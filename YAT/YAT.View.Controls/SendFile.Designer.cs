@@ -53,8 +53,7 @@
 			// 
 			// button_OpenFile
 			// 
-			this.button_OpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_OpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OpenFile.Location = new System.Drawing.Point(247, 3);
 			this.button_OpenFile.Name = "button_OpenFile";
 			this.button_OpenFile.Size = new System.Drawing.Size(25, 21);
@@ -65,8 +64,7 @@
 			// 
 			// button_Send
 			// 
-			this.button_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.button_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Send.Enabled = false;
 			this.button_Send.Location = new System.Drawing.Point(3, 3);
@@ -79,8 +77,7 @@
 			// 
 			// pathComboBox_FilePath
 			// 
-			this.pathComboBox_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.pathComboBox_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathComboBox_FilePath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.pathComboBox_FilePath.Location = new System.Drawing.Point(3, 3);
@@ -92,9 +89,6 @@
 			// 
 			// comboBox_ExplicitDefaultRadix
 			// 
-			this.comboBox_ExplicitDefaultRadix.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_ExplicitDefaultRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_ExplicitDefaultRadix.Location = new System.Drawing.Point(3, 3);
 			this.comboBox_ExplicitDefaultRadix.Name = "comboBox_ExplicitDefaultRadix";

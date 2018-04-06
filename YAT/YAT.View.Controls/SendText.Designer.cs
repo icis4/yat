@@ -52,8 +52,7 @@
 			// 
 			// button_SetMultiLineText
 			// 
-			this.button_SetMultiLineText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_SetMultiLineText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_SetMultiLineText.Location = new System.Drawing.Point(247, 3);
 			this.button_SetMultiLineText.Name = "button_SetMultiLineText";
 			this.button_SetMultiLineText.Size = new System.Drawing.Size(25, 21);
@@ -66,8 +65,7 @@
 			// 
 			// button_Send
 			// 
-			this.button_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.button_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Send.Enabled = false;
 			this.button_Send.Location = new System.Drawing.Point(3, 3);
@@ -80,8 +78,7 @@
 			// 
 			// comboBox_SingleLineText
 			// 
-			this.comboBox_SingleLineText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.comboBox_SingleLineText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_SingleLineText.Location = new System.Drawing.Point(3, 3);
 			this.comboBox_SingleLineText.Name = "comboBox_SingleLineText";

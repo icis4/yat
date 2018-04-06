@@ -3746,13 +3746,17 @@ namespace YAT.View.Forms
 				send.TextPanelIsVisible = this.settingsRoot.Layout.SendTextPanelIsVisible;
 				send.FilePanelIsVisible = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
-				// Adjust send panel size depending on one or two sub-panels:
-				if (splitContainer_Terminal.Panel2MinSize != panel_Send.Height)
-					splitContainer_Terminal.Panel2MinSize = panel_Send.Height;
-
-				// Local scope for 'distance':
+				if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 				{
-					int distance = (splitContainer_Terminal.Height - panel_Send.Height - splitContainer_Terminal.SplitterWidth);
+					int height = 48; // Magic number, well, it is accurate...
+					if (this.settingsRoot.Layout.SendTextPanelIsVisible && this.settingsRoot.Layout.SendFilePanelIsVisible)
+						height = 97; // Magic number, well, it is accurate...
+
+					// Adjust send panel size depending on one or two sub-panels:
+					if (splitContainer_Terminal.Panel2MinSize != height)
+						splitContainer_Terminal.Panel2MinSize = height;
+
+					int distance = (splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth);
 					int limitedDistance;
 					if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_Terminal, distance, out limitedDistance))
 					{
