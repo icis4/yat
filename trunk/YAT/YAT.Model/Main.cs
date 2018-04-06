@@ -1642,8 +1642,11 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
-			// Try to combine the workspace path with terminal path, but only if that is a relative path:
-			absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
+			absoluteTerminalFilePath = null;
+
+			// Try to combine workspace and terminal path:
+			if (!string.IsNullOrEmpty(workspaceFilePath))
+				absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
 
 			// Alternatively, try to use terminal file path only:
 			if (string.IsNullOrEmpty(absoluteTerminalFilePath))
