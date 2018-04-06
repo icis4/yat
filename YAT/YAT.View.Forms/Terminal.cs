@@ -159,8 +159,7 @@ namespace YAT.View.Forms
 		private bool ioStatusIndicatorFlashingIsOn; // = false;
 
 		// Find:
-		/// <remarks>Using "Pattern" instead of "TextOrPattern" for simplicity.</remarks>
-		private string lastFindPattern; // = null;
+		private string lastFindPattern; // = null; Remark: Using "Pattern" instead of "TextOrPattern" for simplicity.
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
