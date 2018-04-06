@@ -559,7 +559,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestReplaceTerminalSettingsInWorkspacePrepare()
 		{
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--DynamicTerminalIndex=2", "--DataBits=7" })))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--DynamicTerminalId=2", "--DataBits=7" })))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -624,7 +624,7 @@ namespace YAT.Model.Test
 		{
 			string text = @"Send something\!(Delay)Send delayed";
 
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitText=" + text, "--DynamicTerminalIndex=2", "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitText=" + text, "--DynamicTerminalId=2", "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -691,7 +691,7 @@ namespace YAT.Model.Test
 			string filePath = Temp.MakeTempFilePath(GetType());
 			File.Create(filePath); // File must exist!
 
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--DynamicTerminalIndex=2", "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--DynamicTerminalId=2", "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
