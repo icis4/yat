@@ -69,6 +69,12 @@ namespace MKY.Windows.Forms
 						if (sc.SplitterDistance != limitedDistance)
 							sc.SplitterDistance = limitedDistance;
 					}
+				#if DEBUG
+					else
+					{
+						Debugger.Break(); // See debug output for issue and instructions!
+					}
+				#endif
 
 					// Continue with the panels:
 					PerformScaling(sc.Panel1);
