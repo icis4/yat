@@ -1221,7 +1221,7 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Find_WholeWord    .Enabled = childIsReady;
 						toolStripButton_MainTool_Find_WholeWord    .Visible = true;
 						toolStripButton_MainTool_Find_UseRegex     .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex;
-						//                            UseRegex     .Enabled = true (always true).
+						////                          UseRegex     .Enabled = true (always true).
 						toolStripButton_MainTool_Find_UseRegex     .Visible = true;
 
 						SetFindState();

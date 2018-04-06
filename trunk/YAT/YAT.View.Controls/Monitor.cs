@@ -174,8 +174,6 @@ namespace YAT.View.Controls
 		private bool showCopyOfActiveLine = ShowCopyOfActiveLineDefault;
 
 		// Find:
-		/// <remarks>Using "Pattern" instead of "TextOrPattern" for simplicity.</remarks>
-		private string findPattern; // = null;
 		private string findText; // = null;
 		private bool findTextCaseSensitive; // = false;
 		private bool findTextWholeWord; // = false;
@@ -767,11 +765,11 @@ namespace YAT.View.Controls
 			return (TryFindPrevious());
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		protected virtual void PrepareFind(string pattern, FindOptions options)
 		{
-			this.findPattern = pattern;
-
 			if (options.UseRegex)
 			{
 				var regexOptions = RegexOptions.Singleline;
