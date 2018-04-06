@@ -813,7 +813,7 @@ namespace YAT.View.Controls
 					var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
 					if (ri != null)
 					{
-						this.command = ri.Item;
+						this.command = new Command(ri.Item); // Clone command to ensure decoupling.
 
 						ConfirmCommand();
 					}
