@@ -3570,6 +3570,12 @@ namespace YAT.View.Forms
 							if (splitContainer_Predefined.SplitterDistance != limitedDistance)
 								splitContainer_Predefined.SplitterDistance = limitedDistance;
 						}
+					#if DEBUG
+						else
+						{
+							Debugger.Break(); // See debug output for issue and instructions!
+						}
+					#endif
 					}
 					else
 					{
@@ -3609,6 +3615,12 @@ namespace YAT.View.Forms
 								if (splitContainer_TxMonitor.SplitterDistance != limitedDistance)
 									splitContainer_TxMonitor.SplitterDistance = limitedDistance;
 							}
+						#if DEBUG
+							else
+							{
+								Debugger.Break(); // See debug output for issue and instructions!
+							}
+						#endif
 						}
 					}
 					else
@@ -3638,6 +3650,12 @@ namespace YAT.View.Forms
 								if (splitContainer_RxMonitor.SplitterDistance != limitedDistance)
 									splitContainer_RxMonitor.SplitterDistance = limitedDistance;
 							}
+						#if DEBUG
+							else
+							{
+								Debugger.Break(); // See debug output for issue and instructions!
+							}
+						#endif
 						}
 					}
 					else
@@ -3742,6 +3760,12 @@ namespace YAT.View.Forms
 						if (splitContainer_Terminal.SplitterDistance != limitedDistance)
 							splitContainer_Terminal.SplitterDistance = limitedDistance;
 					}
+				#if DEBUG
+					else
+					{
+						Debugger.Break(); // See debug output for issue and instructions!
+					}
+				#endif
 				}
 
 				LayoutSend();
