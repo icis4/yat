@@ -73,7 +73,7 @@ namespace YAT.Model.Settings
 		public SendTextSettings(SendTextSettings rhs)
 			: base(rhs)
 		{
-			Command = new Command(rhs.Command);
+			Command = new Command(rhs.Command); // Clone command to ensure decoupling.
 			RecentCommands = new RecentItemCollection<Command>(rhs.RecentCommands);
 			ClearChanged();
 		}

@@ -3448,7 +3448,7 @@ namespace YAT.Model
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
-				CopyIntoRecentTextCommandsIfNeeded(c);
+				CloneIntoRecentTextCommandsIfNeeded(c);
 			}
 			else
 			{
@@ -3490,7 +3490,7 @@ namespace YAT.Model
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
-				CopyIntoRecentTextCommandsIfNeeded(c);
+				CloneIntoRecentTextCommandsIfNeeded(c);
 			}
 			else
 			{
@@ -3504,7 +3504,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Argument of this protected method named "c" for compactness.
 		/// </remarks>
-		protected virtual void CopyIntoRecentTextCommandsIfNeeded(Command c)
+		protected virtual void CloneIntoRecentTextCommandsIfNeeded(Command c)
 		{
 			if (c.IsSingleLineText || c.IsMultiLineText /* || do not add c.IsPartialText to recents */ || c.IsPartialTextEol)
 			{
@@ -3512,7 +3512,7 @@ namespace YAT.Model
 				Command clone;
 				if (c.IsSingleLineText || c.IsMultiLineText)
 				{
-					clone = new Command(c); // 'Normal' case, simply clone the command.
+					clone = new Command(c); // 'Normal' case, simply clone the command to ensure decoupling.
 				}
 				else if (c.IsPartialTextEol)
 				{                                        // Create a single line text command,
@@ -3587,7 +3587,7 @@ namespace YAT.Model
 
 				this.terminal.SendFile(filePath, c.DefaultRadix);
 
-				CopyIntoRecentFileCommands(c);
+				CloneIntoRecentFileCommands(c);
 			}
 			else
 			{
@@ -3598,7 +3598,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Argument of this protected method named "c" for compactness.
 		/// </remarks>
-		protected virtual void CopyIntoRecentFileCommands(Command c)
+		protected virtual void CloneIntoRecentFileCommands(Command c)
 		{
 			// Clone the command for the recent commands collection:
 			var clone = new Command(c);
@@ -3639,7 +3639,7 @@ namespace YAT.Model
 				SendText(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
-					this.settingsRoot.SendText.Command = new Command(c); // Copy command if desired.
+					this.settingsRoot.SendText.Command = new Command(c); // Clone command to ensure decoupling.
 
 				return (true);
 			}
@@ -3648,7 +3648,7 @@ namespace YAT.Model
 				SendFile(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
-					this.settingsRoot.SendFile.Command = new Command(c); // Copy command if desired.
+					this.settingsRoot.SendFile.Command = new Command(c); // Clone command to ensure decoupling.
 
 				return (true);
 			}
@@ -3676,12 +3676,12 @@ namespace YAT.Model
 			var c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 			if (c.IsValidText)
 			{
-				this.settingsRoot.SendText.Command = new Command(c);
+				this.settingsRoot.SendText.Command = new Command(c); // Clone command to ensure decoupling.
 				return (true);
 			}
 			else if (c.IsValidFilePath)
 			{
-				this.settingsRoot.SendFile.Command = new Command(c);
+				this.settingsRoot.SendFile.Command = new Command(c); // Clone command to ensure decoupling.
 				return (true);
 			}
 			else
