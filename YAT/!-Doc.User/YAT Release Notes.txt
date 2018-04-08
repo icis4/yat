@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Final Version 2.0.0 :: 2018-04-08
+YAT 2.0 Final Version 2.0.0 :: 2018-04-13
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -1365,18 +1365,21 @@ XTerm232 1.0.0 :: 2003-10-14
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0 Final :: Expected soon
+YAT 2.0
 ----------------------------------------------------------------------------------------------------
-All bugs and feature requests of priority 7 and above have been resolved. YAT 2.0 Final will be
-released very soon, after waiting a few months for user feedback, and resolving potential new bug
-reports and minor change requests. For details regarding the items, see bugs and feature requests
-at http://sourceforge.net/projects/y-a-terminal/.
+YAT 2.0 is now in maintenance mode, i.e. focus on bug fixes and minor changes, while work for
+YAT 4.0 is already ongoing.
+
+(YAT 3.0 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became public
+around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4.0 with Scripting :: Expected in 2018/2019
+YAT 4.0 with Scripting :: Expected in late 2018 or 2019
 ----------------------------------------------------------------------------------------------------
-The next major step for YAT will be the integration of a scripting environment. Scripting will allow
-executing any kind of automatic procedures from within YAT.
+YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
+Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
+implement protocol layers,... whatever you will think of. Examples and templates will be included.
+
 It is also planned to demonstrate how to use YAT from a PowerShell script and along with NUnit. All
 these features aim for providing a versatile automatic testing tool for serial communications.
 
