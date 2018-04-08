@@ -66,12 +66,7 @@ namespace YAT.Log
 
 		protected override void Dispose(bool disposing)
 		{
-			switch (this.fileType)
-			{
-				case FileType.Xml:		if (this.xmlWriter != null)		this.xmlWriter.Close();		break;
-				case FileType.Binary:
-				default:				if (this.binaryWriter != null)	this.binaryWriter.Close();	break;
-			}
+			CloseAndDisposeWriterNotSynchronized();
 
 			base.Dispose(disposing);
 		}
@@ -103,9 +98,18 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:    this.xmlWriter    = new XmlWriterRaw(stream, true, FilePath); break;
+					case FileType.Xml:
+					{
+						this.xmlWriter = new XmlWriterRaw(stream, true, FilePath);
+						break;
+					}
+
 					case FileType.Binary:
-					default:              this.binaryWriter = new BinaryWriter(stream);                 break;
+					default:
+					{
+						this.binaryWriter = new BinaryWriter(stream);
+						break;
+					}
 				}
 			}
 		}
@@ -119,9 +123,22 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:    this.xmlWriter    .Flush(); break;
+					case FileType.Xml:
+					{
+						if (this.xmlWriter != null)
+							this.xmlWriter.Flush();
+
+						break;
+					}
+
 					case FileType.Binary:
-					default:              this.binaryWriter.Flush(); break;
+					default:
+					{
+						if (this.binaryWriter != null)
+							this.binaryWriter.Flush();
+
+						break;
+					}
 				}
 			}
 		}
@@ -131,13 +148,47 @@ namespace YAT.Log
 		{
 			AssertNotDisposed();
 
-			lock (this.writerSyncObj)
+			lock (this.writerSyncObj) // Needed to allow calling CloseAndDisposeWriterNotSynchronized() from Dispose().
 			{
-				switch (this.fileType)
+				CloseAndDisposeWriterNotSynchronized();
+			}
+		}
+
+		/// <summary></summary>
+		private void CloseAndDisposeWriterNotSynchronized()
+		{
+			switch (this.fileType)
+			{
+				case FileType.Xml:
 				{
-					case FileType.Xml:    this.xmlWriter   .Close(); this.xmlWriter.Dispose();            this.xmlWriter    = null; break;
-					case FileType.Binary:
-					default:              this.binaryWriter.Close();          /* no Dispose() provided */ this.binaryWriter = null; break;
+					if (this.xmlWriter != null)
+					{
+						if (!this.xmlWriter.IsDisposed)
+						{
+							this.xmlWriter.Close();
+							this.xmlWriter.Dispose();
+						}
+
+						this.xmlWriter = null;
+					}
+
+					break;
+				}
+
+				case FileType.Binary:
+				default:
+				{
+					if (this.binaryWriter != null)
+					{
+					////this.binaryWriter.IsDisposed not available.
+
+						this.binaryWriter.Close();
+					////this.binaryWriter.Dispose() not available.
+
+						this.binaryWriter = null;
+					}
+
+					break;
 				}
 			}
 		}
@@ -156,9 +207,22 @@ namespace YAT.Log
 				{
 					switch (this.fileType)
 					{
-						case FileType.Xml:    this.xmlWriter   .WriteLine(chunk);     break;
+						case FileType.Xml:
+						{
+							if (this.xmlWriter != null)
+								this.xmlWriter.WriteLine(chunk);
+
+							break;
+						}
+
 						case FileType.Binary:
-						default:              this.binaryWriter.Write(chunk.Content); break;
+						default:
+						{
+							if (this.binaryWriter != null)
+								this.binaryWriter.Write(chunk.Content);
+
+							break;
+						}
 					}
 				}
 

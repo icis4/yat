@@ -73,13 +73,7 @@ namespace YAT.Log
 
 		protected override void Dispose(bool disposing)
 		{
-			switch (this.fileType)
-			{
-				case FileType.Xml:		if (this.xmlWriter != null)		this.xmlWriter.Close();		break;
-				case FileType.Rtf:		if (this.rtfWriter != null)		this.rtfWriter.Close();		break;
-				case FileType.Text:
-				default:				if (this.textWriter != null)	this.textWriter.Close();	break;
-			}
+			CloseAndDisposeWriterNotSynchronized();
 
 			base.Dispose(disposing);
 		}
@@ -134,10 +128,24 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:  this.xmlWriter  = new XmlWriterNeat(stream, true, FilePath); break;
-					case FileType.Rtf:  this.rtfWriter  = new RtfWriter(    stream, this.format);    break;
+					case FileType.Xml:
+					{
+						this.xmlWriter = new XmlWriterNeat(stream, true, FilePath);
+						break;
+					}
+
+					case FileType.Rtf:
+					{
+						this.rtfWriter = new RtfWriter(stream, this.format);
+						break;
+					}
+
 					case FileType.Text:
-					default:            this.textWriter = new TextWriter(   stream, this.encoding);  break;
+					default:
+					{
+						this.textWriter = new TextWriter(stream, this.encoding);
+						break;
+					}
 				}
 			}
 		}
@@ -151,10 +159,30 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:  this.xmlWriter .Flush(); break;
-					case FileType.Rtf:  this.rtfWriter .Flush(); break;
+					case FileType.Xml:
+					{
+						if (this.xmlWriter != null)
+							this.xmlWriter.Flush();
+
+						break;
+					}
+
+					case FileType.Rtf:
+					{
+						if (this.rtfWriter != null)
+							this.rtfWriter.Flush();
+
+						break;
+					}
+
 					case FileType.Text:
-					default:            this.textWriter.Flush(); break;
+					default:
+					{
+						if (this.textWriter != null)
+							this.textWriter.Flush();
+
+						break;
+					}
 				}
 			}
 		}
@@ -166,12 +194,62 @@ namespace YAT.Log
 
 			lock (this.writerSyncObj)
 			{
-				switch (this.fileType)
+				CloseAndDisposeWriterNotSynchronized();
+			}
+		}
+
+		/// <summary></summary>
+		private void CloseAndDisposeWriterNotSynchronized()
+		{
+			switch (this.fileType)
+			{
+				case FileType.Xml:
 				{
-					case FileType.Xml:  this.xmlWriter .Close(); this.xmlWriter .Dispose(); this.xmlWriter  = null; break;
-					case FileType.Rtf:  this.rtfWriter .Close(); this.rtfWriter .Dispose(); this.rtfWriter  = null; break;
-					case FileType.Text:
-					default:            this.textWriter.Close(); this.textWriter.Dispose(); this.textWriter = null; break;
+					if (this.xmlWriter != null)
+					{
+						if (!this.xmlWriter.IsDisposed)
+						{
+							this.xmlWriter.Close();
+							this.xmlWriter.Dispose();
+						}
+
+						this.xmlWriter = null;
+					}
+
+					break;
+				}
+
+				case FileType.Rtf:
+				{
+					if (this.rtfWriter != null)
+					{
+						if (!this.rtfWriter.IsDisposed)
+						{
+							this.rtfWriter.Close();
+							this.rtfWriter.Dispose();
+						}
+
+						this.rtfWriter = null;
+					}
+
+					break;
+				}
+
+				case FileType.Text:
+				default:
+				{
+					if (this.textWriter != null)
+					{
+						if (!this.textWriter.IsDisposed)
+						{
+							this.textWriter.Close();
+							this.textWriter.Dispose();
+						}
+
+						this.textWriter = null;
+					}
+
+					break;
 				}
 			}
 		}
@@ -190,10 +268,30 @@ namespace YAT.Log
 				{
 					switch (this.fileType)
 					{
-						case FileType.Xml:  this.xmlWriter .WriteLine(line); break;
-						case FileType.Rtf:  this.rtfWriter .WriteLine(line); break;
+						case FileType.Xml:
+						{
+							if (this.xmlWriter != null)
+								this.xmlWriter.WriteLine(line);
+
+							break;
+						}
+
+						case FileType.Rtf:
+						{
+							if (this.rtfWriter != null)
+								this.rtfWriter.WriteLine(line);
+
+							break;
+						}
+
 						case FileType.Text:
-						default:            this.textWriter.WriteLine(line); break;
+						default:
+						{
+							if (this.textWriter != null)
+								this.textWriter.WriteLine(line);
+
+							break;
+						}
 					}
 				}
 
