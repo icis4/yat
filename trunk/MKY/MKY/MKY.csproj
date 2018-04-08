@@ -149,6 +149,7 @@
     <Compile Include="Types\ObjectEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
     <Compile Include="Windows.Forms\ApplicationEx.cs" />
+    <Compile Include="Windows.Forms\SizeHelper.cs" />
     <Compile Include="Windows.Forms\ToolStripComboBoxHelper.cs" />
     <Compile Include="Windows.Forms\ContextMenuStripShortcutModalFormWorkaround.cs" />
     <Compile Include="Windows.Forms\ContextMenuStripShortcutTargetWorkaround.cs" />

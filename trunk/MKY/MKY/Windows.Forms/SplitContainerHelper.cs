@@ -24,7 +24,6 @@
 
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -36,21 +35,8 @@ namespace MKY.Windows.Forms
 	/// <remarks>
 	/// Based on https://www.codeproject.com/Tips/786170/Proper-Resizing-of-SplitterContainer-Controls-at-a.
 	/// </remarks>
-	public class SplitContainerHelper
+	public class SplitContainerHelper : SizeHelper
 	{
-		/// <summary>
-		/// Gets or sets the current scale.
-		/// </summary>
-		protected SizeF Scale { get; set; } = new SizeF(1.0f, 1.0f);
-
-		/// <summary>
-		/// Adjusts the scale by the given factor.
-		/// </summary>
-		public virtual void AdjustScale(SizeF factor)
-		{
-			Scale = new SizeF(Scale.Width * factor.Width, Scale.Height * factor.Height);
-		}
-
 		/// <summary>
 		/// Scales all <see cref="SplitContainer"/> within the specified parent.
 		/// </summary>

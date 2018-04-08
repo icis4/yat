@@ -132,6 +132,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		// Scaling:
+		private SizeHelper sendSizeHelper = new SizeHelper();
 		private SplitContainerHelper splitContainerHelper = new SplitContainerHelper();
 
 		// Startup/Update/Closing:
@@ -223,7 +224,7 @@ namespace YAT.View.Forms
 			AttachSettingsEventHandlers();
 
 			ApplyWindowSettings();
-			LayoutTerminal();
+			LayoutTerminal(); // Apply the layout before the initial 'Paint' event.
 
 			// Force settings changed event to set all controls.
 			// For improved performance, manually suspend/resume handler for terminal settings:
@@ -251,6 +252,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
 		{
+			this.sendSizeHelper.AdjustScale(factor);
 			this.splitContainerHelper.AdjustScale(factor);
 
 			base.ScaleControl(factor, specified);
@@ -323,6 +325,8 @@ namespace YAT.View.Forms
 			this.mdiParent = MdiParent;
 
 			this.splitContainerHelper.PerformScaling(this);
+
+			LayoutTerminal(); // Reapply layouting for proper behavior 'Send' panel if [Send Text | File] is hidden. \remind (2018-04-08 / MKY) bug #412 "Issue with send panel".
 
 			// Immediately set terminal controls so the terminal "looks nice" from the very start:
 			SetTerminalControls();
@@ -2799,7 +2803,7 @@ namespace YAT.View.Forms
 
 		private void send_SizeChanged(object sender, EventArgs e)
 		{
-			LayoutSend();
+			AdjustSendSplitter();
 		}
 
 		#endregion
@@ -3748,9 +3752,11 @@ namespace YAT.View.Forms
 
 				if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 				{
-					int height = 48; // Magic number, well, it is accurate...
+					int height;
 					if (this.settingsRoot.Layout.SendTextPanelIsVisible && this.settingsRoot.Layout.SendFilePanelIsVisible)
-						height = 97; // Magic number, well, it is accurate...
+						height = (int)Math.Ceiling(this.sendSizeHelper.Scale.Height * (Send.DesignedFullHeight + 3)); // Full + margin of 3.
+					else
+						height = (int)Math.Ceiling(this.sendSizeHelper.Scale.Height * (Send.DesignedHalfHeight + 3)); // Half + margin of 3.
 
 					// Adjust send panel size depending on one or two sub-panels:
 					if (splitContainer_Terminal.Panel2MinSize != height)
@@ -3771,7 +3777,7 @@ namespace YAT.View.Forms
 				#endif
 				}
 
-				LayoutSend();
+				AdjustSendSplitter();
 
 				ResumeLayout();
 			}
@@ -3781,7 +3787,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void LayoutSend()
+		private void AdjustSendSplitter()
 		{
 			// Calculate absolute splitter position (distance) of predefined splitter,
 			// including offset to get send buttons pixel-accurate below predefined buttons:
