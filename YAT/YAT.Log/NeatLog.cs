@@ -134,10 +134,10 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:		this.xmlWriter = new XmlWriterNeat(stream, true, FilePath);		break;
-					case FileType.Rtf:		this.rtfWriter = new RtfWriter(stream, this.format);			break;
+					case FileType.Xml:  this.xmlWriter  = new XmlWriterNeat(stream, true, FilePath); break;
+					case FileType.Rtf:  this.rtfWriter  = new RtfWriter(    stream, this.format);    break;
 					case FileType.Text:
-					default:				this.textWriter = new TextWriter(stream, this.encoding);		break;
+					default:            this.textWriter = new TextWriter(   stream, this.encoding);  break;
 				}
 			}
 		}
@@ -151,10 +151,10 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:		this.xmlWriter.Flush();		break;
-					case FileType.Rtf:		this.rtfWriter.Flush();		break;
+					case FileType.Xml:  this.xmlWriter .Flush(); break;
+					case FileType.Rtf:  this.rtfWriter .Flush(); break;
 					case FileType.Text:
-					default:				this.textWriter.Flush();	break;
+					default:            this.textWriter.Flush(); break;
 				}
 			}
 		}
@@ -168,10 +168,10 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:		this.xmlWriter.Close();		this.xmlWriter = null;		break;
-					case FileType.Rtf:		this.rtfWriter.Close();		this.rtfWriter = null;		break;
+					case FileType.Xml:  this.xmlWriter .Close(); this.xmlWriter .Dispose(); this.xmlWriter  = null; break;
+					case FileType.Rtf:  this.rtfWriter .Close(); this.rtfWriter .Dispose(); this.rtfWriter  = null; break;
 					case FileType.Text:
-					default:				this.textWriter.Close();	this.textWriter = null;		break;
+					default:            this.textWriter.Close(); this.textWriter.Dispose(); this.textWriter = null; break;
 				}
 			}
 		}
@@ -190,10 +190,10 @@ namespace YAT.Log
 				{
 					switch (this.fileType)
 					{
-						case FileType.Xml:		this.xmlWriter.WriteLine(line);		break;
-						case FileType.Rtf:		this.rtfWriter.WriteLine(line);		break;
+						case FileType.Xml:  this.xmlWriter .WriteLine(line); break;
+						case FileType.Rtf:  this.rtfWriter .WriteLine(line); break;
 						case FileType.Text:
-						default:				this.textWriter.WriteLine(line);	break;
+						default:            this.textWriter.WriteLine(line); break;
 					}
 				}
 

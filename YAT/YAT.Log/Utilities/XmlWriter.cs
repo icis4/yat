@@ -348,6 +348,27 @@ namespace YAT.Log.Utilities
 			}
 		}
 
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void Dispose(bool disposing)
+		{
+			if (!IsDisposed)
+			{
+				if (disposing)
+				{
+					// Nothing to dispose of (yet).
+				}
+			}
+
+			base.Dispose(disposing);
+		}
+
+		#endregion
+
 		/// <summary></summary>
 		public void WriteLine(RawChunk chunk)
 		{
@@ -418,6 +439,27 @@ namespace YAT.Log.Utilities
 				XmlSchemaEx.ToFile(type, directory, fileName);
 			}
 		}
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void Dispose(bool disposing)
+		{
+			if (!IsDisposed)
+			{
+				if (disposing)
+				{
+					// Nothing to dispose of (yet).
+				}
+			}
+
+			base.Dispose(disposing);
+		}
+
+		#endregion
 
 		/// <summary></summary>
 		public void WriteLine(DisplayLine displayLine)

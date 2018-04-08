@@ -213,8 +213,6 @@ namespace YAT/*.<TODO>*/
 
 				// Release unmanaged resources:
 
-				// Set state to disposed:
-
 			}
 
 			base.Dispose(disposing);
