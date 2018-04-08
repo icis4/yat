@@ -51,6 +51,16 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		/// <summary>
+		/// The designed height when both (text and file) panels are visible.
+		/// </summary>
+		public const int DesignedFullHeight = 93;
+
+		/// <summary>
+		/// The designed height when one (text or file) panel is visible.
+		/// </summary>
+		public const int DesignedHalfHeight = 46;
+
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 		private const bool TerminalIsReadyToSendDefault = false;
 
@@ -280,7 +290,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// No explicit 'Default' value constant as the default is given by <see cref="SplitContainer"/>.
+		/// No explicit 'Default' constant as the default is given by <see cref="SplitContainer"/>.
 		/// </remarks>
 		[DefaultValue(true)]
 		public virtual bool TextPanelIsVisible
@@ -290,7 +300,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// No explicit 'Default' value constant as the default is given by <see cref="SplitContainer"/>.
+		/// No explicit 'Default' constant as the default is given by <see cref="SplitContainer"/>.
 		/// </remarks>
 		[DefaultValue(true)]
 		public virtual bool FilePanelIsVisible
@@ -391,8 +401,8 @@ namespace YAT.View.Controls
 
 		private void SetSendSplitterControls()
 		{
-			sendText.SendSplitterDistance = this.sendSplitterDistance - sendText.Left;
-			sendFile.SendSplitterDistance = this.sendSplitterDistance - sendFile.Left;
+			sendText.SendSplitterDistance = (this.sendSplitterDistance - sendText.Left);
+			sendFile.SendSplitterDistance = (this.sendSplitterDistance - sendFile.Left);
 		}
 
 		#endregion

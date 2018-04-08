@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Final :: 2018-0x-xx
+YAT 2.0 Final Version 2.0.0 :: 2018-04-08
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -125,6 +125,7 @@ Limitations and known issues:
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
      if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+   > When [Send Text] or [Send File] is hidden, resizing the panel doesn't properly work (bug #412).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
