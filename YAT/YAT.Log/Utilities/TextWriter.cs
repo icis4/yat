@@ -124,7 +124,7 @@ namespace YAT.Log.Utilities
 			AssertNotDisposed();
 
 			lock (writerSyncObj)
-				this.writer.Flush();
+				this.writer.Flush(); // Note that the operating system may delay flushing.
 		}
 
 		/// <summary>
