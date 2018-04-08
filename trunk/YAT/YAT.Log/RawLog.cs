@@ -103,9 +103,9 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:		this.xmlWriter = new XmlWriterRaw(stream, true, FilePath);		break;
+					case FileType.Xml:    this.xmlWriter    = new XmlWriterRaw(stream, true, FilePath); break;
 					case FileType.Binary:
-					default:				this.binaryWriter = new BinaryWriter(stream);					break;
+					default:              this.binaryWriter = new BinaryWriter(stream);                 break;
 				}
 			}
 		}
@@ -119,9 +119,9 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:		this.xmlWriter.Flush();		break;
+					case FileType.Xml:    this.xmlWriter    .Flush(); break;
 					case FileType.Binary:
-					default:				this.binaryWriter.Flush();	break;
+					default:              this.binaryWriter.Flush(); break;
 				}
 			}
 		}
@@ -135,9 +135,9 @@ namespace YAT.Log
 			{
 				switch (this.fileType)
 				{
-					case FileType.Xml:		this.xmlWriter.Close();		this.xmlWriter = null;		break;
+					case FileType.Xml:    this.xmlWriter   .Close(); this.xmlWriter.Dispose();            this.xmlWriter    = null; break;
 					case FileType.Binary:
-					default:				this.binaryWriter.Close();	this.binaryWriter = null;	break;
+					default:              this.binaryWriter.Close();          /* no Dispose() provided */ this.binaryWriter = null; break;
 				}
 			}
 		}
@@ -156,18 +156,9 @@ namespace YAT.Log
 				{
 					switch (this.fileType)
 					{
-						case FileType.Xml:
-						{
-							this.xmlWriter.WriteLine(chunk);
-							break;
-						}
-
+						case FileType.Xml:    this.xmlWriter   .WriteLine(chunk);     break;
 						case FileType.Binary:
-						default:
-						{
-							this.binaryWriter.Write(chunk.Content);
-							break;
-						}
+						default:              this.binaryWriter.Write(chunk.Content); break;
 					}
 				}
 
