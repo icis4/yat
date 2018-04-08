@@ -205,7 +205,7 @@ namespace YAT.View.Forms
 			linkLabel_TerminalEmulator.Text = "";
 			textBefore = "YAT is optimized for simple command sets of e.g. embedded systems. If you are looking for a classic terminal emulator," + Environment.NewLine +
 			             "rather go for ";
-			textLink   =               "PuTTy";
+			textLink   =               "PuTTY";
 			textAfter  =                    " or the like.";
 			linkLabel_TerminalEmulator.Text += textBefore;
 			linkStart = linkLabel_TerminalEmulator.Text.Length;
@@ -222,7 +222,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.visualstudio.com/vs/community/");
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
@@ -264,7 +264,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/cs/internet/AsyncSocketServerandClien.asp");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.codeproject.com/Articles/14155/An-Asynchronous-Socket-Server-and-Client");
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
@@ -273,7 +273,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.lvr.com/hidpage.htm");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://janaxelson.com/hidpage.htm");
 			textBefore =                                                            "/";
 			textLink   =                                                             "UsbLibrary";
 			linkLabel_Environment.Text += textBefore;
@@ -324,7 +324,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://dejavu.sourceforge.net/");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://dejavu-fonts.github.io/");
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
@@ -406,7 +406,7 @@ namespace YAT.View.Forms
 			if (TestExecutionIsIntended(message) &&
 				TestPreconditionIsGiven(typeof(Exception)))
 			{
-				this.Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
+				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 
 				throw (new InvalidOperationException("Unhandled synchronous exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
 
@@ -426,7 +426,7 @@ namespace YAT.View.Forms
 			if (TestExecutionIsIntended(message) &&
 				TestPreconditionIsGiven(typeof(Exception)))
 			{
-				this.Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
+				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 
 				timer_ExecuteManualTest2.Start();
 			}
@@ -466,7 +466,7 @@ namespace YAT.View.Forms
 			if (TestExecutionIsIntended(message) &&
 				TestPreconditionIsGiven(typeof(Exception)))
 			{
-				this.Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
+				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 
 				lock (this.timer_ExecuteManualTest3SyncObj)
 				{                  // Explicitly using 'System.Threading.Timer' to prevent naming conflict with 'System.Windows.Forms.Timer'.
