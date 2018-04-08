@@ -38,6 +38,7 @@ using MKY;
 using MKY.IO;
 using MKY.Windows.Forms;
 
+using YAT.Application.Settings;
 using YAT.Application.Utilities;
 using YAT.Settings.Application;
 
@@ -477,10 +478,12 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.Yes)
 			{
+				ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles = ExtensionSettings.RawLogFilesDefault;
+				ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles = ExtensionSettings.NeatLogFilesDefault;
+
 				this.settingsInEdit.SetDefaults();
 
-				// Note that extensions are handled via 'ApplicationSettings'.
-				// The 'ApplicationSettings' can only be reset to defaults via the 'Preferences' dialog.
+				// Note that SetDefaults() will trigger SetControls().
 			}
 		}
 
