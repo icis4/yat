@@ -317,8 +317,8 @@ namespace YAT.View.Forms
 				if (mayBeContinued)
 				{
 					var message =
-						"After this unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
-						"Select [Cancel/Abort] to exit and restart " + productName + " now." + Environment.NewLine +
+						"After this unhandled exception you are advised to exit/restart " + productName + "." + Environment.NewLine + Environment.NewLine +
+						"Select [Cancel/Abort] to exit/restart " + productName + "." + Environment.NewLine +
 						"Or would you like to continue and [Retry] anyway?" + Environment.NewLine +
 						"Or would you like to continue but [Ignore] such unhandled exceptions?";
 
