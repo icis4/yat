@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Final :: 2018-0x-xx
+YAT 2.0 Final Version 2.0.0 :: 2018-04-13
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -97,11 +97,16 @@ Important changes:
   automatically changed when the port type gets changed. This automatism is only applied if the
   settings are at their defaults, i.e. have not been changed by the user; otherwise, the user is
   asked whether the settings shall be changed (related to feature request #335).
+- Simple find/search function now allows to explicitly enable/disable the regex option (related
+  feature requests #11 and #79 implemented in previous release).
 - Option to enable/disable <...> and \... escape sequences has been separated for [Send Text] and
   [Send File]. By default, escapes are enabled for [Send Text] and disabled for [Send File].
 - [Send File] now also sends (formatted) text files for binary terminals, including support for
   [Explicit Default Radix] and other send file related settings (bug #411).
 - Location of some send related settings has changed (related to bug #411).
+- The "DynamicIndex"/"DynamicTerminalIndex" command line option has been changed to "DynamicId"/
+  "DynamicTerminalId" to emphasize that the value is a 1 (and not 0) based ID, incl. the option
+  to use value 0 to select the currently active terminal.
 - Binary distributions now contain DejaVu fonts for manual installation (feature request #331).
 
 Fixed bugs:
@@ -120,6 +125,7 @@ Limitations and known issues:
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
      if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+   > When [Send Text] or [Send File] is hidden, resizing the panel doesn't properly work (bug #412).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
@@ -134,7 +140,7 @@ Limitations and known issues:
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Line content and EOL may be sent in two separate chunks, because the parts are handled slightly
-  after each other. Delay could be eliminated, but requires some refactoring (feature request #333).
+  after each other. Delay could be eliminated but requires some refactoring (feature request #333).
 - Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
@@ -881,18 +887,21 @@ fits the SourceForge limitation of ~1000 lines for the online release notes.
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0 Final :: Expected soon
+YAT 2.0
 ----------------------------------------------------------------------------------------------------
-All bugs and feature requests of priority 7 and above have been resolved. YAT 2.0 Final will be
-released very soon, after waiting a few months for user feedback, and resolving potential new bug
-reports and minor change requests. For details regarding the items, see bugs and feature requests
-at http://sourceforge.net/projects/y-a-terminal/.
+YAT 2.0 is now in maintenance mode, i.e. focus on bug fixes and minor changes, while work for
+YAT 4.0 is already ongoing.
+
+(YAT 3.0 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became public
+around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4.0 with Scripting :: Expected in 2018/2019
+YAT 4.0 with Scripting :: Expected in late 2018 or 2019
 ----------------------------------------------------------------------------------------------------
-The next major step for YAT will be the integration of a scripting environment. Scripting will allow
-executing any kind of automatic procedures from within YAT.
+YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
+Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
+implement protocol layers,... whatever you will think of. Examples and templates will be included.
+
 It is also planned to demonstrate how to use YAT from a PowerShell script and along with NUnit. All
 these features aim for providing a versatile automatic testing tool for serial communications.
 
