@@ -34,6 +34,21 @@ namespace YAT.Application.Settings
 	/// <summary></summary>
 	public class ExtensionSettings : MKY.Settings.SettingsItem, IEquatable<ExtensionSettings>
 	{
+		/// <summary></summary>
+		public static readonly string TextSendFilesDefault = ExtensionHelper.TextFilesDefault;
+
+		/// <summary></summary>
+		public static readonly string BinarySendFilesDefault = ExtensionHelper.BinaryFilesDefault;
+
+		/// <summary></summary>
+		public static readonly string RawLogFilesDefault = ExtensionHelper.RawLogFilesDefault;
+
+		/// <summary></summary>
+		public static readonly string NeatLogFilesDefault = ExtensionHelper.NeatLogFilesDefault;
+
+		/// <summary></summary>
+		public static readonly string MonitorFilesDefault = ExtensionHelper.MonitorFilesDefault;
+
 		private string textSendFiles;
 		private string binarySendFiles;
 		private string rawLogFiles;
@@ -77,11 +92,11 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			TextSendFiles   = ExtensionHelper.TextFilesDefault;
-			BinarySendFiles = ExtensionHelper.BinaryFilesDefault;
-			RawLogFiles     = ExtensionHelper.RawLogFilesDefault;
-			NeatLogFiles    = ExtensionHelper.NeatLogFilesDefault;
-			MonitorFiles    = ExtensionHelper.MonitorFilesDefault;
+			TextSendFiles   = TextSendFilesDefault;
+			BinarySendFiles = BinarySendFilesDefault;
+			RawLogFiles     = RawLogFilesDefault;
+			NeatLogFiles    = NeatLogFilesDefault;
+			MonitorFiles    = MonitorFilesDefault;
 		}
 
 		#region Properties
