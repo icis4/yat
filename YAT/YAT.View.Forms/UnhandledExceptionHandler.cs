@@ -127,7 +127,10 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
-			// Skip if exception is already being ignored:
+			// Potentially reset cursor and status:
+			ResetCursorAndStatus();
+
+			// Continue if exception is already being ignored:
 			if (ExceptionTypeIsIgnored(exception.GetType()))
 				return (UnhandledExceptionResult.Continue);
 
@@ -139,18 +142,14 @@ namespace YAT.View.Forms
 			var formsCount = System.Windows.Forms.Application.OpenForms.Count;
 			if (formsCount > 0)
 			{
-				var f = System.Windows.Forms.Application.OpenForms[formsCount - 1]; // Best guess that most recent form is the right one to query...
+				var f = System.Windows.Forms.Application.OpenForms[0]; // This typically is the main form.
 				if (f.InvokeRequired)
 				{
-					var resetInvoker = new ResetCursorAndStatusDelegate(ResetCursorAndStatusInvocation);
-					f.Invoke(resetInvoker, f);
-
-					var provideInvoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
-					userResult = (UnhandledExceptionResult)f.Invoke(provideInvoker, owner, exception, originMessage, exceptionType, mayBeContinued);
+					var invoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
+					userResult = (UnhandledExceptionResult)f.Invoke(invoker, owner, exception, originMessage, exceptionType, mayBeContinued);
 				}
 				else
 				{
-					ResetCursorAndStatusInvocation(f);
 					userResult = ProvideExceptionToUserInvocation(owner, exception, originMessage, exceptionType, mayBeContinued);
 				}
 			}
@@ -181,35 +180,82 @@ namespace YAT.View.Forms
 			return (userResult);
 		}
 
-		private delegate void ResetCursorAndStatusDelegate(Form active);
-
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private static void ResetCursorAndStatusInvocation(Form active)
+		private static void ResetCursorAndStatus()
 		{
 			try
 			{
-				active.Cursor = Cursors.Default;
+				foreach (var form in System.Windows.Forms.Application.OpenForms)
+				{
+					try
+					{
+						var formAsForm = form as Form;
+						if (formAsForm != null)
+						{
+							if (formAsForm.InvokeRequired)
+							{
+								var invoker = new ResetCursorToDefaultDelegate(ResetCursorToDefaultInvocation);
+								formAsForm.Invoke(invoker);
+							}
+							else
+							{
+								ResetCursorToDefaultInvocation(formAsForm);
+							}
+						}
+					}
+					catch { } // Best effort! Catch any subsequent exception!
+				}
 			}
 			catch { } // Best effort! Catch any subsequent exception!
 
 			try
 			{
-				var activeAsMain = active as Main;
-				if (activeAsMain != null)
+				foreach (var form in System.Windows.Forms.Application.OpenForms)
 				{
-					activeAsMain.ResetStatusText();
-				}
-				else
-				{
-					foreach (var form in System.Windows.Forms.Application.OpenForms)
+					try
 					{
 						var formAsMain = form as Main;
 						if (formAsMain != null)
 						{
-							formAsMain.ResetStatusText();
+							if (formAsMain.InvokeRequired)
+							{
+								var invoker = new ResetStatusTextDelegate(ResetCursorToDefaultInvocation);
+								formAsMain.Invoke(invoker);
+							}
+							else
+							{
+								ResetCursorToDefaultInvocation(formAsMain);
+							}
+
+							break; // There is only one main form.
 						}
 					}
+					catch { } // Best effort! Catch any subsequent exception!
 				}
+			}
+			catch { } // Best effort! Catch any subsequent exception!
+		}
+
+		private delegate void ResetCursorToDefaultDelegate(Form form);
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		private static void ResetCursorToDefaultInvocation(Form form)
+		{
+			try
+			{
+				form.Cursor = Cursors.Default;
+			}
+			catch { } // Best effort! Catch any subsequent exception!
+		}
+
+		private delegate void ResetStatusTextDelegate(Main main);
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		private static void ResetStatusTextInvocation(Main main)
+		{
+			try
+			{
+				main.ResetStatusText();
 			}
 			catch { } // Best effort! Catch any subsequent exception!
 		}
