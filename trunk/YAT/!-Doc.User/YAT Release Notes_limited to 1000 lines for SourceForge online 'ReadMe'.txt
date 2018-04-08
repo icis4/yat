@@ -900,7 +900,7 @@ YAT 4.0 with Scripting :: Expected in late 2018 or 2019
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
-implement protocol layers,... whatever you will think of. Examples and templates will be included.
+implement protocol layers,... whatever you can think of. Examples and templates will be included.
 
 It is also planned to demonstrate how to use YAT from a PowerShell script and along with NUnit. All
 these features aim for providing a versatile automatic testing tool for serial communications.
