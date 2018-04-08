@@ -80,7 +80,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// No explicit 'Default' value constant as the default is given by <see cref="Timer"/>.
+		/// No explicit 'Default' constant as the default is given by <see cref="Timer"/>.
 		/// </remarks>
 		[DefaultValue(100)]
 		public virtual int Interval
