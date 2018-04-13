@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.0.0
+// YAT Version 2.0.1 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -42,8 +42,8 @@ namespace YAT
 		/// <summary>The product name.</summary>
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
-		/// <summary>The product name postfix that describes the build.</summary>
-		public static readonly string ProductBuildName = " Final";
+	/////// <summary>The product name postfix that describes the build.</summary>
+	////public static readonly string ProductBuildName = " Final";
 
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Almost Final";
@@ -57,16 +57,22 @@ namespace YAT
 	/////// <summary>The product name postfix that describes the build.</summary>
 	////public static readonly string ProductBuildName = " Epsilon Development";
 
-		/// <summary>The product name including the build description.</summary>
-		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
+	/////// <summary>The product name including the build description.</summary>
+	////public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
 
 		/// <summary>The product version.</summary>
 		public static readonly string ProductVersion = System.Windows.Forms.Application.ProductVersion;
 
-		/// <summary>The complete product name including build description and version.</summary>
-		public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " Version " + ProductVersion;
+	/////// <summary>The product name and its version.</summary>
+	////public static readonly string ProductNameAndVersion = ProductName + " Version " + ProductVersion;
 
-		/// <summary>The long variant of the complete product name including build description and version.</summary>
+		/// <summary>The product name and its version.</summary>
+		public static readonly string ProductNameAndVersion = ProductName + " Version " + ProductVersion + " Development";
+
+	/////// <summary>The complete product name including build description and its version.</summary>
+	////public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " Version " + ProductVersion;
+
+		/// <summary>The long variant of the product name.</summary>
 		public static readonly string ProductNameLong = ProductName + " - Yet Another Terminal";
 
 		/// <summary>The complete logo (text) of the product.</summary>

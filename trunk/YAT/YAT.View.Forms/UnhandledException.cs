@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.0.0
+// YAT Version 2.0.1 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -62,7 +62,8 @@ namespace YAT.View.Forms
 			{
 				sw.WriteLine(originMessage);
 				sw.WriteLine();
-				sw.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
+				sw.WriteLine(ApplicationEx.ProductNameAndVersion);
+			////sw.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
 				sw.WriteLine();
 
 				AnyWriter.WriteException(sw, null, exception);

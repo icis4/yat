@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.0.0
+// YAT Version 2.0.1 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -1093,7 +1093,8 @@ namespace YAT.Controller
 			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 			Console.Out.WriteLine();
 
-			Console.Out.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
+			Console.Out.WriteLine(ApplicationEx.ProductNameAndVersion);
+		////Console.Out.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
 
 			Console.Out.WriteLine();
 			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
