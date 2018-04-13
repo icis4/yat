@@ -1,0 +1,2 @@
+﻿
+<Saxon>\bin\Transform.exe Input.xml Translation.xsl >Output.xml

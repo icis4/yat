@@ -1,0 +1,14 @@
+﻿
+Shown (in this order)
+ > #			(ticket_num)
+ > Summary		(summary)
+ > Created		(created_date)
+ > Creator		(reported_by)
+ > Labels		(labels)
+ > Status		(status)
+ > Updated		(mod_date)
+ > Owner		(assigned_to)
+ > Priority		(_priority)
+
+Not shown
+ > Milestone	(_milestone)

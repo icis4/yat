@@ -1,0 +1,13 @@
+﻿
+NUnit
+-----
+
+Test Naming:
+ > Only use test names potentially valid for identifiers
+   (Rationale: Automatically named tests are named with the respective method name)
+
+Text Output:
+ > If according 'Content' is active in 'Settings > Gui > Text Output',
+   'Standard (incl. Debug)|Error|Trace|Log' output is written to the 'Text Output' window.
+   (i.e. Console|Debug|Trace.Write...() all work)
+ > To output test relevant tracing information, Trace.Write...() shall be used.
