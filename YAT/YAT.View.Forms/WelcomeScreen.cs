@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.0.0
+// YAT Version 2.0.1 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -76,7 +76,8 @@ namespace YAT.View.Forms
 			int width = Width;
 			int width2 = 0;
 
-			label_Name.Text = ApplicationEx.ProductNameAndBuildName;
+		////label_Name.Text = ApplicationEx.ProductNameAndBuildName;
+			label_Name.Text = ApplicationEx.ProductName;
 			width2 = label_Name.Left + label_Name.Width + Margin;
 			if (width < width2)
 				width = width2;

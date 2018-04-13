@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.0.0
+// YAT Version 2.0.1 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -91,7 +91,8 @@ namespace YAT.View.Forms
 			Text = ApplicationEx.ProductNameLong;
 
 			// Title:
-			linkLabel_Title.Text = ApplicationEx.ProductNameAndBuildNameAndVersion;
+			linkLabel_Title.Text = ApplicationEx.ProductNameAndVersion;
+		////linkLabel_Title.Text = ApplicationEx.ProductNameAndBuildNameAndVersion;
 
 			// Copyright:
 			linkLabel_Copyright.Text = "";
