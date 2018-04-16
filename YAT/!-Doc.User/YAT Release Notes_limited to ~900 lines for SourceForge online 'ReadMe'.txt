@@ -765,93 +765,6 @@ Limitations and known issues:
 
 
 YAT 2.0 Beta 4 Candidate 1 Version 1.99.28 :: 2011-12-05
-----------------------------------------------------------------------------------------------------
-
-New:
-- Support for C-style escape sequences (feature request #3044830)
-- Text terminals: Comments can be chosen to be ignored while sending (feature request #2848298)
-   > Comment indicators can be configured in [Terminal > Settings > Text Settings]
-   > C/C++/C#/Java style "//" and Basic/BAT/DOS style "REM" comment indicators are predefined
-- 'Manual' flow control split into 'Manual Hardware', 'Manual Software' and 'Manual Combined'
-- Serial ports: XOn/XOff state is indicated (feature request #3066635)
-   > Applies to 'Software', 'Combined', 'Manual Software' and 'Manual Combined' flow control
-   > XOn/XOff can be manually toggled in case of 'Manual Software' and 'Manual Combined'
-- Serial ports: Auto-reopen implemented (feature request #1960299)
-   > Workaround for .NET deadlock issue in System.IO.SerialPort applied, limitation removed
-   > Also fixes exceptions in case of disconnect (bugs #2981793, #3093159 and #3372435)
-   > Useful for USB Ser/CDC connections such as USB to serial converters or other Ser/CDC devices
-- Byte and line data rate per second added to monitors (feature requests #2846784 and #3274066)
-- Handling of terminal indecies finalized (feature request #3091859)
-   > Fixed indecies are persistently saved and restored upon loading the workspace
-   > Dynamic indecies are automatically restored correctly
-- Powerful command line argument handling implemented related to the feature requests stated above
-  (feature request #2991946, also fixes feature request #2745211)
-   > Attribute based argument implementation including test environment and runtime validation
-   > Based on the NUnit command line argument infrastructure
-- All major terminal settings are now also available when creating a new terminal as well as when
-  calling YAT from the command line (feature requests #3162725 and #3391925, related to feature
-  request #2991946 listed above)
-
-Important changes:
-- The monitor update rate is now dependent on the data rate, i.e. when more data is transmitted or
-  received, the update rate is reduced, results in better performance (feature request #3274073)
-- Monitor display status settings relocated from 'Display' to 'Status' to improve speed on showing
-  the status labels, i.e. no monitor update is needed anymore (related to feature request #3274073)
-- Data sending in MKY.IO.Serial.SerialPort switched from synchronous to asynchronous in order to
-  allow proper handling of XOn/XOff and RTS/CTS flow control
-- Serial COM ports RTS and DTR states are no longer stored persistently in case of manual flow
-  control (related to feature requests #2932691 and #3066635 and bug #3432512)
-- Parity error replacement removed since parity errors are displayed as error text inside terminal
-- Break states are only indicated and modifiable if selected in 'AdvancedSettings'
-- Shortcut for window layout added: Ctrl+Alt+C/H/V layouts cascaded/horizontal/vertical
-- Behavior of concurrent instances of YAT verified (feature request #2842713)
-   > Already seems to work fine, test case added and successfully passed, limitation removed
-- Exception handling refactored, now using 'Application.ThreadException' for 'Windows.Forms'
-  and 'AppDomain.UnhandledException' for all other threads (also fixes bug #3292682)
-- 'Unhandled Exception' now shows all information including inner exceptions (bug #3290314)
-- MKY.Data added
-- MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
-- MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
-- Update to NUnit 2.5.10
-- "_<Base|Data|Doc|Test>" renamed to "!-<Base|Data|Doc|Test>"
-- Product version added to header of each source code file (feature request #3418320)
-
-Fixed bugs:
-- YAT no longer asks twice whether to save (bug #3121250)
-   > Only applies if [File > Preferences... > Save current workspace automatically] is 'No'
-- Serial COM ports now properly support XOn/XOff and RTS/CTS flow control (bug #3432512)
-- Multi-line commands are again kept in 'Send Command' (bug #3121249)
-- Exception when selecting an undefined predefined command using 'Shift+Fx' fixed (bug #3367649)
-- Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
-- Error message in case of an error when opening a port or socket improved (bug #2213639)
-- Exception in case of a computer without any devices (e.g. off-line notebook) fixed (bug #3060623)
-- 'NullReferenceException' in YAT.Log fixed (bug #3441961)
-
-Limitations and known issues:
-- General imitations of .NET Windows.Forms
-   > System errors are output in local language, even though YAT is all-English (bug #1927786)
-- MDI limitations of .NET
-   > Issues with frame (bugs #1808492 and #1808493)
-   > Issues with window list (bugs #1808494, #2846917 and #3160095)
-   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
-- Long monitor content is not displayed properly when scrolling using scroll bar (bug #2865562)
-- Response of multi-line commands or files is delayed (bug #3072919)
-- Support for serial ports which are named other than "COM..." isn't supported by .NET
-  (feature request #2848228)
-- Serial COM port RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
-  on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097)
-- Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
-  'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205)
-- Handling of serial COM port break states (feature #2932691) may not be supported on certain
-  hardware, e.g. USB/RS-232 converters
-- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
-  implementation and test environment would be needed to run it on unixoids (feature req. #2982052)
-- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
-- Wait for answer line (text terminals) not yet implemented (feature request #1808509)
-- Direct send text mode does not yet support special formats and commands (feature request #1808496)
-- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-
-
 YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25
 YAT 2.0 Beta 3 Candidate 3 Version 1.99.25 :: 2010-11-28
 YAT 2.0 Beta 3 Candidate 2 Version 1.99.24 :: 2010-11-11
@@ -867,7 +780,7 @@ YAT 2.0 Alpha 2 Version 1.99.3 :: 2007-02-07
 YAT 2.0 Alpha 1 Version 1.99.0 :: 2007-01-23
 
 Content of the above Alpha and Beta versions has been removed in order to compact this file such it
-fits the SourceForge limitation of ~1000 lines for the online release notes.
+fits the SourceForge limitation of ~900 lines for the online release notes.
 
 
 
@@ -880,7 +793,7 @@ XTerm232 1.0.1 :: 2003-10-30
 XTerm232 1.0.0 :: 2003-10-14
 
 Content of the above historical versions has been removed in order to compact this file such it
-fits the SourceForge limitation of ~1000 lines for the online release notes.
+fits the SourceForge limitation of ~900 lines for the online release notes.
 
 
 ====================================================================================================
