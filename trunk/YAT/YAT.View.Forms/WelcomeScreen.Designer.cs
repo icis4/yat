@@ -31,7 +31,7 @@
 			this.components = new System.ComponentModel.Container();
 			this.pictureBox_Icon = new System.Windows.Forms.PictureBox();
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
-			this.label_Name = new System.Windows.Forms.Label();
+			this.label_Caption = new System.Windows.Forms.Label();
 			this.label_Version = new System.Windows.Forms.Label();
 			this.label_Status = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Icon)).BeginInit();
@@ -53,18 +53,18 @@
 			this.timer_Opacity.Interval = 40;
 			this.timer_Opacity.Tick += new System.EventHandler(this.timer_Opacity_Tick);
 			// 
-			// label_Name
+			// label_Caption
 			// 
-			this.label_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.label_Caption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label_Name.AutoSize = true;
-			this.label_Name.Font = new System.Drawing.Font("DejaVu Sans Mono", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_Name.Location = new System.Drawing.Point(91, 12);
-			this.label_Name.Margin = new System.Windows.Forms.Padding(12, 0, 3, 0);
-			this.label_Name.Name = "label_Name";
-			this.label_Name.Size = new System.Drawing.Size(74, 38);
-			this.label_Name.TabIndex = 1;
-			this.label_Name.Text = "YAT";
+			this.label_Caption.AutoSize = true;
+			this.label_Caption.Font = new System.Drawing.Font("DejaVu Sans Mono", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Caption.Location = new System.Drawing.Point(91, 12);
+			this.label_Caption.Margin = new System.Windows.Forms.Padding(12, 0, 3, 0);
+			this.label_Caption.Name = "label_Caption";
+			this.label_Caption.Size = new System.Drawing.Size(74, 38);
+			this.label_Caption.TabIndex = 1;
+			this.label_Caption.Text = "YAT";
 			// 
 			// label_Version
 			// 
@@ -101,7 +101,7 @@
 			this.ClientSize = new System.Drawing.Size(280, 120);
 			this.Controls.Add(this.label_Status);
 			this.Controls.Add(this.label_Version);
-			this.Controls.Add(this.label_Name);
+			this.Controls.Add(this.label_Caption);
 			this.Controls.Add(this.pictureBox_Icon);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "WelcomeScreen";
@@ -117,7 +117,7 @@
 		#endregion
 
 		private System.Windows.Forms.PictureBox pictureBox_Icon;
-		private System.Windows.Forms.Label label_Name;
+		private System.Windows.Forms.Label label_Caption;
 		private System.Windows.Forms.Label label_Version;
 		private System.Windows.Forms.Label label_Status;
 		private System.Windows.Forms.Timer timer_Opacity;

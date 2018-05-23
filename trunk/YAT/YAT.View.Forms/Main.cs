@@ -263,14 +263,14 @@ namespace YAT.View.Forms
 					{
 						if (showErrorModally)
 						{
-							string executableName = Path.GetFileName(System.Windows.Forms.Application.ExecutablePath);
+							var name = ApplicationEx.ExecutableNameWithoutExtension;
 
 							var sb = new StringBuilder();
-							sb.Append(ApplicationEx.ProductName);
+							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
 							sb.Append(" could not be started because the given command line is invalid!");
 							sb.AppendLine();
 							sb.AppendLine();
-							sb.Append(@"Use """ + executableName + @" /?"" for command line help.");
+							sb.Append(@"Use """ + name + @"[.exe] /?"" for command line help.");
 
 							MessageBoxEx.Show
 							(
@@ -289,7 +289,7 @@ namespace YAT.View.Forms
 						if (showErrorModally)
 						{
 							var sb = new StringBuilder();
-							sb.Append(ApplicationEx.ProductName);
+							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
 							sb.Append(" could not be started with the given settings!");
 
 							if (!string.IsNullOrEmpty(this.main.StartArgs.ErrorMessage))
@@ -325,7 +325,7 @@ namespace YAT.View.Forms
 						if (showErrorModally)
 						{
 							var sb = new StringBuilder();
-							sb.Append(ApplicationEx.ProductName);
+							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
 							sb.Append(" could not execute the requested operation!");
 
 							MessageBoxEx.Show

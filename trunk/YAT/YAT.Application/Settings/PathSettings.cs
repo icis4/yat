@@ -34,16 +34,16 @@ namespace YAT.Application.Settings
 	public class PathSettings : MKY.Settings.SettingsItem, IEquatable<PathSettings>
 	{
 		/// <summary></summary>
-		public static readonly string MainFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+		public static readonly string MainFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
 
 		/// <summary></summary>
-		public static readonly string SendFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+		public static readonly string SendFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
 
 		/// <summary></summary>
-		public static readonly string LogFilesDefault     = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+		public static readonly string LogFilesDefault     = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
 
 		/// <summary></summary>
-		public static readonly string MonitorFilesDefault = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName;
+		public static readonly string MonitorFilesDefault = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
 
 		private string mainFiles;
 		private string sendFiles;

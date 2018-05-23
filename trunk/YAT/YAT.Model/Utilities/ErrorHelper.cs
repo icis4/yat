@@ -144,7 +144,7 @@ namespace YAT.Model.Utilities
 			{
 				case Domain.IOType.SerialPort:
 				{
-					yatLead = ApplicationEx.ProductName + " hint:";
+					yatLead = ApplicationEx.CommonName + " hint:";
 					yatText = "Check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
 					break;
 				}
@@ -152,7 +152,7 @@ namespace YAT.Model.Utilities
 				case Domain.IOType.TcpClient:
 				case Domain.IOType.UdpClient:
 				{
-					yatLead = ApplicationEx.ProductName + " hint:";
+					yatLead = ApplicationEx.CommonName + " hint:";
 					yatText = "Make sure the selected remote host is available.";
 					break;
 				}
@@ -162,14 +162,14 @@ namespace YAT.Model.Utilities
 				case Domain.IOType.UdpServer:
 				case Domain.IOType.UdpPairSocket:
 				{
-					yatLead = ApplicationEx.ProductName + " hint:";
+					yatLead = ApplicationEx.CommonName + " hint:";
 					yatText = "Make sure the selected socket is not already in use.";
 					break;
 				}
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					yatLead = ApplicationEx.ProductName + " hint:";
+					yatLead = ApplicationEx.CommonName + " hint:";
 					yatText = "Make sure the selected USB device is ready.";
 					break;
 				}
@@ -191,7 +191,7 @@ namespace YAT.Model.Utilities
 			{
 				case Domain.IOType.SerialPort:
 				{
-					yatLead = ApplicationEx.ProductName + " hints:";
+					yatLead = ApplicationEx.CommonName + " hints:";
 					yatText = "Make sure the selected serial COM port is available and not already in use. " +
 					          "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
 					break;
@@ -204,14 +204,14 @@ namespace YAT.Model.Utilities
 				case Domain.IOType.UdpServer:
 				case Domain.IOType.UdpPairSocket:
 				{
-					yatLead = ApplicationEx.ProductName + " hint:";
+					yatLead = ApplicationEx.CommonName + " hint:";
 					yatText = "Make sure the selected socket is not already in use.";
 					break;
 				}
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					yatLead = ApplicationEx.ProductName + " hint:";
+					yatLead = ApplicationEx.CommonName + " hint:";
 					yatText = "Make sure the selected USB device is connected and not already in use.";
 					break;
 				}
@@ -279,7 +279,7 @@ namespace YAT.Model.Utilities
 				hintCount++;
 			}
 
-			yatLead = ApplicationEx.ProductName + (hintCount <= 1 ? " hint:" : " hints:");
+			yatLead = ApplicationEx.CommonName + (hintCount <= 1 ? " hint:" : " hints:");
 			yatText = hintText.ToString();
 		}
 	}

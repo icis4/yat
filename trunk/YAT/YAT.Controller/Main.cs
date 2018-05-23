@@ -1062,7 +1062,13 @@ namespace YAT.Controller
 			foreach (string line in ResultText)
 				sb.AppendLine(line);
 
-			MessageBoxEx.Show(sb.ToString(), ApplicationEx.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBoxEx.Show
+			(
+				sb.ToString(),
+				ApplicationEx.ProductName + " Help", // "YAT" or "YATConsole", as indicated in main title bar.
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
 		}
 
 		#endregion
@@ -1093,8 +1099,7 @@ namespace YAT.Controller
 			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 			Console.Out.WriteLine();
 
-			Console.Out.WriteLine(ApplicationEx.ProductNameAndVersion);
-		////Console.Out.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
+			Console.Out.WriteLine(ApplicationEx.ProductCaptionAndVersion);
 
 			Console.Out.WriteLine();
 			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...

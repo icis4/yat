@@ -38,12 +38,10 @@ namespace YAT.View.Forms
 		{
 			InitializeComponent();
 
-			// Form title/caption:
-			string text = ApplicationEx.ProductName;
-			text += " Help";
-			Text = text;
+			// Form:
+			Text = ApplicationEx.CommonName + " Help"; // Fixed to "YAT".
 
-			// Help texts:
+			// Contents:
 			textBox_ParserFormat.Text        = Domain.Parser.Parser.FormatHelp;
 			textBox_ParserKeyword.Text       = Domain.Parser.Parser.KeywordHelp;
 			textBox_TextTerminalKeyword.Text = Domain.TextTerminal.KeywordHelp;

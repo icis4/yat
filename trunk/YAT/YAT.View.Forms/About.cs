@@ -88,11 +88,10 @@ namespace YAT.View.Forms
 			int linkStart = 0;
 
 			// Form:
-			Text = ApplicationEx.ProductNameLong;
+			Text = ApplicationEx.CommonNameLong; // Fixed to "YAT - Yet Another Terminal".
 
 			// Title:
-			linkLabel_Title.Text = ApplicationEx.ProductNameAndVersion;
-		////linkLabel_Title.Text = ApplicationEx.ProductNameAndBuildNameAndVersion;
+			linkLabel_Title.Text = ApplicationEx.ProductCaptionAndVersion;
 
 			// Copyright:
 			linkLabel_Copyright.Text = "";
