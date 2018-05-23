@@ -324,8 +324,7 @@ namespace YAT.Model.Types
 				case MdiLayout.TileHorizontal: return (new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
 
-				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException(                MessageHelper.InvalidExecutionPreamble + "'ArrangeIcons' is not supported by " + ApplicationEx.ProductName + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
+				case MdiLayout.ArrangeIcons:
 				default:                       throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
