@@ -105,7 +105,7 @@ namespace YAT.Model.Types
 		private const string             CloseTerminal_string = "[Close Terminal]";
 		private static readonly string[] CloseTerminal_stringAlternatives = new string[] { "[CT]" };
 
-		private static readonly string   ExitApplication_string = "[Exit " + ApplicationEx.ProductName + "]";
+		private static readonly string   ExitApplication_string = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
 		private static readonly string[] ExitApplication_stringAlternatives = new string[] { "[X]" };
 
 		#endregion

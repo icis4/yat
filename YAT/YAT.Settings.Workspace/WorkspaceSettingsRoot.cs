@@ -80,7 +80,7 @@ namespace YAT.Settings.Workspace
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationEx.ProductName + " Workspace Settings"); }
+			get { return (ApplicationEx.ProductName + " Workspace Settings"); } // File identification shall differ for "YAT" and "YATConsole".
 			set { } // Do nothing.
 		}
 

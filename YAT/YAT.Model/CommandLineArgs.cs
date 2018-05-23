@@ -387,8 +387,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationEx.ProductNameConstWorkaround + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
-			"For " + ApplicationEx.ProductNameConstWorkaround + ".exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
-			"For " + ApplicationEx.ProductNameConstWorkaround + "Console.exe, interaction is always disabled, i.e. this option has no effect.")]
+			"For " + ApplicationEx.ProductNameConstWorkaround + "[.exe], interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
+			"For " + ApplicationEx.ProductNameConstWorkaround + "Console[.exe], interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;
 
 		#endregion
@@ -521,14 +521,14 @@ namespace YAT.Model
 		/// </summary>
 		public override string GetHelpText(int maxWidth)
 		{
-			string anyWorkspace = "<Workspace>" + ExtensionHelper.WorkspaceFile;
-			string anyTerminal  = "<Terminal>"  + ExtensionHelper.TerminalFile;
+			var anyWorkspace = "<Workspace>" + ExtensionHelper.WorkspaceFile;
+			var anyTerminal  = "<Terminal>"  + ExtensionHelper.TerminalFile;
 
-			string myWorkspace = "MyWorkspace" + ExtensionHelper.WorkspaceFile;
-			string myTerminal  = "MyTerminal"  + ExtensionHelper.TerminalFile;
+			var myWorkspace = "MyWorkspace" + ExtensionHelper.WorkspaceFile;
+			var myTerminal  = "MyTerminal"  + ExtensionHelper.TerminalFile;
 
-			string name = ApplicationEx.ProductName;
-			StringBuilder helpText = new StringBuilder();
+			var name = ApplicationEx.ExecutableNameWithoutExtension; // The executable name shall be used as *the* name, as
+			var helpText = new StringBuilder();                      // only that is relevant to the user of the command line.
 
 			helpText.AppendLine(                                 "Usage:");
 			helpText.AppendLine();
@@ -538,25 +538,25 @@ namespace YAT.Model
 			helpText.AppendLine(                                 "Usage examples:");
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myWorkspace));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and open the given workspace."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " and open the given workspace."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and open the given terminal."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " and open the given terminal."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal + " /b=19200"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " with the given terminal, but change the baud rate to 19200 baud."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " with the given terminal, but change the baud rate to 19200 baud."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /r"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and open the most recent file."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " and open the most recent file."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /n /p=1 /b=19200"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and create a new terminal on COM1 using 19200 baud."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " and create a new terminal on COM1 using 19200 baud."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and show the 'New Terminal' dialog."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " and show the 'New Terminal' dialog."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /e"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " but neither show any dialog nor perform any operation."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " but neither show any dialog nor perform any operation."));
 			helpText.AppendLine();
 
 			helpText.Append(base.GetHelpText(maxWidth));

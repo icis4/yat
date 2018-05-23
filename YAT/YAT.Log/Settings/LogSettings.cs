@@ -164,7 +164,7 @@ namespace YAT.Log.Settings
 			ApplicationSettings.LocalUserSettings.Paths.LogFiles = Application.Settings.PathSettings.LogFilesDefault;
 
 			RootPath     = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
-			RootFileName = ApplicationEx.ProductName + "-Log";
+			RootFileName = ApplicationEx.ProductName + "-Log"; // File location shall be separate for "YAT" and "YATConsole".
 
 			RawLogTx     = false;
 			RawLogBidir  = false;

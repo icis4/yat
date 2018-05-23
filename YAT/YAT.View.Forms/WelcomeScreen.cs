@@ -76,14 +76,13 @@ namespace YAT.View.Forms
 			int width = Width;
 			int width2 = 0;
 
-		////label_Name.Text = ApplicationEx.ProductNameAndBuildName;
-			label_Name.Text = ApplicationEx.ProductName;
-			width2 = label_Name.Left + label_Name.Width + Margin;
+			label_Caption.Text = ApplicationEx.ProductCaption;
+			width2 = label_Caption.Left + label_Caption.Width + Margin;
 			if (width < width2)
 				width = width2;
 
-			label_Version.Text = "Version " + ApplicationEx.ProductVersion;
-			width2 = label_Version.Left + label_Version.Width + Margin;
+			label_Version.Text = ApplicationEx.ProductVersion; // No longer using "Version" prefix as many other applications which don't.
+			width2 = label_Version.Left + label_Version.Width + Margin; // Release sections in release notes no longer use "Version" either.
 			if (width < width2)
 				width = width2;
 

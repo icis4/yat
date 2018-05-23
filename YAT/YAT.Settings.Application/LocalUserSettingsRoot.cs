@@ -95,7 +95,7 @@ namespace YAT.Settings.Application
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationEx.ProductName + " local user settings"); }
+			get { return (ApplicationEx.ProductName + " local user settings"); } // File identification shall differ for "YAT" and "YATConsole".
 			set { } // Do nothing.
 		}
 

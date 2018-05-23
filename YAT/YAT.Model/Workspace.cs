@@ -325,7 +325,7 @@ namespace YAT.Model
 				if (this.activeTerminal != null)
 					return (this.activeTerminal.IndicatedName);
 				else
-					return (ApplicationEx.ProductName);
+					return (ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
 			}
 		}
 
@@ -1164,8 +1164,8 @@ namespace YAT.Model
 			{
 				var dr = OnMessageInputRequest
 				(
-					"Save workspace?",
-					ApplicationEx.ProductName, // Do not use 'IndicatedName' as that would refer to the active terminal.
+					"Save workspace?", // Do not use 'IndicatedName' as that would refer to the active terminal.
+					ApplicationEx.ProductName, // "YAT" or "YATConsole", as indicated in main title bar.
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
 				);

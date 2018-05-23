@@ -55,7 +55,7 @@ namespace YAT.View.Forms
 
 			// Form:
 			sb = new StringBuilder();
-			sb.Append(ApplicationEx.ProductName);
+			sb.Append(ApplicationEx.CommonName); // Fixed to "YAT" as in text further below.
 			switch (tracker)
 			{
 				case TrackerType.Support: sb.Append(" Support Request"); break;
@@ -69,10 +69,10 @@ namespace YAT.View.Forms
 			sb = new StringBuilder();
 			switch (tracker)
 			{
-				case TrackerType.Support: sb.Append("Support for "              + ApplicationEx.ProductName + " can be requested online."); break;
-				case TrackerType.Feature: sb.Append("Features and changes for " + ApplicationEx.ProductName + " can be requested online."); break;
+				case TrackerType.Support: sb.Append("Support for "              + ApplicationEx.CommonName + " can be requested online."); break;
+				case TrackerType.Feature: sb.Append("Features and changes for " + ApplicationEx.CommonName + " can be requested online."); break;
 				case TrackerType.Bug:
-				default:                  sb.Append("Bugs for "                 + ApplicationEx.ProductName + " can be submitted online."); break;
+				default:                  sb.Append("Bugs for "                 + ApplicationEx.CommonName + " can be submitted online."); break;
 			}
 			sb.Append(" Follow the link below and proceed according to the instructions.");
 			linkLabel_Intro.Text = sb.ToString();
@@ -91,7 +91,7 @@ namespace YAT.View.Forms
 			sb.Append("If you don't have a SourceForge.net account,");
 			switch (tracker)
 			{
-				case TrackerType.Support: sb.Append(" you can participate in or start a discussion, or directly contact " + ApplicationEx.ProductName + " by email."); break;
+				case TrackerType.Support: sb.Append(" you can participate in or start a discussion, or directly contact " + ApplicationEx.CommonName + " by email."); break;
 				case TrackerType.Feature:
 				case TrackerType.Bug:
 				default:                  sb.Append(" you can optionally provide a email address to get email notifications."); break;
@@ -119,7 +119,7 @@ namespace YAT.View.Forms
 			{
 				case TrackerType.Support:
 				{
-					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version and settings, devices, system,...).");
+					sb.AppendLine("    > Environment (" + ApplicationEx.CommonName + " version and settings, devices, system,...).");
 					sb.AppendLine("    > What you want to achieve.");
 					sb.AppendLine("    > What doesn't work.");
 					break;
@@ -127,7 +127,7 @@ namespace YAT.View.Forms
 
 				case TrackerType.Feature:
 				{
-					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version and settings, devices, system,...).");
+					sb.AppendLine("    > Environment (" + ApplicationEx.CommonName + " version and settings, devices, system,...).");
 					sb.AppendLine("    > Expected behavior of the new or changed feature.");
 					sb.AppendLine("    > Use case(s) of the new or changed feature.");
 					break;
@@ -136,7 +136,7 @@ namespace YAT.View.Forms
 				case TrackerType.Bug:
 				default:
 				{
-					sb.AppendLine("    > Environment (" + ApplicationEx.ProductName + " version and settings, devices, system,...).");
+					sb.AppendLine("    > Environment (" + ApplicationEx.CommonName + " version and settings, devices, system,...).");
 					sb.AppendLine("    > Steps to reproduce the bug.");
 					sb.AppendLine("    > Any useful additional information.");
 					break;

@@ -62,8 +62,7 @@ namespace YAT.View.Forms
 			{
 				sw.WriteLine(originMessage);
 				sw.WriteLine();
-				sw.WriteLine(ApplicationEx.ProductNameAndVersion);
-			////sw.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
+				sw.WriteLine(ApplicationEx.ProductCaptionAndVersion);
 				sw.WriteLine();
 
 				AnyWriter.WriteException(sw, null, exception);

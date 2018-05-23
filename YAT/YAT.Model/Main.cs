@@ -265,7 +265,7 @@ namespace YAT.Model
 				if (this.workspace != null)
 					return (this.workspace.IndicatedName);
 				else
-					return (ApplicationEx.ProductName);
+					return (ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
 			}
 		}
 
@@ -1186,7 +1186,7 @@ namespace YAT.Model
 
 			if (workspaceSuccess)
 			{
-				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
+				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "..."); // "YAT" or "YATConsole", as indicated in main title bar.
 
 				// Discard potential exceptions already before signalling the close! Required to
 				// prevent exceptions on still ongoing asynchronous callbacks trying to synchronize
@@ -1923,7 +1923,7 @@ namespace YAT.Model
 
 					try
 					{
-						OnFixedStatusTextRequest("Automatically exiting " + ApplicationEx.ProductName + "...");
+						OnFixedStatusTextRequest("Automatically exiting " + ApplicationEx.ProductName + "..."); // "YAT" or "YATConsole", as indicated in main title bar.
 						Exit();
 					}
 					catch (Exception ex)

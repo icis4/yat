@@ -267,9 +267,9 @@ namespace YAT.View.Forms
 		{
 			try
 			{
-				var productName = ApplicationEx.ProductName;
-
-				var titleBuilder = new StringBuilder(productName);
+				var productName = ApplicationEx.ProductName;       // "YAT" or "YATConsole", as indicated in main title bar.
+				                                                   // Note that 'ProductCaptionAndVersion' will be used when
+				var titleBuilder = new StringBuilder(productName); // composing exception text in the 'UnhandledException' form.
 				{
 					titleBuilder.Append(" Unhandled");
 					switch (exceptionType)

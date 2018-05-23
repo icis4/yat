@@ -80,7 +80,7 @@ namespace YAT.View.Forms
 			this.groupBox_ParserHelp.Size = new System.Drawing.Size(455, 490);
 			this.groupBox_ParserHelp.TabIndex = 1;
 			this.groupBox_ParserHelp.TabStop = false;
-			this.groupBox_ParserHelp.Text = "Help";
+			this.groupBox_ParserHelp.Text = "Contents";
 			// 
 			// splitContainer_Help
 			// 
