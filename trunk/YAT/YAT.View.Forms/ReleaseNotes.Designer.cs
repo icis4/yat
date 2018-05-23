@@ -57,7 +57,6 @@
 			this.groupBox_ReleaseNotes.Size = new System.Drawing.Size(740, 393);
 			this.groupBox_ReleaseNotes.TabIndex = 1;
 			this.groupBox_ReleaseNotes.TabStop = false;
-			this.groupBox_ReleaseNotes.Text = "&Release Notes";
 			// 
 			// textBox_ReleaseNotes
 			// 

@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0.1 :: 201?-??-??
+YAT 2.0.1 :: 2018-0?-??
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -94,7 +94,7 @@ Important changes:
 - 
 
 Fixed bugs:
-- 
+- [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

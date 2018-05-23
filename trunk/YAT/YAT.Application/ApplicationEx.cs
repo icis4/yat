@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 // This code is intentionally placed into the YAT namespace even though the file is located in
 // YAT.Application since the class name already contains 'Application'.
@@ -32,54 +33,55 @@ namespace YAT
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public static class ApplicationEx
 	{
+		/// <summary>The common name, always "YAT", i.e. not "YAT" *or* "YATConsole".</summary>
+		public const string CommonName = "YAT";
+
+		/// <summary>The long variant of the common name.</summary>
+		public const string CommonNameLong = CommonName + " - Yet Another Terminal";
+
 		/// <summary>
 		/// Constant string to expand the application's product name in places where neither
 		/// <see cref="ProductName"/> nor <see cref="System.Windows.Forms.Application.ProductName"/>
 		/// can be used, e.g. in case of attribute arguments.
 		/// </summary>
-		public const string ProductNameConstWorkaround = "YAT";
+		public const string ProductNameConstWorkaround = "YAT"; // Should be "YAT" or "YATConsole", but fixed for simplicity.
 
 		/// <summary>The product name.</summary>
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Final";
-
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Almost Final";
-
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Epsilon";
-
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Epsilon Preliminary";
-
-	/////// <summary>The product name postfix that describes the build.</summary>
-	////public static readonly string ProductBuildName = " Epsilon Development";
-
-	/////// <summary>The product name including the build description.</summary>
-	////public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
-
 		/// <summary>The product version.</summary>
 		public static readonly string ProductVersion = System.Windows.Forms.Application.ProductVersion;
 
-	/////// <summary>The product name and its version.</summary>
-	////public static readonly string ProductNameAndVersion = ProductName + " Version " + ProductVersion;
+		/// <summary>The build designation.</summary>
+		public static readonly string ProductBuildDesignation = "";
+	////public static readonly string ProductBuildDesignation = " Final";
+	////public static readonly string ProductBuildDesignation = " Almost Final";
+	////public static readonly string ProductBuildDesignation = " Epsilon";
+	////public static readonly string ProductBuildDesignation = " Epsilon Preliminary";
+	////public static readonly string ProductBuildDesignation = " Epsilon Development";
 
-		/// <summary>The product name and its version.</summary>
-		public static readonly string ProductNameAndVersion = ProductName + " Version " + ProductVersion + " Development";
+		/// <summary>The product caption that combines product name and build designation.</summary>
+		public static readonly string ProductCaption = ProductName + ProductBuildDesignation;
 
-	/////// <summary>The complete product name including build description and its version.</summary>
-	////public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " Version " + ProductVersion;
-
-		/// <summary>The long variant of the product name.</summary>
-		public static readonly string ProductNameLong = ProductName + " - Yet Another Terminal";
+		/// <summary>
+		/// The product caption and version.
+		/// </summary>
+		/// <remarks>
+		/// No longer using "Version" inbetween as many other applications which don't, e.g.
+		///  > TortoiseSVN 1.9.7, Build 27907
+		///  > Syncovery 7.68 build 446
+		///  > FreeFileSync 9.9 [2018-03-09]
+		///  > Firefox 59.0.2 (64-Bit) + Thunderbird 52.7.0 (32-Bit)
+		/// Release sections in release notes no longer use "Version" either.
+		/// </remarks>
+	////public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersion;
+		public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersion + " Development"; // Version postfix.
 
 		/// <summary>The complete logo (text) of the product.</summary>
 		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Nobody will modify this array, don't worry...")]
 		public static readonly string[] ProductLogo =
 		{
-			ProductNameLong + ".",
+			CommonNameLong + ".", // Fixed to "YAT - Yet Another Terminal".
 			"Engineering, testing and debugging of serial communications.",
 			"Supports RS-232/422/423/485 as well as...",
 			"...TCP/IP Client/Server/AutoSocket,...",
@@ -96,6 +98,9 @@ namespace YAT
 			"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.
 			"See http://www.gnu.org/licenses/lgpl.html for license details."
 		};
+
+		/// <summary>The executable name.</summary>
+		public static readonly string ExecutableNameWithoutExtension = Path.GetFileNameWithoutExtension(System.Windows.Forms.Application.ExecutablePath);
 
 		/// <summary>The .NET Framework prerequisite.</summary>
 		public static readonly string PrerequisiteFramework = ".NET Framework 3.5 Service Pack 1";

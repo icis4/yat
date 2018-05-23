@@ -43,7 +43,7 @@ namespace YAT.View.Forms
 	public partial class ReleaseNotes : Form
 	{
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private static readonly string ReleaseNotesFileName = ApplicationEx.ProductName + " Release Notes.txt";
+		private static readonly string ReleaseNotesFileName = ApplicationEx.CommonName + " Release Notes.txt";
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private static readonly string ReleaseNotesFilePath = System.Windows.Forms.Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
@@ -74,10 +74,10 @@ namespace YAT.View.Forms
 					break;
 			}
 
-			// Set form title:
-			Text = ApplicationEx.ProductName + " Release Notes";
+			// Form:
+			Text = ApplicationEx.CommonName + " Release Notes"; // Fixed to "YAT" as that is contained in release notes.
 
-			// Open and fill release notes:
+			// Content:
 			textBox_ReleaseNotes.Text = "";
 			if (File.Exists(filePath))
 			{
