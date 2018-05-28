@@ -12,6 +12,11 @@
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
+::
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+:: Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::
 :: Author(s): Matthias Klaey
 :: ------------------------------------------------------------------------------------------------
 :: Copyright © 2003-2018 Matthias Kläy.
@@ -51,7 +56,7 @@ SET len=0
 IF DEFINED # (
     SET #=%#:~1%
     SET /A len += 1
-    GOTO StrLenLoop)
+    GOTO :StrLenLoop)
 )
 IF %verbose%=='TRUE' ECHO Script string length is %len%
 

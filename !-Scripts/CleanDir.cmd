@@ -26,8 +26,8 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-IF %1=="" GOTO NoPath
-IF %2=="" GOTO NoDirectory
+IF %1=="" GOTO :NoPath
+IF %2=="" GOTO :NoDirectory
 
 ::--------------------------------------------------------------------------------------------------
 PUSHD %1
@@ -36,16 +36,16 @@ ECHO Cleaning %2 in %1 . . .
 RMDIR /S /Q %2
 
 POPD
-GOTO End
+GOTO :End
 ::--------------------------------------------------------------------------------------------------
 
 :NoPath
 ECHO Parameter 1 must be a valid path
-GOTO End
+GOTO :End
 
 :NoDirectory
 ECHO Parameter 2 must be a valid directory name
-GOTO End
+GOTO :End
 
 :End
 
