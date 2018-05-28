@@ -1,4 +1,4 @@
-ï»¿@ECHO OFF
+@ECHO OFF
 
 ::==================================================================================================
 :: YAT - Yet Another Terminal.
@@ -12,16 +12,21 @@
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
+::
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+:: Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::
 :: Author(s): Matthias Klaey
 :: ------------------------------------------------------------------------------------------------
-:: Copyright Â© 2003-2018 Matthias KlÃ¤y.
+:: Copyright © 2003-2018 Matthias Kläy.
 :: All rights reserved.
 :: ------------------------------------------------------------------------------------------------
 :: This source code is licensed under the GNU LGPL.
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-IF %1=="" GOTO ErrorHandler
+IF %1=="" GOTO :SomeError
 
 ::--------------------------------------------------------------------------------------------------
 PUSHD %1
@@ -29,12 +34,12 @@ PUSHD %1
 ECHO Do something . . .
 
 POPD
-GOTO End
+GOTO :End
 ::--------------------------------------------------------------------------------------------------
 
-:ErrorHandler
+:SomeError
 ECHO Parameter 1 must be . . .
-GOTO End
+GOTO :End
 
 :End
 

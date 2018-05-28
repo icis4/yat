@@ -12,6 +12,11 @@
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
+::
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+:: Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::
 :: Author(s): Matthias Klaey
 :: ------------------------------------------------------------------------------------------------
 :: Copyright © 2003-2018 Matthias Kläy.
@@ -23,9 +28,9 @@
 
 SET USB_HUB_CTRL_EXE=USBHubControl.exe
 
-:: Verify that executable is available:
+:: Verify that executable is available via the system's PATH:
 WHERE %USB_HUB_CTRL_EXE% >NUL 2>&1
-IF NOT %ERRORLEVEL% == 0 GOTO ERROR_EXE
+IF NOT %ERRORLEVEL% == 0 GOTO :NoExe
 
 :: Reset both hubs:
 ECHO.
@@ -70,18 +75,18 @@ ECHO Hub 2: Adding lower pair of devices . . .
 TIMEOUT 9
 :: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
 
-GOTO END
+GOTO :End
 
-:ERROR_EXE
+:NoExe
 ECHO.
 ECHO The required %USB_HUB_CTRL_EXE% is not available!
 ECHO Make sure that the "MCD Conline USB HUB" drivers are installed, and. . .
 ECHO . . ."<MCD>\Tools\CommandLine" has been added to the system's PATH!
 ECHO.
 PAUSE
-GOTO END
+GOTO :End
 
-:END
+:End
 
 ::==================================================================================================
 :: End of
