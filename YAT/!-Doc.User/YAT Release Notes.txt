@@ -94,6 +94,7 @@ Important changes:
 - 
 
 Fixed bugs:
+- Optional user name of terminal is taken into account again (bug #415).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 
 Limitations and known issues:
