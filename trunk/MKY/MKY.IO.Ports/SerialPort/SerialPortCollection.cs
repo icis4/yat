@@ -310,7 +310,7 @@ namespace MKY.IO.Ports
 			// Lookup:
 			bool isInUseByActivePort = false;
 			bool isOpenByActivePort = false;
-			if ((ActivePortInUseInfo != null) && (ActivePortInUseInfo.PortId == portId))
+			if ((ActivePortInUseInfo != null) && (ActivePortInUseInfo.PortName == portId.Name))
 			{
 				isInUseByActivePort = true;
 				isOpenByActivePort = ActivePortInUseInfo.IsOpen;
@@ -321,7 +321,7 @@ namespace MKY.IO.Ports
 			bool isOpenByOtherPort = false;
 			if (otherPortInUseLookup != null)
 			{
-				otherPortInUseInfo = otherPortInUseLookup.FindAll(inUse => (inUse.PortId == portId));
+				otherPortInUseInfo = otherPortInUseLookup.FindAll(inUse => (inUse.PortName == portId.Name));
 				if (otherPortInUseInfo != null)
 				{
 					foreach (var statement in otherPortInUseInfo)
