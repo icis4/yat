@@ -73,21 +73,23 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			const int Margin = 8;
-			int width = Width;
-			int width2 = 0;
+			int totalWidth = Width;
+			int lineWidth = 0;
 
 			label_Caption.Text = ApplicationEx.ProductCaption;
-			width2 = label_Caption.Left + label_Caption.Width + Margin;
-			if (width < width2)
-				width = width2;
+			lineWidth = label_Caption.Left + label_Caption.Width + Margin;
 
-			label_Version.Text = ApplicationEx.ProductVersion; // No longer using "Version" prefix as many other applications which don't.
-			width2 = label_Version.Left + label_Version.Width + Margin; // Release sections in release notes no longer use "Version" either.
-			if (width < width2)
-				width = width2;
+			if (totalWidth < lineWidth)
+				totalWidth = lineWidth;
 
-			if (Width < width)
-				Width = width;
+			label_Version.Text = "Version " + ApplicationEx.ProductVersion; // Using "Version" prefix for better appearance even
+			lineWidth = label_Version.Left + label_Version.Width + Margin;  // though other locations no longer use "Version".
+
+			if (totalWidth < lineWidth)
+				totalWidth = lineWidth;
+
+			if (Width < totalWidth)
+				Width = totalWidth;
 
 			label_Status.Text = "Loading settings...";
 			var asyncInvoker = new Action(LoadApplicationSettingsAsync);
