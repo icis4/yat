@@ -3922,8 +3922,8 @@ namespace YAT.View.Forms
 			SuspendHandlingTerminalSettings();
 			try
 			{
-				var ts = this.settingsRoot.Explicit.Terminal;
-				var scs = ts.IO.SerialPort.Communication;
+				var es = this.settingsRoot.Explicit;
+				var scs = es.Terminal.IO.SerialPort.Communication;
 				scs.SuspendChangeEvent();
 				try
 				{
@@ -4010,7 +4010,7 @@ namespace YAT.View.Forms
 
 				if (scs.HaveChanged)
 				{
-					this.terminal.ApplySettings(ts);
+					this.terminal.ApplySettings(es);
 					SetTimedStatusText("Terminal settings set to " + presetString + ".");
 				}
 				else
@@ -5210,7 +5210,7 @@ namespace YAT.View.Forms
 					SuspendHandlingTerminalSettings();
 					try
 					{
-						this.terminal.ApplySettings(fsr.Terminal);
+						this.terminal.ApplySettings(fsr);
 					}
 					finally
 					{

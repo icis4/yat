@@ -979,9 +979,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// No need to validate the freely definable name.
+		/// </remarks>
 		private void textBox_UserName_TextChanged(object sender, EventArgs e)
 		{
-			// No need to validate the freely definable name.
 			this.settingsInEdit.UserName = textBox_UserName.Text;
 		}
 
