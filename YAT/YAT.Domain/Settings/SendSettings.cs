@@ -106,8 +106,8 @@ namespace YAT.Domain.Settings
 			UseExplicitDefaultRadix = rhs.UseExplicitDefaultRadix;
 			CopyPredefined          = rhs.CopyPredefined;
 
-			Text = rhs.Text;
-			File = rhs.File;
+			Text = new SendSettingsText(rhs.Text);
+			File = new SendSettingsFile(rhs.File);
 
 			DefaultDelay        = rhs.DefaultDelay;
 			DefaultLineDelay    = rhs.DefaultLineDelay;
