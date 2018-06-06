@@ -217,8 +217,8 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text = "YAT is developed with..." + Environment.NewLine;
 
 			textBefore = "...Microsoft ";
-			textLink   =              "Visual Studio 2015 Community Edition";
-			textAfter  =                                                  "...";
+			textLink   =              "Visual Studio Community Edition";
+			textAfter  =                                             "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
