@@ -29,7 +29,7 @@ namespace MKY.IO.Ports
 {
 	/// <remarks>
 	/// 'class' instead of 'struct' to allow a parameterless constructor, i.e. initializing
-	/// <see cref="PortId"/> and <see cref="InUseText"/> to other value than 0 and "".
+	/// <see cref="UseId"/> and <see cref="PortName"/> to other value than 0 and "".
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 	[Serializable]
@@ -45,9 +45,9 @@ namespace MKY.IO.Ports
 		[XmlElement("UseId")]
 		public int UseId { get; set; } // = 0;
 
-		/// <summary>The ID of the stated serial port.</summary>
-		[XmlElement("PortId")]
-		public int PortId { get; set; } = SerialPortId.FirstStandardPortNumber;
+		/// <summary>The name of the stated serial port.</summary>
+		[XmlElement("PortName")]
+		public string PortName { get; set; } = SerialPortId.FirstStandardPortName;
 
 		/// <summary>Indicates whether the serial port is open.</summary>
 		[XmlElement("IsOpen")]
@@ -58,10 +58,10 @@ namespace MKY.IO.Ports
 		public string InUseText { get; set; } = ActivePortInUseTextDefault;
 
 		/// <summary></summary>
-		public InUseInfo(int useId, int portId, bool isOpen, string inUseText)
+		public InUseInfo(int useId, string portName, bool isOpen, string inUseText)
 		{
 			UseId     = useId;
-			PortId    = portId;
+			PortName  = portName;
 			IsOpen    = isOpen;
 			InUseText = inUseText;
 		}
@@ -82,9 +82,9 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				UseId + ", " +
-				PortId + ", " +
-				IsOpen + ", " +
+				UseId    + ", " +
+				PortName + ", " +
+				IsOpen   + ", " +
 				InUseText
 			);
 		}
@@ -103,7 +103,7 @@ namespace MKY.IO.Ports
 				int hashCode;
 
 				hashCode =                     UseId;
-				hashCode = (hashCode * 397) ^ PortId;
+				hashCode = (hashCode * 397) ^ (PortName != null ? PortName.GetHashCode() : 0);
 
 				// Do not include 'IsOpen' and 'InUseText'.
 				// Hash (as well as equality) shall be defined by IDs only.
@@ -137,8 +137,8 @@ namespace MKY.IO.Ports
 			(
 			////base.Equals(other) is not required when deriving from 'object'.
 
-				UseId .Equals(other.UseId) &&
-				PortId.Equals(other.PortId)
+				UseId   .Equals                 (other.UseId) &&
+				StringEx.EqualsOrdinal(PortName, other.PortName)
 
 				// Do not include 'IsOpen' and 'InUseText'.
 				// Equality (as well as hash) shall be defined by IDs only.
