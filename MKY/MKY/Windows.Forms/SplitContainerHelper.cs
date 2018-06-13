@@ -132,6 +132,13 @@ namespace MKY.Windows.Forms
 		{
 			int widthOrHeight = OrientationEx.SizeToWidthOrHeight(sc, sc.Orientation);
 
+			if (widthOrHeight <= 0) // Case e.g. if the form/control is hidden.
+			{                       // Needed to prevent 'ArgumentException' at Int32Ex.Limit() below.
+				Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "Size should be larger than 0, but is {0}. This may happen if '{1}' is hidden.", widthOrHeight, sc.Name));
+				limited = 0;
+				return (false);
+			}
+
 			int min =                       (sc.Panel1Collapsed ? 0 : sc.Panel1MinSize);
 			int max = (widthOrHeight - 1) - (sc.Panel2Collapsed ? 0 : sc.Panel2MinSize);
 
