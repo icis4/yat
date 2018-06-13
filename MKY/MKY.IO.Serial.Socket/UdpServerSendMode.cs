@@ -197,7 +197,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(int sendMode, out UdpServerSendModeEx result)
 		{
@@ -214,7 +214,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(int sendMode, out UdpServerSendMode result)
 		{

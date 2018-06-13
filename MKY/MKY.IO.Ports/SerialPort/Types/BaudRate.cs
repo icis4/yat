@@ -66,7 +66,13 @@ namespace MKY.IO.Ports
 		Baud460800 = 460800,
 		Baud921600 = 921600,
 
-		Explicit = 0
+		Explicit = 0,
+
+		/// <summary>Theoretical minimum is 1.</summary>
+		Minimum = 1,
+
+		/// <summary>Supported maximum is <see cref="int.MaxValue"/>.</summary>
+		Maximum = int.MaxValue
 	}
 
 	#pragma warning restore 1591
@@ -108,7 +114,7 @@ namespace MKY.IO.Ports
 		public BaudRateEx(int baudRate)
 			: base(BaudRate.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
-			if (IsPotentiallyValidBaudRate(baudRate))
+			if (IsPotentiallyValid(baudRate))
 			{
 				this.explicitBaudRate = baudRate;
 			}
@@ -309,11 +315,11 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given baud rate.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(int baudRate, out BaudRateEx result)
 		{
-			if (IsPotentiallyValidBaudRate(baudRate))
+			if (IsPotentiallyValid(baudRate))
 			{
 				result = baudRate;
 				return (true);
@@ -326,11 +332,11 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given baud rate.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(int baudRate, out BaudRate result)
 		{
-			if (IsPotentiallyValidBaudRate(baudRate))
+			if (IsPotentiallyValid(baudRate))
 			{
 				result = (BaudRateEx)baudRate;
 				return (true);
@@ -343,9 +349,9 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static bool IsPotentiallyValidBaudRate(int baudRate)
+		public static bool IsPotentiallyValid(int baudRate)
 		{
-			return (baudRate > 0);
+			return ((baudRate > (int)BaudRate.Minimum) && (baudRate < (int)BaudRate.Maximum));
 		}
 
 		#endregion

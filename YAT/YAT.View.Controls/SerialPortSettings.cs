@@ -348,7 +348,7 @@ namespace YAT.View.Controls
 				return;
 
 			int intBaudRate;
-			if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
+			if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(intBaudRate)))
 			{
 				BaudRate = (MKY.IO.Ports.BaudRateEx)intBaudRate;
 			}

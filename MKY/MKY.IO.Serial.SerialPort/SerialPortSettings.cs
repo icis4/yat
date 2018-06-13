@@ -171,6 +171,14 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
+		public SerialPortSettings(SerialPortId portId)
+			: this(portId, new SerialCommunicationSettings(SerialCommunicationSettings.BaudRateDefault))
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
 		public SerialPortSettings(SerialPortId portId, SerialCommunicationSettings communication)
 		{
 			SetMyDefaults();
@@ -593,17 +601,25 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static bool TryParseShort(string s, out SerialPortSettings settings)
 		{
-			string delimiters = "/,;";
-			string[] sa = s.Trim().Split(delimiters.ToCharArray(), 2);
-			if (sa.Length == 2)
+			var delimiters = " ,;|";
+			var sa = s.Trim().Split(delimiters.ToCharArray(), 2, StringSplitOptions.RemoveEmptyEntries);
+			if (sa.Length > 0)
 			{
 				SerialPortId portId;
 				if (SerialPortId.TryParse(sa[0], out portId))
 				{
-					SerialCommunicationSettings communication;
-					if (SerialCommunicationSettings.TryParse(sa[1], out communication))
+					if (sa.Length > 1)
 					{
-						settings = new SerialPortSettings(portId, communication);
+						SerialCommunicationSettings communication;
+						if (SerialCommunicationSettings.TryParse(sa[1], out communication))
+						{
+							settings = new SerialPortSettings(portId, communication);
+							return (true);
+						}
+					}
+					else
+					{
+						settings = new SerialPortSettings(portId);
 						return (true);
 					}
 				}

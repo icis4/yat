@@ -51,7 +51,7 @@ namespace MKY.IO.Serial.SerialPort
 		ManualSoftware,
 		ManualCombined,
 
-		RS485,
+		RS485
 	}
 
 	#pragma warning restore 1591
@@ -167,9 +167,9 @@ namespace MKY.IO.Serial.SerialPort
 
 		#endregion
 
-		#region Parse
+		#region Parse/From
 		//==========================================================================================
-		// Parse
+		// Parse/From
 		//==========================================================================================
 
 		/// <remarks>
@@ -252,6 +252,46 @@ namespace MKY.IO.Serial.SerialPort
 					return (false);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Tries to create an item from the given value.
+		/// </summary>
+		public static bool TryFrom(int flowControl, out SerialFlowControlEx result)
+		{
+			if (IsDefined(flowControl))
+			{
+				result = flowControl;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Tries to create an item from the given value.
+		/// </summary>
+		public static bool TryFrom(int flowControl, out SerialFlowControl result)
+		{
+			if (IsDefined(flowControl))
+			{
+				result = (SerialFlowControlEx)flowControl;
+				return (true);
+			}
+			else
+			{
+				result = new SerialFlowControlEx(); // Default!
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public static bool IsDefined(int flowControl)
+		{
+			return (IsDefined(typeof(SerialFlowControl), flowControl));
 		}
 
 		#endregion

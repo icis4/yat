@@ -47,6 +47,21 @@ namespace MKY.IO.Ports
 	[TypeConverter(typeof(SerialPortSettingsConverter))]
 	public class SerialPortSettings : IEquatable<SerialPortSettings>
 	{
+		/// <summary></summary>
+		public const BaudRate BaudRateDefault = BaudRate.Baud009600;
+
+		/// <summary></summary>
+		public const DataBits DataBitsDefault = DataBits.Eight;
+
+		/// <summary></summary>
+		public const Parity ParityDefault = Parity.None;
+
+		/// <summary></summary>
+		public const StopBits StopBitsDefault = StopBits.One;
+
+		/// <summary></summary>
+		public const Handshake HandshakeDefault = Handshake.None;
+
 		private BaudRate  baudRate;
 		private DataBits  dataBits;
 		private Parity    parity;
@@ -54,17 +69,9 @@ namespace MKY.IO.Ports
 		private Handshake handshake;
 
 		/// <summary>
-		/// Creates new port settings with defaults.
-		/// </summary>
-		public SerialPortSettings()
-		{
-			SetDefaults();
-		}
-
-		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		public SerialPortSettings(BaudRate baudRate, DataBits dataBits, Parity parity, StopBits stopBits, Handshake handshake)
+		public SerialPortSettings(BaudRate baudRate = BaudRateDefault, DataBits dataBits = DataBitsDefault, Parity parity = ParityDefault, StopBits stopBits = StopBitsDefault, Handshake handshake = HandshakeDefault)
 		{
 			BaudRate  = baudRate;
 			DataBits  = dataBits;
@@ -83,18 +90,6 @@ namespace MKY.IO.Ports
 			Parity    = rhs.Parity;
 			StopBits  = rhs.StopBits;
 			Handshake = rhs.Handshake;
-		}
-
-		/// <summary>
-		/// Sets default port settings.
-		/// </summary>
-		protected void SetDefaults()
-		{
-			BaudRate  = BaudRate.Baud009600;
-			DataBits  = DataBits.Eight;
-			Parity    = Parity.None;
-			StopBits  = StopBits.One;
-			Handshake = Handshake.None;
 		}
 
 		#region Properties
@@ -302,30 +297,62 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static bool TryParse(string s, out SerialPortSettings settings)
 		{
-			string delimiters = "/,;";
-			string[] sa = s.Trim().Split(delimiters.ToCharArray());
-			if (sa.Length == 5)
+			var delimiters = " ,;|";
+			var sa = s.Trim().Split(delimiters.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+			if (sa.Length > 0)
 			{
 				BaudRate baudRate;
 				if (BaudRateEx.TryParse(sa[0], out baudRate))
 				{
-					DataBits dataBits;
-					if (DataBitsEx.TryParse(sa[1], out dataBits))
+					if (sa.Length > 1)
 					{
-						Parity parity;
-						if (ParityEx.TryParse(sa[2], out parity))
+						DataBits dataBits;
+						if (DataBitsEx.TryParse(sa[1], out dataBits))
 						{
-							StopBits stopBits;
-							if (StopBitsEx.TryParse(sa[3], out stopBits))
+							if (sa.Length > 2)
 							{
-								Handshake handshake;
-								if (HandshakeEx.TryParse(sa[4], out handshake))
+								Parity parity;
+								if (ParityEx.TryParse(sa[2], out parity))
 								{
-									settings = new SerialPortSettings(baudRate, dataBits, parity, stopBits, handshake);
-									return (true);
+									if (sa.Length > 3)
+									{
+										StopBits stopBits;
+										if (StopBitsEx.TryParse(sa[3], out stopBits))
+										{
+											if (sa.Length > 4)
+											{
+												Handshake handshake;
+												if (HandshakeEx.TryParse(sa[4], out handshake))
+												{
+													settings = new SerialPortSettings(baudRate, dataBits, parity, stopBits, handshake);
+													return (true);
+												}
+											}
+											else
+											{
+												settings = new SerialPortSettings(baudRate, dataBits, parity, stopBits);
+												return (true);
+											}
+										}
+									}
+									else
+									{
+										settings = new SerialPortSettings(baudRate, dataBits, parity);
+										return (true);
+									}
 								}
 							}
+							else
+							{
+								settings = new SerialPortSettings(baudRate, dataBits);
+								return (true);
+							}
 						}
+					}
+					else
+					{
+						settings = new SerialPortSettings(baudRate);
+						return (true);
 					}
 				}
 			}
