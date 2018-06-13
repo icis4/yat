@@ -1256,7 +1256,7 @@ namespace YAT.Domain
 								{
 									performLineDelay = true;
 
-									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args))
+									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
 										lineDelay = keywordResult.Args[0];
 
 									break;
@@ -1266,7 +1266,7 @@ namespace YAT.Domain
 								{
 									performLineInterval = true;
 
-									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args))
+									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
 										lineInterval = keywordResult.Args[0];
 
 									break;
@@ -1278,7 +1278,7 @@ namespace YAT.Domain
 									{
 										performLineRepeat = true;
 
-										if (!ArrayEx.IsNullOrEmpty(keywordResult.Args))
+										if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
 										{
 											lineRepeatIsInfinite = (keywordResult.Args[0] == Settings.SendSettings.LineRepeatInfinite);
 											lineRepeatRemaining  =  keywordResult.Args[0];
@@ -1365,6 +1365,121 @@ namespace YAT.Domain
 					break;
 				}
 
+				case Parser.Keyword.PortSettings:
+				{
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
+						var setting = port.Settings;
+
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+						{
+							if (result.Args.Length > 0)
+							{
+								MKY.IO.Ports.BaudRateEx baudRate;
+								if (MKY.IO.Ports.BaudRateEx.TryFrom(result.Args[0], out baudRate))
+									setting.Communication.BaudRate = baudRate;
+
+								if (result.Args.Length > 1)
+								{
+									MKY.IO.Ports.DataBitsEx dataBits;
+									if (MKY.IO.Ports.DataBitsEx.TryFrom(result.Args[1], out dataBits))
+										setting.Communication.DataBits = dataBits;
+
+									if (result.Args.Length > 2)
+									{
+										MKY.IO.Ports.ParityEx parity;
+										if (MKY.IO.Ports.ParityEx.TryFrom(result.Args[2], out parity))
+											setting.Communication.Parity = parity;
+
+										if (result.Args.Length > 3)
+										{
+											MKY.IO.Ports.StopBitsEx stopBits;   // 1.5 is not (yet) supported as the keyword args are limited to int.
+											if (MKY.IO.Ports.StopBitsEx.TryFrom(result.Args[3], out stopBits))
+												setting.Communication.StopBits = stopBits;
+
+											if (result.Args.Length > 4)
+											{
+												MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
+												if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryFrom(result.Args[4], out flowControl))
+													setting.Communication.FlowControl = flowControl;
+											}
+										}
+									}
+								}
+							}
+						}
+
+						if (setting.Communication.HaveChanged)
+						{
+							Exception ex;
+							if (!TryApplySettings(port, setting, out ex))
+								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing port settings has failed! " + ex.Message));
+						}
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Changing port settings is yet limited to serial COM ports (limitation #71).", true));
+					}
+					break;
+				}
+
+				case Parser.Keyword.Baud:
+				{
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
+						var setting = port.Settings;
+
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+						{
+							MKY.IO.Ports.BaudRateEx baudRate;
+							if (MKY.IO.Ports.BaudRateEx.TryFrom(result.Args[0], out baudRate))
+								setting.Communication.BaudRate = baudRate;
+						}
+
+						if (setting.Communication.HaveChanged)
+						{
+							Exception ex;
+							if (!TryApplySettings(port, setting, out ex))
+								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing baud rate has failed! " + ex.Message));
+						}
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Baud rate can only be changed on serial COM ports.", true));
+					}
+					break;
+				}
+
+				case Parser.Keyword.FlowControl:
+				{
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
+						var setting = port.Settings;
+
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+						{
+							MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
+							if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryFrom(result.Args[0], out flowControl))
+								setting.Communication.FlowControl = flowControl;
+						}
+
+						if (setting.Communication.HaveChanged)
+						{
+							Exception ex;
+							if (!TryApplySettings(port, setting, out ex))
+								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing flow control has failed! " + ex.Message));
+						}
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Flow control can only be changed on serial COM ports.", true));
+					}
+					break;
+				}
+
 				case Parser.Keyword.FramingErrorsOn:
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
@@ -1374,7 +1489,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1388,7 +1503,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1402,7 +1517,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1416,7 +1531,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1430,7 +1545,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1444,7 +1559,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1462,7 +1577,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Report ID can only be used with USB Ser/HID."));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Report ID can only be used with USB Ser/HID.", true));
 					}
 					break;
 				}
@@ -1585,6 +1700,37 @@ namespace YAT.Domain
 				var leadMessage = "Unable to send data:";
 				DebugEx.WriteException(GetType(), ex, leadMessage);
 				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Tx, leadMessage + Environment.NewLine + ex.Message));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+		protected virtual bool TryApplySettings(MKY.IO.Serial.SerialPort.SerialPort port, MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exception)
+		{
+			try
+			{
+				// Attention:
+				// Similar code exists in Model.Terminal.ApplySettings().
+				// Changes here may have to be applied there too. // \ToDo: Consider to eliminate Model.Terminal.ApplySettings().
+
+				if (port.IsStarted) // Port is started, stop and restart it with the new settings:
+				{
+					port.Stop(); // Attention, do not Stop() the whole terminal as that will also stop the currently ongoing send thread!
+					port.Settings = settings;
+					port.Start();
+				}
+				else // Port is stopped, simply set the new settings:
+				{
+					port.Settings = settings;
+				}
+
+				exception = null;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				exception = ex;
+				return (false);
 			}
 		}
 
