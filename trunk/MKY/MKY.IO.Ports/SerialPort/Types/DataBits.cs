@@ -167,11 +167,11 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(int dataBits, out DataBitsEx result)
 		{
-			if (IsValidDataBits(dataBits))
+			if (IsDefined(dataBits))
 			{
 				result = dataBits;
 				return (true);
@@ -184,11 +184,11 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(int dataBits, out DataBits result)
 		{
-			if (IsValidDataBits(dataBits))
+			if (IsDefined(dataBits))
 			{
 				result = (DataBitsEx)dataBits;
 				return (true);
@@ -201,9 +201,9 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static bool IsValidDataBits(int dataBits)
+		public static bool IsDefined(int dataBits)
 		{
-			return ((dataBits >= 4) && (dataBits <= 8));
+			return (IsDefined(typeof(DataBits), dataBits));
 		}
 
 		#endregion

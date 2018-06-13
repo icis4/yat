@@ -33,16 +33,16 @@ namespace MKY.IO.Serial.SerialPort
 	public class SerialCommunicationSettings : Settings.SettingsItem, IEquatable<SerialCommunicationSettings>
 	{
 		/// <summary></summary>
-		public const int BaudRateDefault = (int)MKY.IO.Ports.BaudRate.Baud009600;
+		public const int BaudRateDefault = (int)MKY.IO.Ports.SerialPortSettings.BaudRateDefault;
 
 		/// <summary></summary>
-		public const MKY.IO.Ports.DataBits DataBitsDefault = MKY.IO.Ports.DataBits.Eight;
+		public const MKY.IO.Ports.DataBits DataBitsDefault = MKY.IO.Ports.SerialPortSettings.DataBitsDefault;
 
 		/// <summary></summary>
-		public const System.IO.Ports.Parity ParityDefault = System.IO.Ports.Parity.None;
+		public const System.IO.Ports.Parity ParityDefault = MKY.IO.Ports.SerialPortSettings.ParityDefault;
 
 		/// <summary></summary>
-		public const System.IO.Ports.StopBits StopBitsDefault = System.IO.Ports.StopBits.One;
+		public const System.IO.Ports.StopBits StopBitsDefault = MKY.IO.Ports.SerialPortSettings.StopBitsDefault;
 
 		/// <summary></summary>
 		public const SerialFlowControl FlowControlDefault = SerialFlowControl.None;
@@ -77,7 +77,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits, System.IO.Ports.Parity parity, System.IO.Ports.StopBits stopBits, SerialFlowControl flowControl)
+		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits = DataBitsDefault, System.IO.Ports.Parity parity = ParityDefault, System.IO.Ports.StopBits stopBits = StopBitsDefault, SerialFlowControl flowControl = FlowControlDefault)
 			: this(baudRate, dataBits, parity, stopBits, flowControl, ToRfrPinDefault(flowControl), ToDtrPinDefault(flowControl))
 		{
 		}
@@ -586,31 +586,61 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static bool TryParse(string s, out SerialCommunicationSettings settings)
 		{
-			string delimiters = "/,;";
-			string[] sa = s.Trim().Split(delimiters.ToCharArray());
-			if (sa.Length == 5)
+			var delimiters = " ,;|";
+			var sa = s.Trim().Split(delimiters.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+			if (sa.Length > 0)
 			{
 				MKY.IO.Ports.BaudRateEx baudRate;
 				if (MKY.IO.Ports.BaudRateEx.TryParse(sa[0], out baudRate))
 				{
-					MKY.IO.Ports.DataBits dataBits;
-					if (MKY.IO.Ports.DataBitsEx.TryParse(sa[1], out dataBits))
+					if (sa.Length > 1)
 					{
-						System.IO.Ports.Parity parity;
-						if (MKY.IO.Ports.ParityEx.TryParse(sa[2], out parity))
+						MKY.IO.Ports.DataBits dataBits;
+						if (MKY.IO.Ports.DataBitsEx.TryParse(sa[1], out dataBits))
 						{
-							System.IO.Ports.StopBits stopBits;
-							if (MKY.IO.Ports.StopBitsEx.TryParse(sa[3], out stopBits))
+							if (sa.Length > 2)
 							{
-								SerialFlowControl flowControl;
-								if (SerialFlowControlEx.TryParse(sa[4], out flowControl))
+								System.IO.Ports.Parity parity;
+								if (MKY.IO.Ports.ParityEx.TryParse(sa[2], out parity))
 								{
-									settings = new SerialCommunicationSettings(baudRate, dataBits, parity, stopBits, flowControl);
-									return (true);
+									if (sa.Length > 3)
+									{
+										System.IO.Ports.StopBits stopBits;
+										if (MKY.IO.Ports.StopBitsEx.TryParse(sa[3], out stopBits))
+										{
+											if (sa.Length > 4)
+											{
+												SerialFlowControl flowControl;
+												if (SerialFlowControlEx.TryParse(sa[4], out flowControl))
+												{
+													settings = new SerialCommunicationSettings(baudRate, dataBits, parity, stopBits, flowControl);
+													return (true);
+												}
+											}
+											else
+											{
+												settings = new SerialCommunicationSettings(baudRate, dataBits, parity, stopBits);
+												return (true);
+											}
+										}
+									}
+									else
+									{
+										settings = new SerialCommunicationSettings(baudRate, dataBits, parity);
+										return (true);
+									}
 								}
+							}
+							else
+							{
+								settings = new SerialCommunicationSettings(baudRate, dataBits);
+								return (true);
 							}
 						}
 					}
+
+					settings = new SerialCommunicationSettings(baudRate);
+					return (true);
 				}
 			}
 

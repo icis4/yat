@@ -133,9 +133,9 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Parse
+		#region Parse/From
 		//==========================================================================================
-		// Parse
+		// Parse/From
 		//==========================================================================================
 
 		/// <remarks>
@@ -211,6 +211,47 @@ namespace MKY.IO.Ports
 				result = new ParityEx(); // Default!
 				return (false);
 			}
+		}
+
+
+		/// <summary>
+		/// Tries to create an item from the given value.
+		/// </summary>
+		public static bool TryFrom(int parity, out ParityEx result)
+		{
+			if (IsDefined(parity))
+			{
+				result = parity;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Tries to create an item from the given value.
+		/// </summary>
+		public static bool TryFrom(int parity, out Parity result)
+		{
+			if (IsDefined(parity))
+			{
+				result = (ParityEx)parity;
+				return (true);
+			}
+			else
+			{
+				result = new ParityEx(); // Default!
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public static bool IsDefined(int parity)
+		{
+			return (IsDefined(typeof(Parity), parity));
 		}
 
 		#endregion

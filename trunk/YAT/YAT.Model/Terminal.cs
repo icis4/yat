@@ -1313,6 +1313,10 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
+			// Attention:
+			// Similar code exists in Domain.Terminal.ApplySettings().
+			// Changes here may have to be applied there too. // \ToDo: Consider to use Domain.Terminal.ApplySettings() instead.
+
 			if (this.terminal.IsStarted) // Terminal is started, stop and restart it with the new settings:
 			{
 				// Note that the whole terminal will be recreated. Thus, it must also be recreated if non-IO settings have changed.
@@ -1347,7 +1351,7 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Terminal settings not applied!");
 				}
 			}
-			else // Terminal is closed, simply set the new settings:
+			else // Terminal is stopped, simply set the new settings:
 			{
 				this.settingsRoot.SuspendChangeEvent();
 				try

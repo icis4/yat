@@ -43,10 +43,10 @@ namespace MKY.IO.Ports
 	{
 		#region Double Definitions
 
-		private const double None_double = 0.0;
-		private const double One_double = 1.0;
+		private const double None_double         = 0.0;
+		private const double One_double          = 1.0;
 		private const double OnePointFive_double = 1.5;
-		private const double Two_double = 2.0;
+		private const double Two_double          = 2.0;
 
 		#endregion
 
@@ -164,11 +164,11 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(double stopBits, out StopBitsEx result)
 		{
-			if (IsValidStopBits(stopBits))
+			if (IsDefined(stopBits))
 			{
 				result = stopBits;
 				return (true);
@@ -181,11 +181,11 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given value.
 		/// </summary>
 		public static bool TryFrom(double stopBits, out StopBits result)
 		{
-			if (IsValidStopBits(stopBits))
+			if (IsDefined(stopBits))
 			{
 				result = (StopBitsEx)stopBits;
 				return (true);
@@ -198,14 +198,9 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static bool IsValidStopBits(double stopBits)
+		public static bool IsDefined(double stopBits)
 		{
-			if (stopBits == None_double)         return (true);
-			if (stopBits == One_double)          return (true);
-			if (stopBits == OnePointFive_double) return (true);
-			if (stopBits == Two_double)          return (true);
-
-			return (false);
+			return (true); // \remind (2018-06-13 / MKY) there should be a good comparison for slightly below 0.0 up to slightly above 2.0.
 		}
 
 		#endregion
@@ -249,7 +244,7 @@ namespace MKY.IO.Ports
 			else if (bits >= OnePointFive_double) return (new StopBitsEx(StopBits.OnePointFive));
 			else if (bits >= One_double)          return (new StopBitsEx(StopBits.One));
 			else                                  return (new StopBitsEx(StopBits.None));
-		}
+		} // \remind (2018-06-13 / MKY) there should be a better comparison for slightly below 0.0 up to slightly above 2.0.
 
 		/// <summary></summary>
 		public static implicit operator string(StopBitsEx bits)

@@ -500,7 +500,7 @@ namespace MKY.IO.Ports
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				SerialPortSettings settings = new SerialPortSettings();
+				var settings = new SerialPortSettings();
 				settings.BaudRate  = (BaudRateEx) base.BaudRate;
 				settings.DataBits  = (DataBitsEx) base.DataBits;
 				settings.Parity    = (ParityEx)   base.Parity;

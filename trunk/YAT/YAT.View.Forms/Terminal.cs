@@ -3897,11 +3897,9 @@ namespace YAT.View.Forms
 		// Preset
 		//==========================================================================================
 
-		/// <summary>
-		/// Set requested preset. Currently, presets are fixed to those listed below.
-		/// For future versions, presets could be defined and managed similarly to predefined
-		/// commands.
-		/// </summary>
+		/// <remarks>
+		/// Currently, presets are limited to those hardcoded below.
+		/// </remarks>
 		private void RequestPreset(int preset)
 		{
 			string presetString = "";
@@ -4010,7 +4008,7 @@ namespace YAT.View.Forms
 
 				if (scs.HaveChanged)
 				{
-					this.terminal.ApplySettings(es);
+					this.terminal.ApplySettings(es); // \ToDo: Consider to use Domain.Terminal.ApplySettings() instead.
 					SetTimedStatusText("Terminal settings set to " + presetString + ".");
 				}
 				else

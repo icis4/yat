@@ -137,7 +137,39 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort, int localUdpPort, AutoInterval tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode)
+		public SocketSettings(SocketType type)
+			: this(type, RemoteHostDefault)
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort = RemotePortDefault, int remoteUdpPort = RemotePortDefault)
+			: this(type, remoteHost, remoteTcpPort, remoteUdpPort, LocalInterfaceDefault)
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface)
+			: this(type, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, LocalFilterDefault)
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort = LocalPortDefault, int localUdpPort = LocalPortDefault)
+			: this(type, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localFilter, localTcpPort, localUdpPort, TcpClientAutoReconnectDefault)
+		{
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort, int localUdpPort, AutoInterval tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode = UdpServerSendModeDefault)
 		{
 			Type           = type;
 
@@ -653,52 +685,122 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static bool TryParse(string s, out SocketSettings settings)
 		{
-			string delimiters = "/,;";
-			string[] sa = s.Trim().Split(delimiters.ToCharArray());
-			if (sa.Length == 12)
+			var delimiters = " ,;|"; // '/' is not a valid delimiter as host address likely contains a '/'.
+			var sa = s.Trim().Split(delimiters.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+			if (sa.Length > 0)
 			{
 				SocketType socketType;
 				if (SocketTypeEx.TryParse(sa[0], out socketType))
 				{
-					string remoteHost = sa[1].Trim();
-
-					int remoteTcpPort;
-					if (int.TryParse(sa[2], out remoteTcpPort))
+					if (sa.Length > 1)
 					{
-						int remoteUdpPort;
-						if (int.TryParse(sa[3], out remoteUdpPort))
+						string remoteHost = sa[1].Trim();
+
+						if (sa.Length > 2)
 						{
-							IPNetworkInterfaceDescriptorPair localInterface = new IPNetworkInterfaceDescriptorPair(sa[4].Trim(), sa[5].Trim());
-
-							string localFilter = sa[6].Trim();
-
-							int localTcpPort;
-							if (int.TryParse(sa[7], out localTcpPort))
+							int remoteTcpPort;
+							if (int.TryParse(sa[2], out remoteTcpPort))
 							{
-								int localUdpPort;
-								if (int.TryParse(sa[8], out localUdpPort))
+								if (sa.Length > 3)
 								{
-									bool arEnabled;
-									if (bool.TryParse(sa[9], out arEnabled))
+									int remoteUdpPort;
+									if (int.TryParse(sa[3], out remoteUdpPort))
 									{
-										int arInterval;
-										if (int.TryParse(sa[10], out arInterval))
+										if (sa.Length > 5)
 										{
-											AutoInterval autoRetry = new AutoInterval(arEnabled, arInterval);
+											var localInterface = new IPNetworkInterfaceDescriptorPair(sa[4].Trim(), sa[5].Trim());
 
-											int smValue;
-											if (int.TryParse(sa[11], out smValue))
+											if (sa.Length > 6)
 											{
-												UdpServerSendMode sendMode = (UdpServerSendModeEx)smValue;
+												var localFilter = sa[6].Trim();
 
-												settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localFilter, localTcpPort, localUdpPort, autoRetry, sendMode);
+												if (sa.Length > 7)
+												{
+													int localTcpPort;
+													if (int.TryParse(sa[7], out localTcpPort))
+													{
+														if (sa.Length > 8)
+														{
+															int localUdpPort;
+															if (int.TryParse(sa[8], out localUdpPort))
+															{
+																if (sa.Length > 10)
+																{
+																	bool arEnabled;
+																	int arInterval;
+																	if (bool.TryParse(sa[9], out arEnabled) && 
+																	    int.TryParse(sa[10], out arInterval))
+																	{
+																		var autoRetry = new AutoInterval(arEnabled, arInterval);
+
+																		if (sa.Length > 11)
+																		{
+																			int smValue;
+																			if (int.TryParse(sa[11], out smValue))
+																			{
+																				var sendMode = (UdpServerSendModeEx)smValue;
+
+																				settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localFilter, localTcpPort, localUdpPort, autoRetry, sendMode);
+																				return (true);
+																			}
+																		}
+																		else
+																		{
+																			settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localFilter, localTcpPort, localUdpPort, autoRetry);
+																			return (true);
+																		}
+																	}
+																}
+																else
+																{
+																	settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localFilter, localTcpPort, localUdpPort);
+																	return (true);
+																}
+															}
+														}
+														else
+														{
+															settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localFilter, localTcpPort);
+															return (true);
+														}
+													}
+												}
+												else
+												{
+													settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localFilter);
+													return (true);
+												}
+											}
+											else
+											{
+												settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface);
 												return (true);
 											}
 										}
+										else
+										{
+											settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort);
+											return (true);
+										}
 									}
+								}
+								else
+								{
+									settings = new SocketSettings(socketType, remoteHost, remoteTcpPort);
+									return (true);
 								}
 							}
 						}
+						else
+						{
+							settings = new SocketSettings(socketType, remoteHost);
+							return (true);
+						}
+					}
+					else
+					{
+						settings = new SocketSettings(socketType);
+						return (true);
 					}
 				}
 			}
