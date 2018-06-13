@@ -116,6 +116,12 @@ namespace YAT.Domain.Parser
 			@"Note that ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" will repeat as fast as possible, thus resulting in 100% load of the CPU core in use. To prevent this, use this keyword combined with a delay or interval keyword, e.g. ""\!(" + (KeywordEx)Keyword.LineRepeat + @")\!(" + (KeywordEx)Keyword.LineInterval + @")""." + Environment.NewLine +
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
+			@"Change port settings to the specified values ""\!(" + (KeywordEx)Keyword.PortSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
+			@"Changing port settings is yet limited to serial COM ports." +                                      // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
+			@"Change flow control to the specified value ""\!(" + (KeywordEx)Keyword.FlowControl + @"(1))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
+			@"Changing baud rate and flow control only applies to serial COM ports." +              // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+			Environment.NewLine +
 			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""" + Environment.NewLine +
 			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""" + Environment.NewLine +
 			@"Restore framing error setting ""\!(" + (KeywordEx)Keyword.FramingErrorsRestore + @")""" + Environment.NewLine +
@@ -127,7 +133,7 @@ namespace YAT.Domain.Parser
 			@"Output break state only applies to serial COM ports." +
 			Environment.NewLine +
 			@"Change USB Ser/HID report ID to 1 ""\!(" + (KeywordEx)Keyword.ReportId + @"(1))""" + Environment.NewLine +
-			@"Report ID can only be used with USB Ser/HID.";
+			@"This keyword only applies to USB Ser/HID.";
 
 		#endregion
 
