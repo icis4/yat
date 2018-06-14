@@ -89,8 +89,8 @@ YAT 2.0.1 :: 2018-0?-??
 
 New:
 - Additional keyword \!(PortSettings()) that allows re-configuring the port settings before or after
-  sending data, as well as convenience keywords \!(Baud()) and \!(FlowControl()) as these two are
-  likely the most frequent use cases to change port settings on-the-fly (feature request #71, partly
+  sending data, and dedicated keywords \!(Baud()), \!(DataBits()), \!(Parity()), \!(StopBits()) and
+  \!(FlowControl()) to change a dedicated port setting on-the-fly (feature request #71, partly
   related to former request #321 implemented since YAT 1.99.80). Useful for e.g. sending commands
   that let a connected device change its baud rate. See [Help > Contents...] for example usage.
 

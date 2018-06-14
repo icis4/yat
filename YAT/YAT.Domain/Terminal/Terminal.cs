@@ -1452,6 +1452,90 @@ namespace YAT.Domain
 					break;
 				}
 
+				case Parser.Keyword.StopBits:
+				{
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
+						var setting = port.Settings;
+
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+						{
+							MKY.IO.Ports.StopBitsEx stopBits;
+							if (MKY.IO.Ports.StopBitsEx.TryFrom(result.Args[0], out stopBits))
+								setting.Communication.StopBits = stopBits;
+						}
+
+						if (setting.Communication.HaveChanged)
+						{
+							Exception ex;
+							if (!TryApplySettings(port, setting, out ex))
+								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing stop bits has failed! " + ex.Message));
+						}
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Stop bits can only be changed on serial COM ports.", true));
+					}
+					break;
+				}
+
+				case Parser.Keyword.DataBits:
+				{
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
+						var setting = port.Settings;
+
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+						{
+							MKY.IO.Ports.DataBitsEx dataBits;
+							if (MKY.IO.Ports.DataBitsEx.TryFrom(result.Args[0], out dataBits))
+								setting.Communication.DataBits = dataBits;
+						}
+
+						if (setting.Communication.HaveChanged)
+						{
+							Exception ex;
+							if (!TryApplySettings(port, setting, out ex))
+								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing data bits has failed! " + ex.Message));
+						}
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Data bits can only be changed on serial COM ports.", true));
+					}
+					break;
+				}
+
+				case Parser.Keyword.Parity:
+				{
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
+						var setting = port.Settings;
+
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+						{
+							MKY.IO.Ports.ParityEx parity;
+							if (MKY.IO.Ports.ParityEx.TryFrom(result.Args[0], out parity))
+								setting.Communication.Parity = parity;
+						}
+
+						if (setting.Communication.HaveChanged)
+						{
+							Exception ex;
+							if (!TryApplySettings(port, setting, out ex))
+								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing parity has failed! " + ex.Message));
+						}
+					}
+					else
+					{
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Parity can only be changed on serial COM ports.", true));
+					}
+					break;
+				}
+
 				case Parser.Keyword.FlowControl:
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)

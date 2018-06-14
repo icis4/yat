@@ -52,6 +52,9 @@ namespace YAT.Domain.Parser
 		NoEol,
 		PortSettings,
 		Baud,
+		DataBits,
+		Parity,
+		StopBits,
 		FlowControl,
 		FramingErrorsOn,
 		FramingErrorsOff,
@@ -99,6 +102,9 @@ namespace YAT.Domain.Parser
 		private const string NoEol_string                = "NoEOL";
 		private const string PortSettings_string         = "PortSettings";
 		private const string Baud_string                 = "Baud";
+		private const string StopBits_string             = "StopBits";
+		private const string Parity_string               = "Parity";
+		private const string DataBits_string             = "DataBits";
 		private const string FlowControl_string          = "FlowControl";
 		private const string FramingErrorsOn_string      = "FramingErrorsOn";
 		private const string FramingErrorsOff_string     = "FramingErrorsOff";
@@ -149,6 +155,9 @@ namespace YAT.Domain.Parser
 				case Keyword.NoEol:                return (NoEol_string);
 				case Keyword.PortSettings:         return (PortSettings_string);
 				case Keyword.Baud:                 return (Baud_string);
+				case Keyword.DataBits:             return (DataBits_string);
+				case Keyword.Parity:               return (Parity_string);
+				case Keyword.StopBits:             return (StopBits_string);
 				case Keyword.FlowControl:          return (FlowControl_string);
 				case Keyword.FramingErrorsOn:      return (FramingErrorsOn_string);
 				case Keyword.FramingErrorsOff:     return (FramingErrorsOff_string);
@@ -189,6 +198,9 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.NoEol));
 			a.Add(new KeywordEx(Keyword.PortSettings));
 			a.Add(new KeywordEx(Keyword.Baud));
+			a.Add(new KeywordEx(Keyword.DataBits));
+			a.Add(new KeywordEx(Keyword.Parity));
+			a.Add(new KeywordEx(Keyword.StopBits));
 			a.Add(new KeywordEx(Keyword.FlowControl));
 			a.Add(new KeywordEx(Keyword.FramingErrorsOn));
 			a.Add(new KeywordEx(Keyword.FramingErrorsOff));
@@ -217,6 +229,9 @@ namespace YAT.Domain.Parser
 				case Keyword.LineRepeat:   return (1);
 				case Keyword.PortSettings: return (5);
 				case Keyword.Baud:         return (1);
+				case Keyword.DataBits:     return (1);
+				case Keyword.Parity:       return (1);
+				case Keyword.StopBits:     return (1);
 				case Keyword.FlowControl:  return (1);
 				case Keyword.ReportId:     return (1);
 
@@ -241,6 +256,9 @@ namespace YAT.Domain.Parser
 				case Keyword.PortSettings: return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue) && MKY.IO.Ports.DataBitsEx.IsDefined(argValue) && MKY.IO.Ports.ParityEx.IsDefined(argValue) && MKY.IO.Ports.StopBitsEx.IsDefined(argValue) && MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue) );
 				                                                 //// Attention, a similar validation exists in 'View.Controls.SerialPortSettings'. Changes here may have to be applied there too.
 				case Keyword.Baud:         return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue));
+				case Keyword.DataBits:     return (MKY.IO.Ports.DataBitsEx                     .IsDefined(argValue));
+				case Keyword.Parity:       return (MKY.IO.Ports.ParityEx                       .IsDefined(argValue));
+				case Keyword.StopBits:     return (MKY.IO.Ports.StopBitsEx                     .IsDefined(argValue));
 				case Keyword.FlowControl:  return (MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue));
 				                                                 //// Attention, a similar validation exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 				case Keyword.ReportId:     return ((argValue >= 0) && (argValue <= 255));
@@ -277,8 +295,11 @@ namespace YAT.Domain.Parser
 				case Keyword.LineRepeat:           return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
 				case Keyword.Eol:                  return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.NoEol:                return (noArgSupportedMessage);
-				case Keyword.PortSettings:         return ("one or more integer values indicating the settings, separated by ' ' (space) or ',' (comma) or ';' (semicolon) or '|' (pipe)");
+				case Keyword.PortSettings:         return ("one or more integer values indicating the settings, separated by ',' (comma) or ';' (semicolon) or '|' (pipe)");
 				case Keyword.Baud:                 return ("an integer value of 1 or more indicating the number of bits per second");
+				case Keyword.DataBits:             return ("an integer value of 4 to 8");// Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.Parity:               return ("an integer value where 0 = None, 1 = Odd, 2 = Even, 3 = Mark, 4 = Space");
+				case Keyword.StopBits:             return ("an integer value 0, 1 or 2");// Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.FlowControl:          return ("an integer value where 0 = None, 1 = Software, 2 = Hardware, 3 = Combined, 4 = Manual Hardware, 5 = Manual Software, 6 = Manual Combined, 7 = RS-485");
 				case Keyword.FramingErrorsOn:      return (noArgSupportedMessage);
 				case Keyword.FramingErrorsOff:     return (noArgSupportedMessage);
@@ -392,6 +413,21 @@ namespace YAT.Domain.Parser
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Baud_string))
 			{
 				result = Keyword.Baud;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DataBits_string))
+			{
+				result = Keyword.DataBits;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Parity_string))
+			{
+				result = Keyword.Parity;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, StopBits_string))
+			{
+				result = Keyword.StopBits;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, FlowControl_string))
