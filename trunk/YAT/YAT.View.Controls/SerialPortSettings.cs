@@ -184,7 +184,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Serial Port")]
-		[Description("The partiy type.")]
+		[Description("The parity type.")]
 		[DefaultValue(ParityDefault)]
 		public virtual System.IO.Ports.Parity Parity
 		{

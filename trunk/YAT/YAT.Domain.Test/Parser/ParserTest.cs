@@ -438,6 +438,19 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(Baud)",                   Domain.Parser.Keyword.Baud,                 null));
 				yield return (new TestCaseData(@"\!(Baud())",                 Domain.Parser.Keyword.Baud,                 null));
 				yield return (new TestCaseData(@"\!(Baud(9600))",             Domain.Parser.Keyword.Baud,                 new int[] { 9600 }));
+				yield return (new TestCaseData(@"\!(DataBits)",               Domain.Parser.Keyword.DataBits,             null));
+				yield return (new TestCaseData(@"\!(DataBits())",             Domain.Parser.Keyword.DataBits,             null));
+				yield return (new TestCaseData(@"\!(DataBits(7))",            Domain.Parser.Keyword.DataBits,             new int[] { 7 }));
+				yield return (new TestCaseData(@"\!(Parity)",                 Domain.Parser.Keyword.Parity,               null));
+				yield return (new TestCaseData(@"\!(Parity())",               Domain.Parser.Keyword.Parity,               null));
+				yield return (new TestCaseData(@"\!(Parity(0))",              Domain.Parser.Keyword.Parity,               new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(Parity(1))",              Domain.Parser.Keyword.Parity,               new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(Parity(2))",              Domain.Parser.Keyword.Parity,               new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(StopBits)",               Domain.Parser.Keyword.StopBits,             null));
+				yield return (new TestCaseData(@"\!(StopBits())",             Domain.Parser.Keyword.StopBits,             null));
+				yield return (new TestCaseData(@"\!(StopBits(0))",            Domain.Parser.Keyword.StopBits,             new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(StopBits(1))",            Domain.Parser.Keyword.StopBits,             new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(StopBits(2))",            Domain.Parser.Keyword.StopBits,             new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
 				yield return (new TestCaseData(@"\!(FlowControl)",            Domain.Parser.Keyword.FlowControl,          null));
 				yield return (new TestCaseData(@"\!(FlowControl())",          Domain.Parser.Keyword.FlowControl,          null));
 				yield return (new TestCaseData(@"\!(FlowControl(0))",         Domain.Parser.Keyword.FlowControl,          new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.

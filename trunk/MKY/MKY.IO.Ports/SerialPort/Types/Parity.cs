@@ -122,9 +122,9 @@ namespace MKY.IO.Ports
 		{
 			var a = new List<ParityEx>(5); // Preset the required capacity to improve memory management.
 
-			a.Add(new ParityEx(Parity.Even));
-			a.Add(new ParityEx(Parity.Odd));
 			a.Add(new ParityEx(Parity.None));
+			a.Add(new ParityEx(Parity.Odd));
+			a.Add(new ParityEx(Parity.Even));
 			a.Add(new ParityEx(Parity.Mark));
 			a.Add(new ParityEx(Parity.Space));
 

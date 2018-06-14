@@ -119,6 +119,9 @@ namespace YAT.Domain.Parser
 			@"Change port settings to the specified values ""\!(" + (KeywordEx)Keyword.PortSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
 			@"Changing port settings is yet limited to serial COM ports." +                                      // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
 			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
+			@"Change data bits to the specified value ""\!(" + (KeywordEx)Keyword.DataBits + @"(7))""." + Environment.NewLine +
+			@"Change parity to the specified value ""\!(" + (KeywordEx)Keyword.Parity + @"(2))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
+			@"Change stop bits to the specified value ""\!(" + (KeywordEx)Keyword.StopBits + @"(2))""." + Environment.NewLine +
 			@"Change flow control to the specified value ""\!(" + (KeywordEx)Keyword.FlowControl + @"(1))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
 			@"Changing baud rate and flow control only applies to serial COM ports." +              // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
 			Environment.NewLine +
