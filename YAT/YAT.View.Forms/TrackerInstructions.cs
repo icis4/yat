@@ -112,16 +112,18 @@ namespace YAT.View.Forms
 
 			// Instructions:
 			sb = new StringBuilder();
-			sb.AppendLine("1. [Create Ticket]");
-			sb.AppendLine("2. Fill in a title.");
-			sb.AppendLine("3. Fill in as much information as possible into the text field:");
+			sb.AppendLine("1. Check existing tickets using [Searches > New | Open].");
+			sb.AppendLine("2. If issue already exists, you may [Post] additional comment to the ticket.");
+			sb.AppendLine("3. If issue does not yet exist, select [Create Ticket].");
+			sb.AppendLine("4. Fill in a title.");
+			sb.AppendLine("5. Fill in as much information as possible into the text field:");
 			switch (tracker)
 			{
 				case TrackerType.Support:
 				{
 					sb.AppendLine("    > Environment (" + ApplicationEx.CommonName + " version and settings, devices, system,...).");
+					sb.AppendLine("    > What doesn't work as expected.");
 					sb.AppendLine("    > What you want to achieve.");
-					sb.AppendLine("    > What doesn't work.");
 					break;
 				}
 
@@ -137,13 +139,13 @@ namespace YAT.View.Forms
 				default:
 				{
 					sb.AppendLine("    > Environment (" + ApplicationEx.CommonName + " version and settings, devices, system,...).");
-					sb.AppendLine("    > Steps to reproduce the bug.");
-					sb.AppendLine("    > Any useful additional information.");
+					sb.AppendLine("    > Any useful information (condition, sequence,...) to *reproduce* the bug.");
+					sb.AppendLine("    > If given, the output of the 'Unhandled Exception' dialog.");
 					break;
 				}
 			}
-			sb.AppendLine("4. Optionally add attachment(s).");
-			sb.AppendLine("5. [Save]");
+			sb.AppendLine("6. Optionally add attachment(s).");
+			sb.AppendLine("7. [Save]");
 			linkLabel_Instructions.Text = sb.ToString();
 		}
 
