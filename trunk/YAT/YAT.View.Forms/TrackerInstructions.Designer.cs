@@ -42,7 +42,7 @@
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(270, 286);
+			this.button_Close.Location = new System.Drawing.Point(270, 312);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -60,7 +60,7 @@
 			this.groupBox_Instructions.Controls.Add(this.linkLabel_Intro);
 			this.groupBox_Instructions.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Instructions.Name = "groupBox_Instructions";
-			this.groupBox_Instructions.Size = new System.Drawing.Size(333, 262);
+			this.groupBox_Instructions.Size = new System.Drawing.Size(333, 288);
 			this.groupBox_Instructions.TabIndex = 1;
 			this.groupBox_Instructions.TabStop = false;
 			// 
@@ -81,9 +81,9 @@
 			this.linkLabel_Instructions.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Instructions.Location = new System.Drawing.Point(6, 150);
 			this.linkLabel_Instructions.Name = "linkLabel_Instructions";
-			this.linkLabel_Instructions.Size = new System.Drawing.Size(25, 104);
+			this.linkLabel_Instructions.Size = new System.Drawing.Size(25, 130);
 			this.linkLabel_Instructions.TabIndex = 3;
-			this.linkLabel_Instructions.Text = "1.\r\n2.\r\n3.\r\n    >\r\n    >\r\n    >\r\n4.\r\n5.";
+			this.linkLabel_Instructions.Text = "1.\r\n2.\r\n3.\r\n4.\r\n5.\r\n    >\r\n    >\r\n    >\r\n6.\r\n7.";
 			// 
 			// linkLabel_SourceForgeRemark
 			// 
@@ -110,7 +110,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(357, 321);
+			this.ClientSize = new System.Drawing.Size(357, 347);
 			this.Controls.Add(this.groupBox_Instructions);
 			this.Controls.Add(this.button_Close);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
