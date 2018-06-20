@@ -253,7 +253,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineInterval: return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				                                                 //// Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
-				case Keyword.PortSettings: return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue) && MKY.IO.Ports.DataBitsEx.IsDefined(argValue) && MKY.IO.Ports.ParityEx.IsDefined(argValue) && MKY.IO.Ports.StopBitsEx.IsDefined(argValue) && MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue) );
+				case Keyword.PortSettings: return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue) || MKY.IO.Ports.DataBitsEx.IsDefined(argValue) || MKY.IO.Ports.ParityEx.IsDefined(argValue) || MKY.IO.Ports.StopBitsEx.IsDefined(argValue) || MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue) );
 				                                                 //// Attention, a similar validation exists in 'View.Controls.SerialPortSettings'. Changes here may have to be applied there too.
 				case Keyword.Baud:         return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue));
 				case Keyword.DataBits:     return (MKY.IO.Ports.DataBitsEx                     .IsDefined(argValue));
