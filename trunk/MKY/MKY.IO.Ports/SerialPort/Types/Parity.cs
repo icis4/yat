@@ -251,7 +251,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool IsDefined(int parity)
 		{
-			return (IsDefined(typeof(Parity), parity));
+			return (IsDefined(typeof(ParityEx), parity));
 		}
 
 		#endregion
