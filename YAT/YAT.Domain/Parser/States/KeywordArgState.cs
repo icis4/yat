@@ -37,7 +37,7 @@ namespace YAT.Domain.Parser
 {
 	/// <summary>
 	/// This state handles one or more keyword arguments. The state terminates with the closing ')'
-	/// or a separating ','.
+	/// or a separating ','/';'/'|'.
 	/// </summary>
 	/// <remarks>
 	/// So far, this state can only deal with integer values. As soon as floating point, boolean,
@@ -172,7 +172,9 @@ namespace YAT.Domain.Parser
 				parser.HasFinished = true;
 				return (true);
 			}
-			else if (parseChar == ',') // Beginning of next argument.
+			else if ((parseChar == ',') ||
+			         (parseChar == ';') ||
+			         (parseChar == '|'))
 			{
 				var s = this.valueWriter.ToString();
 				if (string.IsNullOrEmpty(s))

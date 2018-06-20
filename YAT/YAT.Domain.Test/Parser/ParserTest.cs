@@ -435,6 +435,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(PortSettings(9600))",     Domain.Parser.Keyword.PortSettings,         new int[] { 9600 }));
 				yield return (new TestCaseData(@"\!(PortSettings(9600,8))",   Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8 }));
 				yield return (new TestCaseData(@"\!(PortSettings(9600;8;0))", Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(PortSettings(9600|8|0))", Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
 				yield return (new TestCaseData(@"\!(Baud)",                   Domain.Parser.Keyword.Baud,                 null));
 				yield return (new TestCaseData(@"\!(Baud())",                 Domain.Parser.Keyword.Baud,                 null));
 				yield return (new TestCaseData(@"\!(Baud(9600))",             Domain.Parser.Keyword.Baud,                 new int[] { 9600 }));
