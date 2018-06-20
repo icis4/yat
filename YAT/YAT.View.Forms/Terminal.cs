@@ -1114,9 +1114,14 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isText       = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
+				bool isText       = true;
+				bool isSerialPort = true;
 
-				bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+				if (this.settingsRoot != null)
+				{
+					isText = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
+					isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+				}
 
 				// Layout, disable monitor item if the other monitors are hidden:
 				toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
@@ -1389,7 +1394,9 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+				bool isSerialPort = true;
+				if (this.settingsRoot != null)
+					isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
 				foreach (ToolStripMenuItem item in this.menuItems_preset)
 					item.Enabled = isSerialPort;
@@ -2541,7 +2548,9 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+				bool isSerialPort = true;
+				if (this.settingsRoot != null)
+					isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
 				// Flow control count:
 				bool showFlowControlOptions = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
@@ -5367,10 +5376,16 @@ namespace YAT.View.Forms
 			Image on  = Properties.Resources.Image_Status_Green_12x12;
 			Image off = Properties.Resources.Image_Status_Red_12x12;
 
-			bool isOpen = ((this.terminal != null) ? (this.terminal.IsOpen) : (false));
+			bool isOpen = ((this.terminal != null) && (this.terminal.IsOpen));
 
-			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
+			bool isSerialPort   = true;
+			bool isUsbSerialHid = false;
+
+			if (this.settingsRoot != null)
+			{
+				isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+				isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
+			}
 
 			if (isSerialPort)
 			{
