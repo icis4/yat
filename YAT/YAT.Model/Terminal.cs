@@ -772,10 +772,27 @@ namespace YAT.Model
 					{
 						case Domain.IOType.SerialPort:
 						{
-							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
+							string portNameAndCaption;
+							bool autoReopenEnabled;
+
+							var port = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null) // Effective settings from port object:
+							{
+								var s = port.Settings;
+								portNameAndCaption = s.PortId.ToNameAndCaptionString();
+								autoReopenEnabled  = s.AutoReopen.Enabled;
+							}
+							else // Fallback to settings object tree:
+							{
+								var s = this.settingsRoot.IO.SerialPort;
+								portNameAndCaption = s.PortId.ToNameAndCaptionString();
+								autoReopenEnabled  = s.AutoReopen.Enabled;
+							}
+
 							sb.Append(" - ");
-							sb.Append(s.PortId.ToNameAndCaptionString());
+							sb.Append(portNameAndCaption);
 							sb.Append(" - ");
+
 							if (IsStarted)
 							{
 								if (IsOpen)
@@ -784,7 +801,7 @@ namespace YAT.Model
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Disconnected"); // Break?
 								}
-								else if (s.AutoReopen.Enabled)
+								else if (autoReopenEnabled)
 								{
 									sb.Append("Closed - Waiting for reconnect");
 								}
@@ -797,12 +814,13 @@ namespace YAT.Model
 							{
 								sb.Append("Closed");
 							}
+
 							break;
 						}
 
 						case Domain.IOType.TcpClient:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 
 							sb.Append(" - ");
 							sb.Append(s.RemoteEndPointString);
@@ -820,7 +838,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpServer:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 
 							sb.Append(" - ");
 							sb.Append("Server:");
@@ -837,7 +855,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpAutoSocket:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 							if (IsStarted)
 							{
 								bool isClient = false;
@@ -880,12 +898,13 @@ namespace YAT.Model
 								sb.Append(" - ");
 								sb.Append("Disconnected");
 							}
+
 							break;
 						}
 
 						case Domain.IOType.UdpClient:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
 							sb.Append(s.RemoteEndPointString);
 							sb.Append(" - ");
@@ -895,7 +914,7 @@ namespace YAT.Model
 
 						case Domain.IOType.UdpServer:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
 							sb.Append("Receive:");
 							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
@@ -906,7 +925,7 @@ namespace YAT.Model
 
 						case Domain.IOType.UdpPairSocket:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
 							sb.Append(s.RemoteEndPointString);
 							sb.Append(" - ");
@@ -919,7 +938,7 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Serial.Usb.SerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
+							var s = this.settingsRoot.IO.UsbSerialHidDevice;
 							sb.Append(" - ");
 							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 							if (device != null)
@@ -983,10 +1002,30 @@ namespace YAT.Model
 					{
 						case Domain.IOType.SerialPort:
 						{
-							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
+							string portNameAndCaption;
+							string communication;
+							bool autoReopenEnabled;
+
+							var port = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null) // Effective settings from port object:
+							{
+								var s = port.Settings;
+								portNameAndCaption = s.PortId.ToNameAndCaptionString();
+								communication      = s.Communication.ToString();
+								autoReopenEnabled  = s.AutoReopen.Enabled;
+							}
+							else // Fallback to settings object tree;
+							{
+								var s = this.settingsRoot.IO.SerialPort;
+								portNameAndCaption = s.PortId.ToNameAndCaptionString();
+								communication      = s.Communication.ToString();
+								autoReopenEnabled  = s.AutoReopen.Enabled;
+							}
+
 							sb.Append("Serial port "); // Not adding "COM" as the port name will already state that.
-							sb.Append(s.PortId.ToNameAndCaptionString());
-							sb.Append(" (" + s.Communication + ")");
+							sb.Append(portNameAndCaption);
+							sb.Append(" (" + communication + ")");
+
 							if (IsStarted)
 							{
 								if (IsOpen)
@@ -994,7 +1033,7 @@ namespace YAT.Model
 									sb.Append(" is open and ");
 									sb.Append(IsConnected ? "connected" : "disconnected");
 								}
-								else if (s.AutoReopen.Enabled)
+								else if (autoReopenEnabled)
 								{
 									sb.Append(" is closed and waiting for reconnect");
 								}
@@ -1007,6 +1046,7 @@ namespace YAT.Model
 							{
 								sb.Append(" is closed");
 							}
+
 							break;
 						}
 
@@ -1028,7 +1068,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpServer:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 							sb.Append("TCP/IP server");
 							if (IsStarted)
 							{
@@ -1061,6 +1101,7 @@ namespace YAT.Model
 							{
 								sb.Append(" is closed");
 							}
+
 							sb.Append(" on local port ");
 							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							break;
@@ -1068,7 +1109,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpAutoSocket:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							var s = this.settingsRoot.IO.Socket;
 							sb.Append("TCP/IP AutoSocket");
 							if (IsStarted)
 							{
@@ -1104,6 +1145,7 @@ namespace YAT.Model
 								sb.Append(" is disconnected from ");
 								sb.Append(s.RemoteEndPointString);
 							}
+
 							break;
 						}
 
@@ -1131,6 +1173,7 @@ namespace YAT.Model
 							{
 								sb.Append(" is closed");
 							}
+
 							break;
 						}
 
@@ -1182,12 +1225,13 @@ namespace YAT.Model
 							{
 								sb.Append(" is closed");
 							}
+
 							break;
 						}
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Serial.Usb.SerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
+							var s = this.settingsRoot.IO.UsbSerialHidDevice;
 							sb.Append("USB HID device '");
 
 							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
