@@ -395,17 +395,36 @@ namespace MKY
 
 		private static Type EnumExTypeToUnderlyingEnumType(Type enumExType)
 		{
-			Type[] ta = enumExType.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic);
+			var potentialEnumTypes = new List<Type>();
 
-			if (ta.Length < 1)
-				throw (new TypeLoadException("No nested types found!"));
-
-			foreach (Type t in ta)
+			// Search for all constructors with a single enum parameter:
+			var cis = enumExType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			foreach (var ci in cis)
 			{
-				if (t.IsEnum)
-					return (t);
+				var p = ci.GetParameters();
+				if (p.Length == 1)
+				{
+					var t = p[0].ParameterType;
+					if (t.IsEnum)
+						potentialEnumTypes.Add(t);
+				}
 			}
-			throw (new TypeLoadException("No nested enum found!"));
+
+			// Select the best matching parameter type:
+			if (potentialEnumTypes.Count == 1) // Should be the typical case for most EnumEx.
+			{
+				return (potentialEnumTypes[0]);
+			}
+			else
+			{
+				foreach (var t in potentialEnumTypes)
+				{
+					if (enumExType.Name.StartsWith(t.Name))
+						return (t);
+				}
+
+				throw (new TypeLoadException("No matching enum type found!"));
+			}
 		}
 
 		/// <summary>

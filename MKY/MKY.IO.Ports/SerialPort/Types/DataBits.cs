@@ -203,7 +203,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool IsDefined(int dataBits)
 		{
-			return (IsDefined(typeof(DataBits), dataBits));
+			return (IsDefined(typeof(DataBitsEx), dataBits));
 		}
 
 		#endregion

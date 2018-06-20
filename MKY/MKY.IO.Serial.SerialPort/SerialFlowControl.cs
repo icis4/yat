@@ -291,7 +291,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public static bool IsDefined(int flowControl)
 		{
-			return (IsDefined(typeof(SerialFlowControl), flowControl));
+			return (IsDefined(typeof(SerialFlowControlEx), flowControl));
 		}
 
 		#endregion
