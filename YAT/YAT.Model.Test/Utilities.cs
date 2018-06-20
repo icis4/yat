@@ -403,6 +403,78 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Devices
+		//==========================================================================================
+		// Devices
+		//==========================================================================================
+
+		internal static IEnumerable<Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>> MTSicsDevices
+		{
+			get
+			{
+				foreach (var dev in MTSicsSerialPortDevices)
+					yield return (dev);
+
+				foreach (var dev in MTSicsTcpAutoSocketDevices)
+					yield return (dev);
+
+				foreach (var dev in MTSicsUsbDevices)
+					yield return (dev);
+			}
+		}
+
+		internal static IEnumerable<Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>> MTSicsSerialPortDevices
+		{
+			get
+			{
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
+					!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
+				{
+					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedSerialPortMTSicsDeviceATextSettings, null);
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_MTSicsDeviceA_"));
+				}
+
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+				{
+					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedSerialPortMTSicsDeviceBTextSettings, null);
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_MTSicsDeviceB_"));
+				}
+			}
+		}
+
+		internal static IEnumerable<Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>> MTSicsTcpAutoSocketDevices
+		{
+			get
+			{
+				// Add device in any case => 'Ignore' is issued if device is not available.
+				{
+					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketMTSicsDeviceTextSettings, null);
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.Net.Test.ConfigurationCategoryStrings.MTSicsDeviceIsAvailable, "TcpAutoSocket_MTSicsDevice_"));
+				}
+			}
+		}
+
+		internal static IEnumerable<Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>> MTSicsUsbDevices
+		{
+			get
+			{
+				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
+					!MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
+				{
+					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUsbSerialHidMTSicsDeviceATextSettings, null);
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_MTSicsDeviceA_"));
+				}
+
+				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+				{
+					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUsbSerialHidMTSicsDeviceBTextSettings, null);
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_MTSicsDeviceB_"));
+				}
+			}
+		}
+
+		#endregion
+
 		#region Settings
 		//==========================================================================================
 		// Settings
@@ -1207,19 +1279,14 @@ namespace YAT.Model.Test
 
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
 		{
-			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCount, 1); // Single cycle.
-		}
-
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
-		{
-			WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1); // Single cycle.
+			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCount);
 		}
 
 		/// <remarks>
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleByteCount, int expectedPerCycleLineCount, int cycle)
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleByteCount, int expectedPerCycleLineCount, int cycle = 1)
 		{
 			// Calculate total expected counts at the receiver side:
 			int expectedTotalByteCount = (expectedPerCycleByteCount * cycle);
