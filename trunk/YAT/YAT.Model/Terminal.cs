@@ -1358,8 +1358,8 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// Attention:
-			// Similar code exists in Domain.Terminal.ApplySettings().
-			// Changes here may have to be applied there too. // \ToDo: Consider to use Domain.Terminal.ApplySettings() instead.
+			// Similar code exists in Domain.Terminal.ApplySettings() but without changing the terminal settings (.yat file).
+			// Changes here may have to be applied there too.
 
 			if (this.terminal.IsStarted) // Terminal is started, stop and restart it with the new settings:
 			{
