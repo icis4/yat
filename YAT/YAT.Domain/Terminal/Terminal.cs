@@ -1794,8 +1794,8 @@ namespace YAT.Domain
 			try
 			{
 				// Attention:
-				// Similar code exists in Model.Terminal.ApplySettings().
-				// Changes here may have to be applied there too. // \ToDo: Consider to eliminate Model.Terminal.ApplySettings().
+				// Similar code exists in Model.Terminal.ApplySettings() but including change of terminal settings (.yat file).
+				// Changes here may have to be applied there too.
 
 				if (port.IsStarted) // Port is started, stop and restart it with the new settings:
 				{
