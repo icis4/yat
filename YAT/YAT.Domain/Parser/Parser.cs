@@ -588,13 +588,16 @@ namespace YAT.Domain.Parser
 		/// Spelled "WhiteSpace" instead of "Whitespace" for consistency with the
 		/// <see cref="char.IsWhiteSpace(char)"/> method.
 		/// </remarks>
+		/// <remarks>
+		/// Using <c>int</c> instead of <c>char</c> for ease of use after calling
+		/// <see cref="StringReader.Peek()"/> and <see cref="StringReader.Read()"/>.
+		/// </remarks>
 		internal virtual bool IsWhiteSpace(int parseChar)
 		{
-			if (char.IsWhiteSpace((char)parseChar)) // 'official' whitespace.
+			if (Int32Ex.IsWithin(parseChar, char.MinValue, char.MaxValue) && char.IsWhiteSpace((char)parseChar)) // 'official' whitespace.
 				return (true);
 			
-			if (Int32Ex.IsWithin(parseChar, byte.MinValue, byte.MaxValue) &&
-				Ascii.IsControl((byte)parseChar)) // ASCII control.
+			if (Int32Ex.IsWithin(parseChar, byte.MinValue, byte.MaxValue) && Ascii.IsControl((byte)parseChar)) // ASCII control.
 				return (true);
 
 			return (false);

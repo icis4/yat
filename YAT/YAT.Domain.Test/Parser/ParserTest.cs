@@ -498,8 +498,8 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(Delay(10 ))",				Domain.Parser.Keyword.Delay, new int[] { 10 }));
 				yield return (new TestCaseData(@"\!(Delay( 10 ))",				Domain.Parser.Keyword.Delay, new int[] { 10 }));
 				yield return (new TestCaseData(@"\!(Delay(   10   ))",			Domain.Parser.Keyword.Delay, new int[] { 10 }));
-				yield return (new TestCaseData(@"\!(Delay(   10   )",			Domain.Parser.Keyword.Delay, new int[] { 10 }).SetName("Whitespace without 2nd closing parentheses"));
-				yield return (new TestCaseData(@"\!(Delay(   10   ",			Domain.Parser.Keyword.Delay, new int[] { 10 }).SetName("Whitespace without 2nd nor 1st closing parentheses"));
+				yield return (new TestCaseData(@"\!(Delay(   10   )",			Domain.Parser.Keyword.Delay, new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(Delay(   10   ",			Domain.Parser.Keyword.Delay, new int[] { 10 }));
 
 				// Empty:
 				yield return (new TestCaseData(@"\!(Clear())",					Domain.Parser.Keyword.Clear, null));
@@ -508,15 +508,15 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(Delay())",					Domain.Parser.Keyword.Delay, null));
 				yield return (new TestCaseData(@"\!(Delay ( ) )",				Domain.Parser.Keyword.Delay, null));
 				yield return (new TestCaseData(@"\!(Delay   (   )   )",			Domain.Parser.Keyword.Delay, null));
-				yield return (new TestCaseData(@"\!(Delay   (   )   ",			Domain.Parser.Keyword.Delay, null).SetName("Empty without 2nd closing parentheses"));
-				yield return (new TestCaseData(@"\!(Delay   (   ",				Domain.Parser.Keyword.Delay, null).SetName("Empty without 2nd nor 1st closing parentheses"));
+				yield return (new TestCaseData(@"\!(Delay   (   )   ",			Domain.Parser.Keyword.Delay, null));
+				yield return (new TestCaseData(@"\!(Delay   (   ",				Domain.Parser.Keyword.Delay, null));
 
 				// Single:
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(1))",				Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT ( 1 ) )",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT   (   1   )   )",	Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT   (   1   )   ",	Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }).SetName("Single without 2nd closing parentheses"));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT   (   1   ",		Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }).SetName("Single without 2nd nor 1st closing parentheses"));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT   (   1   )   ",	Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT   (   1   ",		Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1 }));
 
 				// Multiple:
 				yield return (new TestCaseData(@"\!(ZZZ_FIT( 1 , 2 , 3 ))",		Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
@@ -526,20 +526,20 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(ZZZ_FIT( 1,2,3 ))",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(1,2,3))",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, 3 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(0,1,2))",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1, 2 }));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(0,1,2)",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1, 2 }).SetName("Single without 2nd closing parentheses"));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(0,1,2",				Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1, 2 }).SetName("Single without 2nd nor 1st closing parentheses"));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0,1,2)",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1, 2 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0,1,2",				Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1, 2 }));
 
 				// Partial:
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2))",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(0, 1))",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1 }));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(0, 1)",				Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1 }).SetName("Partial without 2nd closing parentheses"));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(0, 1",				Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1 }).SetName("Partial without 2nd nor 1st closing parentheses"));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0, 1)",				Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0, 1",				Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0, 1 }));
 
 				// Sign:
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, -2, 3))",		Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, -2, 3 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2, +3))",		Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, +3 }));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2, +3)",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, +3 }).SetName("Sign without 2nd closing parentheses"));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2, +3",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, +3 }).SetName("Sign without 2nd nor 1st closing parentheses"));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2, +3)",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, +3 }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(1, 2, +3",			Domain.Parser.Keyword.ZZZ_FIT, new int[] { 1, 2, +3 }));
 
 				// Radix:
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(0b0))",									Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x00 }));
@@ -565,8 +565,8 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x00000001))",							Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x01 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x40000001))",							Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x40000001 }));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x7FFFFFFF))",							Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x7FFFFFFF)",							Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }).SetName("Radix without 2nd closing parentheses"));
-				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x7FFFFFFF",							Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }).SetName("Radix without 2nd nor 1st closing parentheses"));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x7FFFFFFF)",							Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }));
+				yield return (new TestCaseData(@"\!(ZZZ_FIT(0x7FFFFFFF",							Domain.Parser.Keyword.ZZZ_FIT, new int[] { 0x7FFFFFFF }));
 			}
 		}
 

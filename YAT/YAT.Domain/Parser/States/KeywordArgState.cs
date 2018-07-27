@@ -136,7 +136,8 @@ namespace YAT.Domain.Parser
 					}
 				}
 			}
-			else if (parseChar == ')') // End of argument(s).
+			else if ((parseChar == ')') ||              // ')' => Explicit end of argument(s).
+			         (parseChar == CharEx.InvalidChar)) // EOS => Implicit end of argument(s).
 			{
 				// Trim trailing whitespace (after the closing parenthesis):
 				while (parser.IsWhiteSpace(parser.CharReader.Peek()))
@@ -240,7 +241,10 @@ namespace YAT.Domain.Parser
 
 					default:
 					{
-						if ((nextChar == ')') || (nextChar == ',') || parser.IsWhiteSpace(nextChar)) // Just (0) or (0,...) or (0 ) is OK!
+						if ((nextChar == ')') ||
+						    (nextChar == ',') ||
+						    parser.IsWhiteSpace(nextChar) ||
+						    (nextChar == CharEx.InvalidChar)) // Just (0) or (0,...) or (0 ) or (0 is OK!
 						{
 							this.radix = Radix.Dec;
 							this.valueWriter.Write((char)parseChar);
