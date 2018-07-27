@@ -102,6 +102,7 @@ Fixed bugs:
 - Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
   #422, #423) which further refines the fix to former bugs #408 and #409.
+- 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 
 Limitations and known issues:
