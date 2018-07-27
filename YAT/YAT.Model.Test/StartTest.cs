@@ -91,7 +91,7 @@ namespace YAT.Model.Test
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 
 			// Ensure that recent files are contained:
-			ApplicationSettings.LocalUserSettings.RecentFiles = new Settings.RecentFileSettings();
+			ApplicationSettings.LocalUserSettings.RecentFiles = new Model.Settings.RecentFileSettings();
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(TerminalFilePath);
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(WorkspaceFilePath);
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
