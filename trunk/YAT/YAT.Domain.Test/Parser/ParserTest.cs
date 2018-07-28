@@ -288,11 +288,47 @@ namespace YAT.Domain.Test.Parser
 
 		/// <remarks>
 		/// Good online tools:
-		/// http://codepage-encoding.online-domain-tools.com/
-		/// http://www.njstar.com/cms/unicode-to-dbcs-code-conversion
 		/// https://www.branah.com/unicode-converter
 		/// https://r12a.github.io/app-conversion/
 		/// https://r12a.github.io/app-encodings/
+		/// 
+		/// Useless online tools:
+		/// https://www.motobit.com/util/charset-codepage-conversion.asp (not working for advanced characters)
+		/// http://www.njstar.com/cms/unicode-to-dbcs-code-conversion (no access to bytes)
+		/// http://codepage-encoding.online-domain-tools.com/ (always encodes 16 bits)
+		/// http://string-functions.com/encodedecode.aspx (no access to bytes)
+		/// 
+		/// Rather use simple .NET application:
+		/// <![CDATA[
+		/// var lines = File.ReadAllLines("Encoding-UTF-8.txt", Encoding.UTF8);
+		/// 
+		/// var lookup = new Dictionary<int, string>();
+		/// lookup.Add(950,   "Encoding-CJK-Big5-[950].txt");
+		/// lookup.Add(20936, "Encoding-CJK-GB2312-[20936].txt");
+		/// lookup.Add(54936, "Encoding-CJK-GB18030-[54936].txt");
+		/// lookup.Add(936,   "Encoding-CJK-GBK-[936].txt");
+		/// lookup.Add(949,   "Encoding-CJK-KSC-[949].txt");
+		/// lookup.Add(932,   "Encoding-CJK-ShiftJIS-[932].txt");
+		/// 
+		/// foreach (var kvp in lookup)
+		/// {
+		/// 	var e = Encoding.GetEncoding(kvp.Key);
+		/// 
+		/// 	using (var stream = File.Open(kvp.Value, FileMode.Create, FileAccess.Write))
+		/// 	{
+		/// 		using (var writer = new BinaryWriter(stream))
+		/// 		{
+		/// 			for (int i = 0; i < lines.Length; i++)
+		/// 			{
+		/// 				writer.Write(e.GetBytes(lines[i]));
+		/// 
+		/// 				if (i < (lines.Length - 1))
+		/// 					writer.Write(e.GetBytes(Environment.NewLine));
+		/// 			}
+		/// 		}
+		/// 	}
+		/// }
+		/// ]]>
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -386,69 +422,71 @@ namespace YAT.Domain.Test.Parser
 
 				// Big5 [950]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0x22, 0x75 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "$£€", new byte[] { 0x24, 0xA2, 0x47, 0x45, 0x55, 0x52 })); // 1-2-3 bytes and € = EUR !!!
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "$£€", new byte[] { 0x24, 0xA2, 0x47, 0xA3, 0xE1 })); // 1-2-2 bytes
 				                                                                          //// "čěř" is not supported
-
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "一二州", new byte[] { 0xA4, 0x40, 0xA4, 0x47, 0xA6, 0x7B }));
 				                                                                          //// "︙" is not supported
 				                                                                          //// "𝄞"  is not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A })); // same as ASCII
 
 				// GBK [936]:                                                           // is GBK !!!
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "äöü", new byte[] { 0x81, 0x30, 0x8A, 0x31, 0x81, 0x30, 0x8B, 0x32, 0xA8, 0xB9 })); // 4-4-2 bytes ???
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "ÄÖÜ", new byte[] { 0x81, 0x30, 0x87, 0x32, 0x81, 0x30, 0x89, 0x30, 0x81, 0x30, 0x89, 0x35 })); // 4 bytes
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "$£€", new byte[] { 0x24, 0x81, 0x30, 0x84, 0x35, 0xA2, 0xE3 })); // 1-4-2
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "čěř", new byte[] { 0x81, 0x30, 0x8D, 0x30, 0xA8, 0xA7, 0x81, 0x30, 0x94, 0x30 })); // 4-2-4 bytes ???
-
+				                                                                            //// "äöü" is not supported
+				                                                                            //// "ÄÖÜ" is not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "$£€", new byte[] { 0x24, 0xA1, 0xEA, 0x80 }));
+				                                                                            //// "čěř" is not supported
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "︙", new byte[] { 0xA6, 0xF3 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "𝄞", new byte[] { 0x94, 0x32, 0xBE, 0x34 }));
+				                                                                            //// "︙", is not supported
+				                                                                            //// "𝄞",  is not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A })); // same as ASCII
 
 				// GB2312 (-80) [20936]:                                                  // is GB2312 !!!
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0xA8, 0xB9 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "$£€", new byte[] { 0x24, 0x6C, 0x62, 0x45, 0x55, 0x52 })); // 1-2-3 bytes and € = EUR !!!
+				                                                                               //// "äöü" is not supported
+				                                                                               //// "ÄÖÜ" is not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "$",   new byte[] { 0x24 })); // only $ supported
 				                                                                               //// "čěř" is not supported
-
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
 				                                                                               //// "︙" is not supported
 				                                                                               //// "𝄞"  is not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A })); // same as ASCII
 
 				// GB18030 [54936]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "äöü", new byte[] { 0x81, 0x30, 0x8A, 0x31, 0x81, 0x30, 0x8B, 0x32, 0xA8, 0xB9 })); // 4-4-2 bytes ???
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "äöü", new byte[] { 0x81, 0x30, 0x8A, 0x31, 0x81, 0x30, 0x8B, 0x32, 0xA8, 0xB9 })); // 4-4-2 bytes !!!
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "ÄÖÜ", new byte[] { 0x81, 0x30, 0x87, 0x32, 0x81, 0x30, 0x89, 0x30, 0x81, 0x30, 0x89, 0x35 })); // 4 bytes
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "$£€", new byte[] { 0x24, 0x81, 0x30, 0x84, 0x35, 0xA2, 0xE3 })); // 1-4-2
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "čěř", new byte[] { 0x81, 0x30, 0x8D, 0x30, 0xA8, 0xA7, 0x81, 0x30, 0x94, 0x30 })); // 4-2-4 bytes ???
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "$£€", new byte[] { 0x24, 0x81, 0x30, 0x84, 0x35, 0xA2, 0xE3 })); // 1-4-2 bytes !!!
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "čěř", new byte[] { 0x81, 0x30, 0x8D, 0x30, 0xA8, 0xA7, 0x81, 0x30, 0x94, 0x30 })); // 4-2-4 bytes !!!
 
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "︙", new byte[] { 0xA6, 0xF3 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "︙", new byte[] { 0x84, 0x31, 0x83, 0x35 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "𝄞", new byte[] { 0x94, 0x32, 0xBE, 0x34 }));
+
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A })); // same as ASCII
 
 				// KSC [949]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0x22, 0x75 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "$£€", new byte[] { 0x24, 0x6C, 0x62, 0xA2, 0xE6 })); // 1-2-2 bytes
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "$£€", new byte[] { 0x24, 0xA1, 0xCC, 0xA2, 0xE6 })); // 1-2-2 bytes
 				                                                                                    //// "čěř" is not supported
-
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "一二州", new byte[] { 0xEC, 0xE9, 0xEC, 0xA3, 0xF1, 0xB6 }));
 				                                                                                    //// "︙" is not supported
 				                                                                                    //// "𝄞"  is not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A })); // same as ASCII
 
 				// Shift-JIS [932]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0x22, 0x75 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "$£€", new byte[] { 0x24, 0x81, 0x92, 0x45, 0x55, 0x52 })); // 1-2-3 bytes and € = EUR !!!
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "$£",  new byte[] { 0x24, 0x81, 0x92 })); // only $ and £ supported
 				                                                                               //// "čěř" is not supported
-
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "一二州", new byte[] { 0x88, 0xEA, 0x93, 0xF1, 0x8F, 0x42 }));
 				                                                                               //// "︙" is not supported
 				                                                                               //// "𝄞"  is not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A })); // same as ASCII
 			}
 		}
 
@@ -758,7 +796,7 @@ namespace YAT.Domain.Test.Parser
 			// \remind (2017-12-09 / MKY / bug #400)
 			// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
 			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
-			// UTF-8 is independent on endianness. The endianness would only have to be applied single
+			// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
 			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
