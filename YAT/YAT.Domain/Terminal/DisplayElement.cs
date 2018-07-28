@@ -806,6 +806,9 @@ namespace YAT.Domain
 					this.text += other.text;
 
 				this.byteCount += other.byteCount;
+
+				if (other.Highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous element.
+					this.Highlight = true;
 			}
 			catch (ArgumentException ex)
 			{
