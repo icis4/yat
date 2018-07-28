@@ -431,13 +431,13 @@ namespace YAT.Model.Test
 					!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedSerialPortMTSicsDeviceATextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_MTSicsDeviceA_"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_MTSicsDeviceA"));
 				}
 
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedSerialPortMTSicsDeviceBTextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_MTSicsDeviceB_"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_MTSicsDeviceB"));
 				}
 			}
 		}
@@ -449,7 +449,7 @@ namespace YAT.Model.Test
 				// Add device in any case => 'Ignore' is issued if device is not available.
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTcpAutoSocketMTSicsDeviceTextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.Net.Test.ConfigurationCategoryStrings.MTSicsDeviceIsAvailable, "TcpAutoSocket_MTSicsDevice_"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.Net.Test.ConfigurationCategoryStrings.MTSicsDeviceIsAvailable, "TcpAutoSocket_MTSicsDevice"));
 				}
 			}
 		}
@@ -462,13 +462,13 @@ namespace YAT.Model.Test
 					!MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUsbSerialHidMTSicsDeviceATextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_MTSicsDeviceA_"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_MTSicsDeviceA"));
 				}
 
 				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUsbSerialHidMTSicsDeviceBTextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_MTSicsDeviceB_"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_MTSicsDeviceB"));
 				}
 			}
 		}
@@ -1348,10 +1348,10 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalRxByteCount, int expectedTotalRxLineCount)
 		{
 			// Calculate timeout:
-			int timeout = (WaitTimeoutForLineTransmission * expectedTotalLineCount);
+			int timeout = (WaitTimeoutForLineTransmission * expectedTotalRxLineCount);
 
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
@@ -1365,19 +1365,19 @@ namespace YAT.Model.Test
 					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
 				}
 
-				if (terminalRx.RxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+				if (terminalRx.RxByteCount > expectedTotalRxByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
 					            " Number of received bytes = " + terminalRx.RxByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
+					            " mismatches expected = " + expectedTotalRxByteCount + ".");
 				}
 
-				if (terminalRx.RxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				if (terminalRx.RxLineCount > expectedTotalRxLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
 					            " Number of received lines = " + terminalRx.RxLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+					            " mismatches expected = " + expectedTotalRxLineCount + ".");
 				}
 			}
-			while ((terminalRx.RxByteCount != expectedTotalByteCount) || (terminalRx.RxLineCount != expectedTotalLineCount));
+			while ((terminalRx.RxByteCount != expectedTotalRxByteCount) || (terminalRx.RxLineCount != expectedTotalRxLineCount));
 
 			// Attention: Terminal line count is not always equal to display line count!
 			//  > Terminal line count = number of *completed* lines in terminal

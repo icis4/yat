@@ -250,15 +250,15 @@ namespace YAT.Model.Test.Transmission
 				l.Add(0x0A); // <LF>
 
 				var expectedBytes = l.ToArray();
-				int expectedTotalByteCount = 0;
+				int expectedTotalRxByteCount = 0;
 
 				for (int i = 0; i < transmissionCount; i++)
 				{
 					// Send stimulus to device:
 					Trace.WriteLine(@">> """ + stimulus + @""" (" + i + ")");
 					terminal.SendText(stimulusCommand);
-					expectedTotalByteCount += expectedBytes.Length;
-					Utilities.WaitForReceiving(terminal, expectedTotalByteCount, i + 1); // i = transmission count equals line count.
+					expectedTotalRxByteCount += expectedBytes.Length;
+					Utilities.WaitForReceiving(terminal, expectedTotalRxByteCount, i + 1); // i = transmission count equals line count.
 
 					// Verify response:
 					var lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
