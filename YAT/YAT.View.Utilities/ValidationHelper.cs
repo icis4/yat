@@ -40,11 +40,13 @@ namespace YAT.View.Utilities
 	public static class ValidationHelper
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public static bool ValidateTextSilently(string textToValidate, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
 		{
 			int invalidTextLength;
-			return (ValidateText(owner, description, textToValidate, out invalidTextStart, out invalidTextLength));
+			int invalidTextStart;
+			string errorMessage;                                  // Empty 'description' as error message will be ignored anyway.
+			return (Model.Utilities.ValidationHelper.ValidateText("", textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, defaultRadix, modes));
 		}
 
 		/// <summary></summary>
@@ -60,16 +62,8 @@ namespace YAT.View.Utilities
 			}
 			else
 			{
-				MessageBoxEx.Show
-				(
-					owner,
-					errorMessage.ToString(),
-					"Invalid " + description,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Exclamation
-				);
-
-				return (false);
+				var errorCaption = "Invalid " + description;
+				return (ShowErrorMessageAndReturnFalse(owner, errorMessage, errorCaption));
 			}
 		}
 
@@ -83,17 +77,24 @@ namespace YAT.View.Utilities
 			}
 			else
 			{
-				MessageBoxEx.Show
-				(
-					owner,
-					"This " + description + " is not valid with the current command. Clear or change the command before changing the " + description + ".",
-					"Invalid " + description,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Exclamation
-				);
-
-				return (false);
+				var errorMessage = "This " + description + " is not valid with the current command. Clear or change the command before changing the " + description + ".";
+				var errorCaption = "Invalid " + description;
+				return (ShowErrorMessageAndReturnFalse(owner, errorMessage, errorCaption));
 			}
+		}
+
+		private static bool ShowErrorMessageAndReturnFalse(IWin32Window owner, string errorMessage, string errorCaption)
+		{
+			MessageBoxEx.Show
+			(
+				owner,
+				errorMessage,
+				errorCaption,
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Exclamation
+			);
+
+			return (false);
 		}
 	}
 }

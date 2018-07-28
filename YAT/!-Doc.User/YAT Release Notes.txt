@@ -103,6 +103,7 @@ Fixed bugs:
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
   #422, #423) which further refines the fix to former bugs #408 and #409.
 - 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
+- Problem with escape sequences in automatic action/response fixed (bug #424).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 
 Limitations and known issues:

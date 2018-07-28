@@ -1427,8 +1427,8 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
-		/// only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_Find_Pattern_TextChanged(object sender, EventArgs e)
 		{
@@ -1917,37 +1917,40 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
-		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
 		{
-			// Attention, 'isSettingControls' must only be checked further below!
+			if (this.isSettingControls)
+				return;
 
 			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				string triggerText = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
-				int invalidTextStart;
-				if (Utilities.ValidationHelper.ValidateText(this, "automatic action trigger", triggerText, out invalidTextStart))
+				var triggerText = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
+				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!this.isSettingControls)
+					if (Utilities.ValidationHelper.ValidateTextSilently(triggerText))
 					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						try
-						{
-							((Terminal)ActiveMdiChild).RequestAutoActionTrigger(triggerText);
-						}
-						finally
-						{
-							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-						}
+						toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
+						toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
+						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+
+					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+					try
+					{
+						((Terminal)ActiveMdiChild).RequestAutoActionTrigger(triggerText);
+					}
+					finally
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
 					}
 				}
-				else
-				{
-					toolStripComboBox_MainTool_AutoAction_Trigger.Text = triggerText.Remove(invalidTextStart);
-				}
 			}
+
+			toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.Window;
+			toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
 		}
 
 		private void toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
@@ -1991,37 +1994,40 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
-		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
 		{
-			// Attention, 'isSettingControls' must only be checked further below!
+			if (this.isSettingControls)
+				return;
 
 			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				string triggerText = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
-				int invalidTextStart;
-				if (Utilities.ValidationHelper.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
+				var triggerText = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
+				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!this.isSettingControls)
+					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText))
 					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						try
-						{
-							((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerText);
-						}
-						finally
-						{
-							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-						}
+						toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
+						toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
+						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+
+					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+					try
+					{
+						((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerText);
+					}
+					finally
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
 					}
 				}
-				else
-				{
-					toolStripComboBox_MainTool_AutoResponse_Trigger.Text = triggerText.Remove(invalidTextStart);
-				}
 			}
+
+			toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.Window;
+			toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
@@ -2035,37 +2041,40 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event
-		/// way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Response_TextChanged(object sender, EventArgs e)
 		{
-			// Attention, 'isSettingControls' must only be checked further below!
+			if (this.isSettingControls)
+				return;
 
 			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				string responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
-				int invalidTextStart;
-				if (Utilities.ValidationHelper.ValidateText(this, "automatic response", responseText, out invalidTextStart))
+				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
+				if (!string.IsNullOrEmpty(responseText))
 				{
-					if (!this.isSettingControls)
+					if (!Utilities.ValidationHelper.ValidateTextSilently(responseText))
 					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-						try
-						{
-							((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
-						}
-						finally
-						{
-							this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-						}
+						toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.ControlDark;
+						toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.ControlText;
+						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+
+					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+					try
+					{
+						((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
+					}
+					finally
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
 					}
 				}
-				else
-				{
-					toolStripComboBox_MainTool_AutoResponse_Response.Text = responseText.Remove(invalidTextStart);
-				}
 			}
+
+			toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.Window;
+			toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.WindowText;
 		}
 
 		private void toolStripLabel_MainTool_AutoResponse_Count_Click(object sender, EventArgs e)
