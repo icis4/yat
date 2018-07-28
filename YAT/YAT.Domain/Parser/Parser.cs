@@ -577,11 +577,28 @@ namespace YAT.Domain.Parser
 			return (true);
 		}
 
+		/// <summary>
+		/// Determines whether the specified character is an escape character.
+		/// </summary>
+		public static bool IsEscape(char c)
+		{
+			if (c == '\\')
+				return (true);
+
+			if (c == '<')
+				return (true);
+
+			if (c == '(')
+				return (true);
+
+			return (false);
+		}
+
 		#endregion
 
-		#region Protected Methods
+		#region Internal Methods
 		//==========================================================================================
-		// Protected Methods
+		// Internal Methods
 		//==========================================================================================
 
 		/// <remarks>
@@ -591,6 +608,9 @@ namespace YAT.Domain.Parser
 		/// <remarks>
 		/// Using <c>int</c> instead of <c>char</c> for ease of use after calling
 		/// <see cref="StringReader.Peek()"/> and <see cref="StringReader.Read()"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Virtual instance member instead of static member to be prepared for potential overload.
 		/// </remarks>
 		internal virtual bool IsWhiteSpace(int parseChar)
 		{
@@ -721,7 +741,7 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Encodes the given string, taking encoding into account.
 		/// </summary>
-		public byte[] GetBytes(string s)
+		internal byte[] GetBytes(string s)
 		{
 			byte[] a = this.encoding.GetBytes(s);
 			return (a);
@@ -758,7 +778,7 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Encodes the given character, taking encoding into account.
 		/// </summary>
-		public byte[] GetBytes(char c)
+		internal byte[] GetBytes(char c)
 		{
 			byte[] a = this.encoding.GetBytes(new char[] { c });
 			return (a);
@@ -1040,9 +1060,9 @@ namespace YAT.Domain.Parser
 
 		#endregion
 
-		#region Non-Public Methods
+		#region Private Methods
 		//==========================================================================================
-		// Non-Public Methods
+		// Private Methods
 		//==========================================================================================
 
 		/// <summary>
