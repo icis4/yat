@@ -1,7 +1,8 @@
 abc
-"a"o"u
-"A"O"U
-$’EUR
-cer
+aou
+AOU
+$’?
+???
 ˆê“ñB
-
+?
+??
