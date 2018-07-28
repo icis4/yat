@@ -288,9 +288,11 @@ namespace YAT.Domain.Test.Parser
 
 		/// <remarks>
 		/// Good online tools:
+		/// http://codepage-encoding.online-domain-tools.com/
+		/// http://www.njstar.com/cms/unicode-to-dbcs-code-conversion
 		/// https://www.branah.com/unicode-converter
-		/// https://r12a.github.io/apps/conversion/
-		/// https://r12a.github.io/apps/encodings/
+		/// https://r12a.github.io/app-conversion/
+		/// https://r12a.github.io/app-encodings/
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -313,7 +315,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF8, "一二州", new byte[] { 0xE4, 0xB8, 0x80, 0xE4, 0xBA, 0x8C, 0xE5, 0xB7, 0x9E }));
 				                                              //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.UTF8, "︙", new byte[] { 0xEF, 0xB8, 0x99 }));
-				                                              //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				                                              //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WinForms...
 				yield return (new TestCaseData(Encoding.UTF8, "𝄞", new byte[] { 0xF0, 0x9D, 0x84, 0x9E }));
 
 				yield return (new TestCaseData(Encoding.UTF8, @"\0<CR>\n", new byte[] { 0x00, 0x0D, 0x0A }));
@@ -329,7 +331,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.Unicode, "一二州", new byte[] { 0x00, 0x4E, 0x8C, 0x4E, 0xDE, 0x5D }));
 				                                                 //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.Unicode, "︙", new byte[] { 0x19, 0xFE }));
-				                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WinForms...
 				yield return (new TestCaseData(Encoding.Unicode, "𝄞", new byte[] { 0x34, 0xD8, 0x1E, 0xDD }));
 
 				yield return (new TestCaseData(Encoding.Unicode, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x0D, 0x00, 0x0A, 0x00 }));
@@ -345,7 +347,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "一二州", new byte[] { 0x4E, 0x00, 0x4E, 0x8C, 0x5D, 0xDE }));
 				                                                          //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "︙", new byte[] { 0xFE, 0x19 }));
-				                                                          //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				                                                          //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WinForms...
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "𝄞", new byte[] { 0xD8, 0x34, 0xDD, 0x1E }));
 
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x0D, 0x00, 0x0A }));
@@ -361,7 +363,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF32, "一二州", new byte[] { 0x00, 0x4E, 0x00, 0x00, 0x8C, 0x4E, 0x00, 0x00, 0xDE, 0x5D, 0x00, 0x00 }));
 				                                               //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.UTF32, "︙", new byte[] { 0x19, 0xFE, 0x00, 0x00 }));
-				                                               //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				                                               //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WinForms...
 				yield return (new TestCaseData(Encoding.UTF32, "𝄞", new byte[] { 0x1E, 0xD1, 0x01, 0x00 }));
 
 				yield return (new TestCaseData(Encoding.UTF32, @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00 }));
@@ -377,25 +379,76 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "一二州", new byte[] { 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, 0x4E, 0x8C, 0x00, 0x00, 0x5D, 0xDE }));
 				                                                                                  //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "︙", new byte[] { 0x00, 0x00, 0xFE, 0x19 }));
-				                                                                                  //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WindowForms...
+				                                                                                  //// 'Notenschlüssel' is U+1D11E but U+10000 does not seem supported by .NET 3.5 WinForms...
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "𝄞", new byte[] { 0x00, 0x01, 0xD1, 0x1E }));
 
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), @"\0<CR>\n", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0A }));
 
-				// Big5:
+				// Big5 [950]:
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0x22, 0x75 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "$£€", new byte[] { 0x24, 0xA2, 0x47, 0x45, 0x55, 0x52 })); // 1-2-3 bytes and € = EUR !!!
+				                                                                          //// "čěř" is not supported
+
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "一二州", new byte[] { 0xA4, 0x40, 0xA4, 0x47, 0xA6, 0x7B }));
+				                                                                          //// "︙" is not supported
+				                                                                          //// "𝄞"  is not supported
 
-				// GBK:                                                                 // is GBK !!!
+				// GBK [936]:                                                           // is GBK !!!
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "äöü", new byte[] { 0x81, 0x30, 0x8A, 0x31, 0x81, 0x30, 0x8B, 0x32, 0xA8, 0xB9 })); // 4-4-2 bytes ???
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "ÄÖÜ", new byte[] { 0x81, 0x30, 0x87, 0x32, 0x81, 0x30, 0x89, 0x30, 0x81, 0x30, 0x89, 0x35 })); // 4 bytes
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "$£€", new byte[] { 0x24, 0x81, 0x30, 0x84, 0x35, 0xA2, 0xE3 })); // 1-4-2
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "čěř", new byte[] { 0x81, 0x30, 0x8D, 0x30, 0xA8, 0xA7, 0x81, 0x30, 0x94, 0x30 })); // 4-2-4 bytes ???
+
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "︙", new byte[] { 0xA6, 0xF3 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "𝄞", new byte[] { 0x94, 0x32, 0xBE, 0x34 }));
 
-				// GB2312 (-80):                                                          // is GB2312 !!!
+				// GB2312 (-80) [20936]:                                                  // is GB2312 !!!
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0xA8, 0xB9 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "$£€", new byte[] { 0x24, 0x6C, 0x62, 0x45, 0x55, 0x52 })); // 1-2-3 bytes and € = EUR !!!
+				                                                                               //// "čěř" is not supported
+
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+				                                                                               //// "︙" is not supported
+				                                                                               //// "𝄞"  is not supported
 
-				// GB18030:
+				// GB18030 [54936]:
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "äöü", new byte[] { 0x81, 0x30, 0x8A, 0x31, 0x81, 0x30, 0x8B, 0x32, 0xA8, 0xB9 })); // 4-4-2 bytes ???
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "ÄÖÜ", new byte[] { 0x81, 0x30, 0x87, 0x32, 0x81, 0x30, 0x89, 0x30, 0x81, 0x30, 0x89, 0x35 })); // 4 bytes
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "$£€", new byte[] { 0x24, 0x81, 0x30, 0x84, 0x35, 0xA2, 0xE3 })); // 1-4-2
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "čěř", new byte[] { 0x81, 0x30, 0x8D, 0x30, 0xA8, 0xA7, 0x81, 0x30, 0x94, 0x30 })); // 4-2-4 bytes ???
+
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "︙", new byte[] { 0xA6, 0xF3 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "𝄞", new byte[] { 0x94, 0x32, 0xBE, 0x34 }));
 
-				// Shift-JIS:
+				// KSC [949]:
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0x22, 0x75 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "$£€", new byte[] { 0x24, 0x6C, 0x62, 0xA2, 0xE6 })); // 1-2-2 bytes
+				                                                                                    //// "čěř" is not supported
+
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "一二州", new byte[] { 0xEC, 0xE9, 0xEC, 0xA3, 0xF1, 0xB6 }));
+				                                                                                    //// "︙" is not supported
+				                                                                                    //// "𝄞"  is not supported
+
+				// Shift-JIS [932]:
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "äöü", new byte[] { 0x22, 0x61, 0x22, 0x6F, 0x22, 0x75 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "ÄÖÜ", new byte[] { 0x22, 0x41, 0x22, 0x4F, 0x22, 0x55 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "$£€", new byte[] { 0x24, 0x81, 0x92, 0x45, 0x55, 0x52 })); // 1-2-3 bytes and € = EUR !!!
+				                                                                               //// "čěř" is not supported
+
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "一二州", new byte[] { 0x88, 0xEA, 0x93, 0xF1, 0x8F, 0x42 }));
+				                                                                               //// "︙" is not supported
+				                                                                               //// "𝄞"  is not supported
 			}
 		}
 
