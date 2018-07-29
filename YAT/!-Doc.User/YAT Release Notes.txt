@@ -98,6 +98,7 @@ Important changes:
 - 
 
 Fixed bugs:
+- Non-Unicode multi-byte encodings (e.g. Big5, GBK, GB2312,...) fixed (bugs #427, #428, #429).
 - Optional user name of terminal is taken into account again (bug #415).
 - Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,

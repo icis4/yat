@@ -580,27 +580,30 @@ namespace YAT.Domain
 					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
 					if (e.IsSingleByte)
 					{
-						if ((b < 0x20) || (b == 0x7F)) // Control chars.
+						// Note that the following code is similar as twice below but with differences such
+						// as treatment of 0xFF, comment,...
+
+						if ((b < 0x20) || (b == 0x7F))               // ASCII control characters.
 						{
 							return (base.ByteToElement(b, d, r));
 						}
-						else if (b == 0x20) // Space.
+						else if (b == 0x20)                          // ASCII space.
 						{
 							return (base.ByteToElement(b, d, r));
-						}
-						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
+						}                                            // Special case.
+						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF) 
 						{
 							return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
 						}
-						else
+						else                                         // ASCII and extended ASCII printable characters.
 						{
-							char[] c = new char[1]; // 'IsSingleByte'!
+							char[] c = new char[1]; // 'IsSingleByte' always results in a single character.
 							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, c, 0, true) == 1)
 							{
 								if (r != Radix.Unicode)
 								{
 									switch (d)
-									{                                                               // 'IsSingleByte'!
+									{                                                               // 'IsSingleByte' always results in a single character.
 										case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
 										case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
 
@@ -610,7 +613,7 @@ namespace YAT.Domain
 								else // Unicode:
 								{
 									switch (d)
-									{                                                                                           // 'IsSingleByte'!
+									{                                                                                           // 'IsSingleByte' always results in a single character.
 										case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0])));
 										case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0])));
 
@@ -634,34 +637,197 @@ namespace YAT.Domain
 						// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 						// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
-						this.rxMultiByteDecodingStream.Add(b);
-						byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
-
-						int expectedCharCount = e.GetCharCount(decodingArray);
-						char[] chars = new char[expectedCharCount];
-
-						int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
-						if (effectiveCharCount == 1)
+						if (((EncodingEx)e).IsUnicode)
 						{
-							int code = chars[0];
-							if (code != 0xFFFD) // Ensure that 'unknown' character 0xFFFD is not decoded yet.
-							{
-								this.rxMultiByteDecodingStream.Clear();
+							// Note that the following code is similar as above and below but with differences such
+							// as no treatment of a lead byte, no treatment of 0xFF, treatment of 0xFFFD, comment,...
 
-								if ((code < 0x20) || (code == 0x7F)) // Control chars.
+							this.rxMultiByteDecodingStream.Add(b);
+
+							if (this.rxMultiByteDecodingStream.Count < ((EncodingEx)e).UnicodeMinimumByteCount)
+							{
+								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+							}
+
+							byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+							int expectedCharCount = e.GetCharCount(decodingArray);
+							char[] chars = new char[expectedCharCount];
+
+							int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
+							if (effectiveCharCount == 1)
+							{
+								int code = chars[0];
+								if (code != 0xFFFD) // Ensure that 'unknown' character 0xFFFD is not decoded yet.
 								{
-									return (base.ByteToElement(b, d, r));
+									this.rxMultiByteDecodingStream.Clear();
+
+									if ((code < 0x20) || (code == 0x7F)) // ASCII control characters.
+									{
+										return (base.ByteToElement((byte)code, d, r));
+									}
+									else if (code == 0x20)               // ASCII space.
+									{
+										return (base.ByteToElement((byte)code, d, r));
+									}
+									else                                 // ASCII printable character.
+									{
+										if (r != Radix.Unicode)
+										{
+											switch (d)
+											{                                                                               // 'effectiveCharCount' is 1 for sure!
+												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
+												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
+
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											}
+										}
+										else // Unicode:
+										{
+											switch (d)
+											{                                                                                                           // 'effectiveCharCount' is 1 for sure!
+												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
+												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
+
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											}
+										}
+									}
 								}
-								else if (code == 0x20) // Space.
+								else // Single 'unknown' character 0xFFFD:
 								{
-									return (base.ByteToElement(b, d, r));
+									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 								}
-								else if ((code == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
+							}
+							else // (effectiveCharCount == 0) || (effectiveCharCount > 1)
+							{
+								bool isInvalid = false;
+
+								// If one of the following conditions is given, the byte sequence is invalid:
+
+								if (decodingArray.Length >= e.GetMaxByteCount(1))
 								{
-									return (new DisplayElement.Nonentity()); // Ignore the character, this results in hiding.
+									isInvalid = true; // Nothing useful to decode even though maximum length reached.
+								}
+								else if (effectiveCharCount > 0)
+								{
+									foreach (char c in chars)
+									{
+										int code = c;
+										if (code != 0xFFFD)
+										{
+											isInvalid = true; // Everything else than 'unknown' character 0xFFFD is invalid.
+											break;
+										}
+									}
+								}
+
+								// If neither of the conditions is given, the byte sequence may not be complete yet:
+
+								if (!isInvalid)
+								{
+									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 								}
 								else
 								{
+									var seq = new StringBuilder(@"""");
+									bool isFirstByte = true;
+									foreach (byte invalidMultiByte in decodingArray)
+									{
+										if (isFirstByte)
+											isFirstByte = false;
+										else
+											seq.Append(" ");
+
+										seq.Append(base.ByteToElement(invalidMultiByte, d, Radix.Hex));
+									}
+									seq.Append(@"""");
+
+									var sb = new StringBuilder();
+									if ((decodingArray.Length >= 1) && (decodingArray.Length <= 4) && (decodingArray[0] >= 0xF0))
+									{
+										sb.Append("Byte sequence ");
+										sb.Append(seq.ToString());
+										sb.Append(" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
+									}
+									else
+									{
+										sb.Append(seq.ToString());
+										sb.Append(" is an invalid '");
+										sb.Append(((EncodingEx)e).DisplayName);
+										sb.Append("' byte sequence!");
+									}
+
+									this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+
+									return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+								}
+							}
+						}
+						else // Non-Unicode DBCS/MBCS.
+						{
+							// Note that the following code is similar as twice above but with differences such
+							// as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
+
+							if (this.rxMultiByteDecodingStream.Count == 0) // A first 'MultiByte' is either ASCII or lead byte.
+							{
+								if (b >= 0x80)                               // DBCS/MBCS lead byte.
+								{
+									this.rxMultiByteDecodingStream.Add(b);
+									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+								}
+								else if ((b < 0x20) || (b == 0x7F))          // ASCII control characters.
+								{
+									return (base.ByteToElement(b, d, r));
+								}
+								else if (b == 0x20)                          // ASCII space.
+								{
+									return (base.ByteToElement(b, d, r));
+								}
+								else                                         // ASCII printable character.
+								{
+									char[] c = new char[1]; // 'IsMultiByte' but the current single byte must result in a single character here.
+									if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, c, 0, true) == 1)
+									{
+										if (r != Radix.Unicode)
+										{
+											switch (d)
+											{                                                               // 'IsMultiByte' but the current single byte must result in a single character here.
+												case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
+												case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
+
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											}
+										}
+										else // Unicode:
+										{
+											switch (d)
+											{                                                                                           // 'IsMultiByte' but the current single byte must result in a single character here.
+												case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0])));
+												case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0])));
+
+												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											}
+										}
+									}
+									else // Something went seriously wrong!
+									{
+										throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "byte " + b.ToString("X2", CultureInfo.InvariantCulture) + " is invalid for encoding " + ((EncodingEx)e).ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									}
+								}
+							}
+							else // (rxMultiByteDecodingStream.Count > 0) => Neither ASCII nor lead byte.
+							{
+								this.rxMultiByteDecodingStream.Add(b);
+								byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+
+								int expectedCharCount = e.GetCharCount(decodingArray);
+								char[] chars = new char[expectedCharCount];
+
+								int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
+								if (effectiveCharCount == 1)
+								{
+									this.rxMultiByteDecodingStream.Clear();
+
 									if (r != Radix.Unicode)
 									{
 										switch (d)
@@ -683,65 +849,38 @@ namespace YAT.Domain
 										}
 									}
 								}
-							}
-							else // Single 'unknown' character 0xFFFD:
-							{
-								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
-							}
-						}
-						else // (effectiveCharCount == 0) || (effectiveCharCount > 1)
-						{
-							bool isInvalid = false;
-
-							// If one of the following conditions is given, the byte sequence is invalid:
-
-							if (decodingArray.Length >= e.GetMaxByteCount(1))
-							{
-								isInvalid = true; // Nothing useful to decode even though maximum length reached.
-							}
-							else if (effectiveCharCount > 0)
-							{
-								foreach (char c in chars)
+								else // (effectiveCharCount == 0) || (effectiveCharCount > 1)
 								{
-									int code = c;
-									if (code != 0xFFFD)
+									if (decodingArray.Length < e.GetMaxByteCount(1))
 									{
-										isInvalid = true; // Everything else than 'unknown' character 0xFFFD is invalid.
-										break;
+										return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+									}
+									else
+									{
+										var sb = new StringBuilder(@"""");
+
+										bool isFirstByte = true;
+										foreach (byte invalidMultiByte in decodingArray)
+										{
+											if (isFirstByte)
+												isFirstByte = false;
+											else
+												sb.Append(" ");
+
+											sb.Append(base.ByteToElement(invalidMultiByte, d, Radix.Hex));
+										}
+
+										sb.Append(@""" is an invalid '");
+										sb.Append(((EncodingEx)e).DisplayName);
+										sb.Append("' byte sequence!");
+
+										this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+
+										return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
 									}
 								}
-							}
-
-							// If neither of the conditions is given, the byte sequence may not be complete yet:
-
-							if (!isInvalid)
-							{
-								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
-							}
-							else
-							{
-								var sb = new StringBuilder(@"""");
-
-								bool firstElement = true;
-								foreach (byte invalid in this.rxMultiByteDecodingStream)
-								{
-									if (firstElement)
-										firstElement = false;
-									else
-										sb.Append(" ");
-
-									sb.Append(base.ByteToElement(invalid, d, Radix.Hex));
-								}
-
-								sb.Append(@""" is an invalid '");
-								sb.Append(((EncodingEx)e).DisplayName);
-								sb.Append("' byte sequence!");
-
-								this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
-
-								return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
-							}
-						} // (effectiveCharCount == 0) || (effectiveCharCount > 1)
+							} // ASCII or lead byte.
+						} // Unicode/Non-Unicode
 					} // MultiByte
 				} // String/Char/Unicode
 
