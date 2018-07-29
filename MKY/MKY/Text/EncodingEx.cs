@@ -852,6 +852,87 @@ namespace MKY.Text
 			}
 		}
 
+		/// <summary>
+		/// Returns whether this instance is using one of the Unicode encodings (UTF/UCS).
+		/// </summary>
+		public virtual bool IsUnicode
+		{
+			get
+			{
+				switch ((SupportedEncoding)CodePage)
+				{
+					case SupportedEncoding.UTF7:
+					case SupportedEncoding.UTF8:
+					case SupportedEncoding.UTF16:
+					case SupportedEncoding.UTF16BE:
+					case SupportedEncoding.UTF32:
+					case SupportedEncoding.UTF32BE:
+					{
+						return (true);
+					}
+
+					default:
+					{
+						return (false);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns whether this instance is using one of the big-endian Unicode encodings (UTF16BE or UTF32BE).
+		/// </summary>
+		public virtual bool IsUnicodeBigEndian
+		{
+			get
+			{
+				switch ((SupportedEncoding)CodePage)
+				{
+					case SupportedEncoding.UTF16BE:
+					case SupportedEncoding.UTF32BE:
+					{
+						return (true);
+					}
+
+					default:
+					{
+						return (false);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns the minimum byte count of this instance.
+		/// </summary>
+		public virtual int UnicodeMinimumByteCount
+		{
+			get
+			{
+				switch ((SupportedEncoding)CodePage)
+				{
+					case SupportedEncoding.UTF32:
+					case SupportedEncoding.UTF32BE:
+					{
+						return (4);
+					}
+
+					case SupportedEncoding.UTF16:
+					case SupportedEncoding.UTF16BE:
+					{
+						return (2);
+					}
+
+					case SupportedEncoding.UTF7:
+					case SupportedEncoding.UTF8:
+					default:
+					{
+						return (1);
+					}
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
