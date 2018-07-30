@@ -905,32 +905,47 @@ namespace MKY.Text
 		/// <summary>
 		/// Returns the minimum byte count of this instance.
 		/// </summary>
-		public virtual int UnicodeMinimumByteCount
+		/// <remarks>
+		/// Method instead of property for same signature as <see cref="Encoding.GetMaxByteCount(int)"/>,
+		/// though without 'charCount' parameter (method is limited to return count for a single character).
+		/// </remarks>
+		public virtual int GetMinByteCount()
 		{
-			get
+			switch ((SupportedEncoding)CodePage)
 			{
-				switch ((SupportedEncoding)CodePage)
+				case SupportedEncoding.UTF32:
+				case SupportedEncoding.UTF32BE:
 				{
-					case SupportedEncoding.UTF32:
-					case SupportedEncoding.UTF32BE:
-					{
-						return (4);
-					}
+					return (4);
+				}
 
-					case SupportedEncoding.UTF16:
-					case SupportedEncoding.UTF16BE:
-					{
-						return (2);
-					}
+				case SupportedEncoding.UTF16:
+				case SupportedEncoding.UTF16BE:
+				{
+					return (2);
+				}
 
-					case SupportedEncoding.UTF7:
-					case SupportedEncoding.UTF8:
-					default:
-					{
-						return (1);
-					}
+				case SupportedEncoding.UTF7:
+				case SupportedEncoding.UTF8:
+				default: // covers all SBCS as well as all non-Unicode DBCS/MBCS (they are all ASCII compatible).
+				{
+					return (1);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Returns the framgment byte count if this instance is using one of the Unicode encodings.
+		/// </summary>
+		/// <remarks>
+		/// Value equals <see cref="GetMinByteCount()"/> for Unicode encodings.
+		/// </remarks>
+		public virtual int GetUnicodeFragmentByteCount()
+		{
+			if (IsUnicode)
+				return (GetMinByteCount());
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is no Unicode encoding!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
