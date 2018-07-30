@@ -42,9 +42,9 @@ namespace MKY.Diagnostics
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	public static class ProcessorLoad
 	{
-		private const int MinimumUpdateIntervalDefault = 100;
+		private const int MinUpdateIntervalDefault = 100;
 
-		private static int staticMinimumUpdateInterval = MinimumUpdateIntervalDefault;
+		private static int staticMinUpdateInterval = MinUpdateIntervalDefault;
 		private static long staticLastUpdateTimestamp; // Ticks as defined by 'Stopwatch'.
 		private static TimeSpan staticLastProcessorTime = TimeSpan.Zero;
 		private static object staticSyncObj = new object();
@@ -57,11 +57,11 @@ namespace MKY.Diagnostics
 		/// <summary>Initializes the processor load evaluation.</summary>
 		/// <remarks>Call once as soon as the application is ready.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static void Initialize(int minimumUpdateInterval = MinimumUpdateIntervalDefault)
+		public static void Initialize(int minUpdateInterval = MinUpdateIntervalDefault)
 		{
 			lock (staticSyncObj)
 			{
-				staticMinimumUpdateInterval = minimumUpdateInterval;
+				staticMinUpdateInterval = minUpdateInterval;
 				staticLastUpdateTimestamp = Stopwatch.GetTimestamp();
 				staticLastProcessorTime = Process.GetCurrentProcess().TotalProcessorTime;
 			}
@@ -82,7 +82,7 @@ namespace MKY.Diagnostics
 					intervalTime = StopwatchEx.TicksToTime(currentUpdateTimestamp - staticLastUpdateTimestamp);
 				}
 
-				if (intervalTime >= staticMinimumUpdateInterval)
+				if (intervalTime >= staticMinUpdateInterval)
 				{
 					staticLastUpdateTimestamp = currentUpdateTimestamp;
 
