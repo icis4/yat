@@ -131,6 +131,12 @@ namespace YAT.Domain
 			return (new RawChunk((byte[])Content.Clone(), TimeStamp, PortStamp, Direction));
 		}
 
+		/// <summary></summary>
+		protected string ContentAsPrintableString
+		{
+			get { return (Utilities.ByteHelper.FormatHexString(Content)); }
+		}
+
 		#endregion
 
 		#region Object Members
@@ -143,13 +149,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
-			{
-				foreach (byte b in Content)
-					sw.Write(Convert.ToChar(b));
-
-				return (sw.ToString());
-			}
+			return (ContentAsPrintableString);
 		}
 
 		/// <summary></summary>
@@ -161,25 +161,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToDiagnosticsString(string indent)
 		{
-			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
-			{
-				bool begin = true;
-				foreach (byte b in Content)
-				{
-					if (!begin)
-						sw.Write(" ");
-
-					begin = false;
-					sw.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
-				}
-
-				var sb = new StringBuilder();
-				sb.AppendLine(indent + "> Data: " + sw);
-				sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.CurrentCulture), 2));
-				sb.AppendLine(indent + "> PortStamp: " + PortStamp);
-				sb.AppendLine(indent + "> Direction: " + Direction);
-				return (sb.ToString());
-			}
+			var sb = new StringBuilder();
+			sb.AppendLine(indent + "> Content:   " + ContentAsPrintableString);
+			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.CurrentCulture), 2));
+			sb.AppendLine(indent + "> PortStamp: " + PortStamp);
+			sb.AppendLine(indent + "> Direction: " + Direction);
+			return (sb.ToString());
 		}
 
 		#endregion

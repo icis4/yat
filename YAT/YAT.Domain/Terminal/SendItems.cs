@@ -29,9 +29,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Text;
 
 using MKY;
 
@@ -95,23 +92,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected string DataAsPrintableString
 		{
-			get
-			{
-				var sb = new StringBuilder();
-
-				bool isFirst = true;
-				foreach (byte b in Data)
-				{
-					if (isFirst)
-						isFirst = false;
-					else
-						sb.Append(" ");
-
-					sb.Append(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
-				}
-
-				return (sb.ToString());
-			}
+			get { return (Utilities.ByteHelper.FormatHexString(Data)); }
 		}
 
 		#region Object Members

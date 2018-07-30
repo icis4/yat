@@ -596,28 +596,20 @@ namespace YAT.Domain
 						}
 						else                                         // ASCII and extended ASCII printable characters.
 						{
-							char[] c = new char[1]; // 'IsSingleByte' always results in a single character.
-							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, c, 0, true) == 1)
+							char[] chars = new char[1]; // 'IsSingleByte' always results in a single character.
+							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true) == 1)
 							{
+								char c = chars[0]; // 'IsSingleByte' always results in a single character.
+
 								if (r != Radix.Unicode)
 								{
-									switch (d)
-									{                                                               // 'IsSingleByte' always results in a single character.
-										case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
-										case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
-
-										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-									}
+									string text = c.ToString(CultureInfo.InvariantCulture);
+									return (CreateDataElement(b, d, text));
 								}
 								else // Unicode:
 								{
-									switch (d)
-									{                                                                                           // 'IsSingleByte' always results in a single character.
-										case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0])));
-										case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0])));
-
-										default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-									}
+									string text = UnicodeValueToNumericString(c);
+									return (CreateDataElement(b, d, text));
 								}
 							}
 							else // Something went seriously wrong!
@@ -642,8 +634,9 @@ namespace YAT.Domain
 							// as no treatment of a lead byte, no treatment of 0xFF, treatment of 0xFFFD, comment,...
 
 							this.rxMultiByteDecodingStream.Add(b);
-
-							if (this.rxMultiByteDecodingStream.Count < ((EncodingEx)e).UnicodeMinimumByteCount)
+							
+							int remainingBytesInFragment = (this.rxMultiByteDecodingStream.Count % ((EncodingEx)e).GetUnicodeFragmentByteCount());
+							if (remainingBytesInFragment > 0)
 							{
 								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 							}
@@ -651,7 +644,6 @@ namespace YAT.Domain
 							byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
 							int expectedCharCount = e.GetCharCount(decodingArray);
 							char[] chars = new char[expectedCharCount];
-
 							int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 							if (effectiveCharCount == 1)
 							{
@@ -670,25 +662,17 @@ namespace YAT.Domain
 									}
 									else                                 // ASCII printable character.
 									{
+										char c = chars[0]; // 'effectiveCharCount' is 1 for sure.
+
 										if (r != Radix.Unicode)
 										{
-											switch (d)
-											{                                                                               // 'effectiveCharCount' is 1 for sure!
-												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
-												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
-
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-											}
+											string text = c.ToString(CultureInfo.InvariantCulture);
+											return (CreateDataElement(decodingArray, d, text));
 										}
 										else // Unicode:
 										{
-											switch (d)
-											{                                                                                                           // 'effectiveCharCount' is 1 for sure!
-												case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
-												case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
-
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-											}
+											string text = UnicodeValueToNumericString(c);
+											return (CreateDataElement(decodingArray, d, text));
 										}
 									}
 								}
@@ -728,30 +712,20 @@ namespace YAT.Domain
 								}
 								else
 								{
-									var seq = new StringBuilder(@"""");
-									bool isFirstByte = true;
-									foreach (byte invalidMultiByte in decodingArray)
-									{
-										if (isFirstByte)
-											isFirstByte = false;
-										else
-											seq.Append(" ");
-
-										seq.Append(base.ByteToElement(invalidMultiByte, d, Radix.Hex));
-									}
-									seq.Append(@"""");
+									var decodingArrayAsString = ByteHelper.FormatHexString(decodingArray, TerminalSettings.Display.ShowRadix);
 
 									var sb = new StringBuilder();
 									if ((decodingArray.Length >= 1) && (decodingArray.Length <= 4) && (decodingArray[0] >= 0xF0))
 									{
-										sb.Append("Byte sequence ");
-										sb.Append(seq.ToString());
-										sb.Append(" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
+										sb.Append(@"Byte sequence """);
+										sb.Append(decodingArrayAsString);
+										sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
 									}
 									else
 									{
-										sb.Append(seq.ToString());
-										sb.Append(" is an invalid '");
+										sb.Append(@"""");
+										sb.Append(decodingArrayAsString);
+										sb.Append(@""" is an invalid '");
 										sb.Append(((EncodingEx)e).DisplayName);
 										sb.Append("' byte sequence!");
 									}
@@ -772,6 +746,7 @@ namespace YAT.Domain
 								if (b >= 0x80)                               // DBCS/MBCS lead byte.
 								{
 									this.rxMultiByteDecodingStream.Add(b);
+
 									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 								}
 								else if ((b < 0x20) || (b == 0x7F))          // ASCII control characters.
@@ -784,28 +759,20 @@ namespace YAT.Domain
 								}
 								else                                         // ASCII printable character.
 								{
-									char[] c = new char[1]; // 'IsMultiByte' but the current single byte must result in a single character here.
-									if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, c, 0, true) == 1)
+									char[] chars = new char[1]; // 'IsMultiByte' but the current single byte must result in a single character here.
+									if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true) == 1)
 									{
+										char c = chars[0]; // 'IsMultiByte' but the current single byte must result in a single character here.
+
 										if (r != Radix.Unicode)
 										{
-											switch (d)
-											{                                                               // 'IsMultiByte' but the current single byte must result in a single character here.
-												case IODirection.Tx: return (new DisplayElement.TxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
-												case IODirection.Rx: return (new DisplayElement.RxData(b, c[0].ToString(CultureInfo.InvariantCulture)));
-
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-											}
+											string text = c.ToString(CultureInfo.InvariantCulture);
+											return (CreateDataElement(b, d, text));
 										}
 										else // Unicode:
 										{
-											switch (d)
-											{                                                                                           // 'IsMultiByte' but the current single byte must result in a single character here.
-												case IODirection.Tx: return (new DisplayElement.TxData(b, UnicodeValueToNumericString(c[0])));
-												case IODirection.Rx: return (new DisplayElement.RxData(b, UnicodeValueToNumericString(c[0])));
-
-												default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-											}
+											string text = UnicodeValueToNumericString(c);
+											return (CreateDataElement(b, d, text));
 										}
 									}
 									else // Something went seriously wrong!
@@ -817,35 +784,26 @@ namespace YAT.Domain
 							else // (rxMultiByteDecodingStream.Count > 0) => Neither ASCII nor lead byte.
 							{
 								this.rxMultiByteDecodingStream.Add(b);
-								byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
 
+								byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
 								int expectedCharCount = e.GetCharCount(decodingArray);
 								char[] chars = new char[expectedCharCount];
-
 								int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 								if (effectiveCharCount == 1)
 								{
 									this.rxMultiByteDecodingStream.Clear();
 
+									char c = chars[0]; // 'effectiveCharCount' is 1 for sure.
+
 									if (r != Radix.Unicode)
 									{
-										switch (d)
-										{                                                                               // 'effectiveCharCount' is 1 for sure!
-											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
-											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, chars[0].ToString(CultureInfo.InvariantCulture), decodingArray.Length));
-
-											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-										}
+										string text = c.ToString(CultureInfo.InvariantCulture);
+										return (CreateDataElement(decodingArray, d, text));
 									}
 									else // Unicode:
 									{
-										switch (d)
-										{                                                                                                           // 'effectiveCharCount' is 1 for sure!
-											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
-											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, UnicodeValueToNumericString(chars[0]), decodingArray.Length));
-
-											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-										}
+										string text = UnicodeValueToNumericString(c);
+										return (CreateDataElement(decodingArray, d, text));
 									}
 								}
 								else // (effectiveCharCount == 0) || (effectiveCharCount > 1)
@@ -856,19 +814,11 @@ namespace YAT.Domain
 									}
 									else
 									{
-										var sb = new StringBuilder(@"""");
+										var decodingArrayAsString = ByteHelper.FormatHexString(decodingArray, TerminalSettings.Display.ShowRadix);
 
-										bool isFirstByte = true;
-										foreach (byte invalidMultiByte in decodingArray)
-										{
-											if (isFirstByte)
-												isFirstByte = false;
-											else
-												sb.Append(" ");
-
-											sb.Append(base.ByteToElement(invalidMultiByte, d, Radix.Hex));
-										}
-
+										var sb = new StringBuilder();
+										sb.Append(@"""");
+										sb.Append(decodingArrayAsString);
 										sb.Append(@""" is an invalid '");
 										sb.Append(((EncodingEx)e).DisplayName);
 										sb.Append("' byte sequence!");
