@@ -49,19 +49,27 @@ namespace YAT
 		/// <summary>The product name.</summary>
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
-		/// <summary>The product version.</summary>
-		public static readonly string ProductVersion = System.Windows.Forms.Application.ProductVersion;
-
 		/// <summary>The build designation.</summary>
-		public static readonly string ProductBuildDesignation = "";
-	////public static readonly string ProductBuildDesignation = " Final";
-	////public static readonly string ProductBuildDesignation = " Almost Final";
-	////public static readonly string ProductBuildDesignation = " Epsilon";
-	////public static readonly string ProductBuildDesignation = " Epsilon Preliminary";
-	////public static readonly string ProductBuildDesignation = " Epsilon Development";
+		public const string ProductBuildDesignation = "";
+	////public const string ProductBuildDesignation = " Final";
+	////public const string ProductBuildDesignation = " Almost Final";
+	////public const string ProductBuildDesignation = " Epsilon";
+	////public const string ProductBuildDesignation = " Epsilon Preliminary";
+	////public const string ProductBuildDesignation = " Epsilon Development";
 
 		/// <summary>The product caption that combines product name and build designation.</summary>
 		public static readonly string ProductCaption = ProductName + ProductBuildDesignation;
+
+		/// <summary>The product version.</summary>
+		public static readonly string ProductVersion = System.Windows.Forms.Application.ProductVersion;
+
+		/// <summary>The version designation.</summary>
+	////public const string ProductVersionStabilityIndication = "";
+		public const string ProductVersionStabilityIndication = " Development";
+	////public const string ProductVersionStabilityIndication = " Preliminary";
+
+		/// <summary>The product version that combines product version and version stability indication.</summary>
+		public static readonly string ProductVersionWithStabilityIndication = ProductVersion + ProductVersionStabilityIndication;
 
 		/// <summary>
 		/// The product caption and version.
@@ -74,8 +82,7 @@ namespace YAT
 		///  > Firefox 59.0.2 (64-Bit) + Thunderbird 52.7.0 (32-Bit)
 		/// Release sections in release notes no longer use "Version" either.
 		/// </remarks>
-	////public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersion;
-		public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersion + " Development"; // Version postfix.
+		public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersionWithStabilityIndication;
 
 		/// <summary>The complete logo (text) of the product.</summary>
 		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Nobody will modify this array, don't worry...")]
