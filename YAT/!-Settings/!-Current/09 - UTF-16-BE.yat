@@ -5,7 +5,7 @@
   <ProductVersion>2.0.0</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2018-04-05T23:21:10.707649+02:00</TimeStamp>
+    <TimeStamp>2018-07-30T16:40:07.2030209+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -157,7 +157,7 @@
         </Text>
         <File>
           <SkipEmptyLines>false</SkipEmptyLines>
-          <EnableEscapes>false</EnableEscapes>
+          <EnableEscapes>true</EnableEscapes>
         </File>
         <DefaultDelay>100</DefaultDelay>
         <DefaultLineDelay>100</DefaultLineDelay>
@@ -177,7 +177,7 @@
         <ShowEol>false</ShowEol>
         <LineSendDelay>
           <Enabled>true</Enabled>
-          <Delay>1000</Delay>
+          <Delay>500</Delay>
           <LineInterval>1</LineInterval>
         </LineSendDelay>
         <WaitForResponse>
@@ -409,13 +409,24 @@
     </SendText>
     <SendFile>
       <Command>
-        <IsDefined>false</IsDefined>
-        <Description />
+        <IsDefined>true</IsDefined>
+        <Description>Encoding-UTF-16-BE.txt</Description>
         <DefaultRadix>String</DefaultRadix>
         <CommandLines />
-        <IsFilePath>false</IsFilePath>
-        <FilePath />
+        <IsFilePath>true</IsFilePath>
+        <FilePath>..\..\!-SendFiles\Encoding-UTF-16-BE.txt</FilePath>
       </Command>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>Encoding-UTF-16-BE.txt</Description>
+          <DefaultRadix>String</DefaultRadix>
+          <CommandLines />
+          <IsFilePath>true</IsFilePath>
+          <FilePath>..\..\!-SendFiles\Encoding-UTF-16-BE.txt</FilePath>
+        </Item>
+        <TimeStamp>2018-07-30T16:39:44.7827791+02:00</TimeStamp>
+      </RecentCommands>
     </SendFile>
     <Predefined>
       <SelectedPage>1</SelectedPage>
