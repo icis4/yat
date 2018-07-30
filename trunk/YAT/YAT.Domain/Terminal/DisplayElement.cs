@@ -121,9 +121,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public TxData(byte[] origin, string text, int byteCount)
-				: base(Direction.Tx, origin, text, byteCount)
+			public TxData(byte[] origin, string text)
+				: base(Direction.Tx, origin, text)
 			{
 			}
 		}
@@ -145,9 +144,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public TxControl(byte[] origin, string text, int byteCount)
-				: base(Direction.Tx, origin, text, byteCount)
+			public TxControl(byte[] origin, string text)
+				: base(Direction.Tx, origin, text)
 			{
 			}
 		}
@@ -169,9 +167,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public RxData(byte[] origin, string text, int byteCount)
-				: base(Direction.Rx, origin, text, byteCount)
+			public RxData(byte[] origin, string text)
+				: base(Direction.Rx, origin, text)
 			{
 			}
 		}
@@ -193,9 +190,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public RxControl(byte[] origin, string text, int byteCount)
-				: base(Direction.Rx, origin, text, byteCount)
+			public RxControl(byte[] origin, string text)
+				: base(Direction.Rx, origin, text)
 			{
 			}
 		}
@@ -570,16 +566,16 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(Direction direction, byte origin, string text)
-			: this(direction, new byte[] { origin }, text, 1)
+			: this(direction, new byte[] { origin }, text)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, byte[] origin, string text, int byteCount)
+		private DisplayElement(Direction direction, byte[] origin, string text)
 		{
 			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, byteCount, ElementAttributes.Content);
+			Initialize(direction, l, text, origin.Length, ElementAttributes.Content);
 		}
 
 		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int byteCount, ElementAttributes attributes)
