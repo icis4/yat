@@ -2496,47 +2496,23 @@ namespace YAT.Domain
 					// If they were control elements (i.e. sequence of data and control elements),
 					// tabs would only get aligned within the respective control element,
 					// thus resulting in misaligned tab stops.
-					if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
+					if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab) // Keep tab as data element:
 					{
-						switch (d) // Keep tab:
-						{
-							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
+						return (CreateDataElement(b, d, text));
 					}
-					else
+					else // Use control elements:
 					{
-						switch (d) // Use dedicated control elements:
-						{
-							case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
-							case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
-
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
+						return (CreateControlElement(b, d, text));
 					}
 				}
-				else // Do not 'ReplaceControlChars':
+				else // Do not 'ReplaceControlChars' => Use normal data element:
 				{
-					switch (d) // Use normal data elements:
-					{
-						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
+					return (CreateDataElement(b, d, text));
 				}
 			}
-			else // Neither 'isError' nor 'isByteToHide' nor 'isError' = normal data:
+			else // Neither 'isError' nor 'isByteToHide' nor 'isError' => Use normal data element:
 			{
-				switch (d)
-				{
-					case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-					case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
+				return (CreateDataElement(b, d, text));
 			}
 		}
 
@@ -2725,6 +2701,44 @@ namespace YAT.Domain
 
 				default: // Includes 'String' and 'Unicode' which are not supported for control character replacement.
 					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an ASCII control character radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDataElement(byte origin, IODirection d, string text)
+		{
+			switch (d)
+			{
+				case IODirection.Tx: return (new DisplayElement.TxData(origin, text));
+				case IODirection.Rx: return (new DisplayElement.RxData(origin, text));
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDataElement(byte[] origin, IODirection d, string text)
+		{
+			switch (d)
+			{
+				case IODirection.Tx: return (new DisplayElement.TxData(origin, text));
+				case IODirection.Rx: return (new DisplayElement.RxData(origin, text));
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateControlElement(byte origin, IODirection d, string text)
+		{
+			switch (d)
+			{
+				case IODirection.Tx: return (new DisplayElement.TxControl(origin, text));
+				case IODirection.Rx: return (new DisplayElement.RxControl(origin, text));
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
