@@ -81,9 +81,9 @@ namespace YAT.View.Forms
 
 			if (totalWidth < lineWidth)
 				totalWidth = lineWidth;
-
-			label_Version.Text = "Version " + ApplicationEx.ProductVersion; // Using "Version" prefix for better appearance even
-			lineWidth = label_Version.Left + label_Version.Width + Margin;  // though other locations no longer use "Version".
+			            // Using "Version" prefix for better appearance even though other locations no longer use "Version".
+			label_Version.Text = "Version " + ApplicationEx.ProductVersionWithStabilityIndication;
+			lineWidth = label_Version.Left + label_Version.Width + Margin;
 
 			if (totalWidth < lineWidth)
 				totalWidth = lineWidth;
