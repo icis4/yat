@@ -101,6 +101,7 @@ namespace YAT.View.Controls
 		private Command command = new Command();
 		private RecentItemCollection<Command> recent;
 
+		private string rootDirectory; // = null;
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
 
@@ -199,12 +200,25 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectory
+		{
+			get { return (this.rootDirectory); }
+			set
+			{
+				if (this.rootDirectory != value)
+				{
+					this.rootDirectory = value;
+					SetSendControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
-			get
-			{
-				return (this.terminalType);
-			}
+			get { return (this.terminalType); }
 			set
 			{
 				if (this.terminalType != value)
@@ -244,10 +258,7 @@ namespace YAT.View.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsReadyToSend
 		{
-			get
-			{
-				return (this.terminalIsReadyToSend);
-			}
+			get { return (this.terminalIsReadyToSend); }
 			set
 			{
 				if (this.terminalIsReadyToSend != value)
@@ -592,7 +603,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				if (this.command.IsValidFilePath)
+				if (this.command.IsValidFilePath(this.rootDirectory))
 					button_Send.Enabled = this.terminalIsReadyToSend;
 				else
 					button_Send.Enabled = false;
@@ -711,7 +722,7 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void RequestSendCommand()
 		{
-			if (this.command.IsValidFilePath)
+			if (this.command.IsValidFilePath(this.rootDirectory))
 			{
 				ConfirmCommand(); // Required to invoke OnCommandChanged().
 				OnSendCommandRequest(EventArgs.Empty);

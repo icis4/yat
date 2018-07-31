@@ -70,30 +70,30 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void AssertSingleLineText(Command c, string text, string description = null)
 		{
-			Assert.That(c.IsDefined,        Is.True);
-			Assert.That(c.IsValid,          Is.True);
-			Assert.That(c.Caption,          Is.EqualTo(text));
+			Assert.That(c.IsDefined,         Is.True);
+			Assert.That(c.IsValid(),         Is.True);
+			Assert.That(c.Caption,           Is.EqualTo(text));
 
-			Assert.That(c.IsText,           Is.True);
-			Assert.That(c.IsValidText,      Is.True);
-			Assert.That(c.IsSingleLineText, Is.True);
-			Assert.That(c.SingleLineText,   Is.EqualTo(text));
+			Assert.That(c.IsText,            Is.True);
+			Assert.That(c.IsValidText,       Is.True);
+			Assert.That(c.IsSingleLineText,  Is.True);
+			Assert.That(c.SingleLineText,    Is.EqualTo(text));
 
-			Assert.That(c.IsPartialTextEol, Is.False);
-			Assert.That(c.IsPartialText,    Is.False);
-			Assert.That(c.PartialText,      Is.EqualTo(text));
+			Assert.That(c.IsPartialTextEol,  Is.False);
+			Assert.That(c.IsPartialText,     Is.False);
+			Assert.That(c.PartialText,       Is.EqualTo(text));
 
-			Assert.That(c.IsMultiLineText,  Is.False);
-			Assert.That(c.MultiLineText,    Is.EquivalentTo(new string[] { text }));
+			Assert.That(c.IsMultiLineText,   Is.False);
+			Assert.That(c.MultiLineText,     Is.EquivalentTo(new string[] { text }));
 
-			Assert.That(c.IsFilePath,       Is.False);
-			Assert.That(c.IsValidFilePath,  Is.False);
-			Assert.That(c.FilePath,         Is.Null.Or.Empty);
+			Assert.That(c.IsFilePath,        Is.False);
+			Assert.That(c.IsValidFilePath(), Is.False);
+			Assert.That(c.FilePath,          Is.Null.Or.Empty);
 
 			if (string.IsNullOrEmpty(description))
-				Assert.That(c.Description,  Is.EqualTo(text));
+				Assert.That(c.Description,   Is.EqualTo(text));
 			else
-				Assert.That(c.Description,  Is.EqualTo(description));
+				Assert.That(c.Description,   Is.EqualTo(description));
 		}
 	}
 }

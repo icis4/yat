@@ -98,6 +98,7 @@ namespace YAT.View.Controls
 
 		private Command command = new Command();
 
+		private string rootDirectory; // = null;
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
@@ -170,11 +171,27 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectory
+		{
+			get { return (this.rootDirectory); }
+			set
+			{
+				if (this.rootDirectory != value)
+				{
+					this.rootDirectory = value;
+					SetControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
+			get { return (this.terminalType); }
 			set
 			{
 				if (this.terminalType != value)
@@ -210,11 +227,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.Parser.Modes ParseModeForText
 		{
+			get { return (this.parseModeForText); }
 			set
 			{
 				if (this.parseModeForText != value)
@@ -401,7 +418,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			if (checkBox_IsFile.Checked && !this.command.IsValidFilePath)
+			if (checkBox_IsFile.Checked && !this.command.IsValidFilePath(this.rootDirectory))
 			{
 				ShowOpenFileDialog();
 			}
