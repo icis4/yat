@@ -173,7 +173,7 @@
         <SeparateTxRxEol>false</SeparateTxRxEol>
         <TxEol>&lt;CR&gt;&lt;LF&gt;</TxEol>
         <RxEol>&lt;CR&gt;&lt;LF&gt;</RxEol>
-        <Encoding>12001</Encoding>
+        <Encoding>54936</Encoding>
         <ShowEol>false</ShowEol>
         <LineSendDelay>
           <Enabled>true</Enabled>
@@ -418,20 +418,20 @@
     <SendFile>
       <Command>
         <IsDefined>true</IsDefined>
-        <Description>Encoding-UTF-32-BE-[12001].txt</Description>
+        <Description>Encoding-CJK-GB18030-[54936].txt</Description>
         <DefaultRadix>String</DefaultRadix>
         <CommandLines />
         <IsFilePath>true</IsFilePath>
-        <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
+        <FilePath>..\..\!-SendFiles\Encoding-CJK-GB18030-[54936].txt</FilePath>
       </Command>
       <RecentCommands>
         <Item>
           <IsDefined>true</IsDefined>
-          <Description>Encoding-UTF-32-BE-[12001].txt</Description>
+          <Description>Encoding-CJK-GB18030-[54936].txt</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>true</IsFilePath>
-          <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
+          <FilePath>..\..\!-SendFiles\Encoding-CJK-GB18030-[54936].txt</FilePath>
         </Item>
         <TimeStamp>2018-07-30T16:39:02.1625175+02:00</TimeStamp>
       </RecentCommands>

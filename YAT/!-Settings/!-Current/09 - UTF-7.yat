@@ -2,11 +2,11 @@
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
   <SettingsVersion>1.6.0</SettingsVersion>
-  <ProductVersion>2.0.0</ProductVersion>
+  <ProductVersion>2.0.1</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2018-07-30T16:40:07.2030209+02:00</TimeStamp>
-    <UserName>Matthias</UserName>
+    <TimeStamp>2018-07-31T18:21:23.8950162+02:00</TimeStamp>
+    <UserName>klaey-1</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
   <Explicit>
@@ -173,7 +173,7 @@
         <SeparateTxRxEol>false</SeparateTxRxEol>
         <TxEol>&lt;CR&gt;&lt;LF&gt;</TxEol>
         <RxEol>&lt;CR&gt;&lt;LF&gt;</RxEol>
-        <Encoding>12001</Encoding>
+        <Encoding>65000</Encoding>
         <ShowEol>false</ShowEol>
         <LineSendDelay>
           <Enabled>true</Enabled>
@@ -414,26 +414,59 @@
         <IsFilePath>false</IsFilePath>
         <FilePath />
       </Command>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>äöü</Description>
+          <DefaultRadix>String</DefaultRadix>
+          <CommandLines>äöü</CommandLines>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Item>
+        <TimeStamp>2018-07-31T18:11:15.1131441+02:00</TimeStamp>
+      </RecentCommands>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>[empty]</Description>
+          <DefaultRadix>String</DefaultRadix>
+          <CommandLines />
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Item>
+        <TimeStamp>2018-07-31T13:31:43.8731596+02:00</TimeStamp>
+      </RecentCommands>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>abc</Description>
+          <DefaultRadix>String</DefaultRadix>
+          <CommandLines>abc</CommandLines>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Item>
+        <TimeStamp>2018-07-31T13:31:41.1898913+02:00</TimeStamp>
+      </RecentCommands>
     </SendText>
     <SendFile>
       <Command>
         <IsDefined>true</IsDefined>
-        <Description>Encoding-UTF-32-BE-[12001].txt</Description>
+        <Description>Encoding-UTF-7-[65000]-NoBOM.txt</Description>
         <DefaultRadix>String</DefaultRadix>
         <CommandLines />
         <IsFilePath>true</IsFilePath>
-        <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
+        <FilePath>..\..\!-SendFiles\Encoding-UTF-7-[65000]-NoBOM.txt</FilePath>
       </Command>
       <RecentCommands>
         <Item>
           <IsDefined>true</IsDefined>
-          <Description>Encoding-UTF-32-BE-[12001].txt</Description>
+          <Description>Encoding-UTF-7-[65000]-NoBOM.txt</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>true</IsFilePath>
-          <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
+          <FilePath>..\..\!-SendFiles\Encoding-UTF-7-[65000]-NoBOM.txt</FilePath>
         </Item>
-        <TimeStamp>2018-07-30T16:39:02.1625175+02:00</TimeStamp>
+        <TimeStamp>2018-07-31T18:21:15.9632231+02:00</TimeStamp>
       </RecentCommands>
     </SendFile>
     <Predefined>
@@ -442,7 +475,7 @@
     <Window>
       <State>Normal</State>
       <Location>
-        <X>0</X>
+        <X>390</X>
         <Y>0</Y>
       </Location>
       <Size>
