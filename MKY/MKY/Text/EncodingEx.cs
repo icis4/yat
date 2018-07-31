@@ -855,13 +855,15 @@ namespace MKY.Text
 		/// <summary>
 		/// Returns whether this instance is using one of the Unicode encodings (UTF/UCS).
 		/// </summary>
+		/// <remarks>
+		/// UTF-7 is *not* a Unicode encoding.
+		/// </remarks>
 		public virtual bool IsUnicode
 		{
 			get
 			{
 				switch ((SupportedEncoding)CodePage)
 				{
-					case SupportedEncoding.UTF7:
 					case SupportedEncoding.UTF8:
 					case SupportedEncoding.UTF16:
 					case SupportedEncoding.UTF16BE:
@@ -925,9 +927,8 @@ namespace MKY.Text
 					return (2);
 				}
 
-				case SupportedEncoding.UTF7:
 				case SupportedEncoding.UTF8:
-				default: // covers all SBCS as well as all non-Unicode DBCS/MBCS (they are all ASCII compatible).
+				default: // covers all SBCS as well as UTF-7 and all non-Unicode DBCS/MBCS (they are all ASCII compatible).
 				{
 					return (1);
 				}

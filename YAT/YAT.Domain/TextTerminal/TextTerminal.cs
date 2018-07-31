@@ -582,40 +582,21 @@ namespace YAT.Domain
 						// Note that the following code is similar as twice below but with differences such
 						// as treatment of 0xFF, comment,...
 
-						if ((b < 0x20) || (b == 0x7F))               // ASCII control characters.
+						if ((b < 0x20) || (b == 0x7F))                   // ASCII control characters.
 						{
 							return (base.ByteToElement(b, d, r));
 						}
-						else if (b == 0x20)                          // ASCII space.
+						else if (b == 0x20)                              // ASCII space.
 						{
 							return (base.ByteToElement(b, d, r));
-						}                                            // Special case.
+						}                                                // Special case.
 						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF) 
 						{
-							return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
+							return (new DisplayElement.Nonentity());     // Return nothing, ignore the character, this results in hiding.
 						}
-						else                                         // ASCII and extended ASCII printable characters.
+						else                                             // ASCII and extended ASCII printable characters.
 						{
-							char[] chars = new char[1]; // 'IsSingleByte' always results in a single character.
-							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true) == 1)
-							{
-								char c = chars[0]; // 'IsSingleByte' always results in a single character.
-
-								if (r != Radix.Unicode)
-								{
-									string text = c.ToString(CultureInfo.InvariantCulture);
-									return (CreateDataElement(b, d, text));
-								}
-								else // Unicode:
-								{
-									string text = UnicodeValueToNumericString(c);
-									return (CreateDataElement(b, d, text));
-								}
-							}
-							else // Something went seriously wrong!
-							{
-								throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "byte " + b.ToString("X2", CultureInfo.InvariantCulture) + " is invalid for encoding " + ((EncodingEx)e).ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							}
+							return (DecodeAndCreateElement(b, d, r, e)); // 'IsSingleByte' always results in a single character per byte.
 						}
 					}
 					else // 'IsMultiByte':
@@ -661,19 +642,8 @@ namespace YAT.Domain
 										return (base.ByteToElement((byte)code, d, r));
 									}
 									else                                 // ASCII printable character.
-									{
-										char c = chars[0]; // 'effectiveCharCount' is 1 for sure.
-
-										if (r != Radix.Unicode)
-										{
-											string text = c.ToString(CultureInfo.InvariantCulture);
-											return (CreateDataElement(decodingArray, d, text));
-										}
-										else // Unicode:
-										{
-											string text = UnicodeValueToNumericString(c);
-											return (CreateDataElement(decodingArray, d, text));
-										}
+									{                                                        // 'effectiveCharCount' is 1 for sure.
+										return (CreateDataElement(decodingArray, d, r, chars[0]));
 									}
 								}
 								else // Single 'unknown' character 0xFFFD:
@@ -681,104 +651,164 @@ namespace YAT.Domain
 									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 								}
 							}
-							else // (effectiveCharCount == 0) || (effectiveCharCount > 1)
+							else if (effectiveCharCount == 0)
 							{
-								bool isInvalid = false;
-
-								// If one of the following conditions is given, the byte sequence is invalid:
-
-								if (decodingArray.Length >= e.GetMaxByteCount(1))
-								{
-									isInvalid = true; // Nothing useful to decode even though maximum length reached.
-								}
-								else if (effectiveCharCount > 0)
-								{
-									foreach (char c in chars)
-									{
-										int code = c;
-										if (code != 0xFFFD)
-										{
-											isInvalid = true; // Everything else than 'unknown' character 0xFFFD is invalid.
-											break;
-										}
-									}
-								}
-
-								// If neither of the conditions is given, the byte sequence may not be complete yet:
-
-								if (!isInvalid)
+								if (decodingArray.Length < e.GetMaxByteCount(1))
 								{
 									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 								}
 								else
 								{
-									var decodingArrayAsString = ByteHelper.FormatHexString(decodingArray, TerminalSettings.Display.ShowRadix);
-
-									var sb = new StringBuilder();
-									if ((decodingArray.Length >= 1) && (decodingArray.Length <= 4) && (decodingArray[0] >= 0xF0))
-									{
-										sb.Append(@"Byte sequence """);
-										sb.Append(decodingArrayAsString);
-										sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
-									}
-									else
-									{
-										sb.Append(@"""");
-										sb.Append(decodingArrayAsString);
-										sb.Append(@""" is an invalid '");
-										sb.Append(((EncodingEx)e).DisplayName);
-										sb.Append("' byte sequence!");
-									}
-
 									this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
 
-									return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+									return (CreateInvalidBytesWarning(decodingArray, d, e));
 								}
 							}
+							else // (effectiveCharCount > 1) => Code doesn't fit into a single u16 value, thus more than one character will be returned.
+							{
+								this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+
+								return (CreateOutsideUnicodePlane0Warning(decodingArray, d, e));
+							}
+						}
+						else if ((EncodingEx)e == SupportedEncoding.UTF7)
+						{
+							// Note that the following code is similar as twice above but with differences such
+							// as treatment of Base64 bytes, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
+
+							if (this.rxMultiByteDecodingStream.Count == 0)       // A first 'MultiByte' is either direct or lead byte.
+							{
+								if ((b < 0x20) || (b == 0x7F))                   // ASCII control characters.
+								{
+									return (base.ByteToElement(b, d, r));
+								}
+								else if (b == 0x20)                              // ASCII space.
+								{
+									return (base.ByteToElement(b, d, r));
+								}
+								else if (CharEx.IsValidForUTF7((char)b))
+								{
+									return (DecodeAndCreateElement(b, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
+								}
+								else if (b == (byte)'+')                         // UTF-7 lead byte.
+								{
+									this.rxMultiByteDecodingStream.Clear();
+									this.rxMultiByteDecodingStream.Add(b);
+
+									return (new DisplayElement.Nonentity());     // Nothing to decode (yet).
+								}
+								else
+								{
+									return (CreateInvalidByteWarning(b, d, e));
+								}
+							}
+							else // (rxMultiByteDecodingStream.Count > 0) => Not lead byte.
+							{
+								if (b == (byte)'-')                              // UTF-7 terminating byte.
+								{
+									this.rxMultiByteDecodingStream.Add(b);
+									byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+									this.rxMultiByteDecodingStream.Clear();
+
+									int expectedCharCount = e.GetCharCount(decodingArray);
+									char[] chars = new char[expectedCharCount];
+									int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
+									if (effectiveCharCount == expectedCharCount)
+									{
+										return (CreateDataElement(decodingArray, d, r, chars));
+									}
+									else // Decoder has failed:
+									{
+										return (CreateInvalidBytesWarning(decodingArray, d, e));
+									}
+								}
+								else if (!CharEx.IsValidForBase64((char)b))      // Non-Base64 characters also terminates!
+								{
+									byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+									this.rxMultiByteDecodingStream.Clear();
+
+									int expectedCharCount = e.GetCharCount(decodingArray);
+									char[] chars = new char[expectedCharCount];
+									int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
+									if (effectiveCharCount == expectedCharCount)
+									{                                                                         // 'effectiveCharCount' is 1 for sure.
+										DisplayElement encoded = CreateDataElement(decodingArray, d, r, chars);
+										
+										DisplayElement direct;
+										if ((b < 0x20) || (b == 0x7F))                   // ASCII control characters.
+										{
+											direct = base.ByteToElement(b, d, r);
+										}
+										else if (b == 0x20)                              // ASCII space.
+										{
+											direct = base.ByteToElement(b, d, r);
+										}
+										else if (CharEx.IsValidForUTF7((char)b))
+										{
+											direct = DecodeAndCreateElement(b, d, r, e); // 'IsMultiByte' but the current byte must result in a single character here.
+										}
+										else
+										{
+											return (CreateInvalidByteWarning(b, d, e));
+										}
+
+										// Combine into single element, accepting the limitation that a potential control character will be contained in a data element:
+
+										var origin = new List<byte>(decodingArray.Length + 1); // Preset the initial capacity to improve memory management.
+										origin.AddRange(decodingArray);
+										origin.Add(b);
+
+										var text = (encoded.Text + direct.Text);
+
+										switch (d)
+										{
+											case IODirection.Tx: return (new DisplayElement.TxData(origin.ToArray(), text));
+											case IODirection.Rx: return (new DisplayElement.RxData(origin.ToArray(), text));
+
+											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+										}
+									}
+									else // Decoder has failed:
+									{
+										return (CreateInvalidBytesWarning(decodingArray, d, e));
+									}
+								}
+								else if (CharEx.IsValidForUTF7((char)b))     // UTF-7 trailing byte.
+								{
+									this.rxMultiByteDecodingStream.Add(b);
+
+									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+								}
+								else
+								{
+									return (CreateInvalidByteWarning(b, d, e));
+								}
+							} // direct or lead or trailing byte.
 						}
 						else // Non-Unicode DBCS/MBCS.
 						{
 							// Note that the following code is similar as twice above but with differences such
 							// as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
-							if (this.rxMultiByteDecodingStream.Count == 0) // A first 'MultiByte' is either ASCII or lead byte.
+							if (this.rxMultiByteDecodingStream.Count == 0)       // A first 'MultiByte' is either ASCII or lead byte.
 							{
-								if (b >= 0x80)                               // DBCS/MBCS lead byte.
+								if (b >= 0x80)                                   // DBCS/MBCS lead byte.
 								{
 									this.rxMultiByteDecodingStream.Add(b);
 
-									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+									return (new DisplayElement.Nonentity());     // Nothing to decode (yet).
 								}
-								else if ((b < 0x20) || (b == 0x7F))          // ASCII control characters.
+								else if ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
 								{
 									return (base.ByteToElement(b, d, r));
 								}
-								else if (b == 0x20)                          // ASCII space.
+								else if (b == 0x20)                              // ASCII space.
 								{
 									return (base.ByteToElement(b, d, r));
 								}
-								else                                         // ASCII printable character.
+								else                                             // ASCII printable character.
 								{
-									char[] chars = new char[1]; // 'IsMultiByte' but the current single byte must result in a single character here.
-									if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true) == 1)
-									{
-										char c = chars[0]; // 'IsMultiByte' but the current single byte must result in a single character here.
-
-										if (r != Radix.Unicode)
-										{
-											string text = c.ToString(CultureInfo.InvariantCulture);
-											return (CreateDataElement(b, d, text));
-										}
-										else // Unicode:
-										{
-											string text = UnicodeValueToNumericString(c);
-											return (CreateDataElement(b, d, text));
-										}
-									}
-									else // Something went seriously wrong!
-									{
-										throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "byte " + b.ToString("X2", CultureInfo.InvariantCulture) + " is invalid for encoding " + ((EncodingEx)e).ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-									}
+									return (DecodeAndCreateElement(b, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
 								}
 							}
 							else // (rxMultiByteDecodingStream.Count > 0) => Neither ASCII nor lead byte.
@@ -792,21 +822,10 @@ namespace YAT.Domain
 								if (effectiveCharCount == 1)
 								{
 									this.rxMultiByteDecodingStream.Clear();
-
-									char c = chars[0]; // 'effectiveCharCount' is 1 for sure.
-
-									if (r != Radix.Unicode)
-									{
-										string text = c.ToString(CultureInfo.InvariantCulture);
-										return (CreateDataElement(decodingArray, d, text));
-									}
-									else // Unicode:
-									{
-										string text = UnicodeValueToNumericString(c);
-										return (CreateDataElement(decodingArray, d, text));
-									}
+									                                                     // 'effectiveCharCount' is 1 for sure.
+									return (CreateDataElement(decodingArray, d, r, chars[0]));
 								}
-								else // (effectiveCharCount == 0) || (effectiveCharCount > 1)
+								else if (effectiveCharCount == 0)
 								{
 									if (decodingArray.Length < e.GetMaxByteCount(1))
 									{
@@ -814,21 +833,18 @@ namespace YAT.Domain
 									}
 									else
 									{
-										var decodingArrayAsString = ByteHelper.FormatHexString(decodingArray, TerminalSettings.Display.ShowRadix);
-
-										var sb = new StringBuilder();
-										sb.Append(@"""");
-										sb.Append(decodingArrayAsString);
-										sb.Append(@""" is an invalid '");
-										sb.Append(((EncodingEx)e).DisplayName);
-										sb.Append("' byte sequence!");
-
 										this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
 
-										return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+										return (CreateInvalidBytesWarning(decodingArray, d, e));
 									}
 								}
-							} // ASCII or lead byte.
+								else // (effectiveCharCount > 1)
+								{
+									this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+
+									return (CreateInvalidBytesWarning(decodingArray, d, e));
+								}
+							} // ASCII or lead or trailing byte
 						} // Unicode/Non-Unicode
 					} // MultiByte
 				} // String/Char/Unicode
@@ -838,6 +854,129 @@ namespace YAT.Domain
 					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement DecodeAndCreateElement(byte b, IODirection d, Radix r, Encoding e)
+		{
+			int expectedCharCount = 1;
+			char[] chars = new char[expectedCharCount];
+			int effectiveCharCount = e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true);
+			if (effectiveCharCount == expectedCharCount)
+			{                                            // 'effectiveCharCount' is 1 for sure.
+				return (CreateDataElement(b, d, r, chars[0]));
+			}
+			else // Decoder has failed:
+			{
+				return (CreateInvalidByteWarning(b, d, e));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDataElement(byte origin, IODirection d, Radix r, char c)
+		{
+			if (r != Radix.Unicode)
+			{
+				string text = c.ToString(CultureInfo.InvariantCulture);
+				return (CreateDataElement(origin, d, text));
+			}
+			else // Unicode:
+			{
+				string text = UnicodeValueToNumericString(c);
+				return (CreateDataElement(origin, d, text));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDataElement(byte[] origin, IODirection d, Radix r, char c)
+		{
+			if (r != Radix.Unicode)
+			{
+				string text = c.ToString(CultureInfo.InvariantCulture);
+				return (CreateDataElement(origin, d, text));
+			}
+			else // Unicode:
+			{
+				string text = UnicodeValueToNumericString(c);
+				return (CreateDataElement(origin, d, text));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDataElement(byte[] origin, IODirection d, Radix r, char[] text)
+		{
+			if (r != Radix.Unicode)
+			{
+				return (CreateDataElement(origin, d, new string(text)));
+			}
+			else // Unicode:
+			{
+				return (CreateDataElement(origin, d, new string(text)));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateInvalidByteWarning(byte b, IODirection d, Encoding e)
+		{
+			var byteAsString = ByteHelper.FormatHexString(b, TerminalSettings.Display.ShowRadix);
+
+			var sb = new StringBuilder();
+			sb.Append("'");
+			sb.Append(byteAsString);
+			sb.Append("' is an invalid '");
+			sb.Append(((EncodingEx)e).DisplayName);
+			sb.Append("' byte!");
+
+			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateInvalidBytesWarning(byte[] a, IODirection d, Encoding e)
+		{
+			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
+
+			var sb = new StringBuilder();
+			sb.Append(@"""");
+			sb.Append(bytesAsString);
+			sb.Append(@""" is an invalid '");
+			sb.Append(((EncodingEx)e).DisplayName);
+			sb.Append("' byte sequence!");
+
+			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateOutsideUnicodePlane0Warning(byte[] a, IODirection d, Encoding e)
+		{
+			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
+
+			var sb = new StringBuilder();
+			sb.Append(@"Byte sequence """);
+			sb.Append(bytesAsString);
+			sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
+
+			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
 		}
 
 		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)

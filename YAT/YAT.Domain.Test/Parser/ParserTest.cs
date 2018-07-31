@@ -288,6 +288,8 @@ namespace YAT.Domain.Test.Parser
 
 		/// <remarks>
 		/// Good online tools:
+		/// http://toolswebtop.com/text/process/encode/utf-8 as well as many others; only works with Firefox
+		/// http://toolswebtop.com/text/process/decode/utf-8 as well as many others; only works with Firefox
 		/// https://www.branah.com/unicode-converter
 		/// https://r12a.github.io/app-conversion/
 		/// https://r12a.github.io/app-encodings/
@@ -340,7 +342,23 @@ namespace YAT.Domain.Test.Parser
 				// ASCII:
 				yield return (new TestCaseData(Encoding.ASCII, "abc", new byte[] { 0x61, 0x62, 0x63 }));
 
-				// UTF-8:
+				// UTF-7 [65000]:
+				yield return (new TestCaseData(Encoding.UTF7, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+				yield return (new TestCaseData(Encoding.UTF7, "äöü", new byte[] { 0x2B, 0x41, 0x4F, 0x51, 0x41, 0x39, 0x67, 0x44, 0x38, 0x2D })); // +AOQA9gD8-
+				yield return (new TestCaseData(Encoding.UTF7, "ÄÖÜ", new byte[] { 0x2B, 0x41, 0x4D, 0x51, 0x41, 0x31, 0x67, 0x44, 0x63, 0x2D })); // +AMQA1gDc-
+				yield return (new TestCaseData(Encoding.UTF7, "$£€", new byte[] { 0x2B, 0x41, 0x43, 0x51, 0x41, 0x6F, 0x79, 0x43, 0x73, 0x2D })); // +ACQAoyCs-
+				yield return (new TestCaseData(Encoding.UTF7, "čěř", new byte[] { 0x2B, 0x41, 0x51, 0x30, 0x42, 0x47, 0x77, 0x46, 0x5A, 0x2D })); // +AQ0BGwFZ-
+
+				                                              //// yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new TestCaseData(Encoding.UTF7, "一二州", new byte[] { 0x2B, 0x54, 0x67, 0x42, 0x4F, 0x6A, 0x46, 0x33, 0x65, 0x2D })); // +TgBOjF3e-
+				                                              //// 'Vertical Horizontal Ellipsis' is U+FE19
+				yield return (new TestCaseData(Encoding.UTF7, "︙", new byte[] { 0x2B, 0x2F, 0x68, 0x6B, 0x2D })); // +/hk-
+				                                              //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
+				yield return (new TestCaseData(Encoding.UTF7, "𝄞", new byte[] { 0x2B, 0x32, 0x44, 0x54, 0x64, 0x48, 0x67, 0x2D })); // +2DTdHg-
+
+				yield return (new TestCaseData(Encoding.UTF7, @"0\0<CR>1\n2", new byte[] { 0x30, 0x2B, 0x41, 0x41, 0x41, 0x2D, 0x0D, 0x31, 0x0A, 0x32 })); // 0+AAA-\r1\n2
+
+				// UTF-8 [65001]:
 				yield return (new TestCaseData(Encoding.UTF8, "abc", new byte[] { 0x61, 0x62, 0x63 }));
 				yield return (new TestCaseData(Encoding.UTF8, "äöü", new byte[] { 0xC3, 0xA4, 0xC3, 0xB6, 0xC3, 0xBC }));
 				yield return (new TestCaseData(Encoding.UTF8, "ÄÖÜ", new byte[] { 0xC3, 0x84, 0xC3, 0x96, 0xC3, 0x9C }));
@@ -356,7 +374,7 @@ namespace YAT.Domain.Test.Parser
 
 				yield return (new TestCaseData(Encoding.UTF8, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
 
-				// UTF-16 (little endian, i.e. machine endianness):
+				// UTF-16 (little endian, i.e. machine endianness) [1200]:
 				yield return (new TestCaseData(Encoding.Unicode, "abc", new byte[] { 0x61, 0x00, 0x62, 0x00, 0x63, 0x00 }));
 				yield return (new TestCaseData(Encoding.Unicode, "äöü", new byte[] { 0xE4, 0x00, 0xF6, 0x00, 0xFC, 0x00 }));
 				yield return (new TestCaseData(Encoding.Unicode, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0xD6, 0x00, 0xDC, 0x00 }));
@@ -372,7 +390,7 @@ namespace YAT.Domain.Test.Parser
 				                                                                            //          |           |           |           |           |           |
 				yield return (new TestCaseData(Encoding.Unicode, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32, 0x00 }));
 
-				// UTF-16 (big endian, i.e. network endianness):
+				// UTF-16 (big endian, i.e. network endianness) [1201]:
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "abc", new byte[] { 0x00, 0x61, 0x00, 0x62, 0x00, 0x63 }));
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "äöü", new byte[] { 0x00, 0xE4, 0x00, 0xF6, 0x00, 0xFC }));
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
@@ -388,7 +406,7 @@ namespace YAT.Domain.Test.Parser
 				                                                                                     //          |           |           |           |           |           |
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, @"0\0<CR>1\n2", new byte[] { 0x00, 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32 }));
 
-				// UTF-32 (little endian, i.e. machine endianness):
+				// UTF-32 (little endian, i.e. machine endianness) [12000]:
 				yield return (new TestCaseData(Encoding.UTF32, "abc", new byte[] { 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00 }));
 				yield return (new TestCaseData(Encoding.UTF32, "äöü", new byte[] { 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00 }));
 				yield return (new TestCaseData(Encoding.UTF32, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC, 0x00, 0x00, 0x00 }));
@@ -404,7 +422,7 @@ namespace YAT.Domain.Test.Parser
 				                                                                          //                      |                       |                       |                       |                       |                       |
 				yield return (new TestCaseData(Encoding.UTF32, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00 }));
 
-				// UTF-32 (big endian, i.e. network endianness):
+				// UTF-32 (big endian, i.e. network endianness) [12001]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "ÄÖÜ", new byte[] { 0x00, 0x00, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC }));

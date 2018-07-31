@@ -42,6 +42,14 @@ namespace YAT.Domain.Utilities
 		/// <summary>
 		/// Formats the given data into a hexadecimal string.
 		/// </summary>
+		public static string FormatHexString(byte data, bool showRadix = true)
+		{
+			return (FormatHexString(new byte[] { data }, showRadix));
+		}
+
+		/// <summary>
+		/// Formats the given data into a hexadecimal string.
+		/// </summary>
 		public static string FormatHexString(byte[] data, bool showRadix = true)
 		{
 			var sb = new StringBuilder();

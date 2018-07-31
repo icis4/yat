@@ -85,6 +85,116 @@ namespace MKY
 			// Unicode control characters U+0080..U+009F:
 			return (@"\U+" + ((ushort)(value)).ToString("X4", CultureInfo.InvariantCulture));
 		}
+
+		/// <summary>
+		/// Determines whether the given character is valid for Base64.
+		/// </summary>
+		public static bool IsValidForBase64(char value)
+		{
+			if ((value >= 'A') && (value <= 'Z'))
+				return (true);
+
+			if ((value >= 'a') && (value <= 'z'))
+				return (true);
+
+			if ((value >= '0') && (value <= '9'))
+				return (true);
+
+			if (value == '+')
+				return (true);
+
+			if (value == '/')
+				return (true);
+
+			if (value == '=')
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether the given character is valid for Base64Url.
+		/// </summary>
+		public static bool IsValidForBase64Url(char value)
+		{
+			if ((value >= 'A') && (value <= 'Z'))
+				return (true);
+
+			if ((value >= 'a') && (value <= 'z'))
+				return (true);
+
+			if ((value >= '0') && (value <= '9'))
+				return (true);
+
+			if (value == '-') // '-' instead of '+'
+				return (true);
+
+			if (value == '_') // '_' instead of '/'
+				return (true);
+
+			if (value == '%') // '%' with numeric value (e.g "%3d") instead of '='
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether the given character is valid for UTF-7, as specified
+		/// by https://tools.ietf.org/html/rfc2152.
+		/// </summary>
+		/// <remarks>
+		/// Located here instead of <see cref="EncodingEx"/> for closeness to methods above.
+		/// </remarks>
+		public static bool IsValidForUTF7(char value)
+		{
+			if ((value >= 'A') && (value <= 'Z'))
+				return (true);
+
+			if ((value >= 'a') && (value <= 'z'))
+				return (true);
+
+			if ((value >= '0') && (value <= '9'))
+				return (true);
+
+			switch (value)
+			{
+				// Mandatory:
+				case '\'':
+				case '(':
+				case ')':
+				case ',':
+				case '-':
+				case '.':
+				case '/':
+				case ':':
+				case '?':
+
+				// Optional:
+				case '!':
+				case '"':
+				case '#':
+				case '$':
+				case '%':
+				case '&':
+				case '*':
+				case ';':
+				case '<':
+				case '=':
+				case '>':
+				case '@':
+				case '[':
+				case ']':
+				case '^':
+				case '_':
+				case '`':
+				case '{':
+				case '|':
+				case '}':
+					return (true);
+			}
+
+			return (false);
+		}
 	}
 }
 
