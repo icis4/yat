@@ -465,7 +465,7 @@ namespace YAT.Log.Utilities
 		public void WriteLine(DisplayLine displayLine)
 		{
 			XmlTransferNeatLine transferLine;
-			XmlWriterHelperNeat.LineFromDisplayToTransfer(displayLine, out transferLine);
+			XmlWriterHelperNeat.ConvertLine(displayLine, out transferLine);
 			WriteLine(transferLine);
 		}
 

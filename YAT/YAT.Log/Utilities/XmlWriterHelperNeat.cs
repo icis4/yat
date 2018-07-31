@@ -48,10 +48,10 @@ namespace YAT.Log.Utilities
 	public static class XmlWriterHelperNeat
 	{
 		/// <returns>Returns the number of lines that could successfully be written to the file.</returns>
-		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
+		public static int SaveLinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
 		{
 			List<XmlTransferNeatLine> transferLines;
-			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
+			int count = ConvertLines(displayLines, out transferLines);
 			if (count > 0)
 			{
 				Type type = typeof(List<XmlTransferNeatLine>);
@@ -69,13 +69,13 @@ namespace YAT.Log.Utilities
 		}
 
 		/// <returns>Returns the number of lines that could successfully be converted.</returns>
-		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
+		private static int ConvertLines(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
 		{
 			transferLines = new List<XmlTransferNeatLine>(displayLines.Count); // Preset the required capacity to improve memory management.
 			foreach (var dl in displayLines)
 			{
 				XmlTransferNeatLine tl;
-				if (LineFromDisplayToTransfer(dl, out tl))
+				if (ConvertLine(dl, out tl))
 					transferLines.Add(tl);
 				else
 					break; // Immediately break, 'output' will only contain successfully converted lines.
@@ -86,7 +86,7 @@ namespace YAT.Log.Utilities
 
 		/// <returns>Returns <c>true</c> if the line could successfully be converted.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
+		public static bool ConvertLine(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
 		{
 			// Note that display elements are text-only and no longer contain the underlying typed
 			// information such as the time stamp of the origin. Since the XML schema is strongly-

@@ -155,7 +155,7 @@ namespace YAT.View.Utilities
 				this.foreColorBrush = new SolidBrush(formatSettings.PortFormat.Color);
 			}
 
-			Print(RtfWriterHelper.LinesToRichTextBox(lines, formatSettings));
+			Print(RtfWriterHelper.CopyLinesToRichTextBox(lines, formatSettings));
 		}
 
 		/// <remarks>

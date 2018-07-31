@@ -45,9 +45,9 @@ namespace YAT.View.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of saving text to a file.
 		/// </remarks>
-		public static int LinesToFile(List<DisplayLine> lines, string filePath, FormatSettings formatSettings)
+		public static int SaveLinesToFile(List<DisplayLine> lines, string filePath, FormatSettings formatSettings)
 		{
-			var richTextProvider = RtfWriterHelper.LinesToRichTextBox(lines, formatSettings);
+			var richTextProvider = RtfWriterHelper.CopyLinesToRichTextBox(lines, formatSettings);
 			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.UnicodePlainText);
 
 			return (lines.Count); // Assume success, an exception should otherwise be thrown above.

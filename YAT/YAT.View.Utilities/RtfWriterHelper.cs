@@ -65,9 +65,9 @@ namespace YAT.View.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of copying RTF to the clipboard. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		public static int LinesToClipboard(List<DisplayLine> lines, FormatSettings settings)
+		public static int CopyLinesToClipboard(List<DisplayLine> lines, FormatSettings settings)
 		{
-			var richTextProvider = LinesToRichTextBox(lines, settings);
+			var richTextProvider = CopyLinesToRichTextBox(lines, settings);
 			richTextProvider.SelectAll();
 			richTextProvider.Copy();
 
@@ -77,16 +77,16 @@ namespace YAT.View.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of saving RTF to a file. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		public static int LinesToFile(List<DisplayLine> lines, string filePath, FormatSettings settings)
+		public static int SaveLinesToFile(List<DisplayLine> lines, string filePath, FormatSettings settings)
 		{
-			var richTextProvider = LinesToRichTextBox(lines, settings);
+			var richTextProvider = CopyLinesToRichTextBox(lines, settings);
 			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.RichText);
 
 			return (lines.Count); // Assume success, an exception should otherwise be thrown above.
 		}
 
 		/// <summary></summary>
-		internal static RichTextBox LinesToRichTextBox(List<DisplayLine> lines, FormatSettings settings)
+		internal static RichTextBox CopyLinesToRichTextBox(List<DisplayLine> lines, FormatSettings settings)
 		{
 			var richTextProvider = new RichTextBox();
 			richTextProvider.Font      = settings.Font;
