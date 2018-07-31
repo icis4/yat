@@ -173,7 +173,7 @@
         <SeparateTxRxEol>false</SeparateTxRxEol>
         <TxEol>&lt;CR&gt;&lt;LF&gt;</TxEol>
         <RxEol>&lt;CR&gt;&lt;LF&gt;</RxEol>
-        <Encoding>12001</Encoding>
+        <Encoding>20936</Encoding>
         <ShowEol>false</ShowEol>
         <LineSendDelay>
           <Enabled>true</Enabled>
@@ -249,17 +249,17 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>äöü</Description>
+          <Description>&lt;äöü not supported&gt</Description>
           <DefaultRadix>String</DefaultRadix>
-          <CommandLines>äöü</CommandLines>
+          <CommandLines />
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>ÄÖÜ</Description>
+          <Description>&lt;ÄÖÜ not supported&gt</Description>
           <DefaultRadix>String</DefaultRadix>
-          <CommandLines>ÄÖÜ</CommandLines>
+          <CommandLines />
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
@@ -273,9 +273,9 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>čěř</Description>
+          <Description>&lt;čěř not supported&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
-          <CommandLines>čěř</CommandLines>
+          <CommandLines />
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
@@ -289,7 +289,7 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>︙</Description>
+          <Description>&lt;︙ not supported&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines>︙</CommandLines>
           <IsFilePath>false</IsFilePath>
@@ -297,7 +297,7 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>&lt;U+10000 and above not supported by .NET WinForms&gt;</Description>
+          <Description>&lt;'Notenschlüssel' not supported&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>false</IsFilePath>
@@ -418,22 +418,22 @@
     <SendFile>
       <Command>
         <IsDefined>true</IsDefined>
-        <Description>Encoding-UTF-32-BE-[12001].txt</Description>
+        <Description>Encoding-CJK-GB2312-[20936].txt</Description>
         <DefaultRadix>String</DefaultRadix>
         <CommandLines />
         <IsFilePath>true</IsFilePath>
-        <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
+        <FilePath>..\..\!-SendFiles\Encoding-CJK-GB2312-[20936].txt</FilePath>
       </Command>
       <RecentCommands>
         <Item>
           <IsDefined>true</IsDefined>
-          <Description>Encoding-UTF-32-BE-[12001].txt</Description>
+          <Description>Encoding-CJK-GB2312-[20936].txt</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>true</IsFilePath>
-          <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
+          <FilePath>..\..\!-SendFiles\Encoding-CJK-GB2312-[20936].txt</FilePath>
         </Item>
-        <TimeStamp>2018-07-30T16:39:02.1625175+02:00</TimeStamp>
+        <TimeStamp>2018-07-30T16:39:53.8756883+02:00</TimeStamp>
       </RecentCommands>
     </SendFile>
     <Predefined>

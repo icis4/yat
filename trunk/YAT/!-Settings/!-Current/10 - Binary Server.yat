@@ -5,7 +5,7 @@
   <ProductVersion>2.0.0</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2018-07-30T16:40:07.2030209+02:00</TimeStamp>
+    <TimeStamp>2018-04-05T23:21:10.684596+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -13,9 +13,9 @@
     <LogIsOn>false</LogIsOn>
     <UserName />
     <Terminal>
-      <TerminalType>Text</TerminalType>
+      <TerminalType>Binary</TerminalType>
       <IO>
-        <IOType>TcpClient</IOType>
+        <IOType>TcpServer</IOType>
         <SerialPort>
           <PortId>
             <Name>COM1</Name>
@@ -56,7 +56,7 @@
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
         <Socket>
-          <Type>TcpClient</Type>
+          <Type>TcpServer</Type>
           <RemoteHost>[localhost]</RemoteHost>
           <RemoteTcpPort>10000</RemoteTcpPort>
           <RemoteUdpPort>10000</RemoteUdpPort>
@@ -68,7 +68,7 @@
           <LocalTcpPort>10000</LocalTcpPort>
           <LocalUdpPort>10001</LocalUdpPort>
           <TcpClientAutoReconnect>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <Interval>500</Interval>
           </TcpClientAutoReconnect>
           <UdpServerSendMode>MostRecent</UdpServerSendMode>
@@ -112,8 +112,8 @@
       </Buffer>
       <Display>
         <SeparateTxRxRadix>false</SeparateTxRxRadix>
-        <TxRadix>String</TxRadix>
-        <RxRadix>String</RxRadix>
+        <TxRadix>Hex</TxRadix>
+        <RxRadix>Hex</RxRadix>
         <ShowRadix>true</ShowRadix>
         <ShowBufferLineNumbers>false</ShowBufferLineNumbers>
         <ShowTotalLineNumbers>false</ShowTotalLineNumbers>
@@ -137,7 +137,7 @@
         <InfoEnclosure>()</InfoEnclosure>
       </Display>
       <CharReplace>
-        <ReplaceControlChars>true</ReplaceControlChars>
+        <ReplaceControlChars>false</ReplaceControlChars>
         <ControlCharRadix>AsciiMnemonic</ControlCharRadix>
         <ReplaceTab>false</ReplaceTab>
         <ReplaceSpace>false</ReplaceSpace>
@@ -157,7 +157,7 @@
         </Text>
         <File>
           <SkipEmptyLines>false</SkipEmptyLines>
-          <EnableEscapes>true</EnableEscapes>
+          <EnableEscapes>false</EnableEscapes>
         </File>
         <DefaultDelay>100</DefaultDelay>
         <DefaultLineDelay>100</DefaultLineDelay>
@@ -173,10 +173,10 @@
         <SeparateTxRxEol>false</SeparateTxRxEol>
         <TxEol>&lt;CR&gt;&lt;LF&gt;</TxEol>
         <RxEol>&lt;CR&gt;&lt;LF&gt;</RxEol>
-        <Encoding>12001</Encoding>
+        <Encoding>1252</Encoding>
         <ShowEol>false</ShowEol>
         <LineSendDelay>
-          <Enabled>true</Enabled>
+          <Enabled>false</Enabled>
           <Delay>500</Delay>
           <LineInterval>1</LineInterval>
         </LineSendDelay>
@@ -200,7 +200,7 @@
         <SeparateTxRxDisplay>false</SeparateTxRxDisplay>
         <TxDisplay>
           <LengthLineBreak>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <Length>16</Length>
           </LengthLineBreak>
           <SequenceLineBreakBefore>
@@ -212,13 +212,13 @@
             <Sequence>\h(00)</Sequence>
           </SequenceLineBreakAfter>
           <TimedLineBreak>
-            <Enabled>false</Enabled>
+            <Enabled>true</Enabled>
             <Timeout>500</Timeout>
           </TimedLineBreak>
         </TxDisplay>
         <RxDisplay>
           <LengthLineBreak>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <Length>16</Length>
           </LengthLineBreak>
           <SequenceLineBreakBefore>
@@ -230,89 +230,13 @@
             <Sequence>\h(00)</Sequence>
           </SequenceLineBreakAfter>
           <TimedLineBreak>
-            <Enabled>false</Enabled>
+            <Enabled>true</Enabled>
             <Timeout>500</Timeout>
           </TimedLineBreak>
         </RxDisplay>
       </BinaryTerminal>
     </Terminal>
-    <PredefinedCommand>
-      <Pages>
-        <PageName>Page 1</PageName>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>abc</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>abc</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>äöü</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>äöü</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>ÄÖÜ</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>ÄÖÜ</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>$£€</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>$£€</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>čěř</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>čěř</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>一二州</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>一二州</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>︙</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>︙</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>&lt;U+10000 and above not supported by .NET WinForms&gt;</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines />
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>0\0&lt;CR&gt;1\n2</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines>0\0&lt;CR&gt;1\n2</CommandLines>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-    </PredefinedCommand>
+    <PredefinedCommand />
     <AutoResponse>
       <Trigger>[None]</Trigger>
       <Response>[None]</Response>
@@ -417,24 +341,13 @@
     </SendText>
     <SendFile>
       <Command>
-        <IsDefined>true</IsDefined>
-        <Description>Encoding-UTF-32-BE-[12001].txt</Description>
+        <IsDefined>false</IsDefined>
+        <Description />
         <DefaultRadix>String</DefaultRadix>
         <CommandLines />
-        <IsFilePath>true</IsFilePath>
-        <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
+        <IsFilePath>false</IsFilePath>
+        <FilePath />
       </Command>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>Encoding-UTF-32-BE-[12001].txt</Description>
-          <DefaultRadix>String</DefaultRadix>
-          <CommandLines />
-          <IsFilePath>true</IsFilePath>
-          <FilePath>..\..\!-SendFiles\Encoding-UTF-32-BE-[12001].txt</FilePath>
-        </Item>
-        <TimeStamp>2018-07-30T16:39:02.1625175+02:00</TimeStamp>
-      </RecentCommands>
     </SendFile>
     <Predefined>
       <SelectedPage>1</SelectedPage>
@@ -442,7 +355,7 @@
     <Window>
       <State>Normal</State>
       <Location>
-        <X>0</X>
+        <X>390</X>
         <Y>0</Y>
       </Location>
       <Size>

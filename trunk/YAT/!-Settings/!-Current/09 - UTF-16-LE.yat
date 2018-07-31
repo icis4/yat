@@ -297,9 +297,17 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>&lt;U+10000 and above not supported&gt;</Description>
+          <Description>&lt;U+10000 and above not supported by .NET WinForms&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Commands>
+        <Commands>
+          <IsDefined>true</IsDefined>
+          <Description>0\0&lt;CR&gt;1\n2</Description>
+          <DefaultRadix>String</DefaultRadix>
+          <CommandLines>0\0&lt;CR&gt;1\n2</CommandLines>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
@@ -410,20 +418,20 @@
     <SendFile>
       <Command>
         <IsDefined>true</IsDefined>
-        <Description>Encoding-UTF-16-LE.txt</Description>
+        <Description>Encoding-UTF-16-LE-[1200].txt</Description>
         <DefaultRadix>String</DefaultRadix>
         <CommandLines />
         <IsFilePath>true</IsFilePath>
-        <FilePath>..\..\!-SendFiles\Encoding-UTF-16-LE.txt</FilePath>
+        <FilePath>..\..\!-SendFiles\Encoding-UTF-16-LE-[1200].txt</FilePath>
       </Command>
       <RecentCommands>
         <Item>
           <IsDefined>true</IsDefined>
-          <Description>Encoding-UTF-16-LE.txt</Description>
+          <Description>Encoding-UTF-16-LE-[1200].txt</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>true</IsFilePath>
-          <FilePath>..\..\!-SendFiles\Encoding-UTF-16-LE.txt</FilePath>
+          <FilePath>..\..\!-SendFiles\Encoding-UTF-16-LE-[1200].txt</FilePath>
         </Item>
         <TimeStamp>2018-07-30T16:39:53.8756883+02:00</TimeStamp>
       </RecentCommands>
