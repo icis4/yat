@@ -64,6 +64,8 @@ namespace YAT.View.Controls
 		private SettingControlsHelper isSettingControls;
 		private PredefinedCommandPageCollection pages;
 		private int selectedPage = SelectedPageDefault;
+
+		private string rootDirectory; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
 		#endregion
@@ -150,6 +152,19 @@ namespace YAT.View.Controls
 					SetControls();
 					OnSelectedPageChanged(EventArgs.Empty);
 				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectory
+		{
+			set
+			{
+				this.rootDirectory = value;
+				SetControls();
 			}
 		}
 
@@ -264,6 +279,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				pageButtons.RootPath              = this.rootDirectory;
 				pageButtons.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
 				if ((this.pages != null) && (this.pages.Count > 0) &&

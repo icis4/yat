@@ -517,8 +517,10 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <summary></summary>
-		[XmlIgnore]
+		/// <remarks>
+		/// Property instead of method even though <see cref="IsValidFilePath()"/> is a method
+		/// for consistency with other 'Is...Text' properties.
+		/// </remarks>
 		public virtual bool IsValidText
 		{
 			get
@@ -669,29 +671,33 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool IsValidFilePath
+		public virtual bool IsValidFilePath()
 		{
-			get
-			{
-				if (!IsFilePath)
-					return (false);
-
-				return (File.Exists(Environment.ExpandEnvironmentVariables(this.filePath))); // May be absolute or relative to current directory.
-			}
+			return (IsValidFilePath(Environment.CurrentDirectory));
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool IsValid
+		public virtual bool IsValidFilePath(string rootDirectory)
 		{
-			get
-			{
-				if (IsText)
-					return (IsValidText);
-				else
-					return (IsValidFilePath);
-			}
+			if (!IsFilePath)
+				return (false);
+
+			return (File.Exists(EnvironmentEx.ResolveAbsolutePath(this.filePath, rootDirectory))); // May be absolute or relative to given root path.
+		}
+
+		/// <summary></summary>
+		public virtual bool IsValid()
+		{
+			return (IsValid(Environment.CurrentDirectory));
+		}
+
+		/// <summary></summary>
+		public virtual bool IsValid(string rootDirectory)
+		{
+			if (IsText)
+				return (IsValidText);
+			else
+				return (IsValidFilePath(rootDirectory));
 		}
 
 		#endregion

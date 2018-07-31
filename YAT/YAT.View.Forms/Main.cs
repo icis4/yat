@@ -1112,7 +1112,7 @@ namespace YAT.View.Forms
 						arTriggerItems  = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
 						arTrigger       = activeTerminal.SettingsRoot.AutoResponse.Trigger;
 
-						arResponseItems = activeTerminal.SettingsRoot.GetValidAutoResponseItems();
+						arResponseItems = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
 						arResponse      = activeTerminal.SettingsRoot.AutoResponse.Response;
 
 						arCount         = activeTerminal.AutoResponseCount;

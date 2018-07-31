@@ -450,7 +450,7 @@ namespace YAT.Settings.Terminal
 						if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 						{
 							var c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-							if ((c != null) && (c.IsValid))
+							if ((c != null) && (c.IsValid())) // Trigger can never be a file command.
 								a.Add(trigger);
 						}
 
@@ -460,7 +460,7 @@ namespace YAT.Settings.Terminal
 					case Model.Types.AutoTrigger.Explicit:
 					{
 						var c = new Model.Types.Command(AutoResponse.Trigger); // No explicit default radix available (yet).
-						if (c.IsValid)
+						if (c.IsValid()) // Trigger can never be a file command.
 							a.Add(trigger);
 
 						break;
@@ -482,7 +482,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		public virtual Model.Types.AutoResponseEx[] GetValidAutoResponseItems()
+		public virtual Model.Types.AutoResponseEx[] GetValidAutoResponseItems(string rootDirectory)
 		{
 			var responses = Model.Types.AutoResponseEx.GetAllItems();
 			var l = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
@@ -494,7 +494,7 @@ namespace YAT.Settings.Terminal
 					case Model.Types.AutoResponse.SendText:
 					{
 						var c = SendText.Command;
-						if ((c != null) && (c.IsValid))
+						if ((c != null) && (c.IsValid(rootDirectory)))
 							l.Add(response);
 
 						break;
@@ -503,7 +503,7 @@ namespace YAT.Settings.Terminal
 					case Model.Types.AutoResponse.SendFile:
 					{
 						var c = SendFile.Command;
-						if ((c != null) && (c.IsValid))
+						if ((c != null) && (c.IsValid(rootDirectory)))
 							l.Add(response);
 
 						break;
@@ -527,7 +527,7 @@ namespace YAT.Settings.Terminal
 						if (commandId != Model.Types.AutoResponseEx.InvalidPredefinedCommandId)
 						{
 							var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-							if ((c != null) && (c.IsValid))
+							if ((c != null) && (c.IsValid(rootDirectory)))
 								l.Add(response);
 						}
 
@@ -537,7 +537,7 @@ namespace YAT.Settings.Terminal
 					case Model.Types.AutoResponse.Explicit:
 					{
 						var c = new Model.Types.Command(AutoResponse.Response); // No explicit default radix available (yet).
-						if (c.IsValid)
+						if (c.IsValid(rootDirectory))
 							l.Add(response);
 
 						break;
@@ -622,7 +622,7 @@ namespace YAT.Settings.Terminal
 					if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
 					{
 						var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-						if ((c != null) && (c.IsValid))
+						if ((c != null) && (c.IsValid())) // Trigger can never be a file command.
 							response = c;
 					}
 
@@ -632,7 +632,7 @@ namespace YAT.Settings.Terminal
 				case Model.Types.AutoTrigger.Explicit:
 				{
 					var c = new Model.Types.Command(trigger); // No explicit default radix available (yet).
-					if (c.IsValid)
+					if (c.IsValid()) // Trigger can never be a file command.
 						response = c;
 
 					break;

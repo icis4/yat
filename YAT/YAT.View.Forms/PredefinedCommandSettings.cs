@@ -93,12 +93,13 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <param name="settings">Settings to be displayed.</param>
+		/// <param name="rootDirectory">An optional root path for file commands.</param>
 		/// <param name="terminalType">The terminal type related to the command.</param>
 		/// <param name="useExplicitDefaultRadix">Whether to use an explicit default radix.</param>
 		/// <param name="parseModeForText">The parse mode related to the command.</param>
 		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, int requestedPage, int requestedCommand)
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, string rootDirectory, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, int requestedPage, int requestedCommand)
 		{
 			InitializeComponent();
 
@@ -109,6 +110,7 @@ namespace YAT.View.Forms
 
 			foreach (var pcss in this.predefinedCommandSettingsSets)
 			{
+				pcss.RootDirectory           = rootDirectory;
 				pcss.TerminalType            = terminalType;
 				pcss.UseExplicitDefaultRadix = useExplicitDefaultRadix;
 				pcss.ParseModeForText        = parseModeForText;

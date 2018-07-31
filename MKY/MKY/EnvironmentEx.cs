@@ -167,10 +167,20 @@ namespace MKY
 		/// </summary>
 		public static string ResolveAbsolutePath(string filePath)
 		{
+			return (ResolveAbsolutePath(filePath, Environment.CurrentDirectory));
+		}
+
+		/// <summary>
+		/// Resolves the absolute location to the given file path.
+		///  - If the path is rooted, simply expand environment variables.
+		///  - If the path is relative, expand environment variables and combine it with the given <paramref name="rootDirectory"/>.
+		/// </summary>
+		public static string ResolveAbsolutePath(string filePath, string rootDirectory)
+		{
 			if (Path.IsPathRooted(filePath))
 				return (Environment.ExpandEnvironmentVariables(filePath));
 			else
-				return (PathEx.CombineDirectoryAndFilePaths(Environment.CurrentDirectory, Environment.ExpandEnvironmentVariables(filePath)));
+				return (PathEx.CombineDirectoryAndFilePaths(rootDirectory, Environment.ExpandEnvironmentVariables(filePath)));
 		}
 
 		/// <summary>

@@ -680,7 +680,7 @@ namespace YAT.View.Forms
 						sendTextEnabled = false;
 				}
 
-				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
+				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(Path.GetDirectoryName(this.terminal.SettingsFilePath));
 
 				// Set the menu item properties:
 
@@ -722,7 +722,7 @@ namespace YAT.View.Forms
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems());
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
 
 					var response = this.settingsRoot.AutoResponse.Response;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
@@ -2168,7 +2168,7 @@ namespace YAT.View.Forms
 				for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
 				{
 					bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-					bool isValid = (isDefined && commands[i].IsValid && this.terminal.IsReadyToSend);
+					bool isValid = (isDefined && commands[i].IsValid(this.terminal.SettingsFilePath) && this.terminal.IsReadyToSend);
 
 					if (isDefined)
 					{
@@ -2398,7 +2398,7 @@ namespace YAT.View.Forms
 						sendTextEnabled = false;
 				}
 
-				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
+				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(Path.GetDirectoryName(this.terminal.SettingsFilePath));
 
 				// Set the menu item properties:
 
@@ -3843,6 +3843,7 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				predefined.RootDirectory         = Path.GetDirectoryName(this.terminal.SettingsFilePath);
 				predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
 			}
 			finally
@@ -3863,6 +3864,7 @@ namespace YAT.View.Forms
 				send.RecentTextCommands      = this.settingsRoot.SendText.RecentCommands;
 				send.FileCommand             = this.settingsRoot.SendFile.Command;
 				send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
+				send.RootDirectory           = Path.GetDirectoryName(this.terminal.SettingsFilePath);
 				send.TerminalType            = this.settingsRoot.TerminalType;
 				send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
 				send.ParseModeForText        = this.settingsRoot.Send.Text.ToParseMode();
@@ -4501,6 +4503,7 @@ namespace YAT.View.Forms
 			var f = new PredefinedCommandSettings
 			(
 				this.settingsRoot.PredefinedCommand,
+				Path.GetDirectoryName(this.terminal.SettingsFilePath),
 				this.settingsRoot.TerminalType,
 				this.settingsRoot.Send.UseExplicitDefaultRadix,
 				this.settingsRoot.Send.Text.ToParseMode(),

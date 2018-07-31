@@ -67,6 +67,8 @@ namespace YAT.View.Controls
 		private List<Button> buttons_commands;
 
 		private List<Command> commands;
+
+		private string rootDirectory; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
 		#endregion
@@ -118,6 +120,19 @@ namespace YAT.View.Controls
 			set
 			{
 				this.commands = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootPath
+		{
+			set
+			{
+				this.rootDirectory = value;
 				SetControls();
 			}
 		}
@@ -241,7 +256,7 @@ namespace YAT.View.Controls
 			for (int i = 0; i < commandCount; i++)
 			{
 				bool isDefined = ((this.commands[i] != null) && this.commands[i].IsDefined);
-				bool isValid = (isDefined && this.terminalIsReadyToSend && this.commands[i].IsValid);
+				bool isValid = (isDefined && this.terminalIsReadyToSend && this.commands[i].IsValid(this.rootDirectory));
 
 				if (isDefined)
 				{

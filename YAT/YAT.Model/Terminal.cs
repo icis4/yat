@@ -3637,11 +3637,11 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			if (c.IsValidFilePath)
+			if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 			{
-				string filePath = EnvironmentEx.ResolveAbsolutePath(c.FilePath);
+				string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(c.FilePath, Path.GetDirectoryName(SettingsFilePath));
 
-				this.terminal.SendFile(filePath, c.DefaultRadix);
+				this.terminal.SendFile(absoluteFilePath, c.DefaultRadix);
 
 				CloneIntoRecentFileCommands(c);
 			}
@@ -3699,7 +3699,7 @@ namespace YAT.Model
 
 				return (true);
 			}
-			else if (c.IsValidFilePath)
+			else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 			{
 				SendFile(c);
 
@@ -3735,7 +3735,7 @@ namespace YAT.Model
 				this.settingsRoot.SendText.Command = new Command(c); // Clone command to ensure decoupling.
 				return (true);
 			}
-			else if (c.IsValidFilePath)
+			else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 			{
 				this.settingsRoot.SendFile.Command = new Command(c); // Clone command to ensure decoupling.
 				return (true);

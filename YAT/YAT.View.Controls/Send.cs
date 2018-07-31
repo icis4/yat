@@ -73,6 +73,7 @@ namespace YAT.View.Controls
 		// Fields
 		//==========================================================================================
 
+		private string rootDirectory; // = null;
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
@@ -226,6 +227,19 @@ namespace YAT.View.Controls
 		public virtual RecentItemCollection<Command> RecentFileCommands
 		{
 			set { sendFile.Recent = value; }
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectory
+		{
+			set
+			{
+				this.rootDirectory = value;
+				SetTerminalControls();
+			}
 		}
 
 		/// <summary></summary>
@@ -395,6 +409,7 @@ namespace YAT.View.Controls
 			sendText.TerminalType          = this.terminalType;
 			sendText.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
+			sendFile.RootDirectory         = this.rootDirectory;
 			sendFile.TerminalType          = this.terminalType;
 			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 		}
