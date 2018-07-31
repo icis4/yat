@@ -4164,27 +4164,43 @@ namespace YAT.View.Forms
 
 		private void ReloadMonitors()
 		{
-			SetFixedStatusText("Reloading...");
-			Cursor = Cursors.WaitCursor;
+			try
+			{
+				SetFixedStatusText("Reloading...");
+				Cursor = Cursors.WaitCursor;
 
-			this.terminal.RefreshRepositories();
+				this.terminal.RefreshRepositories();
 
-			Cursor = Cursors.Default;
-			SetTimedStatusText("Reloading done");
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Reloading done");
+			}
+			catch
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Reloading failed!");
+			}
 		}
 
 		private void ReformatMonitors()
 		{
-			SetFixedStatusText("Reformatting...");
-			Cursor = Cursors.WaitCursor;
+			try
+			{
+				SetFixedStatusText("Reformatting...");
+				Cursor = Cursors.WaitCursor;
 
-			                                // Clone settings to ensure decoupling:
-			monitor_Tx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
-			monitor_Bidir.FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
-			monitor_Rx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
+				                             // Clone settings to ensure decoupling:
+				monitor_Tx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
+				monitor_Bidir.FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
+				monitor_Rx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
 
-			Cursor = Cursors.Default;
-			SetTimedStatusText("Reformatting done");
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Reformatting done");
+			}
+			catch
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Reformatting failed!");
+			}
 		}
 
 		private void ClearMonitor(Domain.RepositoryType repositoryType)
@@ -4281,9 +4297,23 @@ namespace YAT.View.Forms
 
 		private void CopyMonitorToClipboard(Controls.Monitor monitor)
 		{
-			SetFixedStatusText("Copying data to clipboard...");
-			Utilities.RtfWriterHelper.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
-			SetTimedStatusText("Data copied to clipboard");
+			try
+			{
+				SetFixedStatusText("Preparing copying...");
+				Cursor = Cursors.WaitCursor;
+
+				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
+				SetFixedStatusText("Copying selected lines to clipboard...");
+				Utilities.RtfWriterHelper.CopyLinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
+
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Copying done");
+			}
+			catch
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Copying failed!");
+			}
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -4331,18 +4361,18 @@ namespace YAT.View.Forms
 				if (ExtensionHelper.IsXmlFile(filePath))
 				{
 				#if FALSE // Enable to use the raw instead of neat XML export schema, useful for development purposes of the raw XML schema.
-					savedCount = Log.Utilities.XmlWriterHelperRaw.LinesToFile(monitor.SelectedLines, filePath, true);
+					savedCount = Log.Utilities.XmlWriterHelperRaw.SaveLinesToFile(monitor.SelectedLines, filePath, true);
 				#else
-					savedCount = Log.Utilities.XmlWriterHelperNeat.LinesToFile(monitor.SelectedLines, filePath, true);
+					savedCount = Log.Utilities.XmlWriterHelperNeat.SaveLinesToFile(monitor.SelectedLines, filePath, true);
 				#endif
 				}
 				else if (ExtensionHelper.IsRtfFile(filePath))
 				{
-					savedCount = Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = Utilities.RtfWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				}
 				else
 				{
-					savedCount = Utilities.TextWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = Utilities.TextWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				}
 
 				if (savedCount == requestedCount)
@@ -4897,7 +4927,7 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				SetFixedStatusText("Terminal Error");
+				SetFixedStatusText("Terminal Error!");
 
 				if (showErrorModally)
 				{
