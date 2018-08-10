@@ -1930,7 +1930,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (Utilities.ValidationHelper.ValidateTextSilently(triggerText))
+					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText))
 					{
 						toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
