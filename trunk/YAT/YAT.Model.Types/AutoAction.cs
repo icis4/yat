@@ -48,6 +48,7 @@ namespace YAT.Model.Types
 		ShowMessageBox,
 
 		ClearRepositories,
+		ClearRepositoriesOnSubsequentRx,
 		ResetCountAndRate,
 		SwitchLogOn,
 		SwitchLogOff,
@@ -89,6 +90,10 @@ namespace YAT.Model.Types
 
 		private const string             ClearRepositories_string = "[Clear Monitor]"; // Translating from code to user terminology.
 		private static readonly string[] ClearRepositories_stringAlternatives = new string[] { "[CM]" };
+
+		private const string             ClearRepositoriesOnSubsequentRx_string = "[Cl. Mon. on Subsequ. Rx]"; // Translating from code to user terminology.
+		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternatives = new string[] { "[CMSR]" };
+		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Cl. Mon. ", "[Clear Monitor " }; // Including ' ' to distiguish from above
 
 		private const string             ResetCountAndRate_string = "[Reset Count/Rate]";
 		private static readonly string[] ResetCountAndRate_stringAlternatives = new string[] { "[R]" };
@@ -138,17 +143,21 @@ namespace YAT.Model.Types
 		{
 			switch ((AutoAction)UnderlyingEnum)
 			{
-				case AutoAction.None:              return (None_string);
-				case AutoAction.Highlight:         return (Highlight_string);
-				case AutoAction.Beep:              return (Beep_string);
-				case AutoAction.ShowMessageBox:    return (ShowMessageBox_string);
-				case AutoAction.ClearRepositories: return (ClearRepositories_string);
-				case AutoAction.ResetCountAndRate: return (ResetCountAndRate_string);
-				case AutoAction.SwitchLogOn:       return (SwitchLogOn_string);
-				case AutoAction.SwitchLogOff:      return (SwitchLogOff_string);
-				case AutoAction.StopIO:            return (StopIO_string);
-				case AutoAction.CloseTerminal:     return (CloseTerminal_string);
-				case AutoAction.ExitApplication:   return (ExitApplication_string);
+				case AutoAction.None:                            return (None_string);
+
+				case AutoAction.Highlight:                       return (Highlight_string);
+				case AutoAction.Beep:                            return (Beep_string);
+				case AutoAction.ShowMessageBox:                  return (ShowMessageBox_string);
+
+				case AutoAction.ClearRepositories:               return (ClearRepositories_string);
+				case AutoAction.ClearRepositoriesOnSubsequentRx: return (ClearRepositoriesOnSubsequentRx_string);
+				case AutoAction.ResetCountAndRate:               return (ResetCountAndRate_string);
+				case AutoAction.SwitchLogOn:                     return (SwitchLogOn_string);
+				case AutoAction.SwitchLogOff:                    return (SwitchLogOff_string);
+
+				case AutoAction.StopIO:                          return (StopIO_string);
+				case AutoAction.CloseTerminal:                   return (CloseTerminal_string);
+				case AutoAction.ExitApplication:                 return (ExitApplication_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -219,16 +228,21 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(10); // Preset the initial capacity to improve memory management, 16 is a large enough value.
+			var a = new List<AutoActionEx>(12); // Preset the initial capacity to improve memory management, 16 is a large enough value.
 
 			a.Add(new AutoActionEx(AutoAction.None));
+
 			a.Add(new AutoActionEx(AutoAction.Highlight));
 			a.Add(new AutoActionEx(AutoAction.Beep));
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
+
 			a.Add(new AutoActionEx(AutoAction.ClearRepositories));
+			a.Add(new AutoActionEx(AutoAction.ClearRepositoriesOnSubsequentRx));
 			a.Add(new AutoActionEx(AutoAction.ResetCountAndRate));
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOn));
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOff));
+
+			a.Add(new AutoActionEx(AutoAction.StopIO));
 			a.Add(new AutoActionEx(AutoAction.CloseTerminal));
 			a.Add(new AutoActionEx(AutoAction.ExitApplication));
 
@@ -313,6 +327,13 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ClearRepositories_stringAlternatives))
 			{
 				result = AutoAction.ClearRepositories;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase       (s, ClearRepositoriesOnSubsequentRx_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase    (s, ClearRepositoriesOnSubsequentRx_stringAlternatives) ||
+			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, ClearRepositoriesOnSubsequentRx_stringAlternativeStarts))
+			{
+				result = AutoAction.ClearRepositoriesOnSubsequentRx;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ResetCountAndRate_string) ||
