@@ -309,10 +309,11 @@
 			this.linkLabel_TerminalEmulator.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_TerminalEmulator.Location = new System.Drawing.Point(12, 271);
 			this.linkLabel_TerminalEmulator.Name = "linkLabel_TerminalEmulator";
-			this.linkLabel_TerminalEmulator.Size = new System.Drawing.Size(560, 26);
+			this.linkLabel_TerminalEmulator.Size = new System.Drawing.Size(525, 26);
 			this.linkLabel_TerminalEmulator.TabIndex = 10;
 			this.linkLabel_TerminalEmulator.Text = "YAT is optimized for simple command sets of e.g. embedded systems. If you are loo" +
-    "king for a classic terminal emulator,\r\nrather go for PuTTy or the like.";
+    "king for a terminal emulator,\r\nrather go for PuTTy , Tera Term, SecureCRT or the" +
+    " like.";
 			this.linkLabel_TerminalEmulator.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// About

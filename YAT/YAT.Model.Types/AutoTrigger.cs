@@ -377,7 +377,7 @@ namespace YAT.Model.Types
 				return (true);
 			}
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
-			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives))
+			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives)) // StartWith()! Not Equals()!
 			{
 				var match = Regex.Match(s, @"\d+");
 				if (match.Success)
