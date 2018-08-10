@@ -167,13 +167,14 @@ namespace YAT.Model
 
 		// AutoResponse:
 		private int autoResponseCount;
-		private AutoTriggerHelper autoResponseHelper;
-		private object autoResponseHelperSyncObj = new object();
+		private AutoTriggerHelper autoResponseTriggerHelper;
+		private object autoResponseTriggerHelperSyncObj = new object();
 
 		// AutoAction:
 		private int autoActionCount;
-		private AutoTriggerHelper autoActionHelper;
-		private object autoActionHelperSyncObj = new object();
+		private AutoTriggerHelper autoActionTriggerHelper;
+		private object autoActionTriggerHelperSyncObj = new object();
+		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
 
 		// Time status:
 		private Chronometer activeConnectChrono;
@@ -2518,11 +2519,11 @@ namespace YAT.Model
 
 				foreach (byte b in e.Value.Content)
 				{
-					lock (this.autoResponseHelperSyncObj)
+					lock (this.autoResponseTriggerHelperSyncObj)
 					{
-						if (this.autoResponseHelper != null)
+						if (this.autoResponseTriggerHelper != null)
 						{
-							if (this.autoResponseHelper.EnqueueAndMatchTrigger(b))
+							if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(b))
 								isTriggered = true;
 						}
 						else
@@ -2536,10 +2537,10 @@ namespace YAT.Model
 				{
 					byte[] triggerSequence = null;
 
-					lock (this.autoResponseHelperSyncObj)
+					lock (this.autoResponseTriggerHelperSyncObj)
 					{
-						if (this.autoResponseHelper != null)
-							triggerSequence = this.autoResponseHelper.TriggerSequence;
+						if (this.autoResponseTriggerHelper != null)
+							triggerSequence = this.autoResponseTriggerHelper.TriggerSequence;
 					}
 
 					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_SendAutoResponseAsync);
@@ -2552,15 +2553,31 @@ namespace YAT.Model
 			// AutoAction:
 			if (this.settingsRoot.AutoAction.IsActive)
 			{
+				if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
+				{
+					this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
+
+					byte[] triggerSequence = null;
+
+					lock (this.autoActionTriggerHelperSyncObj)
+					{
+						if (this.autoActionTriggerHelper != null)
+							triggerSequence = this.autoActionTriggerHelper.TriggerSequence;
+					}
+
+					var asyncInvoker = new Action<AutoAction, byte[], DateTime>(terminal_RawChunkReceived_InvokeAutoActionAsync);
+					asyncInvoker.BeginInvoke(AutoAction.ClearRepositories, triggerSequence, e.Value.TimeStamp, null, null);
+				}                                    // ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
+
 				bool isTriggered = false;
 
 				foreach (byte b in e.Value.Content)
 				{
-					lock (this.autoActionHelperSyncObj)
+					lock (this.autoActionTriggerHelperSyncObj)
 					{
-						if (this.autoActionHelper != null)
+						if (this.autoActionTriggerHelper != null)
 						{
-							if (this.autoActionHelper.EnqueueAndMatchTrigger(b))
+							if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(b))
 								isTriggered = true;
 						}
 						else
@@ -2574,14 +2591,14 @@ namespace YAT.Model
 				{
 					byte[] triggerSequence = null;
 
-					lock (this.autoActionHelperSyncObj)
+					lock (this.autoActionTriggerHelperSyncObj)
 					{
-						if (this.autoActionHelper != null)
-							triggerSequence = this.autoActionHelper.TriggerSequence;
+						if (this.autoActionTriggerHelper != null)
+							triggerSequence = this.autoActionTriggerHelper.TriggerSequence;
 					}
 
-					var asyncInvoker = new Action<byte[], DateTime>(terminal_RawChunkReceived_InvokeAutoActionAsync);
-					asyncInvoker.BeginInvoke(triggerSequence, e.Value.TimeStamp, null, null);
+					var asyncInvoker = new Action<AutoAction, byte[], DateTime>(terminal_RawChunkReceived_InvokeAutoActionAsync);
+					asyncInvoker.BeginInvoke(this.settingsRoot.AutoAction.Action, triggerSequence, e.Value.TimeStamp, null, null);
 
 					e.Highlight = true;
 				}
@@ -2593,9 +2610,9 @@ namespace YAT.Model
 			SendAutoResponse(triggerSequence);
 		}
 
-		private void terminal_RawChunkReceived_InvokeAutoActionAsync(byte[] triggerSequence, DateTime ts)
+		private void terminal_RawChunkReceived_InvokeAutoActionAsync(AutoAction action, byte[] triggerSequence, DateTime ts)
 		{
-			InvokeAutoAction(triggerSequence, ts);
+			InvokeAutoAction(action, triggerSequence, ts);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2696,7 +2713,7 @@ namespace YAT.Model
 					if (!dl.TryGetTimeStamp(out ts))
 						ts = DateTime.Now;
 
-					InvokeAutoAction(LineWithoutRxEolToOrigin(dl), ts);
+					InvokeAutoAction(this.settingsRoot.AutoAction.Action, LineWithoutRxEolToOrigin(dl), ts);
 				}
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
@@ -4612,8 +4629,8 @@ namespace YAT.Model
 
 		private void DisposeAutoResponseHelper()
 		{
-			lock (this.autoResponseHelperSyncObj)
-				this.autoResponseHelper = null; // Simply delete the reference to the object.
+			lock (this.autoResponseTriggerHelperSyncObj)
+				this.autoResponseTriggerHelper = null; // Simply delete the reference to the object.
 		}
 
 		/// <summary>
@@ -4628,12 +4645,12 @@ namespace YAT.Model
 					byte[] triggerSequence;
 					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out triggerSequence))
 					{
-						lock (this.autoResponseHelperSyncObj)
+						lock (this.autoResponseTriggerHelperSyncObj)
 						{
-							if (this.autoResponseHelper == null)
-								this.autoResponseHelper = new AutoTriggerHelper(triggerSequence);
+							if (this.autoResponseTriggerHelper == null)
+								this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerSequence);
 							else
-								this.autoResponseHelper.TriggerSequence = triggerSequence;
+								this.autoResponseTriggerHelper.TriggerSequence = triggerSequence;
 						}
 					}
 					else
@@ -4773,8 +4790,8 @@ namespace YAT.Model
 
 		private void DisposeAutoActionHelper()
 		{
-			lock (this.autoActionHelperSyncObj)
-				this.autoActionHelper = null; // Simply delete the reference to the object.
+			lock (this.autoActionTriggerHelperSyncObj)
+				this.autoActionTriggerHelper = null; // Simply delete the reference to the object.
 		}
 
 		/// <summary>
@@ -4789,12 +4806,12 @@ namespace YAT.Model
 					byte[] triggerSequence;
 					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoActionTrigger, out triggerSequence))
 					{
-						lock (this.autoActionHelperSyncObj)
+						lock (this.autoActionTriggerHelperSyncObj)
 						{
-							if (this.autoActionHelper == null)
-								this.autoActionHelper = new AutoTriggerHelper(triggerSequence);
+							if (this.autoActionTriggerHelper == null)
+								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerSequence);
 							else
-								this.autoActionHelper.TriggerSequence = triggerSequence;
+								this.autoActionTriggerHelper.TriggerSequence = triggerSequence;
 						}
 					}
 					else
@@ -4826,23 +4843,24 @@ namespace YAT.Model
 		/// <summary>
 		/// Invokes the automatic action.
 		/// </summary>
-		protected virtual void InvokeAutoAction(byte[] triggerSequence, DateTime ts)
+		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, DateTime ts)
 		{
 			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
 			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
 
-			switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+			switch (action)
 			{
-				case AutoAction.Highlight:         /* no additional action */                     break;
-				case AutoAction.Beep:              SystemSounds.Beep.Play();                      break;
-				case AutoAction.ShowMessageBox:    RequestAutoActionMessage(triggerSequence, ts); break;
-				case AutoAction.ClearRepositories: ClearRepositories();                           break;
-				case AutoAction.ResetCountAndRate: ResetIOCountAndRate();                         break;
-				case AutoAction.SwitchLogOn:       SwitchLogOn();                                 break;
-				case AutoAction.SwitchLogOff:      SwitchLogOff();                                break;
-				case AutoAction.StopIO:            StopIO();                                      break;
-				case AutoAction.CloseTerminal:     Close();                                       break;
-				case AutoAction.ExitApplication:   OnExitRequest(EventArgs.Empty);                break;
+				case AutoAction.Highlight:                       /* no additional action */                                    break;
+				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                     break;
+				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, ts);                break;
+				case AutoAction.ClearRepositories:               ClearRepositories();                                          break;
+				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true; break;
+				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                        break;
+				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                break;
+				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                               break;
+				case AutoAction.StopIO:                          StopIO();                                                     break;
+				case AutoAction.CloseTerminal:                   Close();                                                      break;
+				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                               break;
 
 				case AutoAction.None:
 				default:
