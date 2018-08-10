@@ -203,14 +203,26 @@ namespace YAT.View.Forms
 
 			// Terminal emulator:
 			linkLabel_TerminalEmulator.Text = "";
-			textBefore = "YAT is optimized for simple command sets of e.g. embedded systems. If you are looking for a classic terminal emulator," + Environment.NewLine +
+			textBefore = "YAT is optimized for simple command sets of e.g. embedded systems. If you are looking for a terminal emulator," + Environment.NewLine +
 			             "rather go for ";
 			textLink   =               "PuTTY";
-			textAfter  =                    " or the like.";
+			textAfter  =                    ", ";
 			linkLabel_TerminalEmulator.Text += textBefore;
 			linkStart = linkLabel_TerminalEmulator.Text.Length;
 			linkLabel_TerminalEmulator.Text += textLink;
-			linkLabel_TerminalEmulator.Links.Add(linkStart, textLink.Length, "http://www.putty.org/");
+			linkLabel_TerminalEmulator.Links.Add(linkStart, textLink.Length, "https://www.putty.org/");
+			linkLabel_TerminalEmulator.Text += textAfter;
+			textLink   =                      "Tera Term";
+			textAfter  =                               ", ";
+			linkStart = linkLabel_TerminalEmulator.Text.Length;
+			linkLabel_TerminalEmulator.Text += textLink;
+			linkLabel_TerminalEmulator.Links.Add(linkStart, textLink.Length, "https://osdn.net/projects/ttssh2/");
+			linkLabel_TerminalEmulator.Text += textAfter;
+			textLink   =                                 "SecureCRT";
+			textAfter  =                                          " or the like.";
+			linkStart = linkLabel_TerminalEmulator.Text.Length;
+			linkLabel_TerminalEmulator.Text += textLink;
+			linkLabel_TerminalEmulator.Links.Add(linkStart, textLink.Length, "https://www.vandyke.com/products/securecrt/");
 			linkLabel_TerminalEmulator.Text += textAfter;
 
 			// Environment:
