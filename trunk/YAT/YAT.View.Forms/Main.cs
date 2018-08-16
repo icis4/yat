@@ -2192,9 +2192,9 @@ namespace YAT.View.Forms
 				for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
 				{
 					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // 'InvariantCulture' for prefix!
-					string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
 					if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
 					{
+						string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
 						this.menuItems_recent[i].Text = "&" + prefix + file;
 						this.menuItems_recent[i].Enabled = true;
 					}
