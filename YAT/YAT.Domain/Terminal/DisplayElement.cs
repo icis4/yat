@@ -55,6 +55,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(TimeStampInfo))]
 	[XmlInclude(typeof(TimeSpanInfo))]
 	[XmlInclude(typeof(TimeDeltaInfo))]
+	[XmlInclude(typeof(TimeDurationInfo))]
 	[XmlInclude(typeof(PortInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
@@ -315,6 +316,40 @@ namespace YAT.Domain
 			protected static string ToText(TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
 			{
 				return (enclosureLeft + TimeSpanEx.FormatInvariantThousandths(timeDelta, format) + enclosureRight);
+			}                                                         // Attention, slightly different than time span above!
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class TimeDurationInfo : InfoElement
+		{
+			/// <summary></summary>
+			public TimeSpan TimeDuration { get; }
+
+			/// <summary></summary>
+			public TimeDurationInfo(TimeDurationInfo other)
+				: base(other.Direction, other.Text)
+			{
+				TimeDuration = other.TimeDuration;
+			}
+
+			/// <summary></summary>
+			public TimeDurationInfo(TimeSpan timeDuration, string format, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, timeDuration, format, enclosureLeft, enclosureRight)
+			{
+			}
+
+			/// <summary></summary>
+			public TimeDurationInfo(Direction direction, TimeSpan timeDuration, string format, string enclosureLeft, string enclosureRight)
+				: base(direction, ToText(timeDuration, format, enclosureLeft, enclosureRight))
+			{
+				TimeDuration = timeDuration;
+			}
+
+			/// <summary></summary>
+			protected static string ToText(TimeSpan timeDuration, string format, string enclosureLeft, string enclosureRight)
+			{
+				return (enclosureLeft + TimeSpanEx.FormatInvariantThousandths(timeDuration, format) + enclosureRight);
 			}                                                         // Attention, slightly different than time span above!
 		}
 
@@ -704,22 +739,23 @@ namespace YAT.Domain
 		{
 			DisplayElement clone;
 
-			if      (this is Nonentity)     clone = new Nonentity();
-			else if (this is TxData)        clone = new TxData();
-			else if (this is TxControl)     clone = new TxControl();
-			else if (this is RxData)        clone = new RxData();
-			else if (this is RxControl)     clone = new RxControl();
-			else if (this is TimeStampInfo) clone = new TimeStampInfo((TimeStampInfo)this);
-			else if (this is TimeSpanInfo)  clone = new TimeSpanInfo((TimeSpanInfo)this);
-			else if (this is TimeDeltaInfo) clone = new TimeDeltaInfo((TimeDeltaInfo)this);
-			else if (this is PortInfo)      clone = new PortInfo();
-			else if (this is DirectionInfo) clone = new DirectionInfo();
-			else if (this is DataLength)    clone = new DataLength((DataLength)this);
-			else if (this is DataSpace)     clone = new DataSpace();
-			else if (this is InfoSeparator) clone = new InfoSeparator();
-			else if (this is LineStart)     clone = new LineStart();
-			else if (this is LineBreak)     clone = new LineBreak();
-			else if (this is ErrorInfo)     clone = new ErrorInfo();
+			if      (this is Nonentity)        clone = new Nonentity();
+			else if (this is TxData)           clone = new TxData();
+			else if (this is TxControl)        clone = new TxControl();
+			else if (this is RxData)           clone = new RxData();
+			else if (this is RxControl)        clone = new RxControl();
+			else if (this is TimeStampInfo)    clone = new TimeStampInfo((TimeStampInfo)this);
+			else if (this is TimeSpanInfo)     clone = new TimeSpanInfo((TimeSpanInfo)this);
+			else if (this is TimeDeltaInfo)    clone = new TimeDeltaInfo((TimeDeltaInfo)this);
+			else if (this is TimeDurationInfo) clone = new TimeDurationInfo((TimeDurationInfo)this);
+			else if (this is PortInfo)         clone = new PortInfo();
+			else if (this is DirectionInfo)    clone = new DirectionInfo();
+			else if (this is DataLength)       clone = new DataLength((DataLength)this);
+			else if (this is DataSpace)        clone = new DataSpace();
+			else if (this is InfoSeparator)    clone = new InfoSeparator();
+			else if (this is LineStart)        clone = new LineStart();
+			else if (this is LineBreak)        clone = new LineBreak();
+			else if (this is ErrorInfo)        clone = new ErrorInfo();
 			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			clone.direction  = this.direction;

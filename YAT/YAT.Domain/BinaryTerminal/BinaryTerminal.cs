@@ -807,7 +807,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
@@ -819,10 +819,10 @@ namespace YAT.Domain
 
 			// Process line length:
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
-			if (TerminalSettings.Display.ShowLength) // = byte count.
+			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(lineState.Elements.ByteCount, out info);
+				PrepareLineEndInfo(line.ByteCount, (ts - lineState.TimeStamp), out info);
 				lp.AddRange(info);
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
@@ -899,9 +899,9 @@ namespace YAT.Domain
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimer.Stop();
 
-					ExecuteLineEnd(lineState, elements, lines);
+					ExecuteLineEnd(lineState, raw.TimeStamp, elements, lines);
 
-					// In case of a pending immediately insert the sequence into a new line:
+					// In case of a pending element immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 					{
 						ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
@@ -937,7 +937,7 @@ namespace YAT.Domain
 			{
 				var span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
-					ExecuteLineEnd(lineState, elements, lines);
+					ExecuteLineEnd(lineState, ts, elements, lines);
 				}
 			}
 
@@ -945,7 +945,7 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalPortAndDirectionLineBreak(string ps, IODirection d)
+		private void ProcessAndSignalPortAndDirectionLineBreak(DateTime ts, string ps, IODirection d)
 		{
 			if (this.bidirLineState.IsFirstChunk)
 			{
@@ -986,7 +986,7 @@ namespace YAT.Domain
 							var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							var lines = new List<DisplayLine>();
 
-							ExecuteLineEnd(lineState, elements, lines);
+							ExecuteLineEnd(lineState, ts, elements, lines);
 
 							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
 							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
@@ -1000,7 +1000,7 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalLineBreak(IODirection d)
+		private void ProcessAndSignalLineBreak(DateTime ts, IODirection d)
 		{
 			LineState lineState;
 			switch (d)
@@ -1016,7 +1016,7 @@ namespace YAT.Domain
 				var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				var lines = new List<DisplayLine>();
 
-				ExecuteLineEnd(lineState, elements, lines);
+				ExecuteLineEnd(lineState, ts, elements, lines);
 
 				OnDisplayElementsProcessed(d, elements);
 				OnDisplayLinesProcessed(d, lines);
@@ -1027,14 +1027,14 @@ namespace YAT.Domain
 		protected override void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
 		{
 			// Check whether port or direction has changed:
-			ProcessAndSignalPortAndDirectionLineBreak(raw.PortStamp, raw.Direction);
+			ProcessAndSignalPortAndDirectionLineBreak(raw.TimeStamp, raw.PortStamp, raw.Direction);
 
 			// Process the raw chunk:
 			base.ProcessAndSignalRawChunk(raw, highlight);
 
 			// Enforce line break if requested:
 			if (TerminalSettings.Display.ChunkLineBreakEnabled)
-				ProcessAndSignalLineBreak(raw.Direction);
+				ProcessAndSignalLineBreak(raw.TimeStamp, raw.Direction);
 		}
 
 		#endregion
@@ -1136,12 +1136,12 @@ namespace YAT.Domain
 
 		private void txTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalLineBreak(IODirection.Tx);
+			ProcessAndSignalLineBreak(DateTime.Now, IODirection.Tx);
 		}
 
 		private void rxTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalLineBreak(IODirection.Rx);
+			ProcessAndSignalLineBreak(DateTime.Now, IODirection.Rx);
 		}
 
 		#endregion

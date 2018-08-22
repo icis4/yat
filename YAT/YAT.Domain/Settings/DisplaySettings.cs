@@ -82,6 +82,9 @@ namespace YAT.Domain.Settings
 		public const bool ShowDurationDefault = false;
 
 		/// <summary></summary>
+		public const string TimeDurationFormatDefault = TimeDeltaFormatPresetEx.DefaultFormat;
+
+		/// <summary></summary>
 		public const int MaxLineCountDefault = 1000;
 
 		/// <summary></summary>
@@ -122,6 +125,7 @@ namespace YAT.Domain.Settings
 		private bool   showDirection;
 		private bool   showLength;
 		private bool   showDuration;
+		private string timeDurationFormat;
 		private int    maxLineCount;
 		private int    maxBytePerLineCount;
 		private bool   showCopyOfActiveLine;
@@ -175,6 +179,7 @@ namespace YAT.Domain.Settings
 			ShowDirection         = rhs.ShowDirection;
 			ShowLength            = rhs.ShowLength;
 			ShowDuration          = rhs.ShowDuration;
+			TimeDurationFormat    = rhs.TimeDurationFormat;
 			MaxLineCount          = rhs.MaxLineCount;
 			MaxBytePerLineCount   = rhs.MaxBytePerLineCount;
 			ShowCopyOfActiveLine  = rhs.ShowCopyOfActiveLine;
@@ -213,6 +218,7 @@ namespace YAT.Domain.Settings
 			ShowDirection         = ShowDirectionDefault;
 			ShowLength            = ShowLengthDefault;
 			ShowDuration          = ShowDurationDefault;
+			TimeDurationFormat    = TimeDurationFormatDefault;
 			MaxLineCount          = MaxLineCountDefault;
 			MaxBytePerLineCount   = MaxBytePerLineCountDefault;
 			ShowCopyOfActiveLine  = ShowCopyOfActiveLineDefault;
@@ -508,7 +514,10 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This option is currently fixed to the byte count. Could potentially be extended such it
+		/// shows the character count for multi-byte encodings (string/character/Unicode radix).
+		/// </remarks>
 		[XmlElement("ShowLength")]
 		public virtual bool ShowLength
 		{
@@ -523,10 +532,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>
-		/// This option is currently fixed to the byte count. Could potentially be extended such it
-		/// shows the character count for multi-byte encodings (string/character/Unicode radix).
-		/// </remarks>
+		/// <summary></summary>
 		[XmlElement("ShowDuration")]
 		public virtual bool ShowDuration
 		{
@@ -536,6 +542,21 @@ namespace YAT.Domain.Settings
 				if (this.showDuration != value)
 				{
 					this.showDuration = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TimeDurationFormat")]
+		public virtual string TimeDurationFormat
+		{
+			get { return (this.timeDurationFormat); }
+			set
+			{
+				if (this.timeDurationFormat != value)
+				{
+					this.timeDurationFormat = value;
 					SetMyChanged();
 				}
 			}
@@ -765,6 +786,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ ShowDirection        .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowLength           .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowDuration         .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ MaxLineCount         .GetHashCode();
 				hashCode = (hashCode * 397) ^ MaxBytePerLineCount  .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowCopyOfActiveLine .GetHashCode();
@@ -805,26 +827,27 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SeparateTxRxRadix    .Equals(other.SeparateTxRxRadix)          &&
-				TxRadix              .Equals(other.TxRadix)                    &&
-				RxRadix              .Equals(other.RxRadix)                    &&
-				ShowRadix            .Equals(other.ShowRadix)                  &&
-				ShowBufferLineNumbers.Equals(other.ShowBufferLineNumbers)      &&
-				ShowTotalLineNumbers .Equals(other.ShowTotalLineNumbers)       &&
-				ShowTimeStamp        .Equals(other.ShowTimeStamp)              &&
-				StringEx.EqualsOrdinal(TimeStampFormat, other.TimeStampFormat) &&
-				TimeStampUseUtc      .Equals(other.TimeStampUseUtc)            &&
-				ShowTimeSpan         .Equals(other.ShowTimeSpan)               &&
-				StringEx.EqualsOrdinal(TimeSpanFormat, other.TimeSpanFormat)   &&
-				ShowTimeDelta        .Equals(other.ShowTimeDelta)              &&
-				StringEx.EqualsOrdinal(TimeDeltaFormat, other.TimeDeltaFormat) &&
-				ShowPort             .Equals(other.ShowPort)                   &&
-				ShowDirection        .Equals(other.ShowDirection)              &&
-				ShowLength           .Equals(other.ShowLength)                 &&
-				ShowDuration         .Equals(other.ShowDuration)               &&
-				MaxLineCount         .Equals(other.MaxLineCount)               &&
-				MaxBytePerLineCount  .Equals(other.MaxBytePerLineCount)        &&
-				ShowCopyOfActiveLine .Equals(other.ShowCopyOfActiveLine)       &&
+				SeparateTxRxRadix    .Equals(other.SeparateTxRxRadix)                &&
+				TxRadix              .Equals(other.TxRadix)                          &&
+				RxRadix              .Equals(other.RxRadix)                          &&
+				ShowRadix            .Equals(other.ShowRadix)                        &&
+				ShowBufferLineNumbers.Equals(other.ShowBufferLineNumbers)            &&
+				ShowTotalLineNumbers .Equals(other.ShowTotalLineNumbers)             &&
+				ShowTimeStamp        .Equals(other.ShowTimeStamp)                    &&
+				StringEx.EqualsOrdinal(TimeStampFormat, other.TimeStampFormat)       &&
+				TimeStampUseUtc      .Equals(other.TimeStampUseUtc)                  &&
+				ShowTimeSpan         .Equals(other.ShowTimeSpan)                     &&
+				StringEx.EqualsOrdinal(TimeSpanFormat, other.TimeSpanFormat)         &&
+				ShowTimeDelta        .Equals(other.ShowTimeDelta)                    &&
+				StringEx.EqualsOrdinal(TimeDeltaFormat, other.TimeDeltaFormat)       &&
+				ShowPort             .Equals(other.ShowPort)                         &&
+				ShowDirection        .Equals(other.ShowDirection)                    &&
+				ShowLength           .Equals(other.ShowLength)                       &&
+				ShowDuration         .Equals(other.ShowDuration)                     &&
+				StringEx.EqualsOrdinal(TimeDurationFormat, other.TimeDurationFormat) &&
+				MaxLineCount         .Equals(other.MaxLineCount)                     &&
+				MaxBytePerLineCount  .Equals(other.MaxBytePerLineCount)              &&
+				ShowCopyOfActiveLine .Equals(other.ShowCopyOfActiveLine)             &&
 
 				PortLineBreakEnabled     .Equals(other.PortLineBreakEnabled)      &&
 				DirectionLineBreakEnabled.Equals(other.DirectionLineBreakEnabled) &&

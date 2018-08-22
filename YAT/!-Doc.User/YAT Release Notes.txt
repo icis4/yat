@@ -95,6 +95,7 @@ New:
   that let a connected device change its baud rate. See [Help > Contents...] for example usage.
 - Additional automatic action [Clear Monitor on Subsequent Receiving] added (feature request #357).
   Useful for screen/page synchronization on terminal-like behavior.
+- Additional option [View > Show Duration (Line)] (feature request #348).
 
 Important changes:
 - Prevention of potential handling error when copying data to clipboard (feature request #345).

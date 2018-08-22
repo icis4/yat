@@ -2784,7 +2784,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
 			    TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				lp = new DisplayLinePart(8); // Preset the required capacity to improve memory management.
+				lp = new DisplayLinePart(10); // Preset the required capacity to improve memory management.
 
 				if (TerminalSettings.Display.ShowTimeStamp)
 				{
@@ -2801,6 +2801,7 @@ namespace YAT.Domain
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
+
 				if (TerminalSettings.Display.ShowTimeDelta)
 				{
 					lp.Add(new DisplayElement.TimeDeltaInfo(delta, TerminalSettings.Display.TimeDeltaFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
@@ -2808,6 +2809,7 @@ namespace YAT.Domain
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
+
 				if (TerminalSettings.Display.ShowPort)
 				{
 					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
@@ -2833,16 +2835,28 @@ namespace YAT.Domain
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		protected virtual void PrepareLineEndInfo(int byteCount, out DisplayLinePart lp)
+		protected virtual void PrepareLineEndInfo(int byteCount, TimeSpan duration, out DisplayLinePart lp)
 		{
-			if (TerminalSettings.Display.ShowLength) // = byte count.
+			if (TerminalSettings.Display.ShowLength || // = byte count.
+			    TerminalSettings.Display.ShowDuration) // = line duration.
 			{
-				lp = new DisplayLinePart(2); // Preset the required capacity to improve memory management.
+				lp = new DisplayLinePart(4); // Preset the required capacity to improve memory management.
 
-				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-					lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+				if (TerminalSettings.Display.ShowLength)
+				{
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 
-				lp.Add(new DisplayElement.DataLength(byteCount, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
+					lp.Add(new DisplayElement.DataLength(byteCount, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
+				}
+
+				if (TerminalSettings.Display.ShowDuration)
+				{
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+
+					lp.Add(new DisplayElement.TimeDurationInfo(duration, TerminalSettings.Display.TimeDurationFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
+				}
 			}
 			else
 			{
