@@ -1147,7 +1147,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineEnd(LineState lineState, string ps, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
@@ -1184,10 +1184,10 @@ namespace YAT.Domain
 
 			// Process line length:
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
-			if (TerminalSettings.Display.ShowLength) // = byte count.
+			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(line.ByteCount, out info);
+				PrepareLineEndInfo(line.ByteCount, (ts - lineState.TimeStamp), out info);
 				lp.AddRange(info);
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
@@ -1245,12 +1245,12 @@ namespace YAT.Domain
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
-					ExecuteLineEnd(lineState, raw.PortStamp, elements, lines);
+					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elements, lines);
 			}
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalPortOrDirectionLineBreak(string ps, IODirection d)
+		private void ProcessAndSignalPortOrDirectionLineBreak(DateTime ts, string ps, IODirection d)
 		{
 			if (this.bidirLineState.IsFirstChunk)
 			{
@@ -1291,7 +1291,7 @@ namespace YAT.Domain
 							var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							var lines = new List<DisplayLine>();
 
-							ExecuteLineEnd(lineState, ps, elements, lines);
+							ExecuteLineEnd(lineState, ts, ps, elements, lines);
 
 							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
 							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
@@ -1305,7 +1305,7 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalLineBreak(string ps, IODirection d)
+		private void ProcessAndSignalLineBreak(DateTime ts, string ps, IODirection d)
 		{
 			LineState lineState;
 			switch (d)
@@ -1321,7 +1321,7 @@ namespace YAT.Domain
 				var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				var lines = new List<DisplayLine>();
 
-				ExecuteLineEnd(lineState, ps, elements, lines);
+				ExecuteLineEnd(lineState, ts, ps, elements, lines);
 
 				OnDisplayElementsProcessed(d, elements);
 				OnDisplayLinesProcessed(d, lines);
@@ -1332,14 +1332,14 @@ namespace YAT.Domain
 		protected override void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
 		{
 			// Check whether port or direction has changed:
-			ProcessAndSignalPortOrDirectionLineBreak(raw.PortStamp, raw.Direction);
+			ProcessAndSignalPortOrDirectionLineBreak(raw.TimeStamp, raw.PortStamp, raw.Direction);
 
 			// Process the raw chunk:
 			base.ProcessAndSignalRawChunk(raw, highlight);
 
 			// Enforce line break if requested:
 			if (TerminalSettings.Display.ChunkLineBreakEnabled)
-				ProcessAndSignalLineBreak(raw.PortStamp, raw.Direction);
+				ProcessAndSignalLineBreak(raw.TimeStamp, raw.PortStamp, raw.Direction);
 		}
 
 		#endregion

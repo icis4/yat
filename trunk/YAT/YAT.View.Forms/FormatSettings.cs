@@ -62,6 +62,7 @@ namespace YAT.View.Forms
 		private string timeStampFormat;
 		private string timeSpanFormat;
 		private string timeDeltaFormat;
+		private string timeDurationFormat;
 
 		private Domain.InfoSeparatorEx infoSeparator;
 		private Domain.InfoEnclosureEx infoEnclosure;
@@ -77,7 +78,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Format.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure, bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat)
+		public FormatSettings(Format.Settings.FormatSettings formatSettings, int[] customColors, Domain.InfoSeparatorEx infoSeparator, Domain.InfoEnclosureEx infoEnclosure, bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat, string timeDurationFormat)
 		{
 			InitializeComponent();
 
@@ -91,10 +92,11 @@ namespace YAT.View.Forms
 			this.infoSeparator = infoSeparator;
 			this.infoEnclosure = infoEnclosure;
 
-			this.timeStampUseUtc = timeStampUseUtc;
-			this.timeStampFormat = timeStampFormat;
-			this.timeSpanFormat  = timeSpanFormat;
-			this.timeDeltaFormat = timeDeltaFormat;
+			this.timeStampUseUtc    = timeStampUseUtc;
+			this.timeStampFormat    = timeStampFormat;
+			this.timeSpanFormat     = timeSpanFormat;
+			this.timeDeltaFormat    = timeDeltaFormat;
+			this.timeDurationFormat = timeDurationFormat;
 
 			InitializeControls();
 
@@ -158,6 +160,12 @@ namespace YAT.View.Forms
 			get { return (this.timeDeltaFormat); }
 		}
 
+		/// <summary></summary>
+		public string TimeDurationFormatResult
+		{
+			get { return (this.timeDurationFormat); }
+		}
+
 		#endregion
 
 		#region Form Event Handlers
@@ -186,9 +194,10 @@ namespace YAT.View.Forms
 		{
 			comboBox_InfoSeparator.OnFormDeactivateWorkaround();
 			comboBox_InfoEnclosure.OnFormDeactivateWorkaround();
-		////comboBox_TimeStampFormatPreset is a standard ComboBox.
-		////comboBox_TimeSpanFormatPreset  is a standard ComboBox.
-		////comboBox_TimeDeltaFormatPreset is a standard ComboBox.
+		////comboBox_TimeStampFormatPreset    is a standard ComboBox.
+		////comboBox_TimeSpanFormatPreset     is a standard ComboBox.
+		////comboBox_TimeDeltaFormatPreset    is a standard ComboBox.
+		////comboBox_TimeDurationFormatPreset is a standard ComboBox.
 		}
 
 		#endregion
@@ -564,6 +573,77 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void textBox_TimeDurationFormat_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			ValidateAndUpdateTimeDurationFormat(textBox_TimeDurationFormat.Text);
+		}
+
+		private void textBox_TimeDurationFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			if (!ValidateAndUpdateTimeDurationFormat(textBox_TimeDurationFormat.Text))
+				e.Cancel = true;
+		}
+
+		private bool ValidateAndUpdateTimeDurationFormat(string format)
+		{
+			try
+			{
+			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
+			////item.ToString(format);
+
+				this.timeDurationFormat = format;
+				SetControls();
+
+				return (true);
+			}
+			catch (FormatException ex)
+			{
+				string message = "Invalid time duration format!" + Environment.NewLine + Environment.NewLine +
+				                 "System error message:" + Environment.NewLine + ex.Message;
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				return (false);
+			}
+		}
+
+		private void comboBox_TimeDurationFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var preset = (comboBox_TimeDurationFormatPreset.SelectedItem as Domain.TimeDeltaFormatPresetEx); // Using TimeDelta too!
+			if (preset != null)
+			{
+				if (preset != Domain.TimeDeltaFormatPreset.None) // Using TimeDelta too!
+				{
+					this.timeDurationFormat = preset.ToFormat();
+					SetControls();
+				}
+				else
+				{
+					SetControls();
+				}
+			}
+			else
+			{
+				SetControls();
+			}
+		}
+
 		private void linkLabel_DateTimeFormat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			LinkHelper.TryBrowseUriAndShowErrorIfItFails(Parent, e);
@@ -605,10 +685,11 @@ namespace YAT.View.Forms
 				this.infoSeparator = Domain.Settings.DisplaySettings.InfoSeparatorDefault;
 				this.infoEnclosure = Domain.Settings.DisplaySettings.InfoEnclosureDefault;
 
-				this.timeStampUseUtc = Domain.Settings.DisplaySettings.TimeStampUseUtcDefault;
-				this.timeStampFormat = Domain.Settings.DisplaySettings.TimeStampFormatDefault;
-				this.timeSpanFormat  = Domain.Settings.DisplaySettings.TimeSpanFormatDefault;
-				this.timeDeltaFormat = Domain.Settings.DisplaySettings.TimeDeltaFormatDefault;
+				this.timeStampUseUtc    = Domain.Settings.DisplaySettings.TimeStampUseUtcDefault;
+				this.timeStampFormat    = Domain.Settings.DisplaySettings.TimeStampFormatDefault;
+				this.timeSpanFormat     = Domain.Settings.DisplaySettings.TimeSpanFormatDefault;
+				this.timeDeltaFormat    = Domain.Settings.DisplaySettings.TimeDeltaFormatDefault;
+				this.timeDurationFormat = Domain.Settings.DisplaySettings.TimeDurationFormatDefault;
 
 				SetControls();
 			}
@@ -629,7 +710,7 @@ namespace YAT.View.Forms
 				this.monitors = new Controls.Monitor[]
 				{
 					monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
-					monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta,
+					monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta, monitor_TimeDuration,
 					monitor_Port, monitor_Direction, monitor_Length,
 					monitor_Error,
 				};
@@ -637,7 +718,7 @@ namespace YAT.View.Forms
 				this.textFormats = new Controls.TextFormat[]
 				{
 					textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
-					textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta,
+					textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta, textFormat_TimeDuration,
 					textFormat_Port, textFormat_Direction, textFormat_Length,
 					textFormat_Error,
 				};
@@ -656,6 +737,9 @@ namespace YAT.View.Forms
 
 				comboBox_TimeDeltaFormatPreset.Items.Clear();
 				comboBox_TimeDeltaFormatPreset.Items.AddRange(Domain.TimeDeltaFormatPresetEx.GetItems());
+
+				comboBox_TimeDurationFormatPreset.Items.Clear();
+				comboBox_TimeDurationFormatPreset.Items.AddRange(Domain.TimeDeltaFormatPresetEx.GetItems()); // Using TimeDelta too!
 
 				var linkText = ".NET" + Environment.NewLine + "Date/Time Format";
 				var linkUri = @"https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings";
@@ -686,10 +770,11 @@ namespace YAT.View.Forms
 				case  4: return (this.formatSettingsInEdit.TimeStampFormat);
 				case  5: return (this.formatSettingsInEdit.TimeSpanFormat);
 				case  6: return (this.formatSettingsInEdit.TimeDeltaFormat);
-				case  7: return (this.formatSettingsInEdit.PortFormat);
-				case  8: return (this.formatSettingsInEdit.DirectionFormat);
-				case  9: return (this.formatSettingsInEdit.LengthFormat);
-				case 10: return (this.formatSettingsInEdit.ErrorFormat);
+				case  7: return (this.formatSettingsInEdit.TimeDurationFormat);
+				case  8: return (this.formatSettingsInEdit.PortFormat);
+				case  9: return (this.formatSettingsInEdit.DirectionFormat);
+				case 10: return (this.formatSettingsInEdit.LengthFormat);
+				case 11: return (this.formatSettingsInEdit.ErrorFormat);
 			}
 			throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "There is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -741,19 +826,23 @@ namespace YAT.View.Forms
 				textBox_TimeStampFormat.Text     = this.timeStampFormat;
 				textBox_TimeSpanFormat.Text      = this.timeSpanFormat;
 				textBox_TimeDeltaFormat.Text     = this.timeDeltaFormat;
+				textBox_TimeDurationFormat.Text  = this.timeDurationFormat;
 
 				// Try to automatically select the according presets:
 				Domain.TimeStampFormatPresetEx timeStampFormatPreset;
 				Domain.TimeSpanFormatPresetEx  timeSpanFormatPreset;
 				Domain.TimeDeltaFormatPresetEx timeDeltaFormatPreset;
+				Domain.TimeDeltaFormatPresetEx timeDurationFormatPreset; // Using TimeDelta too!
 
-				Domain.TimeStampFormatPresetEx.TryParse(this.timeStampFormat, out timeStampFormatPreset);
-				Domain.TimeSpanFormatPresetEx. TryParse(this.timeSpanFormat,  out timeSpanFormatPreset);
-				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDeltaFormat, out timeDeltaFormatPreset);
+				Domain.TimeStampFormatPresetEx.TryParse(this.timeStampFormat,    out timeStampFormatPreset);
+				Domain.TimeSpanFormatPresetEx. TryParse(this.timeSpanFormat,     out timeSpanFormatPreset);
+				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDeltaFormat,    out timeDeltaFormatPreset);
+				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDurationFormat, out timeDurationFormatPreset); // Using TimeDelta too!
 
-				ComboBoxHelper.Select(comboBox_TimeStampFormatPreset, timeStampFormatPreset);
-				ComboBoxHelper.Select(comboBox_TimeSpanFormatPreset,  timeSpanFormatPreset );
-				ComboBoxHelper.Select(comboBox_TimeDeltaFormatPreset, timeDeltaFormatPreset);
+				ComboBoxHelper.Select(comboBox_TimeStampFormatPreset,    timeStampFormatPreset);
+				ComboBoxHelper.Select(comboBox_TimeSpanFormatPreset,     timeSpanFormatPreset );
+				ComboBoxHelper.Select(comboBox_TimeDeltaFormatPreset,    timeDeltaFormatPreset);
+				ComboBoxHelper.Select(comboBox_TimeDurationFormatPreset, timeDurationFormatPreset);
 				                                //// Clone settings to ensure decoupling:
 				monitor_Example.FormatSettings = new Format.Settings.FormatSettings(this.formatSettingsInEdit);
 
@@ -777,7 +866,8 @@ namespace YAT.View.Forms
 		{
 			var now = DateTime.Now;
 			var diff = (now - this.initialTimeStamp);
-			var delta = new TimeSpan(0, 0, 0, 0, 0);
+			var delta = new TimeSpan(0, 0, 0, 0, 111); // 111 ms
+			var duration = new TimeSpan(0, 0, 0, 0, 22); // 22 ms
 
 			var infoSeparator      = this.infoSeparator.ToSeparator();
 			var infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
@@ -792,6 +882,7 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDurationInfo(duration, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight)));
@@ -818,6 +909,8 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(0x13, "<CR>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(duration, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
@@ -836,6 +929,8 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(0x10, "<LF>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(duration, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());

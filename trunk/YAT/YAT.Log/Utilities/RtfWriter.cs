@@ -78,6 +78,7 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor timeStampFormat;
 		private FormatDescriptor timeSpanFormat;
 		private FormatDescriptor timeDeltaFormat;
+		private FormatDescriptor timeDurationFormat;
 		private FormatDescriptor portFormat;
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
@@ -114,18 +115,19 @@ namespace YAT.Log.Utilities
 			this.alignment = Align.Left;
 
 			// Formats:
-			this.txDataFormat      = new FormatDescriptor(settings.TxDataFormat.FontStyle,      this.document.createColor(settings.TxDataFormat.Color),      this.document.createColor(settings.BackColor));
-			this.txControlFormat   = new FormatDescriptor(settings.TxControlFormat.FontStyle,   this.document.createColor(settings.TxControlFormat.Color),   this.document.createColor(settings.BackColor));
-			this.rxDataFormat      = new FormatDescriptor(settings.RxDataFormat.FontStyle,      this.document.createColor(settings.RxDataFormat.Color),      this.document.createColor(settings.BackColor));
-			this.rxControlFormat   = new FormatDescriptor(settings.RxControlFormat.FontStyle,   this.document.createColor(settings.RxControlFormat.Color),   this.document.createColor(settings.BackColor));
-			this.timeStampFormat   = new FormatDescriptor(settings.TimeStampFormat.FontStyle,   this.document.createColor(settings.TimeStampFormat.Color),   this.document.createColor(settings.BackColor));
-			this.timeSpanFormat    = new FormatDescriptor(settings.TimeSpanFormat.FontStyle,    this.document.createColor(settings.TimeSpanFormat.Color),    this.document.createColor(settings.BackColor));
-			this.timeDeltaFormat   = new FormatDescriptor(settings.TimeDeltaFormat.FontStyle,   this.document.createColor(settings.TimeDeltaFormat.Color),   this.document.createColor(settings.BackColor));
-			this.portFormat        = new FormatDescriptor(settings.PortFormat.FontStyle,        this.document.createColor(settings.PortFormat.Color),        this.document.createColor(settings.BackColor));
-			this.directionFormat   = new FormatDescriptor(settings.DirectionFormat.FontStyle,   this.document.createColor(settings.DirectionFormat.Color),   this.document.createColor(settings.BackColor));
-			this.lengthFormat      = new FormatDescriptor(settings.LengthFormat.FontStyle,      this.document.createColor(settings.LengthFormat.Color),      this.document.createColor(settings.BackColor));
-			this.whiteSpacesFormat = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle, this.document.createColor(settings.WhiteSpacesFormat.Color), this.document.createColor(settings.BackColor));
-			this.errorFormat       = new FormatDescriptor(settings.ErrorFormat.FontStyle,       this.document.createColor(settings.ErrorFormat.Color),       this.document.createColor(settings.BackColor));
+			this.txDataFormat       = new FormatDescriptor(settings.TxDataFormat.FontStyle,       this.document.createColor(settings.TxDataFormat.Color),       this.document.createColor(settings.BackColor));
+			this.txControlFormat    = new FormatDescriptor(settings.TxControlFormat.FontStyle,    this.document.createColor(settings.TxControlFormat.Color),    this.document.createColor(settings.BackColor));
+			this.rxDataFormat       = new FormatDescriptor(settings.RxDataFormat.FontStyle,       this.document.createColor(settings.RxDataFormat.Color),       this.document.createColor(settings.BackColor));
+			this.rxControlFormat    = new FormatDescriptor(settings.RxControlFormat.FontStyle,    this.document.createColor(settings.RxControlFormat.Color),    this.document.createColor(settings.BackColor));
+			this.timeStampFormat    = new FormatDescriptor(settings.TimeStampFormat.FontStyle,    this.document.createColor(settings.TimeStampFormat.Color),    this.document.createColor(settings.BackColor));
+			this.timeSpanFormat     = new FormatDescriptor(settings.TimeSpanFormat.FontStyle,     this.document.createColor(settings.TimeSpanFormat.Color),     this.document.createColor(settings.BackColor));
+			this.timeDeltaFormat    = new FormatDescriptor(settings.TimeDeltaFormat.FontStyle,    this.document.createColor(settings.TimeDeltaFormat.Color),    this.document.createColor(settings.BackColor));
+			this.timeDurationFormat = new FormatDescriptor(settings.TimeDurationFormat.FontStyle, this.document.createColor(settings.TimeDurationFormat.Color), this.document.createColor(settings.BackColor));
+			this.portFormat         = new FormatDescriptor(settings.PortFormat.FontStyle,         this.document.createColor(settings.PortFormat.Color),         this.document.createColor(settings.BackColor));
+			this.directionFormat    = new FormatDescriptor(settings.DirectionFormat.FontStyle,    this.document.createColor(settings.DirectionFormat.Color),    this.document.createColor(settings.BackColor));
+			this.lengthFormat       = new FormatDescriptor(settings.LengthFormat.FontStyle,       this.document.createColor(settings.LengthFormat.Color),       this.document.createColor(settings.BackColor));
+			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle,  this.document.createColor(settings.WhiteSpacesFormat.Color),  this.document.createColor(settings.BackColor));
+			this.errorFormat        = new FormatDescriptor(settings.ErrorFormat.FontStyle,        this.document.createColor(settings.ErrorFormat.Color),        this.document.createColor(settings.BackColor));
 
 			// Header:
 			var header = this.document.Header.addParagraph();
@@ -149,22 +151,23 @@ namespace YAT.Log.Utilities
 
 		private void SetFormat(DisplayElement element, out FormatDescriptor format)
 		{
-			if      ( element is DisplayElement.TxData)        { format = this.txDataFormat;     }
-			else if ( element is DisplayElement.TxControl)     { format = this.txControlFormat;  }
-			else if ( element is DisplayElement.RxData)        { format = this.rxDataFormat;     }
-			else if ( element is DisplayElement.RxControl)     { format = this.rxControlFormat;  }
-			else if ( element is DisplayElement.TimeStampInfo) { format = this.timeStampFormat;  }
-			else if ( element is DisplayElement.TimeSpanInfo)  { format = this.timeSpanFormat;   }
-			else if ( element is DisplayElement.TimeDeltaInfo) { format = this.timeDeltaFormat;  }
-			else if ( element is DisplayElement.PortInfo)      { format = this.portFormat;       }
-			else if ( element is DisplayElement.DirectionInfo) { format = this.directionFormat;  }
-			else if ( element is DisplayElement.DataLength)    { format = this.lengthFormat;     }
+			if      ( element is DisplayElement.TxData)           { format = this.txDataFormat;       }
+			else if ( element is DisplayElement.TxControl)        { format = this.txControlFormat;    }
+			else if ( element is DisplayElement.RxData)           { format = this.rxDataFormat;       }
+			else if ( element is DisplayElement.RxControl)        { format = this.rxControlFormat;    }
+			else if ( element is DisplayElement.TimeStampInfo)    { format = this.timeStampFormat;    }
+			else if ( element is DisplayElement.TimeSpanInfo)     { format = this.timeSpanFormat;     }
+			else if ( element is DisplayElement.TimeDeltaInfo)    { format = this.timeDeltaFormat;    }
+			else if ( element is DisplayElement.TimeDurationInfo) { format = this.timeDurationFormat; }
+			else if ( element is DisplayElement.PortInfo)         { format = this.portFormat;         }
+			else if ( element is DisplayElement.DirectionInfo)    { format = this.directionFormat;    }
+			else if ( element is DisplayElement.DataLength)       { format = this.lengthFormat;       }
 			else if ((element is DisplayElement.Nonentity) ||
 			         (element is DisplayElement.DataSpace) ||
 			         (element is DisplayElement.InfoSeparator) ||
 			         (element is DisplayElement.LineStart) ||
-			         (element is DisplayElement.LineBreak))    { format = this.whiteSpacesFormat; }
-			else if ( element is DisplayElement.ErrorInfo)     { format = this.errorFormat;       }
+			         (element is DisplayElement.LineBreak))       { format = this.whiteSpacesFormat;  }
+			else if ( element is DisplayElement.ErrorInfo)        { format = this.errorFormat;        }
 			else
 			{
 				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + element.GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

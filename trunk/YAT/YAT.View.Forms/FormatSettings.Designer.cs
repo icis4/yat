@@ -54,6 +54,7 @@ namespace YAT.View.Forms
 			this.monitor_Length = new YAT.View.Controls.Monitor();
 			this.monitor_TimeSpan = new YAT.View.Controls.Monitor();
 			this.monitor_TimeDelta = new YAT.View.Controls.Monitor();
+			this.monitor_TimeDuration = new YAT.View.Controls.Monitor();
 			this.monitor_RxControl = new YAT.View.Controls.Monitor();
 			this.monitor_RxData = new YAT.View.Controls.Monitor();
 			this.monitor_TxControl = new YAT.View.Controls.Monitor();
@@ -62,6 +63,7 @@ namespace YAT.View.Forms
 			this.label_Length = new System.Windows.Forms.Label();
 			this.label_TimeSpan = new System.Windows.Forms.Label();
 			this.label_TimeDelta = new System.Windows.Forms.Label();
+			this.label_TimeDuration = new System.Windows.Forms.Label();
 			this.label_RxControl = new System.Windows.Forms.Label();
 			this.label_RxData = new System.Windows.Forms.Label();
 			this.label_TxControl = new System.Windows.Forms.Label();
@@ -70,6 +72,7 @@ namespace YAT.View.Forms
 			this.textFormat_Length = new YAT.View.Controls.TextFormat();
 			this.textFormat_TimeSpan = new YAT.View.Controls.TextFormat();
 			this.textFormat_TimeDelta = new YAT.View.Controls.TextFormat();
+			this.textFormat_TimeDuration = new YAT.View.Controls.TextFormat();
 			this.textFormat_RxControl = new YAT.View.Controls.TextFormat();
 			this.textFormat_RxData = new YAT.View.Controls.TextFormat();
 			this.textFormat_TxControl = new YAT.View.Controls.TextFormat();
@@ -78,6 +81,7 @@ namespace YAT.View.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.label_Example = new System.Windows.Forms.Label();
 			this.groupBox_Options = new System.Windows.Forms.GroupBox();
+			this.textBox_TimeDurationFormat = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_TimeStampUseUtc = new System.Windows.Forms.CheckBox();
 			this.label_Reference = new System.Windows.Forms.Label();
 			this.label_Presets = new System.Windows.Forms.Label();
@@ -92,6 +96,8 @@ namespace YAT.View.Forms
 			this.label_TimeDeltaFormat = new System.Windows.Forms.Label();
 			this.comboBox_TimeDeltaFormatPreset = new System.Windows.Forms.ComboBox();
 			this.textBox_TimeDeltaFormat = new MKY.Windows.Forms.TextBoxEx();
+			this.label_TimeDurationFormat = new System.Windows.Forms.Label();
+			this.comboBox_TimeDurationFormatPreset = new System.Windows.Forms.ComboBox();
 			this.label_InfoEnclosure = new System.Windows.Forms.Label();
 			this.label_InfoSeparator = new System.Windows.Forms.Label();
 			this.comboBox_InfoEnclosure = new MKY.Windows.Forms.ComboBoxEx();
@@ -148,6 +154,7 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.Controls.Add(this.monitor_Length);
 			this.groupBox_Elements.Controls.Add(this.monitor_TimeSpan);
 			this.groupBox_Elements.Controls.Add(this.monitor_TimeDelta);
+			this.groupBox_Elements.Controls.Add(this.monitor_TimeDuration);
 			this.groupBox_Elements.Controls.Add(this.monitor_RxControl);
 			this.groupBox_Elements.Controls.Add(this.monitor_RxData);
 			this.groupBox_Elements.Controls.Add(this.monitor_TxControl);
@@ -156,6 +163,7 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.Controls.Add(this.label_Length);
 			this.groupBox_Elements.Controls.Add(this.label_TimeSpan);
 			this.groupBox_Elements.Controls.Add(this.label_TimeDelta);
+			this.groupBox_Elements.Controls.Add(this.label_TimeDuration);
 			this.groupBox_Elements.Controls.Add(this.label_RxControl);
 			this.groupBox_Elements.Controls.Add(this.label_RxData);
 			this.groupBox_Elements.Controls.Add(this.label_TxControl);
@@ -164,6 +172,7 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.Controls.Add(this.textFormat_Length);
 			this.groupBox_Elements.Controls.Add(this.textFormat_TimeSpan);
 			this.groupBox_Elements.Controls.Add(this.textFormat_TimeDelta);
+			this.groupBox_Elements.Controls.Add(this.textFormat_TimeDuration);
 			this.groupBox_Elements.Controls.Add(this.textFormat_RxControl);
 			this.groupBox_Elements.Controls.Add(this.textFormat_RxData);
 			this.groupBox_Elements.Controls.Add(this.textFormat_TxControl);
@@ -171,17 +180,17 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.Controls.Add(this.button_Font);
 			this.groupBox_Elements.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Elements.Name = "groupBox_Elements";
-			this.groupBox_Elements.Size = new System.Drawing.Size(713, 398);
+			this.groupBox_Elements.Size = new System.Drawing.Size(713, 427);
 			this.groupBox_Elements.TabIndex = 0;
 			this.groupBox_Elements.TabStop = false;
 			this.groupBox_Elements.Text = "Elements";
 			// 
 			// label_Remark3
 			// 
-			this.label_Remark3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Remark3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remark3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remark3.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Remark3.Location = new System.Drawing.Point(611, 364);
+			this.label_Remark3.Location = new System.Drawing.Point(611, 393);
 			this.label_Remark3.Name = "label_Remark3";
 			this.label_Remark3.Size = new System.Drawing.Size(96, 26);
 			this.label_Remark3.TabIndex = 35;
@@ -201,23 +210,23 @@ namespace YAT.View.Forms
 			// 
 			// textFormat_Port
 			// 
-			this.textFormat_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Port.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Port.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Port.Location = new System.Drawing.Point(373, 249);
+			this.textFormat_Port.Location = new System.Drawing.Point(373, 278);
 			this.textFormat_Port.Name = "textFormat_Port";
 			this.textFormat_Port.Size = new System.Drawing.Size(232, 23);
 			this.textFormat_Port.TabIndex = 24;
-			this.textFormat_Port.Tag = "7";
+			this.textFormat_Port.Tag = "8";
 			this.textFormat_Port.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_Port.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// monitor_Port
 			// 
 			this.monitor_Port.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.monitor_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Port.Location = new System.Drawing.Point(88, 249);
+			this.monitor_Port.Location = new System.Drawing.Point(88, 278);
 			this.monitor_Port.Name = "monitor_Port";
 			this.monitor_Port.ShowStatusPanel = false;
 			this.monitor_Port.Size = new System.Drawing.Size(275, 23);
@@ -227,8 +236,9 @@ namespace YAT.View.Forms
 			// 
 			// label_Port
 			// 
+			this.label_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Port.AutoSize = true;
-			this.label_Port.Location = new System.Drawing.Point(12, 255);
+			this.label_Port.Location = new System.Drawing.Point(12, 283);
 			this.label_Port.Name = "label_Port";
 			this.label_Port.Size = new System.Drawing.Size(29, 13);
 			this.label_Port.TabIndex = 22;
@@ -239,11 +249,11 @@ namespace YAT.View.Forms
 			this.label_Remark2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remark2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remark2.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Remark2.Location = new System.Drawing.Point(611, 273);
+			this.label_Remark2.Location = new System.Drawing.Point(611, 297);
 			this.label_Remark2.Name = "label_Remark2";
 			this.label_Remark2.Size = new System.Drawing.Size(96, 63);
 			this.label_Remark2.TabIndex = 36;
-			this.label_Remark2.Text = "Style and color separately for each format.";
+			this.label_Remark2.Text = "Style and color\r\nper format.";
 			this.label_Remark2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_Remark1
@@ -251,7 +261,7 @@ namespace YAT.View.Forms
 			this.label_Remark1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remark1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remark1.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Remark1.Location = new System.Drawing.Point(611, 219);
+			this.label_Remark1.Location = new System.Drawing.Point(611, 234);
 			this.label_Remark1.Name = "label_Remark1";
 			this.label_Remark1.Size = new System.Drawing.Size(96, 26);
 			this.label_Remark1.TabIndex = 37;
@@ -260,8 +270,8 @@ namespace YAT.View.Forms
 			// 
 			// button_Background
 			// 
-			this.button_Background.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Background.Location = new System.Drawing.Point(469, 365);
+			this.button_Background.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Background.Location = new System.Drawing.Point(469, 394);
 			this.button_Background.Name = "button_Background";
 			this.button_Background.Size = new System.Drawing.Size(136, 23);
 			this.button_Background.TabIndex = 34;
@@ -306,23 +316,23 @@ namespace YAT.View.Forms
 			// 
 			// textFormat_Direction
 			// 
-			this.textFormat_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Direction.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Direction.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Direction.Location = new System.Drawing.Point(373, 278);
+			this.textFormat_Direction.Location = new System.Drawing.Point(373, 307);
 			this.textFormat_Direction.Name = "textFormat_Direction";
 			this.textFormat_Direction.Size = new System.Drawing.Size(232, 23);
 			this.textFormat_Direction.TabIndex = 27;
-			this.textFormat_Direction.Tag = "8";
+			this.textFormat_Direction.Tag = "9";
 			this.textFormat_Direction.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_Direction.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// monitor_Direction
 			// 
 			this.monitor_Direction.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.monitor_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Direction.Location = new System.Drawing.Point(88, 278);
+			this.monitor_Direction.Location = new System.Drawing.Point(88, 307);
 			this.monitor_Direction.Name = "monitor_Direction";
 			this.monitor_Direction.ShowStatusPanel = false;
 			this.monitor_Direction.Size = new System.Drawing.Size(275, 23);
@@ -332,8 +342,9 @@ namespace YAT.View.Forms
 			// 
 			// label_Direction
 			// 
+			this.label_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Direction.AutoSize = true;
-			this.label_Direction.Location = new System.Drawing.Point(12, 283);
+			this.label_Direction.Location = new System.Drawing.Point(12, 312);
 			this.label_Direction.Name = "label_Direction";
 			this.label_Direction.Size = new System.Drawing.Size(52, 13);
 			this.label_Direction.TabIndex = 25;
@@ -342,9 +353,9 @@ namespace YAT.View.Forms
 			// monitor_Error
 			// 
 			this.monitor_Error.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Error.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.monitor_Error.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Error.Location = new System.Drawing.Point(88, 336);
+			this.monitor_Error.Location = new System.Drawing.Point(88, 365);
 			this.monitor_Error.Name = "monitor_Error";
 			this.monitor_Error.ShowStatusPanel = false;
 			this.monitor_Error.Size = new System.Drawing.Size(275, 23);
@@ -355,9 +366,9 @@ namespace YAT.View.Forms
 			// monitor_Length
 			// 
 			this.monitor_Length.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Length.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.monitor_Length.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Length.Location = new System.Drawing.Point(88, 307);
+			this.monitor_Length.Location = new System.Drawing.Point(88, 336);
 			this.monitor_Length.Name = "monitor_Length";
 			this.monitor_Length.ShowStatusPanel = false;
 			this.monitor_Length.Size = new System.Drawing.Size(275, 23);
@@ -390,6 +401,19 @@ namespace YAT.View.Forms
 			this.monitor_TimeDelta.TabIndex = 20;
 			this.monitor_TimeDelta.TabStop = false;
 			this.monitor_TimeDelta.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			// 
+			// monitor_TimeDuration
+			// 
+			this.monitor_TimeDuration.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_TimeDuration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.monitor_TimeDuration.Location = new System.Drawing.Point(88, 249);
+			this.monitor_TimeDuration.Name = "monitor_TimeDuration";
+			this.monitor_TimeDuration.ShowStatusPanel = false;
+			this.monitor_TimeDuration.Size = new System.Drawing.Size(275, 23);
+			this.monitor_TimeDuration.TabIndex = 20;
+			this.monitor_TimeDuration.TabStop = false;
+			this.monitor_TimeDuration.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_RxControl
 			// 
@@ -445,8 +469,9 @@ namespace YAT.View.Forms
 			// 
 			// label_Error
 			// 
+			this.label_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Error.AutoSize = true;
-			this.label_Error.Location = new System.Drawing.Point(12, 341);
+			this.label_Error.Location = new System.Drawing.Point(12, 370);
 			this.label_Error.Name = "label_Error";
 			this.label_Error.Size = new System.Drawing.Size(32, 13);
 			this.label_Error.TabIndex = 31;
@@ -454,8 +479,9 @@ namespace YAT.View.Forms
 			// 
 			// label_Length
 			// 
+			this.label_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Length.AutoSize = true;
-			this.label_Length.Location = new System.Drawing.Point(12, 312);
+			this.label_Length.Location = new System.Drawing.Point(12, 341);
 			this.label_Length.Name = "label_Length";
 			this.label_Length.Size = new System.Drawing.Size(43, 13);
 			this.label_Length.TabIndex = 28;
@@ -464,7 +490,7 @@ namespace YAT.View.Forms
 			// label_TimeSpan
 			// 
 			this.label_TimeSpan.AutoSize = true;
-			this.label_TimeSpan.Location = new System.Drawing.Point(12, 195);
+			this.label_TimeSpan.Location = new System.Drawing.Point(12, 196);
 			this.label_TimeSpan.Name = "label_TimeSpan";
 			this.label_TimeSpan.Size = new System.Drawing.Size(61, 13);
 			this.label_TimeSpan.TabIndex = 16;
@@ -473,11 +499,20 @@ namespace YAT.View.Forms
 			// label_TimeDelta
 			// 
 			this.label_TimeDelta.AutoSize = true;
-			this.label_TimeDelta.Location = new System.Drawing.Point(12, 226);
+			this.label_TimeDelta.Location = new System.Drawing.Point(12, 225);
 			this.label_TimeDelta.Name = "label_TimeDelta";
 			this.label_TimeDelta.Size = new System.Drawing.Size(61, 13);
 			this.label_TimeDelta.TabIndex = 19;
 			this.label_TimeDelta.Text = "Tim&e Delta:";
+			// 
+			// label_TimeDuration
+			// 
+			this.label_TimeDuration.AutoSize = true;
+			this.label_TimeDuration.Location = new System.Drawing.Point(12, 254);
+			this.label_TimeDuration.Name = "label_TimeDuration";
+			this.label_TimeDuration.Size = new System.Drawing.Size(61, 13);
+			this.label_TimeDuration.TabIndex = 19;
+			this.label_TimeDuration.Text = "Time D&uration:";
 			// 
 			// label_RxControl
 			// 
@@ -517,27 +552,27 @@ namespace YAT.View.Forms
 			// 
 			// textFormat_Error
 			// 
-			this.textFormat_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Error.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Error.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Error.Location = new System.Drawing.Point(373, 336);
+			this.textFormat_Error.Location = new System.Drawing.Point(373, 365);
 			this.textFormat_Error.Name = "textFormat_Error";
 			this.textFormat_Error.Size = new System.Drawing.Size(232, 23);
 			this.textFormat_Error.TabIndex = 33;
-			this.textFormat_Error.Tag = "10";
+			this.textFormat_Error.Tag = "11";
 			this.textFormat_Error.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_Error.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_Length
 			// 
-			this.textFormat_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Length.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Length.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Length.Location = new System.Drawing.Point(373, 307);
+			this.textFormat_Length.Location = new System.Drawing.Point(373, 336);
 			this.textFormat_Length.Name = "textFormat_Length";
 			this.textFormat_Length.Size = new System.Drawing.Size(232, 23);
 			this.textFormat_Length.TabIndex = 30;
-			this.textFormat_Length.Tag = "9";
+			this.textFormat_Length.Tag = "10";
 			this.textFormat_Length.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_Length.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
@@ -566,6 +601,19 @@ namespace YAT.View.Forms
 			this.textFormat_TimeDelta.Tag = "6";
 			this.textFormat_TimeDelta.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_TimeDelta.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
+			// 
+			// textFormat_TimeDuration
+			// 
+			this.textFormat_TimeDuration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_TimeDuration.FormatColor = System.Drawing.Color.Black;
+			this.textFormat_TimeDuration.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
+			this.textFormat_TimeDuration.Location = new System.Drawing.Point(373, 249);
+			this.textFormat_TimeDuration.Name = "textFormat_TimeDuration";
+			this.textFormat_TimeDuration.Size = new System.Drawing.Size(232, 23);
+			this.textFormat_TimeDuration.TabIndex = 21;
+			this.textFormat_TimeDuration.Tag = "7";
+			this.textFormat_TimeDuration.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_TimeDuration.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// textFormat_RxControl
 			// 
@@ -622,7 +670,7 @@ namespace YAT.View.Forms
 			// button_Font
 			// 
 			this.button_Font.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Font.Location = new System.Drawing.Point(620, 190);
+			this.button_Font.Location = new System.Drawing.Point(620, 205);
 			this.button_Font.Name = "button_Font";
 			this.button_Font.Size = new System.Drawing.Size(75, 23);
 			this.button_Font.TabIndex = 38;
@@ -632,7 +680,7 @@ namespace YAT.View.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(742, 202);
+			this.button_Defaults.Location = new System.Drawing.Point(742, 217);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 6;
@@ -643,7 +691,7 @@ namespace YAT.View.Forms
 			// 
 			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
-			this.label_Example.Location = new System.Drawing.Point(24, 604);
+			this.label_Example.Location = new System.Drawing.Point(24, 662);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(50, 13);
 			this.label_Example.TabIndex = 2;
@@ -653,6 +701,7 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Options.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Options.Controls.Add(this.textBox_TimeDurationFormat);
 			this.groupBox_Options.Controls.Add(this.checkBox_TimeStampUseUtc);
 			this.groupBox_Options.Controls.Add(this.label_Reference);
 			this.groupBox_Options.Controls.Add(this.label_Presets);
@@ -667,16 +716,28 @@ namespace YAT.View.Forms
 			this.groupBox_Options.Controls.Add(this.label_TimeDeltaFormat);
 			this.groupBox_Options.Controls.Add(this.comboBox_TimeDeltaFormatPreset);
 			this.groupBox_Options.Controls.Add(this.textBox_TimeDeltaFormat);
+			this.groupBox_Options.Controls.Add(this.label_TimeDurationFormat);
+			this.groupBox_Options.Controls.Add(this.comboBox_TimeDurationFormatPreset);
 			this.groupBox_Options.Controls.Add(this.label_InfoEnclosure);
 			this.groupBox_Options.Controls.Add(this.label_InfoSeparator);
 			this.groupBox_Options.Controls.Add(this.comboBox_InfoEnclosure);
 			this.groupBox_Options.Controls.Add(this.comboBox_InfoSeparator);
-			this.groupBox_Options.Location = new System.Drawing.Point(12, 416);
+			this.groupBox_Options.Location = new System.Drawing.Point(12, 445);
 			this.groupBox_Options.Name = "groupBox_Options";
-			this.groupBox_Options.Size = new System.Drawing.Size(713, 168);
+			this.groupBox_Options.Size = new System.Drawing.Size(713, 197);
 			this.groupBox_Options.TabIndex = 1;
 			this.groupBox_Options.TabStop = false;
 			this.groupBox_Options.Text = "Options";
+			// 
+			// textBox_TimeDurationFormat
+			// 
+			this.textBox_TimeDurationFormat.Enabled = false;
+			this.textBox_TimeDurationFormat.Location = new System.Drawing.Point(88, 164);
+			this.textBox_TimeDurationFormat.Name = "textBox_TimeDurationFormat";
+			this.textBox_TimeDurationFormat.Size = new System.Drawing.Size(275, 20);
+			this.textBox_TimeDurationFormat.TabIndex = 16;
+			this.textBox_TimeDurationFormat.TextChanged += new System.EventHandler(this.textBox_TimeDurationFormat_TextChanged);
+			this.textBox_TimeDurationFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeDurationFormat_Validating);
 			// 
 			// checkBox_TimeStampUseUtc
 			// 
@@ -691,7 +752,7 @@ namespace YAT.View.Forms
 			// 
 			// label_Reference
 			// 
-			this.label_Reference.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Reference.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Reference.AutoSize = true;
 			this.label_Reference.Location = new System.Drawing.Point(626, 55);
 			this.label_Reference.Name = "label_Reference";
@@ -701,7 +762,7 @@ namespace YAT.View.Forms
 			// 
 			// label_Presets
 			// 
-			this.label_Presets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Presets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Presets.AutoSize = true;
 			this.label_Presets.Location = new System.Drawing.Point(466, 55);
 			this.label_Presets.Name = "label_Presets";
@@ -711,9 +772,9 @@ namespace YAT.View.Forms
 			// 
 			// linkLabel_TimeSpanFormat
 			// 
-			this.linkLabel_TimeSpanFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabel_TimeSpanFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_TimeSpanFormat.AutoSize = true;
-			this.linkLabel_TimeSpanFormat.Location = new System.Drawing.Point(613, 117);
+			this.linkLabel_TimeSpanFormat.Location = new System.Drawing.Point(613, 131);
 			this.linkLabel_TimeSpanFormat.Name = "linkLabel_TimeSpanFormat";
 			this.linkLabel_TimeSpanFormat.Size = new System.Drawing.Size(93, 26);
 			this.linkLabel_TimeSpanFormat.TabIndex = 14;
@@ -724,9 +785,9 @@ namespace YAT.View.Forms
 			// 
 			// linkLabel_DateTimeFormat
 			// 
-			this.linkLabel_DateTimeFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabel_DateTimeFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_DateTimeFormat.AutoSize = true;
-			this.linkLabel_DateTimeFormat.Location = new System.Drawing.Point(613, 76);
+			this.linkLabel_DateTimeFormat.Location = new System.Drawing.Point(613, 73);
 			this.linkLabel_DateTimeFormat.Name = "linkLabel_DateTimeFormat";
 			this.linkLabel_DateTimeFormat.Size = new System.Drawing.Size(93, 26);
 			this.linkLabel_DateTimeFormat.TabIndex = 10;
@@ -829,6 +890,29 @@ namespace YAT.View.Forms
 			this.textBox_TimeDeltaFormat.TextChanged += new System.EventHandler(this.textBox_TimeDeltaFormat_TextChanged);
 			this.textBox_TimeDeltaFormat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimeDeltaFormat_Validating);
 			// 
+			// label_TimeDurationFormat
+			// 
+			this.label_TimeDurationFormat.AutoSize = true;
+			this.label_TimeDurationFormat.Location = new System.Drawing.Point(12, 167);
+			this.label_TimeDurationFormat.Name = "label_TimeDurationFormat";
+			this.label_TimeDurationFormat.Size = new System.Drawing.Size(76, 13);
+			this.label_TimeDurationFormat.TabIndex = 15;
+			this.label_TimeDurationFormat.Text = "Tim&e Duration:";
+			this.toolTip.SetToolTip(this.label_TimeDurationFormat, "Currently limited to the standard format. Will become available as soon as update" +
+        "d to .NET 4+ which supports time span formats.");
+			// 
+			// comboBox_TimeDurationFormatPreset
+			// 
+			this.comboBox_TimeDurationFormatPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_TimeDurationFormatPreset.FormattingEnabled = true;
+			this.comboBox_TimeDurationFormatPreset.Location = new System.Drawing.Point(373, 164);
+			this.comboBox_TimeDurationFormatPreset.Name = "comboBox_TimeDurationFormatPreset";
+			this.comboBox_TimeDurationFormatPreset.Size = new System.Drawing.Size(232, 21);
+			this.comboBox_TimeDurationFormatPreset.TabIndex = 17;
+			this.toolTip.SetToolTip(this.comboBox_TimeDurationFormatPreset, "Currently limited to the standard format. Will become available as soon as update" +
+        "d to .NET 4+ which supports time span formats.");
+			this.comboBox_TimeDurationFormatPreset.SelectedIndexChanged += new System.EventHandler(this.comboBox_TimeDurationFormatPreset_SelectedIndexChanged);
+			// 
 			// label_InfoEnclosure
 			// 
 			this.label_InfoEnclosure.AutoSize = true;
@@ -876,7 +960,7 @@ namespace YAT.View.Forms
 			this.monitor_Example.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Example.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Example.Location = new System.Drawing.Point(100, 599);
+			this.monitor_Example.Location = new System.Drawing.Point(100, 657);
 			this.monitor_Example.Name = "monitor_Example";
 			this.monitor_Example.ShowStatusPanel = false;
 			this.monitor_Example.Size = new System.Drawing.Size(625, 63);
@@ -890,7 +974,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(832, 677);
+			this.ClientSize = new System.Drawing.Size(832, 735);
 			this.Controls.Add(this.groupBox_Options);
 			this.Controls.Add(this.monitor_Example);
 			this.Controls.Add(this.label_Example);
@@ -923,6 +1007,7 @@ namespace YAT.View.Forms
 		private YAT.View.Controls.TextFormat textFormat_Length;
 		private YAT.View.Controls.TextFormat textFormat_TimeSpan;
 		private YAT.View.Controls.TextFormat textFormat_TimeDelta;
+		private YAT.View.Controls.TextFormat textFormat_TimeDuration;
 		private YAT.View.Controls.TextFormat textFormat_RxControl;
 		private YAT.View.Controls.TextFormat textFormat_RxData;
 		private YAT.View.Controls.TextFormat textFormat_TxControl;
@@ -937,6 +1022,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Label label_Length;
 		private System.Windows.Forms.Label label_TimeSpan;
 		private System.Windows.Forms.Label label_TimeDelta;
+		private System.Windows.Forms.Label label_TimeDuration;
 		private System.Windows.Forms.Label label_RxControl;
 		private System.Windows.Forms.Label label_RxData;
 		private System.Windows.Forms.Label label_TxControl;
@@ -945,6 +1031,7 @@ namespace YAT.View.Forms
 		private YAT.View.Controls.Monitor monitor_Length;
 		private YAT.View.Controls.Monitor monitor_TimeSpan;
 		private YAT.View.Controls.Monitor monitor_TimeDelta;
+		private YAT.View.Controls.Monitor monitor_TimeDuration;
 		private YAT.View.Controls.Monitor monitor_RxControl;
 		private YAT.View.Controls.Monitor monitor_RxData;
 		private YAT.View.Controls.Monitor monitor_TxControl;
@@ -979,6 +1066,9 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.TextBoxEx textBox_TimeDeltaFormat;
 		private System.Windows.Forms.ComboBox comboBox_TimeDeltaFormatPreset;
 		private System.Windows.Forms.Label label_TimeDeltaFormat;
+		private MKY.Windows.Forms.TextBoxEx textBox_TimeDurationFormat;
+		private System.Windows.Forms.ComboBox comboBox_TimeDurationFormatPreset;
+		private System.Windows.Forms.Label label_TimeDurationFormat;
 		private System.Windows.Forms.LinkLabel linkLabel_DateTimeFormat;
 		private System.Windows.Forms.LinkLabel linkLabel_TimeSpanFormat;
 		private System.Windows.Forms.Label label_Reference;

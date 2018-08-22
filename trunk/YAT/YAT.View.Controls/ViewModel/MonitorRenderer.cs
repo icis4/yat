@@ -60,6 +60,7 @@ namespace YAT.View.Controls
 		private static Font staticTimeStampFont;
 		private static Font staticTimeSpanFont;
 		private static Font staticTimeDeltaFont;
+		private static Font staticTimeDurationFont;
 		private static Font staticPortFont;
 		private static Font staticDirectionFont;
 		private static Font staticLengthFont;
@@ -243,6 +244,12 @@ namespace YAT.View.Controls
 				foreColor = settings.TimeDeltaFormat.Color;
 				fontStyle = settings.TimeDeltaFormat.FontStyle;
 				font      = CacheAndAssignIfChanged(ref staticTimeDeltaFont, fontName, fontSize, fontStyle);
+			}
+			else if (element is Domain.DisplayElement.TimeDurationInfo)
+			{
+				foreColor = settings.TimeDurationFormat.Color;
+				fontStyle = settings.TimeDurationFormat.FontStyle;
+				font      = CacheAndAssignIfChanged(ref staticTimeDurationFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.PortInfo)
 			{

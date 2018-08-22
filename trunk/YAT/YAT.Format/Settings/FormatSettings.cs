@@ -64,6 +64,7 @@ namespace YAT.Format.Settings
 		private TextFormat timeStampFormat;
 		private TextFormat timeSpanFormat;
 		private TextFormat timeDeltaFormat;
+		private TextFormat timeDurationFormat;
 		private TextFormat portFormat;
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
@@ -97,18 +98,19 @@ namespace YAT.Format.Settings
 
 			FormattingEnabled = rhs.FormattingEnabled;
 
-			TxDataFormat      = new TextFormat(rhs.TxDataFormat);
-			TxControlFormat   = new TextFormat(rhs.TxControlFormat);
-			RxDataFormat      = new TextFormat(rhs.RxDataFormat);
-			RxControlFormat   = new TextFormat(rhs.RxControlFormat);
-			TimeStampFormat   = new TextFormat(rhs.TimeStampFormat);
-			TimeSpanFormat    = new TextFormat(rhs.TimeSpanFormat);
-			TimeDeltaFormat   = new TextFormat(rhs.TimeDeltaFormat);
-			PortFormat        = new TextFormat(rhs.PortFormat);
-			DirectionFormat   = new TextFormat(rhs.DirectionFormat);
-			LengthFormat      = new TextFormat(rhs.LengthFormat);
-			WhiteSpacesFormat = new TextFormat(rhs.WhiteSpacesFormat);
-			ErrorFormat       = new TextFormat(rhs.ErrorFormat);
+			TxDataFormat       = new TextFormat(rhs.TxDataFormat);
+			TxControlFormat    = new TextFormat(rhs.TxControlFormat);
+			RxDataFormat       = new TextFormat(rhs.RxDataFormat);
+			RxControlFormat    = new TextFormat(rhs.RxControlFormat);
+			TimeStampFormat    = new TextFormat(rhs.TimeStampFormat);
+			TimeSpanFormat     = new TextFormat(rhs.TimeSpanFormat);
+			TimeDeltaFormat    = new TextFormat(rhs.TimeDeltaFormat);
+			TimeDurationFormat = new TextFormat(rhs.TimeDurationFormat);
+			PortFormat         = new TextFormat(rhs.PortFormat);
+			DirectionFormat    = new TextFormat(rhs.DirectionFormat);
+			LengthFormat       = new TextFormat(rhs.LengthFormat);
+			WhiteSpacesFormat  = new TextFormat(rhs.WhiteSpacesFormat);
+			ErrorFormat        = new TextFormat(rhs.ErrorFormat);
 
 			BackFormat        = new BackFormat(rhs.BackFormat);
 
@@ -126,18 +128,19 @@ namespace YAT.Format.Settings
 
 			FormattingEnabled = true;
 
-			TxDataFormat      = new TextFormat(TxColorDefault,           true, false, false, false); // Bold.
-			TxControlFormat   = new TextFormat(TxColorDefault,          false, false, false, false);
-			RxDataFormat      = new TextFormat(RxColorDefault,           true, false, false, false); // Bold.
-			RxControlFormat   = new TextFormat(RxColorDefault,          false, false, false, false);
-			TimeStampFormat   = new TextFormat(InfoColorDefault,        false, false, false, false);
-			TimeSpanFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
-			TimeDeltaFormat   = new TextFormat(InfoColorDefault,        false, false, false, false);
-			PortFormat        = new TextFormat(InfoColorDefault,        false, false, false, false);
-			DirectionFormat   = new TextFormat(InfoColorDefault,        false, false, false, false);
-			LengthFormat      = new TextFormat(InfoColorDefault,        false, false, false, false);
-			WhiteSpacesFormat = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
-			ErrorFormat       = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
+			TxDataFormat       = new TextFormat(TxColorDefault,           true, false, false, false); // Bold.
+			TxControlFormat    = new TextFormat(TxColorDefault,          false, false, false, false);
+			RxDataFormat       = new TextFormat(RxColorDefault,           true, false, false, false); // Bold.
+			RxControlFormat    = new TextFormat(RxColorDefault,          false, false, false, false);
+			TimeStampFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
+			TimeSpanFormat     = new TextFormat(InfoColorDefault,        false, false, false, false);
+			TimeDeltaFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
+			TimeDurationFormat = new TextFormat(InfoColorDefault,        false, false, false, false);
+			PortFormat         = new TextFormat(InfoColorDefault,        false, false, false, false);
+			DirectionFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
+			LengthFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
+			WhiteSpacesFormat  = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
+			ErrorFormat        = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
 
 			BackFormat        = new BackFormat(BackColorDefault);
 		}
@@ -298,6 +301,21 @@ namespace YAT.Format.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("TimeDurationFormat")]
+		public TextFormat TimeDurationFormat
+		{
+			get { return (this.timeDurationFormat); }
+			set
+			{
+				if (this.timeDurationFormat != value)
+				{
+					this.timeDurationFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("PortFormat")]
 		public TextFormat PortFormat
 		{
@@ -422,24 +440,25 @@ namespace YAT.Format.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ (Font              != null ? Font             .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (Font               != null ? Font              .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^                              FormattingEnabled.GetHashCode();
+				hashCode = (hashCode * 397) ^                                FormattingEnabled.GetHashCode();
 
-				hashCode = (hashCode * 397) ^ (TxDataFormat      != null ? TxDataFormat     .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (TxControlFormat   != null ? TxControlFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RxDataFormat      != null ? RxDataFormat     .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RxControlFormat   != null ? RxControlFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (TimeStampFormat   != null ? TimeStampFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (TimeSpanFormat    != null ? TimeSpanFormat   .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (TimeDeltaFormat   != null ? TimeDeltaFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (PortFormat        != null ? PortFormat       .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (DirectionFormat   != null ? DirectionFormat  .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (LengthFormat      != null ? LengthFormat     .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat != null ? WhiteSpacesFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (ErrorFormat       != null ? ErrorFormat      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TxDataFormat       != null ? TxDataFormat      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TxControlFormat    != null ? TxControlFormat   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RxDataFormat       != null ? RxDataFormat      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RxControlFormat    != null ? RxControlFormat   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeStampFormat    != null ? TimeStampFormat   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeSpanFormat     != null ? TimeSpanFormat    .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeDeltaFormat    != null ? TimeDeltaFormat   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (PortFormat         != null ? PortFormat        .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (DirectionFormat    != null ? DirectionFormat   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (LengthFormat       != null ? LengthFormat      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat  != null ? WhiteSpacesFormat .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (ErrorFormat        != null ? ErrorFormat       .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^ (BackFormat        != null ? BackFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (BackFormat         != null ? BackFormat        .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -470,24 +489,25 @@ namespace YAT.Format.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ObjectEx.Equals(Font,              other.Font) &&
+				ObjectEx.Equals(Font,               other.Font) &&
 
-				FormattingEnabled.Equals(          other.FormattingEnabled) &&
+				FormattingEnabled.Equals(           other.FormattingEnabled) &&
 
-				ObjectEx.Equals(TxDataFormat,      other.TxDataFormat)      &&
-				ObjectEx.Equals(TxControlFormat,   other.TxControlFormat)   &&
-				ObjectEx.Equals(RxDataFormat,      other.RxDataFormat)      &&
-				ObjectEx.Equals(RxControlFormat,   other.RxControlFormat)   &&
-				ObjectEx.Equals(TimeStampFormat,   other.TimeStampFormat)   &&
-				ObjectEx.Equals(TimeSpanFormat,    other.TimeSpanFormat)    &&
-				ObjectEx.Equals(TimeDeltaFormat,   other.TimeDeltaFormat)   &&
-				ObjectEx.Equals(PortFormat,        other.PortFormat)        &&
-				ObjectEx.Equals(DirectionFormat,   other.DirectionFormat)   &&
-				ObjectEx.Equals(LengthFormat,      other.LengthFormat)      &&
-				ObjectEx.Equals(WhiteSpacesFormat, other.WhiteSpacesFormat) &&
-				ObjectEx.Equals(ErrorFormat,       other.ErrorFormat)       &&
+				ObjectEx.Equals(TxDataFormat,       other.TxDataFormat)       &&
+				ObjectEx.Equals(TxControlFormat,    other.TxControlFormat)    &&
+				ObjectEx.Equals(RxDataFormat,       other.RxDataFormat)       &&
+				ObjectEx.Equals(RxControlFormat,    other.RxControlFormat)    &&
+				ObjectEx.Equals(TimeStampFormat,    other.TimeStampFormat)    &&
+				ObjectEx.Equals(TimeSpanFormat,     other.TimeSpanFormat)     &&
+				ObjectEx.Equals(TimeDeltaFormat,    other.TimeDeltaFormat)    &&
+				ObjectEx.Equals(TimeDurationFormat, other.TimeDurationFormat) &&
+				ObjectEx.Equals(PortFormat,         other.PortFormat)         &&
+				ObjectEx.Equals(DirectionFormat,    other.DirectionFormat)    &&
+				ObjectEx.Equals(LengthFormat,       other.LengthFormat)       &&
+				ObjectEx.Equals(WhiteSpacesFormat,  other.WhiteSpacesFormat)  &&
+				ObjectEx.Equals(ErrorFormat,        other.ErrorFormat)        &&
 
-				ObjectEx.Equals(BackFormat,        other.BackFormat)
+				ObjectEx.Equals(BackFormat,         other.BackFormat)
 			);
 		}
 
