@@ -105,9 +105,10 @@ Fixed bugs:
 - Optional user name of terminal is taken into account again (bug #415).
 - Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
-  #422, #423) which further refines the fix to former bugs #408 and #409.
+  #422, #423, #432) which further refines the fix to former bugs #408 and #409.
 - 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - Problem with escape sequences in automatic action/response fixed (bug #424).
+- [View > Show Time Span/Delta] are no longer swapped (bug #431).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 
 Limitations and known issues:

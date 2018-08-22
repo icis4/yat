@@ -1167,8 +1167,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_View_ShowBufferLineNumbers.Checked = this.settingsRoot.Display.ShowBufferLineNumbers;
 				toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
 				toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked         = this.settingsRoot.Display.ShowTimeStamp;
-				toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Checked          = this.settingsRoot.Display.ShowTimeDelta;
-				toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Checked         = this.settingsRoot.Display.ShowTimeSpan;
+				toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Checked          = this.settingsRoot.Display.ShowTimeSpan;
+				toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Checked         = this.settingsRoot.Display.ShowTimeDelta;
 				toolStripMenuItem_TerminalMenu_View_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
 				toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
 
