@@ -693,6 +693,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowPort              = f.SettingsResult.Terminal.Display.ShowPort;
 				this.settingsInEdit.Terminal.Display.ShowDirection         = f.SettingsResult.Terminal.Display.ShowDirection;
 				this.settingsInEdit.Terminal.Display.ShowLength            = f.SettingsResult.Terminal.Display.ShowLength;
+				this.settingsInEdit.Terminal.Display.ShowDuration          = f.SettingsResult.Terminal.Display.ShowDuration;
 				this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine  = f.SettingsResult.Terminal.Display.ShowCopyOfActiveLine;
 				this.settingsInEdit.Terminal.Status.ShowConnectTime        = f.SettingsResult.Terminal.Status.ShowConnectTime;
 				this.settingsInEdit.Terminal.Status.ShowCountAndRate       = f.SettingsResult.Terminal.Status.ShowCountAndRate;
