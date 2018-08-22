@@ -290,6 +290,14 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.ShowLength = checkBox_ShowLength.Checked;
 		}
 
+		private void checkBox_ShowDuration_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowDuration = checkBox_ShowDuration.Checked;
+		}
+
 		private void checkBox_ShowCopyOfActiveLine_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1075,6 +1083,7 @@ namespace YAT.View.Forms
 				checkBox_ShowPort.Checked              = this.settingsInEdit.Terminal.Display.ShowPort;
 				checkBox_ShowDirection.Checked         = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked            = this.settingsInEdit.Terminal.Display.ShowLength;
+				checkBox_ShowDuration.Checked          = this.settingsInEdit.Terminal.Display.ShowDuration;
 				checkBox_ShowCopyOfActiveLine.Checked  = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
 				checkBox_ShowFlowControlCount.Enabled = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
@@ -1190,6 +1199,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowPort              = Domain.Settings.DisplaySettings.ShowPortDefault;
 				this.settingsInEdit.Terminal.Display.ShowDirection         = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowLength            = Domain.Settings.DisplaySettings.ShowLengthDefault;
+				this.settingsInEdit.Terminal.Display.ShowDuration          = Domain.Settings.DisplaySettings.ShowDurationDefault;
 				this.settingsInEdit.Terminal.Status.ShowConnectTime        = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
 				this.settingsInEdit.Terminal.Status.ShowCountAndRate       = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
 				this.settingsInEdit.Terminal.Status.ShowFlowControlCount   = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;

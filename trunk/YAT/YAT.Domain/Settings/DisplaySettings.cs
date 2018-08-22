@@ -79,6 +79,9 @@ namespace YAT.Domain.Settings
 		public const bool ShowLengthDefault = false;
 
 		/// <summary></summary>
+		public const bool ShowDurationDefault = false;
+
+		/// <summary></summary>
 		public const int MaxLineCountDefault = 1000;
 
 		/// <summary></summary>
@@ -118,6 +121,7 @@ namespace YAT.Domain.Settings
 		private bool   showPort;
 		private bool   showDirection;
 		private bool   showLength;
+		private bool   showDuration;
 		private int    maxLineCount;
 		private int    maxBytePerLineCount;
 		private bool   showCopyOfActiveLine;
@@ -170,6 +174,7 @@ namespace YAT.Domain.Settings
 			ShowPort              = rhs.ShowPort;
 			ShowDirection         = rhs.ShowDirection;
 			ShowLength            = rhs.ShowLength;
+			ShowDuration          = rhs.ShowDuration;
 			MaxLineCount          = rhs.MaxLineCount;
 			MaxBytePerLineCount   = rhs.MaxBytePerLineCount;
 			ShowCopyOfActiveLine  = rhs.ShowCopyOfActiveLine;
@@ -207,6 +212,7 @@ namespace YAT.Domain.Settings
 			ShowPort              = ShowPortDefault;
 			ShowDirection         = ShowDirectionDefault;
 			ShowLength            = ShowLengthDefault;
+			ShowDuration          = ShowDurationDefault;
 			MaxLineCount          = MaxLineCountDefault;
 			MaxBytePerLineCount   = MaxBytePerLineCountDefault;
 			ShowCopyOfActiveLine  = ShowCopyOfActiveLineDefault;
@@ -502,10 +508,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>
-		/// This option is currently fixed to the byte count. Could potentially be extended such it
-		/// shows the character count for multi-byte encodings (string/character/Unicode radix).
-		/// </remarks>
+		/// <summary></summary>
 		[XmlElement("ShowLength")]
 		public virtual bool ShowLength
 		{
@@ -515,6 +518,24 @@ namespace YAT.Domain.Settings
 				if (this.showLength != value)
 				{
 					this.showLength = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// This option is currently fixed to the byte count. Could potentially be extended such it
+		/// shows the character count for multi-byte encodings (string/character/Unicode radix).
+		/// </remarks>
+		[XmlElement("ShowDuration")]
+		public virtual bool ShowDuration
+		{
+			get { return (this.showDuration); }
+			set
+			{
+				if (this.showDuration != value)
+				{
+					this.showDuration = value;
 					SetMyChanged();
 				}
 			}
@@ -743,6 +764,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ ShowPort             .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowDirection        .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowLength           .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowDuration         .GetHashCode();
 				hashCode = (hashCode * 397) ^ MaxLineCount         .GetHashCode();
 				hashCode = (hashCode * 397) ^ MaxBytePerLineCount  .GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowCopyOfActiveLine .GetHashCode();
@@ -799,6 +821,7 @@ namespace YAT.Domain.Settings
 				ShowPort             .Equals(other.ShowPort)                   &&
 				ShowDirection        .Equals(other.ShowDirection)              &&
 				ShowLength           .Equals(other.ShowLength)                 &&
+				ShowDuration         .Equals(other.ShowDuration)               &&
 				MaxLineCount         .Equals(other.MaxLineCount)               &&
 				MaxBytePerLineCount  .Equals(other.MaxBytePerLineCount)        &&
 				ShowCopyOfActiveLine .Equals(other.ShowCopyOfActiveLine)       &&

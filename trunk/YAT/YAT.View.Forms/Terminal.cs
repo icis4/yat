@@ -1176,6 +1176,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
 
 				toolStripMenuItem_TerminalMenu_View_ShowLength.Checked           = this.settingsRoot.Display.ShowLength;
+				toolStripMenuItem_TerminalMenu_View_ShowDuration.Checked         = this.settingsRoot.Display.ShowDuration;
 				toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine.Checked = this.settingsRoot.Display.ShowCopyOfActiveLine;
 
 				// Flow control count:
@@ -1332,6 +1333,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_ShowLength_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowDuration_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowDuration = !this.settingsRoot.Display.ShowDuration;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowCopyOfActiveLine_Click(object sender, EventArgs e)
@@ -1511,6 +1517,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
 				toolStripMenuItem_MonitorContextMenu_ShowLength.Checked           = this.settingsRoot.Display.ShowLength;
+				toolStripMenuItem_MonitorContextMenu_ShowDuration.Checked         = this.settingsRoot.Display.ShowDuration;
 				toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine.Checked = this.settingsRoot.Display.ShowCopyOfActiveLine;
 
 				bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
@@ -1718,6 +1725,14 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowDuration_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Display.ShowDuration = !this.settingsRoot.Display.ShowDuration;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowCopyOfActiveLine_Click(object sender, EventArgs e)
