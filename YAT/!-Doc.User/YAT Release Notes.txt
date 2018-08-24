@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0.1 :: 2018-0?-??
+YAT 2.0.1 :: 2018-??-??
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -109,6 +109,7 @@ Fixed bugs:
   #422, #423, #432) which further refines the fix to former bugs #408 and #409.
 - 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - Problem with escape sequences in automatic action/response fixed (bug #424).
+- Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - [View > Show Time Span/Delta] are no longer swapped (bug #431).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 
