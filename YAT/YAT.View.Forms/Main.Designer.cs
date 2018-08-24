@@ -1204,7 +1204,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_WholeWord.Name = "toolStripButton_MainTool_Find_WholeWord";
 			this.toolStripButton_MainTool_Find_WholeWord.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_WholeWord.Text = "Find Whole Word";
-			this.toolStripButton_MainTool_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex\r\n[Alt+W] (while in Find)";
+			this.toolStripButton_MainTool_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex\r\n[Alt+W] (while in Find)" +
+    "";
 			this.toolStripButton_MainTool_Find_WholeWord.Visible = false;
 			this.toolStripButton_MainTool_Find_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_WholeWord_Click);
 			// 
@@ -1309,9 +1310,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.Name = "toolStripComboBox_MainTool_AutoAction_Trigger";
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText = "Configure Automatic Action Trigger,\r\neither refer to one of the commands,\r\nor fil" +
-    "l-in any command text.\r\n\r\nNote that...\r\n...\'Any Line\' is not available if action" +
-    " is \'Highlight Only\'.";
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText = resources.GetString("toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText");
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged);
@@ -1321,8 +1320,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoAction_Action.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.toolStripComboBox_MainTool_AutoAction_Action.Name = "toolStripComboBox_MainTool_AutoAction_Action";
 			this.toolStripComboBox_MainTool_AutoAction_Action.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that...\r\n...trigger is highlighted for " +
-    "every action.\r\n...\'Highlight Only\' is not available if trigger is \'Any Line\'.";
+			this.toolStripComboBox_MainTool_AutoAction_Action.ToolTipText = resources.GetString("toolStripComboBox_MainTool_AutoAction_Action.ToolTipText");
 			this.toolStripComboBox_MainTool_AutoAction_Action.Visible = false;
 			this.toolStripComboBox_MainTool_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged);
 			// 

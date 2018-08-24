@@ -3413,9 +3413,9 @@ namespace YAT.View.Forms
 			if ((trigger == AutoTrigger.AnyLine) && (this.settingsRoot.AutoAction.Action == AutoAction.Highlight))
 			{
 				var text = new StringBuilder();
-				text.AppendLine("Trigger cannot be set to 'Any Line' if action is 'Highlight Only'!");
+				text.AppendLine("Trigger cannot be set to 'Any Line' if action is 'Highlight'!");
 				text.AppendLine();
-				text.Append    ("Reason: Lines are not highlighted if trigger is 'Any Line' as that would result in all received lines highlighted.");
+				text.Append    ("Reason: Highlighting is suppressed when trigger is 'Any Line', as that would otherwise result in all received lines being highlighted.");
 
 				MessageBoxEx.Show
 				(
@@ -3438,9 +3438,9 @@ namespace YAT.View.Forms
 			if ((action == AutoAction.Highlight) && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
 				var text = new StringBuilder();
-				text.AppendLine("Action cannot be set to 'Highlight Only' if trigger is 'Any Line'!");
+				text.AppendLine("Action cannot be set to 'Highlight' if trigger is 'Any Line'!");
 				text.AppendLine();
-				text.Append    ("Reason: Lines are not highlighted if trigger is 'Any Line' as that would result in all received lines highlighted.");
+				text.Append    ("Reason: Highlighting is suppressed when trigger is 'Any Line', as that would otherwise result in all received lines being highlighted.");
 
 				MessageBoxEx.Show
 				(
