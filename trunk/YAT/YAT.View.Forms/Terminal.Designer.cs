@@ -2094,9 +2094,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Name = "toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger";
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = "Configure Automatic Action Trigger,\r\neither refer to one of the commands,\r\nor fil" +
-    "l-in any command text.\r\n\r\nNote that...\r\n...\'Any Line\' is not available if action" +
-    " is \'Highlight Only\'.";
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = resources.GetString("toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText");
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_TextChanged);
 			// 
@@ -2114,8 +2112,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Name = "toolStripComboBox_TerminalMenu_Receive_AutoAction_Action";
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText = "Enable / Disable Automatic Action\r\n\r\nNote that...\r\n...trigger is highlighted for " +
-    "every action.\r\n...\'Highlight Only\' is not available if trigger is \'Any Line\'.";
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText = resources.GetString("toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText");
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_SelectedIndexChanged);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate
