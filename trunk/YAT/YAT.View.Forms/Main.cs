@@ -785,12 +785,6 @@ namespace YAT.View.Forms
 			// Otherwise, ActivateMdiChild(f) -> SetChildControls() will recurse here!
 			if (isDropDownOpening)
 			{
-				if (childIsReady)
-				{
-					Form f = this.ActiveMdiChild;
-					ActivateMdiChild(null);
-					ActivateMdiChild(f);
-				}
 			#if (FALSE)
 				// \fixme:
 				// I don't know how to fix bug #31 "MDI window list invisible if no MDI children".
@@ -808,6 +802,13 @@ namespace YAT.View.Forms
 					toolStripMenuItem_MainMenu_Window.Invalidate();
 					- and/or -
 					ActivateMdiChild(null);
+				}
+			#else
+				if (childIsReady)
+				{
+					var f = this.ActiveMdiChild;
+					ActivateMdiChild(null);
+					ActivateMdiChild(f);
 				}
 			#endif
 			}
@@ -1017,8 +1018,6 @@ namespace YAT.View.Forms
 				AutoActionEx[] aaActionItems = AutoActionEx.GetItems();
 				AutoActionEx   aaAction      = AutoAction.None;
 
-				int aaCount = 0;
-
 				if (childIsReady)
 				{
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
@@ -1032,8 +1031,6 @@ namespace YAT.View.Forms
 
 						aaActionItems  = activeTerminal.SettingsRoot.GetValidAutoActionItems();
 						aaAction       = activeTerminal.SettingsRoot.AutoAction.Action;
-
-						aaCount        = activeTerminal.AutoActionCount;
 					}
 				}
 
@@ -1044,7 +1041,7 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Hide Automatic Action";
 
 					// Attention:
-					// Similaa code exists in the following location:
+					// Similar code exists in the following location:
 					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 					// Changes here may have to be applied there too.
 
@@ -1063,7 +1060,8 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
 					}
 
-					toolStripLabel_MainTool_AutoAction_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", aaCount);
+					toolStripButton_MainTool_SetAutoActionCount();
+
 					toolStripLabel_MainTool_AutoAction_Count.Enabled = aaIsActive;
 					toolStripLabel_MainTool_AutoAction_Count.Visible = true;
 
@@ -1099,8 +1097,6 @@ namespace YAT.View.Forms
 				AutoResponseEx[] arResponseItems = AutoResponseEx.GetFixedItems();
 				AutoResponseEx   arResponse      = AutoResponse.None;
 
-				int arCount = 0;
-
 				if (childIsReady)
 				{
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
@@ -1114,8 +1110,6 @@ namespace YAT.View.Forms
 
 						arResponseItems = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
 						arResponse      = activeTerminal.SettingsRoot.AutoResponse.Response;
-
-						arCount         = activeTerminal.AutoResponseCount;
 					}
 				}
 
@@ -1145,7 +1139,8 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
 					}
 
-					toolStripLabel_MainTool_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", arCount);
+					toolStripButton_MainTool_SetAutoResponseCount();
+
 					toolStripLabel_MainTool_AutoResponse_Count.Enabled = arIsActive;
 					toolStripLabel_MainTool_AutoResponse_Count.Visible = true;
 
@@ -1255,6 +1250,55 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 			}
+		}
+
+		/// <remarks>
+		/// Separated to prevent flickering of non-count controls on AutoAction/Response.
+		/// </remarks>
+		private void toolStripButton_MainTool_SetAutoActionCount()
+		{
+			var count = 0;
+
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+			{
+				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				{
+					count = activeTerminal.AutoActionCount;
+				}
+			}
+
+			toolStripLabel_MainTool_AutoAction_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", count);
+		}
+
+		/// <remarks>
+		/// Separated to prevent flickering of non-count controls on AutoAction/Response.
+		/// </remarks>
+		private void toolStripButton_MainTool_SetAutoResponseCount()
+		{
+			int count = 0;
+
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+			{
+				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				{
+					count = activeTerminal.AutoResponseCount;
+				}
+			}
+
+			toolStripLabel_MainTool_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", count);
+		}
+
+		/// <remarks>
+		/// Separated to prevent flickering of non-count controls on AutoAction/Response.
+		/// </remarks>
+		private void toolStripButton_MainTool_SetAutoCountChildControls()
+		{
+			toolStripButton_MainTool_SetAutoActionCount();
+			toolStripButton_MainTool_SetAutoResponseCount();
 		}
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
@@ -2676,6 +2720,11 @@ namespace YAT.View.Forms
 			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls.
 		}
 
+		private void SetAutoCountChildControls()
+		{
+			toolStripButton_MainTool_SetAutoCountChildControls();
+		}
+
 		private void SetRecentControls()
 		{
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
@@ -3180,12 +3229,12 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_AutoResponseCountChanged(object sender, EventArgs<int> e)
 		{
-			SetChildControls();
+			SetAutoCountChildControls();
 		}
 
 		private void terminalMdiChild_AutoActionCountChanged(object sender, EventArgs<int> e)
 		{
-			SetChildControls();
+			SetAutoCountChildControls();
 		}
 
 		private void terminalMdiChild_Resize(object sender, EventArgs e)
