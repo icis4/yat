@@ -13,9 +13,9 @@
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
 ::
-:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-:: Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
-:: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::     Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+::     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ::
 :: Author(s): Matthias Klaey
 :: ------------------------------------------------------------------------------------------------
