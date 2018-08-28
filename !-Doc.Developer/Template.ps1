@@ -274,7 +274,7 @@ if ($verbose) {
 
 # Retrieve name and root:
 $MY_NAME = $MyInvocation.MyCommand.Name
-$MY_ROOT = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path)
+$MY_PATH = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path)
 
 # Save the initial location:
 $START_DIRECTORY = Get-Location # 'Get-Location' is the PowerShell equivalent to 'pwd'.
