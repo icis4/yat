@@ -27,7 +27,10 @@
 ::==================================================================================================
 
 :: Re-direct to the generic helper batch file, forwarding all arguments:
-.\CallPowerShellScript.cmd .\CountLOC.ps1 %*
+CALL .\CallPowerShellScript.cmd .\CountLOC.ps1 %*
+
+:: Let the user see the results:
+PAUSE
 
 ::==================================================================================================
 :: End of
