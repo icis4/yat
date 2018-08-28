@@ -199,7 +199,7 @@ $thirdPartyPaths = @("ALAZ\Source", "netrtfwriter\RtfWriter")
 $proprietaryPaths = @("MKY", "NUnit", "YAT")
 
 Write-Host ""
-Write-Host "             3rd Party              "
+Write-Host "3rd Party       (ALAZ, netrtfwriter)"
 Write-Host "===================================="
 
 $thirdPartyCounts = Create-Counts
@@ -217,7 +217,7 @@ foreach ($thirdPartyPath in $thirdPartyPaths) {
 $message = $thirdPartyCounts.GetEnumerator() | Sort Value | Out-String
 Write-Host $message
 
-Write-Host "            Proprietary             "
+Write-Host "Proprietary        (MKY, NUnit, YAT)"
 Write-Host "===================================="
 
 $proprietaryGeneratedCounts = Create-Counts
@@ -255,17 +255,17 @@ foreach ($proprietaryPath in $proprietaryPaths) {
 }
 
 Write-Host ""
-Write-Host "             Generated              "
+Write-Host "Generated            (*.Designer.cs)"
 Write-Host "------------------------------------"
 $message = $proprietaryGeneratedCounts.GetEnumerator() | Sort Value | Out-String
 Write-Host $message
 
-Write-Host "              Written               "
+Write-Host "Written                       (*.cs)"
 Write-Host "------------------------------------"
 $message = $proprietaryWrittenCounts.GetEnumerator() | Sort Value | Out-String
 Write-Host $message
 
-Write-Host "               Test                 "
+Write-Host "Test                (<Project>.Test)"
 Write-Host "------------------------------------"
 $message = $proprietaryTestCounts.GetEnumerator() | Sort Value | Out-String
 Write-Host $message
@@ -297,7 +297,7 @@ if ($verbose) {
 	Write-Verbose $message
 }
 
-Write-Host "                All                 "
+Write-Host "           S U M M A R Y            "
 Write-Host "===================================="
 
 Write-Output $result
