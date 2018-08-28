@@ -49,33 +49,48 @@ SET verbose='FALSE'
 SET script=%1
 IF %verbose%=='TRUE' ECHO Script is %script%
 
-:: Get the length of the first argument to prepare retrieving the remaining arguments:
-SET #=%1
-SET len=0
-:StrLenLoop
-IF DEFINED # (
-    SET #=%#:~1%
+:: Check whether there are script arguments to forward:
+if %2.==. (
+    SET hasArgs='FALSE'
+    IF %verbose%=='TRUE' ECHO Script has no args
+) else (
+    SET hasArgs='TRUE'
+
+    :: Get the length of the first argument to prepare retrieving the remaining arguments:
+    SET #=%1
+    SET len=0
+    :StrLenLoop
+    IF DEFINED # (
+        SET #=%#:~1%
+        SET /A len += 1
+        IF %verbose%=='TRUE' (
+            ECHO Retrieving script path length... Currently %len%...
+        )
+        GOTO :StrLenLoop
+    )
+    IF %verbose%=='TRUE' ECHO Script path length is %len%
+
+    :: Compensate for the space between the first and the remaining arguments:
     SET /A len += 1
-    GOTO :StrLenLoop)
+
+    :: Retrieve the remaining arguments, retrieving all arguments and then skipping the first:
+    SET args=%*
+    CALL SET args=%%args:~%len%%%
+    IF %verbose%=='TRUE' ECHO Script args are %args%
+
+    :: Convert all quotes within the arguments from '"' to '"""' to ensure that they are properly
+    :: forwarded to the PowerShell -Command argument string:
+    SET args=%args:"="""%
+    IF %verbose%=='TRUE' ECHO PowerShell args are %args%
 )
-IF %verbose%=='TRUE' ECHO Script string length is %len%
-
-:: Compensate for the space between the first and the remaining arguments:
-SET /A len += 1
-
-:: Retrieve the remaining arguments, retrieving all arguments and then skipping the first:
-SET args=%*
-CALL SET args=%%args:~%len%%%
-IF %verbose%=='TRUE' ECHO Script args are %args%
-
-:: Convert all quotes within the arguments from '"' to '"""' to ensure that they are properly
-:: forwarded to the PowerShell -Command argument string:
-SET args=%args:"="""%
-IF %verbose%=='TRUE' ECHO PowerShell args are %args%
 
 :: Compose options and command to call PowerShell:
 SET opts=-ExecutionPolicy Bypass -NoLogo -NoProfile
-SET cmd=PowerShell.exe %opts% -Command "& {%script% %args%}"
+IF %hasArgs%=='FALSE' (
+    SET cmd=PowerShell.exe %opts% -Command "& {%script%}"
+) else (
+    SET cmd=PowerShell.exe %opts% -Command "& {%script% %args%}"
+)
 IF %verbose%=='TRUE' ECHO Invoking PowerShell...
 IF %verbose%=='TRUE' ECHO %cmd%
 

@@ -5,10 +5,10 @@
 :: Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 :: Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 :: ------------------------------------------------------------------------------------------------
-:: $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Doc.Developer/Template.cmd $
-:: $Revision: 1990 $
-:: $Date: 2018-08-28 10:43:52 +0200 (Di, 28 Aug 2018) $
-:: $Author: maettu_this $
+:: $URL$
+:: $Revision$
+:: $Date$
+:: $Author$
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
@@ -27,9 +27,9 @@
 ::==================================================================================================
 
 :: Re-direct to the generic helper batch file, forwarding all arguments:
-..\!-Tools\CallPowerShellScript.bat .\CountLOC.ps1 %*
+.\CallPowerShellScript.cmd .\CountLOC.ps1 %*
 
 ::==================================================================================================
 :: End of
-:: $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Doc.Developer/Template.cmd $
+:: $URL$
 ::==================================================================================================
