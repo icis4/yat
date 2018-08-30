@@ -289,9 +289,9 @@ namespace MKY
 
 			#endregion
 
-			#region Sync Event Invoking
+			#region Sync Event Raising
 			//======================================================================================
-			// Sync Event Invoking
+			// Sync Event Raising
 			//======================================================================================
 
 			/// <summary>
@@ -384,9 +384,9 @@ namespace MKY
 
 			#endregion
 
-			#region Async Event Invoking
+			#region Async Event Raising
 			//======================================================================================
-			// Async Event Invoking
+			// Async Event Raising
 			//======================================================================================
 
 			private delegate void AsyncInvokeDelegate(Delegate eventDelegate, object[] args);
@@ -778,9 +778,9 @@ namespace MKY
 
 		#endregion
 
-		#region Sync Event Invoking
+		#region Sync Event Raising
 		//==========================================================================================
-		// Sync Event Invoking
+		// Sync Event Raising
 		//==========================================================================================
 
 		/// <summary>
@@ -831,9 +831,9 @@ namespace MKY
 
 		#endregion
 
-		#region Async Event Invoking
+		#region Async Event Raising
 		//==========================================================================================
-		// Async Event Invoking
+		// Async Event Raising
 		//==========================================================================================
 
 		/// <summary>
