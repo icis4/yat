@@ -1154,13 +1154,13 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		protected virtual void OnHorizontalScrolledAsync(ScrollEventArgs e)
 		{
-			EventHelper.FireAsync<ScrollEventArgs>(HorizontalScrolled, this, e);
+			EventHelper.RaiseAsync<ScrollEventArgs>(HorizontalScrolled, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnVerticalScrolledAsync(ScrollEventArgs e)
 		{
-			EventHelper.FireAsync<ScrollEventArgs>(VerticalScrolled, this, e);
+			EventHelper.RaiseAsync<ScrollEventArgs>(VerticalScrolled, this, e);
 		}
 
 	#endif // ENABLE_HORIZONTAL_AUTO_SCROLL
