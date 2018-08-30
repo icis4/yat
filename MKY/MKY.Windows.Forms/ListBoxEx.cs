@@ -1144,9 +1144,9 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-		#region Scroll > Event Invoking
+		#region Scroll > Event Raising
 		//------------------------------------------------------------------------------------------
-		// Scroll > Event Invoking
+		// Scroll > Event Raising
 		//------------------------------------------------------------------------------------------
 
 	#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
