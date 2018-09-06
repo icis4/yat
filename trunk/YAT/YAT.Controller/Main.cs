@@ -47,14 +47,14 @@
 //==================================================================================================
 
 using System;
+#if (HANDLE_UNHANDLED_EXCEPTIONS)
 using System.ComponentModel;
+#endif
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-
 #if (HANDLE_UNHANDLED_EXCEPTIONS)
-	using System.Threading;
+using System.Threading;
 #endif
-
 using System.Windows.Forms; // Note that several locations explicitly use 'System.Windows.Forms' to prevent naming conflicts with 'MKY.Windows.Forms' and 'YAT.Application'.
 
 using MKY;
@@ -128,11 +128,9 @@ namespace YAT.Controller
 		private CommandLineArgs commandLineArgs;
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
-
 		// Invocation synchronization objects:
 		private ISynchronizeInvoke mainThreadSynchronizer;
 		private object mainThreadSynchronizerSyncObj = new object();
-
 	#endif
 
 		#endregion
@@ -464,9 +462,6 @@ namespace YAT.Controller
 		//==========================================================================================
 		// Non-Public Methods
 		//==========================================================================================
-
-		// Note that exceptions are only handled in case of 'Release'.
-		// In case of 'Debug', they shall be handled by the debugger.
 
 		#region Non-Public Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------

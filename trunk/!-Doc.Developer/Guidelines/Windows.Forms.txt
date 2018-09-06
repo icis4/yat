@@ -30,7 +30,7 @@ For forms:
 
 For user controls:
  > Set 'AutoScaleMode' to 'Inherit' (default is 'Font').
- > Do not anchor 'Right' or 'Bottom' to a user control, instead use a panel with 'Dock' = 'Fill'.
+ > Do not anchor controls 'Right' or 'Bottom', instead use a panel with 'Dock' = 'Fill'.
 
 Based on:
  > "Resolution" @ https://support.microsoft.com/en-us/help/967578/child-controls-on-a-usercontrol-may-get-clipped-in-a-system-with-a-low

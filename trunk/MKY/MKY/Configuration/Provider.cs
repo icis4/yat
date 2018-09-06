@@ -23,11 +23,11 @@
 
 using System.Configuration;
 #if (DEBUG)
-	using System.Diagnostics;
+using System.Diagnostics;
 #endif
 using System.IO;
 #if (DEBUG)
-	using System.Text;
+using System.Text;
 #endif
 
 namespace MKY.Configuration
