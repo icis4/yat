@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of image rotation initialization/calculation/update:
+////#define DEBUG_IMAGE_ROTATION
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -53,9 +67,6 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public const RotateType ImageRotationDefault = RotateTypeEx.Default;
 
-		/// <summary></summary>
-		public const int ImageZoomPercentDefault = 100;
-
 		#endregion
 
 		#region Fields
@@ -63,8 +74,8 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
+		private Image imageNotRotated; // = null;
 		private RotateType imageRotation = ImageRotationDefault;
-		private int imageZoomPercent = ImageZoomPercentDefault;
 
 		#endregion
 
@@ -90,23 +101,34 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// Gets or sets the image that is displayed by this picture box.
+		/// Gets or sets the image that is displayed by this picture box in 'face up' orientation,
+		/// i.e. as if 'RotateNone' was selected.
 		/// </summary>
 		/// <remarks>
-		/// Overridden to get a notification when the image changes.
+		/// Overridden to handle image changes.
+		/// </remarks>
+		/// <remarks>
+		/// The image is cloned to the base image to ensure each instance has its own clone of the image
+		/// and can perform operations as needed without creating retroactive effects.
 		/// </remarks>
 		[Description("The image that is displayed by this picture box.")]
 		[Localizable(true)]
 		[Bindable(true)]
 		public new Image Image
 		{
-			get { return (base.Image); }
+			get { return (this.imageNotRotated); }
 			set
 			{
-				if (base.Image != value)
+				if (value != null)
 				{
-					base.Image = value;
-					ApplyImageRotationAfterImageChange();
+					this.imageNotRotated = value;
+					base.Image = (Image)value.Clone();
+					ApplyBaseImageRotationAfterImageChange();
+				}
+				else
+				{
+					this.imageNotRotated = null;
+					base.Image = null;
 				}
 			}
 		}
@@ -143,157 +165,76 @@ namespace MKY.Windows.Forms
 				if (this.imageRotation != value)
 				{
 					this.imageRotation = value;
-					ApplyImageRotationAfterRotationChange();
+					ApplyBaseImageRotationAfterRotationChange();
 				}
 			}
 		}
 
 		/// <summary>
 		/// This variable is used to get the difference between the actual and the desired rotation.
-		/// Without this, the image would need to be kept twice, with and without rotation. Upon a
-		/// change of a property, the image would have to be redrawn from the not rotated image.
+		/// Without this, the image would have to be re-cloned from <see cref="imageNotRotated"/>.
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'rotationOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'imageRotationOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private RotateType ApplyImageRotation_imageRotationOld = ImageRotationDefault;
+		private RotateType ApplyBaseImageRotation_imageRotationOld = ImageRotationDefault;
 
-		private void ApplyImageRotationAfterRotationChange()
+		private void ApplyBaseImageRotationAfterRotationChange()
 		{
-			// Skip calculation during designer generated initalization sequence to ensure that the
-			// designer generated local resource is shown with the correct orientation:
-			if (!this.Created)
+		#if DEBUG_IMAGE_ROTATION
+			// There's a tricky thing about this calculation, as it must correctly work in four situations:
+			//  a) At design time, when the developer instantiates this control (i.e. DesignMode = true).
+			//  b) At design time, when the designer generated code gets executed (i.e. DesignMode = true).
+			//  c) At initialization, when the designer generated code gets executed (i.e. DesignMode = false).
+			//  d) During normal operation, when the application updates the image.
+			// Debugging a) and b) is not that easy, thus using a message box to output details.
+			using (var sw = new System.IO.StringWriter())
 			{
-				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
-				return;
+				Diagnostics.AnyWriter.WriteStack(sw, this.GetType(), "imageRotationOld = " + this.ApplyImageRotation_imageRotationOld + " / imageRotation = " + this.imageRotation + " / DesignMode = " + this.DesignMode);
+				MessageBox.Show(sw.ToString());
 			}
+		#endif
 
-			// Calculate the difference between the desired and the 'old' rotation and rotate the image:
-			if ((Image != null) &&
-				(this.ApplyImageRotation_imageRotationOld != this.imageRotation))
+			if (this.ApplyBaseImageRotation_imageRotationOld != this.imageRotation)
 			{
-				RotateType deltaRotation = RotateTypeEx.RotationFromDifference(this.ApplyImageRotation_imageRotationOld, this.imageRotation);
-				Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(deltaRotation));
-				Invalidate();
-
-				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
-			}
-		}
-
-		private void ApplyImageRotationAfterImageChange()
-		{
-			// Skip calculation during designer generated initalization sequence to ensure that the
-			// designer generated local resource is shown with the correct orientation:
-			if (!this.Created)
-			{
-				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
-				return;
-			}
-
-			// The image must be given 'face up', i.e. in 'normal' rotation.
-			// So, simply apply the selected rotation to the image:
-			if (Image != null)
-			{
-				Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(this.imageRotation));
-				Invalidate();
-
-				this.ApplyImageRotation_imageRotationOld = this.imageRotation;
-			}
-		}
-
-		#endregion
-
-		#region Image Zoom Properties and Methods
-		//==========================================================================================
-		// Image Zoom Properties and Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		[DefaultValue(ImageZoomPercentDefault)]
-		public virtual int ImageZoomPercent
-		{
-			get { return (this.imageZoomPercent); }
-			set
-			{
-				if (this.imageZoomPercent != value)
+				if (base.Image != null)
 				{
-					this.imageZoomPercent = value;
-					ApplyImageZoom();
+					// Calculate the difference between the 'new' and 'old' rotation:
+					RotateType deltaRotation = RotateTypeEx.RotationFromDifference(this.ApplyBaseImageRotation_imageRotationOld, this.imageRotation);
+
+					// Then rotate the image:
+					base.Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(deltaRotation));
+					Invalidate();
 				}
+
+				this.ApplyBaseImageRotation_imageRotationOld = this.imageRotation;
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual float ImageZoomFactor
+		private void ApplyBaseImageRotationAfterImageChange()
 		{
-			get { return ((float)ImageZoomPercent / 100); }
-		}
-
-		/// <remarks>
-		/// Workaround for border issue in 'Graphics.DrawImage()'.
-		/// See http://www.codeproject.com/csharp/BorderBug.asp for details.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
-		protected virtual void ApplyImageZoom()
-		{
-			if (Image != null)
+		#if DEBUG_IMAGE_ROTATION
+			// There's a tricky thing about this calculation, as it must correctly work in four situations:
+			//  a) At design time, when the developer instantiates this control (i.e. DesignMode = true).
+			//  b) At design time, when the designer generated code gets executed (i.e. DesignMode = true).
+			//  c) At initialization, when the designer generated code gets executed (i.e. DesignMode = false).
+			//  d) During normal operation, when the application updates the image.
+			// Debugging a) and b) is not that easy, thus using a message box to output details.
+			using (var sw = new System.IO.StringWriter())
 			{
-				/*
-
-				// Clone the image before making transformations:
-				Image src = new Bitmap(this.image.Width, this.image.Height);
-				float srcAspect = (float)src.Width / (float)src.Height;
-
-				// Rotate the image according to the selected orientation:
-				src.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(pictureBox_Screen.ImageRotation));
-
-				// Draw the image according to size mode (and zoom):
-				switch (pictureBox_Screen.SizeMode)
-				{
-					case PictureBoxSizeMode.AutoSize:
-					{
-						throw (new NotSupportedException(AutoSizeErrorMessage));
-					}
-
-					case PictureBoxSizeMode.Normal:
-					case PictureBoxSizeMode.CenterImage:
-					{
-						// \todo
-						break;
-					}
-
-					case PictureBoxSizeMode.Zoom:
-					case PictureBoxSizeMode.StretchImage:
-					default:
-					{
-						RectangleF srcRect = new RectangleF(-0.5f, -0.5f, src.Width, src.Height);
-
-						int destWidth = 0;
-						int destHeight = 0;
-						if (pictureBox_Screen.SizeMode == PictureBoxSizeMode.Zoom)
-						{	// Zoom but preserve aspect ratio:
-							destWidth  = (int)(ZoomFactor * pictureBox_Screen.Width);
-							destHeight = (int)(ZoomFactor * pictureBox_Screen.Height);
-						}
-						else
-						{	// Stretch:
-							destWidth  = (int)(ZoomFactor * pictureBox_Screen.Width);
-							destHeight = (int)(ZoomFactor * pictureBox_Screen.Height);
-						}
-						RectangleF destRect = new RectangleF(0, 0, destWidth, destHeight);
-
-						Image complete = new Bitmap(src.Width, src.Height);
-						using (Graphics g = Graphics.FromImage(complete))
-						{
-							g.InterpolationMode = InterpolationMode.NearestNeighbor;
-							g.DrawImage(src, destRect, srcRect, GraphicsUnit.Pixel);
-						}
-						pictureBox_Screen.Image = complete;
-
-						break;
-					}
-
-				*/
+				Diagnostics.AnyWriter.WriteStack(sw, this.GetType(), "imageRotationOld = " + this.ApplyImageRotation_imageRotationOld + " / imageRotation = " + this.imageRotation + " / DesignMode = " + this.DesignMode);
+				MessageBox.Show(sw.ToString());
 			}
+		#endif
+
+			if (base.Image != null)
+			{
+				// The is given in 'face up' orientation, i.e. as if 'RotateNone' was selected.
+				// So, simply apply the rotation to the image:
+				base.Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(this.imageRotation));
+				Invalidate();
+			}
+
+			this.ApplyBaseImageRotation_imageRotationOld = this.imageRotation;
 		}
 
 		#endregion
