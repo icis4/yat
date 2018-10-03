@@ -2782,7 +2782,8 @@ namespace YAT.Domain
 		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string ps, IODirection d, out DisplayLinePart lp)
 		{
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
-			    TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
+			    TerminalSettings.Display.ShowPort      ||
+			    TerminalSettings.Display.ShowDirection)
 			{
 				lp = new DisplayLinePart(10); // Preset the required capacity to improve memory management.
 

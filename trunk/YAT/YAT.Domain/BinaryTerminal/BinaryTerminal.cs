@@ -663,7 +663,8 @@ namespace YAT.Domain
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
-			    TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
+			    TerminalSettings.Display.ShowPort      ||
+			    TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart info;
 				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), ps, d, out info);
