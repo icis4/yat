@@ -110,6 +110,7 @@ Fixed bugs:
 - 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - Problem with escape sequences in automatic action/response fixed (bug #424).
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
+- [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bug #431).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 

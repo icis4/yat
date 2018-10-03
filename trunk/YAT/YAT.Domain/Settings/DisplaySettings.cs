@@ -171,7 +171,7 @@ namespace YAT.Domain.Settings
 			ShowTimeStamp         = rhs.ShowTimeStamp;
 			TimeStampFormat       = rhs.TimeStampFormat;
 			TimeStampUseUtc       = rhs.TimeStampUseUtc;
-			ShowTimeStamp         = rhs.ShowTimeStamp;
+			ShowTimeSpan          = rhs.ShowTimeSpan;
 			TimeSpanFormat        = rhs.TimeSpanFormat;
 			ShowTimeDelta         = rhs.ShowTimeDelta;
 			TimeDeltaFormat       = rhs.TimeDeltaFormat;
