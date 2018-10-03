@@ -98,7 +98,7 @@ namespace YAT.Domain.Parser
 			@"""\0b01001111"" alternative to ""\b(01001111)""" + Environment.NewLine +
 			@"""\u20AC"" alternative to ""\U+20AC"" or ""\U(20AC)""" + Environment.NewLine +
 			Environment.NewLine +
-			@"Type \\ to send a backspace." + Environment.NewLine +
+			@"Type \\ to send a backslash." + Environment.NewLine +
 			@"Type \< to send an opening angle bracket." + Environment.NewLine +
 			@"Type \) to send a closing parenthesis.";
 
