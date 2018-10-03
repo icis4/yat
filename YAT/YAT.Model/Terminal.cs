@@ -2373,7 +2373,7 @@ namespace YAT.Model
 					{
 						this.terminal.InitialTimeStamp = now;
 
-						if (this.settingsRoot.Display.ShowTimeSpan || this.settingsRoot.Display.ShowTimeSpan)
+						if (this.settingsRoot.Display.ShowTimeSpan)
 							this.terminal.RefreshRepositories();
 					}
 				}
@@ -3971,7 +3971,7 @@ namespace YAT.Model
 
 			this.terminal.InitialTimeStamp = now;
 
-			if (this.settingsRoot.Display.ShowTimeSpan || this.settingsRoot.Display.ShowTimeSpan)
+			if (this.settingsRoot.Display.ShowTimeSpan)
 				this.terminal.RefreshRepositories();
 		}
 
