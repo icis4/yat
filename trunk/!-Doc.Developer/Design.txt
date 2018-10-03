@@ -1,0 +1,25 @@
+﻿
+Design Criteria
+---------------
+ > Generally usable assemblies (i.e. those without any YAT specifics) shall clearly be separated from YAT specific assemblies.
+ > Namespace structure shall follow .NET namespace structure.
+ > Placing .NET extensions into a YAT.dll is not feasible, as it will be confused with YAT.exe.
+ > Placing .NET extensions into a YAT.SystemEx.dll would be inconsistent if namespace was YAT.IO....
+ > I/O extensions shall be usable stand-alone per technology, e.g. only serial COM ports, or only USB Ser/HID.
+   Rationale: MKY.IO.Usb is tighly coupled to HID.dll thus tighly coupled to Win32!
+
+Possible naming of MKY
+----------------------
+ > Following ALAZ : YAT.SystemEx.IOEx.PortsEx => sorry, 3 x Ex just makes thing more complicated than necessary
+ > Improved ALAZ  : YAT.SystemEx.IO.Ports
+                    - or -
+                    MKY.SystemEx.IO.Ports
+
+However:
+ > MKY.Win32 must not be SystemEx!
+ > MKY.IO.Usb must not be SystemEx!
+ > MKY.IO.Serial must not be SystemEx!
+
+As a result, there would by MKY.SystemEx... as well as MKY... assemblies. Not really better...
+
+=> Leaving structure as is, i.e. MKY|YAT
