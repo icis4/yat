@@ -2366,16 +2366,13 @@ namespace YAT.Model
 				{
 					var now = DateTime.Now; // Ensure that all use exactly the same instant.
 
-					this.activeConnectChrono.Restart(now);
-					this.totalConnectChrono.Start(now);
+					this.activeConnectChrono.Restart(now); // Restart, i.e. reset and start from zero.
+					this.totalConnectChrono.Start(now);    // Start again, i.e. continue at last time.
 
-					if (this.terminal != null)
-					{
-						this.terminal.InitialTimeStamp = now;
-
-						if (this.settingsRoot.Display.ShowTimeSpan)
-							this.terminal.RefreshRepositories();
-					}
+					this.terminal.InitialTimeStamp = now;       // The initial time stamp is used for
+					                                            // time spans. Consequently, the spans
+					if (this.settingsRoot.Display.ShowTimeSpan) // will be based on the active connect
+						this.terminal.RefreshRepositories();    // time, not the total connect time.
 				}
 				else if (!isConnectedNow &&  hasBeenConnected)
 				{
