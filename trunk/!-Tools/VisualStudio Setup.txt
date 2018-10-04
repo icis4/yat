@@ -23,10 +23,12 @@ Help > Set Preference > Help Viewer
     > VisualStudio Fundamentals
     > VisualStudio VB and C#
     > VisualStudio C++
-    > VisualStudio F#
     > .NET 3.5
     > .NET 4.0
     > .NET 4.5/4.6
+    > Windows API Reference
+    > Windows Debugging
+    > Windows Desktop App Development
 
 Tools > Options...
   > Environment
@@ -35,8 +37,7 @@ Tools > Options...
     > All Languages > General > Diplay > Line numers = yes
     > C# > Tabs > Keep tabs
     > C# > Code Style > Qualify member access with 'this' = yes
-    > C# > Code Style > Use 'var' when generating locals = no
-    > C# > Formatting > All auto = no
+    > C# > Formatting > 3 x auto = no
     > C# > Advanced > Place 'System' usings first
   > Debugging
     > General > Step over properties and operators = no
@@ -93,4 +94,4 @@ Toolbar
 Customize > Commands
     > Toolbar > Standard
         > Solution Configuration > Modifiy Selection
-            > Width = 110
+            > Width = 360
