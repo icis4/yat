@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.26 Development
+// MKY Version 1.0.25
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -245,14 +245,17 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// The aspect ratio of the scaled image's rectangle.
+		/// Gets the aspect ratio of the scaled image rectangle.
 		/// </summary>
+		[Description("The aspect ratio of the scaled image rectangle.")]
 		public float ImageScaledAspectRatio
 		{
 			get
 			{
-				Size scaled = ImageScaledSize;
-				return ((float)scaled.Width / scaled.Height);
+				if (base.Image != null)
+					return ((float)base.Image.Size.Width / base.Image.Size.Height);
+				else
+					return (1.0f);
 			}
 		}
 
@@ -283,11 +286,11 @@ namespace MKY.Windows.Forms
 						int scaledWidth = Width;
 						int scaledHeight = Height;
 
-						if (ImageAspectRatio < AspectRatio)
-							scaledWidth  = (int)(((float)Width  / AspectRatio * ImageAspectRatio) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
+						if (ImageScaledAspectRatio < AspectRatio)
+							scaledWidth  = (int)(((float)Width  / AspectRatio * ImageScaledAspectRatio) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
 
-						if (ImageAspectRatio > AspectRatio)
-							scaledHeight = (int)(((float)Height * AspectRatio / ImageAspectRatio) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
+						if (ImageScaledAspectRatio > AspectRatio)
+							scaledHeight = (int)(((float)Height * AspectRatio / ImageScaledAspectRatio) + 0.5f); // Equals non-existent 'int Floor(float)' rounding toward negative infinity.
 
 						return (new Size(scaledWidth, scaledHeight));
 					}
