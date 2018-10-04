@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.26 Development
+// MKY Version 1.0.25
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -331,6 +331,27 @@ namespace MKY.IO.Serial.Socket
 		public virtual bool IsStarted
 		{
 			get { return (!IsStopped); }
+		}
+
+		/// <summary></summary>
+		public virtual bool IsListening
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				switch (GetStateSynchronized())
+				{
+					case SocketState.Listening:
+					{
+						return (true);
+					}
+					default:
+					{
+						return (false);
+					}
+				}
+			}
 		}
 
 		/// <summary></summary>
