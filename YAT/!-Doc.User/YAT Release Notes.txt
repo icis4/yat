@@ -100,6 +100,12 @@ New:
 Important changes:
 - Prevention of potential handling error when copying data to clipboard (feature request #345).
 - Unicode/Non-Unicode multi-byte encoding test coverage improved (related to bugs #427, #428, #429).
+- No longer using [Ctrl+Alt+<CharOrDigit>] shortcuts to avoid conflicts with [Alt Gr] modifier as
+  [Ctrl+Alt] results in [Alt Gr] on Windows (feature request #359). As a consequence:
+   > Shortcuts to activate predefined command page changed from [Ctrl+Alt+1..9] to [Ctrl+1..9].
+   > Shortcuts to change window layout changed from [Ctrl+Alt+...] to [Alt+Shift+...].
+   > Shortcuts to [Find Next] changed from [Ctrl+Alt+F] to [Alt+Shift+N].
+          and [Find Previous] changed from [Alt+Shift+F] to [Alt+Shift+P].
 
 Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
@@ -230,8 +236,8 @@ Important changes:
    > Cursor position and text selection is remembered (related to bugs #391 and #395).
    > Cursor no longer jumps to the end of the input box when sending the text (bug #395).
    > Cursor no longer jumps to the beginning of the input box after edit of recent (rel. bug #391).
-- Shortcut of [Clear] changed from (Shift+Delete) to (Ctrl+L) (related to change stated above).
-- Shortcut of [Save to File] changed from (Ctrl+F) to (Ctrl+T) (consequence of feat. #11 and #79).
+- Shortcut of [Clear] changed from [Shift+Delete] to [Ctrl+L] (related to change stated above).
+- Shortcut of [Save to File] changed from [Ctrl+F] to [Ctrl+T] (consequence of feat. #11 and #79).
 - Automatic response trigger is highlighted, same as automatic action trigger (rel. to feat. #320).
 - Automatic response extended by selection to respond the received trigger (related to feature
   requests #176, #252 implemented in version 1.99.50).
@@ -248,10 +254,10 @@ Fixed bugs:
 - Monitors no longer scroll to top as soon as display buffer has been filled (bugs #394 and #398 as
   well as feature request #326; related to feature request #323 implemented in previous release).
 - Focus no longer moves away from [Send Text] when switching applications (bug #391).
-- Standard word selection shortcuts (Ctrl+Shift+Left|Right) also work when commands are predefined.
-- Shortcuts to navigate command pages changed from (Ctrl+Shift+Left|Right) to (Ctrl+Alt+Left|Right)
-  and (Ctrl+Shift+F1..F12) to (Ctrl+Alt+1..9) as well as shortcuts to 'Copy to Send Text' changed
-  from (Alt+Shift+F1..F12) to (Ctrl+Shift+F1..F12) (consequence of change above).
+- Standard word selection shortcuts [Ctrl+Shift+Left|Right] also work when commands are predefined.
+- Shortcuts to navigate command pages changed from [Ctrl+Shift+Left|Right] to [Ctrl+Alt+Left|Right]
+  and [Ctrl+Shift+F1..F12] to [Ctrl+Alt+1..9] as well as shortcuts to 'Copy to Send Text' changed
+  from [Alt+Shift+F1..F12] to [Ctrl+Shift+F1..F12] (consequence of change above).
 - Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
@@ -309,9 +315,9 @@ Important changes:
   responsiveness to receive data while sending a lot of fast data (rel. to bugs #305, #380, #383).
 - Automatic vertical scrolling of monitor is not only suspended if one or more lines are selected
   but also, if the scroll bar is moved away from the bottom of the monitor (feature request #323).
-- Break (Ctrl+B) can now also be used to break sending a file (bug #305 and feature request #295).
+- Break [Ctrl+B] can now also be used to break sending a file (bug #305 and feature request #295).
 - Auto-reconnect of TCP/IP client terminals enabled by default.
-- Text input now supports the (Ctrl+Backspace) shortcut and multi-line text input also the (Ctrl+A)
+- Text input now supports the [Ctrl+Backspace] shortcut and multi-line text input also the [Ctrl+A]
   shortcut (feature request #317 as workaround to limitation of .NET Windows.Forms).
 - Warning on invalid multi-byte encoded byte sequences for string, character and Unicode radix.
 - Option to display the date has been merged with option to display the time, but it is now possible
@@ -370,7 +376,7 @@ YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
 ----------------------------------------------------------------------------------------------------
 
 New:
-- [Send Text] without EOL by (Ctrl+Enter) or (Ctrl+F3) (feature requests #281, #283, #285).
+- [Send Text] without EOL by [Ctrl+Enter] or [Ctrl+F3] (feature requests #281, #283, #285).
 - Option to send data in Unicode notation as "\U+...." or C-style "\u...." or YAT-style "\U(....)
   as well as option to show data in Unicode notation "U+...." added (feature request #271).
 - Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
@@ -868,7 +874,7 @@ Important changes:
   control (related to feature requests #2932691 and #3066635 and bug #3432512)
 - Parity error replacement removed since parity errors are displayed as error text inside terminal
 - Break states are only indicated and modifiable if selected in 'AdvancedSettings'
-- Shortcut for window layout added: Ctrl+Alt+C/H/V layouts cascaded/horizontal/vertical
+- Shortcut for window layout added: [Ctrl+Alt+C/H/V] layouts cascaded/horizontal/vertical
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed
 - Exception handling refactored, now using 'Application.ThreadException' for 'Windows.Forms'
@@ -923,7 +929,7 @@ YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25
 Important changes:
 - Update to DejaVu 2.32
 - Handling of non-platform file system paths improved (related to feature request #2982052)
-- Shortcut to [Terminal > Select None] has changed to Ctrl+Shift+N (bug #3220852)
+- Shortcut to [Terminal > Select None] has changed to [Ctrl+Shift+N] (bug #3220852)
 - Handling of unhandled exceptions improved (feature request #3176816)
    > The user now has a choice on how to proceed
    > There should no longer be undesired multiple exceptions
@@ -1331,7 +1337,7 @@ YAT 2.0 Alpha 3 Version 1.99.8 :: 2007-02-25
 ----------------------------------------------------------------------------------------------------
 
 New:
-- (Ctrl+C) copies selected monitor contents onto clipboard
+- [Ctrl+C] copies selected monitor contents onto clipboard
 - Save and send from YAT XML files
 - Procedure commands "\!(NoEOL)" and "\!(EOL)" added
 - Chronometer added to status bar

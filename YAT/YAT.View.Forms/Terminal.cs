@@ -284,7 +284,7 @@ namespace YAT.View.Forms
 			if (this.contextMenuStripShortcutTargetWorkaround.ProcessCmdKey(keyData))
 				return (true);
 
-			// In addition to predefined shortcuts in the menus, the shortcut Alt+Shift+F1..F12
+			// In addition to predefined shortcuts in the menus, the shortcut [Alt+Shift+F1..F12]
 			// shall copy the according 'Predefined Command' to 'Send Text':
 			if ((keyData & Keys.Modifiers) == (Keys.Alt | Keys.Shift))
 			{
