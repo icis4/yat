@@ -111,11 +111,12 @@ Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
 - Optional user name of terminal is taken into account again (bug #415).
 - Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
-- 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
-  #422, #423, #432, #434 #435) which further refines the fix to former bugs #408 and #409.
 - 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - Problem with escape sequences in automatic action/response fixed (bug #424).
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
+- 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
+- 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
+  #422, #423, #432, #434 #435) which further refines the fix to former bugs #408 and #409.
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bug #431).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
