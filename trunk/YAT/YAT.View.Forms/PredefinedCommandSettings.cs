@@ -410,14 +410,14 @@ namespace YAT.View.Forms
 				}
 
 				// Page list buttons:
-				button_NamePage.Enabled = pageIsSelected;
-				button_InsertPage.Enabled = pageIsSelected;
-				button_AddPage.Enabled = true;
-				button_CopyPage.Enabled = pageIsSelected;
-				button_DeletePage.Enabled = pageIsSelected;
-				button_MovePageUp.Enabled = pageIsSelected && (this.selectedPage > 1);
+				button_NamePage    .Enabled = pageIsSelected;
+				button_InsertPage  .Enabled = pageIsSelected;
+				button_AddPage     .Enabled = true;
+				button_CopyPage    .Enabled = pageIsSelected;
+				button_DeletePage  .Enabled = pageIsSelected; // Deleting a sole page is permissible.
+				button_MovePageUp  .Enabled = pageIsSelected && (this.selectedPage > 1);
 				button_MovePageDown.Enabled = pageIsSelected && (this.selectedPage < pageCount);
-				button_DeletePages.Enabled = (pageCount > 0);
+				button_DeletePages .Enabled = (pageCount > 0); // Deleting a sole page is permissible.
 
 				// Selected page:
 				if (pageIsSelected)
@@ -584,9 +584,18 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
-				this.selectedPage = Int32Ex.Limit(this.selectedPage, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // 'max' must be 1 or above.
-				SetControls();
+				if (this.settingsInEdit.Pages.Count > 1)
+				{
+					this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
+					this.selectedPage = Int32Ex.Limit(this.selectedPage, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // 'max' must be 1 or above.
+					SetControls();
+				}
+				else // Same behavior as DeletePages() further below.
+				{
+					this.settingsInEdit.CreateDefaultPage();
+					this.selectedPage = 1;
+					SetControls();
+				}
 			}
 		}
 
@@ -613,12 +622,12 @@ namespace YAT.View.Forms
 		{
 			if (MessageBoxEx.Show
 				(
-				this,
-				"Delete all pages?",
-				"Delete All?",
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Question,
-				MessageBoxDefaultButton.Button2
+					this,
+					"Delete all pages?",
+					"Delete All?",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question,
+					MessageBoxDefaultButton.Button2
 				)
 				== DialogResult.Yes)
 			{
