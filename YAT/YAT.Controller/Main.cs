@@ -101,19 +101,28 @@ namespace YAT.Controller
 		};
 
 		#if (HANDLE_UNHANDLED_EXCEPTIONS)
-		private static readonly string ObjectDisposedExceptionInMscorlibMessage = 
-			"Such 'ObjectDisposedException' in 'mscorlib' is an exeption that YAT is aware " +
-			"of but cannot properly handle. It can happen when a serial COM port gets physically " +
-			"disconnected while it is open. It happens due to a bug in the .NET 'SerialPort' " +
-			"class for which Microsoft seems to have no plans fixing. The issue is known for " +
-			"internal ports using the Microsoft serial COM port driver, external USB/COM ports " +
-			"using the Microsoft USB CDC/ACM (virtual serial port) driver as well as Microchip " +
-			"MCP2221 USB-to-UART/I2C bridges. The issue is referred to by dozens of online blogs " +
-			"and articles. YAT is applying several patches to try working around the issue, but " +
-			"apparently all of them have failed in the current situation." +
+
+		private static readonly string ExceptionBackground = 
+			"It can happen when a serial COM port gets physically disconnected while it is open. " +
+			"It happens due to a bug in the .NET 'SerialPort' class for which Microsoft seems to " +
+			"have no plans fixing. The issue is known for internal ports using the Microsoft " +
+			"serial COM port driver, external USB/COM ports using the Microsoft USB CDC/ACM " +
+			"(virtual serial port) driver as well as Microchip MCP2221 USB-to-UART/I2C bridges. " +
+			"The issue is referred to by dozens of online blogs and articles. YAT is applying " +
+			"several patches to try working around the issue, but apparently none of them has " +
+			"succeeded in the current situation." +
 			Environment.NewLine + Environment.NewLine +
 			"To prevent this issue, refrain from disconnecting a device while its port is open. " +
 			"Or, manually close the port after the device got disconnected.";
+
+		private static readonly string ObjectDisposedExceptionInMscorlibOrSystemMessage = 
+			"Such 'ObjectDisposedException' in the underlying system is an exeption " +
+			"that YAT is aware of but cannot properly handle. " + ExceptionBackground;
+
+		private static readonly string UnauthorizedAccessExceptionInEventLoopRunnerMessage = 
+			"Such 'UnauthorizedAccessException' in 'SerialStream.EventLoopRunner' is an exeption " +
+			"that YAT is aware of but cannot properly handle. " + ExceptionBackground;
+
 		#endif
 
 		#endregion
@@ -622,8 +631,11 @@ namespace YAT.Controller
 				var ex = (e.ExceptionObject as Exception);
 
 				var message = new StringBuilder(ToUnhandledExceptionMessage(ex));
-				if (IsObjectDisposedExceptionInMscorlib(ex))
-					message.Append(Environment.NewLine + Environment.NewLine + ObjectDisposedExceptionInMscorlibMessage);
+
+				if (IsSerialPortCausedObjectDisposedExceptionInMscorlibOrSystem(ex))
+					message.Append(Environment.NewLine + Environment.NewLine + ObjectDisposedExceptionInMscorlibOrSystemMessage);
+				else if (IsSerialPortCausedUnauthorizedAccessExceptionInEventLoopRunner(ex))
+					message.Append(Environment.NewLine + Environment.NewLine + UnauthorizedAccessExceptionInEventLoopRunnerMessage);
 
 				var result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message.ToString(), View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, !e.IsTerminating);
 				switch (result)
@@ -807,10 +819,15 @@ namespace YAT.Controller
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-				if (IsObjectDisposedExceptionInMscorlib(ex))
+				if (IsSerialPortCausedObjectDisposedExceptionInMscorlibOrSystem(ex))
 				{
 					Console.Error.WriteLine();
-					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibMessage);
+					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibOrSystemMessage);
+				}
+				else if (IsSerialPortCausedUnauthorizedAccessExceptionInEventLoopRunner(ex))
+				{
+					Console.Error.WriteLine();
+					Console.Error.WriteLine(UnauthorizedAccessExceptionInEventLoopRunnerMessage);
 				}
 			}
 		}
@@ -915,10 +932,15 @@ namespace YAT.Controller
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-				if (IsObjectDisposedExceptionInMscorlib(ex))
+				if (IsSerialPortCausedObjectDisposedExceptionInMscorlibOrSystem(ex))
 				{
 					Console.Error.WriteLine();
-					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibMessage);
+					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibOrSystemMessage);
+				}
+				else if (IsSerialPortCausedUnauthorizedAccessExceptionInEventLoopRunner(ex))
+				{
+					Console.Error.WriteLine();
+					Console.Error.WriteLine(UnauthorizedAccessExceptionInEventLoopRunnerMessage);
 				}
 			}
 		}
@@ -1021,10 +1043,15 @@ namespace YAT.Controller
 			{
 				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-				if (IsObjectDisposedExceptionInMscorlib(ex))
+				if (IsSerialPortCausedObjectDisposedExceptionInMscorlibOrSystem(ex))
 				{
 					Console.Error.WriteLine();
-					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibMessage);
+					Console.Error.WriteLine(ObjectDisposedExceptionInMscorlibOrSystemMessage);
+				}
+				else if (IsSerialPortCausedUnauthorizedAccessExceptionInEventLoopRunner(ex))
+				{
+					Console.Error.WriteLine();
+					Console.Error.WriteLine(UnauthorizedAccessExceptionInEventLoopRunnerMessage);
 				}
 			}
 		}
@@ -1199,10 +1226,123 @@ namespace YAT.Controller
 				return ("exception");
 		}
 
-		private static bool IsObjectDisposedExceptionInMscorlib(Exception ex)
+		/// <summary>
+		/// Related to ObjectDisposedException issue (bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401,...)
+		/// </summary>
+		/// <remarks>
+		/// Known error patterns:
+		/// <![CDATA[
+		/// Message:
+		///     Safe handle has been closed
+		/// Source:
+		///     System
+		/// Stack:
+		///     at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped* lpOverlapped, Int32& lpNumberOfBytesTransferred, Boolean bWait)
+		///     at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+		///     ...
+		/// 
+		/// Message:
+		///     Safe handle has been closed
+		/// Source:
+		///     mscorlib
+		/// Stack:
+		///     at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object p This, IntPtr pCleanupWorkList)
+		///     at Microsoft.Win32.UnsafeNativeMethods.WaitCommEvent(SafeFileHandle, hFile, Int32* lpEvtMask, Native...
+		///     at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+		///     ...
+		/// 
+		/// Message:
+		///     Das SafeHandle wurde geschlossen.
+		/// Source:
+		///     mscorlib
+		/// Stack:
+		///     bei System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+		///     bei Microsoft.Win32.Win32Native.SetEvent(SafeWaitHandle handle)
+		///     bei System.Threading.EventWaitHandle.Set()
+		///     bei System.IO.Ports.SerialStream.AsyncFSCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped pOverlapped)
+		///     ...
+		/// 
+		/// Message:
+		///     Das SafeHandle wurde geschlossen.
+		/// Source:
+		///     mscorlib
+		/// Stack:
+		///     bei System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+		///     bei Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped* lpOverlapped, Int32& lpNumberOfBytesTransferred, Boolean bWait)
+		///     bei System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+		///     ...
+		/// ]]>
+		/// Common:
+		/// <list type="bullet">
+		/// </list>
+		/// <item><description>Source is "System" or "mscorlib".</description></item>
+		/// <item><description>Stack trace contains "SafeFileHandle" or "SafeWaitHandle".</description></item>
+		/// <item><description>Stack trace contains "System.IO.Ports.SerialStream".</description></item>
+		/// </remarks>
+		private static bool IsSerialPortCausedObjectDisposedExceptionInMscorlibOrSystem(Exception ex)
 		{
-			return ((ex is ObjectDisposedException) && (ex.Source == "mscorlib") && (ex.Message.Contains("SafeHandle")));
+			if (ex is ObjectDisposedException)
+			{
+				if ((ex.Source == "mscorlib") ||
+				    (ex.Source == "System"))
+				{
+					if (ex.StackTrace.Contains("SafeFileHandle") ||
+					    ex.StackTrace.Contains("SafeWaitHandle"))
+					{
+						if (ex.StackTrace.Contains("System.IO.Ports.SerialStream"))
+						{
+							return (true);
+						}
+					}
+				}
+			}
+
+			return (false);
 		}
+
+		/// <summary>
+		/// Related to UnauthorizedAccessException issue (bugs #442,...)
+		/// </summary>
+		/// <remarks>
+		/// Known error patterns:
+		/// <![CDATA[
+		/// Message:
+		///     Der Zugriff auf den Anschluss wurde verweigert.
+		/// Source:
+		///     System
+		/// Stack:
+		///     bei System.IO.Ports.InternalResources.WinIOError(Int32 errorCode, String str)
+		///     bei System.IO.Port.SerialStream.EventLoopRunner.CallEvents(Int32 nativeEvents)
+		///     bei System.IO.Port.SerialStream.EventLoopRunner.WaitForCommEvent()
+		///     ...
+		/// ]]>
+		/// Common:
+		/// <list type="bullet">
+		/// </list>
+		/// <item><description>Source is "System".</description></item>
+		/// <item><description>Stack trace contains "System.IO.Ports.SerialStream.EventLoopRunner".</description></item>
+		/// </remarks>
+		private static bool IsSerialPortCausedUnauthorizedAccessExceptionInEventLoopRunner(Exception ex)
+		{
+			if (ex is UnauthorizedAccessException)
+			{
+				if ((ex.Source == "System"))
+				{
+					if (ex.StackTrace.Contains("System.IO.Ports.SerialStream.EventLoopRunner"))
+					{
+						return (true);
+					}
+				}
+			}
+
+			return (false);
+		}
+
+		// Note that there are several other issues with "System.IO.Ports.SerialPort":
+		//  > IOException issue
+		//  > ObjectDisposedException issue
+		//  > UnauthorizedAccessException and deadlock issue (bugs #201, #205,...)
+		// See "\MKY.IO.Ports\SerialPort\!-Doc\*.txt" for details.
 
 	#endif
 

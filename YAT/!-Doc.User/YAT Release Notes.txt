@@ -111,12 +111,15 @@ Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
 - Optional user name of terminal is taken into account again (bug #415).
 - Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
+- Handling of potential 'ObjectDisposedException' when disconnecting USB/RS-232 converters (USB CDC)
+  without closing the serial COM port now also handles potential 'UnauthorizedAccessException'
+  (bug #442, related to former bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401).
 - 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - Problem with escape sequences in automatic action/response fixed (bug #424).
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
-  #422, #423, #432, #434 #435) which further refines the fix to former bugs #408 and #409.
+  #422, #423, #432, #434, #435, #441) which further refines the fix to former bugs #408 and #409.
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bug #431).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
@@ -305,10 +308,11 @@ New:
   COM port behavior on framing errors. Useful when e.g. changing baud rates (feature request #321).
 
 Important changes:
-- Additional workaround applied to prevent 'ObjectDisposedException' when disconnecting USB/RS-232
-  converters (USB CDC) without closing the serial COM port (bug #382). Workaround also applies when
-  undocking or hibernating a computer running YAT without closing the serial COM port, as well as
-  when restarting devices that implement a virtual serial COM port (USB CDC).
+- Additional workaround applied to prevent potential 'ObjectDisposedException' or
+  'UnauthorizedAccessException' when disconnecting USB/RS-232 converters (USB CDC) without closing
+  the serial COM port (bug #382).
+  Workaround also applies when undocking or hibernating a computer running YAT without closing the
+  serial COM port, and when restarting devices that implement a virtual serial COM port (USB CDC).
 - Option to disable user interaction question when a serial COM port, a local network interface or
   a USB Ser/HID device is no longer available; terminal will silently stay closed (feat. req. #316).
 - Improved speed on sending and receiving, preventing application freeze on fast data (bug #383).
@@ -550,8 +554,8 @@ Important changes:
 Fixed bugs:
 - Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing the
   serial COM port no longer leads to an 'ObjectDisposedException' or 'UnauthorizedAccessException'
-  in most cases (bugs #224, #254, #293, #316 and #345). However, it is still required to reset the
-  converters, i.e. disconnect and reconnect them, or restart the computer. In addition, it may be
+  in most cases (bugs #224, #254, #293, #316, #317, #345). However, it may still be needed to reset
+  the converter, i.e. disconnect and reconnect it, or restart the computer. In addition, it may be
   required to disconnect or reset any device sending continuous data. Otherwise, related serial COM
   ports may no longer be opened. Issue is being reported by many users of .NET, but Microsoft seems
   to have no plans fixing it. If an 'ObjectDisposedException' or 'UnauthorizedAccessException' still
