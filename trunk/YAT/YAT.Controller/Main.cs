@@ -100,20 +100,7 @@ namespace YAT.Controller
 			"  -6      Unhandled exception",
 		};
 
-		#if (HANDLE_UNHANDLED_EXCEPTIONS)
-
-		private static readonly string ExceptionBackground = 
-			"It can happen when a serial COM port gets physically disconnected while it is open. " +
-			"It happens due to a bug in the .NET 'SerialPort' class for which Microsoft seems to " +
-			"have no plans fixing. The issue is known for internal ports using the Microsoft " +
-			"serial COM port driver, external USB/COM ports using the Microsoft USB CDC/ACM " +
-			"(virtual serial port) driver as well as Microchip MCP2221 USB-to-UART/I2C bridges. " +
-			"The issue is referred to by dozens of online blogs and articles. YAT is applying " +
-			"several patches to try working around the issue, but apparently none of them has " +
-			"succeeded in the current situation." +
-			Environment.NewLine + Environment.NewLine +
-			"To prevent this issue, refrain from disconnecting a device while its port is open. " +
-			"Or, manually close the port after the device got disconnected.";
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
 		private static readonly string ObjectDisposedExceptionInMscorlibOrSystemMessage = 
 			"Such 'ObjectDisposedException' in the underlying system is an exeption " +
@@ -123,7 +110,20 @@ namespace YAT.Controller
 			"Such 'UnauthorizedAccessException' in 'SerialStream.EventLoopRunner' is an exeption " +
 			"that YAT is aware of but cannot properly handle. " + ExceptionBackground;
 
-		#endif
+		private static readonly string ExceptionBackground = 
+			"It can happen when a serial COM port gets physically disconnected while it is open. " +
+			"It happens due to a bug in the .NET 'SerialPort' class for which Microsoft only has " +
+			"vague plans fixing. The issue is known for internal ports using the Microsoft " +
+			"serial COM port driver, external USB/COM ports using the Microsoft USB CDC/ACM " +
+			"(virtual serial port) driver as well as Microchip MCP2221 USB-to-UART/I2C bridges. " +
+			"The issue is referred to by dozens of online blogs and articles. YAT is applying " +
+			"several patches to try working around the issue, but apparently none of them has " +
+			"succeeded in the current situation." +
+			Environment.NewLine + Environment.NewLine +
+			"To prevent this issue, refrain from disconnecting a device while its port is open. " +
+			"Or, manually close the port after the device got disconnected.";
+
+	#endif
 
 		#endregion
 
