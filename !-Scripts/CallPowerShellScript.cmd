@@ -43,67 +43,67 @@
 ::==================================================================================================
 
 :: Change to 'TRUE' for verbose execution (e.g. in case of debugging):
-SET verbose='FALSE'
+SET _verbose='FALSE'
 
 :: Retrieve the first argument which is the PowerShell script to be called:
-SET script=%1
-IF %verbose%=='TRUE' ECHO Script is %script%
+SET _script=%1
+IF %_verbose%=='TRUE' ECHO Script is %_script%
 
 :: Get the length of the first argument to prepare retrieving the subsequent arguments:
 SET #=%1
-SET len=0
+SET _len=0
 :StrLenLoop
 IF DEFINED # (
     SET #=%#:~1%
     SET /A len += 1
-    IF %verbose%=='TRUE' (
-        ECHO Retrieving script path length... Currently at %len%...
+    IF %_verbose%=='TRUE' (
+        ECHO Retrieving script path length... Currently at %_len%...
     )
     GOTO :StrLenLoop
 )
-IF %verbose%=='TRUE' ECHO Script path length is %len%
+IF %_verbose%=='TRUE' ECHO Script path length is %_len%
 
 :: Check whether there are script arguments to forward:
 IF "%~2"=="" (
-    SET hasArgs='FALSE'
-    IF %verbose%=='TRUE' ECHO Script has no args
+    SET _hasArgs='FALSE'
+    IF %_verbose%=='TRUE' ECHO Script has no args
 ) else (
-    SET hasArgs='TRUE'
-    IF %verbose%=='TRUE' ECHO Script has args
+    SET _hasArgs='TRUE'
+    IF %_verbose%=='TRUE' ECHO Script has args
 )
 
 :: Compensate for the space between the first and the subsequent arguments:
-IF %hasArgs%=='TRUE' (
-    SET /A len += 1
+IF %_hasArgs%=='TRUE' (
+    SET /A _len += 1
 )
 
 :: Retrieve the subsequent arguments, retrieving all arguments and then skipping the first:
-SET args=%*
-CALL SET args=%%args:~%len%%%
+SET _args=%*
+CALL SET _args=%%_args:~%_len%%%
 :: CALL is required to let the args be correctly expanded!
-IF %verbose%=='TRUE' ECHO Script args are %args%
+IF %_verbose%=='TRUE' ECHO Script args are %_args%
 
 :: Convert all quotes within the arguments from '"' to '"""' to ensure that they are properly
 :: forwarded to the PowerShell -Command argument string:
-SET args=%args:"="""%
-:: SET must not be placed into an IF %hasArgs%=='TRUE', for whatever reason!
+SET _args=%_args:"="""%
+:: SET must not be placed into an IF %_hasArgs%=='TRUE', for whatever reason!
 :: Otherwise, an e.g. "-LintLevel is syntactically incorrect" error will occur!
-IF %verbose%=='TRUE' ECHO PowerShell args are %args%
+IF %_verbose%=='TRUE' ECHO PowerShell args are %_args%
 
 :: Compose options and command to call PowerShell:
-SET opts=-ExecutionPolicy Bypass -NoLogo -NoProfile
-IF %hasArgs%=='FALSE' (
-    SET cmd=PowerShell.exe %opts% -Command "& {%script%}"
+SET _opts=-ExecutionPolicy Bypass -NoLogo -NoProfile
+IF %_hasArgs%=='FALSE' (
+    SET _cmd=PowerShell.exe %_opts% -Command "& {%_script%}"
 ) else (
-    SET cmd=PowerShell.exe %opts% -Command "& {%script% %args%}"
+    SET _cmd=PowerShell.exe %_opts% -Command "& {%_script% %_args%}"
 )
-IF %verbose%=='TRUE' ECHO Invoking PowerShell...
-IF %verbose%=='TRUE' ECHO %cmd%
+IF %_verbose%=='TRUE' ECHO Invoking PowerShell...
+IF %_verbose%=='TRUE' ECHO %_cmd%
 
 :: Invoke PowerShell executing the script with the given arguments:
-%cmd%
-IF %verbose%=='TRUE' ECHO.
-IF %verbose%=='TRUE' ECHO ...done
+%_cmd%
+IF %_verbose%=='TRUE' ECHO.
+IF %_verbose%=='TRUE' ECHO ...done
 
 ::==================================================================================================
 :: End of
