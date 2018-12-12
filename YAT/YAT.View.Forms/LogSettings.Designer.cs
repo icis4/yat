@@ -126,7 +126,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_Neat);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(511, 433);
+			this.groupBox_Settings.Size = new System.Drawing.Size(507, 431);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -135,7 +135,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_TextEncoding.Controls.Add(this.checkBox_Options_EmitEncodingPreamble);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingTerminal);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingUTF8);
-			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(342, 350);
+			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(340, 350);
 			this.groupBox_Options_TextEncoding.Name = "groupBox_Options_TextEncoding";
 			this.groupBox_Options_TextEncoding.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_TextEncoding.TabIndex = 9;
@@ -188,7 +188,7 @@ namespace YAT.View.Forms
 			// button_RootOpen
 			// 
 			this.button_RootOpen.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
-			this.button_RootOpen.Location = new System.Drawing.Point(460, 19);
+			this.button_RootOpen.Location = new System.Drawing.Point(458, 19);
 			this.button_RootOpen.Name = "button_RootOpen";
 			this.button_RootOpen.Size = new System.Drawing.Size(31, 23);
 			this.button_RootOpen.TabIndex = 3;
@@ -201,7 +201,7 @@ namespace YAT.View.Forms
 			this.pathLabel_Root.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pathLabel_Root.Location = new System.Drawing.Point(53, 20);
 			this.pathLabel_Root.Name = "pathLabel_Root";
-			this.pathLabel_Root.Size = new System.Drawing.Size(354, 20);
+			this.pathLabel_Root.Size = new System.Drawing.Size(352, 20);
 			this.pathLabel_Root.TabIndex = 1;
 			this.pathLabel_Root.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolTip.SetToolTip(this.pathLabel_Root, "The root file specifies file name and root directory for all log files. The effec" +
@@ -212,7 +212,7 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderFormat);
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderChannel);
-			this.groupBox_Options_Folders.Location = new System.Drawing.Point(8, 350);
+			this.groupBox_Options_Folders.Location = new System.Drawing.Point(6, 350);
 			this.groupBox_Options_Folders.Name = "groupBox_Options_Folders";
 			this.groupBox_Options_Folders.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Folders.TabIndex = 7;
@@ -249,7 +249,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameTime);
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameDate);
 			this.groupBox_Options_Name.Controls.Add(this.label_Options_NameSeparator);
-			this.groupBox_Options_Name.Location = new System.Drawing.Point(8, 268);
+			this.groupBox_Options_Name.Location = new System.Drawing.Point(6, 268);
 			this.groupBox_Options_Name.Name = "groupBox_Options_Name";
 			this.groupBox_Options_Name.Size = new System.Drawing.Size(495, 76);
 			this.groupBox_Options_Name.TabIndex = 6;
@@ -322,7 +322,7 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeCreate);
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeAppend);
-			this.groupBox_Options_Mode.Location = new System.Drawing.Point(175, 350);
+			this.groupBox_Options_Mode.Location = new System.Drawing.Point(173, 350);
 			this.groupBox_Options_Mode.Name = "groupBox_Options_Mode";
 			this.groupBox_Options_Mode.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Mode.TabIndex = 8;
@@ -362,7 +362,7 @@ namespace YAT.View.Forms
 			// 
 			// button_Root
 			// 
-			this.button_Root.Location = new System.Drawing.Point(419, 19);
+			this.button_Root.Location = new System.Drawing.Point(417, 19);
 			this.button_Root.Name = "button_Root";
 			this.button_Root.Size = new System.Drawing.Size(31, 23);
 			this.button_Root.TabIndex = 2;
@@ -382,12 +382,12 @@ namespace YAT.View.Forms
 			this.groupBox_Raw.Controls.Add(this.comboBox_Raw_Extension);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Rx);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Tx);
-			this.groupBox_Raw.Location = new System.Drawing.Point(8, 52);
+			this.groupBox_Raw.Location = new System.Drawing.Point(6, 162);
 			this.groupBox_Raw.Name = "groupBox_Raw";
 			this.groupBox_Raw.Size = new System.Drawing.Size(495, 100);
-			this.groupBox_Raw.TabIndex = 4;
+			this.groupBox_Raw.TabIndex = 5;
 			this.groupBox_Raw.TabStop = false;
-			this.groupBox_Raw.Text = "&Raw Outputs";
+			this.groupBox_Raw.Text = "&Raw Data";
 			this.toolTip.SetToolTip(this.groupBox_Raw, "Bytes as transmitted over serial interface");
 			// 
 			// pathLabel_Raw_Rx
@@ -486,12 +486,12 @@ namespace YAT.View.Forms
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Rx);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Bidir);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Tx);
-			this.groupBox_Neat.Location = new System.Drawing.Point(8, 160);
+			this.groupBox_Neat.Location = new System.Drawing.Point(6, 56);
 			this.groupBox_Neat.Name = "groupBox_Neat";
 			this.groupBox_Neat.Size = new System.Drawing.Size(495, 100);
-			this.groupBox_Neat.TabIndex = 5;
+			this.groupBox_Neat.TabIndex = 4;
 			this.groupBox_Neat.TabStop = false;
-			this.groupBox_Neat.Text = "&Neat Outputs";
+			this.groupBox_Neat.Text = "&Neat Format";
 			this.toolTip.SetToolTip(this.groupBox_Neat, "Time stamp, radix, length,... formatted as in monitor view");
 			// 
 			// pathLabel_Neat_Rx
@@ -594,7 +594,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(629, 457);
+			this.ClientSize = new System.Drawing.Size(629, 455);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
