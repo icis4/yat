@@ -2945,7 +2945,7 @@ namespace YAT.View.Forms
 			this.groupBox_Monitor.Size = new System.Drawing.Size(647, 437);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
-			this.groupBox_Monitor.Text = "Monitor";
+			this.groupBox_Monitor.Text = "&Monitor";
 			// 
 			// splitContainer_TxMonitor
 			// 
