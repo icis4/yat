@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0.1 :: 2018-??-??
+YAT 2.0.1 :: 2019-??-??
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -106,6 +106,10 @@ Important changes:
    > Shortcuts to change window layout changed from [Ctrl+Alt+...] to [Alt+Shift+...].
    > Shortcuts to [Find Next] changed from [Ctrl+Alt+F] to [Alt+Shift+N].
           and [Find Previous] changed from [Alt+Shift+F] to [Alt+Shift+P].
+- Shortcuts to select panels no longer conflict with those to select menus (feature request #355).
+   > Shortcut of [Send Text] changed to [Alt+E] to distinguish from shortcut of [Terminal] menu.
+   > Shortcut of [Send File] changed to [Alt+I] to distinguish from shortcut of [File] menu.
+   > Shortcut to [Monitor] added as [Alt+M].
 
 Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
@@ -1478,7 +1482,7 @@ YAT 4.0 is already ongoing.
 around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4.0 with Scripting :: Expected in late 2018 or 2019
+YAT 4.0 with Scripting :: Expected in 2019 or 2020
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,

@@ -85,7 +85,7 @@
 			this.groupBox_SendText.Size = new System.Drawing.Size(712, 46);
 			this.groupBox_SendText.TabIndex = 0;
 			this.groupBox_SendText.TabStop = false;
-			this.groupBox_SendText.Text = "Send &Text";
+			this.groupBox_SendText.Text = "Send T&ext";
 			// 
 			// sendText
 			// 
@@ -117,7 +117,7 @@
 			this.groupBox_SendFile.Size = new System.Drawing.Size(712, 46);
 			this.groupBox_SendFile.TabIndex = 1;
 			this.groupBox_SendFile.TabStop = false;
-			this.groupBox_SendFile.Text = "Send &File";
+			this.groupBox_SendFile.Text = "Send F&ile";
 			// 
 			// sendFile
 			// 
