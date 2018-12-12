@@ -34,7 +34,7 @@ Tools > Options...
   > Environment
     > International Settings > English
   > Text Editor
-    > All Languages > General > Diplay > Line numers = yes
+    > All Languages > General > Settings > Line numbers = yes
     > C# > Tabs > Keep tabs
     > C# > Code Style > Qualify member access with 'this' = yes
     > C# > Formatting > 3 x auto = no
@@ -85,7 +85,7 @@ Shortcuts
 Tools > Options
  > Environment > Keyboard
     > Show "Tools.External"
-       > Command2 (NUnit)
+       > Command4 (NUnit)
           > Alt+N (Global)
 
 
