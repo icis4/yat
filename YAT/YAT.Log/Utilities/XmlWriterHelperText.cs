@@ -45,16 +45,16 @@ namespace YAT.Log.Utilities
 	/// <summary>
 	/// Static utility class providing XML writer functionality for YAT.
 	/// </summary>
-	public static class XmlWriterHelperNeat
+	public static class XmlWriterHelperText
 	{
 		/// <returns>Returns the number of lines that could successfully be written to the file.</returns>
 		public static int SaveLinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
 		{
-			List<XmlTransferNeatLine> transferLines;
+			List<XmlTransferTextLine> transferLines;
 			int count = ConvertLines(displayLines, out transferLines);
 			if (count > 0)
 			{
-				Type type = typeof(List<XmlTransferNeatLine>);
+				Type type = typeof(List<XmlTransferTextLine>);
 				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
 
 				if (addSchema)
@@ -69,12 +69,12 @@ namespace YAT.Log.Utilities
 		}
 
 		/// <returns>Returns the number of lines that could successfully be converted.</returns>
-		private static int ConvertLines(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
+		private static int ConvertLines(List<DisplayLine> displayLines, out List<XmlTransferTextLine> transferLines)
 		{
-			transferLines = new List<XmlTransferNeatLine>(displayLines.Count); // Preset the required capacity to improve memory management.
+			transferLines = new List<XmlTransferTextLine>(displayLines.Count); // Preset the required capacity to improve memory management.
 			foreach (var dl in displayLines)
 			{
-				XmlTransferNeatLine tl;
+				XmlTransferTextLine tl;
 				if (ConvertLine(dl, out tl))
 					transferLines.Add(tl);
 				else
@@ -86,7 +86,7 @@ namespace YAT.Log.Utilities
 
 		/// <returns>Returns <c>true</c> if the line could successfully be converted.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ConvertLine(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
+		public static bool ConvertLine(DisplayLine displayLine, out XmlTransferTextLine transferLine)
 		{
 			// Note that display elements are text-only and no longer contain the underlying typed
 			// information such as the time stamp of the origin. Since the XML schema is strongly-
@@ -196,7 +196,7 @@ namespace YAT.Log.Utilities
 			else
 				direction = Direction.None;
 
-			transferLine = new XmlTransferNeatLine(timeStamp, portStr, direction, textStr, errorStr, lengthByteCount);
+			transferLine = new XmlTransferTextLine(timeStamp, portStr, direction, textStr, errorStr, lengthByteCount);
 
 			return (success);
 		}
