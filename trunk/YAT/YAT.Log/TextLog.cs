@@ -39,7 +39,7 @@ using YAT.Log.Utilities;
 namespace YAT.Log
 {
 	/// <summary></summary>
-	internal class NeatLog : Log
+	internal class TextLog : Log
 	{
 		/// <summary></summary>
 		protected enum FileType
@@ -53,13 +53,13 @@ namespace YAT.Log
 		private Encoding encoding;
 		private FormatSettings format;
 
-		private XmlWriterNeat xmlWriter;
+		private XmlWriterText xmlWriter;
 		private RtfWriter rtfWriter;
 		private TextWriter textWriter;
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
+		public TextLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
 			: base(enabled, makeFilePath, writeMode)
 		{
 			this.encoding = encoding;
@@ -130,7 +130,7 @@ namespace YAT.Log
 				{
 					case FileType.Xml:
 					{
-						this.xmlWriter = new XmlWriterNeat(stream, true, FilePath);
+						this.xmlWriter = new XmlWriterText(stream, true, FilePath);
 						break;
 					}
 

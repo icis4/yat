@@ -85,18 +85,18 @@ namespace YAT.Domain.Utilities
 				sb.AppendLine();
 			}
 
-			// If raw XML fails, try to deserialize from neat XML file:
+			// If raw XML fails, try to deserialize from text XML file:
 			try
 			{
-				if (LinesFromNeatFile(filePath, out lines) > 0)
+				if (LinesFromTextFile(filePath, out lines) > 0)
 					return (lines.Length);
 
-				sb.AppendLine("File does not match the YAT neat XML transfer schema.");
+				sb.AppendLine("File does not match the YAT text XML transfer schema.");
 				sb.AppendLine();
 			}
-			catch (Exception exNeat)
+			catch (Exception exText)
 			{
-				sb.AppendLine(exNeat.Message);
+				sb.AppendLine(exText.Message);
 				sb.AppendLine();
 			}
 
@@ -143,18 +143,18 @@ namespace YAT.Domain.Utilities
 			}
 		}
 
-		private static int LinesFromNeatFile(string filePath, out string[] lines)
+		private static int LinesFromTextFile(string filePath, out string[] lines)
 		{
-			var type = typeof(List<XmlTransferNeatLine>);
+			var type = typeof(List<XmlTransferTextLine>);
 			var deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
-			var neatLines = (deserializedLines as List<XmlTransferNeatLine>);
-			if (neatLines != null)
+			var textLines = (deserializedLines as List<XmlTransferTextLine>);
+			if (textLines != null)
 			{
-				var l = new List<string>(neatLines.Count); // Preset the required capacity to improve memory management.
-				foreach (var neatLine in neatLines)
+				var l = new List<string>(textLines.Count); // Preset the required capacity to improve memory management.
+				foreach (var t in textLines)
 				{
-					if (neatLine.Text != null)
-						l.Add(neatLine.Text);
+					if (t.Text != null)
+						l.Add(t.Text);
 				}
 				lines = l.ToArray();
 				return (lines.Length);

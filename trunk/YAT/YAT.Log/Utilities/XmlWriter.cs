@@ -418,22 +418,22 @@ namespace YAT.Log.Utilities
 	}
 
 	/// <summary>
-	/// Utility class providing neat XML writer functionality for YAT.
+	/// Utility class providing text XML writer functionality for YAT.
 	/// </summary>
-	public class XmlWriterNeat : XmlWriter
+	public class XmlWriterText : XmlWriter
 	{
-		private const string InitialLineAfterHeader = "<ArrayOfXmlTransferNeatLine " + Schema + ">";
-		private const string FinalLine              = "</ArrayOfXmlTransferNeatLine>";
+		private const string InitialLineAfterHeader = "<ArrayOfXmlTransferTextLine " + Schema + ">";
+		private const string FinalLine              = "</ArrayOfXmlTransferTextLine>";
 
 		/// <summary></summary>
-		public XmlWriterNeat(FileStream stream, bool addSchema, string schemaFilePath)
+		public XmlWriterText(FileStream stream, bool addSchema, string schemaFilePath)
 			: base(stream, InitialLineAfterHeader)
 		{
 			Indent();
 
 			if (addSchema)
 			{
-				Type type = typeof(List<XmlTransferNeatLine>);
+				Type type = typeof(List<XmlTransferTextLine>);
 				string directory = Path.GetDirectoryName(schemaFilePath);
 				string fileName = Path.GetFileNameWithoutExtension(schemaFilePath);
 				XmlSchemaEx.ToFile(type, directory, fileName);
@@ -464,17 +464,17 @@ namespace YAT.Log.Utilities
 		/// <summary></summary>
 		public void WriteLine(DisplayLine displayLine)
 		{
-			XmlTransferNeatLine transferLine;
-			XmlWriterHelperNeat.ConvertLine(displayLine, out transferLine);
+			XmlTransferTextLine transferLine;
+			XmlWriterHelperText.ConvertLine(displayLine, out transferLine);
 			WriteLine(transferLine);
 		}
 
-		private void WriteLine(XmlTransferNeatLine transferLine)
+		private void WriteLine(XmlTransferTextLine transferLine)
 		{
 			// AssertNotDisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
-			// <XmlTransferNeatLine TimeStamp="2001-12-23T12:34:56.789-01:00" Port="COM1" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />
+			// <XmlTransferTextLine TimeStamp="2001-12-23T12:34:56.789-01:00" Port="COM1" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />
 
 			// Neither outputting time span nor time delta since that can be calculated from time stamp.
 
@@ -484,7 +484,7 @@ namespace YAT.Log.Utilities
 			//  3. Select 'Save To File...' and select .xml as file extension.
 
 			var sb = new StringBuilder();
-			sb.Append(@"<XmlTransferNeatLine");
+			sb.Append(@"<XmlTransferTextLine");
 			sb.Append(@" TimeStamp=""");
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 			sb.Append(@"T"); // Note that time stamp format is fixed to standard XML format.

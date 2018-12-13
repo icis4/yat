@@ -98,7 +98,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Log.cs" />
-    <Compile Include="NeatLog.cs" />
+    <Compile Include="TextLog.cs" />
     <Compile Include="RawLog.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Settings\LogSettings.cs" />
@@ -108,7 +108,7 @@
     <Compile Include="Utilities\RtfWriter.cs" />
     <Compile Include="Utilities\TextWriter.cs" />
     <Compile Include="Utilities\XmlWriter.cs" />
-    <Compile Include="Utilities\XmlWriterHelperNeat.cs" />
+    <Compile Include="Utilities\XmlWriterHelperText.cs" />
     <Compile Include="Utilities\XmlWriterHelperRaw.cs" />
   </ItemGroup>
   <ItemGroup>

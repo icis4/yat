@@ -122,22 +122,22 @@ namespace YAT.Domain.Utilities
 	}
 
 	/// <summary>
-	/// A line's XML object model for neat import/export transfers.
+	/// A line's XML object model for text import/export transfers.
 	/// </summary>
 	[Serializable]
-	public class XmlTransferNeatLine : XmlTransferLine
+	public class XmlTransferTextLine : XmlTransferLine
 	{
 		private string text;
 		private string errorText;
 		private int    length;
 
 		/// <summary></summary>
-		public XmlTransferNeatLine()
+		public XmlTransferTextLine()
 		{
 		}
 
 		/// <summary></summary>
-		public XmlTransferNeatLine(DateTime timeStamp, string port, Direction direction, string text, string errorText, int length)
+		public XmlTransferTextLine(DateTime timeStamp, string port, Direction direction, string text, string errorText, int length)
 			: base(timeStamp, port, direction)
 		{
 			this.text      = text;
