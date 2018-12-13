@@ -365,9 +365,11 @@ namespace YAT.View.Forms
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger .OnFormDeactivateWorkaround();
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.OnFormDeactivateWorkaround();
 			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.OnFormDeactivateWorkaround();
-		////toolStripComboBox_TerminalMenu_Receive_AutoAction_Action is a standard ToolStripComboBox.
-		////toolStripComboBox_TerminalMenu_View_Panels_Orientation   is a standard ToolStripComboBox.
-		////toolStripComboBox_MonitorContextMenu_Panels_Orientation  is a standard ToolStripComboBox.
+		////toolStripComboBox_TerminalMenu_Receive_AutoAction_Action   is a standard ToolStripComboBox.
+		////toolStripComboBox_TerminalMenu_View_Panels_Orientation     is a standard ToolStripComboBox.
+		////toolStripComboBox_TerminalMenu_View_LineNumbers_Selection  is a standard ToolStripComboBox.
+		////toolStripComboBox_MonitorContextMenu_Panels_Orientation    is a standard ToolStripComboBox.
+		////toolStripComboBox_MonitorContextMenu_LineNumbers_Selection is a standard ToolStripComboBox.
 
 			send.OnFormDeactivateWorkaround();
 		}
@@ -1107,6 +1109,7 @@ namespace YAT.View.Forms
 			try
 			{
 				toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
+				toolStripComboBox_TerminalMenu_View_LineNumbers_Selection.Items.AddRange(Domain.Utilities.LineNumberSelectionEx.GetItems());
 			}
 			finally
 			{
@@ -1141,7 +1144,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
 				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
-				toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_View_Panels_Orientation, (OrientationEx)this.settingsRoot.Layout.MonitorOrientation);
 
 				toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
 				toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
@@ -1159,18 +1162,19 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
 
 				// Display:
-				bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
-				                   (this.settingsRoot.Display.RxRadixIsShowable));
+				bool isShowable = (this.settingsRoot.Display.TxRadixIsShowable ||
+				                   this.settingsRoot.Display.RxRadixIsShowable);
 				toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isShowable; // Attention: Same code exists further below as well as in 'View.Forms.AdvancedTerminalSettings'.
 				toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
 
-				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked      = this.settingsRoot.Display.ShowLineNumbers;
-	//!!LN!!			toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers.Checked = this.settingsRoot.Display.ShowTotalLineNumbers;
-				toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked        = this.settingsRoot.Display.ShowTimeStamp;
-				toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Checked         = this.settingsRoot.Display.ShowTimeSpan;
-				toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Checked        = this.settingsRoot.Display.ShowTimeDelta;
-				toolStripMenuItem_TerminalMenu_View_ShowPort.Checked             = this.settingsRoot.Display.ShowPort;
-				toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked        = this.settingsRoot.Display.ShowDirection;
+				toolStripMenuItem_TerminalMenu_View_LineNumbers_Show.Checked      = this.settingsRoot.Display.ShowLineNumbers;
+				toolStripComboBox_TerminalMenu_View_LineNumbers_Selection.Enabled = this.settingsRoot.Display.ShowLineNumbers;
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_View_LineNumbers_Selection, (Domain.Utilities.LineNumberSelectionEx)this.settingsRoot.Display.LineNumberSelection);
+				toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked         = this.settingsRoot.Display.ShowTimeStamp;
+				toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Checked          = this.settingsRoot.Display.ShowTimeSpan;
+				toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Checked         = this.settingsRoot.Display.ShowTimeDelta;
+				toolStripMenuItem_TerminalMenu_View_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
+				toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
 
 				toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
 				toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
@@ -1290,15 +1294,18 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_LineNumbers_Show_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
 		}
 
-/*		private void toolStripMenuItem_TerminalMenu_View_ShowTotalLineNumbers_Click(object sender, EventArgs e)
-!!LN!!		{
-			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
-		}*/
+		private void toolStripComboBox_TerminalMenu_View_LineNumbers_Selection_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsRoot.Display.LineNumberSelection = (Domain.Utilities.LineNumberSelectionEx)(toolStripComboBox_TerminalMenu_View_LineNumbers_Selection.SelectedItem);
+		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
@@ -1448,6 +1455,7 @@ namespace YAT.View.Forms
 			try
 			{
 				toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
+				toolStripComboBox_MonitorContextMenu_LineNumbers_Selection.Items.AddRange(Domain.Utilities.LineNumberSelectionEx.GetItems());
 			}
 			finally
 			{
@@ -1482,7 +1490,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
 				toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
-				toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
+				ToolStripComboBoxHelper.Select(toolStripComboBox_MonitorContextMenu_Panels_Orientation, (OrientationEx)this.settingsRoot.Layout.MonitorOrientation);
 
 				// Hide "Hide" item if only this monitor is visible
 				bool hideIsAllowed = false;
@@ -1499,22 +1507,23 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
 				toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
 
-				bool isShowable = ((this.settingsRoot.Display.TxRadixIsShowable) ||
-				                   (this.settingsRoot.Display.RxRadixIsShowable));
+				bool isShowable = (this.settingsRoot.Display.TxRadixIsShowable ||
+				                   this.settingsRoot.Display.RxRadixIsShowable);
 				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention: Same code exists further above as well as in 'View.Forms.AdvancedTerminalSettings'.
 				toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
 
-				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked      = this.settingsRoot.Display.ShowLineNumbers;
-	//!!LN!!			toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers.Checked  = this.settingsRoot.Display.ShowTotalLineNumbers;
-				toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked        = this.settingsRoot.Display.ShowTimeStamp;
-				toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Checked         = this.settingsRoot.Display.ShowTimeSpan;
-				toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Checked        = this.settingsRoot.Display.ShowTimeDelta;
-				toolStripMenuItem_MonitorContextMenu_ShowPort.Checked             = this.settingsRoot.Display.ShowPort;
-				toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked        = this.settingsRoot.Display.ShowDirection;
+				toolStripMenuItem_MonitorContextMenu_LineNumbers_Show.Checked      = this.settingsRoot.Display.ShowLineNumbers;
+				toolStripComboBox_MonitorContextMenu_LineNumbers_Selection.Enabled = this.settingsRoot.Display.ShowLineNumbers;
+				ToolStripComboBoxHelper.Select(toolStripComboBox_MonitorContextMenu_LineNumbers_Selection, (Domain.Utilities.LineNumberSelectionEx)this.settingsRoot.Display.LineNumberSelection);
+				toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked         = this.settingsRoot.Display.ShowTimeStamp;
+				toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Checked          = this.settingsRoot.Display.ShowTimeSpan;
+				toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Checked         = this.settingsRoot.Display.ShowTimeDelta;
+				toolStripMenuItem_MonitorContextMenu_ShowPort.Checked              = this.settingsRoot.Display.ShowPort;
+				toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked         = this.settingsRoot.Display.ShowDirection;
 
 				bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
-				toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
-				toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
+				toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = (isText);
+				toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
 
 				toolStripMenuItem_MonitorContextMenu_ShowLength.Checked           = this.settingsRoot.Display.ShowLength;
 				toolStripMenuItem_MonitorContextMenu_ShowDuration.Checked         = this.settingsRoot.Display.ShowDuration;
@@ -1655,7 +1664,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_LineNumbers_Show_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
@@ -1663,13 +1672,16 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
 		}
 
-/*		private void toolStripMenuItem_MonitorContextMenu_ShowTotalLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripComboBox_MonitorContextMenu_LineNumbers_Selection_SelectedIndexChanged(object sender, EventArgs e)
 		{
-!!LN!!			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Display.ShowTotalLineNumbers = !this.settingsRoot.Display.ShowTotalLineNumbers;
-		}*/
+			if (this.isSettingControls)
+				return;
+
+			this.settingsRoot.Display.LineNumberSelection = (Domain.Utilities.LineNumberSelectionEx)(toolStripComboBox_MonitorContextMenu_LineNumbers_Selection.SelectedItem);
+		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
 		{

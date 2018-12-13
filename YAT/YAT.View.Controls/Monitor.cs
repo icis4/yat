@@ -1569,10 +1569,10 @@ namespace YAT.View.Controls
 							lbmon.TopIndex = newTopIndexToRestore;
 							DebugVerticalAutoScroll(".........................done");
 
-							if (!this.showLineNumbers) // This option would require the offset to stay at 0.
+							if (this.lineNumberSelection != Domain.Utilities.LineNumberSelection.Buffer) // This option would require the offset to stay at 0.
 							{
-								// Increment the offset independent on 'showTotalLineNumbers' to
-								// have the indeed total value when the user enables the setting.
+								// Increment the offset independent on 'showLineNumbers' to get
+								// the indeed total value in case the user changes the setting.
 
 								unchecked
 								{
