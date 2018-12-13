@@ -678,6 +678,10 @@ namespace YAT.View.Forms
 			{
 				Refresh();
 
+				// Status:
+				this.settingsInEdit.Terminal.Status.ShowConnectTime  = f.SettingsResult.Terminal.Status.ShowConnectTime;
+				this.settingsInEdit.Terminal.Status.ShowCountAndRate = f.SettingsResult.Terminal.Status.ShowCountAndRate;
+
 				// Radix:
 				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = f.SettingsResult.Terminal.Display.SeparateTxRxRadix;
 				this.settingsInEdit.Terminal.Display.TxRadix           = f.SettingsResult.Terminal.Display.TxRadix;
@@ -694,17 +698,14 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowDirection        = f.SettingsResult.Terminal.Display.ShowDirection;
 				this.settingsInEdit.Terminal.Display.ShowLength           = f.SettingsResult.Terminal.Display.ShowLength;
 				this.settingsInEdit.Terminal.Display.ShowDuration         = f.SettingsResult.Terminal.Display.ShowDuration;
-				this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = f.SettingsResult.Terminal.Display.ShowCopyOfActiveLine;
-				this.settingsInEdit.Terminal.Status.ShowConnectTime       = f.SettingsResult.Terminal.Status.ShowConnectTime;
-				this.settingsInEdit.Terminal.Status.ShowCountAndRate      = f.SettingsResult.Terminal.Status.ShowCountAndRate;
-				this.settingsInEdit.Terminal.Status.ShowFlowControlCount  = f.SettingsResult.Terminal.Status.ShowFlowControlCount;
-				this.settingsInEdit.Terminal.Status.ShowBreakCount        = f.SettingsResult.Terminal.Status.ShowBreakCount;
 
 				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = f.SettingsResult.Terminal.Display.PortLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = f.SettingsResult.Terminal.Display.ChunkLineBreakEnabled;
-				this.settingsInEdit.Terminal.Display.MaxLineCount              = f.SettingsResult.Terminal.Display.MaxLineCount;
-				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount       = f.SettingsResult.Terminal.Display.MaxBytePerLineCount;
+
+				this.settingsInEdit.Terminal.Display.MaxLineCount         = f.SettingsResult.Terminal.Display.MaxLineCount;
+				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount  = f.SettingsResult.Terminal.Display.MaxBytePerLineCount;
+				this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = f.SettingsResult.Terminal.Display.ShowCopyOfActiveLine;
 
 				// Char replace:
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
@@ -720,8 +721,12 @@ namespace YAT.View.Forms
 
 				// Communication:
 				this.settingsInEdit.Terminal.IO.Endianness                        = f.SettingsResult.Terminal.IO.Endianness;
+				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors    = f.SettingsResult.Terminal.IO.SerialPort.IgnoreFramingErrors;
 				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = f.SettingsResult.Terminal.IO.IndicateSerialPortBreakStates;
 				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = f.SettingsResult.Terminal.IO.SerialPortOutputBreakIsModifiable;
+
+				this.settingsInEdit.Terminal.Status.ShowBreakCount       = f.SettingsResult.Terminal.Status.ShowBreakCount;
+				this.settingsInEdit.Terminal.Status.ShowFlowControlCount = f.SettingsResult.Terminal.Status.ShowFlowControlCount;
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = f.SettingsResult.Terminal.Send.UseExplicitDefaultRadix;
@@ -736,7 +741,6 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.BufferMaxBaudRate      = f.SettingsResult.Terminal.IO.SerialPort.BufferMaxBaudRate;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = f.SettingsResult.Terminal.IO.SerialPort.MaxChunkSize;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = f.SettingsResult.Terminal.IO.SerialPort.MaxSendRate;
-				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors    = f.SettingsResult.Terminal.IO.SerialPort.IgnoreFramingErrors;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 

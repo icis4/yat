@@ -87,6 +87,9 @@ namespace YAT.Domain.Settings
 		public const string TimeDurationFormatDefault = TimeDeltaFormatPresetEx.DefaultFormat;
 
 		/// <summary></summary>
+		public const bool IncludePortControlDefault = false;
+
+		/// <summary></summary>
 		public const int MaxLineCountDefault = 1000;
 
 		/// <summary></summary>
@@ -128,13 +131,15 @@ namespace YAT.Domain.Settings
 		private bool   showLength;
 		private bool   showDuration;
 		private string timeDurationFormat;
-		private int    maxLineCount;
-		private int    maxBytePerLineCount;
-		private bool   showCopyOfActiveLine;
+		private bool   includePortControl;
 
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
 		private bool chunkLineBreakEnabled;
+
+		private int    maxLineCount;
+		private int    maxBytePerLineCount;
+		private bool   showCopyOfActiveLine;
 
 		private InfoSeparatorEx infoSeparator; // = null;
 		private InfoEnclosureEx infoEnclosure; // = null;
@@ -182,16 +187,18 @@ namespace YAT.Domain.Settings
 			ShowLength           = rhs.ShowLength;
 			ShowDuration         = rhs.ShowDuration;
 			TimeDurationFormat   = rhs.TimeDurationFormat;
-			MaxLineCount         = rhs.MaxLineCount;
-			MaxBytePerLineCount  = rhs.MaxBytePerLineCount;
-			ShowCopyOfActiveLine = rhs.ShowCopyOfActiveLine;
+			IncludePortControl   = rhs.IncludePortControl;
 
 			PortLineBreakEnabled      = rhs.PortLineBreakEnabled;
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 			ChunkLineBreakEnabled     = rhs.ChunkLineBreakEnabled;
 
-			InfoSeparator     = rhs.InfoSeparator;
-			InfoEnclosure     = rhs.InfoEnclosure;
+			MaxLineCount         = rhs.MaxLineCount;
+			MaxBytePerLineCount  = rhs.MaxBytePerLineCount;
+			ShowCopyOfActiveLine = rhs.ShowCopyOfActiveLine;
+
+			InfoSeparator = rhs.InfoSeparator;
+			InfoEnclosure = rhs.InfoEnclosure;
 
 			ClearChanged();
 		}
@@ -221,16 +228,18 @@ namespace YAT.Domain.Settings
 			ShowLength           = ShowLengthDefault;
 			ShowDuration         = ShowDurationDefault;
 			TimeDurationFormat   = TimeDurationFormatDefault;
-			MaxLineCount         = MaxLineCountDefault;
-			MaxBytePerLineCount  = MaxBytePerLineCountDefault;
-			ShowCopyOfActiveLine = ShowCopyOfActiveLineDefault;
+			IncludePortControl   = IncludePortControlDefault;
 
 			PortLineBreakEnabled      = PortLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 			ChunkLineBreakEnabled     = ChunkLineBreakEnabledDefault;
 
-			InfoSeparator     = InfoSeparatorDefault;
-			InfoEnclosure     = InfoEnclosureDefault;
+			MaxLineCount         = MaxLineCountDefault;
+			MaxBytePerLineCount  = MaxBytePerLineCountDefault;
+			ShowCopyOfActiveLine = ShowCopyOfActiveLineDefault;
+
+			InfoSeparator = InfoSeparatorDefault;
+			InfoEnclosure = InfoEnclosureDefault;
 		}
 
 		#region Properties
@@ -556,6 +565,66 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("IncludePortControl")]
+		public virtual bool IncludePortControl
+		{
+			get { return (this.includePortControl); }
+			set
+			{
+				if (this.includePortControl != value)
+				{
+					this.includePortControl = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("PortLineBreakEnabled")]
+		public virtual bool PortLineBreakEnabled
+		{
+			get { return (this.portLineBreakEnabled); }
+			set
+			{
+				if (this.portLineBreakEnabled != value)
+				{
+					this.portLineBreakEnabled = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("DirectionLineBreakEnabled")]
+		public virtual bool DirectionLineBreakEnabled
+		{
+			get { return (this.directionLineBreakEnabled); }
+			set
+			{
+				if (this.directionLineBreakEnabled != value)
+				{
+					this.directionLineBreakEnabled = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ChunkLineBreakEnabled")]
+		public virtual bool ChunkLineBreakEnabled
+		{
+			get { return (this.chunkLineBreakEnabled); }
+			set
+			{
+				if (this.chunkLineBreakEnabled != value)
+				{
+					this.chunkLineBreakEnabled = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <exception cref="ArgumentOutOfRangeException"> if count is below 1.</exception>
 		[XmlElement("MaxLineCount")]
 		public virtual int MaxLineCount
@@ -609,51 +678,6 @@ namespace YAT.Domain.Settings
 				if (this.showCopyOfActiveLine != value)
 				{
 					this.showCopyOfActiveLine = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("PortLineBreakEnabled")]
-		public virtual bool PortLineBreakEnabled
-		{
-			get { return (this.portLineBreakEnabled); }
-			set
-			{
-				if (this.portLineBreakEnabled != value)
-				{
-					this.portLineBreakEnabled = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("DirectionLineBreakEnabled")]
-		public virtual bool DirectionLineBreakEnabled
-		{
-			get { return (this.directionLineBreakEnabled); }
-			set
-			{
-				if (this.directionLineBreakEnabled != value)
-				{
-					this.directionLineBreakEnabled = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ChunkLineBreakEnabled")]
-		public virtual bool ChunkLineBreakEnabled
-		{
-			get { return (this.chunkLineBreakEnabled); }
-			set
-			{
-				if (this.chunkLineBreakEnabled != value)
-				{
-					this.chunkLineBreakEnabled = value;
 					SetMyChanged();
 				}
 			}
@@ -763,31 +787,33 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ SeparateTxRxRadix   .GetHashCode();
-				hashCode = (hashCode * 397) ^ TxRadix             .GetHashCode();
-				hashCode = (hashCode * 397) ^ RxRadix             .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowRadix           .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowLineNumbers     .GetHashCode();
-				hashCode = (hashCode * 397) ^ LineNumberSelection .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowTimeStamp       .GetHashCode();
-				hashCode = (hashCode * 397) ^ (TimeStampFormat != null ? TimeStampFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ TimeStampUseUtc     .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowTimeSpan        .GetHashCode();
-				hashCode = (hashCode * 397) ^ (TimeSpanFormat != null ? TimeSpanFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ ShowTimeDelta       .GetHashCode();
-				hashCode = (hashCode * 397) ^ (TimeDeltaFormat != null ? TimeDeltaFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ ShowPort            .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowDirection       .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowLength          .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowDuration        .GetHashCode();
+				hashCode = (hashCode * 397) ^  SeparateTxRxRadix  .GetHashCode();
+				hashCode = (hashCode * 397) ^  TxRadix            .GetHashCode();
+				hashCode = (hashCode * 397) ^  RxRadix            .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowRadix          .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowLineNumbers    .GetHashCode();
+				hashCode = (hashCode * 397) ^  LineNumberSelection.GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowTimeStamp      .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TimeStampFormat    != null ? TimeStampFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  TimeStampUseUtc    .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowTimeSpan       .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TimeSpanFormat     != null ? TimeSpanFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  ShowTimeDelta      .GetHashCode();
+				hashCode = (hashCode * 397) ^ (TimeDeltaFormat    != null ? TimeDeltaFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  ShowPort           .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowDirection      .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowLength         .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowDuration       .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ MaxLineCount        .GetHashCode();
-				hashCode = (hashCode * 397) ^ MaxBytePerLineCount .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowCopyOfActiveLine.GetHashCode();
+				hashCode = (hashCode * 397) ^  IncludePortControl .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ PortLineBreakEnabled     .GetHashCode();
-				hashCode = (hashCode * 397) ^ DirectionLineBreakEnabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ ChunkLineBreakEnabled    .GetHashCode();
+				hashCode = (hashCode * 397) ^  PortLineBreakEnabled     .GetHashCode();
+				hashCode = (hashCode * 397) ^  DirectionLineBreakEnabled.GetHashCode();
+				hashCode = (hashCode * 397) ^  ChunkLineBreakEnabled    .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  MaxLineCount        .GetHashCode();
+				hashCode = (hashCode * 397) ^  MaxBytePerLineCount .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowCopyOfActiveLine.GetHashCode();
 
 				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (InfoEnclosure != null ? InfoEnclosure.GetHashCode() : 0);
@@ -821,31 +847,33 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SeparateTxRxRadix   .Equals(other.SeparateTxRxRadix)                 &&
-				TxRadix             .Equals(other.TxRadix)                           &&
-				RxRadix             .Equals(other.RxRadix)                           &&
-				ShowRadix           .Equals(other.ShowRadix)                         &&
-				ShowLineNumbers     .Equals(other.ShowLineNumbers)                   &&
-				LineNumberSelection .Equals(other.LineNumberSelection)               &&
-				ShowTimeStamp       .Equals(other.ShowTimeStamp)                     &&
-				StringEx.EqualsOrdinal(TimeStampFormat, other.TimeStampFormat)       &&
-				TimeStampUseUtc     .Equals(other.TimeStampUseUtc)                   &&
-				ShowTimeSpan        .Equals(other.ShowTimeSpan)                      &&
-				StringEx.EqualsOrdinal(TimeSpanFormat, other.TimeSpanFormat)         &&
-				ShowTimeDelta       .Equals(other.ShowTimeDelta)                     &&
-				StringEx.EqualsOrdinal(TimeDeltaFormat, other.TimeDeltaFormat)       &&
-				ShowPort            .Equals(other.ShowPort)                          &&
-				ShowDirection       .Equals(other.ShowDirection)                     &&
-				ShowLength          .Equals(other.ShowLength)                        &&
-				ShowDuration        .Equals(other.ShowDuration)                      &&
-				StringEx.EqualsOrdinal(TimeDurationFormat, other.TimeDurationFormat) &&
-				MaxLineCount        .Equals(other.MaxLineCount)                      &&
-				MaxBytePerLineCount .Equals(other.MaxBytePerLineCount)               &&
-				ShowCopyOfActiveLine.Equals(other.ShowCopyOfActiveLine)              &&
+				SeparateTxRxRadix                  .Equals(other.SeparateTxRxRadix)   &&
+				TxRadix                            .Equals(other.TxRadix)             &&
+				RxRadix                            .Equals(other.RxRadix)             &&
+				ShowRadix                          .Equals(other.ShowRadix)           &&
+				ShowLineNumbers                    .Equals(other.ShowLineNumbers)     &&
+				LineNumberSelection                .Equals(other.LineNumberSelection) &&
+				ShowTimeStamp                      .Equals(other.ShowTimeStamp)       &&
+				StringEx.EqualsOrdinal(TimeStampFormat,    other.TimeStampFormat)     &&
+				TimeStampUseUtc                    .Equals(other.TimeStampUseUtc)     &&
+				ShowTimeSpan                       .Equals(other.ShowTimeSpan)        &&
+				StringEx.EqualsOrdinal(TimeSpanFormat,     other.TimeSpanFormat)      &&
+				ShowTimeDelta                      .Equals(other.ShowTimeDelta)       &&
+				StringEx.EqualsOrdinal(TimeDeltaFormat,    other.TimeDeltaFormat)     &&
+				ShowPort                           .Equals(other.ShowPort)            &&
+				ShowDirection                      .Equals(other.ShowDirection)       &&
+				ShowLength                         .Equals(other.ShowLength)          &&
+				ShowDuration                       .Equals(other.ShowDuration)        &&
+				StringEx.EqualsOrdinal(TimeDurationFormat, other.TimeDurationFormat)  &&
+				IncludePortControl                 .Equals(other.IncludePortControl)  &&
 
 				PortLineBreakEnabled     .Equals(other.PortLineBreakEnabled)      &&
 				DirectionLineBreakEnabled.Equals(other.DirectionLineBreakEnabled) &&
 				ChunkLineBreakEnabled    .Equals(other.ChunkLineBreakEnabled)     &&
+
+				MaxLineCount        .Equals(other.MaxLineCount)         &&
+				MaxBytePerLineCount .Equals(other.MaxBytePerLineCount)  &&
+				ShowCopyOfActiveLine.Equals(other.ShowCopyOfActiveLine) &&
 
 				ObjectEx.Equals(InfoSeparator, other.InfoSeparator) &&
 				ObjectEx.Equals(InfoEnclosure, other.InfoEnclosure)
