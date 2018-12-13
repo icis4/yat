@@ -84,6 +84,7 @@
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepSendText = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display = new System.Windows.Forms.GroupBox();
+			this.checkBox_ShowDuration = new System.Windows.Forms.CheckBox();
 			this.checkBox_ChunkLineBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_UsbSerialHid = new System.Windows.Forms.GroupBox();
@@ -100,8 +101,7 @@
 			this.checkBox_ShowDirection = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowBreakCount = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowFlowControlCount = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowBufferLineNumbers = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowTotalLineNumbers = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowLineNumbers = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_Space = new System.Windows.Forms.GroupBox();
 			this.label_SpaceReplacementChar = new System.Windows.Forms.Label();
 			this.label_ReplaceSpaceUnicode = new System.Windows.Forms.Label();
@@ -129,7 +129,8 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.checkBox_ShowDuration = new System.Windows.Forms.CheckBox();
+			this.checkBox_IncludePortControl = new System.Windows.Forms.CheckBox();
+			this.comboBox_LineNumber = new System.Windows.Forms.ComboBox();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
 			this.groupBox_Communication_SerialPorts.SuspendLayout();
@@ -180,7 +181,7 @@
 			this.groupBox_User.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_User.Controls.Add(this.textBox_UserName);
 			this.groupBox_User.Controls.Add(this.label_UserName);
-			this.groupBox_User.Location = new System.Drawing.Point(281, 662);
+			this.groupBox_User.Location = new System.Drawing.Point(281, 708);
 			this.groupBox_User.Name = "groupBox_User";
 			this.groupBox_User.Size = new System.Drawing.Size(263, 45);
 			this.groupBox_User.TabIndex = 3;
@@ -208,28 +209,32 @@
 			// 
 			// groupBox_Communication
 			// 
-			this.groupBox_Communication.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Communication.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Communication.Controls.Add(this.groupBox_Communication_SerialPorts);
 			this.groupBox_Communication.Controls.Add(this.comboBox_Endianness);
 			this.groupBox_Communication.Controls.Add(this.label_Endianness);
 			this.groupBox_Communication.Location = new System.Drawing.Point(281, 12);
 			this.groupBox_Communication.Name = "groupBox_Communication";
-			this.groupBox_Communication.Size = new System.Drawing.Size(263, 142);
+			this.groupBox_Communication.Size = new System.Drawing.Size(263, 188);
 			this.groupBox_Communication.TabIndex = 1;
 			this.groupBox_Communication.TabStop = false;
 			this.groupBox_Communication.Text = "&Communication Settings";
 			// 
 			// groupBox_Communication_SerialPorts
 			// 
-			this.groupBox_Communication_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Communication_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_IgnoreFramingErrors);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_OutputBreakModifiable);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_IndicateBreakStates);
+			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_ShowBreakCount);
+			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_ShowFlowControlCount);
 			this.groupBox_Communication_SerialPorts.Location = new System.Drawing.Point(6, 48);
 			this.groupBox_Communication_SerialPorts.Name = "groupBox_Communication_SerialPorts";
-			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 88);
+			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 134);
 			this.groupBox_Communication_SerialPorts.TabIndex = 2;
 			this.groupBox_Communication_SerialPorts.TabStop = false;
 			this.groupBox_Communication_SerialPorts.Text = "Serial COM Ports";
@@ -289,8 +294,7 @@
 			// 
 			// groupBox_Send
 			// 
-			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Send.Controls.Add(this.checkBox_SkipEmptyLines);
 			this.groupBox_Send.Controls.Add(this.checkBox_EnableEscapesForText);
@@ -305,7 +309,7 @@
 			this.groupBox_Send.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_CopyPredefined);
 			this.groupBox_Send.Controls.Add(this.checkBox_KeepSendText);
-			this.groupBox_Send.Location = new System.Drawing.Point(281, 161);
+			this.groupBox_Send.Location = new System.Drawing.Point(281, 207);
 			this.groupBox_Send.Name = "groupBox_Send";
 			this.groupBox_Send.Size = new System.Drawing.Size(263, 497);
 			this.groupBox_Send.TabIndex = 2;
@@ -754,6 +758,8 @@
 			// 
 			this.groupBox_Display.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Display.Controls.Add(this.comboBox_LineNumber);
+			this.groupBox_Display.Controls.Add(this.checkBox_IncludePortControl);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowDuration);
 			this.groupBox_Display.Controls.Add(this.checkBox_ChunkLineBreak);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowCopyOfActiveLine);
@@ -766,10 +772,7 @@
 			this.groupBox_Display.Controls.Add(this.textBox_MaxLineCount);
 			this.groupBox_Display.Controls.Add(this.groupBox_Display_Special);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowDirection);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowBreakCount);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowFlowControlCount);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowBufferLineNumbers);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowTotalLineNumbers);
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowLineNumbers);
 			this.groupBox_Display.Controls.Add(this.groupBox_Display_Space);
 			this.groupBox_Display.Controls.Add(this.groupBox_Display_ControlChars);
 			this.groupBox_Display.Controls.Add(this.checkBox_DirectionLineBreak);
@@ -789,18 +792,29 @@
 			this.groupBox_Display.Controls.Add(this.label_MaxLineCount);
 			this.groupBox_Display.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Display.Name = "groupBox_Display";
-			this.groupBox_Display.Size = new System.Drawing.Size(263, 695);
+			this.groupBox_Display.Size = new System.Drawing.Size(263, 741);
 			this.groupBox_Display.TabIndex = 0;
 			this.groupBox_Display.TabStop = false;
 			this.groupBox_Display.Text = "Display Settings";
 			// 
+			// checkBox_ShowDuration
+			// 
+			this.checkBox_ShowDuration.AutoSize = true;
+			this.checkBox_ShowDuration.Location = new System.Drawing.Point(12, 260);
+			this.checkBox_ShowDuration.Name = "checkBox_ShowDuration";
+			this.checkBox_ShowDuration.Size = new System.Drawing.Size(119, 17);
+			this.checkBox_ShowDuration.TabIndex = 16;
+			this.checkBox_ShowDuration.Text = "Show duration (line)";
+			this.checkBox_ShowDuration.UseVisualStyleBackColor = true;
+			this.checkBox_ShowDuration.CheckedChanged += new System.EventHandler(this.checkBox_ShowDuration_CheckedChanged);
+			// 
 			// checkBox_ChunkLineBreak
 			// 
 			this.checkBox_ChunkLineBreak.AutoSize = true;
-			this.checkBox_ChunkLineBreak.Location = new System.Drawing.Point(12, 348);
+			this.checkBox_ChunkLineBreak.Location = new System.Drawing.Point(12, 329);
 			this.checkBox_ChunkLineBreak.Name = "checkBox_ChunkLineBreak";
 			this.checkBox_ChunkLineBreak.Size = new System.Drawing.Size(153, 17);
-			this.checkBox_ChunkLineBreak.TabIndex = 22;
+			this.checkBox_ChunkLineBreak.TabIndex = 19;
 			this.checkBox_ChunkLineBreak.Text = "Break lines on each chunk";
 			this.toolTip.SetToolTip(this.checkBox_ChunkLineBreak, "Useful for message- rather than stream-oriented\r\ncommunication, e.g. most use cas" +
         "es of UDP/IP.\r\n\r\nDefault for UDP/IP is enabled.\r\nDefault for all other port type" +
@@ -811,10 +825,10 @@
 			// checkBox_ShowCopyOfActiveLine
 			// 
 			this.checkBox_ShowCopyOfActiveLine.AutoSize = true;
-			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 256);
+			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 439);
 			this.checkBox_ShowCopyOfActiveLine.Name = "checkBox_ShowCopyOfActiveLine";
 			this.checkBox_ShowCopyOfActiveLine.Size = new System.Drawing.Size(142, 17);
-			this.checkBox_ShowCopyOfActiveLine.TabIndex = 17;
+			this.checkBox_ShowCopyOfActiveLine.TabIndex = 27;
 			this.checkBox_ShowCopyOfActiveLine.Text = "Show copy of active line";
 			this.checkBox_ShowCopyOfActiveLine.CheckedChanged += new System.EventHandler(this.checkBox_ShowCopyOfActiveLine_CheckedChanged);
 			// 
@@ -823,10 +837,10 @@
 			this.groupBox_Display_UsbSerialHid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Display_UsbSerialHid.Controls.Add(this.checkBox_IncludeNonPayloadData);
-			this.groupBox_Display_UsbSerialHid.Location = new System.Drawing.Point(6, 646);
+			this.groupBox_Display_UsbSerialHid.Location = new System.Drawing.Point(6, 692);
 			this.groupBox_Display_UsbSerialHid.Name = "groupBox_Display_UsbSerialHid";
 			this.groupBox_Display_UsbSerialHid.Size = new System.Drawing.Size(251, 43);
-			this.groupBox_Display_UsbSerialHid.TabIndex = 32;
+			this.groupBox_Display_UsbSerialHid.TabIndex = 31;
 			this.groupBox_Display_UsbSerialHid.TabStop = false;
 			this.groupBox_Display_UsbSerialHid.Text = "&USB Ser/HID";
 			// 
@@ -843,10 +857,10 @@
 			// 
 			// textBox_MaxBytePerLineCount
 			// 
-			this.textBox_MaxBytePerLineCount.Location = new System.Drawing.Point(90, 397);
+			this.textBox_MaxBytePerLineCount.Location = new System.Drawing.Point(90, 405);
 			this.textBox_MaxBytePerLineCount.Name = "textBox_MaxBytePerLineCount";
 			this.textBox_MaxBytePerLineCount.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxBytePerLineCount.TabIndex = 27;
+			this.textBox_MaxBytePerLineCount.TabIndex = 25;
 			this.textBox_MaxBytePerLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_MaxBytePerLineCount, "The maximal number of bytes per line is limited in order to improve performance.");
 			this.textBox_MaxBytePerLineCount.TextChanged += new System.EventHandler(this.textBox_MaxBytePerLineCount_TextChanged);
@@ -855,35 +869,35 @@
 			// label_MaxBytePerLineCountUnit
 			// 
 			this.label_MaxBytePerLineCountUnit.AutoSize = true;
-			this.label_MaxBytePerLineCountUnit.Location = new System.Drawing.Point(141, 400);
+			this.label_MaxBytePerLineCountUnit.Location = new System.Drawing.Point(141, 408);
 			this.label_MaxBytePerLineCountUnit.Name = "label_MaxBytePerLineCountUnit";
 			this.label_MaxBytePerLineCountUnit.Size = new System.Drawing.Size(69, 13);
-			this.label_MaxBytePerLineCountUnit.TabIndex = 28;
+			this.label_MaxBytePerLineCountUnit.TabIndex = 26;
 			this.label_MaxBytePerLineCountUnit.Text = "bytes per line";
 			// 
 			// label_MaxBytePerLineCount
 			// 
 			this.label_MaxBytePerLineCount.AutoSize = true;
-			this.label_MaxBytePerLineCount.Location = new System.Drawing.Point(9, 400);
+			this.label_MaxBytePerLineCount.Location = new System.Drawing.Point(9, 408);
 			this.label_MaxBytePerLineCount.Name = "label_MaxBytePerLineCount";
 			this.label_MaxBytePerLineCount.Size = new System.Drawing.Size(81, 13);
-			this.label_MaxBytePerLineCount.TabIndex = 26;
+			this.label_MaxBytePerLineCount.TabIndex = 24;
 			this.label_MaxBytePerLineCount.Text = "Display maximal";
 			// 
 			// checkBox_PortLineBreak
 			// 
 			this.checkBox_PortLineBreak.AutoSize = true;
-			this.checkBox_PortLineBreak.Location = new System.Drawing.Point(12, 302);
+			this.checkBox_PortLineBreak.Location = new System.Drawing.Point(12, 283);
 			this.checkBox_PortLineBreak.Name = "checkBox_PortLineBreak";
 			this.checkBox_PortLineBreak.Size = new System.Drawing.Size(172, 17);
-			this.checkBox_PortLineBreak.TabIndex = 20;
+			this.checkBox_PortLineBreak.TabIndex = 17;
 			this.checkBox_PortLineBreak.Text = "&Break lines when port changes";
 			this.checkBox_PortLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_PortLineBreak_CheckedChanged);
 			// 
 			// checkBox_ShowPort
 			// 
 			this.checkBox_ShowPort.AutoSize = true;
-			this.checkBox_ShowPort.Location = new System.Drawing.Point(131, 187);
+			this.checkBox_ShowPort.Location = new System.Drawing.Point(131, 191);
 			this.checkBox_ShowPort.Name = "checkBox_ShowPort";
 			this.checkBox_ShowPort.Size = new System.Drawing.Size(74, 17);
 			this.checkBox_ShowPort.TabIndex = 13;
@@ -893,10 +907,10 @@
 			// 
 			// textBox_MaxLineCount
 			// 
-			this.textBox_MaxLineCount.Location = new System.Drawing.Point(90, 374);
+			this.textBox_MaxLineCount.Location = new System.Drawing.Point(90, 382);
 			this.textBox_MaxLineCount.Name = "textBox_MaxLineCount";
 			this.textBox_MaxLineCount.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxLineCount.TabIndex = 24;
+			this.textBox_MaxLineCount.TabIndex = 22;
 			this.textBox_MaxLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_MaxLineCount, "The maximal number of lines is limited in order to improve performance.");
 			this.textBox_MaxLineCount.TextChanged += new System.EventHandler(this.textBox_MaxLineCount_TextChanged);
@@ -908,10 +922,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Display_Special.Controls.Add(this.checkBox_Hide0xFF);
 			this.groupBox_Display_Special.Controls.Add(this.checkBox_Hide0x00);
-			this.groupBox_Display_Special.Location = new System.Drawing.Point(6, 597);
+			this.groupBox_Display_Special.Location = new System.Drawing.Point(6, 643);
 			this.groupBox_Display_Special.Name = "groupBox_Display_Special";
 			this.groupBox_Display_Special.Size = new System.Drawing.Size(251, 43);
-			this.groupBox_Display_Special.TabIndex = 31;
+			this.groupBox_Display_Special.TabIndex = 30;
 			this.groupBox_Display_Special.TabStop = false;
 			this.groupBox_Display_Special.Text = "Spec&ial";
 			// 
@@ -943,7 +957,7 @@
 			// checkBox_ShowDirection
 			// 
 			this.checkBox_ShowDirection.AutoSize = true;
-			this.checkBox_ShowDirection.Location = new System.Drawing.Point(131, 210);
+			this.checkBox_ShowDirection.Location = new System.Drawing.Point(131, 214);
 			this.checkBox_ShowDirection.Name = "checkBox_ShowDirection";
 			this.checkBox_ShowDirection.Size = new System.Drawing.Size(96, 17);
 			this.checkBox_ShowDirection.TabIndex = 14;
@@ -954,10 +968,10 @@
 			// checkBox_ShowBreakCount
 			// 
 			this.checkBox_ShowBreakCount.AutoSize = true;
-			this.checkBox_ShowBreakCount.Location = new System.Drawing.Point(12, 279);
+			this.checkBox_ShowBreakCount.Location = new System.Drawing.Point(6, 88);
 			this.checkBox_ShowBreakCount.Name = "checkBox_ShowBreakCount";
 			this.checkBox_ShowBreakCount.Size = new System.Drawing.Size(113, 17);
-			this.checkBox_ShowBreakCount.TabIndex = 18;
+			this.checkBox_ShowBreakCount.TabIndex = 3;
 			this.checkBox_ShowBreakCount.Text = "Show break count";
 			this.checkBox_ShowBreakCount.UseVisualStyleBackColor = true;
 			this.checkBox_ShowBreakCount.CheckedChanged += new System.EventHandler(this.checkBox_ShowBreakCount_CheckedChanged);
@@ -965,35 +979,24 @@
 			// checkBox_ShowFlowControlCount
 			// 
 			this.checkBox_ShowFlowControlCount.AutoSize = true;
-			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(131, 279);
+			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(6, 111);
 			this.checkBox_ShowFlowControlCount.Name = "checkBox_ShowFlowControlCount";
-			this.checkBox_ShowFlowControlCount.Size = new System.Drawing.Size(122, 17);
-			this.checkBox_ShowFlowControlCount.TabIndex = 19;
-			this.checkBox_ShowFlowControlCount.Text = "Show flow ctrl count";
+			this.checkBox_ShowFlowControlCount.Size = new System.Drawing.Size(140, 17);
+			this.checkBox_ShowFlowControlCount.TabIndex = 4;
+			this.checkBox_ShowFlowControlCount.Text = "Show flow control count";
 			this.checkBox_ShowFlowControlCount.UseVisualStyleBackColor = true;
 			this.checkBox_ShowFlowControlCount.CheckedChanged += new System.EventHandler(this.checkBox_ShowFlowControlCount_CheckedChanged);
 			// 
-			// checkBox_ShowBufferLineNumbers
+			// checkBox_ShowLineNumbers
 			// 
-			this.checkBox_ShowBufferLineNumbers.AutoSize = true;
-			this.checkBox_ShowBufferLineNumbers.Location = new System.Drawing.Point(12, 141);
-			this.checkBox_ShowBufferLineNumbers.Name = "checkBox_ShowBufferLineNumbers";
-			this.checkBox_ShowBufferLineNumbers.Size = new System.Drawing.Size(145, 17);
-			this.checkBox_ShowBufferLineNumbers.TabIndex = 8;
-			this.checkBox_ShowBufferLineNumbers.Text = "Show buffer line &numbers";
-			this.checkBox_ShowBufferLineNumbers.UseVisualStyleBackColor = true;
-			this.checkBox_ShowBufferLineNumbers.CheckedChanged += new System.EventHandler(this.checkBox_ShowBufferLineNumbers_CheckedChanged);
-			// 
-			// checkBox_ShowTotalLineNumbers
-			// 
-			this.checkBox_ShowTotalLineNumbers.AutoSize = true;
-			this.checkBox_ShowTotalLineNumbers.Location = new System.Drawing.Point(12, 164);
-			this.checkBox_ShowTotalLineNumbers.Name = "checkBox_ShowTotalLineNumbers";
-			this.checkBox_ShowTotalLineNumbers.Size = new System.Drawing.Size(138, 17);
-			this.checkBox_ShowTotalLineNumbers.TabIndex = 9;
-			this.checkBox_ShowTotalLineNumbers.Text = "Show total line numbers";
-			this.checkBox_ShowTotalLineNumbers.UseVisualStyleBackColor = true;
-			this.checkBox_ShowTotalLineNumbers.CheckedChanged += new System.EventHandler(this.checkBox_ShowTotalLineNumbers_CheckedChanged);
+			this.checkBox_ShowLineNumbers.AutoSize = true;
+			this.checkBox_ShowLineNumbers.Location = new System.Drawing.Point(12, 145);
+			this.checkBox_ShowLineNumbers.Name = "checkBox_ShowLineNumbers";
+			this.checkBox_ShowLineNumbers.Size = new System.Drawing.Size(115, 17);
+			this.checkBox_ShowLineNumbers.TabIndex = 8;
+			this.checkBox_ShowLineNumbers.Text = "Show line &numbers";
+			this.checkBox_ShowLineNumbers.UseVisualStyleBackColor = true;
+			this.checkBox_ShowLineNumbers.CheckedChanged += new System.EventHandler(this.checkBox_ShowLineNumbers_CheckedChanged);
 			// 
 			// groupBox_Display_Space
 			// 
@@ -1002,10 +1005,10 @@
 			this.groupBox_Display_Space.Controls.Add(this.label_SpaceReplacementChar);
 			this.groupBox_Display_Space.Controls.Add(this.label_ReplaceSpaceUnicode);
 			this.groupBox_Display_Space.Controls.Add(this.checkBox_ReplaceSpace);
-			this.groupBox_Display_Space.Location = new System.Drawing.Point(6, 548);
+			this.groupBox_Display_Space.Location = new System.Drawing.Point(6, 594);
 			this.groupBox_Display_Space.Name = "groupBox_Display_Space";
 			this.groupBox_Display_Space.Size = new System.Drawing.Size(251, 43);
-			this.groupBox_Display_Space.TabIndex = 30;
+			this.groupBox_Display_Space.TabIndex = 29;
 			this.groupBox_Display_Space.TabStop = false;
 			this.groupBox_Display_Space.Text = "Spa&ce";
 			// 
@@ -1050,10 +1053,10 @@
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceTab);
 			this.groupBox_Display_ControlChars.Controls.Add(this.label_ControlCharacterRadix);
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceControlCharacters);
-			this.groupBox_Display_ControlChars.Location = new System.Drawing.Point(6, 430);
+			this.groupBox_Display_ControlChars.Location = new System.Drawing.Point(6, 476);
 			this.groupBox_Display_ControlChars.Name = "groupBox_Display_ControlChars";
 			this.groupBox_Display_ControlChars.Size = new System.Drawing.Size(251, 112);
-			this.groupBox_Display_ControlChars.TabIndex = 29;
+			this.groupBox_Display_ControlChars.TabIndex = 28;
 			this.groupBox_Display_ControlChars.TabStop = false;
 			this.groupBox_Display_ControlChars.Text = "&ASCII Control Characters (0x00..0x1F, 0x7F)";
 			// 
@@ -1125,10 +1128,10 @@
 			// checkBox_DirectionLineBreak
 			// 
 			this.checkBox_DirectionLineBreak.AutoSize = true;
-			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 325);
+			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 306);
 			this.checkBox_DirectionLineBreak.Name = "checkBox_DirectionLineBreak";
 			this.checkBox_DirectionLineBreak.Size = new System.Drawing.Size(194, 17);
-			this.checkBox_DirectionLineBreak.TabIndex = 21;
+			this.checkBox_DirectionLineBreak.TabIndex = 18;
 			this.checkBox_DirectionLineBreak.Text = "Break lines when direction changes";
 			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
 			// 
@@ -1166,7 +1169,7 @@
 			// checkBox_ShowRadix
 			// 
 			this.checkBox_ShowRadix.AutoSize = true;
-			this.checkBox_ShowRadix.Location = new System.Drawing.Point(12, 118);
+			this.checkBox_ShowRadix.Location = new System.Drawing.Point(12, 122);
 			this.checkBox_ShowRadix.Name = "checkBox_ShowRadix";
 			this.checkBox_ShowRadix.Size = new System.Drawing.Size(78, 17);
 			this.checkBox_ShowRadix.TabIndex = 7;
@@ -1176,7 +1179,7 @@
 			// checkBox_ShowTimeStamp
 			// 
 			this.checkBox_ShowTimeStamp.AutoSize = true;
-			this.checkBox_ShowTimeStamp.Location = new System.Drawing.Point(12, 187);
+			this.checkBox_ShowTimeStamp.Location = new System.Drawing.Point(12, 168);
 			this.checkBox_ShowTimeStamp.Name = "checkBox_ShowTimeStamp";
 			this.checkBox_ShowTimeStamp.Size = new System.Drawing.Size(106, 17);
 			this.checkBox_ShowTimeStamp.TabIndex = 10;
@@ -1186,7 +1189,7 @@
 			// checkBox_ShowTimeSpan
 			// 
 			this.checkBox_ShowTimeSpan.AutoSize = true;
-			this.checkBox_ShowTimeSpan.Location = new System.Drawing.Point(12, 210);
+			this.checkBox_ShowTimeSpan.Location = new System.Drawing.Point(12, 191);
 			this.checkBox_ShowTimeSpan.Name = "checkBox_ShowTimeSpan";
 			this.checkBox_ShowTimeSpan.Size = new System.Drawing.Size(101, 17);
 			this.checkBox_ShowTimeSpan.TabIndex = 11;
@@ -1196,7 +1199,7 @@
 			// checkBox_ShowTimeDelta
 			// 
 			this.checkBox_ShowTimeDelta.AutoSize = true;
-			this.checkBox_ShowTimeDelta.Location = new System.Drawing.Point(12, 233);
+			this.checkBox_ShowTimeDelta.Location = new System.Drawing.Point(12, 214);
 			this.checkBox_ShowTimeDelta.Name = "checkBox_ShowTimeDelta";
 			this.checkBox_ShowTimeDelta.Size = new System.Drawing.Size(101, 17);
 			this.checkBox_ShowTimeDelta.TabIndex = 12;
@@ -1226,7 +1229,7 @@
 			// checkBox_ShowLength
 			// 
 			this.checkBox_ShowLength.AutoSize = true;
-			this.checkBox_ShowLength.Location = new System.Drawing.Point(131, 233);
+			this.checkBox_ShowLength.Location = new System.Drawing.Point(12, 237);
 			this.checkBox_ShowLength.Name = "checkBox_ShowLength";
 			this.checkBox_ShowLength.Size = new System.Drawing.Size(144, 17);
 			this.checkBox_ShowLength.TabIndex = 15;
@@ -1256,33 +1259,42 @@
 			// label_MaxLineCountUnit
 			// 
 			this.label_MaxLineCountUnit.AutoSize = true;
-			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(141, 377);
+			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(141, 385);
 			this.label_MaxLineCountUnit.Name = "label_MaxLineCountUnit";
 			this.label_MaxLineCountUnit.Size = new System.Drawing.Size(28, 13);
-			this.label_MaxLineCountUnit.TabIndex = 25;
+			this.label_MaxLineCountUnit.TabIndex = 23;
 			this.label_MaxLineCountUnit.Text = "lines";
 			this.label_MaxLineCountUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_MaxLineCount
 			// 
 			this.label_MaxLineCount.AutoSize = true;
-			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 377);
+			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 385);
 			this.label_MaxLineCount.Name = "label_MaxLineCount";
 			this.label_MaxLineCount.Size = new System.Drawing.Size(81, 13);
-			this.label_MaxLineCount.TabIndex = 23;
+			this.label_MaxLineCount.TabIndex = 21;
 			this.label_MaxLineCount.Text = "Displa&y maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// checkBox_ShowDuration
+			// checkBox_IncludePortControl
 			// 
-			this.checkBox_ShowDuration.AutoSize = true;
-			this.checkBox_ShowDuration.Location = new System.Drawing.Point(156, 256);
-			this.checkBox_ShowDuration.Name = "checkBox_ShowDuration";
-			this.checkBox_ShowDuration.Size = new System.Drawing.Size(119, 17);
-			this.checkBox_ShowDuration.TabIndex = 16;
-			this.checkBox_ShowDuration.Text = "Show duration (line)";
-			this.checkBox_ShowDuration.UseVisualStyleBackColor = true;
-			this.checkBox_ShowDuration.CheckedChanged += new System.EventHandler(this.checkBox_ShowDuration_CheckedChanged);
+			this.checkBox_IncludePortControl.AutoSize = true;
+			this.checkBox_IncludePortControl.Location = new System.Drawing.Point(12, 352);
+			this.checkBox_IncludePortControl.Name = "checkBox_IncludePortControl";
+			this.checkBox_IncludePortControl.Size = new System.Drawing.Size(152, 17);
+			this.checkBox_IncludePortControl.TabIndex = 20;
+			this.checkBox_IncludePortControl.Text = "Include port control events";
+			this.checkBox_IncludePortControl.UseVisualStyleBackColor = true;
+			// 
+			// comboBox_LineNumber
+			// 
+			this.comboBox_LineNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_LineNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_LineNumber.Location = new System.Drawing.Point(131, 143);
+			this.comboBox_LineNumber.Name = "comboBox_LineNumber";
+			this.comboBox_LineNumber.Size = new System.Drawing.Size(121, 21);
+			this.comboBox_LineNumber.TabIndex = 9;
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -1290,7 +1302,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(645, 719);
+			this.ClientSize = new System.Drawing.Size(645, 765);
 			this.Controls.Add(this.groupBox_User);
 			this.Controls.Add(this.groupBox_Send);
 			this.Controls.Add(this.groupBox_Communication);
@@ -1376,8 +1388,7 @@
 		private System.Windows.Forms.GroupBox groupBox_Communication_SerialPorts;
 		private System.Windows.Forms.CheckBox checkBox_OutputBreakModifiable;
 		private System.Windows.Forms.CheckBox checkBox_IndicateBreakStates;
-		private System.Windows.Forms.CheckBox checkBox_ShowBufferLineNumbers;
-		private System.Windows.Forms.CheckBox checkBox_ShowTotalLineNumbers;
+		private System.Windows.Forms.CheckBox checkBox_ShowLineNumbers;
 		private MKY.Windows.Forms.TextBoxEx textBox_OutputBufferSize;
 		private System.Windows.Forms.Label label_OutputBufferSizeUnit;
 		private System.Windows.Forms.CheckBox checkBox_ShowBreakCount;
@@ -1434,5 +1445,7 @@
 		private System.Windows.Forms.CheckBox checkBox_ChunkLineBreak;
 		private System.Windows.Forms.CheckBox checkBox_SkipEmptyLines;
 		private System.Windows.Forms.CheckBox checkBox_ShowDuration;
+		private System.Windows.Forms.ComboBox comboBox_LineNumber;
+		private System.Windows.Forms.CheckBox checkBox_IncludePortControl;
 	}
 }
