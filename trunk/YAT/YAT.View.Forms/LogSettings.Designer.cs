@@ -37,6 +37,11 @@ namespace YAT.View.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
+			this.groupBox_Port = new System.Windows.Forms.GroupBox();
+			this.checkBox_PrependPortStatus = new System.Windows.Forms.CheckBox();
+			this.comboBox_Port_Extension = new MKY.Windows.Forms.ComboBoxEx();
+			this.pathLabel_Port = new MKY.Windows.Forms.PathLabel();
+			this.checkBox_Port = new System.Windows.Forms.CheckBox();
 			this.groupBox_Options_TextEncoding = new System.Windows.Forms.GroupBox();
 			this.checkBox_Options_EmitEncodingPreamble = new System.Windows.Forms.CheckBox();
 			this.radioButton_Options_TextEncodingTerminal = new System.Windows.Forms.RadioButton();
@@ -44,12 +49,12 @@ namespace YAT.View.Forms
 			this.button_RootOpen = new System.Windows.Forms.Button();
 			this.pathLabel_Root = new MKY.Windows.Forms.PathLabel();
 			this.groupBox_Options_Folders = new System.Windows.Forms.GroupBox();
-			this.checkBox_Options_FolderFormat = new System.Windows.Forms.CheckBox();
-			this.checkBox_Options_FolderChannel = new System.Windows.Forms.CheckBox();
+			this.checkBox_Options_FolderType = new System.Windows.Forms.CheckBox();
+			this.checkBox_Options_FolderDirection = new System.Windows.Forms.CheckBox();
 			this.groupBox_Options_Name = new System.Windows.Forms.GroupBox();
-			this.checkBox_Options_NameFormat = new System.Windows.Forms.CheckBox();
+			this.checkBox_Options_NameType = new System.Windows.Forms.CheckBox();
 			this.comboBox_Options_NameSeparator = new MKY.Windows.Forms.ComboBoxEx();
-			this.checkBox_Options_NameChannel = new System.Windows.Forms.CheckBox();
+			this.checkBox_Options_NameDirection = new System.Windows.Forms.CheckBox();
 			this.checkBox_Options_NameTime = new System.Windows.Forms.CheckBox();
 			this.checkBox_Options_NameDate = new System.Windows.Forms.CheckBox();
 			this.label_Options_NameSeparator = new System.Windows.Forms.Label();
@@ -79,6 +84,7 @@ namespace YAT.View.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
+			this.groupBox_Port.SuspendLayout();
 			this.groupBox_Options_TextEncoding.SuspendLayout();
 			this.groupBox_Options_Folders.SuspendLayout();
 			this.groupBox_Options_Name.SuspendLayout();
@@ -114,6 +120,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.groupBox_Port);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_TextEncoding);
 			this.groupBox_Settings.Controls.Add(this.button_RootOpen);
 			this.groupBox_Settings.Controls.Add(this.pathLabel_Root);
@@ -126,21 +133,80 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_Neat);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(507, 431);
+			this.groupBox_Settings.Size = new System.Drawing.Size(507, 512);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
+			// 
+			// groupBox_Port
+			// 
+			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Port.Controls.Add(this.checkBox_PrependPortStatus);
+			this.groupBox_Port.Controls.Add(this.comboBox_Port_Extension);
+			this.groupBox_Port.Controls.Add(this.pathLabel_Port);
+			this.groupBox_Port.Controls.Add(this.checkBox_Port);
+			this.groupBox_Port.Location = new System.Drawing.Point(6, 55);
+			this.groupBox_Port.Name = "groupBox_Port";
+			this.groupBox_Port.Size = new System.Drawing.Size(495, 78);
+			this.groupBox_Port.TabIndex = 4;
+			this.groupBox_Port.TabStop = false;
+			this.groupBox_Port.Text = "&Port Control";
+			// 
+			// checkBox_PrependPortStatus
+			// 
+			this.checkBox_PrependPortStatus.AutoSize = true;
+			this.checkBox_PrependPortStatus.Location = new System.Drawing.Point(12, 45);
+			this.checkBox_PrependPortStatus.Name = "checkBox_PrependPortStatus";
+			this.checkBox_PrependPortStatus.Size = new System.Drawing.Size(118, 17);
+			this.checkBox_PrependPortStatus.TabIndex = 3;
+			this.checkBox_PrependPortStatus.Text = "Prepend port status";
+			this.checkBox_PrependPortStatus.UseVisualStyleBackColor = true;
+			this.checkBox_PrependPortStatus.CheckedChanged += new System.EventHandler(this.checkBox_PrependPortStatus_CheckedChanged);
+			// 
+			// comboBox_Port_Extension
+			// 
+			this.comboBox_Port_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Port_Extension.Location = new System.Drawing.Point(411, 19);
+			this.comboBox_Port_Extension.Name = "comboBox_Port_Extension";
+			this.comboBox_Port_Extension.Size = new System.Drawing.Size(72, 21);
+			this.comboBox_Port_Extension.TabIndex = 2;
+			this.toolTip.SetToolTip(this.comboBox_Port_Extension, resources.GetString("comboBox_Port_Extension.ToolTip"));
+			this.comboBox_Port_Extension.TextChanged += new System.EventHandler(this.comboBox_Port_Extension_TextChanged);
+			this.comboBox_Port_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Port_Extension_Validating);
+			// 
+			// pathLabel_Port
+			// 
+			this.pathLabel_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pathLabel_Port.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pathLabel_Port.Location = new System.Drawing.Point(179, 19);
+			this.pathLabel_Port.Name = "pathLabel_Port";
+			this.pathLabel_Port.Size = new System.Drawing.Size(220, 21);
+			this.pathLabel_Port.TabIndex = 1;
+			this.pathLabel_Port.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.pathLabel_Port.Click += new System.EventHandler(this.pathLabel_Port_Click);
+			// 
+			// checkBox_Port
+			// 
+			this.checkBox_Port.AutoSize = true;
+			this.checkBox_Port.Location = new System.Drawing.Point(12, 22);
+			this.checkBox_Port.Name = "checkBox_Port";
+			this.checkBox_Port.Size = new System.Drawing.Size(100, 17);
+			this.checkBox_Port.TabIndex = 0;
+			this.checkBox_Port.Text = "Log port control";
+			this.checkBox_Port.UseVisualStyleBackColor = true;
+			this.checkBox_Port.CheckedChanged += new System.EventHandler(this.checkBox_Port_CheckedChanged);
 			// 
 			// groupBox_Options_TextEncoding
 			// 
 			this.groupBox_Options_TextEncoding.Controls.Add(this.checkBox_Options_EmitEncodingPreamble);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingTerminal);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingUTF8);
-			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(340, 350);
+			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(340, 431);
 			this.groupBox_Options_TextEncoding.Name = "groupBox_Options_TextEncoding";
 			this.groupBox_Options_TextEncoding.Size = new System.Drawing.Size(161, 75);
-			this.groupBox_Options_TextEncoding.TabIndex = 9;
+			this.groupBox_Options_TextEncoding.TabIndex = 10;
 			this.groupBox_Options_TextEncoding.TabStop = false;
-			this.groupBox_Options_TextEncoding.Text = "Text File &Encoding";
+			this.groupBox_Options_TextEncoding.Text = "File &Encoding";
 			// 
 			// checkBox_Options_EmitEncodingPreamble
 			// 
@@ -201,7 +267,7 @@ namespace YAT.View.Forms
 			this.pathLabel_Root.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pathLabel_Root.Location = new System.Drawing.Point(53, 20);
 			this.pathLabel_Root.Name = "pathLabel_Root";
-			this.pathLabel_Root.Size = new System.Drawing.Size(352, 20);
+			this.pathLabel_Root.Size = new System.Drawing.Size(352, 21);
 			this.pathLabel_Root.TabIndex = 1;
 			this.pathLabel_Root.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolTip.SetToolTip(this.pathLabel_Root, "The root file specifies file name and root directory for all log files. The effec" +
@@ -210,61 +276,61 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Options_Folders
 			// 
-			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderFormat);
-			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderChannel);
-			this.groupBox_Options_Folders.Location = new System.Drawing.Point(6, 350);
+			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderType);
+			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderDirection);
+			this.groupBox_Options_Folders.Location = new System.Drawing.Point(6, 431);
 			this.groupBox_Options_Folders.Name = "groupBox_Options_Folders";
 			this.groupBox_Options_Folders.Size = new System.Drawing.Size(161, 75);
-			this.groupBox_Options_Folders.TabIndex = 7;
+			this.groupBox_Options_Folders.TabIndex = 8;
 			this.groupBox_Options_Folders.TabStop = false;
-			this.groupBox_Options_Folders.Text = "Create &Folders";
+			this.groupBox_Options_Folders.Text = "&Create Folders";
 			// 
-			// checkBox_Options_FolderFormat
+			// checkBox_Options_FolderType
 			// 
-			this.checkBox_Options_FolderFormat.AutoSize = true;
-			this.checkBox_Options_FolderFormat.Location = new System.Drawing.Point(12, 22);
-			this.checkBox_Options_FolderFormat.Name = "checkBox_Options_FolderFormat";
-			this.checkBox_Options_FolderFormat.Size = new System.Drawing.Size(117, 17);
-			this.checkBox_Options_FolderFormat.TabIndex = 0;
-			this.checkBox_Options_FolderFormat.Text = "Format (Raw/Neat)";
-			this.checkBox_Options_FolderFormat.CheckedChanged += new System.EventHandler(this.checkBox_Options_FolderFormat_CheckedChanged);
+			this.checkBox_Options_FolderType.AutoSize = true;
+			this.checkBox_Options_FolderType.Location = new System.Drawing.Point(12, 22);
+			this.checkBox_Options_FolderType.Name = "checkBox_Options_FolderType";
+			this.checkBox_Options_FolderType.Size = new System.Drawing.Size(133, 17);
+			this.checkBox_Options_FolderType.TabIndex = 0;
+			this.checkBox_Options_FolderType.Text = "Type (Port/Raw/Neat)";
+			this.checkBox_Options_FolderType.CheckedChanged += new System.EventHandler(this.checkBox_Options_FolderType_CheckedChanged);
 			// 
-			// checkBox_Options_FolderChannel
+			// checkBox_Options_FolderDirection
 			// 
-			this.checkBox_Options_FolderChannel.AutoSize = true;
-			this.checkBox_Options_FolderChannel.Location = new System.Drawing.Point(12, 46);
-			this.checkBox_Options_FolderChannel.Name = "checkBox_Options_FolderChannel";
-			this.checkBox_Options_FolderChannel.Size = new System.Drawing.Size(129, 17);
-			this.checkBox_Options_FolderChannel.TabIndex = 1;
-			this.checkBox_Options_FolderChannel.Text = "Channel (Tx/Bidir/Rx)";
-			this.checkBox_Options_FolderChannel.CheckedChanged += new System.EventHandler(this.checkBox_Options_FolderChannel_CheckedChanged);
+			this.checkBox_Options_FolderDirection.AutoSize = true;
+			this.checkBox_Options_FolderDirection.Location = new System.Drawing.Point(12, 46);
+			this.checkBox_Options_FolderDirection.Name = "checkBox_Options_FolderDirection";
+			this.checkBox_Options_FolderDirection.Size = new System.Drawing.Size(132, 17);
+			this.checkBox_Options_FolderDirection.TabIndex = 1;
+			this.checkBox_Options_FolderDirection.Text = "Direction (Tx/Bidir/Rx)";
+			this.checkBox_Options_FolderDirection.CheckedChanged += new System.EventHandler(this.checkBox_Options_FolderDirection_CheckedChanged);
 			// 
 			// groupBox_Options_Name
 			// 
 			this.groupBox_Options_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameFormat);
+			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameType);
 			this.groupBox_Options_Name.Controls.Add(this.comboBox_Options_NameSeparator);
-			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameChannel);
+			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameDirection);
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameTime);
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameDate);
 			this.groupBox_Options_Name.Controls.Add(this.label_Options_NameSeparator);
-			this.groupBox_Options_Name.Location = new System.Drawing.Point(6, 268);
+			this.groupBox_Options_Name.Location = new System.Drawing.Point(6, 349);
 			this.groupBox_Options_Name.Name = "groupBox_Options_Name";
 			this.groupBox_Options_Name.Size = new System.Drawing.Size(495, 76);
-			this.groupBox_Options_Name.TabIndex = 6;
+			this.groupBox_Options_Name.TabIndex = 7;
 			this.groupBox_Options_Name.TabStop = false;
-			this.groupBox_Options_Name.Text = "File &Naming";
+			this.groupBox_Options_Name.Text = "&File Naming";
 			// 
-			// checkBox_Options_NameFormat
+			// checkBox_Options_NameType
 			// 
-			this.checkBox_Options_NameFormat.AutoSize = true;
-			this.checkBox_Options_NameFormat.Location = new System.Drawing.Point(12, 22);
-			this.checkBox_Options_NameFormat.Name = "checkBox_Options_NameFormat";
-			this.checkBox_Options_NameFormat.Size = new System.Drawing.Size(117, 17);
-			this.checkBox_Options_NameFormat.TabIndex = 0;
-			this.checkBox_Options_NameFormat.Text = "Format (Raw/Neat)";
-			this.checkBox_Options_NameFormat.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameFormat_CheckedChanged);
+			this.checkBox_Options_NameType.AutoSize = true;
+			this.checkBox_Options_NameType.Location = new System.Drawing.Point(12, 22);
+			this.checkBox_Options_NameType.Name = "checkBox_Options_NameType";
+			this.checkBox_Options_NameType.Size = new System.Drawing.Size(133, 17);
+			this.checkBox_Options_NameType.TabIndex = 0;
+			this.checkBox_Options_NameType.Text = "Type (Port/Raw/Neat)";
+			this.checkBox_Options_NameType.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameType_CheckedChanged);
 			// 
 			// comboBox_Options_NameSeparator
 			// 
@@ -278,15 +344,15 @@ namespace YAT.View.Forms
         "Feature\" to request additional presets.");
 			this.comboBox_Options_NameSeparator.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Options_NameSeparator_Validating);
 			// 
-			// checkBox_Options_NameChannel
+			// checkBox_Options_NameDirection
 			// 
-			this.checkBox_Options_NameChannel.AutoSize = true;
-			this.checkBox_Options_NameChannel.Location = new System.Drawing.Point(12, 46);
-			this.checkBox_Options_NameChannel.Name = "checkBox_Options_NameChannel";
-			this.checkBox_Options_NameChannel.Size = new System.Drawing.Size(129, 17);
-			this.checkBox_Options_NameChannel.TabIndex = 1;
-			this.checkBox_Options_NameChannel.Text = "Channel (Tx/Bidir/Rx)";
-			this.checkBox_Options_NameChannel.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameChannel_CheckedChanged);
+			this.checkBox_Options_NameDirection.AutoSize = true;
+			this.checkBox_Options_NameDirection.Location = new System.Drawing.Point(12, 46);
+			this.checkBox_Options_NameDirection.Name = "checkBox_Options_NameDirection";
+			this.checkBox_Options_NameDirection.Size = new System.Drawing.Size(132, 17);
+			this.checkBox_Options_NameDirection.TabIndex = 1;
+			this.checkBox_Options_NameDirection.Text = "Direction (Tx/Bidir/Rx)";
+			this.checkBox_Options_NameDirection.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameDirection_CheckedChanged);
 			// 
 			// checkBox_Options_NameTime
 			// 
@@ -322,10 +388,10 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeCreate);
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeAppend);
-			this.groupBox_Options_Mode.Location = new System.Drawing.Point(173, 350);
+			this.groupBox_Options_Mode.Location = new System.Drawing.Point(173, 431);
 			this.groupBox_Options_Mode.Name = "groupBox_Options_Mode";
 			this.groupBox_Options_Mode.Size = new System.Drawing.Size(161, 75);
-			this.groupBox_Options_Mode.TabIndex = 8;
+			this.groupBox_Options_Mode.TabIndex = 9;
 			this.groupBox_Options_Mode.TabStop = false;
 			this.groupBox_Options_Mode.Text = "File Write &Mode";
 			// 
@@ -382,9 +448,9 @@ namespace YAT.View.Forms
 			this.groupBox_Raw.Controls.Add(this.comboBox_Raw_Extension);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Rx);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Tx);
-			this.groupBox_Raw.Location = new System.Drawing.Point(6, 162);
+			this.groupBox_Raw.Location = new System.Drawing.Point(6, 139);
 			this.groupBox_Raw.Name = "groupBox_Raw";
-			this.groupBox_Raw.Size = new System.Drawing.Size(495, 100);
+			this.groupBox_Raw.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Raw.TabIndex = 5;
 			this.groupBox_Raw.TabStop = false;
 			this.groupBox_Raw.Text = "&Raw Data";
@@ -394,9 +460,9 @@ namespace YAT.View.Forms
 			// 
 			this.pathLabel_Raw_Rx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Raw_Rx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Raw_Rx.Location = new System.Drawing.Point(179, 67);
+			this.pathLabel_Raw_Rx.Location = new System.Drawing.Point(179, 65);
 			this.pathLabel_Raw_Rx.Name = "pathLabel_Raw_Rx";
-			this.pathLabel_Raw_Rx.Size = new System.Drawing.Size(220, 20);
+			this.pathLabel_Raw_Rx.Size = new System.Drawing.Size(220, 21);
 			this.pathLabel_Raw_Rx.TabIndex = 5;
 			this.pathLabel_Raw_Rx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Raw_Rx.Click += new System.EventHandler(this.pathLabel_Raw_Rx_Click);
@@ -405,9 +471,9 @@ namespace YAT.View.Forms
 			// 
 			this.pathLabel_Raw_Bidir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Raw_Bidir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Raw_Bidir.Location = new System.Drawing.Point(179, 43);
+			this.pathLabel_Raw_Bidir.Location = new System.Drawing.Point(179, 42);
 			this.pathLabel_Raw_Bidir.Name = "pathLabel_Raw_Bidir";
-			this.pathLabel_Raw_Bidir.Size = new System.Drawing.Size(220, 20);
+			this.pathLabel_Raw_Bidir.Size = new System.Drawing.Size(220, 21);
 			this.pathLabel_Raw_Bidir.TabIndex = 3;
 			this.pathLabel_Raw_Bidir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Raw_Bidir.Click += new System.EventHandler(this.pathLabel_Raw_Bidir_Click);
@@ -416,9 +482,9 @@ namespace YAT.View.Forms
 			// 
 			this.pathLabel_Raw_Tx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Raw_Tx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Raw_Tx.Location = new System.Drawing.Point(179, 20);
+			this.pathLabel_Raw_Tx.Location = new System.Drawing.Point(179, 19);
 			this.pathLabel_Raw_Tx.Name = "pathLabel_Raw_Tx";
-			this.pathLabel_Raw_Tx.Size = new System.Drawing.Size(220, 20);
+			this.pathLabel_Raw_Tx.Size = new System.Drawing.Size(220, 21);
 			this.pathLabel_Raw_Tx.TabIndex = 1;
 			this.pathLabel_Raw_Tx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Raw_Tx.Click += new System.EventHandler(this.pathLabel_Raw_Tx_Click);
@@ -426,7 +492,7 @@ namespace YAT.View.Forms
 			// checkBox_Raw_Bidir
 			// 
 			this.checkBox_Raw_Bidir.AutoSize = true;
-			this.checkBox_Raw_Bidir.Location = new System.Drawing.Point(12, 46);
+			this.checkBox_Raw_Bidir.Location = new System.Drawing.Point(12, 45);
 			this.checkBox_Raw_Bidir.Name = "checkBox_Raw_Bidir";
 			this.checkBox_Raw_Bidir.Size = new System.Drawing.Size(156, 17);
 			this.checkBox_Raw_Bidir.TabIndex = 2;
@@ -437,7 +503,7 @@ namespace YAT.View.Forms
 			// 
 			this.label_Raw_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Raw_Extension.AutoSize = true;
-			this.label_Raw_Extension.Location = new System.Drawing.Point(408, 28);
+			this.label_Raw_Extension.Location = new System.Drawing.Point(408, 27);
 			this.label_Raw_Extension.Name = "label_Raw_Extension";
 			this.label_Raw_Extension.Size = new System.Drawing.Size(56, 13);
 			this.label_Raw_Extension.TabIndex = 6;
@@ -446,7 +512,7 @@ namespace YAT.View.Forms
 			// comboBox_Raw_Extension
 			// 
 			this.comboBox_Raw_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Raw_Extension.Location = new System.Drawing.Point(411, 44);
+			this.comboBox_Raw_Extension.Location = new System.Drawing.Point(411, 41);
 			this.comboBox_Raw_Extension.Name = "comboBox_Raw_Extension";
 			this.comboBox_Raw_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Raw_Extension.TabIndex = 7;
@@ -457,7 +523,7 @@ namespace YAT.View.Forms
 			// checkBox_Raw_Rx
 			// 
 			this.checkBox_Raw_Rx.AutoSize = true;
-			this.checkBox_Raw_Rx.Location = new System.Drawing.Point(12, 70);
+			this.checkBox_Raw_Rx.Location = new System.Drawing.Point(12, 68);
 			this.checkBox_Raw_Rx.Name = "checkBox_Raw_Rx";
 			this.checkBox_Raw_Rx.Size = new System.Drawing.Size(134, 17);
 			this.checkBox_Raw_Rx.TabIndex = 4;
@@ -486,10 +552,10 @@ namespace YAT.View.Forms
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Rx);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Bidir);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Tx);
-			this.groupBox_Neat.Location = new System.Drawing.Point(6, 56);
+			this.groupBox_Neat.Location = new System.Drawing.Point(6, 244);
 			this.groupBox_Neat.Name = "groupBox_Neat";
-			this.groupBox_Neat.Size = new System.Drawing.Size(495, 100);
-			this.groupBox_Neat.TabIndex = 4;
+			this.groupBox_Neat.Size = new System.Drawing.Size(495, 99);
+			this.groupBox_Neat.TabIndex = 6;
 			this.groupBox_Neat.TabStop = false;
 			this.groupBox_Neat.Text = "&Neat Format";
 			this.toolTip.SetToolTip(this.groupBox_Neat, "Time stamp, radix, length,... formatted as in monitor view");
@@ -498,9 +564,9 @@ namespace YAT.View.Forms
 			// 
 			this.pathLabel_Neat_Rx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Neat_Rx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Neat_Rx.Location = new System.Drawing.Point(179, 67);
+			this.pathLabel_Neat_Rx.Location = new System.Drawing.Point(179, 65);
 			this.pathLabel_Neat_Rx.Name = "pathLabel_Neat_Rx";
-			this.pathLabel_Neat_Rx.Size = new System.Drawing.Size(220, 20);
+			this.pathLabel_Neat_Rx.Size = new System.Drawing.Size(220, 21);
 			this.pathLabel_Neat_Rx.TabIndex = 5;
 			this.pathLabel_Neat_Rx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Neat_Rx.Click += new System.EventHandler(this.pathLabel_Neat_Rx_Click);
@@ -509,9 +575,9 @@ namespace YAT.View.Forms
 			// 
 			this.pathLabel_Neat_Bidir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Neat_Bidir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Neat_Bidir.Location = new System.Drawing.Point(179, 43);
+			this.pathLabel_Neat_Bidir.Location = new System.Drawing.Point(179, 42);
 			this.pathLabel_Neat_Bidir.Name = "pathLabel_Neat_Bidir";
-			this.pathLabel_Neat_Bidir.Size = new System.Drawing.Size(220, 20);
+			this.pathLabel_Neat_Bidir.Size = new System.Drawing.Size(220, 21);
 			this.pathLabel_Neat_Bidir.TabIndex = 3;
 			this.pathLabel_Neat_Bidir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Neat_Bidir.Click += new System.EventHandler(this.pathLabel_Neat_Bidir_Click);
@@ -520,9 +586,9 @@ namespace YAT.View.Forms
 			// 
 			this.pathLabel_Neat_Tx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Neat_Tx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Neat_Tx.Location = new System.Drawing.Point(179, 20);
+			this.pathLabel_Neat_Tx.Location = new System.Drawing.Point(179, 19);
 			this.pathLabel_Neat_Tx.Name = "pathLabel_Neat_Tx";
-			this.pathLabel_Neat_Tx.Size = new System.Drawing.Size(220, 20);
+			this.pathLabel_Neat_Tx.Size = new System.Drawing.Size(220, 21);
 			this.pathLabel_Neat_Tx.TabIndex = 1;
 			this.pathLabel_Neat_Tx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Neat_Tx.Click += new System.EventHandler(this.pathLabel_Neat_Tx_Click);
@@ -531,7 +597,7 @@ namespace YAT.View.Forms
 			// 
 			this.label_Neat_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Neat_Extension.AutoSize = true;
-			this.label_Neat_Extension.Location = new System.Drawing.Point(408, 28);
+			this.label_Neat_Extension.Location = new System.Drawing.Point(408, 27);
 			this.label_Neat_Extension.Name = "label_Neat_Extension";
 			this.label_Neat_Extension.Size = new System.Drawing.Size(56, 13);
 			this.label_Neat_Extension.TabIndex = 6;
@@ -540,7 +606,7 @@ namespace YAT.View.Forms
 			// comboBox_Neat_Extension
 			// 
 			this.comboBox_Neat_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Neat_Extension.Location = new System.Drawing.Point(411, 44);
+			this.comboBox_Neat_Extension.Location = new System.Drawing.Point(411, 42);
 			this.comboBox_Neat_Extension.Name = "comboBox_Neat_Extension";
 			this.comboBox_Neat_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Neat_Extension.TabIndex = 7;
@@ -551,7 +617,7 @@ namespace YAT.View.Forms
 			// checkBox_Neat_Rx
 			// 
 			this.checkBox_Neat_Rx.AutoSize = true;
-			this.checkBox_Neat_Rx.Location = new System.Drawing.Point(12, 70);
+			this.checkBox_Neat_Rx.Location = new System.Drawing.Point(12, 68);
 			this.checkBox_Neat_Rx.Name = "checkBox_Neat_Rx";
 			this.checkBox_Neat_Rx.Size = new System.Drawing.Size(134, 17);
 			this.checkBox_Neat_Rx.TabIndex = 4;
@@ -561,7 +627,7 @@ namespace YAT.View.Forms
 			// checkBox_Neat_Bidir
 			// 
 			this.checkBox_Neat_Bidir.AutoSize = true;
-			this.checkBox_Neat_Bidir.Location = new System.Drawing.Point(12, 46);
+			this.checkBox_Neat_Bidir.Location = new System.Drawing.Point(12, 45);
 			this.checkBox_Neat_Bidir.Name = "checkBox_Neat_Bidir";
 			this.checkBox_Neat_Bidir.Size = new System.Drawing.Size(156, 17);
 			this.checkBox_Neat_Bidir.TabIndex = 2;
@@ -594,7 +660,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(629, 455);
+			this.ClientSize = new System.Drawing.Size(629, 536);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -610,6 +676,8 @@ namespace YAT.View.Forms
 			this.Shown += new System.EventHandler(this.LogSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
+			this.groupBox_Port.ResumeLayout(false);
+			this.groupBox_Port.PerformLayout();
 			this.groupBox_Options_TextEncoding.ResumeLayout(false);
 			this.groupBox_Options_TextEncoding.PerformLayout();
 			this.groupBox_Options_Folders.ResumeLayout(false);
@@ -630,11 +698,11 @@ namespace YAT.View.Forms
 
 		private System.Windows.Forms.GroupBox groupBox_Raw;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_Options_NameSeparator;
-		private System.Windows.Forms.CheckBox checkBox_Options_NameChannel;
+		private System.Windows.Forms.CheckBox checkBox_Options_NameDirection;
 		private System.Windows.Forms.CheckBox checkBox_Options_NameTime;
 		private System.Windows.Forms.CheckBox checkBox_Options_NameDate;
 		private System.Windows.Forms.Label label_Options_NameSeparator;
-		private System.Windows.Forms.CheckBox checkBox_Options_FolderChannel;
+		private System.Windows.Forms.CheckBox checkBox_Options_FolderDirection;
 		private System.Windows.Forms.GroupBox groupBox_Options_Mode;
 		private System.Windows.Forms.RadioButton radioButton_Options_ModeCreate;
 		private System.Windows.Forms.RadioButton radioButton_Options_ModeAppend;
@@ -656,8 +724,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Label label_Root;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_OK;
-		private System.Windows.Forms.CheckBox checkBox_Options_FolderFormat;
-		private System.Windows.Forms.CheckBox checkBox_Options_NameFormat;
+		private System.Windows.Forms.CheckBox checkBox_Options_FolderType;
+		private System.Windows.Forms.CheckBox checkBox_Options_NameType;
 		private MKY.Windows.Forms.PathLabel pathLabel_Root;
 		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Rx;
 		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Bidir;
@@ -672,5 +740,10 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingTerminal;
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingUTF8;
 		private System.Windows.Forms.CheckBox checkBox_Options_EmitEncodingPreamble;
+		private System.Windows.Forms.GroupBox groupBox_Port;
+		private MKY.Windows.Forms.PathLabel pathLabel_Port;
+		private System.Windows.Forms.CheckBox checkBox_Port;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Port_Extension;
+		private System.Windows.Forms.CheckBox checkBox_PrependPortStatus;
 	}
 }

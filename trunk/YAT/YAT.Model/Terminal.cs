@@ -2336,6 +2336,259 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Terminal > Auxiliary
+		//------------------------------------------------------------------------------------------
+		// Terminal > Auxiliary
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected virtual Domain.DisplayLine IOStatusToDisplayLine(DateTime timeStamp)
+		{
+			var infoSeparator      = SettingsRoot.Display.InfoSeparator.ToSeparator();
+			var infoEnclosureLeft  = SettingsRoot.Display.InfoEnclosure.ToEnclosureLeft();
+			var infoEnclosureRight = SettingsRoot.Display.InfoEnclosure.ToEnclosureRight();
+
+			var virtualLine = new Domain.DisplayLine(5); // Preset the required capacity to improve memory management.
+
+			virtualLine.Add(new Domain.DisplayElement.LineStart());
+
+			if (SettingsRoot.Display.ShowTimeStamp)
+			{
+				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(timeStamp, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			}
+
+			virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, infoEnclosureLeft, infoEnclosureRight));
+			virtualLine.Add(new Domain.DisplayElement.LineBreak());
+
+			return (virtualLine);
+		}
+
+		/// <remarks>
+		/// Attention:
+		/// Similar code exists in View.Forms.Terminal.SetIOControlControls().
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		protected virtual Domain.DisplayLine IOStatusAndControlToDisplayLine(DateTime timeStamp)
+		{
+			var infoSeparator      = SettingsRoot.Display.InfoSeparator.ToSeparator();
+			var infoEnclosureLeft  = SettingsRoot.Display.InfoEnclosure.ToEnclosureLeft();
+			var infoEnclosureRight = SettingsRoot.Display.InfoEnclosure.ToEnclosureRight();
+
+			var virtualLine = new Domain.DisplayLine(7 + (2 * 3)); // Preset the required capacity to improve memory management.
+
+			virtualLine.Add(new Domain.DisplayElement.LineStart());
+
+			if (SettingsRoot.Display.ShowTimeStamp)
+			{
+				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(timeStamp, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			}
+
+			if (SettingsRoot.Log.PrependPortStatus) // Terminology is user = "port" and code = "IO".
+			{
+				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, infoEnclosureLeft, infoEnclosureRight));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			}
+
+			var infos = new List<string>(3); // Preset the required capacity to improve memory management.
+
+			bool isSerialPort   = false;
+			bool isUsbSerialHid = false;
+
+			if (this.settingsRoot != null)
+			{
+				isSerialPort   = ((Domain.IOTypeEx)SettingsRoot.IOType).IsSerialPort;
+				isUsbSerialHid = ((Domain.IOTypeEx)SettingsRoot.IOType).IsUsbSerialHid;
+			}
+
+			bool inputBreak  = false;
+			bool outputBreak = false;
+
+			if (isSerialPort)
+			{
+				var pins = new MKY.IO.Ports.SerialPortControlPins();
+				var pinCount = ((this.terminal != null) ? (this.terminal.SerialPortControlPinCount) : (new MKY.IO.Ports.SerialPortControlPinCount()));
+
+				if (IsOpen)
+				{
+					var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+					if (port != null)
+					{
+						try // Fail-safe implementation, especially catching exceptions while closing.
+						{
+							pins        = port.ControlPins;
+							inputBreak  = port.InputBreak;
+							outputBreak = port.OutputBreak;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Failed to retrieve control pin state");
+						}
+					}
+					else
+					{
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+
+				// Pins:
+				var pinState = new StringBuilder();
+				pinState.Append("RTS = ");
+				pinState.Append(pins.Rfr ? "on" : "off");
+
+				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+					pinState.Append(" | " + pinCount.RfrDisableCount.ToString(CultureInfo.CurrentCulture));
+
+				pinState.Append(", ");
+				pinState.Append("CTS = ");
+				pinState.Append(pins.Cts ? "on" : "off");
+
+				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+					pinState.Append(" | " + pinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
+
+				pinState.Append(", ");
+				pinState.Append("DTR = ");
+				pinState.Append(pins.Dtr ? "on" : "off");
+
+				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+					pinState.Append(" | " + pinCount.DtrDisableCount.ToString(CultureInfo.CurrentCulture));
+
+				pinState.Append(", ");
+				pinState.Append("DSR = ");
+				pinState.Append(pins.Dsr ? "on" : "off");
+
+				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+					pinState.Append(" | " + pinCount.DsrDisableCount.ToString(CultureInfo.CurrentCulture));
+
+				pinState.Append(", ");
+				pinState.Append("DCD = ");
+				pinState.Append(pins.Dsr ? "on" : "off");
+
+				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+					pinState.Append(" | " + pinCount.DcdCount.ToString(CultureInfo.CurrentCulture));
+
+				infos.Add(pinState.ToString());
+			}
+
+			if (isSerialPort || isUsbSerialHid)
+			{
+				if (this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually)
+				{
+					bool inputIsXOn  = false;
+					bool outputIsXOn = false;
+
+					if (IsOpen)
+					{
+						var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+						if (x != null)
+						{
+							try // Fail-safe implementation, especially catching exceptions while closing.
+							{
+								inputIsXOn  = x.InputIsXOn;
+								outputIsXOn = x.OutputIsXOn;
+							}
+							catch (Exception ex)
+							{
+								DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
+							}
+						}
+					}
+
+					var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
+					var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
+					var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
+					var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
+
+					var xState = new StringBuilder();
+					xState.Append("IXS = ");
+					xState.Append(inputIsXOn ? "on" : "off");
+
+					if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+						xState.Append(" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
+
+					xState.Append(", ");
+					xState.Append("OXS = ");
+					xState.Append(outputIsXOn ? "on" : "off");
+
+					if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+						xState.Append(" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
+
+					infos.Add(xState.ToString());
+				}
+			}
+
+			if (isSerialPort)
+			{
+				if (this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates)
+				{
+					var inputBreakCount  = ((this.terminal != null) ? (this.terminal.InputBreakCount)  : (0));
+					var outputBreakCount = ((this.terminal != null) ? (this.terminal.OutputBreakCount) : (0));
+
+					var breakState = new StringBuilder();
+					breakState.Append("IBS = ");
+					breakState.Append(inputBreak ? "on" : "off");
+
+					if (this.settingsRoot.Terminal.Status.ShowBreakCount)
+						breakState.Append(" | " + inputBreakCount.ToString(CultureInfo.CurrentCulture));
+
+					infos.Add(breakState.ToString());
+
+					breakState.Append(", ");
+					breakState.Append("OBS = ");
+					breakState.Append(outputBreak ? "on" : "off");
+
+					if (this.settingsRoot.Terminal.Status.ShowBreakCount)
+						breakState.Append(" | " + outputBreakCount.ToString(CultureInfo.CurrentCulture));
+
+					infos.Add(breakState.ToString());
+				}
+			}
+
+			for (int i = 0; i < infos.Count; i++)
+			{
+				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, infos[i], infoEnclosureLeft, infoEnclosureRight));
+
+				if (i < (infos.Count - 1))
+					virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			}
+
+			virtualLine.Add(new Domain.DisplayElement.LineBreak());
+
+			return (virtualLine);
+		}
+
+		/// <summary></summary>
+		protected virtual Domain.DisplayLine IOErrorToDisplayLine(DateTime timeStamp, Domain.IOErrorEventArgs e)
+		{
+			var infoSeparator      = SettingsRoot.Display.InfoSeparator.ToSeparator();
+			var infoEnclosureLeft  = SettingsRoot.Display.InfoEnclosure.ToEnclosureLeft();
+			var infoEnclosureRight = SettingsRoot.Display.InfoEnclosure.ToEnclosureRight();
+
+			var virtualLine = new Domain.DisplayLine(7); // Preset the required capacity to improve memory management.
+
+			virtualLine.Add(new Domain.DisplayElement.LineStart());
+
+			if (SettingsRoot.Display.ShowTimeStamp)
+			{
+				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(timeStamp, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			}
+
+			if (SettingsRoot.Log.PrependPortStatus) // Terminology is user = "port" and code = "IO".
+			{
+				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, infoEnclosureLeft, infoEnclosureRight));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			}
+
+			virtualLine.Add(new Domain.DisplayElement.ErrorInfo(Domain.Direction.None, e.Message, (e.Severity == Domain.IOErrorSeverity.Acceptable)));
+			virtualLine.Add(new Domain.DisplayElement.LineBreak());
+
+			return (virtualLine);
+		}
+
+		#endregion
+
 		#region Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 		// Terminal > Event Handlers
@@ -2353,6 +2606,11 @@ namespace YAT.Model
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
+			// Log:
+			if (this.log.IsOn && this.log.Settings.PrependPortStatus)
+				this.log.WriteLine(IOStatusToDisplayLine(DateTime.Now), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+
+			// Forward:
 			OnIOChanged(e);
 
 			// Attention, the 'IOChanged' event could trigger close = dispose of terminal!
@@ -2389,6 +2647,11 @@ namespace YAT.Model
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
+			// Log:
+			if (this.log.IsOn)
+				this.log.WriteLine(IOStatusAndControlToDisplayLine(DateTime.Now), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+
+			// Forward:
 			OnIOControlChanged(e);
 		}
 
@@ -2397,6 +2660,11 @@ namespace YAT.Model
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
+			// Log:
+			if (this.log.IsOn)
+				this.log.WriteLine(IOErrorToDisplayLine(DateTime.Now, e), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+
+			// Forward:
 			OnIOError(e);
 		}
 
@@ -4565,12 +4833,37 @@ namespace YAT.Model
 			{
 				string rootPath = this.log.Settings.RootPath;
 
-				Exception ex;
-				if (!DirectoryEx.TryBrowse(rootPath, out ex))
+				// Create directory if not existing yet:
+				if (!Directory.Exists(Path.GetDirectoryName(rootPath)))
+				{
+					try
+					{
+						Directory.CreateDirectory(Path.GetDirectoryName(rootPath));
+					}
+					catch (Exception exCreate)
+					{
+						string message = "Unable to create folder." + Environment.NewLine + Environment.NewLine +
+						                 "System error message:" + Environment.NewLine + exCreate.Message;
+
+						OnMessageInputRequest
+						(
+							message,
+							"Folder Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
+
+						return (false);
+					}
+				}
+
+				// Open directory:
+				Exception exBrowse;
+				if (!DirectoryEx.TryBrowse(rootPath, out exBrowse))
 				{
 					OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to open log folder", rootPath, ex),
+						ErrorHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
 						"Log Folder Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

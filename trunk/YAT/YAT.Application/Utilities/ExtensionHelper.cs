@@ -132,9 +132,9 @@ namespace YAT.Application.Utilities
 
 		#endregion
 
-		#region Text/Binary/Send/Monitor/Log
+		#region Text/Binary/Send/Log/Monitor
 		//------------------------------------------------------------------------------------------
-		// Text/Binary/Send/Monitor/Log
+		// Text/Binary/Send/Log/Monitor
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -213,7 +213,9 @@ namespace YAT.Application.Utilities
 			return (IsRtfExtension(filePath) || IsXmlFile(filePath));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Applies to [Send File] as well as [Monitor > Save].
+		/// </remarks>
 		public static string TextFilesFilter
 		{
 			get
@@ -241,10 +243,35 @@ namespace YAT.Application.Utilities
 				return (4);
 		}
 
-		/// <remarks>
-		/// Only applies to log files.
-		/// </remarks>
-		public static ReadOnlyCollection<string> TextLogFileExtensionsWithDot
+		/// <summary></summary>
+		public static string TextSendFilesDefault
+		{
+			get { return (".txt"); }
+		}
+
+		/// <summary></summary>
+		public static ReadOnlyCollection<string> PortLogFileExtensionsWithDot
+		{
+			get
+			{                            // See comment below!
+				var l = new List<string>(4); // Preset the required capacity to improve memory management.
+				l.Add(".txt");
+				l.Add(".text");
+				l.Add(".log");
+				l.Add(".rtf");
+			////l.Add(".xml"); not supported (yet).
+				return (l.AsReadOnly());
+			}
+		}
+
+		/// <summary></summary>
+		public static string PortLogFilesDefault
+		{
+			get { return (".log"); } // = NeatLogFilesDefault
+		}
+
+		/// <summary></summary>
+		public static ReadOnlyCollection<string> NeatLogFileExtensionsWithDot
 		{
 			get
 			{
@@ -259,15 +286,9 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static string TextFilesDefault
-		{
-			get { return (".txt"); }
-		}
-
-		/// <summary></summary>
 		public static string NeatLogFilesDefault
 		{
-			get { return (".log"); }
+			get { return (".log"); } // = PortLogFilesDefault
 		}
 
 		/// <remarks>
@@ -302,10 +323,16 @@ namespace YAT.Application.Utilities
 				return (4);
 		}
 
+		/// <summary></summary>
+		public static string BinarySendFilesDefault
+		{
+			get { return (".dat"); } // = RawLogFilesDefault
+		}
+
 		/// <remarks>
 		/// Only applies to log files, i.e. does not contain text file extensions (which are also sendable by binary terminals).
 		/// </remarks>
-		public static ReadOnlyCollection<string> BinaryLogFileExtensionsWithDot
+		public static ReadOnlyCollection<string> RawLogFileExtensionsWithDot
 		{
 			get
 			{
@@ -319,15 +346,9 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static string BinaryFilesDefault
-		{
-			get { return (".dat"); }
-		}
-
-		/// <summary></summary>
 		public static string RawLogFilesDefault
 		{
-			get { return (".dat"); } // = BinaryFilesDefault
+			get { return (".dat"); } // = BinarySendFilesDefault
 		}
 
 		/// <summary></summary>

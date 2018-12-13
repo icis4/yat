@@ -50,16 +50,18 @@ namespace YAT.Log
 		private FormatSettings neatFormat;
 
 		private List<Log> logs;
-		private List<Log> rawLogs;
-		private List<Log> neatLogs;
 
+		private TextLog portLog;
+
+		private List<Log> rawLogs;
 		private RawLog rawTxLog;
 		private RawLog rawBidirLog;
 		private RawLog rawRxLog;
 
-		private NeatLog neatTxLog;
-		private NeatLog neatBidirLog;
-		private NeatLog neatRxLog;
+		private List<Log> neatLogs;
+		private TextLog neatTxLog;
+		private TextLog neatBidirLog;
+		private TextLog neatRxLog;
 
 		#endregion
 
@@ -75,21 +77,24 @@ namespace YAT.Log
 			this.textTerminalEncoding = textTerminalEncoding;
 			this.neatFormat           = neatFormat;
 
-			this.rawLogs  = new List<Log>(3); // Preset the required capacity to improve memory management.
-			this.rawLogs.Add(this.rawTxLog    = new RawLog(this.settings.RawLogTx,    new Func<string>(this.settings.MakeRawTxFilePath),    this.settings.WriteMode));
-			this.rawLogs.Add(this.rawBidirLog = new RawLog(this.settings.RawLogBidir, new Func<string>(this.settings.MakeRawBidirFilePath), this.settings.WriteMode));
-			this.rawLogs.Add(this.rawRxLog    = new RawLog(this.settings.RawLogRx,    new Func<string>(this.settings.MakeRawRxFilePath),    this.settings.WriteMode));
-
 			Encoding logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
-			this.neatLogs = new List<Log>(3); // Preset the required capacity to improve memory management.
-			this.neatLogs.Add(this.neatTxLog    = new NeatLog(this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
-			this.neatLogs.Add(this.neatBidirLog = new NeatLog(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat));
-			this.neatLogs.Add(this.neatRxLog    = new NeatLog(this.settings.NeatLogRx,    new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
+			this.portLog                        = new TextLog(this.settings.PortLog,      new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
 
-			this.logs = new List<Log>(2); // Preset the required capacity to improve memory management.
-			this.logs.AddRange(this.rawLogs);
-			this.logs.AddRange(this.neatLogs);
+			this.rawLogs  = new List<Log>(3); // Preset the required capacity to improve memory management.
+			this.rawLogs.Add(this.rawTxLog      = new RawLog( this.settings.RawLogTx,     new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode));
+			this.rawLogs.Add(this.rawBidirLog   = new RawLog( this.settings.RawLogBidir,  new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode));
+			this.rawLogs.Add(this.rawRxLog      = new RawLog( this.settings.RawLogRx,     new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode));
+
+			this.neatLogs = new List<Log>(3); // Preset the required capacity to improve memory management.
+			this.neatLogs.Add(this.neatTxLog    = new TextLog(this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
+			this.neatLogs.Add(this.neatBidirLog = new TextLog(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat));
+			this.neatLogs.Add(this.neatRxLog    = new TextLog(this.settings.NeatLogRx,    new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
+
+			this.logs = new List<Log>(7); // Preset the required capacity to improve memory management.
+			this.logs.Add     (this.portLog);  // Attention: The sequence must correspond to the 'LogChannel' values!
+			this.logs.AddRange(this.rawLogs);  // Attention: The sequence must correspond to the 'LogChannel' values!
+			this.logs.AddRange(this.neatLogs); // Attention: The sequence must correspond to the 'LogChannel' values!
 		}
 
 		#region Disposal
@@ -214,11 +219,13 @@ namespace YAT.Log
 				{
 					this.settings = value;
 
-					this.rawTxLog.SetSettings   (this.settings.RawLogTx,    new Func<string>(this.settings.MakeRawTxFilePath),    this.settings.WriteMode);
-					this.rawBidirLog.SetSettings(this.settings.RawLogBidir, new Func<string>(this.settings.MakeRawBidirFilePath), this.settings.WriteMode);
-					this.rawRxLog.SetSettings   (this.settings.RawLogRx,    new Func<string>(this.settings.MakeRawRxFilePath),    this.settings.WriteMode);
-
 					var logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
+
+					this.portLog.SetSettings     (this.settings.PortLog,      new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
+
+					this.rawTxLog.SetSettings    (this.settings.RawLogTx,     new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode);
+					this.rawBidirLog.SetSettings (this.settings.RawLogBidir,  new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode);
+					this.rawRxLog.SetSettings    (this.settings.RawLogRx,     new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode);
 
 					this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
 					this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
@@ -322,13 +329,17 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void Write(Domain.RawChunk chunk, LogChannel writeChannel)
 		{
-			((RawLog)GetLog(writeChannel)).Write(chunk);
+			var log = GetLog(writeChannel) as RawLog;
+			if (log != null)
+				log.Write(chunk);
 		}
 
 		/// <summary></summary>
 		public virtual void WriteLine(Domain.DisplayLine line, LogChannel writeChannel)
 		{
-			((NeatLog)GetLog(writeChannel)).WriteLine(line);
+			var log = GetLog(writeChannel) as TextLog;
+			if (log != null)
+				log.WriteLine(line);
 		}
 
 		/// <summary></summary>
