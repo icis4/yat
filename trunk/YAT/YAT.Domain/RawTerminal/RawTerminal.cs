@@ -704,11 +704,11 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			var serialPortErrorEventArgs = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
-			if (serialPortErrorEventArgs == null)
+			var spe = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
+			if (spe == null)
 				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message));
 			else
-				OnIOError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
+				OnIOError(new SerialPortErrorEventArgs((IOErrorSeverity)spe.Severity, (IODirection)spe.Direction, spe.Message, spe.SerialPortError));
 		}
 
 		/// <remarks>
