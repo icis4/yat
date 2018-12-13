@@ -59,7 +59,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(PortInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
-	[XmlInclude(typeof(AuxiliaryElement))]
+	[XmlInclude(typeof(FormatElement))]
 	[XmlInclude(typeof(DataSpace))]
 	[XmlInclude(typeof(InfoSeparator))]
 	[XmlInclude(typeof(LineStart))]
@@ -425,22 +425,22 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public abstract class AuxiliaryElement : DisplayElement
+		public abstract class FormatElement : DisplayElement
 		{
 			/// <summary></summary>
-			protected AuxiliaryElement(Direction direction)
+			protected FormatElement(Direction direction)
 				: this(direction, null)
 			{
 			}
 
 			/// <summary></summary>
-			protected AuxiliaryElement(string text)
+			protected FormatElement(string text)
 				: this(Direction.None, text)
 			{
 			}
 
 			/// <summary></summary>
-			protected AuxiliaryElement(Direction direction, string text)
+			protected FormatElement(Direction direction, string text)
 				: base(direction, text, ElementAttributes.Auxiliary)
 			{
 			}
@@ -449,7 +449,7 @@ namespace YAT.Domain
 		/// <summary>The space that is added inbetween characters of the data content (i.e. radix = char).</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DataSpace : AuxiliaryElement
+		public class DataSpace : FormatElement
 		{
 			/// <summary></summary>
 			public DataSpace()
@@ -466,7 +466,7 @@ namespace YAT.Domain
 
 		/// <summary>The margin that is added to the right of the data content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class InfoSeparator : AuxiliaryElement
+		public class InfoSeparator : FormatElement
 		{
 			/// <summary></summary>
 			public InfoSeparator()
@@ -489,7 +489,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class LineStart : AuxiliaryElement
+		public class LineStart : FormatElement
 		{
 			/// <summary></summary>
 			public LineStart()
@@ -506,7 +506,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class LineBreak : AuxiliaryElement
+		public class LineBreak : FormatElement
 		{
 			/// <summary></summary>
 			public LineBreak()

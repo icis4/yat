@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.De
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Scripts", "!-Scripts", "{08FEFDFE-B7C8-4D17-9C8F-3B3108242FB4}"
 	ProjectSection(SolutionItems) = preProject
-		!-Tools\CallPowerShellScript.cmd = !-Tools\CallPowerShellScript.cmd
+		!-Scripts\CallPowerShellScript.cmd = !-Scripts\CallPowerShellScript.cmd
 		!-Scripts\CleanAll-Analyzer.cmd = !-Scripts\CleanAll-Analyzer.cmd
 		!-Scripts\CleanAll-Options.cmd = !-Scripts\CleanAll-Options.cmd
 		!-Scripts\CleanAll-SCM.cmd = !-Scripts\CleanAll-SCM.cmd
@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Scripts", "!-Scripts", "{
 		!-Scripts\CleanAll.cmd = !-Scripts\CleanAll.cmd
 		!-Scripts\CleanDir.cmd = !-Scripts\CleanDir.cmd
 		!-Scripts\CleanFiles.cmd = !-Scripts\CleanFiles.cmd
+		!-Scripts\CountLOC.cmd = !-Scripts\CountLOC.cmd
+		!-Scripts\CountLOC.ps1 = !-Scripts\CountLOC.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-TestConfig", "!-TestConfig", "{CA89FA6B-B262-4974-8690-03E65F24A704}"

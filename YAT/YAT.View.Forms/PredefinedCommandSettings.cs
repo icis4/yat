@@ -397,7 +397,7 @@ namespace YAT.View.Forms
 					listBox_Pages.Enabled = true;
 					listBox_Pages.Items.Clear();
 
-					foreach (Model.Types.PredefinedCommandPage p in this.settingsInEdit.Pages)
+					foreach (var p in this.settingsInEdit.Pages)
 						listBox_Pages.Items.Add(p.PageName);
 
 					if (pageIsSelected)
