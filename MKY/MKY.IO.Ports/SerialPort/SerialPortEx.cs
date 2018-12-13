@@ -1388,7 +1388,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsOpen) // Make sure to propagate event only if active!
 				this.eventHelper.RaiseSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
@@ -1397,11 +1397,11 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsOpen) // Make sure to propagate event only if active!
 			{
-				if ((e.EventType == System.IO.Ports.SerialError.Frame) && this.ignoreFramingErrors)
+				if ((e.EventType == System.IO.Ports.SerialError.Frame) && IgnoreFramingErrors)
 				{
-					// Ignore.
+					// Ignore!
 				}
 				else
 				{
@@ -1415,7 +1415,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsOpen) // Make sure to propagate event only if active!
 				this.eventHelper.RaiseSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 

@@ -42,18 +42,6 @@ namespace YAT.Domain
 		public string Message { get; }
 
 		/// <summary></summary>
-		public IOErrorEventArgs(string message)
-			: this(IOErrorSeverity.Severe, message)
-		{
-		}
-
-		/// <summary></summary>
-		public IOErrorEventArgs(IOErrorSeverity severity, string message)
-			: this(severity, IODirection.None, message)
-		{
-		}
-
-		/// <summary></summary>
 		public IOErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message)
 		{
 			Severity  = severity;
@@ -69,8 +57,8 @@ namespace YAT.Domain
 		public System.IO.Ports.SerialError SerialPortError { get; }
 
 		/// <summary></summary>
-		public SerialPortErrorEventArgs(string message, System.IO.Ports.SerialError serialPortError)
-			: base(message)
+		public SerialPortErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message, System.IO.Ports.SerialError serialPortError)
+			: base(severity, direction, message)
 		{
 			SerialPortError = serialPortError;
 		}
