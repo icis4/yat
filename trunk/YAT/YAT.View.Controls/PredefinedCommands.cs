@@ -296,8 +296,8 @@ namespace YAT.View.Controls
 					comboBox_Pages.Enabled = (this.pages.Count > 1); // No need to navigate a single page.
 					comboBox_Pages.Items.Clear();
 
-					foreach (var page in this.pages)
-						comboBox_Pages.Items.Add(page.PageName);
+					foreach (var p in this.pages)
+						comboBox_Pages.Items.Add(p.PageName);
 
 					comboBox_Pages.SelectedIndex = SelectedPageIndex;
 				}

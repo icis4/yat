@@ -4376,10 +4376,10 @@ namespace YAT.View.Forms
 
 				if (ExtensionHelper.IsXmlFile(filePath))
 				{
-				#if FALSE // Enable to use the raw instead of neat XML export schema, useful for development purposes of the raw XML schema.
+				#if FALSE // Enable to use raw instead of text XML export schema, useful for development purposes of the raw XML schema.
 					savedCount = Log.Utilities.XmlWriterHelperRaw.SaveLinesToFile(monitor.SelectedLines, filePath, true);
 				#else
-					savedCount = Log.Utilities.XmlWriterHelperNeat.SaveLinesToFile(monitor.SelectedLines, filePath, true);
+					savedCount = Log.Utilities.XmlWriterHelperText.SaveLinesToFile(monitor.SelectedLines, filePath, true);
 				#endif
 				}
 				else if (ExtensionHelper.IsRtfFile(filePath))
@@ -5434,9 +5434,13 @@ namespace YAT.View.Forms
 			Image on  = Properties.Resources.Image_Status_Green_12x12;
 			Image off = Properties.Resources.Image_Status_Red_12x12;
 
+			// Attention:
+			// Similar code exists in Model.Terminal.IOStatusAndControlToDisplayLine().
+			// Changes here may have to be applied there too.
+
 			bool isOpen = ((this.terminal != null) && (this.terminal.IsOpen));
 
-			bool isSerialPort   = true;
+			bool isSerialPort   = false;
 			bool isUsbSerialHid = false;
 
 			if (this.settingsRoot != null)
@@ -5526,8 +5530,8 @@ namespace YAT.View.Forms
 
 					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
 					bool indicateXOnXOff = allowXOnXOff; // Indication only works if manual XOn/XOff (bug #214).
-					bool outputIsXOn     = false;
 					bool inputIsXOn      = false;
+					bool outputIsXOn     = false;
 
 					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 					if (x != null)
@@ -5535,8 +5539,8 @@ namespace YAT.View.Forms
 						try // Fail-safe implementation, especially catching exceptions while closing.
 						{
 						////indicateXOnXOff = x.XOnXOffIsInUse; >> See above (bug #214).
-							outputIsXOn     = x.OutputIsXOn;
 							inputIsXOn      = x.InputIsXOn;
+							outputIsXOn     = x.OutputIsXOn;
 						}
 						catch (Exception ex)
 						{
@@ -5646,7 +5650,7 @@ namespace YAT.View.Forms
 					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
 					// checks whether an operation is allowed.
 				}
-				else
+				else // = isClosed
 				{
 					// By default, all are disabled:
 
@@ -5704,8 +5708,8 @@ namespace YAT.View.Forms
 				{
 					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
 					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
-					bool outputIsXOn     = false;
 					bool inputIsXOn      = false;
+					bool outputIsXOn     = false;
 
 					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 					if (x != null)
@@ -5713,8 +5717,8 @@ namespace YAT.View.Forms
 						try // Fail-safe implementation, especially catching exceptions while closing.
 						{
 							indicateXOnXOff = x.XOnXOffIsInUse;
-							outputIsXOn     = x.OutputIsXOn;
 							inputIsXOn      = x.InputIsXOn;
+							outputIsXOn     = x.OutputIsXOn;
 						}
 						catch (Exception ex)
 						{
@@ -5749,7 +5753,7 @@ namespace YAT.View.Forms
 					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
 					// checks whether an operation is allowed.
 				}
-				else
+				else // = isClosed
 				{
 					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
 					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
