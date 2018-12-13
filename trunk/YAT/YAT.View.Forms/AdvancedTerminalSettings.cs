@@ -298,12 +298,12 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.ShowDuration = checkBox_ShowDuration.Checked;
 		}
 
-		private void checkBox_ShowCopyOfActiveLine_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_IncludePortControl_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = checkBox_ShowCopyOfActiveLine.Checked;
+			this.settingsInEdit.Terminal.Display.IncludePortControl = checkBox_IncludePortControl.Checked;
 		}
 
 		private void checkBox_PortLineBreak_CheckedChanged(object sender, EventArgs e)
@@ -438,6 +438,14 @@ namespace YAT.View.Forms
 
 				e.Cancel = true;
 			}
+		}
+
+		private void checkBox_ShowCopyOfActiveLine_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = checkBox_ShowCopyOfActiveLine.Checked;
 		}
 
 		private void checkBox_ReplaceControlCharacters_CheckedChanged(object sender, EventArgs e)
@@ -1055,6 +1063,10 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Status:
+				checkBox_ShowConnectTime.Checked  = this.settingsInEdit.Terminal.Status.ShowConnectTime;
+				checkBox_ShowCountAndRate.Checked = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
+
 				// Radix:
 				bool separateRadix = this.settingsInEdit.Terminal.Display.SeparateTxRxRadix;
 				if (!separateRadix)
@@ -1074,8 +1086,6 @@ namespace YAT.View.Forms
 				checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
 
 				// Display:
-				checkBox_ShowConnectTime.Checked      = this.settingsInEdit.Terminal.Status.ShowConnectTime;
-				checkBox_ShowCountAndRate.Checked     = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
 				checkBox_ShowLineNumbers.Checked      = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
 				ComboBoxHelper.Select(comboBox_LineNumberSelection, (Domain.Utilities.LineNumberSelectionEx)this.settingsInEdit.Terminal.Display.LineNumberSelection);
 				checkBox_ShowTimeStamp.Checked        = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
@@ -1085,18 +1095,15 @@ namespace YAT.View.Forms
 				checkBox_ShowDirection.Checked        = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked           = this.settingsInEdit.Terminal.Display.ShowLength;
 				checkBox_ShowDuration.Checked         = this.settingsInEdit.Terminal.Display.ShowDuration;
-				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
-
-				checkBox_ShowFlowControlCount.Enabled = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
-				checkBox_ShowFlowControlCount.Checked = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;
-				checkBox_ShowBreakCount.Enabled       = (isSerialPort && this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates);
-				checkBox_ShowBreakCount.Checked       = this.settingsInEdit.Terminal.Status.ShowBreakCount;
+				checkBox_IncludePortControl.Checked   = this.settingsInEdit.Terminal.Display.IncludePortControl;
 
 				checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
 				checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
 				checkBox_ChunkLineBreak.Checked     = this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled;
-				textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
-				textBox_MaxBytePerLineCount.Text    = this.settingsInEdit.Terminal.Display.MaxBytePerLineCount.ToString(CultureInfo.CurrentCulture);
+
+				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
+				textBox_MaxBytePerLineCount.Text      = this.settingsInEdit.Terminal.Display.MaxBytePerLineCount.ToString(CultureInfo.CurrentCulture);
+				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
 				// Char replace:
 				bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
@@ -1122,8 +1129,14 @@ namespace YAT.View.Forms
 				comboBox_Endianness.SelectedItem = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
 
 				groupBox_Communication_SerialPorts.Enabled = isSerialPort;
+				checkBox_IgnoreFramingErrors.Checked       = this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors;
 				checkBox_IndicateBreakStates.Checked       = this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates;
 				checkBox_OutputBreakModifiable.Checked     = this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable;
+
+				checkBox_ShowBreakCount.Enabled            = this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates;
+				checkBox_ShowBreakCount.Checked            = this.settingsInEdit.Terminal.Status.ShowBreakCount;
+				checkBox_ShowFlowControlCount.Enabled      = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
+				checkBox_ShowFlowControlCount.Checked      = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;
 
 				// Send:
 				checkBox_UseExplicitDefaultRadix.Checked =  this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
@@ -1154,7 +1167,6 @@ namespace YAT.View.Forms
 				textBox_MaxSendRateSize.Text         = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
 				textBox_MaxSendRateInterval.Enabled  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
 				textBox_MaxSendRateInterval.Text     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
-				checkBox_IgnoreFramingErrors.Checked = this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors;
 				checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
@@ -1185,6 +1197,10 @@ namespace YAT.View.Forms
 			this.settingsInEdit.SuspendChangeEvent();
 			try
 			{
+				// Status:
+				this.settingsInEdit.Terminal.Status.ShowConnectTime  = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
+				this.settingsInEdit.Terminal.Status.ShowCountAndRate = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
+
 				// Radix:
 				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
 				this.settingsInEdit.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
@@ -1201,10 +1217,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowDirection       = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowLength          = Domain.Settings.DisplaySettings.ShowLengthDefault;
 				this.settingsInEdit.Terminal.Display.ShowDuration        = Domain.Settings.DisplaySettings.ShowDurationDefault;
-				this.settingsInEdit.Terminal.Status.ShowConnectTime      = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
-				this.settingsInEdit.Terminal.Status.ShowCountAndRate     = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
-				this.settingsInEdit.Terminal.Status.ShowFlowControlCount = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
-				this.settingsInEdit.Terminal.Status.ShowBreakCount       = Domain.Settings.StatusSettings.ShowBreakCountDefault;
+				this.settingsInEdit.Terminal.Display.IncludePortControl  = Domain.Settings.DisplaySettings.IncludePortControlDefault;
 
 				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
@@ -1226,8 +1239,12 @@ namespace YAT.View.Forms
 
 				// Communication:
 				this.settingsInEdit.Terminal.IO.Endianness                        = Domain.Settings.IOSettings.EndiannessDefault;
+				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors    = MKY.IO.Serial.SerialPort.SerialPortSettings.IgnoreFramingErrorsDefault;
 				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
 				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
+
+				this.settingsInEdit.Terminal.Status.ShowFlowControlCount = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
+				this.settingsInEdit.Terminal.Status.ShowBreakCount       = Domain.Settings.StatusSettings.ShowBreakCountDefault;
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
@@ -1241,7 +1258,6 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.SerialPort.BufferMaxBaudRate      = MKY.IO.Serial.SerialPort.SerialPortSettings.BufferMaxBaudRateDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxChunkSizeDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
-				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors    = MKY.IO.Serial.SerialPort.SerialPortSettings.IgnoreFramingErrorsDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 

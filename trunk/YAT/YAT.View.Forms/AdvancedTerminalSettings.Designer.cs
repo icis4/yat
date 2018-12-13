@@ -42,9 +42,9 @@
 			this.checkBox_OutputBreakModifiable = new System.Windows.Forms.CheckBox();
 			this.checkBox_IndicateBreakStates = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowBreakCount = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowFlowControlCount = new System.Windows.Forms.CheckBox();
 			this.comboBox_Endianness = new System.Windows.Forms.ComboBox();
 			this.label_Endianness = new System.Windows.Forms.Label();
+			this.checkBox_ShowFlowControlCount = new System.Windows.Forms.CheckBox();
 			this.groupBox_Send = new System.Windows.Forms.GroupBox();
 			this.checkBox_SkipEmptyLines = new System.Windows.Forms.CheckBox();
 			this.checkBox_EnableEscapesForText = new System.Windows.Forms.CheckBox();
@@ -215,6 +215,7 @@
 			this.groupBox_Communication.Controls.Add(this.groupBox_Communication_SerialPorts);
 			this.groupBox_Communication.Controls.Add(this.comboBox_Endianness);
 			this.groupBox_Communication.Controls.Add(this.label_Endianness);
+			this.groupBox_Communication.Controls.Add(this.checkBox_ShowFlowControlCount);
 			this.groupBox_Communication.Location = new System.Drawing.Point(281, 12);
 			this.groupBox_Communication.Name = "groupBox_Communication";
 			this.groupBox_Communication.Size = new System.Drawing.Size(263, 188);
@@ -231,10 +232,9 @@
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_OutputBreakModifiable);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_IndicateBreakStates);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_ShowBreakCount);
-			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_ShowFlowControlCount);
-			this.groupBox_Communication_SerialPorts.Location = new System.Drawing.Point(6, 48);
+			this.groupBox_Communication_SerialPorts.Location = new System.Drawing.Point(6, 45);
 			this.groupBox_Communication_SerialPorts.Name = "groupBox_Communication_SerialPorts";
-			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 134);
+			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 111);
 			this.groupBox_Communication_SerialPorts.TabIndex = 2;
 			this.groupBox_Communication_SerialPorts.TabStop = false;
 			this.groupBox_Communication_SerialPorts.Text = "Serial COM Ports";
@@ -283,17 +283,6 @@
 			this.checkBox_ShowBreakCount.UseVisualStyleBackColor = true;
 			this.checkBox_ShowBreakCount.CheckedChanged += new System.EventHandler(this.checkBox_ShowBreakCount_CheckedChanged);
 			// 
-			// checkBox_ShowFlowControlCount
-			// 
-			this.checkBox_ShowFlowControlCount.AutoSize = true;
-			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(6, 111);
-			this.checkBox_ShowFlowControlCount.Name = "checkBox_ShowFlowControlCount";
-			this.checkBox_ShowFlowControlCount.Size = new System.Drawing.Size(140, 17);
-			this.checkBox_ShowFlowControlCount.TabIndex = 4;
-			this.checkBox_ShowFlowControlCount.Text = "Show flow control count";
-			this.checkBox_ShowFlowControlCount.UseVisualStyleBackColor = true;
-			this.checkBox_ShowFlowControlCount.CheckedChanged += new System.EventHandler(this.checkBox_ShowFlowControlCount_CheckedChanged);
-			// 
 			// comboBox_Endianness
 			// 
 			this.comboBox_Endianness.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -313,6 +302,17 @@
 			this.label_Endianness.Size = new System.Drawing.Size(65, 13);
 			this.label_Endianness.TabIndex = 0;
 			this.label_Endianness.Text = "Endianness:";
+			// 
+			// checkBox_ShowFlowControlCount
+			// 
+			this.checkBox_ShowFlowControlCount.AutoSize = true;
+			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(12, 162);
+			this.checkBox_ShowFlowControlCount.Name = "checkBox_ShowFlowControlCount";
+			this.checkBox_ShowFlowControlCount.Size = new System.Drawing.Size(140, 17);
+			this.checkBox_ShowFlowControlCount.TabIndex = 4;
+			this.checkBox_ShowFlowControlCount.Text = "Show flow control count";
+			this.checkBox_ShowFlowControlCount.UseVisualStyleBackColor = true;
+			this.checkBox_ShowFlowControlCount.CheckedChanged += new System.EventHandler(this.checkBox_ShowFlowControlCount_CheckedChanged);
 			// 
 			// groupBox_Send
 			// 
@@ -839,6 +839,7 @@
 			this.checkBox_IncludePortControl.TabIndex = 20;
 			this.checkBox_IncludePortControl.Text = "Include port control events";
 			this.checkBox_IncludePortControl.UseVisualStyleBackColor = true;
+			this.checkBox_IncludePortControl.CheckedChanged += new System.EventHandler(this.checkBox_IncludePortControl_CheckedChanged);
 			// 
 			// checkBox_ShowDuration
 			// 
@@ -940,7 +941,7 @@
 			// checkBox_ShowPort
 			// 
 			this.checkBox_ShowPort.AutoSize = true;
-			this.checkBox_ShowPort.Location = new System.Drawing.Point(131, 191);
+			this.checkBox_ShowPort.Location = new System.Drawing.Point(131, 181);
 			this.checkBox_ShowPort.Name = "checkBox_ShowPort";
 			this.checkBox_ShowPort.Size = new System.Drawing.Size(74, 17);
 			this.checkBox_ShowPort.TabIndex = 13;
@@ -1000,7 +1001,7 @@
 			// checkBox_ShowDirection
 			// 
 			this.checkBox_ShowDirection.AutoSize = true;
-			this.checkBox_ShowDirection.Location = new System.Drawing.Point(131, 214);
+			this.checkBox_ShowDirection.Location = new System.Drawing.Point(131, 204);
 			this.checkBox_ShowDirection.Name = "checkBox_ShowDirection";
 			this.checkBox_ShowDirection.Size = new System.Drawing.Size(96, 17);
 			this.checkBox_ShowDirection.TabIndex = 14;
@@ -1013,9 +1014,9 @@
 			this.checkBox_ShowLineNumbers.AutoSize = true;
 			this.checkBox_ShowLineNumbers.Location = new System.Drawing.Point(12, 145);
 			this.checkBox_ShowLineNumbers.Name = "checkBox_ShowLineNumbers";
-			this.checkBox_ShowLineNumbers.Size = new System.Drawing.Size(115, 17);
+			this.checkBox_ShowLineNumbers.Size = new System.Drawing.Size(118, 17);
 			this.checkBox_ShowLineNumbers.TabIndex = 8;
-			this.checkBox_ShowLineNumbers.Text = "Show line &numbers";
+			this.checkBox_ShowLineNumbers.Text = "Show line &numbers:";
 			this.checkBox_ShowLineNumbers.UseVisualStyleBackColor = true;
 			this.checkBox_ShowLineNumbers.CheckedChanged += new System.EventHandler(this.checkBox_ShowLineNumbers_CheckedChanged);
 			// 
@@ -1161,7 +1162,7 @@
 			this.comboBox_RxRadix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_RxRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_RxRadix.Location = new System.Drawing.Point(131, 90);
+			this.comboBox_RxRadix.Location = new System.Drawing.Point(131, 91);
 			this.comboBox_RxRadix.Name = "comboBox_RxRadix";
 			this.comboBox_RxRadix.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_RxRadix.TabIndex = 6;
@@ -1170,7 +1171,7 @@
 			// label_RxRadix
 			// 
 			this.label_RxRadix.AutoSize = true;
-			this.label_RxRadix.Location = new System.Drawing.Point(9, 93);
+			this.label_RxRadix.Location = new System.Drawing.Point(9, 94);
 			this.label_RxRadix.Name = "label_RxRadix";
 			this.label_RxRadix.Size = new System.Drawing.Size(53, 13);
 			this.label_RxRadix.TabIndex = 5;
@@ -1179,7 +1180,7 @@
 			// checkBox_SeparateTxRxRadix
 			// 
 			this.checkBox_SeparateTxRxRadix.AutoSize = true;
-			this.checkBox_SeparateTxRxRadix.Location = new System.Drawing.Point(12, 69);
+			this.checkBox_SeparateTxRxRadix.Location = new System.Drawing.Point(12, 70);
 			this.checkBox_SeparateTxRxRadix.Name = "checkBox_SeparateTxRxRadix";
 			this.checkBox_SeparateTxRxRadix.Size = new System.Drawing.Size(161, 17);
 			this.checkBox_SeparateTxRxRadix.TabIndex = 4;
@@ -1262,7 +1263,7 @@
 			this.comboBox_TxRadix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_TxRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_TxRadix.Location = new System.Drawing.Point(131, 41);
+			this.comboBox_TxRadix.Location = new System.Drawing.Point(131, 45);
 			this.comboBox_TxRadix.Name = "comboBox_TxRadix";
 			this.comboBox_TxRadix.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_TxRadix.TabIndex = 3;
@@ -1271,7 +1272,7 @@
 			// label_TxRadix
 			// 
 			this.label_TxRadix.AutoSize = true;
-			this.label_TxRadix.Location = new System.Drawing.Point(9, 44);
+			this.label_TxRadix.Location = new System.Drawing.Point(9, 48);
 			this.label_TxRadix.Name = "label_TxRadix";
 			this.label_TxRadix.Size = new System.Drawing.Size(37, 13);
 			this.label_TxRadix.TabIndex = 2;
