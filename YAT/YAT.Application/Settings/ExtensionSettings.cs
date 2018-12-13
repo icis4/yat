@@ -35,10 +35,13 @@ namespace YAT.Application.Settings
 	public class ExtensionSettings : MKY.Settings.SettingsItem, IEquatable<ExtensionSettings>
 	{
 		/// <summary></summary>
-		public static readonly string TextSendFilesDefault = ExtensionHelper.TextFilesDefault;
+		public static readonly string TextSendFilesDefault = ExtensionHelper.TextSendFilesDefault;
 
 		/// <summary></summary>
-		public static readonly string BinarySendFilesDefault = ExtensionHelper.BinaryFilesDefault;
+		public static readonly string BinarySendFilesDefault = ExtensionHelper.BinarySendFilesDefault;
+
+		/// <summary></summary>
+		public static readonly string PortLogFilesDefault = ExtensionHelper.PortLogFilesDefault;
 
 		/// <summary></summary>
 		public static readonly string RawLogFilesDefault = ExtensionHelper.RawLogFilesDefault;
@@ -51,8 +54,11 @@ namespace YAT.Application.Settings
 
 		private string textSendFiles;
 		private string binarySendFiles;
+
+		private string portLogFiles;
 		private string rawLogFiles;
 		private string neatLogFiles;
+
 		private string monitorFiles;
 
 		/// <summary></summary>
@@ -78,8 +84,11 @@ namespace YAT.Application.Settings
 		{
 			TextSendFiles   = rhs.TextSendFiles;
 			BinarySendFiles = rhs.BinarySendFiles;
+
+			PortLogFiles    = rhs.PortLogFiles;
 			RawLogFiles     = rhs.RawLogFiles;
 			NeatLogFiles    = rhs.NeatLogFiles;
+
 			MonitorFiles    = rhs.MonitorFiles;
 
 			ClearChanged();
@@ -94,8 +103,11 @@ namespace YAT.Application.Settings
 
 			TextSendFiles   = TextSendFilesDefault;
 			BinarySendFiles = BinarySendFilesDefault;
+
+			PortLogFiles    = PortLogFilesDefault;
 			RawLogFiles     = RawLogFilesDefault;
 			NeatLogFiles    = NeatLogFilesDefault;
+
 			MonitorFiles    = MonitorFilesDefault;
 		}
 
@@ -129,6 +141,21 @@ namespace YAT.Application.Settings
 				if (this.binarySendFiles != value)
 				{
 					this.binarySendFiles = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("PortLogFiles")]
+		public virtual string PortLogFiles
+		{
+			get { return (this.portLogFiles); }
+			set
+			{
+				if (this.portLogFiles != value)
+				{
+					this.portLogFiles = value;
 					SetMyChanged();
 				}
 			}
@@ -201,8 +228,11 @@ namespace YAT.Application.Settings
 
 				hashCode = (hashCode * 397) ^ (TextSendFiles   != null ? TextSendFiles  .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (BinarySendFiles != null ? BinarySendFiles.GetHashCode() : 0);
+
+				hashCode = (hashCode * 397) ^ (PortLogFiles    != null ? PortLogFiles   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RawLogFiles     != null ? RawLogFiles    .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (NeatLogFiles    != null ? NeatLogFiles   .GetHashCode() : 0);
+
 				hashCode = (hashCode * 397) ^ (MonitorFiles    != null ? MonitorFiles   .GetHashCode() : 0);
 
 				return (hashCode);
@@ -236,8 +266,11 @@ namespace YAT.Application.Settings
 
 				StringEx.EqualsOrdinalIgnoreCase(TextSendFiles,   other.TextSendFiles)   &&
 				StringEx.EqualsOrdinalIgnoreCase(BinarySendFiles, other.BinarySendFiles) &&
+
+				StringEx.EqualsOrdinalIgnoreCase(PortLogFiles,    other.PortLogFiles)    &&
 				StringEx.EqualsOrdinalIgnoreCase(RawLogFiles,     other.RawLogFiles)     &&
 				StringEx.EqualsOrdinalIgnoreCase(NeatLogFiles,    other.NeatLogFiles)    &&
+
 				StringEx.EqualsOrdinalIgnoreCase(MonitorFiles,    other.MonitorFiles)
 			);
 		}

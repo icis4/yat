@@ -31,6 +31,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -111,6 +112,7 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Changed -= settings_Form_Changed;
 			this.settings = this.settingsInEdit;
 
+			ApplicationSettings.RoamingUserSettings.Extensions.PortLogFiles = this.settings.PortExtension;
 			ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles  = this.settings.RawExtension;
 			ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles = this.settings.NeatExtension;
 			ApplicationSettings.SaveRoamingUserSettings();
@@ -171,11 +173,37 @@ namespace YAT.View.Forms
 
 		private void button_RootOpen_Click(object sender, EventArgs e)
 		{
-			Exception ex;
-			if (!DirectoryEx.TryBrowse(this.settingsInEdit.RootPath, out ex))
+			// Create directory if not existing yet:
+			if (!Directory.Exists(Path.GetDirectoryName(this.settingsInEdit.RootPath)))
+			{
+				try
+				{
+					Directory.CreateDirectory(Path.GetDirectoryName(this.settingsInEdit.RootPath));
+				}
+				catch (Exception exCreate)
+				{
+					string message = "Unable to create folder." + Environment.NewLine + Environment.NewLine +
+					                 "System error message:" + Environment.NewLine + exCreate.Message;
+
+					MessageBoxEx.Show
+					(
+						Parent,
+						message,
+						"Folder Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+
+					return;
+				}
+			}
+
+			// Open directory:
+			Exception exBrowse;
+			if (!DirectoryEx.TryBrowse(this.settingsInEdit.RootPath, out exBrowse))
 			{
 				string message = "Unable to open folder." + Environment.NewLine + Environment.NewLine +
-				                 "System error message:" + Environment.NewLine + ex.Message;
+				                 "System error message:" + Environment.NewLine + exBrowse.Message;
 
 				MessageBoxEx.Show
 				(
@@ -185,7 +213,61 @@ namespace YAT.View.Forms
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 				);
+
+				return;
 			}
+		}
+
+		private void checkBox_Port_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.PortLog = checkBox_Port.Checked;
+		}
+
+		private void pathLabel_Port_Click(object sender, EventArgs e)
+		{
+			this.settingsInEdit.PortLog = !this.settingsInEdit.PortLog;
+		}
+
+	////private void comboBox_Port_Extension_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since        "      _Validating() below gets called anyway.
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void comboBox_Port_Extension_Validating(object sender, CancelEventArgs e)
+		{
+			if (!ValidateFileNamePart(comboBox_Port_Extension.Text, "Extension"))
+			{
+				e.Cancel = true;
+				return;
+			}
+
+			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Port_Extension.Text, this.settingsInEdit.RawExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Port_Extension.Text, this.settingsInEdit.NeatExtension))) &&
+			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
+			{
+				ExtensionConflictMessage();
+				e.Cancel = true;
+				return;
+			}
+
+			SetControls();
+		}
+
+		private void comboBox_Port_Extension_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.PortExtension = comboBox_Port_Extension.Text;
+		}
+
+		private void checkBox_PrependPortStatus_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.PrependPortStatus = checkBox_PrependPortStatus.Checked;
 		}
 
 		private void checkBox_Raw_Tx_CheckedChanged(object sender, EventArgs e)
@@ -239,8 +321,8 @@ namespace YAT.View.Forms
 				return;
 			}
 
-			if ((this.settingsInEdit.BothRawAndNeat && (comboBox_Raw_Extension.Text == this.settingsInEdit.NeatExtension)) &&
-			    (!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
+			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Raw_Extension.Text, this.settingsInEdit.PortExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Raw_Extension.Text, this.settingsInEdit.NeatExtension))) &&
+			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
 				ExtensionConflictMessage();
 				e.Cancel = true;
@@ -309,8 +391,8 @@ namespace YAT.View.Forms
 				return;
 			}
 
-			if ((this.settingsInEdit.BothRawAndNeat && (comboBox_Neat_Extension.Text == this.settingsInEdit.RawExtension)) &&
-			    (!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
+			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Neat_Extension.Text, this.settingsInEdit.PortExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Neat_Extension.Text, this.settingsInEdit.RawExtension))) &&
+			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
 				ExtensionConflictMessage();
 				e.Cancel = true;
@@ -328,20 +410,20 @@ namespace YAT.View.Forms
 			this.settingsInEdit.NeatExtension = comboBox_Neat_Extension.Text;
 		}
 
-		private void checkBox_Options_NameFormat_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Options_NameType_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.NameFormat = checkBox_Options_NameFormat.Checked;
+			this.settingsInEdit.NameType = checkBox_Options_NameType.Checked;
 		}
 
-		private void checkBox_Options_NameChannel_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Options_NameDirection_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.NameChannel = checkBox_Options_NameChannel.Checked;
+			this.settingsInEdit.NameDirection = checkBox_Options_NameDirection.Checked;
 		}
 
 		private void checkBox_Options_NameDate_CheckedChanged(object sender, EventArgs e)
@@ -383,20 +465,20 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Options_FolderType_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.FolderFormat = checkBox_Options_FolderFormat.Checked;
+			this.settingsInEdit.FolderType = checkBox_Options_FolderType.Checked;
 		}
 
-		private void checkBox_Options_FolderChannel_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Options_FolderDirection_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.FolderChannel = checkBox_Options_FolderChannel.Checked;
+			this.settingsInEdit.FolderDirection = checkBox_Options_FolderDirection.Checked;
 		}
 
 		private void radioButton_Options_ModeCreate_CheckedChanged(object sender, EventArgs e)
@@ -453,7 +535,7 @@ namespace YAT.View.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			if (ResolveNamingConflicts())
+			if (InhibitNamingConflicts())
 				DetachAndAcceptSettings();
 			else
 				DialogResult = DialogResult.None;
@@ -478,7 +560,8 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.Yes)
 			{
-				ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles = ExtensionSettings.RawLogFilesDefault;
+				ApplicationSettings.RoamingUserSettings.Extensions.PortLogFiles = ExtensionSettings.PortLogFilesDefault;
+				ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles  = ExtensionSettings.RawLogFilesDefault;
 				ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles = ExtensionSettings.NeatLogFilesDefault;
 
 				this.settingsInEdit.SetDefaults();
@@ -499,17 +582,17 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				comboBox_Port_Extension.Items.Clear();
+				comboBox_Port_Extension.Items.AddRange(ExtensionHelper.PortLogFileExtensionsWithDot.ToArray());
+
 				comboBox_Raw_Extension.Items.Clear();
-				foreach (string ext in ExtensionHelper.BinaryLogFileExtensionsWithDot)
-					comboBox_Raw_Extension.Items.Add(ext);
+				comboBox_Raw_Extension.Items.AddRange(ExtensionHelper.RawLogFileExtensionsWithDot.ToArray());
 
 				comboBox_Neat_Extension.Items.Clear();
-				foreach (string ext in ExtensionHelper.TextLogFileExtensionsWithDot)
-					comboBox_Neat_Extension.Items.Add(ext);
+				comboBox_Neat_Extension.Items.AddRange(ExtensionHelper.NeatLogFileExtensionsWithDot.ToArray());
 
 				comboBox_Options_NameSeparator.Items.Clear();
-				foreach (string ext in Log.FileNameSeparatorEx.GetItems())
-					comboBox_Options_NameSeparator.Items.Add(ext);
+				comboBox_Options_NameSeparator.Items.AddRange(Log.FileNameSeparatorEx.GetItems());
 			}
 			finally
 			{
@@ -526,6 +609,16 @@ namespace YAT.View.Forms
 					pathLabel_Root.Text = this.settingsInEdit.RootPath + Path.DirectorySeparatorChar + this.settingsInEdit.RootFileName;
 				else
 					pathLabel_Root.Text = "<Set a root file...>";
+
+				checkBox_Port.Checked = this.settingsInEdit.PortLog;
+				checkBox_Port.Checked = this.settingsInEdit.PortLog;
+				checkBox_Port.Checked = this.settingsInEdit.PortLog;
+
+				pathLabel_Port.Text = this.settingsInEdit.PortRootRelativeFilePath;
+				pathLabel_Port.Text = this.settingsInEdit.PortRootRelativeFilePath;
+				pathLabel_Port.Text = this.settingsInEdit.PortRootRelativeFilePath;
+
+				comboBox_Port_Extension.Text = this.settingsInEdit.PortExtension;
 
 				checkBox_Raw_Tx.Checked    = this.settingsInEdit.RawLogTx;
 				checkBox_Raw_Bidir.Checked = this.settingsInEdit.RawLogBidir;
@@ -547,10 +640,10 @@ namespace YAT.View.Forms
 
 				comboBox_Neat_Extension.Text = this.settingsInEdit.NeatExtension;
 
-				checkBox_Options_NameFormat.Checked  = this.settingsInEdit.NameFormat;
-				checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
-				checkBox_Options_NameDate.Checked    = this.settingsInEdit.NameDate;
-				checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
+				checkBox_Options_NameType.Checked      = this.settingsInEdit.NameType;
+				checkBox_Options_NameDirection.Checked = this.settingsInEdit.NameDirection;
+				checkBox_Options_NameDate.Checked      = this.settingsInEdit.NameDate;
+				checkBox_Options_NameTime.Checked      = this.settingsInEdit.NameTime;
 
 				Log.FileNameSeparatorEx separator = this.settingsInEdit.NameSeparator;
 				ComboBoxHelper.Select(comboBox_Options_NameSeparator, separator, separator);
@@ -559,8 +652,8 @@ namespace YAT.View.Forms
 				checkBox_Options_NameDate.Enabled = dateTimeEnabled;
 				checkBox_Options_NameTime.Enabled = dateTimeEnabled;
 
-				checkBox_Options_FolderFormat.Checked  = this.settingsInEdit.FolderFormat;
-				checkBox_Options_FolderChannel.Checked = this.settingsInEdit.FolderChannel;
+				checkBox_Options_FolderType.Checked      = this.settingsInEdit.FolderType;
+				checkBox_Options_FolderDirection.Checked = this.settingsInEdit.FolderDirection;
 
 				radioButton_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 				radioButton_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
@@ -660,9 +753,9 @@ namespace YAT.View.Forms
 		private void ExtensionConflictMessage()
 		{
 			string message =
-				"To avoid naming conflicts, files must either be placed in format folders or named by format or have different extensions. " +
+				"To avoid naming conflicts, files must either be named by type or separated into folders or have different extensions. " +
 				Environment.NewLine + Environment.NewLine +
-				"First select a different extension. You may then change one of the other options to resolve the naming conflict.";
+				"First, select a different extension. You may then change one of the other options to resolve the naming conflict.";
 
 			MessageBoxEx.Show
 			(
@@ -676,54 +769,80 @@ namespace YAT.View.Forms
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private bool ResolveNamingConflicts()
+		private bool InhibitNamingConflicts()
 		{
-			if ((this.settingsInEdit.SameRawAndNeat) && (this.settingsInEdit.RawExtension == this.settingsInEdit.NeatExtension) &&
-				(!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
+			if ((this.settingsInEdit.SameDirection) && (this.settingsInEdit.SameExtension) &&
+			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
 				string message =
-					"To avoid naming conflicts, files must either be named by format or separated into format folders (Raw/Neat) or have different extensions." +
+					"To avoid naming conflicts, files must either be named by type or separated into folders (Port/Raw/Neat) or have different extensions." +
 					Environment.NewLine + Environment.NewLine +
-					"Do you want to name the files by format [Yes] or separate them into folders [No]?" +
+					"Do you want to name the files by type [Yes] or separate them into folders [No]?" +
 					Environment.NewLine + Environment.NewLine +
 					"You may also cancel and set different extensions, or manually change the settings.";
 
 				switch (MessageBoxEx.Show
-					(
+				(
 					this,
 					message,
 					"Naming Conflict",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
-					))
+				))
 				{
-					case DialogResult.Yes: this.settingsInEdit.NameFormat   = true; break;
-					case DialogResult.No:  this.settingsInEdit.FolderFormat = true; break;
+					case DialogResult.Yes: this.settingsInEdit.NameType   = true; break;
+					case DialogResult.No:  this.settingsInEdit.FolderType = true; break;
 					default: return (false);
 				}
 			}
 
-			if ((this.settingsInEdit.MultipleRaw || this.settingsInEdit.MultipleNeat) &&
-				(!(this.settingsInEdit.FolderChannel || this.settingsInEdit.NameChannel)))
+			if ((this.settingsInEdit.SameType) &&
+			    (!(this.settingsInEdit.FolderDirection || this.settingsInEdit.NameDirection)))
 			{
 				string message =
-					"To avoid naming conflicts, files must either be named by channel or separated into channel folders (Tx/Bidir/Rx)." +
+					"To avoid naming conflicts, files must either be named by direction or separated into folders (Tx/Bidir/Rx)." +
 					Environment.NewLine + Environment.NewLine +
-					"Do you want to name the files by channel [Yes] or separate them into folders [No]?" +
+					"Do you want to name the files by direction [Yes] or separate them into folders [No]?" +
 					Environment.NewLine + Environment.NewLine +
 					"You may also cancel and manually change the settings.";
 
 				switch (MessageBoxEx.Show
-					(
+				(
 					this,
 					message,
 					"Naming Conflict",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
-					))
+				))
 				{
-					case DialogResult.Yes: this.settingsInEdit.NameChannel   = true; break;
-					case DialogResult.No:  this.settingsInEdit.FolderChannel = true; break;
+					case DialogResult.Yes: this.settingsInEdit.NameDirection   = true; break;
+					case DialogResult.No:  this.settingsInEdit.FolderDirection = true; break;
+					default: return (false);
+				}
+			}
+
+			if ((this.settingsInEdit.AnyPort) && (this.settingsInEdit.AnyRaw || this.settingsInEdit.AnyNeat) && (this.settingsInEdit.SameExtension) &&
+			    (!(this.settingsInEdit.FolderType      || this.settingsInEdit.NameType)) &&
+			    (!(this.settingsInEdit.FolderDirection || this.settingsInEdit.NameDirection))) // Special tricky case since port is 'any' direction.
+			{
+				string message =
+					"To avoid naming conflicts, files must either be named by type or separated into folders (Port/Raw/Neat) or have different extensions." +
+					Environment.NewLine + Environment.NewLine +
+					"Do you want to name the files by type [Yes] or separate them into folders [No]?" +
+					Environment.NewLine + Environment.NewLine +
+					"You may also cancel and set different extensions, or manually change the settings.";
+
+				switch (MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Naming Conflict",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question
+				))
+				{
+					case DialogResult.Yes: this.settingsInEdit.NameType   = true; break;
+					case DialogResult.No:  this.settingsInEdit.FolderType = true; break;
 					default: return (false);
 				}
 			}

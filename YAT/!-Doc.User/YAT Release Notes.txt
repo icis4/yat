@@ -94,8 +94,9 @@ New:
   related to former request #321 implemented since YAT 1.99.80). Useful for e.g. sending commands
   that let a connected device change its baud rate. See [Help > Contents...] for example usage.
 - Additional automatic action [Clear Monitor on Subsequent Receiving] added (feature request #357).
-  Useful for screen/page synchronization on terminal-like behavior.
+  Useful for screen/page synchronization on terminal-emulation-like behavior.
 - Additional option [View > Show Duration (Line)] (feature request #348).
+- Additional option [Log > Port Control] (related to feature request #350).
 
 Important changes:
 - Prevention of potential handling error when copying data to clipboard (feature request #345).

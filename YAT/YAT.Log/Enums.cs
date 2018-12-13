@@ -27,8 +27,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Log
 {
 	/// <summary></summary>
-	public enum LogFormat
+	public enum LogType
 	{
+		/// <summary></summary>
+		Port,
+
 		/// <summary></summary>
 		Raw,
 
@@ -37,8 +40,11 @@ namespace YAT.Log
 	}
 
 	/// <summary></summary>
-	public enum LogChannelType
+	public enum LogDirection
 	{
+		/// <summary></summary>
+		None,
+
 		/// <summary></summary>
 		Tx,
 
@@ -53,22 +59,25 @@ namespace YAT.Log
 	public enum LogChannel
 	{
 		/// <summary></summary>
-		RawTx = 0,
+		Port = 0,
 
 		/// <summary></summary>
-		RawBidir = 1,
+		RawTx = 1,
 
 		/// <summary></summary>
-		RawRx = 2,
+		RawBidir = 2,
 
 		/// <summary></summary>
-		NeatTx = 3,
+		RawRx = 3,
 
 		/// <summary></summary>
-		NeatBidir = 4,
+		NeatTx = 4,
 
 		/// <summary></summary>
-		NeatRx = 5
+		NeatBidir = 5,
+
+		/// <summary></summary>
+		NeatRx = 6
 	}
 
 	/// <summary></summary>
