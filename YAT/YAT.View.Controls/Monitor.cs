@@ -114,8 +114,8 @@ namespace YAT.View.Controls
 		// Line numbers:
 		private const int VerticalScrollBarWidth = 18;
 		private const int AdditionalMargin = 4;
-		private const bool ShowBufferLineNumbersDefault = false;
-		private const bool ShowTotalLineNumbersDefault = false;
+		private const bool ShowLineNumbersDefault = Domain.Settings.DisplaySettings.ShowLineNumbersDefault;
+		private const Domain.Utilities.LineNumberSelection LineNumberSelectionDefault = Domain.Settings.DisplaySettings.LineNumberSelectionDefault;
 
 		// Status:
 		private const bool ShowTimeStatusDefault = false;
@@ -161,8 +161,8 @@ namespace YAT.View.Controls
 		private long lineNumberOffset;
 		private int initialLineNumberWidth;
 		private int currentLineNumberWidth;
-		private bool showBufferLineNumbers = ShowBufferLineNumbersDefault;
-		private bool showTotalLineNumbers = ShowTotalLineNumbersDefault;
+		private bool showLineNumbers = ShowLineNumbersDefault;
+		private Domain.Utilities.LineNumberSelection lineNumberSelection = LineNumberSelectionDefault;
 
 		// Status:
 		private bool showTimeStatus = ShowTimeStatusDefault;
@@ -344,23 +344,16 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("Show buffer line numbers.")]
-		[DefaultValue(ShowBufferLineNumbersDefault)]
-		public virtual bool ShowBufferLineNumbers
+		[Description("Show line numbers.")]
+		[DefaultValue(ShowLineNumbersDefault)]
+		public virtual bool ShowLineNumbers
 		{
-			get { return (this.showBufferLineNumbers); }
+			get { return (this.showLineNumbers); }
 			set
 			{
-				if (this.showBufferLineNumbers != value)
+				if (this.showLineNumbers != value)
 				{
-					this.showBufferLineNumbers = value;
-
-					if (this.showBufferLineNumbers) // This option keeps the offset at 0.
-					{
-						this.lineNumberOffset = 0;
-						fastListBox_LineNumbers.Invalidate();
-					}
-
+					this.showLineNumbers = value;
 					SetControls();
 				}
 			}
@@ -368,50 +361,25 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("Show total line numbers.")]
-		[DefaultValue(ShowTotalLineNumbersDefault)]
-		public virtual bool ShowTotalLineNumbers
+		[Description("Line number selection.")]
+		[DefaultValue(LineNumberSelectionDefault)]
+		public virtual Domain.Utilities.LineNumberSelection LineNumberSelection
 		{
-			get { return (this.showTotalLineNumbers); }
+			get { return (this.lineNumberSelection); }
 			set
 			{
-				if (this.showTotalLineNumbers != value)
+				if (this.lineNumberSelection != value)
 				{
-					this.showTotalLineNumbers = value;
+					this.lineNumberSelection = value;
+
+					if (this.lineNumberSelection == Domain.Utilities.LineNumberSelection.Buffer) // This option keeps the offset at 0.
+					{
+						this.lineNumberOffset = 0;
+						fastListBox_LineNumbers.Invalidate();
+					}
+
 					SetControls();
 				}
-			}
-		}
-
-		/// <summary>
-		/// Sets <see cref="ShowBufferLineNumbers"/> and <see cref="ShowTotalLineNumbers"/> at once.
-		/// </summary>
-		public virtual void SetLineNumbers(bool showBufferLineNumbers, bool showTotalLineNumbers)
-		{
-			bool hasChanged = false;
-
-			if (this.showBufferLineNumbers != showBufferLineNumbers)
-			{
-				this.showBufferLineNumbers = showBufferLineNumbers;
-
-				if (this.showBufferLineNumbers) // This option keeps the offset at 0.
-				{
-					this.lineNumberOffset = 0;
-					fastListBox_LineNumbers.Invalidate();
-				}
-
-				hasChanged = true;
-			}
-
-			if (this.showTotalLineNumbers != showTotalLineNumbers)
-			{
-				this.showTotalLineNumbers = showTotalLineNumbers;
-				hasChanged = true;
-			}
-
-			if (hasChanged)
-			{
-				SetControls();
 			}
 		}
 
@@ -1601,7 +1569,7 @@ namespace YAT.View.Controls
 							lbmon.TopIndex = newTopIndexToRestore;
 							DebugVerticalAutoScroll(".........................done");
 
-							if (!this.showBufferLineNumbers) // This option would require the offset to stay at 0.
+							if (!this.showLineNumbers) // This option would require the offset to stay at 0.
 							{
 								// Increment the offset independent on 'showTotalLineNumbers' to
 								// have the indeed total value when the user enables the setting.
@@ -1653,11 +1621,9 @@ namespace YAT.View.Controls
 		{
 			// --- Width ---
 
-			bool showLN = (this.showBufferLineNumbers || this.showTotalLineNumbers);
+			fastListBox_LineNumbers.Visible = this.showLineNumbers;
 
-			fastListBox_LineNumbers.Visible = showLN;
-
-			if (showLN)
+			if (this.showLineNumbers)
 			{
 				int effectiveWidth = requestedLineNumberWidth + VerticalScrollBarWidth + AdditionalMargin;
 				fastListBox_LineNumbers.Width = effectiveWidth;

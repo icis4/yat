@@ -187,21 +187,21 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.ShowRadix = checkBox_ShowRadix.Checked;
 		}
 
-		private void checkBox_ShowBufferLineNumbers_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_ShowLineNumbers_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = checkBox_ShowBufferLineNumbers.Checked;
+			this.settingsInEdit.Terminal.Display.ShowLineNumbers = checkBox_ShowLineNumbers.Checked;
 		}
 
-		private void checkBox_ShowTotalLineNumbers_CheckedChanged(object sender, EventArgs e)
+		/*private void checkBox_ShowTotalLineNumbers_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
-				return;
+!!LN!!				return;
 
 			this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers = checkBox_ShowTotalLineNumbers.Checked;
-		}
+		}*/
 
 		private void checkBox_ShowTimeStamp_CheckedChanged(object sender, EventArgs e)
 		{
@@ -304,22 +304,6 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = checkBox_ShowCopyOfActiveLine.Checked;
-		}
-
-		private void checkBox_ShowFlowControlCount_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.Terminal.Status.ShowFlowControlCount = checkBox_ShowFlowControlCount.Checked;
-		}
-
-		private void checkBox_ShowBreakCount_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.Terminal.Status.ShowBreakCount = checkBox_ShowBreakCount.Checked;
 		}
 
 		private void checkBox_PortLineBreak_CheckedChanged(object sender, EventArgs e)
@@ -570,6 +554,22 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = checkBox_OutputBreakModifiable.Checked;
+		}
+
+		private void checkBox_ShowFlowControlCount_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowFlowControlCount = checkBox_ShowFlowControlCount.Checked;
+		}
+
+		private void checkBox_ShowBreakCount_CheckedChanged(object sender, EventArgs e)
+		{
+			 if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Status.ShowBreakCount = checkBox_ShowBreakCount.Checked;
 		}
 
 		private void checkBox_UseExplicitDefaultRadix_CheckedChanged(object sender, EventArgs e)
@@ -1073,18 +1073,18 @@ namespace YAT.View.Forms
 				checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
 
 				// Display:
-				checkBox_ShowConnectTime.Checked       = this.settingsInEdit.Terminal.Status.ShowConnectTime;
-				checkBox_ShowCountAndRate.Checked      = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
-				checkBox_ShowBufferLineNumbers.Checked = this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers;
-				checkBox_ShowTotalLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers;
-				checkBox_ShowTimeStamp.Checked         = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
-				checkBox_ShowTimeSpan.Checked          = this.settingsInEdit.Terminal.Display.ShowTimeSpan;
-				checkBox_ShowTimeDelta.Checked         = this.settingsInEdit.Terminal.Display.ShowTimeDelta;
-				checkBox_ShowPort.Checked              = this.settingsInEdit.Terminal.Display.ShowPort;
-				checkBox_ShowDirection.Checked         = this.settingsInEdit.Terminal.Display.ShowDirection;
-				checkBox_ShowLength.Checked            = this.settingsInEdit.Terminal.Display.ShowLength;
-				checkBox_ShowDuration.Checked          = this.settingsInEdit.Terminal.Display.ShowDuration;
-				checkBox_ShowCopyOfActiveLine.Checked  = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
+				checkBox_ShowConnectTime.Checked      = this.settingsInEdit.Terminal.Status.ShowConnectTime;
+				checkBox_ShowCountAndRate.Checked     = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
+				checkBox_ShowLineNumbers.Checked      = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
+		//!!LN!!		checkBox_ShowTotalLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers;
+				checkBox_ShowTimeStamp.Checked        = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
+				checkBox_ShowTimeSpan.Checked         = this.settingsInEdit.Terminal.Display.ShowTimeSpan;
+				checkBox_ShowTimeDelta.Checked        = this.settingsInEdit.Terminal.Display.ShowTimeDelta;
+				checkBox_ShowPort.Checked             = this.settingsInEdit.Terminal.Display.ShowPort;
+				checkBox_ShowDirection.Checked        = this.settingsInEdit.Terminal.Display.ShowDirection;
+				checkBox_ShowLength.Checked           = this.settingsInEdit.Terminal.Display.ShowLength;
+				checkBox_ShowDuration.Checked         = this.settingsInEdit.Terminal.Display.ShowDuration;
+				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
 				checkBox_ShowFlowControlCount.Enabled = this.settingsInEdit.Terminal.IO.FlowControlIsInUse;
 				checkBox_ShowFlowControlCount.Checked = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;
@@ -1190,20 +1190,20 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
 
 				// Display:
-				this.settingsInEdit.Terminal.Display.ShowRadix             = Domain.Settings.DisplaySettings.ShowRadixDefault;
-				this.settingsInEdit.Terminal.Display.ShowBufferLineNumbers = Domain.Settings.DisplaySettings.ShowBufferLineNumbersDefault;
-				this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers  = Domain.Settings.DisplaySettings.ShowTotalLineNumbersDefault;
-				this.settingsInEdit.Terminal.Display.ShowTimeStamp         = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
-				this.settingsInEdit.Terminal.Display.ShowTimeSpan          = Domain.Settings.DisplaySettings.ShowTimeSpanDefault;
-				this.settingsInEdit.Terminal.Display.ShowTimeDelta         = Domain.Settings.DisplaySettings.ShowTimeDeltaDefault;
-				this.settingsInEdit.Terminal.Display.ShowPort              = Domain.Settings.DisplaySettings.ShowPortDefault;
-				this.settingsInEdit.Terminal.Display.ShowDirection         = Domain.Settings.DisplaySettings.ShowDirectionDefault;
-				this.settingsInEdit.Terminal.Display.ShowLength            = Domain.Settings.DisplaySettings.ShowLengthDefault;
-				this.settingsInEdit.Terminal.Display.ShowDuration          = Domain.Settings.DisplaySettings.ShowDurationDefault;
-				this.settingsInEdit.Terminal.Status.ShowConnectTime        = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
-				this.settingsInEdit.Terminal.Status.ShowCountAndRate       = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
-				this.settingsInEdit.Terminal.Status.ShowFlowControlCount   = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
-				this.settingsInEdit.Terminal.Status.ShowBreakCount         = Domain.Settings.StatusSettings.ShowBreakCountDefault;
+				this.settingsInEdit.Terminal.Display.ShowRadix            = Domain.Settings.DisplaySettings.ShowRadixDefault;
+				this.settingsInEdit.Terminal.Display.ShowLineNumbers      = Domain.Settings.DisplaySettings.ShowLineNumbersDefault;
+		// !!LN!!		this.settingsInEdit.Terminal.Display.ShowTotalLineNumbers = Domain.Settings.DisplaySettings.ShowTotalLineNumbersDefault;
+				this.settingsInEdit.Terminal.Display.ShowTimeStamp        = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
+				this.settingsInEdit.Terminal.Display.ShowTimeSpan         = Domain.Settings.DisplaySettings.ShowTimeSpanDefault;
+				this.settingsInEdit.Terminal.Display.ShowTimeDelta        = Domain.Settings.DisplaySettings.ShowTimeDeltaDefault;
+				this.settingsInEdit.Terminal.Display.ShowPort             = Domain.Settings.DisplaySettings.ShowPortDefault;
+				this.settingsInEdit.Terminal.Display.ShowDirection        = Domain.Settings.DisplaySettings.ShowDirectionDefault;
+				this.settingsInEdit.Terminal.Display.ShowLength           = Domain.Settings.DisplaySettings.ShowLengthDefault;
+				this.settingsInEdit.Terminal.Display.ShowDuration         = Domain.Settings.DisplaySettings.ShowDurationDefault;
+				this.settingsInEdit.Terminal.Status.ShowConnectTime       = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
+				this.settingsInEdit.Terminal.Status.ShowCountAndRate      = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
+				this.settingsInEdit.Terminal.Status.ShowFlowControlCount  = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
+				this.settingsInEdit.Terminal.Status.ShowBreakCount        = Domain.Settings.StatusSettings.ShowBreakCountDefault;
 
 				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
