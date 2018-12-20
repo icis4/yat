@@ -3,10 +3,10 @@
 # Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 # Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 # -------------------------------------------------------------------------------------------------
-# $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Doc.Developer/Template.ps1 $
-# $Revision: 1793 $
-# $Date: 2018-01-08 23:18:53 +0100 (Mo, 08 Jan 2018) $
-# $Author: maettu_this $
+# $URL$
+# $Revision$
+# $Date$
+# $Author$
 # -------------------------------------------------------------------------------------------------
 # See release notes for product version details.
 # See SVN change log for file revision details.
@@ -305,5 +305,5 @@ Write-Output $result
 
 #===================================================================================================
 # End of
-# $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Doc.Developer/Template.ps1 $
+# $URL$
 #===================================================================================================
