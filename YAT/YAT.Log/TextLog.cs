@@ -81,24 +81,16 @@ namespace YAT.Log
 		#endregion
 
 		/// <summary></summary>
-		public void SetSettings(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
+		public void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
 		{
 			AssertNotDisposed();
 
-			if (this.IsEnabled && this.IsOn && ((this.encoding != encoding) || (this.format != format)))
-			{
+			if (IsEnabled && IsOn && ((this.encoding != encoding) || (this.format != format)))
 				Close();
-				this.encoding = encoding;
-				this.format = format;
-				base.SetSettings(enabled, makeFilePath, writeMode);
-				Open();
-			}
-			else
-			{
-				this.encoding = encoding;
-				this.format = format;
-				base.SetSettings(enabled, makeFilePath, writeMode);
-			}
+
+			this.encoding = encoding;
+			this.format = format;
+			base.ApplySettings(enabled, isOn, makeFilePath, writeMode);
 		}
 
 		/// <summary></summary>

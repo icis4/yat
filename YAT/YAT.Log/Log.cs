@@ -199,7 +199,7 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void SetSettings(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
+		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode)
 		{
 			if (this.isOn)
 			{
@@ -208,32 +208,47 @@ namespace YAT.Log
 					if (enabled)
 					{
 						Initialize(enabled, makeFilePath, writeMode);
-						Open();
+
+						if (isOn)
+							Open();
 					}
 					else
 					{
 						Close();
+
 						Initialize(enabled, makeFilePath, writeMode);
 					}
 				}
 				else if ((this.makeFilePath != makeFilePath) || (this.writeMode != writeMode))
 				{
 					Close();
+
 					Initialize(enabled, makeFilePath, writeMode);
-					Open();
+
+					if (isOn)
+						Open();
 				}
 			}
 			else
 			{
 				Initialize(enabled, makeFilePath, writeMode);
+
+				if (isOn)
+					Open();
 			}
 		}
 
 		/// <summary></summary>
 		protected virtual void MakeFilePath()
 		{
-			string desiredFilePath = this.makeFilePath.Invoke();
-			this.filePath = FileEx.GetUniqueFilePath(desiredFilePath);
+			this.filePath = this.makeFilePath.Invoke();
+		}
+
+		/// <summary></summary>
+		protected virtual void MakeUniqueFilePath()
+		{
+			MakeFilePath();
+			this.filePath = FileEx.GetUniqueFilePath(this.filePath);
 		}
 
 		/// <summary></summary>
@@ -247,7 +262,7 @@ namespace YAT.Log
 				case LogFileWriteMode.Create:
 				{
 					// Make file path now in order to get the time stamp of the open operation:
-					MakeFilePath();
+					MakeUniqueFilePath();
 
 					// Create directory if not existing yet:
 					if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
@@ -265,8 +280,10 @@ namespace YAT.Log
 					{
 						this.fileStream = File.Open(this.filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
 					}
-					else // Create directory if not existing yet and create new file:
+					else // Create new file:
 					{
+						MakeFilePath();
+
 						if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
 							Directory.CreateDirectory(Path.GetDirectoryName(this.filePath));
 
