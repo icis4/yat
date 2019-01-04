@@ -1207,6 +1207,7 @@ namespace YAT.Domain
 				// Finalize elements and line:
 				elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
 				line.AddRange(lp);
+				line.TimeStamp = lineState.TimeStamp;
 				lines.Add(line);
 			}
 
