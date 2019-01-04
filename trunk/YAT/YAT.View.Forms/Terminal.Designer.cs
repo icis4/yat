@@ -2699,7 +2699,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(376, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(377, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2748,11 +2748,12 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_TerminalStatus_RTS.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RTS.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_RTS.Name = "toolStripStatusLabel_TerminalStatus_RTS";
-			this.toolStripStatusLabel_TerminalStatus_RTS.Size = new System.Drawing.Size(43, 20);
+			this.toolStripStatusLabel_TerminalStatus_RTS.Size = new System.Drawing.Size(42, 20);
 			this.toolStripStatusLabel_TerminalStatus_RTS.Text = "RTS";
 			this.toolStripStatusLabel_TerminalStatus_RTS.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RTS.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-			this.toolStripStatusLabel_TerminalStatus_RTS.ToolTipText = "Request To Send (Out); same as RTR (Ready To Receive); also known as RFR (Ready For Receiving)";
+			this.toolStripStatusLabel_TerminalStatus_RTS.ToolTipText = "Request To Send (Out)\r\nSame as RTR (Ready To Receive)\r\nAlso known as RFR (Ready F" +
+    "or Receiving)";
 			this.toolStripStatusLabel_TerminalStatus_RTS.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_RTS_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_CTS
