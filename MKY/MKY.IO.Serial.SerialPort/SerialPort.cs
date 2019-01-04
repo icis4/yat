@@ -646,23 +646,6 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		public virtual int OutputBreakCount
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				lock (this.portSyncObj)
-				{
-					if (this.port != null)
-						return (this.port.OutputBreakCount);
-					else
-						return (0);
-				}
-			}
-		}
-
-		/// <summary></summary>
 		public virtual int InputBreakCount
 		{
 			get
@@ -673,6 +656,23 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					if (this.port != null)
 						return (this.port.InputBreakCount);
+					else
+						return (0);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				lock (this.portSyncObj)
+				{
+					if (this.port != null)
+						return (this.port.OutputBreakCount);
 					else
 						return (0);
 				}

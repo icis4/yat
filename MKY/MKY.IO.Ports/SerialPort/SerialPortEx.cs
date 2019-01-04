@@ -122,8 +122,8 @@ namespace MKY.IO.Ports
 		private bool inputBreakSignal; // = false
 		private object inputBreakSyncObj = new object();
 
-		private int outputBreakCount; // = 0
 		private int inputBreakCount;  // = 0
+		private int outputBreakCount; // = 0
 
 		#endregion
 
@@ -779,19 +779,6 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Returns the number of output breaks.
-		/// </summary>
-		public virtual int OutputBreakCount
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.outputBreakCount);
-			}
-		}
-
-		/// <summary>
 		/// Returns the number of input breaks.
 		/// </summary>
 		public virtual int InputBreakCount
@@ -805,18 +792,31 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
+		/// Returns the number of output breaks.
+		/// </summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.outputBreakCount);
+			}
+		}
+
+		/// <summary>
 		/// Resets the break counts.
 		/// </summary>
 		public virtual void ResetBreakCount()
 		{
 			AssertNotDisposed();
 
-			Interlocked.Exchange(ref this.outputBreakCount, 0);
 			Interlocked.Exchange(ref this.inputBreakCount, 0);
+			Interlocked.Exchange(ref this.outputBreakCount, 0);
 
 			// Fire the event even though just the count changed.
-			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.InputBreak));
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 		}
 
 		#endregion
