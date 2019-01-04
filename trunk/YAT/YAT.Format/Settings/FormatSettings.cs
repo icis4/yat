@@ -47,6 +47,9 @@ namespace YAT.Format.Settings
 		/// <remarks>Color.Black = 000000.</remarks>
 		public static readonly Color WhiteSpacesColorDefault = Color.Black;
 
+		/// <remarks>Color.Goldenrod = FFD700.</remarks>
+		public static readonly Color IOControlColorDefault = Color.Gold;
+
 		/// <remarks>Color.DarkOrange = FF8C00.</remarks>
 		public static readonly Color ErrorColorDefault = Color.DarkOrange;
 
@@ -69,6 +72,7 @@ namespace YAT.Format.Settings
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
 		private TextFormat whiteSpacesFormat;
+		private TextFormat ioControlFormat;
 		private TextFormat errorFormat;
 
 		private BackFormat backFormat;
@@ -110,6 +114,7 @@ namespace YAT.Format.Settings
 			DirectionFormat    = new TextFormat(rhs.DirectionFormat);
 			LengthFormat       = new TextFormat(rhs.LengthFormat);
 			WhiteSpacesFormat  = new TextFormat(rhs.WhiteSpacesFormat);
+			IOControlFormat    = new TextFormat(rhs.IOControlFormat);
 			ErrorFormat        = new TextFormat(rhs.ErrorFormat);
 
 			BackFormat        = new BackFormat(rhs.BackFormat);
@@ -140,6 +145,7 @@ namespace YAT.Format.Settings
 			DirectionFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
 			LengthFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
 			WhiteSpacesFormat  = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
+			IOControlFormat    = new TextFormat(IOControlColorDefault,    true, false, false, false); // Bold.
 			ErrorFormat        = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
 
 			BackFormat        = new BackFormat(BackColorDefault);
@@ -376,6 +382,21 @@ namespace YAT.Format.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("IOControlFormat")]
+		public TextFormat IOControlFormat
+		{
+			get { return (this.ioControlFormat); }
+			set
+			{
+				if (this.ioControlFormat != value)
+				{
+					this.ioControlFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("ErrorFormat")]
 		public TextFormat ErrorFormat
 		{
@@ -456,6 +477,7 @@ namespace YAT.Format.Settings
 				hashCode = (hashCode * 397) ^ (DirectionFormat    != null ? DirectionFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (LengthFormat       != null ? LengthFormat      .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat  != null ? WhiteSpacesFormat .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (IOControlFormat    != null ? IOControlFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (ErrorFormat        != null ? ErrorFormat       .GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^ (BackFormat         != null ? BackFormat        .GetHashCode() : 0);
@@ -505,6 +527,7 @@ namespace YAT.Format.Settings
 				ObjectEx.Equals(DirectionFormat,    other.DirectionFormat)    &&
 				ObjectEx.Equals(LengthFormat,       other.LengthFormat)       &&
 				ObjectEx.Equals(WhiteSpacesFormat,  other.WhiteSpacesFormat)  &&
+				ObjectEx.Equals(IOControlFormat,    other.IOControlFormat)    &&
 				ObjectEx.Equals(ErrorFormat,        other.ErrorFormat)        &&
 
 				ObjectEx.Equals(BackFormat,         other.BackFormat)

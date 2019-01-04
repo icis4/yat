@@ -698,6 +698,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowDirection        = f.SettingsResult.Terminal.Display.ShowDirection;
 				this.settingsInEdit.Terminal.Display.ShowLength           = f.SettingsResult.Terminal.Display.ShowLength;
 				this.settingsInEdit.Terminal.Display.ShowDuration         = f.SettingsResult.Terminal.Display.ShowDuration;
+				this.settingsInEdit.Terminal.Display.IncludePortControl   = f.SettingsResult.Terminal.Display.IncludePortControl;
 
 				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = f.SettingsResult.Terminal.Display.PortLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;

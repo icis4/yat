@@ -61,6 +61,7 @@ namespace YAT.View.Utilities
 		private static Font directionFont;
 		private static Font lengthFont;
 		private static Font whiteSpacesFont;
+		private static Font ioControlFont;
 		private static Font errorFont;
 
 		/// <remarks>
@@ -206,6 +207,12 @@ namespace YAT.View.Utilities
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				color     = settings.WhiteSpacesFormat.Color;
 				font      = CacheAndAssignIfChanged(ref whiteSpacesFont, fontName, fontSize, fontStyle);
+			}
+			else if (element is DisplayElement.IOControl)
+			{
+				fontStyle = settings.IOControlFormat.FontStyle;
+				color     = settings.IOControlFormat.Color;
+				font      = CacheAndAssignIfChanged(ref ioControlFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.ErrorInfo)
 			{

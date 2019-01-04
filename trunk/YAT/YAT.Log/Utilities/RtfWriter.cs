@@ -83,6 +83,7 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
 		private FormatDescriptor whiteSpacesFormat;
+		private FormatDescriptor ioControlFormat;
 		private FormatDescriptor errorFormat;
 
 		private StreamWriter writer;
@@ -127,6 +128,7 @@ namespace YAT.Log.Utilities
 			this.directionFormat    = new FormatDescriptor(settings.DirectionFormat.FontStyle,    this.document.createColor(settings.DirectionFormat.Color),    this.document.createColor(settings.BackColor));
 			this.lengthFormat       = new FormatDescriptor(settings.LengthFormat.FontStyle,       this.document.createColor(settings.LengthFormat.Color),       this.document.createColor(settings.BackColor));
 			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle,  this.document.createColor(settings.WhiteSpacesFormat.Color),  this.document.createColor(settings.BackColor));
+			this.ioControlFormat    = new FormatDescriptor(settings.IOControlFormat.FontStyle,    this.document.createColor(settings.IOControlFormat.Color),    this.document.createColor(settings.BackColor));
 			this.errorFormat        = new FormatDescriptor(settings.ErrorFormat.FontStyle,        this.document.createColor(settings.ErrorFormat.Color),        this.document.createColor(settings.BackColor));
 
 			// Header:
@@ -167,6 +169,7 @@ namespace YAT.Log.Utilities
 			         (element is DisplayElement.InfoSeparator) ||
 			         (element is DisplayElement.LineStart) ||
 			         (element is DisplayElement.LineBreak))       { format = this.whiteSpacesFormat;  }
+			else if ( element is DisplayElement.IOControl)        { format = this.ioControlFormat;    }
 			else if ( element is DisplayElement.ErrorInfo)        { format = this.errorFormat;        }
 			else
 			{

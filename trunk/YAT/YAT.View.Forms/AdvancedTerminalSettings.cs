@@ -1095,6 +1095,7 @@ namespace YAT.View.Forms
 				checkBox_ShowDirection.Checked        = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked           = this.settingsInEdit.Terminal.Display.ShowLength;
 				checkBox_ShowDuration.Checked         = this.settingsInEdit.Terminal.Display.ShowDuration;
+				checkBox_IncludePortControl.Enabled   = (isSerialPort || isUsbSerialHid);
 				checkBox_IncludePortControl.Checked   = this.settingsInEdit.Terminal.Display.IncludePortControl;
 
 				checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;

@@ -65,6 +65,7 @@ namespace YAT.View.Controls
 		private static Font staticDirectionFont;
 		private static Font staticLengthFont;
 		private static Font staticWhiteSpacesFont;
+		private static Font staticIOControlFont;
 		private static Font staticErrorFont;
 
 		/// <summary>String format used for drawing line numbers.</summary>
@@ -278,6 +279,12 @@ namespace YAT.View.Controls
 				foreColor = settings.WhiteSpacesFormat.Color;
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				font      = CacheAndAssignIfChanged(ref staticWhiteSpacesFont, fontName, fontSize, fontStyle);
+			}
+			else if (element is Domain.DisplayElement.IOControl)
+			{
+				foreColor = settings.IOControlFormat.Color;
+				fontStyle = settings.IOControlFormat.FontStyle;
+				font      = CacheAndAssignIfChanged(ref staticIOControlFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.ErrorInfo)
 			{

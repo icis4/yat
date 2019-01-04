@@ -3717,7 +3717,7 @@ namespace YAT.View.Forms
 					{
 						case Domain.RepositoryType.None: // This is the case on startup.
 						{
-							if (bidirIsVisible) // BiDir (center) is priority #1.
+							if (bidirIsVisible) // Bidir (center) is priority #1.
 								this.lastMonitorSelection = Domain.RepositoryType.Bidir;
 							else if (txIsVisible) // Tx (left) is priority #2.
 								this.lastMonitorSelection = Domain.RepositoryType.Tx;
@@ -3733,7 +3733,7 @@ namespace YAT.View.Forms
 						{
 							if (!txIsVisible)
 							{
-								if (bidirIsVisible) // BiDir (center) is priority #1.
+								if (bidirIsVisible) // Bidir (center) is priority #1.
 									this.lastMonitorSelection = Domain.RepositoryType.Bidir;
 								else if (rxIsVisible)
 									this.lastMonitorSelection = Domain.RepositoryType.Rx;
@@ -3763,7 +3763,7 @@ namespace YAT.View.Forms
 						{
 							if (!rxIsVisible)
 							{
-								if (bidirIsVisible) // BiDir (center) is priority #1.
+								if (bidirIsVisible) // Bidir (center) is priority #1.
 									this.lastMonitorSelection = Domain.RepositoryType.Bidir;
 								else if (txIsVisible)
 									this.lastMonitorSelection = Domain.RepositoryType.Tx;
@@ -4055,7 +4055,7 @@ namespace YAT.View.Forms
 
 				if (scs.HaveChanged)
 				{
-					this.terminal.ApplySettings(es); // \ToDo: Consider to use Domain.Terminal.ApplySettings() instead.
+					this.terminal.ApplyTerminalSettings(es); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR#309.
 					SetTimedStatusText("Terminal settings set to " + presetString + ".");
 				}
 				else
@@ -4874,7 +4874,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		private void terminal_IOControlChanged(object sender, EventArgs e)
+		private void terminal_IOControlChanged(object sender, Domain.IOControlEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -5294,7 +5294,7 @@ namespace YAT.View.Forms
 					SuspendHandlingTerminalSettings();
 					try
 					{
-						this.terminal.ApplySettings(fsr);
+						this.terminal.ApplyTerminalSettings(fsr); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR#309.
 					}
 					finally
 					{
@@ -5452,10 +5452,6 @@ namespace YAT.View.Forms
 
 			Image on  = Properties.Resources.Image_Status_Green_12x12;
 			Image off = Properties.Resources.Image_Status_Red_12x12;
-
-			// Attention:
-			// Similar code exists in Model.Terminal.IOStatusAndControlToDisplayLine().
-			// Changes here may have to be applied there too.
 
 			bool isOpen = ((this.terminal != null) && (this.terminal.IsOpen));
 

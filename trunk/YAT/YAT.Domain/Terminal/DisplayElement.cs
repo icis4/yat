@@ -64,6 +64,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(InfoSeparator))]
 	[XmlInclude(typeof(LineStart))]
 	[XmlInclude(typeof(LineBreak))]
+	[XmlInclude(typeof(IOControl))]
 	[XmlInclude(typeof(ErrorInfo))]
 	public abstract class DisplayElement
 	{
@@ -521,6 +522,29 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class IOControl : DisplayElement
+		{
+			/// <summary></summary>
+			public IOControl()
+				: this(null)
+			{
+			}
+
+			/// <summary></summary>
+			public IOControl(string message)
+				: this(Direction.None, message)
+			{
+			}
+
+			/// <summary></summary>
+			public IOControl(Direction direction, string message)
+				: base(direction, "[" + message + "]", ElementAttributes.Inline)
+			{
+			}
+		}
+
 		/// <remarks>
 		/// This element type should rather be called 'Error' because it applies to any errors
 		/// that shall be displayed in the terminal. However, 'Error' is a keyword in certain
@@ -550,7 +574,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public ErrorInfo(Direction direction, string message, bool isWarningOnly)
-				: base(direction, (isWarningOnly ? ("<Warning: " + message + ">") : ("<Error: " + message + ">")), ElementAttributes.Inline)
+				: base(direction, (isWarningOnly ? ("[Warning: " + message + "]") : ("[Error: " + message + "]")), ElementAttributes.Inline)
 			{
 			}
 		}
@@ -755,6 +779,7 @@ namespace YAT.Domain
 			else if (this is InfoSeparator)    clone = new InfoSeparator();
 			else if (this is LineStart)        clone = new LineStart();
 			else if (this is LineBreak)        clone = new LineBreak();
+			else if (this is IOControl)        clone = new IOControl();
 			else if (this is ErrorInfo)        clone = new ErrorInfo();
 			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 

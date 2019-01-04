@@ -838,6 +838,9 @@
 			this.checkBox_IncludePortControl.Size = new System.Drawing.Size(152, 17);
 			this.checkBox_IncludePortControl.TabIndex = 20;
 			this.checkBox_IncludePortControl.Text = "Include port control events";
+			this.toolTip.SetToolTip(this.checkBox_IncludePortControl, "Include port control events in monitor view, i.e...\r\n...for serial COM ports: Flo" +
+        "w control (hardware, software), break state.\r\n...for USB Ser/HID ports: Flow con" +
+        "trol (software).");
 			this.checkBox_IncludePortControl.UseVisualStyleBackColor = true;
 			this.checkBox_IncludePortControl.CheckedChanged += new System.EventHandler(this.checkBox_IncludePortControl_CheckedChanged);
 			// 
