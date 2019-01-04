@@ -36,6 +36,7 @@ using System.Xml.Serialization;
 
 using MKY;
 using MKY.IO;
+using MKY.Text;
 
 using YAT.Application.Utilities;
 using YAT.Settings.Application;
@@ -154,13 +155,6 @@ namespace YAT.Log.Settings
 			ClearChanged();
 		}
 
-		#endregion
-
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
 		/// </remarks>
@@ -197,106 +191,8 @@ namespace YAT.Log.Settings
 
 			WriteMode       = LogFileWriteMode.Create;
 
-			TextEncoding    = TextEncoding.UTF8;
-			EmitEncodingPreamble = true;
-		}
-
-		private static string ToTypeString(LogType type)
-		{
-			switch (type)
-			{
-				case LogType.Port: return ("Port");
-				case LogType.Raw:  return ("Raw");
-				case LogType.Neat: return ("Neat");
-			}
-			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log type '" + type + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "type"));
-		}
-
-		private static string ToDirectionString(LogDirection direction)
-		{
-			switch (direction)
-			{
-				case LogDirection.Tx:    return ("Tx");
-				case LogDirection.Bidir: return ("Bidir");
-				case LogDirection.Rx:    return ("Rx");
-			}
-			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log direction '" + direction + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "direction"));
-		}
-
-		private string ToFileNamePostFixString(LogType type, LogDirection direction)
-		{
-			var now = DateTime.Now;
-			var postFix = new StringBuilder();
-
-			if (this.nameType)
-			{
-				postFix.Append(this.nameSeparator.ToSeparator());
-				postFix.Append(ToTypeString(type));
-			}
-
-			if (this.nameDirection && (direction != LogDirection.None))
-			{
-				postFix.Append(this.nameSeparator.ToSeparator());
-				postFix.Append(ToDirectionString(direction));
-			}
-
-			if (this.nameDate)
-			{
-				postFix.Append(this.nameSeparator.ToSeparator());
-				postFix.Append(now.Year.ToString ("D4", CultureInfo.InvariantCulture));
-				postFix.Append(now.Month.ToString("D2", CultureInfo.InvariantCulture));
-				postFix.Append(now.Day.ToString  ("D2", CultureInfo.InvariantCulture));
-			}
-
-			if (this.nameTime)
-			{
-				postFix.Append(this.nameSeparator.ToSeparator());
-				postFix.Append(now.Hour.ToString  ("D2", CultureInfo.InvariantCulture));
-				postFix.Append(now.Minute.ToString("D2", CultureInfo.InvariantCulture));
-				postFix.Append(now.Second.ToString("D2", CultureInfo.InvariantCulture));
-			}
-
-			return (postFix.ToString());
-		}
-
-		private string ToDirectoryString(LogType type, LogDirection direction)
-		{
-			var folders = new StringBuilder();
-
-			if (this.folderType)
-			{
-				folders.Append(ToTypeString(type));
-				folders.Append(Path.DirectorySeparatorChar);
-			}
-
-			if (this.folderDirection && (direction != LogDirection.None))
-			{
-				folders.Append(ToDirectionString(direction));
-				folders.Append(Path.DirectorySeparatorChar);
-			}
-
-			return (folders.ToString());
-		}
-
-		/// <summary></summary>
-		public Encoding ToTextEncoding(Encoding textTerminalEncoding)
-		{
-			switch (this.textEncoding)
-			{
-				case TextEncoding.Terminal:
-				{
-					return (textTerminalEncoding);
-				}
-
-				case TextEncoding.UTF8:
-				default:
-				{
-					if (this.emitEncodingPreamble)
-						return (Encoding.UTF8); // = UTF8Encoding(true, false);
-					else
-						return (new UTF8Encoding(false));
-				}
-			}
+			TextEncoding         = TextEncoding.UTF8;
+			EmitEncodingPreamble = EncodingEx.EnvironmentRecommendsBOM;
 		}
 
 		#endregion
@@ -985,6 +881,111 @@ namespace YAT.Log.Settings
 				{
 					this.emitEncodingPreamble = value;
 					SetMyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		private static string ToTypeString(LogType type)
+		{
+			switch (type)
+			{
+				case LogType.Port: return ("Port");
+				case LogType.Raw:  return ("Raw");
+				case LogType.Neat: return ("Neat");
+			}
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log type '" + type + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "type"));
+		}
+
+		private static string ToDirectionString(LogDirection direction)
+		{
+			switch (direction)
+			{
+				case LogDirection.Tx:    return ("Tx");
+				case LogDirection.Bidir: return ("Bidir");
+				case LogDirection.Rx:    return ("Rx");
+			}
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log direction '" + direction + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "direction"));
+		}
+
+		private string ToFileNamePostFixString(LogType type, LogDirection direction)
+		{
+			var now = DateTime.Now;
+			var postFix = new StringBuilder();
+
+			if (this.nameType)
+			{
+				postFix.Append(this.nameSeparator.ToSeparator());
+				postFix.Append(ToTypeString(type));
+			}
+
+			if (this.nameDirection && (direction != LogDirection.None))
+			{
+				postFix.Append(this.nameSeparator.ToSeparator());
+				postFix.Append(ToDirectionString(direction));
+			}
+
+			if (this.nameDate)
+			{
+				postFix.Append(this.nameSeparator.ToSeparator());
+				postFix.Append(now.Year.ToString ("D4", CultureInfo.InvariantCulture));
+				postFix.Append(now.Month.ToString("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Day.ToString  ("D2", CultureInfo.InvariantCulture));
+			}
+
+			if (this.nameTime)
+			{
+				postFix.Append(this.nameSeparator.ToSeparator());
+				postFix.Append(now.Hour.ToString  ("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Minute.ToString("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Second.ToString("D2", CultureInfo.InvariantCulture));
+			}
+
+			return (postFix.ToString());
+		}
+
+		private string ToDirectoryString(LogType type, LogDirection direction)
+		{
+			var folders = new StringBuilder();
+
+			if (this.folderType)
+			{
+				folders.Append(ToTypeString(type));
+				folders.Append(Path.DirectorySeparatorChar);
+			}
+
+			if (this.folderDirection && (direction != LogDirection.None))
+			{
+				folders.Append(ToDirectionString(direction));
+				folders.Append(Path.DirectorySeparatorChar);
+			}
+
+			return (folders.ToString());
+		}
+
+		/// <summary></summary>
+		public Encoding ToTextEncoding(Encoding textTerminalEncoding)
+		{
+			switch (this.textEncoding)
+			{
+				case TextEncoding.Terminal:
+				{
+					return (textTerminalEncoding);
+				}
+
+				case TextEncoding.UTF8:
+				default:
+				{
+					if (this.emitEncodingPreamble)
+						return (Encoding.UTF8); // = UTF8Encoding(true, false);
+					else
+						return (new UTF8Encoding(false));
 				}
 			}
 		}

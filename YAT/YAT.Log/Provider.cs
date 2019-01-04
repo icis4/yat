@@ -80,14 +80,14 @@ namespace YAT.Log
 			this.textTerminalEncoding = textTerminalEncoding;
 			this.neatFormat           = neatFormat;
 
-			Encoding logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
+			var logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
 			this.portLog                        = new TextLog(this.settings.PortLog,      new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
 
 			this.rawLogs  = new List<Log>(3); // Preset the required capacity to improve memory management.
-			this.rawLogs.Add(this.rawTxLog      = new RawLog( this.settings.RawLogTx,     new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode));
-			this.rawLogs.Add(this.rawBidirLog   = new RawLog( this.settings.RawLogBidir,  new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode));
-			this.rawLogs.Add(this.rawRxLog      = new RawLog( this.settings.RawLogRx,     new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode));
+			this.rawLogs.Add(this.rawTxLog      = new RawLog( this.settings.RawLogTx,     new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode, logEncoding));
+			this.rawLogs.Add(this.rawBidirLog   = new RawLog( this.settings.RawLogBidir,  new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode, logEncoding));
+			this.rawLogs.Add(this.rawRxLog      = new RawLog( this.settings.RawLogRx,     new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode, logEncoding));
 
 			this.neatLogs = new List<Log>(3); // Preset the required capacity to improve memory management.
 			this.neatLogs.Add(this.neatTxLog    = new TextLog(this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
@@ -226,9 +226,9 @@ namespace YAT.Log
 
 					this.portLog     .ApplySettings(this.settings.PortLog,      this.isOn, new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
 
-					this.rawTxLog    .ApplySettings(this.settings.RawLogTx,     this.isOn, new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode);
-					this.rawBidirLog .ApplySettings(this.settings.RawLogBidir,  this.isOn, new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode);
-					this.rawRxLog    .ApplySettings(this.settings.RawLogRx,     this.isOn, new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode);
+					this.rawTxLog    .ApplySettings(this.settings.RawLogTx,     this.isOn, new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode, logEncoding);
+					this.rawBidirLog .ApplySettings(this.settings.RawLogBidir,  this.isOn, new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode, logEncoding);
+					this.rawRxLog    .ApplySettings(this.settings.RawLogRx,     this.isOn, new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode, logEncoding);
 
 					this.neatTxLog   .ApplySettings(this.settings.NeatLogTx,    this.isOn, new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
 					this.neatBidirLog.ApplySettings(this.settings.NeatLogBidir, this.isOn, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);

@@ -63,16 +63,16 @@ namespace YAT.Log.Utilities
 		private ReaderWriterLockSlim indentSyncObj = new ReaderWriterLockSlim();
 
 		/// <summary></summary>
-		protected XmlWriter(FileStream stream, string initialLineAfterHeader)
-			: this(stream, new string[] { initialLineAfterHeader })
+		protected XmlWriter(FileStream stream, Encoding encoding, string initialLineAfterHeader)
+			: this(stream, encoding, new string[] { initialLineAfterHeader })
 		{
 		}
 
 		/// <summary></summary>
-		protected XmlWriter(FileStream stream, IEnumerable<string> initialLinesAfterHeader)
+		protected XmlWriter(FileStream stream, Encoding encoding, IEnumerable<string> initialLinesAfterHeader)
 		{
 			// Create the stream writer and add the XML header:
-			this.writer = new StreamWriter(stream, Encoding.UTF8);
+			this.writer = new StreamWriter(stream, encoding);
 			this.writer.WriteLine(Header);
 
 			// Add the initial lines:
@@ -334,8 +334,8 @@ namespace YAT.Log.Utilities
 		private const string FinalLine              = "</ArrayOfXmlTransferRawLine>";
 
 		/// <summary></summary>
-		public XmlWriterRaw(FileStream stream, bool addSchema, string schemaFilePath)
-			: base(stream, InitialLineAfterHeader)
+		public XmlWriterRaw(FileStream stream, Encoding encoding, bool addSchema, string schemaFilePath)
+			: base(stream, encoding, InitialLineAfterHeader)
 		{
 			Indent();
 
@@ -426,8 +426,8 @@ namespace YAT.Log.Utilities
 		private const string FinalLine              = "</ArrayOfXmlTransferTextLine>";
 
 		/// <summary></summary>
-		public XmlWriterText(FileStream stream, bool addSchema, string schemaFilePath)
-			: base(stream, InitialLineAfterHeader)
+		public XmlWriterText(FileStream stream, Encoding encoding, bool addSchema, string schemaFilePath)
+			: base(stream, encoding, InitialLineAfterHeader)
 		{
 			Indent();
 
