@@ -129,7 +129,7 @@ namespace YAT.Format.Settings
 		{
 			base.SetMyDefaults();
 
-			FontFormat        = new FontFormat(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
+			FontFormat = new FontFormat(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
 
 			FormattingEnabled = true;
 
@@ -148,7 +148,7 @@ namespace YAT.Format.Settings
 			IOControlFormat    = new TextFormat(IOControlColorDefault,    true, false, false, false); // Bold.
 			ErrorFormat        = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
 
-			BackFormat        = new BackFormat(BackColorDefault);
+			BackFormat = new BackFormat(BackColorDefault);
 		}
 
 		#region Properties
