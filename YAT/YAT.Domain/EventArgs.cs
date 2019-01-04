@@ -24,11 +24,45 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 using MKY;
 
 namespace YAT.Domain
 {
+	/// <summary></summary>
+	public class IOControlEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public IODirection Direction { get; }
+
+		/// <summary></summary>
+		public ReadOnlyCollection<string> Texts { get; }
+
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
+
+		/// <summary></summary>
+		public IOControlEventArgs(IODirection direction)
+			: this(direction, null)
+		{
+		}
+
+		/// <summary></summary>
+		public IOControlEventArgs(IODirection direction, ReadOnlyCollection<string> texts)
+			: this(direction, texts, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOControlEventArgs(IODirection direction, ReadOnlyCollection<string> texts, DateTime timeStamp)
+		{
+			Direction = direction;
+			Texts     = texts;
+			TimeStamp = timeStamp;
+		}
+	}
+
 	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
@@ -42,11 +76,21 @@ namespace YAT.Domain
 		public string Message { get; }
 
 		/// <summary></summary>
+		public DateTime TimeStamp { get; }
+
+		/// <summary></summary>
 		public IOErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message)
+			: this(severity, direction, message, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message, DateTime timeStamp)
 		{
 			Severity  = severity;
 			Direction = direction;
 			Message   = message;
+			TimeStamp = timeStamp;
 		}
 	}
 
@@ -57,8 +101,8 @@ namespace YAT.Domain
 		public System.IO.Ports.SerialError SerialPortError { get; }
 
 		/// <summary></summary>
-		public SerialPortErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message, System.IO.Ports.SerialError serialPortError)
-			: base(severity, direction, message)
+		public SerialPortErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message, System.IO.Ports.SerialError serialPortError, DateTime timeStamp)
+			: base(severity, direction, message, timeStamp)
 		{
 			SerialPortError = serialPortError;
 		}

@@ -706,9 +706,9 @@ namespace YAT.Domain
 
 			var spe = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
 			if (spe == null)
-				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message));
+				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message, e.TimeStamp));
 			else
-				OnIOError(new SerialPortErrorEventArgs((IOErrorSeverity)spe.Severity, (IODirection)spe.Direction, spe.Message, spe.SerialPortError));
+				OnIOError(new SerialPortErrorEventArgs((IOErrorSeverity)spe.Severity, (IODirection)spe.Direction, spe.Message, spe.SerialPortError, spe.TimeStamp));
 		}
 
 		/// <remarks>
