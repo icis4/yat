@@ -38,10 +38,10 @@
 #if (DEBUG)
 
 	// Enable debugging of update management (incl. CPU performance measurement):
-////#define DEBUG_UPDATE               // The 'DebugEnabled' property is set for 'BiDir' monitor.
+////#define DEBUG_UPDATE               // The 'DebugEnabled' property is set for 'Bidir' monitor.
 
 	// Enable debugging of vertical semi-auto scrolling:
-////#define DEBUG_VERTICAL_AUTO_SCROLL // The 'DebugEnabled' property is set for 'BiDir' monitor.
+////#define DEBUG_VERTICAL_AUTO_SCROLL // The 'DebugEnabled' property is set for 'Bidir' monitor.
 
 #endif // DEBUG
 
