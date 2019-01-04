@@ -44,8 +44,8 @@ namespace YAT.Domain
 		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
 		Rx = IODirection.Rx,
 
-		/// <summary></summary>
-		Bidir = 3
+		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
+		Bidir = IODirection.Bidir
 	}
 
 	#endregion
