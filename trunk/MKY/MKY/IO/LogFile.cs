@@ -28,6 +28,8 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
+using MKY.Text;
+
 namespace MKY.IO
 {
 	/// <summary>
@@ -46,13 +48,27 @@ namespace MKY.IO
 		/// <summary>
 		/// Starts log file.
 		/// </summary>
+		/// <remarks>
+		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
+		/// </remarks>
 		/// <param name="filePath">Path of log file.</param>
 		/// <param name="append">true to append to file, false to replace file.</param>
 		public LogFile(string filePath, bool append)
+			: this(filePath, append, EncodingEx.EnvironmentRecommendedUTF8)
+		{
+		}
+
+		/// <summary>
+		/// Starts log file.
+		/// </summary>
+		/// <param name="filePath">Path of log file.</param>
+		/// <param name="append">true to append to file, false to replace file.</param>
+		/// <param name="encoding">Encoding of log file.</param>
+		public LogFile(string filePath, bool append, Encoding encoding)
 		{
 			this.filePath = filePath;
 
-			StreamWriter writer = new StreamWriter(this.filePath, append, Encoding.UTF8);
+			var writer = new StreamWriter(this.filePath, append, encoding);
 			this.writer = (StreamWriter)TextWriter.Synchronized(writer);
 		}
 

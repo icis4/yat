@@ -1325,6 +1325,52 @@ namespace MKY.Text
 		}
 
 		#endregion
+
+		#region General Auxiliary
+		//==========================================================================================
+		// General Auxiliary
+		//==========================================================================================
+
+		/// <summary>
+		/// Returns <c>true</c> whether environment recommends to use a BOM or not.
+		/// </summary>
+		/// <remarks>
+		/// <list type="bullet">
+		/// <item><description>Windows recommends BOM.</description></item>
+		/// <item><description>Unix, Linux,... does not recommend BOM.</description></item>
+		/// <item><description>Other environments unknown, thus also not recommending BOM.</description></item>
+		/// </list>
+		/// </remarks>
+		public static bool EnvironmentRecommendsBOM
+		{
+			get
+			{
+				return (EnvironmentEx.IsWindows);
+			}
+		}
+
+		/// <summary>
+		/// Returns the environment recommended UTF-8 encoding, i.e. with or without a BOM.
+		/// </summary>
+		/// <remarks>
+		/// <list type="bullet">
+		/// <item><description>Windows recommends BOM.</description></item>
+		/// <item><description>Unix, Linux,... does not recommend BOM.</description></item>
+		/// <item><description>Other environments unknown, thus also not recommending BOM.</description></item>
+		/// </list>
+		/// </remarks>
+		public static Encoding EnvironmentRecommendedUTF8
+		{
+			get
+			{
+				if (EnvironmentRecommendsBOM)
+					return (Encoding.UTF8); // = UTF8Encoding(true, false);
+				else
+					return (new UTF8Encoding(false));
+			}
+		}
+
+		#endregion
 	}
 }
 

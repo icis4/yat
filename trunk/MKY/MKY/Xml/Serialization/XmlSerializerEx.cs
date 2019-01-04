@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -29,6 +34,10 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+
+using MKY.Text;
+
+#endregion
 
 namespace MKY.Xml.Serialization
 {
@@ -42,11 +51,20 @@ namespace MKY.Xml.Serialization
 		// Serialize
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void SerializeToFile(string filePath, Type type, object obj)
 		{
-			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			SerializeToFile(filePath, type, obj, EncodingEx.EnvironmentRecommendedUTF8);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static void SerializeToFile(string filePath, Type type, object obj, Encoding encoding)
+		{
+			using (var sw = new StreamWriter(filePath, false, encoding))
 			{
 				var xws = new XmlWriterSettings();
 				xws.Indent = true;
@@ -63,11 +81,19 @@ namespace MKY.Xml.Serialization
 		// Deserialize
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Assuming UTF-8 with or without BOM.
+		/// </remarks>
 		public static object DeserializeFromFile(string filePath, Type type)
 		{
+			return (DeserializeFromFile(filePath, Encoding.UTF8, true, type));
+		}
+
+		/// <summary></summary>
+		public static object DeserializeFromFile(string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, Type type)
+		{
 			object settings = null;
-			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
+			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
 			{
 				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
 				{
@@ -81,10 +107,21 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// For details on tolerant serialization <see cref="TolerantXmlSerializer"/>.
 		/// </remarks>
+		/// <remarks>
+		/// Assuming UTF-8 with or without BOM.
+		/// </remarks>
 		public static object TolerantDeserializeFromFile(string filePath, Type type)
 		{
+			return (TolerantDeserializeFromFile(filePath, Encoding.UTF8, true, type));
+		}
+
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="TolerantXmlSerializer"/>.
+		/// </remarks>
+		public static object TolerantDeserializeFromFile(string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, Type type)
+		{
 			object settings = null;
-			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
+			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
 			{
 				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
 				{
@@ -98,10 +135,21 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// For details on tolerant serialization <see cref="AlternateTolerantXmlSerializer"/>.
 		/// </remarks>
+		/// <remarks>
+		/// Assuming UTF-8 with or without BOM.
+		/// </remarks>
 		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
 		{
+			return (AlternateTolerantDeserializeFromFile(filePath, Encoding.UTF8, true, type, alternateXmlElements));
+		}
+
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </remarks>
+		public static object AlternateTolerantDeserializeFromFile(string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
+		{
 			object settings = null;
-			using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
+			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
 			{
 				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
 				{
