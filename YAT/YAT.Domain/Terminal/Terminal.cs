@@ -43,6 +43,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -84,19 +85,19 @@ namespace YAT.Domain
 		public static readonly string SerialPortHelp =
 			@"For serial COM ports, if one of the following error conditions occurs, the according error indication will be shown in the terminal window:" + Environment.NewLine +
 			Environment.NewLine +
-			@"<" + RxFramingErrorString + ">" + Environment.NewLine +
+			@"[" + RxFramingErrorString + "]" + Environment.NewLine +
 			@"An input framing error occurs when the last bit received is not a stop bit. This may occur due to a timing error. You will most commonly encounter a framing error when the speed at which the data is being sent is different to that of what you have YAT set to receive it at." + Environment.NewLine +
 			Environment.NewLine +
-			@"<" + RxBufferOverrunErrorString + ">" + Environment.NewLine +
+			@"[" + RxBufferOverrunErrorString + "]" + Environment.NewLine +
 			@"An input overrun error occurs when the input gets out of synch. The next character will be lost and the input will be re-synch'd." + Environment.NewLine +
 			Environment.NewLine +
-			@"<" + RxBufferOverflowErrorString + ">" + Environment.NewLine +
+			@"[" + RxBufferOverflowErrorString + "]" + Environment.NewLine +
 			@"An input overflow occurs when there is no more space in the input buffer, i.e. the serial driver, the operating system or YAT doesn't manage to process the incoming data fast enough." + Environment.NewLine +
 			Environment.NewLine +
-			@"<" + RxParityErrorString + ">" + Environment.NewLine +
+			@"[" + RxParityErrorString + "]" + Environment.NewLine +
 			@"An input parity error occurs when a parity check is enabled but the parity bit mismatches. You will most commonly encounter a parity error when the parity setting at which the data is being sent is different to that of what you have YAT set to receive it at." + Environment.NewLine +
 			Environment.NewLine +
-			@"<" + TxBufferFullErrorString + ">" + Environment.NewLine +
+			@"[" + TxBufferFullErrorString + "]" + Environment.NewLine +
 			@"An output buffer full error occurs when there is no more space in the output buffer, i.e. the serial driver, the operating system or YAT doesn't manage to send the data fast enough.";
 
 		#endregion
@@ -269,6 +270,9 @@ namespace YAT.Domain
 		private bool breakState;
 		private object breakStateSyncObj = new object();
 
+		private IOControlState ioControlStateCache;
+		private object ioControlStateCacheSyncObj = new object();
+
 		private DisplayRepository txRepository;
 		private DisplayRepository bidirRepository;
 		private DisplayRepository rxRepository;
@@ -290,7 +294,7 @@ namespace YAT.Domain
 		public event EventHandler IOChanged;
 
 		/// <summary></summary>
-		public event EventHandler IOControlChanged;
+		public event EventHandler<IOControlEventArgs> IOControlChanged;
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
@@ -1414,7 +1418,7 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing port settings has failed! " + ex.Message));
+								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing port settings has failed! " + ex.Message));
 						}
 					}
 					else
@@ -1442,7 +1446,7 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing baud rate has failed! " + ex.Message));
+								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing baud rate has failed! " + ex.Message));
 						}
 					}
 					else
@@ -1470,7 +1474,7 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing stop bits has failed! " + ex.Message));
+								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing stop bits has failed! " + ex.Message));
 						}
 					}
 					else
@@ -1498,7 +1502,7 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing data bits has failed! " + ex.Message));
+								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing data bits has failed! " + ex.Message));
 						}
 					}
 					else
@@ -1526,7 +1530,7 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing parity has failed! " + ex.Message));
+								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing parity has failed! " + ex.Message));
 						}
 					}
 					else
@@ -1554,7 +1558,7 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.None, new DisplayElement.ErrorInfo(Direction.None, "Changing flow control has failed! " + ex.Message));
+								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing flow control has failed! " + ex.Message));
 						}
 					}
 					else
@@ -2057,6 +2061,11 @@ namespace YAT.Domain
 		// Methods > I/O Control
 		//------------------------------------------------------------------------------------------
 
+		private bool IsUsbSerialHid
+		{
+			get { return ((this.terminalSettings != null) && (TerminalSettings.IO.IOType == IOType.UsbSerialHid)); }
+		}
+
 		private bool IsSerialPort
 		{
 			get { return ((this.terminalSettings != null) && (TerminalSettings.IO.IOType == IOType.SerialPort)); }
@@ -2182,24 +2191,6 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual int OutputBreakCount
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				if (IsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.OutputBreakCount);
-				}
-
-				return (0);
-			}
-		}
-
-		/// <summary></summary>
 		public virtual int InputBreakCount
 		{
 			get
@@ -2211,6 +2202,24 @@ namespace YAT.Domain
 					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.InputBreakCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.OutputBreakCount);
 				}
 
 				return (0);
@@ -2444,6 +2453,206 @@ namespace YAT.Domain
 					Monitor.Exit(periodicXOnTimer_Elapsed_SyncObj);
 				}
 			} // Monitor.TryEnter()
+		}
+
+		/// <summary>
+		/// Retruns a collection of <see cref="DisplayElement"/> objects reflecting the changed I/O control status.
+		/// </summary>
+		/// <remarks>
+		/// Private to ensure proper update of <see cref="ioControlStateCache"/>.
+		/// </remarks>
+		private ReadOnlyCollection<string> IOControlChangeTexts()
+		{
+			var currentState = new IOControlState();
+
+			// Pin and IBS/OBS state and count:
+			if (IsSerialPort)
+			{
+				currentState.SerialPortControlPinCount = SerialPortControlPinCount;
+
+				if (IsOpen)
+				{
+					var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+					if (port != null)
+					{
+						try // Fail-safe implementation, especially catching exceptions while closing.
+						{
+							currentState.SerialPortControlPins = port.ControlPins;
+							currentState.InputBreak            = port.InputBreak;
+							currentState.OutputBreak           = port.OutputBreak;
+							currentState.InputBreakCount       = port.InputBreakCount;
+							currentState.OutputBreakCount      = port.OutputBreakCount;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Failed to retrieve control pin state");
+						}
+					}
+					else
+					{
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+
+			// IXS/OXS state and count:
+			if ((IsSerialPort || IsUsbSerialHid) && TerminalSettings.IO.FlowControlManagesXOnXOffManually)
+			{
+				if (IsOpen)
+				{
+					var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+					if (x != null)
+					{
+						try // Fail-safe implementation, especially catching exceptions while closing.
+						{
+							currentState.InputIsXOn        = x.InputIsXOn;
+							currentState.OutputIsXOn       = x.OutputIsXOn;
+							currentState.SentXOnCount      = x.SentXOnCount;
+							currentState.SentXOffCount     = x.SentXOffCount;
+							currentState.ReceivedXOnCount  = x.ReceivedXOnCount;
+							currentState.ReceivedXOffCount = x.ReceivedXOffCount;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
+						}
+					}
+				}
+			}
+
+			var previousState = new IOControlState();
+			lock (this.ioControlStateCacheSyncObj)
+			{
+				previousState = this.ioControlStateCache;
+				this.ioControlStateCache = currentState;
+			}
+
+			var l = new List<string>(3); // Preset the required capacity to improve memory management.
+
+			if (IsSerialPort)
+			{
+				var pinText = new StringBuilder();
+
+				if (currentState.SerialPortControlPins.Rfr != previousState.SerialPortControlPins.Rfr)
+				{
+					pinText.Append("RTS=");
+					pinText.Append(currentState.SerialPortControlPins.Rfr ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowFlowControlCount)
+						pinText.Append("|" + currentState.SerialPortControlPinCount.RfrDisableCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (currentState.SerialPortControlPins.Cts != previousState.SerialPortControlPins.Cts)
+				{
+					if (pinText.Length > 0)
+						pinText.Append(",");
+
+					pinText.Append("CTS=");
+					pinText.Append(currentState.SerialPortControlPins.Cts ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowFlowControlCount)
+						pinText.Append("|" + currentState.SerialPortControlPinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (currentState.SerialPortControlPins.Dtr != previousState.SerialPortControlPins.Dtr)
+				{
+					if (pinText.Length > 0)
+						pinText.Append(",");
+
+					pinText.Append("DTR=");
+					pinText.Append(currentState.SerialPortControlPins.Dtr ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowFlowControlCount)
+						pinText.Append("|" + currentState.SerialPortControlPinCount.DtrDisableCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (currentState.SerialPortControlPins.Dsr != previousState.SerialPortControlPins.Dsr)
+				{
+					if (pinText.Length > 0)
+						pinText.Append(",");
+
+					pinText.Append("DSR=");
+					pinText.Append(currentState.SerialPortControlPins.Dsr ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowFlowControlCount)
+						pinText.Append("|" + currentState.SerialPortControlPinCount.DsrDisableCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (currentState.SerialPortControlPins.Dsr != previousState.SerialPortControlPins.Dsr)
+				{
+					if (pinText.Length > 0)
+						pinText.Append(",");
+
+					pinText.Append("DCD=");
+					pinText.Append(currentState.SerialPortControlPins.Dsr ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowFlowControlCount)
+						pinText.Append("|" + currentState.SerialPortControlPinCount.DcdCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (pinText.Length > 0)
+					l.Add(pinText.ToString());
+			}
+
+			if ((IsSerialPort || IsUsbSerialHid) && TerminalSettings.IO.FlowControlManagesXOnXOffManually)
+			{
+				var xText = new StringBuilder();
+
+				if (currentState.InputIsXOn != previousState.InputIsXOn)
+				{
+					xText.Append("IXS=");
+					xText.Append(currentState.InputIsXOn ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowFlowControlCount)
+						xText.Append("|" + currentState.SentXOnCount.ToString(CultureInfo.CurrentCulture) + "|" + currentState.SentXOffCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (currentState.OutputIsXOn != previousState.OutputIsXOn)
+				{
+					if (xText.Length > 0)
+						xText.Append(",");
+
+					xText.Append("OXS=");
+					xText.Append(currentState.OutputIsXOn ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowFlowControlCount)
+						xText.Append("|" + currentState.ReceivedXOnCount.ToString(CultureInfo.CurrentCulture) + "|" + currentState.ReceivedXOffCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (xText.Length > 0)
+					l.Add(xText.ToString());
+			}
+
+			if (IsSerialPort && TerminalSettings.IO.IndicateSerialPortBreakStates)
+			{
+				var breakText = new StringBuilder();
+
+				if (currentState.InputBreak != previousState.InputBreak)
+				{
+					breakText.Append("IBS=");
+					breakText.Append(currentState.InputBreak ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowBreakCount)
+						breakText.Append("|" + currentState.InputBreakCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (currentState.OutputBreak != previousState.OutputBreak)
+				{
+					if (breakText.Length > 0)
+						breakText.Append(",");
+
+					breakText.Append("OBS=");
+					breakText.Append(currentState.OutputBreak ? "on" : "off");
+
+					if (TerminalSettings.Status.ShowBreakCount)
+						breakText.Append("|" + currentState.OutputBreakCount.ToString(CultureInfo.CurrentCulture));
+				}
+
+				if (breakText.Length > 0)
+					l.Add(breakText.ToString());
+			}
+
+			return (l.AsReadOnly());
 		}
 
 		#endregion
@@ -3534,7 +3743,32 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			OnIOControlChanged(e);
+			if (TerminalSettings.Display.IncludePortControl)
+			{
+				var texts = IOControlChangeTexts();
+				                                                 // Forsee capacity for separators.
+				var c = new DisplayElementCollection(texts.Count * 2); // Preset the required capacity to improve memory management.
+				foreach (var t in texts)
+				{
+					if (c.Count > 0)
+						c.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+
+					c.Add(new DisplayElement.IOControl(Direction.Bidir, t));
+				}
+
+				// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
+				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
+				{
+					foreach (var de in c)
+						OnDisplayElementProcessed((IODirection)de.Direction, de);
+				}
+
+				OnIOControlChanged(new IOControlEventArgs(IODirection.Bidir, texts));
+			}
+			else
+			{
+				OnIOControlChanged(new IOControlEventArgs(IODirection.Bidir));
+			}
 		}
 
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
@@ -3542,20 +3776,21 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
+			// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
+			// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 			{
-				var serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
-				if (serialPortErrorEventArgs != null)
+				var spe = (e as SerialPortErrorEventArgs);
+				if (spe != null)
 				{
 					// Handle serial port errors whenever possible:
-					switch (serialPortErrorEventArgs.SerialPortError)
-					{
+					switch (spe.SerialPortError)
+					{                                                                                    // Same as 'spe.Direction'.
 						case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
 						case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
 						case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
 						case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
 						case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
-						default:                                   OnIOError(e); break;
+						default:                                   OnIOError(e);                                                                                                       break;
 					}
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
@@ -3627,7 +3862,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOControlChanged(EventArgs e)
+		protected virtual void OnIOControlChanged(IOControlEventArgs e)
 		{
 			this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
@@ -3689,6 +3924,26 @@ namespace YAT.Domain
 						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
 
 					break;
+				}
+
+				case IODirection.Bidir:
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.txRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
+
+					break;
+				}
+
+				case IODirection.None:
+				{
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				default:

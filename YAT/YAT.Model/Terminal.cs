@@ -206,7 +206,7 @@ namespace YAT.Model
 		public event EventHandler IOChanged;
 
 		/// <summary></summary>
-		public event EventHandler IOControlChanged;
+		public event EventHandler<Domain.IOControlEventArgs> IOControlChanged;
 
 		/// <summary></summary>
 		public event EventHandler<TimeSpanEventArgs> IOConnectTimeChanged;
@@ -681,7 +681,7 @@ namespace YAT.Model
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.terminal != null)
-					return (this.log.IsOn);
+					return (this.log.AnyIsOn);
 				else
 					return (false);
 			}
@@ -1354,7 +1354,7 @@ namespace YAT.Model
 		/// <item><description>Prepared for future migration to tree view dialog containing all settings.</description></item>
 		/// </list>
 		/// </remarks>
-		public virtual void ApplySettings(ExplicitSettings settings)
+		public virtual void ApplyTerminalSettings(ExplicitSettings settings)
 		{
 			AssertNotDisposed();
 
@@ -2217,7 +2217,7 @@ namespace YAT.Model
 				success = StopIO(false);
 			}
 
-			if (success && this.log.IsOn)
+			if (success && this.log.AnyIsOn)
 			{
 				SwitchLogOff();
 			}
@@ -2342,246 +2342,89 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected virtual Domain.DisplayLine IOStatusToDisplayLine(DateTime timeStamp)
+		protected virtual Domain.DisplayLine IOStatusToDisplayLine(DateTime ts)
 		{
-			var infoSeparator      = SettingsRoot.Display.InfoSeparator.ToSeparator();
-			var infoEnclosureLeft  = SettingsRoot.Display.InfoEnclosure.ToEnclosureLeft();
-			var infoEnclosureRight = SettingsRoot.Display.InfoEnclosure.ToEnclosureRight();
+			var sep   = SettingsRoot.Display.InfoSeparatorCache;
+			var left  = SettingsRoot.Display.InfoEnclosureLeftCache;
+			var right = SettingsRoot.Display.InfoEnclosureRightCache;
 
 			var virtualLine = new Domain.DisplayLine(5); // Preset the required capacity to improve memory management.
-
 			virtualLine.Add(new Domain.DisplayElement.LineStart());
 
 			if (SettingsRoot.Display.ShowTimeStamp)
 			{
-				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(timeStamp, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
-				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(ts, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, left, right));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
-			virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, infoEnclosureLeft, infoEnclosureRight));
-			virtualLine.Add(new Domain.DisplayElement.LineBreak());
-
-			return (virtualLine);
-		}
-
-		/// <remarks>
-		/// Attention:
-		/// Similar code exists in View.Forms.Terminal.SetIOControlControls().
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		protected virtual Domain.DisplayLine IOStatusAndControlToDisplayLine(DateTime timeStamp)
-		{
-			var infoSeparator      = SettingsRoot.Display.InfoSeparator.ToSeparator();
-			var infoEnclosureLeft  = SettingsRoot.Display.InfoEnclosure.ToEnclosureLeft();
-			var infoEnclosureRight = SettingsRoot.Display.InfoEnclosure.ToEnclosureRight();
-
-			var virtualLine = new Domain.DisplayLine(7 + (2 * 3)); // Preset the required capacity to improve memory management.
-
-			virtualLine.Add(new Domain.DisplayElement.LineStart());
-
-			if (SettingsRoot.Display.ShowTimeStamp)
-			{
-				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(timeStamp, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
-				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			}
-
-			if (SettingsRoot.Log.PrependPortStatus) // Terminology is user = "port" and code = "IO".
-			{
-				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, infoEnclosureLeft, infoEnclosureRight));
-				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			}
-
-			var infos = new List<string>(3); // Preset the required capacity to improve memory management.
-
-			bool isSerialPort   = false;
-			bool isUsbSerialHid = false;
-
-			if (this.settingsRoot != null)
-			{
-				isSerialPort   = ((Domain.IOTypeEx)SettingsRoot.IOType).IsSerialPort;
-				isUsbSerialHid = ((Domain.IOTypeEx)SettingsRoot.IOType).IsUsbSerialHid;
-			}
-
-			bool inputBreak  = false;
-			bool outputBreak = false;
-
-			if (isSerialPort)
-			{
-				var pins = new MKY.IO.Ports.SerialPortControlPins();
-				var pinCount = ((this.terminal != null) ? (this.terminal.SerialPortControlPinCount) : (new MKY.IO.Ports.SerialPortControlPinCount()));
-
-				if (IsOpen)
-				{
-					var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-					if (port != null)
-					{
-						try // Fail-safe implementation, especially catching exceptions while closing.
-						{
-							pins        = port.ControlPins;
-							inputBreak  = port.InputBreak;
-							outputBreak = port.OutputBreak;
-						}
-						catch (Exception ex)
-						{
-							DebugEx.WriteException(GetType(), ex, "Failed to retrieve control pin state");
-						}
-					}
-					else
-					{
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
-				}
-
-				// Pins:
-				var pinState = new StringBuilder();
-				pinState.Append("RTS = ");
-				pinState.Append(pins.Rfr ? "on" : "off");
-
-				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-					pinState.Append(" | " + pinCount.RfrDisableCount.ToString(CultureInfo.CurrentCulture));
-
-				pinState.Append(", ");
-				pinState.Append("CTS = ");
-				pinState.Append(pins.Cts ? "on" : "off");
-
-				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-					pinState.Append(" | " + pinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
-
-				pinState.Append(", ");
-				pinState.Append("DTR = ");
-				pinState.Append(pins.Dtr ? "on" : "off");
-
-				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-					pinState.Append(" | " + pinCount.DtrDisableCount.ToString(CultureInfo.CurrentCulture));
-
-				pinState.Append(", ");
-				pinState.Append("DSR = ");
-				pinState.Append(pins.Dsr ? "on" : "off");
-
-				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-					pinState.Append(" | " + pinCount.DsrDisableCount.ToString(CultureInfo.CurrentCulture));
-
-				pinState.Append(", ");
-				pinState.Append("DCD = ");
-				pinState.Append(pins.Dsr ? "on" : "off");
-
-				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-					pinState.Append(" | " + pinCount.DcdCount.ToString(CultureInfo.CurrentCulture));
-
-				infos.Add(pinState.ToString());
-			}
-
-			if (isSerialPort || isUsbSerialHid)
-			{
-				if (this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually)
-				{
-					bool inputIsXOn  = false;
-					bool outputIsXOn = false;
-
-					if (IsOpen)
-					{
-						var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
-						if (x != null)
-						{
-							try // Fail-safe implementation, especially catching exceptions while closing.
-							{
-								inputIsXOn  = x.InputIsXOn;
-								outputIsXOn = x.OutputIsXOn;
-							}
-							catch (Exception ex)
-							{
-								DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
-							}
-						}
-					}
-
-					var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
-					var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
-					var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
-					var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
-
-					var xState = new StringBuilder();
-					xState.Append("IXS = ");
-					xState.Append(inputIsXOn ? "on" : "off");
-
-					if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-						xState.Append(" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
-
-					xState.Append(", ");
-					xState.Append("OXS = ");
-					xState.Append(outputIsXOn ? "on" : "off");
-
-					if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-						xState.Append(" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
-
-					infos.Add(xState.ToString());
-				}
-			}
-
-			if (isSerialPort)
-			{
-				if (this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates)
-				{
-					var inputBreakCount  = ((this.terminal != null) ? (this.terminal.InputBreakCount)  : (0));
-					var outputBreakCount = ((this.terminal != null) ? (this.terminal.OutputBreakCount) : (0));
-
-					var breakState = new StringBuilder();
-					breakState.Append("IBS = ");
-					breakState.Append(inputBreak ? "on" : "off");
-
-					if (this.settingsRoot.Terminal.Status.ShowBreakCount)
-						breakState.Append(" | " + inputBreakCount.ToString(CultureInfo.CurrentCulture));
-
-					infos.Add(breakState.ToString());
-
-					breakState.Append(", ");
-					breakState.Append("OBS = ");
-					breakState.Append(outputBreak ? "on" : "off");
-
-					if (this.settingsRoot.Terminal.Status.ShowBreakCount)
-						breakState.Append(" | " + outputBreakCount.ToString(CultureInfo.CurrentCulture));
-
-					infos.Add(breakState.ToString());
-				}
-			}
-
-			for (int i = 0; i < infos.Count; i++)
-			{
-				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, infos[i], infoEnclosureLeft, infoEnclosureRight));
-
-				if (i < (infos.Count - 1))
-					virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			}
-
+			virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, left, right));
 			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
 			return (virtualLine);
 		}
 
 		/// <summary></summary>
-		protected virtual Domain.DisplayLine IOErrorToDisplayLine(DateTime timeStamp, Domain.IOErrorEventArgs e)
+		protected virtual Domain.DisplayLine IOControlToDisplayLine(DateTime ts, Domain.IOControlEventArgs e, bool includeIOStatusText)
 		{
-			var infoSeparator      = SettingsRoot.Display.InfoSeparator.ToSeparator();
-			var infoEnclosureLeft  = SettingsRoot.Display.InfoEnclosure.ToEnclosureLeft();
-			var infoEnclosureRight = SettingsRoot.Display.InfoEnclosure.ToEnclosureRight();
-
-			var virtualLine = new Domain.DisplayLine(7); // Preset the required capacity to improve memory management.
-
+			var sep   = SettingsRoot.Display.InfoSeparatorCache;
+			var left  = SettingsRoot.Display.InfoEnclosureLeftCache;
+			var right = SettingsRoot.Display.InfoEnclosureRightCache;
+			                                                                    // Forsee capacity for separators.
+			var virtualLine = new Domain.DisplayLine(1 + 2 + 2 + (e.Texts.Count * 2) + 1); // Preset the required capacity to improve memory management.
 			virtualLine.Add(new Domain.DisplayElement.LineStart());
 
 			if (SettingsRoot.Display.ShowTimeStamp)
 			{
-				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(timeStamp, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
-				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(ts, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, left, right));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
-			if (SettingsRoot.Log.PrependPortStatus) // Terminology is user = "port" and code = "IO".
+			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, infoEnclosureLeft, infoEnclosureRight));
-				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, left, right));
+
+				if (e.Texts.Count > 0)
+					virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
+			}
+			                                                          // Forsee capacity for separators.
+			var c = new Domain.DisplayElementCollection(e.Texts.Count * 2); // Preset the required capacity to improve memory management.
+			foreach (var t in e.Texts)
+			{
+				if (c.Count > 0)
+					c.Add(new Domain.DisplayElement.InfoSeparator(SettingsRoot.Display.InfoSeparatorCache));
+
+				c.Add(new Domain.DisplayElement.IOControl((Domain.Direction)e.Direction, t));
 			}
 
-			virtualLine.Add(new Domain.DisplayElement.ErrorInfo(Domain.Direction.None, e.Message, (e.Severity == Domain.IOErrorSeverity.Acceptable)));
+			virtualLine.AddRange(c);
+			virtualLine.Add(new Domain.DisplayElement.LineBreak());
+
+			return (virtualLine);
+		}
+
+		/// <summary></summary>
+		protected virtual Domain.DisplayLine IOErrorToDisplayLine(DateTime ts, Domain.IOErrorEventArgs e, bool includeIOStatusText)
+		{
+			var sep   = SettingsRoot.Display.InfoSeparatorCache;
+			var left  = SettingsRoot.Display.InfoEnclosureLeftCache;
+			var right = SettingsRoot.Display.InfoEnclosureRightCache;
+
+			var virtualLine = new Domain.DisplayLine(1 + 2 + 4); // Preset the required capacity to improve memory management.
+			virtualLine.Add(new Domain.DisplayElement.LineStart());
+
+			if (SettingsRoot.Display.ShowTimeStamp)
+			{
+				virtualLine.Add(new Domain.DisplayElement.TimeStampInfo(ts, SettingsRoot.Display.TimeStampFormat, SettingsRoot.Display.TimeStampUseUtc, left, right));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
+			}
+
+			if (includeIOStatusText)
+			{
+				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
+			}
+
+			virtualLine.Add(new Domain.DisplayElement.ErrorInfo((Domain.Direction)e.Direction, e.Message, (e.Severity == Domain.IOErrorSeverity.Acceptable)));
 			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
 			return (virtualLine);
@@ -2607,7 +2450,7 @@ namespace YAT.Model
 				return;
 
 			// Log:
-			if (this.log.IsOn && this.log.Settings.PrependPortStatus)
+			if (this.log.AnyPortIsOn)
 				this.log.WriteLine(IOStatusToDisplayLine(DateTime.Now), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
 
 			// Forward:
@@ -2642,14 +2485,25 @@ namespace YAT.Model
 			this.terminal_IOChanged_hasBeenConnected = isConnectedNow;
 		}
 
-		private void terminal_IOControlChanged(object sender, EventArgs e)
+		private void terminal_IOControlChanged(object sender, Domain.IOControlEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
 			// Log:
-			if (this.log.IsOn)
-				this.log.WriteLine(IOStatusAndControlToDisplayLine(DateTime.Now), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+			if ((e.Texts != null) && (e.Texts.Count > 0))
+			{
+				if (this.log.AnyPortIsOn)                                     // Status text is always included (so far).
+					this.log.WriteLine(IOControlToDisplayLine(e.TimeStamp, e, true), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+
+				if (this.log.AnyNeatIsOn) // Workaround to bug #447 "Acceptable errors (e.g. <RX PARITY ERROR>) and I/O control events (e.g. <RTS=on>) are not contained in neat logs."
+				{
+					var dl = IOControlToDisplayLine(e.TimeStamp, e, false);
+					this.log.WriteLine(dl, Log.LogChannel.NeatTx);
+					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
+					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
+				}
+			}
 
 			// Forward:
 			OnIOControlChanged(e);
@@ -2661,8 +2515,16 @@ namespace YAT.Model
 				return;
 
 			// Log:
-			if (this.log.IsOn)
-				this.log.WriteLine(IOErrorToDisplayLine(DateTime.Now, e), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+			if (this.log.AnyPortIsOn)                                   // Status text is always included (so far).
+				this.log.WriteLine(IOErrorToDisplayLine(e.TimeStamp, e, true), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+
+			if (this.log.AnyNeatIsOn) // Workaround to bug #447 "Acceptable errors (e.g. <RX PARITY ERROR>) and I/O control events (e.g. <RTS=on>) are not contained in neat logs."
+			{
+				var dl = IOErrorToDisplayLine(e.TimeStamp, e, false);
+				this.log.WriteLine(dl, Log.LogChannel.NeatTx);
+				this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
+				this.log.WriteLine(dl, Log.LogChannel.NeatRx);
+			}
 
 			// Forward:
 			OnIOError(e);
@@ -2723,7 +2585,7 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:
-			if (this.log.IsOn)
+			if (this.log.AnyRawIsOn)
 			{
 				this.log.Write(e.Value, Log.LogChannel.RawTx);
 				this.log.Write(e.Value, Log.LogChannel.RawBidir);
@@ -2771,7 +2633,7 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:
-			if (this.log.IsOn)
+			if (this.log.AnyRawIsOn)
 			{
 				this.log.Write(e.Value, Log.LogChannel.RawBidir);
 				this.log.Write(e.Value, Log.LogChannel.RawRx);
@@ -2916,9 +2778,9 @@ namespace YAT.Model
 			OnDisplayLinesSent(e);
 
 			// Log:
-			foreach (var dl in e.Lines)
+			if (this.log.AnyNeatIsOn)
 			{
-				if (this.log.IsOn)
+				foreach (var dl in e.Lines)
 				{
 					this.log.WriteLine(dl, Log.LogChannel.NeatTx);
 					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
@@ -2944,9 +2806,9 @@ namespace YAT.Model
 			OnDisplayLinesReceived(e);
 
 			// Log:
-			foreach (var dl in e.Lines)
+			if (this.log.AnyNeatIsOn)
 			{
-				if (this.log.IsOn)
+				foreach (var dl in e.Lines)
 				{
 					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
 					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
@@ -2974,11 +2836,7 @@ namespace YAT.Model
 			{
 				foreach (var dl in e.Lines)
 				{
-					DateTime ts;
-					if (!dl.TryGetTimeStamp(out ts))
-						ts = DateTime.Now;
-
-					InvokeAutoAction(this.settingsRoot.AutoAction.Action, LineWithoutRxEolToOrigin(dl), ts);
+					InvokeAutoAction(this.settingsRoot.AutoAction.Action, LineWithoutRxEolToOrigin(dl), dl.TimeStamp);
 				}
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
@@ -3110,7 +2968,7 @@ namespace YAT.Model
 							if (dr == DialogResult.Yes)
 							{
 								this.settingsRoot.Explicit.Terminal.IO.SerialPort.PortId = portIdAlternate;
-								ApplySettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 							}
 
 							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
@@ -3179,7 +3037,7 @@ namespace YAT.Model
 						if (dr == DialogResult.Yes)
 						{
 							this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
-							ApplySettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 							return (CheckResult.OK);
 						}
 						else
@@ -3191,7 +3049,7 @@ namespace YAT.Model
 					else // Silently switch interface:
 					{
 						this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
-						ApplySettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 						return (CheckResult.OK);
 					}
 				}
@@ -3203,7 +3061,7 @@ namespace YAT.Model
 						if (dr == DialogResult.Yes)
 						{
 							this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[0];
-							ApplySettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 							return (CheckResult.OK);
 						}
 						else
@@ -3266,7 +3124,7 @@ namespace YAT.Model
 							if (dr == DialogResult.Yes)
 							{
 								this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-								ApplySettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 							}
 
 							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
@@ -3285,7 +3143,7 @@ namespace YAT.Model
 						if (!hadAlreadyBeenChanged)
 							this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.ClearChanged();
 
-						ApplySettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
 
 						return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
 					}
@@ -4534,17 +4392,6 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual int OutputBreakCount
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.terminal.OutputBreakCount);
-			}
-		}
-
-		/// <summary></summary>
 		public virtual int InputBreakCount
 		{
 			get
@@ -4552,6 +4399,17 @@ namespace YAT.Model
 				AssertNotDisposed();
 
 				return (this.terminal.InputBreakCount);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.terminal.OutputBreakCount);
 			}
 		}
 
@@ -4672,8 +4530,6 @@ namespace YAT.Model
 		{
 			try
 			{
-				// Re-apply settings immediately, makes sure date/time in filenames is refreshed:
-				this.log.Settings = this.settingsRoot.Log;
 				this.log.SwitchOn();
 				this.settingsRoot.LogIsOn = true;
 
@@ -4762,7 +4618,7 @@ namespace YAT.Model
 
 				foreach (string filePath in this.log.FilePaths)
 				{
-					if (this.log.IsOn && ExtensionHelper.IsFileTypeThatCanOnlyBeOpenedWhenCompleted(filePath))
+					if (this.log.AnyIsOn && ExtensionHelper.IsFileTypeThatCanOnlyBeOpenedWhenCompleted(filePath))
 					{
 						string message =
 							@"Log is still on and """ + Path.GetFileName(filePath) + @""" is incomplete." +
@@ -5279,7 +5135,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOControlChanged(EventArgs e)
+		protected virtual void OnIOControlChanged(Domain.IOControlEventArgs e)
 		{
 			this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}

@@ -38,7 +38,6 @@ namespace YAT.View.Forms
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
 			this.groupBox_Port = new System.Windows.Forms.GroupBox();
-			this.checkBox_PrependPortStatus = new System.Windows.Forms.CheckBox();
 			this.comboBox_Port_Extension = new MKY.Windows.Forms.ComboBoxEx();
 			this.pathLabel_Port = new MKY.Windows.Forms.PathLabel();
 			this.checkBox_Port = new System.Windows.Forms.CheckBox();
@@ -133,7 +132,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_Neat);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(507, 512);
+			this.groupBox_Settings.Size = new System.Drawing.Size(507, 489);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -141,27 +140,15 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Port.Controls.Add(this.checkBox_PrependPortStatus);
 			this.groupBox_Port.Controls.Add(this.comboBox_Port_Extension);
 			this.groupBox_Port.Controls.Add(this.pathLabel_Port);
 			this.groupBox_Port.Controls.Add(this.checkBox_Port);
 			this.groupBox_Port.Location = new System.Drawing.Point(6, 55);
 			this.groupBox_Port.Name = "groupBox_Port";
-			this.groupBox_Port.Size = new System.Drawing.Size(495, 78);
+			this.groupBox_Port.Size = new System.Drawing.Size(495, 55);
 			this.groupBox_Port.TabIndex = 4;
 			this.groupBox_Port.TabStop = false;
 			this.groupBox_Port.Text = "&Port Control";
-			// 
-			// checkBox_PrependPortStatus
-			// 
-			this.checkBox_PrependPortStatus.AutoSize = true;
-			this.checkBox_PrependPortStatus.Location = new System.Drawing.Point(12, 45);
-			this.checkBox_PrependPortStatus.Name = "checkBox_PrependPortStatus";
-			this.checkBox_PrependPortStatus.Size = new System.Drawing.Size(118, 17);
-			this.checkBox_PrependPortStatus.TabIndex = 3;
-			this.checkBox_PrependPortStatus.Text = "Prepend port status";
-			this.checkBox_PrependPortStatus.UseVisualStyleBackColor = true;
-			this.checkBox_PrependPortStatus.CheckedChanged += new System.EventHandler(this.checkBox_PrependPortStatus_CheckedChanged);
 			// 
 			// comboBox_Port_Extension
 			// 
@@ -193,6 +180,7 @@ namespace YAT.View.Forms
 			this.checkBox_Port.Size = new System.Drawing.Size(100, 17);
 			this.checkBox_Port.TabIndex = 0;
 			this.checkBox_Port.Text = "Log port control";
+			this.toolTip.SetToolTip(this.checkBox_Port, resources.GetString("checkBox_Port.ToolTip"));
 			this.checkBox_Port.UseVisualStyleBackColor = true;
 			this.checkBox_Port.CheckedChanged += new System.EventHandler(this.checkBox_Port_CheckedChanged);
 			// 
@@ -201,7 +189,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_TextEncoding.Controls.Add(this.checkBox_Options_EmitEncodingPreamble);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingTerminal);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingUTF8);
-			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(340, 431);
+			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(340, 408);
 			this.groupBox_Options_TextEncoding.Name = "groupBox_Options_TextEncoding";
 			this.groupBox_Options_TextEncoding.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_TextEncoding.TabIndex = 10;
@@ -278,7 +266,7 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderType);
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderDirection);
-			this.groupBox_Options_Folders.Location = new System.Drawing.Point(6, 431);
+			this.groupBox_Options_Folders.Location = new System.Drawing.Point(6, 408);
 			this.groupBox_Options_Folders.Name = "groupBox_Options_Folders";
 			this.groupBox_Options_Folders.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Folders.TabIndex = 8;
@@ -315,7 +303,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameTime);
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameDate);
 			this.groupBox_Options_Name.Controls.Add(this.label_Options_NameSeparator);
-			this.groupBox_Options_Name.Location = new System.Drawing.Point(6, 349);
+			this.groupBox_Options_Name.Location = new System.Drawing.Point(6, 326);
 			this.groupBox_Options_Name.Name = "groupBox_Options_Name";
 			this.groupBox_Options_Name.Size = new System.Drawing.Size(495, 76);
 			this.groupBox_Options_Name.TabIndex = 7;
@@ -388,7 +376,7 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeCreate);
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeAppend);
-			this.groupBox_Options_Mode.Location = new System.Drawing.Point(173, 431);
+			this.groupBox_Options_Mode.Location = new System.Drawing.Point(173, 408);
 			this.groupBox_Options_Mode.Name = "groupBox_Options_Mode";
 			this.groupBox_Options_Mode.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Mode.TabIndex = 9;
@@ -448,7 +436,7 @@ namespace YAT.View.Forms
 			this.groupBox_Raw.Controls.Add(this.comboBox_Raw_Extension);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Rx);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Tx);
-			this.groupBox_Raw.Location = new System.Drawing.Point(6, 139);
+			this.groupBox_Raw.Location = new System.Drawing.Point(6, 116);
 			this.groupBox_Raw.Name = "groupBox_Raw";
 			this.groupBox_Raw.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Raw.TabIndex = 5;
@@ -552,7 +540,7 @@ namespace YAT.View.Forms
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Rx);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Bidir);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Tx);
-			this.groupBox_Neat.Location = new System.Drawing.Point(6, 244);
+			this.groupBox_Neat.Location = new System.Drawing.Point(6, 221);
 			this.groupBox_Neat.Name = "groupBox_Neat";
 			this.groupBox_Neat.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Neat.TabIndex = 6;
@@ -660,7 +648,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(629, 536);
+			this.ClientSize = new System.Drawing.Size(629, 513);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -744,6 +732,5 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.PathLabel pathLabel_Port;
 		private System.Windows.Forms.CheckBox checkBox_Port;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_Port_Extension;
-		private System.Windows.Forms.CheckBox checkBox_PrependPortStatus;
 	}
 }

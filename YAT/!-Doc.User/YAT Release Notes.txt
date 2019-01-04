@@ -96,9 +96,11 @@ New:
 - Additional automatic action [Clear Monitor on Subsequent Receiving] added (feature request #357).
   Useful for screen/page synchronization on terminal-emulation-like behavior.
 - Additional option [View > Show Duration (Line)] (feature request #348).
-- Additional option [Log > Port Control] (related to feature request #350).
+- Additional terminal option [Include Port Control Events] (feature request #350).
+- Additional log channel [Log Port Control] (related to feature request #350).
 
 Important changes:
+- Errors are now indicated in square "[...]" instead of angle "<...>" brackets (rel. to feat. #350).
 - Prevention of potential handling error when copying data to clipboard (feature request #345).
 - Unicode/Non-Unicode multi-byte encoding test coverage improved (related to bugs #427, #428, #429).
 - No longer using [Ctrl+Alt+<CharOrDigit>] shortcuts to avoid conflicts with [Alt Gr] modifier as

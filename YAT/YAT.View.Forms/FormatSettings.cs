@@ -712,6 +712,7 @@ namespace YAT.View.Forms
 					monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
 					monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta, monitor_TimeDuration,
 					monitor_Port, monitor_Direction, monitor_Length,
+					monitor_IOControl,
 					monitor_Error,
 				};
 
@@ -720,6 +721,7 @@ namespace YAT.View.Forms
 					textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
 					textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta, textFormat_TimeDuration,
 					textFormat_Port, textFormat_Direction, textFormat_Length,
+					textFormat_IOControl,
 					textFormat_Error,
 				};
 
@@ -774,7 +776,8 @@ namespace YAT.View.Forms
 				case  8: return (this.formatSettingsInEdit.PortFormat);
 				case  9: return (this.formatSettingsInEdit.DirectionFormat);
 				case 10: return (this.formatSettingsInEdit.LengthFormat);
-				case 11: return (this.formatSettingsInEdit.ErrorFormat);
+				case 11: return (this.formatSettingsInEdit.IOControlFormat);
+				case 12: return (this.formatSettingsInEdit.ErrorFormat);
 			}
 			throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "There is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -873,7 +876,7 @@ namespace YAT.View.Forms
 			var infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
 			var infoEnclosureRight = this.infoEnclosure.ToEnclosureRight();
 
-			var exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capacity to improve memory management.
+			var exampleLines = new List<Domain.DisplayLine>(13); // Preset the required capacity to improve memory management.
 
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
@@ -886,12 +889,13 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOControl("RTS=on")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
 
 			for (int i = 0; i < this.monitors.Length; i++)
 				this.monitors[i].AddLine(exampleLines[i]);
 
-			var exampleComplete = new Domain.DisplayRepository(37); // Preset the required capacity to improve memory management.
+			var exampleComplete = new Domain.DisplayRepository(19 + 21 + 9); // Preset the required capacity to improve memory management.
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
@@ -925,6 +929,8 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DataSpace());
+			exampleComplete.Enqueue(new Domain.DisplayElement.IOControl("RTS=on"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataSpace());
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(0x10, "<LF>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));

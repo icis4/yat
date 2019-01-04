@@ -262,14 +262,6 @@ namespace YAT.View.Forms
 			this.settingsInEdit.PortExtension = comboBox_Port_Extension.Text;
 		}
 
-		private void checkBox_PrependPortStatus_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.PrependPortStatus = checkBox_PrependPortStatus.Checked;
-		}
-
 		private void checkBox_Raw_Tx_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)

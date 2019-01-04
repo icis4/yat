@@ -145,6 +145,14 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
+					var casted = (de as DisplayElement.IOControl);
+					if (casted != null)
+					{
+						textStr += casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
+				}
+				{
 					var casted = (de as DisplayElement.ErrorInfo);
 					if (casted != null)
 					{
