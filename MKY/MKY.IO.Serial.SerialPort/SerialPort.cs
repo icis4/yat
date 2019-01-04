@@ -900,13 +900,13 @@ namespace MKY.IO.Serial.SerialPort
 				this.port.StopBits  = scs.StopBits;
 				this.port.Handshake = (SerialFlowControlEx)scs.FlowControl;
 
-				switch (scs.RfrPin)
+				switch (scs.RtsPin)
 				{
 					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
-					case SerialControlPinState.Enabled:   this.port.RfrEnable = true;  break;
-					case SerialControlPinState.Disabled:  this.port.RfrEnable = false; break;
+					case SerialControlPinState.Enabled:   this.port.RtsEnable = true;  break;
+					case SerialControlPinState.Disabled:  this.port.RtsEnable = false; break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.RfrPin.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.RtsPin.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				switch (scs.DtrPin)
@@ -1463,7 +1463,7 @@ namespace MKY.IO.Serial.SerialPort
 						}
 
 						// Handle inactive CTS line:
-						if (this.settings.Communication.FlowControlUsesRfrCts && !this.port.CtsHolding) // No lock required, not modifying anything.
+						if (this.settings.Communication.FlowControlUsesRtsCts && !this.port.CtsHolding) // No lock required, not modifying anything.
 						{
 							if (!isCtsInactiveOldAndErrorHasBeenSignaled)
 							{
@@ -1610,7 +1610,7 @@ namespace MKY.IO.Serial.SerialPort
 
 						if (isWriteTimeout) // Timeout detected while trying to call System.IO.Ports.SerialPort.Write().
 						{                   // May only be partial, some data may have been sent before timeout.
-							if (this.settings.Communication.FlowControlUsesRfrCts && !this.port.CtsHolding)
+							if (this.settings.Communication.FlowControlUsesRtsCts && !this.port.CtsHolding)
 							{
 								if (!isCtsInactiveOldAndErrorHasBeenSignaled)
 								{
@@ -1720,7 +1720,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				this.port.RfrEnable = true;
+				this.port.RtsEnable = true;
 			}
 
 			// Note the remark in SerialPort.Write():
@@ -1770,14 +1770,14 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				this.port.Flush(); // Make sure that data is sent before restoring RFR, including the underlying physical UART.
+				this.port.Flush(); // Make sure that data is sent before restoring RTS, including the underlying physical UART.
 				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameTime)); // Single byte/frame.
-				this.port.RfrEnable = false;
+				this.port.RtsEnable = false;
 			}
 
 			if (unhandled != null)
 			{
-				throw (unhandled); // Re-throw unhandled exception after restoring RFR.
+				throw (unhandled); // Re-throw unhandled exception after restoring RTS.
 			}
 
 			return (writeSuccess);
@@ -1799,7 +1799,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				this.port.RfrEnable = true;
+				this.port.RtsEnable = true;
 			}
 
 			// Note the remark in SerialPort.Write():
@@ -1881,14 +1881,14 @@ namespace MKY.IO.Serial.SerialPort
 				if (effectiveChunkData != null)
 					maxFramesInFifo = Math.Min(effectiveChunkData.Count, 16); // Max 16 bytes/frames in FIFO.
 
-				this.port.Flush(); // Make sure that data is sent before restoring RFR, including the underlying physical UART.
+				this.port.Flush(); // Make sure that data is sent before restoring RTS, including the underlying physical UART.
 				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameTime * maxFramesInFifo));
-				this.port.RfrEnable = false;
+				this.port.RtsEnable = false;
 			}
 
 			if (unhandled != null)
 			{
-				throw (unhandled); // Re-throw unhandled exception after restoring RFR.
+				throw (unhandled); // Re-throw unhandled exception after restoring RTS.
 			}
 
 			return (writeSuccess);

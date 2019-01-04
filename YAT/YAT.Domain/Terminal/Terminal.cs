@@ -2240,7 +2240,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Toggles RFR control pin if current flow control settings allow this.
+		/// Toggles RTS control pin if current flow control settings allow this.
 		/// </summary>
 		/// <param name="pinState">
 		/// <c>true</c> if the control pin has become enabled.; otherwise, <c>false</c>
@@ -2249,19 +2249,19 @@ namespace YAT.Domain
 		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		public virtual bool RequestToggleRfr(out MKY.IO.Serial.SerialPort.SerialControlPinState pinState)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		public virtual bool RequestToggleRts(out MKY.IO.Serial.SerialPort.SerialControlPinState pinState)
 		{
 			AssertNotDisposed();
 
 			if (IsSerialPort)
 			{
-				if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsAutomatically)
+				if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically)
 				{
 					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (p != null)
 					{
-						if (p.ToggleRfr())
+						if (p.ToggleRts())
 							pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Enabled;
 						else
 							pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Disabled;
@@ -2533,13 +2533,13 @@ namespace YAT.Domain
 			{
 				var pinText = new StringBuilder();
 
-				if (currentState.SerialPortControlPins.Rfr != previousState.SerialPortControlPins.Rfr)
+				if (currentState.SerialPortControlPins.Rts != previousState.SerialPortControlPins.Rts)
 				{
 					pinText.Append("RTS=");
-					pinText.Append(currentState.SerialPortControlPins.Rfr ? "on" : "off");
+					pinText.Append(currentState.SerialPortControlPins.Rts ? "on" : "off");
 
 					if (TerminalSettings.Status.ShowFlowControlCount)
-						pinText.Append("|" + currentState.SerialPortControlPinCount.RfrDisableCount.ToString(CultureInfo.CurrentCulture));
+						pinText.Append("|" + currentState.SerialPortControlPinCount.RtsDisableCount.ToString(CultureInfo.CurrentCulture));
 				}
 
 				if (currentState.SerialPortControlPins.Cts != previousState.SerialPortControlPins.Cts)

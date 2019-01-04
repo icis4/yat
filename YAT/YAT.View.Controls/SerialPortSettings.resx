@@ -121,11 +121,11 @@
     <value>17, 17</value>
   </metadata>
   <data name="comboBox_FlowControl.ToolTip" xml:space="preserve">
-    <value>Manual: RFR/DTR and/or XOn/XOff set manually.
-RS-485:  RFR is set high while sending.
+    <value>Manual: RTS/DTR and/or XOn/XOff set manually.
+RS-485:  RTS is set high while sending.
 
-Note that RFR (Ready For Receiving) is the official name
-of the formerly called RTS (Request To Send) control line.</value>
+Note that RTS (Request To Send) is the same as RTR (Ready To Receive)
+and also known as RFR (Ready For Receiving).</value>
   </data>
   <data name="checkBox_AutoReopen.ToolTip" xml:space="preserve">
     <value>Useful to automatically reopen a port

@@ -37,11 +37,14 @@ namespace MKY.IO.Ports
 	public struct SerialPortControlPins : IEquatable<SerialPortControlPins>
 	{
 		/// <summary>
-		/// RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
+		/// RTS/RTR (Request To Send/Ready To Receive) control line.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		[XmlElement("RFR")]
-		public bool Rfr { get; set; }
+		/// <remarks>
+		/// RTS/RTR is also known as RFR (Ready For Receiving).
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		[XmlElement("RTS")]
+		public bool Rts { get; set; }
 
 		/// <summary>
 		/// CTS (Clear To Send) control line.
@@ -87,7 +90,7 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				"RFR=" + Rfr.ToString() + ", " +
+				"RTS=" + Rts.ToString() + ", " +
 				"CTS=" + Cts.ToString() + ", " +
 				"DTR=" + Dtr.ToString() + ", " +
 				"DSR=" + Dsr.ToString() + ", " +
@@ -108,7 +111,7 @@ namespace MKY.IO.Ports
 			{
 				int hashCode;
 
-				hashCode =                    Rfr.GetHashCode();
+				hashCode =                    Rts.GetHashCode();
 				hashCode = (hashCode * 397) ^ Cts.GetHashCode();
 				hashCode = (hashCode * 397) ^ Dtr.GetHashCode();
 				hashCode = (hashCode * 397) ^ Dsr.GetHashCode();
@@ -140,7 +143,7 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				Rfr.Equals(other.Rfr) &&
+				Rts.Equals(other.Rts) &&
 				Cts.Equals(other.Cts) &&
 				Dtr.Equals(other.Dtr) &&
 				Dsr.Equals(other.Dsr) &&
@@ -174,12 +177,15 @@ namespace MKY.IO.Ports
 	public struct SerialPortControlPinCount : IEquatable<SerialPortControlPinCount>
 	{
 		/// <summary>
-		/// RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
+		/// RTS/RTR (Request To Send/Ready To Receive) control line.
 		/// </summary>
+		/// <remarks>
+		/// RTS/RTR is also known as RFR (Ready For Receiving).
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		[XmlElement("RFR")]
-		public int RfrDisableCount;
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		[XmlElement("RTS")]
+		public int RtsDisableCount;
 
 		/// <summary>
 		/// CTS (Clear To Send) control line.
@@ -218,7 +224,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public void Reset()
 		{
-			Interlocked.Exchange(ref RfrDisableCount, 0);
+			Interlocked.Exchange(ref RtsDisableCount, 0);
 			Interlocked.Exchange(ref CtsDisableCount, 0);
 			Interlocked.Exchange(ref DtrDisableCount, 0);
 			Interlocked.Exchange(ref DsrDisableCount, 0);
@@ -241,7 +247,7 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				"RFR=" + RfrDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
+				"RTS=" + RtsDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
 				"CTS=" + CtsDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
 				"DTR=" + DtrDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
 				"DSR=" + DsrDisableCount.ToString(CultureInfo.CurrentCulture) + ", " +
@@ -262,7 +268,7 @@ namespace MKY.IO.Ports
 			{
 				int hashCode;
 
-				hashCode =                    RfrDisableCount;
+				hashCode =                    RtsDisableCount;
 				hashCode = (hashCode * 397) ^ CtsDisableCount;
 				hashCode = (hashCode * 397) ^ DtrDisableCount;
 				hashCode = (hashCode * 397) ^ DsrDisableCount;
@@ -294,7 +300,7 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				RfrDisableCount.Equals(other.RfrDisableCount) &&
+				RtsDisableCount.Equals(other.RtsDisableCount) &&
 				CtsDisableCount.Equals(other.CtsDisableCount) &&
 				DtrDisableCount.Equals(other.DtrDisableCount) &&
 				DsrDisableCount.Equals(other.DsrDisableCount) &&

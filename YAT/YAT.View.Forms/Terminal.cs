@@ -122,7 +122,7 @@ namespace YAT.View.Forms
 		// Status
 		private const string DefaultStatusText = "";
 		private const int TimedStatusInterval = 2000;
-		private const int RfrLuminescenceInterval = 179;
+		private const int RtsLuminescenceInterval = 179;
 
 		#endregion
 
@@ -2871,7 +2871,7 @@ namespace YAT.View.Forms
 			this.terminalStatusLabels = new List<ToolStripStatusLabel>(12); // Preset the required capacity to improve memory management.
 
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator1);
-			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_RFR);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_RTS);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_CTS);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DTR);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DSR);
@@ -2884,7 +2884,7 @@ namespace YAT.View.Forms
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
 
 			this.terminalStatusLabels_DefaultText = new Dictionary<ToolStripStatusLabel, string>(9); // Preset the required capacity to improve memory management.
-			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_RTS,           toolStripStatusLabel_TerminalStatus_RTS.Text);
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.Text);
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.Text);
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.Text);
@@ -2895,7 +2895,7 @@ namespace YAT.View.Forms
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.Text);
 
 			this.terminalStatusLabels_DefaultToolTipText = new Dictionary<ToolStripStatusLabel, string>(9); // Preset the required capacity to improve memory management.
-			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_RTS,           toolStripStatusLabel_TerminalStatus_RTS.ToolTipText);
 			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.ToolTipText);
 			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.ToolTipText);
 			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.ToolTipText);
@@ -2916,10 +2916,10 @@ namespace YAT.View.Forms
 		/// always be clicked. It is the responsibility of the underlying Request...() method
 		/// to decide whether the request can currently be executed or not.
 		/// </remarks>
-		private void toolStripStatusLabel_TerminalStatus_RFR_Click(object sender, EventArgs e)
+		private void toolStripStatusLabel_TerminalStatus_RTS_Click(object sender, EventArgs e)
 		{
 			if (this.terminal != null)
-				this.terminal.RequestToggleRfr();
+				this.terminal.RequestToggleRts();
 
 			// Note that label must always be enabled to show the correct pro, and can therefore
 		}
@@ -5482,17 +5482,17 @@ namespace YAT.View.Forms
 				{
 					var pinCount = ((this.terminal != null) ? (this.terminal.SerialPortControlPinCount) : (new MKY.IO.Ports.SerialPortControlPinCount()));
 
-					toolStripStatusLabel_TerminalStatus_RFR.Text += (" | " + pinCount.RfrDisableCount.ToString(CultureInfo.CurrentCulture));
+					toolStripStatusLabel_TerminalStatus_RTS.Text += (" | " + pinCount.RtsDisableCount.ToString(CultureInfo.CurrentCulture));
 					toolStripStatusLabel_TerminalStatus_CTS.Text += (" | " + pinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
 					toolStripStatusLabel_TerminalStatus_DTR.Text += (" | " + pinCount.DtrDisableCount.ToString(CultureInfo.CurrentCulture));
 					toolStripStatusLabel_TerminalStatus_DSR.Text += (" | " + pinCount.DsrDisableCount.ToString(CultureInfo.CurrentCulture));
 					toolStripStatusLabel_TerminalStatus_DCD.Text += (" | " + pinCount.DcdCount.ToString(CultureInfo.CurrentCulture));
 
-					toolStripStatusLabel_TerminalStatus_RFR.ToolTipText += (" | RFR Disable Count");
-					toolStripStatusLabel_TerminalStatus_CTS.ToolTipText += (" | CTS Disable Count");
-					toolStripStatusLabel_TerminalStatus_DTR.ToolTipText += (" | DTR Disable Count");
-					toolStripStatusLabel_TerminalStatus_DSR.ToolTipText += (" | DSR Disable Count");
-					toolStripStatusLabel_TerminalStatus_DCD.ToolTipText += (" | DCD Count");
+					toolStripStatusLabel_TerminalStatus_RTS.ToolTipText += (" | Disable Count");
+					toolStripStatusLabel_TerminalStatus_CTS.ToolTipText += (" | Disable Count");
+					toolStripStatusLabel_TerminalStatus_DTR.ToolTipText += (" | Disable Count");
+					toolStripStatusLabel_TerminalStatus_DSR.ToolTipText += (" | Disable Count");
+					toolStripStatusLabel_TerminalStatus_DCD.ToolTipText += (" | Count");
 
 					var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
 					var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
@@ -5565,15 +5565,15 @@ namespace YAT.View.Forms
 
 					if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialPort.SerialFlowControl.RS485)
 					{
-						if (pins.Rfr)
-							TriggerRfrLuminescence();
+						if (pins.Rts)
+							TriggerRtsLuminescence();
 					}
 					else
 					{
-						Image rfrImage = (pins.Rfr ? on : off);
+						Image rtsImage = (pins.Rts ? on : off);
 
-						if (toolStripStatusLabel_TerminalStatus_RFR.Image != rfrImage) // Improve performance by only assigning if different.
-							toolStripStatusLabel_TerminalStatus_RFR.Image = rfrImage;
+						if (toolStripStatusLabel_TerminalStatus_RTS.Image != rtsImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_RTS.Image = rtsImage;
 					}
 
 					Image ctsImage = (pins.Cts ? on : off);
@@ -5593,14 +5593,14 @@ namespace YAT.View.Forms
 					if (toolStripStatusLabel_TerminalStatus_DCD.Image != dcdImage) // Improve performance by only assigning if different.
 						toolStripStatusLabel_TerminalStatus_DCD.Image = dcdImage;
 
-					bool allowRfr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsAutomatically;
+					bool allowRts = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically;
 					bool allowDtr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically;
 
-					Color rfrForeColor = (allowRfr ? SystemColors.ControlText : SystemColors.GrayText);
+					Color rtsForeColor = (allowRts ? SystemColors.ControlText : SystemColors.GrayText);
 					Color dtrForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
 
-					if (toolStripStatusLabel_TerminalStatus_RFR.ForeColor != rfrForeColor) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_RFR.ForeColor = rfrForeColor;
+					if (toolStripStatusLabel_TerminalStatus_RTS.ForeColor != rtsForeColor) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_RTS.ForeColor = rtsForeColor;
 
 					if (toolStripStatusLabel_TerminalStatus_CTS.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
@@ -5798,29 +5798,29 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback.")]
-		private void TriggerRfrLuminescence()
+		private void TriggerRtsLuminescence()
 		{
-			timer_RfrLuminescence.Enabled = false;
+			timer_RtsLuminescence.Enabled = false;
 
 			Image on = Properties.Resources.Image_Status_Green_12x12;
-			if (toolStripStatusLabel_TerminalStatus_RFR.Image != on) // Improve performance by only assigning if different.
-				toolStripStatusLabel_TerminalStatus_RFR.Image = on;
+			if (toolStripStatusLabel_TerminalStatus_RTS.Image != on) // Improve performance by only assigning if different.
+				toolStripStatusLabel_TerminalStatus_RTS.Image = on;
 
-			timer_RfrLuminescence.Interval = RfrLuminescenceInterval;
-			timer_RfrLuminescence.Enabled = true;
+			timer_RtsLuminescence.Interval = RtsLuminescenceInterval;
+			timer_RtsLuminescence.Enabled = true;
 		}
 
 		/// <remarks>
 		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
 		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
 		/// </remarks>
-		private void timer_RfrLuminescence_Tick(object sender, EventArgs e)
+		private void timer_RtsLuminescence_Tick(object sender, EventArgs e)
 		{
-			timer_RfrLuminescence.Enabled = false;
-			ResetRfr();
+			timer_RtsLuminescence.Enabled = false;
+			ResetRts();
 		}
 
-		private void ResetRfr()
+		private void ResetRts()
 		{
 			bool isOpen = ((this.terminal != null) ? (this.terminal.IsOpen) : (false));
 
@@ -5835,14 +5835,14 @@ namespace YAT.View.Forms
 				if (port != null)
 					pins = port.ControlPins;
 
-				Image rfr = (pins.Rfr ? on : off);
-				if (toolStripStatusLabel_TerminalStatus_RFR.Image != rfr) // Improve performance by only assigning if different.
-					toolStripStatusLabel_TerminalStatus_RFR.Image = rfr;
+				Image rts = (pins.Rts ? on : off);
+				if (toolStripStatusLabel_TerminalStatus_RTS.Image != rts) // Improve performance by only assigning if different.
+					toolStripStatusLabel_TerminalStatus_RTS.Image = rts;
 			}
 			else
 			{
-				if (toolStripStatusLabel_TerminalStatus_RFR.Image != off) // Improve performance by only assigning if different.
-					toolStripStatusLabel_TerminalStatus_RFR.Image = off;
+				if (toolStripStatusLabel_TerminalStatus_RTS.Image != off) // Improve performance by only assigning if different.
+					toolStripStatusLabel_TerminalStatus_RTS.Image = off;
 			}
 		}
 

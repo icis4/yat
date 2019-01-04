@@ -153,7 +153,7 @@ namespace MKY.IO.Ports
 		/// of a <see cref="System.IO.Ports.SerialPort"/> object.
 		/// </summary>
 		/// <remarks>
-		/// Attention: No event is fired if the RFR or DTR line is changed.
+		/// Attention: No event is fired if the RTS or DTR line is changed.
 		/// </remarks>
 		public new event SerialPinChangedEventHandler PinChanged;
 
@@ -472,7 +472,7 @@ namespace MKY.IO.Ports
 				{
 					base.Handshake = value;
 					OnPortSettingsChanged(EventArgs.Empty);
-					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
+					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				}
 			}
@@ -520,22 +520,22 @@ namespace MKY.IO.Ports
 				base.Handshake = (HandshakeEx)value.Handshake;
 
 				OnPortSettingsChanged(EventArgs.Empty);
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the RTS (Request To Send) signal
-		/// is enabled during serial communication.
+		/// Gets or sets a value indicating whether the RTS/RTR (Request To Send/Ready To Receive)
+		/// control pin is enabled during serial communication.
 		/// </summary>
+		/// <remarks>
+		/// RTS/RTR is also known as RFR (Ready For Receiving).
+		/// </remarks>
 		/// <remarks>
 		/// Attention:
 		/// Different than <see cref="System.IO.Ports.SerialPort.RtsEnable()"/> this
 		/// property fires an <see cref="PinChanged"/> event if the value changes.
-		/// 
-		/// Also note that there is a synonym <see cref="RfrEnable"/> which now is
-		/// the official name of the RTS signal.
 		/// </remarks>
 		public new bool RtsEnable
 		{
@@ -561,39 +561,28 @@ namespace MKY.IO.Ports
 						base.RtsEnable = value;
 
 						if (!base.RtsEnable)
-							Interlocked.Increment(ref this.controlPinCount.RfrDisableCount);
+							Interlocked.Increment(ref this.controlPinCount.RtsDisableCount);
 
-						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
+						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 					}
 				}
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the RFR (Ready For Receiving) signal
-		/// is enabled during serial communication.
+		/// Toggles the RTS/RTR (Request To Send/Ready To Receive) control pin.
 		/// </summary>
 		/// <remarks>
-		/// Note that there is a synonym <see cref="RtsEnable"/> which is the former
-		/// name of the RFR signal.
+		/// RTS/RTR is also known as RFR (Ready For Receiving).
 		/// </remarks>
-		public bool RfrEnable
-		{
-			get { return (this.RtsEnable); }
-			set { this.RtsEnable = value;  }
-		}
-
-		/// <summary>
-		/// Toggles the RFR (Ready For Receiving) control pin. This pin was formerly called RTS (Request To Send).
-		/// </summary>
 		/// <returns>
-		/// The new state of the RFR control pin.
+		/// The new state of the RTS control pin.
 		/// </returns>
-		public virtual bool ToggleRfr()
+		public virtual bool ToggleRts()
 		{
 			AssertNotDisposed();
 
-			return (this.RfrEnable = !this.RfrEnable);
+			return (RtsEnable = !RtsEnable);
 		}
 
 		/// <summary>
@@ -638,7 +627,7 @@ namespace MKY.IO.Ports
 		{
 			AssertNotDisposed();
 
-			return (this.DtrEnable = !this.DtrEnable);
+			return (DtrEnable = !DtrEnable);
 		}
 
 		/// <summary>
@@ -656,9 +645,9 @@ namespace MKY.IO.Ports
 				try
 				{
 					if (HandshakeIsNotUsingRts)
-						pins.Rfr = RfrEnable; // 'RfrEnable' must not be accessed if it is used by the base class!
+						pins.Rts = RtsEnable; // 'RtsEnable' must not be accessed if it is used by the base class!
 					else
-						pins.Rfr = true;
+						pins.Rts = true;
 
 					pins.Dtr = DtrEnable;
 
@@ -701,7 +690,7 @@ namespace MKY.IO.Ports
 			this.controlPinCount.Reset();
 
 			// Fire the event even though just the count changed.
-			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Cts));
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dsr));
@@ -923,7 +912,7 @@ namespace MKY.IO.Ports
 
 				// Invoke the additional events implemented by this class:
 				OnOpened(EventArgs.Empty);
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 
@@ -1063,7 +1052,7 @@ namespace MKY.IO.Ports
 
 				// Invoke the additional events implemented by this class:
 				OnClosed(EventArgs.Empty);
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 			}

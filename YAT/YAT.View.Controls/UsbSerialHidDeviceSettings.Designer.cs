@@ -203,8 +203,6 @@
 			this.comboBox_FlowControl.Name = "comboBox_FlowControl";
 			this.comboBox_FlowControl.Size = new System.Drawing.Size(183, 21);
 			this.comboBox_FlowControl.TabIndex = 21;
-			this.toolTip.SetToolTip(this.comboBox_FlowControl, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
-        "t To Send) control line");
 			this.comboBox_FlowControl.SelectedIndexChanged += new System.EventHandler(this.comboBox_FlowControl_SelectedIndexChanged);
 			// 
 			// label_Line

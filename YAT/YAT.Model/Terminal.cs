@@ -4429,19 +4429,19 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Toggles RFR control pin if current flow control settings allow this.
+		/// Toggles RTS control pin if current flow control settings allow this.
 		/// </summary>
 		/// <returns>
 		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		public virtual bool RequestToggleRfr()
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		public virtual bool RequestToggleRts()
 		{
 			AssertNotDisposed();
 
 			MKY.IO.Serial.SerialPort.SerialControlPinState pinState;
-			bool isSuccess = this.terminal.RequestToggleRfr(out pinState);
-			this.SettingsRoot.IO.SerialPort.Communication.RfrPin = pinState;
+			bool isSuccess = this.terminal.RequestToggleRts(out pinState);
+			this.SettingsRoot.IO.SerialPort.Communication.RtsPin = pinState;
 			return (isSuccess);
 
 			// Note, this user requested change of the current settings is handled here,

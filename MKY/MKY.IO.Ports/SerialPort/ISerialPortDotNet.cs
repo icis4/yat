@@ -61,7 +61,7 @@ namespace MKY.IO.Ports
 		/// of a <see cref="System.IO.Ports.SerialPort"/> object.
 		/// </summary>
 		/// <remarks>
-		/// Attention: No event is fired if the RFR/RTS or DTR line is changed.
+		/// Attention: No event is fired if the RTS or DTR line is changed.
 		/// </remarks>
 		event SerialPinChangedEventHandler PinChanged;
 
