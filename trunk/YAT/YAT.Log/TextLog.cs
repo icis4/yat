@@ -81,7 +81,7 @@ namespace YAT.Log
 		#endregion
 
 		/// <summary></summary>
-		public void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
+		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
 		{
 			AssertNotDisposed();
 
@@ -122,7 +122,7 @@ namespace YAT.Log
 				{
 					case FileType.Xml:
 					{
-						this.xmlWriter = new XmlWriterText(stream, true, FilePath);
+						this.xmlWriter = new XmlWriterText(stream, this.encoding, true, FilePath);
 						break;
 					}
 

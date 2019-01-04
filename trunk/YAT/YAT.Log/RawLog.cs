@@ -29,6 +29,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 using YAT.Application.Utilities;
 using YAT.Log.Utilities;
@@ -48,15 +49,17 @@ namespace YAT.Log
 		}
 
 		private FileType fileType;
+		private Encoding encoding;
 
 		private XmlWriterRaw xmlWriter;
 		private BinaryWriter binaryWriter;
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public RawLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
+		public RawLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding)
 			: base(enabled, makeFilePath, writeMode)
 		{
+			this.encoding = encoding;
 		}
 
 		#region Disposal
@@ -72,6 +75,18 @@ namespace YAT.Log
 		}
 
 		#endregion
+
+		/// <summary></summary>
+		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding)
+		{
+			AssertNotDisposed();
+
+			if (IsEnabled && IsOn && (this.encoding != encoding))
+				Close();
+
+			this.encoding = encoding;
+			base.ApplySettings(enabled, isOn, makeFilePath, writeMode);
+		}
 
 		/// <summary></summary>
 		protected override void MakeFilePath()
@@ -100,7 +115,7 @@ namespace YAT.Log
 				{
 					case FileType.Xml:
 					{
-						this.xmlWriter = new XmlWriterRaw(stream, true, FilePath);
+						this.xmlWriter = new XmlWriterRaw(stream, this.encoding, true, FilePath);
 						break;
 					}
 
