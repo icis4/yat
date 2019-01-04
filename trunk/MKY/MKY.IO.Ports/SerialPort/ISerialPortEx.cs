@@ -96,20 +96,26 @@ namespace MKY.IO.Ports
 		void CloseAfterException();
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the RFR (Ready For Receiving) signal
-		/// is enabled during serial communication.
+		/// Gets or sets a value indicating whether the RTS/RTR (Request To Send/Ready To Receive)
+		/// control pin is enabled during serial communication.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		bool RfrEnable { get; set; }
+		/// <remarks>
+		/// RTS/RTR is also known as RFR (Ready For Receiving).
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		new bool RtsEnable { get; set; }
 
 		/// <summary>
-		/// Toggles the RFR (Ready For Receiving) control pin. This pin was formerly called RTS (Request To Send).
+		/// Toggles the RTS/RTR (Request To Send/Ready To Receive) control pin.
 		/// </summary>
+		/// <remarks>
+		/// RTS/RTR is also known as RFR (Ready For Receiving).
+		/// </remarks>
 		/// <returns>
-		/// The new state of the RFR control pin.
+		/// The new state of the RTS control pin.
 		/// </returns>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		bool ToggleRfr();
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		bool ToggleRts();
 
 		/// <summary>
 		/// Toggles the DTR (Data Terminal Ready) control pin.

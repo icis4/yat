@@ -53,7 +53,7 @@ namespace MKY.IO.Serial.SerialPort
 		private System.IO.Ports.StopBits stopBits;
 		private SerialFlowControl flowControl;
 
-		private SerialControlPinState rfrPin;
+		private SerialControlPinState rtsPin;
 		private SerialControlPinState dtrPin;
 
 		/// <summary>
@@ -78,16 +78,16 @@ namespace MKY.IO.Serial.SerialPort
 		/// Creates new port settings with specified arguments.
 		/// </summary>
 		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits = DataBitsDefault, System.IO.Ports.Parity parity = ParityDefault, System.IO.Ports.StopBits stopBits = StopBitsDefault, SerialFlowControl flowControl = FlowControlDefault)
-			: this(baudRate, dataBits, parity, stopBits, flowControl, ToRfrPinDefault(flowControl), ToDtrPinDefault(flowControl))
+			: this(baudRate, dataBits, parity, stopBits, flowControl, ToRtsPinDefault(flowControl), ToDtrPinDefault(flowControl))
 		{
 		}
 
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "rfr", Justification = "'RFR' is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "rts", Justification = "'RTS' is a common term for serial ports.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dtr", Justification = "'DTR' is a common term for serial ports.")]
-		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits, System.IO.Ports.Parity parity, System.IO.Ports.StopBits stopBits, SerialFlowControl flowControl, SerialControlPinState rfrPin, SerialControlPinState dtrPin)
+		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits, System.IO.Ports.Parity parity, System.IO.Ports.StopBits stopBits, SerialFlowControl flowControl, SerialControlPinState rtsPin, SerialControlPinState dtrPin)
 		{
 			BaudRate    = baudRate;
 			DataBits    = dataBits;
@@ -96,7 +96,7 @@ namespace MKY.IO.Serial.SerialPort
 			FlowControl = flowControl;
 
 			// Override the default pin settings by the provided values:
-			RfrPin = rfrPin;
+			RtsPin = rtsPin;
 			DtrPin = dtrPin;
 		}
 
@@ -117,7 +117,7 @@ namespace MKY.IO.Serial.SerialPort
 			FlowControl = rhs.FlowControl;
 
 			// Override the default pin settings by the provided values:
-			RfrPin = rhs.RfrPin;
+			RtsPin = rhs.RtsPin;
 			DtrPin = rhs.DtrPin;
 
 			ClearChanged();
@@ -260,7 +260,7 @@ namespace MKY.IO.Serial.SerialPort
 					this.flowControl = value;
 
 					// Set the default pin values accordingly:
-					RfrPin = ToRfrPinDefault(FlowControl);
+					RtsPin = ToRtsPinDefault(FlowControl);
 					DtrPin = ToDtrPinDefault(FlowControl);
 
 					SetMyChanged();
@@ -281,12 +281,12 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Returns <c>true</c> if the RFR/CTS lines are use, i.e. if one or the other kind of
+		/// Returns <c>true</c> if the RTS/CTS lines are use, i.e. if one or the other kind of
 		/// hardware flow control is active.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
-		public virtual bool FlowControlUsesRfrCts
+		public virtual bool FlowControlUsesRtsCts
 		{
 			get
 			{
@@ -298,11 +298,11 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Returns <c>true</c> if the RFR/CTS control pins are managed automatically.
+		/// Returns <c>true</c> if the RTS/CTS control pins are managed automatically.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
-		public virtual bool FlowControlManagesRfrCtsAutomatically
+		public virtual bool FlowControlManagesRtsCtsAutomatically
 		{
 			get
 			{
@@ -349,16 +349,16 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		[XmlElement("RfrPin")]
-		public virtual SerialControlPinState RfrPin
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		[XmlElement("RtsPin")]
+		public virtual SerialControlPinState RtsPin
 		{
-			get { return (this.rfrPin); }
+			get { return (this.rtsPin); }
 			set
 			{
-				if (this.rfrPin != value)
+				if (this.rtsPin != value)
 				{
-					this.rfrPin = value;
+					this.rtsPin = value;
 					SetMyChanged();
 				}
 			}
@@ -388,8 +388,8 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "'RFR' is a common term for serial ports.")]
-		public static SerialControlPinState ToRfrPinDefault(SerialFlowControl flowControl)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
+		public static SerialControlPinState ToRtsPinDefault(SerialFlowControl flowControl)
 		{
 			switch (flowControl)
 			{
@@ -458,7 +458,7 @@ namespace MKY.IO.Serial.SerialPort
 				((MKY.IO.Ports.StopBitsEx)StopBits) + ", " +
 				((SerialFlowControlEx)FlowControl).ToShortString()
 
-				// Do not include the state of the RFR and DTR pins, as these are advanced settings typically not displayed.
+				// Do not include the state of the RTS and DTR pins, as these are advanced settings typically not displayed.
 			);
 		}
 
@@ -492,7 +492,7 @@ namespace MKY.IO.Serial.SerialPort
 				hashCode = (hashCode * 397) ^ StopBits   .GetHashCode();
 				hashCode = (hashCode * 397) ^ FlowControl.GetHashCode();
 
-				hashCode = (hashCode * 397) ^ RfrPin     .GetHashCode();
+				hashCode = (hashCode * 397) ^ RtsPin     .GetHashCode();
 				hashCode = (hashCode * 397) ^ DtrPin     .GetHashCode();
 
 				return (hashCode);
@@ -530,7 +530,7 @@ namespace MKY.IO.Serial.SerialPort
 				StopBits   .Equals(other.StopBits)    &&
 				FlowControl.Equals(other.FlowControl) &&
 
-				RfrPin     .Equals(other.RfrPin)      &&
+				RtsPin     .Equals(other.RtsPin)      &&
 				DtrPin     .Equals(other.DtrPin)
 			);
 		}

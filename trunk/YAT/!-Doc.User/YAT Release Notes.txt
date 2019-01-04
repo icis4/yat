@@ -100,6 +100,9 @@ New:
 - Additional log channel [Log Port Control] (related to feature request #350).
 
 Important changes:
+
+- Serial COM port again uses the term RTS (Ready To Send) as that is still most commonly used.
+  In addition, notes/hints on terms RTR (Ready To Receive) as well as RFR (Ready For Receiving).
 - Errors are now indicated in square "[...]" instead of angle "<...>" brackets (rel. to feat. #350).
 - Prevention of potential handling error when copying data to clipboard (feature request #345).
 - Unicode/Non-Unicode multi-byte encoding test coverage improved (related to bugs #427, #428, #429).

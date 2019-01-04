@@ -314,7 +314,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_TerminalStatus_IOStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_Separator1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripStatusLabel_TerminalStatus_RFR = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_TerminalStatus_RTS = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_CTS = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_DTR = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_DSR = new System.Windows.Forms.ToolStripStatusLabel();
@@ -342,7 +342,7 @@ namespace YAT.View.Forms
 			this.predefined = new YAT.View.Controls.PredefinedCommands();
 			this.panel_Send = new System.Windows.Forms.Panel();
 			this.send = new YAT.View.Controls.Send();
-			this.timer_RfrLuminescence = new System.Windows.Forms.Timer(this.components);
+			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor.SuspendLayout();
@@ -2623,7 +2623,7 @@ namespace YAT.View.Forms
             this.toolStripStatusLabel_TerminalStatus_IOStatus,
             this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator,
             this.toolStripStatusLabel_TerminalStatus_Separator1,
-            this.toolStripStatusLabel_TerminalStatus_RFR,
+            this.toolStripStatusLabel_TerminalStatus_RTS,
             this.toolStripStatusLabel_TerminalStatus_CTS,
             this.toolStripStatusLabel_TerminalStatus_DTR,
             this.toolStripStatusLabel_TerminalStatus_DSR,
@@ -2738,22 +2738,22 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_TerminalStatus_Separator1.Name = "toolStripStatusLabel_TerminalStatus_Separator1";
 			this.toolStripStatusLabel_TerminalStatus_Separator1.Size = new System.Drawing.Size(4, 20);
 			// 
-			// toolStripStatusLabel_TerminalStatus_RFR
+			// toolStripStatusLabel_TerminalStatus_RTS
 			// 
-			this.toolStripStatusLabel_TerminalStatus_RFR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+			this.toolStripStatusLabel_TerminalStatus_RTS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-			this.toolStripStatusLabel_TerminalStatus_RFR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_RFR.Image = global::YAT.View.Forms.Properties.Resources.Image_Status_Green_12x12;
-			this.toolStripStatusLabel_TerminalStatus_RFR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripStatusLabel_TerminalStatus_RFR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripStatusLabel_TerminalStatus_RFR.Name = "toolStripStatusLabel_TerminalStatus_RFR";
-			this.toolStripStatusLabel_TerminalStatus_RFR.Size = new System.Drawing.Size(43, 20);
-			this.toolStripStatusLabel_TerminalStatus_RFR.Text = "RFR";
-			this.toolStripStatusLabel_TerminalStatus_RFR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripStatusLabel_TerminalStatus_RFR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-			this.toolStripStatusLabel_TerminalStatus_RFR.ToolTipText = "Ready For Receiving (Out), formerly known as RTS (Request To Send)";
-			this.toolStripStatusLabel_TerminalStatus_RFR.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_RFR_Click);
+			this.toolStripStatusLabel_TerminalStatus_RTS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_TerminalStatus_RTS.Image = global::YAT.View.Forms.Properties.Resources.Image_Status_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_RTS.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_TerminalStatus_RTS.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.toolStripStatusLabel_TerminalStatus_RTS.Name = "toolStripStatusLabel_TerminalStatus_RTS";
+			this.toolStripStatusLabel_TerminalStatus_RTS.Size = new System.Drawing.Size(43, 20);
+			this.toolStripStatusLabel_TerminalStatus_RTS.Text = "RTS";
+			this.toolStripStatusLabel_TerminalStatus_RTS.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_TerminalStatus_RTS.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.toolStripStatusLabel_TerminalStatus_RTS.ToolTipText = "Request To Send (Out); same as RTR (Ready To Receive); also known as RFR (Ready For Receiving)";
+			this.toolStripStatusLabel_TerminalStatus_RTS.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_RTS_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_CTS
 			// 
@@ -3154,9 +3154,9 @@ namespace YAT.View.Forms
 			this.send.SendFileCommandRequest += new System.EventHandler(this.send_SendFileCommandRequest);
 			this.send.SizeChanged += new System.EventHandler(this.send_SizeChanged);
 			// 
-			// timer_RfrLuminescence
+			// timer_RtsLuminescence
 			// 
-			this.timer_RfrLuminescence.Tick += new System.EventHandler(this.timer_RfrLuminescence_Tick);
+			this.timer_RtsLuminescence.Tick += new System.EventHandler(this.timer_RtsLuminescence_Tick);
 			// 
 			// timer_IOStatusIndicator
 			// 
@@ -3267,7 +3267,7 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.StatusStripEx statusStrip_Terminal;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Status;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_IOStatus;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_RFR;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_RTS;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_CTS;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_DTR;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_DSR;
@@ -3287,7 +3287,7 @@ namespace YAT.View.Forms
 		private YAT.View.Controls.Monitor monitor_Bidir;
 		private System.Windows.Forms.Panel panel_Monitor_Rx;
 		private YAT.View.Controls.Monitor monitor_Rx;
-		private System.Windows.Forms.Timer timer_RfrLuminescence;
+		private System.Windows.Forms.Timer timer_RtsLuminescence;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Radix;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_String;

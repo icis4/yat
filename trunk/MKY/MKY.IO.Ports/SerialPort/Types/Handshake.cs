@@ -48,17 +48,17 @@ namespace MKY.IO.Ports
 		private const string             None_string = "None";
 		private static readonly string[] None_stringAlternatives = new string[] { "N" };
 
-		private const string             RfrCts_string = "Hardware (RFR/CTS)";
-		private const string             RfrCts_stringShort = "Hardware";
-		private static readonly string[] RfrCts_stringAlternatives = new string[] { "Hardware", "Hard", "HW", "H" };
+		private const string             RtsCts_string = "Hardware (RTS/CTS)";
+		private const string             RtsCts_stringShort = "Hardware";
+		private static readonly string[] RtsCts_stringAlternatives = new string[] { "Hardware", "Hard", "HW", "H" };
 
 		private const string             XOnXOff_string = "Software (XOn/XOff)";
 		private const string             XOnXOff_stringShort = "Software";
 		private static readonly string[] XOnXOff_stringAlternatives = new string[] { "Software", "Soft", "SW", "S" };
 
-		private const string             RfrCtsXOnXOff_string = "Combined (RFR/CTS + XOn/XOff)";
-		private const string             RfrCtsXOnXOff_stringShort = "Combined";
-		private static readonly string[] RfrCtsXOnXOff_stringAlternatives = new string[] { "Combined", "Combi", "C" };
+		private const string             RtsCtsXOnXOff_string = "Combined (RTS/CTS + XOn/XOff)";
+		private const string             RtsCtsXOnXOff_stringShort = "Combined";
+		private static readonly string[] RtsCtsXOnXOff_stringAlternatives = new string[] { "Combined", "Combi", "C" };
 
 		#endregion
 
@@ -91,9 +91,9 @@ namespace MKY.IO.Ports
 			switch ((Handshake)UnderlyingEnum)
 			{
 				case Handshake.None:                 return (None_string);
-				case Handshake.RequestToSend:        return (RfrCts_string);
+				case Handshake.RequestToSend:        return (RtsCts_string);
 				case Handshake.XOnXOff:              return (XOnXOff_string);
-				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_string);
+				case Handshake.RequestToSendXOnXOff: return (RtsCtsXOnXOff_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -106,9 +106,9 @@ namespace MKY.IO.Ports
 			switch ((Handshake)UnderlyingEnum)
 			{
 				case Handshake.None:                 return (None_string);
-				case Handshake.RequestToSend:        return (RfrCts_stringShort);
+				case Handshake.RequestToSend:        return (RtsCts_stringShort);
 				case Handshake.XOnXOff:              return (XOnXOff_stringShort);
-				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_stringShort);
+				case Handshake.RequestToSendXOnXOff: return (RtsCtsXOnXOff_stringShort);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -187,9 +187,9 @@ namespace MKY.IO.Ports
 				result = Handshake.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RfrCts_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (s, RfrCts_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RfrCts_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RtsCts_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, RtsCts_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RtsCts_stringAlternatives))
 			{
 				result = Handshake.RequestToSend;
 				return (true);
@@ -201,9 +201,9 @@ namespace MKY.IO.Ports
 				result = Handshake.XOnXOff;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RfrCtsXOnXOff_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (s, RfrCtsXOnXOff_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RfrCtsXOnXOff_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RtsCtsXOnXOff_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, RtsCtsXOnXOff_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RtsCtsXOnXOff_stringAlternatives))
 			{
 				result = Handshake.RequestToSendXOnXOff;
 				return (true);
