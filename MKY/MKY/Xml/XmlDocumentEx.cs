@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -30,6 +35,10 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
+using MKY.Text;
+
+#endregion
 
 namespace MKY.Xml
 {
@@ -149,6 +158,9 @@ namespace MKY.Xml
 		/// <summary>
 		/// Writes the given XML document to the given path and file name.
 		/// </summary>
+		/// <remarks>
+		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
+		/// </remarks>
 		/// <param name="document">The document.</param>
 		/// <param name="path">The path.</param>
 		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
@@ -157,8 +169,23 @@ namespace MKY.Xml
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void ToFile(XmlDocument document, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
 		{
+			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8, path, fileNameWithoutExtension, fileExtension);
+		}
+
+		/// <summary>
+		/// Writes the given XML document to the given path and file name.
+		/// </summary>
+		/// <param name="document">The document.</param>
+		/// <param name="encoding">The character encoding to use.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
+		public static void ToFile(XmlDocument document, Encoding encoding, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
+		{
 			string filePath = path + fileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
-			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			using (var sw = new StreamWriter(filePath, false, encoding))
 			{
 				var xws = new XmlWriterSettings();
 				xws.Indent = true;

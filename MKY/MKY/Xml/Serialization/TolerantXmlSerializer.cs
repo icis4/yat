@@ -380,7 +380,7 @@ namespace MKY.Xml.Serialization
 				else
 					filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name + "-" + i, ".xsd";
 
-				using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+				using (var sw = new StreamWriter(filePath, false, EncodingEx.EnvironmentRecommendedUTF8))
 				{
 					schema.Write(sw);
 				}
@@ -401,7 +401,7 @@ namespace MKY.Xml.Serialization
 			=> Attention! No way found to preserve whitespace in XML content when writing a type-unspecified XML document! See XmlDocumentEx.ToFile() for details!
 
 			string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name, ".xml");
-			using (var sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			using (var sw = new StreamWriter(filePath, false, EncodingEx.EnvironmentRecommendedUTF8))
 			{
 				document.Save(sw);
 			}

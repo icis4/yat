@@ -22,12 +22,21 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
+
+using MKY.Text;
+
+#endregion
 
 namespace MKY.Xml.Schema
 {
@@ -89,12 +98,32 @@ namespace MKY.Xml.Schema
 		/// <remarks>
 		/// If the document contains multiple schemas, multiple files will be saved.
 		/// </remarks>
+		/// <remarks>
+		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
+		/// </remarks>
 		/// <param name="type">The type.</param>
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void ToFile(Type type, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		{
+			ToFile(type, EncodingEx.EnvironmentRecommendedUTF8, path, intendedFileNameWithoutExtension, fileExtension);
+		}
+
+		/// <summary>
+		/// Writes the XML schema of the default document of the given XML document to the given path and file name.
+		/// </summary>
+		/// <remarks>
+		/// If the document contains multiple schemas, multiple files will be saved.
+		/// </remarks>
+		/// <param name="type">The type.</param>
+		/// <param name="encoding">The character encoding to use.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public static void ToFile(Type type, Encoding encoding, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(type);
 			ToFile(document, path, intendedFileNameWithoutExtension, fileExtension);
@@ -106,6 +135,9 @@ namespace MKY.Xml.Schema
 		/// <remarks>
 		/// If the document contains multiple schemas, multiple files will be saved.
 		/// </remarks>
+		/// <remarks>
+		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
+		/// </remarks>
 		/// <param name="document">The document.</param>
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
@@ -114,11 +146,29 @@ namespace MKY.Xml.Schema
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void ToFile(XmlDocument document, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
+			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8, path, intendedFileNameWithoutExtension, fileExtension);
+		}
+
+		/// <summary>
+		/// Writes the XML schema of the given XML document to the given path and file name.
+		/// </summary>
+		/// <remarks>
+		/// If the document contains multiple schemas, multiple files will be saved.
+		/// </remarks>
+		/// <param name="document">The document.</param>
+		/// <param name="encoding">The character encoding to use.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
+		public static void ToFile(XmlDocument document, Encoding encoding, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		{
 			int count = document.Schemas.Schemas().Count;
 			int index = 0;
 			foreach (XmlSchema schema in document.Schemas.Schemas())
 			{
-				ToFile(schema, path, intendedFileNameWithoutExtension, count, index, fileExtension);
+				ToFile(schema, encoding, path, intendedFileNameWithoutExtension, count, index, fileExtension);
 
 				index++;
 			}
@@ -130,6 +180,9 @@ namespace MKY.Xml.Schema
 		/// <remarks>
 		/// If the number of schemas is greater than 1, the effective file name will be postfixed with <paramref name="index"/>.
 		/// </remarks>
+		/// <remarks>
+		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
+		/// </remarks>
 		/// <param name="schema">The schema.</param>
 		/// <param name="path">The path.</param>
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
@@ -140,13 +193,33 @@ namespace MKY.Xml.Schema
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void ToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
 		{
+			ToFile(schema, EncodingEx.EnvironmentRecommendedUTF8, path, intendedFileNameWithoutExtension, count, index, fileExtension);
+		}
+
+		/// <summary>
+		/// Writes the given XML schema to the given path and file name.
+		/// </summary>
+		/// <remarks>
+		/// If the number of schemas is greater than 1, the effective file name will be postfixed with <paramref name="index"/>.
+		/// </remarks>
+		/// <param name="schema">The schema.</param>
+		/// <param name="encoding">The character encoding to use.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
+		/// <param name="count">The number of schemas to save in total.</param>
+		/// <param name="index">The index of the current schema to save.</param>
+		/// <param name="fileExtension">Extension of the file.</param>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'postfix' is a correct English term and 'postfixed' seems the obvious participle.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public static void ToFile(XmlSchema schema, Encoding encoding, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
+		{
 			string effectiveFilePath;
 			if (count <= 1)
 				effectiveFilePath = path + Path.DirectorySeparatorChar + intendedFileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
 			else
 				effectiveFilePath = path + Path.DirectorySeparatorChar + intendedFileNameWithoutExtension + "-" + index + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
 
-			using (var sw = new StreamWriter(effectiveFilePath, false, Encoding.UTF8))
+			using (var sw = new StreamWriter(effectiveFilePath, false, encoding))
 			{
 				var xws = new XmlWriterSettings();
 				xws.Indent = true;
