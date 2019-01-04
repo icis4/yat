@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 using YAT.Format.Settings;
@@ -62,6 +63,8 @@ namespace YAT.Log
 		private TextLog neatTxLog;
 		private TextLog neatBidirLog;
 		private TextLog neatRxLog;
+
+		private bool isOn; // = false;
 
 		#endregion
 
@@ -183,9 +186,9 @@ namespace YAT.Log
 
 					Encoding logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
-					this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
-					this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
-					this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatTxLog   .ApplySettings(this.settings.NeatLogTx,    this.isOn, new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatBidirLog.ApplySettings(this.settings.NeatLogBidir, this.isOn, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatRxLog   .ApplySettings(this.settings.NeatLogRx,    this.isOn, new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
 				}
 			}
 		}
@@ -202,9 +205,9 @@ namespace YAT.Log
 
 					Encoding logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
-					this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
-					this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
-					this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatTxLog   .ApplySettings(this.settings.NeatLogTx,    this.isOn, new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatBidirLog.ApplySettings(this.settings.NeatLogBidir, this.isOn, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatRxLog   .ApplySettings(this.settings.NeatLogRx,    this.isOn, new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
 				}
 			}
 		}
@@ -221,15 +224,15 @@ namespace YAT.Log
 
 					var logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
-					this.portLog.SetSettings     (this.settings.PortLog,      new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.portLog     .ApplySettings(this.settings.PortLog,      this.isOn, new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
 
-					this.rawTxLog.SetSettings    (this.settings.RawLogTx,     new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode);
-					this.rawBidirLog.SetSettings (this.settings.RawLogBidir,  new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode);
-					this.rawRxLog.SetSettings    (this.settings.RawLogRx,     new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode);
+					this.rawTxLog    .ApplySettings(this.settings.RawLogTx,     this.isOn, new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode);
+					this.rawBidirLog .ApplySettings(this.settings.RawLogBidir,  this.isOn, new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode);
+					this.rawRxLog    .ApplySettings(this.settings.RawLogRx,     this.isOn, new Func<string>(this.settings.MakeRawRxFilePath),     this.settings.WriteMode);
 
-					this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
-					this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
-					this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatTxLog   .ApplySettings(this.settings.NeatLogTx,    this.isOn, new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatBidirLog.ApplySettings(this.settings.NeatLogBidir, this.isOn, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.neatRxLog   .ApplySettings(this.settings.NeatLogRx,    this.isOn, new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat);
 				}
 			}
 		}
@@ -240,26 +243,89 @@ namespace YAT.Log
 			get
 			{
 				int count = 0;
+
 				foreach (var l in this.logs)
 				{
 					if (l.IsEnabled)
 						count++;
 				}
+
+				if (count == 0)
+					Debug.Assert(!this.isOn, "Provider state must be 'off' if none is 'on'!");
+				else
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+
 				return (count);
 			}
 		}
 
 		/// <summary></summary>
-		public virtual bool IsOn
+		public virtual bool AnyIsOn
 		{
 			get
 			{
-				bool isOn = false;
 				foreach (var l in this.logs)
 				{
-					isOn |= l.IsOn;
+					if (l.IsOn)
+					{
+						Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+						return (true);
+					}
 				}
-				return (isOn);
+
+				Debug.Assert(!this.isOn, "Provider state must be 'off' if none is 'on'!");
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool AnyPortIsOn
+		{
+			get
+			{
+				if (this.portLog.IsOn)
+				{
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any port is 'on'!");
+					return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool AnyRawIsOn
+		{
+			get
+			{
+				foreach (var l in this.rawLogs)
+				{
+					if (l.IsOn)
+					{
+						Debug.Assert(this.isOn, "Provider state must be 'on' if any raw is 'on'!");
+						return (true);
+					}
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool AnyNeatIsOn
+		{
+			get
+			{
+				foreach (var l in this.neatLogs)
+				{
+					if (l.IsOn)
+					{
+						Debug.Assert(this.isOn, "Provider state must be 'on' if any neat is 'on'!");
+						return (true);
+					}
+				}
+
+				return (false);
 			}
 		}
 
@@ -271,8 +337,12 @@ namespace YAT.Log
 				foreach (var l in this.logs)
 				{
 					if (!l.IsOn)
+					{
 						return (false);
+					}
 				}
+
+				Debug.Assert(this.isOn, "Provider state must be 'on' if all logs are 'on'!");
 				return (true);
 			}
 		}
@@ -283,10 +353,12 @@ namespace YAT.Log
 			get
 			{
 				bool fileExists = false;
+
 				foreach (var l in this.logs)
 				{
 					fileExists |= l.FileExists;
 				}
+
 				return (fileExists);
 			}
 		}
@@ -303,6 +375,8 @@ namespace YAT.Log
 		{
 			foreach (var l in this.logs)
 				l.Open();
+
+			this.isOn = true;
 		}
 
 		/// <summary></summary>
@@ -324,22 +398,30 @@ namespace YAT.Log
 		{
 			foreach (var l in this.logs)
 				l.Close();
+
+			this.isOn = false;
 		}
 
 		/// <summary></summary>
 		public virtual void Write(Domain.RawChunk chunk, LogChannel writeChannel)
 		{
-			var log = GetLog(writeChannel) as RawLog;
-			if (log != null)
-				log.Write(chunk);
+			if (this.isOn)
+			{
+				var log = GetLog(writeChannel) as RawLog;
+				if (log != null)
+					log.Write(chunk);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual void WriteLine(Domain.DisplayLine line, LogChannel writeChannel)
 		{
-			var log = GetLog(writeChannel) as TextLog;
-			if (log != null)
-				log.WriteLine(line);
+			if (this.isOn)
+			{
+				var log = GetLog(writeChannel) as TextLog;
+				if (log != null)
+					log.WriteLine(line);
+			}
 		}
 
 		/// <summary></summary>
