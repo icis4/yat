@@ -89,18 +89,16 @@ namespace MKY.IO.Usb
 	/// <summary></summary>
 	public class ErrorEventArgs : EventArgs
 	{
-		private string message;
+		/// <summary></summary>
+		public string Message { get; }
+
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
 		public ErrorEventArgs(string message)
 		{
-			this.message = message;
-		}
-
-		/// <summary></summary>
-		public string Message
-		{
-			get { return (this.message); }
+			Message = message;
 		}
 	}
 }

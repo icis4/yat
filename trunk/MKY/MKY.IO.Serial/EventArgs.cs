@@ -112,59 +112,57 @@ namespace MKY.IO.Serial
 	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
-		private ErrorSeverity severity;
-		private Direction direction;
-		private string message;
+		/// <summary></summary>
+		public ErrorSeverity Severity { get; }
+
+		/// <summary></summary>
+		public Direction Direction { get; }
+
+		/// <summary></summary>
+		public string Message { get; }
+
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
 		public IOErrorEventArgs(ErrorSeverity severity, string message)
-			: this(severity, Direction.None, message)
+			: this(severity, Direction.None, message, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOErrorEventArgs(ErrorSeverity severity, string message, DateTime timeStamp)
+			: this(severity, Direction.None, message, timeStamp)
 		{
 		}
 
 		/// <summary></summary>
 		public IOErrorEventArgs(ErrorSeverity severity, Direction direction, string message)
+			: this(severity, Direction.None, message, DateTime.Now)
 		{
-			this.severity = severity;
-			this.direction = direction;
-			this.message = message;
 		}
 
 		/// <summary></summary>
-		public ErrorSeverity Severity
+		public IOErrorEventArgs(ErrorSeverity severity, Direction direction, string message, DateTime timeStamp)
 		{
-			get { return (this.severity); }
-		}
-
-		/// <summary></summary>
-		public Direction Direction
-		{
-			get { return (this.direction); }
-		}
-
-		/// <summary></summary>
-		public string Message
-		{
-			get { return (this.message); }
+			Severity  = severity;
+			Direction = direction;
+			Message   = message;
+			TimeStamp = timeStamp;
 		}
 	}
 
 	/// <summary></summary>
 	public class SerialPortErrorEventArgs : IOErrorEventArgs
 	{
-		private System.IO.Ports.SerialError serialPortError;
+		/// <summary></summary>
+		public System.IO.Ports.SerialError SerialPortError { get; }
 
 		/// <summary></summary>
 		public SerialPortErrorEventArgs(ErrorSeverity severity, Direction direction, string message, System.IO.Ports.SerialError serialPortError)
 			: base(severity, direction, message)
 		{
-			this.serialPortError = serialPortError;
-		}
-
-		/// <summary></summary>
-		public System.IO.Ports.SerialError SerialPortError
-		{
-			get { return (this.serialPortError); }
+			SerialPortError = serialPortError;
 		}
 	}
 }

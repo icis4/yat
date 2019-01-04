@@ -1293,7 +1293,7 @@ namespace MKY.IO.Serial.Usb
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)
 		{
-			OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, e.Message));
+			OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, e.Message, e.TimeStamp));
 		}
 
 		#endregion
