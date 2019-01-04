@@ -156,14 +156,14 @@ namespace MKY.IO.Ports
 		void ToggleOutputBreak();
 
 		/// <summary>
-		/// Returns the number of output breaks.
-		/// </summary>
-		int OutputBreakCount { get; }
-
-		/// <summary>
 		/// Returns the number of input breaks.
 		/// </summary>
 		int InputBreakCount { get; }
+
+		/// <summary>
+		/// Returns the number of output breaks.
+		/// </summary>
+		int OutputBreakCount { get; }
 
 		/// <summary>
 		/// Resets the break counts.
