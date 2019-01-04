@@ -275,23 +275,6 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual bool TryGetTimeStamp(out DateTime result)
-		{
-			foreach (var de in this)
-			{
-				var ts = de as DisplayElement.TimeStampInfo;
-				if (ts != null)
-				{
-					result = ts.TimeStamp;
-					return (true);
-				}
-			}
-
-			result = DateTime.MinValue;
-			return (false);
-		}
-
-		/// <summary></summary>
 		public virtual byte[] ElementsToOrigin()
 		{
 			var l = new List<byte>(this.ByteCount); // Preset the initial capacity to improve memory management.
@@ -429,6 +412,15 @@ namespace YAT.Domain
 	[Serializable]
 	public class DisplayLine : DisplayLinePart
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private DateTime timeStamp; // = 0;
+
+		#endregion
+
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
@@ -455,6 +447,29 @@ namespace YAT.Domain
 		public DisplayLine(DisplayElement displayElement)
 			: base(displayElement)
 		{
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// The time stamp at the beginning of the line.
+		/// </summary>
+		/// <remarks>
+		/// The value should correspond to <see cref="DisplayElement.TimeStampInfo.TimeStamp"/>. It
+		/// is the responsibility of the element processing terminal to set the same value to both.
+		/// Rationale:
+		/// <see cref="DisplayElement.TimeStampInfo.TimeStamp"/> is optional, whereas this property
+		/// always has a value.
+		/// </remarks>
+		public virtual DateTime TimeStamp
+		{
+			get { return (this.timeStamp); }
+			set { this.timeStamp = value;  }
 		}
 
 		#endregion
