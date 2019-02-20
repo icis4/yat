@@ -55,7 +55,7 @@ SET _len=0
 :StrLenLoop
 IF DEFINED # (
     SET #=%#:~1%
-    SET /A len += 1
+    SET /A _len += 1
     IF %_verbose%=='TRUE' (
         ECHO Retrieving script path length... Currently at %_len%...
     )
@@ -87,17 +87,20 @@ IF %_verbose%=='TRUE' ECHO Script args are %_args%
 :: forwarded to the PowerShell -Command argument string:
 SET _args=%_args:"="""%
 :: SET must not be placed into an IF %_hasArgs%=='TRUE', for whatever reason!
-:: Otherwise, an e.g. "-LintLevel is syntactically incorrect" error will occur!
 IF %_verbose%=='TRUE' ECHO PowerShell args are %_args%
+
+:: Also remove potential quotes in the script path (applies if path contains spaces) to ensure
+:: that the PowerShell -Command string can properly be composed further below:
+SET _script=%_script:"=%
 
 :: Compose options and command to call PowerShell:
 SET _opts=-ExecutionPolicy Bypass -NoLogo -NoProfile
 IF %_hasArgs%=='FALSE' (
-    SET _cmd=PowerShell.exe %_opts% -Command "& {%_script%}"
+    SET _cmd=PowerShell.exe %_opts% -Command "& {&'%_script%'}"
 ) else (
-    SET _cmd=PowerShell.exe %_opts% -Command "& {%_script% %_args%}"
+    SET _cmd=PowerShell.exe %_opts% -Command "& {&'%_script%' %_args%}"
 )
-IF %_verbose%=='TRUE' ECHO Invoking PowerShell...
+IF %_verbose%=='TRUE' ECHO Invoking PowerShell with...
 IF %_verbose%=='TRUE' ECHO %_cmd%
 
 :: Invoke PowerShell executing the script with the given arguments:
