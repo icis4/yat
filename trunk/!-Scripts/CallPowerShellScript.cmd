@@ -42,6 +42,8 @@
 :: helper batch file also solves this limitation.
 ::==================================================================================================
 
+SETLOCAL
+
 :: Change to 'TRUE' for verbose execution (e.g. in case of debugging):
 SET _verbose='FALSE'
 
@@ -107,6 +109,8 @@ IF %_verbose%=='TRUE' ECHO %_cmd%
 %_cmd%
 IF %_verbose%=='TRUE' ECHO.
 IF %_verbose%=='TRUE' ECHO ...done
+
+ENDLOCAL
 
 ::==================================================================================================
 :: End of
