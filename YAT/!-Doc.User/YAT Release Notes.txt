@@ -10,7 +10,7 @@
                      Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
  --------------------------------------------------------------------------------------------------
                     Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-                                Copyright © 2003-2018 Matthias Kläy.
+                                Copyright © 2003-2019 Matthias Kläy.
                                         All rights reserved.
  --------------------------------------------------------------------------------------------------
                                 YAT is licensed under the GNU LGPL.
@@ -129,7 +129,8 @@ Fixed bugs:
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
-  #422, #423, #432, #434, #435, #441, #443, #444) further refining fix to former bugs #408 and #409.
+  #422, #423, #432, #434, #435, #441, #443, #444, #450) which further refines the fix to former bugs
+  #408 and #409.
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
@@ -1503,7 +1504,7 @@ these features aim for providing a versatile automatic testing tool for serial c
 ====================================================================================================
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-Copyright © 2003-2018 Matthias Kläy.
+Copyright © 2003-2019 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the GNU LGPL.
