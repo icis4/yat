@@ -4,7 +4,7 @@
 2.	Search "\Trunk" for the following expressions (match case and whole word) throughout...
 	*.vdproj
 	...and update year:
-	 > "Copyright © 2003-2018 Matthias Kläy."  =>   4 replacements
+	 > "Copyright © 2003-2019 Matthias Kläy."  => 4 replacements
 
 (The above step is required because the .vdproj files cannot be edited while the solution is open.)
 
@@ -17,20 +17,20 @@
 5.	Search solution for the following expressions (match case and whole word) throughout...
 	*.*
 	...and update year:
-	 > "Copyright © 2003-2018 Matthias Kläy."  => 427 replacements
-	 > "Copyright © 2007-2018 Matthias Kläy."  => 147 replacements
+	 > "Copyright © 2003-2019 Matthias Kläy."  => 434 replacements
+	 > "Copyright © 2007-2019 Matthias Kläy."  => 147 replacements
+	 > "Copyright © 2010-2019 Matthias Kläy."  =>  59 replacements
 	 > "Copyright © 2008-2018 Mettler-Toledo." => 264 replacements (=> scripting, testing)
-	 > "Copyright © 2010-2018 Matthias Kläy."  =>  60 replacements
 	 > "Copyright © 2014-2018 Mettler-Toledo." =>   6 replacements (=> scripting templates)
 	 > "Copyright © 2017-2018 Mettler-Toledo." => 183 replacements (=> scripting examples, NUnit testing)
-	 > "2018, Matthias Kläy"                   =>   2 replacements
+	 > "2019, Matthias Kläy"                   =>   2 replacements
 
 6.	Then, search "\Trunk" (neither match case and nor whole word) throughout...
 	*.*
 	...and verify that the following expressions are no more found...
 	...except within SVN, 3rd party, archives and other explainable locations:
-	 > "2017 " (<= incl. space!), where year = 2017 is the 'old' year
-	 > "201[^8] " (<= incl. space!) using RegEx, where year = 2018 is already the 'new' year
+	 > "2018 " (<= incl. space!), where year = 2018 is the 'old' year
+	 > "-201[^9] " (<= incl. space!) using RegEx, where year = 2019 is already the 'new' year
 
 7.	Finally, commit all changes, verifying that SVN properties of all files are up-to-date.
 
