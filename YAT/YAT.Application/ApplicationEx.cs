@@ -15,7 +15,7 @@
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2018 Matthias Kläy.
+// Copyright © 2003-2019 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -99,7 +99,7 @@ namespace YAT
 			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
 			"",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
-			"Copyright © 2003-2018 Matthias Kläy.",
+			"Copyright © 2003-2019 Matthias Kläy.",
 			"All rights reserved.",
 			"",
 			"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.

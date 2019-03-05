@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.De
 		!-Doc.Developer\HowToCreateSetupProjects.txt = !-Doc.Developer\HowToCreateSetupProjects.txt
 		!-Doc.Developer\HowToExportArgoUML.txt = !-Doc.Developer\HowToExportArgoUML.txt
 		!-Doc.Developer\HowToRunAndDebugNUnitTests.txt = !-Doc.Developer\HowToRunAndDebugNUnitTests.txt
-		!-Doc.Developer\HowToUpdateCopyrightYear.txt = !-Doc.Developer\HowToUpdateCopyrightYear.txt
+		!-Doc.Developer\HowToUpdateYear.txt = !-Doc.Developer\HowToUpdateYear.txt
 		!-Doc.Developer\ProjectSetup.txt = !-Doc.Developer\ProjectSetup.txt
 		!-Doc.Developer\Template.cmd = !-Doc.Developer\Template.cmd
 		!-Doc.Developer\Template.cs = !-Doc.Developer\Template.cs
@@ -74,6 +74,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.User", "!-Doc.User", "{ABECE297-BF82-4016-93F9-DF7204BA05F5}"
 	ProjectSection(SolutionItems) = preProject
 		YAT\!-Doc.User\YAT Release Notes.txt = YAT\!-Doc.User\YAT Release Notes.txt
+		YAT\!-Doc.User\YAT Release Notes_limited to ~900 lines for SourceForge online 'ReadMe'.txt = YAT\!-Doc.User\YAT Release Notes_limited to ~900 lines for SourceForge online 'ReadMe'.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx", "ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj", "{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}"
@@ -197,6 +198,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Guidelines", "Guidelines", 
 		!-Doc.Developer\Guidelines\General.txt = !-Doc.Developer\Guidelines\General.txt
 		!-Doc.Developer\Guidelines\Test.txt = !-Doc.Developer\Guidelines\Test.txt
 		!-Doc.Developer\Guidelines\Windows.Forms.txt = !-Doc.Developer\Guidelines\Windows.Forms.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Graphics", "!-Graphics", "{1D52882C-E6C1-4305-842B-1C750EBF6D6D}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Graphics\!-ReadMe-HowToCreateIconResource.txt = YAT\!-Graphics\!-ReadMe-HowToCreateIconResource.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FatCow_Free", "FatCow_Free", "{E588846F-76EC-4EEF-A79D-B6CD628F5ACE}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Graphics\FatCow_Free\!-UpdateFiles.cmd = YAT\!-Graphics\FatCow_Free\!-UpdateFiles.cmd
 	EndProjectSection
 EndProject
 Global
@@ -1571,5 +1582,7 @@ Global
 		{D33931A1-0F8B-4524-A5D1-3891B88C21E5} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{591BCEB5-6B6F-4368-BE6C-F89F668F7DCB} = {5DE02EAE-E609-4D95-9498-DC45AB2271FE}
 		{ACF6882A-643D-4E4F-9D46-44C1A9552AEC} = {E3E1764C-1358-495F-839F-721D4D307DF8}
+		{1D52882C-E6C1-4305-842B-1C750EBF6D6D} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
+		{E588846F-76EC-4EEF-A79D-B6CD628F5ACE} = {1D52882C-E6C1-4305-842B-1C750EBF6D6D}
 	EndGlobalSection
 EndGlobal

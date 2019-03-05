@@ -10,7 +10,7 @@
                      Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
  --------------------------------------------------------------------------------------------------
                     Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-                                Copyright © 2003-2018 Matthias Kläy.
+                                Copyright © 2003-2019 Matthias Kläy.
                                         All rights reserved.
  --------------------------------------------------------------------------------------------------
                                 YAT is licensed under the GNU LGPL.
@@ -809,7 +809,7 @@ YAT 4.0 is already ongoing.
 around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4.0 with Scripting :: Expected in late 2018 or 2019
+YAT 4.0 with Scripting :: Expected in late 2019 or 2020
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
@@ -824,7 +824,7 @@ these features aim for providing a versatile automatic testing tool for serial c
 ====================================================================================================
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-Copyright © 2003-2018 Matthias Kläy.
+Copyright © 2003-2019 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the GNU LGPL.
