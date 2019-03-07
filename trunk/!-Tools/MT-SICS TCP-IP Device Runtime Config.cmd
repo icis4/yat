@@ -26,29 +26,31 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-SET MT_SICS_CMD="Start MT-SICS TCP-IP Device.cmd"
+SETLOCAL
+
+SET _cmd="Start MT-SICS TCP-IP Device.cmd"
 
 :: Verify that command is available via the system's PATH:
-WHERE %MT_SICS_CMD% >NUL 2>&1
+WHERE %_cmd% >NUL 2>&1
 IF NOT %ERRORLEVEL% == 0 GOTO :NoCommand
 
 :: Get executable directory (required below):
-FOR /F "tokens=* USEBACKQ" %%A IN (`WHERE %MT_SICS_CMD%`) DO (
-    SET PATH_OF_CMD=%%A
+FOR /F "tokens=* USEBACKQ" %%A IN (`WHERE %_cmd%`) DO (
+    SET _cmdPath=%%A
 )
-CALL :GetDirOfFile "%PATH_OF_CMD%" DIR_OF_CMD
+CALL :GetDirOfFile "%_cmdPath%" _cmdDir
 
 :: Change to executable directory (limitation of executable):
-CD /D %DIR_OF_CMD%
+CD /D %_cmdDir%
 
 :: Invoke command:
-CALL %MT_SICS_CMD%
+CALL %_cmd%
 
 GOTO :End
 
 :NoCommand
 ECHO.
-ECHO The required %MT_SICS_CMD% is not available!
+ECHO The required %_cmd% is not available!
 ECHO Make sure that it has been added to the system's PATH!
 ECHO.
 PAUSE
@@ -61,6 +63,8 @@ GOTO :End
 )
 
 :End
+
+ENDLOCAL
 
 ::==================================================================================================
 :: End of

@@ -26,6 +26,8 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
+SETLOCAL
+
 :: ------------------------------------------------------------------------------------------------
 :: This batch is a workaround to start .vspe settings 'As Admin'. Setup and procedure:
 :: 1) A shortcut with 'As Admin' enabled refers to this batch.
@@ -41,11 +43,13 @@
 cd /D %~dp0
 
 :: 1) Retrieve the name of this batch (without extension):
-SET NAME=%~n0
+SET _name=%~n0
 
 :: 2) Invoke the according VSPE settings:
 ::    (Unfortunately, VSPE doesn't properly start minimized with the /MIN option.)
-START "VSPE" /B "%NAME%.vspe"
+START "VSPE" /B "%_name%.vspe"
+
+ENDLOCAL
 
 ::==================================================================================================
 :: End of
