@@ -26,24 +26,26 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
+SETLOCAL
+
 PUSHD
 ::--------------------------------------------------------------------------------------------------
-SET TARGET_FORM_TOOL=..\..\YAT.View.Forms\Resources\Tool
-SET TARGET_CTRL_TOOL=..\..\YAT.View.Controls\Resources\Tool
+SET _targetFormsTool=..\..\YAT.View.Forms\Resources\Tool
+SET _targetControlsTool=..\..\YAT.View.Controls\Resources\Tool
 
-DEL %TARGET_FORM_TOOL%\*.* /F /Q
-DEL %TARGET_CTRL_TOOL%\*.* /F /Q
+DEL %_targetFormsTool%\*.* /F /Q
+DEL %_targetControlsTool%\*.* /F /Q
 ::--------------------------------------------------------------------------------------------------
 CD 16x16
 
 ECHO Tool images (16x16) . . .
 
-SET TARGET=..\%TARGET_FORM_TOOL%
-FORFILES /C "CMD /C COPY @FILE %TARGET%\Image_Tool_@FNAME_16x16.@EXT"
+SET _target=..\%_targetFormsTool%
+FORFILES /C "CMD /C COPY @FILE %_target%\Image_Tool_@FNAME_16x16.@EXT"
 
-SET TARGET=..\%TARGET_CTRL_TOOL%
-COPY lightning.png           %TARGET%\Image_Tool_lightning_16x16.png
-COPY arrow_refresh_small.png %TARGET%\Image_Tool_arrow_refresh_small_16x16.png
+SET _target=..\%_targetControlsTool%
+COPY lightning.png           %_target%\Image_Tool_lightning_16x16.png
+COPY arrow_refresh_small.png %_target%\Image_Tool_arrow_refresh_small_16x16.png
 
 CD..
 ::--------------------------------------------------------------------------------------------------
@@ -51,13 +53,13 @@ CD 32x32
 
 ECHO Tool images (32x32) . . .
 
-SET TARGET=..\%TARGET_FORM_TOOL%
-COPY application_add.png    %TARGET%\Image_Tool_application_add_32x32.png
-COPY control_pause_blue.png %TARGET%\Image_Tool_control_pause_blue_32x32.png
-COPY control_play_blue.png  %TARGET%\Image_Tool_control_play_blue_32x32.png
-COPY control_stop_blue.png  %TARGET%\Image_Tool_control_stop_blue_32x32.png
-COPY help.png               %TARGET%\Image_Tool_help_32x32.png
-COPY information.png        %TARGET%\Image_Tool_information_32x32.png
+SET _target=..\%_targetFormsTool%
+COPY application_add.png    %_target%\Image_Tool_application_add_32x32.png
+COPY control_pause_blue.png %_target%\Image_Tool_control_pause_blue_32x32.png
+COPY control_play_blue.png  %_target%\Image_Tool_control_play_blue_32x32.png
+COPY control_stop_blue.png  %_target%\Image_Tool_control_stop_blue_32x32.png
+COPY help.png               %_target%\Image_Tool_help_32x32.png
+COPY information.png        %_target%\Image_Tool_information_32x32.png
 
 CD..
 ::--------------------------------------------------------------------------------------------------
@@ -67,6 +69,8 @@ ECHO.
 ECHO . . . done. Check output above for success/failure.
 ECHO.
 PAUSE
+
+ENDLOCAL
 
 ::==================================================================================================
 :: End of
