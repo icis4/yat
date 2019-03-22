@@ -355,7 +355,7 @@ namespace YAT.View.Controls
 			////label_FillerBytes.Visible = this.fillLastReport;
 			////label_FillerBytesRemarks.Visible = this.fillLastReport;
 
-				// Windows HID.dll requires that outgoing reports are always filled!
+				// Windows HID.dll requires that output reports are always filled!
 				label_FillerBytes.Visible = true;
 				label_FillerBytesRemarks.Visible = true;
 

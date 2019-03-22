@@ -53,7 +53,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// It is a requirement for most systems to fill each report to the advertised byte length.
-		/// Also, Windows HID.dll requires that outgoing reports are always filled!
+		/// Also, Windows HID.dll requires that output reports are always filled!
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
