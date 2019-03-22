@@ -372,7 +372,9 @@ namespace YAT.Log.Utilities
 		/// <summary></summary>
 		public void WriteLine(RawChunk chunk)
 		{
-			WriteLine(new XmlTransferRawLine(chunk.TimeStamp, chunk.PortStamp, (Direction)chunk.Direction, chunk.Content));
+			byte[] copyOfContent = new byte[chunk.Content.Count]; // Copy instead of forwarding 'ReadOnlyCollection' because
+			chunk.Content.CopyTo(copyOfContent, 0);               // 'XmlTransferRawLine' requires an array for serialization.
+			WriteLine(new XmlTransferRawLine(chunk.TimeStamp, chunk.PortStamp, (Direction)chunk.Direction, copyOfContent));
 		}
 
 		private void WriteLine(XmlTransferRawLine transferLine)

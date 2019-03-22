@@ -225,7 +225,9 @@ namespace YAT.Log
 						case FileType.Xml:
 						{
 							if (this.xmlWriter != null)
+							{
 								this.xmlWriter.WriteLine(chunk);
+							}
 
 							break;
 						}
@@ -234,7 +236,11 @@ namespace YAT.Log
 						default:
 						{
 							if (this.binaryWriter != null)
-								this.binaryWriter.Write(chunk.Content);
+							{
+								byte[] copyOfContent = new byte[chunk.Content.Count];
+								chunk.Content.CopyTo(copyOfContent, 0);
+								this.binaryWriter.Write(copyOfContent);
+							}
 
 							break;
 						}

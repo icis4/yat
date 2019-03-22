@@ -3816,9 +3816,9 @@ namespace YAT.Domain
 
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value);
+				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
 				OnRawChunkSent(args);
-				ProcessAndSignalRawChunk(e.Value, args.Highlight);
+				ProcessAndSignalRawChunk(e.Value, args.Highlight); // 'RawChunk' object is immutable, subsequent use is OK.
 			}
 		}
 
@@ -3830,9 +3830,9 @@ namespace YAT.Domain
 
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value);
+				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
 				OnRawChunkReceived(args);
-				ProcessAndSignalRawChunk(e.Value, args.Highlight);
+				ProcessAndSignalRawChunk(e.Value, args.Highlight); // 'RawChunk' object is immutable, subsequent use is OK.
 			}
 		}
 

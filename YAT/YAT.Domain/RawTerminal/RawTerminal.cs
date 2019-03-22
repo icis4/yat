@@ -731,10 +731,10 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
-							this.rxRepository   .Enqueue(re.Clone()); // Clone element as it is needed again below.
-							this.bidirRepository.Enqueue(re.Clone()); // Clone element as it is needed again below.
+							this.rxRepository   .Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
 						}
-						OnRawChunkReceived(new EventArgs<RawChunk>(re));
+						OnRawChunkReceived(new EventArgs<RawChunk>(re)); // 'RawChunk' object is immutable, subsequent use is OK.
 					}
 					finally
 					{
@@ -766,10 +766,10 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
-							this.txRepository   .Enqueue(re.Clone()); // Clone element as it is needed again below.
-							this.bidirRepository.Enqueue(re.Clone()); // Clone element as it is needed again below.
+							this.txRepository   .Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
 						}
-						OnRawChunkSent(new EventArgs<RawChunk>(re));
+						OnRawChunkSent(new EventArgs<RawChunk>(re)); // 'RawChunk' object is immutable, subsequent use is OK.
 					}
 					finally
 					{
