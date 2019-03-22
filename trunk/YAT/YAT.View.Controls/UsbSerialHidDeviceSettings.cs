@@ -359,10 +359,10 @@ namespace YAT.View.Controls
 				return;
 
 			string message =
-				"The Windows HID infrastructure requires that outgoing reports are always filled. " +
+				"The Windows HID infrastructure requires that output reports are always filled. " +
 				"As a consequence, this option must be kept enabled.";
 
-			// Windows HID.dll requires that outgoing reports are always filled!
+			// Windows HID.dll requires that output reports are always filled!
 			// Still, enable the check box in order to make tool tip visible to the user.
 			MessageBoxEx.Show
 			(
@@ -496,7 +496,7 @@ namespace YAT.View.Controls
 				checkBox_PrependPayloadByteLength.Checked = (Enabled ? this.reportFormat.PrependPayloadByteLength : false);
 				checkBox_AppendTerminatingZero.Checked    = (Enabled ? this.reportFormat.AppendTerminatingZero : false);
 			////checkBox_FillLastReport.Checked           = (Enabled ? this.reportFormat.FillLastReport : false);
-				checkBox_FillLastReport.Checked           = true; // Windows HID.dll requires that outgoing reports are always filled!
+				checkBox_FillLastReport.Checked           = true; // Windows HID.dll requires that output reports are always filled!
 
 				reportFormatPreview.Format  = this.reportFormat;
 

@@ -183,7 +183,7 @@ namespace MKY.IO.Usb
 				if (format.AppendTerminatingZero)
 					effectiveLength += 1;
 
-			////// Code if Windows HID.dll didn't require that outgoing reports are always filled:
+			////// Code if Windows HID.dll didn't require that output reports are always filled:
 			////byte[] report;
 			////// If requested, create a full report, many systems don't work otherwise:
 			////if (format.FillLastReport)
@@ -191,7 +191,7 @@ namespace MKY.IO.Usb
 			////else
 			////	report = new byte[effectiveLength];  // C# value-type arrays are initialized to 0.
 
-				// Windows HID.dll requires that outgoing reports are always filled!
+				// Windows HID.dll requires that output reports are always filled!
 				byte[] report = new byte[MaxByteLength]; // C# value-type arrays are initialized to 0.
 
 				// If requested, copy the ID into the first byte of the report:

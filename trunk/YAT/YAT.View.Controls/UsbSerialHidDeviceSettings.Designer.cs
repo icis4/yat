@@ -176,8 +176,8 @@
 			this.textBox_RxId.TabIndex = 4;
 			this.textBox_RxId.Text = "255";
 			this.textBox_RxId.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.toolTip.SetToolTip(this.textBox_RxId, "The ID accepted for incoming (Rx) reports. A numeric value within 0..255 or * (as" +
-        "terisk) to accept any ID.");
+			this.toolTip.SetToolTip(this.textBox_RxId, "The ID accepted for input (Rx) reports. A numeric value within 0..255 or * (aster" +
+        "isk) to accept any ID.");
 			this.textBox_RxId.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_RxId_Validating);
 			// 
 			// comboBox_Preset
