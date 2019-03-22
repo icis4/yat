@@ -2577,11 +2577,11 @@ namespace YAT.Model
 			}
 
 			// Count:
-			this.txByteCount += e.Value.Content.Length;
+			this.txByteCount += e.Value.Content.Count;
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
-			if (this.txByteRate.Update(e.Value.Content.Length))
+			if (this.txByteRate.Update(e.Value.Content.Count))
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:
@@ -2625,11 +2625,11 @@ namespace YAT.Model
 			}
 
 			// Rate:
-			this.rxByteCount += e.Value.Content.Length;
+			this.rxByteCount += e.Value.Content.Count;
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
-			if (this.rxByteRate.Update(e.Value.Content.Length))
+			if (this.rxByteRate.Update(e.Value.Content.Count))
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:

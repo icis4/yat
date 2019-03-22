@@ -28,9 +28,10 @@
 //==================================================================================================
 
 using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Text;
 
 using MKY;
@@ -46,6 +47,7 @@ namespace YAT.Domain
 	/// Defines an element received from or sent to a serial interface. In addition to the raw byte
 	/// content itself, it also contains interface and time information.
 	/// </summary>
+	[ImmutableObject(true)]
 	public class RawChunk
 	{
 		#region Constants
@@ -62,9 +64,11 @@ namespace YAT.Domain
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] Content { get; }
+		/// <remarks>
+		/// "Guidelines for Collections: Do use byte arrays instead of collections of bytes."
+		/// is overruled in order to be able to implement this class of immutable objects.
+		/// </remarks>
+		public ReadOnlyCollection<byte> Content { get; }
 
 		/// <summary></summary>
 		public DateTime TimeStamp { get; }
@@ -97,7 +101,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawChunk(byte[] content, DateTime timeStamp, string portStamp, IODirection direction)
 		{
-			Content   = content;
+			Content   = new ReadOnlyCollection<byte>((byte[])content.Clone());
 			TimeStamp = timeStamp;
 			PortStamp = portStamp;
 			Direction = direction;
@@ -122,14 +126,6 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
-
-		/// <summary>
-		/// Creates and returns a new object that is a deep-copy of this instance.
-		/// </summary>
-		public virtual RawChunk Clone()
-		{
-			return (new RawChunk((byte[])Content.Clone(), TimeStamp, PortStamp, Direction));
-		}
 
 		/// <summary></summary>
 		protected string ContentAsPrintableString

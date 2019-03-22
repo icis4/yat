@@ -100,7 +100,6 @@ New:
 - Additional log channel [Log Port Control] (related to feature request #350).
 
 Important changes:
-
 - Serial COM port again uses the term RTS (Ready To Send) as that is still most commonly used.
   In addition, notes/hints on terms RTR (Ready To Receive) as well as RFR (Ready For Receiving).
 - Errors are now indicated in square "[...]" instead of angle "<...>" brackets (rel. to feat. #350).
@@ -131,6 +130,7 @@ Fixed bugs:
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
   #422, #423, #432, #434, #435, #441, #443, #444, #450) which further refines the fix to former bugs
   #408 and #409.
+- Attempted to fix rare 'TargetInvocationException' (bug #446).
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
@@ -174,7 +174,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Final Version 2.0.0 :: 2018-04-13
@@ -245,7 +245,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Epsilon Version 1.99.90 :: 2018-01-12
@@ -329,7 +329,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Delta Version 1.99.80 :: 2017-10-15
@@ -413,7 +413,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
@@ -499,7 +499,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Gamma 2'' Version 1.99.52 :: 2016-09-30
@@ -644,7 +644,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-13
