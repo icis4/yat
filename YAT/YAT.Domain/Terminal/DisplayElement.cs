@@ -44,7 +44,10 @@ using MKY.Collections.Generic;
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// This class cannot be implemented immutable [ImmutableObject(true)] because of the
+	/// performance improving /// <see cref="Append(DisplayElement)"/> method.
+	/// </remarks>
 	[Serializable]
 	[XmlInclude(typeof(Nonentity))]
 	[XmlInclude(typeof(TxData))]
