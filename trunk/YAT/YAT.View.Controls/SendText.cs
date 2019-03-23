@@ -809,7 +809,7 @@ namespace YAT.View.Controls
 			}
 			DebugUserInputLeave();
 		}
-		
+
 		/// <remarks>
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. ComboBox.Leave()

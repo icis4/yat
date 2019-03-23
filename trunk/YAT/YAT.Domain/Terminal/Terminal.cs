@@ -3652,7 +3652,7 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Settings Events
 		//==========================================================================================
-		
+
 		private void terminalSettings_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			if (e.Inner == null)

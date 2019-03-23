@@ -105,7 +105,7 @@ namespace MKY.Win32
 
 			#pragma warning restore 1591
 		}
-	
+
 		#endregion
 
 		#region Native > External Functions
@@ -139,7 +139,7 @@ namespace MKY.Win32
 		}
 
 		#endregion
-	
+
 		#region Static Properties
 		//==========================================================================================
 		// Static Properties

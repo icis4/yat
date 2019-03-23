@@ -205,7 +205,7 @@ namespace YAT.Domain
 				this.state = State.Inactive;
 				return;
 			}
-			
+
 			if (this.queue.Count <= 0) // Empty queue => Armed.
 			{
 				this.state = State.Armed;

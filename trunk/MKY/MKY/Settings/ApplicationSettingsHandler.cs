@@ -140,7 +140,7 @@ namespace MKY.Settings
 							this.effectiveFileAccess = FileAccessFlags.ReadWrite;
 						else
 							this.effectiveFileAccess = FileAccessFlags.Read;
-						
+
 						break;
 					}
 
@@ -723,7 +723,7 @@ namespace MKY.Settings
 			set
 			{
 				// AssertNotDisposed() is called by 'Has...' below.
-			
+
 				if (HasRoamingUserSettings)
 					this.roamingUserSettings.FilePath = value;
 				else

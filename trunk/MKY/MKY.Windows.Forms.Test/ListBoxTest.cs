@@ -179,7 +179,7 @@ namespace MKY.Windows.Forms.Test
 				lb.BeginUpdate();
 
 				string append = button_AddChar_Click_increment.ToString(CultureInfo.CurrentCulture);
-			
+
 				button_AddChar_Click_increment++;
 				if (button_AddChar_Click_increment >= 10)
 					button_AddChar_Click_increment = 0;

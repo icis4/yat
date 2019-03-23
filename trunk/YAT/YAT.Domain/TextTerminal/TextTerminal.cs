@@ -615,7 +615,7 @@ namespace YAT.Domain
 							// as no treatment of a lead byte, no treatment of 0xFF, treatment of 0xFFFD, comment,...
 
 							this.rxMultiByteDecodingStream.Add(b);
-							
+
 							int remainingBytesInFragment = (this.rxMultiByteDecodingStream.Count % ((EncodingEx)e).GetUnicodeFragmentByteCount());
 							if (remainingBytesInFragment > 0)
 							{
@@ -733,7 +733,7 @@ namespace YAT.Domain
 									if (effectiveCharCount == expectedCharCount)
 									{                                                                         // 'effectiveCharCount' is 1 for sure.
 										DisplayElement encoded = CreateDataElement(decodingArray, d, r, chars);
-										
+
 										DisplayElement direct;
 										if ((b < 0x20) || (b == 0x7F))                   // ASCII control characters.
 										{
@@ -1047,7 +1047,7 @@ namespace YAT.Domain
 					{
 						// Ensure that only as many elements as EOL contains are marked as EOL.
 						// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
-					
+
 						// Unfold the elements into single elements for correct processing:
 						var l = new List<DisplayElement>(lineState.EolElements.ByteCount); // Preset the required capacity to improve memory management.
 						foreach (var item in lineState.EolElements)

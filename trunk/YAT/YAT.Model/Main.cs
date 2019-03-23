@@ -582,7 +582,7 @@ namespace YAT.Model
 				{
 					int requestedDynamicTerminalId = this.commandLineArgs.RequestedDynamicTerminalId;
 					int lastDynamicId = TerminalIds.IndexToDynamicId(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
-				
+
 					if     ((          requestedDynamicTerminalId >= TerminalIds.FirstDynamicId) && (requestedDynamicTerminalId <= lastDynamicId))
 						this.startArgs.RequestedDynamicTerminalId = requestedDynamicTerminalId;
 					else if (          requestedDynamicTerminalId == TerminalIds.ActiveDynamicId)
@@ -1108,7 +1108,7 @@ namespace YAT.Model
 					{
 						if (signalStarted)
 							OnStarted(); // Same as at OpenWorkspaceFromFile() above.
-						
+
 						return (true);
 					}
 				}

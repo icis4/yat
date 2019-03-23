@@ -616,7 +616,7 @@ namespace YAT.Domain.Parser
 		{
 			if (Int32Ex.IsWithin(parseChar, char.MinValue, char.MaxValue) && char.IsWhiteSpace((char)parseChar)) // 'official' whitespace.
 				return (true);
-			
+
 			if (Int32Ex.IsWithin(parseChar, byte.MinValue, byte.MaxValue) && Ascii.IsControl((byte)parseChar)) // ASCII control.
 				return (true);
 

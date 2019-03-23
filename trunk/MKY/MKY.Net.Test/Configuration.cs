@@ -199,7 +199,7 @@ namespace MKY.Net.Test
 						}
 					}
 				}
-		
+
 				// Activate the effective configuration:
 				StaticConfiguration = configuration;
 			}

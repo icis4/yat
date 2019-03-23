@@ -261,7 +261,7 @@ namespace MKY.Win32
 
 			#pragma warning restore 1591
 		}
-	
+
 		#endregion
 
 		#region Native > External Functions
@@ -338,7 +338,7 @@ namespace MKY.Win32
 
 			throw (WinError.LastErrorToIOException());
 		}
- 
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "dcb", Justification = "Naming according to the Win32 API.")]

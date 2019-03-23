@@ -632,7 +632,7 @@ namespace MKY
 			{
 				// Find the furthermost split position:
 				int spaceIndex = spaces.FindLastIndex(value => (value <= (startIndex + desiredChunkLength)));
-				
+
 				int splitIndex;
 				if (spaceIndex >= 0)
 					splitIndex = spaces[spaceIndex];

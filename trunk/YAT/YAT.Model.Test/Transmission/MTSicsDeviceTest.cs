@@ -241,7 +241,7 @@ namespace YAT.Model.Test.Transmission
 
 				// Prepare stimulus and expected:
 				var stimulusCommand = new Types.Command(stimulus);
-				
+
 				var l = new List<byte>(expected.Length); // Preset the required capacity to improve memory management.
 				foreach (char c in expected.ToCharArray())
 					l.Add((byte)c); // ASCII only!

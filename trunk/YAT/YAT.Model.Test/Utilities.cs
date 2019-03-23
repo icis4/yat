@@ -574,7 +574,7 @@ namespace YAT.Model.Test
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
-		
+
 			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 

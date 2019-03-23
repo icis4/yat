@@ -83,7 +83,7 @@ namespace MKY.Xml.Serialization
 			// Try standard match.
 			if (base.TryToMatchAttribute(inputNavigator, ref outputNavigator))
 				return (true);
-			
+
 			// No success, try alternate match.
 			var inputNode = (inputNavigator.UnderlyingObject as XmlNode);
 			if (inputNode != null)

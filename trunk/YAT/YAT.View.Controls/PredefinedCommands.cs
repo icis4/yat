@@ -305,7 +305,7 @@ namespace YAT.View.Controls
 				{
 					button_PagePrevious.Enabled = false;
 					button_PageNext.Enabled = false;
-				
+
 					label_Page.Enabled = false;
 					label_Page.Text = "<No Pages>";
 

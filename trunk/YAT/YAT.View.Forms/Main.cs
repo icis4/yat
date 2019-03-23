@@ -1445,11 +1445,11 @@ namespace YAT.View.Forms
 		{
 			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
 			toolStripMenuItem_MainMenu_File_New.Enabled = false;
-		
+
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
 			// be an overkill, thus using this straight-forward implementation.
-		
+
 			foreach (var child in MdiChildren)
 			{
 				var t = (child as Terminal);
@@ -1461,7 +1461,7 @@ namespace YAT.View.Forms
 		private void ResumeCtrlFNPShortcuts()
 		{
 			toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
-		
+
 			foreach (var child in MdiChildren)
 			{
 				var t = (child as Terminal);
@@ -1558,7 +1558,7 @@ namespace YAT.View.Forms
 					case Keys.F:      // Additional shortcuts shall be executable under same conditions as normal shortcuts.
 					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
 					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious(); } e.SuppressKeyPress = true; break;
-			
+
 					default: break;
 				}
 			}
@@ -1596,7 +1596,7 @@ namespace YAT.View.Forms
 					case Keys.F:
 					case Keys.N: e.SuppressKeyPress = true; break;
 					case Keys.P: e.SuppressKeyPress = true; break;
-			
+
 					default: break;
 				}
 			}
@@ -2536,7 +2536,7 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 		// Main > Lifetime
 		//------------------------------------------------------------------------------------------
-		
+
 		private void AttachMainEventHandlers()
 		{
 			if (this.main != null)
@@ -3049,7 +3049,7 @@ namespace YAT.View.Forms
 
 				this.workspace.SaveAsFileDialogRequest += workspace_SaveAsFileDialogRequest;
 				this.workspace.CursorRequest           += workspace_CursorRequest;
-				
+
 				this.workspace.Closed += workspace_Closed;
 
 				if (this.workspace.SettingsRoot != null)
@@ -3279,7 +3279,7 @@ namespace YAT.View.Forms
 		private void terminalMdiChild_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			SetTimedStatus(Status.ChildClosed);
-	
+
 			// Sender MUST be a terminal, otherwise something must have freaked out...
 			DetachTerminalEventHandlersAndMdiChildFromParent(sender as Terminal);
 
