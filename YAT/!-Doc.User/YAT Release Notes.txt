@@ -130,7 +130,7 @@ Fixed bugs:
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
   #422, #423, #432, #434, #435, #441, #443, #444, #450) which further refines the fix to former bugs
   #408 and #409.
-- Attempted to fix rare 'TargetInvocationException' (bug #446).
+- Attempted to fix rare 'TargetInvocationException' caused by 'IndexOutOfRangeException' (bug #446).
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
