@@ -72,7 +72,7 @@ namespace MKY.IO.Usb
 
 		Any                 = 0x00,
 	}
-	
+
 	/// <summary>
 	/// Descriptor types.
 	/// </summary>

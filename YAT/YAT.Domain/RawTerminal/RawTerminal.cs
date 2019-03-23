@@ -857,10 +857,10 @@ namespace YAT.Domain
 
 				sb.AppendLine(indent + "> BidirRepository: ");
 				sb.Append(this.bidirRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
-				
+
 				sb.AppendLine(indent + "> RxRepository: ");
 				sb.Append(this.rxRepository.ToDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
-				
+
 				sb.Append(indent + "> I/O: " + this.io.ToString());
 			}
 			return (sb.ToString());

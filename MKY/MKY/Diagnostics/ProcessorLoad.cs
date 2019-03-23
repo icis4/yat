@@ -48,7 +48,7 @@ namespace MKY.Diagnostics
 		private static long staticLastUpdateTimestamp; // Ticks as defined by 'Stopwatch'.
 		private static TimeSpan staticLastProcessorTime = TimeSpan.Zero;
 		private static object staticSyncObj = new object();
-		
+
 		/// <summary>
 		/// The current processor load percentage of the current process.
 		/// </summary>

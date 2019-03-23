@@ -1390,7 +1390,7 @@ Important changes:
 - 12 instead of 8 predefined commands per page
 - Predefined command dialog bugs fixed
 - Text: "EOL = None" fixed
- 
+
 Limitations and known issues:
 - So far, only serial ports are supported, TCP/IP and UDP/IP are yet to be implemented
 - Already open serial COM ports are not marked as such

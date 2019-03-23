@@ -83,7 +83,7 @@ namespace MKY.Win32
 		{
 			/// <summary></summary>
 			public const Int32 WAIT_TIMEOUT = 0x0102;
-		
+
 			/// <summary></summary>
 			public const Int32 WAIT_OBJECT_0 = 0;
 		}

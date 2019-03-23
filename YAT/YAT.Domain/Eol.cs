@@ -97,20 +97,20 @@ namespace YAT.Domain
 
 		private const string CRLF_stringSequence = "<CR><LF>";
 		private const string CRLF_stringNative = "\r\n";
-		
+
 		private const string LFCR_stringSequence = "<LF><CR>";
 		private const string LFCR_stringNative = "\n\r";
-		
+
 		private const string Nul_stringSequence = "<NUL>";
 		private const string Nul_stringNative = "\0";
 
 		private const string Tab_stringSequence = "<TAB>";
 		private const string Tab_stringNative = "\t";
-		
+
 		private const string Space_stringNice = "[Space]";
 		private const string Space_stringOld1 =  "Space";
 		private const string Space_stringSequence = " ";
-		
+
 		#endregion
 
 		/// <summary>Default is <see cref="Eol.CRLF"/>.</summary>

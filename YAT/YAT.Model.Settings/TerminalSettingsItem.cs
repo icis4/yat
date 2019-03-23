@@ -118,7 +118,7 @@ namespace YAT.Model.Settings
 					this.filePath = value;
 					SetMyChanged();
 				}
-				
+
 				// Create GUID from file path:
 				if (PathEx.IsDefined(this.filePath) && (this.guid == Guid.Empty))
 				{

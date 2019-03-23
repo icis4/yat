@@ -126,7 +126,7 @@ namespace MKY.Win32
 
 			#pragma warning restore 1591
 		}
-		
+
 		#endregion
 
 		#region Native > External Functions

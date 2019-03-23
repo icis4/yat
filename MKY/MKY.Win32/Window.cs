@@ -212,7 +212,7 @@ namespace MKY.Win32
 
 			#pragma warning restore 1591
 		}
-	
+
 		#endregion
 
 		#region Native > Constants
@@ -419,7 +419,7 @@ namespace MKY.Win32
 		}
 
 		#endregion
-	
+
 		#endregion
 	}
 }

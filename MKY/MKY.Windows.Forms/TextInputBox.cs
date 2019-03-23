@@ -245,7 +245,7 @@ namespace MKY.Windows.Forms
 				inputText = tib.InputText;
 			else
 				inputText = "";
-			
+
 			return (dr);
 		}
 

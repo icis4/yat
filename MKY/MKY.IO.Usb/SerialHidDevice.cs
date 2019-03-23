@@ -1258,7 +1258,7 @@ namespace MKY.IO.Usb
 		}
 
 		#endregion
-		
+
 		#endregion
 
 		#region Event Handling
