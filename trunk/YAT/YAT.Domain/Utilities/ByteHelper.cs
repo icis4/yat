@@ -27,6 +27,7 @@
 // Using
 //==================================================================================================
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -40,22 +41,22 @@ namespace YAT.Domain.Utilities
 	public static class ByteHelper
 	{
 		/// <summary>
-		/// Formats the given data into a hexadecimal string.
+		/// Formats the given value into a hexadecimal string (e.g. "0Ah").
 		/// </summary>
-		public static string FormatHexString(byte data, bool showRadix = true)
+		public static string FormatHexString(byte value, bool showRadix = true)
 		{
-			return (FormatHexString(new byte[] { data }, showRadix));
+			return (FormatHexString(new byte[] { value }, showRadix));
 		}
 
 		/// <summary>
-		/// Formats the given data into a hexadecimal string.
+		/// Formats the given values into a hexadecimal string (e.g. "0Ah FFh 20h").
 		/// </summary>
-		public static string FormatHexString(byte[] data, bool showRadix = true)
+		public static string FormatHexString(IEnumerable<byte> values, bool showRadix = true)
 		{
 			var sb = new StringBuilder();
 
 			bool isFirst = true;
-			foreach (byte b in data)
+			foreach (byte b in values)
 			{
 				if (isFirst)
 					isFirst = false;
