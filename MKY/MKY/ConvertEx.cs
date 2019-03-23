@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
@@ -32,18 +34,29 @@ namespace MKY
 	public static class ConvertEx
 	{
 		/// <summary>
-		/// Converts values into hexadecimal string (e.g. "0A FF 20").
+		/// Converts the given values into a hexadecimal string (e.g. "0A").
 		/// </summary>
-		public static string ToHexadecimalString(byte[] values)
+		public static string ToHexString(byte value)
+		{
+			return (ToHexString(new byte[] { value }));
+		}
+
+		/// <summary>
+		/// Converts the given values into a hexadecimal string (e.g. "0A FF 20").
+		/// </summary>
+		public static string ToHexString(IEnumerable<byte> values)
 		{
 			var sb = new StringBuilder();
 
-			for (int i = 0; i < values.Length; i++)
+			bool isFirst = true;
+			foreach (byte b in values)
 			{
-				if (i > 0)
+				if (isFirst)
+					isFirst = false;
+				else
 					sb.Append(" ");
 
-				sb.Append(values[i].ToString("X2", CultureInfo.InvariantCulture));
+				sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
 			}
 
 			return (sb.ToString());
