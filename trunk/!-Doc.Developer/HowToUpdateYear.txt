@@ -38,3 +38,5 @@
  > Detection whether all intended files are included in the solution.
  > Detection whether there are superfluous files in "\Trunk".
  > Detection whether SVN properties of all files are up-to-date.)
+
+(8. Consider to check for trailing whitespace according to HowToRemoveTrailingWhitespace.txt)

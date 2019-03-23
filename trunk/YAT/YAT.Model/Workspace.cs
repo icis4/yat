@@ -1473,7 +1473,7 @@ namespace YAT.Model
 				var item = clone[i];
 
 				// \remind
-				// Check whether the item is defined. Because under certain error conditions there 
+				// Check whether the item is defined. Because under certain error conditions there
 				// were occasions when the item contained an empty file path and an empty GUID. That
 				// has lead to an exception in an underlying System.IO call and would have lead to
 				// an error message which isn't really understandable to the user. Therefore, check

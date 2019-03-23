@@ -102,15 +102,15 @@ namespace YAT.Controller
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
-		private static readonly string ObjectDisposedExceptionInMscorlibOrSystemMessage = 
+		private static readonly string ObjectDisposedExceptionInMscorlibOrSystemMessage =
 			"Such 'ObjectDisposedException' in the underlying system is an exeption " +
 			"that YAT is aware of but cannot properly handle. " + ExceptionBackground;
 
-		private static readonly string UnauthorizedAccessExceptionInEventLoopRunnerMessage = 
+		private static readonly string UnauthorizedAccessExceptionInEventLoopRunnerMessage =
 			"Such 'UnauthorizedAccessException' in 'SerialStream.EventLoopRunner' is an exeption " +
 			"that YAT is aware of but cannot properly handle. " + ExceptionBackground;
 
-		private static readonly string ExceptionBackground = 
+		private static readonly string ExceptionBackground =
 			"It can happen when a serial COM port gets physically disconnected while it is open. " +
 			"It happens due to a bug in the .NET 'SerialPort' class for which Microsoft only has " +
 			"vague plans fixing. The issue is known for internal ports using the Microsoft " +

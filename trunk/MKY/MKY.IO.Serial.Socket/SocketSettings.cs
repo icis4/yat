@@ -728,7 +728,7 @@ namespace MKY.IO.Serial.Socket
 																{
 																	bool arEnabled;
 																	int arInterval;
-																	if (bool.TryParse(sa[9], out arEnabled) && 
+																	if (bool.TryParse(sa[9], out arEnabled) &&
 																	    int.TryParse(sa[10], out arInterval))
 																	{
 																		var autoRetry = new AutoInterval(arEnabled, arInterval);

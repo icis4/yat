@@ -314,11 +314,11 @@ namespace YAT.Domain.Test.TextTerminal
 			int txTotalLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Bidir);
 			int rxTotalLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Bidir);
 
-			string txMessage = "Error!" + 
+			string txMessage = "Error!" +
 			                   " Number of total lines = " + txTotalLineCount +
 			                   " mismatches expected = " + expectedTotalLineCount + ".";
 
-			string rxMessage = "Error!" + 
+			string rxMessage = "Error!" +
 			                   " Number of total lines = " + rxTotalLineCount +
 			                   " mismatches expected = " + expectedTotalLineCount + ".";
 

@@ -54,7 +54,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		/// <remarks>
 		/// There are predefined variants for the static objects
-		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Debug"/> and
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
@@ -91,7 +91,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		/// <remarks>
 		/// There are predefined variants for the static objects
-		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Debug"/> and
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
@@ -127,7 +127,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		/// <remarks>
 		/// There are predefined variants for the static objects
-		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Debug"/> and
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
@@ -161,7 +161,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		/// <remarks>
 		/// There are predefined variants for the static objects
-		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Debug"/> and
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
@@ -195,7 +195,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		/// <remarks>
 		/// There are predefined variants for the static objects
-		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Debug"/> and
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
@@ -230,7 +230,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		/// <remarks>
 		/// There are predefined variants for the static objects
-		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Debug"/> and
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and

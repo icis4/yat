@@ -590,7 +590,7 @@ namespace YAT.Domain
 						{
 							return (base.ByteToElement(b, d, r));
 						}                                                // Special case.
-						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF) 
+						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 						{
 							return (new DisplayElement.Nonentity());     // Return nothing, ignore the character, this results in hiding.
 						}

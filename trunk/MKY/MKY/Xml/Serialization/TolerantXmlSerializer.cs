@@ -95,7 +95,7 @@ namespace MKY.Xml.Serialization
 		/// <summary>
 		/// Deserializes the XML document from by the specified input stream. This implementation
 		/// is more tolerant regarding the XML structure than
-		/// <see cref="XmlSerializer.Deserialize(Stream)"/>. 
+		/// <see cref="XmlSerializer.Deserialize(Stream)"/>.
 		/// </summary>
 		/// <remarks>
 		/// For example, it allows that XML elements in the input have a different schema type than

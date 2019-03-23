@@ -1045,7 +1045,7 @@ namespace MKY.Win32
 		}
 
 		/// <summary>
-		/// Retrieves a structure with information about a device's capabilities. 
+		/// Retrieves a structure with information about a device's capabilities.
 		/// </summary>
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <param name="capabilities">An HIDP_CAPS structure.</param>

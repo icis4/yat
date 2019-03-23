@@ -37,7 +37,6 @@ How to create "YAT.res"
 8.	Save pictures as <.ico>
 
 9.	Use "Resource Hacker" to add the icons to <YAT.res>
-	- 
 	- Resources must be named "1", "2",...
 
 

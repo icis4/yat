@@ -190,7 +190,7 @@ Inherited class
 			// Finalize managed resources.
 			   - or -
 			// In any case, <CLOSE> the <ITEM>:
-			
+
 			if (disposing)
 			{
 				// Dispose of unmanaged resources.
