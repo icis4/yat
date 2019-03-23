@@ -149,7 +149,7 @@ namespace MKY.Win32
 			/// <param name="hTargetProcessHandle">A handle to the process that is to receive
 			/// the duplicated handle. The handle must have the PROCESS_DUP_HANDLE access right.</param>
 			/// <param name="lpTargetHandle">A pointer to a variable that receives the duplicate
-			/// handle. This handle value is valid in the context of the target process. 
+			/// handle. This handle value is valid in the context of the target process.
 			/// If hSourceHandle is a pseudo handle returned by GetCurrentProcess or GetCurrentThread,
 			/// DuplicateHandle converts it to a real handle to a process or thread, respectively.
 			/// If lpTargetHandle is NULL, the function duplicates the handle, but does not return

@@ -823,7 +823,7 @@ namespace YAT.Model
 					else
 						return (false);
 				}
-				if (((finalIOType == Domain.IOType.TcpClient) || 
+				if (((finalIOType == Domain.IOType.TcpClient) ||
 				     (finalIOType == Domain.IOType.TcpServer) ||
 				     (finalIOType == Domain.IOType.TcpAutoSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalInterface"))

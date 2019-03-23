@@ -281,7 +281,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 				Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
 			////Assert.That(!port.IsOpen);
 
-				// \remind: The port should be closed here. However, this doesn't work due to the 
+				// \remind: The port should be closed here. However, this doesn't work due to the
 				// issue documented in the header of 'SerialPortEx'. The assertion above actually
 				// results in an ObjectDisposedException "The SafeHandle has been closed" which
 				// would...

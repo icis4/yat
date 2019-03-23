@@ -554,7 +554,7 @@ namespace MKY.Win32
 			{
 				pDeviceInfoSet = NativeMethods.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, NativeTypes.DIGCF.PRESENT | NativeTypes.DIGCF.DEVICEINTERFACE);
 
-				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
+				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes.
 				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
 				deviceInterfaceData.cbSize = (uint)Marshal.SizeOf(deviceInterfaceData);
 

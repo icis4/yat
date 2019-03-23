@@ -1066,7 +1066,7 @@ namespace MKY.IO.Ports
 		/// The <see cref="System.IO.Ports.SerialPort"/> class has 3 different problems in disposal
 		/// in case of a USB serial device that is physically removed:
 		/// 
-		/// 1. The eventLoopRunner is asked to stop and <see cref="System.IO.Ports.SerialPort.IsOpen"/> 
+		/// 1. The eventLoopRunner is asked to stop and <see cref="System.IO.Ports.SerialPort.IsOpen"/>
 		/// returns false. Upon disposal this property is checked and closing  the internal serial
 		/// stream is skipped, thus keeping the original handle open indefinitely (until the finalizer
 		/// runs which leads to the next problem).

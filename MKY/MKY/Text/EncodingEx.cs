@@ -718,7 +718,7 @@ namespace MKY.Text
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false)));
-			staticInfos = l.ToArray(); 
+			staticInfos = l.ToArray();
 		}
 
 		/// <summary>
