@@ -98,14 +98,14 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElementCollection collection)
 		{
-			foreach (var de in collection) // Clone the whole collection.
+			foreach (var de in collection) // Clone the whole collection to ensure decoupling.
 				Add(de.Clone());
 		}
 
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElement displayElement)
 		{
-			Add(displayElement.Clone()); // Clone the element.
+			Add(displayElement.Clone()); // Clone the element to ensure decoupling.
 		}
 
 	#if (DEBUG)
@@ -270,7 +270,7 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void CloneTo(DisplayElementCollection c)
 		{
-			foreach (var de in this) // Clone the whole collection.
+			foreach (var de in this) // Clone the whole collection to ensure decoupling.
 				c.Add(de.Clone());
 		}
 
