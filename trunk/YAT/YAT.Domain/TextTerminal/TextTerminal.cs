@@ -89,15 +89,19 @@ namespace YAT.Domain
 
 		private class LineState
 		{
-			public LinePosition    Position         { get; set; }
-			public DisplayLinePart Elements         { get; set; }
-			public DisplayLinePart EolElements      { get; set; }
-			public SequenceQueue   Eol              { get; set; }
+			public LinePosition    Position    { get; set; }
+			public DisplayLinePart Elements    { get; set; }
+			public DisplayLinePart EolElements { get; set; }
+			public SequenceQueue   Eol         { get; set; }
 
 			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
-			public DateTime        TimeStamp        { get; set; }
-			public bool            Highlight        { get; set; }
+			public DateTime TimeStamp { get; set; }
+
+			public bool Highlight           { get; set; }
+			public bool Filter              { get; set; }
+			public bool PotentiallySuppress { get; set; }
+			public bool SuppressForSure     { get; set; }
 
 			public LineState(SequenceQueue eol)
 			{
@@ -109,7 +113,11 @@ namespace YAT.Domain
 				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default initial capacity is OK.
 
 				TimeStamp = DateTime.Now;
-				Highlight = false;
+
+				Highlight           = false;
+				Filter              = false;
+				PotentiallySuppress = false;
+				SuppressForSure     = false;
 			}
 
 			public virtual void Reset(string portStamp, bool eolOfLastLineWasCompleteMatch)
@@ -125,7 +133,11 @@ namespace YAT.Domain
 					EolOfLastLineOfGivenPortWasCompleteMatch.Add(portStamp, eolOfLastLineWasCompleteMatch);
 
 				TimeStamp = DateTime.Now;
-				Highlight = false;
+
+				Highlight           = false;
+				Filter              = false;
+				PotentiallySuppress = false;
+				SuppressForSure     = false;
 			}
 		}
 
@@ -1152,14 +1164,14 @@ namespace YAT.Domain
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
-			                                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			                                 // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
 			int eolLength = lineState.Eol.Sequence.Length;
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
 			{
-				line.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
+				l.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
 			}
 			else // Remove EOL:
 			{
@@ -1176,7 +1188,7 @@ namespace YAT.Domain
 
 				// Now, traverse elements forward and add elements to line:
 				for (int i = 0; i < (des.Length - eolCount); i++)
-					line.Add(des[i]); // No clone needed as items have just been cloned futher above.
+					l.Add(des[i]); // No clone needed as items have just been cloned futher above.
 
 				// Finally, remove EOL from elements:
 				if (elements.Count >= eolCount)
@@ -1188,7 +1200,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(line.ByteCount, (ts - lineState.TimeStamp), out info);
+				PrepareLineEndInfo(l.ByteCount, (ts - lineState.TimeStamp), out info);
 				lp.AddRange(info);
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
@@ -1202,13 +1214,19 @@ namespace YAT.Domain
 			{
 				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
 			}
+			else if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter)) // Potentially suppress line:
+			{
+				int initialCount = elements.Count;
+				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
+			////elementsToBeRemovedAgain = (initialCount - elements.Count); \ToDo
+			}
 			else
 			{
 				// Finalize elements and line:
 				elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
-				line.AddRange(lp);
-				line.TimeStamp = lineState.TimeStamp;
-				lines.Add(line);
+				l.AddRange(lp);
+				l.TimeStamp = lineState.TimeStamp;
+				lines.Add(l);
 			}
 
 			this.bidirLineState.IsFirstLine = false;
@@ -1219,7 +1237,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, bool highlight, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			LineState lineState;
 			switch (raw.Direction)
@@ -1230,9 +1248,14 @@ namespace YAT.Domain
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			if (highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous raw chunk.
-			{
-				lineState.Highlight = true;
+			switch (rawAttribute) // Activate flags as needed, leave unchanged otherwise as it could have become activated by a previous chunk.
+			{                     // Note that in case of active filtering, the [Filter] and [PotentiallySuppress] flags may both be active.
+				case LineChunkAttribute.Highlight:           lineState.Highlight           = (rawAttribute == LineChunkAttribute.Highlight);           break;
+				case LineChunkAttribute.Filter:              lineState.Filter              = (rawAttribute == LineChunkAttribute.Filter);              break;
+				case LineChunkAttribute.PotentiallySuppress: lineState.PotentiallySuppress = (rawAttribute == LineChunkAttribute.PotentiallySuppress); break;
+				case LineChunkAttribute.SuppressForSure:     lineState.SuppressForSure     = (rawAttribute == LineChunkAttribute.SuppressForSure);     break;
+
+				default: /* nothing to do */ break;
 			}
 
 			foreach (byte b in raw.Content)
@@ -1331,13 +1354,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
+		protected override void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
 		{
 			// Check whether port or direction has changed:
 			ProcessAndSignalPortOrDirectionLineBreak(raw.TimeStamp, raw.PortStamp, raw.Direction);
 
 			// Process the raw chunk:
-			base.ProcessAndSignalRawChunk(raw, highlight);
+			base.ProcessAndSignalRawChunk(raw, rawAttribute);
 
 			// Enforce line break if requested:
 			if (TerminalSettings.Display.ChunkLineBreakEnabled)

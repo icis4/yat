@@ -3075,17 +3075,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected abstract void ProcessRawChunk(RawChunk raw, bool highlight, DisplayElementCollection elements, List<DisplayLine> lines);
+		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elements, List<DisplayLine> lines);
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
+		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
 		{
 			// Collection of elements processed, extends over one or multiple lines,
 			// depending on the number of bytes in raw chunk.
 			var elements = new DisplayElementCollection(); // Default initial capacity is OK.
 			var lines = new List<DisplayLine>();
 
-			ProcessRawChunk(raw, highlight, elements, lines);
+			ProcessRawChunk(raw, rawAttribute, elements, lines);
 
 			if (elements.Count > 0)
 			{
@@ -3312,7 +3312,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(repository))
 					{
-						ProcessAndSignalRawChunk(raw, false); // Highlighting is not (yet) supported on reloading => bug #211.
+						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
 					OnRepositoryReloaded(new EventArgs<RepositoryType>(repository));
@@ -3360,7 +3360,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
 					{
-						ProcessAndSignalRawChunk(raw, false); // Highlighting is not (yet) supported on reloading => bug #211.
+						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
 					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Tx));
@@ -3818,7 +3818,7 @@ namespace YAT.Domain
 			{
 				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
 				OnRawChunkSent(args);
-				ProcessAndSignalRawChunk(e.Value, args.Highlight); // 'RawChunk' object is immutable, subsequent use is OK.
+				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' object is immutable, subsequent use is OK.
 			}
 		}
 
@@ -3832,7 +3832,7 @@ namespace YAT.Domain
 			{
 				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
 				OnRawChunkReceived(args);
-				ProcessAndSignalRawChunk(e.Value, args.Highlight); // 'RawChunk' object is immutable, subsequent use is OK.
+				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' object is immutable, subsequent use is OK.
 			}
 		}
 

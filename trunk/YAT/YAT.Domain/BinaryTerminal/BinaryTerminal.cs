@@ -244,7 +244,11 @@ namespace YAT.Domain
 			public SequenceQueue        SequenceBefore                { get; set; }
 			public List<DisplayElement> PendingSequenceBeforeElements { get; set; }
 			public DateTime             TimeStamp                     { get; set; }
+
 			public bool                 Highlight                     { get; set; }
+			public bool                 Filter                        { get; set; }
+			public bool                 PotentiallySuppress           { get; set; }
+			public bool                 SuppressForSure               { get; set; }
 
 			public LineBreakTimer       BreakTimer                    { get; set; }
 
@@ -256,7 +260,11 @@ namespace YAT.Domain
 				SequenceBefore                = sequenceBefore;
 				PendingSequenceBeforeElements = new List<DisplayElement>();
 				TimeStamp                     = DateTime.Now;
+
 				Highlight                     = false;
+				Filter                        = false;
+				PotentiallySuppress           = false;
+				SuppressForSure               = false;
 
 				BreakTimer                    = breakTimer;
 			}
@@ -342,7 +350,11 @@ namespace YAT.Domain
 				SequenceBefore                 .Reset();
 				PendingSequenceBeforeElements = new List<DisplayElement>();
 				TimeStamp                     = DateTime.Now;
+
 				Highlight                     = false;
+				Filter                        = false;
+				PotentiallySuppress           = false;
+				SuppressForSure               = false;
 			}
 		}
 
@@ -812,27 +824,35 @@ namespace YAT.Domain
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
-			                                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var line = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			                                 // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			// Process line content:
-			line.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
+			l.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
 
 			// Process line length:
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(line.ByteCount, (ts - lineState.TimeStamp), out info);
+				PrepareLineEndInfo(l.ByteCount, (ts - lineState.TimeStamp), out info);
 				lp.AddRange(info);
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
-			// Finalize elements and line:
-			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
-			line.AddRange(lp);
-			line.TimeStamp = lineState.TimeStamp;
-			lines.Add(line);
+			// Potentially suppress line:
+			if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
+			{
+				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
+			}
+			else
+			{
+				// Finalize elements and line:
+				elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
+				l.AddRange(lp);
+				l.TimeStamp = lineState.TimeStamp;
+				lines.Add(l);
+			}
 
 			this.bidirLineState.IsFirstLine = false;
 			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
@@ -842,7 +862,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, bool highlight, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			if (lines.Count <= 0) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = raw.TimeStamp;
@@ -865,9 +885,14 @@ namespace YAT.Domain
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			if (highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous raw chunk.
-			{
-				lineState.Highlight = true;
+			switch (rawAttribute) // Activate flags as needed, leave unchanged otherwise as it could have become activated by a previous chunk.
+			{                     // Note that in case of active filtering, the [Filter] and [PotentiallySuppress] flags may both be active.
+				case LineChunkAttribute.Highlight:           lineState.Highlight           = (rawAttribute == LineChunkAttribute.Highlight);           break;
+				case LineChunkAttribute.Filter:              lineState.Filter              = (rawAttribute == LineChunkAttribute.Filter);              break;
+				case LineChunkAttribute.PotentiallySuppress: lineState.PotentiallySuppress = (rawAttribute == LineChunkAttribute.PotentiallySuppress); break;
+				case LineChunkAttribute.SuppressForSure:     lineState.SuppressForSure     = (rawAttribute == LineChunkAttribute.SuppressForSure);     break;
+
+				default: /* nothing to do */ break;
 			}
 
 			foreach (byte b in raw.Content)
@@ -1026,13 +1051,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessAndSignalRawChunk(RawChunk raw, bool highlight)
+		protected override void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
 		{
 			// Check whether port or direction has changed:
 			ProcessAndSignalPortAndDirectionLineBreak(raw.TimeStamp, raw.PortStamp, raw.Direction);
 
 			// Process the raw chunk:
-			base.ProcessAndSignalRawChunk(raw, highlight);
+			base.ProcessAndSignalRawChunk(raw, rawAttribute);
 
 			// Enforce line break if requested:
 			if (TerminalSettings.Display.ChunkLineBreakEnabled)

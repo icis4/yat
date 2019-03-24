@@ -44,6 +44,9 @@ namespace YAT.Model.Types
 		None,
 
 		Highlight,
+		Filter,
+		Suppress,
+
 		Beep,
 		ShowMessageBox,
 
@@ -81,6 +84,12 @@ namespace YAT.Model.Types
 
 		private const string             Highlight_string = "[Highlight]";
 		private static readonly string[] Highlight_stringAlternatives = new string[] { "[H]", "[Highlight Only]" };
+
+		private const string             Filter_string = "[Filter]";
+		private static readonly string[] Filter_stringAlternatives = new string[] { "[F]" };
+
+		private const string             Suppress_string = "[Suppress]";
+		private static readonly string[] Suppress_stringAlternatives = new string[] { "[S]" };
 
 		private const string             Beep_string = "[Beep]";
 		private static readonly string[] Beep_stringAlternatives = new string[] { "[B]" };
@@ -146,6 +155,9 @@ namespace YAT.Model.Types
 				case AutoAction.None:                            return (None_string);
 
 				case AutoAction.Highlight:                       return (Highlight_string);
+				case AutoAction.Filter:                          return (Filter_string);
+				case AutoAction.Suppress:                        return (Suppress_string);
+
 				case AutoAction.Beep:                            return (Beep_string);
 				case AutoAction.ShowMessageBox:                  return (ShowMessageBox_string);
 
@@ -233,6 +245,9 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.None));
 
 			a.Add(new AutoActionEx(AutoAction.Highlight));
+			a.Add(new AutoActionEx(AutoAction.Filter));
+			a.Add(new AutoActionEx(AutoAction.Suppress));
+
 			a.Add(new AutoActionEx(AutoAction.Beep));
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
 
@@ -309,6 +324,18 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Highlight_stringAlternatives))
 			{
 				result = AutoAction.Highlight;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Filter_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Filter_stringAlternatives))
+			{
+				result = AutoAction.Filter;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Suppress_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Suppress_stringAlternatives))
+			{
+				result = AutoAction.Suppress;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Beep_string) ||

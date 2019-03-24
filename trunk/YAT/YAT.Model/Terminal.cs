@@ -2660,8 +2660,9 @@ namespace YAT.Model
 					}
 				}
 
-				if (isTriggered) // Invoke sending on different thread than the receive thread.
+				if (isTriggered)
 				{
+					// Invoke sending on different thread than the receive thread:
 					byte[] triggerSequence = null;
 
 					lock (this.autoResponseTriggerHelperSyncObj)
@@ -2673,7 +2674,8 @@ namespace YAT.Model
 					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_SendAutoResponseAsync);
 					asyncInvoker.BeginInvoke(triggerSequence, null, null);
 
-					e.Highlight = true;
+					// Highlighting is done for all auto responses (so far):
+					e.Attribute = Domain.LineChunkAttribute.Highlight;
 				}
 			}
 
@@ -2714,8 +2716,9 @@ namespace YAT.Model
 					}
 				}
 
-				if (isTriggered) // Invoke sending on different thread than the receive thread.
+				if (isTriggered)
 				{
+					// Invoke sending on different thread than the receive thread:
 					byte[] triggerSequence = null;
 
 					lock (this.autoActionTriggerHelperSyncObj)
@@ -2727,7 +2730,21 @@ namespace YAT.Model
 					var asyncInvoker = new Action<AutoAction, byte[], DateTime>(terminal_RawChunkReceived_InvokeAutoActionAsync);
 					asyncInvoker.BeginInvoke(this.settingsRoot.AutoAction.Action, triggerSequence, e.Value.TimeStamp, null, null);
 
-					e.Highlight = true;
+					// Mark the received chunk as needed:
+					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+					{
+						case AutoAction.Filter:   e.Attribute = Domain.LineChunkAttribute.Filter;           break;
+						case AutoAction.Suppress: e.Attribute = Domain.LineChunkAttribute.SuppressForSure;  break;
+						default:                  e.Attribute = Domain.LineChunkAttribute.Highlight;        break;
+					}
+				}
+				else
+				{
+					// Mark the received chunk as needed:
+					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+					{
+						case AutoAction.Filter: e.Attribute = Domain.LineChunkAttribute.PotentiallySuppress; break;
+					}
 				}
 			}
 		}
@@ -4997,6 +5014,8 @@ namespace YAT.Model
 			switch (action)
 			{
 				case AutoAction.Highlight:                       /* no additional action */                                    break;
+				case AutoAction.Filter:                          /* no additional action */                                    break;
+				case AutoAction.Suppress:                        /* no additional action */                                    break;
 				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                     break;
 				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, ts);                break;
 				case AutoAction.ClearRepositories:               ClearRepositories();                                          break;

@@ -3422,23 +3422,48 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
 		{
-			if ((trigger == AutoTrigger.AnyLine) && (this.settingsRoot.AutoAction.Action == AutoAction.Highlight))
+			if (trigger == AutoTrigger.AnyLine)
 			{
 				var text = new StringBuilder();
-				text.AppendLine("Trigger cannot be set to 'Any Line' if action is 'Highlight'!");
-				text.AppendLine();
-				text.Append    ("Reason: Highlighting is suppressed when trigger is 'Any Line', as that would otherwise result in all received lines being highlighted.");
 
-				MessageBoxEx.Show
-				(
-					this,
-					text.ToString(),
-					"Currently Invalid Trigger",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Exclamation
-				);
+				switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+				{
+					case AutoAction.Highlight:
+					{
+						text.AppendLine("Trigger cannot be set to 'Any Line' when action is 'Highlight'!");
+						text.AppendLine();
+						text.Append    ("Reason: Such action would result in all received lines being highlighted.");
+						break;
+					}
+
+					case AutoAction.Suppress:
+					{
+						text.AppendLine("Trigger cannot be set to 'Any Line' when action is 'Suppress'!");
+						text.AppendLine();
+						text.Append    ("Reason: Such action would result in all received lines being suppressed.");
+						break;
+					}
+
+					default: // Accept change of trigger:
+					{
+						this.settingsRoot.AutoAction.Trigger = trigger;
+						break;
+					}
+				}
+
+				if (text.Length > 0)
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						text.ToString(),
+						"Currently Invalid Trigger",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Exclamation
+					);
+				}
 			}
-			else
+			else // Accept change of trigger:
 			{
 				this.settingsRoot.AutoAction.Trigger = trigger;
 			}
@@ -3447,23 +3472,48 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestAutoActionAction(AutoActionEx action)
 		{
-			if ((action == AutoAction.Highlight) && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
+			if (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine)
 			{
 				var text = new StringBuilder();
-				text.AppendLine("Action cannot be set to 'Highlight' if trigger is 'Any Line'!");
-				text.AppendLine();
-				text.Append    ("Reason: Highlighting is suppressed when trigger is 'Any Line', as that would otherwise result in all received lines being highlighted.");
 
-				MessageBoxEx.Show
-				(
-					this,
-					text.ToString(),
-					"Currently Invalid Action",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Exclamation
-				);
+				switch ((AutoAction)action)
+				{
+					case AutoAction.Highlight:
+					{
+						text.AppendLine("Action cannot be set to 'Highlight' when trigger is 'Any Line'!");
+						text.AppendLine();
+						text.Append    ("Reason: Such action would result in all received lines being highlighted.");
+						break;
+					}
+
+					case AutoAction.Suppress:
+					{
+						text.AppendLine("Action cannot be set to 'Suppress' when trigger is 'Any Line'!");
+						text.AppendLine();
+						text.Append    ("Reason: Such action would result in all received lines being suppressed.");
+						break;
+					}
+
+					default: // Accept change of action:
+					{
+						this.settingsRoot.AutoAction.Action = action;
+						break;
+					}
+				}
+
+				if (text.Length > 0)
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						text.ToString(),
+						"Currently Invalid Action",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Exclamation
+					);
+				}
 			}
-			else
+			else // Accept change of action:
 			{
 				this.settingsRoot.AutoAction.Action = action;
 			}
