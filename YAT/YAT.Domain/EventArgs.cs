@@ -112,10 +112,11 @@ namespace YAT.Domain
 	public class RawChunkEventArgs : EventArgs<RawChunk>
 	{
 		/// <summary></summary>
-		public bool Highlight { get; set; } // = false;
+		public LineChunkAttribute Attribute { get; set; } // = LineChunkAttributeNone;
 
 		/// <remarks>
-		/// <see cref="Highlight"/> is intended to be set by the event sink.
+		/// The <see cref="Attribute"/> is intended to be set by the event sink,
+		/// therefore not part of the constructor parameters.
 		/// </remarks>
 		public RawChunkEventArgs(RawChunk value)
 			: base(value)

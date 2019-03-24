@@ -54,6 +54,27 @@ namespace YAT.Domain
 		/// <summary></summary>
 		Bidir = 3
 	}
+
+	/// <remarks>
+	/// So far there can only be one attribute, thus named "Attribute" and not marked [Flags].
+	/// </remarks>
+	public enum LineChunkAttribute
+	{
+		/// <summary></summary>
+		None =  0,
+
+		/// <summary>Resulting line shall be highlighted.</summary>
+		Highlight,
+
+		/// <summary>Resulting line shall be included when filtering is active.</summary>
+		Filter,
+
+		/// <summary>Resulting line shall may be excluded when filtering is active.</summary>
+		PotentiallySuppress,
+
+		/// <summary>Resulting line shall be excluded when suppressing is active.</summary>
+		SuppressForSure
+	}
 }
 
 //==================================================================================================
