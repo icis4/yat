@@ -35,6 +35,7 @@ using System.Globalization;
 using System.Text;
 
 using MKY;
+using MKY.Contracts;
 
 #endregion
 
@@ -48,6 +49,7 @@ namespace YAT.Domain
 	/// content itself, it also contains interface and time information.
 	/// </summary>
 	[ImmutableObject(true)]
+	[ImmutableContract(true)]
 	public class RawChunk
 	{
 		#region Constants

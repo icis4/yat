@@ -34,6 +34,8 @@ namespace MKY.Contracts
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Event | AttributeTargets.Delegate, AllowMultiple = true)]
 	public sealed class CallingContractAttribute : Attribute
 	{
+		// Note that fields and manual properties are needed to implement the logic among the fields.
+
 		private bool isAlwaysMainThread;
 		private bool isNeverMainThread;
 		private bool isAlwaysSequential;
