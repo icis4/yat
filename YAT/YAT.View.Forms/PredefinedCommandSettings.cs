@@ -487,7 +487,7 @@ namespace YAT.View.Forms
 		// Non-Public Methods > Pages
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always)]
+		[ModalBehaviorContract(ModalBehavior.Always)]
 		private void NamePage()
 		{
 			string pageName;
@@ -506,7 +506,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void InsertPage()
 		{
 			int pageNumber = this.selectedPage;
@@ -527,7 +527,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void AddPage()
 		{
 			int pageNumber = this.settingsInEdit.Pages.Count + 1;
@@ -549,7 +549,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void CopyPage()
 		{
 			string pageName;
@@ -570,7 +570,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void DeletePage()
 		{
 			if (MessageBoxEx.Show
@@ -617,7 +617,7 @@ namespace YAT.View.Forms
 			SetPagesControls();
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void DeletePages()
 		{
 			if (MessageBoxEx.Show
@@ -652,7 +652,7 @@ namespace YAT.View.Forms
 			page.SetCommand(command - 1, this.predefinedCommandSettingsSets[command - 1].Command);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ClearPage()
 		{
 			if (MessageBoxEx.Show
@@ -673,7 +673,7 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowHelp()
 		{
 			MessageBoxEx.Show

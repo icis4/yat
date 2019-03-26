@@ -317,7 +317,7 @@ namespace YAT.View.Forms
 			ValidateAndUpdateInfoEnclosure(comboBox_InfoEnclosure.Text);
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_InfoEnclosure_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -666,7 +666,7 @@ namespace YAT.View.Forms
 			// Do nothing.
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBoxEx.Show
@@ -952,7 +952,7 @@ namespace YAT.View.Forms
 			monitor_Example.AddLines(exampleComplete.ToLines());
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFontDialog()
 		{
 			FontDialog fd;
@@ -1007,7 +1007,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowBackgroundColorDialog()
 		{
 			colorDialog.CustomColors = this.customColors;

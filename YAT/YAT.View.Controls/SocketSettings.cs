@@ -219,7 +219,7 @@ namespace YAT.View.Controls
 			TcpClientAutoReconnect = ai;
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_TcpClientAutoReconnectInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)

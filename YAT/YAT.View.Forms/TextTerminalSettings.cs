@@ -179,7 +179,7 @@ namespace YAT.View.Forms
 	////private void comboBox_TxEol_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since   "  _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_TxEol_Validating(object sender, CancelEventArgs e)
 		{
 			string eolString = comboBox_TxEol.Text;
@@ -223,7 +223,7 @@ namespace YAT.View.Forms
 	////private void comboBox_RxEol_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since   "  _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RxEol_Validating(object sender, CancelEventArgs e)
 		{
 			string eolString = comboBox_RxEol.Text;
@@ -269,7 +269,7 @@ namespace YAT.View.Forms
 			this.settingsInEdit.LineSendDelay = lsd;
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_Delay_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -306,7 +306,7 @@ namespace YAT.View.Forms
 				label_DelayIntervalUnit.Text = "lines";
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DelayInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -363,7 +363,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_WaitForResponse_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -491,7 +491,7 @@ namespace YAT.View.Forms
 			// Do nothing.
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBoxEx.Show

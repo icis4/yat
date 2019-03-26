@@ -254,7 +254,7 @@ namespace YAT.View.Controls
 	////private void comboBox_Port_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since  "  _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Port_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -329,7 +329,7 @@ namespace YAT.View.Controls
 		/// 
 		/// Note that the same fix has been implemented in <see cref="SocketSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
 		/// </remarks>
-		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
+		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetPortList()
 		{
 			// Only scan for ports if control is enabled and visible. This saves some time and prevents issues. And refresh makes no sense if not visible.

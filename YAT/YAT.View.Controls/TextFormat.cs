@@ -317,7 +317,7 @@ namespace YAT.View.Controls
 			Strikeout = checkBox_Strikeout.Checked;
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Color_Click(object sender, EventArgs e)
 		{
 			colorDialog.CustomColors = CustomColors;

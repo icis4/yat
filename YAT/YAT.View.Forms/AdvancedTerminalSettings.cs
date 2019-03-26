@@ -379,7 +379,7 @@ namespace YAT.View.Forms
 				label_MaxLineCountUnit.Text = "lines";
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxLineCount_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -414,7 +414,7 @@ namespace YAT.View.Forms
 				label_MaxBytePerLineCountUnit.Text = "bytes per line";
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxBytePerLineCount_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -630,7 +630,7 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize = lob;
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_OutputBufferSize_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -690,7 +690,7 @@ namespace YAT.View.Forms
 				label_MaxChunkSizeUnit.Text = "bytes";
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxChunkSize_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -738,7 +738,7 @@ namespace YAT.View.Forms
 				label_MaxSendRateIntervalUnit1.Text = "bytes per";
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxSendRateSize_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -766,7 +766,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxSendRateInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -874,7 +874,7 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Send.File.EnableEscapes = checkBox_EnableEscapesForFile.Checked;
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultDelay_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -900,7 +900,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultLineDelay_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -926,7 +926,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultLineInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -967,7 +967,7 @@ namespace YAT.View.Forms
 				label_DefaultLineRepeatUnit.Text = "times";
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultLineRepeat_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1013,7 +1013,7 @@ namespace YAT.View.Forms
 			// Do nothing.
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBoxEx.Show

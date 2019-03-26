@@ -806,7 +806,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Almost duplicated code in <see cref="SendText.ShowMultiLineBox"/>.
 		/// </remarks>
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineBox(Control requestingControl)
 		{
 			// Indicate multi-line text:
@@ -856,7 +856,7 @@ namespace YAT.View.Controls
 		// Non-Public Methods > File
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenFileDialog()
 		{
 			var ofd = new OpenFileDialog();

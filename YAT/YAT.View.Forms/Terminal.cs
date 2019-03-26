@@ -4342,7 +4342,7 @@ namespace YAT.View.Forms
 		// Monitor Panels > Methods
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
 			int[] customColors = ApplicationSettings.RoamingUserSettings.View.CustomColorsToWin32();
@@ -4401,7 +4401,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowSaveMonitorDialog(Controls.Monitor monitor)
 		{
 			SetFixedStatusText("Preparing to save data...");
@@ -4434,7 +4434,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
 			SetFixedStatusText("Saving selected lines...");
@@ -4514,7 +4514,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPrintMonitorDialog(Controls.Monitor monitor)
 		{
 			SetFixedStatusText("Preparing to print data...");
@@ -4612,7 +4612,7 @@ namespace YAT.View.Forms
 
 		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
 			var f = new PredefinedCommandSettings
@@ -4980,7 +4980,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
+		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			if (IsDisposed)
@@ -5219,7 +5219,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			if (IsDisposed)
@@ -5281,7 +5281,7 @@ namespace YAT.View.Forms
 		// Terminal > Methods
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private DialogResult ShowSaveTerminalAsFileDialog()
 		{
 			SetFixedStatusText("Saving terminal as...");
@@ -5324,7 +5324,7 @@ namespace YAT.View.Forms
 		// Terminal > Settings
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTerminalSettings()
 		{
 			SetFixedStatusText("Terminal Settings...");
@@ -5910,7 +5910,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowLogSettings()
 		{
 			var f = new LogSettings(this.settingsRoot.Log);

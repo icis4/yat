@@ -621,7 +621,7 @@ namespace YAT.View.Controls
 		// Non-Public Methods > Open File
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private bool ShowOpenFileDialog()
 		{
 			var ofd = new OpenFileDialog();
@@ -719,7 +719,7 @@ namespace YAT.View.Controls
 		// Non-Public Methods > Request Send
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void RequestSendCommand()
 		{
 			if (this.command.IsValidFilePath(this.rootDirectory))

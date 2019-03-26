@@ -400,7 +400,7 @@ namespace YAT.View.Forms
 			this.newTerminalSettings.UsbSerialHidMatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBoxEx.Show
@@ -419,7 +419,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Help_Click(object sender, EventArgs e)
 		{
 			// \fixme: Replace MessageBox with a real help.

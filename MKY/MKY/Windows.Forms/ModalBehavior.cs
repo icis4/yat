@@ -51,7 +51,7 @@ namespace MKY.Windows.Forms
 	#endregion
 
 	/// <summary>
-	/// This <see cref="System.Windows.Forms"/> utility attribute can be used to emphasize that a
+	/// This <see cref="System.Windows.Forms"/> contract attribute can be used to emphasize that a
 	/// method is always or sometimes shown modal. The attribute can then be used to find all modal
 	/// and potentially modal locations within a the application.
 	/// </summary>
@@ -59,7 +59,7 @@ namespace MKY.Windows.Forms
 	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Method)]
-	public sealed class ModalBehaviorAttribute : Attribute
+	public sealed class ModalBehaviorContractAttribute : Attribute
 	{
 		/// <summary></summary>
 		public ModalBehavior Behavior { get; }
@@ -68,7 +68,7 @@ namespace MKY.Windows.Forms
 		public string Approval { get; set; }
 
 		/// <summary></summary>
-		public ModalBehaviorAttribute(ModalBehavior behavior)
+		public ModalBehaviorContractAttribute(ModalBehavior behavior)
 		{
 			Behavior = behavior;
 		}

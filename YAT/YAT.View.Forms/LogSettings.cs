@@ -234,7 +234,7 @@ namespace YAT.View.Forms
 	////private void comboBox_Port_Extension_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since        "      _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Port_Extension_Validating(object sender, CancelEventArgs e)
 		{
 			if (!ValidateFileNamePart(comboBox_Port_Extension.Text, "Extension"))
@@ -304,7 +304,7 @@ namespace YAT.View.Forms
 	////private void comboBox_Raw_Extension_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since       "      _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Raw_Extension_Validating(object sender, CancelEventArgs e)
 		{
 			if (!ValidateFileNamePart(comboBox_Raw_Extension.Text, "Extension"))
@@ -374,7 +374,7 @@ namespace YAT.View.Forms
 	////private void comboBox_Neat_Extension_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since        "      _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Neat_Extension_Validating(object sender, CancelEventArgs e)
 		{
 			if (!ValidateFileNamePart(comboBox_Neat_Extension.Text, "Extension"))
@@ -437,7 +437,7 @@ namespace YAT.View.Forms
 	////private void comboBox_Options_NameSeparator_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since           "          _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Options_NameSeparator_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -538,7 +538,7 @@ namespace YAT.View.Forms
 			// Do nothing.
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBoxEx.Show
@@ -673,7 +673,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowSetRootDirectoryDialog()
 		{
 			var ofd = new OpenFileDialog();
@@ -705,7 +705,7 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool ValidateFileNamePart(string fileNamePart, string title)
 		{
 			char[] invalid = Path.GetInvalidFileNameChars();
@@ -741,7 +741,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ExtensionConflictMessage()
 		{
 			string message =
@@ -760,7 +760,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool InhibitNamingConflicts()
 		{
 			if ((this.settingsInEdit.SameDirection) && (this.settingsInEdit.SameExtension) &&

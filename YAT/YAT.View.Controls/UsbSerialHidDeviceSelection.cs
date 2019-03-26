@@ -236,7 +236,7 @@ namespace YAT.View.Controls
 		/// 
 		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/> and <see cref="SocketSelection"/>.
 		/// </remarks>
-		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
+		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetDeviceList()
 		{
 			// Only scan for devices if control is enabled. This saves some time and prevents issues.
