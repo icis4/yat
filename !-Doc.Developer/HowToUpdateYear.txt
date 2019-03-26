@@ -20,9 +20,9 @@
 	 > "Copyright © 2003-2019 Matthias Kläy."  => 434 replacements
 	 > "Copyright © 2007-2019 Matthias Kläy."  => 147 replacements
 	 > "Copyright © 2010-2019 Matthias Kläy."  =>  59 replacements
-	 > "Copyright © 2008-2018 Mettler-Toledo." => 264 replacements (=> scripting, testing)
+	 > "Copyright © 2008-2018 Mettler-Toledo." => 307 replacements (=> scripting, testing)
 	 > "Copyright © 2014-2018 Mettler-Toledo." =>   6 replacements (=> scripting templates)
-	 > "Copyright © 2017-2018 Mettler-Toledo." => 183 replacements (=> scripting examples, NUnit testing)
+	 > "Copyright © 2017-2018 Mettler-Toledo." => 268 replacements (=> scripting examples, NUnit testing)
 	 > "2019, Matthias Kläy"                   =>   2 replacements
 
 6.	Then, search "\Trunk" (neither match case and nor whole word) throughout...
