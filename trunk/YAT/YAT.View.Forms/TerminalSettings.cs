@@ -443,7 +443,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			string type;
@@ -476,7 +476,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Help_Click(object sender, EventArgs e)
 		{
 			// \fixme: Replace MessageBox with a real help.
@@ -631,7 +631,7 @@ namespace YAT.View.Forms
 			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTextOrBinarySettings()
 		{
 			var tt = this.settingsInEdit.Terminal.TerminalType;
@@ -670,7 +670,7 @@ namespace YAT.View.Forms
 		/// The following list must handle the same properties as
 		/// <see cref="View.Forms.AdvancedTerminalSettings.SetDefaults()"/> defaults.
 		/// </remarks>
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowAdvancedSettings()
 		{
 			var f = new AdvancedTerminalSettings(this.settingsInEdit);

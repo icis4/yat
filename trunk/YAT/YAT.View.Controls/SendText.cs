@@ -1116,7 +1116,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Almost duplicated code in <see cref="PredefinedCommandSettingsSet.ShowMultiLineBox"/>.
 		/// </remarks>
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineBox(Control requestingControl)
 		{
 			var previousText            = comboBox_SingleLineText.Text;

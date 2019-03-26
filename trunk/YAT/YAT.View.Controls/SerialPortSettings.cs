@@ -341,7 +341,7 @@ namespace YAT.View.Controls
 	////private void comboBox_BaudRate_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since    "   _Validating() below gets called anyway.
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -408,7 +408,7 @@ namespace YAT.View.Controls
 			AliveMonitor = ai;
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_AliveMonitorInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -445,7 +445,7 @@ namespace YAT.View.Controls
 			AutoReopen = ar;
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)

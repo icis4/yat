@@ -1065,7 +1065,7 @@ namespace YAT.Controller
 		// Non-Public Methods > MessageBox
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMessageBoxHelp(bool showLogo)
 		{
 			var sb = new StringBuilder();

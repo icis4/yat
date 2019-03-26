@@ -82,7 +82,7 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void button_CopyToClipboard_Click(object sender, EventArgs e)
 		{
 			bool retry = false;
@@ -148,7 +148,7 @@ namespace YAT.View.Forms
 			while (retry);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Instructions_Click(object sender, EventArgs e)
 		{
 			var f = new TrackerInstructions(TrackerType.Bug);

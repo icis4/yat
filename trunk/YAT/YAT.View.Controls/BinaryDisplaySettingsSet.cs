@@ -130,7 +130,7 @@ namespace YAT.View.Controls
 				label_LengthLineBreakUnit.Text = "bytes";
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_LengthLineBreak_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
@@ -233,7 +233,7 @@ namespace YAT.View.Controls
 			OnSettingsChanged(EventArgs.Empty);
 		}
 
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_TimedLineBreakTimeout_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)

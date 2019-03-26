@@ -241,7 +241,7 @@ namespace YAT.View.Forms
 		/// WITHOUT a view, <see cref="Model.Main.Start"/> is called by either
 		/// YAT.Controller.Main.RunFullyFromConsole() or YAT.Controller.Main.RunInvisible().
 		/// </remarks>
-		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
+		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void Main_Shown(object sender, EventArgs e)
 		{
 			this.isStartingUp = false;
@@ -863,7 +863,7 @@ namespace YAT.View.Forms
 		// Controls Event Handlers > Main Menu > Help
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_Contents_Click(object sender, EventArgs e)
 		{
 			var f = new Help();
@@ -872,7 +872,7 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
 		{
 			var f = new ReleaseNotes();
@@ -881,7 +881,7 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestSupport_Click(object sender, EventArgs e)
 		{
 			var f = new TrackerInstructions(TrackerType.Support);
@@ -890,7 +890,7 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestFeature_Click(object sender, EventArgs e)
 		{
 			var f = new TrackerInstructions(TrackerType.Feature);
@@ -899,7 +899,7 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_SubmitBug_Click(object sender, EventArgs e)
 		{
 			var f = new TrackerInstructions(TrackerType.Bug);
@@ -908,14 +908,14 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
-		[ModalBehavior(ModalBehavior.Never)]
+		[ModalBehaviorContract(ModalBehavior.Never)]
 		private void toolStripMenuItem_MainMenu_Help_Donate_Click(object sender, EventArgs e)
 		{
 			var link = "https://sourceforge.net/p/y-a-terminal/donate/";
 			LinkHelper.TryBrowseUriAndShowErrorIfItFails(this, link);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_About_Click(object sender, EventArgs e)
 		{
 			var f = new About();
@@ -2453,7 +2453,7 @@ namespace YAT.View.Forms
 		// Preferences
 		//==========================================================================================
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPreferences()
 		{
 			var f = new Preferences(ApplicationSettings.LocalUserSettings);
@@ -2602,7 +2602,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText(e.Value);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void main_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			DialogResult dr;
@@ -2743,13 +2743,13 @@ namespace YAT.View.Forms
 		// Main > Methods > New
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowNewTerminalDialog()
 		{
 			ShowNewTerminalDialog(ApplicationSettings.LocalUserSettings.NewTerminal);
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowNewTerminalDialog(Model.Settings.NewTerminalSettings newTerminalSettings)
 		{
 			SetFixedStatusText("New terminal...");
@@ -2782,7 +2782,7 @@ namespace YAT.View.Forms
 		// Main > Methods > Open File
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenFileDialog()
 		{
 			SetFixedStatusText("Select a file...");
@@ -2830,7 +2830,7 @@ namespace YAT.View.Forms
 		/// is also possible to select a workspace file using the 'normal' 'File Open' method.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenWorkspaceFromFileDialog()
 		{
 			SetFixedStatusText("Select a file...");
@@ -2856,7 +2856,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private DialogResult ShowSaveWorkspaceAsFileDialog()
 		{
 			SetFixedStatusText("Select a workspace file name...");
@@ -3128,7 +3128,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);

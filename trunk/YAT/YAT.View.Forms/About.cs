@@ -408,7 +408,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest1_Click(object sender, EventArgs e)
 		{
 			string message =
@@ -428,7 +428,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest2_Click(object sender, EventArgs e)
 		{
 			string message =
@@ -468,7 +468,7 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.
 		/// </summary>
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
 		{
 			string message =

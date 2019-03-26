@@ -72,7 +72,7 @@ namespace MKY.Windows.Forms
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[ModalBehavior(ModalBehavior.Always)]
+		[ModalBehaviorContract(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string caption, string status1, string status2 = null)
 		{
 			bool setting = false;
@@ -112,7 +112,7 @@ namespace MKY.Windows.Forms
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
-		[ModalBehavior(ModalBehavior.Always)]
+		[ModalBehaviorContract(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string caption, string status1, string status2, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
 			StatusBox sb = new StatusBox();
@@ -120,7 +120,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		[ModalBehavior(ModalBehavior.Never)]
+		[ModalBehaviorContract(ModalBehavior.Never)]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static StatusBox Create(string caption, string status1, string status2 = null)
 		{
@@ -260,7 +260,7 @@ namespace MKY.Windows.Forms
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[ModalBehavior(ModalBehavior.Always)]
+		[ModalBehaviorContract(ModalBehavior.Always)]
 		public DialogResult ShowDialog(IWin32Window owner, string caption, string status1, string status2 = null)
 		{
 			bool setting = false;
@@ -270,7 +270,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Setting is required to be received, modified and returned.")]
-		[ModalBehavior(ModalBehavior.Always)]
+		[ModalBehaviorContract(ModalBehavior.Always)]
 		public DialogResult ShowDialog(IWin32Window owner, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
 			return (ShowDialog(owner, Caption, Status1, Status2, settingText, ref setting, showCancel, timeout));
@@ -279,7 +279,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
-		[ModalBehavior(ModalBehavior.Always)]
+		[ModalBehaviorContract(ModalBehavior.Always)]
 		public DialogResult ShowDialog(IWin32Window owner, string caption, string status1, string status2, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
 			DialogResult dr;
