@@ -87,6 +87,7 @@
     <Compile Include="Collections\IEnumeratorEx.cs" />
     <Compile Include="Collections\IEnumerableEx.cs" />
     <Compile Include="ComponentModel\CancelEventArgs.cs" />
+    <Compile Include="Contracts\ImmutableContract.cs" />
     <Compile Include="Diagnostics\DebugFinalization.cs" />
     <Compile Include="Diagnostics\DebugDisposal.cs" />
     <Compile Include="Diagnostics\DebugEventManagement.cs" />
