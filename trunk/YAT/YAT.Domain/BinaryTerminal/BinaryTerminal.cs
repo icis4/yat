@@ -665,6 +665,9 @@ namespace YAT.Domain
 			this.bidirLineState = new BidirLineState();
 		}
 
+		/// <remarks>
+		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// </remarks>
 		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
@@ -690,6 +693,9 @@ namespace YAT.Domain
 			lineState.TimeStamp = ts;
 		}
 
+		/// <remarks>
+		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteContent(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection d, byte b, DisplayElementCollection elements, out List<DisplayElement> elementsForNextLine)
@@ -820,6 +826,9 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// </remarks>
 		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
@@ -954,6 +963,9 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
