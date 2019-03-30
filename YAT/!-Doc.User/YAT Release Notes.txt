@@ -117,6 +117,7 @@ Important changes:
    > Shortcut of [Send Text] changed to [Alt+E] to distinguish from shortcut of [Terminal] menu.
    > Shortcut of [Send File] changed to [Alt+I] to distinguish from shortcut of [File] menu.
    > Shortcut to [Monitor] added as [Alt+M].
+- Text terminals: Refactoring of EOL handling (related to feature requests #224, #340 and #347).
 
 Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).

@@ -798,7 +798,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual DisplayElement RecreateFromOriginItem(Pair<byte[], string> originItem)
+		public virtual DisplayElement RecreateFromOrigin(Pair<byte[], string> origin)
 		{
 			var clone = Clone(); // Ensure to recreate the proper type.
 
@@ -806,12 +806,12 @@ namespace YAT.Domain
 
 			// Replace origin and byteCount:
 			var clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capacity to improve memory management.
-			clonedOrigin.Add(PerformDeepClone(originItem));
+			clonedOrigin.Add(PerformDeepClone(origin));
 			clone.origin = clonedOrigin;
-			clone.byteCount = originItem.Value1.Length;
+			clone.byteCount = origin.Value1.Length;
 
 			// Replace text:
-			string text = originItem.Value2;
+			string text = origin.Value2;
 			clone.text = text;
 
 			return (clone);
