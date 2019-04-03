@@ -305,6 +305,7 @@ namespace YAT.View.Controls
 
 				panel_Udp.Visible = isUdp;
 
+				label_UdpServerSendMode.Enabled                  = enabledAndUdpServer;
 				radioButton_UdpServerSendMode_MostRecent.Enabled = enabledAndUdpServer;
 				radioButton_UdpServerSendMode_MostRecent.Checked = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent);
 				radioButton_UdpServerSendMode_First.Enabled      = enabledAndUdpServer;
