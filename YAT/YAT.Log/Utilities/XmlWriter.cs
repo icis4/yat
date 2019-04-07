@@ -121,7 +121,6 @@ namespace YAT.Log.Utilities
 		}
 
 	#if (DEBUG)
-
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -139,7 +138,6 @@ namespace YAT.Log.Utilities
 
 			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
-
 	#endif // DEBUG
 
 		/// <summary></summary>

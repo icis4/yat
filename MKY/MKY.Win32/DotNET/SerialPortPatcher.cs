@@ -158,7 +158,6 @@ namespace MKY.Win32.DotNet
 		}
 
 	#if (DEBUG)
-
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -176,7 +175,6 @@ namespace MKY.Win32.DotNet
 
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
-
 	#endif // DEBUG
 
 		/// <summary></summary>

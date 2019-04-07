@@ -248,7 +248,6 @@ namespace MKY.IO.Ports
 		public bool IsDisposed { get; protected set; }
 
 	#if (DEBUG)
-
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -269,7 +268,6 @@ namespace MKY.IO.Ports
 
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
-
 	#endif // DEBUG
 
 		/// <summary></summary>
