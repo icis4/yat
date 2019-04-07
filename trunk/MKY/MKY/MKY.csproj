@@ -18,7 +18,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Debug\MKY.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\MKY.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -29,7 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Release\MKY.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\MKY.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
