@@ -191,6 +191,19 @@ namespace YAT.Domain
 			Evaluate();
 		}
 
+		/// <summary>
+		/// Creates and returns a new object that is a deep-copy of this instance.
+		/// </summary>
+		public virtual SequenceQueue Clone()
+		{
+			SequenceQueue clone = new SequenceQueue(this.sequence);
+
+			clone.queue = new Queue<byte>(this.queue);
+			clone.state = this.state;
+
+			return (clone);
+		}
+
 		#endregion
 
 		#region Non-Public Methods
