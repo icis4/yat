@@ -89,10 +89,24 @@ namespace YAT.Domain
 		{
 			None      =  0,
 			Content   =  1,
+		#if (DEBUG)
+			/// <remarks>
+			/// Item used to be used but no longer is, thus excluding it (YAGNI). Still,
+			/// keeping the implementation to be prepared for potential reactivation (!YAGNI).
+			/// </remarks>
+			/// <remarks>
+			/// It is not possible to mark an enum item with [Conditional("DEBUG")].
+			/// And that wouldn't be sufficient here anyway.
+			/// </remarks>
 			Eol       =  2,
 			Inline    =  4,
 			Info      =  8,
 			Auxiliary = 16
+		#else // RELEASE
+			Inline    =  2,
+			Info      =  4,
+			Auxiliary =  8
+		#endif // DEBUG || RELEASE
 		}
 
 		#pragma warning restore 1591
@@ -716,7 +730,14 @@ namespace YAT.Domain
 			get { return ((this.attributes & ElementAttributes.Content) != 0); }
 		}
 
-		/// <summary></summary>
+	#if (DEBUG)
+		/// <remarks>
+		/// Property used to be used but no longer is, thus excluding it (YAGNI). Still,
+		/// keeping the implementation to be prepared for potential reactivation (!YAGNI).
+		/// </remarks>
+		/// <remarks>
+		/// It is not possible to mark a property with [Conditional("DEBUG")].
+		/// </remarks>
 		[XmlIgnore]
 		public virtual bool IsEol
 		{
@@ -729,6 +750,7 @@ namespace YAT.Domain
 					this.attributes &= ~ElementAttributes.Eol;
 			}
 		}
+	#endif // DEBUG
 
 		/// <summary></summary>
 		[XmlIgnore]
