@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace YAT.Domain
 			public SequenceQueue   Eol                          { get; set; }
 
 			public DisplayLinePart RetainedUnconfirmedHiddenEolElements { get; set; }
-			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
+			public Dictionary<string, SequenceQueue> EolOfLastLineOfGivenPort { get; set; }
 
 			public DateTime TimeStamp { get; set; }
 
@@ -111,7 +112,7 @@ namespace YAT.Domain
 				Eol      = eol;
 
 				RetainedUnconfirmedHiddenEolElements = new DisplayLinePart(); // Default initial capacity is OK.
-				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>(); // Default initial capacity is OK.
+				EolOfLastLineOfGivenPort = new Dictionary<string, SequenceQueue>(); // Default initial capacity is OK.
 
 				TimeStamp = DateTime.Now;
 
@@ -121,7 +122,8 @@ namespace YAT.Domain
 				SuppressForSure     = false;
 			}
 
-			public virtual void Reset(string portStamp, bool eolOfLastLineWasCompleteMatch)
+			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for consistency with [Execute...()] methods.")]
+			public virtual void Reset(string ps, SequenceQueue eolOfLastLine)
 			{
 				Position = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
@@ -129,10 +131,10 @@ namespace YAT.Domain
 
 				RetainedUnconfirmedHiddenEolElements = new DisplayLinePart(); // Default initial capacity is OK.
 
-				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(portStamp))
-					EolOfLastLineOfGivenPortWasCompleteMatch[portStamp] = eolOfLastLineWasCompleteMatch;
-				else
-					EolOfLastLineOfGivenPortWasCompleteMatch.Add(portStamp, eolOfLastLineWasCompleteMatch);
+				if (EolOfLastLineOfGivenPort.ContainsKey(ps))        // It is OK to only assign or add to the collection,
+					EolOfLastLineOfGivenPort[ps] = eolOfLastLine;    // this will not lead to excessive use of memory,
+				else                                                 // since there is only a given number of ports.
+					EolOfLastLineOfGivenPort.Add(ps, eolOfLastLine); // Applies to TCP and UDP terminals only
 
 				TimeStamp = DateTime.Now;
 
@@ -1044,6 +1046,9 @@ namespace YAT.Domain
 					{
 						AddSpaceIfNecessary(lineState, d, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
+
+						int eolByteCount = lineState.Eol.Sequence.Length;
+						MarkCompletedEol(eolByteCount, lp); // Precondition: [lp] must contain at least one element. This is given.
 					}
 					else
 					{
@@ -1096,13 +1101,19 @@ namespace YAT.Domain
 						lineState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
 
 						// Potential but not yet confirmed EOL elements shall be retained until EOL
-						// is either confirmed or dismissed, in order to prevent flickering like:
+						// is either confirmed or dismissed, in order to...
+						//
+						// ...prevent flickering like:
 						//  1. ABC
 						//  2. ABC<CR>
 						//  3. ABC
 						//
+						// ...significantly simplify the ExecuteLineEnd() implementation since it
+						// is no longer needed to remove EOL from elements as it was the case until
+						// SVN revision #2052 of this file.
+						//
 						// Nice-to-have refinement of this behavior:
-						// Retained EOL elements shall be shown after a timeout of 150 ms => FR#364.
+						// Retained EOL elements shall be shown after a timeout of e.g. 150 ms => FR#364.
 					}
 				}
 				else
@@ -1133,8 +1144,8 @@ namespace YAT.Domain
 					(lineState.Position != LinePosition.ContentExceeded))
 				{
 					lineState.Position = LinePosition.ContentExceeded;
-					                                     //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
-					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
+					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
+					var message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
 					elements.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
@@ -1160,6 +1171,115 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
+		/// Precondition: <paramref name="lp"/> must contain at least one element.
+		/// </remarks>
+		/// <remarks>
+		/// Functionality used to be used but no longer is, thus excluding it (YAGNI). Still,
+		/// keeping the implementation to be prepared for potential reactivation (!YAGNI).
+		/// </remarks>
+		[Conditional("DEBUG")]
+		private static void MarkCompletedEol(int eolByteCount, DisplayLinePart lp)
+		{
+			// Ensure that the correct element(s) are marked. This includes:
+			// <CR><CR><LF> where only the last two are EOL!
+			// <CR>␣<CR>␣<LF> (= spread across 3 display elements) where only the two content elements are EOL!
+			// <CR>ZZZZ<LF> where ZZ<LF> (= spread across 2 display elements) could be the EOL (unlikely but possible).
+			// <CR>ZZZZ<LF> where <CR>ZZZZ<LF> (= spread across 3 display elements) could be the EOL (even less unlikely but still possible).
+
+			var lastElement = lp.Last();
+			var lastElementByteCount = lastElement.ByteCount;
+			if (lastElementByteCount == eolByteCount) // Simplest case, EOL consists of a single sequence of control characters, e.g. <CR><LF>:
+			{
+				lastElement.IsEol = true;
+			}
+			else if (lastElementByteCount > eolByteCount) // +/- simple case, there is non-EOL content in the last element:
+			{
+				// Remove the last element:
+				lp.RemoveLast(); // Precondition: [lp] must contain at least one element.
+
+				// Unfold the last element into single elements for correct processing:
+				var unfolded = new List<DisplayElement>(); // Default initial capacity is good enough.
+				foreach (var origin in lastElement.Origin)
+					unfolded.Add(lastElement.RecreateFromOrigin(origin));
+
+				// Count content:
+				int unfoldedByteCount = 0;
+				foreach (var de in unfolded)
+					unfoldedByteCount += de.ByteCount;
+
+				// Append the unfolded elements again and mark EOL:
+				int firstEolIndex = (unfoldedByteCount - eolByteCount);
+				int currentIndex = 0;
+				foreach (var de in unfolded)
+				{
+					currentIndex += de.ByteCount;
+
+					if (currentIndex >= firstEolIndex)
+					{
+						if (de.IsContent) // e.g. separating ␣ are not part of EOL!
+							de.IsEol = true;
+					}
+
+					lp.Add(de); // No clone needed as all items have just been recreated futher above.
+				}
+
+				// Attention:
+				// Similar code exists further below.
+				// Changes above may have to be applied there too.
+			}
+			else // Tricky case, EOL is spread across multiple elements:
+			{
+				// Remove elements that contain EOL:
+				var removedElements = new List<DisplayElement>(); // Default initial capacity is good enough.
+				removedElements.Add(lastElement);
+				var removedByteCount = lastElementByteCount;
+				lp.RemoveLast(); // Precondition: [lp] must contain at least one element.
+				do
+				{
+					lastElement = lp.Last();
+					lastElementByteCount = lastElement.ByteCount;
+					removedElements.Add(lastElement);
+					removedByteCount += lastElementByteCount;
+					lp.RemoveLast(); // Precondition: [lp] must contain at least as many elements as EOL is spread. This is given.
+				}
+				while (removedByteCount >= eolByteCount);
+
+				// Unfold the elements into single elements for correct processing:
+				var unfolded = new List<DisplayElement>(); // Default initial capacity is good enough.
+				foreach (var de in removedElements)
+				{
+					foreach (var origin in lastElement.Origin)
+						unfolded.Add(lastElement.RecreateFromOrigin(origin));
+				}
+
+				// Count content:
+				int unfoldedByteCount = 0;
+				foreach (var de in unfolded)
+					unfoldedByteCount += de.ByteCount;
+
+				// Append the unfolded elements again and mark EOL:
+				int firstEolIndex = (unfoldedByteCount - eolByteCount);
+				int currentIndex = 0;
+				foreach (var de in unfolded)
+				{
+					currentIndex += de.ByteCount;
+
+					if (currentIndex >= firstEolIndex)
+					{
+						if (de.IsContent) // e.g. separating ␣ are not part of EOL!
+							de.IsEol = true;
+					}
+
+					lp.Add(de); // No clone needed as all items have just been recreated futher above.
+				}
+
+				// Attention:
+				// Similar code exists further above.
+				// Changes above may have to be applied there too.
+			}
+		}
+
+		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
 		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elements, List<DisplayLine> lines)
@@ -1168,109 +1288,6 @@ namespace YAT.Domain
 
 			                                 // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-
-			// Mark EOL if shown and complete:
-			int eolByteCount = lineState.Eol.Sequence.Length;
-			if (TextTerminalSettings.ShowEol && (eolByteCount > 0) && (lineState.Eol.IsCompleteMatch))
-			{
-				// Ensure that the correct element(s) are marked. This includes:
-				// <CR><CR><LF> where only the last two are EOL!
-				// <CR>␣<CR>␣<LF> (= spread across 3 display elements) where only the two content elements are EOL!
-				// <CR>ZZZZ<LF> where ZZ<LF> (= spread across 2 display elements) could be the EOL (unlikely but possible).
-				// <CR>ZZZZ<LF> where <CR>ZZZZ<LF> (= spread across 3 display elements) could be the EOL (even less unlikely but still possible).
-
-				var lastElement = lineState.Elements.Last();
-				var lastElementByteCount = lastElement.ByteCount;
-				if (lastElementByteCount == eolByteCount) // Simplest case, EOL consists of a single sequence of control characters, e.g. <CR><LF>:
-				{
-					lineState.Elements.Last().IsEol = true;
-				}
-				else if (lastElementByteCount > eolByteCount) // +/- simple case, there is non-EOL content in the last element:
-				{
-					// Remove the last element:
-					lineState.Elements.RemoveOneAtEnd();
-
-					// Unfold the last element into single elements for correct processing:
-					var unfolded = new List<DisplayElement>(); // Default initial capacity is good enough.
-					foreach (var origin in lastElement.Origin)
-						unfolded.Add(lastElement.RecreateFromOrigin(origin));
-
-					// Count content:
-					int unfoldedByteCount = 0;
-					foreach (var de in unfolded)
-						unfoldedByteCount += de.ByteCount;
-
-					// Append the unfolded elements again and mark EOL:
-					int firstEolIndex = (unfoldedByteCount - eolByteCount);
-					int currentIndex = 0;
-					foreach (var de in unfolded)
-					{
-						currentIndex += de.ByteCount;
-
-						if (currentIndex >= firstEolIndex)
-						{
-							if (de.IsContent) // e.g. separating ␣ are not part of EOL!
-								de.IsEol = true;
-						}
-
-						lineState.Elements.Add(de); // No clone needed as all items have just been recreated futher above.
-					}
-
-					// Attention:
-					// Similar code exists further below.
-					// Changes above may have to be applied there too.
-				}
-				else // Tricky case, EOL is spread across multiple elements:
-				{
-					// Remove elements that contain EOL:
-					var removedElements = new List<DisplayElement>(); // Default initial capacity is good enough.
-					removedElements.Add(lastElement);
-					var removedByteCount = lastElementByteCount;
-					lineState.Elements.RemoveOneAtEnd();
-					do
-					{
-						lastElement = lineState.Elements.Last();
-						lastElementByteCount = lastElement.ByteCount;
-						removedElements.Add(lastElement);
-						removedByteCount += lastElementByteCount;
-						lineState.Elements.RemoveOneAtEnd();
-					}
-					while (removedByteCount >= eolByteCount);
-
-					// Unfold the elements into single elements for correct processing:
-					var unfolded = new List<DisplayElement>(); // Default initial capacity is good enough.
-					foreach (var de in removedElements)
-					{
-						foreach (var origin in lastElement.Origin)
-							unfolded.Add(lastElement.RecreateFromOrigin(origin));
-					}
-
-					// Count content:
-					int unfoldedByteCount = 0;
-					foreach (var de in unfolded)
-						unfoldedByteCount += de.ByteCount;
-
-					// Append the unfolded elements again and mark EOL:
-					int firstEolIndex = (unfoldedByteCount - eolByteCount);
-					int currentIndex = 0;
-					foreach (var de in unfolded)
-					{
-						currentIndex += de.ByteCount;
-
-						if (currentIndex >= firstEolIndex)
-						{
-							if (de.IsContent) // e.g. separating ␣ are not part of EOL!
-								de.IsEol = true;
-						}
-
-						lineState.Elements.Add(de); // No clone needed as all items have just been recreated futher above.
-					}
-
-					// Attention:
-					// Similar code exists further above.
-					// Changes above may have to be applied there too.
-				}
-			} // Mark EOL if shown and complete.
 
 			// There could be retained elements, e.g. because EOL is incomplete:
 			TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(lineState, lineState.Elements);
@@ -1289,9 +1306,9 @@ namespace YAT.Domain
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 			// Potentially suppress empty lines that only contain hidden <CR><LF>:
-			bool suppressEmptyLine = ((lineState.Elements.ByteCount == 0) &&                                 // Empty line.
-			                           lineState.EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps) &&
-			                          !lineState.EolOfLastLineOfGivenPortWasCompleteMatch[ps]);              // EOL of last line of the current port is still pending.
+			bool suppressEmptyLine = ((lineState.Elements.ByteCount == 0) &&                  // Empty line.
+			                           lineState.EolOfLastLineOfGivenPort.ContainsKey(ps) &&
+			                           lineState.EolOfLastLineOfGivenPort[ps].IsPartlyMatch); // EOL of last line of the current port is still pending.
 			if (suppressEmptyLine)
 			{
 				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
@@ -1300,7 +1317,7 @@ namespace YAT.Domain
 			{
 				int initialCount = elements.Count;
 				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
-			////elementsToBeRemovedAgain = (initialCount - elements.Count); \ToDo
+			////elementsToBeRemovedAgain = (initialCount - elements.Count); \ToDo FR#347
 			}
 			else
 			{
@@ -1315,7 +1332,7 @@ namespace YAT.Domain
 			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
 
 			// Reset line state:
-			lineState.Reset(ps, lineState.Eol.IsCompleteMatch);
+			lineState.Reset(ps, lineState.Eol.Clone()); // Clone is essential as the current EOL will be reset!
 		}
 
 		/// <summary></summary>
