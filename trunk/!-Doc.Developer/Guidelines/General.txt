@@ -1,4 +1,11 @@
 ﻿
+Code
+----
+
+Keep code line below 120 characters.
+Note that headers are 100 characters.
+
+
 Assemblies
 ----------
 
