@@ -1494,7 +1494,7 @@ YAT 4.0 is already ongoing.
 around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4.0 with Scripting :: Expected in 2019 or 2020
+YAT 4.0 with Scripting :: Expected in late 2019 or 2020
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,

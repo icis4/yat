@@ -135,7 +135,14 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+- Serial COM port limitations of .NET:
+   > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
+     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+     a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
+     applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
+     #345, #382, #385, #387, #401). To prevent this issue, refrain from disconnecting a device
+     while its port is open. Or, manually close the port after the device got disconnected.
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
@@ -145,7 +152,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Epsilon Version 1.99.90 :: 2018-01-12
@@ -165,8 +172,8 @@ Important changes:
    > Cursor position and text selection is remembered (related to bugs #391 and #395).
    > Cursor no longer jumps to the end of the input box when sending the text (bug #395).
    > Cursor no longer jumps to the beginning of the input box after edit of recent (rel. bug #391).
-- Shortcut of [Clear] changed from (Shift+Delete) to (Ctrl+L) (related to change stated above).
-- Shortcut of [Save to File] changed from (Ctrl+F) to (Ctrl+T) (consequence of feat. #11 and #79).
+- Shortcut of [Clear] changed from [Shift+Delete] to [Ctrl+L] (related to change stated above).
+- Shortcut of [Save to File] changed from [Ctrl+F] to [Ctrl+T] (consequence of feat. #11 and #79).
 - Automatic response trigger is highlighted, same as automatic action trigger (rel. to feat. #320).
 - Automatic response extended by selection to respond the received trigger (related to feature
   requests #176, #252 implemented in version 1.99.50).
@@ -183,10 +190,10 @@ Fixed bugs:
 - Monitors no longer scroll to top as soon as display buffer has been filled (bugs #394 and #398 as
   well as feature request #326; related to feature request #323 implemented in previous release).
 - Focus no longer moves away from [Send Text] when switching applications (bug #391).
-- Standard word selection shortcuts (Ctrl+Shift+Left|Right) also work when commands are predefined.
-- Shortcuts to navigate command pages changed from (Ctrl+Shift+Left|Right) to (Ctrl+Alt+Left|Right)
-  and (Ctrl+Shift+F1..F12) to (Ctrl+Alt+1..9) as well as shortcuts to 'Copy to Send Text' changed
-  from (Alt+Shift+F1..F12) to (Ctrl+Shift+F1..F12) (consequence of change above).
+- Standard word selection shortcuts [Ctrl+Shift+Left|Right] also work when commands are predefined.
+- Shortcuts to navigate command pages changed from [Ctrl+Shift+Left|Right] to [Ctrl+Alt+Left|Right]
+  and [Ctrl+Shift+F1..F12] to [Ctrl+Alt+1..9] as well as shortcuts to 'Copy to Send Text' changed
+  from [Alt+Shift+F1..F12] to [Ctrl+Shift+F1..F12] (consequence of change above).
 - Endianness of multi-byte encoded characters fixed, UTF-8 no longer results in spurious warning
   messages (bug #400, regression of bug #343 fixed for version 1.99.70).
 - Superfluous spaces for multi-byte LE encodings fixed (related to bug #400 and feat. request #271).
@@ -214,7 +221,14 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+- Serial COM port limitations of .NET:
+   > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
+     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+     a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
+     applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
+     #345, #382, #385, #387, #401). To prevent this issue, refrain from disconnecting a device
+     while its port is open. Or, manually close the port after the device got disconnected.
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
@@ -222,7 +236,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Delta Version 1.99.80 :: 2017-10-15
@@ -233,10 +247,11 @@ New:
   COM port behavior on framing errors. Useful when e.g. changing baud rates (feature request #321).
 
 Important changes:
-- Additional workaround applied to prevent 'ObjectDisposedException' when disconnecting USB/RS-232
-  converters (USB CDC) without closing the serial COM port (bug #382). Workaround also applies when
-  undocking or hibernating a computer running YAT without closing the serial COM port, as well as
-  when restarting devices that implement a virtual serial COM port (USB CDC).
+- Additional workaround applied to prevent potential 'ObjectDisposedException' or
+  'UnauthorizedAccessException' when disconnecting USB/RS-232 converters (USB CDC) without closing
+  the serial COM port (bug #382).
+  Workaround also applies when undocking or hibernating a computer running YAT without closing the
+  serial COM port, and when restarting devices that implement a virtual serial COM port (USB CDC).
 - Option to disable user interaction question when a serial COM port, a local network interface or
   a USB Ser/HID device is no longer available; terminal will silently stay closed (feat. req. #316).
 - Improved speed on sending and receiving, preventing application freeze on fast data (bug #383).
@@ -244,9 +259,9 @@ Important changes:
   responsiveness to receive data while sending a lot of fast data (rel. to bugs #305, #380, #383).
 - Automatic vertical scrolling of monitor is not only suspended if one or more lines are selected
   but also, if the scroll bar is moved away from the bottom of the monitor (feature request #323).
-- Break (Ctrl+B) can now also be used to break sending a file (bug #305 and feature request #295).
+- Break [Ctrl+B] can now also be used to break sending a file (bug #305 and feature request #295).
 - Auto-reconnect of TCP/IP client terminals enabled by default.
-- Text input now supports the (Ctrl+Backspace) shortcut and multi-line text input also the (Ctrl+A)
+- Text input now supports the [Ctrl+Backspace] shortcut and multi-line text input also the [Ctrl+A]
   shortcut (feature request #317 as workaround to limitation of .NET Windows.Forms).
 - Warning on invalid multi-byte encoded byte sequences for string, character and Unicode radix.
 - Option to display the date has been merged with option to display the time, but it is now possible
@@ -290,7 +305,14 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+- Serial COM port limitations of .NET:
+   > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
+     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+     a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
+     applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
+     #345, #382, #385, #387). To prevent this issue, refrain from disconnecting a device while
+     its port is open. Or, manually close the port after the device got disconnected.
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
@@ -298,14 +320,14 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
 ----------------------------------------------------------------------------------------------------
 
 New:
-- [Send Text] without EOL by (Ctrl+Enter) or (Ctrl+F3) (feature requests #281, #283, #285).
+- [Send Text] without EOL by [Ctrl+Enter] or [Ctrl+F3] (feature requests #281, #283, #285).
 - Option to send data in Unicode notation as "\U+...." or C-style "\u...." or YAT-style "\U(....)
   as well as option to show data in Unicode notation "U+...." added (feature request #271).
 - Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
@@ -384,7 +406,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Gamma 2'' Version 1.99.52 :: 2016-09-30
@@ -478,8 +500,8 @@ Important changes:
 Fixed bugs:
 - Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing the
   serial COM port no longer leads to an 'ObjectDisposedException' or 'UnauthorizedAccessException'
-  in most cases (bugs #224, #254, #293, #316 and #345). However, it is still required to reset the
-  converters, i.e. disconnect and reconnect them, or restart the computer. In addition, it may be
+  in most cases (bugs #224, #254, #293, #316, #317, #345). However, it may still be needed to reset
+  the converter, i.e. disconnect and reconnect it, or restart the computer. In addition, it may be
   required to disconnect or reset any device sending continuous data. Otherwise, related serial COM
   ports may no longer be opened. Issue is being reported by many users of .NET, but Microsoft seems
   to have no plans fixing it. If an 'ObjectDisposedException' or 'UnauthorizedAccessException' still
@@ -529,7 +551,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
 
 
 YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-13
