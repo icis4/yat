@@ -711,7 +711,7 @@ namespace YAT.Domain
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
 			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.ByteCount > 0) &&
-				(lineState.Position != LinePosition.End)))   // Also skip if line has just been brokwn.
+				(lineState.Position != LinePosition.End)))       // Also skip if line has just been brokwn.
 			{
 				lineState.SequenceBefore.Enqueue(b);
 				if (lineState.SequenceBefore.IsCompleteMatch)
@@ -829,32 +829,30 @@ namespace YAT.Domain
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
-			                                 // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-
-			// Process line content:
-			l.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
-
 			// Process line length:
-			var lp = new DisplayLinePart(); // Default initial capacity is OK.
+			var lineEnd = new DisplayLinePart(); // Default initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(l.ByteCount, (ts - lineState.TimeStamp), out info);
-				lp.AddRange(info);
+				PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
+				lineEnd.AddRange(info);
 			}
-			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
+			lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 			// Potentially suppress line:
 			if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
 			{
-				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
+				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); // !!!!!!!!!!!!!!!!!!!! DOESN'T WORK !!!!!!!!!!!!!!!!
 			}
 			else
 			{
-				// Finalize elements and line:
-				elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
-				l.AddRange(lp);
+				// Finalize elements:
+				elements.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
+
+				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
+				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
 				lines.Add(l);
 			}
