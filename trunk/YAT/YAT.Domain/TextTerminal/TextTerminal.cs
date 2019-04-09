@@ -91,12 +91,14 @@ namespace YAT.Domain
 
 		private class LineState
 		{
+			public byte[]          EolSequence                  { get; }
+
 			public LinePosition    Position                     { get; set; }
 			public DisplayLinePart Elements                     { get; set; }
-			public SequenceQueue   Eol                          { get; set; }
 
 			public DisplayLinePart RetainedUnconfirmedHiddenEolElements { get; set; }
-			public Dictionary<string, SequenceQueue> EolOfLastLineOfGivenPort { get; set; }
+			public Dictionary<string, SequenceQueue> EolOfGivenPort { get; set; }
+			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
 			public DateTime TimeStamp { get; set; }
 
@@ -105,14 +107,16 @@ namespace YAT.Domain
 			public bool PotentiallySuppress { get; set; }
 			public bool SuppressForSure     { get; set; }
 
-			public LineState(SequenceQueue eol)
+			public LineState(byte[] eolSequence)
 			{
+				EolSequence = eolSequence;
+
 				Position = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				Eol      = eol;
 
-				RetainedUnconfirmedHiddenEolElements = new DisplayLinePart(); // Default initial capacity is OK.
-				EolOfLastLineOfGivenPort = new Dictionary<string, SequenceQueue>(); // Default initial capacity is OK.
+				RetainedUnconfirmedHiddenEolElements     = new DisplayLinePart();                   // Default initial capacity is OK.
+				EolOfGivenPort                           = new Dictionary<string, SequenceQueue>(); // Default initial capacity is OK.
+				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>();          // Default initial capacity is OK.
 
 				TimeStamp = DateTime.Now;
 
@@ -123,18 +127,31 @@ namespace YAT.Domain
 			}
 
 			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for consistency with [Execute...()] methods.")]
-			public virtual void Reset(string ps, SequenceQueue eolOfLastLine)
+			public virtual void Reset(string ps, bool eolWasCompleteMatch)
 			{
 				Position = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				Elements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				Eol.Reset();
 
-				RetainedUnconfirmedHiddenEolElements = new DisplayLinePart(); // Default initial capacity is OK.
+				if (eolWasCompleteMatch) // Keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
+					RetainedUnconfirmedHiddenEolElements = new DisplayLinePart(); // Default initial capacity is OK.
 
-				if (EolOfLastLineOfGivenPort.ContainsKey(ps))        // It is OK to only assign or add to the collection,
-					EolOfLastLineOfGivenPort[ps] = eolOfLastLine;    // this will not lead to excessive use of memory,
-				else                                                 // since there is only a given number of ports.
-					EolOfLastLineOfGivenPort.Add(ps, eolOfLastLine); // Applies to TCP and UDP terminals only
+				if (EolOfGivenPort.ContainsKey(ps))
+				{
+					if (EolOfGivenPort[ps].IsCompleteMatch)
+						EolOfGivenPort[ps].Reset();
+
+					// Keep EOL state when incomplete. Subsequent lines
+					// need this to handle broken/pending EOL characters.
+				}
+				else                                                        // It is OK to only access or add to the collection,
+				{                                                           // this will not lead to excessive use of memory,
+					EolOfGivenPort.Add(ps, new SequenceQueue(EolSequence)); // since there is only a given number of ports.
+				}                                                           // Applies to TCP and UDP terminals only.
+
+				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps))
+					EolOfLastLineOfGivenPortWasCompleteMatch[ps] = eolWasCompleteMatch;
+				else
+					EolOfLastLineOfGivenPortWasCompleteMatch.Add(ps, eolWasCompleteMatch); // Same as above, it is OK to only access or add to the collection.
 
 				TimeStamp = DateTime.Now;
 
@@ -142,6 +159,30 @@ namespace YAT.Domain
 				Filter              = false;
 				PotentiallySuppress = false;
 				SuppressForSure     = false;
+			}
+
+			public virtual bool EolOfLastLineWasCompleteMatch(string ps)
+			{
+				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps))
+					return (EolOfLastLineOfGivenPortWasCompleteMatch[ps]);
+				else
+					return (true); // Cleared monitors mean that last line was complete!
+			}
+
+			public virtual bool EolIsAnyMatch(string ps)
+			{
+				if (EolOfGivenPort.ContainsKey(ps))
+					return (EolOfGivenPort[ps].IsAnyMatch);
+				else
+					return (false);
+			}
+
+			public virtual bool EolIsCompleteMatch(string ps)
+			{
+				if (EolOfGivenPort.ContainsKey(ps))
+					return (EolOfGivenPort[ps].IsCompleteMatch);
+				else
+					return (false);
 			}
 		}
 
@@ -306,7 +347,7 @@ namespace YAT.Domain
 				AssertNotDisposed();
 
 				if (this.txLineState != null)
-					return (this.txLineState.Eol.Sequence);
+					return (this.txLineState.EolSequence);
 				else
 					return (null);
 			}
@@ -323,7 +364,7 @@ namespace YAT.Domain
 				AssertNotDisposed();
 
 				if (this.rxLineState != null)
-					return (this.rxLineState.Eol.Sequence);
+					return (this.rxLineState.EolSequence);
 				else
 					return (null);
 			}
@@ -430,7 +471,7 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Eol:
 				{
-					ForwardDataToRawTerminal(this.txLineState.Eol.Sequence); // In-line.
+					ForwardDataToRawTerminal(this.txLineState.EolSequence); // In-line.
 					break;
 				}
 
@@ -457,7 +498,7 @@ namespace YAT.Domain
 		protected override void ProcessLineEnd(bool sendEol)
 		{
 			if (sendEol)
-				ForwardDataToRawTerminal(this.txLineState.Eol.Sequence); // End-of-line.
+				ForwardDataToRawTerminal(this.txLineState.EolSequence); // End-of-line.
 		}
 
 		/// <summary></summary>
@@ -567,8 +608,8 @@ namespace YAT.Domain
 				}
 			}
 
-			this.txLineState = new LineState(new SequenceQueue(txEol));
-			this.rxLineState = new LineState(new SequenceQueue(rxEol));
+			this.txLineState = new LineState(txEol);
+			this.rxLineState = new LineState(rxEol);
 
 			this.bidirLineState = new BidirLineState();
 
@@ -1028,7 +1069,7 @@ namespace YAT.Domain
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
+		private void ExecuteContent(LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elements)
 		{
 			// Convert content:
 			var de = ByteToElement(b, d);
@@ -1036,9 +1077,15 @@ namespace YAT.Domain
 
 			var lp = new DisplayLinePart(); // Default initial capacity is OK.
 
+			// Prepare EOL:
+			if (!lineState.EolOfGivenPort.ContainsKey(ps))                                  // It is OK to only access or add to the collection,
+				lineState.EolOfGivenPort.Add(ps, new SequenceQueue(lineState.EolSequence)); // this will not lead to excessive use of memory,
+			                                                                                // since there is only a given number of ports.
+			// Add byte to EOL:                                                             // Applies to TCP and UDP terminals only.
+			lineState.EolOfGivenPort[ps].Enqueue(b);
+
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
-			lineState.Eol.Enqueue(b);
-			if (lineState.Eol.IsCompleteMatch)
+			if (lineState.EolOfGivenPort[ps].IsCompleteMatch)
 			{
 				if (de.IsContent)
 				{
@@ -1046,16 +1093,12 @@ namespace YAT.Domain
 					{
 						AddSpaceIfNecessary(lineState, d, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
-
-						int eolByteCount = lineState.Eol.Sequence.Length;
-						MarkCompletedEol(eolByteCount, lp); // Precondition: [lp] must contain at least one element. This is given.
 					}
 					else
 					{
-					////lineState.RetainedPotentialEolElements.Add(de); // No clone needed as element is no more used below.
+					////lineState.RetainedPotentialEolElements.Add(de); // Adding is useless, Confirm...() below will clear the elements anyway.
 
-						// Confirm EOL by clearing the list of retained hidden elements:
-						lineState.RetainedUnconfirmedHiddenEolElements.Clear();
+						ConfirmRetainedHiddenEolElements(lineState);
 					}
 
 					lineState.Position = LinePosition.End;
@@ -1064,11 +1107,11 @@ namespace YAT.Domain
 				{
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
-			}                                              // Note the inverted implementation sequence:
-			else if (lineState.Eol.IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
-			{                                              //  2. PartlyMatchContinued (intermediate, here)
-				if (de.IsContent)                          //  3. PartlyMatchBeginning (first trigger, below)
-				{                                          //  4. Unrelatd to EOL      (any time, further below)
+			}                                                             // Note the inverted implementation sequence:
+			else if (lineState.EolOfGivenPort[ps].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
+			{                                                             //  2. PartlyMatchContinued (intermediate, here)
+				if (de.IsContent)                                         //  3. PartlyMatchBeginning (first trigger, below)
+				{                                                         //  4. Unrelatd to EOL      (any time, further below)
 					if (TextTerminalSettings.ShowEol)
 					{
 						AddSpaceIfNecessary(lineState, d, lp, de);
@@ -1084,7 +1127,7 @@ namespace YAT.Domain
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
 			}
-			else if (lineState.Eol.IsPartlyMatchBeginning)
+			else if (lineState.EolOfGivenPort[ps].IsPartlyMatchBeginning)
 			{
 				// Previous was no match, retained potential EOL elements can be treated as non-EOL:
 				TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(lineState, lp);
@@ -1161,6 +1204,14 @@ namespace YAT.Domain
 			}
 		}
 
+		private static void ConfirmRetainedHiddenEolElements(LineState lineState)
+		{
+			if (lineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
+			{
+				lineState.RetainedUnconfirmedHiddenEolElements.Clear();
+			}
+		}
+
 		private static void TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(LineState lineState, DisplayLinePart lp)
 		{
 			if (lineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
@@ -1171,159 +1222,44 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Precondition: <paramref name="lp"/> must contain at least one element.
-		/// </remarks>
-		/// <remarks>
-		/// Functionality used to be used but no longer is, thus excluding it (YAGNI). Still,
-		/// keeping the implementation to be prepared for potential reactivation (!YAGNI).
-		/// </remarks>
-		[Conditional("DEBUG")]
-		private static void MarkCompletedEol(int eolByteCount, DisplayLinePart lp)
-		{
-			// Ensure that the correct element(s) are marked. This includes:
-			// <CR><CR><LF> where only the last two are EOL!
-			// <CR>␣<CR>␣<LF> (= spread across 3 display elements) where only the two content elements are EOL!
-			// <CR>ZZZZ<LF> where ZZ<LF> (= spread across 2 display elements) could be the EOL (unlikely but possible).
-			// <CR>ZZZZ<LF> where <CR>ZZZZ<LF> (= spread across 3 display elements) could be the EOL (even less unlikely but still possible).
-
-			var lastElement = lp.Last();
-			var lastElementByteCount = lastElement.ByteCount;
-			if (lastElementByteCount == eolByteCount) // Simplest case, EOL consists of a single sequence of control characters, e.g. <CR><LF>:
-			{
-				lastElement.IsEol = true;
-			}
-			else if (lastElementByteCount > eolByteCount) // +/- simple case, there is non-EOL content in the last element:
-			{
-				// Remove the last element:
-				lp.RemoveLast(); // Precondition: [lp] must contain at least one element.
-
-				// Unfold the last element into single elements for correct processing:
-				var unfolded = new List<DisplayElement>(); // Default initial capacity is good enough.
-				foreach (var origin in lastElement.Origin)
-					unfolded.Add(lastElement.RecreateFromOrigin(origin));
-
-				// Count content:
-				int unfoldedByteCount = 0;
-				foreach (var de in unfolded)
-					unfoldedByteCount += de.ByteCount;
-
-				// Append the unfolded elements again and mark EOL:
-				int firstEolIndex = (unfoldedByteCount - eolByteCount);
-				int currentIndex = 0;
-				foreach (var de in unfolded)
-				{
-					currentIndex += de.ByteCount;
-
-					if (currentIndex >= firstEolIndex)
-					{
-						if (de.IsContent) // e.g. separating ␣ are not part of EOL!
-							de.IsEol = true;
-					}
-
-					lp.Add(de); // No clone needed as all items have just been recreated futher above.
-				}
-
-				// Attention:
-				// Similar code exists further below.
-				// Changes above may have to be applied there too.
-			}
-			else // Tricky case, EOL is spread across multiple elements:
-			{
-				// Remove elements that contain EOL:
-				var removedElements = new List<DisplayElement>(); // Default initial capacity is good enough.
-				removedElements.Add(lastElement);
-				var removedByteCount = lastElementByteCount;
-				lp.RemoveLast(); // Precondition: [lp] must contain at least one element.
-				do
-				{
-					lastElement = lp.Last();
-					lastElementByteCount = lastElement.ByteCount;
-					removedElements.Add(lastElement);
-					removedByteCount += lastElementByteCount;
-					lp.RemoveLast(); // Precondition: [lp] must contain at least as many elements as EOL is spread. This is given.
-				}
-				while (removedByteCount >= eolByteCount);
-
-				// Unfold the elements into single elements for correct processing:
-				var unfolded = new List<DisplayElement>(); // Default initial capacity is good enough.
-				foreach (var de in removedElements)
-				{
-					foreach (var origin in lastElement.Origin)
-						unfolded.Add(lastElement.RecreateFromOrigin(origin));
-				}
-
-				// Count content:
-				int unfoldedByteCount = 0;
-				foreach (var de in unfolded)
-					unfoldedByteCount += de.ByteCount;
-
-				// Append the unfolded elements again and mark EOL:
-				int firstEolIndex = (unfoldedByteCount - eolByteCount);
-				int currentIndex = 0;
-				foreach (var de in unfolded)
-				{
-					currentIndex += de.ByteCount;
-
-					if (currentIndex >= firstEolIndex)
-					{
-						if (de.IsContent) // e.g. separating ␣ are not part of EOL!
-							de.IsEol = true;
-					}
-
-					lp.Add(de); // No clone needed as all items have just been recreated futher above.
-				}
-
-				// Attention:
-				// Similar code exists further above.
-				// Changes above may have to be applied there too.
-			}
-		}
-
-		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
 		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
-			                                 // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-
-			// There could be retained elements, e.g. because EOL is incomplete:
-			TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(lineState, lineState.Elements);
-
-			// Add the elements:
-			l.AddRange(lineState.Elements.Clone()); // Clone elements to ensure decoupling.
-
 			// Process line length:
-			var lp = new DisplayLinePart(); // Default initial capacity is OK.
+			var lineEnd = new DisplayLinePart(); // Default initial capacity is OK.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
 				DisplayLinePart info;
-				PrepareLineEndInfo(l.ByteCount, (ts - lineState.TimeStamp), out info);
-				lp.AddRange(info);
+				PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
+				lineEnd.AddRange(info);
 			}
-			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
+			lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
-			// Potentially suppress empty lines that only contain hidden <CR><LF>:
-			bool suppressEmptyLine = ((lineState.Elements.ByteCount == 0) &&                  // Empty line.
-			                           lineState.EolOfLastLineOfGivenPort.ContainsKey(ps) &&
-			                           lineState.EolOfLastLineOfGivenPort[ps].IsPartlyMatch); // EOL of last line of the current port is still pending.
-			if (suppressEmptyLine)
-			{
-				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
-			}
+			// Potentially suppress empty lines that only contain hidden pending EOL character(s):
+			bool isEmptyLine = (lineState.Elements.ByteCount == 0);
+			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
+			if (isEmptyLine && isPendingEol) // Intended empty lines must be shown!
+			{                                                                         // Precondition: [elements] must contain all elements since line start!
+				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); //               This is given by (lineState.Elements.ByteCount == 0), i.e.
+			}                                                                         //               line has just been started and does not yet contain content.
 			else if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter)) // Potentially suppress line:
 			{
 				int initialCount = elements.Count;
-				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart));
+				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); // !!!!!!!!!!!!!!!!!!!! DOESN'T WORK !!!!!!!!!!!!!!!!
 			////elementsToBeRemovedAgain = (initialCount - elements.Count); \ToDo FR#347
 			}
 			else
 			{
-				// Finalize elements and line:
-				elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
-				l.AddRange(lp);
+				// Finalize elements:
+				elements.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
+
+				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
+				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
 				lines.Add(l);
 			}
@@ -1332,7 +1268,7 @@ namespace YAT.Domain
 			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
 
 			// Reset line state:
-			lineState.Reset(ps, lineState.Eol.Clone()); // Clone is essential as the current EOL will be reset!
+			lineState.Reset(ps, lineState.EolIsCompleteMatch(ps));
 		}
 
 		/// <summary></summary>
@@ -1365,7 +1301,7 @@ namespace YAT.Domain
 
 				// Content:
 				if (lineState.Position == LinePosition.Content)
-					ExecuteContent(lineState, raw.Direction, b, elements);
+					ExecuteContent(lineState, raw.PortStamp, raw.Direction, b, elements);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)

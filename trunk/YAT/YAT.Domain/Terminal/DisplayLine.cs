@@ -220,8 +220,19 @@ namespace YAT.Domain
 			base.RemoveAt(index);
 		}
 
+		/// <remarks>
+		/// Required because <see cref="T:List`1.RemoveRange"/> doesn't call <see cref="RemoveAt"/>
+		/// method above because it is 'new'. Call to <see cref="RemoveAt"/> method above is
+		/// required to properly perform content counting.
+		/// </remarks>
+		public new void RemoveRange(int index, int count)
+		{
+			for (int i = 0; i < count; i++)
+				RemoveAt(index + i);
+		}
+
 		/// <summary></summary>
-		public virtual void RemoveOneAtEnd()
+		public virtual void RemoveLast()
 		{
 			RemoveAt(Count - 1);
 		}
@@ -241,18 +252,11 @@ namespace YAT.Domain
 			{
 				bool typeFound = (this[Count - 1].GetType() == type);
 
-				RemoveOneAtEnd();
+				RemoveLast();
 
 				if (typeFound)
 					break;
 			}
-		}
-
-		/// <summary></summary>
-		public new void RemoveRange(int index, int count)
-		{
-			for (int i = 0; i < count; i++)
-				RemoveAt(index + i);
 		}
 
 		/// <summary>
