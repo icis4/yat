@@ -141,9 +141,49 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual bool IsPartlyMatch
+		{
+			get
+			{
+				switch (this.state)
+				{
+					case State.PartlyMatchBeginning:
+					case State.PartlyMatchContinued:
+						return (true);
+
+					case State.Armed:
+					case State.Inactive:
+					case State.CompleteMatch:
+					default:
+						return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsCompleteMatch
 		{
 			get { return (this.state == State.CompleteMatch); }
+		}
+
+		/// <summary></summary>
+		public virtual bool IsAnyMatch
+		{
+			get
+			{
+				switch (this.state)
+				{
+					case State.PartlyMatchBeginning:
+					case State.PartlyMatchContinued:
+					case State.CompleteMatch:
+						return (true);
+
+					case State.Armed:
+					case State.Inactive:
+					default:
+						return (false);
+				}
+			}
 		}
 
 		#endregion
