@@ -131,8 +131,8 @@ Fixed bugs:
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
-  #422, #423, #432, #434, #435, #441, #443, #444, #450) which further refines the fix to former bugs
-  #408 and #409.
+  #422, #423, #432, #434, #435, #441, #443, #444, #450, #452) which further refines the fix to
+  former bugs #408 and #409.
 - Attempted to fix rare 'TargetInvocationException' caused by 'IndexOutOfRangeException' (bug #446).
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
