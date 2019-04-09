@@ -2637,7 +2637,7 @@ namespace YAT.Model
 				this.log.Write(e.Value, Log.LogChannel.RawRx);
 			}
 
-			// AutoResponse:
+			// AutoResponse (by specification only active on receive-path):
 			if (this.settingsRoot.AutoResponse.IsActive)
 			{
 				bool isTriggered = false;
@@ -2653,9 +2653,9 @@ namespace YAT.Model
 						}
 						else
 						{
-							break; // Break the for-loop if AutoResponse got disposed in the meantime.
-						}
-					}
+							break; // Break the for-loop if [AutoResponse] got disposed in the meantime.
+						}          // Though unlikely, it may happen when deactivating [AutoResponse]
+					}              // while receiving a very large chunk.
 				}
 
 				if (isTriggered)
@@ -2677,7 +2677,7 @@ namespace YAT.Model
 				}
 			}
 
-			// AutoAction:
+			// AutoAction (by specification only active on receive-path):
 			if (this.settingsRoot.AutoAction.IsActive)
 			{
 				if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
@@ -2709,9 +2709,9 @@ namespace YAT.Model
 						}
 						else
 						{
-							break; // Break the for-loop if AutoAction got disposed in the meantime.
-						}
-					}
+							break; // Break the for-loop if [AutoAction] got disposed in the meantime.
+						}          // Though unlikely, it may happen when deactivating [AutoAction]
+					}              // while receiving a very large chunk.
 				}
 
 				if (isTriggered)

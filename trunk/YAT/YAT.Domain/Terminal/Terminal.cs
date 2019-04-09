@@ -408,7 +408,6 @@ namespace YAT.Domain
 		}
 
 	#if (DEBUG)
-
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -426,7 +425,6 @@ namespace YAT.Domain
 
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
-
 	#endif // DEBUG
 
 		/// <summary></summary>
@@ -3080,9 +3078,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
 		{
-			// Collection of elements processed, extends over one or multiple lines,
-			// depending on the number of bytes in raw chunk.
+			// Collection of elements resulting from this chunk, typically a partial line,
+			// but may also be a complete line or even span across multiple lines.
 			var elements = new DisplayElementCollection(); // Default initial capacity is OK.
+
+			// Collection of lines being completed by this chunk, typically none or a single line,
+			// but may also be multiple lines.
 			var lines = new List<DisplayLine>();
 
 			ProcessRawChunk(raw, rawAttribute, elements, lines);
@@ -3135,9 +3136,8 @@ namespace YAT.Domain
 		/// </summary>
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
-		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to
-		/// format whole lines or even multiple lines (<see cref="ProcessRawChunk"/> instead of
-		/// <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to format whole lines or even
+		/// multiple lines (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		public virtual string Format(byte[] data, IODirection d)
@@ -3156,9 +3156,8 @@ namespace YAT.Domain
 		/// </summary>
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
-		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to
-		/// format whole lines or even multiple lines (<see cref="ProcessRawChunk"/> instead of
-		/// <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to format whole lines or even
+		/// multiple lines (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
