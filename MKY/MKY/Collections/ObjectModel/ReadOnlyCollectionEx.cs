@@ -34,11 +34,11 @@ namespace MKY.Collections.ObjectModel
 	public static class ReadOnlyCollectionEx
 	{
 		/// <summary>
-		/// Determines whether the two collections have value equality, i.e. all array elements have
+		/// Determines whether the two collections have value equality, i.e. all array items have
 		/// value equality.
 		/// </summary>
 		/// <remarks>
-		/// This method has intentionally been called "ElementsEqual()"...
+		/// This method has intentionally been called "ItemsEqual()"...
 		/// ...for similar naming as <see cref="object.ReferenceEquals(object, object)"/> and...
 		/// ...to emphasize difference to "ReadOnlyCollection.Equals()" which is just "object.Equals()".
 		/// </remarks>
@@ -46,7 +46,7 @@ namespace MKY.Collections.ObjectModel
 		/// True if collections have value equality, otherwise false.
 		/// </returns>
 		/// <typeparam name="T">The type of the array's items.</typeparam>
-		public static bool ElementsEqual<T>(ReadOnlyCollection<T> collectionA, ReadOnlyCollection<T> collectionB)
+		public static bool ItemsEqual<T>(ReadOnlyCollection<T> collectionA, ReadOnlyCollection<T> collectionB)
 		{
 			if (ReferenceEquals(collectionA, collectionB)) return (true);
 			if (ReferenceEquals(collectionA, null))        return (false);
@@ -55,7 +55,7 @@ namespace MKY.Collections.ObjectModel
 			if (collectionA.Count != collectionB.Count)
 				return (false);
 
-			return (IEnumeratorEx.ElementsEqual(collectionA.GetEnumerator(), collectionB.GetEnumerator()));
+			return (IEnumeratorEx.ItemsEqual(collectionA.GetEnumerator(), collectionB.GetEnumerator()));
 		}
 	}
 }

@@ -130,7 +130,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding elements.
+		/// operations while adding items.
 		/// </remarks>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
 
@@ -141,7 +141,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding elements.
+		/// operations while adding items.
 		/// </remarks>
 		private Queue<Pair<byte, System.Net.IPEndPoint>> receiveQueue = new Queue<Pair<byte, System.Net.IPEndPoint>>(ReceiveQueueInitialCapacity);
 

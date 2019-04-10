@@ -227,7 +227,7 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				IEnumerableEx.ElementsEqual(Pages, other.Pages)
+				IEnumerableEx.ItemsEqual(Pages, other.Pages)
 			);
 		}
 

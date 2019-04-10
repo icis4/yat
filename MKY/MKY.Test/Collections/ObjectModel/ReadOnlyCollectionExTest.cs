@@ -162,7 +162,7 @@ namespace MKY.Test.Collections.ObjectModel
 				yield return (new TestCaseData(null,       null,       true).SetName("BothAreNull"));
 
 				yield return (new TestCaseData(IntCollections[0], IntCollections[0], true) .SetName("IntCollections_ReferenceEquals"));
-				yield return (new TestCaseData(IntCollections[0], IntCollections[1], true) .SetName("IntCollections_ElementsEqual"));
+				yield return (new TestCaseData(IntCollections[0], IntCollections[1], true) .SetName("IntCollections_ItemsEqual"));
 				yield return (new TestCaseData(IntCollections[0], IntCollections[2], false).SetName("IntCollections_Differs"));
 			}
 		}
@@ -177,7 +177,7 @@ namespace MKY.Test.Collections.ObjectModel
 			get
 			{
 				yield return (new TestCaseData(EnumCollections[0], EnumCollections[0], true) .SetName("EnumCollections_ReferenceEquals"));
-				yield return (new TestCaseData(EnumCollections[0], EnumCollections[1], true) .SetName("EnumCollections_ElementsEqual"));
+				yield return (new TestCaseData(EnumCollections[0], EnumCollections[1], true) .SetName("EnumCollections_ItemsEqual"));
 				yield return (new TestCaseData(EnumCollections[0], EnumCollections[2], false).SetName("EnumCollections_Differs"));
 			}
 		}
@@ -192,7 +192,7 @@ namespace MKY.Test.Collections.ObjectModel
 			get
 			{
 				yield return (new TestCaseData(ReferenceTypeCollections[0], ReferenceTypeCollections[0], true) .SetName("ReferenceTypeCollections_ReferenceEquals"));
-				yield return (new TestCaseData(ReferenceTypeCollections[0], ReferenceTypeCollections[1], true) .SetName("ReferenceTypeCollections_ElementsEqual"));
+				yield return (new TestCaseData(ReferenceTypeCollections[0], ReferenceTypeCollections[1], true) .SetName("ReferenceTypeCollections_ItemsEqual"));
 				yield return (new TestCaseData(ReferenceTypeCollections[0], ReferenceTypeCollections[2], false).SetName("ReferenceTypeCollections_Differs"));
 			}
 		}
@@ -207,7 +207,7 @@ namespace MKY.Test.Collections.ObjectModel
 			get
 			{
 				yield return (new TestCaseData(StringCollections[0], StringCollections[0], true) .SetName("StringCollections_ReferenceEquals"));
-				yield return (new TestCaseData(StringCollections[0], StringCollections[1], true) .SetName("StringCollections_ElementsEqual"));
+				yield return (new TestCaseData(StringCollections[0], StringCollections[1], true) .SetName("StringCollections_ItemsEqual"));
 				yield return (new TestCaseData(StringCollections[0], StringCollections[2], false).SetName("StringCollections_Differs"));
 
 				yield return (new TestCaseData(CollectionsWithNull[0], CollectionsWithNull[0], true) .SetName("CollectionsWithNull_ReferenceEquals"));
@@ -233,30 +233,30 @@ namespace MKY.Test.Collections.ObjectModel
 	{
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(ReadOnlyCollectionExTestData), "TestCasesInt")]
-		public virtual void TestElementsEqualInt(ReadOnlyCollection<int> collectionA, ReadOnlyCollection<int> collectionB, bool equals)
+		public virtual void TestItemsEqualInt(ReadOnlyCollection<int> collectionA, ReadOnlyCollection<int> collectionB, bool equals)
 		{
-			Assert.That(ReadOnlyCollectionEx.ElementsEqual(collectionA, collectionB), Is.EqualTo(equals));
+			Assert.That(ReadOnlyCollectionEx.ItemsEqual(collectionA, collectionB), Is.EqualTo(equals));
 		}
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(ReadOnlyCollectionExTestData), "TestCasesEnum")]
-		public virtual void TestElementsEqualEnum(ReadOnlyCollection<EnumType> collectionA, ReadOnlyCollection<EnumType> collectionB, bool equals)
+		public virtual void TestItemsEqualEnum(ReadOnlyCollection<EnumType> collectionA, ReadOnlyCollection<EnumType> collectionB, bool equals)
 		{
-			Assert.That(ReadOnlyCollectionEx.ElementsEqual(collectionA, collectionB), Is.EqualTo(equals));
+			Assert.That(ReadOnlyCollectionEx.ItemsEqual(collectionA, collectionB), Is.EqualTo(equals));
 		}
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(ReadOnlyCollectionExTestData), "TestCasesReferenceType")]
-		public virtual void TestElementsEqualReferenceType(ReadOnlyCollection<EquatableReferenceType> collectionA, ReadOnlyCollection<EquatableReferenceType> collectionB, bool equals)
+		public virtual void TestItemsEqualReferenceType(ReadOnlyCollection<EquatableReferenceType> collectionA, ReadOnlyCollection<EquatableReferenceType> collectionB, bool equals)
 		{
-			Assert.That(ReadOnlyCollectionEx.ElementsEqual(collectionA, collectionB), Is.EqualTo(equals));
+			Assert.That(ReadOnlyCollectionEx.ItemsEqual(collectionA, collectionB), Is.EqualTo(equals));
 		}
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(ReadOnlyCollectionExTestData), "TestCasesString")]
-		public virtual void TestElementsEqualString(ReadOnlyCollection<string> collectionA, ReadOnlyCollection<string> collectionB, bool equals)
+		public virtual void TestItemsEqualString(ReadOnlyCollection<string> collectionA, ReadOnlyCollection<string> collectionB, bool equals)
 		{
-			Assert.That(ReadOnlyCollectionEx.ElementsEqual(collectionA, collectionB), Is.EqualTo(equals));
+			Assert.That(ReadOnlyCollectionEx.ItemsEqual(collectionA, collectionB), Is.EqualTo(equals));
 		}
 	}
 }

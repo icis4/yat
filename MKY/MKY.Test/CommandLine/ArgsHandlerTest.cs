@@ -91,7 +91,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, string[]> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2).SetName(ArrayEx.ElementsToString(pair.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2).SetName(ArrayEx.ValuesToString(pair.Value2)));
 			}
 		}
 
@@ -123,7 +123,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<string, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<string, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -214,7 +214,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<bool, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -261,7 +261,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<int, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -311,7 +311,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<double, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -346,7 +346,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<CommandLineEnum, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -378,7 +378,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<int, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -414,7 +414,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<string[], string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -445,7 +445,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<int[], string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -476,7 +476,7 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				foreach (Pair<bool, Pair<Pair<int, int>, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1.Value1, pair.Value2.Value1.Value2, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1.Value1, pair.Value2.Value1.Value2, pair.Value2.Value2).SetName(ArrayEx.ValuesToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -753,7 +753,7 @@ namespace MKY.Test.CommandLine
 			if (isValid)
 			{
 				Assert.That(cla.OptionIsGiven("sao"));
-				Assert.That(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.StringArrayOption));
+				Assert.That(ArrayEx.ValuesEqual(expectedArrayOptionArgs, cla.StringArrayOption));
 			}
 		}
 
@@ -777,7 +777,7 @@ namespace MKY.Test.CommandLine
 			if (isValid)
 			{
 				Assert.That(cla.OptionIsGiven("iao"));
-				Assert.That(ArrayEx.ElementsEqual(expectedArrayOptionArgs, cla.IntArrayOption));
+				Assert.That(ArrayEx.ValuesEqual(expectedArrayOptionArgs, cla.IntArrayOption));
 			}
 		}
 

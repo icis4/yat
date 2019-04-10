@@ -155,7 +155,7 @@ namespace MKY.Xml.Serialization
 				foreach (AlternateXmlElement element in alternates)
 				{
 					// Compare XML path:
-					if (IEnumerableEx.ElementsEqual(element.XmlPath, standardXmlPath))
+					if (IEnumerableEx.ItemsEqual(element.XmlPath, standardXmlPath))
 					{
 						// Compare alternates to given local name:
 						foreach (string alternateLocalName in element.AlternateLocalNames)

@@ -129,7 +129,7 @@ namespace MKY.Test.Types
 		public virtual void TestToByteArray(ulong data, int boundary, ulong max, bool expandNegative, bool useBigEndian, string binString, string octString, string decString, string hexString, byte[] byteArray)
 		{
 			byte[] convertedByteArray = UInt64Ex.ConvertToByteArray(data, boundary, expandNegative, useBigEndian);
-			Assert.That(ArrayEx.ElementsEqual(convertedByteArray, byteArray));
+			Assert.That(ArrayEx.ValuesEqual(convertedByteArray, byteArray));
 		}
 
 		#endregion

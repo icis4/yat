@@ -36,48 +36,48 @@ namespace MKY.Collections
 	{
 		/// <summary>
 		/// Determines whether the two enumerable objects have value equality, i.e. contains the
-		/// same number of elements, all elements are equally sequenced and have value equality.
+		/// same number of items, all items are equally sequenced and have value equality.
 		/// </summary>
 		/// <remarks>
-		/// This method has intentionally been called "ElementsEqual()"...
+		/// This method has intentionally been called "ItemsEqual()"...
 		/// ...for similar naming as <see cref="object.ReferenceEquals(object, object)"/> and...
 		/// ...to emphasize difference to "IEnumerable.Equals()" which is just "object.Equals()".
 		/// </remarks>
 		/// <returns>
 		/// True if enumerable objects have value equality, otherwise false.
 		/// </returns>
-		public static bool ElementsEqual(IEnumerable objA, IEnumerable objB)
+		public static bool ItemsEqual(IEnumerable objA, IEnumerable objB)
 		{
 			if (ReferenceEquals(objA, objB)) return (true);
 			if (ReferenceEquals(objA, null)) return (false);
 			if (ReferenceEquals(objB, null)) return (false);
 
-			// Opposed to ArrayEx.ElementsEqual(), this IEnumerable based implementation
+			// Opposed to ArrayEx.ItemsEqual(), this IEnumerable based implementation
 			// cannot compare the count of the objects.
 
-			return (IEnumeratorEx.ElementsEqual(objA.GetEnumerator(), objB.GetEnumerator()));
+			return (IEnumeratorEx.ItemsEqual(objA.GetEnumerator(), objB.GetEnumerator()));
 		}
 
 		/// <summary>
-		/// Appends all elements of an enumerable object to a string and returns the string.
-		/// Elements that are <c>null</c> are returned as "[null]".
+		/// Appends all items of an enumerable object to a string and returns the string.
+		/// Items that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>
-		/// String containing all elements.
+		/// String containing all items.
 		/// </returns>
-		public static string ElementsToString(IEnumerable value)
+		public static string ItemsToString(IEnumerable collection)
 		{
 			// Attention:
-			// Similar code exists in ArrayEx.ElementsToString().
+			// Similar code exists in ArrayEx.ValuesToString().
 			// Changes here may have to be applied there too.
 
 			var sb = new StringBuilder();
 
-			bool firstElement = true;
-			foreach (object item in value)
+			bool isFirst = true;
+			foreach (object item in collection)
 			{
-				if (firstElement)
-					firstElement = false;
+				if (isFirst)
+					isFirst = false;
 				else
 					sb.Append(", ");
 
@@ -93,15 +93,15 @@ namespace MKY.Collections
 		/// <summary>
 		/// Serves as a hash function that iterates over all items within the given collection.
 		/// </summary>
-		public static int ElementsToHashCode(IEnumerable value)
+		public static int ItemsToHashCode(IEnumerable collection)
 		{
 			// Attention:
-			// Similar code exists in ArrayEx.ElementsToHashCode().
+			// Similar code exists in ArrayEx.ValuesToHashCode().
 			// Changes here may have to be applied there too.
 
 			int hashCode = 0;
 
-			foreach (object item in value)
+			foreach (object item in collection)
 			{
 				unchecked
 				{

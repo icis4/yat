@@ -458,7 +458,7 @@ namespace MKY
 		/// </summary>
 		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <returns>
-		/// A string array of the names of the constants in enum type. The elements
+		/// A string array of the names of the constants in enum type. The values
 		/// of the array are sorted by the values of the enumerated constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
@@ -475,7 +475,7 @@ namespace MKY
 		/// </summary>
 		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <returns>
-		/// An Array of the values of the constants in enum type. The elements of
+		/// An Array of the values of the constants in enum type. The values of
 		/// the array are sorted by the values of the enumeration constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
@@ -491,7 +491,7 @@ namespace MKY
 		/// </summary>
 		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <returns>
-		/// An Array of the values of the constants in enum type. The elements of
+		/// An Array of the values of the constants in enum type. The values of
 		/// the array are sorted by the values of the enumeration constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">

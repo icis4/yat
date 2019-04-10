@@ -363,8 +363,8 @@ namespace YAT.Model.Test
 				(
 					ObjectEx            .Equals(Command,               other.Command) &&
 					ExpectedLineCount   .Equals(                       other.ExpectedLineCount) &&
-					ArrayEx     .ElementsEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
-					ArrayEx     .ElementsEqual( ExpectedByteCounts,    other.ExpectedByteCounts) &&
+					ArrayEx       .ValuesEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
+					ArrayEx       .ValuesEqual( ExpectedByteCounts,    other.ExpectedByteCounts) &&
 					ExpectedAlsoApplyToA.Equals(                       other.ExpectedAlsoApplyToA)
 				);
 			}
@@ -1418,7 +1418,7 @@ namespace YAT.Model.Test
 			{
 				var sbB = new StringBuilder();
 				foreach (Domain.DisplayLine displayLineB in displayLinesB)
-					sbB.Append(ArrayEx.ElementsToString(displayLineB.ToArray()));
+					sbB.Append(ArrayEx.ValuesToString(displayLineB.ToArray()));
 
 				Console.Error.Write
 				(
@@ -1459,8 +1459,8 @@ namespace YAT.Model.Test
 						}
 						else
 						{
-							string strA = ArrayEx.ElementsToString(displayLineA.ToArray());
-							string strB = ArrayEx.ElementsToString(displayLineB.ToArray());
+							string strA = ArrayEx.ValuesToString(displayLineA.ToArray());
+							string strB = ArrayEx.ValuesToString(displayLineB.ToArray());
 
 							Console.Error.Write
 							(
@@ -1486,11 +1486,11 @@ namespace YAT.Model.Test
 				{
 					var sbA = new StringBuilder();
 					foreach (Domain.DisplayLine displayLineA in displayLinesA)
-						sbA.Append(ArrayEx.ElementsToString(displayLineA.ToArray()));
+						sbA.Append(ArrayEx.ValuesToString(displayLineA.ToArray()));
 
 					var sbB = new StringBuilder();
 					foreach (Domain.DisplayLine displayLineB in displayLinesB)
-						sbB.Append(ArrayEx.ElementsToString(displayLineB.ToArray()));
+						sbB.Append(ArrayEx.ValuesToString(displayLineB.ToArray()));
 
 					Console.Error.Write
 					(

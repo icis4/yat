@@ -144,7 +144,7 @@ namespace YAT.Domain.Settings
 					}
 				}
 
-				this.regexesUpdatePatternsHashCode = IEnumerableEx.ElementsToHashCode(this.patterns); // Workaround for issue described in Patterns{set} above.
+				this.regexesUpdatePatternsHashCode = IEnumerableEx.ItemsToHashCode(this.patterns); // Workaround for issue described in Patterns{set} above.
 				this.regexes = new ReadOnlyCollection<Regex>(l);                                      // Not a 100% solution but close enough to such.
 			}
 		}
@@ -156,7 +156,7 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				if (this.regexesUpdatePatternsHashCode != IEnumerableEx.ElementsToHashCode(this.patterns)) // Workaround for issue described in Patterns{set} above.
+				if (this.regexesUpdatePatternsHashCode != IEnumerableEx.ItemsToHashCode(this.patterns)) // Workaround for issue described in Patterns{set} above.
 					UpdateRegexes();                                                                       // Not a 100% solution but close enough to such.
 
 				return (this.regexes);
@@ -215,8 +215,8 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				Enabled              .Equals(         other.Enabled) &&
-				IEnumerableEx.ElementsEqual(Patterns, other.Patterns)
+				Enabled           .Equals(         other.Enabled) &&
+				IEnumerableEx.ItemsEqual(Patterns, other.Patterns)
 			);
 		}
 

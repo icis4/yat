@@ -156,7 +156,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// Async event handling. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding elements.
+		/// operations while adding items.
 		/// </remarks>
 		private Queue<Pair<byte, System.Net.IPEndPoint>> dataSentQueue = new Queue<Pair<byte, System.Net.IPEndPoint>>(DataSentQueueInitialCapacity);
 

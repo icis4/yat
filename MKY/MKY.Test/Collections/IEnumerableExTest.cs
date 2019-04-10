@@ -37,9 +37,9 @@ namespace MKY.Test.Collections
 	{
 		/// <remarks>Re-uses the test cases of the <see cref="ArrayExTest"/>.</remarks>
 		[Test, TestCaseSource(typeof(ArrayExTestData), "TestCases")]
-		public virtual void TestArrayElementsEqual(IEnumerable objA, IEnumerable objB, bool equals)
+		public virtual void TestArrayItemsEqual(IEnumerable objA, IEnumerable objB, bool equals)
 		{
-			Assert.That(IEnumerableEx.ElementsEqual(objA, objB), Is.EqualTo(equals));
+			Assert.That(IEnumerableEx.ItemsEqual(objA, objB), Is.EqualTo(equals));
 		}
 
 		/// <remarks>Re-uses the test cases of the <see cref="ReadOnlyCollectionExTest"/>.</remarks>
@@ -48,9 +48,9 @@ namespace MKY.Test.Collections
 		[TestCaseSource(typeof(ReadOnlyCollectionExTestData), "TestCasesEnum")]
 		[TestCaseSource(typeof(ReadOnlyCollectionExTestData), "TestCasesReferenceType")]
 		[TestCaseSource(typeof(ReadOnlyCollectionExTestData), "TestCasesString")]
-		public virtual void TestReadOnlyCollectionElementsEqualInt(IEnumerable objA, IEnumerable objB, bool equals)
+		public virtual void TestReadOnlyCollectionItemsEqualInt(IEnumerable objA, IEnumerable objB, bool equals)
 		{
-			Assert.That(IEnumerableEx.ElementsEqual(objA, objB), Is.EqualTo(equals));
+			Assert.That(IEnumerableEx.ItemsEqual(objA, objB), Is.EqualTo(equals));
 		}
 	}
 }

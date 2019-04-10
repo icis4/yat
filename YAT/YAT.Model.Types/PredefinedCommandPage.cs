@@ -186,7 +186,7 @@ namespace YAT.Model.Types
 			if (!Commands.Count.Equals(other.Commands.Count))
 				return (false);
 
-			return (IEnumerableEx.ElementsEqual(Commands, other.Commands));
+			return (IEnumerableEx.ItemsEqual(Commands, other.Commands));
 		}
 
 		/// <summary>

@@ -345,7 +345,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding elements.
+		/// operations while adding items.
 		/// </remarks>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 

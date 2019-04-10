@@ -4353,7 +4353,7 @@ namespace YAT.View.Forms
 				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
 
-				if (!ArrayEx.ElementsEqual(customColors, f.CustomColors))
+				if (!ArrayEx.ValuesEqual(customColors, f.CustomColors))
 				{
 					ApplicationSettings.RoamingUserSettings.View.UpdateCustomColorsFromWin32(f.CustomColors);
 					ApplicationSettings.SaveRoamingUserSettings();

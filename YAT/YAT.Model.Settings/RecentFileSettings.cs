@@ -158,7 +158,7 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				IEnumerableEx.ElementsEqual(FilePaths, other.FilePaths)
+				IEnumerableEx.ItemsEqual(FilePaths, other.FilePaths)
 			);
 		}
 
