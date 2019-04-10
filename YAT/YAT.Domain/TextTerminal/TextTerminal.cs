@@ -461,7 +461,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParserResult(parseResult, item.IsLine);
 			else
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
@@ -570,7 +570,7 @@ namespace YAT.Domain
 			}
 			catch (Exception ex)
 			{
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
+				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
 			}
 		}
 
@@ -1039,7 +1039,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elementsAdded)
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
@@ -1058,7 +1058,7 @@ namespace YAT.Domain
 			}
 
 			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-			elements.AddRange(lp);
+			elementsAdded.AddRange(lp);
 
 			lineState.Position = LinePosition.Content;
 			lineState.TimeStamp = ts;
@@ -1069,7 +1069,7 @@ namespace YAT.Domain
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elements)
+		private void ExecuteContent(LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsAdded)
 		{
 			// Convert content:
 			var de = ByteToElement(b, d);
@@ -1177,7 +1177,7 @@ namespace YAT.Domain
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elements.AddRange(lp);
+				elementsAdded.AddRange(lp);
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
@@ -1190,7 +1190,7 @@ namespace YAT.Domain
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					var message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
-					elements.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elementsAdded.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
 			}
 		}
@@ -1224,7 +1224,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
@@ -1243,25 +1243,25 @@ namespace YAT.Domain
 			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
 			if (isEmptyLine && isPendingEol) // Intended empty lines must be shown!
 			{                                                                         // Precondition: [elements] must contain all elements since line start!
-				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); //               This is given by (lineState.Elements.ByteCount == 0), i.e.
+				elementsAdded.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); //               This is given by (lineState.Elements.ByteCount == 0), i.e.
 			}                                                                         //               line has just been started and does not yet contain content.
 			else if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter)) // Potentially suppress line:
 			{
-				int initialCount = elements.Count;
-				elements.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); // !!!!!!!!!!!!!!!!!!!! DOESN'T WORK !!!!!!!!!!!!!!!!
+				int initialCount = elementsAdded.Count;
+				elementsAdded.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); // !!!!!!!!!!!!!!!!!!!! DOESN'T WORK !!!!!!!!!!!!!!!!
 			////elementsToBeRemovedAgain = (initialCount - elements.Count); \ToDo FR#347
 			}
 			else
 			{
 				// Finalize elements:
-				elements.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
+				elementsAdded.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
 				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
-				lines.Add(l);
+				linesAdded.Add(l);
 			}
 
 			this.bidirLineState.IsFirstLine = false;
@@ -1272,7 +1272,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded)
 		{
 			LineState lineState;
 			switch (raw.Direction)
@@ -1297,15 +1297,15 @@ namespace YAT.Domain
 			{
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
-					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
+					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsAdded);
 
 				// Content:
 				if (lineState.Position == LinePosition.Content)
-					ExecuteContent(lineState, raw.PortStamp, raw.Direction, b, elements);
+					ExecuteContent(lineState, raw.PortStamp, raw.Direction, b, elementsAdded);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
-					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elements, lines);
+					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elementsAdded, linesAdded);
 			}
 		}
 
@@ -1348,13 +1348,13 @@ namespace YAT.Domain
 
 						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
-							var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-							var lines = new List<DisplayLine>();
+							var elementsAdded = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+							var linesAdded = new List<DisplayLine>();
 
-							ExecuteLineEnd(lineState, ts, ps, elements, lines);
+							ExecuteLineEnd(lineState, ts, ps, elementsAdded, linesAdded);
 
-							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
-							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
+							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsAdded);
+							OnDisplayLinesAdded   (this.bidirLineState.Direction, linesAdded);
 						}
 					} // a line break has been detected
 				} // a line break is active
@@ -1378,13 +1378,13 @@ namespace YAT.Domain
 
 			if (lineState.Elements.Count > 0)
 			{
-				var elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				var lines = new List<DisplayLine>();
+				var elementsAdded = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var linesAdded = new List<DisplayLine>();
 
-				ExecuteLineEnd(lineState, ts, ps, elements, lines);
+				ExecuteLineEnd(lineState, ts, ps, elementsAdded, linesAdded);
 
-				OnDisplayElementsProcessed(d, elements);
-				OnDisplayLinesProcessed(d, lines);
+				OnDisplayElementsAdded(d, elementsAdded);
+				OnDisplayLinesAdded   (d, linesAdded);
 			}
 		}
 

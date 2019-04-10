@@ -1055,7 +1055,7 @@ namespace YAT.Domain
 		/// on the same thread that triggered the send operation.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
 		/// to the main application. Small chunks of sent data would generate many events. However,
-		/// since <see cref="OnDisplayElementProcessed"/> synchronously invokes the event, it will
+		/// since <see cref="OnDisplayElementAdded"/> synchronously invokes the event, it will
 		/// take some time until the send queue is checked again. During this time, no more new
 		/// events are invoked, instead, outgoing data is buffered.
 		/// </summary>
@@ -1205,7 +1205,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParserResult(parseResult, item.IsLine);
 			else
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
+				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
@@ -1416,12 +1416,12 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing port settings has failed! " + ex.Message));
+								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing port settings has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Changing port settings is yet limited to serial COM ports (limitation #71).", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Changing port settings is yet limited to serial COM ports (limitation #71).", true));
 					}
 					break;
 				}
@@ -1444,12 +1444,12 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing baud rate has failed! " + ex.Message));
+								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing baud rate has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Baud rate can only be changed on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Baud rate can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1472,12 +1472,12 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing stop bits has failed! " + ex.Message));
+								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing stop bits has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Stop bits can only be changed on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Stop bits can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1500,12 +1500,12 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing data bits has failed! " + ex.Message));
+								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing data bits has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Data bits can only be changed on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Data bits can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1528,12 +1528,12 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing parity has failed! " + ex.Message));
+								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing parity has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Parity can only be changed on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Parity can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1556,12 +1556,12 @@ namespace YAT.Domain
 						{
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementProcessed(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing flow control has failed! " + ex.Message));
+								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing flow control has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Flow control can only be changed on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Flow control can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1575,7 +1575,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1589,7 +1589,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1603,7 +1603,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1617,7 +1617,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1631,7 +1631,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1645,7 +1645,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -1663,7 +1663,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Report ID can only be used with USB Ser/HID.", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Report ID can only be used with USB Ser/HID.", true));
 					}
 					break;
 				}
@@ -1672,9 +1672,9 @@ namespace YAT.Domain
 				{
 					// Add space if necessary:
 					if (ElementsAreSeparate(IODirection.Tx))
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.DataSpace());
 
-					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
+					OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
 					break;
 				}
 			}
@@ -3073,28 +3073,28 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elements, List<DisplayLine> lines);
+		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded);
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
 		{
 			// Collection of elements resulting from this chunk, typically a partial line,
 			// but may also be a complete line or even span across multiple lines.
-			var elements = new DisplayElementCollection(); // Default initial capacity is OK.
+			var elementsAdded = new DisplayElementCollection(); // Default initial capacity is OK.
 
 			// Collection of lines being completed by this chunk, typically none or a single line,
 			// but may also be multiple lines.
-			var lines = new List<DisplayLine>();
+			var linesAdded = new List<DisplayLine>();
 
-			ProcessRawChunk(raw, rawAttribute, elements, lines);
+			ProcessRawChunk(raw, rawAttribute, elementsAdded, linesAdded);
 
-			if (elements.Count > 0)
+			if (elementsAdded.Count > 0)
 			{
-				OnDisplayElementsProcessed(raw.Direction, elements);
+				OnDisplayElementsAdded(raw.Direction, elementsAdded);
 
-				if (lines.Count > 0)
+				if (linesAdded.Count > 0)
 				{
-					OnDisplayLinesProcessed(raw.Direction, lines);
+					OnDisplayLinesAdded(raw.Direction, linesAdded);
 				}
 			}
 		}
@@ -3111,7 +3111,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void EnqueueEasterEggMessage()
 		{
-			OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
+			OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
 		}
 
 		#endregion
@@ -3759,7 +3759,7 @@ namespace YAT.Domain
 				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
 					foreach (var de in c)
-						OnDisplayElementProcessed((IODirection)de.Direction, de);
+						OnDisplayElementAdded((IODirection)de.Direction, de);
 				}
 
 				OnIOControlChanged(new IOControlEventArgs(IODirection.Bidir, texts));
@@ -3783,22 +3783,22 @@ namespace YAT.Domain
 				{
 					// Handle serial port errors whenever possible:
 					switch (spe.SerialPortError)
-					{                                                                                    // Same as 'spe.Direction'.
-						case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
-						case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
-						case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
-						case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
-						case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
-						default:                                   OnIOError(e);                                                                                                       break;
+					{                                                                                // Same as 'spe.Direction'.
+						case System.IO.Ports.SerialError.Frame:    OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
+						case System.IO.Ports.SerialError.Overrun:  OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
+						case System.IO.Ports.SerialError.RXOver:   OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
+						case System.IO.Ports.SerialError.RXParity: OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
+						case System.IO.Ports.SerialError.TXFull:   OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
+						default:                                   OnIOError(e);                                                                                                   break;
 					}
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
 				{
-					OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
+					OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
 				{
-					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
+					OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
 				}
 				else
 				{
@@ -3885,15 +3885,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementProcessed(IODirection direction, DisplayElement element)
+		protected virtual void OnDisplayElementAdded(IODirection direction, DisplayElement element)
 		{
 			var elements = new DisplayElementCollection(1); // Preset the required capacity to improve memory management.
 			elements.Add(element); // No clone needed as the element must be created when calling this event method.
-			OnDisplayElementsProcessed(direction, elements);
+			OnDisplayElementsAdded(direction, elements);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsProcessed(IODirection direction, DisplayElementCollection elements)
+		protected virtual void OnDisplayElementsAdded(IODirection direction, DisplayElementCollection elements)
 		{
 			switch (direction)
 			{
@@ -3968,7 +3968,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void OnDisplayLinesProcessed(IODirection d, List<DisplayLine> lines)
+		protected virtual void OnDisplayLinesAdded(IODirection d, List<DisplayLine> lines)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 			{
