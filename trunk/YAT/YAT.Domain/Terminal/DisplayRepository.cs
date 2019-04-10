@@ -234,7 +234,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<DisplayElement> ToElements()
 		{
-			var elements = new List<DisplayElement>(256); // Preset the initial capacity to improve memory management, 256 is an arbitrary value.
+			var elements = new List<DisplayElement>(256); // Preset initial capacity to improve memory management, 256 is an arbitrary value.
 
 			foreach (var line in ToLines())
 				elements.AddRange(line.ToArray());

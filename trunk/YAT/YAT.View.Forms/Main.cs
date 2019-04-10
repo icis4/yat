@@ -2610,7 +2610,7 @@ namespace YAT.View.Forms
 			e.Result = dr;
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_CursorRequest(object sender, EventArgs<Cursor> e)
 		{
 			Cursor = e.Value;
@@ -3088,7 +3088,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspace_TerminalAdded(object sender, EventArgs<Model.Terminal> e)
 		{
 			// Create terminal form and immediately show it:
@@ -3109,44 +3109,44 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspace_TerminalRemoved(object sender, EventArgs<Model.Terminal> e)
 		{
 			// Nothing to do, see remarks above.
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspace_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
 			SetTimedStatusText(e.Value);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspace_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
 			SetFixedStatusText(e.Value);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspace_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			e.Result = ShowSaveWorkspaceAsFileDialog();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspace_CursorRequest(object sender, EventArgs<Cursor> e)
 		{
 			Cursor = e.Value;
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspace_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			DetachWorkspaceEventHandlers();
@@ -3155,7 +3155,7 @@ namespace YAT.View.Forms
 			SetChildControls();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void workspaceSettingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			SetWorkspaceControls();

@@ -157,7 +157,7 @@ namespace MKY.Collections.Specialized
 			// If there are indeed duplicates, take the long way to remove the recent ones...
 			while (this.Distinct().ToList().Count < Count)
 			{
-				var duplicates = new List<RecentItem<T>>(Count); // Preset the initial capacity to improve memory management.
+				var duplicates = new List<RecentItem<T>>(Count); // Preset initial capacity to improve memory management.
 
 				// Traverse the collection and search for duplicates:
 				for (int outer = 0; outer < (Count - 1); outer++)
@@ -189,7 +189,7 @@ namespace MKY.Collections.Specialized
 		/// </summary>
 		public virtual void ValidateAll()
 		{
-			var invalids = new List<RecentItem<T>>(Count); // Preset the initial capacity to improve memory management.
+			var invalids = new List<RecentItem<T>>(Count); // Preset initial capacity to improve memory management.
 
 			foreach (var ri in this)
 			{
@@ -208,7 +208,7 @@ namespace MKY.Collections.Specialized
 		/// </summary>
 		public virtual T[] ToItemArray()
 		{
-			var items = new List<T>(Count); // Preset the initial capacity to improve memory management.
+			var items = new List<T>(Count); // Preset initial capacity to improve memory management.
 
 			foreach (var ri in this)
 			{
