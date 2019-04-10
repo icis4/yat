@@ -65,7 +65,7 @@ namespace YAT.View.Controls
 		private const bool TerminalIsReadyToSendDefault = false;
 
 		private const int SendSplitterDistanceDefault = 353; // Designer requires that this is a constant.
-		                                                     // Set same value as underlying elements (less the left margin of 3).
+		                                                     // Set same value as underlying controls (less the left margin of 3).
 		#endregion
 
 		#region Fields
