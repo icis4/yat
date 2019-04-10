@@ -1238,7 +1238,7 @@ namespace YAT.Model
 				var terminals = this.workspace.Terminals;
 				if (terminals != null)
 				{
-					var inUseLookup = new List<MKY.IO.Ports.InUseInfo>(terminals.Length); // Preset the initial capacity to improve memory management.
+					var inUseLookup = new List<MKY.IO.Ports.InUseInfo>(terminals.Length); // Preset initial capacity to improve memory management.
 
 					foreach (var t in this.workspace.Terminals)
 					{

@@ -298,7 +298,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		private static AutoResponseEx[] GetItems(bool addFixed, bool addVariable)
 		{
-			var a = new List<AutoResponseEx>(16); // Preset the initial capacity to improve memory management, 16 is a large enough value.
+			var a = new List<AutoResponseEx>(16); // Preset initial capacity to improve memory management, 16 is a large enough value.
 
 			if (addFixed)    a.Add(new AutoResponseEx(AutoResponse.None));
 			if (addFixed)    a.Add(new AutoResponseEx(AutoResponse.Trigger));

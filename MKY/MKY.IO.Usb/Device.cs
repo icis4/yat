@@ -127,7 +127,7 @@ namespace MKY.IO.Usb
 		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true)
 		{
 			var paths = Win32.DeviceManagement.GetDevicesFromGuid(classGuid);
-			var l = new List<DeviceInfo>(paths.Length); // Preset the initial capacity to improve memory management.
+			var l = new List<DeviceInfo>(paths.Length); // Preset initial capacity to improve memory management.
 
 			foreach (var path in paths)
 			{
