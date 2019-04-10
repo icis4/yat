@@ -262,7 +262,7 @@ namespace YAT.Model.Settings
 				AutoActionVisible  .Equals(other.AutoActionVisible)   &&
 				AutoResponseVisible.Equals(other.AutoResponseVisible) &&
 
-				IEnumerableEx.ElementsEqual(CustomColors, other.CustomColors)
+				IEnumerableEx.ItemsEqual(CustomColors, other.CustomColors)
 			);
 		}
 

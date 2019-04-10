@@ -168,8 +168,8 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				Layout     .Equals(other.Layout)      &&
-				IEnumerableEx.ElementsEqual(TerminalSettings, other.TerminalSettings)
+				Layout            .Equals(                 other.Layout) &&
+				IEnumerableEx.ItemsEqual(TerminalSettings, other.TerminalSettings)
 			);
 		}
 

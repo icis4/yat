@@ -205,7 +205,7 @@ namespace MKY.IO.Ports
 				{
 					string[] formerCache = (string[])staticPortNamesCache.Clone();
 					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames();
-					useCaptionsFromCache = ArrayEx.ElementsEqual(staticPortNamesCache, formerCache);
+					useCaptionsFromCache = ArrayEx.ValuesEqual(staticPortNamesCache, formerCache);
 				}
 			}
 

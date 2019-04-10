@@ -204,9 +204,9 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				IEnumerableEx.ElementsEqual(RecentRemoteHosts,  other.RecentRemoteHosts)  &&
-				IEnumerableEx.ElementsEqual(RecentLocalFilters, other.RecentLocalFilters) &&
-				IEnumerableEx.ElementsEqual(RecentPorts,        other.RecentPorts)
+				IEnumerableEx.ItemsEqual(RecentRemoteHosts,  other.RecentRemoteHosts)  &&
+				IEnumerableEx.ItemsEqual(RecentLocalFilters, other.RecentLocalFilters) &&
+				IEnumerableEx.ItemsEqual(RecentPorts,        other.RecentPorts)
 			);
 		}
 

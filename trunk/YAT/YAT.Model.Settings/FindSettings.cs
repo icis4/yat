@@ -204,9 +204,9 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx             .EqualsOrdinal(ActivePattern, other.ActivePattern)  &&
-				IEnumerableEx.ElementsEqual(       RecentPatterns, other.RecentPatterns) &&
-				Options              .Equals(                      other.Options)
+				StringEx          .EqualsOrdinal(ActivePattern, other.ActivePattern)  &&
+				IEnumerableEx.ItemsEqual(       RecentPatterns, other.RecentPatterns) &&
+				Options           .Equals(                      other.Options)
 			);
 		}
 

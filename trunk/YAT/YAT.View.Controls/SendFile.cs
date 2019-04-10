@@ -185,7 +185,7 @@ namespace YAT.View.Controls
 		{
 			set
 			{
-				if (!IEnumerableEx.ElementsEqual(this.recent, value))
+				if (!IEnumerableEx.ItemsEqual(this.recent, value))
 				{
 					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
@@ -801,7 +801,7 @@ namespace YAT.View.Controls
 			Debug.WriteLine("Text    = " + pathComboBox_FilePath.Text);
 
 			if (this.recent != null)
-				Debug.WriteLine("Recent = " + ArrayEx.ElementsToString(this.recent.ToArray()));
+				Debug.WriteLine("Recent = " + ArrayEx.ValuesToString(this.recent.ToArray()));
 		}
 
 		#endregion

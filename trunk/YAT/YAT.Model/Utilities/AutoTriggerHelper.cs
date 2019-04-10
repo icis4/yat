@@ -75,7 +75,7 @@ namespace YAT.Model.Utilities
 			{
 				lock (this)
 				{
-					if (!ArrayEx.ElementsEqual(this.triggerSequence, value))
+					if (!ArrayEx.ValuesEqual(this.triggerSequence, value))
 					{
 						this.triggerSequence = value;
 						this.triggerQueue = new Domain.SequenceQueue(this.triggerSequence);

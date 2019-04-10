@@ -98,9 +98,9 @@ namespace MKY.Xml
 		{
 			return
 			(	// XML is case insensitive!
-				(StringEx.ElementsEqualOrdinalIgnoreCase(XmlPath,             other.XmlPath)) &&
-				(StringEx       .EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
-				(StringEx.ElementsEqualOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))
+				(StringEx.ItemsEqualOrdinalIgnoreCase(XmlPath,             other.XmlPath)) &&
+				(StringEx    .EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
+				(StringEx.ItemsEqualOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))
 			);
 		}
 

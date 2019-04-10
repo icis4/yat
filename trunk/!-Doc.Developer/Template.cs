@@ -413,10 +413,10 @@ namespace YAT/*.<TODO>*/
 			//	PropertyN.Equals(other.PropertyN) &&
 			//	...
 			//	!!! For reference types !!!
-			//	StringEx     .EqualsOrdinal( StringProperty,        other.StringProperty)      &&
-			//	ArrayEx      .ElementsEqual( ArrayProperty,         other.ArrayProperty)       &&
-			//	IEnumerableEx.ElementsEqual( IEnumerableProperty,   other.IEnumerableProperty) &&
-			//	ObjectEx             .Equals(ReferenceTypeProperty, other.ReferenceTypeProperty)
+			//	StringEx          .EqualsOrdinal(StringProperty,        other.StringProperty)      &&
+			//	ArrayEx     .ValuesEqual(        ArrayProperty,         other.ArrayProperty)       &&
+			//	IEnumerableEx.ItemsEqual(        IEnumerableProperty,   other.IEnumerableProperty) &&
+			//	ObjectEx          .Equals(       ReferenceTypeProperty, other.ReferenceTypeProperty)
 			);
 		}
 

@@ -35,17 +35,17 @@ namespace MKY.Collections
 	{
 		/// <summary>
 		/// Determines whether the two enumerated objects have value equality, i.e. contains the
-		/// same number of elements, all elements are equally sequenced and have value equality.
+		/// same number of items, all items are equally sequenced and have value equality.
 		/// </summary>
 		/// <remarks>
-		/// This method has intentionally been called "ElementsEqual()"...
+		/// This method has intentionally been called "ItemsEqual()"...
 		/// ...for similar naming as <see cref="object.ReferenceEquals(object, object)"/> and...
 		/// ...to emphasize difference to "IEnumerator.Equals()" which is just "object.Equals()".
 		/// </remarks>
 		/// <returns>
 		/// True if enumerated objects have value equality, otherwise false.
 		/// </returns>
-		public static bool ElementsEqual(IEnumerator enumA, IEnumerator enumB)
+		public static bool ItemsEqual(IEnumerator enumA, IEnumerator enumB)
 		{
 			while (true)
 			{

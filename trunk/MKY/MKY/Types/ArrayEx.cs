@@ -52,9 +52,9 @@ namespace MKY
 
 		/// <summary>
 		/// Creates an array using <see cref="Array.CreateInstance(Type, int)"/> and initializes
-		/// the given number of array elements with the given initial value.
+		/// the given number of array values with the given initial value.
 		/// </summary>
-		/// <typeparam name="T">The type of the array's items.</typeparam>
+		/// <typeparam name="T">The type of the array's values.</typeparam>
 		public static T[] CreateAndInitializeInstance<T>(int length, T initialValue)
 		{
 			T[] a = (T[])Array.CreateInstance(typeof(T), length);
@@ -67,17 +67,17 @@ namespace MKY
 
 		/// <summary>
 		/// Determines whether the two arrays have value equality, i.e. contains the same number of
-		/// elements, all elements are equally sequenced and have value equality.
+		/// values, all values are equally sequenced and have value equality.
 		/// </summary>
 		/// <remarks>
-		/// This method has intentionally been called "ElementsEqual()"...
+		/// This method has intentionally been called "ValuesEqual()"...
 		/// ...for similar naming as <see cref="object.ReferenceEquals(object, object)"/> and...
 		/// ...to emphasize difference to "Array.Equals()" which is just "object.Equals()".
 		/// </remarks>
 		/// <returns>
 		/// True if arrays have value equality, otherwise false.
 		/// </returns>
-		public static bool ElementsEqual(Array objA, Array objB)
+		public static bool ValuesEqual(Array objA, Array objB)
 		{
 			if (ReferenceEquals(objA, objB)) return (true);
 			if (ReferenceEquals(objA, null)) return (false);
@@ -86,34 +86,34 @@ namespace MKY
 			if (objA.Length != objB.Length)
 				return (false);
 
-			return (IEnumeratorEx.ElementsEqual(objA.GetEnumerator(), objB.GetEnumerator()));
+			return (IEnumeratorEx.ItemsEqual(objA.GetEnumerator(), objB.GetEnumerator()));
 		}
 
 		/// <summary>
-		/// Appends all elements of an array to a string and returns the string.
-		/// Elements that are <c>null</c> are returned as "[null]".
+		/// Appends all values of an array to a string and returns the string.
+		/// Values that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>
-		/// String containing all elements.
+		/// String containing all values.
 		/// </returns>
-		public static string ElementsToString(Array value)
+		public static string ValuesToString(Array array)
 		{
 			// Attention:
-			// Similar code exists in IEnumerableEx.ElementsToString().
+			// Similar code exists in IEnumerableEx.ItemsToString().
 			// Changes here may have to be applied there too.
 
 			var sb = new StringBuilder();
 
-			bool firstElement = true;
-			foreach (object item in value)
+			bool isFirst = true;
+			foreach (object value in array)
 			{
-				if (firstElement)
-					firstElement = false;
+				if (isFirst)
+					isFirst = false;
 				else
 					sb.Append(", ");
 
-				if (item != null)
-					sb.Append(item.ToString());
+				if (value != null)
+					sb.Append(value.ToString());
 				else
 					sb.Append("[null]");
 			}
@@ -122,21 +122,21 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Serves as a hash function that iterates over all items within the given array.
+		/// Serves as a hash function that iterates over all values within the given array.
 		/// </summary>
-		public static int ElementsToHashCode(Array value)
+		public static int ValuesToHashCode(Array array)
 		{
 			// Attention:
-			// Similar code exists in IEnumerableEx.ElementsToHashCode().
+			// Similar code exists in IEnumerableEx.ItemsToHashCode().
 			// Changes here may have to be applied there too.
 
 			int hashCode = 0;
 
-			foreach (object item in value)
+			foreach (object value in array)
 			{
 				unchecked
 				{
-					hashCode = (hashCode * 397) ^ (item != null ? item.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (value != null ? value.GetHashCode() : 0);
 				}
 			}
 

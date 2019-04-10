@@ -117,19 +117,19 @@ namespace MKY.Test.Types
 				yield return (new TestCaseData(null,       null,       true).SetName("BothAreNull"));
 
 				yield return (new TestCaseData(IntArrays[0], IntArrays[0], true) .SetName("IntArrays_ReferenceEquals"));
-				yield return (new TestCaseData(IntArrays[0], IntArrays[1], true) .SetName("IntArrays_ElementsEqual"));
+				yield return (new TestCaseData(IntArrays[0], IntArrays[1], true) .SetName("IntArrays_ValuesEqual"));
 				yield return (new TestCaseData(IntArrays[0], IntArrays[2], false).SetName("IntArrays_Differs"));
 
 				yield return (new TestCaseData(EnumArrays[0], EnumArrays[0], true) .SetName("EnumArrays_ReferenceEquals"));
-				yield return (new TestCaseData(EnumArrays[0], EnumArrays[1], true) .SetName("EnumArrays_ElementsEqual"));
+				yield return (new TestCaseData(EnumArrays[0], EnumArrays[1], true) .SetName("EnumArrays_ValuesEqual"));
 				yield return (new TestCaseData(EnumArrays[0], EnumArrays[2], false).SetName("EnumArrays_Differs"));
 
 				yield return (new TestCaseData(ReferenceTypeArrays[0], ReferenceTypeArrays[0], true) .SetName("ReferenceTypeArrays_ReferenceEquals"));
-				yield return (new TestCaseData(ReferenceTypeArrays[0], ReferenceTypeArrays[1], true) .SetName("ReferenceTypeArrays_ElementsEqual"));
+				yield return (new TestCaseData(ReferenceTypeArrays[0], ReferenceTypeArrays[1], true) .SetName("ReferenceTypeArrays_ValuesEqual"));
 				yield return (new TestCaseData(ReferenceTypeArrays[0], ReferenceTypeArrays[2], false).SetName("ReferenceTypeArrays_Differs"));
 
 				yield return (new TestCaseData(StringArrays[0], StringArrays[0], true) .SetName("StringArrays_ReferenceEquals"));
-				yield return (new TestCaseData(StringArrays[0], StringArrays[1], true) .SetName("StringArrays_ElementsEqual"));
+				yield return (new TestCaseData(StringArrays[0], StringArrays[1], true) .SetName("StringArrays_ValuesEqual"));
 				yield return (new TestCaseData(StringArrays[0], StringArrays[2], false).SetName("StringArrays_Differs"));
 
 				yield return (new TestCaseData(ArraysWithNull[0], ArraysWithNull[0], true) .SetName("ArraysWithNull_ReferenceEquals"));
@@ -158,16 +158,16 @@ namespace MKY.Test.Types
 		// Test
 		//==========================================================================================
 
-		#region Tests > ElementsEqual()
+		#region Tests > ValuesEqual()
 		//------------------------------------------------------------------------------------------
-		// Tests > ElementsEqual()
+		// Tests > ValuesEqual()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(ArrayExTestData), "TestCases")]
-		public virtual void TestElementsEqual(Array objA, Array objB, bool equals)
+		public virtual void TestValuesEqual(Array objA, Array objB, bool equals)
 		{
-			Assert.That(ArrayEx.ElementsEqual(objA, objB), Is.EqualTo(equals));
+			Assert.That(ArrayEx.ValuesEqual(objA, objB), Is.EqualTo(equals));
 		}
 
 		#endregion

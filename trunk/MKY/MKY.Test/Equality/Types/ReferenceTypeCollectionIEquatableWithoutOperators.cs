@@ -82,9 +82,9 @@ namespace MKY.Test.Equality.Types
 					return (false);
 				}
 
-				if (!IEnumerableEx.ElementsEqual(this, other))
+				if (!IEnumerableEx.ItemsEqual(this, other))
 				{
-					Trace.WriteLine("Results in 'False' since elements don't equal");
+					Trace.WriteLine("Results in 'False' since items don't equal");
 					Trace.Unindent();
 					return (false);
 				}
@@ -98,7 +98,7 @@ namespace MKY.Test.Equality.Types
 				if (Count != other.Count)
 					return (false);
 
-				return (IEnumerableEx.ElementsEqual(this, other));
+				return (IEnumerableEx.ItemsEqual(this, other));
 			}
 		}
 

@@ -158,7 +158,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// Async event handling. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding elements.
+		/// operations while adding items.
 		/// </remarks>
 		private Queue<byte> dataSentQueue = new Queue<byte>(DataSentQueueInitialCapacity);
 

@@ -801,7 +801,7 @@ namespace YAT.Model.Types
 				IsDefined.Equals(                   other.IsDefined)    &&
 				StringEx.EqualsOrdinal(Description, other.Description)  &&
 				DefaultRadix.Equals(                other.DefaultRadix) &&
-				ArrayEx.ElementsEqual(TextLines,    other.TextLines)    &&
+				ArrayEx.ValuesEqual(TextLines,      other.TextLines)    &&
 				IsFilePath.Equals(                  other.IsFilePath)   &&
 				PathEx.Equals(FilePath,             other.FilePath)
 			);

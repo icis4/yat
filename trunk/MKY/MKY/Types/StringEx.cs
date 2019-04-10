@@ -100,7 +100,7 @@ namespace MKY
 		/// There are overloads for <see cref="string"/> arrays as well as
 		/// <see cref="IEnumerable{T}"/> for optimal performance.
 		/// </remarks>
-		public static bool ElementsEqualOrdinal(string[] strA, string[] strB)
+		public static bool ValuesEqualOrdinal(string[] strA, string[] strB)
 		{
 			if (ReferenceEquals(strA, strB)) return (true);
 			if (ReferenceEquals(strA, null)) return (false);
@@ -129,7 +129,7 @@ namespace MKY
 		/// <see cref="IEnumerable{T}"/> for optimal performance.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'enumerables' is a correct English term for multiple 'enumerable', right?")]
-		public static bool ElementsEqualOrdinal(IEnumerable<string> strA, IEnumerable<string> strB)
+		public static bool ItemsEqualOrdinal(IEnumerable<string> strA, IEnumerable<string> strB)
 		{
 			if (ReferenceEquals(strA, strB)) return (true);
 			if (ReferenceEquals(strA, null)) return (false);
@@ -165,7 +165,7 @@ namespace MKY
 		/// There are overloads for <see cref="string"/> arrays as well as
 		/// <see cref="IEnumerable{T}"/> for optimal performance.
 		/// </remarks>
-		public static bool ElementsEqualOrdinalIgnoreCase(string[] strA, string[] strB)
+		public static bool ValuesEqualOrdinalIgnoreCase(string[] strA, string[] strB)
 		{
 			if (ReferenceEquals(strA, strB)) return (true);
 			if (ReferenceEquals(strA, null)) return (false);
@@ -194,7 +194,7 @@ namespace MKY
 		/// <see cref="IEnumerable{T}"/> for optimal performance.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'enumerables' is a correct English term for multiple 'enumerable', right?")]
-		public static bool ElementsEqualOrdinalIgnoreCase(IEnumerable<string> strA, IEnumerable<string> strB)
+		public static bool ItemsEqualOrdinalIgnoreCase(IEnumerable<string> strA, IEnumerable<string> strB)
 		{
 			if (ReferenceEquals(strA, strB)) return (true);
 			if (ReferenceEquals(strA, null)) return (false);

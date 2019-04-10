@@ -58,7 +58,7 @@ namespace MKY.Windows.Forms
 		/// class that is empty and has the specified initial capacity.
 		/// </summary>
 		/// <param name="capacity">
-		/// The initial number of elements that the underlying collection can contain.
+		/// The initial number of items that the underlying collection can contain.
 		/// </param>
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// <paramref name="capacity"/>capacity is less than 0.
@@ -91,7 +91,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Gets the number of elements actually contained in this workaround object.
+		/// Gets the number of items actually contained in this workaround object.
 		/// </summary>
 		public int Count
 		{

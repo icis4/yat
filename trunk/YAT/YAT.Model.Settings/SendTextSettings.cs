@@ -214,8 +214,8 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ObjectEx             .Equals(Command,        other.Command) &&
-				IEnumerableEx.ElementsEqual( RecentCommands, other.RecentCommands)
+				ObjectEx          .Equals(Command,        other.Command) &&
+				IEnumerableEx.ItemsEqual( RecentCommands, other.RecentCommands)
 			);
 		}
 
