@@ -433,7 +433,7 @@ namespace YAT.Log
 		{
 			get
 			{
-				var result = new List<string>(this.logs.Count); // Preset initial capacity to improve memory management.
+				var result = new List<string>(this.logs.Count); // Preset the required capacity to improve memory management.
 
 				foreach (var l in this.logs)
 				{

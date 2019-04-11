@@ -240,7 +240,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(12); // Preset initial capacity to improve memory management, 16 is a large enough value.
+			var a = new List<AutoActionEx>(16); // Preset the required capacity to improve memory management; 16 is a large enough value.
 
 			a.Add(new AutoActionEx(AutoAction.None));
 
