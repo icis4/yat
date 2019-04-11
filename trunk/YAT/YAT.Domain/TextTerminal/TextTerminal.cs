@@ -91,13 +91,13 @@ namespace YAT.Domain
 
 		private class LineState
 		{
-			public byte[]          EolSequence                  { get; }
+			public byte[]                   EolSequence { get; }
 
-			public LinePosition    Position                     { get; set; }
-			public DisplayLinePart Elements                     { get; set; }
+			public LinePosition             Position    { get; set; }
+			public DisplayElementCollection Elements    { get; set; }
 
-			public DisplayLinePart RetainedUnconfirmedHiddenEolElements { get; set; }
-			public Dictionary<string, SequenceQueue> EolOfGivenPort { get; set; }
+			public DisplayElementCollection RetainedUnconfirmedHiddenEolElements     { get; set; }
+			public Dictionary<string, SequenceQueue> EolOfGivenPort                  { get; set; }
 			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
 			public DateTime TimeStamp { get; set; }
@@ -111,12 +111,12 @@ namespace YAT.Domain
 			{
 				EolSequence = eolSequence;
 
-				Position = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				Elements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Position = LinePosition.Begin;
+				Elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
-				RetainedUnconfirmedHiddenEolElements     = new DisplayLinePart();                   // Default initial capacity is OK.
-				EolOfGivenPort                           = new Dictionary<string, SequenceQueue>(); // Default initial capacity is OK.
-				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>();          // Default initial capacity is OK.
+				RetainedUnconfirmedHiddenEolElements     = new DisplayElementCollection();          // No preset needed, the default initial capacity is good enough.
+				EolOfGivenPort                           = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
+				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>();          // No preset needed, the default initial capacity is good enough.
 
 				TimeStamp = DateTime.Now;
 
@@ -129,11 +129,11 @@ namespace YAT.Domain
 			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for consistency with [Execute...()] methods.")]
 			public virtual void Reset(string ps, bool eolWasCompleteMatch)
 			{
-				Position = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				Elements = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Position = LinePosition.Begin;
+				Elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 				if (eolWasCompleteMatch) // Keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
-					RetainedUnconfirmedHiddenEolElements = new DisplayLinePart(); // Default initial capacity is OK.
+					RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 				if (EolOfGivenPort.ContainsKey(ps))
 				{
@@ -583,7 +583,7 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the initial capacity to improve memory management, 4 is the maximum value for multi-byte characters.
+			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 
 			byte[] txEol;
 			byte[] rxEol;
@@ -811,7 +811,7 @@ namespace YAT.Domain
 
 										// Combine into single element, accepting the limitation that a potential control character will be contained in a data element:
 
-										var origin = new List<byte>(decodingArray.Length + 1); // Preset the initial capacity to improve memory management.
+										var origin = new List<byte>(decodingArray.Length + 1); // Preset the required capacity to improve memory management.
 										origin.AddRange(decodingArray);
 										origin.Add(b);
 
@@ -1039,12 +1039,12 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elementsAdded)
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elementsToAdd)
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
-			                                        //// Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+
+			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
@@ -1052,13 +1052,13 @@ namespace YAT.Domain
 			    TerminalSettings.Display.ShowPort      ||
 			    TerminalSettings.Display.ShowDirection)
 			{
-				DisplayLinePart info;
+				DisplayElementCollection info;
 				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), ps, d, out info);
 				lp.AddRange(info);
 			}
 
 			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-			elementsAdded.AddRange(lp);
+			elementsToAdd.AddRange(lp);
 
 			lineState.Position = LinePosition.Content;
 			lineState.TimeStamp = ts;
@@ -1069,13 +1069,13 @@ namespace YAT.Domain
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsAdded)
+		private void ExecuteContent(LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsToAdd)
 		{
 			// Convert content:
 			var de = ByteToElement(b, d);
 			de.Highlight = lineState.Highlight;
 
-			var lp = new DisplayLinePart(); // Default initial capacity is OK.
+			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			// Prepare EOL:
 			if (!lineState.EolOfGivenPort.ContainsKey(ps))                                  // It is OK to only access or add to the collection,
@@ -1177,7 +1177,7 @@ namespace YAT.Domain
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elementsAdded.AddRange(lp);
+				elementsToAdd.AddRange(lp);
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
@@ -1190,12 +1190,12 @@ namespace YAT.Domain
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					var message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
-					elementsAdded.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elementsToAdd.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
 			}
 		}
 
-		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp, DisplayElement de)
+		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
@@ -1212,7 +1212,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private static void TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(LineState lineState, DisplayLinePart lp)
+		private static void TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(LineState lineState, DisplayElementCollection lp)
 		{
 			if (lineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
@@ -1224,15 +1224,15 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
 			// Process line length:
-			var lineEnd = new DisplayLinePart(); // Default initial capacity is OK.
+			var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
-				DisplayLinePart info;
+				DisplayElementCollection info;
 				PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
 				lineEnd.AddRange(info);
 			}
@@ -1242,26 +1242,26 @@ namespace YAT.Domain
 			bool isEmptyLine = (lineState.Elements.ByteCount == 0);
 			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
 			if (isEmptyLine && isPendingEol) // Intended empty lines must be shown!
-			{                                                                         // Precondition: [elements] must contain all elements since line start!
-				elementsAdded.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); //               This is given by (lineState.Elements.ByteCount == 0), i.e.
-			}                                                                         //               line has just been started and does not yet contain content.
+			{                                                                     // Precondition: [elements] must contain all elements since line start!
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); //               This is given by (lineState.Elements.ByteCount == 0), i.e.
+			}                                                                     //               line has just been started and does not yet contain content.
 			else if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter)) // Potentially suppress line:
 			{
-				int initialCount = elementsAdded.Count;
-				elementsAdded.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); // !!!!!!!!!!!!!!!!!!!! DOESN'T WORK !!!!!!!!!!!!!!!!
-			////elementsToBeRemovedAgain = (initialCount - elements.Count); \ToDo FR#347
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: [elements] likely doesn't contain all elements since line start!
+				                                                                  //            All other elements must be removed as well!
+				suppressLine = true;                                              //            This is signalled by setting [suppressLine].
 			}
 			else
 			{
 				// Finalize elements:
-				elementsAdded.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
+				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
 				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
-				linesAdded.Add(l);
+				linesToAdd.Add(l);
 			}
 
 			this.bidirLineState.IsFirstLine = false;
@@ -1272,7 +1272,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
 		{
 			LineState lineState;
 			switch (raw.Direction)
@@ -1297,15 +1297,15 @@ namespace YAT.Domain
 			{
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
-					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsAdded);
+					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsToAdd);
 
 				// Content:
 				if (lineState.Position == LinePosition.Content)
-					ExecuteContent(lineState, raw.PortStamp, raw.Direction, b, elementsAdded);
+					ExecuteContent(lineState, raw.PortStamp, raw.Direction, b, elementsToAdd);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
-					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elementsAdded, linesAdded);
+					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elementsToAdd, linesToAdd, ref suppressLine);
 			}
 		}
 
@@ -1348,13 +1348,18 @@ namespace YAT.Domain
 
 						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
-							var elementsAdded = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-							var linesAdded = new List<DisplayLine>();
+							var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+							var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-							ExecuteLineEnd(lineState, ts, ps, elementsAdded, linesAdded);
+							bool lineToSuppress = false;
 
-							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsAdded);
-							OnDisplayLinesAdded   (this.bidirLineState.Direction, linesAdded);
+							ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref lineToSuppress);
+
+							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsToAdd);
+							OnDisplayLinesAdded(   this.bidirLineState.Direction, linesToAdd);
+
+							if (lineToSuppress)
+								OnCurrentDisplayLineCleared(this.bidirLineState.Direction);
 						}
 					} // a line break has been detected
 				} // a line break is active
@@ -1378,13 +1383,18 @@ namespace YAT.Domain
 
 			if (lineState.Elements.Count > 0)
 			{
-				var elementsAdded = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				var linesAdded = new List<DisplayLine>();
+				var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-				ExecuteLineEnd(lineState, ts, ps, elementsAdded, linesAdded);
+				bool lineToSuppress = false;
 
-				OnDisplayElementsAdded(d, elementsAdded);
-				OnDisplayLinesAdded   (d, linesAdded);
+				ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref lineToSuppress);
+
+				OnDisplayElementsAdded(d, elementsToAdd);
+				OnDisplayLinesAdded(   d, linesToAdd);
+
+				if (lineToSuppress)
+					OnCurrentDisplayLineCleared(d);
 			}
 		}
 

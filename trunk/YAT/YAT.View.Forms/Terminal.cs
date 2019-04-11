@@ -4834,18 +4834,22 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged                += terminal_IOChanged;
-				this.terminal.IOControlChanged         += terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged     += terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly  += terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly   += terminal_IORateChanged_Promptly;  // See further below for reason.
-				this.terminal.IORateChanged_Decimated  += terminal_IORateChanged_Decimated;
-				this.terminal.IOError                  += terminal_IOError;
+				this.terminal.IOChanged               += terminal_IOChanged;
+				this.terminal.IOControlChanged        += terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
+			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
+				this.terminal.IOError                 += terminal_IOError;
 
-				this.terminal.DisplayElementsSent      += terminal_DisplayElementsSent;
-				this.terminal.DisplayElementsReceived  += terminal_DisplayElementsReceived;
-				this.terminal.DisplayLinesSent         += terminal_DisplayLinesSent;
-				this.terminal.DisplayLinesReceived     += terminal_DisplayLinesReceived;
+				this.terminal.DisplayElementsSent                += terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived            += terminal_DisplayElementsReceived;
+				this.terminal.CurrentDisplayLineSentReplaced     += terminal_CurrentDisplayLineSentReplaced;
+				this.terminal.CurrentDisplayLineReceivedReplaced += terminal_CurrentDisplayLineReceivedReplaced;
+				this.terminal.CurrentDisplayLineSentCleared      += terminal_CurrentDisplayLineSentCleared;
+				this.terminal.CurrentDisplayLineReceivedCleared  += terminal_CurrentDisplayLineReceivedCleared;
+				this.terminal.DisplayLinesSent                   += terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived               += terminal_DisplayLinesReceived;
 
 				this.terminal.RepositoryCleared        += terminal_RepositoryCleared;
 				this.terminal.RepositoryReloaded       += terminal_RepositoryReloaded;
@@ -4877,26 +4881,30 @@ namespace YAT.View.Forms
 				this.terminal.IORateChanged_Decimated -= terminal_IORateChanged_Decimated;
 				this.terminal.IOError                 -= terminal_IOError;
 
-				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
-				this.terminal.DisplayElementsReceived -= terminal_DisplayElementsReceived;
-				this.terminal.DisplayLinesSent        -= terminal_DisplayLinesSent;
-				this.terminal.DisplayLinesReceived    -= terminal_DisplayLinesReceived;
+				this.terminal.DisplayElementsSent                -= terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived            -= terminal_DisplayElementsReceived;
+				this.terminal.CurrentDisplayLineSentReplaced     -= terminal_CurrentDisplayLineSentReplaced;
+				this.terminal.CurrentDisplayLineReceivedReplaced -= terminal_CurrentDisplayLineReceivedReplaced;
+				this.terminal.CurrentDisplayLineSentCleared      -= terminal_CurrentDisplayLineSentCleared;
+				this.terminal.CurrentDisplayLineReceivedCleared  -= terminal_CurrentDisplayLineReceivedCleared;
+				this.terminal.DisplayLinesSent                   -= terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived               -= terminal_DisplayLinesReceived;
 
-				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
+				this.terminal.RepositoryCleared        -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded       -= terminal_RepositoryReloaded;
 
 				this.terminal.AutoResponseCountChanged -= terminal_AutoResponseCountChanged;
 				this.terminal.AutoActionCountChanged   -= terminal_AutoActionCountChanged;
 
-				this.terminal.FixedStatusTextRequest  -= terminal_FixedStatusTextRequest;
-				this.terminal.TimedStatusTextRequest  -= terminal_TimedStatusTextRequest;
-				this.terminal.ResetStatusTextRequest  -= terminal_ResetStatusTextRequest;
-				this.terminal.MessageInputRequest     -= terminal_MessageInputRequest;
-				this.terminal.SaveAsFileDialogRequest -= terminal_SaveAsFileDialogRequest;
-				this.terminal.CursorRequest           -= terminal_CursorRequest;
+				this.terminal.FixedStatusTextRequest   -= terminal_FixedStatusTextRequest;
+				this.terminal.TimedStatusTextRequest   -= terminal_TimedStatusTextRequest;
+				this.terminal.ResetStatusTextRequest   -= terminal_ResetStatusTextRequest;
+				this.terminal.MessageInputRequest      -= terminal_MessageInputRequest;
+				this.terminal.SaveAsFileDialogRequest  -= terminal_SaveAsFileDialogRequest;
+				this.terminal.CursorRequest            -= terminal_CursorRequest;
 
-				this.terminal.Saved                   -= terminal_Saved;
-				this.terminal.Closed                  -= terminal_Closed;
+				this.terminal.Saved                    -= terminal_Saved;
+				this.terminal.Closed                   -= terminal_Closed;
 			}
 		}
 
@@ -4912,7 +4920,7 @@ namespace YAT.View.Forms
 		// Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
 			if (IsDisposed)
@@ -4923,7 +4931,7 @@ namespace YAT.View.Forms
 			OnTerminalChanged(EventArgs.Empty);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IOControlChanged(object sender, Domain.IOControlEventArgs e)
 		{
 			if (IsDisposed)
@@ -4932,7 +4940,7 @@ namespace YAT.View.Forms
 			SetIOControlControls();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
 			if (IsDisposed)
@@ -4958,7 +4966,7 @@ namespace YAT.View.Forms
 		//
 		// 'terminal_IORateChanged_Decimated' is fine.
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IORateChanged_Decimated(object sender, EventArgs e)
 		{
 			if (IsDisposed)
@@ -4979,7 +4987,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
@@ -5083,7 +5091,7 @@ namespace YAT.View.Forms
 			SetReceivedDataCountAndRateStatus();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
@@ -5099,7 +5107,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
@@ -5115,7 +5123,63 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineSentReplaced(object sender, Domain.DisplayElementsEventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
+			{
+				monitor_Tx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineReceivedReplaced(object sender, Domain.DisplayElementsEventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
+			{
+				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Rx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineSentCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
+			{
+				monitor_Tx   .ClearCurrentLine();
+				monitor_Bidir.ClearCurrentLine();
+			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineReceivedCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			if (TerminalIsAvailable)
+			{
+				monitor_Bidir.ClearCurrentLine();
+				monitor_Rx   .ClearCurrentLine();
+			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
@@ -5126,7 +5190,7 @@ namespace YAT.View.Forms
 				SetSentDataCountAndRateStatus();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
@@ -5137,7 +5201,7 @@ namespace YAT.View.Forms
 				SetReceivedDataCountAndRateStatus();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
 		{
 			if (IsDisposed)
@@ -5155,7 +5219,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_RepositoryReloaded(object sender, EventArgs<Domain.RepositoryType> e)
 		{
 			if (IsDisposed)
@@ -5173,7 +5237,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_AutoResponseCountChanged(object sender, EventArgs<int> e)
 		{
 			if (IsDisposed)
@@ -5182,7 +5246,7 @@ namespace YAT.View.Forms
 			OnAutoResponseCountChanged(e);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_AutoActionCountChanged(object sender, EventArgs<int> e)
 		{
 			if (IsDisposed)
@@ -5191,7 +5255,7 @@ namespace YAT.View.Forms
 			OnAutoActionCountChanged(e);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
 			if (IsDisposed)
@@ -5200,7 +5264,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText(e.Value);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
 			if (IsDisposed)
@@ -5209,7 +5273,7 @@ namespace YAT.View.Forms
 			SetTimedStatusText(e.Value);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_ResetStatusTextRequest(object sender, EventArgs e)
 		{
 			if (IsDisposed)
@@ -5218,7 +5282,7 @@ namespace YAT.View.Forms
 			ResetStatusText();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
@@ -5228,7 +5292,7 @@ namespace YAT.View.Forms
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			if (IsDisposed)
@@ -5237,7 +5301,7 @@ namespace YAT.View.Forms
 			e.Result = ShowSaveTerminalAsFileDialog();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_CursorRequest(object sender, EventArgs<Cursor> e)
 		{
 			if (IsDisposed)
@@ -5246,7 +5310,7 @@ namespace YAT.View.Forms
 			Cursor = e.Value;
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_Saved(object sender, Model.SavedEventArgs e)
 		{
 			if (IsDisposed)
@@ -5255,7 +5319,7 @@ namespace YAT.View.Forms
 			SetTerminalControls();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			if (IsDisposed)

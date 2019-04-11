@@ -46,9 +46,9 @@ namespace YAT.Domain
 	/// Implements a collection of display elements.
 	/// </summary>
 	/// <remarks>
-	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
-	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
-	/// undefined behavior.
+	/// This calls inherits from <see cref="T:List`"/>. However, it only overrides functions
+	/// required for YAT use cases. It is only allowed to add to the list, removing items results
+	/// in an undefined behavior.
 	/// </remarks>
 	[Serializable]
 	public class DisplayElementCollection : List<DisplayElement>
@@ -59,14 +59,17 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <remarks>
-		/// Can be use to preset the initial capacity of collections. The value reflects typical
-		/// maximum settings in case of string radix:
-		/// date, sep, time, sep, port, sep, direction, sep, content, eol, sep, length, linebreak = 13
+		/// Can be used to preset the initial capacity of display element collections. A value of
+		/// 18 would reflect the maximum elements in case of string radix and EOL shown:
+		/// start, stamp, sep, span, sep, delta, sep, port, sep, direction, sep, content, eol, sep, length, sep, duration, linebreak
+		/// 
+		/// However, this is not a typical use case, thus using a reduced value of 16 which is the
+		/// most typical 2^n value.
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'linebreak' is a YAT display element.")]
-		public const int TypicalNumberOfElementsPerLine = 16; // Use 16 = on of the 'normal' values.
+		public const int TypicalNumberOfElementsPerLine = 16;
 
 		#endregion
 
@@ -96,16 +99,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public DisplayElementCollection(DisplayElementCollection collection)
+		public DisplayElementCollection(DisplayElement element)
 		{
-			foreach (var de in collection) // Clone the whole collection to ensure decoupling.
-				Add(de.Clone());
+			Add(element.Clone()); // Clone the element to ensure decoupling.
 		}
 
 		/// <summary></summary>
-		public DisplayElementCollection(DisplayElement displayElement)
+		public DisplayElementCollection(IEnumerable<DisplayElement> collection)
 		{
-			Add(displayElement.Clone()); // Clone the element to ensure decoupling.
+			foreach (var de in collection) // Clone the whole collection to ensure decoupling.
+				Add(de.Clone());
 		}
 
 	#if (DEBUG)
@@ -246,7 +249,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Removes all elements at the end until (and including!) an element of the given type is found.
 		/// </summary>
-		public virtual void RemoveAtEndUntilIncluding(Type type)
+		public virtual void RemoveAtEndUntil(Type type)
 		{
 			while (Count > 0)
 			{
@@ -272,16 +275,31 @@ namespace YAT.Domain
 		/// <summary>
 		/// Clones this collection to the given collection.
 		/// </summary>
-		protected virtual void CloneTo(DisplayElementCollection c)
+		public virtual void CloneTo(DisplayElementCollection collection)
 		{
-			foreach (var de in this) // Clone the whole collection to ensure decoupling.
-				c.Add(de.Clone());
+			foreach (var de in this)
+				collection.Add(de.Clone());
+		}
+
+		/// <summary>
+		/// Clones a range of this collection to the given collection.
+		/// </summary>
+		/// <remarks>
+		/// Signature following <see cref="List{T}.CopyTo(int, T[], int, int)"/>.
+		/// </remarks>
+		/// <param name="index">The zero-based index in the source collection at which cloning begins.</param>
+		/// <param name="collection">The collection that is the destination of the elements cloned to.</param>
+		/// <param name="count">The number of items to copy.</param>
+		public virtual void CloneTo(int index, DisplayElementCollection collection, int count)
+		{
+			for (int i = index; i < count; i++)
+				collection.Add(this[i].Clone());
 		}
 
 		/// <summary></summary>
 		public virtual byte[] ElementsToOrigin()
 		{
-			var l = new List<byte>(this.ByteCount); // Preset the initial capacity to improve memory management.
+			var l = new List<byte>(this.ByteCount); // Preset the required capacity to improve memory management.
 
 			foreach (var de in this)
 			{
@@ -362,59 +380,15 @@ namespace YAT.Domain
 	}
 
 	/// <summary>
-	/// Implements a part of a display line containing a list of display elements.
+	/// Implements a display line containing a collection of display elements.
 	/// </summary>
 	/// <remarks>
-	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
-	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
-	/// undefined behavior.
-	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line part is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
-	[Serializable]
-	public class DisplayLinePart : DisplayElementCollection
-	{
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		public DisplayLinePart()
-		{
-		}
-
-		/// <summary></summary>
-		public DisplayLinePart(int elementCapacity)
-			: base(elementCapacity)
-		{
-		}
-
-		/// <summary></summary>
-		public DisplayLinePart(DisplayElementCollection collection)
-			: base(collection)
-		{
-		}
-
-		/// <summary></summary>
-		public DisplayLinePart(DisplayElement displayElement)
-			: base(displayElement)
-		{
-		}
-
-		#endregion
-	}
-
-	/// <summary>
-	/// Implements a display line containing a list of display elements.
-	/// </summary>
-	/// <remarks>
-	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
-	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
-	/// undefined behavior.
+	/// This calls redirects to <see cref="DisplayElementCollection"/>. The purpose of this
+	/// collection is to add functionality that explicitly applies to a line.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
 	[Serializable]
-	public class DisplayLine : DisplayLinePart
+	public class DisplayLine : DisplayElementCollection
 	{
 		#region Fields
 		//==========================================================================================
@@ -442,14 +416,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayElementCollection collection)
-			: base(collection)
+		public DisplayLine(DisplayElement element)
+			: base(element)
 		{
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayElement displayElement)
-			: base(displayElement)
+		public DisplayLine(IEnumerable<DisplayElement> collection)
+			: base(collection)
 		{
 		}
 
@@ -491,6 +465,41 @@ namespace YAT.Domain
 			var c = new DisplayLine(Capacity); // Preset the required capacity to improve memory management.
 			CloneTo(c);
 			return (c);
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// Implements a collection of display lines.
+	/// </summary>
+	/// <remarks>
+	/// This calls redirects to <see cref="T:List`"/>. The sole purpose of this collection is
+	/// consistency with <see cref="DisplayElementCollection"/>.
+	/// </remarks>
+	[Serializable]
+	public class DisplayLineCollection : List<DisplayLine>
+	{
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		public DisplayLineCollection()
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLineCollection(int elementCapacity)
+			: base(elementCapacity)
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLineCollection(IEnumerable<DisplayLine> lines)
+			: base(lines)
+		{
 		}
 
 		#endregion
