@@ -141,7 +141,7 @@ namespace YAT.View.Utilities
 		/// <exception cref="InvalidPrinterException">
 		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.
 		/// </exception>
-		public virtual void Print(List<DisplayLine> lines, FormatSettings formatSettings)
+		public virtual void Print(DisplayLineCollection lines, FormatSettings formatSettings)
 		{
 			if (this.foreColorBrushColor != formatSettings.PortFormat.Color)
 			{

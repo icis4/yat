@@ -876,7 +876,7 @@ namespace YAT.View.Forms
 			var infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
 			var infoEnclosureRight = this.infoEnclosure.ToEnclosureRight();
 
-			var exampleLines = new List<Domain.DisplayLine>(13); // Preset the required capacity to improve memory management.
+			var exampleLines = new Domain.DisplayLineCollection(13); // Preset the required capacity to improve memory management.
 
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));

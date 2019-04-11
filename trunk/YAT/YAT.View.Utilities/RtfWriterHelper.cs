@@ -67,7 +67,7 @@ namespace YAT.View.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of copying RTF to the clipboard. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		public static int CopyLinesToClipboard(List<DisplayLine> lines, FormatSettings settings)
+		public static int CopyLinesToClipboard(DisplayLineCollection lines, FormatSettings settings)
 		{
 			var richTextProvider = CopyLinesToRichTextBox(lines, settings);
 			richTextProvider.SelectAll();
@@ -79,7 +79,7 @@ namespace YAT.View.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of saving RTF to a file. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		public static int SaveLinesToFile(List<DisplayLine> lines, string filePath, FormatSettings settings)
+		public static int SaveLinesToFile(DisplayLineCollection lines, string filePath, FormatSettings settings)
 		{
 			var richTextProvider = CopyLinesToRichTextBox(lines, settings);
 			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.RichText);
@@ -88,7 +88,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		internal static RichTextBox CopyLinesToRichTextBox(List<DisplayLine> lines, FormatSettings settings)
+		internal static RichTextBox CopyLinesToRichTextBox(DisplayLineCollection lines, FormatSettings settings)
 		{
 			var richTextProvider = new RichTextBox();
 			richTextProvider.Font      = settings.Font;
@@ -105,7 +105,7 @@ namespace YAT.View.Utilities
 			AppendDisplayElements(richTextProvider, line, settings);
 		}
 
-		private static void AppendDisplayElements(RichTextBox richTextProvider, List<DisplayElement> elements, FormatSettings settings)
+		private static void AppendDisplayElements(RichTextBox richTextProvider, DisplayElementCollection elements, FormatSettings settings)
 		{
 			foreach (var de in elements)
 				AppendDisplayElement(richTextProvider, de, settings);
