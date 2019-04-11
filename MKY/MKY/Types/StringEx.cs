@@ -601,7 +601,7 @@ namespace MKY
 		/// </summary>
 		public static string[] SplitLexically(string str, int desiredChunkLength)
 		{
-			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset initial capacity to improve memory management.
+			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			string[] newLineSeparators = new string[] { Environment.NewLine, "\n", "\r" };
 
 			foreach (string paragraph in str.Split(newLineSeparators, StringSplitOptions.None))
@@ -612,7 +612,7 @@ namespace MKY
 
 		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkLength)
 		{
-			var spaces = new List<int>(ListInitialCapacityDefault); // Preset initial capacity to improve memory management.
+			var spaces = new List<int>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 
 			// Retrieve all spaces within the string:
 			int i = 0;
@@ -627,7 +627,7 @@ namespace MKY
 
 			// Split the string into the desired chunk size taking word boundaries into account:
 			int startIndex = 0;
-			var chunks = new List<string>(ListInitialCapacityDefault); // Preset initial capacity to improve memory management.
+			var chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			while (startIndex < str.Length)
 			{
 				// Find the furthermost split position:
@@ -909,7 +909,7 @@ namespace MKY
 			string rep = substring.Replace(@"\""", @""""); // Replace \" by "" to ease processing below.
 
 			int offset = 0;
-			var l = new List<KeyValuePair<int, string>>(ListInitialCapacityDefault); // Preset initial capacity to improve memory management.
+			var l = new List<KeyValuePair<int, string>>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			foreach (string s in rep.Split('"')) // Split string into chunks between double quotes.
 			{
 				l.Add(new KeyValuePair<int, string>(offset, s));
