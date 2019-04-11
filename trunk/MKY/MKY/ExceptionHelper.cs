@@ -40,7 +40,7 @@ namespace MKY
 		/// </summary>
 		public string Owner { get; protected set; }
 
-		private Dictionary<Type, bool> exceptionTypesToIgnore = new Dictionary<Type, bool>(); // Default initial capacity is OK.
+		private Dictionary<Type, bool> exceptionTypesToIgnore = new Dictionary<Type, bool>(); // No preset needed, the default initial capacity is good enough.
 		private object exceptionTypesToIgnoreSyncObj = new object();
 
 		/// <summary>
