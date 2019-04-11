@@ -1255,7 +1255,7 @@ namespace YAT.Domain
 			{
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				suppressLine = true;                                              //            This is signalled by setting 'suppressLine'.
+				suppressLine = true;                                              //            This is signaled by setting 'suppressLine'.
 			}
 			else
 			{

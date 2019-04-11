@@ -1045,7 +1045,7 @@ namespace MKY.IO.Ports
 					if (!isAfterException) // CloseNormally() shall be notified about exceptions.
 						throw; // Rethrow!
 					else
-						Debug.WriteLine("Suppressing exception as 'isAfterException' has been signalled.");
+						Debug.WriteLine("Suppressing exception as 'isAfterException' has been signaled.");
 				}
 
 				// Invoke the additional events implemented by this class:
