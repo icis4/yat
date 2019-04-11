@@ -75,7 +75,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.User", "!-Doc.User", "{ABECE297-BF82-4016-93F9-DF7204BA05F5}"
 	ProjectSection(SolutionItems) = preProject
 		YAT\!-Doc.User\YAT Release Notes.txt = YAT\!-Doc.User\YAT Release Notes.txt
-		YAT\!-Doc.User\YAT Release Notes_limited to ~900 lines for SourceForge online 'ReadMe'.txt = YAT\!-Doc.User\YAT Release Notes_limited to ~900 lines for SourceForge online 'ReadMe'.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx", "ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj", "{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}"
