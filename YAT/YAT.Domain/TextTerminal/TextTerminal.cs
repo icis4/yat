@@ -1057,8 +1057,16 @@ namespace YAT.Domain
 				lp.AddRange(info);
 			}
 
-			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-			elementsToAdd.AddRange(lp);
+			if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
+			{
+				lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
+			////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
+			}
+			else
+			{
+				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+				elementsToAdd.AddRange(lp);
+			}
 
 			lineState.Position = LinePosition.Content;
 			lineState.TimeStamp = ts;
@@ -1176,8 +1184,16 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
-				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elementsToAdd.AddRange(lp);
+				if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
+				{
+					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
+				////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
+				}
+				else
+				{
+					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+					elementsToAdd.AddRange(lp);
+				}
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
@@ -1190,7 +1206,7 @@ namespace YAT.Domain
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					var message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
-					elementsToAdd.Add          (new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elementsToAdd.Add(     new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
 			}
 		}
@@ -1228,31 +1244,31 @@ namespace YAT.Domain
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
-			// Process line length:
-			var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
-			{
-				DisplayElementCollection info;
-				PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
-				lineEnd.AddRange(info);
-			}
-			lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
-
 			// Potentially suppress empty lines that only contain hidden pending EOL character(s):
 			bool isEmptyLine = (lineState.Elements.ByteCount == 0);
 			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
 			if (isEmptyLine && isPendingEol) // Intended empty lines must be shown!
-			{                                                                     // Precondition: [elements] must contain all elements since line start!
+			{                                                                     // Precondition: 'elements' must contain all elements since line start!
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); //               This is given by (lineState.Elements.ByteCount == 0), i.e.
 			}                                                                     //               line has just been started and does not yet contain content.
 			else if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter)) // Potentially suppress line:
 			{
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: [elements] likely doesn't contain all elements since line start!
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				suppressLine = true;                                              //            This is signalled by setting [suppressLine].
+				suppressLine = true;                                              //            This is signalled by setting 'suppressLine'.
 			}
 			else
 			{
+				// Process line length:
+				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
+				{
+					DisplayElementCollection info;
+					PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
+					lineEnd.AddRange(info);
+				}
+				lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
+
 				// Finalize elements:
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
@@ -1283,15 +1299,12 @@ namespace YAT.Domain
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			switch (rawAttribute) // Activate flags as needed, leave unchanged otherwise as it could have become activated by a previous chunk.
-			{                     // Note that in case of active filtering, the [Filter] and [PotentiallySuppress] flags may both be active.
-				case LineChunkAttribute.Highlight:           lineState.Highlight           = (rawAttribute == LineChunkAttribute.Highlight);           break;
-				case LineChunkAttribute.Filter:              lineState.Filter              = (rawAttribute == LineChunkAttribute.Filter);              break;
-				case LineChunkAttribute.PotentiallySuppress: lineState.PotentiallySuppress = (rawAttribute == LineChunkAttribute.PotentiallySuppress); break;
-				case LineChunkAttribute.SuppressForSure:     lineState.SuppressForSure     = (rawAttribute == LineChunkAttribute.SuppressForSure);     break;
-
-				default: /* nothing to do */ break;
-			}
+			// Activate flags as needed, leave unchanged otherwise as it could have become activated by a previous chunk.
+			// Note that in case of active filtering, the [Filter] and [PotentiallySuppress] flags may both be active.
+			if (rawAttribute == LineChunkAttribute.Highlight)           lineState.Highlight           = true;
+			if (rawAttribute == LineChunkAttribute.Filter)              lineState.Filter              = true;
+			if (rawAttribute == LineChunkAttribute.PotentiallySuppress) lineState.PotentiallySuppress = true;
+			if (rawAttribute == LineChunkAttribute.SuppressForSure)     lineState.SuppressForSure     = true;
 
 			foreach (byte b in raw.Content)
 			{

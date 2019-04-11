@@ -619,7 +619,7 @@ namespace YAT.View.Controls
 			{
 				case ClearResult.NoElementOrLinePending:
 				case ClearResult.HasClearedButIsIncomplete:
-					ClearCurrentLineInListBoxes();
+					ResetCurrentLineInListBoxes();
 					AddElementsOrLines(elements);
 					break;
 
@@ -640,8 +640,7 @@ namespace YAT.View.Controls
 			switch (result)
 			{
 				case ClearResult.NoElementOrLinePending:
-				case ClearResult.HasClearedButIsIncomplete:
-					RemoveCurrentLineInListBoxes();
+					ClearCurrentLineInListBoxes();
 					break;
 
 				case ClearResult.HasClearedAndCompleted:
@@ -1635,7 +1634,7 @@ namespace YAT.View.Controls
 						while (lbmon.Items.Count >= this.maxLineCount)
 						{
 							int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // lbmon is master; decrement accounts for item that will be removed.
-							DebugVerticalAutoScroll("Removing least recent item...");
+							DebugVerticalAutoScroll("Removing least recent line...");
 							lblin.Items.RemoveAt(0); // Remove/RemoveAt() resets 'TopIndex' to 0!
 							lbmon.Items.RemoveAt(0); // \remind (2017-11-05 / MKY) check if still needed after upgrade to .NET 4.0 or higher (FR#229)
 							DebugVerticalAutoScroll("......restoring 'TopIndex'...");
@@ -1656,7 +1655,7 @@ namespace YAT.View.Controls
 						}
 
 						// Add element to a new line:
-						DebugVerticalAutoScroll("Adding new item..............");
+						DebugVerticalAutoScroll("Adding new line..............");
 						lblin.Items.Add(0); // 0 = dummy value. 'null' is not valid, it would result in an 'ArgumentNullException'.
 						lbmon.Items.Add(new Domain.DisplayLine(element));
 						DebugVerticalAutoScroll(".........................done");
@@ -1757,7 +1756,7 @@ namespace YAT.View.Controls
 			return ((element as Domain.DisplayElement.LineStart) != null);
 		}
 
-		private void ClearCurrentLineInListBoxes()
+		private void ResetCurrentLineInListBoxes()
 		{
 		////var lblin = fastListBox_LineNumbers => Nothing to do (yet).
 
@@ -1765,19 +1764,26 @@ namespace YAT.View.Controls
 			lbmon.Items[lbmon.Items.Count - 1] = new Domain.DisplayLine(); // Empty line.
 		}
 
-		private void RemoveCurrentLineInListBoxes()
+		private void ClearCurrentLineInListBoxes()
 		{
 			var lblin = fastListBox_LineNumbers;
 			var lbmon = fastListBox_Monitor;
 
-			int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // lbmon is master; decrement accounts for item that will be removed.
-			DebugVerticalAutoScroll("Removing current item...");
-			lblin.Items.RemoveAt(lblin.Items.Count - 1); // Remove/RemoveAt() resets 'TopIndex' to 0!
-			lbmon.Items.RemoveAt(lbmon.Items.Count - 1); // \remind (2017-11-05 / MKY) check if still needed after upgrade to .NET 4.0 or higher (FR#229)
-			DebugVerticalAutoScroll("..restoring 'TopIndex'..");
-			lblin.TopIndex = adjustedTopIndex;
-			lbmon.TopIndex = adjustedTopIndex;
-			DebugVerticalAutoScroll("....................done");
+			if ((lbmon.Items != null) && (lbmon.Items.Count > 0)) // lbmon is master.
+			{
+				var dl = (lbmon.Items[lbmon.Items.Count - 1] as Domain.DisplayLine);
+				if ((dl != null) && (dl.Count > 0) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
+				{
+					int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // lbmon is master; decrement accounts for item that will be removed.
+					DebugVerticalAutoScroll("Clearing current line...");
+					lblin.Items.RemoveAt(lblin.Items.Count - 1); // Remove/RemoveAt() resets 'TopIndex' to 0!
+					lbmon.Items.RemoveAt(lbmon.Items.Count - 1); // \remind (2017-11-05 / MKY) check if still needed after upgrade to .NET 4.0 or higher (FR#229)
+					DebugVerticalAutoScroll("..restoring 'TopIndex'..");
+					lblin.TopIndex = adjustedTopIndex;
+					lbmon.TopIndex = adjustedTopIndex;
+					DebugVerticalAutoScroll("....................done");
+				}
+			}
 		}
 
 		private void ClearAndResetListBoxes()

@@ -450,6 +450,21 @@ namespace YAT.Domain
 			set { this.timeStamp = value;  }
 		}
 
+		/// <summary>
+		/// Indicates whether the line is complete, i.e. the collection of elements contains a
+		/// <see cref="DisplayElement.LineBreak"/> at the end.
+		/// </summary>
+		public virtual bool IsComplete
+		{
+			get
+			{
+				if (Count > 0)
+					return (this[Count - 1] is DisplayElement.LineBreak);
+
+				return (false);
+			}
+		}
+
 		#endregion
 
 		#region Methods
