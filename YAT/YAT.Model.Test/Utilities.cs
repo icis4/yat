@@ -1395,13 +1395,13 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void VerifyLines(List<Domain.DisplayLine> displayLinesA, List<Domain.DisplayLine> displayLinesB, TestSet testSet)
+		internal static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet)
 		{
 			VerifyLines(displayLinesA, displayLinesB, testSet, 1); // Single cycle.
 		}
 
 		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void VerifyLines(List<Domain.DisplayLine> displayLinesA, List<Domain.DisplayLine> displayLinesB, TestSet testSet, int cycle)
+		internal static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet, int cycle)
 		{
 			// Attention: Display line count is not always equal to terminal line count!
 			//  > Display line count = number of lines in view

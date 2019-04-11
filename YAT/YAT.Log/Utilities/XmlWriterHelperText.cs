@@ -48,7 +48,7 @@ namespace YAT.Log.Utilities
 	public static class XmlWriterHelperText
 	{
 		/// <returns>Returns the number of lines that could successfully be written to the file.</returns>
-		public static int SaveLinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
+		public static int SaveLinesToFile(DisplayLineCollection displayLines, string filePath, bool addSchema)
 		{
 			List<XmlTransferTextLine> transferLines;
 			int count = ConvertLines(displayLines, out transferLines);
@@ -69,7 +69,7 @@ namespace YAT.Log.Utilities
 		}
 
 		/// <returns>Returns the number of lines that could successfully be converted.</returns>
-		private static int ConvertLines(List<DisplayLine> displayLines, out List<XmlTransferTextLine> transferLines)
+		private static int ConvertLines(DisplayLineCollection displayLines, out List<XmlTransferTextLine> transferLines)
 		{
 			transferLines = new List<XmlTransferTextLine>(displayLines.Count); // Preset the required capacity to improve memory management.
 			foreach (var dl in displayLines)

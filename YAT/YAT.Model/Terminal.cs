@@ -232,6 +232,18 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsReceived;
 
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLinePartSentReplaced"/></remarks>
+		public event EventHandler<Domain.DisplayLinePartEventArgs> CurrentDisplayLinePartSentReplaced;
+
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLinePartReceivedReplaced"/></remarks>
+		public event EventHandler<Domain.DisplayLinePartEventArgs> CurrentDisplayLinePartReceivedReplaced;
+
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineSentCleared"/></remarks>
+		public event EventHandler CurrentDisplayLineSentCleared;
+
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineReceivedCleared"/></remarks>
+		public event EventHandler CurrentDisplayLineReceivedCleared;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesSent;
 
@@ -2296,10 +2308,16 @@ namespace YAT.Model
 				this.terminal.RawChunkReceived        += terminal_RawChunkReceived;
 				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived += terminal_DisplayElementsReceived;
-				this.terminal.DisplayLinesSent        += terminal_DisplayLinesSent;
-				this.terminal.DisplayLinesReceived    += terminal_DisplayLinesReceived;
-				this.terminal.RepositoryCleared       += terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded      += terminal_RepositoryReloaded;
+
+				this.terminal.CurrentDisplayLinePartSentReplaced     += terminal_CurrentDisplayLinePartSentReplaced;
+				this.terminal.CurrentDisplayLinePartReceivedReplaced += terminal_CurrentDisplayLinePartReceivedReplaced;
+				this.terminal.CurrentDisplayLineSentCleared          += terminal_CurrentDisplayLineSentCleared;
+				this.terminal.CurrentDisplayLineReceivedCleared      += terminal_CurrentDisplayLineReceivedCleared;
+
+				this.terminal.DisplayLinesSent     += terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived += terminal_DisplayLinesReceived;
+				this.terminal.RepositoryCleared    += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded   += terminal_RepositoryReloaded;
 			}
 		}
 
@@ -2315,10 +2333,16 @@ namespace YAT.Model
 				this.terminal.RawChunkReceived        -= terminal_RawChunkReceived;
 				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived -= terminal_DisplayElementsReceived;
-				this.terminal.DisplayLinesSent        -= terminal_DisplayLinesSent;
-				this.terminal.DisplayLinesReceived    -= terminal_DisplayLinesReceived;
-				this.terminal.RepositoryCleared       -= terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded      -= terminal_RepositoryReloaded;
+
+				this.terminal.CurrentDisplayLinePartSentReplaced     -= terminal_CurrentDisplayLinePartSentReplaced;
+				this.terminal.CurrentDisplayLinePartReceivedReplaced -= terminal_CurrentDisplayLinePartReceivedReplaced;
+				this.terminal.CurrentDisplayLineSentCleared          -= terminal_CurrentDisplayLineSentCleared;
+				this.terminal.CurrentDisplayLineReceivedCleared      -= terminal_CurrentDisplayLineReceivedCleared;
+
+				this.terminal.DisplayLinesSent     -= terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived -= terminal_DisplayLinesReceived;
+				this.terminal.RepositoryCleared    -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded   -= terminal_RepositoryReloaded;
 			}
 		}
 
@@ -2553,6 +2577,8 @@ namespace YAT.Model
 		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
 		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
 		///    when processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
+		///    <see cref="CurrentDisplayLinePartSentReplaced"/>, <see cref="CurrentDisplayLinePartReceivedReplaced"/>,
+		///    <see cref="CurrentDisplayLineSentCleared"/>, <see cref="CurrentDisplayLineReceivedCleared"/>,
 		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
 		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
 		///    notified on updates after transmission.
@@ -2601,6 +2627,8 @@ namespace YAT.Model
 		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
 		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
 		///    when processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
+		///    <see cref="CurrentDisplayLinePartSentReplaced"/>, <see cref="CurrentDisplayLinePartReceivedReplaced"/>,
+		///    <see cref="CurrentDisplayLineSentCleared"/>, <see cref="CurrentDisplayLineReceivedCleared"/>,
 		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
 		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
 		///    notified on updates after transmission.
@@ -2728,7 +2756,7 @@ namespace YAT.Model
 					var asyncInvoker = new Action<AutoAction, byte[], DateTime>(terminal_RawChunkReceived_InvokeAutoActionAsync);
 					asyncInvoker.BeginInvoke(this.settingsRoot.AutoAction.Action, triggerSequence, e.Value.TimeStamp, null, null);
 
-					// Mark the received chunk as needed:
+					// Mark the received chunk as needed (triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
 						case AutoAction.Filter:   e.Attribute = Domain.LineChunkAttribute.Filter;           break;
@@ -2738,7 +2766,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					// Mark the received chunk as needed:
+					// Mark the received chunk as needed (non-triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
 						case AutoAction.Filter: e.Attribute = Domain.LineChunkAttribute.PotentiallySuppress; break;
@@ -2773,6 +2801,42 @@ namespace YAT.Model
 				return;
 
 			OnDisplayElementsReceived(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLinePartReceivedReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLinePartSentReplaced(object sender, Domain.DisplayLinePartEventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnCurrentDisplayLinePartSentReplaced(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLinePartSentReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLinePartReceivedReplaced(object sender, Domain.DisplayLinePartEventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnCurrentDisplayLinePartReceivedReplaced(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineSentCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnCurrentDisplayLineSentCleared(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineReceivedCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnCurrentDisplayLineReceivedCleared(e);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -3982,7 +4046,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public virtual List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
+		public virtual Domain.DisplayElementCollection RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
@@ -3992,7 +4056,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public virtual List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
+		public virtual Domain.DisplayLineCollection RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
@@ -5115,7 +5179,7 @@ namespace YAT.Model
 				}
 				else if (c.IsMultiLineText)
 				{
-					List<byte> commandResult = new List<byte>(256); // Preset the initial capacity to improve memory management, 256 is an arbitrary value.
+					List<byte> commandResult = new List<byte>(256); // Preset the initial capacity to improve memory management; 256 is an arbitrary value.
 
 					foreach (string line in c.MultiLineText)
 					{
@@ -5200,6 +5264,30 @@ namespace YAT.Model
 		protected virtual void OnDisplayElementsReceived(Domain.DisplayElementsEventArgs e)
 		{
 			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLinePartSentReplaced(Domain.DisplayLinePartEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.DisplayLinePartEventArgs>(CurrentDisplayLinePartSentReplaced, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLinePartReceivedReplaced(Domain.DisplayLinePartEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.DisplayLinePartEventArgs>(CurrentDisplayLinePartReceivedReplaced, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineSentCleared(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(CurrentDisplayLineSentCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineReceivedCleared(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(CurrentDisplayLineReceivedCleared, this, e);
 		}
 
 		/// <summary></summary>
