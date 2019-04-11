@@ -184,9 +184,8 @@ namespace YAT.View.Controls
 		private int lastFindIndex = ListBox.NoMatches;
 
 		// Update:
-		private Domain.DisplayElementCollection pendingElements = new Domain.DisplayElementCollection(32); // Preset the initial capacity to improve memory management; 32 is an arbitrary value.
-		private Domain.DisplayLineCollection        pendingLines    = new Domain.DisplayLineCollection();          // No preset needed, the default initial capacity is good enough.
-		private bool performImmediateUpdate;
+		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.		private bool performImmediateUpdate;
+		private bool performImmediateMonitorAndStatusUpdate;
 		private long monitorUpdateTickInterval;     // Ticks as defined by 'Stopwatch'.
 		private long nextMonitorUpdateTickStamp;    // Ticks as defined by 'Stopwatch'.
 		private long nextDataStatusUpdateTickStamp; // Ticks as defined by 'Stopwatch'.
@@ -589,78 +588,39 @@ namespace YAT.View.Controls
 			label_DataStatusEmpty.BackColor = SystemColors.Control;
 		}
 
-		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
+		/// <summary></summary>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddElement(Domain.DisplayElement element)
 		{
-			var l = new Domain.DisplayElementCollection();
-			l.Add(element);
-			DoAddElements(l);
+			AddElementsOrLines(element);
 		}
 
-		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
+		/// <summary></summary>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddElements(Domain.DisplayElementCollection elements)
 		{
-			DoAddElements(elements);
+			AddElementsOrLines(elements);
 		}
 
-		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		public virtual void RemoveElement(Domain.DisplayElement element)
-		{
-			var l = new List<Domain.DisplayElement>();
-			l.Add(element);
-			DoRemoveElements(l);
-		}
-
-		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		public virtual void RemoveElements(Domain.DisplayElementCollection elements)
-		{
-			DoRemoveElements(elements);
-		}
-
-		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
+		/// <summary></summary>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddLine(Domain.DisplayLine line)
 		{
-			var l = new Domain.DisplayLineCollection();
-			l.Add(line);
-			AddLines(l);
+			AddElementsOrLines(line);
 		}
 
-		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
+		/// <summary></summary>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddLines(Domain.DisplayLineCollection lines)
 		{
-			AddLines(lines);
+			AddElementsOrLines(lines);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void Clear()
 		{
-			this.pendingElements.Clear();
-			this.pendingLines.Clear();
+			this.pendingElementsAndLines.Clear();
 
 			ClearAndResetListBoxes();
 		}
@@ -1257,7 +1217,7 @@ namespace YAT.View.Controls
 		private void timer_MonitorUpdateTimeout_Tick(object sender, EventArgs e)
 		{
 			StopMonitorUpdateTimeout();
-			UpdateFastListBoxWithPendingElementsOrLines();
+			UpdateFastListBoxWithPendingElementsAndLines();
 		}
 
 		/// <remarks>
@@ -1476,37 +1436,14 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
-		/// <remarks>
 		/// This method will always be called on the application main thread, either from a
 		/// synchronized invocation or the synchronized 'Windows.Forms.Timer' event handler.
 		/// No additional synchronization or prevention of a race condition is needed.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void DoAddElements(List<Domain.DisplayElement> elements)
+		private void AddElementsOrLines(object elementsOrLines)
 		{
-			foreach (var de in elements)
-				this.pendingElements.Add(de);
-
-			TriggerMonitorUpdate();
-		}
-
-		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
-		/// <remarks>
-		/// This method will always be called on the application main thread, either from a
-		/// synchronized invocation or the synchronized 'Windows.Forms.Timer' event handler.
-		/// No additional synchronization or prevention of a race condition is needed.
-		/// </remarks>
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void DoAddLines(Domain.DisplayLineCollection lines)
-		{
-			foreach (var dl in lines)
-				this.pendingLines.Add(dl);
+			this.pendingElementsAndLines.Add(elementsOrLines);
 
 			TriggerMonitorUpdate();
 		}
@@ -1524,7 +1461,7 @@ namespace YAT.View.Controls
 			if (MonitorUpdateHasToBePerformed())
 			{
 				StopMonitorUpdateTimeout();
-				UpdateFastListBoxWithPendingElementsOrLines();
+				UpdateFastListBoxWithPendingElementsAndLines();
 			}
 			else
 			{
@@ -1533,16 +1470,12 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// Elements are added/removed during "normal" operation.
-		/// Lines will only be added on reload; or examples.
-		/// </remarks>
-		/// <remarks>
 		/// This method will always be called on the application main thread, either from a
 		/// synchronized invocation or the synchronized 'Windows.Forms.Timer' event handler.
 		/// No additional synchronization or prevention of a race condition is needed.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void UpdateFastListBoxWithPendingElementsOrLines()
+		private void UpdateFastListBoxWithPendingElementsAndLines()
 		{
 			ListBoxEx lblin = fastListBox_LineNumbers;
 			ListBoxEx lbmon = fastListBox_Monitor;
@@ -1550,25 +1483,53 @@ namespace YAT.View.Controls
 			lblin.BeginUpdate();
 			lbmon.BeginUpdate();
 
-			if (this.pendingElements.Count > 0) // Elements are added/removed during "normal" operation:
+			foreach (object obj in (this.pendingElementsAndLines))
 			{
-				foreach (var de in this.pendingElements)
 				{
-					AddElementToListBox(de);
+					var element = (obj as Domain.DisplayElement);
+					if (element != null)
+					{
+						AddElementToListBox(element);
+						continue;
+					}
+				}
+				{
+					var elements = (obj as List<Domain.DisplayElement>);
+					if (elements != null)
+					{
+						foreach (var element in elements)
+							AddElementToListBox(element);
+
+						continue;
+					}
+				}
+				{
+					var line = (obj as Domain.DisplayLine);
+					if (line != null)
+					{
+						foreach (var element in line)
+							AddElementToListBox(element);
+
+						continue;
+					}
+				}
+				{
+					var lines = (obj as List<Domain.DisplayLine>);
+					if (lines != null)
+					{
+						foreach (var line in lines)
+							foreach (var element in line)
+								AddElementToListBox(element);
+
+						continue;
+					}
 				}
 
-				this.pendingElements.Clear();
-			}
-			else if (this.pendingLines.Count > 0) // Lines will only be added on reload; or examples:
-			{
-				foreach (var dl in this.pendingLines)
-				{
-					foreach (var de in dl)
-						AddElementToListBox(de);
-				}
+				// Kind of 'default':
+				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + obj.GetType() + "' is a pending item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			} // foreach (object in pending)
 
-				this.pendingLines.Clear();
-			}
+			this.pendingElementsAndLines.Clear();
 
 			// Calculate tick stamp of next update:
 			unchecked
@@ -1846,14 +1807,14 @@ namespace YAT.View.Controls
 			if (processorLoadPercentage < LowerLoad)
 			{
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(LowerInterval);
-				this.performImmediateUpdate = true;
+				this.performImmediateMonitorAndStatusUpdate = true;
 
 				DebugUpdate("minimum update interval of ");
 			}
 			else if (processorLoadPercentage > UpperLoad)
 			{
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(UpperInterval);
-				this.performImmediateUpdate = false;
+				this.performImmediateMonitorAndStatusUpdate = false;
 
 				DebugUpdate("maximum update interval of ");
 			}
@@ -1865,7 +1826,7 @@ namespace YAT.View.Controls
 				y = Int32Ex.Limit(y, LowerInterval, UpperInterval); // 'min' and 'max' are fixed.
 
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(y);
-				this.performImmediateUpdate = false;
+				this.performImmediateMonitorAndStatusUpdate = false;
 
 				DebugUpdate("calculated update interval of ");
 			}
@@ -1882,7 +1843,7 @@ namespace YAT.View.Controls
 		private bool MonitorUpdateHasToBePerformed()
 		{
 			// Immediate update:
-			if (this.performImmediateUpdate)
+			if (this.performImmediateMonitorAndStatusUpdate)
 				return (true);
 
 			// Calculate whether the update interval has expired:
@@ -1920,7 +1881,7 @@ namespace YAT.View.Controls
 		private bool DataStatusUpdateHasToBePerformed()
 		{
 			// Immediate update:
-			if (this.performImmediateUpdate)
+			if (this.performImmediateMonitorAndStatusUpdate)
 				return (true);
 
 			// Calculate whether the update interval has expired:
