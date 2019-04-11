@@ -236,35 +236,35 @@ namespace YAT.Domain
 
 		private class LineState : IDisposable
 		{
-			public LinePosition         Position                      { get; set; }
-			public DisplayLinePart      Elements                      { get; set; }
-			public SequenceQueue        SequenceAfter                 { get; set; }
-			public SequenceQueue        SequenceBefore                { get; set; }
-			public List<DisplayElement> PendingSequenceBeforeElements { get; set; }
-			public DateTime             TimeStamp                     { get; set; }
+			public LinePosition             Position                      { get; set; }
+			public DisplayElementCollection Elements                      { get; set; }
+			public SequenceQueue            SequenceAfter                 { get; set; }
+			public SequenceQueue            SequenceBefore                { get; set; }
+			public DisplayElementCollection PendingSequenceBeforeElements { get; set; }
+			public DateTime                 TimeStamp                     { get; set; }
 
-			public bool                 Highlight                     { get; set; }
-			public bool                 Filter                        { get; set; }
-			public bool                 PotentiallySuppress           { get; set; }
-			public bool                 SuppressForSure               { get; set; }
+			public bool           Highlight                     { get; set; }
+			public bool           Filter                        { get; set; }
+			public bool           PotentiallySuppress           { get; set; }
+			public bool           SuppressForSure               { get; set; }
 
-			public LineBreakTimer       BreakTimer                    { get; set; }
+			public LineBreakTimer BreakTimer                    { get; set; }
 
 			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimer breakTimer)
 			{
-				Position                      = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				Elements                      = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Position                      = LinePosition.Begin;
+				Elements                      = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                 = sequenceAfter;
 				SequenceBefore                = sequenceBefore;
-				PendingSequenceBeforeElements = new List<DisplayElement>();
+				PendingSequenceBeforeElements = new DisplayElementCollection();
 				TimeStamp                     = DateTime.Now;
 
-				Highlight                     = false;
-				Filter                        = false;
-				PotentiallySuppress           = false;
-				SuppressForSure               = false;
+				Highlight           = false;
+				Filter              = false;
+				PotentiallySuppress = false;
+				SuppressForSure     = false;
 
-				BreakTimer                    = breakTimer;
+				BreakTimer          = breakTimer;
 			}
 
 			#region Disposal
@@ -340,17 +340,17 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				Position                      = LinePosition.Begin; // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				Elements                      = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Position                      = LinePosition.Begin;
+				Elements                      = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				SequenceAfter                  .Reset();
 				SequenceBefore                 .Reset();
-				PendingSequenceBeforeElements = new List<DisplayElement>();
+				PendingSequenceBeforeElements = new DisplayElementCollection();
 				TimeStamp                     = DateTime.Now;
 
-				Highlight                     = false;
-				Filter                        = false;
-				PotentiallySuppress           = false;
-				SuppressForSure               = false;
+				Highlight           = false;
+				Filter              = false;
+				PotentiallySuppress = false;
+				SuppressForSure     = false;
 			}
 		}
 
@@ -664,12 +664,12 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elementsAdded)
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elementsToAdd)
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
-			                                        //// Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var lp = new DisplayLinePart(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+
+			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
@@ -677,13 +677,13 @@ namespace YAT.Domain
 			    TerminalSettings.Display.ShowPort      ||
 			    TerminalSettings.Display.ShowDirection)
 			{
-				DisplayLinePart info;
+				DisplayElementCollection info;
 				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), ps, d, out info);
 				lp.AddRange(info);
 			}
 
 			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-			elementsAdded.AddRange(lp);
+			elementsToAdd.AddRange(lp);
 
 			lineState.Position = LinePosition.Content;
 			lineState.TimeStamp = ts;
@@ -694,7 +694,7 @@ namespace YAT.Domain
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection d, byte b, DisplayElementCollection elementsAdded, out List<DisplayElement> elementsForNextLine)
+		private void ExecuteContent(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection d, byte b, DisplayElementCollection elementsToAdd, out DisplayElementCollection elementsForNextLine)
 		{
 			elementsForNextLine = null;
 
@@ -702,7 +702,7 @@ namespace YAT.Domain
 			var de = ByteToElement(b, d);
 			de.Highlight = lineState.Highlight;
 
-			var lp = new DisplayLinePart(); // Default initial capacity is OK.
+			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			// Evaluate line breaks:
 			//  1. Evaluate the tricky case: Sequence before.
@@ -721,7 +721,7 @@ namespace YAT.Domain
 
 					de = null; // Indicate that element has been consumed.
 
-					elementsForNextLine = new List<DisplayElement>(lineState.PendingSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
+					elementsForNextLine = new DisplayElementCollection(lineState.PendingSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
 					foreach (DisplayElement dePending in lineState.PendingSequenceBeforeElements)
 						elementsForNextLine.Add(dePending.Clone());
 
@@ -761,7 +761,7 @@ namespace YAT.Domain
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elementsAdded.AddRange(lp);
+				elementsToAdd.AddRange(lp);
 			}
 
 			// Evaluate line breaks:
@@ -794,12 +794,12 @@ namespace YAT.Domain
 					                                     //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					string message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
-					elementsAdded.Add     (new DisplayElement.ErrorInfo((Direction)d, message, true));
+					elementsToAdd.Add     (new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
 			}
 		}
 
-		private void TreatSequenceBeforeAsNormal(LineState lineState, IODirection d, DisplayLinePart lp)
+		private void TreatSequenceBeforeAsNormal(LineState lineState, IODirection d, DisplayElementCollection lp)
 		{
 			if (lineState.PendingSequenceBeforeElements.Count > 0)
 			{
@@ -813,7 +813,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp, DisplayElement de)
+		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
@@ -825,15 +825,15 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
 			// Process line length:
-			var lineEnd = new DisplayLinePart(); // Default initial capacity is OK.
+			var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
 			{
-				DisplayLinePart info;
+				DisplayElementCollection info;
 				PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
 				lineEnd.AddRange(info);
 			}
@@ -842,19 +842,21 @@ namespace YAT.Domain
 			// Potentially suppress line:
 			if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
 			{
-				elementsAdded.RemoveAtEndUntilIncluding(typeof(DisplayElement.LineStart)); // !!!!!!!!!!!!!!!!!!!! DOESN'T WORK !!!!!!!!!!!!!!!!
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: [elements] likely doesn't contain all elements since line start!
+				                                                                  //            All other elements must be removed as well!
+				suppressLine = true;                                              //            This is signalled by setting [suppressLine].
 			}
 			else
 			{
 				// Finalize elements:
-				elementsAdded.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
+				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
 				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
-				linesAdded.Add(l);
+				linesToAdd.Add(l);
 			}
 
 			this.bidirLineState.IsFirstLine = false;
@@ -865,9 +867,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
 		{
-			if (linesAdded.Count <= 0) // Properly initialize the time delta:
+			if (linesToAdd.Count <= 0) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = raw.TimeStamp;
 
 			Settings.BinaryDisplaySettings displaySettings;
@@ -902,12 +904,12 @@ namespace YAT.Domain
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elementsAdded, linesAdded);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressLine);
 
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
 				{
-					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsAdded);
+					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsToAdd);
 
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimer.Start();
@@ -919,9 +921,9 @@ namespace YAT.Domain
 				}
 
 				// Content:
-				List<DisplayElement> elementsForNextLine = null;
+				DisplayElementCollection elementsForNextLine = null;
 				if (lineState.Position == LinePosition.Content)
-					ExecuteContent(displaySettings, lineState, raw.Direction, b, elementsAdded, out elementsForNextLine);
+					ExecuteContent(displaySettings, lineState, raw.Direction, b, elementsToAdd, out elementsForNextLine);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
@@ -929,12 +931,12 @@ namespace YAT.Domain
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimer.Stop();
 
-					ExecuteLineEnd(lineState, raw.TimeStamp, elementsAdded, linesAdded);
+					ExecuteLineEnd(lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressLine);
 
 					// In case of a pending element immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 					{
-						ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsAdded);
+						ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsToAdd);
 
 						foreach (var de in elementsForNextLine)
 						{
@@ -944,8 +946,8 @@ namespace YAT.Domain
 								{
 									foreach (var originByte in origin.Value1)
 									{
-										List<DisplayElement> elementsForNextLineDummy;
-										ExecuteContent(displaySettings, lineState, raw.Direction, originByte, elementsAdded, out elementsForNextLineDummy);
+										DisplayElementCollection elementsForNextLineDummy;
+										ExecuteContent(displaySettings, lineState, raw.Direction, originByte, elementsToAdd, out elementsForNextLineDummy);
 
 										// Note that 're.Direction' above is OK, this function is processing all in the same direction.
 									}
@@ -963,14 +965,14 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
-		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState,
-		                                           DateTime ts, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded)
+		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts,
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
 		{
 			if (lineState.Elements.Count > 0)
 			{
 				var span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
-					ExecuteLineEnd(lineState, ts, elementsAdded, linesAdded);
+					ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressLine);
 				}
 			}
 
@@ -1016,13 +1018,18 @@ namespace YAT.Domain
 
 						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
-							var elementsAdded = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-							var linesAdded = new List<DisplayLine>();
+							var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+							var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-							ExecuteLineEnd(lineState, ts, elementsAdded, linesAdded);
+							bool lineToSuppress = false;
 
-							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsAdded);
-							OnDisplayLinesAdded   (this.bidirLineState.Direction, linesAdded);
+							ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref lineToSuppress);
+
+							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsToAdd);
+							OnDisplayLinesAdded(   this.bidirLineState.Direction, linesToAdd);
+
+							if (lineToSuppress)
+								OnCurrentDisplayLineCleared(this.bidirLineState.Direction);
 						}
 					} // a line break has been detected
 				} // a line break is active
@@ -1046,13 +1053,18 @@ namespace YAT.Domain
 
 			if (lineState.Elements.Count > 0)
 			{
-				var elementsAdded = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				var linesAdded = new List<DisplayLine>();
+				var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-				ExecuteLineEnd(lineState, ts, elementsAdded, linesAdded);
+				bool lineToSuppress = false;
 
-				OnDisplayElementsAdded(d, elementsAdded);
-				OnDisplayLinesAdded   (d, linesAdded);
+				ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref lineToSuppress);
+
+				OnDisplayElementsAdded(d, elementsToAdd);
+				OnDisplayLinesAdded(   d, linesToAdd);
+
+				if (lineToSuppress)
+					OnCurrentDisplayLineCleared(d);
 			}
 		}
 

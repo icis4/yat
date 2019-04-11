@@ -68,8 +68,8 @@ namespace YAT.Domain
 		public DisplayRepository(int capacity)
 			: base(capacity)
 		{
-			this.capacity    = capacity;                    // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			this.currentLine = new DisplayLine(DisplayLinePart.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			this.capacity    = capacity;                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			this.currentLine = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 		////this.dataCount   = 0;
 			                                                  // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
@@ -163,7 +163,6 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1061:DoNotHideBaseClassMethods", Justification = "No clue why Queue<T>.Enqueue(T item) cannot be overridden...")]
 		public virtual void Enqueue(DisplayElement item)
 		{
 			// Add element to current line:
@@ -185,7 +184,6 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1061:DoNotHideBaseClassMethods", Justification = "No clue why Queue<T>.Enqueue(T item) cannot be overridden...")]
 		public virtual void Enqueue(IEnumerable<DisplayElement> collection)
 		{
 			foreach (var de in collection)
@@ -220,9 +218,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<DisplayLine> ToLines()
+		public virtual DisplayLineCollection ToLines()
 		{
-			var lines = new List<DisplayLine>(base.ToArray()); // Using this.ToArray() would result in stack overflow!
+			var lines = new DisplayLineCollection(base.ToArray()); // Using this.ToArray() would result in stack overflow!
 
 			// Add current line if it contains elements:
 			if (this.currentLine.Count > 0)
@@ -232,9 +230,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<DisplayElement> ToElements()
+		public virtual DisplayElementCollection ToElements()
 		{
-			var elements = new List<DisplayElement>(256); // Preset initial capacity to improve memory management, 256 is an arbitrary value.
+			var elements = new DisplayElementCollection(256); // Preset the initial capacity to improve memory management; 256 is an arbitrary value.
 
 			foreach (var line in ToLines())
 				elements.AddRange(line.ToArray());

@@ -311,6 +311,28 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsReceived;
 
+		/// <remarks>
+		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
+		/// elements would likely be more error prone since...
+		/// ...exact sequence of adding and removing elements has to exactly match.
+		/// ...an already added element would likely have to be unfolded to remove parts of it!
+		/// </remarks>
+		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineSentReplaced;
+
+		/// <remarks>
+		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
+		/// elements would likely be more error prone since...
+		/// ...exact sequence of adding and removing elements has to exactly match.
+		/// ...an already added element would likely have to be unfolded to remove parts of it!
+		/// </remarks>
+		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineReceivedReplaced;
+
+		/// <remarks><see cref="CurrentDisplayLineSentReplaced"/> above.</remarks>
+		public event EventHandler CurrentDisplayLineSentCleared;
+
+		/// <remarks><see cref="CurrentDisplayLineReceivedReplaced"/> above.</remarks>
+		public event EventHandler CurrentDisplayLineReceivedCleared;
+
 		/// <summary></summary>
 		public event EventHandler<DisplayLinesEventArgs> DisplayLinesSent;
 
@@ -2986,13 +3008,13 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string ps, IODirection d, out DisplayLinePart lp)
+		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string ps, IODirection d, out DisplayElementCollection lp)
 		{
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
 			    TerminalSettings.Display.ShowPort      ||
 			    TerminalSettings.Display.ShowDirection)
 			{
-				lp = new DisplayLinePart(10); // Preset the required capacity to improve memory management.
+				lp = new DisplayElementCollection(10); // Preset the required capacity to improve memory management.
 
 				if (TerminalSettings.Display.ShowTimeStamp)
 				{
@@ -3043,12 +3065,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		protected virtual void PrepareLineEndInfo(int byteCount, TimeSpan duration, out DisplayLinePart lp)
+		protected virtual void PrepareLineEndInfo(int byteCount, TimeSpan duration, out DisplayElementCollection lp)
 		{
 			if (TerminalSettings.Display.ShowLength || // = byte count.
 			    TerminalSettings.Display.ShowDuration) // = line duration.
 			{
-				lp = new DisplayLinePart(4); // Preset the required capacity to improve memory management.
+				lp = new DisplayElementCollection(4); // Preset the required capacity to improve memory management.
 
 				if (TerminalSettings.Display.ShowLength)
 				{
@@ -3073,29 +3095,36 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsAdded, List<DisplayLine> linesAdded);
+		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine);
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
 		{
 			// Collection of elements resulting from this chunk, typically a partial line,
 			// but may also be a complete line or even span across multiple lines.
-			var elementsAdded = new DisplayElementCollection(); // Default initial capacity is OK.
+			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			// Collection of lines being completed by this chunk, typically none or a single line,
 			// but may also be multiple lines.
-			var linesAdded = new List<DisplayLine>();
+			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-			ProcessRawChunk(raw, rawAttribute, elementsAdded, linesAdded);
+			bool suppressLine = false;
 
-			if (elementsAdded.Count > 0)
+			ProcessRawChunk(raw, rawAttribute, elementsToAdd, linesToAdd, ref suppressLine);
+
+			if (elementsToAdd.Count > 0)
 			{
-				OnDisplayElementsAdded(raw.Direction, elementsAdded);
+				OnDisplayElementsAdded(raw.Direction, elementsToAdd);
 
-				if (linesAdded.Count > 0)
+				if (linesToAdd.Count > 0)
 				{
-					OnDisplayLinesAdded(raw.Direction, linesAdded);
+					OnDisplayLinesAdded(raw.Direction, linesToAdd);
 				}
+			}
+
+			if (suppressLine)
+			{
+				OnCurrentDisplayLineCleared(raw.Direction);
 			}
 		}
 
@@ -3136,8 +3165,8 @@ namespace YAT.Domain
 		/// </summary>
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
-		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to format whole lines or even
-		/// multiple lines (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
+		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		public virtual string Format(byte[] data, IODirection d)
@@ -3156,14 +3185,14 @@ namespace YAT.Domain
 		/// </summary>
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
-		/// Currently limited to a <see cref="DisplayLinePart"/>. Refactoring would be required to format whole lines or even
-		/// multiple lines (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
+		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		public virtual string Format(byte[] data, IODirection d, Radix r)
 		{
-			var lp = new DisplayLinePart();
+			var lp = new DisplayElementCollection();
 
 			foreach (byte b in data)
 			{
@@ -3175,7 +3204,7 @@ namespace YAT.Domain
 			return (lp.ElementsToString());
 		}
 
-		private void AddSpaceIfNecessary(IODirection d, DisplayLinePart lp, DisplayElement de)
+		private void AddSpaceIfNecessary(IODirection d, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
@@ -3444,7 +3473,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
+		public virtual DisplayElementCollection RepositoryToDisplayElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -3464,7 +3493,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<DisplayLine> RepositoryToDisplayLines(RepositoryType repository)
+		public virtual DisplayLineCollection RepositoryToDisplayLines(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -3967,8 +3996,62 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineSentReplaced(DisplayElementsEventArgs e)
+		{
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineSentReplaced, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineReceivedReplaced(DisplayElementsEventArgs e)
+		{
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineReceivedReplaced, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineCleared(IODirection direction)
+		{
+			switch (direction)
+			{
+				case IODirection.Tx:
+					OnCurrentDisplayLineSentCleared(new EventArgs ());
+					break;
+
+				case IODirection.Rx:
+					OnCurrentDisplayLineReceivedCleared(new EventArgs ());
+					break;
+
+				case IODirection.Bidir:
+					OnCurrentDisplayLineSentCleared(new EventArgs ());
+					OnCurrentDisplayLineReceivedCleared(new EventArgs ());
+					break;
+
+				case IODirection.None:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineSentCleared(EventArgs e)
+		{
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(CurrentDisplayLineSentCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineReceivedCleared(EventArgs e)
+		{
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(CurrentDisplayLineReceivedCleared, this, e);
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void OnDisplayLinesAdded(IODirection d, List<DisplayLine> lines)
+		protected virtual void OnDisplayLinesAdded(IODirection d, DisplayLineCollection lines)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 			{

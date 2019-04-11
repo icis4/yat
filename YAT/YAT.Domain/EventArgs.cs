@@ -141,10 +141,10 @@ namespace YAT.Domain
 	public class DisplayLinesEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public List<DisplayLine> Lines { get; }
+		public DisplayLineCollection Lines { get; }
 
 		/// <summary></summary>
-		public DisplayLinesEventArgs(List<DisplayLine> lines)
+		public DisplayLinesEventArgs(DisplayLineCollection lines)
 		{
 			Lines = lines;
 		}
