@@ -96,7 +96,7 @@ namespace YAT.Log.Utilities
 
 			bool success = true;
 
-			var content = new List<byte>(displayLine.ByteCount); // Preset initial capacity to improve memory management.
+			var content = new List<byte>(displayLine.ByteCount); // Preset the required capacity to improve memory management.
 
 			DateTime timeStamp = DateTime.MinValue;
 			string portStr = "";

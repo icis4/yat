@@ -1397,7 +1397,7 @@ namespace YAT.Model
 
 				if (this.terminals != null)
 				{
-					var filePaths = new List<string>(this.terminals.Count); // Preset initial capacity to improve memory management.
+					var filePaths = new List<string>(this.terminals.Count); // Preset the required capacity to improve memory management.
 					foreach (var t in this.terminals)
 					{
 						if (t.SettingsFileExists)
