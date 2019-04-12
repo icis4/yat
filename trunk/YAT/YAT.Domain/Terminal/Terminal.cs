@@ -3095,7 +3095,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine);
+		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine);
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
@@ -3108,9 +3108,9 @@ namespace YAT.Domain
 			// but may also be multiple lines.
 			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-			bool suppressLine = false;
+			bool suppressAlreadyStartedLine = false;
 
-			ProcessRawChunk(raw, rawAttribute, elementsToAdd, linesToAdd, ref suppressLine);
+			ProcessRawChunk(raw, rawAttribute, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
 
 			if (elementsToAdd.Count > 0)
 			{
@@ -3122,7 +3122,7 @@ namespace YAT.Domain
 				}
 			}
 
-			if (suppressLine)
+			if (suppressAlreadyStartedLine)
 			{
 				OnCurrentDisplayLineCleared(raw.Direction);
 			}
