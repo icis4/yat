@@ -1329,7 +1329,7 @@ namespace YAT.Domain
 
 			// In both cases, filtering and suppression, the current implementation retains the line until the line is
 			// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs from
-			// the standard behavior which continuously displays data as they are coming in.
+			// the standard behavior which continuously displays data as it is coming in.
 			//
 			// Why this retaining approach? It would be possible to immediately display but then remove the line if it
 			// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach, at the
