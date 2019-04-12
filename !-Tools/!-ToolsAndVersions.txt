@@ -23,5 +23,8 @@ Testing
   > YAT TestBoard  1.0.0
   > WinPcap        4.1.3
 
+Documentation
+  > Libre Office   6.1.5.2
+
 ----------------
-2019-04-10 / MKY
+2019-04-12 / MKY
