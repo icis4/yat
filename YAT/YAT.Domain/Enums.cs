@@ -66,14 +66,17 @@ namespace YAT.Domain
 		/// <summary>Resulting line shall be highlighted.</summary>
 		Highlight,
 
-		/// <summary>Resulting line shall be included when filtering is active.</summary>
+		/// <summary>Filtering is active; resulting line shall be included.</summary>
 		Filter,
 
-		/// <summary>Resulting line shall may be excluded when filtering is active.</summary>
-		PotentiallySuppress,
+		/// <summary>Filtering is active; resulting line may be excluded.</summary>
+		SuppressIfNotFiltered,
 
-		/// <summary>Resulting line shall be excluded when suppressing is active.</summary>
-		SuppressForSure
+		/// <summary>Suppressing is active; resulting line may be excluded.</summary>
+		SuppressIfSubsequentlyTriggered,
+
+		/// <summary>Suppressing is active; resulting line shall be excluded.</summary>
+		Suppress
 	}
 }
 

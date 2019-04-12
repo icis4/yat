@@ -2633,6 +2633,15 @@ namespace YAT.Model
 		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
 		///    notified on updates after transmission.
 		/// </remarks>
+		/// <remarks>
+		/// \remind (2019-04-12 / MKY) (feature request #366 automatic response and action shall be made chunk independent)
+		/// Currently, trigger detection is implemented per chunk, i.e.:
+		///  > If the trigger is located in a single chunk, all fine, as long as the chunk does not spread across multiple lines.
+		///  > If the trigger is spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
+		///  > If there is more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger is detected.
+		/// To make this change happen, trigger detection will have to be moved from here to one of the underlying methods of
+		/// <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, i.e. where chunks are being processed onto lines.
+		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, Domain.RawChunkEventArgs e)
 		{
@@ -2670,7 +2679,7 @@ namespace YAT.Model
 			{
 				bool isTriggered = false;
 
-				foreach (byte b in e.Value.Content)
+				foreach (byte b in e.Value.Content) // Note the feature request #366 related remark in the method header.
 				{
 					lock (this.autoResponseTriggerHelperSyncObj)
 					{
@@ -2681,8 +2690,8 @@ namespace YAT.Model
 						}
 						else
 						{
-							break; // Break the for-loop if [AutoResponse] got disposed in the meantime.
-						}          // Though unlikely, it may happen when deactivating [AutoResponse]
+							break; // Break the for-loop if response got disposed in the meantime.
+						}          // Though unlikely, it may happen when deactivating response
 					}              // while receiving a very large chunk.
 				}
 
@@ -2726,7 +2735,7 @@ namespace YAT.Model
 
 				bool isTriggered = false;
 
-				foreach (byte b in e.Value.Content)
+				foreach (byte b in e.Value.Content) // Note the feature request #366 related remark in the method header.
 				{
 					lock (this.autoActionTriggerHelperSyncObj)
 					{
@@ -2737,8 +2746,8 @@ namespace YAT.Model
 						}
 						else
 						{
-							break; // Break the for-loop if [AutoAction] got disposed in the meantime.
-						}          // Though unlikely, it may happen when deactivating [AutoAction]
+							break; // Break the for-loop if action got disposed in the meantime.
+						}          // Though unlikely, it may happen when deactivating action
 					}              // while receiving a very large chunk.
 				}
 
@@ -2759,9 +2768,9 @@ namespace YAT.Model
 					// Mark the received chunk as needed (triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
-						case AutoAction.Filter:   e.Attribute = Domain.LineChunkAttribute.Filter;           break;
-						case AutoAction.Suppress: e.Attribute = Domain.LineChunkAttribute.SuppressForSure;  break;
-						default:                  e.Attribute = Domain.LineChunkAttribute.Highlight;        break;
+						case AutoAction.Filter:   e.Attribute = Domain.LineChunkAttribute.Filter;    break;
+						case AutoAction.Suppress: e.Attribute = Domain.LineChunkAttribute.Suppress;  break;
+						default:                  e.Attribute = Domain.LineChunkAttribute.Highlight; break;
 					}
 				}
 				else
@@ -2769,7 +2778,8 @@ namespace YAT.Model
 					// Mark the received chunk as needed (non-triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
-						case AutoAction.Filter: e.Attribute = Domain.LineChunkAttribute.PotentiallySuppress; break;
+						case AutoAction.Filter:   e.Attribute = Domain.LineChunkAttribute.SuppressIfNotFiltered;           break;
+						case AutoAction.Suppress: e.Attribute = Domain.LineChunkAttribute.SuppressIfSubsequentlyTriggered; break;
 					}
 				}
 			}
@@ -4907,6 +4917,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the automatic response.
 		/// </summary>
+		/// <remarks>
+		/// Note the feature request #366 related remark in the method header of
+		/// <see cref="terminal_RawChunkReceived(object, Domain.RawChunkEventArgs)"/>.
+		/// </remarks>
 		protected virtual void SendAutoResponse(byte[] triggerSequence)
 		{
 			this.autoResponseCount++; // Incrementing before sending to have the effective count available during sending.
@@ -5068,6 +5082,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Invokes the automatic action.
 		/// </summary>
+		/// <remarks>
+		/// Note the feature request #366 related remark in the method header of
+		/// <see cref="terminal_RawChunkReceived(object, Domain.RawChunkEventArgs)"/>.
+		/// </remarks>
 		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, DateTime ts)
 		{
 			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.

@@ -243,12 +243,14 @@ namespace YAT.Domain
 			public DisplayElementCollection PendingSequenceBeforeElements { get; set; }
 			public DateTime                 TimeStamp                     { get; set; }
 
-			public bool           Highlight                     { get; set; }
-			public bool           Filter                        { get; set; }
-			public bool           PotentiallySuppress           { get; set; }
-			public bool           SuppressForSure               { get; set; }
+			public bool Highlight                        { get; set; }
+			public bool FilterDetectedInFirstChunkOfLine { get; set; } // Line shall continuously get shown if filter is active from the first chunk.
+			public bool FilterDetectedInSubsequentChunk  { get; set; } // Line shall be retained and delay-shown if filter is detected subsequently.
+			public bool SuppressIfNotFiltered            { get; set; }
+			public bool SuppressIfSubsequentlyTriggered  { get; set; }
+			public bool SuppressForSure                  { get; set; }
 
-			public LineBreakTimer BreakTimer                    { get; set; }
+			public LineBreakTimer BreakTimer { get; set; }
 
 			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimer breakTimer)
 			{
@@ -259,12 +261,14 @@ namespace YAT.Domain
 				PendingSequenceBeforeElements = new DisplayElementCollection();
 				TimeStamp                     = DateTime.Now;
 
-				Highlight           = false;
-				Filter              = false;
-				PotentiallySuppress = false;
-				SuppressForSure     = false;
+				Highlight                        = false;
+				FilterDetectedInFirstChunkOfLine = false;
+				FilterDetectedInSubsequentChunk  = false;
+				SuppressIfNotFiltered            = false;
+				SuppressIfSubsequentlyTriggered  = false;
+				SuppressForSure                  = false;
 
-				BreakTimer          = breakTimer;
+				BreakTimer = breakTimer;
 			}
 
 			#region Disposal
@@ -347,10 +351,17 @@ namespace YAT.Domain
 				PendingSequenceBeforeElements = new DisplayElementCollection();
 				TimeStamp                     = DateTime.Now;
 
-				Highlight           = false;
-				Filter              = false;
-				PotentiallySuppress = false;
-				SuppressForSure     = false;
+				Highlight                        = false;
+				FilterDetectedInFirstChunkOfLine = false;
+				FilterDetectedInSubsequentChunk  = false;
+				SuppressIfNotFiltered            = false;
+				SuppressIfSubsequentlyTriggered  = false;
+				SuppressForSure                  = false;
+			}
+
+			public virtual bool AnyFilterDetected
+			{
+				get { return (FilterDetectedInFirstChunkOfLine || FilterDetectedInSubsequentChunk); }
 			}
 		}
 
@@ -682,7 +693,7 @@ namespace YAT.Domain
 				lp.AddRange(info);
 			}
 
-			if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
+			if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
 			{
 				lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 			////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
@@ -768,7 +779,7 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
-				if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
+				if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
 				{
 					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 				////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
@@ -841,22 +852,22 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
 			// Potentially suppress line:
-			if (lineState.SuppressForSure || (lineState.PotentiallySuppress && !lineState.Filter))
+			if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				suppressLine = true;                                              //            This is signaled by setting 'suppressLine'.
+				suppressAlreadyStartedLine = true;                                //            This is signaled by setting 'suppressAlreadyStartedLine'.
 			}
 			else
 			{
 				// Process line length:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // = (byte count, line duration).
+				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration.
 				{
 					DisplayElementCollection info;
 					PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
@@ -865,6 +876,11 @@ namespace YAT.Domain
 				lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 				// Finalize elements:
+				if ((lineState.SuppressIfSubsequentlyTriggered && !lineState.SuppressForSure) ||    // Don't suppress line!
+				    (lineState.SuppressIfNotFiltered && lineState.FilterDetectedInSubsequentChunk)) // Filter line!
+				{                                                                                   // Both cases mean to delay-show the elements of the line.
+					elementsToAdd.AddRange(lineState.Elements.Clone()); // Clone elements because they are needed again further below.
+				}
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
@@ -883,7 +899,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
 		{
 			if (linesToAdd.Count <= 0) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = raw.TimeStamp;
@@ -906,18 +922,32 @@ namespace YAT.Domain
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			// Activate flags as needed, leave unchanged otherwise as it could have become activated by a previous chunk.
-			// Note that in case of active filtering, the [Filter] and [PotentiallySuppress] flags may both be active.
-			if (rawAttribute == LineChunkAttribute.Highlight)           lineState.Highlight           = true;
-			if (rawAttribute == LineChunkAttribute.Filter)              lineState.Filter              = true;
-			if (rawAttribute == LineChunkAttribute.PotentiallySuppress) lineState.PotentiallySuppress = true;
-			if (rawAttribute == LineChunkAttribute.SuppressForSure)     lineState.SuppressForSure     = true;
+			// Activate flags as needed, leave unchanged otherwise.
+			// Note that each chunk will either have none or only have a single attribute activated.
+			// But the line state has to deal with multiple chunks, thus multiples attribute may get activated.
+			// Also note the limitations described in feature request #366 "Automatic response and action shall be...".
+			if (rawAttribute == LineChunkAttribute.Highlight)                       {                                                                                     lineState.Highlight                        = true;                                                                }
+			if (rawAttribute == LineChunkAttribute.Filter)                          { if (!lineState.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.FilterDetectedInFirstChunkOfLine = true; } else { lineState.FilterDetectedInSubsequentChunk = true; } } }
+			if (rawAttribute == LineChunkAttribute.SuppressIfNotFiltered)           { if (!lineState.AnyFilterDetected) {                                                 lineState.SuppressIfNotFiltered            = true;                                                              } }
+			if (rawAttribute == LineChunkAttribute.SuppressIfSubsequentlyTriggered) {                                                                                     lineState.SuppressIfSubsequentlyTriggered  = true;                                                                }
+			if (rawAttribute == LineChunkAttribute.Suppress)                        {                                                                                     lineState.SuppressForSure                  = true;                                                                }
+
+			// In both cases, filtering and suppression, the current implementation retains the line until the line is
+			// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs from
+			// the standard behavior which continuously displays data as they are coming in.
+			//
+			// Why this retaining approach? It would be possible to immediately display but then remove the line if it
+			// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach, at the
+			// price that there is no longer immediate feedback on single character transmission in case filtering or
+			// suppression is active.
+			//
+			// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
 
 			foreach (byte b in raw.Content)
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressLine);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
 
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
@@ -944,7 +974,7 @@ namespace YAT.Domain
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimer.Stop();
 
-					ExecuteLineEnd(lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressLine);
+					ExecuteLineEnd(lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
 
 					// In case of a pending element immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
@@ -979,13 +1009,13 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
 		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressLine)
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
 		{
 			if (lineState.Elements.Count > 0)
 			{
 				var span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
-					ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressLine);
+					ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
 				}
 			}
 
