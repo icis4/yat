@@ -2802,6 +2802,8 @@ namespace YAT.Model
 				return;
 
 			OnDisplayElementsSent(e);
+
+			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2811,6 +2813,8 @@ namespace YAT.Model
 				return;
 
 			OnDisplayElementsReceived(e);
+
+			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2820,6 +2824,8 @@ namespace YAT.Model
 				return;
 
 			OnCurrentDisplayLineSentReplaced(e);
+
+			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2829,6 +2835,8 @@ namespace YAT.Model
 				return;
 
 			OnCurrentDisplayLineReceivedReplaced(e);
+
+			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2838,6 +2846,8 @@ namespace YAT.Model
 				return;
 
 			OnCurrentDisplayLineSentCleared(e);
+
+			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -2847,6 +2857,8 @@ namespace YAT.Model
 				return;
 
 			OnCurrentDisplayLineReceivedCleared(e);
+
+			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
