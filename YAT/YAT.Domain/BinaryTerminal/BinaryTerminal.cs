@@ -859,9 +859,11 @@ namespace YAT.Domain
 			// Potentially suppress line:
 			if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
+			#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
 				suppressAlreadyStartedLine = true;                                //            This is signaled by setting 'suppressAlreadyStartedLine'.
+			#endif
 			}
 			else
 			{
@@ -932,16 +934,25 @@ namespace YAT.Domain
 			if (rawAttribute == LineChunkAttribute.SuppressIfSubsequentlyTriggered) {                                                                                     lineState.SuppressIfSubsequentlyTriggered  = true;                                                                }
 			if (rawAttribute == LineChunkAttribute.Suppress)                        {                                                                                     lineState.SuppressForSure                  = true;                                                                }
 
-			// In both cases, filtering and suppression, the current implementation retains the line until the line is
-			// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs from
-			// the standard behavior which continuously displays data as it is coming in.
+			// In both cases, filtering and suppression, the current implementation retains the line until it is
+			// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs
+			// from the standard behavior which continuously shows data as it is coming in.
 			//
 			// Why this retaining approach? It would be possible to immediately display but then remove the line if it
-			// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach, at the
+			// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach. At the
 			// price that there is no longer immediate feedback on single character transmission in case filtering or
-			// suppression is active.
+			// suppression is active, except in case of filtering when the first chunk of a line already contains the
+			// trigger, then the line is continuously shown ('FilterDetectedInFirstChunkOfLine').
 			//
 			// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
+			//
+			// To change from retaining to continuous approach, the #if (DEBUG) around 'suppressAlreadyStartedLine' will
+			// have to be removed again. As a consequence, the flag can never get activated, thus excluding it (YAGNI).
+			// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
+			//
+			// Note that logging works fine even when filtering or suppression is active, since logging is only
+			// triggered by the 'DisplayLinesSent/Received' events and thus not affected by the more tricky to handle
+			// 'CurrentDisplayLineSent/ReceivedReplaced' and 'CurrentDisplayLineSent/ReceivedCleared' events.
 
 			foreach (byte b in raw.Content)
 			{
@@ -1064,15 +1075,17 @@ namespace YAT.Domain
 							var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 							var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-							bool lineToSuppress = false;
+							bool suppressAlreadyStartedLine = false;
 
-							ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref lineToSuppress);
+							ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
 
 							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsToAdd);
 							OnDisplayLinesAdded(   this.bidirLineState.Direction, linesToAdd);
 
-							if (lineToSuppress)
+						#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
+							if (suppressAlreadyStartedLine)
 								OnCurrentDisplayLineCleared(this.bidirLineState.Direction);
+						#endif
 						}
 					} // a line break has been detected
 				} // a line break is active
@@ -1099,15 +1112,17 @@ namespace YAT.Domain
 				var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-				bool lineToSuppress = false;
+				bool suppressAlreadyStartedLine = false;
 
-				ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref lineToSuppress);
+				ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
 
 				OnDisplayElementsAdded(d, elementsToAdd);
 				OnDisplayLinesAdded(   d, linesToAdd);
 
-				if (lineToSuppress)
+			#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
+				if (suppressAlreadyStartedLine)
 					OnCurrentDisplayLineCleared(d);
+			#endif
 			}
 		}
 

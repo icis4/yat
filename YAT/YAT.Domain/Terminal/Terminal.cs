@@ -3122,10 +3122,16 @@ namespace YAT.Domain
 				}
 			}
 
+		#if (DEBUG)
+			// As described in 'BinaryTerminal/TextTerminal.ProcessRawChunk()', the current implementation retains
+			// the line until it is complete, i.e. until the final decision to filter or suppress could be done.
+			// As a consequence, the 'suppressAlreadyStartedLine' can never get activated, thus excluding it (YAGNI).
+			// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 			if (suppressAlreadyStartedLine)
 			{
 				OnCurrentDisplayLineCleared(raw.Direction);
 			}
+		#endif
 		}
 
 		#endregion
