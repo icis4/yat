@@ -66,18 +66,27 @@ namespace YAT.View.Forms
 			this.label_Encoding = new System.Windows.Forms.Label();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.groupBox_Display = new System.Windows.Forms.GroupBox();
+			this.groupBox_RxDisplay = new System.Windows.Forms.GroupBox();
+			this.textTerminalSettingsSet_Rx = new YAT.View.Controls.TextDisplaySettingsSet();
+			this.groupBox_TxDisplay = new System.Windows.Forms.GroupBox();
+			this.textTerminalSettingsSet_Tx = new YAT.View.Controls.TextDisplaySettingsSet();
+			this.checkBox_SeparateTxRxDisplay = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_Eol.SuspendLayout();
 			this.groupBox_Send.SuspendLayout();
 			this.groupBox_Exclude.SuspendLayout();
 			this.groupBox_Substitute.SuspendLayout();
+			this.groupBox_Display.SuspendLayout();
+			this.groupBox_RxDisplay.SuspendLayout();
+			this.groupBox_TxDisplay.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_OK
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(312, 26);
+			this.button_OK.Location = new System.Drawing.Point(584, 71);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -88,7 +97,7 @@ namespace YAT.View.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(312, 55);
+			this.button_Cancel.Location = new System.Drawing.Point(584, 100);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -100,13 +109,14 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.groupBox_Display);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Eol);
 			this.groupBox_Settings.Controls.Add(this.comboBox_Encoding);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Send);
 			this.groupBox_Settings.Controls.Add(this.label_Encoding);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(284, 557);
+			this.groupBox_Settings.Size = new System.Drawing.Size(556, 393);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -123,16 +133,16 @@ namespace YAT.View.Forms
 			this.groupBox_Eol.Size = new System.Drawing.Size(272, 119);
 			this.groupBox_Eol.TabIndex = 2;
 			this.groupBox_Eol.TabStop = false;
-			this.groupBox_Eol.Text = "EOL (end-of-line) sequence";
+			this.groupBox_Eol.Text = "EOL (End-Of-Line) Sequence";
 			// 
 			// checkBox_ShowEol
 			// 
 			this.checkBox_ShowEol.AutoSize = true;
 			this.checkBox_ShowEol.Location = new System.Drawing.Point(11, 93);
 			this.checkBox_ShowEol.Name = "checkBox_ShowEol";
-			this.checkBox_ShowEol.Size = new System.Drawing.Size(155, 17);
+			this.checkBox_ShowEol.Size = new System.Drawing.Size(127, 17);
 			this.checkBox_ShowEol.TabIndex = 5;
-			this.checkBox_ShowEol.Text = "&Show end-of-line sequence";
+			this.checkBox_ShowEol.Text = "&Show EOL sequence";
 			this.checkBox_ShowEol.CheckedChanged += new System.EventHandler(this.checkBox_ShowEol_CheckedChanged);
 			// 
 			// checkBox_SeparateTxRxEol
@@ -142,7 +152,7 @@ namespace YAT.View.Forms
 			this.checkBox_SeparateTxRxEol.Name = "checkBox_SeparateTxRxEol";
 			this.checkBox_SeparateTxRxEol.Size = new System.Drawing.Size(215, 17);
 			this.checkBox_SeparateTxRxEol.TabIndex = 2;
-			this.checkBox_SeparateTxRxEol.Text = "&Separate EOL sequences for Tx and Rx";
+			this.checkBox_SeparateTxRxEol.Text = "Separate EOL sequences for Tx and Rx";
 			this.checkBox_SeparateTxRxEol.UseVisualStyleBackColor = true;
 			this.checkBox_SeparateTxRxEol.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxEol_CheckedChanged);
 			// 
@@ -192,8 +202,6 @@ namespace YAT.View.Forms
 			// 
 			// comboBox_Encoding
 			// 
-			this.comboBox_Encoding.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Encoding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Encoding.FormattingEnabled = true;
 			this.comboBox_Encoding.Location = new System.Drawing.Point(17, 32);
@@ -220,20 +228,17 @@ namespace YAT.View.Forms
 			this.groupBox_Send.Controls.Add(this.checkBox_Delay);
 			this.groupBox_Send.Location = new System.Drawing.Point(6, 184);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(272, 367);
-			this.groupBox_Send.TabIndex = 3;
+			this.groupBox_Send.Size = new System.Drawing.Size(543, 202);
+			this.groupBox_Send.TabIndex = 4;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settings";
 			// 
 			// groupBox_Exclude
 			// 
-			this.groupBox_Exclude.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Exclude.Controls.Add(this.linkLabel_Regex);
 			this.groupBox_Exclude.Controls.Add(this.stringListEdit_ExcludePatterns);
 			this.groupBox_Exclude.Controls.Add(this.checkBox_Exclude);
-			this.groupBox_Exclude.Location = new System.Drawing.Point(6, 185);
+			this.groupBox_Exclude.Location = new System.Drawing.Point(278, 19);
 			this.groupBox_Exclude.Name = "groupBox_Exclude";
 			this.groupBox_Exclude.Size = new System.Drawing.Size(259, 176);
 			this.groupBox_Exclude.TabIndex = 10;
@@ -279,14 +284,12 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Substitute
 			// 
-			this.groupBox_Substitute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteToLower);
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteToUpper);
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteNone);
-			this.groupBox_Substitute.Location = new System.Drawing.Point(6, 91);
+			this.groupBox_Substitute.Location = new System.Drawing.Point(6, 107);
 			this.groupBox_Substitute.Name = "groupBox_Substitute";
-			this.groupBox_Substitute.Size = new System.Drawing.Size(260, 88);
+			this.groupBox_Substitute.Size = new System.Drawing.Size(266, 88);
 			this.groupBox_Substitute.TabIndex = 9;
 			this.groupBox_Substitute.TabStop = false;
 			this.groupBox_Substitute.Text = "Character Substitution";
@@ -324,7 +327,7 @@ namespace YAT.View.Forms
 			// checkBox_WaitForResponse
 			// 
 			this.checkBox_WaitForResponse.AutoSize = true;
-			this.checkBox_WaitForResponse.Location = new System.Drawing.Point(12, 45);
+			this.checkBox_WaitForResponse.Location = new System.Drawing.Point(12, 62);
 			this.checkBox_WaitForResponse.Name = "checkBox_WaitForResponse";
 			this.checkBox_WaitForResponse.Size = new System.Drawing.Size(242, 17);
 			this.checkBox_WaitForResponse.TabIndex = 5;
@@ -334,7 +337,7 @@ namespace YAT.View.Forms
 			// 
 			// textBox_DelayInterval
 			// 
-			this.textBox_DelayInterval.Location = new System.Drawing.Point(193, 19);
+			this.textBox_DelayInterval.Location = new System.Drawing.Point(193, 36);
 			this.textBox_DelayInterval.Name = "textBox_DelayInterval";
 			this.textBox_DelayInterval.Size = new System.Drawing.Size(40, 20);
 			this.textBox_DelayInterval.TabIndex = 3;
@@ -345,7 +348,7 @@ namespace YAT.View.Forms
 			// label_WaitForResponse
 			// 
 			this.label_WaitForResponse.AutoSize = true;
-			this.label_WaitForResponse.Location = new System.Drawing.Point(28, 65);
+			this.label_WaitForResponse.Location = new System.Drawing.Point(28, 82);
 			this.label_WaitForResponse.Name = "label_WaitForResponse";
 			this.label_WaitForResponse.Size = new System.Drawing.Size(84, 13);
 			this.label_WaitForResponse.TabIndex = 6;
@@ -355,7 +358,7 @@ namespace YAT.View.Forms
 			// label_WaitForResponseUnit
 			// 
 			this.label_WaitForResponseUnit.AutoSize = true;
-			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(163, 65);
+			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(163, 82);
 			this.label_WaitForResponseUnit.Name = "label_WaitForResponseUnit";
 			this.label_WaitForResponseUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_WaitForResponseUnit.TabIndex = 8;
@@ -365,7 +368,7 @@ namespace YAT.View.Forms
 			// label_DelayUnit
 			// 
 			this.label_DelayUnit.AutoSize = true;
-			this.label_DelayUnit.Location = new System.Drawing.Point(146, 22);
+			this.label_DelayUnit.Location = new System.Drawing.Point(146, 39);
 			this.label_DelayUnit.Name = "label_DelayUnit";
 			this.label_DelayUnit.Size = new System.Drawing.Size(47, 13);
 			this.label_DelayUnit.TabIndex = 2;
@@ -374,7 +377,7 @@ namespace YAT.View.Forms
 			// 
 			// textBox_WaitForResponse
 			// 
-			this.textBox_WaitForResponse.Location = new System.Drawing.Point(112, 62);
+			this.textBox_WaitForResponse.Location = new System.Drawing.Point(112, 79);
 			this.textBox_WaitForResponse.Name = "textBox_WaitForResponse";
 			this.textBox_WaitForResponse.Size = new System.Drawing.Size(51, 20);
 			this.textBox_WaitForResponse.TabIndex = 7;
@@ -383,7 +386,7 @@ namespace YAT.View.Forms
 			// 
 			// textBox_Delay
 			// 
-			this.textBox_Delay.Location = new System.Drawing.Point(95, 19);
+			this.textBox_Delay.Location = new System.Drawing.Point(95, 36);
 			this.textBox_Delay.Name = "textBox_Delay";
 			this.textBox_Delay.Size = new System.Drawing.Size(51, 20);
 			this.textBox_Delay.TabIndex = 1;
@@ -393,7 +396,7 @@ namespace YAT.View.Forms
 			// label_DelayIntervalUnit
 			// 
 			this.label_DelayIntervalUnit.AutoSize = true;
-			this.label_DelayIntervalUnit.Location = new System.Drawing.Point(233, 22);
+			this.label_DelayIntervalUnit.Location = new System.Drawing.Point(233, 39);
 			this.label_DelayIntervalUnit.Name = "label_DelayIntervalUnit";
 			this.label_DelayIntervalUnit.Size = new System.Drawing.Size(23, 13);
 			this.label_DelayIntervalUnit.TabIndex = 4;
@@ -403,7 +406,7 @@ namespace YAT.View.Forms
 			// checkBox_Delay
 			// 
 			this.checkBox_Delay.AutoSize = true;
-			this.checkBox_Delay.Location = new System.Drawing.Point(12, 21);
+			this.checkBox_Delay.Location = new System.Drawing.Point(12, 38);
 			this.checkBox_Delay.Name = "checkBox_Delay";
 			this.checkBox_Delay.Size = new System.Drawing.Size(85, 17);
 			this.checkBox_Delay.TabIndex = 0;
@@ -423,12 +426,82 @@ namespace YAT.View.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(312, 123);
+			this.button_Defaults.Location = new System.Drawing.Point(584, 171);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
+			// 
+			// groupBox_Display
+			// 
+			this.groupBox_Display.Controls.Add(this.groupBox_RxDisplay);
+			this.groupBox_Display.Controls.Add(this.groupBox_TxDisplay);
+			this.groupBox_Display.Controls.Add(this.checkBox_SeparateTxRxDisplay);
+			this.groupBox_Display.Location = new System.Drawing.Point(284, 59);
+			this.groupBox_Display.Name = "groupBox_Display";
+			this.groupBox_Display.Size = new System.Drawing.Size(265, 119);
+			this.groupBox_Display.TabIndex = 3;
+			this.groupBox_Display.TabStop = false;
+			this.groupBox_Display.Text = "Display Settings";
+		// 
+			// groupBox_RxDisplay
+			// 
+			this.groupBox_RxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_RxDisplay.Controls.Add(this.textTerminalSettingsSet_Rx);
+			this.groupBox_RxDisplay.Location = new System.Drawing.Point(6, 176);
+			this.groupBox_RxDisplay.Name = "groupBox_RxDisplay";
+			this.groupBox_RxDisplay.Size = new System.Drawing.Size(290, 119);
+			this.groupBox_RxDisplay.TabIndex = 2;
+			this.groupBox_RxDisplay.TabStop = false;
+			this.groupBox_RxDisplay.Text = "&Rx";
+			// 
+			// textTerminalSettingsSet_Rx
+			// 
+			this.textTerminalSettingsSet_Rx.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textTerminalSettingsSet_Rx.Location = new System.Drawing.Point(9, 19);
+			this.textTerminalSettingsSet_Rx.Name = "textTerminalSettingsSet_Rx";
+			this.textTerminalSettingsSet_Rx.Size = new System.Drawing.Size(272, 91);
+			this.textTerminalSettingsSet_Rx.TabIndex = 0;
+			this.textTerminalSettingsSet_Rx.SettingsChanged += new System.EventHandler(this.textTerminalSettingsSet_Rx_SettingsChanged);
+			// 
+			// groupBox_TxDisplay
+			// 
+			this.groupBox_TxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_TxDisplay.Controls.Add(this.textTerminalSettingsSet_Tx);
+			this.groupBox_TxDisplay.Location = new System.Drawing.Point(6, 19);
+			this.groupBox_TxDisplay.Name = "groupBox_TxDisplay";
+			this.groupBox_TxDisplay.Size = new System.Drawing.Size(290, 119);
+			this.groupBox_TxDisplay.TabIndex = 0;
+			this.groupBox_TxDisplay.TabStop = false;
+			this.groupBox_TxDisplay.Text = "&Tx and Rx";
+			// 
+			// textTerminalSettingsSet_Tx
+			// 
+			this.textTerminalSettingsSet_Tx.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textTerminalSettingsSet_Tx.Location = new System.Drawing.Point(9, 19);
+			this.textTerminalSettingsSet_Tx.Name = "textTerminalSettingsSet_Tx";
+			this.textTerminalSettingsSet_Tx.Size = new System.Drawing.Size(272, 91);
+			this.textTerminalSettingsSet_Tx.TabIndex = 0;
+			this.textTerminalSettingsSet_Tx.SettingsChanged += new System.EventHandler(this.textTerminalSettingsSet_Tx_SettingsChanged);
+			// 
+			// checkBox_SeparateTxRxDisplay
+			// 
+			this.checkBox_SeparateTxRxDisplay.AutoSize = true;
+			this.checkBox_SeparateTxRxDisplay.Location = new System.Drawing.Point(18, 153);
+			this.checkBox_SeparateTxRxDisplay.Name = "checkBox_SeparateTxRxDisplay";
+			this.checkBox_SeparateTxRxDisplay.Size = new System.Drawing.Size(175, 17);
+			this.checkBox_SeparateTxRxDisplay.TabIndex = 1;
+			this.checkBox_SeparateTxRxDisplay.Text = "&Separate settings for Tx and Rx";
+			this.checkBox_SeparateTxRxDisplay.UseVisualStyleBackColor = true;
+			this.checkBox_SeparateTxRxDisplay.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxDisplay_CheckedChanged);
 			// 
 			// TextTerminalSettings
 			// 
@@ -436,7 +509,8 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(399, 581);
+			this.ClientSize = new System.Drawing.Size(671, 417);
+			this.Controls.Add(this.groupBox_Display);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Cancel);
@@ -460,6 +534,10 @@ namespace YAT.View.Forms
 			this.groupBox_Exclude.PerformLayout();
 			this.groupBox_Substitute.ResumeLayout(false);
 			this.groupBox_Substitute.PerformLayout();
+			this.groupBox_Display.ResumeLayout(false);
+			this.groupBox_Display.PerformLayout();
+			this.groupBox_RxDisplay.ResumeLayout(false);
+			this.groupBox_TxDisplay.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -498,5 +576,11 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.StringListEdit stringListEdit_ExcludePatterns;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.LinkLabel linkLabel_Regex;
+		private System.Windows.Forms.GroupBox groupBox_Display;
+		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxDisplay;
+		private System.Windows.Forms.GroupBox groupBox_RxDisplay;
+		private YAT.View.Controls.TextDisplaySettingsSet textTerminalSettingsSet_Rx;
+		private System.Windows.Forms.GroupBox groupBox_TxDisplay;
+		private YAT.View.Controls.TextDisplaySettingsSet textTerminalSettingsSet_Tx;
 	}
 }

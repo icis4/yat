@@ -134,6 +134,7 @@
     <Compile Include="Terminal\InfoSeparator.cs" />
     <Compile Include="Terminal\SendItems.cs" />
     <Compile Include="Settings\SendSettingsFile.cs" />
+    <Compile Include="TextSettings\TextDisplaySettings.cs" />
     <Compile Include="TextSettings\TextExclusionSettings.cs" />
     <Compile Include="TextTerminal\Structs.cs" />
     <Compile Include="Terminal\Radix.cs" />

@@ -409,6 +409,30 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void textTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.TxDisplay = textTerminalSettingsSet_Tx.Settings;
+		}
+
+		private void checkBox_SeparateTxRxDisplay_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
+		}
+
+		private void textTerminalSettingsSet_Rx_SettingsChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.RxDisplay = textTerminalSettingsSet_Rx.Settings;
+		}
+
 		private void radioButton_SubstituteNone_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -579,8 +603,19 @@ namespace YAT.View.Forms
 				else
 					comboBox_RxEol.Text = this.settingsInEdit.RxEol;
 
-				// Display:
 				checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
+
+				// Display:
+				if (this.settingsInEdit.SeparateTxRxDisplay)
+					groupBox_TxDisplay.Text = "&Tx";
+				else
+					groupBox_TxDisplay.Text = "&Tx and Rx";
+
+				textTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
+
+				checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
+				groupBox_RxDisplay.Enabled           = this.settingsInEdit.SeparateTxRxDisplay;
+				textTerminalSettingsSet_Rx.Settings  = this.settingsInEdit.RxDisplay;
 
 				// Send:
 				bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
