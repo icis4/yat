@@ -109,7 +109,7 @@ namespace YAT.View.Forms
 			this.button_TextOrBinarySettings.Size = new System.Drawing.Size(114, 23);
 			this.button_TextOrBinarySettings.TabIndex = 2;
 			this.button_TextOrBinarySettings.Text = "Te&xt Settings...";
-			this.toolTip.SetToolTip(this.button_TextOrBinarySettings, "Text terminal dependent settings such as encoding, end-of-line and comments.");
+			this.toolTip.SetToolTip(this.button_TextOrBinarySettings, "Text terminal dependent settings such as encoding, EOL (end-of-line) and comments.");
 			this.button_TextOrBinarySettings.Click += new System.EventHandler(this.button_TextOrBinarySettings_Click);
 			// 
 			// terminalSelection
