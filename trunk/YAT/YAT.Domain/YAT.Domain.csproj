@@ -124,6 +124,7 @@
     <Compile Include="Settings\SendSettingsText.cs" />
     <Compile Include="Settings\StatusSettings.cs" />
     <Compile Include="Settings\IOSettings.cs" />
+    <Compile Include="Settings\Structs.cs" />
     <Compile Include="Structs.cs" />
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />

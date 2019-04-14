@@ -139,7 +139,7 @@ namespace YAT.View.Controls
 			int length;
 			if (int.TryParse(textBox_LengthLineBreak.Text, out length) && (length >= 1))
 			{
-				Domain.BinaryLengthLineBreak llb = this.settings.LengthLineBreak;
+				Domain.LengthSettingTuple llb = this.settings.LengthLineBreak;
 				llb.Length = length;
 				this.settings.LengthLineBreak = llb;
 				SetControls();

@@ -61,13 +61,13 @@ namespace YAT.Domain.Settings
 		public const bool SeparateTxRxDisplayDefault = false;
 
 		/// <summary></summary>
-		public static readonly TextTimedLineBreak TimedLineBreakDefault = new TextTimedLineBreak(false, 500);
+		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, 500);
 
 		/// <summary></summary>
-		public static readonly TextLineSendDelay LineSendDelayDefault = new TextLineSendDelay(false, 500, 1);
+		public static readonly TextLineSendDelaySettingTuple LineSendDelayDefault = new TextLineSendDelaySettingTuple(false, 500, 1);
 
 		/// <summary></summary>
-		public static readonly WaitForResponse WaitForResponseDefault = new WaitForResponse(false, 500);
+		public static readonly TimeoutSettingTuple WaitForResponseDefault = new TimeoutSettingTuple(false, 500);
 
 		/// <summary></summary>
 		public const CharSubstitution CharSubstitutionDefault = CharSubstitution.None;
@@ -89,10 +89,10 @@ namespace YAT.Domain.Settings
 		private TextDisplaySettings txDisplay;
 		private TextDisplaySettings rxDisplay;
 
-		private TextLineSendDelay     lineSendDelay;
-		private WaitForResponse       waitForResponse;
-		private CharSubstitution      charSubstitution;
-		private TextExclusionSettings textExclusion;
+		private TextLineSendDelaySettingTuple lineSendDelay;
+		private TimeoutSettingTuple                waitForResponse;
+		private CharSubstitution              charSubstitution;
+		private TextExclusionSettings         textExclusion;
 
 		#endregion
 
@@ -353,7 +353,7 @@ namespace YAT.Domain.Settings
 		/// The text above is copy-pasted into the tool tip text of the text settings dialog.
 		/// </remarks>
 		[XmlElement("LineSendDelay")]
-		public virtual TextLineSendDelay LineSendDelay
+		public virtual TextLineSendDelaySettingTuple LineSendDelay
 		{
 			get { return (this.lineSendDelay); }
 			set
@@ -372,7 +372,7 @@ namespace YAT.Domain.Settings
 		/// It is tracked as feature request #19 and bug #176.
 		/// </remarks>
 		[XmlElement("WaitForResponse")]
-		public virtual WaitForResponse WaitForResponse
+		public virtual TimeoutSettingTuple WaitForResponse
 		{
 			get { return (this.waitForResponse); }
 			set

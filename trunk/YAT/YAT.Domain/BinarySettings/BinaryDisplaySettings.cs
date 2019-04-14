@@ -34,21 +34,21 @@ namespace YAT.Domain.Settings
 	public class BinaryDisplaySettings : MKY.Settings.SettingsItem, IEquatable<BinaryDisplaySettings>
 	{
 		/// <summary></summary>
-		public static readonly BinaryLengthLineBreak LengthLineBreakDefault = new BinaryLengthLineBreak(true, 16); // Enabled to prevent too long display lines.
+		public static readonly LengthSettingTuple LengthLineBreakDefault = new LengthSettingTuple(true, 16); // Enabled to prevent too long display lines.
 
 		/// <summary></summary>
-		public static readonly BinarySequenceLineBreak SequenceLineBreakBeforeDefault = new BinarySequenceLineBreak(false, @"ABC");
+		public static readonly BinarySequenceSettingTuple SequenceLineBreakBeforeDefault = new BinarySequenceSettingTuple(false, @"ABC");
 
 		/// <summary></summary>
-		public static readonly BinarySequenceLineBreak SequenceLineBreakAfterDefault = new BinarySequenceLineBreak(false, @"\h(00)");
+		public static readonly BinarySequenceSettingTuple SequenceLineBreakAfterDefault = new BinarySequenceSettingTuple(false, @"\h(00)");
 
 		/// <summary></summary>
-		public static readonly BinaryTimedLineBreak TimedLineBreakDefault = new BinaryTimedLineBreak(false, 500);
+		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, 500);
 
-		private BinaryLengthLineBreak   lengthLineBreak;
-		private BinarySequenceLineBreak sequenceLineBreakBefore;
-		private BinarySequenceLineBreak sequenceLineBreakAfter;
-		private BinaryTimedLineBreak    timedLineBreak;
+		private LengthSettingTuple         lengthLineBreak;
+		private BinarySequenceSettingTuple sequenceLineBreakBefore;
+		private BinarySequenceSettingTuple sequenceLineBreakAfter;
+		private TimeoutSettingTuple        timedLineBreak;
 
 		/// <summary></summary>
 		public BinaryDisplaySettings()
@@ -99,7 +99,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("LengthLineBreak")]
-		public BinaryLengthLineBreak LengthLineBreak
+		public LengthSettingTuple LengthLineBreak
 		{
 			get { return (this.lengthLineBreak); }
 			set
@@ -114,7 +114,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SequenceLineBreakBefore")]
-		public BinarySequenceLineBreak SequenceLineBreakBefore
+		public BinarySequenceSettingTuple SequenceLineBreakBefore
 		{
 			get { return (this.sequenceLineBreakBefore); }
 			set
@@ -129,7 +129,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SequenceLineBreakAfter")]
-		public BinarySequenceLineBreak SequenceLineBreakAfter
+		public BinarySequenceSettingTuple SequenceLineBreakAfter
 		{
 			get { return (this.sequenceLineBreakAfter); }
 			set
@@ -144,7 +144,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("TimedLineBreak")]
-		public BinaryTimedLineBreak TimedLineBreak
+		public TimeoutSettingTuple TimedLineBreak
 		{
 			get { return (this.timedLineBreak); }
 			set
