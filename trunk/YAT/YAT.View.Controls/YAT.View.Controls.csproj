@@ -99,6 +99,12 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="TextDisplaySettingsSet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TextDisplaySettingsSet.Designer.cs">
+      <DependentUpon>TextDisplaySettingsSet.cs</DependentUpon>
+    </Compile>
     <Compile Include="BinaryDisplaySettingsSet.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -227,6 +233,10 @@
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="TextDisplaySettingsSet.resx">
+      <DependentUpon>TextDisplaySettingsSet.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="BinaryDisplaySettingsSet.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>

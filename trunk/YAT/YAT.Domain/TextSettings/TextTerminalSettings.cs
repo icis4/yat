@@ -40,6 +40,11 @@ namespace YAT.Domain.Settings
 	[Serializable]
 	public class TextTerminalSettings : MKY.Settings.SettingsItem, IEquatable<TextTerminalSettings>
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
 		/// <summary></summary>
 		public const bool SeparateTxRxEolDefault = false;
 
@@ -53,6 +58,12 @@ namespace YAT.Domain.Settings
 		public const bool ShowEolDefault = false;
 
 		/// <summary></summary>
+		public const bool SeparateTxRxDisplayDefault = false;
+
+		/// <summary></summary>
+		public static readonly TextTimedLineBreak TimedLineBreakDefault = new TextTimedLineBreak(false, 500);
+
+		/// <summary></summary>
 		public static readonly TextLineSendDelay LineSendDelayDefault = new TextLineSendDelay(false, 500, 1);
 
 		/// <summary></summary>
@@ -61,16 +72,34 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const CharSubstitution CharSubstitutionDefault = CharSubstitution.None;
 
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
 		private bool   separateTxRxEol;
 		private string txEol;
 		private string rxEol;
 		private int    encoding;
 		private bool   showEol;
 
+		private bool separateTxRxDisplay;
+		private TextDisplaySettings txDisplay;
+		private TextDisplaySettings rxDisplay;
+
 		private TextLineSendDelay     lineSendDelay;
 		private WaitForResponse       waitForResponse;
 		private CharSubstitution      charSubstitution;
 		private TextExclusionSettings textExclusion;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public TextTerminalSettings()
@@ -84,6 +113,8 @@ namespace YAT.Domain.Settings
 		{
 			SetMyDefaults();
 
+			TxDisplay     = new TextDisplaySettings(SettingsType);
+			RxDisplay     = new TextDisplaySettings(SettingsType);
 			TextExclusion = new TextExclusionSettings(SettingsType);
 
 			SetNodeDefaults();
@@ -102,6 +133,11 @@ namespace YAT.Domain.Settings
 			RxEol            = rhs.RxEol;
 			Encoding         = rhs.Encoding;
 			ShowEol          = rhs.ShowEol;
+
+			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
+			TxDisplay = new TextDisplaySettings(SettingsType);
+			RxDisplay = new TextDisplaySettings(SettingsType);
+
 			LineSendDelay    = rhs.LineSendDelay;
 			WaitForResponse  = rhs.WaitForResponse;
 			CharSubstitution = rhs.CharSubstitution;
@@ -123,6 +159,9 @@ namespace YAT.Domain.Settings
 			RxEol            = EolDefault;
 			Encoding         = EncodingDefault;
 			ShowEol          = ShowEolDefault;
+
+			SeparateTxRxDisplay = SeparateTxRxDisplayDefault;
+
 			LineSendDelay    = LineSendDelayDefault;
 			WaitForResponse  = WaitForResponseDefault;
 			CharSubstitution = CharSubstitutionDefault;
@@ -151,6 +190,8 @@ namespace YAT.Domain.Settings
 			TextExclusion.Patterns.Add(@"\s*&\s*(REM|::)" + CommonPatterns.PositiveLookaheadOutsideQuotes + @"\s*.*$");    // DOS-style comments: From & REM or :: until the end of the line, including leading whitespace.
 			TextExclusion.Patterns.Add(             @"%=" + CommonPatterns.PositiveLookaheadOutsideQuotes + @".*=%");      // DOS-style comments: From %= until =%, not including surrounding whitespace.
 		}
+
+		#endregion
 
 		#region Properties
 		//==========================================================================================
@@ -239,6 +280,65 @@ namespace YAT.Domain.Settings
 					this.showEol = value;
 					SetMyChanged();
 				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SeparateTxRxDisplay")]
+		public virtual bool SeparateTxRxDisplay
+		{
+			get { return (this.separateTxRxDisplay); }
+			set
+			{
+				if (this.separateTxRxDisplay != value)
+				{
+					this.separateTxRxDisplay = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TxDisplay")]
+		public virtual TextDisplaySettings TxDisplay
+		{
+			get { return (this.txDisplay); }
+			set
+			{
+				if (this.txDisplay != value)
+				{
+					var oldNode = this.txDisplay;
+					this.txDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RxDisplay")]
+		public virtual TextDisplaySettings RxDisplay
+		{
+			get
+			{
+				if (this.separateTxRxDisplay)
+					return (this.rxDisplay);
+				else // Rx redirects to Tx:
+					return (this.txDisplay);
+			}
+			set
+			{
+				if (this.rxDisplay != value)
+				{
+					var oldNode = this.rxDisplay;
+					this.rxDisplay = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+
+				// Do not redirect on 'set'. this would not be an understandable behavior.
+				// It could even confuse the user, e.g. when temporarily separating the settings,
+				// and then load them again from XML => temporary settings get lost.
 			}
 		}
 
@@ -342,9 +442,12 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ (RxEol != null ? RxEol.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  Encoding             .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowEol              .GetHashCode();
-				hashCode = (hashCode * 397) ^  LineSendDelay        .GetHashCode();
-				hashCode = (hashCode * 397) ^  WaitForResponse      .GetHashCode();
-				hashCode = (hashCode * 397) ^  CharSubstitution     .GetHashCode();
+
+				hashCode = (hashCode * 397) ^  SeparateTxRxDisplay.GetHashCode();
+
+				hashCode = (hashCode * 397) ^  LineSendDelay   .GetHashCode();
+				hashCode = (hashCode * 397) ^  WaitForResponse .GetHashCode();
+				hashCode = (hashCode * 397) ^  CharSubstitution.GetHashCode();
 
 				return (hashCode);
 			}
@@ -380,9 +483,12 @@ namespace YAT.Domain.Settings
 				StringEx.EqualsOrdinal(RxEol, other.RxEol)           &&
 				Encoding              .Equals(other.Encoding)        &&
 				ShowEol               .Equals(other.ShowEol)         &&
-				LineSendDelay         .Equals(other.LineSendDelay)   &&
-				WaitForResponse       .Equals(other.WaitForResponse) &&
-				CharSubstitution      .Equals(other.CharSubstitution)
+
+				SeparateTxRxDisplay.Equals(other.SeparateTxRxDisplay) &&
+
+				LineSendDelay   .Equals(other.LineSendDelay)   &&
+				WaitForResponse .Equals(other.WaitForResponse) &&
+				CharSubstitution.Equals(other.CharSubstitution)
 			);
 		}
 

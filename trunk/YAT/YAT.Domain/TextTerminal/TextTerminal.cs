@@ -32,12 +32,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Text;
 
 using YAT.Application.Utilities;
@@ -51,9 +51,8 @@ using YAT.Domain.Utilities;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Text protocol terminal.
+	/// <see cref="Terminal"/> implementation with text semantics.
 	/// </summary>
-	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class TextTerminal : Terminal
 	{
 		#region Constant Help Text
@@ -76,6 +75,171 @@ namespace YAT.Domain
 		// Types
 		//==========================================================================================
 
+		#region Types > Line Break Timer
+		//------------------------------------------------------------------------------------------
+		// Types > Line Break Timer
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		private class LineBreakTimer : IDisposable
+		{
+			/// <summary>
+			/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+			/// </summary>
+			private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(LineBreakTimer).FullName);
+
+			private int timeout;
+			private Timer timer;
+			private object timerSyncObj = new object();
+
+			/// <summary></summary>
+			public event EventHandler Elapsed;
+
+			/// <summary></summary>
+			public LineBreakTimer(int timeout)
+			{
+				this.timeout = timeout;
+			}
+
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			public bool IsDisposed { get; protected set; }
+
+			/// <summary></summary>
+			public void Dispose()
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+
+			/// <summary></summary>
+			protected virtual void Dispose(bool disposing)
+			{
+				if (!IsDisposed)
+				{
+					Debug.WriteLine("Remind (2016-09-08 / MKY) 'Elapsed' event handler not yet free'd, whole timer handling should be encapsulated into the 'LineState' class.");
+					DebugEventManagement.DebugWriteAllEventRemains(this);
+					this.eventHelper.DiscardAllEventsAndExceptions();
+
+					// Dispose of managed resources if requested:
+					if (disposing)
+					{
+						// In the 'normal' case, the timer is stopped in Stop().
+						StopAndDisposeTimer();
+					}
+
+					// Set state to disposed:
+					IsDisposed = true;
+				}
+			}
+
+		#if (DEBUG)
+			/// <remarks>
+			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
+			/// "Types that declare disposable members should also implement IDisposable. If the type
+			///  does not own any unmanaged resources, do not implement a finalizer on it."
+			/// 
+			/// Well, true for best performance on finalizing. However, it's not easy to find missing
+			/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
+			/// is kept for DEBUG, indicating missing calls.
+			/// 
+			/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+			/// </remarks>
+			~LineBreakTimer()
+			{
+				Dispose(false);
+
+				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
+			}
+		#endif // DEBUG
+
+			/// <summary></summary>
+			protected void AssertNotDisposed()
+			{
+				if (IsDisposed)
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			}
+
+			#endregion
+
+			/// <summary></summary>
+			public virtual void Start()
+			{
+				AssertNotDisposed();
+
+				CreateAndStartTimer();
+			}
+
+			/// <summary></summary>
+			public virtual void Restart()
+			{
+				// AssertNotDisposed() is called by methods below.
+
+				Stop();
+				Start();
+			}
+
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
+			public virtual void Stop()
+			{
+				AssertNotDisposed();
+
+				StopAndDisposeTimer();
+			}
+
+			private void CreateAndStartTimer()
+			{
+				lock (this.timerSyncObj)
+				{
+					if (this.timer == null)
+					{
+						this.timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite);
+					}
+				}
+			}
+
+			private void StopAndDisposeTimer()
+			{
+				lock (this.timerSyncObj)
+				{
+					if (this.timer != null)
+					{
+						this.timer.Dispose();
+						this.timer = null;
+					}
+				}
+			}
+
+			private void timer_Timeout(object obj)
+			{
+				// Non-periodic timer, only a single timeout event thread can be active at a time.
+				// There is no need to synchronize callbacks to this event handler.
+
+				lock (this.timerSyncObj)
+				{
+					if ((this.timer == null) || (IsDisposed))
+						return; // Handle overdue event callbacks.
+				}
+
+				Stop();
+
+				OnElapsed(EventArgs.Empty);
+			}
+
+			/// <summary></summary>
+			protected virtual void OnElapsed(EventArgs e)
+			{
+				this.eventHelper.RaiseSync(Elapsed, this, e);
+			}
+		}
+
+		#endregion
+
 		#region Types > Line State
 		//------------------------------------------------------------------------------------------
 		// Types > Line State
@@ -89,18 +253,18 @@ namespace YAT.Domain
 			End
 		}
 
-		private class LineState
+		private class LineState : IDisposable
 		{
-			public byte[]                   EolSequence { get; }
+			public byte[] EolSequence { get; }
 
-			public LinePosition             Position    { get; set; }
-			public DisplayElementCollection Elements    { get; set; }
+			public LinePosition             Position  { get; set; }
+			public DisplayElementCollection Elements  { get; set; }
+			public DateTime                 TimeStamp { get; set; }
+			public string                   PortStamp { get; set; }
 
-			public DisplayElementCollection RetainedUnconfirmedHiddenEolElements     { get; set; }
-			public Dictionary<string, SequenceQueue> EolOfGivenPort                  { get; set; }
-			public Dictionary<string, bool> EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
-
-			public DateTime TimeStamp { get; set; }
+			public Dictionary<string, SequenceQueue> EolOfGivenPort                           { get; set; }
+			public DisplayElementCollection          RetainedUnconfirmedHiddenEolElements     { get; set; }
+			public Dictionary<string, bool>          EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
 
 			public bool Highlight                        { get; set; }
 			public bool FilterDetectedInFirstChunkOfLine { get; set; } // Line shall continuously get shown if filter is active from the first chunk.
@@ -109,18 +273,20 @@ namespace YAT.Domain
 			public bool SuppressIfSubsequentlyTriggered  { get; set; }
 			public bool SuppressForSure                  { get; set; }
 
-			public LineState(byte[] eolSequence)
+			public LineBreakTimer BreakTimer { get; set; }
+
+			public LineState(byte[] eolSequence, LineBreakTimer breakTimer)
 			{
 				EolSequence = eolSequence;
 
-				Position = LinePosition.Begin;
-				Elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-
-				RetainedUnconfirmedHiddenEolElements     = new DisplayElementCollection();          // No preset needed, the default initial capacity is good enough.
-				EolOfGivenPort                           = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
-				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>();          // No preset needed, the default initial capacity is good enough.
-
+				Position  = LinePosition.Begin;
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 				TimeStamp = DateTime.Now;
+				PortStamp = null;
+
+				EolOfGivenPort                           = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
+				RetainedUnconfirmedHiddenEolElements     = new DisplayElementCollection();          // No preset needed, the default initial capacity is good enough.
+				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>();          // No preset needed, the default initial capacity is good enough.
 
 				Highlight                        = false;
 				FilterDetectedInFirstChunkOfLine = false;
@@ -128,36 +294,108 @@ namespace YAT.Domain
 				SuppressIfNotFiltered            = false;
 				SuppressIfSubsequentlyTriggered  = false;
 				SuppressForSure                  = false;
+
+				BreakTimer = breakTimer;
 			}
 
-			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for consistency with [Execute...()] methods.")]
-			public virtual void Reset(string ps, bool eolWasCompleteMatch)
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			public bool IsDisposed { get; protected set; }
+
+			/// <summary></summary>
+			public void Dispose()
 			{
-				Position = LinePosition.Begin;
-				Elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
 
-				if (eolWasCompleteMatch) // Keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
-					RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-
-				if (EolOfGivenPort.ContainsKey(ps))
+			/// <summary></summary>
+			protected virtual void Dispose(bool disposing)
+			{
+				if (!IsDisposed)
 				{
-					if (EolOfGivenPort[ps].IsCompleteMatch)
-						EolOfGivenPort[ps].Reset();
+					// Dispose of managed resources if requested:
+					if (disposing)
+					{
+						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
+						if (BreakTimer != null)
+						{
+							BreakTimer.Dispose();
+							EventHandlerHelper.RemoveAllEventHandlers(BreakTimer);
+
+							// \remind (2016-09-08 / MKY)
+							// Whole timer handling should be encapsulated into the 'LineState' class.
+						}
+					}
+
+					// Set state to disposed:
+					BreakTimer = null;
+					IsDisposed = true;
+				}
+			}
+
+		#if (DEBUG)
+			/// <remarks>
+			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
+			/// "Types that declare disposable members should also implement IDisposable. If the type
+			///  does not own any unmanaged resources, do not implement a finalizer on it."
+			/// 
+			/// Well, true for best performance on finalizing. However, it's not easy to find missing
+			/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
+			/// is kept for DEBUG, indicating missing calls.
+			/// 
+			/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
+			/// </remarks>
+			~LineState()
+			{
+				Dispose(false);
+
+				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
+			}
+		#endif // DEBUG
+
+			/// <summary></summary>
+			protected void AssertNotDisposed()
+			{
+				if (IsDisposed)
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			}
+
+			#endregion
+
+			public virtual void Reset(string formerPortStamp, bool eolWasCompleteMatch)
+			{
+				AssertNotDisposed();
+
+				Position  = LinePosition.Begin;
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				TimeStamp = DateTime.Now;
+				PortStamp = null;
+
+				if (EolOfGivenPort.ContainsKey(formerPortStamp))
+				{
+					if (EolOfGivenPort[formerPortStamp].IsCompleteMatch)
+						EolOfGivenPort[formerPortStamp].Reset();
 
 					// Keep EOL state when incomplete. Subsequent lines
 					// need this to handle broken/pending EOL characters.
 				}
 				else                                                        // It is OK to only access or add to the collection,
 				{                                                           // this will not lead to excessive use of memory,
-					EolOfGivenPort.Add(ps, new SequenceQueue(EolSequence)); // since there is only a given number of ports.
+					EolOfGivenPort.Add(formerPortStamp, new SequenceQueue(EolSequence)); // since there is only a given number of ports.
 				}                                                           // Applies to TCP and UDP terminals only.
 
-				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps))
-					EolOfLastLineOfGivenPortWasCompleteMatch[ps] = eolWasCompleteMatch;
-				else
-					EolOfLastLineOfGivenPortWasCompleteMatch.Add(ps, eolWasCompleteMatch); // Same as above, it is OK to only access or add to the collection.
+				if (eolWasCompleteMatch) // Keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
+					RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
-				TimeStamp = DateTime.Now;
+				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(formerPortStamp))
+					EolOfLastLineOfGivenPortWasCompleteMatch[formerPortStamp] = eolWasCompleteMatch;
+				else
+					EolOfLastLineOfGivenPortWasCompleteMatch.Add(formerPortStamp, eolWasCompleteMatch); // Same as above, it is OK to only access or add to the collection.
 
 				Highlight                        = false;
 				FilterDetectedInFirstChunkOfLine = false;
@@ -294,8 +532,28 @@ namespace YAT.Domain
 			if (casted != null)
 			{
 				this.rxMultiByteDecodingStream = casted.rxMultiByteDecodingStream;
-				this.txLineState               = casted.txLineState;
-				this.rxLineState               = casted.rxLineState;
+
+				// Tx:
+
+				this.txLineState = casted.txLineState;
+				                                         //// \remind (2016-09-08 / MKY)
+				if (this.txLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.txLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+
+				this.txLineState.BreakTimer = new LineBreakTimer(TextTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+				this.txLineState.BreakTimer.Elapsed += txTimedLineBreak_Elapsed;
+
+				// Rx:
+
+				this.rxLineState = casted.rxLineState;
+				                                         //// \remind (2016-09-08 / MKY)
+				if (this.rxLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.rxLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+
+				this.rxLineState.BreakTimer = new LineBreakTimer(TextTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+				this.rxLineState.BreakTimer.Elapsed += rxTimedLineBreak_Elapsed;
+
+				// Bidir:
 
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 
@@ -321,7 +579,17 @@ namespace YAT.Domain
 				if (disposing)
 				{
 					DetachTextTerminalSettings();
+
+					if (this.txLineState != null)
+						this.txLineState.Dispose();
+
+					if (this.rxLineState != null)
+						this.rxLineState.Dispose();
 				}
+
+				// Set state to disposed:
+				this.txLineState = null;
+				this.rxLineState = null;
 			}
 
 			base.Dispose(disposing);
@@ -509,7 +777,7 @@ namespace YAT.Domain
 		protected override void ProcessLineEnd(bool sendEol)
 		{
 			if (sendEol)
-				ForwardDataToRawTerminal(this.txLineState.EolSequence); // End-of-line.
+				ForwardDataToRawTerminal(this.txLineState.EolSequence); // EOL.
 		}
 
 		/// <summary></summary>
@@ -619,8 +887,29 @@ namespace YAT.Domain
 				}
 			}
 
-			this.txLineState = new LineState(txEol);
-			this.rxLineState = new LineState(rxEol);
+			LineBreakTimer t;
+
+			// Tx:
+
+			t = new LineBreakTimer(TextTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+			t.Elapsed += txTimedLineBreak_Elapsed;
+
+			if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+				this.txLineState.Dispose();
+
+			this.txLineState = new LineState(txEol, t);
+
+			// Rx:
+
+			t = new LineBreakTimer(TextTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+			t.Elapsed += rxTimedLineBreak_Elapsed;
+
+			if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+				this.rxLineState.Dispose();
+
+			this.rxLineState = new LineState(rxEol, t);
+
+			// Bidir:
 
 			this.bidirLineState = new BidirLineState();
 
@@ -1081,6 +1370,7 @@ namespace YAT.Domain
 
 			lineState.Position = LinePosition.Content;
 			lineState.TimeStamp = ts;
+			lineState.PortStamp = ps;
 		}
 
 		/// <remarks>
@@ -1088,7 +1378,7 @@ namespace YAT.Domain
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsToAdd)
+		private void ExecuteContent(Settings.TextDisplaySettings displaySettings, LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsToAdd)
 		{
 			// Convert content:
 			var de = ByteToElement(b, d);
@@ -1117,7 +1407,7 @@ namespace YAT.Domain
 					{
 					////lineState.RetainedPotentialEolElements.Add(de); // Adding is useless, Confirm...() below will clear the elements anyway.
 
-						ConfirmRetainedHiddenEolElements(lineState);
+						ConfirmRetainedUnconfirmedHiddenEolElements(lineState);
 					}
 
 					lineState.Position = LinePosition.End;
@@ -1149,7 +1439,7 @@ namespace YAT.Domain
 			else if (lineState.EolOfGivenPort[ps].IsPartlyMatchBeginning)
 			{
 				// Previous was no match, retained potential EOL elements can be treated as non-EOL:
-				TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(lineState, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, lp);
 
 				if (de.IsContent)
 				{
@@ -1186,7 +1476,7 @@ namespace YAT.Domain
 			else
 			{
 				// No match at all, retained potential EOL elements can be treated as non-EOL:
-				TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(lineState, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, lp);
 
 				// Add the current element, which for sure is not related to EOL:
 				AddSpaceIfNecessary(lineState, d, lp, de);
@@ -1208,6 +1498,13 @@ namespace YAT.Domain
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
+			if ((displaySettings.LengthLineBreak.Enabled) &&
+				(lineState.Position != LinePosition.End))
+			{
+				if (lineState.Elements.ByteCount >= displaySettings.LengthLineBreak.Length)
+					lineState.Position = LinePosition.End;
+			}
+
 			if (lineState.Position != LinePosition.End)
 			{
 				if ((lineState.Elements.ByteCount >= TerminalSettings.Display.MaxBytePerLineCount) &&
@@ -1215,7 +1512,7 @@ namespace YAT.Domain
 				{
 					lineState.Position = LinePosition.ContentExceeded;
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
-					var message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
+					var message = "Maximal number of bytes per line exceeded! Check the EOL (end-of-line) settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
 					elementsToAdd.Add(     new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
@@ -1231,7 +1528,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private static void ConfirmRetainedHiddenEolElements(LineState lineState)
+		private static void ConfirmRetainedUnconfirmedHiddenEolElements(LineState lineState)
 		{
 			if (lineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
@@ -1239,11 +1536,11 @@ namespace YAT.Domain
 			}
 		}
 
-		private static void TreatRetainedUnconfirmedHiddenEolElementsAsNonEol(LineState lineState, DisplayElementCollection lp)
+		private static void ReleaseRetainedUnconfirmedHiddenEolElements(LineState lineState, DisplayElementCollection lp)
 		{
 			if (lineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
-				lp.AddRange(lineState.RetainedUnconfirmedHiddenEolElements); // No clone needed as collection is reset below.
+				lp.AddRange(lineState.RetainedUnconfirmedHiddenEolElements); // No clone needed as collection is cleared below.
 				lineState.RetainedUnconfirmedHiddenEolElements.Clear();
 			}
 		}
@@ -1310,6 +1607,15 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
 		{
+			Settings.TextDisplaySettings displaySettings;
+			switch (raw.Direction)
+			{
+				case IODirection.Tx: displaySettings = TextTerminalSettings.TxDisplay; break;
+				case IODirection.Rx: displaySettings = TextTerminalSettings.RxDisplay; break;
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
 			LineState lineState;
 			switch (raw.Direction)
 			{
@@ -1351,18 +1657,57 @@ namespace YAT.Domain
 
 			foreach (byte b in raw.Content)
 			{
+				// In case of reload, timed line breaks are executed here:
+				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, raw.PortStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
+				{
 					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsToAdd);
+
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.BreakTimer.Start();
+				}
+				else
+				{
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.BreakTimer.Restart(); // Restart as timeout refers to time after last received byte.
+				}
 
 				// Content:
 				if (lineState.Position == LinePosition.Content)
-					ExecuteContent(lineState, raw.PortStamp, raw.Direction, b, elementsToAdd);
+					ExecuteContent(displaySettings, lineState, raw.PortStamp, raw.Direction, b, elementsToAdd);
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
+				{
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.BreakTimer.Stop();
+
 					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+				}
 			}
+		}
+
+		/// <remarks>
+		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
+		private void ExecuteTimedLineBreakOnReload(Settings.TextDisplaySettings displaySettings, LineState lineState, DateTime ts, string ps,
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
+		{
+			if (lineState.Elements.Count > 0)
+			{
+				var span = ts - lineState.TimeStamp;
+				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
+					ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+				}
+			}
+
+			lineState.TimeStamp = ts;
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
@@ -1560,6 +1905,23 @@ namespace YAT.Domain
 		private void TextTerminalSettings_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			ApplyTextTerminalSettings();
+		}
+
+		#endregion
+
+		#region Timer Events
+		//==========================================================================================
+		// Timer Events
+		//==========================================================================================
+
+		private void txTimedLineBreak_Elapsed(object sender, EventArgs e)
+		{
+			ProcessAndSignalLineBreak(DateTime.Now, this.txLineState.PortStamp, IODirection.Tx);
+		}
+
+		private void rxTimedLineBreak_Elapsed(object sender, EventArgs e)
+		{
+			ProcessAndSignalLineBreak(DateTime.Now, this.rxLineState.PortStamp, IODirection.Rx);
 		}
 
 		#endregion

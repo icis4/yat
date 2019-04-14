@@ -331,7 +331,7 @@ New:
 - Option to send data in Unicode notation as "\U+...." or C-style "\u...." or YAT-style "\U(....)
   as well as option to show data in Unicode notation "U+...." added (feature request #271).
 - Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
-- Option to disable formatting, useful when highest data throughput slows down the view (feat. #39).
+- Option to disable formatting; useful when highest data throughput slows down the view (feat. #39).
 - Keywords with arguments \!(Delay(<ms>)), \!(LineDelay(<ms>)), \!(LineInterval(<ms>)) and
   \!(LineRepeat(<n>)) added (feature requests #13, #139).
 - Additional keyword \!(ReportID(<ID>)) allows changing the USB Ser/HID report ID while sending and
@@ -442,7 +442,7 @@ New:
 - USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
 - USB Ser/HID discovery improved, serial string may optionally be ignored (feature request #261).
 - Automatic response feature, YAT can automatically respond to a request (feature reqs. #176, #252).
-- Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay), useful together
+- Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay); useful together
   with \!(LineRepeat), line will be sent in more or less accurate interval (feature request #255).
 - Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
 - Selectable default parse radix, e.g. useful when sending binary data (feat. reqs. #238, #270).
@@ -559,8 +559,8 @@ YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-13
 
 New:
 - Serial COM ports can better be configured in terms of sending (feature request #235)
-   > Output buffer size can be limited, useful when using hardware and/or software flow control
-   > Send rate can be limited, useful if a device cannot process more than a certain amount of data
+   > Output buffer size can be limited; useful when using hardware and/or software flow control
+   > Send rate can be limited; useful if a device cannot process more than a certain amount of data
 
 Important changes:
 - Serial COM port send chunk size can no longer be configured (related to feature request #235)
