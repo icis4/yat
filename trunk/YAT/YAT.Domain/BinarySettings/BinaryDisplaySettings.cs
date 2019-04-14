@@ -34,7 +34,7 @@ namespace YAT.Domain.Settings
 	public class BinaryDisplaySettings : MKY.Settings.SettingsItem, IEquatable<BinaryDisplaySettings>
 	{
 		/// <summary></summary>
-		public static readonly BinaryLengthLineBreak LengthLineBreakDefault = new BinaryLengthLineBreak  (true, 16); // Enabled to prevent too long display lines.
+		public static readonly BinaryLengthLineBreak LengthLineBreakDefault = new BinaryLengthLineBreak(true, 16); // Enabled to prevent too long display lines.
 
 		/// <summary></summary>
 		public static readonly BinarySequenceLineBreak SequenceLineBreakBeforeDefault = new BinarySequenceLineBreak(false, @"ABC");
@@ -79,7 +79,6 @@ namespace YAT.Domain.Settings
 			ClearChanged();
 		}
 
-		/// <summary></summary>
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
 		/// </remarks>

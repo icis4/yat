@@ -33,6 +33,16 @@ namespace YAT.Domain.Settings
 	/// <summary></summary>
 	public class BinaryTerminalSettings : MKY.Settings.SettingsItem, IEquatable<BinaryTerminalSettings>
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary></summary>
+		public const bool SeparateTxRxDisplayDefault = false;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -75,7 +85,6 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
-
 			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
 			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
 
@@ -89,7 +98,7 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxDisplay = false;
+			SeparateTxRxDisplay = SeparateTxRxDisplayDefault;
 		}
 
 		#endregion
