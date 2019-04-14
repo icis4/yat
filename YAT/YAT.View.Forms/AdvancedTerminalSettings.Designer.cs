@@ -1134,7 +1134,7 @@
 			// label_ControlCharacterRadix
 			// 
 			this.label_ControlCharacterRadix.AutoSize = true;
-			this.label_ControlCharacterRadix.Location = new System.Drawing.Point(3, 42);
+			this.label_ControlCharacterRadix.Location = new System.Drawing.Point(3, 43);
 			this.label_ControlCharacterRadix.Name = "label_ControlCharacterRadix";
 			this.label_ControlCharacterRadix.Size = new System.Drawing.Size(37, 13);
 			this.label_ControlCharacterRadix.TabIndex = 1;
@@ -1165,7 +1165,7 @@
 			this.comboBox_RxRadix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_RxRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_RxRadix.Location = new System.Drawing.Point(131, 91);
+			this.comboBox_RxRadix.Location = new System.Drawing.Point(131, 92);
 			this.comboBox_RxRadix.Name = "comboBox_RxRadix";
 			this.comboBox_RxRadix.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_RxRadix.TabIndex = 6;
@@ -1174,7 +1174,7 @@
 			// label_RxRadix
 			// 
 			this.label_RxRadix.AutoSize = true;
-			this.label_RxRadix.Location = new System.Drawing.Point(9, 94);
+			this.label_RxRadix.Location = new System.Drawing.Point(9, 95);
 			this.label_RxRadix.Name = "label_RxRadix";
 			this.label_RxRadix.Size = new System.Drawing.Size(53, 13);
 			this.label_RxRadix.TabIndex = 5;
@@ -1266,7 +1266,7 @@
 			this.comboBox_TxRadix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_TxRadix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_TxRadix.Location = new System.Drawing.Point(131, 45);
+			this.comboBox_TxRadix.Location = new System.Drawing.Point(131, 44);
 			this.comboBox_TxRadix.Name = "comboBox_TxRadix";
 			this.comboBox_TxRadix.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_TxRadix.TabIndex = 3;
@@ -1275,7 +1275,7 @@
 			// label_TxRadix
 			// 
 			this.label_TxRadix.AutoSize = true;
-			this.label_TxRadix.Location = new System.Drawing.Point(9, 48);
+			this.label_TxRadix.Location = new System.Drawing.Point(9, 47);
 			this.label_TxRadix.Name = "label_TxRadix";
 			this.label_TxRadix.Size = new System.Drawing.Size(37, 13);
 			this.label_TxRadix.TabIndex = 2;
