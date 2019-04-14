@@ -41,17 +41,17 @@
 			// label_LengthLineBreakUnit
 			// 
 			this.label_LengthLineBreakUnit.AutoSize = true;
-			this.label_LengthLineBreakUnit.Location = new System.Drawing.Point(212, 4);
+			this.label_LengthLineBreakUnit.Location = new System.Drawing.Point(202, 4);
 			this.label_LengthLineBreakUnit.Name = "label_LengthLineBreakUnit";
-			this.label_LengthLineBreakUnit.Size = new System.Drawing.Size(32, 13);
+			this.label_LengthLineBreakUnit.Size = new System.Drawing.Size(33, 13);
 			this.label_LengthLineBreakUnit.TabIndex = 2;
-			this.label_LengthLineBreakUnit.Text = "bytes";
+			this.label_LengthLineBreakUnit.Text = "chars";
 			this.label_LengthLineBreakUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textBox_LengthLineBreak
 			// 
 			this.textBox_LengthLineBreak.Enabled = false;
-			this.textBox_LengthLineBreak.Location = new System.Drawing.Point(163, 1);
+			this.textBox_LengthLineBreak.Location = new System.Drawing.Point(153, 1);
 			this.textBox_LengthLineBreak.Name = "textBox_LengthLineBreak";
 			this.textBox_LengthLineBreak.Size = new System.Drawing.Size(48, 20);
 			this.textBox_LengthLineBreak.TabIndex = 1;
@@ -66,36 +66,36 @@
 			this.checkBox_LengthLineBreak.Name = "checkBox_LengthLineBreak";
 			this.checkBox_LengthLineBreak.Size = new System.Drawing.Size(102, 17);
 			this.checkBox_LengthLineBreak.TabIndex = 0;
-			this.checkBox_LengthLineBreak.Text = "Break &lines after";
+			this.checkBox_LengthLineBreak.Text = "Break lines &after";
 			this.checkBox_LengthLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_LengthLineBreak_CheckedChanged);
 			// 
 			// label_TimedLineBreakUnit
 			// 
 			this.label_TimedLineBreakUnit.AutoSize = true;
-			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(212, 73);
+			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(202, 27);
 			this.label_TimedLineBreakUnit.Name = "label_TimedLineBreakUnit";
 			this.label_TimedLineBreakUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_TimedLineBreakUnit.TabIndex = 7;
+			this.label_TimedLineBreakUnit.TabIndex = 5;
 			this.label_TimedLineBreakUnit.Text = "ms";
 			this.label_TimedLineBreakUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textBox_TimedLineBreakTimeout
 			// 
 			this.textBox_TimedLineBreakTimeout.Enabled = false;
-			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(163, 70);
+			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(153, 24);
 			this.textBox_TimedLineBreakTimeout.Name = "textBox_TimedLineBreakTimeout";
 			this.textBox_TimedLineBreakTimeout.Size = new System.Drawing.Size(48, 20);
-			this.textBox_TimedLineBreakTimeout.TabIndex = 6;
+			this.textBox_TimedLineBreakTimeout.TabIndex = 4;
 			this.textBox_TimedLineBreakTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_TimedLineBreakTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimedLineBreakTimeout_Validating);
 			// 
 			// checkBox_TimedLineBreak
 			// 
 			this.checkBox_TimedLineBreak.AutoSize = true;
-			this.checkBox_TimedLineBreak.Location = new System.Drawing.Point(3, 72);
+			this.checkBox_TimedLineBreak.Location = new System.Drawing.Point(3, 26);
 			this.checkBox_TimedLineBreak.Name = "checkBox_TimedLineBreak";
 			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(151, 17);
-			this.checkBox_TimedLineBreak.TabIndex = 5;
+			this.checkBox_TimedLineBreak.TabIndex = 3;
 			this.checkBox_TimedLineBreak.Text = "Break lines after ti&meout of";
 			this.checkBox_TimedLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_TimedLineBreak_CheckedChanged);
 			// 
@@ -109,7 +109,7 @@
 			this.Controls.Add(this.textBox_TimedLineBreakTimeout);
 			this.Controls.Add(this.checkBox_TimedLineBreak);
 			this.Name = "TextDisplaySettingsSet";
-			this.Size = new System.Drawing.Size(272, 91);
+			this.Size = new System.Drawing.Size(238, 45);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -143,7 +143,7 @@ namespace YAT.View.Forms
 			// checkBox_SeparateTxRxDisplay
 			// 
 			this.checkBox_SeparateTxRxDisplay.AutoSize = true;
-			this.checkBox_SeparateTxRxDisplay.Location = new System.Drawing.Point(18, 153);
+			this.checkBox_SeparateTxRxDisplay.Location = new System.Drawing.Point(18, 152);
 			this.checkBox_SeparateTxRxDisplay.Name = "checkBox_SeparateTxRxDisplay";
 			this.checkBox_SeparateTxRxDisplay.Size = new System.Drawing.Size(175, 17);
 			this.checkBox_SeparateTxRxDisplay.TabIndex = 1;
