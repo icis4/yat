@@ -180,10 +180,10 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		private System.Windows.Forms.GroupBox groupBox_Display;
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_Defaults;
+		private System.Windows.Forms.GroupBox groupBox_Display;
 		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxDisplay;
 		private System.Windows.Forms.GroupBox groupBox_RxDisplay;
 		private YAT.View.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Rx;

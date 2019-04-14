@@ -47,7 +47,7 @@ using YAT.Application.Utilities;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Binary protocol terminal.
+	/// <see cref="Terminal"/> implementation with binary semantics.
 	/// </summary>
 	public class BinaryTerminal : Terminal
 	{
@@ -236,12 +236,13 @@ namespace YAT.Domain
 
 		private class LineState : IDisposable
 		{
-			public LinePosition             Position                      { get; set; }
-			public DisplayElementCollection Elements                      { get; set; }
-			public SequenceQueue            SequenceAfter                 { get; set; }
-			public SequenceQueue            SequenceBefore                { get; set; }
-			public DisplayElementCollection PendingSequenceBeforeElements { get; set; }
-			public DateTime                 TimeStamp                     { get; set; }
+			public LinePosition             Position  { get; set; }
+			public DisplayElementCollection Elements  { get; set; }
+			public DateTime                 TimeStamp { get; set; }
+
+			public SequenceQueue            SequenceAfter                                   { get; set; }
+			public SequenceQueue            SequenceBefore                                  { get; set; }
+			public DisplayElementCollection RetainedUnconfirmedHiddenSequenceBeforeElements { get; set; }
 
 			public bool Highlight                        { get; set; }
 			public bool FilterDetectedInFirstChunkOfLine { get; set; } // Line shall continuously get shown if filter is active from the first chunk.
@@ -254,12 +255,13 @@ namespace YAT.Domain
 
 			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimer breakTimer)
 			{
-				Position                      = LinePosition.Begin;
-				Elements                      = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				SequenceAfter                 = sequenceAfter;
-				SequenceBefore                = sequenceBefore;
-				PendingSequenceBeforeElements = new DisplayElementCollection();
-				TimeStamp                     = DateTime.Now;
+				Position  = LinePosition.Begin;
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				TimeStamp = DateTime.Now;
+
+				SequenceAfter                                   = sequenceAfter;
+				SequenceBefore                                  = sequenceBefore;
+				RetainedUnconfirmedHiddenSequenceBeforeElements = new DisplayElementCollection();
 
 				Highlight                        = false;
 				FilterDetectedInFirstChunkOfLine = false;
@@ -344,12 +346,13 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				Position                      = LinePosition.Begin;
-				Elements                      = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
-				SequenceAfter                  .Reset();
-				SequenceBefore                 .Reset();
-				PendingSequenceBeforeElements = new DisplayElementCollection();
-				TimeStamp                     = DateTime.Now;
+				Position  = LinePosition.Begin;
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				TimeStamp = DateTime.Now;
+
+				SequenceAfter                                    .Reset();
+				SequenceBefore                                   .Reset();
+				RetainedUnconfirmedHiddenSequenceBeforeElements = new DisplayElementCollection();
 
 				Highlight                        = false;
 				FilterDetectedInFirstChunkOfLine = false;
@@ -523,8 +526,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public override void SendFileLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public override void SendFileLine(string dataLine, Radix defaultRadix)
 		{
 			// AssertNotDisposed() is called by DoSendData().
 
@@ -534,7 +536,6 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1022:PositiveSignsMustBeSpacedCorrectly", Justification = "What's wrong with closing parenthesis_+_quote? Bug in StyleCop?")]
 		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
 		{
 			switch (result.Keyword)
@@ -549,7 +550,7 @@ namespace YAT.Domain
 							OnDisplayElementAdded(IODirection.Tx, new DisplayElement.DataSpace());
 					}
 
-					string info = (Parser.KeywordEx)(result.Keyword) + " keyword is not supported for binary terminals";
+					string info = ((Parser.KeywordEx)(result.Keyword)) + " keyword is not supported for binary terminals";
 					OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, info));
 					break;
 				}
@@ -736,12 +737,12 @@ namespace YAT.Domain
 				if (lineState.SequenceBefore.IsCompleteMatch)
 				{
 					// Sequence is complete, move them to the next line:
-					lineState.PendingSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 
-					elementsForNextLine = new DisplayElementCollection(lineState.PendingSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
-					foreach (DisplayElement dePending in lineState.PendingSequenceBeforeElements)
+					elementsForNextLine = new DisplayElementCollection(lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
+					foreach (DisplayElement dePending in lineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
 						elementsForNextLine.Add(dePending.Clone());
 
 					lineState.Position = LinePosition.End;
@@ -749,24 +750,24 @@ namespace YAT.Domain
 				else if (lineState.SequenceBefore.IsPartlyMatchContinued)
 				{
 					// Keep sequence elements and delay them until sequence is either complete or refused:
-					lineState.PendingSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 				}
 				else if (lineState.SequenceBefore.IsPartlyMatchBeginning)
 				{
 					// Previous was no match, previous sequence can be treated as normal:
-					TreatSequenceBeforeAsNormal(lineState, d, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, d, lp);
 
 					// Keep sequence elements and delay them until sequence is either complete or refused:
-					lineState.PendingSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 				}
 				else
 				{
 					// No match at all, previous sequence can be treated as normal:
-					TreatSequenceBeforeAsNormal(lineState, d, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, d, lp);
 				}
 			}
 
@@ -819,24 +820,10 @@ namespace YAT.Domain
 				{
 					lineState.Position = LinePosition.ContentExceeded;
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
-					var message = "Maximal number of bytes per line exceeded! Check the end-of-line settings or increase the limit in the advanced terminal settings.";
+					var message = "Maximal number of bytes per line exceeded! Check the line break settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
 					elementsToAdd.Add(     new DisplayElement.ErrorInfo((Direction)d, message, true));
 				}
-			}
-		}
-
-		private void TreatSequenceBeforeAsNormal(LineState lineState, IODirection d, DisplayElementCollection lp)
-		{
-			if (lineState.PendingSequenceBeforeElements.Count > 0)
-			{
-				foreach (var de in lineState.PendingSequenceBeforeElements)
-				{
-					AddSpaceIfNecessary(lineState, d, lp, de);
-					lp.Add(de);
-				}
-
-				lineState.PendingSequenceBeforeElements.Clear();
 			}
 		}
 
@@ -846,6 +833,15 @@ namespace YAT.Domain
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.DataSpace());
+			}
+		}
+
+		private void ReleaseRetainedUnconfirmedHiddenSequenceBefore(LineState lineState, IODirection d, DisplayElementCollection lp)
+		{
+			if (lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Count > 0)
+			{
+				lp.AddRange(lineState.RetainedUnconfirmedHiddenSequenceBeforeElements); // No clone needed as collection is cleared below.
+				lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Clear();
 			}
 		}
 
