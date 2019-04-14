@@ -97,9 +97,10 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="LineBreakTimer.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
     <Compile Include="BinarySettings\BinaryDisplaySettings.cs" />
-    <Compile Include="BinaryTerminal\Structs.cs" />
+    <Compile Include="BinarySettings\Structs.cs" />
     <Compile Include="Endianness.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Eol.cs" />
@@ -137,7 +138,7 @@
     <Compile Include="Settings\SendSettingsFile.cs" />
     <Compile Include="TextSettings\TextDisplaySettings.cs" />
     <Compile Include="TextSettings\TextExclusionSettings.cs" />
-    <Compile Include="TextTerminal\Structs.cs" />
+    <Compile Include="TextSettings\Structs.cs" />
     <Compile Include="Terminal\Radix.cs" />
     <Compile Include="Terminal\DisplayElement.cs" />
     <Compile Include="Terminal\DisplayRepository.cs" />
