@@ -34,97 +34,7 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct BinaryLengthLineBreak : IEquatable<BinaryLengthLineBreak>
-	{
-		/// <summary></summary>
-		[XmlElement("Enabled")]
-		public bool Enabled { get; set; }
-
-		/// <summary>In chars or bytes.</summary>
-		[XmlElement("Length")]
-		public int Length { get; set; }
-
-		/// <summary></summary>
-		public BinaryLengthLineBreak(bool enabled, int length)
-		{
-			Enabled = enabled;
-			Length  = length;
-		}
-
-		#region Object Members
-		//==========================================================================================
-		// Object Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Length .GetHashCode();
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			if (obj is BinaryLengthLineBreak)
-				return (Equals((BinaryLengthLineBreak)obj));
-			else
-				return (false);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public bool Equals(BinaryLengthLineBreak other)
-		{
-			return
-			(
-				Enabled.Equals(other.Enabled) &&
-				Length .Equals(other.Length)
-			);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value equality.
-		/// </summary>
-		public static bool operator ==(BinaryLengthLineBreak lhs, BinaryLengthLineBreak rhs)
-		{
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value inequality.
-		/// </summary>
-		public static bool operator !=(BinaryLengthLineBreak lhs, BinaryLengthLineBreak rhs)
-		{
-			return (!(lhs == rhs));
-		}
-
-		#endregion
-	}
-
-	/// <summary></summary>
-	[Serializable]
-	public struct BinarySequenceLineBreak : IEquatable<BinarySequenceLineBreak>
+	public struct BinarySequenceSettingTuple : IEquatable<BinarySequenceSettingTuple>
 	{
 		/// <summary></summary>
 		[XmlElement("Enabled")]
@@ -135,7 +45,7 @@ namespace YAT.Domain
 		public string Sequence { get; set; }
 
 		/// <summary></summary>
-		public BinarySequenceLineBreak(bool enabled, string sequence)
+		public BinarySequenceSettingTuple(bool enabled, string sequence)
 		{
 			Enabled  = enabled;
 			Sequence = sequence;
@@ -171,8 +81,8 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is BinarySequenceLineBreak)
-				return (Equals((BinarySequenceLineBreak)obj));
+			if (obj is BinarySequenceSettingTuple)
+				return (Equals((BinarySequenceSettingTuple)obj));
 			else
 				return (false);
 		}
@@ -184,7 +94,7 @@ namespace YAT.Domain
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(BinarySequenceLineBreak other)
+		public bool Equals(BinarySequenceSettingTuple other)
 		{
 			return
 			(
@@ -196,7 +106,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have value equality.
 		/// </summary>
-		public static bool operator ==(BinarySequenceLineBreak lhs, BinarySequenceLineBreak rhs)
+		public static bool operator ==(BinarySequenceSettingTuple lhs, BinarySequenceSettingTuple rhs)
 		{
 			return (lhs.Equals(rhs));
 		}
@@ -204,97 +114,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
-		public static bool operator !=(BinarySequenceLineBreak lhs, BinarySequenceLineBreak rhs)
-		{
-			return (!(lhs == rhs));
-		}
-
-		#endregion
-	}
-
-	/// <summary></summary>
-	[Serializable]
-	public struct BinaryTimedLineBreak : IEquatable<BinaryTimedLineBreak>
-	{
-		/// <summary></summary>
-		[XmlElement("Enabled")]
-		public bool Enabled { get; set; }
-
-		/// <summary>Timeout in milliseconds.</summary>
-		[XmlElement("Timeout")]
-		public int Timeout { get; set; }
-
-		/// <summary></summary>
-		public BinaryTimedLineBreak(bool enabled, int timeout)
-		{
-			Enabled = enabled;
-			Timeout = timeout;
-		}
-
-		#region Object Members
-		//==========================================================================================
-		// Object Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Timeout.GetHashCode();
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			if (obj is BinaryTimedLineBreak)
-				return (Equals((BinaryTimedLineBreak)obj));
-			else
-				return (false);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public bool Equals(BinaryTimedLineBreak other)
-		{
-			return
-			(
-				Enabled.Equals(other.Enabled) &&
-				Timeout.Equals(other.Timeout)
-			);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value equality.
-		/// </summary>
-		public static bool operator ==(BinaryTimedLineBreak lhs, BinaryTimedLineBreak rhs)
-		{
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value inequality.
-		/// </summary>
-		public static bool operator !=(BinaryTimedLineBreak lhs, BinaryTimedLineBreak rhs)
+		public static bool operator !=(BinarySequenceSettingTuple lhs, BinarySequenceSettingTuple rhs)
 		{
 			return (!(lhs == rhs));
 		}

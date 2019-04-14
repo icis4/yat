@@ -32,187 +32,7 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct TextLengthLineBreak : IEquatable<TextLengthLineBreak>
-	{
-		/// <summary></summary>
-		[XmlElement("Enabled")]
-		public bool Enabled { get; set; }
-
-		/// <summary>In chars or bytes.</summary>
-		[XmlElement("Length")]
-		public int Length { get; set; }
-
-		/// <summary></summary>
-		public TextLengthLineBreak(bool enabled, int length)
-		{
-			Enabled = enabled;
-			Length  = length;
-		}
-
-		#region Object Members
-		//==========================================================================================
-		// Object Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Length .GetHashCode();
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			if (obj is TextLengthLineBreak)
-				return (Equals((TextLengthLineBreak)obj));
-			else
-				return (false);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public bool Equals(TextLengthLineBreak other)
-		{
-			return
-			(
-				Enabled.Equals(other.Enabled) &&
-				Length .Equals(other.Length)
-			);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value equality.
-		/// </summary>
-		public static bool operator ==(TextLengthLineBreak lhs, TextLengthLineBreak rhs)
-		{
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value inequality.
-		/// </summary>
-		public static bool operator !=(TextLengthLineBreak lhs, TextLengthLineBreak rhs)
-		{
-			return (!(lhs == rhs));
-		}
-
-		#endregion
-	}
-
-	/// <summary></summary>
-	[Serializable]
-	public struct TextTimedLineBreak : IEquatable<TextTimedLineBreak>
-	{
-		/// <summary></summary>
-		[XmlElement("Enabled")]
-		public bool Enabled { get; set; }
-
-		/// <summary>Timeout in milliseconds.</summary>
-		[XmlElement("Timeout")]
-		public int Timeout { get; set; }
-
-		/// <summary></summary>
-		public TextTimedLineBreak(bool enabled, int timeout)
-		{
-			Enabled = enabled;
-			Timeout = timeout;
-		}
-
-		#region Object Members
-		//==========================================================================================
-		// Object Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Timeout.GetHashCode();
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			if (obj is TextTimedLineBreak)
-				return (Equals((TextTimedLineBreak)obj));
-			else
-				return (false);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public bool Equals(TextTimedLineBreak other)
-		{
-			return
-			(
-				Enabled.Equals(other.Enabled) &&
-				Timeout.Equals(other.Timeout)
-			);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value equality.
-		/// </summary>
-		public static bool operator ==(TextTimedLineBreak lhs, TextTimedLineBreak rhs)
-		{
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value inequality.
-		/// </summary>
-		public static bool operator !=(TextTimedLineBreak lhs, TextTimedLineBreak rhs)
-		{
-			return (!(lhs == rhs));
-		}
-
-		#endregion
-	}
-
-	/// <summary></summary>
-	[Serializable]
-	public struct TextLineSendDelay : IEquatable<TextLineSendDelay>
+	public struct TextLineSendDelaySettingTuple : IEquatable<TextLineSendDelaySettingTuple>
 	{
 		/// <summary></summary>
 		[XmlElement("Enabled")]
@@ -227,10 +47,10 @@ namespace YAT.Domain
 		public int LineInterval { get; set; }
 
 		/// <summary></summary>
-		public TextLineSendDelay(bool enabled, int delay, int lineInterval)
+		public TextLineSendDelaySettingTuple(bool enabled, int delay, int lineInterval)
 		{
-			Enabled = enabled;
-			Delay = delay;
+			Enabled      = enabled;
+			Delay        = delay;
 			LineInterval = lineInterval;
 		}
 
@@ -265,8 +85,8 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is TextLineSendDelay)
-				return (Equals((TextLineSendDelay)obj));
+			if (obj is TextLineSendDelaySettingTuple)
+				return (Equals((TextLineSendDelaySettingTuple)obj));
 			else
 				return (false);
 		}
@@ -278,7 +98,7 @@ namespace YAT.Domain
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(TextLineSendDelay other)
+		public bool Equals(TextLineSendDelaySettingTuple other)
 		{
 			return
 			(
@@ -291,7 +111,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have value equality.
 		/// </summary>
-		public static bool operator ==(TextLineSendDelay lhs, TextLineSendDelay rhs)
+		public static bool operator ==(TextLineSendDelaySettingTuple lhs, TextLineSendDelaySettingTuple rhs)
 		{
 			return (lhs.Equals(rhs));
 		}
@@ -299,97 +119,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
-		public static bool operator !=(TextLineSendDelay lhs, TextLineSendDelay rhs)
-		{
-			return (!(lhs == rhs));
-		}
-
-		#endregion
-	}
-
-	/// <summary></summary>
-	[Serializable]
-	public struct WaitForResponse : IEquatable<WaitForResponse>
-	{
-		/// <summary></summary>
-		[XmlElement("Enabled")]
-		public bool Enabled { get; set; }
-
-		/// <summary>Wait timeout in milliseconds.</summary>
-		[XmlElement("Timeout")]
-		public int Timeout { get; set; }
-
-		/// <summary></summary>
-		public WaitForResponse(bool enabled, int timeout)
-		{
-			Enabled = enabled;
-			Timeout = timeout;
-		}
-
-		#region Object Members
-		//==========================================================================================
-		// Object Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Timeout.GetHashCode();
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			if (obj is WaitForResponse)
-				return (Equals((WaitForResponse)obj));
-			else
-				return (false);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public bool Equals(WaitForResponse other)
-		{
-			return
-			(
-				Enabled.Equals(other.Enabled) &&
-				Timeout.Equals(other.Timeout)
-			);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value equality.
-		/// </summary>
-		public static bool operator ==(WaitForResponse lhs, WaitForResponse rhs)
-		{
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have inequality.
-		/// </summary>
-		public static bool operator !=(WaitForResponse lhs, WaitForResponse rhs)
+		public static bool operator !=(TextLineSendDelaySettingTuple lhs, TextLineSendDelaySettingTuple rhs)
 		{
 			return (!(lhs == rhs));
 		}

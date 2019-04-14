@@ -34,13 +34,13 @@ namespace YAT.Domain.Settings
 	public class TextDisplaySettings : MKY.Settings.SettingsItem, IEquatable<TextDisplaySettings>
 	{
 		/// <summary></summary>
-		public static readonly TextLengthLineBreak LengthLineBreakDefault = new TextLengthLineBreak(false, 80);
+		public static readonly LengthSettingTuple LengthLineBreakDefault = new LengthSettingTuple(false, 80);
 
 		/// <summary></summary>
-		public static readonly TextTimedLineBreak TimedLineBreakDefault = new TextTimedLineBreak(false, 500);
+		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, 500);
 
-		private TextLengthLineBreak lengthLineBreak;
-		private TextTimedLineBreak  timedLineBreak;
+		private LengthSettingTuple  lengthLineBreak;
+		private TimeoutSettingTuple timedLineBreak;
 
 		/// <summary></summary>
 		public TextDisplaySettings()
@@ -87,7 +87,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("LengthLineBreak")]
-		public TextLengthLineBreak LengthLineBreak
+		public LengthSettingTuple LengthLineBreak
 		{
 			get { return (this.lengthLineBreak); }
 			set
@@ -102,7 +102,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("TimedLineBreak")]
-		public TextTimedLineBreak TimedLineBreak
+		public TimeoutSettingTuple TimedLineBreak
 		{
 			get { return (this.timedLineBreak); }
 			set

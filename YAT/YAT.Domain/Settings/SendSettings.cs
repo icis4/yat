@@ -58,9 +58,9 @@ namespace YAT.Domain.Settings
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static PeriodicSetting SignalXOnPeriodicallyDefault
+		public static PeriodicSettingTuple SignalXOnPeriodicallyDefault
 		{
-			get { return (new PeriodicSetting(false, 1000)); }
+			get { return (new PeriodicSettingTuple(false, 1000)); }
 		}
 
 		private bool useExplicitDefaultRadix;
@@ -76,7 +76,7 @@ namespace YAT.Domain.Settings
 
 		// Serial port specific send settings. Located here (and not in 'SerialPortSettings) as they are endemic to YAT.
 		private bool signalXOnBeforeEachTransmission;
-		private PeriodicSetting signalXOnPeriodically;
+		private PeriodicSettingTuple signalXOnPeriodically;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -285,7 +285,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SignalXOnPeriodically")]
-		public virtual PeriodicSetting SignalXOnPeriodically
+		public virtual PeriodicSettingTuple SignalXOnPeriodically
 		{
 			get { return (this.signalXOnPeriodically); }
 			set
