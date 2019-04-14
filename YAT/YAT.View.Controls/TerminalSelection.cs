@@ -53,7 +53,7 @@ namespace YAT.View.Controls
 			Environment.NewLine +
 			"Use a text terminal for text based protocols:" + Environment.NewLine +
 			"   - Characters 0x00..0x1F are treated as control characters" + Environment.NewLine +
-			"   - Line break is done using end-of-line sequence (EOL), e.g. <CR><LF>" + Environment.NewLine +
+			"   - Line break is done using EOL (end-of-line) sequence, e.g. <CR><LF>" + Environment.NewLine +
 			Environment.NewLine +
 			"Use a binary terminal for binary protocols:" + Environment.NewLine +
 			"   - Characters 0x00..0x1F are treated as normal data" + Environment.NewLine +

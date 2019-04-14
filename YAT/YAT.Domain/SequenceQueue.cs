@@ -36,8 +36,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Queue evaluates whether a sequence of bytes matches the given sequence. Can be used to e.g.
-	/// detect end-of-line sequences.
+	/// Queue evaluates whether a sequence of bytes matches the given sequence.
+	/// Can be used to e.g. detect EOL (end-of-line) sequences.
 	/// </summary>
 	/// <remarks>
 	/// Implementation used to evaluate match on request only. However, when adding 'IsPartlyMatch'

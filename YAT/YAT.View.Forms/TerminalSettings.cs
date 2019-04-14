@@ -523,7 +523,7 @@ namespace YAT.View.Forms
 				{
 					case Domain.TerminalType.Text:
 						button += "Text";
-						toolTipCaption = "Text terminal dependent settings such as encoding, end-of-line and comments.";
+						toolTipCaption = "Text terminal dependent settings such as encoding, EOL (end-of-line) and comments.";
 						break;
 
 					case Domain.TerminalType.Binary:
