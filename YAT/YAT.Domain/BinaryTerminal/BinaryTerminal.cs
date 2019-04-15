@@ -86,9 +86,9 @@ namespace YAT.Domain
 			public bool SuppressIfSubsequentlyTriggered  { get; set; }
 			public bool SuppressForSure                  { get; set; }
 
-			public LineBreakTimer BreakTimer { get; set; }
+			public LineBreakTimeout BreakTimeout { get; set; }
 
-			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimer breakTimer)
+			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimeout breakTimeout)
 			{
 				Position  = LinePosition.Begin;
 				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
@@ -105,7 +105,7 @@ namespace YAT.Domain
 				SuppressIfSubsequentlyTriggered  = false;
 				SuppressForSure                  = false;
 
-				BreakTimer = breakTimer;
+				BreakTimeout = breakTimeout;
 			}
 
 			#region Disposal
@@ -132,10 +132,10 @@ namespace YAT.Domain
 					if (disposing)
 					{
 						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
-						if (BreakTimer != null)
+						if (BreakTimeout != null)
 						{
-							BreakTimer.Dispose();
-							EventHandlerHelper.RemoveAllEventHandlers(BreakTimer);
+							BreakTimeout.Dispose();
+							EventHandlerHelper.RemoveAllEventHandlers(BreakTimeout);
 
 							// \remind (2016-09-08 / MKY)
 							// Whole timer handling should be encapsulated into the 'LineState' class.
@@ -143,7 +143,7 @@ namespace YAT.Domain
 					}
 
 					// Set state to disposed:
-					BreakTimer = null;
+					BreakTimeout = null;
 					IsDisposed = true;
 				}
 			}
@@ -271,22 +271,22 @@ namespace YAT.Domain
 				// Tx:
 
 				this.txLineState = casted.txLineState;
-				                                         //// \remind (2016-09-08 / MKY)
-				if (this.txLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.txLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+				                                           //// \remind (2016-09-08 / MKY)
+				if (this.txLineState.BreakTimeout != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.txLineState.BreakTimeout.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
-				this.txLineState.BreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				this.txLineState.BreakTimer.Elapsed += txTimedLineBreak_Elapsed;
+				this.txLineState.BreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+				this.txLineState.BreakTimeout.Elapsed += txTimedLineBreakTimeout_Elapsed;
 
 				// Rx:
 
 				this.rxLineState = casted.rxLineState;
-				                                         //// \remind (2016-09-08 / MKY)
-				if (this.rxLineState.BreakTimer != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.rxLineState.BreakTimer.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
+				                                           //// \remind (2016-09-08 / MKY)
+				if (this.rxLineState.BreakTimeout != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
+					this.rxLineState.BreakTimeout.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
 
-				this.rxLineState.BreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				this.rxLineState.BreakTimer.Elapsed += rxTimedLineBreak_Elapsed;
+				this.rxLineState.BreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+				this.rxLineState.BreakTimeout.Elapsed += rxTimedLineBreakTimeout_Elapsed;
 
 				// Bidir:
 
@@ -464,7 +464,7 @@ namespace YAT.Domain
 		{
 			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness))
 			{
-				LineBreakTimer t;
+				LineBreakTimeout t;
 
 				// Tx:
 
@@ -476,8 +476,8 @@ namespace YAT.Domain
 				if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Sequence, out txSequenceBreakBefore))
 					txSequenceBreakBefore = null;
 
-				t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				t.Elapsed += txTimedLineBreak_Elapsed;
+				t = new LineBreakTimeout(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+				t.Elapsed += txTimedLineBreakTimeout_Elapsed;
 
 				if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
 					this.txLineState.Dispose();
@@ -494,8 +494,8 @@ namespace YAT.Domain
 				if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakBefore.Sequence, out rxSequenceBreakBefore))
 					rxSequenceBreakBefore = null;
 
-				t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				t.Elapsed += rxTimedLineBreak_Elapsed;
+				t = new LineBreakTimeout(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+				t.Elapsed += rxTimedLineBreakTimeout_Elapsed;
 
 				if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
 					this.rxLineState.Dispose();
@@ -797,12 +797,12 @@ namespace YAT.Domain
 					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsToAdd);
 
 					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.BreakTimer.Start();
+						lineState.BreakTimeout.Start();
 				}
 				else
 				{
 					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.BreakTimer.Restart(); // Restart as timeout refers to time after last received byte.
+						lineState.BreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
 				}
 
 				// Content:
@@ -814,7 +814,7 @@ namespace YAT.Domain
 				if (lineState.Position == LinePosition.End)
 				{
 					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.BreakTimer.Stop();
+						lineState.BreakTimeout.Stop();
 
 					ExecuteLineEnd(lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
 
@@ -1068,12 +1068,12 @@ namespace YAT.Domain
 		// Timer Events
 		//==========================================================================================
 
-		private void txTimedLineBreak_Elapsed(object sender, EventArgs e)
+		private void txTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
 			ProcessAndSignalLineBreak(DateTime.Now, IODirection.Tx);
 		}
 
-		private void rxTimedLineBreak_Elapsed(object sender, EventArgs e)
+		private void rxTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
 			ProcessAndSignalLineBreak(DateTime.Now, IODirection.Rx);
 		}

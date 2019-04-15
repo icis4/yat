@@ -40,12 +40,12 @@ using MKY.Diagnostics;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public class LineBreakTimer : IDisposable
+	public class LineBreakTimeout : IDisposable
 	{
 		/// <summary>
 		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(LineBreakTimer).FullName);
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(LineBreakTimeout).FullName);
 
 		private int timeout;
 		private Timer timer;
@@ -55,7 +55,7 @@ namespace YAT.Domain
 		public event EventHandler Elapsed;
 
 		/// <summary></summary>
-		public LineBreakTimer(int timeout)
+		public LineBreakTimeout(int timeout)
 		{
 			this.timeout = timeout;
 		}
@@ -108,7 +108,7 @@ namespace YAT.Domain
 		/// 
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
-		~LineBreakTimer()
+		~LineBreakTimeout()
 		{
 			Dispose(false);
 
@@ -157,7 +157,7 @@ namespace YAT.Domain
 			{
 				if (this.timer == null)
 				{
-					this.timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite);
+					this.timer = new Timer(new TimerCallback(timer_Timeout), null, this.timeout, Timeout.Infinite);
 				}
 			}
 		}
