@@ -97,7 +97,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
-    <Compile Include="LineBreakTimer.cs" />
+    <Compile Include="LineBreakTimeout.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
     <Compile Include="BinarySettings\BinaryDisplaySettings.cs" />
     <Compile Include="BinarySettings\Structs.cs" />
