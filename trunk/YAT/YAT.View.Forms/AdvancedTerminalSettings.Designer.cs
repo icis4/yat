@@ -93,9 +93,9 @@
 			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_UsbSerialHid = new System.Windows.Forms.GroupBox();
 			this.checkBox_IncludeNonPayloadData = new System.Windows.Forms.CheckBox();
-			this.textBox_MaxBytePerLineCount = new MKY.Windows.Forms.TextBoxEx();
-			this.label_MaxBytePerLineCountUnit = new System.Windows.Forms.Label();
-			this.label_MaxBytePerLineCount = new System.Windows.Forms.Label();
+			this.textBox_MaxLineLength = new MKY.Windows.Forms.TextBoxEx();
+			this.label_MaxLineLengthUnit = new System.Windows.Forms.Label();
+			this.label_MaxLineLength = new System.Windows.Forms.Label();
 			this.checkBox_PortLineBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowPort = new System.Windows.Forms.CheckBox();
 			this.textBox_MaxLineCount = new MKY.Windows.Forms.TextBoxEx();
@@ -786,9 +786,9 @@
 			this.groupBox_Display.Controls.Add(this.checkBox_ChunkLineBreak);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowCopyOfActiveLine);
 			this.groupBox_Display.Controls.Add(this.groupBox_Display_UsbSerialHid);
-			this.groupBox_Display.Controls.Add(this.textBox_MaxBytePerLineCount);
-			this.groupBox_Display.Controls.Add(this.label_MaxBytePerLineCountUnit);
-			this.groupBox_Display.Controls.Add(this.label_MaxBytePerLineCount);
+			this.groupBox_Display.Controls.Add(this.textBox_MaxLineLength);
+			this.groupBox_Display.Controls.Add(this.label_MaxLineLengthUnit);
+			this.groupBox_Display.Controls.Add(this.label_MaxLineLength);
 			this.groupBox_Display.Controls.Add(this.checkBox_PortLineBreak);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowPort);
 			this.groupBox_Display.Controls.Add(this.textBox_MaxLineCount);
@@ -902,34 +902,34 @@
 			this.checkBox_IncludeNonPayloadData.UseVisualStyleBackColor = true;
 			this.checkBox_IncludeNonPayloadData.CheckedChanged += new System.EventHandler(this.checkBox_IncludeNonPayloadData_CheckedChanged);
 			// 
-			// textBox_MaxBytePerLineCount
+			// textBox_MaxLineLength
 			// 
-			this.textBox_MaxBytePerLineCount.Location = new System.Drawing.Point(90, 405);
-			this.textBox_MaxBytePerLineCount.Name = "textBox_MaxBytePerLineCount";
-			this.textBox_MaxBytePerLineCount.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxBytePerLineCount.TabIndex = 25;
-			this.textBox_MaxBytePerLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip.SetToolTip(this.textBox_MaxBytePerLineCount, "The maximal number of bytes per line is limited in order to improve performance.");
-			this.textBox_MaxBytePerLineCount.TextChanged += new System.EventHandler(this.textBox_MaxBytePerLineCount_TextChanged);
-			this.textBox_MaxBytePerLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxBytePerLineCount_Validating);
+			this.textBox_MaxLineLength.Location = new System.Drawing.Point(90, 405);
+			this.textBox_MaxLineLength.Name = "textBox_MaxLineLength";
+			this.textBox_MaxLineLength.Size = new System.Drawing.Size(48, 20);
+			this.textBox_MaxLineLength.TabIndex = 25;
+			this.textBox_MaxLineLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
+			this.textBox_MaxLineLength.TextChanged += new System.EventHandler(this.textBox_MaxLineLength_TextChanged);
+			this.textBox_MaxLineLength.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineLength_Validating);
 			// 
-			// label_MaxBytePerLineCountUnit
+			// label_MaxLineLengthUnit
 			// 
-			this.label_MaxBytePerLineCountUnit.AutoSize = true;
-			this.label_MaxBytePerLineCountUnit.Location = new System.Drawing.Point(141, 408);
-			this.label_MaxBytePerLineCountUnit.Name = "label_MaxBytePerLineCountUnit";
-			this.label_MaxBytePerLineCountUnit.Size = new System.Drawing.Size(69, 13);
-			this.label_MaxBytePerLineCountUnit.TabIndex = 26;
-			this.label_MaxBytePerLineCountUnit.Text = "bytes per line";
+			this.label_MaxLineLengthUnit.AutoSize = true;
+			this.label_MaxLineLengthUnit.Location = new System.Drawing.Point(141, 408);
+			this.label_MaxLineLengthUnit.Name = "label_MaxLineLengthUnit";
+			this.label_MaxLineLengthUnit.Size = new System.Drawing.Size(69, 13);
+			this.label_MaxLineLengthUnit.TabIndex = 26;
+			this.label_MaxLineLengthUnit.Text = "characters per line";
 			// 
-			// label_MaxBytePerLineCount
+			// label_MaxLineLength
 			// 
-			this.label_MaxBytePerLineCount.AutoSize = true;
-			this.label_MaxBytePerLineCount.Location = new System.Drawing.Point(9, 408);
-			this.label_MaxBytePerLineCount.Name = "label_MaxBytePerLineCount";
-			this.label_MaxBytePerLineCount.Size = new System.Drawing.Size(81, 13);
-			this.label_MaxBytePerLineCount.TabIndex = 24;
-			this.label_MaxBytePerLineCount.Text = "Display maximal";
+			this.label_MaxLineLength.AutoSize = true;
+			this.label_MaxLineLength.Location = new System.Drawing.Point(9, 408);
+			this.label_MaxLineLength.Name = "label_MaxLineLength";
+			this.label_MaxLineLength.Size = new System.Drawing.Size(81, 13);
+			this.label_MaxLineLength.TabIndex = 24;
+			this.label_MaxLineLength.Text = "Display maximal";
 			// 
 			// checkBox_PortLineBreak
 			// 
@@ -1437,9 +1437,9 @@
 		private System.Windows.Forms.Label label_DefaultLineInterval;
 		private System.Windows.Forms.CheckBox checkBox_ShowPort;
 		private System.Windows.Forms.CheckBox checkBox_PortLineBreak;
-		private MKY.Windows.Forms.TextBoxEx textBox_MaxBytePerLineCount;
-		private System.Windows.Forms.Label label_MaxBytePerLineCountUnit;
-		private System.Windows.Forms.Label label_MaxBytePerLineCount;
+		private MKY.Windows.Forms.TextBoxEx textBox_MaxLineLength;
+		private System.Windows.Forms.Label label_MaxLineLengthUnit;
+		private System.Windows.Forms.Label label_MaxLineLength;
 		private System.Windows.Forms.CheckBox checkBox_UseExplicitDefaultRadix;
 		private System.Windows.Forms.CheckBox checkBox_BufferMaxBaudRate;
 		private System.Windows.Forms.GroupBox groupBox_Display_UsbSerialHid;

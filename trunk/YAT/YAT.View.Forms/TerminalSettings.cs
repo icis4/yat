@@ -705,7 +705,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = f.SettingsResult.Terminal.Display.ChunkLineBreakEnabled;
 
 				this.settingsInEdit.Terminal.Display.MaxLineCount         = f.SettingsResult.Terminal.Display.MaxLineCount;
-				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount  = f.SettingsResult.Terminal.Display.MaxBytePerLineCount;
+				this.settingsInEdit.Terminal.Display.MaxLineLength        = f.SettingsResult.Terminal.Display.MaxLineLength;
 				this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = f.SettingsResult.Terminal.Display.ShowCopyOfActiveLine;
 
 				// Char replace:
