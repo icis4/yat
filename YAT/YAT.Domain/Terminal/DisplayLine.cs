@@ -135,9 +135,9 @@ namespace YAT.Domain
 		/// Returns number of raw byte content within collection.
 		/// </summary>
 		/// <remarks>
-		/// Note that this value reflects the byte count of the elements contained in the collection,
+		/// Note that value reflects the byte count of the elements contained in the collection,
 		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
-		/// total byte count of a sent or received sequence.
+		/// total byte count of a sent or received sequence, a hidden EOL is e.g. not reflected.
 		/// </remarks>
 		public virtual int ByteCount
 		{
