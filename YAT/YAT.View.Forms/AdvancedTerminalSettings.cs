@@ -405,25 +405,27 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void textBox_MaxBytePerLineCount_TextChanged(object sender, EventArgs e)
+		private void textBox_MaxLineLength_TextChanged(object sender, EventArgs e)
 		{
+			bool isText = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text);
+
 			int bytes;
-			if (int.TryParse(textBox_MaxBytePerLineCount.Text, out bytes) && (Math.Abs(bytes) == 1))
-				label_MaxBytePerLineCountUnit.Text = "byte per line";
+			if (int.TryParse(textBox_MaxLineLength.Text, out bytes) && (Math.Abs(bytes) == 1))
+				label_MaxLineLengthUnit.Text = (isText ? "character" : "byte") + " per line";
 			else
-				label_MaxBytePerLineCountUnit.Text = "bytes per line";
+				label_MaxLineLengthUnit.Text = (isText ? "characters" : "bytes") + " per line";
 		}
 
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void textBox_MaxBytePerLineCount_Validating(object sender, CancelEventArgs e)
+		private void textBox_MaxLineLength_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
 			int count;
-			if (int.TryParse(textBox_MaxBytePerLineCount.Text, out count) && (count >= 1))
+			if (int.TryParse(textBox_MaxLineLength.Text, out count) && (count >= 1))
 			{
-				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount = count;
+				this.settingsInEdit.Terminal.Display.MaxLineLength = count;
 			}
 			else
 			{
@@ -1048,6 +1050,11 @@ namespace YAT.View.Forms
 				comboBox_LineNumberSelection  .Items.AddRange(Domain.Utilities.LineNumberSelectionEx.GetItems());
 				comboBox_Endianness           .Items.AddRange(Domain.EndiannessEx                   .GetItems());
 				comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx             .GetItems());
+
+				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text)
+					this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
+				else                    // incl. TerminalType == Domain.TerminalType.Binary:
+					this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of bytes per line is limited to improve performance.");
 			}
 			finally
 			{
@@ -1103,7 +1110,7 @@ namespace YAT.View.Forms
 				checkBox_ChunkLineBreak.Checked     = this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled;
 
 				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
-				textBox_MaxBytePerLineCount.Text      = this.settingsInEdit.Terminal.Display.MaxBytePerLineCount.ToString(CultureInfo.CurrentCulture);
+				textBox_MaxLineLength.Text            = this.settingsInEdit.Terminal.Display.MaxLineLength.ToString(CultureInfo.CurrentCulture);
 				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
 				// Char replace:
@@ -1224,7 +1231,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = Domain.Settings.DisplaySettings.ChunkLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
-				this.settingsInEdit.Terminal.Display.MaxBytePerLineCount       = Domain.Settings.DisplaySettings.MaxBytePerLineCountDefault;
+				this.settingsInEdit.Terminal.Display.MaxLineLength             = Domain.Settings.DisplaySettings.MaxLineLengthDefault;
 
 				// Char replace:
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;

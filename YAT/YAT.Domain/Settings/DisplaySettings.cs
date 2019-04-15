@@ -93,10 +93,10 @@ namespace YAT.Domain.Settings
 		public const int MaxLineCountDefault = 1000;
 
 		/// <summary></summary>
-		public const bool ShowCopyOfActiveLineDefault = false;
+		public const int MaxLineLengthDefault = 1000;
 
 		/// <summary></summary>
-		public const int MaxBytePerLineCountDefault = 1000;
+		public const bool ShowCopyOfActiveLineDefault = false;
 
 		/// <summary></summary>
 		public const bool PortLineBreakEnabledDefault = true;
@@ -138,7 +138,7 @@ namespace YAT.Domain.Settings
 		private bool chunkLineBreakEnabled;
 
 		private int    maxLineCount;
-		private int    maxBytePerLineCount;
+		private int    maxLineLength;
 		private bool   showCopyOfActiveLine;
 
 		private InfoSeparatorEx infoSeparator; // = null;
@@ -194,7 +194,7 @@ namespace YAT.Domain.Settings
 			ChunkLineBreakEnabled     = rhs.ChunkLineBreakEnabled;
 
 			MaxLineCount         = rhs.MaxLineCount;
-			MaxBytePerLineCount  = rhs.MaxBytePerLineCount;
+			MaxLineLength        = rhs.MaxLineLength;
 			ShowCopyOfActiveLine = rhs.ShowCopyOfActiveLine;
 
 			InfoSeparator = rhs.InfoSeparator;
@@ -235,7 +235,7 @@ namespace YAT.Domain.Settings
 			ChunkLineBreakEnabled     = ChunkLineBreakEnabledDefault;
 
 			MaxLineCount         = MaxLineCountDefault;
-			MaxBytePerLineCount  = MaxBytePerLineCountDefault;
+			MaxLineLength        = MaxLineLengthDefault;
 			ShowCopyOfActiveLine = ShowCopyOfActiveLineDefault;
 
 			InfoSeparator = InfoSeparatorDefault;
@@ -648,19 +648,23 @@ namespace YAT.Domain.Settings
 		/// lines, redrawing of a list box item may take way too long! It even looks as if there
 		/// is a recursion within 'mscorlib.dll'.
 		/// </remarks>
-		/// <exception cref="ArgumentOutOfRangeException"> if count is below 1.</exception>
-		[XmlElement("MaxBytePerLineCount")]
-		public virtual int MaxBytePerLineCount
+		/// <remarks>
+		/// Named "length" rather than "char count" or "byte count" because it is either or,
+		/// depending on the terminal type. Also, "length" seems the most appropriate term.
+		/// </remarks>
+		/// <exception cref="ArgumentOutOfRangeException"> if length is below 1.</exception>
+		[XmlElement("MaxLineLength")]
+		public virtual int MaxLineLength
 		{
-			get { return (this.maxBytePerLineCount); }
+			get { return (this.maxLineLength); }
 			set
 			{
-				if (this.maxBytePerLineCount != value)
+				if (this.maxLineLength != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Byte per line count must at least be 1!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+						throw (new ArgumentOutOfRangeException("value", value, "Line length must at least be 1!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
-					this.maxBytePerLineCount = value;
+					this.maxLineLength = value;
 					SetMyChanged();
 				}
 			}
@@ -812,7 +816,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^  ChunkLineBreakEnabled    .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  MaxLineCount        .GetHashCode();
-				hashCode = (hashCode * 397) ^  MaxBytePerLineCount .GetHashCode();
+				hashCode = (hashCode * 397) ^  MaxLineLength       .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowCopyOfActiveLine.GetHashCode();
 
 				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
@@ -872,7 +876,7 @@ namespace YAT.Domain.Settings
 				ChunkLineBreakEnabled    .Equals(other.ChunkLineBreakEnabled)     &&
 
 				MaxLineCount        .Equals(other.MaxLineCount)         &&
-				MaxBytePerLineCount .Equals(other.MaxBytePerLineCount)  &&
+				MaxLineLength       .Equals(other.MaxLineLength)        &&
 				ShowCopyOfActiveLine.Equals(other.ShowCopyOfActiveLine) &&
 
 				ObjectEx.Equals(InfoSeparator, other.InfoSeparator) &&
