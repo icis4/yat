@@ -100,10 +100,11 @@ New:
 - Additional option [View > Show Duration (Line)] (feature request #348).
 - Additional terminal option [Include Port Control Events] (feature request #350).
 - Additional log channel [Log Port Control] (related to feature request #350).
-- Text terminals: Additional options to control line break; useful to communicate with devices that
-  do use text messages but without EOL sequence.
+- Text terminals: Additional options to control line break:
    > Length line break (feature request #224).
+     Useful to limit the number of characters displayed per line, i.e. "char wrap".
    > Timed line break (feature request #340).
+     Useful to communicate with devices that do use text messages but without EOL sequence.
 
 Important changes:
 - Serial COM port again uses the term RTS (Ready To Send) as that is still most commonly used.
@@ -127,7 +128,6 @@ Important changes:
 
 Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
-- Optional user name of terminal is taken into account again (bug #415).
 - Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
 - Handling of potential 'ObjectDisposedException' when disconnecting USB/RS-232 converters (USB CDC)
   without closing the serial COM port now also handles potential 'UnauthorizedAccessException'
@@ -143,6 +143,8 @@ Fixed bugs:
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
+- Optional user name of terminal is again taken into account (bug #415).
+- Binary terminals: Synchronization on timed line break added (related to feature request #340).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

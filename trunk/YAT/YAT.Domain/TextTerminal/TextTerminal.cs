@@ -1408,7 +1408,7 @@ namespace YAT.Domain
 			{
 				// Process line length:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration.
+				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
 				{
 					DisplayElementCollection info;
 					PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
