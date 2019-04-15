@@ -1053,7 +1053,7 @@ namespace YAT.View.Forms
 
 				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text)
 					this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
-				else                    // incl. TerminalType == Domain.TerminalType.Binary:
+				else                   // incl. (TerminalType == Domain.TerminalType.Binary)
 					this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of bytes per line is limited to improve performance.");
 			}
 			finally

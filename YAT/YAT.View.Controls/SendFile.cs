@@ -487,7 +487,7 @@ namespace YAT.View.Controls
 						{
 							explicitDefaultRadixIsTakenIntoAccount = true; // Supported for text, RTF, XML,...
 						}
-						else // incl. Type == Domain.TerminalType.Binary:
+						else   // incl. (Type == Domain.TerminalType.Binary)
 						{
 							explicitDefaultRadixIsTakenIntoAccount = false; // Not supported for any binary format.
 
