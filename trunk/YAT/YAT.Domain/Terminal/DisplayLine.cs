@@ -78,6 +78,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
+		private int charCount; // = 0;
 		private int byteCount; // = 0;
 
 		#endregion
@@ -132,19 +133,6 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns number of raw byte content within collection.
-		/// </summary>
-		/// <remarks>
-		/// Note that value reflects the byte count of the elements contained in the collection,
-		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
-		/// total byte count of a sent or received sequence, a hidden EOL is e.g. not reflected.
-		/// </remarks>
-		public virtual int ByteCount
-		{
-			get { return (this.byteCount); }
-		}
-
-		/// <summary>
 		/// Appends and returns the text of all display elements.
 		/// </summary>
 		public virtual string Text
@@ -157,6 +145,30 @@ namespace YAT.Domain
 
 				return (sb.ToString());
 			}
+		}
+
+		/// <summary>
+		/// The number of characters of the elements contained in the collection.
+		/// </summary>
+		/// <remarks>
+		/// ASCII menmonics (e.g. &lt;CR&gt;) are considered a single shown character.
+		/// </remarks>
+		public virtual int CharCount
+		{
+			get { return (this.charCount); }
+		}
+
+		/// <summary>
+		/// The number of raw bytes of the elements contained in the collection.
+		/// </summary>
+		/// <remarks>
+		/// Note that value reflects the byte count of the elements contained in the collection,
+		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
+		/// total byte count of a sent or received sequence, a hidden EOL is e.g. not reflected.
+		/// </remarks>
+		public virtual int ByteCount
+		{
+			get { return (this.byteCount); }
 		}
 
 		/// <summary>
@@ -193,13 +205,14 @@ namespace YAT.Domain
 			else
 			{
 				// For performance reasons, append the item to the last item if possible:
-				int lastIndex = Count - 1;
+				int lastIndex = (Count - 1);
 				if (this[lastIndex].AcceptsAppendOf(item))
 					this[lastIndex].Append(item);
 				else
 					base.Add(item);
 			}
 
+			this.charCount += item.CharCount;
 			this.byteCount += item.ByteCount;
 		}
 
@@ -217,8 +230,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public new void RemoveAt(int index)
 		{
-			if (this[index].IsContent)
-				this.byteCount -= this[index].ByteCount;
+			this.charCount -= this[index].CharCount;
+			this.byteCount -= this[index].ByteCount;
 
 			base.RemoveAt(index);
 		}
@@ -348,6 +361,7 @@ namespace YAT.Domain
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
+					indent + "> CharCount: " + this.charCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> Elements: " + Environment.NewLine + ElementsToDiagnosticsString(indent + "   "));
 		}

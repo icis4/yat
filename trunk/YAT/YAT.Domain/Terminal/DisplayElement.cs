@@ -120,14 +120,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TxData(byte origin, string text)
-				: base(Direction.Tx, origin, text)
-			{
+				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public TxData(byte[] origin, string text)
-				: base(Direction.Tx, origin, text)
-			{
+				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -143,14 +143,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TxControl(byte origin, string text)
-				: base(Direction.Tx, origin, text)
-			{
+				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public TxControl(byte[] origin, string text)
-				: base(Direction.Tx, origin, text)
-			{
+				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -166,14 +166,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public RxData(byte origin, string text)
-				: base(Direction.Rx, origin, text)
-			{
+				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public RxData(byte[] origin, string text)
-				: base(Direction.Rx, origin, text)
-			{
+				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -189,14 +189,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public RxControl(byte origin, string text)
-				: base(Direction.Rx, origin, text)
-			{
+				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public RxControl(byte[] origin, string text)
-				: base(Direction.Rx, origin, text)
-			{
+				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
+			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -591,6 +591,7 @@ namespace YAT.Domain
 		private Direction direction;               // = Direction.None;
 		private List<Pair<byte[], string>> origin; // = null;
 		private string text;                       // = null;
+		private int charCount;                     // = 0;
 		private int byteCount;                     // = 0;
 		private ElementAttributes attributes;      // = ElementAttributes.None.
 
@@ -622,28 +623,29 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, string text, ElementAttributes flags)
 		{
-			Initialize(direction, null, text, 0, flags);
+			Initialize(direction, null, text, 0, 0, flags);
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, byte origin, string text)
-			: this(direction, new byte[] { origin }, text)
+		private DisplayElement(Direction direction, byte origin, string text, int charCount)
+			: this(direction, new byte[] { origin }, text, charCount)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, byte[] origin, string text)
-		{
+		private DisplayElement(Direction direction, byte[] origin, string text, int charCount)
+		{                                                                   // Makes sense since elements of the same type will be appended.
 			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, origin.Length, ElementAttributes.Content);
+			Initialize(direction, l, text, charCount, origin.Length, ElementAttributes.Content);
 		}
 
-		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int byteCount, ElementAttributes attributes)
+		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int charCount, int byteCount, ElementAttributes attributes)
 		{
 			this.direction  = direction;
 			this.origin     = origin;
 			this.text       = text;
+			this.charCount  = charCount;
 			this.byteCount  = byteCount;
 			this.attributes = attributes;
 		}
@@ -690,6 +692,14 @@ namespace YAT.Domain
 		{
 			get { return (this.text); }
 			set { this.text = value;  }
+		}
+
+		/// <summary></summary>
+		[XmlAttribute("CharCount")]
+		public virtual int CharCount
+		{
+			get { return (this.charCount); }
+			set { this.charCount = value;  }
 		}
 
 		/// <summary></summary>
@@ -774,6 +784,7 @@ namespace YAT.Domain
 			clone.direction  = this.direction;
 			clone.origin     = PerformDeepClone(this.origin);
 			clone.text       = this.text;
+			clone.charCount  = this.charCount;
 			clone.byteCount  = this.byteCount;
 			clone.attributes = this.attributes;
 
@@ -795,10 +806,11 @@ namespace YAT.Domain
 			clone.origin = clonedOrigin;
 			clone.byteCount = origin.Value1.Length;
 
-			// Replace text:
+			// Replace text and charCount:
 			string text = origin.Value2;
 			clone.text = text;
-
+			clone.charCount = 1; // Elements are always created corresponding to a single shown character.
+			                     // ASCII menmonics (e.g. <CR>) are considered a single shown character.
 			return (clone);
 		}
 
@@ -850,6 +862,7 @@ namespace YAT.Domain
 				if (this.text != null)
 					this.text += other.text;
 
+				this.charCount += other.charCount;
 				this.byteCount += other.byteCount;
 
 				if (other.Highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous element.
