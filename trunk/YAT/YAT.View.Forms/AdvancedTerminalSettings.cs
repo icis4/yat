@@ -1073,7 +1073,7 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
-			bool isText = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text);
+			bool isBinary = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Binary);
 
 			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
 			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUsbSerialHid;
@@ -1112,7 +1112,16 @@ namespace YAT.View.Forms
 				checkBox_ShowPort.Checked           = this.settingsInEdit.Terminal.Display.ShowPort;
 				checkBox_ShowDirection.Checked      = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked         = this.settingsInEdit.Terminal.Display.ShowLength;
-				ComboBoxHelper.Select(comboBox_LengthSelection, (Domain.Utilities.LengthSelectionEx)this.settingsInEdit.Terminal.Display.LengthSelection);
+
+				if (!isBinary) {
+					comboBox_LengthSelection.Enabled = true;
+					ComboBoxHelper.Select(comboBox_LengthSelection, (Domain.Utilities.LengthSelectionEx)this.settingsInEdit.Terminal.Display.LengthSelection);
+				}
+				else { // isBinary => preset and disable:
+					ComboBoxHelper.Select(comboBox_LengthSelection, (Domain.Utilities.LengthSelectionEx)Domain.Utilities.LengthSelection.ByteCount);
+					comboBox_LengthSelection.Enabled = false;
+				}
+
 				checkBox_ShowDuration.Checked       = this.settingsInEdit.Terminal.Display.ShowDuration;
 				checkBox_IncludePortControl.Enabled = (isSerialPort || isUsbSerialHid);
 				checkBox_IncludePortControl.Checked = this.settingsInEdit.Terminal.Display.IncludePortControl;

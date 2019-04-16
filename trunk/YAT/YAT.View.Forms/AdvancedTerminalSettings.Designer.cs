@@ -826,7 +826,7 @@
 			this.comboBox_LineNumberSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_LineNumberSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_LineNumberSelection.Location = new System.Drawing.Point(131, 143);
+			this.comboBox_LineNumberSelection.Location = new System.Drawing.Point(131, 142);
 			this.comboBox_LineNumberSelection.Name = "comboBox_LineNumberSelection";
 			this.comboBox_LineNumberSelection.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_LineNumberSelection.TabIndex = 9;
@@ -1308,10 +1308,12 @@
 			this.comboBox_LengthSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_LengthSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_LengthSelection.Location = new System.Drawing.Point(131, 235);
+			this.comboBox_LengthSelection.Location = new System.Drawing.Point(131, 234);
 			this.comboBox_LengthSelection.Name = "comboBox_LengthSelection";
 			this.comboBox_LengthSelection.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_LengthSelection.TabIndex = 17;
+			this.toolTip.SetToolTip(this.comboBox_LengthSelection, "Text terminals: Selectable, default is [Char Count].\r\nBinary terminals: Fixed to " +
+        "[Byte Count].");
 			this.comboBox_LengthSelection.SelectedIndexChanged += new System.EventHandler(this.comboBox_LengthSelection_SelectedIndexChanged);
 			// 
 			// AdvancedTerminalSettings
