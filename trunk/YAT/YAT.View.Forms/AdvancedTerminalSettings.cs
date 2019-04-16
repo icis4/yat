@@ -290,6 +290,14 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.ShowLength = checkBox_ShowLength.Checked;
 		}
 
+		private void comboBox_LengthSelection_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Display.LengthSelection = (Domain.Utilities.LengthSelectionEx)(comboBox_LengthSelection.SelectedItem);
+		}
+
 		private void checkBox_ShowDuration_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1048,6 +1056,7 @@ namespace YAT.View.Forms
 				comboBox_TxRadix              .Items.AddRange(Domain.RadixEx                        .GetItems());
 				comboBox_RxRadix              .Items.AddRange(Domain.RadixEx                        .GetItems());
 				comboBox_LineNumberSelection  .Items.AddRange(Domain.Utilities.LineNumberSelectionEx.GetItems());
+				comboBox_LengthSelection      .Items.AddRange(Domain.Utilities.LengthSelectionEx    .GetItems());
 				comboBox_Endianness           .Items.AddRange(Domain.EndiannessEx                   .GetItems());
 				comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx             .GetItems());
 
@@ -1103,7 +1112,7 @@ namespace YAT.View.Forms
 				checkBox_ShowPort.Checked           = this.settingsInEdit.Terminal.Display.ShowPort;
 				checkBox_ShowDirection.Checked      = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked         = this.settingsInEdit.Terminal.Display.ShowLength;
-			////ComboBoxHelper.Select(comboBox_LengthSelection, (Domain.Utilities.LengthSelectionEx)this.settingsInEdit.Terminal.Display.LengthSelection);
+				ComboBoxHelper.Select(comboBox_LengthSelection, (Domain.Utilities.LengthSelectionEx)this.settingsInEdit.Terminal.Display.LengthSelection);
 				checkBox_ShowDuration.Checked       = this.settingsInEdit.Terminal.Display.ShowDuration;
 				checkBox_IncludePortControl.Enabled = (isSerialPort || isUsbSerialHid);
 				checkBox_IncludePortControl.Checked = this.settingsInEdit.Terminal.Display.IncludePortControl;
