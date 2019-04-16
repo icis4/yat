@@ -162,6 +162,7 @@
     <Compile Include="TextTerminal\TextTerminal.cs" />
     <Compile Include="TextTerminal\ControlCharRadix.cs" />
     <Compile Include="Utilities\ByteHelper.cs" />
+    <Compile Include="Utilities\LengthSelection.cs" />
     <Compile Include="Utilities\LineNumberSelection.cs" />
     <Compile Include="Utilities\RtfReaderHelper.cs" />
     <Compile Include="Utilities\XmlReaderHelper.cs" />

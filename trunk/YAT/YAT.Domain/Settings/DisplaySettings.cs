@@ -81,6 +81,18 @@ namespace YAT.Domain.Settings
 		public const bool ShowLengthDefault = false;
 
 		/// <summary></summary>
+		public const LengthSelection LengthSelectionTextDefault = LengthSelectionEx.TextDefault;
+
+		/// <summary></summary>
+		public const LengthSelection LengthSelectionBinaryDefault = LengthSelectionEx.BinaryDefault;
+
+		/// <summary>
+		/// Default is <see cref="LengthSelectionBinaryDefault"/> as its value of
+		/// <see cref="LengthSelection.ByteCount"/> is supported by all terminal types.
+		/// </summary>
+		public const LengthSelection LengthSelectionDefault = LengthSelectionBinaryDefault;
+
+		/// <summary></summary>
 		public const bool ShowDurationDefault = false;
 
 		/// <summary></summary>
@@ -129,6 +141,7 @@ namespace YAT.Domain.Settings
 		private bool   showPort;
 		private bool   showDirection;
 		private bool   showLength;
+		private LengthSelection lengthSelection;
 		private bool   showDuration;
 		private string timeDurationFormat;
 		private bool   includePortControl;
@@ -185,6 +198,7 @@ namespace YAT.Domain.Settings
 			ShowPort             = rhs.ShowPort;
 			ShowDirection        = rhs.ShowDirection;
 			ShowLength           = rhs.ShowLength;
+			LengthSelection      = rhs.LengthSelection;
 			ShowDuration         = rhs.ShowDuration;
 			TimeDurationFormat   = rhs.TimeDurationFormat;
 			IncludePortControl   = rhs.IncludePortControl;
@@ -225,6 +239,7 @@ namespace YAT.Domain.Settings
 			TimeDeltaFormat      = TimeDeltaFormatDefault;
 			ShowPort             = ShowPortDefault;
 			ShowDirection        = ShowDirectionDefault;
+			LengthSelection      = LengthSelectionDefault;
 			ShowLength           = ShowLengthDefault;
 			ShowDuration         = ShowDurationDefault;
 			TimeDurationFormat   = TimeDurationFormatDefault;
@@ -517,10 +532,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>
-		/// This option is currently fixed to the byte count. Could potentially be extended such it
-		/// shows the character count for multi-byte encodings (string/character/Unicode radix).
-		/// </remarks>
+		/// <summary></summary>
 		[XmlElement("ShowLength")]
 		public virtual bool ShowLength
 		{
@@ -530,6 +542,21 @@ namespace YAT.Domain.Settings
 				if (this.showLength != value)
 				{
 					this.showLength = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("LengthSelection")]
+		public virtual LengthSelection LengthSelection
+		{
+			get { return (this.lengthSelection); }
+			set
+			{
+				if (this.lengthSelection != value)
+				{
+					this.lengthSelection = value;
 					SetMyChanged();
 				}
 			}
@@ -807,6 +834,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^  ShowPort           .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowDirection      .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowLength         .GetHashCode();
+				hashCode = (hashCode * 397) ^  LengthSelection    .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowDuration       .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  IncludePortControl .GetHashCode();
@@ -867,6 +895,7 @@ namespace YAT.Domain.Settings
 				ShowPort                           .Equals(other.ShowPort)            &&
 				ShowDirection                      .Equals(other.ShowDirection)       &&
 				ShowLength                         .Equals(other.ShowLength)          &&
+				LengthSelection                    .Equals(other.LengthSelection)     &&
 				ShowDuration                       .Equals(other.ShowDuration)        &&
 				StringEx.EqualsOrdinal(TimeDurationFormat, other.TimeDurationFormat)  &&
 				IncludePortControl                 .Equals(other.IncludePortControl)  &&

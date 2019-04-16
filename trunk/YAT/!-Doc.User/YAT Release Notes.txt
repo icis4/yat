@@ -125,6 +125,7 @@ Important changes:
 - Text terminals: Refactoring and refinement of EOL handling (related to feature requests #224,
   #340 and #347). Any sequence and mix of received and sent characters (even quite exotic sequences)
   should now be correctly handled and displayed. Corresponding test coverage enlarged.
+- Text terminals: Option to show length as number of characters (related to feature request #224).
 
 Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
