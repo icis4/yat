@@ -1336,13 +1336,13 @@ namespace YAT.Domain
 			if ((displaySettings.LengthLineBreak.Enabled) &&
 				(lineState.Position != LinePosition.End))
 			{
-				if (lineState.Elements.ByteCount >= displaySettings.LengthLineBreak.Length)
+				if (lineState.Elements.CharCount >= displaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
 			}
 
 			if (lineState.Position != LinePosition.End)
 			{
-				if ((lineState.Elements.ByteCount >= TerminalSettings.Display.MaxLineLength) &&
+				if ((lineState.Elements.CharCount >= TerminalSettings.Display.MaxLineLength) &&
 					(lineState.Position != LinePosition.ContentExceeded))
 				{
 					lineState.Position = LinePosition.ContentExceeded;
@@ -1358,7 +1358,7 @@ namespace YAT.Domain
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
-				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
+				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
@@ -1388,7 +1388,7 @@ namespace YAT.Domain
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
 			// Potentially suppress empty lines that only contain hidden pending EOL character(s):
-			bool isEmptyLine = (lineState.Elements.ByteCount == 0);
+			bool isEmptyLine = (lineState.Elements.CharCount == 0);
 			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
 			if (isEmptyLine && isPendingEol) // Intended empty lines must be shown!
 			{
@@ -1408,10 +1408,16 @@ namespace YAT.Domain
 			{
 				// Process line length:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
+				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count"/"char count" and "line duration".
 				{
+					int length;
+					if (TerminalSettings.Display.LengthSelection == LengthSelection.CharCount)
+						length = lineState.Elements.CharCount;
+					else        // incl. Display.LengthSelection == LengthSelection.ByteCount)
+						length = lineState.Elements.ByteCount;
+
 					DisplayElementCollection info;
-					PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
+					PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
 					lineEnd.AddRange(info);
 				}
 				lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!

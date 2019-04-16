@@ -199,6 +199,9 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		/// <remarks>
+		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// </remarks>
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:

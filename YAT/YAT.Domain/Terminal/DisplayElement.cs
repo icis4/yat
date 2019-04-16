@@ -401,28 +401,28 @@ namespace YAT.Domain
 		public class DataLength : InfoElement
 		{
 			/// <summary></summary>
-			public int LengthByteCount { get; }
+			public int Length { get; }
 
 			/// <summary></summary>
 			public DataLength(DataLength other)
 				: base(other.Direction, other.Text)
 			{
-				LengthByteCount = other.LengthByteCount;
+				Length = other.Length;
 			}
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public DataLength(int byteCount, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, byteCount, enclosureLeft, enclosureRight)
+			public DataLength(int length, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, length, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public DataLength(Direction direction, int byteCount, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + byteCount.ToString(CultureInfo.InvariantCulture) + enclosureRight)
+			public DataLength(Direction direction, int length, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight)
 			{
-				LengthByteCount = byteCount;
+				Length = length;
 			}
 		}
 

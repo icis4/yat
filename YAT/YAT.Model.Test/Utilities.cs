@@ -236,7 +236,11 @@ namespace YAT.Model.Test
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedElementCounts { get; }
 
-			/// <summary>The expected number of raw byte content per display line, including potentially hidden EOL or control bytes.</summary>
+			/// <summary>The expected number of shown characters per display line, ASCII menmonics (e.g. &lt;CR&gt;) are considered a single shown character.</summary>
+			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
+			public int[] ExpectedCharCounts { get; }
+
+			/// <summary>The expected number of raw byte content per display line, without hidden EOL or control bytes.</summary>
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedByteCounts { get; }
 
@@ -256,10 +260,12 @@ namespace YAT.Model.Test
 				ExpectedLineCount = command.TextLines.Length;
 
 				ExpectedElementCounts = new int[ExpectedLineCount];
+				ExpectedCharCounts    = new int[ExpectedLineCount];
 				ExpectedByteCounts    = new int[ExpectedLineCount];
 				for (int i = 0; i < ExpectedLineCount; i++)
 				{
 					ExpectedElementCounts[i] = 4; // LineStart + Data + EOL + LineBreak.
+					ExpectedCharCounts[i]    = command.TextLines[i].Length + 2; // Content + EOL.
 					ExpectedByteCounts[i]    = command.TextLines[i].Length + 2; // Content + EOL.
 				}
 
@@ -271,16 +277,18 @@ namespace YAT.Model.Test
 			/// <param name="command">The test command.</param>
 			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
 			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
-			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, including potentially hidden EOL or control bytes.</param>
+			/// <param name="expectedCharCounts">The expected number of shown characters per display line, ASCII menmonics (e.g. &lt;CR&gt;) are considered a single shown character.</param>
+			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, without hidden EOL or control bytes.</param>
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
 			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
+			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedCharCounts, int[] expectedByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
 			{
 				Command = command;
 
 				ExpectedLineCount         = expectedLineCount;
 				ExpectedElementCounts     = expectedElementCounts;
+				ExpectedCharCounts        = expectedCharCounts;
 				ExpectedByteCounts        = expectedByteCounts;
 				ExpectedAlsoApplyToA      = expectedAlsoApplyToA;
 				ClearedIsExpectedInTheEnd = clearedIsExpectedInTheEnd;
@@ -293,6 +301,19 @@ namespace YAT.Model.Test
 				{
 					int totalCount = 0;
 					foreach (int count in ExpectedElementCounts)
+						totalCount += count;
+
+					return (totalCount);
+				}
+			}
+
+			/// <summary>The expected number of shown characters in total.</summary>
+			public int ExpectedTotalCharCount
+			{
+				get
+				{
+					int totalCount = 0;
+					foreach (int count in ExpectedCharCounts)
 						totalCount += count;
 
 					return (totalCount);
@@ -332,6 +353,7 @@ namespace YAT.Model.Test
 
 					hashCode = (hashCode * 397) ^  ExpectedLineCount                                    .GetHashCode();
 					hashCode = (hashCode * 397) ^ (ExpectedElementCounts != null ? ExpectedElementCounts.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (ExpectedCharCounts    != null ? ExpectedCharCounts   .GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (ExpectedByteCounts    != null ? ExpectedByteCounts   .GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^  ExpectedAlsoApplyToA                                 .GetHashCode();
 
@@ -364,6 +386,7 @@ namespace YAT.Model.Test
 					ObjectEx            .Equals(Command,               other.Command) &&
 					ExpectedLineCount   .Equals(                       other.ExpectedLineCount) &&
 					ArrayEx       .ValuesEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
+					ArrayEx       .ValuesEqual( ExpectedCharCounts,    other.ExpectedCharCounts) &&
 					ArrayEx       .ValuesEqual( ExpectedByteCounts,    other.ExpectedByteCounts) &&
 					ExpectedAlsoApplyToA.Equals(                       other.ExpectedAlsoApplyToA)
 				);
@@ -1286,6 +1309,9 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		/// <remarks>
+		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// </remarks>
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleByteCount, int expectedPerCycleLineCount, int cycle = 1)
 		{
 			// Calculate total expected counts at the receiver side:
@@ -1444,13 +1470,16 @@ namespace YAT.Model.Test
 					{
 						int index                = i % testSet.ExpectedElementCounts.Length;
 						int expectedElementCount =     testSet.ExpectedElementCounts[index];
+						int expectedCharCount    =     testSet.ExpectedCharCounts[index];
 						int expectedByteCount    =     testSet.ExpectedByteCounts[index];
 
 						var displayLineA = displayLinesA[i];
 						var displayLineB = displayLinesB[i];
 
-						if ((displayLineB.Count     == displayLineA.Count) &&
-							(displayLineB.Count     == expectedElementCount) &&
+						if ((displayLineB.Count     == displayLineA.Count)     &&
+							(displayLineB.Count     == expectedElementCount)   &&
+							(displayLineB.CharCount == displayLineA.CharCount) &&
+							(displayLineB.CharCount == expectedCharCount)      &&
 							(displayLineB.ByteCount == displayLineA.ByteCount) &&
 							(displayLineB.ByteCount == expectedByteCount))
 						{
@@ -1474,6 +1503,9 @@ namespace YAT.Model.Test
 								"Expected = " + expectedElementCount + " element(s), " +
 								"A = " + displayLineA.Count + " element(s), " +
 								"B = " + displayLineB.Count + " element(s)," + Environment.NewLine +
+								"Expected = " + expectedCharCount + " char(s), " +
+								"A = " + displayLineA.CharCount + " char(s), " +
+								"B = " + displayLineB.CharCount + " char(s)." + Environment.NewLine +
 								"Expected = " + expectedByteCount + " byte(s), " +
 								"A = " + displayLineA.ByteCount + " byte(s), " +
 								"B = " + displayLineB.ByteCount + " byte(s)." + Environment.NewLine +
