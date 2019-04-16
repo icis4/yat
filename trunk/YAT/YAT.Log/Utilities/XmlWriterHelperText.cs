@@ -100,7 +100,7 @@ namespace YAT.Log.Utilities
 
 			DateTime timeStamp = DateTime.MinValue;
 			string portStr = "";
-			int lengthByteCount = 0;
+			int length = 0;
 
 			bool containsTx = false;
 			bool containsRx = false;
@@ -182,7 +182,7 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.DataLength);
 					if (casted != null)
 					{
-						lengthByteCount = casted.LengthByteCount;
+						length = casted.Length;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
@@ -204,7 +204,7 @@ namespace YAT.Log.Utilities
 			else
 				direction = Direction.None;
 
-			transferLine = new XmlTransferTextLine(timeStamp, portStr, direction, textStr, errorStr, lengthByteCount);
+			transferLine = new XmlTransferTextLine(timeStamp, portStr, direction, textStr, errorStr, length);
 
 			return (success);
 		}

@@ -3065,10 +3065,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		protected virtual void PrepareLineEndInfo(int byteCount, TimeSpan duration, out DisplayElementCollection lp)
+		protected virtual void PrepareLineEndInfo(int length, TimeSpan duration, out DisplayElementCollection lp)
 		{
-			if (TerminalSettings.Display.ShowLength || // = byte count.
-			    TerminalSettings.Display.ShowDuration) // = line duration.
+			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count"/"char count" and "line duration".
 			{
 				lp = new DisplayElementCollection(4); // Preset the required capacity to improve memory management.
 
@@ -3077,7 +3076,7 @@ namespace YAT.Domain
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 
-					lp.Add(new DisplayElement.DataLength(byteCount, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
+					lp.Add(new DisplayElement.DataLength(length, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
 				}
 
 				if (TerminalSettings.Display.ShowDuration)
