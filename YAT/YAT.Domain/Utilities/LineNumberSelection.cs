@@ -57,8 +57,8 @@ namespace YAT.Domain.Utilities
 	{
 		#region String Definitions
 
-		private const string Total_string  = "Total absolute";
-		private const string Buffer_string = "Buffer relative";
+		private const string Total_string  = "Total Absolute";
+		private const string Buffer_string = "Buffer Relative";
 
 		#endregion
 
