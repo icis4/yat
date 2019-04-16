@@ -28,6 +28,8 @@ using System.Xml.Serialization;
 
 using MKY.Text;
 
+using YAT.Domain.Utilities;
+
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
@@ -130,12 +132,16 @@ namespace YAT.Domain.Settings
 
 					bool isBinary = ((TerminalTypeEx)value).IsBinary;
 
-					if (Display != null) {
+					if (Display != null)
+					{
 						Display.TxRadix = (isBinary ? Radix.Hex : Radix.String);
 						Display.RxRadix = (isBinary ? Radix.Hex : Radix.String);
+
+						Display.LengthSelection = (isBinary ? LengthSelection.ByteCount : LengthSelection.CharCount);
 					}
 
-					if (CharReplace != null) {
+					if (CharReplace != null)
+					{
 						CharReplace.ReplaceControlChars = (!isBinary);
 						CharReplace.ReplaceTab          = (!isBinary);
 						CharReplace.ReplaceSpace        = (!isBinary);
