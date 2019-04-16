@@ -697,6 +697,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowPort             = f.SettingsResult.Terminal.Display.ShowPort;
 				this.settingsInEdit.Terminal.Display.ShowDirection        = f.SettingsResult.Terminal.Display.ShowDirection;
 				this.settingsInEdit.Terminal.Display.ShowLength           = f.SettingsResult.Terminal.Display.ShowLength;
+				this.settingsInEdit.Terminal.Display.LengthSelection      = f.SettingsResult.Terminal.Display.LengthSelection;
 				this.settingsInEdit.Terminal.Display.ShowDuration         = f.SettingsResult.Terminal.Display.ShowDuration;
 				this.settingsInEdit.Terminal.Display.IncludePortControl   = f.SettingsResult.Terminal.Display.IncludePortControl;
 
