@@ -105,6 +105,8 @@ New:
      Useful to limit the number of characters displayed per line, i.e. "char wrap".
    > Timed line break (feature request #340).
      Useful to communicate with devices that do use text messages but without EOL sequence.
+- Text terminals: Backspace (feature request #308) as well as bell controls are executed by default.
+                  Note that tabs have already been treated as tabs by default since YAT 1.99.22.
 
 Important changes:
 - Serial COM port again uses the term RTS (Ready To Send) as that is still most commonly used.

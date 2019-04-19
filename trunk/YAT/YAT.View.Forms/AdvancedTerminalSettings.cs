@@ -474,6 +474,22 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.CharReplace.ControlCharRadix = (Domain.ControlCharRadixEx)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
+		private void checkBox_ReplaceBell_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharReplace.ReplaceBell = checkBox_ReplaceBell.Checked;
+		}
+
+		private void checkBox_ReplaceBackspace_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace = checkBox_ReplaceBackspace.Checked;
+		}
+
 		private void checkBox_ReplaceTab_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1073,6 +1089,7 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
+			bool isText   = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text);
 			bool isBinary = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Binary);
 
 			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
@@ -1137,13 +1154,24 @@ namespace YAT.View.Forms
 				// Char replace:
 				bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
 				checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
-				label_ControlCharacterRadix.Enabled         = replaceControlChars;
 				comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
-				bool replaceTabEnabled                      =  replaceControlChars  &&  (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic);
+
+				bool replaceBellEnabled                     = (isText && replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic));
+				checkBox_ReplaceBell.Enabled                = replaceBellEnabled;
+				checkBox_ReplaceBell.Checked                = this.settingsInEdit.Terminal.CharReplace.ReplaceBell;
+				label_ReplaceBell.Enabled                   = replaceBellEnabled;
+
+				bool replaceBackspaceEnabled                = (isText && replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic));
+				checkBox_ReplaceBackspace.Enabled           = replaceBackspaceEnabled;
+				checkBox_ReplaceBackspace.Checked           = this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace;
+				label_ReplaceBackspace.Enabled              = replaceBackspaceEnabled;
+
+				bool replaceTabEnabled                      = (isText && replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic));
 				checkBox_ReplaceTab.Enabled                 = replaceTabEnabled;
 				checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
 				label_ReplaceTab.Enabled                    = replaceTabEnabled;
+
 				checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 				checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
 				checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
@@ -1219,7 +1247,11 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// The following list must default the same properties as
-		/// <see cref="View.Forms.TerminalSettings.ShowAdvancedSettings()"/> handles.
+		/// <see cref="TerminalSettings.ShowAdvancedSettings()"/> handles.
+		/// </remarks>
+		/// <remarks>
+		/// The following list must default the same values as
+		/// <see cref="Domain.Settings.TerminalSettings.TerminalType"/> handles.
 		/// </remarks>
 		private void SetDefaults()
 		{
@@ -1232,8 +1264,15 @@ namespace YAT.View.Forms
 
 				// Radix:
 				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
-				this.settingsInEdit.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
-				this.settingsInEdit.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+
+				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text) {
+					this.settingsInEdit.Terminal.Display.TxRadix = Domain.Settings.DisplaySettings.RadixTextDefault;
+					this.settingsInEdit.Terminal.Display.RxRadix = Domain.Settings.DisplaySettings.RadixTextDefault;
+				}
+				else {                 // incl. (TerminalType == Domain.TerminalType.Binary)
+					this.settingsInEdit.Terminal.Display.TxRadix = Domain.Settings.DisplaySettings.RadixBinaryDefault;
+					this.settingsInEdit.Terminal.Display.RxRadix = Domain.Settings.DisplaySettings.RadixBinaryDefault;
+				}
 
 				// Display:
 				this.settingsInEdit.Terminal.Display.ShowRadix           = Domain.Settings.DisplaySettings.ShowRadixDefault;
@@ -1246,10 +1285,12 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowDirection       = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowLength          = Domain.Settings.DisplaySettings.ShowLengthDefault;
 
-				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text)
+				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text) {
 					this.settingsInEdit.Terminal.Display.LengthSelection = Domain.Settings.DisplaySettings.LengthSelectionTextDefault;
-				else                   // incl. (TerminalType == Domain.TerminalType.Binary)
+				}
+				else {                 // incl. (TerminalType == Domain.TerminalType.Binary)
 					this.settingsInEdit.Terminal.Display.LengthSelection = Domain.Settings.DisplaySettings.LengthSelectionBinaryDefault;
+				}
 
 				this.settingsInEdit.Terminal.Display.ShowDuration        = Domain.Settings.DisplaySettings.ShowDurationDefault;
 				this.settingsInEdit.Terminal.Display.IncludePortControl  = Domain.Settings.DisplaySettings.IncludePortControlDefault;
@@ -1260,14 +1301,22 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 				this.settingsInEdit.Terminal.Display.MaxLineLength             = Domain.Settings.DisplaySettings.MaxLineLengthDefault;
 
-				// Char replace:
-				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
-				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
-				this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
-				this.settingsInEdit.Terminal.CharHide.Hide0x00               = Domain.Settings.CharHideSettings.Hide0x00Default;
-				this.settingsInEdit.Terminal.CharHide.Hide0xFF               = Domain.Settings.CharHideSettings.Hide0xFFDefault;
+				// Char replace/hide:
+				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text) {
+					this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsTextDefault;
+				}
+				else {                 // incl. (TerminalType == Domain.TerminalType.Binary)
+					this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsBinaryDefault;
+				}
+
+				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceBell      = Domain.Settings.CharReplaceSettings.ReplaceBellDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace = Domain.Settings.CharReplaceSettings.ReplaceBackspaceDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceTab       = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
+				this.settingsInEdit.Terminal.CharHide.HideXOnXOff         = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace     = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
+				this.settingsInEdit.Terminal.CharHide.Hide0x00            = Domain.Settings.CharHideSettings.Hide0x00Default;
+				this.settingsInEdit.Terminal.CharHide.Hide0xFF            = Domain.Settings.CharHideSettings.Hide0xFFDefault;
 
 				// USB Ser/HID:
 				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = MKY.IO.Serial.Usb.SerialHidDeviceSettings.IncludeNonPayloadDataDefault;
@@ -1278,8 +1327,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
 				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 
-				this.settingsInEdit.Terminal.Status.ShowFlowControlCount = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
-				this.settingsInEdit.Terminal.Status.ShowBreakCount       = Domain.Settings.StatusSettings.ShowBreakCountDefault;
+				this.settingsInEdit.Terminal.Status.ShowFlowControlCount          = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
+				this.settingsInEdit.Terminal.Status.ShowBreakCount                = Domain.Settings.StatusSettings.ShowBreakCountDefault;
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;

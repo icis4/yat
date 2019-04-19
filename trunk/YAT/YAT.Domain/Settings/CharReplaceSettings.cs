@@ -31,10 +31,25 @@ namespace YAT.Domain.Settings
 	public class CharReplaceSettings : MKY.Settings.SettingsItem, IEquatable<CharReplaceSettings>
 	{
 		/// <summary></summary>
-		public const bool ReplaceControlCharsDefault = true;
+		public const bool ReplaceControlCharsTextDefault = true;
+
+		/// <summary></summary>
+		public const bool ReplaceControlCharsBinaryDefault = false;
+
+		/// <remarks>
+		/// Default is <see cref="ReplaceControlCharsBinaryDefault"/> as its value of
+		/// <c>false</c> is less intrusive.
+		/// </remarks>
+		public const bool ReplaceControlCharsDefault = ReplaceControlCharsBinaryDefault;
 
 		/// <summary></summary>
 		public const ControlCharRadix ControlCharRadixDefault = ControlCharRadix.AsciiMnemonic;
+
+		/// <summary></summary>
+		public const bool ReplaceBellDefault = false;
+
+		/// <summary></summary>
+		public const bool ReplaceBackspaceDefault = false;
 
 		/// <summary></summary>
 		public const bool ReplaceTabDefault = false;
@@ -47,6 +62,8 @@ namespace YAT.Domain.Settings
 
 		private bool replaceControlChars;
 		private ControlCharRadix controlCharRadix;
+		private bool replaceBell;
+		private bool replaceBackspace;
 		private bool replaceTab;
 		private bool replaceSpace;
 
@@ -73,6 +90,8 @@ namespace YAT.Domain.Settings
 		{
 			ReplaceControlChars = rhs.ReplaceControlChars;
 			ControlCharRadix    = rhs.ControlCharRadix;
+			ReplaceBell         = rhs.ReplaceBell;
+			ReplaceBackspace    = rhs.ReplaceBackspace;
 			ReplaceTab          = rhs.ReplaceTab;
 			ReplaceSpace        = rhs.ReplaceSpace;
 
@@ -88,6 +107,8 @@ namespace YAT.Domain.Settings
 
 			ReplaceControlChars = ReplaceControlCharsDefault;
 			ControlCharRadix    = ControlCharRadixDefault;
+			ReplaceBell         = ReplaceBellDefault;
+			ReplaceBackspace    = ReplaceBackspaceDefault;
 			ReplaceTab          = ReplaceTabDefault;
 			ReplaceSpace        = ReplaceSpaceDefault;
 		}
@@ -122,6 +143,36 @@ namespace YAT.Domain.Settings
 				if (this.controlCharRadix != value)
 				{
 					this.controlCharRadix = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ReplaceBell")]
+		public virtual bool ReplaceBell
+		{
+			get { return (this.replaceBell); }
+			set
+			{
+				if (this.replaceBell != value)
+				{
+					this.replaceBell = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ReplaceBackspace")]
+		public virtual bool ReplaceBackspace
+		{
+			get { return (this.replaceBackspace); }
+			set
+			{
+				if (this.replaceBackspace != value)
+				{
+					this.replaceBackspace = value;
 					SetMyChanged();
 				}
 			}
@@ -179,6 +230,8 @@ namespace YAT.Domain.Settings
 
 				hashCode = (hashCode * 397) ^ ReplaceControlChars.GetHashCode();
 				hashCode = (hashCode * 397) ^ ControlCharRadix   .GetHashCode();
+				hashCode = (hashCode * 397) ^ ReplaceBell        .GetHashCode();
+				hashCode = (hashCode * 397) ^ ReplaceBackspace   .GetHashCode();
 				hashCode = (hashCode * 397) ^ ReplaceTab         .GetHashCode();
 				hashCode = (hashCode * 397) ^ ReplaceSpace       .GetHashCode();
 
@@ -213,6 +266,8 @@ namespace YAT.Domain.Settings
 
 				ReplaceControlChars.Equals(other.ReplaceControlChars) &&
 				ControlCharRadix   .Equals(other.ControlCharRadix)    &&
+				ReplaceBell        .Equals(other.ReplaceBell)         &&
+				ReplaceBackspace   .Equals(other.ReplaceBackspace)    &&
 				ReplaceTab         .Equals(other.ReplaceTab)          &&
 				ReplaceSpace       .Equals(other.ReplaceSpace)
 			);
