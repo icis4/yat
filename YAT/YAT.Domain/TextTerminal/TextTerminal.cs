@@ -29,9 +29,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -115,7 +115,7 @@ namespace YAT.Domain
 				EolSequence = eolSequence;
 
 				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				TimeStamp = DateTime.Now;
 				PortStamp = null;
 
@@ -207,7 +207,7 @@ namespace YAT.Domain
 				AssertNotDisposed();
 
 				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				TimeStamp = DateTime.Now;
 				PortStamp = null;
 
@@ -771,14 +771,14 @@ namespace YAT.Domain
 					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
 					if (e.IsSingleByte)
 					{
-						// Note that the following code is similar as twice below but with differences such
-						// as treatment of 0xFF, comment,...
+						// Note that the following code is similar as several time below but with subtle differences
+						// such as treatment of 0xFF, comment,...
 
-						if ((b < 0x20) || (b == 0x7F))                   // ASCII control characters.
+						if      ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
 						{
 							return (base.ByteToElement(b, d, r));
 						}
-						else if (b == 0x20)                              // ASCII space.
+						else if  (b == 0x20)                             // ASCII space.
 						{
 							return (base.ByteToElement(b, d, r));
 						}                                                // Special case.
@@ -803,8 +803,8 @@ namespace YAT.Domain
 
 						if (((EncodingEx)e).IsUnicode)
 						{
-							// Note that the following code is similar as above and below but with differences such
-							// as no treatment of a lead byte, no treatment of 0xFF, treatment of 0xFFFD, comment,...
+							// Note that the following code is similar as above and below but with subtle differences
+							// such as no treatment of a lead byte, no treatment of 0xFF, treatment of 0xFFFD, comment,...
 
 							this.rxMultiByteDecodingStream.Add(b);
 
@@ -825,52 +825,52 @@ namespace YAT.Domain
 								{
 									this.rxMultiByteDecodingStream.Clear();
 
-									if ((code < 0x20) || (code == 0x7F)) // ASCII control characters.
+									if      ((code < 0x20) || (code == 0x7F))        // ASCII control characters.
 									{
 										return (base.ByteToElement((byte)code, d, r));
 									}
-									else if (code == 0x20)               // ASCII space.
+									else if (code == 0x20)                           // ASCII space.
 									{
 										return (base.ByteToElement((byte)code, d, r));
 									}
-									else                                 // ASCII printable character.
+									else                                             // ASCII printable character.
 									{                                                        // 'effectiveCharCount' is 1 for sure.
 										return (CreateDataElement(decodingArray, d, r, chars[0]));
 									}
 								}
 								else // Single 'unknown' character 0xFFFD:
 								{
-									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+									return (new DisplayElement.Nonentity());         // Nothing to decode (yet).
 								}
 							}
 							else if (effectiveCharCount == 0)
 							{
 								if (decodingArray.Length < e.GetMaxByteCount(1))
 								{
-									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
+									return (new DisplayElement.Nonentity());         // Nothing to decode (yet).
 								}
 								else
 								{
-									this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+									this.rxMultiByteDecodingStream.Clear();          // Reset decoding stream.
 
 									return (CreateInvalidBytesWarning(decodingArray, d, e));
 								}
 							}
 							else // (effectiveCharCount > 1) => Code doesn't fit into a single u16 value, thus more than one character will be returned.
 							{
-								this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+								this.rxMultiByteDecodingStream.Clear();              // Reset decoding stream.
 
 								return (CreateOutsideUnicodePlane0Warning(decodingArray, d, e));
 							}
 						}
 						else if ((EncodingEx)e == SupportedEncoding.UTF7)
 						{
-							// Note that the following code is similar as twice above but with differences such
-							// as treatment of Base64 bytes, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
+							// Note that the following code is similar as above and below but with subtle differences
+							// such as treatment of Base64 bytes, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
 							if (this.rxMultiByteDecodingStream.Count == 0)       // A first 'MultiByte' is either direct or lead byte.
 							{
-								if ((b < 0x20) || (b == 0x7F))                   // ASCII control characters.
+								if      ((b < 0x20) || (b == 0x7F))               // ASCII control characters.
 								{
 									return (base.ByteToElement(b, d, r));
 								}
@@ -926,8 +926,11 @@ namespace YAT.Domain
 									{                                                                         // 'effectiveCharCount' is 1 for sure.
 										DisplayElement encoded = CreateDataElement(decodingArray, d, r, chars);
 
+										// Note that the following code is similar as above and below but with subtle differences
+										// such as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
+
 										DisplayElement direct;
-										if ((b < 0x20) || (b == 0x7F))                   // ASCII control characters.
+										if      ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
 										{
 											direct = base.ByteToElement(b, d, r);
 										}
@@ -979,12 +982,12 @@ namespace YAT.Domain
 						}
 						else // Non-Unicode DBCS/MBCS.
 						{
-							// Note that the following code is similar as twice above but with differences such
-							// as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
+							// Note that the following code is similar as several times above but with subtle differences
+							// such as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
 							if (this.rxMultiByteDecodingStream.Count == 0)       // A first 'MultiByte' is either ASCII or lead byte.
 							{
-								if (b >= 0x80)                                   // DBCS/MBCS lead byte.
+								if      (b >= 0x80)                              // DBCS/MBCS lead byte.
 								{
 									this.rxMultiByteDecodingStream.Add(b);
 
@@ -1179,7 +1182,7 @@ namespace YAT.Domain
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
 
-			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
@@ -1213,10 +1216,16 @@ namespace YAT.Domain
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(Settings.TextDisplaySettings displaySettings, LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsToAdd)
+		private void ExecuteContent(Settings.TextDisplaySettings displaySettings, LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
 		{
+			replaceAlreadyStartedLine = false;
+
 			// Convert content:
-			var de = ByteToElement(b, d);
+			DisplayElement de;
+			bool isBackspace;
+			if (!ControlCharacterHasBeenExecuted(b, d, out de, out isBackspace))
+				de = ByteToElement(b, d); // Default conversion to value or ASCII mnemonic.
+
 			de.Highlight = lineState.Highlight;
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -1320,6 +1329,34 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
+				if (isBackspace)
+				{
+					// Note that backspace must be executed after EOL since...
+					// ...unconfirmed hidden EOL elements may have to be released.
+					// ...EOL could contain backspace, unlikely but possible.
+
+					// Remove the just added backspace:
+					int count = lineState.Elements.Count;
+					if ((count > 0) && (lineState.Elements[count] is DisplayElement.Nonentity))
+					{
+						lineState.Elements.RemoveLast();
+						RemoveSpaceIfNecessary(lineState, d);
+					}
+
+					// Remove the preceeding character:
+					if (lineState.Elements.CharCount > 0)
+					{
+						int intendedCharCount = (lineState.Elements.CharCount - 1);
+						while (lineState.Elements.CharCount > intendedCharCount)
+						{
+							lineState.Elements.RemoveLast();
+							RemoveSpaceIfNecessary(lineState, d);
+						}
+					}
+
+					replaceAlreadyStartedLine = true;
+				}
+
 				if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
 				{
 					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
@@ -1354,12 +1391,76 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
+		protected virtual bool ControlCharacterHasBeenExecuted(byte b, IODirection d, out DisplayElement de, out bool isBackspace)
+		{
+			isBackspace = false;
+
+			switch (b)
+			{
+				case 0x07: // <BEL>
+				{
+					if (!TerminalSettings.CharReplace.ReplaceBell)
+					{
+						SystemSounds.Beep.Play();
+
+						de = new DisplayElement.Nonentity();
+						return (true);
+					}
+
+					break;
+				}
+
+				case 0x08: // <BS>
+				{
+					if (!TerminalSettings.CharReplace.ReplaceBackspace)
+					{
+						de = new DisplayElement.Nonentity();
+						isBackspace = true;
+						return (true);
+					}
+
+					break;
+				}
+
+				case 0x09: // <TAB>
+				{
+					if (!TerminalSettings.CharReplace.ReplaceTab)
+					{
+						// Attention:
+						// In order to get well aligned tab stops, tab characters must be data elements.
+						// If they were control elements (i.e. sequence of data and control elements),
+						// tabs would only get aligned within the respective control element,
+						// thus resulting in misaligned tab stops.
+
+						de = CreateDataElement(b, d, "\t");
+						return (true);
+					}
+
+					break;
+				}
+			}
+
+			de = null;
+			return (false);
+		}
+
 		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
 					lp.Add(new DisplayElement.DataSpace());
+			}
+		}
+
+		private void RemoveSpaceIfNecessary(LineState lineState, IODirection d)
+		{
+			if (ElementsAreSeparate(d))
+			{
+				int count = lineState.Elements.Count;
+				if ((count > 0) && (lineState.Elements[count] is DisplayElement.DataSpace))
+					lineState.Elements.RemoveLast();
 			}
 		}
 
@@ -1383,7 +1484,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
@@ -1394,14 +1495,14 @@ namespace YAT.Domain
 			{
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Precondition: 'elements' must contain all elements since line start!
 				                                                                  //               This is given by (lineState.Elements.ByteCount == 0), i.e.
-			////suppressAlreadyStartedLine = true is not needed, see comment.     //               line has just been started and does not yet contain content.
+			////clearAlreadyStartedLine = true is not needed, see comment.        //               line has just been started and does not yet contain content.
 			}
 			else if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
 			#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				suppressAlreadyStartedLine = true;                                //            This is signaled by setting 'suppressAlreadyStartedLine'.
+				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			#endif
 			}
 			else
@@ -1431,7 +1532,7 @@ namespace YAT.Domain
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
 				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
@@ -1446,7 +1547,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			Settings.TextDisplaySettings displaySettings;
 			switch (raw.Direction)
@@ -1488,7 +1589,7 @@ namespace YAT.Domain
 			//
 			// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
 			//
-			// To change from retaining to continuous approach, the #if (DEBUG) around 'suppressAlreadyStartedLine' will
+			// To change from retaining to continuous approach, the #if (DEBUG) around 'clearAlreadyStartedLine' will
 			// have to be removed again. As a consequence, the flag can never get activated, thus excluding it (YAGNI).
 			// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 			//
@@ -1500,7 +1601,7 @@ namespace YAT.Domain
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, raw.PortStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, raw.PortStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
@@ -1518,7 +1619,14 @@ namespace YAT.Domain
 
 				// Content:
 				if (lineState.Position == LinePosition.Content)
-					ExecuteContent(displaySettings, lineState, raw.PortStamp, raw.Direction, b, elementsToAdd);
+				{
+					bool replaceAlreadyStartedLine;
+
+					ExecuteContent(displaySettings, lineState, raw.PortStamp, raw.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
+
+					if (replaceAlreadyStartedLine)
+						OnCurrentDisplayLineReplaced(raw.Direction, lineState.Elements); // Elements are cloned by OnCurrentDisplayLineReplaced().
+				}
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
@@ -1526,7 +1634,7 @@ namespace YAT.Domain
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimeout.Stop();
 
-					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+					ExecuteLineEnd(lineState, raw.TimeStamp, raw.PortStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 				}
 			}
 		}
@@ -1538,13 +1646,13 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
 		private void ExecuteTimedLineBreakOnReload(Settings.TextDisplaySettings displaySettings, LineState lineState, DateTime ts, string ps,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			if (lineState.Elements.Count > 0)
 			{
 				var span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
-					ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+					ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 				}
 			}
 
@@ -1590,18 +1698,18 @@ namespace YAT.Domain
 
 						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
-							var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+							var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 							var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-							bool suppressAlreadyStartedLine = false;
+							bool clearAlreadyStartedLine = false;
 
-							ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+							ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsToAdd);
 							OnDisplayLinesAdded(   this.bidirLineState.Direction, linesToAdd);
 
 						#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
-							if (suppressAlreadyStartedLine)
+							if (clearAlreadyStartedLine)
 								OnCurrentDisplayLineCleared(this.bidirLineState.Direction);
 						#endif
 						}
@@ -1627,18 +1735,18 @@ namespace YAT.Domain
 
 			if (lineState.Elements.Count > 0)
 			{
-				var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-				bool suppressAlreadyStartedLine = false;
+				bool clearAlreadyStartedLine = false;
 
-				ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+				ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 				OnDisplayElementsAdded(d, elementsToAdd);
 				OnDisplayLinesAdded(   d, linesToAdd);
 
 			#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
-				if (suppressAlreadyStartedLine)
+				if (clearAlreadyStartedLine)
 					OnCurrentDisplayLineCleared(d);
 			#endif
 			}

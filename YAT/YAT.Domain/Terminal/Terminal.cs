@@ -2719,25 +2719,9 @@ namespace YAT.Domain
 			else if (isControl)
 			{
 				if (TerminalSettings.CharReplace.ReplaceControlChars)
-				{
-					// Attention:
-					// In order to get well aligned tab stops, tab characters must be data elements.
-					// If they were control elements (i.e. sequence of data and control elements),
-					// tabs would only get aligned within the respective control element,
-					// thus resulting in misaligned tab stops.
-					if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab) // Keep tab as data element:
-					{
-						return (CreateDataElement(b, d, text));
-					}
-					else // Use control elements:
-					{
-						return (CreateControlElement(b, d, text));
-					}
-				}
-				else // Do not 'ReplaceControlChars' => Use normal data element:
-				{
+					return (CreateControlElement(b, d, text));
+				else                         // !ReplaceControlChars => Use normal data element:
 					return (CreateDataElement(b, d, text));
-				}
 			}
 			else // Neither 'isError' nor 'isByteToHide' nor 'isError' => Use normal data element:
 			{
@@ -2755,7 +2739,7 @@ namespace YAT.Domain
 		protected virtual string ByteToText(byte b, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
 		{
 			isByteToHide = false;
-			if (b == 0x00)
+			if      (b == 0x00)
 			{
 				if (TerminalSettings.CharHide.Hide0x00)
 					isByteToHide = true;
@@ -2844,7 +2828,11 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToAsciiString(byte b)
 		{
-			if ((b == 0x09) && !TerminalSettings.CharReplace.ReplaceTab)
+			if      ((b == '\a') && !TerminalSettings.CharReplace.ReplaceBell)
+				return ("\a");
+			else if ((b == '\b') && !TerminalSettings.CharReplace.ReplaceBackspace)
+				return ("\b");
+			else if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
 				return ("\t");
 			else
 				return ("<" + Ascii.ConvertToMnemonic(b) + ">");
@@ -3094,7 +3082,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine);
+		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine);
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
@@ -3107,9 +3095,9 @@ namespace YAT.Domain
 			// but may also be multiple lines.
 			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-			bool suppressAlreadyStartedLine = false;
+			bool clearAlreadyStartedLine = false;
 
-			ProcessRawChunk(raw, rawAttribute, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+			ProcessRawChunk(raw, rawAttribute, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 			if (elementsToAdd.Count > 0)
 			{
@@ -3124,9 +3112,9 @@ namespace YAT.Domain
 		#if (DEBUG)
 			// As described in 'BinaryTerminal/TextTerminal.ProcessRawChunk()', the current implementation retains
 			// the line until it is complete, i.e. until the final decision to filter or suppress could be done.
-			// As a consequence, the 'suppressAlreadyStartedLine' can never get activated, thus excluding it (YAGNI).
+			// As a consequence, the 'clearAlreadyStartedLine' can never get activated, thus excluding it (YAGNI).
 			// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
-			if (suppressAlreadyStartedLine)
+			if (clearAlreadyStartedLine)
 			{
 				OnCurrentDisplayLineCleared(raw.Direction);
 			}
@@ -4001,6 +3989,32 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineReplaced(IODirection direction, DisplayElementCollection currentLineElements)
+		{
+			switch (direction)
+			{
+				case IODirection.Tx:
+					OnCurrentDisplayLineSentReplaced(    new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
+					break;
+
+				case IODirection.Rx:
+					OnCurrentDisplayLineReceivedReplaced(new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
+					break;
+
+				case IODirection.Bidir:
+					OnCurrentDisplayLineSentReplaced(    new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
+					OnCurrentDisplayLineReceivedReplaced(new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
+					break;
+
+				case IODirection.None:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineSentReplaced(DisplayElementsEventArgs e)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
@@ -4020,16 +4034,16 @@ namespace YAT.Domain
 			switch (direction)
 			{
 				case IODirection.Tx:
-					OnCurrentDisplayLineSentCleared(new EventArgs ());
+					OnCurrentDisplayLineSentCleared(    new EventArgs());
 					break;
 
 				case IODirection.Rx:
-					OnCurrentDisplayLineReceivedCleared(new EventArgs ());
+					OnCurrentDisplayLineReceivedCleared(new EventArgs());
 					break;
 
 				case IODirection.Bidir:
-					OnCurrentDisplayLineSentCleared(new EventArgs ());
-					OnCurrentDisplayLineReceivedCleared(new EventArgs ());
+					OnCurrentDisplayLineSentCleared(    new EventArgs());
+					OnCurrentDisplayLineReceivedCleared(new EventArgs());
 					break;
 
 				case IODirection.None:
