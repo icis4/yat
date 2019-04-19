@@ -91,7 +91,7 @@ namespace YAT.Domain
 			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimeout breakTimeout)
 			{
 				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				TimeStamp = DateTime.Now;
 
 				SequenceAfter                                   = sequenceAfter;
@@ -182,7 +182,7 @@ namespace YAT.Domain
 				AssertNotDisposed();
 
 				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				TimeStamp = DateTime.Now;
 
 				SequenceAfter                                    .Reset();
@@ -516,7 +516,7 @@ namespace YAT.Domain
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
 
-			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
@@ -683,7 +683,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
 		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
@@ -693,7 +693,7 @@ namespace YAT.Domain
 			#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				suppressAlreadyStartedLine = true;                                //            This is signaled by setting 'suppressAlreadyStartedLine'.
+				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			#endif
 			}
 			else
@@ -717,7 +717,7 @@ namespace YAT.Domain
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
 				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
@@ -732,7 +732,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
+		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			if (linesToAdd.Count <= 0) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = raw.TimeStamp;
@@ -777,7 +777,7 @@ namespace YAT.Domain
 			//
 			// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
 			//
-			// To change from retaining to continuous approach, the #if (DEBUG) around 'suppressAlreadyStartedLine' will
+			// To change from retaining to continuous approach, the #if (DEBUG) around 'clearAlreadyStartedLine' will
 			// have to be removed again. As a consequence, the flag can never get activated, thus excluding it (YAGNI).
 			// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 			//
@@ -789,7 +789,7 @@ namespace YAT.Domain
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 				// Line begin and time stamp:
 				if (lineState.Position == LinePosition.Begin)
@@ -808,7 +808,9 @@ namespace YAT.Domain
 				// Content:
 				DisplayElementCollection elementsForNextLine = null;
 				if (lineState.Position == LinePosition.Content)
+				{
 					ExecuteContent(displaySettings, lineState, raw.Direction, b, elementsToAdd, out elementsForNextLine);
+				}
 
 				// Line end and length:
 				if (lineState.Position == LinePosition.End)
@@ -816,7 +818,7 @@ namespace YAT.Domain
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.BreakTimeout.Stop();
 
-					ExecuteLineEnd(lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+					ExecuteLineEnd(lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 					// In case of a pending element immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
@@ -851,13 +853,13 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
 		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool suppressAlreadyStartedLine)
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			if (lineState.Elements.Count > 0)
 			{
 				var span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
-					ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+					ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 				}
 			}
 
@@ -903,18 +905,18 @@ namespace YAT.Domain
 
 						if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 						{
-							var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+							var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 							var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-							bool suppressAlreadyStartedLine = false;
+							bool clearAlreadyStartedLine = false;
 
-							ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+							ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 							OnDisplayElementsAdded(this.bidirLineState.Direction, elementsToAdd);
 							OnDisplayLinesAdded(   this.bidirLineState.Direction, linesToAdd);
 
 						#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
-							if (suppressAlreadyStartedLine)
+							if (clearAlreadyStartedLine)
 								OnCurrentDisplayLineCleared(this.bidirLineState.Direction);
 						#endif
 						}
@@ -940,18 +942,18 @@ namespace YAT.Domain
 
 			if (lineState.Elements.Count > 0)
 			{
-				var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+				var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
-				bool suppressAlreadyStartedLine = false;
+				bool clearAlreadyStartedLine = false;
 
-				ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref suppressAlreadyStartedLine);
+				ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 				OnDisplayElementsAdded(d, elementsToAdd);
 				OnDisplayLinesAdded(   d, linesToAdd);
 
 			#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
-				if (suppressAlreadyStartedLine)
+				if (clearAlreadyStartedLine)
 					OnCurrentDisplayLineCleared(d);
 			#endif
 			}
