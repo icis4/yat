@@ -635,7 +635,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, byte[] origin, string text, int charCount)
 		{                                                                   // Makes sense since elements of the same type will be appended.
-			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
 			Initialize(direction, l, text, charCount, origin.Length, ElementAttributes.Content);
 		}

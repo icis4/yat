@@ -39,7 +39,16 @@ namespace YAT.Domain.Settings
 		public const bool SeparateTxRxRadixDefault = false;
 
 		/// <summary></summary>
-		public const Radix RadixDefault = Radix.String;
+		public const Radix RadixTextDefault = Radix.String;
+
+		/// <summary></summary>
+		public const Radix RadixBinaryDefault = Radix.Hex;
+
+		/// <remarks>
+		/// Default is <see cref="RadixTextDefault"/> as its value of
+		/// <see cref="Radix.String"/> is more general.
+		/// </remarks>
+		public const Radix RadixDefault = RadixTextDefault;
 
 		/// <summary></summary>
 		public const bool ShowRadixDefault = true;
@@ -86,10 +95,10 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const LengthSelection LengthSelectionBinaryDefault = LengthSelectionEx.BinaryDefault;
 
-		/// <summary>
+		/// <remarks>
 		/// Default is <see cref="LengthSelectionBinaryDefault"/> as its value of
 		/// <see cref="LengthSelection.ByteCount"/> is supported by all terminal types.
-		/// </summary>
+		/// </remarks>
 		public const LengthSelection LengthSelectionDefault = LengthSelectionBinaryDefault;
 
 		/// <summary></summary>
