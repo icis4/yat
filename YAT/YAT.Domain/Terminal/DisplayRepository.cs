@@ -69,10 +69,10 @@ namespace YAT.Domain
 			: base(capacity)
 		{
 			this.capacity    = capacity;                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			this.currentLine = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			this.currentLine = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 		////this.dataCount   = 0;
 			                                                  // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the required capacity to improve memory management.
+			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 		}
 
 		/// <summary></summary>
