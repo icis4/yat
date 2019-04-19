@@ -143,9 +143,10 @@ namespace YAT.Domain.Settings
 					if (CharReplace != null)
 					{
 						CharReplace.ReplaceControlChars = (!isBinary);
-						CharReplace.ReplaceTab          = (!isBinary);
-						CharReplace.ReplaceSpace        = (!isBinary);
 					}
+
+					// Attention:
+					// Similar logic has to be implemented in 'AdvancedTerminalSettings.SetDefaults()'!
 
 					SetMyChanged();
 				}
