@@ -1375,6 +1375,9 @@ namespace YAT.Domain
 			{
 				if (lineState.Elements.CharCount >= displaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
+
+				// Note that length line break shall be applied even when EOL has just started or is already ongoing,
+				// since remaining hidden EOL elements will not result in additional lines.
 			}
 
 			if (lineState.Position != LinePosition.End)

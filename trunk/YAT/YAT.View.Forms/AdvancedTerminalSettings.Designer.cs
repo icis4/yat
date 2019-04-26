@@ -1125,7 +1125,8 @@
 			this.checkBox_ReplaceBell.Size = new System.Drawing.Size(149, 17);
 			this.checkBox_ReplaceBell.TabIndex = 2;
 			this.checkBox_ReplaceBell.Text = "Also replace bell (0x08) by";
-			this.toolTip.SetToolTip(this.checkBox_ReplaceBell, "Replaces bell by <BEL> instead of executing the bell, i.e. doing a beep.");
+			this.toolTip.SetToolTip(this.checkBox_ReplaceBell, "Replaces bell by <BEL> instead of executing the bell, i.e. doing a beep.\r\n\r\nOnly " +
+        "available for text terminals.\r\nApplicable to any radix.");
 			this.checkBox_ReplaceBell.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceBell.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceBell_CheckedChanged);
 			// 
@@ -1149,7 +1150,8 @@
 			this.checkBox_ReplaceBackspace.TabIndex = 4;
 			this.checkBox_ReplaceBackspace.Text = "Also replace backspace (0x08) by";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceBackspace, "Replaces backspace by <BS> instead of executing the backspace, i.e. removing the " +
-        "previous character.");
+        "previous character.\r\n\r\nOnly available for text terminals.\r\nApplicable to any rad" +
+        "ix.");
 			this.checkBox_ReplaceBackspace.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceBackspace.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceBackspace_CheckedChanged);
 			// 
@@ -1195,7 +1197,8 @@
 			this.checkBox_ReplaceTab.TabIndex = 6;
 			this.checkBox_ReplaceTab.Text = "Also replace horizontal tab (0x09) by";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceTab, "Replaces tabulator characters by <TAB> instead of executing the tabulator, i.e. i" +
-        "nserting a horizontal whitespace.");
+        "nserting a horizontal whitespace.\r\n\r\nOnly available for text terminals.\r\nOnly ap" +
+        "plies if radix is [String].");
 			this.checkBox_ReplaceTab.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceTab.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceTab_CheckedChanged);
 			// 
