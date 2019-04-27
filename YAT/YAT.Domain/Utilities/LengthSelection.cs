@@ -68,16 +68,24 @@ namespace YAT.Domain.Utilities
 		/// <summary>Default for binary terminals is <see cref="LengthSelection.ByteCount"/>.</summary>
 		public const LengthSelection BinaryDefault = LengthSelection.ByteCount;
 
-		/// <summary>Default is <see cref="LengthSelection.ByteCount"/> as that is supported by all terminal types.</summary>
-		public const LengthSelection Default = LengthSelection.ByteCount;
+		/// <summary>
+		/// Default is <see cref="BinaryDefault"/> as its value of
+		/// <see cref="LengthSelection.ByteCount"/> is supported by all terminal types.
+		/// </summary>
+		public const LengthSelection Default = BinaryDefault;
 
-		/// <summary>Default is <see cref="Default"/>.</summary>
+		/// <summary>
+		/// Default is <see cref="Default"/>.
+		/// </summary>
 		public LengthSelectionEx()
 			: this(Default)
 		{
 		}
 
-		/// <summary>Default is <see cref="TextDefault"/> for text and <see cref="BinaryDefault"/> for binary terminals.</summary>
+		/// <summary>
+		/// Default is <see cref="TextDefault"/> for text
+		/// and <see cref="BinaryDefault"/> for binary terminals.
+		/// </summary>
 		public LengthSelectionEx(TerminalType terminalType)
 			: this((terminalType == TerminalType.Text) ? TextDefault : BinaryDefault)
 		{

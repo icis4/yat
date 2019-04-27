@@ -128,26 +128,7 @@ namespace YAT.Domain.Settings
 				{
 					this.terminalType = value;
 
-					// Set terminal type dependent settings:
-
-					bool isBinary = ((TerminalTypeEx)value).IsBinary;
-
-					if (Display != null)
-					{
-						Display.TxRadix = (isBinary ? Radix.Hex : Radix.String);
-						Display.RxRadix = (isBinary ? Radix.Hex : Radix.String);
-
-						Display.LengthSelection = (isBinary ? LengthSelection.ByteCount : LengthSelection.CharCount);
-					}
-
-					if (CharReplace != null)
-					{
-						CharReplace.ReplaceControlChars = (!isBinary);
-					}
-
-					// Attention:
-					// Similar logic has to be implemented in 'AdvancedTerminalSettings.SetDefaults()'!
-
+					UpdateTerminalTypeDependentDefaults();
 					SetMyChanged();
 				}
 			}
@@ -342,25 +323,32 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <remarks>
-		/// \remind (2018-02-23 / MKY)
+		/// \remind (2019-04-27 / MKY)
 		/// Not a 'nice' solution, but it works...
 		/// </remarks>
-		public virtual bool IOTypeDependentSettingsWereDefaults(bool isUdpSocket)
+		public virtual void UpdateTerminalTypeDependentDefaults()
 		{
-			// Attention:
-			// When changing code below,...
-			// ...code of method below has to be adapted accordingly.
-			// ...messages in terminalSelection_IOTypeChanged() of View.Forms.TerminalSettings have to be adapted accordingly.
+			UpdateTerminalTypeDependentDefaults(((TerminalTypeEx)TerminalType).IsBinary);
+		}
 
-			bool areDefaults = true;
+		/// <remarks>
+		/// \remind (2019-04-27 / MKY)
+		/// Not a 'nice' solution, but it works...
+		/// </remarks>
+		public virtual void UpdateTerminalTypeDependentDefaults(bool isBinary)
+		{
+			if (Display != null)
+			{
+				Display.TxRadix = (isBinary ? DisplaySettings.RadixBinaryDefault : DisplaySettings.RadixTextDefault);
+				Display.RxRadix = (isBinary ? DisplaySettings.RadixBinaryDefault : DisplaySettings.RadixTextDefault);
 
-			areDefaults &= (Display.ChunkLineBreakEnabled == isUdpSocket);
+				Display.LengthSelection = (isBinary ? DisplaySettings.LengthSelectionBinaryDefault : DisplaySettings.LengthSelectionTextDefault);
+			}
 
-			areDefaults &= (TextTerminal.TxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
-			areDefaults &= (TextTerminal.RxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
-			areDefaults &= (TextTerminal.SeparateTxRxEol == false);
-
-			return (areDefaults);
+			if (CharReplace != null)
+			{
+				CharReplace.ReplaceControlChars = (isBinary ? CharReplaceSettings.ReplaceControlCharsBinaryDefault : CharReplaceSettings.ReplaceControlCharsTextDefault);
+			}
 		}
 
 		/// <remarks>
@@ -380,20 +368,44 @@ namespace YAT.Domain.Settings
 		{
 			// Attention:
 			// When changing code below,...
-			// ...code of property above has to be adapted accordingly.
+			// ...code of property further below has to be adapted accordingly.
 			// ...messages in terminalSelection_IOTypeChanged() of View.Forms.TerminalSettings have to be adapted accordingly.
 
-			if (Display != null) {
+			if (Display != null)
+			{
 				Display.ChunkLineBreakEnabled = isUdpSocket;
 			}
 
-			if (TextTerminal != null) {
+			if (TextTerminal != null)
+			{
 				TextTerminal.TxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
 				TextTerminal.RxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
 				TextTerminal.SeparateTxRxEol = false;
 			}
 
 			SetMyChanged();
+		}
+
+		/// <remarks>
+		/// \remind (2018-02-23 / MKY)
+		/// Not a 'nice' solution, but it works...
+		/// </remarks>
+		public virtual bool IOTypeDependentSettingsWereDefaults(bool isUdpSocket)
+		{
+			// Attention:
+			// When changing code below,...
+			// ...code of method above has to be adapted accordingly.
+			// ...messages in terminalSelection_IOTypeChanged() of View.Forms.TerminalSettings have to be adapted accordingly.
+
+			bool areDefaults = true;
+
+			areDefaults &= (Display.ChunkLineBreakEnabled == isUdpSocket);
+
+			areDefaults &= (TextTerminal.TxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
+			areDefaults &= (TextTerminal.RxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
+			areDefaults &= (TextTerminal.SeparateTxRxEol == false);
+
+			return (areDefaults);
 		}
 
 		#endregion

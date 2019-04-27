@@ -355,9 +355,10 @@ namespace YAT.View.Forms
 			// Create document settings and fill it with new terminal settings:
 			this.terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
 
-			this.terminalSettings.Terminal.TerminalType = this.newTerminalSettings.TerminalType;
-			this.terminalSettings.Terminal.IO.IOType    = this.newTerminalSettings.IOType;
-			this.terminalSettings.Terminal.UpdateIOTypeDependentSettings(); // Update because new settings are created.
+			this.terminalSettings.Terminal.TerminalType                            = this.newTerminalSettings.TerminalType;
+			this.terminalSettings.Terminal.UpdateTerminalTypeDependentDefaults();
+			this.terminalSettings.Terminal.IO.IOType                               = this.newTerminalSettings.IOType;
+			this.terminalSettings.Terminal.UpdateIOTypeDependentSettings();
 
 			this.terminalSettings.Terminal.IO.SerialPort.PortId                    = this.newTerminalSettings.SerialPortId;
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.BaudRate    = this.newTerminalSettings.SerialPortCommunication.BaudRate;
@@ -385,7 +386,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
 
-			this.terminalSettings.TerminalIsStarted = this.newTerminalSettings.StartTerminal;
+			this.terminalSettings.TerminalIsStarted                                = this.newTerminalSettings.StartTerminal;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)

@@ -102,12 +102,31 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="Radix.String"/>.</summary>
-		public const Radix Default = Radix.String;
+		/// <summary>Default for text terminals is <see cref="Radix.String"/>.</summary>
+		public const Radix TextDefault = Radix.String;
 
-		/// <summary>Default is <see cref="Default"/>.</summary>
+		/// <summary>Default for binary terminals is <see cref="Radix.Hex"/>.</summary>
+		public const Radix BinaryDefault = Radix.String;
+
+		/// <summary>
+		/// Default is <see cref="TextDefault"/> as its value of
+		/// <see cref="Radix.String"/> is more general.</summary>
+		public const Radix Default = TextDefault;
+
+		/// <summary>
+		/// Default is <see cref="Default"/>.
+		/// </summary>
 		public RadixEx()
 			: this(Default)
+		{
+		}
+
+		/// <summary>
+		/// Default is <see cref="TextDefault"/> for text
+		/// and <see cref="BinaryDefault"/> for binary terminals.
+		/// </summary>
+		public RadixEx(TerminalType terminalType)
+			: this((terminalType == TerminalType.Text) ? TextDefault : BinaryDefault)
 		{
 		}
 
