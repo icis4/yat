@@ -52,8 +52,9 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private int capacity; // = 0;
-		private DisplayLine currentLine; // = null;
 		private int byteCount; // = 0;
+
+		private DisplayLine currentLine; // = null;
 
 		private DisplayLine lastLineAuxiliary; // = null;
 
@@ -68,9 +69,9 @@ namespace YAT.Domain
 		public DisplayRepository(int capacity)
 			: base(capacity)
 		{
-			this.capacity    = capacity;                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			this.capacity    = capacity;
+		////this.byteCount   = 0;                       // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.currentLine = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-		////this.dataCount   = 0;
 			                                                  // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 		}
@@ -79,9 +80,10 @@ namespace YAT.Domain
 		public DisplayRepository(DisplayRepository rhs)
 			: base(rhs)
 		{
-			this.capacity    = rhs.capacity;
+			this.capacity  = rhs.capacity;
+			this.byteCount = rhs.byteCount;
+
 			this.currentLine = rhs.currentLine.Clone();
-			this.byteCount   = rhs.byteCount;
 
 			this.lastLineAuxiliary = rhs.lastLineAuxiliary.Clone();
 		}
@@ -166,8 +168,8 @@ namespace YAT.Domain
 		public virtual void Enqueue(DisplayElement item)
 		{
 			// Add element to current line:
-			this.currentLine.Add(item);
 			this.byteCount += item.ByteCount;
+			this.currentLine.Add(item);
 
 			// Check whether a line break is needed:
 			if (item is DisplayElement.LineBreak)
@@ -202,11 +204,27 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public void ReplaceCurrentLine(DisplayElementCollection currentLineElements)
+		{
+			ClearCurrentLine();
+			Enqueue(currentLineElements);
+		}
+
+		/// <summary></summary>
+		public void ClearCurrentLine()
+		{
+			this.byteCount -= this.currentLine.ByteCount;
+
+			this.currentLine.Clear();
+		}
+
+		/// <summary></summary>
 		public new void Clear()
 		{
 			base.Clear();
-			this.currentLine.Clear();
 			this.byteCount = 0;
+
+			this.currentLine.Clear();
 
 			this.lastLineAuxiliary.Clear();
 		}
