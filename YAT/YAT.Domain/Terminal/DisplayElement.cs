@@ -31,11 +31,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 
 using MKY;
 using MKY.Collections.Generic;
+using MKY.Diagnostics;
 
 #endregion
 
@@ -114,7 +116,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxData()
-				: base(ElementAttributes.Content)
+				: base(Direction.Tx, ElementAttributes.Content)
 			{
 			}
 
@@ -137,7 +139,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxControl()
-				: base(ElementAttributes.Content)
+				: base(Direction.Tx, ElementAttributes.Content)
 			{
 			}
 
@@ -160,7 +162,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxData()
-				: base(ElementAttributes.Content)
+				: base(Direction.Rx, ElementAttributes.Content)
 			{
 			}
 
@@ -183,7 +185,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxControl()
-				: base(ElementAttributes.Content)
+				: base(Direction.Rx, ElementAttributes.Content)
 			{
 			}
 
@@ -616,7 +618,13 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(ElementAttributes flags)
-			: this(Direction.None, null, flags)
+			: this(Direction.None, flags)
+		{
+		}
+
+		/// <summary></summary>
+		private DisplayElement(Direction direction, ElementAttributes flags)
+			: this(direction, null, flags)
 		{
 		}
 
@@ -658,7 +666,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~DisplayElement()
 		{
-			MKY.Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
+			DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 
 	#endif // DEBUG
@@ -793,7 +801,12 @@ namespace YAT.Domain
 			return (clone);
 		}
 
-		/// <summary></summary>
+	#if (FALSE)
+		/// <remarks>
+		/// <paramref name="origin"/> must correspond to a single byte or character, i.e. result
+		/// in a single element, same as when creating elements "the normal way". ASCII menmonics
+		/// (e.g. <CR>) are considered a single shown character.
+		/// </remarks>
 		public virtual DisplayElement RecreateFromOrigin(Pair<byte[], string> origin)
 		{
 			var clone = Clone(); // Ensure to recreate the proper type.
@@ -809,13 +822,14 @@ namespace YAT.Domain
 			// Replace text and charCount:
 			string text = origin.Value2;
 			clone.text = text;
-			clone.charCount = 1; // Elements are always created corresponding to a single shown character.
-			                     // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			clone.charCount = 1; // See remark.
+
 			return (clone);
 		}
+	#endif
 
 		/// <summary>
-		/// Returns <c>true</c> if <param name="other"></param> can be appended to this element. Only
+		/// Returns <c>true</c> if <paramref name="other"/> can be appended to this element. Only
 		/// data elements of the same direction can be appended. Appending other elements would
 		/// lead to missing elements.
 		/// </summary>
@@ -850,28 +864,79 @@ namespace YAT.Domain
 		public virtual void Append(DisplayElement other)
 		{
 			if (!AcceptsAppendOf(other))
-				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "The given element '" + other + "' cannot be appended to this element '" + this + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The given element '" + other + "' cannot be appended to this element '" + this + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			// \fixme (2010-04-01 / MKY):
-			// Weird ArgumentException when receiving large chunks of data.
-			try
+			if (this.origin != null)
+				this.origin.AddRange(PerformDeepClone(other.origin));
+			else
+				this.origin = PerformDeepClone(other.origin);
+
+			if (this.text != null)
+				this.text += other.text;
+			else
+				this.text = other.text;
+
+			this.charCount += other.charCount;
+			this.byteCount += other.byteCount;
+
+			if (other.Highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous element.
+				this.Highlight = true;
+		}
+
+		/// <summary>
+		/// Removes the last character from the element.
+		/// </summary>
+		/// <remarks>
+		/// Needed to handle backspace; consequence of <see cref="Append(DisplayElement)"/> above.
+		/// </remarks>
+		public virtual void RemoveLastContentChar()
+		{
+			if (!IsContent)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The element is no content!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if (this.origin.Count == 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The origin is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			// Unfold the element:
+			ConstructorInfo ciOrigin = GetType().GetConstructor(new Type[] { typeof(byte[]), typeof(string) }); // All content elements have such constructor.
+			var unfolded = new List<DisplayElement>(this.origin.Count); // Preset the required capacity to improve memory management.
+			foreach (var p in this.origin)
+				unfolded.Add((DisplayElement)ciOrigin.Invoke(new object[] { p.Value1, p.Value2 }));
+
+			// Remove the last character:
+			for (int index = (unfolded.Count - 1); index >= 0; index--)
 			{
-				if (this.origin != null)
-					this.origin.AddRange(PerformDeepClone(other.origin));
-
-				if (this.text != null)
-					this.text += other.text;
-
-				this.charCount += other.charCount;
-				this.byteCount += other.byteCount;
-
-				if (other.Highlight) // Activate if needed, leave unchanged otherwise as it could have become highlighted by a previous element.
-					this.Highlight = true;
+				var current = unfolded[index];
+				if (current.CharCount < 1)
+				{
+					unfolded.RemoveAt(index); // A preceeding whitespace content has to be removed,
+					continue;                 // but then continue searching for char.
+				}
+				else if (current.CharCount == 1)
+				{
+					unfolded.RemoveAt(index); // A single element can be removed,
+					break;                    // done.
+				}
+				else if (current.CharCount > 1)
+				{
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A newly created element can never have a character count of '" + current.CharCount + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
-			catch (ArgumentException ex)
-			{
-				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, other.ToString());
-			}
+
+			// Recreate the element:
+			ConstructorInfo ciEmpty = GetType().GetConstructor(Type.EmptyTypes); // All content elements have such constructor.
+			var recreated = (DisplayElement)ciEmpty.Invoke(null);
+			foreach (var de in unfolded)
+				recreated.Append(de);
+
+		////this.direction can be kept.
+			this.origin    = recreated.origin;
+			this.text      = recreated.text;
+			this.charCount = recreated.charCount;
+			this.byteCount = recreated.byteCount;
+		////this.attributes can be kept.
+
+		////this.Highlight can be kept.
 		}
 
 		#endregion
