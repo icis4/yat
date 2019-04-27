@@ -84,7 +84,7 @@ namespace MKY
 		{
 			MethodInfo mi = type.GetMethod("get_Events", AllBindings);
 			if (mi != null)
-				return ((EventHandlerList)mi.Invoke(obj, new object[] { }));
+				return ((EventHandlerList)mi.Invoke(obj, null));
 			else
 				return (null);
 		}

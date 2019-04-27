@@ -821,12 +821,12 @@ namespace MKY.Test.Settings
 		{
 			string filePath = Temp.MakeTempFilePath(GetType(), fileName, ".xml");
 
-			object objToSerialize = typeToSerialize.GetConstructor(new Type[] { }).Invoke(new object[] { });
+			object objToSerialize = typeToSerialize.GetConstructor(Type.EmptyTypes).Invoke(null);
 			XmlSerializerTest.TestSerializeToFile(filePath, typeToSerialize, objToSerialize);
 
 			object objFromDeserialize = XmlSerializerTest.TestDeserializeFromFile(filePath, typeToDeserialize);
 
-			object objToTestAgainst = typeToDeserialize.GetConstructor(new Type[] { }).Invoke(new object[] { });
+			object objToTestAgainst = typeToDeserialize.GetConstructor(Type.EmptyTypes).Invoke(null);
 
 			SettingsEvolutionTestTypeAndData.TestClassV1 v1a = null;
 			SettingsEvolutionTestTypeAndData.TestClassV1 v1b = null;
