@@ -33,6 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
+using MKY;
 using MKY.Collections.Generic;
 
 #endregion
@@ -227,13 +228,77 @@ namespace YAT.Domain
 				Add(item);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Removes the element at the specified index of the <see cref="DisplayElementCollection"/>.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <list type="table">
+		/// <item><description><paramref name="index"/> is less than 0.</description></item>
+		/// <item><description>-or-</description></item>
+		/// <item><description><paramref name="index"/> is equal to or greater than <see cref="T:List`1.Count"/>.</description></item>
+		/// </list>
+		/// </exception>
 		public new void RemoveAt(int index)
 		{
 			this.charCount -= this[index].CharCount;
 			this.byteCount -= this[index].ByteCount;
 
 			base.RemoveAt(index);
+		}
+
+		/// <summary>
+		/// Removes the last element of the <see cref="DisplayElementCollection"/>.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">
+		/// The collection is empty.
+		/// </exception>
+		public virtual void RemoveLast()
+		{
+			if (Count == 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			RemoveAt(Count - 1);
+		}
+
+		/// <summary>
+		/// Removes the last character from the <see cref="DisplayElementCollection"/>.
+		/// </summary>
+		/// <remarks>
+		/// Needed to handle backspace.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// The collection is empty.
+		/// </exception>
+		public virtual void RemoveLastContentChar()
+		{
+			if (Count == 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if (CharCount == 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection contains no content character!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			for (int index = (Count - 1); index >= 0; index--)
+			{
+				var current = this[index];
+				if (current.IsContent)
+				{
+					if (current.CharCount < 1)
+					{
+						RemoveAt(index); // A preceeding whitespace content has to be removed,
+						continue;        // but then continue searching for char.
+					}
+					else if (current.CharCount == 1)
+					{
+						RemoveAt(index); // A single element can be removed,
+						break;           // done.
+					}
+					else if (current.CharCount > 1)
+					{
+						current.RemoveLastContentChar(); // A single element can be removed,
+						break;                           // done.
+					}
+				}
+			}
 		}
 
 		/// <remarks>
@@ -245,12 +310,6 @@ namespace YAT.Domain
 		{
 			for (int i = 0; i < count; i++)
 				RemoveAt(index + i);
-		}
-
-		/// <summary></summary>
-		public virtual void RemoveLast()
-		{
-			RemoveAt(Count - 1);
 		}
 
 		/// <summary></summary>
