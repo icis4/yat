@@ -30,17 +30,17 @@ namespace YAT.Domain.Settings
 	/// <summary></summary>
 	public class CharReplaceSettings : MKY.Settings.SettingsItem, IEquatable<CharReplaceSettings>
 	{
-		/// <summary></summary>
-		public const bool ReplaceControlCharsTextDefault = true;
-
-		/// <summary></summary>
-		public const bool ReplaceControlCharsBinaryDefault = false;
-
 		/// <remarks>
 		/// Default is <see cref="ReplaceControlCharsBinaryDefault"/> as its value of
 		/// <c>false</c> is less intrusive.
 		/// </remarks>
 		public const bool ReplaceControlCharsDefault = ReplaceControlCharsBinaryDefault;
+
+		/// <summary></summary>
+		public const bool ReplaceControlCharsTextDefault = true;
+
+		/// <summary></summary>
+		public const bool ReplaceControlCharsBinaryDefault = false;
 
 		/// <summary></summary>
 		public const ControlCharRadix ControlCharRadixDefault = ControlCharRadix.AsciiMnemonic;

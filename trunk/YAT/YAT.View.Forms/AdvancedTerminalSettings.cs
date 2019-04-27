@@ -1264,15 +1264,8 @@ namespace YAT.View.Forms
 
 				// Radix:
 				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
-
-				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text) {
-					this.settingsInEdit.Terminal.Display.TxRadix = Domain.Settings.DisplaySettings.RadixTextDefault;
-					this.settingsInEdit.Terminal.Display.RxRadix = Domain.Settings.DisplaySettings.RadixTextDefault;
-				}
-				else {                 // incl. (TerminalType == Domain.TerminalType.Binary)
-					this.settingsInEdit.Terminal.Display.TxRadix = Domain.Settings.DisplaySettings.RadixBinaryDefault;
-					this.settingsInEdit.Terminal.Display.RxRadix = Domain.Settings.DisplaySettings.RadixBinaryDefault;
-				}
+				this.settingsInEdit.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+				this.settingsInEdit.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
 
 				// Display:
 				this.settingsInEdit.Terminal.Display.ShowRadix           = Domain.Settings.DisplaySettings.ShowRadixDefault;
@@ -1284,14 +1277,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowPort            = Domain.Settings.DisplaySettings.ShowPortDefault;
 				this.settingsInEdit.Terminal.Display.ShowDirection       = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowLength          = Domain.Settings.DisplaySettings.ShowLengthDefault;
-
-				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text) {
-					this.settingsInEdit.Terminal.Display.LengthSelection = Domain.Settings.DisplaySettings.LengthSelectionTextDefault;
-				}
-				else {                 // incl. (TerminalType == Domain.TerminalType.Binary)
-					this.settingsInEdit.Terminal.Display.LengthSelection = Domain.Settings.DisplaySettings.LengthSelectionBinaryDefault;
-				}
-
+				this.settingsInEdit.Terminal.Display.LengthSelection     = Domain.Settings.DisplaySettings.LengthSelectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowDuration        = Domain.Settings.DisplaySettings.ShowDurationDefault;
 				this.settingsInEdit.Terminal.Display.IncludePortControl  = Domain.Settings.DisplaySettings.IncludePortControlDefault;
 
@@ -1302,21 +1288,15 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.MaxLineLength             = Domain.Settings.DisplaySettings.MaxLineLengthDefault;
 
 				// Char replace/hide:
-				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text) {
-					this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsTextDefault;
-				}
-				else {                 // incl. (TerminalType == Domain.TerminalType.Binary)
-					this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsBinaryDefault;
-				}
-
-				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceBell      = Domain.Settings.CharReplaceSettings.ReplaceBellDefault;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace = Domain.Settings.CharReplaceSettings.ReplaceBackspaceDefault;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceTab       = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
-				this.settingsInEdit.Terminal.CharHide.HideXOnXOff         = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace     = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
-				this.settingsInEdit.Terminal.CharHide.Hide0x00            = Domain.Settings.CharHideSettings.Hide0x00Default;
-				this.settingsInEdit.Terminal.CharHide.Hide0xFF            = Domain.Settings.CharHideSettings.Hide0xFFDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
+				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceBell         = Domain.Settings.CharReplaceSettings.ReplaceBellDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace    = Domain.Settings.CharReplaceSettings.ReplaceBackspaceDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
+				this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
+				this.settingsInEdit.Terminal.CharHide.Hide0x00               = Domain.Settings.CharHideSettings.Hide0x00Default;
+				this.settingsInEdit.Terminal.CharHide.Hide0xFF               = Domain.Settings.CharHideSettings.Hide0xFFDefault;
 
 				// USB Ser/HID:
 				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = MKY.IO.Serial.Usb.SerialHidDeviceSettings.IncludeNonPayloadDataDefault;
@@ -1356,7 +1336,8 @@ namespace YAT.View.Forms
 				// User:
 				this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
 
-				// I/O dependent settings:
+				// Update dependent settings:
+				this.settingsInEdit.Terminal.UpdateTerminalTypeDependentDefaults();
 				this.settingsInEdit.Terminal.UpdateIOTypeDependentSettings();
 			}
 			finally
