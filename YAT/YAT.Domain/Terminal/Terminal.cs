@@ -3923,12 +3923,12 @@ namespace YAT.Domain
 				{
 					lock (this.repositorySyncObj)
 					{
-						this.txRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
-						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+						this.txRepository   .Enqueue(elements.Clone()); // Clone elements as they are needed again below.
+						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements as they are needed again below.
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
+						OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
 
 					break;
 				}
@@ -3937,31 +3937,17 @@ namespace YAT.Domain
 				{
 					lock (this.repositorySyncObj)
 					{
-						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
-						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements as they are needed again below.
+						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements as they are needed again below.
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
+						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
 
 					break;
 				}
 
 				case IODirection.Bidir:
-				{
-					lock (this.repositorySyncObj)
-					{
-						this.txRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
-						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
-						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
-					}
-
-					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
-
-					break;
-				}
-
 				case IODirection.None:
 				{
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -3994,23 +3980,43 @@ namespace YAT.Domain
 			switch (direction)
 			{
 				case IODirection.Tx:
-					OnCurrentDisplayLineSentReplaced(    new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.txRepository   .ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+						this.bidirRepository.ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineSentReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
+
 					break;
+				}
 
 				case IODirection.Rx:
-					OnCurrentDisplayLineReceivedReplaced(new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.bidirRepository.ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+						this.rxRepository   .ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineReceivedReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
+
 					break;
+				}
 
 				case IODirection.Bidir:
-					OnCurrentDisplayLineSentReplaced(    new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
-					OnCurrentDisplayLineReceivedReplaced(new DisplayElementsEventArgs(currentLineElements.Clone())); // Clone the ensure decoupling.
-					break;
-
 				case IODirection.None:
+				{
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 
 				default:
+				{
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
@@ -4034,23 +4040,43 @@ namespace YAT.Domain
 			switch (direction)
 			{
 				case IODirection.Tx:
-					OnCurrentDisplayLineSentCleared(    new EventArgs());
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.txRepository   .ClearCurrentLine();
+						this.bidirRepository.ClearCurrentLine();
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineSentCleared(new EventArgs());
+
 					break;
+				}
 
 				case IODirection.Rx:
-					OnCurrentDisplayLineReceivedCleared(new EventArgs());
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.bidirRepository.ClearCurrentLine();
+						this.rxRepository   .ClearCurrentLine();
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineReceivedCleared(new EventArgs());
+
 					break;
+				}
 
 				case IODirection.Bidir:
-					OnCurrentDisplayLineSentCleared(    new EventArgs());
-					OnCurrentDisplayLineReceivedCleared(new EventArgs());
-					break;
-
 				case IODirection.None:
+				{
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 
 				default:
+				{
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
@@ -4079,7 +4105,12 @@ namespace YAT.Domain
 					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
 					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					case IODirection.Bidir:
+					case IODirection.None:
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+					default:
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
