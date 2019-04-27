@@ -1336,25 +1336,12 @@ namespace YAT.Domain
 					// ...EOL could contain backspace, unlikely but possible.
 
 					// Remove the just added backspace:
-					int count = lineState.Elements.Count;
-					if ((count > 0) && (lineState.Elements[count] is DisplayElement.Nonentity))
+					int count = lp.Count;
+					if ((count > 0) && (lp[count - 1] is DisplayElement.Nonentity))
 					{
-						lineState.Elements.RemoveLast();
-						RemoveSpaceIfNecessary(lineState, d);
+						lp.RemoveLast();
+						RemoveSpaceIfNecessary(d, lp);
 					}
-
-					// Remove the preceeding character:
-					if (lineState.Elements.CharCount > 0)
-					{
-						int intendedCharCount = (lineState.Elements.CharCount - 1);
-						while (lineState.Elements.CharCount > intendedCharCount)
-						{
-							lineState.Elements.RemoveLast();
-							RemoveSpaceIfNecessary(lineState, d);
-						}
-					}
-
-					replaceAlreadyStartedLine = true;
 				}
 
 				if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
@@ -1366,6 +1353,18 @@ namespace YAT.Domain
 				{
 					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 					elementsToAdd.AddRange(lp);
+				}
+
+				if (isBackspace)
+				{
+					// Remove the preceeding character:
+					if (lineState.Elements.CharCount > 0)
+					{
+						lineState.Elements.RemoveLastContentChar();
+						RemoveSpaceIfNecessary(d, lineState.Elements);
+
+						replaceAlreadyStartedLine = true;
+					}
 				}
 			}
 
@@ -1405,7 +1404,8 @@ namespace YAT.Domain
 				{
 					if (!TerminalSettings.CharReplace.ReplaceBell)
 					{
-						SystemSounds.Beep.Play();
+						if ((d == IODirection.Rx) && (!IsReloading))
+							SystemSounds.Beep.Play();
 
 						de = new DisplayElement.Nonentity();
 						return (true);
@@ -1418,8 +1418,9 @@ namespace YAT.Domain
 				{
 					if (!TerminalSettings.CharReplace.ReplaceBackspace)
 					{
-						de = new DisplayElement.Nonentity();
 						isBackspace = true;
+
+						de = new DisplayElement.Nonentity();
 						return (true);
 					}
 
@@ -1457,13 +1458,13 @@ namespace YAT.Domain
 			}
 		}
 
-		private void RemoveSpaceIfNecessary(LineState lineState, IODirection d)
+		private void RemoveSpaceIfNecessary(IODirection d, DisplayElementCollection lp)
 		{
 			if (ElementsAreSeparate(d))
 			{
-				int count = lineState.Elements.Count;
-				if ((count > 0) && (lineState.Elements[count] is DisplayElement.DataSpace))
-					lineState.Elements.RemoveLast();
+				int count = lp.Count;
+				if ((count > 0) && (lp[count - 1] is DisplayElement.DataSpace))
+					lp.RemoveLast();
 			}
 		}
 
@@ -1628,7 +1629,7 @@ namespace YAT.Domain
 					ExecuteContent(displaySettings, lineState, raw.PortStamp, raw.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
 
 					if (replaceAlreadyStartedLine)
-						OnCurrentDisplayLineReplaced(raw.Direction, lineState.Elements); // Elements are cloned by OnCurrentDisplayLineReplaced().
+						OnCurrentDisplayLineReplaced(raw.Direction, lineState.Elements.Clone()); // Clone the ensure decoupling.
 				}
 
 				// Line end and length:
