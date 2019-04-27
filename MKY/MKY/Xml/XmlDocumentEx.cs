@@ -109,9 +109,9 @@ namespace MKY.Xml
 				}
 				else
 				{
-					ConstructorInfo ci = type.GetConstructor(new Type[] { });
+					var ci = type.GetConstructor(Type.EmptyTypes);
 					if (ci != null)
-						obj = ci.Invoke(new object[] { });
+						obj = ci.Invoke(null);
 					else
 						throw (new NotImplementedException("Type '" + type + "'does not provide a default constructor!"));
 				}
