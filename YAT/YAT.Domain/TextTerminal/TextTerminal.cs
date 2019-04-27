@@ -1402,7 +1402,7 @@ namespace YAT.Domain
 			{
 				case 0x07: // <BEL>
 				{
-					if (!TerminalSettings.CharReplace.ReplaceBell)
+					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBell))
 					{
 						if ((d == IODirection.Rx) && (!IsReloading))
 							SystemSounds.Beep.Play();
@@ -1416,7 +1416,7 @@ namespace YAT.Domain
 
 				case 0x08: // <BS>
 				{
-					if (!TerminalSettings.CharReplace.ReplaceBackspace)
+					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBackspace))
 					{
 						isBackspace = true;
 
@@ -1429,7 +1429,7 @@ namespace YAT.Domain
 
 				case 0x09: // <TAB>
 				{
-					if (!TerminalSettings.CharReplace.ReplaceTab)
+					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceTab))
 					{
 						// Attention:
 						// In order to get well aligned tab stops, tab characters must be data elements.

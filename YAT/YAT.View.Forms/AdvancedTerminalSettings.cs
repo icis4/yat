@@ -1157,20 +1157,20 @@ namespace YAT.View.Forms
 				comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
 
-				bool replaceBellEnabled                     = (isText && replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic));
-				checkBox_ReplaceBell.Enabled                = replaceBellEnabled;
-				checkBox_ReplaceBell.Checked                = this.settingsInEdit.Terminal.CharReplace.ReplaceBell;
-				label_ReplaceBell.Enabled                   = replaceBellEnabled;
+				bool replaceBellEnabled                     = (isText && replaceControlChars);
+				checkBox_ReplaceBell.Enabled                =  replaceBellEnabled;
+				checkBox_ReplaceBell.Checked                = (replaceBellEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceBell);
+				label_ReplaceBell.Enabled                   =  replaceBellEnabled;
 
-				bool replaceBackspaceEnabled                = (isText && replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic));
-				checkBox_ReplaceBackspace.Enabled           = replaceBackspaceEnabled;
-				checkBox_ReplaceBackspace.Checked           = this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace;
-				label_ReplaceBackspace.Enabled              = replaceBackspaceEnabled;
+				bool replaceBackspaceEnabled                = (isText && replaceControlChars);
+				checkBox_ReplaceBackspace.Enabled           =  replaceBackspaceEnabled;
+				checkBox_ReplaceBackspace.Checked           = (replaceBackspaceEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace);
+				label_ReplaceBackspace.Enabled              =  replaceBackspaceEnabled;
 
-				bool replaceTabEnabled                      = (isText && replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic));
-				checkBox_ReplaceTab.Enabled                 = replaceTabEnabled;
-				checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
-				label_ReplaceTab.Enabled                    = replaceTabEnabled;
+				bool replaceTabEnabled                      = (isText && replaceControlChars);
+				checkBox_ReplaceTab.Enabled                 =  replaceTabEnabled;
+				checkBox_ReplaceTab.Checked                 = (replaceTabEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceTab);
+				label_ReplaceTab.Enabled                    =  replaceTabEnabled;
 
 				checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 				checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
