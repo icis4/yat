@@ -259,6 +259,30 @@ namespace YAT.View.Forms
 			this.settingsInEdit.ShowEol = checkBox_ShowEol.Checked;
 		}
 
+		private void textTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.TxDisplay = textTerminalSettingsSet_Tx.Settings;
+		}
+
+		private void checkBox_SeparateTxRxDisplay_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
+		}
+
+		private void textTerminalSettingsSet_Rx_SettingsChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.RxDisplay = textTerminalSettingsSet_Rx.Settings;
+		}
+
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -407,30 +431,6 @@ namespace YAT.View.Forms
 
 				e.Cancel = true;
 			}
-		}
-
-		private void textTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.TxDisplay = textTerminalSettingsSet_Tx.Settings;
-		}
-
-		private void checkBox_SeparateTxRxDisplay_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
-		}
-
-		private void textTerminalSettingsSet_Rx_SettingsChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.RxDisplay = textTerminalSettingsSet_Rx.Settings;
 		}
 
 		private void radioButton_SubstituteNone_CheckedChanged(object sender, EventArgs e)
@@ -611,7 +611,7 @@ namespace YAT.View.Forms
 				else
 					groupBox_TxDisplay.Text = "&Tx and Rx";
 
-				textTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
+				textTerminalSettingsSet_Tx.Settings  = this.settingsInEdit.TxDisplay;
 
 				checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
 				groupBox_RxDisplay.Enabled           = this.settingsInEdit.SeparateTxRxDisplay;
