@@ -135,8 +135,8 @@ namespace YAT.Domain.Settings
 			ShowEol          = rhs.ShowEol;
 
 			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
-			TxDisplay = new TextDisplaySettings(SettingsType);
-			RxDisplay = new TextDisplaySettings(SettingsType);
+			TxDisplay = new TextDisplaySettings(rhs.TxDisplay);
+			RxDisplay = new TextDisplaySettings(rhs.RxDisplay);
 
 			LineSendDelay    = rhs.LineSendDelay;
 			WaitForResponse  = rhs.WaitForResponse;
