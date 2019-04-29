@@ -1381,7 +1381,7 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.End)
 			{
-				if ((lineState.Elements.CharCount >= TerminalSettings.Display.MaxLineLength) &&
+				if ((lineState.Elements.CharCount > TerminalSettings.Display.MaxLineLength) &&
 					(lineState.Position != LinePosition.ContentExceeded))
 				{
 					lineState.Position = LinePosition.ContentExceeded;
