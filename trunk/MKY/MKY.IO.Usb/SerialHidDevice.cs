@@ -206,7 +206,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static new bool RegisterStaticDeviceNotificationHandler()
 		{
-			bool result = false;
+			bool success = false;
 
 			lock (staticDeviceNotificationSyncObj)
 			{
@@ -220,7 +220,7 @@ namespace MKY.IO.Usb
 					{
 						staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
 						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidGuid, out staticDeviceNotificationHandle);
-						result = true;
+						success = true;
 					}
 				}
 
@@ -231,7 +231,7 @@ namespace MKY.IO.Usb
 					throw (new OverflowException("Too many USB Ser/HID device notification registrations! It is required to restart the application!"));
 			}
 
-			return (result);
+			return (success);
 		}
 
 		/// <remarks>
