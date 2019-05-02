@@ -57,6 +57,11 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
 		IPv4Localhost,
 
+		Broadcast,
+
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
+		IPv4Broadcast,
+
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		IPv6Localhost,
 
@@ -86,14 +91,11 @@ namespace MKY.Net
 		private const string Localhost_stringOld1 =  "localhost";  // Backward compatibility.
 
 		private const string IPv4Localhost_string = "IPv4 localhost";
+		private const string Broadcast_string     = "[broadcast]";
+		private const string IPv4Broadcast_string = "IPv4 broadcast";
 		private const string IPv6Localhost_string = "IPv6 localhost";
 
 		#endregion
-
-		/// <remarks>
-		/// The list of fixed items of this extended enum.
-		/// </remarks>
-		private static List<IPHostEx> staticItems;
 
 		private string    explicitName; // = null;
 		private IPAddress explicitAddress  = IPAddress.None;
@@ -124,7 +126,7 @@ namespace MKY.Net
 			if (address == null)
 				throw (new ArgumentNullException("address", "An IP address is required!"));
 
-			                     // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPHost.Localhost);     this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPHost.IPv6Localhost); this.explicitAddress = IPAddress.None; }
 			else                                             { SetUnderlyingEnum(IPHost.Explicit);      this.explicitAddress = address;        }
@@ -159,6 +161,8 @@ namespace MKY.Net
 				{
 					case IPHost.Localhost:     return ("localhost");
 					case IPHost.IPv4Localhost: return ("localhost");
+					case IPHost.Broadcast:     return ("broadcast");
+					case IPHost.IPv4Broadcast: return ("broadcast");
 					case IPHost.IPv6Localhost: return ("localhost");
 					case IPHost.Explicit:
 					{
@@ -182,6 +186,8 @@ namespace MKY.Net
 				{
 					case IPHost.Localhost:     return (IPAddress.Loopback);
 					case IPHost.IPv4Localhost: return (IPAddress.Loopback);
+					case IPHost.Broadcast:     return (IPAddress.Broadcast);
+					case IPHost.IPv4Broadcast: return (IPAddress.Broadcast);
 					case IPHost.IPv6Localhost: return (IPAddress.IPv6Loopback);
 					case IPHost.Explicit:      return (this.explicitAddress);
 
@@ -208,6 +214,23 @@ namespace MKY.Net
 			}
 		}
 
+		/// <summary></summary>
+		public bool IsBroadcast
+		{
+			get
+			{
+				switch ((IPHost)UnderlyingEnum)
+				{
+					case IPHost.Broadcast:
+					case IPHost.IPv4Broadcast:
+						return (true);
+
+					default:
+						return (false);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -225,6 +248,8 @@ namespace MKY.Net
 			{
 				case IPHost.Localhost:     return (Localhost_string);
 				case IPHost.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
+				case IPHost.Broadcast:     return (Broadcast_string);
+				case IPHost.IPv4Broadcast: return (IPv4Broadcast_string + " (" + IPAddress.Broadcast + ")");
 				case IPHost.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
 				case IPHost.Explicit:
 				{
@@ -250,6 +275,8 @@ namespace MKY.Net
 			{
 				case IPHost.Localhost:     return (Localhost_string);
 				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
+				case IPHost.Broadcast:     return (Broadcast_string);
+				case IPHost.IPv4Broadcast: return (IPv4Broadcast_string);
 				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHost.Explicit:
 				{
@@ -284,6 +311,8 @@ namespace MKY.Net
 			{
 				case IPHost.Localhost:     return (Localhost_string);
 				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
+				case IPHost.Broadcast:     return (Broadcast_string);
+				case IPHost.IPv4Broadcast: return (IPv4Broadcast_string);
 				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHost.Explicit:
 				{
@@ -414,29 +443,33 @@ namespace MKY.Net
 		//==========================================================================================
 
 		/// <remarks>
-		/// The list of fixed items of this extended enum.
+		/// The list of items of this extended enum, depending on whether broadcast shall be included or not.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Symmetricity with Enum.GetNames() and Enum.GetValues().")]
-		public static ReadOnlyCollection<IPHostEx> GetItems()
+		public static ReadOnlyCollection<IPHostEx> GetItems(bool includeBroadcast = true)
 		{
-			if (staticItems == null)
+			var items = new List<IPHostEx>(includeBroadcast ? 5 : 3); // Preset the required capacity to improve memory management.
+
+			items.Add(new IPHostEx(IPHost.Localhost));
+			items.Add(new IPHostEx(IPHost.IPv4Localhost));
+
+			if (includeBroadcast)
 			{
-				staticItems = new List<IPHostEx>(3); // Preset the required capacity to improve memory management.
-
-				staticItems.Add(new IPHostEx(IPHost.Localhost));
-				staticItems.Add(new IPHostEx(IPHost.IPv4Localhost));
-				staticItems.Add(new IPHostEx(IPHost.IPv6Localhost));
-
-				// The shall only contain the fixed items, 'Explicit' is not added therefore.
+				items.Add(new IPHostEx(IPHost.Broadcast));
+				items.Add(new IPHostEx(IPHost.IPv4Broadcast));
 			}
 
-			return (staticItems.AsReadOnly());
+			items.Add(new IPHostEx(IPHost.IPv6Localhost));
+
+			// The shall only contain the fixed items, 'Explicit' is not added therefore.
+
+			return (items.AsReadOnly());
 		}
 
 		/// <summary>
-		/// Determines whether the enumeration contains the specified item.
+		/// Determines whether the enumeration covers the specified item.
 		/// </summary>
-		public static bool Contains(IPHostEx item)
+		public static bool HasItem(IPHostEx item)
 		{
 			return (GetItems().Contains(item));
 		}
@@ -517,6 +550,16 @@ namespace MKY.Net
 				result = new IPHostEx(IPHost.IPv4Localhost);
 				return (true);
 			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Broadcast_string))
+			{
+				result = new IPHostEx(IPHost.Broadcast);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv4Broadcast_string))
+			{
+				result = new IPHostEx(IPHost.IPv4Broadcast);
+				return (true);
+			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv6Localhost_string))
 			{
 				result = new IPHostEx(IPHost.IPv6Localhost);
@@ -571,8 +614,8 @@ namespace MKY.Net
 			{
 				try
 				{
-					IPAddress[] addressesFromDns = Dns.GetHostAddresses(s);
-					foreach (IPAddress addressFromDns in addressesFromDns)
+					var addressesFromDns = Dns.GetHostAddresses(s);
+					foreach (var addressFromDns in addressesFromDns)
 					{
 						if (addressFromDns.AddressFamily == AddressFamily.InterNetwork) // IPv4 has precedence for compatibility reasons.
 						{

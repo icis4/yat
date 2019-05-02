@@ -73,7 +73,7 @@ namespace MKY.Net
 
 				foreach (var item in sortedReversed)
 				{
-					if (!IPHostEx.Contains(item.Item)) // Do not remove the fixed items.
+					if (!IPHostEx.HasItem(item.Item)) // Do not remove the fixed items.
 					{
 						Remove(item.Item);
 						return (true);
