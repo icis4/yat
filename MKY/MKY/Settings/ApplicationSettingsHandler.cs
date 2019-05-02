@@ -913,16 +913,16 @@ namespace MKY.Settings
 		{
 			// AssertNotDisposed() is called by 'Load()' below.
 
-			bool result = true;
+			bool success = true;
 
 			if (!LoadCommonSettings())
-				result = false;
+				success = false;
 
 			if (!LoadLocalUserSettings())
-				result = false;
+				success = false;
 
 			if (!LoadRoamingUserSettings())
-				result = false;
+				success = false;
 
 			// Immediately try to save settings to reflect current version:
 			try
@@ -935,7 +935,7 @@ namespace MKY.Settings
 			}
 
 			// Return load result:
-			return (result);
+			return (success);
 		}
 
 		/// <summary>
