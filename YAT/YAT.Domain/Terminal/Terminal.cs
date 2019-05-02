@@ -895,13 +895,14 @@ namespace YAT.Domain
 				// Do not clear the send queue, it already got cleared when stopping. This setup
 				// potentially allows to call Send() and buffer data before starting the terminal.
 
-				bool result = this.rawTerminal.Start();
+				var success = this.rawTerminal.Start();
+				if (success)
+				{
+					this.initialTimeStamp = DateTime.Now;
 
-				this.initialTimeStamp = DateTime.Now;
-
-				ConfigurePeriodicXOnTimer();
-
-				return (result);
+					ConfigurePeriodicXOnTimer();
+				}
+				return (success);
 			}
 			else
 			{
