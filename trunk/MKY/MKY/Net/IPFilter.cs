@@ -140,7 +140,7 @@ namespace MKY.Net
 			if (address == null)
 				throw (new ArgumentNullException("address", "An IP address is required!"));
 
-			                    // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPFilter.Any);           this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPFilter.Localhost);     this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPFilter.IPv6Any);       this.explicitAddress = IPAddress.None; }
@@ -210,6 +210,24 @@ namespace MKY.Net
 					case IPFilter.Explicit:      return (this.explicitAddress);
 
 					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsAny
+		{
+			get
+			{
+				switch ((IPFilter)UnderlyingEnum)
+				{
+					case IPFilter.Any:
+					case IPFilter.IPv4Any:
+					case IPFilter.IPv6Any:
+						return (true);
+
+					default:
+						return (false);
 				}
 			}
 		}

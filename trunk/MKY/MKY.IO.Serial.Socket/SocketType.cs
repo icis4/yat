@@ -110,7 +110,7 @@ namespace MKY.IO.Serial.Socket
 					case SocketType.TcpAutoSocket: return (true);
 					case SocketType.UdpClient:     return (false);
 					case SocketType.UdpServer:     return (false);
-					case SocketType.UdpPairSocket:     return (false);
+					case SocketType.UdpPairSocket: return (false);
 					default:                       return (false);
 				}
 			}
@@ -128,7 +128,7 @@ namespace MKY.IO.Serial.Socket
 					case SocketType.TcpAutoSocket: return (false);
 					case SocketType.UdpClient:     return (true);
 					case SocketType.UdpServer:     return (true);
-					case SocketType.UdpPairSocket:     return (true);
+					case SocketType.UdpPairSocket: return (true);
 					default:                       return (false);
 				}
 			}
