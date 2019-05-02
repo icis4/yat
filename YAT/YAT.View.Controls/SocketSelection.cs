@@ -32,6 +32,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
+using System.Linq;
 using System.Windows.Forms;
 
 using MKY;
@@ -689,21 +690,51 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				comboBox_RemoteHost.Items.Clear();
-				if (this.recentRemoteHosts != null)
-					comboBox_RemoteHost.Items.AddRange(this.recentRemoteHosts.ToArray());
+				SetRemoteHostList();
 
 				comboBox_RemotePort.Items.Clear();
-				if (this.recentPorts != null)
+				if (this.recentPorts != null) {
 					comboBox_RemotePort.Items.AddRange(this.recentPorts.ToArray());
+				}
 
 				comboBox_LocalFilter.Items.Clear();
-				if (this.recentLocalFilters != null)
-					comboBox_LocalFilter.Items.AddRange(this.recentLocalFilters.ToArray());
+				comboBox_LocalFilter.Items.AddRange(IPFilterEx.GetItems().ToArray());
+				if (this.recentLocalFilters != null) {
+					foreach (var rlf in this.recentLocalFilters.ToArray()) {
+						var localFilter = (IPFilterEx)rlf.Item;
+						if (!comboBox_LocalFilter.Items.Contains(localFilter))
+							comboBox_LocalFilter.Items.Add(localFilter);
+					}
+				}
 
 				comboBox_LocalPort.Items.Clear();
-				if (this.recentPorts != null)
+				if (this.recentPorts != null) {
 					comboBox_LocalPort.Items.AddRange(this.recentPorts.ToArray());
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Needed to update list with or without broadcast, depending on whether TCP/IP or UDP/IP is selected.
+		/// </remarks>
+		private void SetRemoteHostList()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				comboBox_RemoteHost.Items.Clear();
+				comboBox_RemoteHost.Items.AddRange(IPHostEx.GetItems(SocketType == SocketType.UdpClient).ToArray());
+				if (this.recentRemoteHosts != null) {
+					foreach (var rrh in this.recentRemoteHosts.ToArray()) {
+						var remoteHost = (IPHostEx)rrh.Item;
+						if (!comboBox_RemoteHost.Items.Contains(remoteHost))
+							comboBox_RemoteHost.Items.Add(remoteHost);
+					}
+				}
 			}
 			finally
 			{
@@ -860,6 +891,9 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				// Remote host list:
+				SetRemoteHostList();
+
 				// Remote host address:
 				if (!DesignMode && Enabled && (this.remoteHost != null) &&
 				    ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
@@ -902,18 +936,10 @@ namespace YAT.View.Controls
 				comboBox_LocalInterface.Enabled = true;
 				if (comboBox_LocalInterface.Items.Count > 0)
 				{
-					if (this.socketType != SocketType.UdpClient)
-					{
-						if (this.localInterface != null)
-							comboBox_LocalInterface.SelectedItem = this.localInterface;
-						else
-							comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default;
-					}
+					if (this.localInterface != null)
+						comboBox_LocalInterface.SelectedItem = this.localInterface;
 					else
-					{
-						comboBox_LocalInterface.Enabled = false;
 						comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterfaceEx.Default;
-					}
 				}
 				else // Note that 'SelectionHelper' is not used for this 'DropDownList'-style ComboBox.
 				{
@@ -953,13 +979,6 @@ namespace YAT.View.Controls
 					comboBox_LocalFilter.Visible = true;
 					switch (this.socketType)
 					{
-						case SocketType.UdpClient:
-						{
-							comboBox_LocalFilter.Enabled = false;
-							ComboBoxHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
-							break;
-						}
-
 						case SocketType.UdpServer:
 						{
 							comboBox_LocalFilter.Enabled = true;
@@ -972,6 +991,7 @@ namespace YAT.View.Controls
 							break;
 						}
 
+						case SocketType.UdpClient:
 						case SocketType.UdpPairSocket:
 						{
 							comboBox_LocalFilter.Enabled = false;

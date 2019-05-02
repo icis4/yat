@@ -74,10 +74,14 @@ namespace MKY.Test.Net
 			{
 				yield return (new TestCaseData(new IPHostEx(IPHost.Localhost),			IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
 				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Localhost),		IPHost.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.Broadcast),			IPHost.Broadcast,		IPAddress.Broadcast,	BroadcastString)		.SetName("Broadcast_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Broadcast),		IPHost.IPv4Broadcast,	IPAddress.Broadcast,	IPv4BroadcastString)	.SetName("IPv4Broadcast_HostType"));
 				yield return (new TestCaseData(new IPHostEx(IPHost.IPv6Localhost),		IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
 
 				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),		IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
 				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),		IPHost.IPv4Localhost,	IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Broadcast),		IPHost.Broadcast,		IPAddress.Broadcast,	BroadcastString)		.SetName("Broadcast_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Broadcast),		IPHost.IPv4Broadcast,	IPAddress.Broadcast,	BroadcastString)		.SetName("IPv4Broadcast_HostAddress"));
 				yield return (new TestCaseData(new IPHostEx(IPAddress.IPv6Loopback),	IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
 
 				yield return (new TestCaseData(new IPHostEx(SomeIPv4Address),			IPHost.Explicit,		SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address"));
@@ -112,6 +116,12 @@ namespace MKY.Test.Net
 
 			if ((ipHostType == IPHost.IPv4Localhost) && (ipHost == IPHost.Localhost))
 				return; // All fine, 'IPv4Localhost' and 'Localhost' are the same.
+
+			if ((ipHostType == IPHost.Broadcast) && (ipHost == IPHost.IPv4Broadcast))
+				return; // All fine, 'Broadcast' and 'IPv4Broadcast' are the same.
+
+			if ((ipHostType == IPHost.IPv4Broadcast) && (ipHost == IPHost.Broadcast))
+				return; // All fine, 'IPv4Broadcast' and 'Broadcast' are the same.
 
 			Assert.That((IPHost)ipHost, Is.EqualTo(ipHostType));
 		}

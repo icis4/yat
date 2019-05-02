@@ -109,6 +109,7 @@ New:
                   Note that tabs have already been treated as tabs by default since YAT 1.99.22.
 
 Important changes:
+- UDP/IP now supports sending to and receiving from broadcast addresses (feature request #370).
 - Serial COM port again uses the term RTS (Ready To Send) as that is still most commonly used.
   In addition, notes/hints on terms RTR (Ready To Receive) as well as RFR (Ready For Receiving).
 - Errors are now indicated in square "[...]" instead of angle "<...>" brackets (rel. to feat. #350).
@@ -135,6 +136,7 @@ Fixed bugs:
 - Handling of potential 'ObjectDisposedException' when disconnecting USB/RS-232 converters (USB CDC)
   without closing the serial COM port now also handles potential 'UnauthorizedAccessException'
   (bug #442, related to former bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401).
+- [Remote Host] and [Local Filter] selection again show the common items (rel. to feat. req. #370)).
 - 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - Problem with escape sequences in automatic action/response fixed (bug #424).
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
