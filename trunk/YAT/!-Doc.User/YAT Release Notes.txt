@@ -126,7 +126,7 @@ Important changes:
    > Shortcut of [Send File] changed to [Alt+I] to distinguish from shortcut of [File] menu.
    > Shortcut to [Monitor] added as [Alt+M].
 - Text terminals: Refactoring and refinement of EOL handling (related to feature requests #224,
-  #340 and #347). Any sequence and mix of received and sent characters (even quite exotic sequences)
+  #340 and #347). Any sequence and mix of received and sent characters (even quite exotic ones)
   should now be correctly handled and displayed. Corresponding test coverage enlarged.
 - Text terminals: Option to show length as number of characters (related to feature request #224).
 
