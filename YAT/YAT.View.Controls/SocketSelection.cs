@@ -700,10 +700,11 @@ namespace YAT.View.Controls
 				comboBox_LocalFilter.Items.Clear();
 				if (RecentLocalFilters != null) {                                                    // Make sure to only list the item, in its type.
 					comboBox_LocalFilter.Items.AddRange(RecentLocalFilters.ConvertAll(x => (object)x.Item).ToArray());
-				}                                                           // Recent items shall be listed first.
-				foreach (var item in IPFilterEx.GetItems()) {               // Predefined items shall be listed after.
-					if (!comboBox_LocalFilter.Items.Contains((string)item)) // Same as .Distinct(), but explicitly controlling the order.
-						comboBox_LocalFilter.Items.Add((string)item);
+				}                                             // Recent items shall be listed first.
+				foreach (var item in IPFilterEx.GetItems()) { // Predefined items shall be listed after.
+					var casted = (string)item; // Make sure to compare (and list) identical types!
+					if (!comboBox_LocalFilter.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
+						comboBox_LocalFilter.Items.Add(casted);
 				}
 
 				comboBox_LocalPort.Items.Clear();
@@ -730,8 +731,9 @@ namespace YAT.View.Controls
 					comboBox_RemoteHost.Items.AddRange(RecentRemoteHosts.ConvertAll(x => (object)x.Item).ToArray());
 				}                                                                             // Recent items shall be listed first.
 				foreach (var item in IPHostEx.GetItems(SocketType == SocketType.UdpClient)) { // Predefined items shall be listed after.
-					if (!comboBox_RemoteHost.Items.Contains((string)item))                    // Same as .Distinct(), but explicitly controlling the order.
-						comboBox_RemoteHost.Items.Add((string)item);
+					var casted = (string)item; // Make sure to compare (and list) identical types!
+					if (!comboBox_RemoteHost.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
+						comboBox_RemoteHost.Items.Add(casted);
 				}
 			}
 			finally
