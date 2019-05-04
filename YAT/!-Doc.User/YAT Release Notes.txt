@@ -103,8 +103,9 @@ New:
 - Text terminals: Additional options to control line break:
    > Length line break (feature request #224).
      Useful to limit the number of characters displayed per line, i.e. "word wrap".
-   > Timed line break (feature request #340).
      Useful to communicate with devices that do use text messages but no EOL sequence.
+   > Timed line break (feature request #340).
+     Also useful to communicate with devices that do use text messages but no EOL sequence.
 - Text terminals: Backspace (feature request #308) as well as bell controls are executed by default.
                   Note that tabs have already been treated as tabs by default since YAT 1.99.22.
 

@@ -58,7 +58,7 @@
 			this.textBox_SequenceLineBreakAfterSequence.Location = new System.Drawing.Point(163, 47);
 			this.textBox_SequenceLineBreakAfterSequence.Name = "textBox_SequenceLineBreakAfterSequence";
 			this.textBox_SequenceLineBreakAfterSequence.Size = new System.Drawing.Size(106, 20);
-			this.textBox_SequenceLineBreakAfterSequence.TabIndex = 4;
+			this.textBox_SequenceLineBreakAfterSequence.TabIndex = 6;
 			this.textBox_SequenceLineBreakAfterSequence.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_SequenceLineBreakAfterSequence, "Can be any sequence of bytes, e.g. \\h(17 00) or <ETB><NUL>");
 			this.textBox_SequenceLineBreakAfterSequence.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SequenceLineBreakAfterSequence_Validating);
@@ -80,7 +80,7 @@
 			this.checkBox_SequenceLineBreakAfter.Location = new System.Drawing.Point(3, 49);
 			this.checkBox_SequenceLineBreakAfter.Name = "checkBox_SequenceLineBreakAfter";
 			this.checkBox_SequenceLineBreakAfter.Size = new System.Drawing.Size(152, 17);
-			this.checkBox_SequenceLineBreakAfter.TabIndex = 3;
+			this.checkBox_SequenceLineBreakAfter.TabIndex = 5;
 			this.checkBox_SequenceLineBreakAfter.Text = "Break lines &after sequence";
 			this.checkBox_SequenceLineBreakAfter.CheckedChanged += new System.EventHandler(this.checkBox_SequenceLineBreakAfter_CheckedChanged);
 			// 
@@ -100,7 +100,7 @@
 			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(212, 73);
 			this.label_TimedLineBreakUnit.Name = "label_TimedLineBreakUnit";
 			this.label_TimedLineBreakUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_TimedLineBreakUnit.TabIndex = 7;
+			this.label_TimedLineBreakUnit.TabIndex = 9;
 			this.label_TimedLineBreakUnit.Text = "ms";
 			this.label_TimedLineBreakUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -110,7 +110,7 @@
 			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(163, 70);
 			this.textBox_TimedLineBreakTimeout.Name = "textBox_TimedLineBreakTimeout";
 			this.textBox_TimedLineBreakTimeout.Size = new System.Drawing.Size(48, 20);
-			this.textBox_TimedLineBreakTimeout.TabIndex = 6;
+			this.textBox_TimedLineBreakTimeout.TabIndex = 8;
 			this.textBox_TimedLineBreakTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_TimedLineBreakTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_TimedLineBreakTimeout_Validating);
 			// 
@@ -120,8 +120,10 @@
 			this.checkBox_TimedLineBreak.Location = new System.Drawing.Point(3, 72);
 			this.checkBox_TimedLineBreak.Name = "checkBox_TimedLineBreak";
 			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(151, 17);
-			this.checkBox_TimedLineBreak.TabIndex = 5;
+			this.checkBox_TimedLineBreak.TabIndex = 7;
 			this.checkBox_TimedLineBreak.Text = "Break lines after ti&meout of";
+			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
+        "en.");
 			this.checkBox_TimedLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_TimedLineBreak_CheckedChanged);
 			// 
 			// textBox_SequenceLineBreakBeforeSequence
@@ -130,7 +132,7 @@
 			this.textBox_SequenceLineBreakBeforeSequence.Location = new System.Drawing.Point(163, 24);
 			this.textBox_SequenceLineBreakBeforeSequence.Name = "textBox_SequenceLineBreakBeforeSequence";
 			this.textBox_SequenceLineBreakBeforeSequence.Size = new System.Drawing.Size(106, 20);
-			this.textBox_SequenceLineBreakBeforeSequence.TabIndex = 9;
+			this.textBox_SequenceLineBreakBeforeSequence.TabIndex = 4;
 			this.toolTip.SetToolTip(this.textBox_SequenceLineBreakBeforeSequence, "Can be any sequence of bytes, e.g. \\h(17 00) or <ETB><NUL>");
 			this.textBox_SequenceLineBreakBeforeSequence.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SequenceLineBreakBeforeSequence_Validating);
 			// 
@@ -140,7 +142,7 @@
 			this.checkBox_SequenceLineBreakBefore.Location = new System.Drawing.Point(3, 26);
 			this.checkBox_SequenceLineBreakBefore.Name = "checkBox_SequenceLineBreakBefore";
 			this.checkBox_SequenceLineBreakBefore.Size = new System.Drawing.Size(161, 17);
-			this.checkBox_SequenceLineBreakBefore.TabIndex = 8;
+			this.checkBox_SequenceLineBreakBefore.TabIndex = 3;
 			this.checkBox_SequenceLineBreakBefore.Text = "Break lines &before sequence";
 			this.checkBox_SequenceLineBreakBefore.UseVisualStyleBackColor = true;
 			this.checkBox_SequenceLineBreakBefore.CheckedChanged += new System.EventHandler(this.checkBox_SequenceLineBreakBefore_CheckedChanged);
