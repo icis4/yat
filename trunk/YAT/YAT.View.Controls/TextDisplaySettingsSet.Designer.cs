@@ -67,6 +67,9 @@
 			this.checkBox_LengthLineBreak.Size = new System.Drawing.Size(102, 17);
 			this.checkBox_LengthLineBreak.TabIndex = 0;
 			this.checkBox_LengthLineBreak.Text = "Break lines &after";
+			this.toolTip.SetToolTip(this.checkBox_LengthLineBreak, "Useful to limit the number of characters displayed per line, i.e. \"word wrap\".\r\nU" +
+        "seful to communicate with devices that do use text messages but no EOL sequence." +
+        "");
 			this.checkBox_LengthLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_LengthLineBreak_CheckedChanged);
 			// 
 			// label_TimedLineBreakUnit
@@ -97,6 +100,9 @@
 			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(151, 17);
 			this.checkBox_TimedLineBreak.TabIndex = 3;
 			this.checkBox_TimedLineBreak.Text = "Break lines after ti&meout of";
+			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
+        "en.\r\n\r\nUseful to communicate with devices that do use text messages but no EOL s" +
+        "equence.");
 			this.checkBox_TimedLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_TimedLineBreak_CheckedChanged);
 			// 
 			// TextDisplaySettingsSet
