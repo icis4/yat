@@ -619,7 +619,7 @@ namespace MKY.IO.Serial.Socket
 			if (IsStopped)
 			{
 				if ((this.socketType == UdpSocketType.Client) ||
-					(this.socketType == UdpSocketType.PairSocket))
+				    (this.socketType == UdpSocketType.PairSocket))
 				{
 					DebugMessage("Resolving host address...");
 					if (!this.remoteHost.TryResolve())
@@ -630,7 +630,7 @@ namespace MKY.IO.Serial.Socket
 				}
 
 				if ((this.socketType == UdpSocketType.Server) ||
-					(this.socketType == UdpSocketType.PairSocket))
+				    (this.socketType == UdpSocketType.PairSocket))
 				{
 					DebugMessage("Resolving local filter addres...");
 					if (!this.localFilter.TryResolve())
@@ -914,24 +914,53 @@ namespace MKY.IO.Serial.Socket
 			// Then, create socket:
 			lock (this.socketSyncObj)
 			{
-				// Neither local nor remote endpoint must be set in constructor!
-				// Otherwise, options cannot be changed below!
+				// Neither local nor remote endpoint must be set in constructor! Otherwise, options cannot be changed below!
 				this.socket = new System.Net.Sockets.UdpClient();
 
 				if ((this.socketType == UdpSocketType.Server) ||
-					(this.socketType == UdpSocketType.PairSocket)) // Configure and bind the server/listener port:
+				    (this.socketType == UdpSocketType.PairSocket)) // Configure and bind the listener port:
 				{
 					this.socket.ExclusiveAddressUse = false;
 					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
+
+					if (this.remoteHost.IsBroadcast) {
+						this.socket.EnableBroadcast = true;
+						this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
+					}
+
 					this.socket.Client.Bind(new System.Net.IPEndPoint(this.localInterface.Address, this.localPort));
 				}
 				else // Client
 				{
-					// The socket is not bound to a local port, neither limited to a specific interface.
+					if (this.remoteHost.IsBroadcast) {
+						this.socket.EnableBroadcast = true;
+						this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
+					}
+
+					this.socket.Client.Bind(new System.Net.IPEndPoint(this.localInterface.Address, this.localPort));
 				}
 
+				// Note the following remark of the UdpClient.Connect() method:
+				//
+				// "You cannot set the default remote host to a broadcast address using this method unless (...)
+				//  and set the socket option to SocketOptionName.Broadcast."
+				// "You can however, broadcast data to the default broadcast address, 255.255.255.255, if
+				//  you specify IPAddress.Broadcast in your call to the Send method."
+				// (https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient.connect)
+				//
+				// Limited broadcast:  A packet is sent to a specific network or series of networks.
+				//                     A limited broadcast address includes the network or subnet fields.
+				//                     In a limited broadcast packet destined for a local network, the network
+				//                     identifier portion and host identifier portion of the destination address
+				//                     is either all ones (255.255.255.255) or all zeros (0.0.0.0).
+				// Flooded broadcast:  A packet is sent to every network.
+				// Directed broadcast: A packet is sent to a specific destination address where only the host
+				//                     portion of the IP address is either all ones or all zeros (such as
+				//                     192.20.255.255 or 190.20.0.0).
+				// (https://www.juniper.net/documentation/en_US/junose15.1/topics/concept/ip-broadcast-addressing-overview.html)
+
 				if ((this.socketType == UdpSocketType.Client) ||
-					(this.socketType == UdpSocketType.PairSocket)) // Connect the client port:
+				    (this.socketType == UdpSocketType.PairSocket)) // Connect the client port:
 				{
 					this.socket.Connect(this.remoteHost.Address, this.remotePort);
 				}
@@ -1171,7 +1200,7 @@ namespace MKY.IO.Serial.Socket
 				byte[] data;
 				try
 				{
-					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
+					data = state.Socket.EndReceive(ar, ref remoteEndPoint); MISMATCH HERE ?!?
 				}
 				catch (Exception ex)
 				{
@@ -1339,7 +1368,7 @@ namespace MKY.IO.Serial.Socket
 
 										if (remoteEndPoint == null)
 											remoteEndPoint = item.Value2;
-										else if (remoteEndPoint != item.Value2)
+										else if (remoteEndPoint != item.Value2) MISMATCH HERE ?!?
 											break; // Break as soon as data of a different end point is available.
 
 										// If still the same end point, dequeue the item to acknowledge it's gone:
