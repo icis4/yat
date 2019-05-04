@@ -693,23 +693,22 @@ namespace YAT.View.Controls
 				SetRemoteHostList();
 
 				comboBox_RemotePort.Items.Clear();
-				if (this.recentPorts != null) {
-					comboBox_RemotePort.Items.AddRange(this.recentPorts.ToArray());
+				if (RecentPorts != null) {                                                   // Make sure to only list the item, in its type.
+					comboBox_RemotePort.Items.AddRange(RecentPorts.ConvertAll(x => (object)x.Item).ToArray());
 				}
 
 				comboBox_LocalFilter.Items.Clear();
-				comboBox_LocalFilter.Items.AddRange(IPFilterEx.GetItems().ToArray());
-				if (this.recentLocalFilters != null) {
-					foreach (var rlf in this.recentLocalFilters.ToArray()) {
-						var localFilter = (IPFilterEx)rlf.Item;
-						if (!comboBox_LocalFilter.Items.Contains(localFilter))
-							comboBox_LocalFilter.Items.Add(localFilter);
-					}
+				if (RecentLocalFilters != null) {                                                    // Make sure to only list the item, in its type.
+					comboBox_LocalFilter.Items.AddRange(RecentLocalFilters.ConvertAll(x => (object)x.Item).ToArray());
+				}                                                           // Recent items shall be listed first.
+				foreach (var item in IPFilterEx.GetItems()) {               // Predefined items shall be listed after.
+					if (!comboBox_LocalFilter.Items.Contains((string)item)) // Same as .Distinct(), but explicitly controlling the order.
+						comboBox_LocalFilter.Items.Add((string)item);
 				}
 
 				comboBox_LocalPort.Items.Clear();
-				if (this.recentPorts != null) {
-					comboBox_LocalPort.Items.AddRange(this.recentPorts.ToArray());
+				if (RecentPorts != null) {                                                  // Make sure to only list the item, in its type.
+					comboBox_LocalPort.Items.AddRange(RecentPorts.ConvertAll(x => (object)x.Item).ToArray());
 				}
 			}
 			finally
@@ -727,13 +726,12 @@ namespace YAT.View.Controls
 			try
 			{
 				comboBox_RemoteHost.Items.Clear();
-				comboBox_RemoteHost.Items.AddRange(IPHostEx.GetItems(SocketType == SocketType.UdpClient).ToArray());
-				if (this.recentRemoteHosts != null) {
-					foreach (var rrh in this.recentRemoteHosts.ToArray()) {
-						var remoteHost = (IPHostEx)rrh.Item;
-						if (!comboBox_RemoteHost.Items.Contains(remoteHost))
-							comboBox_RemoteHost.Items.Add(remoteHost);
-					}
+				if (RecentRemoteHosts != null) {                                                   // Make sure to only list the item, in its type.
+					comboBox_RemoteHost.Items.AddRange(RecentRemoteHosts.ConvertAll(x => (object)x.Item).ToArray());
+				}                                                                             // Recent items shall be listed first.
+				foreach (var item in IPHostEx.GetItems(SocketType == SocketType.UdpClient)) { // Predefined items shall be listed after.
+					if (!comboBox_RemoteHost.Items.Contains((string)item))                    // Same as .Distinct(), but explicitly controlling the order.
+						comboBox_RemoteHost.Items.Add((string)item);
 				}
 			}
 			finally
