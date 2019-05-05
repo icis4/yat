@@ -31,6 +31,9 @@
 	// Enable debugging of thread state:
 ////#define DEBUG_THREAD_STATE
 
+	// Enable debugging of thread state:
+////#define DEBUG_RECEIVE
+
 #endif // DEBUG
 
 #endregion
@@ -304,13 +307,13 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, UdpSocketType socketType, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 		{
-			// Verify reference arguments:
+			// Verify by-reference arguments:
 
 			if (remoteHost     == null) throw (new ArgumentNullException("remoteHost"));
 			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
 			if (localFilter    == null) throw (new ArgumentNullException("localFilter"));
 
-			// Arguments are defined:
+			// All arguments are defined!
 
 			this.instanceId     = instanceId;
 			this.socketType     = socketType;
@@ -573,7 +576,12 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public virtual bool IsConnected
 		{
-			get { return (IsOpen); }
+			get
+			{
+				// AssertNotDisposed() is called by 'IsOpen' below.
+
+				return (IsOpen);
+			}
 		}
 
 		/// <summary></summary>
@@ -581,6 +589,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
+				// AssertNotDisposed() is called by 'IsOpen' below.
+
 				if ((this.socketType == UdpSocketType.Client) ||
 					(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
 				{
@@ -1183,6 +1193,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					var localFilterEndPoint = new System.Net.IPEndPoint(this.localFilter, this.localPort);
 					var state = new AsyncReceiveState(localFilterEndPoint, this.socket);
+					DebugReceive(string.Format("Beginning receive filtered for {0}", localFilterEndPoint.ToString()));
 					this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
 				}
 			}
@@ -1191,6 +1202,8 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Partially same code for multiple exceptions.")]
 		private void ReceiveCallback(IAsyncResult ar)
 		{
+			DebugReceive("Receive callback...");
+
 			var state = (AsyncReceiveState)(ar.AsyncState);
 
 			// Ensure that async receive is discarded after close/dispose:
@@ -1200,7 +1213,9 @@ namespace MKY.IO.Serial.Socket
 				byte[] data;
 				try
 				{
-					data = state.Socket.EndReceive(ar, ref remoteEndPoint); MISMATCH HERE ?!?
+					DebugReceive(string.Format("...ending receive filtered for {0}...", remoteEndPoint.ToString()));
+					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
+					DebugReceive(string.Format("...{0} bytes received from {1}", ((data != null) ? data.Length : 0), remoteEndPoint.ToString()));
 				}
 				catch (Exception ex)
 				{
@@ -1235,7 +1250,7 @@ namespace MKY.IO.Serial.Socket
 						throw; // Rethrow!
 					}
 
-					// Reset receive state for further processing:
+					// Reset state for further processing:
 					data = null;
 					remoteEndPoint.Address = System.Net.IPAddress.None;
 					remoteEndPoint.Port    = System.Net.IPEndPoint.MinPort;
@@ -1246,6 +1261,8 @@ namespace MKY.IO.Serial.Socket
 				{
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
+						DebugReceive(string.Format("Enqueuing {0} bytes...", data.Length));
+
 						foreach (byte b in data)
 							this.receiveQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, remoteEndPoint));
 
@@ -1296,7 +1313,12 @@ namespace MKY.IO.Serial.Socket
 				} // if (IsServer)
 
 				BeginReceiveIfEnabled(); // Continue receiving in case the socket is still ready or ready again.
+
 			} // if (!IsDisposed && ...)
+			else
+			{
+				DebugReceive("...discarded.");
+			}
 		}
 
 		/// <summary>
@@ -1363,13 +1385,15 @@ namespace MKY.IO.Serial.Socket
 									{
 										Pair<byte, System.Net.IPEndPoint> item;
 
-										// First, peek to check whether data refers to a different end point:
+										// First, peek to check what end point the data refers to:
 										item = this.receiveQueue.Peek();
 
-										if (remoteEndPoint == null)
+										if (remoteEndPoint == null) {
 											remoteEndPoint = item.Value2;
-										else if (remoteEndPoint != item.Value2) MISMATCH HERE ?!?
+										}
+										else if (remoteEndPoint != item.Value2) {
 											break; // Break as soon as data of a different end point is available.
+										}          // Receiving from different end point will continue immediately.
 
 										// If still the same end point, dequeue the item to acknowledge it's gone:
 										item = this.receiveQueue.Dequeue();
@@ -1377,6 +1401,7 @@ namespace MKY.IO.Serial.Socket
 									}
 								}
 
+								DebugReceive(string.Format("...{0} bytes from {1} dequeued", data.Count, remoteEndPoint));
 								OnDataReceived(new SocketDataReceivedEventArgs(data.ToArray(), remoteEndPoint));
 							}
 							finally
@@ -1476,7 +1501,7 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		public override string ToString()
 		{
-			// See below why AssertNotDisposed() is not called on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToShortEndPointString());
 		}
@@ -1488,8 +1513,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
 			switch (SocketType)
 			{
@@ -1534,6 +1558,12 @@ namespace MKY.IO.Serial.Socket
 
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void DebugThreadState(string message)
+		{
+			DebugMessage(message);
+		}
+
+		[Conditional("DEBUG_RECEIVE")]
+		private void DebugReceive(string message)
 		{
 			DebugMessage(message);
 		}
