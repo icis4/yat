@@ -1418,7 +1418,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override string ToString()
 		{
-			// See below why AssertNotDisposed() is not called on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToPortName());
 		}
@@ -1426,10 +1426,9 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public virtual string ToPortName()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
-			SerialPortId id = PortId;
+			var id = PortId;
 			if (id != null)
 				return (id.Name);
 			else

@@ -319,7 +319,11 @@ namespace YAT/*.<TODO>*/
 		public override string ToString()
 		{
 			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
+
+			// -OR-
+
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return ("TODO");
 		}

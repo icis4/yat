@@ -5472,7 +5472,7 @@ namespace YAT.Model
 		public override string ToString()
 		{
 			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
 
 			return (Caption);
 		}

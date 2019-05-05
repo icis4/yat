@@ -1839,7 +1839,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			// See below why AssertNotDisposed() is not called on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
 
 			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
 		}
@@ -1847,8 +1847,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToDiagnosticsString(string indent)
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
 
 			return (indent + "> Type: TextTerminal" + Environment.NewLine + base.ToDiagnosticsString(indent));
 		}

@@ -1171,7 +1171,7 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		public override string ToString()
 		{
-			// See below why AssertNotDisposed() is not called on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToShortEndPointString());
 		}
@@ -1183,8 +1183,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
 			return (this.remoteHost.ToEndpointAddressString() + ":" + this.remotePort);
 		}
