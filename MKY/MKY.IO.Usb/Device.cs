@@ -1038,8 +1038,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (this.deviceInfo.ToString());
 		}
@@ -1049,8 +1048,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string ToShortString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (this.deviceInfo.ToShortString());
 		}
