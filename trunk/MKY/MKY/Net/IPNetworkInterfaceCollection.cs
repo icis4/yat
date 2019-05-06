@@ -47,6 +47,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 #endregion
 
@@ -101,15 +102,19 @@ namespace MKY.Net
 						{
 							DebugVerboseIndent("Address is '" + ai.Address + "'");
 
-							foreach (IPAddress hostAddress in hostEntry.AddressList)
+							if ((ai.Address.AddressFamily == AddressFamily.InterNetwork) ||
+							    (ai.Address.AddressFamily == AddressFamily.InterNetworkV6))
 							{
-								if (ai.Address.Equals(hostAddress)) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-									Add(new IPNetworkInterfaceEx(ai.Address, ni.Description));
+								foreach (IPAddress hostAddress in hostEntry.AddressList)
+								{                  // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+									if (ai.Address.Equals(hostAddress))
+										Add(new IPNetworkInterfaceEx(ai.Address, ni.Description));
 
-								// Note that ni.Name is of not much use, example:
-								//  > Description = "Microsoft Wi-Fi Direct Virtual Adapter"
-								//  > Name        = "LAN -Verbindung* 1"
-							}
+									// Note that ni.Name is of not much use, example:
+									//  > Description = "Microsoft Wi-Fi Direct Virtual Adapter"
+									//  > Name        = "LAN-Verbindung 1"
+								}
+							} // if (is IP)
 
 							DebugVerboseUnindent();
 						} // foreach (unicast address)
@@ -135,9 +140,9 @@ namespace MKY.Net
 		{
 			lock (this)
 			{
-				foreach (IPNetworkInterfaceEx di in this)
+				foreach (IPNetworkInterfaceEx ni in this)
 				{
-					if (di.EqualsDescription(item))
+					if (ni.EqualsDescription(item))
 						return (true);
 				}
 
@@ -159,7 +164,7 @@ namespace MKY.Net
 		{
 			lock (this)
 			{
-				EqualsDescription predicate = new EqualsDescription(item);
+				var predicate = new EqualsDescription(item);
 				return (Find(predicate.Match));
 			}
 		}
@@ -179,7 +184,7 @@ namespace MKY.Net
 		{
 			lock (this)
 			{
-				EqualsDescription predicate = new EqualsDescription(item);
+				var predicate = new EqualsDescription(item);
 				return (FindIndex(predicate.Match));
 			}
 		}
