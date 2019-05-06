@@ -128,6 +128,7 @@ namespace MKY.Net
 
 			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPHost.Localhost);     this.explicitAddress = IPAddress.None; }
+			else if (address.Equals(IPAddress.Broadcast))    { SetUnderlyingEnum(IPHost.Broadcast);     this.explicitAddress = IPAddress.None; }
 			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPHost.IPv6Localhost); this.explicitAddress = IPAddress.None; }
 			else                                             { SetUnderlyingEnum(IPHost.Explicit);      this.explicitAddress = address;        }
 
