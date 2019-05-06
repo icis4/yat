@@ -32,6 +32,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 #endregion
 
@@ -259,6 +261,61 @@ namespace MKY.Net
 		public IPNetworkInterfaceDescriptorPair ToDescriptorPair()
 		{
 			return (new IPNetworkInterfaceDescriptorPair(Description, Address.ToString()));
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public IPAddress RetrieveIPv4Mask()
+		{
+			return (RetrieveIPv4Mask(Address));
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public static IPAddress RetrieveIPv4Mask(IPNetworkInterfaceEx networkInterface)
+		{
+			return (RetrieveIPv4Mask(networkInterface.Address));
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public static IPAddress RetrieveIPv4Mask(IPAddress address)
+		{
+			// Special cases:
+			                // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
+			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
+			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Broadcast);
+			else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.None);
+
+			// Iterate interfaces:
+			foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
+			{
+				if ((ni.OperationalStatus == OperationalStatus.Up) && (ni.NetworkInterfaceType != NetworkInterfaceType.Loopback))
+				{
+					foreach (var ai in ni.GetIPProperties().UnicastAddresses)
+					{
+						if ((ai.Address.AddressFamily == AddressFamily.InterNetwork) && (ai.IPv4Mask != null))
+						{
+							uint maskBytes      = BitConverter.ToUInt32(ai.IPv4Mask.GetAddressBytes(), 0); // e.g. 255.255.0.0
+							uint interfaceBytes = BitConverter.ToUInt32(ai.Address.GetAddressBytes(), 0);  // e.g. 192.20.0.1
+							uint addressBytes   = BitConverter.ToUInt32(address.GetAddressBytes(), 0);     // e.g. 192.20.0.11
+
+							// e.g.        192.20.0.0        ==          192.20.0.0
+							if ((interfaceBytes | maskBytes) == (addressBytes | maskBytes))
+								return (ai.IPv4Mask);
+						}
+					}
+				}
+			}
+
+			return (IPAddress.None);
 		}
 
 		#endregion
