@@ -28,7 +28,7 @@ using System.Net;
 namespace MKY.Net
 {
 	/// <summary>
-	/// <see cref="System.Net.IPAddress"/> utility methods.
+	/// <see cref="IPAddress"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class IPAddressEx
@@ -65,8 +65,8 @@ namespace MKY.Net
 		/// <returns><c>true</c> if value is valid; otherwise, <c>false</c>.</returns>
 		public static bool EqualsNone(IPAddress address)
 		{
-			if (address != null)
-				return (address.Equals(IPAddress.None)); // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			if (address != null) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				return (address.Equals(IPAddress.None));
 			else
 				return (false);
 		}
@@ -81,8 +81,8 @@ namespace MKY.Net
 		/// <returns><c>true</c> if value is valid; otherwise, <c>false</c>.</returns>
 		public static bool NotEqualsNone(IPAddress address)
 		{
-			if (address != null)
-				return (!address.Equals(IPAddress.None)); // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			if (address != null) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				return (!address.Equals(IPAddress.None));
 			else
 				return (false);
 		}

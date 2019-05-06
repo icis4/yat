@@ -23,11 +23,12 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace MKY.Net
 {
 	/// <summary>
-	/// <see cref="System.Net.IPEndPoint"/> utility methods.
+	/// <see cref="IPEndPoint"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class IPEndPointEx
@@ -39,7 +40,7 @@ namespace MKY.Net
 		/// <returns><c>true</c> if value is valid; otherwise, <c>false</c>.</returns>
 		public static bool IsValidPort(int port)
 		{
-			return (Int32Ex.IsWithin(port, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort));
+			return (Int32Ex.IsWithin(port, IPEndPoint.MinPort, IPEndPoint.MaxPort));
 		}
 	}
 }
