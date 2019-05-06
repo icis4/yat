@@ -81,7 +81,8 @@ namespace YAT.Domain
 					return (new UdpSocket
 					(
 						clone.Socket.RemoteHost,
-						clone.Socket.RemoteUdpPort
+						clone.Socket.RemoteUdpPort,
+						clone.Socket.LocalInterface
 					));
 				}
 
