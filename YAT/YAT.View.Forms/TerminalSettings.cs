@@ -174,9 +174,8 @@ namespace YAT.View.Forms
 				return;
 
 			var ioTypeOldWasUdpSocket = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUdpSocket;
-
-			this.settingsInEdit.Terminal.IO.IOType =                   terminalSelection.IOType;
-			var ioTypeNewIsUdpSocket               = ((Domain.IOTypeEx)terminalSelection.IOType).IsUdpSocket;
+			this.settingsInEdit.Terminal.IO.IOType =                    terminalSelection.IOType;
+			var ioTypeNewIsUdpSocket               =  ((Domain.IOTypeEx)terminalSelection.IOType).IsUdpSocket;
 
 			if (ioTypeNewIsUdpSocket != ioTypeOldWasUdpSocket)
 			{
