@@ -183,8 +183,7 @@ namespace YAT.View.Controls
 
 					// Ensure that a localhost pair socket does not use the same port twice:
 					if ((this.socketType == SocketType.UdpPairSocket) &&
-					    (RemoteHost.IsLocalhost) &&
-					    (RemoteUdpPort == LocalUdpPort))
+					    (RemoteHost.IsLocalhost) && (RemoteUdpPort == LocalUdpPort))
 					{
 						if (RemoteUdpPort < IPEndPoint.MaxPort)
 							LocalUdpPort = (RemoteUdpPort + 1);
@@ -661,12 +660,15 @@ namespace YAT.View.Controls
 				else if ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket))
 				{
 					// Also set the remote port:
-					//  > For server:
-					//     > On local host, typically using adjecent ports for client and server.
-					//     > On remote host, typically using same port for client and server.
+					//  > For server: Same port, makes it easier setting the client settings for a same connection.
+					//  > For pair socket: Only in case of port conflict on local host! Otherwise, user couldn't freely choose ports!
 					if (this.socketType == SocketType.UdpServer)
 					{
-						if (RemoteHost.IsLocalhost)
+						RemoteUdpPort = port;
+					}
+					else // .socketType == SocketType.UdpPairSocket)
+					{
+						if ((RemoteHost.IsLocalhost) && (RemoteUdpPort == port))
 						{
 							if (port > IPEndPoint.MinPort)
 								RemoteUdpPort = (port - 1);
@@ -679,10 +681,6 @@ namespace YAT.View.Controls
 							//  > comboBox_RemotePort_Validating()
 							//  > comboBox_LocalPort_Validating()
 							// Changes above may have to be applied at the other two locations too.
-						}
-						else
-						{
-							RemoteUdpPort = port;
 						}
 					}
 
