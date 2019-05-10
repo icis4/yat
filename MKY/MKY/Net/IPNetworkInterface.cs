@@ -383,10 +383,10 @@ namespace MKY.Net
 		{
 			// Special cases:
 			                // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
-			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
-			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Broadcast);
-			else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.None);
+			if      (address.Equals(IPAddress.Any))          return (IPAddress.Any);
+			else if (address.Equals(IPAddress.Loopback))     return (new IPAddress(new byte[] { 127, 0, 0, 0 }));
+			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Any);
+			else if (address.Equals(IPAddress.IPv6Loopback)) return (new IPAddress(new byte[] { 127, 0, 0, 0 }));
 
 			// Calculate address:
 			IPAddress mask = RetrieveIPv4Mask(address);
