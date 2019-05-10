@@ -81,7 +81,7 @@ namespace YAT.Domain
 			if (!IsDisposed)
 			{
 				Debug.WriteLine("Remind (2016-09-08 / MKY) 'Elapsed' event handler not yet free'd, whole timer handling should be encapsulated into the 'LineState' class.");
-				DebugEventManagement.DebugWriteAllEventRemains(this);
+			////DebugEventManagement.DebugWriteAllEventRemains(this); intended implementation commented out to prevent 100+ lines of debug output (Terminal.ToString())
 				this.eventHelper.DiscardAllEventsAndExceptions();
 
 				// Dispose of managed resources if requested:
