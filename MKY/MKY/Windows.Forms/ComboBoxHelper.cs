@@ -80,35 +80,38 @@ namespace MKY.Windows.Forms
 			/// </summary>
 			public void Restore(ComboBox control)
 			{
-				if (PreviousSelectionLength == 0)
+				if (PreviousSelectionStart != ControlEx.InvalidIndex)
 				{
-					if (!PreviousCursorIsAtEnd) // Simply restore selection:
+					if (PreviousSelectionLength == 0)
 					{
-						control.SelectionStart  = PreviousSelectionStart;
-						control.SelectionLength = 0;
+						if (!PreviousCursorIsAtEnd) // Simply restore selection:
+						{
+							control.SelectionStart  = PreviousSelectionStart;
+							control.SelectionLength = 0;
+						}
+						else // PreviousCursorIsAtEnd => Re-calculate position:
+						{
+							control.SelectionStart  = control.Text.Length;
+							control.SelectionLength = 0;
+						}
 					}
-					else // PreviousCursorIsAtEnd => Re-calculate position:
+					else
 					{
-						control.SelectionStart  = control.Text.Length;
-						control.SelectionLength = 0;
-					}
-				}
-				else
-				{
-					if (!PreviousSelectionSpansEnd) // Simply restore selection:
-					{
-						control.SelectionStart  = PreviousSelectionStart;
-						control.SelectionLength = PreviousSelectionLength;
-					}
-					else // PreviousSelectionSpansEnd => Re-calculate selection:
-					{
-						control.SelectionStart  = PreviousSelectionStart;
-						control.SelectionLength = (control.Text.Length - control.SelectionStart);
-					}
+						if (!PreviousSelectionSpansEnd) // Simply restore selection:
+						{
+							control.SelectionStart  = PreviousSelectionStart;
+							control.SelectionLength = PreviousSelectionLength;
+						}
+						else // PreviousSelectionSpansEnd => Re-calculate selection:
+						{
+							control.SelectionStart  = PreviousSelectionStart;
+							control.SelectionLength = (control.Text.Length - control.SelectionStart);
+						}
 
-					// \remind (2018-01-02 / MKY) minor issue (bug #403):
-					// If selection was done in reverse direction, i.e. cursor is located to the
-					// left of the selection, e.g. Iabc, Restore() again reverts this, e.g. abcI.
+						// \remind (2018-01-02 / MKY) minor issue (bug #403):
+						// If selection was done in reverse direction, i.e. cursor is located to the
+						// left of the selection, e.g. Iabc, Restore() again reverts this, e.g. abcI.
+					}
 				}
 			}
 		}

@@ -47,6 +47,8 @@
 			// 
 			// comboBox
 			// 
+			this.comboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox.FormattingEnabled = true;
 			this.comboBox.Items.AddRange(new object[] {
             "Some item 1",
@@ -78,6 +80,8 @@
 			// 
 			// comboBoxEx
 			// 
+			this.comboBoxEx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxEx.FormattingEnabled = true;
 			this.comboBoxEx.Items.AddRange(new object[] {
             "Some item 1",
@@ -99,6 +103,8 @@
 			// 
 			// button_TabStopDummy
 			// 
+			this.button_TabStopDummy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_TabStopDummy.Location = new System.Drawing.Point(197, 12);
 			this.button_TabStopDummy.Name = "button_TabStopDummy";
 			this.button_TabStopDummy.Size = new System.Drawing.Size(227, 23);
@@ -118,6 +124,7 @@
 			this.Controls.Add(this.textBoxEx);
 			this.Controls.Add(this.comboBox);
 			this.Controls.Add(this.textBox);
+			this.MinimumSize = new System.Drawing.Size(452, 142);
 			this.Name = "TextInputTest";
 			this.Text = "TextInputTest";
 			this.Deactivate += new System.EventHandler(this.TextInputTest_Deactivate);

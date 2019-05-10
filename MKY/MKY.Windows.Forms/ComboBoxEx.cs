@@ -255,6 +255,31 @@ namespace MKY.Windows.Forms
 	////	base.OnEnter(e);
 	////}
 
+	/////// <summary>
+	/////// Raises the <see cref="E:Resize"/> event.
+	/////// </summary>
+	/////// <remarks>
+	/////// \remind (2019-05-10 / MKY) minor issue (bug #403):
+	/////// For whatever reason, resizing a ComboBox selects the whole content. Overriding
+	/////// <see cref="ComboBox.OnResize(EventArgs)"/> was an attempt to also restore the selection
+	/////// in such case. But it doesn't work...
+	/////// </remarks>
+	/////// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+	////protected override void OnResize(EventArgs e)
+	////{
+	////	base.OnResize(e);
+	////
+	////	if (Focused)
+	////	{
+	////		CursorAndSelectionHelper.Restore(this);
+	////		DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} restored.", SelectionStart, SelectionLength));
+	////	}
+	////	else
+	////	{
+	////		DebugCursorAndSelection(string.Format("...cursor position {0} and text selection length {1} left unchanged.", SelectionStart, SelectionLength));
+	////	}
+	////}
+
 		/// <summary>
 		/// Implements the same selection behavior on getting focus as <see cref="TextBox"/>.
 		/// </summary>
