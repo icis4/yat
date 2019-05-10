@@ -361,12 +361,12 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				System.Net.IPAddress directedBroadcastAddress = IPNetworkInterfaceEx.RetrieveDirectedBroadcastAddress(localFilter.Address); // e.g. 192.20.255.255
-				System.Net.IPAddress directedAnyAddress       = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(      localFilter.Address); // e.g. 192.20.0.0
-				                              // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				var directedBroadcastAddress = IPNetworkInterfaceEx.RetrieveDirectedBroadcastAddress(localFilter.Address); // e.g. 192.20.255.255
+				                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 				if (localFilter.Address.Equals(directedBroadcastAddress)) // = directed broadcast using e.g. 192.20.255.255.
-				{                                          // Filtering for limited broadcast address 192.20.255.255 doesn't work.
-					this.localFilter = directedAnyAddress; // Nothing would be received => using directed any address 192.20.0.0 instead.
+				{                                                                                                  // Filtering for directed broadcast address 192.20.255.255 doesn't work.
+					var directedAnyAddress = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(localFilter.Address); // Nothing would be received => using directed any address 192.20.0.0 instead.
+					this.localFilter = directedAnyAddress;
 				}
 				else // i.e. no broadcast:
 				{
