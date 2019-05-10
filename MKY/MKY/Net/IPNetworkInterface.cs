@@ -308,7 +308,7 @@ namespace MKY.Net
 							uint addressBytes   = BitConverter.ToUInt32(address.GetAddressBytes(), 0);     // e.g. 192.20.0.11
 
 							// e.g.        192.20.0.0        ==          192.20.0.0
-							if ((interfaceBytes | maskBytes) == (addressBytes | maskBytes))
+							if ((interfaceBytes & maskBytes) == (addressBytes & maskBytes))
 								return (ai.IPv4Mask);
 						}
 					}
@@ -316,6 +316,84 @@ namespace MKY.Net
 			}
 
 			return (IPAddress.None);
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public IPAddress RetrieveDirectedBroadcastAddress()
+		{
+			return (RetrieveDirectedBroadcastAddress(Address));
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public static IPAddress RetrieveDirectedBroadcastAddress(IPNetworkInterfaceEx networkInterface)
+		{
+			return (RetrieveDirectedBroadcastAddress(networkInterface.Address));
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public static IPAddress RetrieveDirectedBroadcastAddress(IPAddress address)
+		{
+			// Special cases:
+			                // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
+			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
+			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Broadcast);
+			else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.None);
+
+			// Calculate address:
+			IPAddress mask = RetrieveIPv4Mask(address);
+			uint maskBytes    = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);                                 // e.g. 255.255.0.0
+			uint addressBytes = BitConverter.ToUInt32(address.GetAddressBytes(), 0);                              // e.g. 192.20.0.1 or 192.20.255.255
+			IPAddress directedBroadcastAddress = new IPAddress(BitConverter.GetBytes(addressBytes | ~maskBytes)); // e.g. 192.20.255.255
+			return (directedBroadcastAddress);
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public IPAddress RetrieveDirectedAnyAddress()
+		{
+			return (RetrieveDirectedAnyAddress(Address));
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public static IPAddress RetrieveDirectedAnyAddress(IPNetworkInterfaceEx networkInterface)
+		{
+			return (RetrieveDirectedAnyAddress(networkInterface.Address));
+		}
+
+		/// <remarks>
+		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
+		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// </remarks>
+		public static IPAddress RetrieveDirectedAnyAddress(IPAddress address)
+		{
+			// Special cases:
+			                // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
+			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
+			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Broadcast);
+			else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.None);
+
+			// Calculate address:
+			IPAddress mask = RetrieveIPv4Mask(address);
+			uint maskBytes    = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);                          // e.g. 255.255.0.0
+			uint addressBytes = BitConverter.ToUInt32(address.GetAddressBytes(), 0);                       // e.g. 192.20.0.1 or 192.20.255.255
+			IPAddress directedAnyAddress = new IPAddress(BitConverter.GetBytes(addressBytes & maskBytes)); // e.g. 192.20.0.0
+			return (directedAnyAddress);
 		}
 
 		#endregion

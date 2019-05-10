@@ -361,12 +361,8 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				System.Net.IPAddress mask = IPNetworkInterfaceEx.RetrieveIPv4Mask(localFilter.Address);
-				uint maskBytes    = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);                // e.g. 255.255.0.0
-		äöü		uint addressBytes = BitConverter.ToUInt32(localFilter.Address.GetAddressBytes(), 0); // e.g. 192.20.0.1 or 192.20.255.255
-
-				System.Net.IPAddress directedBroadcastAddress = new System.Net.IPAddress(BitConverter.GetBytes(addressBytes | ~maskBytes)); // e.g. 192.20.255.255
-				System.Net.IPAddress directedAnyAddress       = new System.Net.IPAddress(BitConverter.GetBytes(addressBytes &  maskBytes)); // e.g. 192.20.0.0
+				System.Net.IPAddress directedBroadcastAddress = IPNetworkInterfaceEx.RetrieveDirectedBroadcastAddress(localFilter.Address); // e.g. 192.20.255.255
+				System.Net.IPAddress directedAnyAddress       = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(      localFilter.Address); // e.g. 192.20.0.0
 				                              // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 				if (localFilter.Address.Equals(directedBroadcastAddress)) // = directed broadcast using e.g. 192.20.255.255.
 				{                                          // Filtering for limited broadcast address 192.20.255.255 doesn't work.
@@ -693,16 +689,12 @@ namespace MKY.IO.Serial.Socket
 					}
 				}
 
-		äöü		/*if ((this.socketType == UdpSocketType.Server) ||
-				    (this.socketType == UdpSocketType.PairSocket))
-				{ */
-					DebugMessage("Resolving local filter addres...");
-					if (!this.localFilter.TryResolve())
-					{
-						DebugMessage("...failed");
-						return (false);
-					}
-				//}
+				DebugMessage("Resolving local filter addres...");
+				if (!this.localFilter.TryResolve())
+				{
+					DebugMessage("...failed");
+					return (false);
+				}
 
 				DebugMessage("Starting...");
 				StartSocket();
@@ -981,31 +973,24 @@ namespace MKY.IO.Serial.Socket
 				// Neither local nor remote endpoint must be set in constructor! Otherwise, options cannot be changed below!
 				this.socket = new System.Net.Sockets.UdpClient();
 
-				if ((this.socketType == UdpSocketType.Server) ||
-				    (this.socketType == UdpSocketType.PairSocket)) // Configure and bind the listener port:
+				// Configure the listener port:
+				if (this.socketType == UdpSocketType.Server)
 				{
 					this.socket.ExclusiveAddressUse = false; // "Address" is misleading, it's about the port: "only one client to use a specific port".
 					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
-
-comment out if useless					if (this.remoteHost.IsBroadcast) {
-						this.socket.EnableBroadcast = true;
-						this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
-					}
-
-					this.socket.Client.Bind(new System.Net.IPEndPoint(this.localInterface.Address, this.localPort));
-				}
-				else // Client
-				{
-comment out if useless					if (this.remoteHost.IsBroadcast) {
-						this.socket.EnableBroadcast = true;
-						this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
-					}
-
-					this.socket.Client.Bind(new System.Net.IPEndPoint(this.localInterface.Address, this.localPort));
 				}
 
+				// Bind the socket:
+				if (this.remoteHost.IsBroadcast) { // \TODO UDP comment out if useless
+					this.socket.EnableBroadcast = true;
+					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
+				}
+
+				this.socket.Client.Bind(new System.Net.IPEndPoint(this.localInterface.Address, this.localPort));
+
+				// Set the default remove endpoint of a client socket:
 				if ((this.socketType == UdpSocketType.Client) ||
-				    (this.socketType == UdpSocketType.PairSocket)) // Connect the client port:
+				    (this.socketType == UdpSocketType.PairSocket))
 				{
 					this.socket.Connect(this.remoteHost.Address, this.remotePort);
 
