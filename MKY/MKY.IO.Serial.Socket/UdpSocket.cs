@@ -343,11 +343,11 @@ namespace MKY.IO.Serial.Socket
 
 			// Adjust the local filter in case of limited or directed broadcast:
 			//
-			// Limited broadcast:  A packet is sent to a specific network or series of networks.
-			//                     A limited broadcast address includes the network or subnet fields.
-			//                     In a limited broadcast packet destined for a local network, the network
-			//                     identifier portion and host identifier portion of the destination address
-			//                     is either all ones (255.255.255.255) or all zeros (0.0.0.0).
+			// Limited broadcast:  A packet is sent to a specific network or series of networks. A limited
+			//                     broadcast address includes the network or subnet fields. In a limited
+			//                     broadcast packet destined for a local network, the network identifier
+			//                     portion and host identifier portion of the destination address is either
+			//                     all ones (255.255.255.255) or all zeros (0.0.0.0).
 			// Flooded broadcast:  A packet is sent to every network.
 			// Directed broadcast: A packet is sent to a specific destination address where only the host
 			//                     portion of the IP address is either all ones or all zeros (such as
@@ -355,17 +355,17 @@ namespace MKY.IO.Serial.Socket
 			// (https://www.juniper.net/documentation/en_US/junose15.1/topics/concept/ip-broadcast-addressing-overview.html)
 
 			var localFilterCasted = (IPHostEx)localFilter.Address;
-			if (localFilterCasted.IsBroadcast) // = limited broadcast 255.255.255.255.
-			{                                                // Filtering for limited broadcast address 255.255.255.255 doesn't work.
-				this.localFilter = System.Net.IPAddress.Any; // Nothing would be received => using any address 0.0.0.0 instead.
+			if (localFilterCasted.IsBroadcast) // = limited broadcast (255.255.255.255)
+			{                                                // Filtering for limited broadcast address (255.255.255.255) doesn't work.
+				this.localFilter = System.Net.IPAddress.Any; // Nothing would be received => using any address (0.0.0.0) instead.
 			}
 			else
 			{
-				var directedBroadcastAddress = IPNetworkInterfaceEx.RetrieveDirectedBroadcastAddress(localFilter.Address); // e.g. 192.20.255.255
+				var directedBroadcastAddress = IPNetworkInterfaceEx.RetrieveDirectedBroadcastAddress(localFilter.Address); // e.g. (192.20.255.255)
 				                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-				if (localFilter.Address.Equals(directedBroadcastAddress)) // = directed broadcast using e.g. 192.20.255.255.
-				{                                                                                                  // Filtering for directed broadcast address 192.20.255.255 doesn't work.
-					var directedAnyAddress = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(localFilter.Address); // Nothing would be received => using directed any address 192.20.0.0 instead.
+				if (localFilter.Address.Equals(directedBroadcastAddress)) // = directed broadcast e.g. (192.20.255.255)
+				{                                                                                                  // Filtering for directed broadcast address (192.20.255.255) doesn't work.
+					var directedAnyAddress = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(localFilter.Address); // Nothing would be received => using directed any address (192.20.0.0) instead.
 					this.localFilter = directedAnyAddress;
 				}
 				else // i.e. no broadcast:
