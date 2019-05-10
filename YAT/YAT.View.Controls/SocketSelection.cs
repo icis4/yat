@@ -180,6 +180,24 @@ namespace YAT.View.Controls
 				{
 					this.socketType = value;
 					SetControls();
+
+					// Ensure that a localhost pair socket does not use the same port twice:
+					if ((this.socketType == SocketType.UdpPairSocket) &&
+					    (RemoteHost.IsLocalhost) &&
+					    (RemoteUdpPort == LocalUdpPort))
+					{
+						if (RemoteUdpPort < IPEndPoint.MaxPort)
+							LocalUdpPort = (RemoteUdpPort + 1);
+						else
+							LocalUdpPort = (IPEndPoint.MaxPort - 1);
+
+						// Attention:
+						// The implementation of the above logic is spread across three locations:
+						//  > SocketType { set }
+						//  > comboBox_RemotePort_Validating()
+						//  > comboBox_LocalPort_Validating()
+						// Changes above may have to be applied at the other two locations too.
+					}
 				}
 			}
 		}
@@ -453,7 +471,7 @@ namespace YAT.View.Controls
 
 			var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
 			if ((remoteHost != null) && (IPAddressEx.NotEqualsNone(remoteHost.Address)) &&
-				StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
+			    StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 			{
 				RemoteHost = remoteHost;
 			}
@@ -496,7 +514,7 @@ namespace YAT.View.Controls
 
 			var localFilter = (comboBox_LocalFilter.SelectedItem as IPFilterEx);
 			if ((localFilter != null) && (IPAddressEx.NotEqualsNone(localFilter.Address)) &&
-				StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
+			    StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
 			{
 				LocalFilter = localFilter;
 			}
@@ -551,14 +569,14 @@ namespace YAT.View.Controls
 				{
 					// Also set the local port:
 					//  > For client: Same port, makes it easier setting the server settings for a same connection.
-					//  > For socket:
+					//  > For pair socket:
 					//     > On local host, typically using adjecent ports for client and server.
 					//     > On remote host, typically using same port for client and server.
 					if (this.socketType == SocketType.UdpClient)
 					{
 						LocalUdpPort = port;
 					}
-					else
+					else // .socketType == SocketType.UdpPairSocket
 					{
 						if (RemoteHost.IsLocalhost)
 						{
@@ -566,6 +584,13 @@ namespace YAT.View.Controls
 								LocalUdpPort = (port + 1);
 							else
 								LocalUdpPort = (IPEndPoint.MaxPort - 1);
+
+							// Attention:
+							// The implementation of the above logic is spread across three locations:
+							//  > SocketType { set }
+							//  > comboBox_RemotePort_Validating()
+							//  > comboBox_LocalPort_Validating()
+							// Changes above may have to be applied at the other two locations too.
 						}
 						else
 						{
@@ -647,6 +672,13 @@ namespace YAT.View.Controls
 								RemoteUdpPort = (port - 1);
 							else
 								RemoteUdpPort = (IPEndPoint.MinPort + 1);
+
+							// Attention:
+							// The implementation of the above logic is spread across three locations:
+							//  > SocketType { set }
+							//  > comboBox_RemotePort_Validating()
+							//  > comboBox_LocalPort_Validating()
+							// Changes above may have to be applied at the other two locations too.
 						}
 						else
 						{
