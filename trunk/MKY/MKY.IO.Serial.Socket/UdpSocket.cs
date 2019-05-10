@@ -366,7 +366,7 @@ namespace MKY.IO.Serial.Socket
 				if (localFilter.Address.Equals(directedBroadcastAddress)) // = directed broadcast e.g. (192.20.255.255)
 				{                                                                                                  // Filtering for directed broadcast address (192.20.255.255) doesn't work.
 					var directedAnyAddress = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(localFilter.Address); // Nothing would be received => using directed any address (192.20.0.0) instead.
-					this.localFilter = directedAnyAddress;
+					this.localFilter = directedAnyAddress; // \ToDo UDP comment out if useless
 				}
 				else // i.e. no broadcast:
 				{
@@ -681,20 +681,22 @@ namespace MKY.IO.Serial.Socket
 				if ((this.socketType == UdpSocketType.Client) ||
 				    (this.socketType == UdpSocketType.PairSocket))
 				{
-					DebugMessage("Resolving host address...");
+					DebugMessage("Resolving remote host address...");
 					if (!this.remoteHost.TryResolve())
 					{
-						DebugMessage("...failed");
+						DebugMessage("...failed!");
 						return (false);
 					}
+					DebugMessage("...succeeded (" + this.remoteHost + ").");
 				}
 
-				DebugMessage("Resolving local filter addres...");
+				DebugMessage("Resolving local filter address...");
 				if (!this.localFilter.TryResolve())
 				{
-					DebugMessage("...failed");
+					DebugMessage("...failed!");
 					return (false);
 				}
+				DebugMessage("...succeeded (" + this.localFilter + ").");
 
 				DebugMessage("Starting...");
 				StartSocket();
@@ -981,7 +983,7 @@ namespace MKY.IO.Serial.Socket
 				}
 
 				// Bind the socket:
-				if (this.remoteHost.IsBroadcast) { // \TODO UDP comment out if useless
+				if (this.remoteHost.IsBroadcast) { // \ToDo UDP comment out if useless
 					this.socket.EnableBroadcast = true;
 					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
 				}
@@ -1221,7 +1223,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					var localFilterEndPoint = new System.Net.IPEndPoint(this.localFilter, this.localPort);
 					var state = new AsyncReceiveState(localFilterEndPoint, this.socket);
-					DebugReceive(string.Format("Beginning receive filtered for {0}", localFilterEndPoint.ToString()));
+					DebugReceive(string.Format("Beginning receive on local port {0} filtered for {1}...", this.localPort, this.localFilter));
 					this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
 				}
 			}
@@ -1241,9 +1243,9 @@ namespace MKY.IO.Serial.Socket
 				byte[] data;
 				try
 				{
-					DebugReceive(string.Format("...ending receive filtered for {0}...", remoteEndPoint.ToString()));
+					DebugReceive(string.Format("...ending receive on local port {0} filtered for {1}...", remoteEndPoint.Port.ToString(), remoteEndPoint.Address.ToString()));
 					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
-					DebugReceive(string.Format("...{0} bytes received from {1}", ((data != null) ? data.Length : 0), remoteEndPoint.ToString()));
+					DebugReceive(string.Format("...{0} bytes received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint.ToString()));
 				}
 				catch (Exception ex)
 				{
