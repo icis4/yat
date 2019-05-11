@@ -34,6 +34,11 @@ namespace MKY.Net
 	public static class IPEndPointEx
 	{
 		/// <summary>
+		/// An empty IP end point, i.e. address 0.0.0.0 and port 0.
+		/// </summary>
+		public static readonly IPEndPoint Empty = new IPEndPoint(IPAddress.Any, 0);
+
+		/// <summary>
 		/// Determines whether the specified <paramref name="port"/> has a valid value.
 		/// </summary>
 		/// <param name="port">Port to evaluate.</param>
