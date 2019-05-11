@@ -346,15 +346,26 @@ namespace MKY.Net
 			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
 			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
-			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Broadcast);
-			else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.None);
+		////else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.IPv6Whatever);
+		////else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.IPv6Whatever);
 
 			// Calculate address:
-			IPAddress mask = RetrieveIPv4Mask(address);
-			uint maskBytes    = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);                                 // e.g. 255.255.0.0
-			uint addressBytes = BitConverter.ToUInt32(address.GetAddressBytes(), 0);                              // e.g. 192.20.0.1 or 192.20.255.255
-			IPAddress directedBroadcastAddress = new IPAddress(BitConverter.GetBytes(addressBytes | ~maskBytes)); // e.g. 192.20.255.255
-			return (directedBroadcastAddress);
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork: // IPv4
+				{
+					IPAddress mask = RetrieveIPv4Mask(address);
+					uint maskBytes    = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);                                 // e.g. 255.255.0.0
+					uint addressBytes = BitConverter.ToUInt32(address.GetAddressBytes(), 0);                              // e.g. 192.20.0.1 or 192.20.255.255
+					IPAddress directedBroadcastAddress = new IPAddress(BitConverter.GetBytes(addressBytes | ~maskBytes)); // e.g. 192.20.255.255
+					return (directedBroadcastAddress);
+				}
+
+				default:
+				{
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 		}
 
 		/// <remarks>
@@ -385,15 +396,26 @@ namespace MKY.Net
 			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          return (IPAddress.Any);
 			else if (address.Equals(IPAddress.Loopback))     return (new IPAddress(new byte[] { 127, 0, 0, 0 }));
-			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Any);
-			else if (address.Equals(IPAddress.IPv6Loopback)) return (new IPAddress(new byte[] { 127, 0, 0, 0 }));
+			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.IPv6Any);
+			else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.IPv6Any);
 
 			// Calculate address:
-			IPAddress mask = RetrieveIPv4Mask(address);
-			uint maskBytes    = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);                          // e.g. 255.255.0.0
-			uint addressBytes = BitConverter.ToUInt32(address.GetAddressBytes(), 0);                       // e.g. 192.20.0.1 or 192.20.255.255
-			IPAddress directedAnyAddress = new IPAddress(BitConverter.GetBytes(addressBytes & maskBytes)); // e.g. 192.20.0.0
-			return (directedAnyAddress);
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork: // IPv4
+				{
+					IPAddress mask = RetrieveIPv4Mask(address);
+					uint maskBytes    = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);                          // e.g. 255.255.0.0
+					uint addressBytes = BitConverter.ToUInt32(address.GetAddressBytes(), 0);                       // e.g. 192.20.0.1 or 192.20.255.255
+					IPAddress directedAnyAddress = new IPAddress(BitConverter.GetBytes(addressBytes & maskBytes)); // e.g. 192.20.0.0
+					return (directedAnyAddress);
+				}
+
+				default:
+				{
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 		}
 
 		#endregion
