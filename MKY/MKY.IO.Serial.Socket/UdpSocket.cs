@@ -79,13 +79,17 @@ namespace MKY.IO.Serial.Socket
 
 		private class AsyncReceiveState
 		{
-			public System.Net.IPEndPoint        LocalFilterEndPoint { get; protected set; }
-			public System.Net.Sockets.UdpClient Socket              { get; protected set; }
+			public System.Net.Sockets.UdpClient Socket                   { get; protected set; }
+			public int                          LocalPort                { get; protected set; }
+			public System.Net.IPAddress         LocalFilter              { get; protected set; }
+			public uint                         LocalFilterIPv4MaskBytes { get; protected set; }
 
-			public AsyncReceiveState(System.Net.IPEndPoint localFilterEndPoint, System.Net.Sockets.UdpClient socket)
+			public AsyncReceiveState(System.Net.Sockets.UdpClient socket, int localPort, System.Net.IPAddress localFilter, uint localFilterIPv4MaskBytes)
 			{
-				LocalFilterEndPoint = localFilterEndPoint;
-				Socket              = socket;
+				Socket                   = socket;
+				LocalPort                = localPort;
+				LocalFilter              = localFilter;
+				LocalFilterIPv4MaskBytes = localFilterIPv4MaskBytes;
 			}
 		}
 
@@ -340,39 +344,7 @@ namespace MKY.IO.Serial.Socket
 			this.remotePort     = remotePort;
 			this.localInterface = localInterface;
 			this.localPort      = localPort;
-
-			// Adjust the local filter in case of limited or directed broadcast:
-			//
-			// Limited broadcast:  A packet is sent to a specific network or series of networks. A limited
-			//                     broadcast address includes the network or subnet fields. In a limited
-			//                     broadcast packet destined for a local network, the network identifier
-			//                     portion and host identifier portion of the destination address is either
-			//                     all ones (255.255.255.255) or all zeros (0.0.0.0).
-			// Flooded broadcast:  A packet is sent to every network.
-			// Directed broadcast: A packet is sent to a specific destination address where only the host
-			//                     portion of the IP address is either all ones or all zeros (such as
-			//                     192.20.255.255 or 190.20.0.0).
-			// (https://www.juniper.net/documentation/en_US/junose15.1/topics/concept/ip-broadcast-addressing-overview.html)
-
-			var localFilterCasted = (IPHostEx)localFilter.Address;
-			if (localFilterCasted.IsBroadcast) // = limited broadcast (255.255.255.255)
-			{                                                // Filtering for limited broadcast address (255.255.255.255) doesn't work.
-				this.localFilter = System.Net.IPAddress.Any; // Nothing would be received => using any address (0.0.0.0) instead.
-			}
-			else
-			{
-				var directedBroadcastAddress = IPNetworkInterfaceEx.RetrieveDirectedBroadcastAddress(localFilter.Address); // e.g. (192.20.255.255)
-				                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-				if (localFilter.Address.Equals(directedBroadcastAddress)) // = directed broadcast e.g. (192.20.255.255)
-				{                                                                                                  // Filtering for directed broadcast address (192.20.255.255) doesn't work.
-					var directedAnyAddress = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(localFilter.Address); // Nothing would be received => using directed any address (192.20.0.0) instead.
-					this.localFilter = directedAnyAddress; // \ToDo UDP comment out if useless
-				}
-				else // i.e. no broadcast:
-				{
-					this.localFilter = localFilter;
-				}
-			}
+			this.localFilter    = localFilter;
 
 			this.serverSendMode = serverSendMode;
 		}
@@ -690,6 +662,37 @@ namespace MKY.IO.Serial.Socket
 					DebugMessage("...succeeded (" + this.remoteHost + ").");
 				}
 
+				// Adjust the local filter in case it is set to a limited or directed broadcast address.
+				// For [Client] and [PairSocket] this is the case if the remote host is set that way.
+				// For [Server] this is the case if the user accidentally enters some *.255 address.
+				//
+				// Limited broadcast:  A packet is sent to a specific network or series of networks. A limited
+				//                     broadcast address includes the network or subnet fields. In a limited
+				//                     broadcast packet destined for a local network, the network identifier
+				//                     portion and host identifier portion of the destination address is either
+				//                     all ones (255.255.255.255) or all zeros (0.0.0.0).
+				// Flooded broadcast:  A packet is sent to every network.
+				// Directed broadcast: A packet is sent to a specific destination address where only the host
+				//                     portion of the IP address is either all ones or all zeros (such as
+				//                     192.20.255.255 or 190.20.0.0).
+				// (https://www.juniper.net/documentation/en_US/junose15.1/topics/concept/ip-broadcast-addressing-overview.html)
+
+				var localFilterCasted = (IPHostEx)this.localFilter.Address;
+				if (localFilterCasted.IsBroadcast) // = limited broadcast (255.255.255.255)
+				{                                    // Filtering for limited broadcast address (255.255.255.255) doesn't work.
+					this.localFilter = IPFilter.Any; // Nothing would be received => using any address (0.0.0.0) instead.
+				}
+				else
+				{
+					var directedBroadcastAddress = IPNetworkInterfaceEx.RetrieveDirectedBroadcastAddress(this.localFilter.Address); // e.g. (192.20.255.255)
+					                             // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					if (this.localFilter.Address.Equals(directedBroadcastAddress)) // = directed broadcast e.g. (192.20.255.255)
+					{                                                                                                       // Filtering for directed broadcast address (192.20.255.255) doesn't work.
+						var directedAnyAddress = IPNetworkInterfaceEx.RetrieveDirectedAnyAddress(this.localFilter.Address); // Nothing would be received => using directed any address (192.20.0.0) instead.
+						this.localFilter = directedAnyAddress;
+					}
+				}
+
 				DebugMessage("Resolving local filter address...");
 				if (!this.localFilter.TryResolve())
 				{
@@ -794,10 +797,6 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
-			System.Net.IPEndPoint remoteEndPoint;
-			lock (this.socketSyncObj)
-				remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
-
 			DebugThreadState("SendThread() has started.");
 
 			try
@@ -849,18 +848,11 @@ namespace MKY.IO.Serial.Socket
 									this.sendQueue.Clear();
 								}
 
-								if ((this.socketType == UdpSocketType.Client) ||
-									(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
-								{
-									this.socket.Send(data, data.Length);
-								}
-								else // Server => Remote endpoint is the sender of the first or most recently received data.
-								{
-									lock (this.socketSyncObj)
-										remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
+								System.Net.IPEndPoint remoteEndPoint;
+								lock (this.socketSyncObj)
+									remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
 
-									this.socket.Send(data, data.Length, remoteEndPoint);
-								}
+								this.socket.Send(data, data.Length, remoteEndPoint);
 
 								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
 							}
@@ -982,32 +974,44 @@ namespace MKY.IO.Serial.Socket
 					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
 				}
 
+			////if (this.remoteHost.IsBroadcast) => Not used, see notes below.
+			////{
+			////	this.socket.EnableBroadcast = true;
+			////	this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
+			////}
+				
 				// Bind the socket:
-				if (this.remoteHost.IsBroadcast) { // \ToDo UDP comment out if useless
-					this.socket.EnableBroadcast = true;
-					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
-				}
+				// Socket.Bind() "If you do not care which local port is used, you can create an IPEndPoint using 0 for the port number.
+				//                In this case, the service provider will assign an available port number between 49152 and 65535."
+				var localEP = new System.Net.IPEndPoint(this.localInterface.Address, this.localPort);
+				this.socket.Client.Bind(localEP);
+				DebugMessage(string.Format("Socket bound to {0}.", localEP));
 
-				this.socket.Client.Bind(new System.Net.IPEndPoint(this.localInterface.Address, this.localPort));
-
-				// Set the default remove endpoint of a client socket:
-				if ((this.socketType == UdpSocketType.Client) ||
-				    (this.socketType == UdpSocketType.PairSocket))
-				{
-					this.socket.Connect(this.remoteHost.Address, this.remotePort);
-
-					// Note the following remark of the UdpClient.Connect() method:
-					//
-					// "You cannot set the default remote host to a broadcast address using this method unless (...)
-					//  and set the socket option to SocketOptionName.Broadcast."
-					// "You can however, broadcast data to the default broadcast address, 255.255.255.255, if
-					//  you specify IPAddress.Broadcast in your call to the Send method."
-					// (https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient.connect)
-				}
-				else // Server
-				{
-					// The remote address will be set to the sender of the first or most recently received data.
-				}
+			////// Set the default remote endpoint of a client socket:
+			////if ((this.socketType == UdpSocketType.Client) ||
+			////    (this.socketType == UdpSocketType.PairSocket))
+			////{
+			////	this.socket.Connect(this.remoteHost.Address, this.remotePort);
+			////	DebugMessage(string.Format(@"Socket ""connected"" to {0}.", new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort)));
+			////
+			////	// Note the following remark of the UdpClient.Connect() method:
+			////	//
+			////	// "You cannot set the default remote host to a broadcast address using this method unless (...)
+			////	//  and set the socket option to SocketOptionName.Broadcast."
+			////	// "You can however, broadcast data to the default broadcast address, 255.255.255.255, if
+			////	//  you specify IPAddress.Broadcast in your call to the Send method."
+			////	// (https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.udpclient.connect)
+			////	//
+			////	// However, this doesn't properly work. Sending to broadcast address works,
+			////	// but receiving doesn't! Also, this wouldn't work with a directed broadcast!
+			////	// Finally, there is not much benefit of calling UdpClient.Connect(), specifying
+			////	// the remote host IP on each UdpClient.Send() is no issue.
+			////	//  => UdpClient.Connect() above not used.
+			////}
+			////else // Server
+			////{
+			////	// The remote address will be set to the sender of the first or most recently received data.
+			////}
 			}
 
 			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
@@ -1221,8 +1225,7 @@ namespace MKY.IO.Serial.Socket
 				// Ensure that async receive is no longer initiated after close/dispose:
 				if (!IsDisposed && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 				{
-					var localFilterEndPoint = new System.Net.IPEndPoint(this.localFilter, this.localPort);
-					var state = new AsyncReceiveState(localFilterEndPoint, this.socket);
+					var state = new AsyncReceiveState(this.socket, this.localPort, this.localFilter, this.localFilter.IPv4MaskBytes);
 					DebugReceive(string.Format("Beginning receive on local port {0} filtered for {1}...", this.localPort, this.localFilter));
 					this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
 				}
@@ -1239,13 +1242,20 @@ namespace MKY.IO.Serial.Socket
 			// Ensure that async receive is discarded after close/dispose:
 			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
-				var remoteEndPoint = state.LocalFilterEndPoint;
-				byte[] data;
+				var remoteEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.None, System.Net.IPEndPoint.MinPort);
+				byte[] data;                // EndReceive() will populate the object with address and port of the sender.
+				bool discard = false;
 				try
 				{
-					DebugReceive(string.Format("...ending receive on local port {0} filtered for {1}...", remoteEndPoint.Port.ToString(), remoteEndPoint.Address.ToString()));
+					DebugReceive(string.Format("...ending receive on local port {0} filtered for {1}...", state.LocalPort, state.LocalFilter));
 					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
-					DebugReceive(string.Format("...{0} bytes received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint.ToString()));
+					DebugReceive(string.Format("...{0} bytes received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint));
+
+					if ((this.socketType == UdpSocketType.Server) && (IPFilterEx.IsIPv4Refused(state.LocalFilterIPv4MaskBytes, remoteEndPoint.Address)))
+					{
+						DebugReceive(string.Format("Bytes are discarded since received data is filtered by {0}.", state.LocalFilter));
+						discard = true;
+					}
 				}
 				catch (Exception ex)
 				{
@@ -1284,10 +1294,11 @@ namespace MKY.IO.Serial.Socket
 					data = null;
 					remoteEndPoint.Address = System.Net.IPAddress.None;
 					remoteEndPoint.Port    = System.Net.IPEndPoint.MinPort;
+					discard = true;
 				}
 
 				// Handle data:
-				if (data != null)
+				if ((data != null) && (!discard))
 				{
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
@@ -1305,7 +1316,7 @@ namespace MKY.IO.Serial.Socket
 				}
 
 				// Handle server connection:
-				if (this.socketType == UdpSocketType.Server)
+				if ((this.socketType == UdpSocketType.Server) && (!discard))
 				{
 					// Set the remote end point to the sender of the first or most recently received data, depending on send mode:
 
