@@ -27,7 +27,6 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
-using MKY;
 using MKY.Diagnostics;
 
 namespace MKY.Windows.Forms

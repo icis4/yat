@@ -24,5 +24,7 @@ Hi <>,
 
 I have just given you access to the YAT preliminary binaries at dropbox. Either, extract the binaries to a temporary location, or replace the files in "C:\Program Files\YAT".
 
+Let me know <whatever>.
+
 Best regards,
 Matthias
