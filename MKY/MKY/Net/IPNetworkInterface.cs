@@ -288,7 +288,7 @@ namespace MKY.Net
 		public static IPAddress RetrieveIPv4Mask(IPAddress address)
 		{
 			// Special cases:
-			                // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
 			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
 			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Broadcast);
@@ -303,12 +303,12 @@ namespace MKY.Net
 					{
 						if ((ai.Address.AddressFamily == AddressFamily.InterNetwork) && (ai.IPv4Mask != null))
 						{
-							uint maskBytes      = BitConverter.ToUInt32(ai.IPv4Mask.GetAddressBytes(), 0); // e.g. 255.255.0.0
-							uint interfaceBytes = BitConverter.ToUInt32(ai.Address.GetAddressBytes(), 0);  // e.g. 192.20.0.1
 							uint addressBytes   = BitConverter.ToUInt32(address.GetAddressBytes(), 0);     // e.g. 192.20.0.11
+							uint interfaceBytes = BitConverter.ToUInt32(ai.Address.GetAddressBytes(), 0);  // e.g. 192.20.0.1
+							uint maskBytes      = BitConverter.ToUInt32(ai.IPv4Mask.GetAddressBytes(), 0); // e.g. 255.255.0.0
 
-							// e.g.        192.20.0.0        ==          192.20.0.0
-							if ((interfaceBytes & maskBytes) == (addressBytes & maskBytes))
+							// e.g.       192.20.0.0       ==             192.20.0.0
+							if ((addressBytes & maskBytes) == (interfaceBytes & maskBytes))
 								return (ai.IPv4Mask);
 						}
 					}
@@ -343,7 +343,7 @@ namespace MKY.Net
 		public static IPAddress RetrieveDirectedBroadcastAddress(IPAddress address)
 		{
 			// Special cases:
-			                // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
 			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
 			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Broadcast);
@@ -382,7 +382,7 @@ namespace MKY.Net
 		public static IPAddress RetrieveDirectedAnyAddress(IPAddress address)
 		{
 			// Special cases:
-			                // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          return (IPAddress.Any);
 			else if (address.Equals(IPAddress.Loopback))     return (new IPAddress(new byte[] { 127, 0, 0, 0 }));
 			else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.Any);
