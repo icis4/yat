@@ -929,11 +929,13 @@ namespace YAT.View.Controls
 				    ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
 				     (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 				{
+					   label_RemoteHost.Enabled = true;
 					comboBox_RemoteHost.Enabled = true;
 					ComboBoxHelper.Select(comboBox_RemoteHost, this.remoteHost, this.remoteHost);
 				}
 				else
 				{
+					   label_RemoteHost.Enabled = false;
 					comboBox_RemoteHost.Enabled = false;
 					ComboBoxHelper.Deselect(comboBox_RemoteHost);
 				}
@@ -947,16 +949,19 @@ namespace YAT.View.Controls
 				// Remote port:
 				if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket)))
 				{
+					   label_RemotePort.Enabled = true;
 					comboBox_RemotePort.Enabled = true;
 					comboBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else if (!DesignMode && Enabled && ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 				{
+					   label_RemotePort.Enabled = true;
 					comboBox_RemotePort.Enabled = true;
 					comboBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else
 				{
+					   label_RemotePort.Enabled = false;
 					comboBox_RemotePort.Enabled = false;
 					comboBox_RemotePort.Text = "";
 				}
@@ -988,16 +993,19 @@ namespace YAT.View.Controls
 				// Local port:
 				if (Enabled && ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket)))
 				{
+					   label_LocalPort.Enabled = true;
 					comboBox_LocalPort.Enabled = true;
 					comboBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else if (Enabled && ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket)))
 				{
+					   label_LocalPort.Enabled = true;
 					comboBox_LocalPort.Enabled = true;
 					comboBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 				}
 				else
 				{
+					   label_LocalPort.Enabled = false;
 					comboBox_LocalPort.Enabled = false;
 					comboBox_LocalPort.Text = "";
 				}
@@ -1005,12 +1013,13 @@ namespace YAT.View.Controls
 				// Local filter:
 				if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
 				{
-					label_LocalFilter.Visible = true;
+					   label_LocalFilter.Visible = true;
 					comboBox_LocalFilter.Visible = true;
 					switch (this.socketType)
 					{
 						case SocketType.UdpServer:
 						{
+							   label_LocalFilter.Enabled = true;
 							comboBox_LocalFilter.Enabled = true;
 
 							if (this.localFilter != null)
@@ -1024,6 +1033,7 @@ namespace YAT.View.Controls
 						case SocketType.UdpClient:
 						case SocketType.UdpPairSocket:
 						{
+							   label_LocalFilter.Enabled = false;
 							comboBox_LocalFilter.Enabled = false;
 							ComboBoxHelper.Select(comboBox_LocalFilter, (IPFilterEx)IPFilterEx.Default);
 							break;
@@ -1037,9 +1047,9 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					label_LocalFilter.Visible = false;
+					   label_LocalFilter.Visible = false;
 					comboBox_LocalFilter.Visible = false;
-					comboBox_LocalFilter.Enabled = false;
+					comboBox_LocalFilter.Enabled = false; // Disabling to prevent user interaction with hidden control.
 					ComboBoxHelper.Deselect(comboBox_LocalFilter);
 				}
 			}
