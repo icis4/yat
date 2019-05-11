@@ -111,6 +111,8 @@ namespace MKY.Net
 		/// </remarks>
 		private static List<IPFilterEx> staticItems;
 
+		private uint ipv4MaskBytes; // = 0;
+
 		private string    explicitName; // = null;
 		private IPAddress explicitAddress  = IPAddress.None;
 
@@ -128,10 +130,17 @@ namespace MKY.Net
 		/// an IP address or host name. Use <see cref="IPFilterEx(IPAddress)"/> or
 		/// <see cref="IPFilterEx(string, IPAddress)"/> instead.
 		/// </remarks>
-		public IPFilterEx(IPFilter addressFilter)
-			: base(addressFilter)
+		public IPFilterEx(IPFilter address)
+			: base(address)
 		{
-			Debug.Assert((addressFilter != IPFilter.Explicit), "'IPFilter.Explicit' requires an IP address or host name, use 'IPFilterEx(IPAddress)' or 'IPFilterEx(string, IPAddress)' instead!");
+			Debug.Assert((address != IPFilter.Explicit), "'IPFilter.Explicit' requires an IP address or host name, use 'IPFilterEx(IPAddress)' or 'IPFilterEx(string, IPAddress)' instead!");
+
+			if      (address == IPFilter.Any)           { this.ipv4MaskBytes = 0xFFFFFFFF; }
+			else if (address == IPFilter.Localhost)     { this.ipv4MaskBytes = 0x01FFFF7F; }
+			else if (address == IPFilter.IPv4Any)       { this.ipv4MaskBytes = 0xFFFFFFFF; }
+			else if (address == IPFilter.IPv4Localhost) { this.ipv4MaskBytes = 0x01FFFF7F; }
+			else if (address == IPFilter.IPv6Any)       { this.ipv4MaskBytes = 0xFFFFFFFF; }
+			else if (address == IPFilter.IPv6Localhost) { this.ipv4MaskBytes = 0x01FFFF7F; }
 		}
 
 		/// <summary></summary>
@@ -141,11 +150,11 @@ namespace MKY.Net
 				throw (new ArgumentNullException("address", "An IP address is required!"));
 
 			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPFilter.Any);           this.explicitAddress = IPAddress.None; }
-			else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPFilter.Localhost);     this.explicitAddress = IPAddress.None; }
-			else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPFilter.IPv6Any);       this.explicitAddress = IPAddress.None; }
-			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPFilter.IPv6Localhost); this.explicitAddress = IPAddress.None; }
-			else                                             { SetUnderlyingEnum(IPFilter.Explicit);      this.explicitAddress = address;        }
+			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPFilter.Any);           this.ipv4MaskBytes = 0xFFFFFFFF;                                                      }
+			else if (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPFilter.Localhost);     this.ipv4MaskBytes = 0x01FFFF7F;                                                      }
+			else if (address.Equals(IPAddress.IPv6Any))      { SetUnderlyingEnum(IPFilter.IPv6Any);       this.ipv4MaskBytes = 0xFFFFFFFF;                                                      }
+			else if (address.Equals(IPAddress.IPv6Loopback)) { SetUnderlyingEnum(IPFilter.IPv6Localhost); this.ipv4MaskBytes = 0x01FFFF7F;                                                      }
+			else                                             { SetUnderlyingEnum(IPFilter.Explicit);      this.ipv4MaskBytes = ConvertToIPv4MaskBytes(address); this.explicitAddress = address; }
 
 			// Note that 'IPAddressFilter.IPv4Any|Localhost' cannot be distinguished from 'IPAddressFilter.IPv4Any|Localhost' when 'IPAddress.Any|Loopback' is given.
 		}
@@ -160,7 +169,10 @@ namespace MKY.Net
 			this.explicitName = name;
 
 			if (address != null) // Keep 'IPAddress.None' otherwise.
+			{
+				this.ipv4MaskBytes = ConvertToIPv4MaskBytes(address);
 				this.explicitAddress = address;
+			}
 		}
 
 		#region Properties
@@ -248,6 +260,113 @@ namespace MKY.Net
 						return (false);
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[CLSCompliant(false)]
+		public uint IPv4MaskBytes
+		{
+			get { return (this.ipv4MaskBytes); }
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the given address to filter mask bytes.
+		/// </summary>
+		[CLSCompliant(false)]
+		public virtual uint ConvertToIPv4MaskBytes()
+		{
+			return (ConvertToIPv4MaskBytes(Address));
+		}
+
+		/// <summary>
+		/// Converts the given address to filter mask bytes.
+		/// </summary>
+		[CLSCompliant(false)]
+		public static uint ConvertToIPv4MaskBytes(IPAddress address)
+		{
+			if (address.AddressFamily == AddressFamily.InterNetwork) // IPv4
+			{
+				var addressBytes = address.GetAddressBytes();
+
+				for (int i = 0; i < addressBytes.Length; i++)
+				{
+					if (addressBytes[i] == 0)
+						addressBytes[i] = 255;
+				}
+
+				return (BitConverter.ToUInt32(addressBytes, 0));
+			}
+			else
+			{
+				return (0);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether the given address is accepted by the filter.
+		/// </summary>
+		public virtual bool IsAccepted(IPAddress address)
+		{
+			return (IsIPv4Accepted(IPv4MaskBytes, address));
+		}
+
+		/// <summary>
+		/// Determines whether the given address is accepted by the given filter.
+		/// </summary>
+		public static bool IsAccepted(IPAddress addressOfFilter, IPAddress addressToProbe)
+		{
+			switch (addressToProbe.AddressFamily)
+			{
+				case AddressFamily.InterNetwork: // IPv4
+					return (IsIPv4Accepted(ConvertToIPv4MaskBytes(addressOfFilter), addressToProbe));
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + addressToProbe.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Determines whether the given address is accepted by the given filter.
+		/// </summary>
+		[CLSCompliant(false)]
+		public static bool IsIPv4Accepted(uint ipv4FilterMaskBytes, IPAddress addressToProbe)
+		{
+			uint probeBytes = BitConverter.ToUInt32(addressToProbe.GetAddressBytes(), 0);
+
+			// e.g. (192.20.0.1 &   192.255.255.255  ) ==  192.20.0.1
+			return ((probeBytes & ipv4FilterMaskBytes) == probeBytes);
+		}
+
+		/// <summary>
+		/// Determines whether the given address is refused by the filter.
+		/// </summary>
+		public virtual bool IsRefused(IPAddress address)
+		{
+			return (!IsAccepted(address));
+		}
+
+		/// <summary>
+		/// Determines whether the given address is refused by the given filter.
+		/// </summary>
+		public static bool IsRefused(IPAddress addressOfFilter, IPAddress addressToProbe)
+		{
+			return (!IsAccepted(addressOfFilter, addressToProbe));
+		}
+
+		/// <summary>
+		/// Determines whether the given address is refused by the given filter.
+		/// </summary>
+		[CLSCompliant(false)]
+		public static bool IsIPv4Refused(uint ipv4FilterMaskBytes, IPAddress addressToProbe)
+		{
+			return (!IsIPv4Accepted(ipv4FilterMaskBytes, addressToProbe));
 		}
 
 		#endregion
@@ -708,15 +827,15 @@ namespace MKY.Net
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static implicit operator IPFilter(IPFilterEx addressFilter)
+		public static implicit operator IPFilter(IPFilterEx address)
 		{
-			return ((IPFilter)addressFilter.UnderlyingEnum);
+			return ((IPFilter)address.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPFilterEx(IPFilter addressFilter)
+		public static implicit operator IPFilterEx(IPFilter address)
 		{
-			return (new IPFilterEx(addressFilter));
+			return (new IPFilterEx(address));
 		}
 
 		/// <summary></summary>
@@ -732,15 +851,15 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(IPFilterEx addressFilter)
+		public static implicit operator string(IPFilterEx address)
 		{
-			return (addressFilter.ToString());
+			return (address.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPFilterEx(string addressFilter)
+		public static implicit operator IPFilterEx(string address)
 		{
-			return (Parse(addressFilter));
+			return (Parse(address));
 		}
 
 		#endregion
