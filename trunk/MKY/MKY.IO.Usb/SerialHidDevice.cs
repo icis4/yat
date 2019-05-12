@@ -969,7 +969,7 @@ namespace MKY.IO.Usb
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private void AsyncReadCompleted(IAsyncResult result)
+		private void AsyncReadCompleted(IAsyncResult ar)
 		{
 			try
 			{
@@ -980,9 +980,9 @@ namespace MKY.IO.Usb
 					// Finalize read and retrieve the data. In case of an exception during the read,
 					// the call of EndRead() throws it. If this happens, e.g. due to disconnect,
 					// exception is caught further down and stream is closed:
-					int actualLength = this.stream.EndRead(result);
+					int actualLength = this.stream.EndRead(ar);
 					byte[] inputReportBuffer = new byte[actualLength];
-					Buffer.BlockCopy((byte[])result.AsyncState, 0, inputReportBuffer, 0, actualLength);
+					Buffer.BlockCopy((byte[])ar.AsyncState, 0, inputReportBuffer, 0, actualLength);
 
 					// Convert the input report into usable data:
 					SerialHidInputReportContainer input = new SerialHidInputReportContainer(this);
