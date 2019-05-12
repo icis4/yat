@@ -314,7 +314,14 @@ namespace MKY.Net
 		/// </summary>
 		public virtual bool IsAccepted(IPAddress address)
 		{
-			return (IsIPv4Accepted(IPv4MaskBytes, address));
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork: // IPv4
+					return (IsIPv4Accepted(IPv4MaskBytes, address));
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <summary>

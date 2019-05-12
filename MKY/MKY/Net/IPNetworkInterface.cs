@@ -361,6 +361,11 @@ namespace MKY.Net
 					return (directedBroadcastAddress);
 				}
 
+				case AddressFamily.InterNetworkV6: // IPv6
+				{
+					return (IPAddress.IPv6None); // \remind (MKY / 2019-05-12 / FR#372): IPv6 is currently only minimally implemented.
+				}
+
 				default:
 				{
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -409,6 +414,11 @@ namespace MKY.Net
 					uint addressBytes = BitConverter.ToUInt32(address.GetAddressBytes(), 0);                       // e.g. 192.20.0.1 or 192.20.255.255
 					IPAddress directedAnyAddress = new IPAddress(BitConverter.GetBytes(addressBytes & maskBytes)); // e.g. 192.20.0.0
 					return (directedAnyAddress);
+				}
+
+				case AddressFamily.InterNetworkV6: // IPv6
+				{
+					return (IPAddress.IPv6Any); // \remind (MKY / 2019-05-12 / FR#372): IPv6 is currently only minimally implemented.
 				}
 
 				default:
