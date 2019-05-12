@@ -1237,23 +1237,27 @@ namespace MKY.IO.Serial.Socket
 		{
 			DebugReceive("Receive callback...");
 
-			var state = (AsyncReceiveState)(ar.AsyncState);
+			var asyncState = (AsyncReceiveState)(ar.AsyncState);
 
 			// Ensure that async receive is discarded after close/dispose:
-			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
+			if (!IsDisposed && (asyncState.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
 				var remoteEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.None, System.Net.IPEndPoint.MinPort);
 				byte[] data;                // EndReceive() will populate the object with address and port of the sender.
 				bool discard = false;
 				try
 				{
-					DebugReceive(string.Format("...ending receive on local port {0} filtered for {1}...", state.LocalPort, state.LocalFilter));
-					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
+					// Note:
+					// Using async state to forward information from main to callback
+					// for not having to lock the [socketSyncObj] on accessing members.
+
+					DebugReceive(string.Format("...ending receive on local port {0}...", asyncState.LocalPort));
+					data = asyncState.Socket.EndReceive(ar, ref remoteEndPoint);
 					DebugReceive(string.Format("...{0} bytes received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint));
 
-					if ((this.socketType == UdpSocketType.Server) && (IPFilterEx.IsIPv4Refused(state.LocalFilterIPv4MaskBytes, remoteEndPoint.Address)))
+					if (IPFilterEx.IsIPv4Refused(asyncState.LocalFilterIPv4MaskBytes, remoteEndPoint.Address))
 					{
-						DebugReceive(string.Format("Bytes are discarded since received data is filtered by {0}.", state.LocalFilter));
+						DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.", asyncState.LocalFilter));
 						discard = true;
 					}
 				}
