@@ -734,8 +734,8 @@ namespace YAT.View.Controls
 				foreach (var item in IPFilterEx.GetItems()) { // Predefined items shall be listed after.
 					var casted = (string)item; // Make sure to compare (and list) identical types!
 					if (!comboBox_LocalFilter.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
-						comboBox_LocalFilter.Items.Add(casted);
-				}
+						comboBox_LocalFilter.Items.Add(item); // Make sure to list the item in its type! "IPv4 any (0.0.0.0)" would
+				}                                             // otherwise result in a "Address filter is invalid!" message!
 
 				comboBox_LocalPort.Items.Clear();
 				if (RecentPorts != null) {                                                  // Make sure to only list the item, in its type.
@@ -763,8 +763,8 @@ namespace YAT.View.Controls
 				foreach (var item in IPHostEx.GetItems(SocketType == SocketType.UdpClient)) { // Predefined items shall be listed after.
 					var casted = (string)item; // Make sure to compare (and list) identical types!
 					if (!comboBox_RemoteHost.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
-						comboBox_RemoteHost.Items.Add(casted);
-				}
+						comboBox_RemoteHost.Items.Add(item); // Make sure to list the item in its type! "IPv4 localhost (127.0.0.1)" would
+				}                                            // otherwise result in a "Remote host name or address is invalid!" message!
 			}
 			finally
 			{
