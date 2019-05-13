@@ -54,7 +54,7 @@ namespace MKY.IO
 		/// <param name="filePath">Path of log file.</param>
 		/// <param name="append">true to append to file, false to replace file.</param>
 		public LogFile(string filePath, bool append)
-			: this(filePath, append, EncodingEx.EnvironmentRecommendedUTF8)
+			: this(filePath, append, EncodingEx.EnvironmentRecommendedUTF8Encoding)
 		{
 		}
 

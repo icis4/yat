@@ -22,10 +22,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+
+#endregion
 
 #region Module-level StyleCop suppressions
 //==================================================================================================
@@ -911,6 +918,7 @@ namespace MKY.Text
 		/// Method instead of property for same signature as <see cref="Encoding.GetMaxByteCount(int)"/>,
 		/// though without 'charCount' parameter (method is limited to return count for a single character).
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remark above.")]
 		public virtual int GetMinByteCount()
 		{
 			switch ((SupportedEncoding)CodePage)
@@ -941,12 +949,15 @@ namespace MKY.Text
 		/// <remarks>
 		/// Value equals <see cref="GetMinByteCount()"/> for Unicode encodings.
 		/// </remarks>
-		public virtual int GetUnicodeFragmentByteCount()
+		public virtual int UnicodeFragmentByteCount
 		{
-			if (IsUnicode)
-				return (GetMinByteCount());
-			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is no Unicode encoding!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			get
+			{
+				if (IsUnicode)
+					return (GetMinByteCount());
+				else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is no Unicode encoding!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#endregion
@@ -1341,7 +1352,7 @@ namespace MKY.Text
 		/// <item><description>Other environments unknown, thus also not recommending BOM.</description></item>
 		/// </list>
 		/// </remarks>
-		public static bool EnvironmentRecommendsBOM
+		public static bool EnvironmentRecommendsByteOrderMarks
 		{
 			get
 			{
@@ -1359,11 +1370,12 @@ namespace MKY.Text
 		/// <item><description>Other environments unknown, thus also not recommending BOM.</description></item>
 		/// </list>
 		/// </remarks>
-		public static Encoding EnvironmentRecommendedUTF8
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "UTF", Justification = "Same spelling as 'Encoding.UTF8'.")]
+		public static Encoding EnvironmentRecommendedUTF8Encoding
 		{
 			get
 			{
-				if (EnvironmentRecommendsBOM)
+				if (EnvironmentRecommendsByteOrderMarks)
 					return (Encoding.UTF8); // = UTF8Encoding(true, false);
 				else
 					return (new UTF8Encoding(false));

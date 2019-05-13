@@ -138,7 +138,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public IOErrorEventArgs(ErrorSeverity severity, Direction direction, string message)
-			: this(severity, Direction.None, message, DateTime.Now)
+			: this(severity, direction, message, DateTime.Now)
 		{
 		}
 

@@ -33,10 +33,10 @@ namespace MKY.Net
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class IPEndPointEx
 	{
-		/// <summary>
-		/// An empty IP end point, i.e. address 0.0.0.0 and port 0.
-		/// </summary>
-		public static readonly IPEndPoint Empty = new IPEndPoint(IPAddress.Any, 0);
+	/////// <summary>
+	/////// An empty IP end point, i.e. address 0.0.0.0 and port 0.
+	/////// </summary>
+	////public static readonly IPEndPoint Empty = new IPEndPoint(IPAddress.Any, 0); <= Not recommended, leads to FxCop message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
 
 		/// <summary>
 		/// Determines whether the specified <paramref name="port"/> has a valid value.

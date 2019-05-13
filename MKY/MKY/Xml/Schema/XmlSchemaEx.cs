@@ -108,7 +108,7 @@ namespace MKY.Xml.Schema
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void ToFile(Type type, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
-			ToFile(type, EncodingEx.EnvironmentRecommendedUTF8, path, intendedFileNameWithoutExtension, fileExtension);
+			ToFile(type, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>
@@ -126,7 +126,7 @@ namespace MKY.Xml.Schema
 		public static void ToFile(Type type, Encoding encoding, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(type);
-			ToFile(document, path, intendedFileNameWithoutExtension, fileExtension);
+			ToFile(document, encoding, path, intendedFileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>
@@ -146,7 +146,7 @@ namespace MKY.Xml.Schema
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void ToFile(XmlDocument document, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
-			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8, path, intendedFileNameWithoutExtension, fileExtension);
+			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>
@@ -193,7 +193,7 @@ namespace MKY.Xml.Schema
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void ToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
 		{
-			ToFile(schema, EncodingEx.EnvironmentRecommendedUTF8, path, intendedFileNameWithoutExtension, count, index, fileExtension);
+			ToFile(schema, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, count, index, fileExtension);
 		}
 
 		/// <summary>

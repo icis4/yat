@@ -1588,7 +1588,7 @@ namespace YAT.Model.Test
 			e.Result = DialogResult.OK;
 
 			// ...and signal exclusion via a flag:
-			if (e.Text.StartsWith("Unable to start terminal", StringComparison.Ordinal)) // 'Ordinal' since YAT is all-English.
+			if (e.Text.StartsWith("Unable to start terminal", StringComparison.Ordinal)) // 'Ordinal' since YAT is all-English and test is passable with this strict comparison.
 			{
 				staticTerminalMessageInputRequestResultsInExclude = true;
 				staticTerminalMessageInputRequestResultsInExcludeText = e.Text;

@@ -77,6 +77,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits = DataBitsDefault, System.IO.Ports.Parity parity = ParityDefault, System.IO.Ports.StopBits stopBits = StopBitsDefault, SerialFlowControl flowControl = FlowControlDefault)
 			: this(baudRate, dataBits, parity, stopBits, flowControl, ToRtsPinDefault(flowControl), ToDtrPinDefault(flowControl))
 		{
@@ -388,6 +389,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRts", Justification = "'RTS' is a common term for serial ports.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
 		public static SerialControlPinState ToRtsPinDefault(SerialFlowControl flowControl)
 		{

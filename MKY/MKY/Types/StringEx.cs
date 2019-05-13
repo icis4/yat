@@ -377,6 +377,18 @@ namespace MKY
 		/// <param name="value">The string to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of the comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithOrdinal(string str, string value)
+		{
+			return (str.StartsWith(value, StringComparison.Ordinal));
+		}
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches the specified <paramref name="value"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="value">The string to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of the comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
 		public static bool StartsWithOrdinalIgnoreCase(string str, string value)
 		{
 			return (str.StartsWith(value, StringComparison.OrdinalIgnoreCase));
