@@ -147,9 +147,9 @@ namespace YAT.Model.Test
 					Assert.That(terminalB.Start(), Is.True, @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Create test set to verify transmission:                                            // LineStart + EOL + LineBreak result in three more elements.
+					// Create test set to verify transmission:                                                    // LineStart + EOL + LineBreak result in three more elements.
 					var testSetInitial   = new Utilities.TestSet(new Types.Command(@"A"),          1, new int[] { 4 }, new int[] { 3 }, true);
-					var testSetContinued = new Utilities.TestSet(new Types.Command(@"B\!(NoEOL)"), 1, new int[] { 4 }, new int[] { 4 }, true);
+					var testSetContinued = new Utilities.TestSet(new Types.Command(@"B\!(NoEOL)"), 2, new int[] { 5 }, new int[] { 4 }, true);
 
 					// Send test command:
 					terminalA.SendText(testSetInitial.Command);
@@ -165,6 +165,9 @@ namespace YAT.Model.Test
 					Utilities.WaitForTransmission(terminalA, terminalB, testSetContinued);
 
 					// Verify incomplete line:
+					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+					                      testSetContinued);
 					var lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
 					if (lines.Count != 2)
 						Assert.Fail("Incomplete line not received!");
