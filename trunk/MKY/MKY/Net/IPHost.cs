@@ -447,6 +447,7 @@ namespace MKY.Net
 		/// The list of items of this extended enum, depending on whether broadcast shall be included or not.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Symmetricity with Enum.GetNames() and Enum.GetValues().")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static ReadOnlyCollection<IPHostEx> GetItems(bool includeBroadcast = true)
 		{
 			var items = new List<IPHostEx>(includeBroadcast ? 5 : 3); // Preset the required capacity to improve memory management.

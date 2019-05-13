@@ -43,10 +43,14 @@ namespace MKY.IO.Ports
 	{
 		#region Double Definitions
 
-		private const double None_double         = 0.0;
-		private const double One_double          = 1.0;
-		private const double OnePointFive_double = 1.5;
-		private const double Two_double          = 2.0;
+		private const double LowerLimit_double   = -0.25;
+
+		private const double None_double         =  0.0;
+		private const double One_double          =  1.0;
+		private const double OnePointFive_double =  1.5;
+		private const double Two_double          =  2.0;
+
+		private const double UpperLimit_double   =  2.25;
 
 		#endregion
 
@@ -166,11 +170,11 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Tries to create an item from the given value.
 		/// </summary>
-		public static bool TryFrom(double stopBits, out StopBitsEx result)
+		public static bool TryFrom(double bits, out StopBitsEx result)
 		{
-			if (IsDefined(stopBits))
+			if (IsDefined(bits))
 			{
-				result = stopBits;
+				result = bits;
 				return (true);
 			}
 			else
@@ -183,11 +187,11 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Tries to create an item from the given value.
 		/// </summary>
-		public static bool TryFrom(double stopBits, out StopBits result)
+		public static bool TryFrom(double bits, out StopBits result)
 		{
-			if (IsDefined(stopBits))
+			if (IsDefined(bits))
 			{
-				result = (StopBitsEx)stopBits;
+				result = (StopBitsEx)bits;
 				return (true);
 			}
 			else
@@ -198,9 +202,9 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static bool IsDefined(double stopBits)
+		public static bool IsDefined(double bits)
 		{
-			return (true); // \remind (2018-06-13 / MKY) there should be a good comparison for slightly below 0.0 up to slightly above 2.0.
+			return ((bits >= LowerLimit_double) && (bits <= UpperLimit_double));
 		}
 
 		#endregion
@@ -238,13 +242,21 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public static implicit operator StopBitsEx(double bits)
 		{
-			if      (bits >= Two_double)          return (new StopBitsEx(StopBits.Two));
-			else if (bits >= OnePointFive_double) return (new StopBitsEx(StopBits.OnePointFive));
-			else if (bits >= One_double)          return (new StopBitsEx(StopBits.One));
-			else                                  return (new StopBitsEx(StopBits.None));
-		} // \remind (2018-06-13 / MKY) there should be a better comparison for slightly below 0.0 up to slightly above 2.0.
+			if (IsDefined(bits))
+			{
+				if      (bits >= Two_double)          return (new StopBitsEx(StopBits.Two));
+				else if (bits >= OnePointFive_double) return (new StopBitsEx(StopBits.OnePointFive));
+				else if (bits >= One_double)          return (new StopBitsEx(StopBits.One));
+				else                                  return (new StopBitsEx(StopBits.None));
+			}
+			else
+			{
+				throw (new ArgumentOutOfRangeException("bits", MessageHelper.InvalidExecutionPreamble + "'" + bits.ToString(CultureInfo.InvariantCulture) + "' is a stop bit value that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
 
 		/// <summary></summary>
 		public static implicit operator string(StopBitsEx bits)

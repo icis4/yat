@@ -365,7 +365,7 @@ namespace MKY.Xml.Serialization
 			}
 		}
 
-#if (WRITE_SCHEMAS_TO_FILES)
+	#if (WRITE_SCHEMAS_TO_FILES)
 		private void WriteSchemasToFiles(XmlSchemaSet schemas, string name)
 		{
 			=> Migrate to XmlSchemaEx.ToFile() when using this code the next time.
@@ -380,7 +380,7 @@ namespace MKY.Xml.Serialization
 				else
 					filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name + "-" + i, ".xsd";
 
-				using (var sw = new StreamWriter(filePath, false, EncodingEx.EnvironmentRecommendedUTF8))
+				using (var sw = new StreamWriter(filePath, false, EncodingEx.EnvironmentRecommendedUTF8Encoding))
 				{
 					schema.Write(sw);
 				}
@@ -392,16 +392,16 @@ namespace MKY.Xml.Serialization
 				i++;
 			}
 		}
-#endif
+	#endif
 
-#if (WRITE_DOCUMENTS_TO_FILES)
+	#if (WRITE_DOCUMENTS_TO_FILES)
 		private void WriteDocumentToFile(XmlDocument document, string name)
 		{
 			=> Migrate to XmlDocumentEx.ToFile() when using this code the next time.
 			=> Attention! No way found to preserve whitespace in XML content when writing a type-unspecified XML document! See XmlDocumentEx.ToFile() for details!
 
 			string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name, ".xml");
-			using (var sw = new StreamWriter(filePath, false, EncodingEx.EnvironmentRecommendedUTF8))
+			using (var sw = new StreamWriter(filePath, false, EncodingEx.EnvironmentRecommendedUTF8Encoding))
 			{
 				document.Save(sw);
 			}
@@ -411,7 +411,7 @@ namespace MKY.Xml.Serialization
 				@"""" + filePath + @""""
 			);
 		}
-#endif
+	#endif
 
 		#endregion
 	}

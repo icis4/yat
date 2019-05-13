@@ -192,7 +192,7 @@ namespace YAT.Log.Settings
 			WriteMode       = LogFileWriteMode.Create;
 
 			TextEncoding         = TextEncoding.UTF8;
-			EmitEncodingPreamble = EncodingEx.EnvironmentRecommendsBOM;
+			EmitEncodingPreamble = EncodingEx.EnvironmentRecommendsByteOrderMarks;
 		}
 
 		#endregion

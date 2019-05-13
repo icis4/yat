@@ -145,6 +145,7 @@ namespace MKY
 		/// <remarks>
 		/// Located here instead of <see cref="EncodingEx"/> for closeness to methods above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "UTF", Justification = "Same spelling as 'Encoding.UTF7'.")]
 		public static bool IsValidForUTF7(char value)
 		{
 			if ((value >= 'A') && (value <= 'Z'))

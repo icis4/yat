@@ -80,15 +80,16 @@ namespace MKY.IO.Serial.Socket
 		private class AsyncReceiveState
 		{
 			public System.Net.Sockets.UdpClient Socket                   { get; protected set; }
-			public int                          LocalPort                { get; protected set; }
-			public System.Net.IPAddress         LocalFilter              { get; protected set; }
+		////public int                          LocalPort                { get; protected set; } <= Commented-out to prevent FxCopy message CA1811
+		////public System.Net.IPAddress         LocalFilter              { get; protected set; } <= "AvoidUncalledPrivateCode" (Microsoft.Performance).
 			public uint                         LocalFilterIPv4MaskBytes { get; protected set; }
 
-			public AsyncReceiveState(System.Net.Sockets.UdpClient socket, int localPort, System.Net.IPAddress localFilter, uint localFilterIPv4MaskBytes)
+		////public AsyncReceiveState(System.Net.Sockets.UdpClient socket, int localPort, System.Net.IPAddress localFilter, uint localFilterIPv4MaskBytes)
+			public AsyncReceiveState(System.Net.Sockets.UdpClient socket, uint localFilterIPv4MaskBytes)
 			{
 				Socket                   = socket;
-				LocalPort                = localPort;
-				LocalFilter              = localFilter;
+			////LocalPort                = localPort;
+			////LocalFilter              = localFilter;
 				LocalFilterIPv4MaskBytes = localFilterIPv4MaskBytes;
 			}
 		}
@@ -985,7 +986,7 @@ namespace MKY.IO.Serial.Socket
 				//                In this case, the service provider will assign an available port number between 49152 and 65535."
 				var localEP = new System.Net.IPEndPoint(this.localInterface.Address, this.localPort);
 				this.socket.Client.Bind(localEP);
-				DebugMessage(string.Format("Socket bound to {0}.", localEP));
+				DebugMessage(string.Format(CultureInfo.InvariantCulture, "Socket bound to {0}.", localEP));
 
 			////// Set the default remote endpoint of a client socket:
 			////if ((this.socketType == UdpSocketType.Client) ||
@@ -1225,7 +1226,8 @@ namespace MKY.IO.Serial.Socket
 				// Ensure that async receive is no longer initiated after close/dispose:
 				if (!IsDisposed && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 				{
-					var state = new AsyncReceiveState(this.socket, this.localPort, this.localFilter, this.localFilter.IPv4MaskBytes);
+				////var state = new AsyncReceiveState(this.socket, this.localPort, this.localFilter, this.localFilter.IPv4MaskBytes); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
+					var state = new AsyncReceiveState(this.socket, this.localFilter.IPv4MaskBytes);
 					DebugReceive(string.Format("Beginning receive on local port {0} filtered for {1}...", this.localPort, this.localFilter));
 					this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
 				}
@@ -1252,13 +1254,15 @@ namespace MKY.IO.Serial.Socket
 					// Using async state to forward information from main to callback
 					// for not having to lock the [socketSyncObj] on accessing members.
 
-					DebugReceive(string.Format("...ending receive on local port {0}...", asyncState.LocalPort));
+				////DebugReceive(string.Format("...ending receive on local port {0}...", asyncState.LocalPort)); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
+					DebugReceive(string.Format("...ending receive on local port {0}...",       this.LocalPort)); // Consequently, using members for debug output.
 					data = asyncState.Socket.EndReceive(ar, ref remoteEndPoint);
 					DebugReceive(string.Format("...{0} bytes received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint));
 
 					if (IPFilterEx.IsIPv4Refused(asyncState.LocalFilterIPv4MaskBytes, remoteEndPoint.Address))
 					{
-						DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.", asyncState.LocalFilter));
+					////DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.", asyncState.LocalFilter)); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
+						DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.",       this.LocalFilter)); // Consequently, using members for debug output.
 						discard = true;
 					}
 				}

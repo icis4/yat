@@ -71,6 +71,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public SerialPortSettings(BaudRate baudRate = BaudRateDefault, DataBits dataBits = DataBitsDefault, Parity parity = ParityDefault, StopBits stopBits = StopBitsDefault, Handshake handshake = HandshakeDefault)
 		{
 			BaudRate  = baudRate;

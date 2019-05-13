@@ -419,7 +419,7 @@ namespace MKY
 			{
 				foreach (var t in potentialEnumTypes)
 				{
-					if (enumExType.Name.StartsWith(t.Name))
+					if (enumExType.Name.StartsWith(t.Name, StringComparison.Ordinal)) // 'Ordinal' like a compiler would do.
 						return (t);
 				}
 

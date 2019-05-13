@@ -169,7 +169,7 @@ namespace MKY.Xml
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void ToFile(XmlDocument document, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
 		{
-			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8, path, fileNameWithoutExtension, fileExtension);
+			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, fileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>

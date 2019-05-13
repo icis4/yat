@@ -809,7 +809,7 @@ namespace YAT.Domain
 
 							this.rxMultiByteDecodingStream.Add(b);
 
-							int remainingBytesInFragment = (this.rxMultiByteDecodingStream.Count % ((EncodingEx)e).GetUnicodeFragmentByteCount());
+							int remainingBytesInFragment = (this.rxMultiByteDecodingStream.Count % ((EncodingEx)e).UnicodeFragmentByteCount);
 							if (remainingBytesInFragment > 0)
 							{
 								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
