@@ -102,7 +102,7 @@ namespace YAT.Model.Types
 
 		private const string             ClearRepositoriesOnSubsequentRx_string = "[Cl. Mon. on Subsequ. Rx]"; // Translating from code to user terminology.
 		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternatives = new string[] { "[CMSR]" };
-		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Cl. Mon. ", "[Clear Monitor " }; // Including ' ' to distiguish from above
+		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Cl. Mon. ", "[Clear Monitor " }; // Including ' ' to distinguish from above.
 
 		private const string             ResetCountAndRate_string = "[Reset Count/Rate]";
 		private static readonly string[] ResetCountAndRate_stringAlternatives = new string[] { "[R]" };

@@ -297,9 +297,9 @@ namespace YAT.Domain.Parser
 				case Keyword.NoEol:                return (noArgSupportedMessage);
 				case Keyword.PortSettings:         return ("one or more integer values indicating the settings, separated by ',' (comma) or ';' (semicolon) or '|' (pipe)");
 				case Keyword.Baud:                 return ("an integer value of 1 or more indicating the number of bits per second");
-				case Keyword.DataBits:             return ("an integer value of 4 to 8");// Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.DataBits:             return ("an integer value of 4 to 8"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.Parity:               return ("an integer value where 0 = None, 1 = Odd, 2 = Even, 3 = Mark, 4 = Space");
-				case Keyword.StopBits:             return ("an integer value 0, 1 or 2");// Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.StopBits:             return ("an integer value 0, 1 or 2"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.FlowControl:          return ("an integer value where 0 = None, 1 = Software, 2 = Hardware, 3 = Combined, 4 = Manual Hardware, 5 = Manual Software, 6 = Manual Combined, 7 = RS-485");
 				case Keyword.FramingErrorsOn:      return (noArgSupportedMessage);
 				case Keyword.FramingErrorsOff:     return (noArgSupportedMessage);

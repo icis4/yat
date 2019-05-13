@@ -45,14 +45,14 @@ namespace MKY.IO.Serial.Usb
 		/// dynamically managed and increased if necessary. Received XOff will be taken into account
 		/// though.
 		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, Ser/HID is just called 'Ser'...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Ser/HID' is just called 'Ser'...")]
 		Software,
 
 		/// <summary>
 		/// Manually managing XOn/XOff flow control, mainly useful for development of devices that
 		/// provide XOn/XOff for USB Ser/HID, e.g. MT Ser/HID devices.
 		/// </summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, Ser/HID is just called 'Ser'...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Ser/HID' is just called 'Ser'...")]
 		ManualSoftware,
 	}
 

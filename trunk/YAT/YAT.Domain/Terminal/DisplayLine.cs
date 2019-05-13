@@ -152,7 +152,7 @@ namespace YAT.Domain
 		/// The number of characters of the elements contained in the collection.
 		/// </summary>
 		/// <remarks>
-		/// ASCII menmonics (e.g. &lt;CR&gt;) are considered a single shown character.
+		/// ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character.
 		/// </remarks>
 		public virtual int CharCount
 		{

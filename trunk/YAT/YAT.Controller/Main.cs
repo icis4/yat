@@ -1225,7 +1225,7 @@ namespace YAT.Controller
 		}
 
 		/// <summary>
-		/// Related to ObjectDisposedException issue (bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401,...)
+		/// Related to ObjectDisposedException issue (bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401,...).
 		/// </summary>
 		/// <remarks>
 		/// Known error patterns:
@@ -1299,7 +1299,7 @@ namespace YAT.Controller
 		}
 
 		/// <summary>
-		/// Related to UnauthorizedAccessException issue (bugs #442,...)
+		/// Related to UnauthorizedAccessException issue (bugs #442,...).
 		/// </summary>
 		/// <remarks>
 		/// Known error patterns:

@@ -316,6 +316,8 @@ namespace YAT.Domain
 		/// elements would likely be more error prone since...
 		/// ...exact sequence of adding and removing elements has to exactly match.
 		/// ...an already added element would likely have to be unfolded to remove parts of it!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineSentReplaced;
 
@@ -324,6 +326,8 @@ namespace YAT.Domain
 		/// elements would likely be more error prone since...
 		/// ...exact sequence of adding and removing elements has to exactly match.
 		/// ...an already added element would likely have to be unfolded to remove parts of it!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineReceivedReplaced;
 
@@ -2477,7 +2481,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Retruns a collection of <see cref="DisplayElement"/> objects reflecting the changed I/O control status.
+		/// Returns a collection of <see cref="DisplayElement"/> objects reflecting the changed I/O control status.
 		/// </summary>
 		/// <remarks>
 		/// Private to ensure proper update of <see cref="ioControlStateCache"/>.
@@ -2617,31 +2621,31 @@ namespace YAT.Domain
 
 			if ((IsSerialPort || IsUsbSerialHid) && TerminalSettings.IO.FlowControlManagesXOnXOffManually)
 			{
-				var xText = new StringBuilder();
+				var flowControlText = new StringBuilder();
 
 				if (currentState.InputIsXOn != previousState.InputIsXOn)
 				{
-					xText.Append("IXS=");
-					xText.Append(currentState.InputIsXOn ? "on" : "off");
+					flowControlText.Append("IXS=");
+					flowControlText.Append(currentState.InputIsXOn ? "on" : "off");
 
 					if (TerminalSettings.Status.ShowFlowControlCount)
-						xText.Append("|" + currentState.SentXOnCount.ToString(CultureInfo.CurrentCulture) + "|" + currentState.SentXOffCount.ToString(CultureInfo.CurrentCulture));
+						flowControlText.Append("|" + currentState.SentXOnCount.ToString(CultureInfo.CurrentCulture) + "|" + currentState.SentXOffCount.ToString(CultureInfo.CurrentCulture));
 				}
 
 				if (currentState.OutputIsXOn != previousState.OutputIsXOn)
 				{
-					if (xText.Length > 0)
-						xText.Append(",");
+					if (flowControlText.Length > 0)
+						flowControlText.Append(",");
 
-					xText.Append("OXS=");
-					xText.Append(currentState.OutputIsXOn ? "on" : "off");
+					flowControlText.Append("OXS=");
+					flowControlText.Append(currentState.OutputIsXOn ? "on" : "off");
 
 					if (TerminalSettings.Status.ShowFlowControlCount)
-						xText.Append("|" + currentState.ReceivedXOnCount.ToString(CultureInfo.CurrentCulture) + "|" + currentState.ReceivedXOffCount.ToString(CultureInfo.CurrentCulture));
+						flowControlText.Append("|" + currentState.ReceivedXOnCount.ToString(CultureInfo.CurrentCulture) + "|" + currentState.ReceivedXOffCount.ToString(CultureInfo.CurrentCulture));
 				}
 
-				if (xText.Length > 0)
-					l.Add(xText.ToString());
+				if (flowControlText.Length > 0)
+					l.Add(flowControlText.ToString());
 			}
 
 			if (IsSerialPort && TerminalSettings.IO.IndicateSerialPortBreakStates)
@@ -3768,7 +3772,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.IncludePortControl)
 			{
 				var texts = IOControlChangeTexts();
-				                                                 // Forsee capacity for separators.
+				                                                 //// Forsee capacity for separators.
 				var c = new DisplayElementCollection(texts.Count * 2); // Preset the required capacity to improve memory management.
 				foreach (var t in texts)
 				{

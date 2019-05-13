@@ -203,7 +203,7 @@ namespace YAT.Model.Test.Settings
 				Utilities.WaitForReceiving(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				Thread.Sleep(500);
-				                                    // 2 = Even
+				                                    //// 2 = Even
 				send     = @"\!(PortSettings(9600|7|2))COM 0"; // \remind (2018-06-20 / MKY) can be migrated to -1 after upgrade of test boards
 				expected =  "COM A 0 6 0 1";                   // Now expected at 9600/7/E.
 
@@ -223,7 +223,7 @@ namespace YAT.Model.Test.Settings
 				Utilities.WaitForReceiving(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				Thread.Sleep(500);
-				                                      // 0 = None
+				                                      //// 0 = None
 				send     = @"\!(DataBits(8))\!(Parity(0))COM 0"; // \remind (2018-06-20 / MKY) can be migrated to -1 after upgrade of test boards
 				expected =  "COM A 0 6 3 1";                     // Now expected at 9600/8/N.
 

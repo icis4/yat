@@ -1018,7 +1018,7 @@ namespace YAT.Domain
 								if (effectiveCharCount == 1)
 								{
 									this.rxMultiByteDecodingStream.Clear();
-									                                                     // 'effectiveCharCount' is 1 for sure.
+									                                                    //// 'effectiveCharCount' is 1 for sure.
 									return (CreateDataElement(decodingArray, d, r, chars[0]));
 								}
 								else if (effectiveCharCount == 0)
@@ -1176,7 +1176,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
 		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
 		/// </remarks>
 		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elementsToAdd)
@@ -1214,7 +1214,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
 		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
@@ -1489,7 +1489,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
 		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
 		/// </remarks>
 		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
@@ -1555,7 +1555,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distiguish this local method from the overall "Process" methods.
+		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
 		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
@@ -1670,6 +1670,7 @@ namespace YAT.Domain
 			} // lock (processSyncObj)
 		}
 
+		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		private void ProcessPortOrDirectionLineBreak(DateTime ts, string ps, IODirection d, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
