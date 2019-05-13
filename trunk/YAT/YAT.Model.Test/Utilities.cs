@@ -277,6 +277,22 @@ namespace YAT.Model.Test
 			/// <param name="command">The test command.</param>
 			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
 			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
+			/// <param name="expectedCharAndByteCounts">
+			/// The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character,
+			/// which equals the expected number of raw byte content per display line, without hidden EOL or control bytes.
+			/// </param>
+			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
+			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedCharAndByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
+				: this(command, expectedLineCount, expectedElementCounts, expectedCharAndByteCounts, expectedCharAndByteCounts, expectedAlsoApplyToA, clearedIsExpectedInTheEnd)
+			{
+			}
+
+			/// <summary></summary>
+			/// <param name="command">The test command.</param>
+			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
+			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
 			/// <param name="expectedCharCounts">The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character.</param>
 			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, without hidden EOL or control bytes.</param>
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>

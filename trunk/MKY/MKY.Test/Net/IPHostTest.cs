@@ -49,9 +49,10 @@ namespace MKY.Test.Net
 		// Constants
 		//==========================================================================================
 
-		private const string LocalhostString = "[localhost]";
-
+		private const string LocalhostString     = "[localhost]";
 		private const string IPv4LocalhostString = "IPv4 localhost (127.0.0.1)";
+		private const string BroadcastString     = "[broadcast]";
+		private const string IPv4BroadcastString = "IPv4 broadcast (255.255.255.255)";
 		private const string IPv6LocalhostString = "IPv6 localhost (::1)";
 
 		private static readonly IPAddress SomeIPv4Address = new IPAddress(new byte[] { 1, 2, 3, 4 });
