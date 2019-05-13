@@ -236,7 +236,7 @@ namespace YAT.Model.Test
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedElementCounts { get; }
 
-			/// <summary>The expected number of shown characters per display line, ASCII menmonics (e.g. &lt;CR&gt;) are considered a single shown character.</summary>
+			/// <summary>The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character.</summary>
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedCharCounts { get; }
 
@@ -277,7 +277,7 @@ namespace YAT.Model.Test
 			/// <param name="command">The test command.</param>
 			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
 			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
-			/// <param name="expectedCharCounts">The expected number of shown characters per display line, ASCII menmonics (e.g. &lt;CR&gt;) are considered a single shown character.</param>
+			/// <param name="expectedCharCounts">The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character.</param>
 			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, without hidden EOL or control bytes.</param>
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
 			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>

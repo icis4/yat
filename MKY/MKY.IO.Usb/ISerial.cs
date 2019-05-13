@@ -35,7 +35,7 @@ namespace MKY.IO.Usb
 	/// i.e. a  method must be called to send and receive data, and the corresponding
 	/// events do not contain any data.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Ser/HID' just happens to contain 'Ser'...")]
 	public interface ISerial
 	{
 		#region Events

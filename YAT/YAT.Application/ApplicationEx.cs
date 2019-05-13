@@ -30,6 +30,7 @@ using System.IO;
 namespace YAT
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public static class ApplicationEx
 	{
@@ -82,6 +83,7 @@ namespace YAT
 		///  > Firefox 59.0.2 (64-Bit) + Thunderbird 52.7.0 (32-Bit)
 		/// Release sections in release notes no longer use "Version" either.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Syncovery' is a product name.")]
 		public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersionWithStabilityIndication;
 
 		/// <summary>The complete logo (text) of the product.</summary>

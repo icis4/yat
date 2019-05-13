@@ -213,7 +213,6 @@ namespace MKY.IO.Ports
 			}
 		}
 
-
 		/// <summary>
 		/// Tries to create an item from the given value.
 		/// </summary>

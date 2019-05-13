@@ -936,7 +936,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Returns the framgment byte count if this instance is using one of the Unicode encodings.
+		/// Returns the fragment byte count if this instance is using one of the Unicode encodings.
 		/// </summary>
 		/// <remarks>
 		/// Value equals <see cref="GetMinByteCount()"/> for Unicode encodings.

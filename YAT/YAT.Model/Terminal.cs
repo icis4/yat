@@ -2391,7 +2391,7 @@ namespace YAT.Model
 			var sep   = SettingsRoot.Display.InfoSeparatorCache;
 			var left  = SettingsRoot.Display.InfoEnclosureLeftCache;
 			var right = SettingsRoot.Display.InfoEnclosureRightCache;
-			                                                                    // Forsee capacity for separators.
+			                                                                    //// Forsee capacity for separators.
 			var virtualLine = new Domain.DisplayLine(1 + 2 + 2 + (e.Texts.Count * 2) + 1); // Preset the required capacity to improve memory management.
 			virtualLine.Add(new Domain.DisplayElement.LineStart());
 
@@ -2408,7 +2408,7 @@ namespace YAT.Model
 				if (e.Texts.Count > 0)
 					virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
-			                                                          // Forsee capacity for separators.
+			                                                          //// Forsee capacity for separators.
 			var c = new Domain.DisplayElementCollection(e.Texts.Count * 2); // Preset the required capacity to improve memory management.
 			foreach (var t in e.Texts)
 			{

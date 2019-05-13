@@ -387,7 +387,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.Unicode, "︙", new byte[] { 0x19, 0xFE }));
 				                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
 				yield return (new TestCaseData(Encoding.Unicode, "𝄞", new byte[] { 0x34, 0xD8, 0x1E, 0xDD }));
-				                                                                            //          |           |           |           |           |           |
+				                                                                        //// |           |           |           |           |           |          |
 				yield return (new TestCaseData(Encoding.Unicode, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32, 0x00 }));
 
 				// UTF-16 (big endian, i.e. network endianness) [1201]:
@@ -403,7 +403,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "︙", new byte[] { 0xFE, 0x19 }));
 				                                                          //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "𝄞", new byte[] { 0xD8, 0x34, 0xDD, 0x1E }));
-				                                                                                     //          |           |           |           |           |           |
+				                                                                                 //// |           |           |           |           |           |          |
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, @"0\0<CR>1\n2", new byte[] { 0x00, 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32 }));
 
 				// UTF-32 (little endian, i.e. machine endianness) [12000]:
@@ -419,7 +419,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF32, "︙", new byte[] { 0x19, 0xFE, 0x00, 0x00 }));
 				                                               //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
 				yield return (new TestCaseData(Encoding.UTF32, "𝄞", new byte[] { 0x1E, 0xD1, 0x01, 0x00 }));
-				                                                                          //                      |                       |                       |                       |                       |                       |
+				                                                                      //// |                       |                       |                       |                       |                       |                      |
 				yield return (new TestCaseData(Encoding.UTF32, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00 }));
 
 				// UTF-32 (big endian, i.e. network endianness) [12001]:
@@ -435,7 +435,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "︙", new byte[] { 0x00, 0x00, 0xFE, 0x19 }));
 				                                                                                  //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "𝄞", new byte[] { 0x00, 0x01, 0xD1, 0x1E }));
-				                                                                                                             //                      |                       |                       |                       |                       |                       |
+				                                                                                                         //// |                       |                       |                       |                       |                       |                      |
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), @"0\0<CR>1\n2", new byte[] { 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32 }));
 
 				// Big5 [950]:

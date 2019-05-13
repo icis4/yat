@@ -1232,6 +1232,7 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
 		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Partially same code for multiple exceptions.")]
 		private void ReceiveCallback(IAsyncResult ar)
 		{

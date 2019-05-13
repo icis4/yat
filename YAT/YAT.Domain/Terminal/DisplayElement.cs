@@ -123,13 +123,13 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TxData(byte origin, string text)
 				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public TxData(byte[] origin, string text)
 				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -146,13 +146,13 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TxControl(byte origin, string text)
 				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public TxControl(byte[] origin, string text)
 				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -169,13 +169,13 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public RxData(byte origin, string text)
 				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public RxData(byte[] origin, string text)
 				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -192,13 +192,13 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public RxControl(byte origin, string text)
 				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 
 			/// <summary></summary>
 			public RxControl(byte[] origin, string text)
 				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII menmonics (e.g. <CR>) are considered a single shown character.
+			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
 			}
 		}
 
@@ -804,7 +804,7 @@ namespace YAT.Domain
 	#if (FALSE)
 		/// <remarks>
 		/// <paramref name="origin"/> must correspond to a single byte or character, i.e. result
-		/// in a single element, same as when creating elements "the normal way". ASCII menmonics
+		/// in a single element, same as when creating elements "the normal way". ASCII mnemonics
 		/// (e.g. <CR>) are considered a single shown character.
 		/// </remarks>
 		public virtual DisplayElement RecreateFromOrigin(Pair<byte[], string> origin)
@@ -889,6 +889,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Needed to handle backspace; consequence of <see cref="Append(DisplayElement)"/> above.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 		public virtual void RemoveLastContentChar()
 		{
 			if (!IsContent)
@@ -898,10 +899,10 @@ namespace YAT.Domain
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The origin is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// Unfold the element:
-			ConstructorInfo ciOrigin = GetType().GetConstructor(new Type[] { typeof(byte[]), typeof(string) }); // All content elements have such constructor.
+			var originConstructor = GetType().GetConstructor(new Type[] { typeof(byte[]), typeof(string) }); // All content elements have such constructor.
 			var unfolded = new List<DisplayElement>(this.origin.Count); // Preset the required capacity to improve memory management.
 			foreach (var p in this.origin)
-				unfolded.Add((DisplayElement)ciOrigin.Invoke(new object[] { p.Value1, p.Value2 }));
+				unfolded.Add((DisplayElement)originConstructor.Invoke(new object[] { p.Value1, p.Value2 }));
 
 			// Remove the last character:
 			for (int index = (unfolded.Count - 1); index >= 0; index--)
@@ -924,8 +925,8 @@ namespace YAT.Domain
 			}
 
 			// Recreate the element:
-			ConstructorInfo ciEmpty = GetType().GetConstructor(Type.EmptyTypes); // All content elements have such constructor.
-			var recreated = (DisplayElement)ciEmpty.Invoke(null);
+			var emptyConstructor = GetType().GetConstructor(Type.EmptyTypes); // All content elements have such constructor.
+			var recreated = (DisplayElement)emptyConstructor.Invoke(null);
 			foreach (var de in unfolded)
 				recreated.Append(de);
 

@@ -125,7 +125,7 @@ namespace MKY.IO.Usb
 					payload.Add(report[i]);
 
 				// Note that this is the case if neither length is prepended nor terminating zero
-				// is appended. In such case, there is no way to distiguish 0x00 payload bytes from
+				// is appended. In such case, there is no way to distinguish 0x00 payload bytes from
 				// 0x00 filler bytes, thus consider the whole report as payload.
 			}
 
