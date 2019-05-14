@@ -21,10 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
+using System;
+using System.Globalization;
 using System;
 using System.Xml.Serialization;
 
 using MKY.IO.Ports;
+
+#endregion
 
 namespace YAT.Domain
 {
@@ -123,11 +132,11 @@ namespace YAT.Domain
 				SerialPortControlPins    .ToString() + ", " +
 				SerialPortControlPinCount.ToString() + ", " +
 
-				"IXS=" + InputIsXOn .ToString() + "|" + SentXOnCount    .ToString() + "|" + SentXOffCount    .ToString() + ", " +
-				"OXS=" + OutputIsXOn.ToString() + "|" + ReceivedXOnCount.ToString() + "|" + ReceivedXOffCount.ToString() + ", " +
+				"IXS=" + InputIsXOn .ToString() + "|" + SentXOnCount    .ToString(CultureInfo.CurrentCulture) + "|" + SentXOffCount    .ToString(CultureInfo.CurrentCulture) + ", " +
+				"OXS=" + OutputIsXOn.ToString() + "|" + ReceivedXOnCount.ToString(CultureInfo.CurrentCulture) + "|" + ReceivedXOffCount.ToString(CultureInfo.CurrentCulture) + ", " +
 
-				"IBS=" + InputBreak .ToString() + "|" + InputBreakCount .ToString() + ", " +
-				"OBS=" + OutputBreak.ToString() + "|" + OutputBreakCount.ToString()
+				"IBS=" + InputBreak .ToString() + "|" + InputBreakCount .ToString(CultureInfo.CurrentCulture) + ", " +
+				"OBS=" + OutputBreak.ToString() + "|" + OutputBreakCount.ToString(CultureInfo.CurrentCulture)
 			);
 		}
 

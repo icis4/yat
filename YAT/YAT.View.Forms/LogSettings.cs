@@ -171,6 +171,7 @@ namespace YAT.View.Forms
 			ShowSetRootDirectoryDialog();
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void button_RootOpen_Click(object sender, EventArgs e)
 		{
 			// Create directory if not existing yet:

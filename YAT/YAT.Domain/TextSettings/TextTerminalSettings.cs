@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
@@ -30,6 +35,8 @@ using MKY;
 using MKY.Text;
 using MKY.Text.RegularExpressions;
 
+#endregion
+
 // The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
 // This code is intentionally placed into the YAT.Domain.Settings namespace even though the file is
 // located in the YAT.Domain\TextSettings for better separation of the implementation files.
@@ -37,7 +44,6 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
-	[Serializable]
 	public class TextTerminalSettings : MKY.Settings.SettingsItem, IEquatable<TextTerminalSettings>
 	{
 		#region Constants
@@ -90,7 +96,7 @@ namespace YAT.Domain.Settings
 		private TextDisplaySettings rxDisplay;
 
 		private TextLineSendDelaySettingTuple lineSendDelay;
-		private TimeoutSettingTuple                waitForResponse;
+		private TimeoutSettingTuple           waitForResponse;
 		private CharSubstitution              charSubstitution;
 		private TextExclusionSettings         textExclusion;
 

@@ -22,10 +22,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.Diagnostics;
+
+#endregion
 
 // This code is intentionally placed into the parser base namespace even though the file is located
 // in a "\States" sub-directory. The sub-directory shall only group the implementation but not open

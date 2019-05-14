@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using YAT.Format.Settings;
@@ -116,6 +117,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "portLog", Justification = "Logs are actually disposed via this.logs in the below foreach loop.")]
 		protected virtual void Dispose(bool disposing)
 		{
 			if (!IsDisposed)

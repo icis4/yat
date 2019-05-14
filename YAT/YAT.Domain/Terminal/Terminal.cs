@@ -1365,6 +1365,7 @@ namespace YAT.Domain
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InLine", Justification = "It's 'in line' and not inline!")]
+		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agreed, could be refactored. Could be.")]
 		protected virtual void ProcessInLineKeywords(Parser.KeywordResult result)
 		{
 			switch (result.Keyword)
@@ -2486,6 +2487,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Private to ensure proper update of <see cref="ioControlStateCache"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Fail-safe implementation, especially catching exceptions while closing.")]
 		private ReadOnlyCollection<string> IOControlChangeTexts()
 		{
 			var currentState = new IOControlState();
@@ -3056,7 +3058,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		protected virtual void PrepareLineEndInfo(int length, TimeSpan duration, out DisplayElementCollection lp)
 		{
@@ -3087,6 +3089,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Setting is required to be received, modified and returned.")]
 		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine);
 
 		/// <summary></summary>

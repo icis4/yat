@@ -22,6 +22,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -58,6 +60,7 @@ namespace YAT.Domain
 	/// <remarks>
 	/// So far there can only be one attribute, thus named "Attribute" and not marked [Flags].
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Enum actually implements an attribute, an attribute related to display elements.")]
 	public enum LineChunkAttribute
 	{
 		/// <summary></summary>
