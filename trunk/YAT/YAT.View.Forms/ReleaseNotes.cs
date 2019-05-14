@@ -43,7 +43,7 @@ namespace YAT.View.Forms
 	public partial class ReleaseNotes : Form
 	{
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private static readonly string ReleaseNotesFileName = ApplicationEx.CommonName + " Release Notes.txt";
+		private const string ReleaseNotesFileName = ApplicationEx.CommonName + " Release Notes.txt";
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private static readonly string ReleaseNotesFilePath = System.Windows.Forms.Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;

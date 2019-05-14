@@ -4229,6 +4229,7 @@ namespace YAT.View.Forms
 			monitor_Rx   .ShowDataStatus = showCountAndRate;
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void ReloadMonitors()
 		{
 			try
@@ -4248,6 +4249,7 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void ReformatMonitors()
 		{
 			try
@@ -4363,6 +4365,7 @@ namespace YAT.View.Forms
 			monitor.SelectNone();
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void CopyMonitorToClipboard(Controls.Monitor monitor)
 		{
 			try

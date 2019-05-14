@@ -44,6 +44,7 @@ namespace YAT.Domain.Utilities
 		/// <summary>
 		/// Formats the given value into a hexadecimal string (e.g. "0Ah").
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string FormatHexString(byte value, bool showRadix = true)
 		{
 			return (FormatHexString(new byte[] { value }, showRadix));
@@ -53,6 +54,7 @@ namespace YAT.Domain.Utilities
 		/// Formats the given values into a hexadecimal string (e.g. "0Ah FFh 20h").
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'FFh'...")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string FormatHexString(IEnumerable<byte> values, bool showRadix = true)
 		{
 			var sb = new StringBuilder();

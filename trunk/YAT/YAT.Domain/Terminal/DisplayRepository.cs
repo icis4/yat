@@ -186,13 +186,25 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1061:DoNotHideBaseClassMethods", Justification = "Emphasize use.")]
 		public virtual void Enqueue(IEnumerable<DisplayElement> collection)
 		{
 			foreach (var de in collection)
 				Enqueue(de);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Ensure that <see cref="Enqueue(DisplayElement)"/> is called, which keeps track of the counts.
+		/// </remarks>
+		public new void Enqueue(DisplayLine line)
+		{
+			foreach (var de in line)
+				Enqueue(de);
+		}
+
+		/// <remarks>
+		/// Ensure that track of the counts is kept.
+		/// </remarks>
 		public new DisplayLine Dequeue()
 		{
 			var dl = base.Dequeue();

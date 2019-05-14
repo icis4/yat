@@ -52,8 +52,9 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Model.Test.Connection", Justification = "Namespace for orthogonality of test and testee namespaces.")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Model.Test.FileHandling", Justification = "Namespace for orthogonality of test and testee namespaces.")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Model.Test.Connection", Justification = "Namespace structure of test assembly is defined by testee assembly.")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Model.Test.FileHandling", Justification = "Namespace structure of test assembly is defined by testee assembly.")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Model.Test.Settings", Justification = "Namespace structure of test assembly is defined by testee assembly.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames", Scope = "assembly", Justification = "Intentionally not signing test assemblies, as there will be a warning when accidentally referencing it from a 'normal' assembly.")]
 
 //==================================================================================================

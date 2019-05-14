@@ -596,7 +596,7 @@ namespace YAT.Domain
 				else if (lineState.SequenceBefore.IsPartlyMatchBeginning)
 				{
 					// Previous was no match, previous sequence can be treated as normal:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, d, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, lp);
 
 					// Keep sequence elements and delay them until sequence is either complete or refused:
 					lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
@@ -606,7 +606,7 @@ namespace YAT.Domain
 				else
 				{
 					// No match at all, previous sequence can be treated as normal:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, d, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, lp);
 				}
 			}
 
@@ -675,7 +675,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ReleaseRetainedUnconfirmedHiddenSequenceBefore(LineState lineState, IODirection d, DisplayElementCollection lp)
+		private static void ReleaseRetainedUnconfirmedHiddenSequenceBefore(LineState lineState, DisplayElementCollection lp)
 		{
 			if (lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Count > 0)
 			{

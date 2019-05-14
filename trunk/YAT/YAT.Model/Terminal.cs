@@ -4784,6 +4784,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual bool OpenLogDirectory()
 		{
 			if (this.log != null)

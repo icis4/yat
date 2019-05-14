@@ -1751,7 +1751,7 @@ namespace YAT.View.Controls
 				return (ClearResult.NoElementOrLinePending);
 		}
 
-		private bool IsLineStart(Domain.DisplayElement element)
+		private static bool IsLineStart(Domain.DisplayElement element)
 		{
 			return ((element as Domain.DisplayElement.LineStart) != null);
 		}

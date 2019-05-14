@@ -53,7 +53,7 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.IO.Serial.SerialPort.Test", Justification = "Namespace for orthogonality of test and testee namespaces.")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.IO.Serial.SerialPort.Test", Justification = "Namespace structure of test assembly is defined by testee assembly.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames", Scope = "assembly", Justification = "Intentionally not signing test assemblies, as there will be a warning when accidentally referencing it from a 'normal' assembly.")]
 
 //==================================================================================================
