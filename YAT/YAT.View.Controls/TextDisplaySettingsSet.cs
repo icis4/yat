@@ -125,9 +125,9 @@ namespace YAT.View.Controls
 		{
 			int length;
 			if (int.TryParse(textBox_LengthLineBreak.Text, out length) && (Math.Abs(length) == 1))
-				label_LengthLineBreakUnit.Text = "byte";
+				label_LengthLineBreakUnit.Text = "char";
 			else
-				label_LengthLineBreakUnit.Text = "bytes";
+				label_LengthLineBreakUnit.Text = "chars";
 		}
 
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
