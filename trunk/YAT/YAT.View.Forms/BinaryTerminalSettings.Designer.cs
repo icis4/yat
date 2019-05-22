@@ -41,6 +41,7 @@ namespace YAT.View.Forms
 			this.groupBox_TxDisplay = new System.Windows.Forms.GroupBox();
 			this.binaryTerminalSettingsSet_Tx = new YAT.View.Controls.BinaryDisplaySettingsSet();
 			this.checkBox_SeparateTxRxDisplay = new System.Windows.Forms.CheckBox();
+			this.label_AdvancedSettingsRemark = new System.Windows.Forms.Label();
 			this.groupBox_Display.SuspendLayout();
 			this.groupBox_RxDisplay.SuspendLayout();
 			this.groupBox_TxDisplay.SuspendLayout();
@@ -151,6 +152,17 @@ namespace YAT.View.Forms
 			this.checkBox_SeparateTxRxDisplay.UseVisualStyleBackColor = true;
 			this.checkBox_SeparateTxRxDisplay.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxDisplay_CheckedChanged);
 			// 
+			// label_AdvancedSettingsRemark
+			// 
+			this.label_AdvancedSettingsRemark.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_AdvancedSettingsRemark.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_AdvancedSettingsRemark.Location = new System.Drawing.Point(314, 188);
+			this.label_AdvancedSettingsRemark.Name = "label_AdvancedSettingsRemark";
+			this.label_AdvancedSettingsRemark.Size = new System.Drawing.Size(103, 125);
+			this.label_AdvancedSettingsRemark.TabIndex = 4;
+			this.label_AdvancedSettingsRemark.Text = "Also see\r\n[Advanced Settings...]";
+			this.label_AdvancedSettingsRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// BinaryTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -162,6 +174,7 @@ namespace YAT.View.Forms
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
+			this.Controls.Add(this.label_AdvancedSettingsRemark);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -189,6 +202,6 @@ namespace YAT.View.Forms
 		private YAT.View.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Rx;
 		private System.Windows.Forms.GroupBox groupBox_TxDisplay;
 		private YAT.View.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Tx;
-
+		private System.Windows.Forms.Label label_AdvancedSettingsRemark;
 	}
 }

@@ -1146,6 +1146,7 @@ namespace YAT.View.Forms
 				checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
 				checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
 				checkBox_ChunkLineBreak.Checked     = this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled;
+				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
 
 				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
 				textBox_MaxLineLength.Text            = this.settingsInEdit.Terminal.Display.MaxLineLength.ToString(CultureInfo.CurrentCulture);
@@ -1238,6 +1239,9 @@ namespace YAT.View.Forms
 
 				// User:
 				textBox_UserName.Text = this.settingsInEdit.UserName;
+
+				// Remark:
+				label_TextSettingsRemark.Visible = isText;
 			}
 			finally
 			{
