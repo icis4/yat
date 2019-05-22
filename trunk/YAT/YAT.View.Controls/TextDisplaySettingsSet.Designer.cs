@@ -115,7 +115,7 @@
 			this.Controls.Add(this.textBox_TimedLineBreakTimeout);
 			this.Controls.Add(this.checkBox_TimedLineBreak);
 			this.Name = "TextDisplaySettingsSet";
-			this.Size = new System.Drawing.Size(238, 45);
+			this.Size = new System.Drawing.Size(251, 45);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
