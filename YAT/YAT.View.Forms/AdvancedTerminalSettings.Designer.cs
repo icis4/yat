@@ -135,6 +135,8 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.label_LineBreakRemark = new System.Windows.Forms.Label();
+			this.label_TextSettingsRemark = new System.Windows.Forms.Label();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
 			this.groupBox_Communication_SerialPorts.SuspendLayout();
@@ -817,6 +819,7 @@
 			this.groupBox_Display.Controls.Add(this.label_TxRadix);
 			this.groupBox_Display.Controls.Add(this.label_MaxLineCountUnit);
 			this.groupBox_Display.Controls.Add(this.label_MaxLineCount);
+			this.groupBox_Display.Controls.Add(this.label_LineBreakRemark);
 			this.groupBox_Display.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Display.Name = "groupBox_Display";
 			this.groupBox_Display.Size = new System.Drawing.Size(263, 741);
@@ -832,7 +835,7 @@
 			this.comboBox_LengthSelection.Location = new System.Drawing.Point(131, 228);
 			this.comboBox_LengthSelection.Name = "comboBox_LengthSelection";
 			this.comboBox_LengthSelection.Size = new System.Drawing.Size(121, 21);
-			this.comboBox_LengthSelection.TabIndex = 17;
+			this.comboBox_LengthSelection.TabIndex = 16;
 			this.toolTip.SetToolTip(this.comboBox_LengthSelection, "Text terminals: Selectable, default is [Char Count].\r\nBinary terminals: Fixed to " +
         "[Byte Count].");
 			this.comboBox_LengthSelection.SelectedIndexChanged += new System.EventHandler(this.comboBox_LengthSelection_SelectedIndexChanged);
@@ -854,7 +857,7 @@
 			this.checkBox_IncludePortControl.Location = new System.Drawing.Point(12, 346);
 			this.checkBox_IncludePortControl.Name = "checkBox_IncludePortControl";
 			this.checkBox_IncludePortControl.Size = new System.Drawing.Size(152, 17);
-			this.checkBox_IncludePortControl.TabIndex = 21;
+			this.checkBox_IncludePortControl.TabIndex = 22;
 			this.checkBox_IncludePortControl.Text = "Include port control events";
 			this.toolTip.SetToolTip(this.checkBox_IncludePortControl, "Include port control events in monitor view, i.e...\r\n...for serial COM ports: Flo" +
         "w control (hardware, software), break state.\r\n...for USB Ser/HID ports: Flow con" +
@@ -868,7 +871,7 @@
 			this.checkBox_ShowDuration.Location = new System.Drawing.Point(12, 254);
 			this.checkBox_ShowDuration.Name = "checkBox_ShowDuration";
 			this.checkBox_ShowDuration.Size = new System.Drawing.Size(119, 17);
-			this.checkBox_ShowDuration.TabIndex = 16;
+			this.checkBox_ShowDuration.TabIndex = 17;
 			this.checkBox_ShowDuration.Text = "Show duration (line)";
 			this.checkBox_ShowDuration.UseVisualStyleBackColor = true;
 			this.checkBox_ShowDuration.CheckedChanged += new System.EventHandler(this.checkBox_ShowDuration_CheckedChanged);
@@ -893,7 +896,7 @@
 			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 424);
 			this.checkBox_ShowCopyOfActiveLine.Name = "checkBox_ShowCopyOfActiveLine";
 			this.checkBox_ShowCopyOfActiveLine.Size = new System.Drawing.Size(142, 17);
-			this.checkBox_ShowCopyOfActiveLine.TabIndex = 28;
+			this.checkBox_ShowCopyOfActiveLine.TabIndex = 29;
 			this.checkBox_ShowCopyOfActiveLine.Text = "Show copy of active line";
 			this.checkBox_ShowCopyOfActiveLine.CheckedChanged += new System.EventHandler(this.checkBox_ShowCopyOfActiveLine_CheckedChanged);
 			// 
@@ -925,7 +928,7 @@
 			this.textBox_MaxLineLength.Location = new System.Drawing.Point(90, 395);
 			this.textBox_MaxLineLength.Name = "textBox_MaxLineLength";
 			this.textBox_MaxLineLength.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxLineLength.TabIndex = 26;
+			this.textBox_MaxLineLength.TabIndex = 27;
 			this.textBox_MaxLineLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
 			this.textBox_MaxLineLength.TextChanged += new System.EventHandler(this.textBox_MaxLineLength_TextChanged);
@@ -937,7 +940,7 @@
 			this.label_MaxLineLengthUnit.Location = new System.Drawing.Point(141, 398);
 			this.label_MaxLineLengthUnit.Name = "label_MaxLineLengthUnit";
 			this.label_MaxLineLengthUnit.Size = new System.Drawing.Size(94, 13);
-			this.label_MaxLineLengthUnit.TabIndex = 27;
+			this.label_MaxLineLengthUnit.TabIndex = 28;
 			this.label_MaxLineLengthUnit.Text = "characters per line";
 			// 
 			// label_MaxLineLength
@@ -946,7 +949,7 @@
 			this.label_MaxLineLength.Location = new System.Drawing.Point(9, 398);
 			this.label_MaxLineLength.Name = "label_MaxLineLength";
 			this.label_MaxLineLength.Size = new System.Drawing.Size(81, 13);
-			this.label_MaxLineLength.TabIndex = 25;
+			this.label_MaxLineLength.TabIndex = 26;
 			this.label_MaxLineLength.Text = "Display maximal";
 			// 
 			// checkBox_PortLineBreak
@@ -975,7 +978,7 @@
 			this.textBox_MaxLineCount.Location = new System.Drawing.Point(90, 372);
 			this.textBox_MaxLineCount.Name = "textBox_MaxLineCount";
 			this.textBox_MaxLineCount.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxLineCount.TabIndex = 23;
+			this.textBox_MaxLineCount.TabIndex = 24;
 			this.textBox_MaxLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_MaxLineCount, "The maximal number of lines is limited in order to improve performance.");
 			this.textBox_MaxLineCount.TextChanged += new System.EventHandler(this.textBox_MaxLineCount_TextChanged);
@@ -990,7 +993,7 @@
 			this.groupBox_Display_Special.Location = new System.Drawing.Point(6, 643);
 			this.groupBox_Display_Special.Name = "groupBox_Display_Special";
 			this.groupBox_Display_Special.Size = new System.Drawing.Size(251, 43);
-			this.groupBox_Display_Special.TabIndex = 31;
+			this.groupBox_Display_Special.TabIndex = 32;
 			this.groupBox_Display_Special.TabStop = false;
 			this.groupBox_Display_Special.Text = "Spec&ial";
 			// 
@@ -1051,7 +1054,7 @@
 			this.groupBox_Display_Space.Location = new System.Drawing.Point(6, 594);
 			this.groupBox_Display_Space.Name = "groupBox_Display_Space";
 			this.groupBox_Display_Space.Size = new System.Drawing.Size(251, 43);
-			this.groupBox_Display_Space.TabIndex = 30;
+			this.groupBox_Display_Space.TabIndex = 31;
 			this.groupBox_Display_Space.TabStop = false;
 			this.groupBox_Display_Space.Text = "Spa&ce";
 			// 
@@ -1102,7 +1105,7 @@
 			this.groupBox_Display_ControlChars.Location = new System.Drawing.Point(6, 452);
 			this.groupBox_Display_ControlChars.Name = "groupBox_Display_ControlChars";
 			this.groupBox_Display_ControlChars.Size = new System.Drawing.Size(251, 136);
-			this.groupBox_Display_ControlChars.TabIndex = 29;
+			this.groupBox_Display_ControlChars.TabIndex = 30;
 			this.groupBox_Display_ControlChars.TabStop = false;
 			this.groupBox_Display_ControlChars.Text = "&ASCII Control Characters (0x00..0x1F, 0x7F)";
 			// 
@@ -1306,7 +1309,7 @@
 			// checkBox_ShowCountAndRate
 			// 
 			this.checkBox_ShowCountAndRate.AutoSize = true;
-			this.checkBox_ShowCountAndRate.Location = new System.Drawing.Point(132, 20);
+			this.checkBox_ShowCountAndRate.Location = new System.Drawing.Point(131, 20);
 			this.checkBox_ShowCountAndRate.Name = "checkBox_ShowCountAndRate";
 			this.checkBox_ShowCountAndRate.Size = new System.Drawing.Size(125, 17);
 			this.checkBox_ShowCountAndRate.TabIndex = 1;
@@ -1349,7 +1352,7 @@
 			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(141, 375);
 			this.label_MaxLineCountUnit.Name = "label_MaxLineCountUnit";
 			this.label_MaxLineCountUnit.Size = new System.Drawing.Size(28, 13);
-			this.label_MaxLineCountUnit.TabIndex = 24;
+			this.label_MaxLineCountUnit.TabIndex = 25;
 			this.label_MaxLineCountUnit.Text = "lines";
 			this.label_MaxLineCountUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -1359,9 +1362,31 @@
 			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 375);
 			this.label_MaxLineCount.Name = "label_MaxLineCount";
 			this.label_MaxLineCount.Size = new System.Drawing.Size(81, 13);
-			this.label_MaxLineCount.TabIndex = 22;
+			this.label_MaxLineCount.TabIndex = 23;
 			this.label_MaxLineCount.Text = "Displa&y maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label_LineBreakRemark
+			// 
+			this.label_LineBreakRemark.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_LineBreakRemark.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_LineBreakRemark.Location = new System.Drawing.Point(159, 310);
+			this.label_LineBreakRemark.Name = "label_LineBreakRemark";
+			this.label_LineBreakRemark.Size = new System.Drawing.Size(102, 44);
+			this.label_LineBreakRemark.TabIndex = 21;
+			this.label_LineBreakRemark.Text = "Also see\r\n[Text Settings...]";
+			this.label_LineBreakRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// label_TextSettingsRemark
+			// 
+			this.label_TextSettingsRemark.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_TextSettingsRemark.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_TextSettingsRemark.Location = new System.Drawing.Point(544, 207);
+			this.label_TextSettingsRemark.Name = "label_TextSettingsRemark";
+			this.label_TextSettingsRemark.Size = new System.Drawing.Size(103, 193);
+			this.label_TextSettingsRemark.TabIndex = 7;
+			this.label_TextSettingsRemark.Text = "Also see\r\n[Text Settings...]";
+			this.label_TextSettingsRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -1377,6 +1402,7 @@
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.groupBox_Display);
 			this.Controls.Add(this.button_OK);
+			this.Controls.Add(this.label_TextSettingsRemark);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -1518,5 +1544,7 @@
 		private System.Windows.Forms.Label label_ReplaceBackspace;
 		private System.Windows.Forms.CheckBox checkBox_ReplaceBell;
 		private System.Windows.Forms.Label label_ReplaceBell;
+		private System.Windows.Forms.Label label_LineBreakRemark;
+		private System.Windows.Forms.Label label_TextSettingsRemark;
 	}
 }

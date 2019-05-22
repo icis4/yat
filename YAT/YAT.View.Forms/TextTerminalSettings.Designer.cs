@@ -72,6 +72,7 @@ namespace YAT.View.Forms
 			this.label_Encoding = new System.Windows.Forms.Label();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.label_AdvancedSettingsRemark = new System.Windows.Forms.Label();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_Display.SuspendLayout();
 			this.groupBox_RxDisplay.SuspendLayout();
@@ -494,6 +495,17 @@ namespace YAT.View.Forms
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
+			// label_AdvancedSettingsRemark
+			// 
+			this.label_AdvancedSettingsRemark.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_AdvancedSettingsRemark.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_AdvancedSettingsRemark.Location = new System.Drawing.Point(574, 215);
+			this.label_AdvancedSettingsRemark.Name = "label_AdvancedSettingsRemark";
+			this.label_AdvancedSettingsRemark.Size = new System.Drawing.Size(102, 190);
+			this.label_AdvancedSettingsRemark.TabIndex = 4;
+			this.label_AdvancedSettingsRemark.Text = "Also see\r\n[Advanced Settings...]";
+			this.label_AdvancedSettingsRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// TextTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -505,6 +517,7 @@ namespace YAT.View.Forms
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
+			this.Controls.Add(this.label_AdvancedSettingsRemark);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -572,5 +585,6 @@ namespace YAT.View.Forms
 		private YAT.View.Controls.TextDisplaySettingsSet textTerminalSettingsSet_Rx;
 		private System.Windows.Forms.GroupBox groupBox_TxDisplay;
 		private YAT.View.Controls.TextDisplaySettingsSet textTerminalSettingsSet_Tx;
+		private System.Windows.Forms.Label label_AdvancedSettingsRemark;
 	}
 }
