@@ -1084,6 +1084,7 @@ namespace YAT.View.Controls
 
 		private void ConfirmSingleLineText(string text)
 		{
+			this.command.ClearDescription(); // An immediate command never has a description.
 			this.command.SingleLineText = text;
 
 			SetCommandControls();
@@ -1092,6 +1093,7 @@ namespace YAT.View.Controls
 
 		private void ConfirmPartialText(string text)
 		{
+			this.command.ClearDescription(); // An immediate command never has a description.
 			this.command.PartialText = text;
 
 			SetCommandControls();
@@ -1100,6 +1102,7 @@ namespace YAT.View.Controls
 
 		private void ConfirmPartialTextEolCommand()
 		{
+			this.command.ClearDescription(); // An immediate command never has a description.
 			this.command.IsPartialTextEol = true;
 
 			SetCommandControls();
