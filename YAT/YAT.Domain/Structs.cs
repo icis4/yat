@@ -28,7 +28,6 @@
 
 using System;
 using System.Globalization;
-using System;
 using System.Xml.Serialization;
 
 using MKY.IO.Ports;
