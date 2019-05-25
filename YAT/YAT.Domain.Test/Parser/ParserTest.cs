@@ -796,7 +796,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
 		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
-			using (var p = new Domain.Parser.Parser())
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Modes.AllEscapes))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -819,7 +819,7 @@ namespace YAT.Domain.Test.Parser
 			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
-			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian))
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian, Domain.Parser.Modes.RadixAndAsciiEscapes))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -827,7 +827,7 @@ namespace YAT.Domain.Test.Parser
 				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
 			}
 
-			using (var p = new Domain.Parser.Parser(encoding, Endianness.BigEndian))
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.BigEndian, Domain.Parser.Modes.RadixAndAsciiEscapes))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -843,7 +843,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(KeywordTestData), "TestCases")]
 		public virtual void TestParserKeyword(string s, Domain.Parser.Keyword expectedKeyword, int[] expectedArgs)
 		{
-			using (var p = new Domain.Parser.Parser())
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Modes.AllEscapes))
 			{
 				Domain.Parser.Result[] results;
 				string successfullyParsed;
@@ -861,7 +861,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ErrorTestData), "TestCases")]
 		public virtual void TestParserError(string s, string expectedParsed, string expectedMessage)
 		{
-			using (var p = new Domain.Parser.Parser())
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Modes.AllEscapes))
 			{
 				byte[] actualBytes;
 				string actualParsed;
