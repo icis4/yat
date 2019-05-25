@@ -156,22 +156,23 @@ namespace YAT.Domain.Parser
 
 		private Parser parentParser;
 
-		private Encoding encoding = Encoding.Default;
-		private Endianness endianness = Endianness.BigEndian;
-		private Radix defaultRadix = DefaultRadixDefault;
-		private Modes modes = Modes.AllEscapes;
+		private Encoding encoding;        // = null;
+		private Endianness endianness;    // = BigEndian;
+		private Modes modes;              // = None;
 
-		private StringReader charReader;
-		private MemoryStream bytesWriter;
-		private List<Result> result;
-		private ParserState state;
+		private Radix defaultRadix;       // = None;
 
-		private bool isKeywordParser;
-		private bool doProbe;
+		private StringReader charReader;  // = null;
+		private MemoryStream bytesWriter; // = null;
+		private List<Result> result;      // = null;
+		private ParserState state;        // = null;
 
-		private bool hasFinished;
+		private bool isKeywordParser;     // = false;
+		private bool doProbe;             // = false;
 
-		private Parser nestedParser;
+		private bool hasFinished;         // = false;
+
+		private Parser nestedParser;      // = null;
 
 		#endregion
 
@@ -181,25 +182,27 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public Parser(Modes modes = Modes.AllEscapes)
+		public Parser(Modes modes)
+			: this(Encoding.Default, modes)
 		{
-			this.modes = modes;
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Endianness endianness, Modes modes = Modes.AllEscapes)
+		public Parser(Encoding encoding, Modes modes)
+			: this(encoding, Endianness.BigEndian, modes)
 		{
-			this.endianness = endianness;
-			this.modes      = modes;
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Encoding encoding, Endianness endianness = Endianness.BigEndian, Modes modes = Modes.AllEscapes)
+		public Parser(Endianness endianness, Modes modes)
+			: this(Encoding.Default, modes)
+		{
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public Parser(Encoding encoding, Endianness endianness, Modes modes)
 		{
 			this.encoding   = encoding;
 			this.endianness = endianness;
@@ -1082,7 +1085,6 @@ namespace YAT.Domain.Parser
 			this.result          = new List<Result>();
 			this.state           = new DefaultState();
 
-			this.parentParser    = null;
 			this.isKeywordParser = false;
 			this.doProbe         = doProbe;
 
@@ -1147,11 +1149,12 @@ namespace YAT.Domain.Parser
 			if (this.nestedParser != null)
 				this.nestedParser.Dispose();
 
-			this.parentParser = null;
 			this.charReader   = null;
 			this.bytesWriter  = null;
 			this.state        = null;
 			this.nestedParser = null;
+
+			this.parentParser = null; // Last because needed further above.
 		}
 
 		#endregion

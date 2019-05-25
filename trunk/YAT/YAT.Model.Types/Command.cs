@@ -521,30 +521,6 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <remarks>
-		/// Property instead of method even though <see cref="IsValidFilePath()"/> is a method
-		/// for consistency with other 'Is...Text' properties.
-		/// </remarks>
-		public virtual bool IsValidText
-		{
-			get
-			{
-				if (!IsText)
-					return (false);
-
-				using (var p = new Domain.Parser.Parser())
-				{
-					foreach (string commandLine in this.textLines)
-					{
-						if (!p.TryParse(commandLine, this.defaultRadix))
-							return (false);
-					}
-
-					return (true);
-				}
-			}
-		}
-
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual string SingleLineText
@@ -674,7 +650,27 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Validation is dependent on <see cref="Domain.Parser.Modes"/>! Thus, validation must be
+		/// done during runtime when the mode is given; i.e. it cannot be done once and then kept.
+		/// </remarks>
+		public virtual bool IsValidText(Domain.Parser.Modes parseModesForText)
+		{
+			if (!IsText)
+				return (false);
+
+			foreach (string commandLine in this.textLines)
+			{
+				if (!Domain.Utilities.ValidationHelper.ValidateText("text to send", commandLine, parseModesForText, this.defaultRadix))
+					return (false);
+			}
+
+			return (true);
+		}
+
+		/// <remarks>
+		/// Method instead of property for consistency with the <see cref="IsValidFilePath(string)"/> method below.
+		/// </remarks>
 		public virtual bool IsValidFilePath()
 		{
 			return (IsValidFilePath(Environment.CurrentDirectory));
@@ -689,19 +685,24 @@ namespace YAT.Model.Types
 			return (File.Exists(EnvironmentEx.ResolveAbsolutePath(this.filePath, rootDirectory))); // May be absolute or relative to given root path.
 		}
 
-		/// <summary></summary>
-		public virtual bool IsValid()
+		/// <remarks>
+		/// Method instead of property for consistency with the <see cref="IsValid(Domain.Parser.Modes, string)"/> method below.
+		/// </remarks>
+		public virtual bool IsValid(Domain.Parser.Modes parseModesForText)
 		{
-			return (IsValid(Environment.CurrentDirectory));
+			if (IsText)
+				return (IsValidText(parseModesForText));
+			else
+				return (IsValidFilePath(Environment.CurrentDirectory));
 		}
 
 		/// <summary></summary>
-		public virtual bool IsValid(string rootDirectory)
+		public virtual bool IsValid(Domain.Parser.Modes parseModesForText, string rootDirectoryForFile)
 		{
 			if (IsText)
-				return (IsValidText);
+				return (IsValidText(parseModesForText));
 			else
-				return (IsValidFilePath(rootDirectory));
+				return (IsValidFilePath(rootDirectoryForFile));
 		}
 
 		#endregion

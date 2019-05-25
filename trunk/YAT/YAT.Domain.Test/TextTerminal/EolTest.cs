@@ -133,7 +133,7 @@ namespace YAT.Domain.Test.TextTerminal
 		{
 			const int WaitForDisposal = 100;
 
-			using (var parser = new Domain.Parser.Parser(encoding))
+			using (var parser = new Domain.Parser.Parser(encoding, Domain.Parser.Modes.RadixAndAsciiEscapes))
 			{
 				byte[] parseResult;
 
