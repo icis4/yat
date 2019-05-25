@@ -31,33 +31,32 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
-using System.Windows.Forms;
 
 using MKY.Windows.Forms;
 
 #endregion
 
-namespace YAT.Model.Utilities
+namespace YAT.Domain.Utilities
 {
 	/// <summary></summary>
 	public static class ValidationHelper
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, Parser.Modes modes, Radix defaultRadix = Radix.String)
 		{
 			string errorMessage;
-			return (ValidateText(description, textToValidate, out errorMessage, defaultRadix, modes));
+			return (ValidateText(description, textToValidate, out errorMessage, modes, defaultRadix));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, out string errorMessage, Parser.Modes modes, Radix defaultRadix = Radix.String)
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			return (ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, defaultRadix, modes));
+			return (ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, modes, defaultRadix));
 		}
 
 		/// <summary></summary>
@@ -65,10 +64,10 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string errorMessage, Parser.Modes modes, Radix defaultRadix = Radix.String)
 		{
 			string successfullyParsed;
-			if (ValidateText(description, textToValidate, out successfullyParsed, out errorMessage, defaultRadix, modes))
+			if (ValidateText(description, textToValidate, out successfullyParsed, out errorMessage, modes, defaultRadix))
 			{
 				invalidTextStart = -1;
 				invalidTextLength = 0;
@@ -87,12 +86,12 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string errorMessage, Domain.Radix defaultRadix = Domain.Radix.String, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
+		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string errorMessage, Parser.Modes modes, Radix defaultRadix = Radix.String)
 		{
 			bool hasSucceeded;
-			var formatException = new Domain.Parser.FormatException("");
+			var formatException = new Parser.FormatException("");
 
-			using (var p = new Domain.Parser.Parser(modes))
+			using (var p = new Parser.Parser(modes))
 				hasSucceeded = p.TryParse(textToValidate, out successfullyParsed, ref formatException, defaultRadix);
 
 			if (hasSucceeded)
