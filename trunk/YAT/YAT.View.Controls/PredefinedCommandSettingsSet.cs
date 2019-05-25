@@ -98,10 +98,10 @@ namespace YAT.View.Controls
 
 		private Command command = new Command();
 
-		private string rootDirectory; // = null;
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
+		private string rootDirectoryForFile; // = null;
 
 		private EditFocusState editFocusState = EditFocusState.EditIsInactive;
 		private bool isValidated; // = false;
@@ -156,7 +156,7 @@ namespace YAT.View.Controls
 					if (value != null)
 					{
 						this.command = value;
-						this.isValidated = value.IsValidText;
+						this.isValidated = value.IsValid(this.parseModeForText, this.rootDirectoryForFile);
 					}
 					else
 					{
@@ -166,22 +166,6 @@ namespace YAT.View.Controls
 
 					SetControls();
 					OnCommandChanged(EventArgs.Empty);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual string RootDirectory
-		{
-			get { return (this.rootDirectory); }
-			set
-			{
-				if (this.rootDirectory != value)
-				{
-					this.rootDirectory = value;
-					SetControls();
 				}
 			}
 		}
@@ -237,6 +221,22 @@ namespace YAT.View.Controls
 				if (this.parseModeForText != value)
 				{
 					this.parseModeForText = value;
+					SetControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectoryForFile
+		{
+			get { return (this.rootDirectoryForFile); }
+			set
+			{
+				if (this.rootDirectoryForFile != value)
+				{
+					this.rootDirectoryForFile = value;
 					SetControls();
 				}
 			}
@@ -378,7 +378,7 @@ namespace YAT.View.Controls
 			if (this.command.IsSingleLineText)
 			{
 				var text = this.command.SingleLineText;
-				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseModeForText))
+				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, radix))
 				{
 					this.command.DefaultRadix = radix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
@@ -392,7 +392,7 @@ namespace YAT.View.Controls
 
 				foreach (var text in this.command.MultiLineText)
 				{
-					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, radix, this.parseModeForText))
+					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, radix))
 						isValid = false;
 				}
 
@@ -418,7 +418,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			if (checkBox_IsFile.Checked && !this.command.IsValidFilePath(this.rootDirectory))
+			if (checkBox_IsFile.Checked && !this.command.IsValidFilePath(this.rootDirectoryForFile))
 			{
 				ShowOpenFileDialog();
 			}
@@ -521,7 +521,7 @@ namespace YAT.View.Controls
 				// Single line => Validate!
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseModeForText))
+				if (Utilities.ValidationHelper.ValidateText(this, "text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.parseModeForText, this.command.DefaultRadix))
 				{
 					this.isValidated = true;
 

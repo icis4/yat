@@ -3713,7 +3713,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			if (c.IsValidText)
+			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
 				if (c.IsSingleLineText)
 				{
@@ -3763,7 +3763,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			if (c.IsValidText)
+			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
 				if (c.IsSingleLineText)
 				{
@@ -3931,7 +3931,7 @@ namespace YAT.Model
 
 			// Process command:
 			var c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
-			if (c.IsValidText)
+			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
 				SendText(c);
 
@@ -3971,7 +3971,7 @@ namespace YAT.Model
 
 			// Process command:
 			var c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
-			if (c.IsValidText)
+			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
 				this.settingsRoot.SendText.Command = new Command(c); // Clone command to ensure decoupling.
 				return (true);

@@ -54,6 +54,7 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
 		private const bool TerminalIsReadyToSendDefault = false;
 
 		#endregion
@@ -68,7 +69,8 @@ namespace YAT.View.Controls
 
 		private List<Command> commands;
 
-		private string rootDirectory; // = null;
+		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
+		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
 		#endregion
@@ -128,11 +130,24 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual string RootPath
+		public virtual Domain.Parser.Modes ParseModeForText
 		{
 			set
 			{
-				this.rootDirectory = value;
+				this.parseModeForText = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectoryForFile
+		{
+			set
+			{
+				this.rootDirectoryForFile = value;
 				SetControls();
 			}
 		}
@@ -256,7 +271,7 @@ namespace YAT.View.Controls
 			for (int i = 0; i < commandCount; i++)
 			{
 				bool isDefined = ((this.commands[i] != null) && this.commands[i].IsDefined);
-				bool isValid = (isDefined && this.terminalIsReadyToSend && this.commands[i].IsValid(this.rootDirectory));
+				bool isValid = (isDefined && this.terminalIsReadyToSend && this.commands[i].IsValid(this.parseModeForText, this.rootDirectoryForFile));
 
 				if (isDefined)
 				{

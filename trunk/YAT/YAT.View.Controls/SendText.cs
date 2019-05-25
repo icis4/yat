@@ -208,7 +208,7 @@ namespace YAT.View.Controls
 						if (value != null)
 						{
 							this.command = value;
-							this.isValidated = value.IsValidText;
+							this.isValidated = value.IsValidText(this.parseMode);
 						}
 						else
 						{
@@ -652,7 +652,7 @@ namespace YAT.View.Controls
 			if (this.command.IsSingleLineText)
 			{
 				string s = this.command.SingleLineText;
-				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, radix, this.parseMode))
+				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", s, this.parseMode, radix))
 				{
 					this.command.DefaultRadix = radix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
@@ -666,7 +666,7 @@ namespace YAT.View.Controls
 
 				foreach (string line in this.command.MultiLineText)
 				{
-					if (!Utilities.ValidationHelper.ValidateRadix(this, "default radix", line, radix, this.parseMode))
+					if (!Utilities.ValidationHelper.ValidateRadix(this, "default radix", line, this.parseMode, radix))
 						isValid = false;
 				}
 
@@ -856,7 +856,7 @@ namespace YAT.View.Controls
 						// Single line => Validate!
 						int invalidTextStart;
 						int invalidTextLength;
-						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.command.DefaultRadix, this.parseMode))
+						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.parseMode, this.command.DefaultRadix))
 						{
 							this.isValidated = true;
 

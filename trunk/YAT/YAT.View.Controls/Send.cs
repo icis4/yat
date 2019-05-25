@@ -61,9 +61,6 @@ namespace YAT.View.Controls
 		/// </summary>
 		public const int DesignedHalfHeight = 46;
 
-		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
-		private const bool TerminalIsReadyToSendDefault = false;
-
 		private const int SendSplitterDistanceDefault = 353; // Designer requires that this is a constant.
 		                                                     // Set same value as underlying controls (less the left margin of 3).
 		#endregion
@@ -72,10 +69,6 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
-
-		private string rootDirectory; // = null;
-		private Domain.TerminalType terminalType = TerminalTypeDefault;
-		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
 		private int sendSplitterDistance = SendSplitterDistanceDefault;
 
@@ -233,25 +226,12 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual string RootDirectory
-		{
-			set
-			{
-				this.rootDirectory = value;
-				SetTerminalControls();
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
 			set
 			{
-				this.terminalType = value;
-				SetTerminalControls();
+				sendText.TerminalType = value;
+				sendFile.TerminalType = value;
 			}
 		}
 
@@ -294,12 +274,24 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectoryForFile
+		{
+			set
+			{
+				sendFile.RootDirectory = value;
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsReadyToSend
 		{
 			set
 			{
-				this.terminalIsReadyToSend = value;
-				SetTerminalControls();
+				sendText.TerminalIsReadyToSend = value;
+				sendFile.TerminalIsReadyToSend = value;
 			}
 		}
 
@@ -400,18 +392,7 @@ namespace YAT.View.Controls
 
 		private void SetControls()
 		{
-			SetTerminalControls();
 			SetSendSplitterControls();
-		}
-
-		private void SetTerminalControls()
-		{
-			sendText.TerminalType          = this.terminalType;
-			sendText.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-
-			sendFile.RootDirectory         = this.rootDirectory;
-			sendFile.TerminalType          = this.terminalType;
-			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 		}
 
 		private void SetSendSplitterControls()
