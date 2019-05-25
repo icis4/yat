@@ -165,6 +165,7 @@
     <Compile Include="Utilities\LengthSelection.cs" />
     <Compile Include="Utilities\LineNumberSelection.cs" />
     <Compile Include="Utilities\RtfReaderHelper.cs" />
+    <Compile Include="Utilities\ValidationHelper.cs" />
     <Compile Include="Utilities\XmlReaderHelper.cs" />
     <Compile Include="Utilities\XmlTransfer.cs" />
   </ItemGroup>

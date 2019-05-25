@@ -108,7 +108,6 @@
     <Compile Include="TerminalIds.cs" />
     <Compile Include="Utilities\AutoTriggerHelper.cs" />
     <Compile Include="Utilities\ErrorHelper.cs" />
-    <Compile Include="Utilities\ValidationHelper.cs" />
     <Compile Include="Workspace.cs" />
   </ItemGroup>
   <ItemGroup>

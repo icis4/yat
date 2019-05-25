@@ -41,22 +41,22 @@ namespace YAT.View.Utilities
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateTextSilently(string textToValidate, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
+		public static bool ValidateTextSilently(string textToValidate, Domain.Parser.Modes modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
 			int invalidTextLength;
 			int invalidTextStart;
 			string errorMessage;                                  // Empty 'description' as error message will be ignored anyway.
-			return (Model.Utilities.ValidationHelper.ValidateText("", textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, defaultRadix, modes));
+			return (Domain.Utilities.ValidationHelper.ValidateText("", textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, modes, defaultRadix));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
+		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, Domain.Parser.Modes modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
 			string errorMessage;
-			if (Model.Utilities.ValidationHelper.ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, defaultRadix, modes))
+			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, modes, defaultRadix))
 			{
 				return (true);
 			}
@@ -69,9 +69,9 @@ namespace YAT.View.Utilities
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateRadix(IWin32Window owner, string description, string textToValidate, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault, Domain.Parser.Modes modes = Domain.Parser.Modes.AllEscapesExceptKeywords)
+		public static bool ValidateRadix(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
-			if (Model.Utilities.ValidationHelper.ValidateText(description, textToValidate, defaultRadix, modes))
+			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, modes, defaultRadix))
 			{
 				return (true);
 			}
