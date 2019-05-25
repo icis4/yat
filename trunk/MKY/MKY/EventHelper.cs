@@ -29,14 +29,20 @@
 
 #if (DEBUG)
 
-	// Enable unhandled exception handling:
-////#define RETHROW_UNHANDLED_EXCEPTIONS // Disabled for 'Debug' => only write exception details to debug output.
+	// Configure unhandled exception handling:
+////#define HANDLE_UNHANDLED_EXCEPTIONS  // Disabled for 'Debug' => to be handled by the debugger.
+	                                     // Rationale: Debugger shall break at the location of the initial throw.
+	                                     // Temporarily enabling the option can be useful to continue program execution even in case of exceptions.
+	                                     //  > Exception details will be output to the debug console.
+	                                     //  > Exceptions will either be discarded or rethrown, depending on the option below.
+////#define RETHROW_UNHANDLED_EXCEPTIONS // Disabled for 'Debug' => see above.
 
 #else // RELEASE
 
-	// Enable unhandled exception handling:
-	#define RETHROW_UNHANDLED_EXCEPTIONS // Enabled for 'Release' => to be handled by the application's unhandled exception handlers,
-	                                     //                                        or the debugger in case of running 'Release' in debugger.
+	// Configure unhandled exception handling:
+////#define HANDLE_UNHANDLED_EXCEPTIONS // Disabled for 'Release' => to be handled by the application's unhandled exception handlers,
+	                                    //                                         or the debugger in case of running 'Release' in debugger.
+
 #endif // DEBUG|RELEASE
 
 #endregion
@@ -77,7 +83,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this type belongs to the 'EventHelper'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Well, there are exceptions to the rules...")]
 		[Flags]
-		public enum EventHandlingMode
+		public enum EventInvocationMode
 		{
 			/// <summary>
 			/// All events will be raised.
@@ -109,21 +115,19 @@ namespace MKY
 		/// <summary>
 		/// Flags to configure the exception handling mode of the <see cref="EventHelper"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "'RethrowAll' actually means 'DiscardNone' but is more obvious.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this type belongs to the 'EventHelper'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Well, there are exceptions to the rules...")]
 		[Flags]
 		public enum ExceptionHandlingMode
 		{
 			/// <summary>
-			/// All exceptions will be rethrown, i.e. may be handled by
+			/// All exceptions will be tolerated, i.e. not handled be the helper but rather by
 			/// a <see cref="AppDomain.UnhandledException"/> or
 			/// <see cref="System.Windows.Forms.Application.ThreadException"/> or
 			/// <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> or
 			/// <see cref="EventHelper.UnhandledExceptionOnMainThread"/> or catch-all handler.
 			/// </summary>
-			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'rethrown' is a correct English term.")]
-			RethrowAll = 0,
+			None = 0,
 
 			/// <summary>
 			/// Exceptions on the main thread will be discarded, i.e. will *not* be propagated to
@@ -160,17 +164,31 @@ namespace MKY
 			/// <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> nor
 			/// <see cref="EventHelper.UnhandledExceptionOnMainThread"/> nor catch-all handler.
 			/// </summary>
-			DiscardAll = DiscardMainThread | DiscardNonMainThread
+			DiscardAll = DiscardMainThread | DiscardNonMainThread,
+
+			/// <summary>
+			/// All exceptions will be rethrown, i.e. may be handled by
+			/// a <see cref="AppDomain.UnhandledException"/> or
+			/// <see cref="System.Windows.Forms.Application.ThreadException"/> or
+			/// <see cref="EventHelper.UnhandledExceptionOnNonMainThread"/> or
+			/// <see cref="EventHelper.UnhandledExceptionOnMainThread"/> or catch-all handler.
+			/// </summary>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'rethrown' is a correct English term.")]
+			RethrowAll = 3
 		}
 
 		/// <summary></summary>
-		public const EventHandlingMode EventHandlingDefault = EventHandlingMode.RaiseAll;
+		public const EventInvocationMode EventHandlingDefault = EventInvocationMode.RaiseAll;
 
 		/// <summary></summary>
-	#if (RETHROW_UNHANDLED_EXCEPTIONS)
-		public const ExceptionHandlingMode ExceptionHandlingDefault = ExceptionHandlingMode.RethrowAll;
+	#if (!HANDLE_UNHANDLED_EXCEPTIONS)
+		public const ExceptionHandlingMode ExceptionHandlingDefault = ExceptionHandlingMode.None;
 	#else
+		#if (!RETHROW_UNHANDLED_EXCEPTIONS)
 		public const ExceptionHandlingMode ExceptionHandlingDefault = ExceptionHandlingMode.DiscardAll;
+		#else
+		public const ExceptionHandlingMode ExceptionHandlingDefault = ExceptionHandlingMode.RethrowAll;
+		#endif
 	#endif
 
 		#endregion
@@ -194,7 +212,7 @@ namespace MKY
 			public string Owner { get; protected set; } // = null;
 
 			/// <summary></summary>
-			public EventHandlingMode EventHandling { get; set; } = EventHandlingDefault;
+			public EventInvocationMode EventHandling { get; set; } = EventHandlingDefault;
 
 			/// <summary></summary>
 			public ExceptionHandlingMode ExceptionHandling { get; set; } = ExceptionHandlingDefault;
@@ -207,47 +225,39 @@ namespace MKY
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Item"/> class that is by default configured as follows:
-			///  - <see cref="EventHandling"/>:
-			///     - <see cref="EventHandlingMode.RaiseAll"/>.
-			///  - <see cref="ExceptionHandling"/>:
-			///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
-			///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
-			///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+			///  - <see cref="EventHandling"/>: <see cref="EventInvocationMode.RaiseAll"/>.
+			///  - <see cref="ExceptionHandling"/>: <see cref="ExceptionHandlingMode.None"/>.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-			public Item(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
+			public Item(EventInvocationMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 				: this(null, eventHandling, exceptionHandling)
 			{
 			}
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Item"/> class that is by default configured as follows:
-			///  - <see cref="EventHandling"/>:
-			///     - <see cref="EventHandlingMode.RaiseAll"/>.
-			///  - <see cref="ExceptionHandling"/>:
-			///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
-			///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
-			///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+			///  - <see cref="EventHandling"/>: <see cref="EventInvocationMode.RaiseAll"/>.
+			///  - <see cref="ExceptionHandling"/>: <see cref="ExceptionHandlingMode.None"/>.
 			/// </summary>
 			/// <remarks>
 			/// Could be extended such that <paramref name="owner"/> could also be provided as callback method.
 			/// </remarks>
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-			public Item(string owner, EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
+			public Item(string owner, EventInvocationMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 			{
-				Owner = owner;
-				EventHandling = eventHandling;
+				Owner             = owner;
+				EventHandling     = eventHandling;
 				ExceptionHandling = exceptionHandling;
 			}
 
 			/// <remarks>
 			/// Convenience method, identical to setting <see cref="EventHandling"/> to
-			/// <see cref="EventHandlingMode.DiscardAll"/>. Useful e.g. when disposing or
+			/// <see cref="EventInvocationMode.DiscardAll"/>. Useful e.g. when disposing or
 			/// closing or shutting down objects or the whole application.
 			/// </remarks>
 			public virtual void DiscardAllEvents()
 			{
-				EventHandling = EventHandlingMode.DiscardAll;
+				EventHandling = EventInvocationMode.DiscardAll;
 			}
 
 			/// <remarks>
@@ -274,9 +284,9 @@ namespace MKY
 			private bool EventHasToBeDiscarded(bool isMainThread)
 			{
 				if (isMainThread)
-					return ((EventHandling & EventHandlingMode.DiscardMainThread) != 0);
+					return ((EventHandling & EventInvocationMode.DiscardMainThread) != 0);
 				else
-					return ((EventHandling & EventHandlingMode.DiscardNonMainThread) != 0);
+					return ((EventHandling & EventInvocationMode.DiscardNonMainThread) != 0);
 			}
 
 			private bool ExceptionHasToBeDiscarded(bool isMainThread)
@@ -505,52 +515,76 @@ namespace MKY
 			[OneWay]
 			private void InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, object[] args)
 			{
-				try
+				if (ExceptionHandling == ExceptionHandlingMode.None)
 				{
 					sinkTarget.Invoke(sink, args);
 				}
-				catch (Exception ex)
+				else
 				{
-					var isMainThread = MainThreadHelper.IsMainThread;
-					var discard = ExceptionHasToBeDiscarded(isMainThread);
-
-					var sb = new StringBuilder();
-
-					if (!string.IsNullOrEmpty(Owner))
+					try
 					{
-						sb.Append(typeof(EventHelper).Name);
-						sb.Append(" owned by ");
-						sb.Append(Owner);
-						sb.Append(": ");
+						sinkTarget.Invoke(sink, args);
 					}
-
-					if (isMainThread)
-						sb.Append("Exception in event callback synchronized from main thread!");
-					else
-						sb.Append("Exception in event callback synchronized from non-main thread!");
-
-					if (discard)
-						sb.Append(" Exception is being discarded...");
-					else
-						sb.Append(" Exception will be rethrown...");
-
-					WriteExceptionAndEventToDebugOutput(ex, sink, sb.ToString());
-
-					if (!discard)
+					catch (Exception ex)
 					{
-						if (isMainThread)
+						var isMainThread = MainThreadHelper.IsMainThread;
+						var discard = ExceptionHasToBeDiscarded(isMainThread);
+
+						var sb = new StringBuilder();
+
+						if (!string.IsNullOrEmpty(Owner))
 						{
-							if (UnhandledExceptionOnMainThread != null)
-								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
-							else
-								throw; // Rethrow!
+							sb.Append(typeof(EventHelper).Name);
+							sb.Append(" owned by ");
+							sb.Append(Owner);
+							sb.Append(": ");
 						}
+
+						if (isMainThread)
+							sb.Append("Exception in event callback synchronized from main thread!");
 						else
+							sb.Append("Exception in event callback synchronized from non-main thread!");
+
+						if (discard)
+							sb.Append(" Exception is being discarded...");
+						else
+							sb.Append(" Exception will be rethrown...");
+
+						WriteExceptionAndEventToDebugOutput(ex, sink, sb.ToString());
+
+						if (!discard)
 						{
-							if (UnhandledExceptionOnNonMainThread != null)
-								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+							if (isMainThread)
+							{
+								if (UnhandledExceptionOnMainThread != null)
+									RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								else
+									throw; // Rethrow!
+							}
 							else
-								throw; // Rethrow!
+							{
+								if (UnhandledExceptionOnNonMainThread != null)
+									RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								else
+									throw; // Rethrow!
+							}
+
+							// Attention, the 'System.Timers.Timer' class has a very particular behavior
+							// that impacts re-throwing above!
+							//
+							// https://msdn.microsoft.com/en-us/library/system.timers.timer.aspx
+							// "The Timer component catches and suppresses all exceptions thrown by event
+							//  handlers for the Elapsed event. This behavior is subject to change in future
+							//  releases of the .NET Framework."
+							//
+							// As a consequence, an exception rethrown above will not be propagated to the
+							// application's 'UnhandledException' handler, but rather be discarded by the
+							// timer's 'Elapsed' event. Pretty particular, positively spoken...
+							// The issue doesn't happen if the timer's 'SynchronizationObject' is set, i.e.
+							// the 'Elapsed' event callback is dispatched onto a different thread. In that
+							// case, typically, 'InvokeSynchronized()' will be used by the event.
+							// The issue can also be circumvented by using this helper's additional event
+							// 'UnhandledExceptionOnNonMainThread'.
 						}
 					}
 				}
@@ -560,82 +594,89 @@ namespace MKY
 			[OneWay]
 			private void InvokeOnCurrentThread(Delegate sink, object[] args)
 			{
-				try
+				if (ExceptionHandling == ExceptionHandlingMode.None)
 				{
 					sink.DynamicInvoke(args);
 				}
-				catch (Exception ex)
+				else
 				{
-					var isMainThread = MainThreadHelper.IsMainThread;
-					var discard = ExceptionHasToBeDiscarded(isMainThread);
-
-					// Note that 'discard' is only evaluated *after* the exception occured. This
-					// ensures that exceptions happening inside 'zombie' callbacks, i.e. callbacks
-					// whose handlers got detached while the callback was being invoked, can be
-					// properly discarded as illustrated below:
-					//
-					// 1. An event callback gets invoked.
-					// 2. The event sink signals the 'EventHelper' to discard exception from now.
-					// 3. The event sink gets disposed, resulting in a 'zombie' callback.
-					// 4. The 'zombie' throws an exception as it can no longer access the sink.
-					// 5. The 'EventHelper' discards the exception.
-
-					var sb = new StringBuilder();
-
-					if (!string.IsNullOrEmpty(Owner))
+					try
 					{
-						sb.Append(typeof(EventHelper).Name);
-						sb.Append(" owned by ");
-						sb.Append(Owner);
-						sb.Append(": ");
+						sink.DynamicInvoke(args);
 					}
-
-					if (isMainThread)
-						sb.Append("Exception in synchronous event callback on main thread!");
-					else
-						sb.Append("Exception in synchronous event callback on non-main thread!");
-
-					if (discard)
-						sb.Append(" Exception is being discarded...");
-					else
-						sb.Append(" Exception will be rethrown...");
-
-					WriteExceptionAndEventToDebugOutput(ex, sink, sb.ToString());
-
-					if (!discard)
+					catch (Exception ex)
 					{
+						var isMainThread = MainThreadHelper.IsMainThread;
+						var discard = ExceptionHasToBeDiscarded(isMainThread);
+
+						// Note that 'discard' is only evaluated *after* the exception occured. This
+						// ensures that exceptions happening inside 'zombie' callbacks, i.e. callbacks
+						// whose handlers got detached while the callback was being invoked, can be
+						// properly discarded as illustrated below:
+						//
+						// 1. An event callback gets invoked.
+						// 2. The event sink signals the 'EventHelper' to discard exception from now.
+						// 3. The event sink gets disposed, resulting in a 'zombie' callback.
+						// 4. The 'zombie' throws an exception as it can no longer access the sink.
+						// 5. The 'EventHelper' discards the exception.
+
+						var sb = new StringBuilder();
+
+						if (!string.IsNullOrEmpty(Owner))
+						{
+							sb.Append(typeof(EventHelper).Name);
+							sb.Append(" owned by ");
+							sb.Append(Owner);
+							sb.Append(": ");
+						}
+
 						if (isMainThread)
-						{
-							if (UnhandledExceptionOnMainThread != null)
-								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
-							else
-								throw; // Rethrow!
-						}
+							sb.Append("Exception in synchronous event callback on main thread!");
 						else
+							sb.Append("Exception in synchronous event callback on non-main thread!");
+
+						if (discard)
+							sb.Append(" Exception is being discarded...");
+						else
+							sb.Append(" Exception will be rethrown...");
+
+						WriteExceptionAndEventToDebugOutput(ex, sink, sb.ToString());
+
+						if (!discard)
 						{
-							if (UnhandledExceptionOnNonMainThread != null)
-								RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+							if (isMainThread)
+							{
+								if (UnhandledExceptionOnMainThread != null)
+									RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								else
+									throw; // Rethrow!
+							}
 							else
-								throw; // Rethrow!
+							{
+								if (UnhandledExceptionOnNonMainThread != null)
+									RaiseSync<UnhandledExceptionEventArgs>(UnhandledExceptionOnNonMainThread, this, new UnhandledExceptionEventArgs(ex, false));
+								else
+									throw; // Rethrow!
+							}
+
+							// Attention, the 'System.Timers.Timer' class has a very particular behavior
+							// that impacts re-throwing above!
+							//
+							// https://msdn.microsoft.com/en-us/library/system.timers.timer.aspx
+							// "The Timer component catches and suppresses all exceptions thrown by event
+							//  handlers for the Elapsed event. This behavior is subject to change in future
+							//  releases of the .NET Framework."
+							//
+							// As a consequence, an exception rethrown above will not be propagated to the
+							// application's 'UnhandledException' handler, but rather be discarded by the
+							// timer's 'Elapsed' event. Pretty particular, positively spoken...
+							// The issue doesn't happen if the timer's 'SynchronizationObject' is set, i.e.
+							// the 'Elapsed' event callback is dispatched onto a different thread. In that
+							// case, typically, 'InvokeSynchronized()' will be used by the event.
+							// The issue can also be circumvented by using this helper's additional event
+							// 'UnhandledExceptionOnNonMainThread'.
 						}
 					}
-
-					// Attention, the 'System.Timers.Timer' class has a very particular behavior
-					// that impacts re-throwing above!
-					//
-					// https://msdn.microsoft.com/en-us/library/system.timers.timer.aspx
-					// "The Timer component catches and suppresses all exceptions thrown by event
-					//  handlers for the Elapsed event. This behavior is subject to change in future
-					//  releases of the .NET Framework."
-					//
-					// As a consequence, an exception rethrown above will not be propagated to the
-					// application's 'UnhandledException' handler, but rather be discarded by the
-					// timer's 'Elapsed' event. Pretty particular, positively spoken...
-					// The issue doesn't happen if the timer's 'SynchronizationObject' is set, i.e.
-					// the 'Elapsed' event callback is dispatched onto a different thread. In that
-					// case, typically, 'InvokeSynchronized()' will be used by the event.
-					// The issue can also be circumvented by using this helper's additional event
-					// 'UnhandledExceptionOnNonMainThread'.
 				}
 			}
 
@@ -686,33 +727,25 @@ namespace MKY
 
 		/// <remarks>
 		/// Creates an <see cref="Item"/> that is by default configured as follows:
-		///  - <see cref="EventHandling"/>:
-		///     - <see cref="EventHandlingMode.RaiseAll"/>.
-		///  - <see cref="ExceptionHandling"/>:
-		///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
-		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
-		///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+		///  - <see cref="EventHandling"/>: <see cref="EventInvocationMode.RaiseAll"/>.
+		///  - <see cref="ExceptionHandling"/>: <see cref="ExceptionHandlingMode.None"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static Item CreateItem(EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
+		public static Item CreateItem(EventInvocationMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 		{
 			return (CreateItem(typeof(EventHelper).FullName, eventHandling, exceptionHandling));
 		}
 
 		/// <remarks>
 		/// Creates an <see cref="Item"/> that is by default configured as follows:
-		///  - <see cref="EventHandling"/>:
-		///     - <see cref="EventHandlingMode.RaiseAll"/>.
-		///  - <see cref="ExceptionHandling"/>:
-		///     - <see cref="ExceptionHandlingMode.RethrowAll"/> for "RELEASE" configurations.
-		///     - <see cref="ExceptionHandlingMode.DiscardAll"/> for "DEBUG" configurations.
-		///    The behavior can be configured by the local "RETHROW_UNHANDLED_EXCEPTIONS" definition.
+		///  - <see cref="EventHandling"/>: <see cref="EventInvocationMode.RaiseAll"/>.
+		///  - <see cref="ExceptionHandling"/>: <see cref="ExceptionHandlingMode.None"/>.
 		/// </remarks>
 		/// <remarks>
 		/// Could be extended such that <paramref name="owner"/> could also be provided as callback method.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static Item CreateItem(string owner, EventHandlingMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
+		public static Item CreateItem(string owner, EventInvocationMode eventHandling = EventHandlingDefault, ExceptionHandlingMode exceptionHandling = ExceptionHandlingDefault)
 		{
 			return (new Item(owner, eventHandling, exceptionHandling));
 		}
@@ -732,7 +765,7 @@ namespace MKY
 		}
 
 		/// <summary></summary>
-		public virtual EventHandlingMode EventHandling
+		public virtual EventInvocationMode EventHandling
 		{
 			get { return (staticItem.EventHandling); }
 			set { staticItem.EventHandling = value;  }
@@ -747,12 +780,12 @@ namespace MKY
 
 		/// <remarks>
 		/// Convenience method, identical to setting <see cref="EventHandling"/> to
-		/// <see cref="EventHandlingMode.DiscardAll"/>. Useful e.g. when disposing or
+		/// <see cref="EventInvocationMode.DiscardAll"/>. Useful e.g. when disposing or
 		/// closing or shutting down objects or the whole application.
 		/// </remarks>
 		public virtual void DiscardAllEvents()
 		{
-			EventHandling = EventHandlingMode.DiscardAll;
+			EventHandling = EventInvocationMode.DiscardAll;
 		}
 
 		/// <remarks>
