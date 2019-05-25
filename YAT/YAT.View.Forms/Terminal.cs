@@ -673,7 +673,7 @@ namespace YAT.View.Forms
 				// Main and context menu are separated as there are subtle differences between them.
 
 				string sendTextText = "Text";
-				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
+				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText(this.settingsRoot.Send.Text.ToParseMode());
 				if (this.settingsRoot.Send.Text.SendImmediately)
 				{
 					if (isTextTerminal)
@@ -830,7 +830,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText))
+					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
 					{
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
@@ -877,7 +877,7 @@ namespace YAT.View.Forms
 				var responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(responseText))
+					if (!Utilities.ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.AllEscapes))
 					{
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.ControlText;
@@ -985,7 +985,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText))
+					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
 					{
 						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
@@ -2178,7 +2178,7 @@ namespace YAT.View.Forms
 				for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
 				{
 					bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-					bool isValid = (isDefined && commands[i].IsValid(this.terminal.SettingsFilePath) && this.terminal.IsReadyToSend);
+					bool isValid = (isDefined && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath) && this.terminal.IsReadyToSend);
 
 					if (isDefined)
 					{
@@ -2399,7 +2399,7 @@ namespace YAT.View.Forms
 				// Context and main menu are separated as there are subtle differences between them.
 
 				string sendTextText = "Send Text";
-				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
+				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText(this.settingsRoot.Send.Text.ToParseMode());
 				if (this.settingsRoot.Send.Text.SendImmediately)
 				{
 					if (isTextTerminal)
@@ -3903,7 +3903,8 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				predefined.RootDirectory         = Path.GetDirectoryName(this.terminal.SettingsFilePath);
+				predefined.ParseModeForText      = this.settingsRoot.Send.Text.ToParseMode();
+				predefined.RootDirectoryForFile  = Path.GetDirectoryName(this.terminal.SettingsFilePath);
 				predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
 			}
 			finally
@@ -3924,11 +3925,11 @@ namespace YAT.View.Forms
 				send.RecentTextCommands      = this.settingsRoot.SendText.RecentCommands;
 				send.FileCommand             = this.settingsRoot.SendFile.Command;
 				send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
-				send.RootDirectory           = Path.GetDirectoryName(this.terminal.SettingsFilePath);
 				send.TerminalType            = this.settingsRoot.TerminalType;
 				send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
 				send.ParseModeForText        = this.settingsRoot.Send.Text.ToParseMode();
 				send.SendTextImmediately     = this.settingsRoot.Send.Text.SendImmediately;
+				send.RootDirectoryForFile    = Path.GetDirectoryName(this.terminal.SettingsFilePath);
 				send.TerminalIsReadyToSend   = this.terminal.IsReadyToSend;
 			}
 			finally
@@ -4604,10 +4605,10 @@ namespace YAT.View.Forms
 			var f = new PredefinedCommandSettings
 			(
 				this.settingsRoot.PredefinedCommand,
-				Path.GetDirectoryName(this.terminal.SettingsFilePath),
 				this.settingsRoot.TerminalType,
 				this.settingsRoot.Send.UseExplicitDefaultRadix,
 				this.settingsRoot.Send.Text.ToParseMode(),
+				Path.GetDirectoryName(this.terminal.SettingsFilePath),
 				page,
 				command
 			);

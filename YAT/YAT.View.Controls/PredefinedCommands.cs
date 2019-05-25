@@ -52,6 +52,8 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		private const int SelectedPageDefault = 1;
+
+		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
 		private const bool TerminalIsReadyToSendDefault = false;
 
 		#endregion
@@ -65,7 +67,8 @@ namespace YAT.View.Controls
 		private PredefinedCommandPageCollection pages;
 		private int selectedPage = SelectedPageDefault;
 
-		private string rootDirectory; // = null;
+		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
+		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
 		#endregion
@@ -159,11 +162,24 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual string RootDirectory
+		public virtual Domain.Parser.Modes ParseModeForText
 		{
 			set
 			{
-				this.rootDirectory = value;
+				this.parseModeForText = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual string RootDirectoryForFile
+		{
+			set
+			{
+				this.rootDirectoryForFile = value;
 				SetControls();
 			}
 		}
@@ -279,7 +295,8 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				pageButtons.RootPath              = this.rootDirectory;
+				pageButtons.ParseModeForText      = this.parseModeForText;
+				pageButtons.RootDirectoryForFile  = this.rootDirectoryForFile;
 				pageButtons.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
 				if ((this.pages != null) && (this.pages.Count > 0) &&
