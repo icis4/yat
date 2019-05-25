@@ -150,6 +150,7 @@ Fixed bugs:
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
 - [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 - Optional user name of terminal is again taken into account (bug #415).
+- Command line option [TransmitText] again allows keywords (related to bug #454).
 - Binary terminals: Synchronization on timed line break added (related to feature request #340).
 
 Limitations and known issues:
