@@ -199,7 +199,7 @@ namespace YAT.View.Controls
 			{
 				int invalidTextStart;
 				int invalidTextLength;
-				if (!Utilities.ValidationHelper.ValidateText(this, "text", line, out invalidTextStart, out invalidTextLength, this.parseMode, this.defaultRadix))
+				if (!Utilities.ValidationHelper.ValidateText(this, "multi-line text", line, out invalidTextStart, out invalidTextLength, this.parseMode, this.defaultRadix))
 				{
 					invalidTextStart += textLength;
 					invalidTextLength = textBox_Lines.Text.Length - invalidTextStart;

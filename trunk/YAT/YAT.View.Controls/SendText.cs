@@ -859,7 +859,7 @@ namespace YAT.View.Controls
 						// Single line => Validate!
 						int invalidTextStart;
 						int invalidTextLength;
-						if (Utilities.ValidationHelper.ValidateText(this, "text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.parseMode, this.command.DefaultRadix))
+						if (Utilities.ValidationHelper.ValidateText(this, "command text", comboBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.parseMode, this.command.DefaultRadix))
 						{
 							this.isValidated = true;
 
