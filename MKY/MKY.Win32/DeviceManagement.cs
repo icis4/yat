@@ -554,32 +554,30 @@ namespace MKY.Win32
 			{
 				pDeviceInfoSet = NativeMethods.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, NativeTypes.DIGCF.PRESENT | NativeTypes.DIGCF.DEVICEINTERFACE);
 
-				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes.
-				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
-				deviceInterfaceData.cbSize = (uint)Marshal.SizeOf(deviceInterfaceData);
+				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes:
+				deviceInterfaceData.cbSize = (uint)Marshal.SizeOf(deviceInterfaceData); // The size is 28 bytes for 32- and 32 bytes for 64-bit binaries.
 
 				do
 				{
-					// Begin with 0 and increment through the device information set until no more devices are available.
+					// Begin with 0 and increment through the device information set until no more devices are available:
 					if (NativeMethods.SetupDiEnumDeviceInterfaces(pDeviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
 					{
-						// A device is present. Retrieve the size of the data buffer. Don't care about the return value, it will be false.
+						// A device is present. Retrieve the size of the data buffer (don't care about the return value, it will be false):
 						NativeMethods.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, out bufferSize, IntPtr.Zero);
 
-						// Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
+						// Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size:
 						pDetailDataBuffer = Marshal.AllocHGlobal(bufferSize);
 
-						// Store cbSize in the first bytes of the array. The number of bytes varies with 32- and 64-bit systems.
+						// Store cbSize in the first bytes of the array (the number of bytes varies with 32- and 64-bit systems):
 						Marshal.WriteInt32(pDetailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : (8));
 
-						// Call SetupDiGetDeviceInterfaceDetail again.
-						// This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
+						// Call SetupDiGetDeviceInterfaceDetail again. This time, pass a pointer to DetailDataBuffer and the returned required buffer size:
 						if (NativeMethods.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, out bufferSize, IntPtr.Zero))
 						{
-							// Skip over cbsize (4 bytes) to get the address of the devicePathName.
+							// Skip over cbsize (4 bytes) to get the address of the devicePathName:
 							IntPtr pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt32() + 4);
 
-							// Get the String containing the devicePathName.
+							// Get the String containing the devicePathName:
 							devicePaths.Add(Marshal.PtrToStringAuto(pDevicePathName));
 						}
 					}
@@ -591,20 +589,18 @@ namespace MKY.Win32
 				}
 				while (!isLastDevice);
 			}
-			catch
-			{
-				throw;
-			}
 			finally
 			{
 				if (pDetailDataBuffer != IntPtr.Zero)
 				{
-					// Free the memory allocated previously by AllocHGlobal.
+					// Free the memory allocated previously by AllocHGlobal:
 					Marshal.FreeHGlobal(pDetailDataBuffer);
 				}
 
 				if (pDeviceInfoSet != IntPtr.Zero)
+				{
 					NativeMethods.SetupDiDestroyDeviceInfoList(pDeviceInfoSet);
+				}
 			}
 
 			return (devicePaths.ToArray());
