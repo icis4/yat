@@ -116,7 +116,8 @@ namespace YAT.Domain.Utilities
 					else
 					{
 						sb.Append(                          " is invalid at position ");
-						sb.Append(                                                  (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
+						sb.Append(                                                  (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture));
+						sb.Append(                                                                                                                     ".");
 						if (successfullyParsed.Length > 0)
 						{
 							sb.Append(Environment.NewLine);
