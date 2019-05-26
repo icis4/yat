@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
@@ -77,7 +78,16 @@ namespace YAT.View.Utilities
 			}
 			else
 			{
-				var errorMessage = "This " + description + " is not valid with the current command. Clear or change the command before changing the " + description + ".";
+				var sb = new StringBuilder();
+				sb.Append("The ");
+				sb.Append(     description);
+				sb.Append(              @" is not valid with """);
+				sb.Append(                                     textToValidate);
+				sb.Append(                                                 @""". Clear or change the command text before changing the ");
+				sb.Append(                                                                                                            description);
+				sb.Append(                                                                                                                      ".");
+
+				var errorMessage = sb.ToString();
 				var errorCaption = "Invalid " + description;
 				return (ShowErrorMessageAndReturnFalse(owner, errorMessage, errorCaption));
 			}

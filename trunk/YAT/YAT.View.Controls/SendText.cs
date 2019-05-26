@@ -624,6 +624,9 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
+			if (!comboBox_ExplicitDefaultRadix.Visible) // ValidateInput() calls ValidateChildren() which calls this method.
+				return;                                 // But a potential validation error message makes no sense if invisible!
+
 			// Attention:
 			// Similar code exists in PredefinedCommandSettingsSet.comboBox_ExplicitDefaultRadix_Validating().
 			// Changes here may have to be applied there too.
@@ -1229,7 +1232,7 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					if (ValidateChildren()) // ConfirmSingleLineText() gets called here.
+					if (ValidateChildren()) // comboBox_SingleLineText_Validating() will call ConfirmSingleLineText().
 						OnSendCommandRequest(new SendTextOptionEventArgs(option));
 				}
 			}
