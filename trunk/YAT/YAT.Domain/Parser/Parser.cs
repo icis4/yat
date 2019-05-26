@@ -117,25 +117,25 @@ namespace YAT.Domain.Parser
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
 			@"Change port settings to the specified values ""\!(" + (KeywordEx)Keyword.PortSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
-			@"Changing port settings is yet limited to serial COM ports." +                                      // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+			@"Changing port settings is yet limited to serial COM ports." +                                      // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
 			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
 			@"Change data bits to the specified value ""\!(" + (KeywordEx)Keyword.DataBits + @"(7))""." + Environment.NewLine +
 			@"Change parity to the specified value ""\!(" + (KeywordEx)Keyword.Parity + @"(2))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
 			@"Change stop bits to the specified value ""\!(" + (KeywordEx)Keyword.StopBits + @"(2))""." + Environment.NewLine +
 			@"Change flow control to the specified value ""\!(" + (KeywordEx)Keyword.FlowControl + @"(1))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
-			@"Changing baud rate and flow control only applies to serial COM ports." +              // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+			@"These keywords only apply to serial COM ports." + Environment.NewLine +               // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
 			Environment.NewLine +
-			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""" + Environment.NewLine +
-			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""" + Environment.NewLine +
-			@"Restore framing error setting ""\!(" + (KeywordEx)Keyword.FramingErrorsRestore + @")""" + Environment.NewLine +
-			@"Framing errors can only be configured on serial COM ports." +
+			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""." + Environment.NewLine +
+			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""." + Environment.NewLine +
+			@"Restore framing error setting ""\!(" + (KeywordEx)Keyword.FramingErrorsRestore + @")""." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports." + Environment.NewLine +
 			Environment.NewLine +
-			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""" + Environment.NewLine +
-			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""" + Environment.NewLine +
-			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @")""" + Environment.NewLine +
-			@"Output break state only applies to serial COM ports." +
+			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""." + Environment.NewLine +
+			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""." + Environment.NewLine +
+			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @")""." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports." + Environment.NewLine +
 			Environment.NewLine +
-			@"Change USB Ser/HID report ID to 1 ""\!(" + (KeywordEx)Keyword.ReportId + @"(1))""" + Environment.NewLine +
+			@"Change USB Ser/HID report ID to 1 ""\!(" + (KeywordEx)Keyword.ReportId + @"(1))""." + Environment.NewLine +
 			@"This keyword only applies to USB Ser/HID.";
 
 		#endregion
