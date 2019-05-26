@@ -461,6 +461,10 @@ namespace YAT.View.Forms
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			// Skip if WinForms has already determined to cancel:
+			if (e.Cancel)
+				return;
+
 			// Prevent multiple calls to Exit()/Close():
 			if (this.closingState == ClosingState.None)
 			{

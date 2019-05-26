@@ -427,6 +427,10 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			// Skip if WinForms has already determined to cancel:
+			if (e.Cancel)
+				return;
+
 			// Prevent multiple calls to Close().
 			if (this.closingState == ClosingState.None)
 			{
