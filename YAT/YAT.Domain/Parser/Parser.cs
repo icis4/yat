@@ -542,7 +542,8 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			InitializeTopLevel(s, defaultRadix, (s.Length <= 256)); // Inhibit probing in order to keep speed at a decent level...
+			bool doProbe = (s.Length <= 256); // Inhibit probing in order to keep speed at a decent level...
+			InitializeTopLevel(s, defaultRadix, doProbe);
 
 			while (!HasFinished)
 			{
@@ -563,7 +564,7 @@ namespace YAT.Domain.Parser
 					{
 						// Signal that parsing resulted in a parse error and
 						//   return the part of the string that could be parsed:
-						successfullyParsed = StringEx.Left(s, s.Length - remaining.Length - 1);
+						successfullyParsed = StringEx.Left(s, s.Length - remaining.Length);
 						result = this.result.ToArray();
 						return (false);
 					}
