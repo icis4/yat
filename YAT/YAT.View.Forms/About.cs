@@ -320,9 +320,9 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...tool bar icons from ";
-			textLink   =                        "FatCow";
-			textAfter  =                              "...";
+			textBefore = "...";
+			textLink   =    "FatCow";
+			textAfter  =          " icons...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
