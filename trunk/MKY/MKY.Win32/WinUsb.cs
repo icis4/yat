@@ -191,7 +191,7 @@ namespace MKY.Win32
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(typeof(WinUsb), ex);
-				throw;
+				throw; // Rethrow!
 			}
 		}
 
@@ -221,7 +221,7 @@ namespace MKY.Win32
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(typeof(WinUsb), ex);
-				throw;
+				throw; // Rethrow!
 			}
 		}
 
@@ -255,7 +255,7 @@ namespace MKY.Win32
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(typeof(WinUsb), ex);
-				throw;
+				throw; // Rethrow!
 			}
 		}
 
