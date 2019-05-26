@@ -109,8 +109,16 @@ namespace YAT.Domain.Utilities
 				sb.Append(                               @"""");
 				if (successfullyParsed != null)
 				{
-					sb.Append(                              " is invalid at position ");
-					sb.Append(                                                      (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
+					if (successfullyParsed.Length <= textToValidate.Length)
+					{
+						sb.Append(                          " is incomplete");
+					}
+					else
+					{
+						sb.Append(                          " is invalid at position ");
+						sb.Append(                                                  (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
+					}
+
 					if (successfullyParsed.Length > 0)
 					{
 						sb.Append(Environment.NewLine);
