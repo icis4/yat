@@ -117,19 +117,18 @@ namespace YAT.Domain.Utilities
 					{
 						sb.Append(                          " is invalid at position ");
 						sb.Append(                                                  (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
-					}
-
-					if (successfullyParsed.Length > 0)
-					{
-						sb.Append(Environment.NewLine);
-						sb.Append(@"Only """);
-						sb.Append(         successfullyParsed);
-						sb.Append(                  @""" is valid.");
+						if (successfullyParsed.Length > 0)
+						{
+							sb.Append(Environment.NewLine);
+							sb.Append(@"Only """);
+							sb.Append(         successfullyParsed);
+							sb.Append(                         @""" is valid.");
+						}
 					}
 				}
 				else
 				{
-					sb.Append(                         " is invalid.");
+					sb.Append(                              " is invalid.");
 				}
 
 				if (!string.IsNullOrEmpty(formatException.Message))
