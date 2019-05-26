@@ -2283,8 +2283,7 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_FileRecent_Opening(object sender, CancelEventArgs e)
 		{
-			// No need to validate again, is already done on opening of parent menu
-			// ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
+		////ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll(); No need to validate again, is already done on opening of parent menu.
 
 			contextMenuStrip_FileRecent_SetRecentMenuItems();
 		}
