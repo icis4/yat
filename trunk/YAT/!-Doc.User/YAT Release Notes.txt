@@ -148,9 +148,11 @@ Fixed bugs:
 - Attempted to fix rare 'TargetInvocationException' caused by 'IndexOutOfRangeException' (bug #446).
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
-- [Help > Release Notes] fixed for YATConsole.exe (bug #413).
-- Optional user name of terminal is again taken into account (bug #415).
+- [Advanced Settings > Disable escapes on [Send Text]] no longer leads to an 'ArgumentException'
+  in some cases (bug #454).
 - Command line option [TransmitText] again allows keywords (related to bug #454).
+- Optional user name of terminal is again taken into account (bug #415).
+- [Help > Release Notes] fixed for YATConsole.exe (bug #413).
 - Binary terminals: Synchronization on timed line break added (related to feature request #340).
 
 Limitations and known issues:

@@ -3740,14 +3740,14 @@ namespace YAT.Model
 				{
 					this.terminal.SendTextLine("", Domain.Radix.String);
 				}
-				else
+				else // This indicates an invalid operation, since a command must have been validated before calling this method!
 				{
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
 				CloneIntoRecentTextCommandsIfNeeded(c);
 			}
-			else
+			else // This indicates an invalid operation, since a command must have been validated before calling this method!
 			{
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a valid text command!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 			}
