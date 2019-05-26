@@ -61,6 +61,7 @@ If still issues:
 
 StatusStrip
 -----------
+
 'StatusStrip' items do not show tool tip by default, 'ShowItemToolTips' must be manually set to 'True'.
 
 
@@ -105,3 +106,13 @@ Use the 'StartUp-And-Properly-Show-UserControl-Controls' pattern to initially se
 				this.isStartingUp = false;
 
 For more details on events of Windows.Forms, see the MKY > SequenceOfFormAndControlEvents demo project.
+
+
+Closing
+-------
+
+Always check for 'e.Cancel' on 'FormClosing':
+
+			// Skip if WinForms has already determined to cancel:
+			if (e.Cancel)
+				return;
