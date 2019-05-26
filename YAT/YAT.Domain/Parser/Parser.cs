@@ -112,7 +112,8 @@ namespace YAT.Domain.Parser
 			@"Interval ""Send something in interval\!(" + (KeywordEx)Keyword.LineInterval + @"(1000))"" or without argument according to the advanced settings." + Environment.NewLine +
 			@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.LineRepeat + @"(10))"" or without argument according to the advanced settings." + Environment.NewLine +
 			@"Repeat ""Send something infinitely\!(" + (KeywordEx)Keyword.LineRepeat + @"(-1))"" or without argument according to the advanced settings." + Environment.NewLine +
-			@"Note that ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" will repeat as fast as possible, thus resulting in 100% load of the CPU core in use. To prevent this, use this keyword combined with a delay or interval keyword, e.g. ""\!(" + (KeywordEx)Keyword.LineRepeat + @")\!(" + (KeywordEx)Keyword.LineInterval + @")""." + Environment.NewLine +
+			@"Note that ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" will repeat as fast as possible, thus resulting in 100% load of the CPU core in use." + Environment.NewLine +
+			@"To prevent, use the keyword combined with a delay or interval keyword, e.g. ""\!(" + (KeywordEx)Keyword.LineRepeat + @")\!(" + (KeywordEx)Keyword.LineInterval + @")""." + Environment.NewLine +
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
 			@"Change port settings to the specified values ""\!(" + (KeywordEx)Keyword.PortSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
