@@ -344,15 +344,17 @@ namespace YAT.View.Controls
 	////private void comboBox_ExplicitDefaultRadix_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since           "         _Validating() below gets called anyway.
 
-		/// <remarks>
-		/// Attention:
-		/// Similar code exists in <see cref="SendText.comboBox_ExplicitDefaultRadix_Validating"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		private void comboBox_ExplicitDefaultRadix_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
+
+			if (!comboBox_ExplicitDefaultRadix.Visible) // Same implementation as SendText.comboBox_ExplicitDefaultRadix_Validating().
+				return;
+
+			// Attention:
+			// Similar code exists in SendText.comboBox_ExplicitDefaultRadix_Validating().
+			// Changes here may have to be applied there too.
 
 			Domain.Radix radix = this.command.DefaultRadix;
 			Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
