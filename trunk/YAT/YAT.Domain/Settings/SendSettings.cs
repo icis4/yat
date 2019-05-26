@@ -69,10 +69,10 @@ namespace YAT.Domain.Settings
 		private SendSettingsText text;
 		private SendSettingsFile file;
 
-		private int  defaultDelay;
-		private int  defaultLineDelay;
-		private int  defaultLineInterval;
-		private int  defaultLineRepeat;
+		private int defaultDelay;
+		private int defaultLineDelay;
+		private int defaultLineInterval;
+		private int defaultLineRepeat;
 
 		// Serial port specific send settings. Located here (and not in 'SerialPortSettings) as they are endemic to YAT.
 		private bool signalXOnBeforeEachTransmission;

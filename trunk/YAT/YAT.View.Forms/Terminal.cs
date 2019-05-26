@@ -539,7 +539,7 @@ namespace YAT.View.Forms
 				if (TerminalIsAvailable)
 				{
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
-					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
+					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled =  this.terminal.IsStarted;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  monitorIsDefined;
@@ -547,18 +547,18 @@ namespace YAT.View.Forms
 				else
 				{
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = false;
-					toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  = false;
+					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled = false;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
 				}
 
-				toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && textIsNotFocused); // [Ctrl+A]
-				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && textIsNotFocused); // [Ctrl+Delete]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll .Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+A]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+Delete]
 
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+C]
-				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
-				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
+				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile     .Enabled =  monitorIsDefined;
+				toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled =  monitorIsDefined;
 
 				toolStripMenuItem_TerminalMenu_Terminal_FindNext    .Enabled = (monitorIsDefined && FindNextIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Enabled = (monitorIsDefined && FindPreviousIsFeasible);
@@ -2141,14 +2141,14 @@ namespace YAT.View.Forms
 
 				if (pageCount > 0)
 				{
-					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = (predefined.SelectedPage > 1);
-					toolStripMenuItem_PredefinedContextMenu_Page_Next    .Enabled  = (predefined.SelectedPage < pageCount);
+					toolStripMenuItem_PredefinedContextMenu_Page_Previous .Enabled = (predefined.SelectedPage > 1);
+					toolStripMenuItem_PredefinedContextMenu_Page_Next     .Enabled = (predefined.SelectedPage < pageCount);
 					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
 				}
 				else
 				{
-					toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled  = false;
-					toolStripMenuItem_PredefinedContextMenu_Page_Next    .Enabled  = false;
+					toolStripMenuItem_PredefinedContextMenu_Page_Previous .Enabled = false;
+					toolStripMenuItem_PredefinedContextMenu_Page_Next     .Enabled = false;
 					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = false;
 				}
 
