@@ -105,7 +105,7 @@ namespace YAT.Domain.Parser
 		public static readonly string KeywordHelp =
 			@"In addition, the following keywords are supported:" + Environment.NewLine +
 			Environment.NewLine +
-			@"Clear the monitors ""Send something\!(" + (KeywordEx)Keyword.Clear + @")""" + Environment.NewLine +
+			@"Clear the monitors ""Send something\!(" + (KeywordEx)Keyword.Clear + @")""." + Environment.NewLine +
 			Environment.NewLine +
 			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(1000))Send delayed"" or without argument according to the advanced settings." + Environment.NewLine +
 			@"Delay after ""Send something and then delay\!(" + (KeywordEx)Keyword.LineDelay + @"(1000))"" or without argument according to the advanced settings." + Environment.NewLine +
