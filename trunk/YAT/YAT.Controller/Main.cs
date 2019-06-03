@@ -39,6 +39,13 @@
 
 #endif // DEBUG|RELEASE
 
+#if (DEBUG)
+
+	// Enable debugging of welcome screen related Show():
+////#define DEBUG_WELCOME_SCREEN_SHOW
+
+#endif // DEBUG
+
 #endregion
 
 #region Using
@@ -50,11 +57,11 @@ using System;
 #if (HANDLE_UNHANDLED_EXCEPTIONS)
 using System.ComponentModel;
 #endif
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
 using System.Threading;
-#endif
 using System.Windows.Forms; // Note that several locations explicitly use 'System.Windows.Forms' to prevent naming conflicts with 'MKY.Windows.Forms' and 'YAT.Application'.
 
 using MKY;
@@ -496,10 +503,17 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					// Application settings are loaded while showing the welcome screen:
+					DebugWelcomeScreenShow("Welcome screen...");
 					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
 					{
-						if (welcomeScreen.ShowDialog() != DialogResult.OK)
+						DebugWelcomeScreenShow("...showing...");
+						var dr = welcomeScreen.ShowDialog();
+						if (dr != DialogResult.OK)
+						{
+							DebugWelcomeScreenShow(string.Format(CultureInfo.CurrentUICulture, "...failed with [{0}]!", dr));
 							return (MainResult.ApplicationSettingsError);
+						}
+						DebugWelcomeScreenShow("...done.");
 					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
@@ -709,10 +723,17 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 
 					// Application settings are loaded while showing the welcome screen:
+					DebugWelcomeScreenShow("Welcome screen...");
 					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
 					{
-						if (welcomeScreen.ShowDialog() != DialogResult.OK)
+						DebugWelcomeScreenShow("...showing...");
+						var dr = welcomeScreen.ShowDialog();
+						if (dr != DialogResult.OK)
+						{
+							DebugWelcomeScreenShow(string.Format(CultureInfo.CurrentUICulture, "...failed with [{0}]!", dr));
 							return (MainResult.ApplicationSettingsError);
+						}
+						DebugWelcomeScreenShow("...done.");
 					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
@@ -1332,6 +1353,38 @@ namespace YAT.Controller
 	#endif
 
 		#endregion
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG")]
+		private void DebugMessage(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"",
+					"",
+					message
+				)
+			);
+		}
+
+		[Conditional("DEBUG_WELCOME_SCREEN_SHOW")]
+		private void DebugWelcomeScreenShow(string message)
+		{
+			DebugMessage(message);
+		}
 
 		#endregion
 	}

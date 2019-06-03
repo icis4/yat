@@ -22,17 +22,31 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of form/dialog related Show():
+////#define DEBUG_SHOW
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
-
-using MKY;
 
 using YAT.Settings.Application;
 
@@ -91,6 +105,7 @@ namespace YAT.View.Forms
 			if (Width < totalWidth)
 				Width = totalWidth;
 
+			DebugShow("Invoking LoadApplicationSettingsAsync()...");
 			label_Status.Text = "Loading settings...";
 			var asyncInvoker = new Action(LoadApplicationSettingsAsync);
 			asyncInvoker.BeginInvoke(null, null);
@@ -111,17 +126,25 @@ namespace YAT.View.Forms
 		{
 			try
 			{
+				DebugShow("...loading application settings...");
 				ApplicationSettings.Load(); // Don't care about result, either the settings have been loaded or they have been set to defaults.
+				DebugShow("...successfully done.");
 
 				DialogResult = DialogResult.OK;
 			}
 			catch
 			{
+				DebugShow("...failed!");
+
 				DialogResult = DialogResult.Abort;
 			}
 
+			DebugShow("Signaling 'finishedLoading'...");
+
 			lock (this.finishedLoadingSyncObj)
 				this.finishedLoading = true;
+
+			DebugShow("...done.");
 		}
 
 		#endregion
@@ -143,9 +166,11 @@ namespace YAT.View.Forms
 				finishedLoading = this.finishedLoading;
 
 			// Close welcome screen immediately if application settings have successfully been loaded.
-			// Close welcome screen after opacity transition if application settings could not be loaded successfully.
+			// Close welcome screen after opacity transition otherwise.
 			if (finishedLoading)
 			{
+				DebugShow(string.Format(CultureInfo.CurrentUICulture, "Loading has finished => stopping timer and closing form with [{0}].", DialogResult));
+
 				timer_Opacity.Stop();
 				Close();
 			}
@@ -154,10 +179,49 @@ namespace YAT.View.Forms
 				// Opacity starts at 0.25 (25%).
 				// 75% opacity increase within a second.
 				//  3% opacity increase per step.
-				//   => 40ms ticks
+				//   => 40 ms ticks
 				Opacity += 0.03;
 				Refresh();
 			}
+			else
+			{
+				DebugShow(string.Format(CultureInfo.CurrentUICulture,"Loading has *NOT* finished => stopping timer and closing form with [{0}] anyway.", DialogResult));
+
+				timer_Opacity.Stop();
+				Close();
+			}
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG")]
+		private void DebugMessage(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"",
+					"",
+					message
+				)
+			);
+		}
+
+		[Conditional("DEBUG_SHOW")]
+		private void DebugShow(string message)
+		{
+			DebugMessage(message);
 		}
 
 		#endregion
