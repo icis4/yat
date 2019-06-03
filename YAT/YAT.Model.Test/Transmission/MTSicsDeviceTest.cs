@@ -188,7 +188,7 @@ namespace YAT.Model.Test.Transmission
 			);
 
 			if (dr != DialogResult.OK)
-				Assert.Fail("User cancel!");
+				Assert.Ignore("Tester has canceled");
 
 			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
