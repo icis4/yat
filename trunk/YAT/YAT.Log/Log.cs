@@ -323,6 +323,9 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void Close()
 		{
+			if (IsDisposed)
+				return; // Close() shall be callable on a disposed object.
+
 			if (this.isEnabled && this.isOn)
 			{
 				CloseWriter();
