@@ -40,19 +40,43 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public static DialogResult Show(string text, string caption)
 		{
-			return (Show(text, caption, (MessageBoxButtons)0));
+			return (Show(text, caption));
 		}
 
 		/// <summary></summary>
 		public static DialogResult Show(string text, string caption, MessageBoxButtons buttons)
 		{
-			return (Show(text, caption, buttons, (MessageBoxIcon)0));
+			return (Show(text, caption, buttons));
 		}
 
 		/// <summary></summary>
 		public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			return (Show(null, text, caption, buttons, icon));
+		}
+
+		/// <summary></summary>
+		public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		{
+			return (Show(null, text, caption, buttons, icon, defaultButton));
+		}
+
+		/// <summary></summary>
+		public static DialogResult Show(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		{
+			return (Show(null, text, caption, buttons, icon, defaultButton, options));
+		}
+
+		/// <summary></summary>
+		public static DialogResult Show(IWin32Window owner, string text, string caption)
+		{
+			return (Show(owner, text, caption, (MessageBoxButtons)0));
+		}
+
+		/// <summary></summary>
+		public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons)
+		{
+			return (Show(owner, text, caption, buttons, (MessageBoxIcon)0));
 		}
 
 		/// <summary></summary>
