@@ -189,7 +189,8 @@ namespace MKY.IO
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual void Close()
 		{
-			AssertNotDisposed();
+			if (IsDisposed)
+				return; // Close() shall be callable on a disposed object.
 
 			try
 			{

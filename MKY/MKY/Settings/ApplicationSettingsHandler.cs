@@ -380,7 +380,8 @@ namespace MKY.Settings
 			/// </summary>
 			public virtual void Close()
 			{
-				AssertNotDisposed();
+				if (IsDisposed)
+					return; // Close() shall be callable on a disposed object.
 
 				if (this.mutex != null)
 				{
@@ -1116,6 +1117,9 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void Close()
 		{
+			if (IsDisposed)
+				return; // Close() shall be callable on a disposed object.
+
 			if (HasCommonSettings)
 				this.commonSettings.Close();
 
