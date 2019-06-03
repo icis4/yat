@@ -31,6 +31,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading;
 
 using MKY.Diagnostics;
@@ -108,6 +109,8 @@ namespace MKY.Time
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 				this.eventHelper.DiscardAllEventsAndExceptions();
 
+				DebugMessage("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -121,6 +124,8 @@ namespace MKY.Time
 				// Set state to disposed:
 				this.timer = null;
 				IsDisposed = true;
+
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -343,6 +348,32 @@ namespace MKY.Time
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
 			this.eventHelper.RaiseSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG")]
+		private void DebugMessage(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"",
+					"",
+					message
+				)
+			);
 		}
 
 		#endregion
