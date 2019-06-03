@@ -356,7 +356,7 @@ namespace YAT.Controller
 			}
 			else
 			{
-				result = Run(runFromConsole, showView);
+				result = Run(runFromConsole, showView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned);
 			}
 
 			return (result);
@@ -403,31 +403,18 @@ namespace YAT.Controller
 		///    ==> Run(false, true) or Run(true, true) to test the GUI (e.g. GUI stress test)
 		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. controller test)
 		/// 
-		/// 
-		/// Handling of the application settings is related to these use cases.
-		/// Handling is done as follows:
-		/// 
-		/// > In case of 'RunFullyWithView()' the application settings are created/loaded with
-		///   <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> permissions.
-		/// 
-		/// > In case of 'RunWithViewButOutputErrorsOnConsole()' they are created/loaded with
-		///   <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> permissions.
-		/// 
-		/// > In case of 'RunFullyFromConsole()' they are created/loaded with
-		///   <see cref="ApplicationSettingsFileAccess.ReadShared"/> permissions.
-		/// 
-		/// > In case of 'RunInvisible()' they are created/loaded with
-		///   <see cref="ApplicationSettingsFileAccess.ReadShared"/> permissions.
-		/// 
+		/// Handling of the application settings is also related to these use cases.
 		/// <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> means that the
 		/// instance reads the application settings, but only the owner, i.e. the first instance
 		/// that was started, also writes them.
 		/// <see cref="ApplicationSettingsFileAccess.ReadShared"/> means that the instance only
 		/// reads the application settings, independent on whether it is the first or subsequent
 		/// instance.
+		/// <see cref="ApplicationSettingsFileAccess.None"/> means that the instance uses temporary
+		/// in-memory settings, i.e. neither reads nor writes from the application's file.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop isn't able to deal with command line terms such as 'cmd' or 'nv'...")]
-		public virtual MainResult Run(bool runFromConsole, bool runWithView)
+		public virtual MainResult Run(bool runFromConsole, bool runWithView, ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			AssertNotDisposed();
 
@@ -437,7 +424,7 @@ namespace YAT.Controller
 
 			if (!runFromConsole && runWithView)
 			{
-				result = RunFullyWithView();                        // 1, 2, 7
+				result = RunFullyWithView(applicationSettingsFileAccess);                        // 1, 2, 7
 			}
 			else
 			{
@@ -445,11 +432,11 @@ namespace YAT.Controller
 				this.commandLineArgs.Override("NonInteractive", true);
 
 				if (     runFromConsole && runWithView)
-					result = RunWithViewButOutputErrorsOnConsole(); // 3, 4, 7
+					result = RunWithViewButOutputErrorsOnConsole(applicationSettingsFileAccess); // 3, 4, 7
 				else if (runFromConsole && !runWithView)
-					result = RunFullyFromConsole();                 // 5, 6, 7
+					result = RunFullyFromConsole(applicationSettingsFileAccess);                 // 5, 6, 7
 				else
-					result = RunInvisible();                        //       7
+					result = RunInvisible(applicationSettingsFileAccess);                        //       7
 			}
 
 			if (result == MainResult.CommandLineError)
@@ -481,7 +468,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunFullyWithView()
+		private MainResult RunFullyWithView(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
@@ -505,7 +492,7 @@ namespace YAT.Controller
 				{
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit (settings are closed there):
-					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
+					if (!ApplicationSettings.Create(applicationSettingsFileAccess))
 						return (MainResult.ApplicationSettingsError);
 
 					// Application settings are loaded while showing the welcome screen:
@@ -694,7 +681,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunWithViewButOutputErrorsOnConsole()
+		private MainResult RunWithViewButOutputErrorsOnConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
@@ -718,7 +705,7 @@ namespace YAT.Controller
 				{
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit (settings are closed there):
-					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
+					if (!ApplicationSettings.Create(applicationSettingsFileAccess))
 						return (MainResult.ApplicationSettingsError);
 
 					// Application settings are loaded while showing the welcome screen:
@@ -848,7 +835,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunFullyFromConsole()
+		private MainResult RunFullyFromConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
@@ -869,7 +856,7 @@ namespace YAT.Controller
 				try
 			#endif
 				{
-					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
+					if (ApplicationSettings.Create(applicationSettingsFileAccess))
 					{
 						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
 
@@ -961,7 +948,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunInvisible()
+		private MainResult RunInvisible(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
@@ -982,7 +969,7 @@ namespace YAT.Controller
 				try
 			#endif
 				{
-					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
+					if (ApplicationSettings.Create(applicationSettingsFileAccess))
 					{
 						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
 

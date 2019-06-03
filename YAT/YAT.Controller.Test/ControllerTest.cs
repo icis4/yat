@@ -88,11 +88,9 @@ namespace YAT.Controller.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Create temporary in-memory application settings for this test run:
-			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
-
-			// Prevent auto-save of workspace settings:
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+			// Temporary in-memory application settings are useless when YAT.Controller is used,
+			// as YAT.Controller will retrieve the real application settings, that's its job...
+			// Instead, [ApplicationSettingsFileAccess.None] is specified on Main.Run(...).
 
 			tempPath = Temp.MakeTempPath(GetType());
 		}
@@ -102,9 +100,6 @@ namespace YAT.Controller.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close and dispose of temporary in-memory application settings:
-			ApplicationSettings.CloseAndDispose();
-
 			Temp.CleanTempPath(GetType());
 		}
 
@@ -264,7 +259,7 @@ namespace YAT.Controller.Test
 				"This test will open YAT and show the [New Terminal] dialog." + Environment.NewLine +
 				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
-				"Simply exit YAT to complete this test.",
+				"Simply [Cancel] and then exit YAT to complete this test.",
 				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
@@ -440,7 +435,7 @@ namespace YAT.Controller.Test
 
 		private static void RunAndVerifyApplicationWithView(Main main, MainResult expectedMainResult)
 		{
-			var mainResult = main.Run(false, true);
+			var mainResult = main.Run(false, true, ApplicationSettingsFileAccess.None);
 			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 
@@ -451,7 +446,7 @@ namespace YAT.Controller.Test
 
 		private static void RunAndVerifyApplicationWithoutView(Main main, MainResult expectedMainResult)
 		{
-			var mainResult = main.Run(false, false);
+			var mainResult = main.Run(false, false, ApplicationSettingsFileAccess.None);
 			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 

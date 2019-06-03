@@ -64,11 +64,9 @@ namespace YAT.View.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Create temporary in-memory application settings for this test run:
-			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
-
-			// Prevent auto-save of workspace settings:
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+			// Temporary in-memory application settings are useless when YAT.Controller is used,
+			// as YAT.Controller will retrieve the real application settings, that's its job...
+			// Instead, [ApplicationSettingsFileAccess.None] is specified on Main.Run(...).
 		}
 
 		/// <summary></summary>
@@ -76,9 +74,6 @@ namespace YAT.View.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Close and dispose of temporary in-memory application settings:
-			ApplicationSettings.CloseAndDispose();
-
 			Temp.CleanTempPath(GetType());
 		}
 
@@ -205,13 +200,13 @@ namespace YAT.View.Test
 			{
 				@"""" + workspaceSettingsFilePath + @"""",
 				@"-tf=""" + transmitFilePath + @"""",
-				@"-di=0",
-				@"-ke"
+				@"-di=0", // DynamicId
+				@"-ke"    // KeepOpenOnError
 			};
 
 			using (var m = new Controller.Main(args))
 			{
-				var result = m.Run();
+				var result = m.Run(false, false, ApplicationSettingsFileAccess.None);
 				Assert.That(result, Is.EqualTo(Controller.MainResult.Success));
 			}
 		}
