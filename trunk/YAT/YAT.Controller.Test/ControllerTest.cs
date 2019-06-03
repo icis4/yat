@@ -28,8 +28,10 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Windows.Forms;
 
+using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
@@ -54,14 +56,25 @@ namespace YAT.Controller.Test
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly string[] EmptyArgs = new string[] { };
 
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Orthogonality with underlying test case.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private readonly string[] TerminalArgs = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCase.T_03_COM1_Closed_Predefined] };
+		private readonly string TerminalFilePath_TestCase03 = Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCase.T_03_COM1_Closed_Predefined];
 
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Orthogonality with underlying test case.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private readonly string[] WorkspaceArgs = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCase.W_04_Matthias] };
+		private readonly string WorkspaceFilePath_TestCase04 = Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCase.W_04_Matthias];
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly string[] SerialPortArgs = new string[] { "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" };
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// TestFixture
+		//==========================================================================================
+
+		string tempPath;
 
 		#endregion
 
@@ -80,6 +93,8 @@ namespace YAT.Controller.Test
 
 			// Prevent auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+
+			tempPath = Temp.MakeTempPath(GetType());
 		}
 
 		/// <summary></summary>
@@ -89,6 +104,8 @@ namespace YAT.Controller.Test
 		{
 			// Close and dispose of temporary in-memory application settings:
 			ApplicationSettings.CloseAndDispose();
+
+			Temp.CleanTempPath(GetType());
 		}
 
 		#endregion
@@ -127,7 +144,8 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestTerminalCommandLineArg()
 		{
-			using (var m = new Main(TerminalArgs))
+			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
+			using (var m = new Main(new string[]{ terminalFilePathForTest }))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.Success);
 
@@ -147,7 +165,8 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestWorkspaceCommandLineArg()
 		{
-			using (var m = new Main(WorkspaceArgs))
+			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
+			using (var m = new Main(new string[]{ workspaceFilePathForTest }))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.Success);
 
@@ -184,7 +203,8 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestTerminalCommandLineArgRun()
 		{
-			using (var m = new Main(TerminalArgs))
+			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
+			using (var m = new Main(new string[]{ terminalFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithoutView(m);
 			}
@@ -204,21 +224,8 @@ namespace YAT.Controller.Test
 		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void TestWorkspaceCommandLineArgRun()
 		{
-			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
-			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
-			var dr = MessageBoxEx.Show
-			(
-				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
-				"Ensure that VSPE is running and providing these ports.",
-				"Precondition",
-				MessageBoxButtons.OKCancel,
-				MessageBoxIcon.Information
-			);
-
-			if (dr != DialogResult.OK)
-				Assert.Fail("User cancel!");
-
-			using (var m = new Main(WorkspaceArgs))
+			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
+			using (var m = new Main(new string[]{ workspaceFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithoutView(m);
 			}
@@ -252,6 +259,20 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestEmptyCommandLineRunInteractive()
 		{
+			var dr = MessageBoxEx.Show
+			(
+				"This test will open YAT and show the [New Terminal] dialog." + Environment.NewLine +
+				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				Environment.NewLine +
+				"Simply exit YAT to complete this test.",
+				"Instruction",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
+			);
+
+			if (dr != DialogResult.OK)
+				Assert.Ignore("Tester has canceled");
+
 			using (var m = new Main(EmptyArgs))
 			{
 				RunAndVerifyApplicationWithView(m);
@@ -269,7 +290,22 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestTerminalCommandLineArgRunInteractive()
 		{
-			using (var m = new Main(TerminalArgs))
+			var dr = MessageBoxEx.Show
+			(
+				"This test will open YAT with a serial COM port terminal." + Environment.NewLine +
+				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				Environment.NewLine +
+				"Simply exit YAT to complete this test.",
+				"Instruction",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
+			);
+
+			if (dr != DialogResult.OK)
+				Assert.Ignore("Tester has canceled");
+
+			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
+			using (var m = new Main(new string[]{ terminalFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithView(m);
 			}
@@ -289,21 +325,22 @@ namespace YAT.Controller.Test
 		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory, InteractiveCategory]
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
-			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
-			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
 			var dr = MessageBoxEx.Show
 			(
-				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
-				"Ensure that VSPE is running and providing these ports.",
-				"Precondition",
+				"This test will open YAT with two serial COM port terminals." + Environment.NewLine +
+				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				Environment.NewLine +
+				"Simply exit YAT to complete this test.",
+				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
 			);
 
 			if (dr != DialogResult.OK)
-				Assert.Fail("User cancel!");
+				Assert.Ignore("Tester has canceled");
 
-			using (var m = new Main(WorkspaceArgs))
+			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
+			using (var m = new Main(new string[]{ workspaceFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithView(m);
 			}
@@ -320,6 +357,20 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestSerialPortCommandLineArgRunInteractive()
 		{
+			var dr = MessageBoxEx.Show
+			(
+				"This test will open YAT with a serial COM port terminal." + Environment.NewLine +
+				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				Environment.NewLine +
+				"Simply exit YAT to complete this test.",
+				"Instruction",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Information
+			);
+
+			if (dr != DialogResult.OK)
+				Assert.Ignore("Tester has canceled");
+
 			using (var m = new Main(SerialPortArgs))
 			{
 				RunAndVerifyApplicationWithView(m);
@@ -402,6 +453,22 @@ namespace YAT.Controller.Test
 		{
 			var mainResult = main.Run(false, false);
 			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
+		}
+
+		/// <summary>
+		/// Clones files for a test case.
+		/// </summary>
+		protected virtual string CloneForTest(string filePath, string fileNamePatternToClone)
+		{
+			var path = Path.GetDirectoryName(filePath);
+			foreach (var src in Directory.GetFiles(path, fileNamePatternToClone))
+			{
+				var dest = this.tempPath + Path.DirectorySeparatorChar + Path.GetFileName(src);
+				File.Copy(src, dest, true);
+			}
+
+			var clonedFilePath = this.tempPath + Path.DirectorySeparatorChar + Path.GetFileName(filePath);
+			return (clonedFilePath);
 		}
 
 		#endregion
