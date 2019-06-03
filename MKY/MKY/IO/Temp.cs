@@ -52,7 +52,7 @@ namespace MKY.IO
 			else
 				path = Path.GetTempPath() + root + Path.DirectorySeparatorChar + type.Namespace + Path.DirectorySeparatorChar + type.Name;
 
-			if (outputPathToDebug)
+			if (outputPathToDebug) // ...ry file path is """
 				Debug.WriteLine(@"Temporary path is      """ + path + @""".");
 
 			if (!Directory.Exists(path))
@@ -73,7 +73,7 @@ namespace MKY.IO
 				Directory.Delete(path, true);
 			}
 
-			if (outputPathToDebug)
+			if (outputPathToDebug) // ...ry file path is """
 				Debug.WriteLine(@"Temporary path         """ + path + @""" cleaned.");
 		}
 
