@@ -272,6 +272,18 @@ namespace YAT.Controller.Test
 			{
 				RunAndVerifyApplicationWithView(m);
 			}
+
+			dr = MessageBoxEx.Show
+			(
+				"Did YAT open and showed the [New Terminal] dialog?",
+				"Confirmation",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Information,
+				MessageBoxDefaultButton.Button2
+			);
+
+			if (dr != DialogResult.Yes)
+				Assert.Fail("Tester has let the test failed!");
 		}
 
 		#endregion
@@ -304,6 +316,18 @@ namespace YAT.Controller.Test
 			{
 				RunAndVerifyApplicationWithView(m);
 			}
+
+			dr = MessageBoxEx.Show
+			(
+				"Did YAT open with a serial COM port terminal?",
+				"Confirmation",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Information,
+				MessageBoxDefaultButton.Button2
+			);
+
+			if (dr != DialogResult.Yes)
+				Assert.Fail("Tester has let the test failed!");
 		}
 
 		#endregion
@@ -339,6 +363,18 @@ namespace YAT.Controller.Test
 			{
 				RunAndVerifyApplicationWithView(m);
 			}
+
+			dr = MessageBoxEx.Show
+			(
+				"Did YAT open with two serial COM port terminals?",
+				"Confirmation",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Information,
+				MessageBoxDefaultButton.Button2
+			);
+
+			if (dr != DialogResult.Yes)
+				Assert.Fail("Tester has let the test failed!");
 		}
 
 		#endregion
@@ -370,6 +406,18 @@ namespace YAT.Controller.Test
 			{
 				RunAndVerifyApplicationWithView(m);
 			}
+
+			dr = MessageBoxEx.Show
+			(
+				"Did YAT open with a serial COM port terminal?",
+				"Confirmation",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Information,
+				MessageBoxDefaultButton.Button2
+			);
+
+			if (dr != DialogResult.Yes)
+				Assert.Fail("Tester has let the test failed!");
 		}
 
 		#endregion
