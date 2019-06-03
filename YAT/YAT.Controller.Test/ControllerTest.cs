@@ -38,8 +38,6 @@ using MKY.Windows.Forms;
 using NUnit;
 using NUnit.Framework;
 
-using YAT.Settings.Application;
-
 #endregion
 
 namespace YAT.Controller.Test

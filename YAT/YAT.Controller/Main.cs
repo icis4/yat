@@ -184,6 +184,8 @@ namespace YAT.Controller
 		{
 			if (!IsDisposed)
 			{
+				DebugMessage("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -191,6 +193,8 @@ namespace YAT.Controller
 
 				// Set state to disposed:
 				IsDisposed = true;
+
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -510,10 +514,10 @@ namespace YAT.Controller
 						var dr = welcomeScreen.ShowDialog();
 						if (dr != DialogResult.OK)
 						{
-							DebugWelcomeScreenShow(string.Format(CultureInfo.CurrentUICulture, "...failed with [{0}]!", dr));
+							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...failed with [{0}]!", dr));
 							return (MainResult.ApplicationSettingsError);
 						}
-						DebugWelcomeScreenShow("...done.");
+						DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
 					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
@@ -730,10 +734,10 @@ namespace YAT.Controller
 						var dr = welcomeScreen.ShowDialog();
 						if (dr != DialogResult.OK)
 						{
-							DebugWelcomeScreenShow(string.Format(CultureInfo.CurrentUICulture, "...failed with [{0}]!", dr));
+							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...failed with [{0}]!", dr));
 							return (MainResult.ApplicationSettingsError);
 						}
-						DebugWelcomeScreenShow("...done.");
+						DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
 					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
