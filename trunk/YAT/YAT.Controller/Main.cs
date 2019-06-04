@@ -367,7 +367,7 @@ namespace YAT.Controller
 			}
 			else
 			{
-				result = Run(runFromConsole, showView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned);
+				result = Run(runFromConsole, showView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned, true);
 			}
 
 			return (result);
@@ -411,9 +411,9 @@ namespace YAT.Controller
 		///    ==> Run(true, false);
 		/// 
 		/// 7. YAT testing
-		///    ==> Run(false, true) or Run(true, true) to test the GUI (e.g. GUI stress test)
+		///    ==> Run(false, true) or Run(true, true) to test the view (e.g. view stress test)
 		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. controller test)
-		/// 
+		///
 		/// Handling of the application settings is also related to these use cases.
 		/// <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> means that the
 		/// instance reads the application settings, but only the owner, i.e. the first instance
@@ -424,8 +424,12 @@ namespace YAT.Controller
 		/// <see cref="ApplicationSettingsFileAccess.None"/> means that the instance uses temporary
 		/// in-memory settings, i.e. neither reads nor writes from the application's file.
 		/// </remarks>
+		/// <param name="runFromConsole">See remarks above.</param>
+		/// <param name="runWithView">See remarks above.</param>
+		/// <param name="applicationSettingsFileAccess">See remarks above.</param>
+		/// <param name="loadSettingsInWelcomeScreen">See YAT.Controller.Test.TestFixtureSetUp() for background.</param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop isn't able to deal with command line terms such as 'cmd' or 'nv'...")]
-		public virtual MainResult Run(bool runFromConsole, bool runWithView, ApplicationSettingsFileAccess applicationSettingsFileAccess)
+		public virtual MainResult Run(bool runFromConsole, bool runWithView, ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
 		{
 			AssertNotDisposed();
 
@@ -435,7 +439,7 @@ namespace YAT.Controller
 
 			if (!runFromConsole && runWithView)
 			{
-				result = RunFullyWithView(applicationSettingsFileAccess);                        // 1, 2, 7
+				result = RunFullyWithView(applicationSettingsFileAccess, loadSettingsInWelcomeScreen);                        // 1, 2, 7
 			}
 			else
 			{
@@ -443,11 +447,11 @@ namespace YAT.Controller
 				this.commandLineArgs.Override("NonInteractive", true);
 
 				if (     runFromConsole && runWithView)
-					result = RunWithViewButOutputErrorsOnConsole(applicationSettingsFileAccess); // 3, 4, 7
+					result = RunWithViewButOutputErrorsOnConsole(applicationSettingsFileAccess, loadSettingsInWelcomeScreen); // 3, 4, 7
 				else if (runFromConsole && !runWithView)
-					result = RunFullyFromConsole(applicationSettingsFileAccess);                 // 5, 6, 7
+					result = RunFullyFromConsole(applicationSettingsFileAccess);                                              // 5, 6, 7
 				else
-					result = RunInvisible(applicationSettingsFileAccess);                        //       7
+					result = RunInvisible(applicationSettingsFileAccess);                                                     //       7
 			}
 
 			if (result == MainResult.CommandLineError)
@@ -479,7 +483,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunFullyWithView(ApplicationSettingsFileAccess applicationSettingsFileAccess)
+		private MainResult RunFullyWithView(ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
@@ -506,18 +510,28 @@ namespace YAT.Controller
 					if (!ApplicationSettings.Create(applicationSettingsFileAccess))
 						return (MainResult.ApplicationSettingsError);
 
-					// Application settings are loaded while showing the welcome screen:
-					DebugWelcomeScreenShow("Welcome screen...");
-					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
+					// Application settings must be loaded before main form is created, as the main
+					// form's dimensions and location must be known prior to creating and showing it.
+					if (loadSettingsInWelcomeScreen)
 					{
-						DebugWelcomeScreenShow("...showing...");
-						var dr = welcomeScreen.ShowDialog();
-						if (dr != DialogResult.OK)
+						// Application settings are loaded while showing a welcome screen:
+						DebugWelcomeScreenShow("Welcome screen...");
+						using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
 						{
-							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...failed with [{0}]!", dr));
-							return (MainResult.ApplicationSettingsError);
+							DebugWelcomeScreenShow("...showing...");
+							var dr = welcomeScreen.ShowDialog();
+							if (dr != DialogResult.OK)
+							{
+								DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...failed with [{0}]!", dr));
+								return (MainResult.ApplicationSettingsError);
+							}
+							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
 						}
-						DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
+					}
+					else // See YAT.Controller.Test.TestFixtureSetUp() for background.
+					{
+						// Application settings are loaded synchronously here (solely used for testing purposes):
+						ApplicationSettings.Load();
 					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
@@ -699,7 +713,7 @@ namespace YAT.Controller
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunWithViewButOutputErrorsOnConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess)
+		private MainResult RunWithViewButOutputErrorsOnConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
@@ -726,18 +740,28 @@ namespace YAT.Controller
 					if (!ApplicationSettings.Create(applicationSettingsFileAccess))
 						return (MainResult.ApplicationSettingsError);
 
-					// Application settings are loaded while showing the welcome screen:
-					DebugWelcomeScreenShow("Welcome screen...");
-					using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
+					// Application settings must be loaded before main form is created, as the main
+					// form's dimensions and location must be known prior to creating and showing it.
+					if (loadSettingsInWelcomeScreen)
 					{
-						DebugWelcomeScreenShow("...showing...");
-						var dr = welcomeScreen.ShowDialog();
-						if (dr != DialogResult.OK)
+						// Application settings are loaded while showing a welcome screen:
+						DebugWelcomeScreenShow("Welcome screen...");
+						using (View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen())
 						{
-							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...failed with [{0}]!", dr));
-							return (MainResult.ApplicationSettingsError);
+							DebugWelcomeScreenShow("...showing...");
+							var dr = welcomeScreen.ShowDialog();
+							if (dr != DialogResult.OK)
+							{
+								DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...failed with [{0}]!", dr));
+								return (MainResult.ApplicationSettingsError);
+							}
+							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
 						}
-						DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
+					}
+					else // See YAT.Controller.Test.TestFixtureSetUp() for background.
+					{
+						// Application settings are loaded synchronously here (solely used for testing purposes):
+						ApplicationSettings.Load();
 					}
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)

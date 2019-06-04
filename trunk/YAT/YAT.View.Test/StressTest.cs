@@ -206,7 +206,7 @@ namespace YAT.View.Test
 
 			using (var m = new Controller.Main(args))
 			{
-				var result = m.Run(false, false, ApplicationSettingsFileAccess.None);
+				var result = m.Run(false, true, ApplicationSettingsFileAccess.None, false); // <= see YAT.Controller.Test.TestFixtureSetUp() for background why without welcome screen.
 				Assert.That(result, Is.EqualTo(Controller.MainResult.Success));
 			}
 		}
