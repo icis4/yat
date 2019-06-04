@@ -86,11 +86,33 @@ namespace YAT.Controller.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			tempPath = Temp.MakeTempPath(GetType());
+
 			// Temporary in-memory application settings are useless when YAT.Controller is used,
 			// as YAT.Controller will retrieve the real application settings, that's its job...
 			// Instead, [ApplicationSettingsFileAccess.None] is specified on Main.Run(...).
 
-			tempPath = Temp.MakeTempPath(GetType());
+			// There is another issue when running YAT.Controller from NUnit:
+			// The first test that invokes YAT, i.e. the first time the welcome screen should get
+			// shown, leads to an invalid [DialogResult] value of the welcome screen:
+			//
+			// YAT.View.Forms.WelcomeScreen : Invoking LoadApplicationSettingsAsync()...
+			// YAT.Controller.Main          : ...showing...
+			// YAT.View.Forms.WelcomeScreen : ...loading application settings...
+			// YAT.View.Forms.WelcomeScreen : ...successfully done.
+			// YAT.View.Forms.WelcomeScreen : Closing dialog, result is [OK].
+			// YAT.Controller.Main          : ...failed with [Cancel]!
+			//
+			// The returned value is [Cancel] instead of [OK]! The root cause to this issue has
+			// not been found (yet). It could be related to the fact that the NUnit GUI "owns" the
+			// main thread, and the YAT's welcome screen is shown without that form as parent.
+			// This could also be related to the following note in .NET WinForms:
+			// "If a Form is displayed as a modeless window, the value returned by the DialogResult
+			//  property might not return a value assigned to the form because the form's resources
+			//  are automatically released when the form is closed."
+			//
+			// This issue is worked around by not showing the welcome screen when running NUnit
+			// based tests. A welcome screen doesn't make much sense during testing anyway...
 		}
 
 		/// <summary></summary>
@@ -468,34 +490,6 @@ namespace YAT.Controller.Test
 		// Non-Public Methods
 		//==========================================================================================
 
-		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
-		{
-			var mainResult = main.PrepareRun();
-			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
-		}
-
-		private static void RunAndVerifyApplicationWithView(Main main)
-		{
-			RunAndVerifyApplicationWithView(main, MainResult.Success);
-		}
-
-		private static void RunAndVerifyApplicationWithView(Main main, MainResult expectedMainResult)
-		{
-			var mainResult = main.Run(false, true, ApplicationSettingsFileAccess.None);
-			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
-		}
-
-		private static void RunAndVerifyApplicationWithoutView(Main main)
-		{
-			RunAndVerifyApplicationWithoutView(main, MainResult.Success);
-		}
-
-		private static void RunAndVerifyApplicationWithoutView(Main main, MainResult expectedMainResult)
-		{
-			var mainResult = main.Run(false, false, ApplicationSettingsFileAccess.None);
-			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
-		}
-
 		/// <summary>
 		/// Clones files for a test case.
 		/// </summary>
@@ -510,6 +504,34 @@ namespace YAT.Controller.Test
 
 			var clonedFilePath = this.tempPath + Path.DirectorySeparatorChar + Path.GetFileName(filePath);
 			return (clonedFilePath);
+		}
+
+		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
+		{
+			var mainResult = main.PrepareRun();
+			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
+		}
+
+		private static void RunAndVerifyApplicationWithView(Main main)
+		{
+			RunAndVerifyApplicationWithView(main, MainResult.Success);
+		}
+
+		private static void RunAndVerifyApplicationWithView(Main main, MainResult expectedMainResult)
+		{
+			var mainResult = main.Run(false, true, ApplicationSettingsFileAccess.None, false); // <= see TestFixtureSetUp() for background why without welcome screen.
+			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
+		}
+
+		private static void RunAndVerifyApplicationWithoutView(Main main)
+		{
+			RunAndVerifyApplicationWithoutView(main, MainResult.Success);
+		}
+
+		private static void RunAndVerifyApplicationWithoutView(Main main, MainResult expectedMainResult)
+		{
+			var mainResult = main.Run(false, false, ApplicationSettingsFileAccess.None, false);
+			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 
 		#endregion
