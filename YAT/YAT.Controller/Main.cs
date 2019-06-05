@@ -333,7 +333,7 @@ namespace YAT.Controller
 			// validated in PrepareRun() above, or also in YAT.Model.Main.
 
 			// Prio 0 = None:
-			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
+			if (this.commandLineArgs == null || this.commandLineArgs.HasNoArgs)
 			{
 				result = MainResult.Success;
 				showLogo = true;

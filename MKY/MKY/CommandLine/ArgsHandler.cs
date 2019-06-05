@@ -79,7 +79,7 @@ namespace MKY.CommandLine
 	/// The implementation has been copied and improved to be more .NET-ish and edited to comply
 	/// with the YAT/MKY naming and coding conventions such as passing FxCop and StyleCop analysis.
 	/// 
-	/// In addition, this implementation has added so-called multi-options. Multi-options can be
+	/// In addition, this implementation has added so-called array-options. Array-options can be
 	/// used to deal with a variable number of additional argument, i.e. ellipsis. This feature is
 	/// optional.
 	/// 
@@ -202,11 +202,11 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is invalid.
+		/// Gets a value indicating whether this instance is valid.
 		/// </summary>
 		public bool IsValid
 		{
-			get { return (this.invalidArgs.Count <= 0); }
+			get { return (InvalidArgsCount <= 0); }
 		}
 
 		/// <summary>
@@ -214,7 +214,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public ReadOnlyCollection<string> ValueArgs
 		{
-			get { return (this.valueArgs.AsReadOnly()); }
+			get
+			{
+				if (this.valueArgs != null)
+					return (this.valueArgs.AsReadOnly());
+
+				return (null);
+			}
 		}
 
 		/// <summary>
@@ -222,7 +228,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public int ValueArgsCount
 		{
-			get { return (this.valueArgs.Count); }
+			get
+			{
+				if (this.valueArgs != null)
+					return (this.valueArgs.Count);
+
+				return (0);
+			}
 		}
 
 		/// <summary>
@@ -230,7 +242,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public ReadOnlyCollection<string> OptionArgs
 		{
-			get { return (this.optionArgs.AsReadOnly()); }
+			get
+			{
+				if (this.optionArgs != null)
+					return (this.optionArgs.AsReadOnly());
+
+				return (null);
+			}
 		}
 
 		/// <summary>
@@ -238,7 +256,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public int OptionArgsCount
 		{
-			get { return (this.optionArgs.Count); }
+			get
+			{
+				if (this.optionArgs != null)
+					return (this.optionArgs.Count);
+
+				return (0);
+			}
 		}
 
 		/// <summary>
@@ -246,7 +270,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public ReadOnlyCollection<string[]> ArrayOptionArgs
 		{
-			get { return (this.arrayOptionArgs.AsReadOnly()); }
+			get
+			{
+				if (this.arrayOptionArgs != null)
+					return (this.arrayOptionArgs.AsReadOnly());
+
+				return (null);
+			}
 		}
 
 		/// <summary>
@@ -254,7 +284,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public int ArrayOptionArgsCount
 		{
-			get { return (this.arrayOptionArgs.Count); }
+			get
+			{
+				if (this.arrayOptionArgs != null)
+					return (this.arrayOptionArgs.Count);
+
+				return (0);
+			}
 		}
 
 		/// <summary>
@@ -270,7 +306,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public ReadOnlyCollection<string> InvalidArgs
 		{
-			get { return (this.invalidArgs.AsReadOnly()); }
+			get
+			{
+				if (this.invalidArgs != null)
+					return (this.invalidArgs.AsReadOnly());
+
+				return (null);
+			}
 		}
 
 		/// <summary>
@@ -278,7 +320,13 @@ namespace MKY.CommandLine
 		/// </summary>
 		public int InvalidArgsCount
 		{
-			get { return (this.invalidArgs.Count); }
+			get
+			{
+				if (this.invalidArgs != null)
+					return (this.invalidArgs.Count);
+
+				return (0);
+			}
 		}
 
 		/// <summary>
@@ -290,15 +338,15 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
-		/// Indicates that there are no args.
+		/// Indicates that there are no args at all.
 		/// </summary>
-		public bool NoArgs
+		public bool HasNoArgs
 		{
 			get { return (ArgsCount <= 0); }
 		}
 
 		/// <summary>
-		/// Gets the <see cref="System.String"/> at the specified index.
+		/// Gets the <see cref="string"/> at the specified index.
 		/// </summary>
 		public string this[int index]
 		{
