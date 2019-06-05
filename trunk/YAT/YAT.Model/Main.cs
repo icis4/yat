@@ -467,7 +467,7 @@ namespace YAT.Model
 			// validated here for the first time.
 
 			// Prio 0 = None:
-			if ((this.commandLineArgs == null) || this.commandLineArgs.NoArgs)
+			if ((this.commandLineArgs == null) || this.commandLineArgs.HasNoArgs)
 			{
 				// This is the standard case, the 'New Terminal' dialog will get shown:
 				if (this.commandLineArgs == null)
