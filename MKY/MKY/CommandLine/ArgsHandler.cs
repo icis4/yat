@@ -150,22 +150,23 @@ namespace MKY.CommandLine
 		// Fields
 		//==========================================================================================
 
-		private bool supportValueArgs;
-		private bool supportOptionArgs;
-		private bool supportArrayOptionArgs;
+		private bool supportValueArgs;       // = false;
+		private bool supportOptionArgs;      // = false;
+		private bool supportArrayOptionArgs; // = false;
 
-		private string[] args;
+		private string[] args; // = null;
 
-		private Dictionary<string, object> argsOverride;
+		private Dictionary<string, object> argsOverride; // = null;
 
-		private List<string>    valueArgs;
-		private List<string>    optionArgs;
-		private List<string[]>  arrayOptionArgs;
-		private List<string>    invalidArgs;
+		private List<string>    valueArgs;       // = null;
+		private List<string>    optionArgs;      // = null;
+		private List<string[]>  arrayOptionArgs; // = null;
+		private List<string>    invalidArgs;     // = null;
 
-		private List<FieldInfo> optionFields;
+		private List<FieldInfo> optionFields; // = null;
 
-		private bool hasBeenProcessed;
+		private bool hasBeenProcessed; // = false;
+		private bool hasBeenValidated; // = false;
 
 		#endregion
 
@@ -202,11 +203,23 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether this instance has been validated.
+		/// </summary>
+		public bool HasBeenValidated
+		{
+			get { return (this.hasBeenValidated); }
+		}
+
+		/// <summary>
 		/// Gets a value indicating whether this instance is valid.
 		/// </summary>
+		/// <remarks>
+		/// Until the args have been validated using <see cref="ProcessAndValidate"/>,
+		/// this property returns <c>false</c>.
+		/// </remarks>
 		public bool IsValid
 		{
-			get { return (InvalidArgsCount <= 0); }
+			get { return (HasBeenValidated && InvalidArgsCount <= 0); }
 		}
 
 		/// <summary>
@@ -824,6 +837,8 @@ namespace MKY.CommandLine
 				}
 			}
 		#endif
+
+			this.hasBeenValidated = true;
 			return (IsValid);
 		}
 

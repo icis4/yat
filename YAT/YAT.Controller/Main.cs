@@ -237,7 +237,10 @@ namespace YAT.Controller
 		// Intentionally don't directly return the args strings or object. The requested operation
 		// could also be requested by some other means than the command line, e.g. by a config file.
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Until the command line has been validated by <see cref="PrepareRun"/>,
+		/// this property returns <c>false</c>.
+		/// </remarks>
 		public virtual bool CommandLineIsValid
 		{
 			get { return ((this.commandLineArgs != null) && (this.commandLineArgs.IsValid)); }
@@ -269,18 +272,20 @@ namespace YAT.Controller
 		{
 			AssertNotDisposed();
 
-			// Process command line arguments, and evaluate them:
-			// 
-			// Note that this is the location where the command line arguments are processed and
-			// validated in normal operation. In case of automated testing, they will be processed
-			// and validated in PrepareRun() below or in YAT.Model.Main. Calling ProcessAndValidate()
-			// multiple times doesn't matter, this case is handled with 'ArgsHandler'.
 			if (this.commandLineArgs != null)
 			{
+				// Process and validate command line arguments:
 				if (this.commandLineArgs.ProcessAndValidate())
 					return (MainResult.Success);
 				else
 					return (MainResult.CommandLineError);
+
+				// Note that this is the location where the command line arguments are processed
+				// and validated in case of automated testing. In normal operation, they will be
+				// processed and validated in Run() further below.
+				//
+				// Calling ProcessAndValidate() multiple times doesn't matter, this use case is
+				// covered by 'ArgsHandler'.
 			}
 			else
 			{
@@ -330,7 +335,10 @@ namespace YAT.Controller
 			// in YAT.Model.Main.ProcessCommandLineArgsIntoStartRequests().
 			//
 			// In case of automated testing, the command line arguments will be processed and
-			// validated in PrepareRun() above, or also in YAT.Model.Main.
+			// validated in PrepareRun() above, and also in YAT.Model.Main.
+			//
+			// Calling ProcessAndValidate() multiple times doesn't matter, this use case is covered
+			// by 'ArgsHandler'.
 
 			// Prio 0 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.HasNoArgs)
