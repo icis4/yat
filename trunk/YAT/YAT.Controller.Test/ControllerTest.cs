@@ -192,6 +192,26 @@ namespace YAT.Controller.Test
 
 		#endregion
 
+		#region Tests > SerialPortCommandLineArg
+		//------------------------------------------------------------------------------------------
+		// Tests > SerialPortCommandLineArg
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestSerialPortCommandLineArg()
+		{
+			using (var m = new Main(SerialPortArgs))
+			{
+				PrepareMainAndVerifyResult(m, MainResult.Success);
+
+				Assert.That(m.CommandLineIsValid,         Is.True);
+				Assert.That(m.CommandLineHelpIsRequested, Is.False);
+			}
+		}
+
+		#endregion
+
 		#region Tests > EmptyCommandLineRun
 		//------------------------------------------------------------------------------------------
 		// Tests > EmptyCommandLineRun

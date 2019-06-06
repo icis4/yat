@@ -34,10 +34,8 @@ using System.Text;
 
 using MKY;
 using MKY.CommandLine;
-using MKY.IO.Usb;
 
 using YAT.Application.Utilities;
-using YAT.Model.Utilities;
 using YAT.Settings.Application;
 
 #endregion
@@ -66,7 +64,7 @@ namespace YAT.Model
 		[OptionArg(Name = "Recent", ShortName = "r", Description = "Open the most recent file.")]
 		public bool MostRecentIsRequested;
 
-		/// <summary></summary>
+		/// <remarks>Internal use, not part of the visible args.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		public string MostRecentFilePath;
 
@@ -277,7 +275,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "FormatPreset", ShortName = "fp", Description =
-			"One of the presets to specify the report format USB Ser/HID. Valid values are " + SerialHidReportFormatPresetEx.UserSummary + "." + EnvironmentEx.NewLineConstWorkaround +
+			"One of the presets to specify the report format USB Ser/HID. Valid values are " + MKY.IO.Usb.SerialHidReportFormatPresetEx.UserSummary + "." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string FormatPreset;
 
@@ -566,6 +564,57 @@ namespace YAT.Model
 			helpText.AppendLine();
 
 			return (helpText.ToString());
+		}
+
+		/// <summary>
+		/// Returns whether a new terminal is implicitly requested, opposed to an explicit request
+		/// using <see cref="NewIsRequested"/>.
+		/// </summary>
+		public bool NewIsRequestedImplicitly(out Domain.IOType implicitIOType)
+		{
+			implicitIOType = Domain.IOType.Unknown;
+
+			if (!string.IsNullOrEmpty(RequestedFilePath)) {
+				return (false);
+			}
+
+			if (MostRecentIsRequested) {
+				return (false);
+			}
+
+			if (OptionIsGiven("TerminalType") || OptionIsGiven("IOType")) {
+				// IOType is either default or explicitly set.
+				return (true);
+			}
+
+			if (OptionIsGiven("SerialPort")) {
+				implicitIOType = Domain.IOType.SerialPort;
+				return (true);
+			}
+
+			if (OptionIsGiven("RemotePort") && !OptionIsGiven("LocalPort")) {
+				implicitIOType = Domain.IOType.TcpClient;
+				return (true);
+			}
+
+			if (OptionIsGiven("LocalPort") && !OptionIsGiven("RemotePort")) {
+				implicitIOType = Domain.IOType.TcpServer;
+				return (true);
+			}
+
+			if (OptionIsGiven("RemotePort") && OptionIsGiven("LocalPort")) {
+				implicitIOType = Domain.IOType.TcpAutoSocket;
+				return (true);
+			}
+
+			// TCP/IP shall have precedence over UDP/IP.
+
+			if (OptionIsGiven("VendorId") && OptionIsGiven("ProductId")) {
+				implicitIOType = Domain.IOType.UsbSerialHid;
+				return (true);
+			}
+
+			return (false);
 		}
 
 		#endregion
