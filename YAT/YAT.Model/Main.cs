@@ -574,6 +574,7 @@ namespace YAT.Model
 			}
 
 			// Prio 7 = Retrieve the requested terminal within the workspace and validate it:
+			Domain.IOType implicitIOType;
 			if (this.startArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
 			{
 				if (this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
@@ -619,6 +620,16 @@ namespace YAT.Model
 					this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 
 				this.startArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			}
+			else if (this.commandLineArgs.NewIsRequestedImplicitly(out implicitIOType)) // Also applies to a new terminal.
+			{
+				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
+					this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+
+				this.startArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
+
+				if (implicitIOType != Domain.IOType.Unknown)
+					this.startArgs.TerminalSettingsHandler.Settings.IOType = implicitIOType;
 			}
 			else
 			{
