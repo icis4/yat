@@ -484,7 +484,7 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
-	public static class RuntimeValidationTestData
+	public static class DevelopmentValidationTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -894,50 +894,50 @@ namespace MKY.Test.CommandLine
 
 		#endregion
 
-		#region Tests > RuntimeValidation
+		#region Tests > DevelopmentValidation
 		//------------------------------------------------------------------------------------------
-		// Tests > RuntimeValidation
+		// Tests > DevelopmentValidation
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(RuntimeValidationTestData), "TestCases")]
-		public virtual void TestRuntimeValidation(bool isValid, Type type)
+		[Test, TestCaseSource(typeof(DevelopmentValidationTestData), "TestCases")]
+		public virtual void TestDevelopmentValidation(bool isValid, Type type)
 		{
-			TestRuntimeValidation_type = type;
+			TestDevelopmentValidation_type = type;
 
 			// Must not throw an exception:
-			Assert.DoesNotThrow(new TestDelegate(TestRuntimeValidation_GetConstructorAndCreateObject));
+			Assert.DoesNotThrow(new TestDelegate(TestDevelopmentValidation_GetConstructorAndCreateObject));
 
 			// Must throw an exception in case of invalid arguments:
 			if (isValid)
 			{
-				Assert.DoesNotThrow(new TestDelegate(TestRuntimeValidation_ProcessAndValidate));
+				Assert.DoesNotThrow(new TestDelegate(TestDevelopmentValidation_ProcessAndValidate));
 			}
 		#if (DEBUG)
 			else
 			{
-				Assert.Throws<ArgsHandler.RuntimeValidationException>(new TestDelegate(TestRuntimeValidation_ProcessAndValidate));
+				Assert.Throws<ArgsHandler.DevelopmentValidationException>(new TestDelegate(TestDevelopmentValidation_ProcessAndValidate));
 			}
 		#endif
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'type' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Type TestRuntimeValidation_type;
+		private Type TestDevelopmentValidation_type;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'args' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private ArgsHandler TestRuntimeValidation_args;
+		private ArgsHandler TestDevelopmentValidation_args;
 
-		private void TestRuntimeValidation_GetConstructorAndCreateObject()
+		private void TestDevelopmentValidation_GetConstructorAndCreateObject()
 		{
-			ConstructorInfo ci = TestRuntimeValidation_type.GetConstructor(new Type[] { typeof(string[]) });
-			TestRuntimeValidation_args = (ArgsHandler)ci.Invoke(new object[] { new string[] { "" } });
+			ConstructorInfo ci = TestDevelopmentValidation_type.GetConstructor(new Type[] { typeof(string[]) });
+			TestDevelopmentValidation_args = (ArgsHandler)ci.Invoke(new object[] { new string[] { "" } });
 		}
 
-		private void TestRuntimeValidation_ProcessAndValidate()
+		private void TestDevelopmentValidation_ProcessAndValidate()
 		{
-			TestRuntimeValidation_args.ProcessAndValidate();
+			TestDevelopmentValidation_args.ProcessAndValidate();
 		}
 
 		#endregion
