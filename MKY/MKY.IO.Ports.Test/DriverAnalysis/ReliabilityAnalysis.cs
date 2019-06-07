@@ -116,7 +116,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	[TestFixture, Explicit("This test fixture assesses the reliability of serial port drivers. It does not perform any tests. It is only useful for measurments and analysis.")]
-	public class ReliabilityAnalysis : IDisposable
+	public class ReliabilityAnalysis : IDisposable, IDisposableEx
 	{
 		#region Constants
 		//==========================================================================================

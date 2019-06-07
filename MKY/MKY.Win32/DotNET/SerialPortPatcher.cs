@@ -52,7 +52,7 @@ namespace MKY.Win32.DotNet
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Patcher", Justification = "What's wrong with 'Patcher'?")]
-	public class SerialPortPatcher : IDisposable
+	public class SerialPortPatcher : IDisposable, IDisposableEx
 	{
 		/// <summary>
 		/// Applies the fix to the given serial port.

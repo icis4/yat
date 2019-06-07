@@ -74,7 +74,7 @@ namespace YAT.Domain
 	/// its specializations add additional functionality.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public abstract class Terminal : IDisposable
+	public abstract class Terminal : IDisposable, IDisposableEx
 	{
 		#region Constant Help Text
 		//==========================================================================================
@@ -241,7 +241,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName);
 

@@ -89,7 +89,7 @@ namespace YAT.Domain
 			End
 		}
 
-		private class LineState : IDisposable
+		private class LineState : IDisposable, IDisposableEx
 		{
 			public byte[] EolSequence { get; }
 

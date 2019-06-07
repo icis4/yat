@@ -35,7 +35,7 @@ namespace MKY.IO
 	/// <summary>
 	/// Thread-safe log file.
 	/// </summary>
-	public class LogFile : IDisposable
+	public class LogFile : IDisposable, IDisposableEx
 	{
 		private string filePath;
 		private StreamWriter writer;

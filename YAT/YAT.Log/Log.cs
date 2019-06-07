@@ -41,7 +41,7 @@ namespace YAT.Log
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	internal abstract class Log : IDisposable
+	internal abstract class Log : IDisposable, IDisposableEx
 	{
 		#region Constants
 		//==========================================================================================

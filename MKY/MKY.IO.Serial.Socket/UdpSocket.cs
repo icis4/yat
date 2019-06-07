@@ -61,7 +61,7 @@ using MKY.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
-	public class UdpSocket : IIOProvider, IDisposable
+	public class UdpSocket : IIOProvider, IDisposable, IDisposableEx
 	{
 		#region Types
 		//==========================================================================================
@@ -114,7 +114,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(UdpSocket).FullName);
 

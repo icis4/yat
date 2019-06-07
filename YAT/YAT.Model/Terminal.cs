@@ -62,7 +62,7 @@ namespace YAT.Model
 	/// Terminals (.yat) of the YAT application model.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public class Terminal : IDisposable, IGuidProvider
+	public class Terminal : IGuidProvider, IDisposable, IDisposableEx
 	{
 		#region Constants
 		//==========================================================================================
@@ -145,7 +145,7 @@ namespace YAT.Model
 		public bool DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification { get; set; }
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName);
 
@@ -2241,8 +2241,8 @@ namespace YAT.Model
 				// Status text request must be before closed event, closed event may close the view:
 				OnTimedStatusTextRequest("Terminal successfully closed.");
 
-				// Discard potential exceptions already before signalling the close! Required to
-				// prevent exceptions on still ongoing asynchronous callbacks trying to synchronize
+				// Discard potential exceptions already BEFORE signalling the close! Required to
+				// prevent exceptions on still pending asynchronous callbacks trying to synchronize
 				// event callbacks onto the terminal form which is going to be closed/disposed by
 				// the handler of the 'Closed' event below!
 				this.eventHelper.DiscardAllExceptions();

@@ -70,7 +70,7 @@ statements one level out of normal code structure to clearly show that these sta
 			try
 			{
 		#endif
-do not belong to the normal code. Decide on version a) or b) such that readability is optimal.
+do not belong to the normal code. Decide on variant a) or b) for better readability.
 
 
 Classes
@@ -112,7 +112,7 @@ Use MKY.Diagnostics.DebugDisposal
 
 Base class
 
-		class Class : IDisposable
+		class Class : IDisposable, IDisposableEx
 
 		#region Disposal
 		//------------------------------------------------------------------------------------------

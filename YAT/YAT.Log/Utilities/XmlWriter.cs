@@ -34,6 +34,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
+using MKY;
 using MKY.Xml.Schema;
 
 using YAT.Domain;
@@ -46,7 +47,7 @@ namespace YAT.Log.Utilities
 	/// <summary>
 	/// Utility class providing XML writer functionality for YAT.
 	/// </summary>
-	public abstract class XmlWriter : IDisposable
+	public abstract class XmlWriter : IDisposable, IDisposableEx
 	{
 		/// <summary></summary>
 		protected const string Header = @"<?xml version=""1.0"" encoding=""utf-8""?>";

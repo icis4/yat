@@ -30,6 +30,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY;
 using MKY.Diagnostics;
 
 #endregion
@@ -40,7 +41,7 @@ using MKY.Diagnostics;
 namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
-	internal abstract class ParserState : IDisposable
+	internal abstract class ParserState : IDisposable, IDisposableEx
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]

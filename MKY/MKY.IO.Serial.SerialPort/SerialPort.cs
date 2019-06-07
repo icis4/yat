@@ -80,7 +80,7 @@ namespace MKY.IO.Serial.SerialPort
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
-	public class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable
+	public class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable, IDisposableEx
 	{
 		#region Types
 		//==========================================================================================
@@ -133,7 +133,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPort).FullName);
 
@@ -933,20 +933,20 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void SetStateSynchronizedAndNotify(State state, bool withNotify = true)
 		{
-#if (DEBUG)
+		#if (DEBUG)
 			State oldState = GetStateSynchronized();
-#endif
+		#endif
 			lock (this.stateSyncObj)
 				this.state = state;
 
 			if (withNotify)
 			{
-#if (DEBUG)
+			#if (DEBUG)
 				if (this.state != oldState)
 					DebugMessage("State has changed from " + oldState + " to " + state + ".");
 				else
 					DebugMessage("State is already " + oldState + ".");
-#endif
+			#endif
 				// Notify asynchronously because the state will get changed from asynchronous items
 				// such as the reopen timer. In case of that timer, the port needs to be locked to
 				// ensure proper operation. In such case, a synchronous notification callback would

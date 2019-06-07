@@ -69,7 +69,7 @@ namespace MKY.Settings
 	/// Pass <see cref="EmptySettingsItem"/> for those settings that shall not be used.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes", Justification = "Three type parameters are given by the nature of application settings.")]
-	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings> : IDisposable
+	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings> : IDisposable, IDisposableEx
 		where TCommonSettings : SettingsItem, new()
 		where TLocalUserSettings : SettingsItem, new()
 		where TRoamingUserSettings : SettingsItem, new()
@@ -88,7 +88,7 @@ namespace MKY.Settings
 			ReadWrite = Read | Write,
 		}
 
-		private class Handler<TSettings> : SettingsFileHandler, IDisposable
+		private class Handler<TSettings> : SettingsFileHandler, IDisposable, IDisposableEx
 			where TSettings : SettingsItem, new()
 		{
 			#region Fields
