@@ -97,27 +97,27 @@ namespace MKY.CommandLine
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this exception type shall only be used by the ArgsHandler class. Anyway, it is only used for DEBUG.")]
 		[Serializable]
-		public class RuntimeValidationException : Exception
+		public class DevelopmentValidationException : Exception
 		{
 			/// <summary></summary>
-			public RuntimeValidationException()
+			public DevelopmentValidationException()
 			{
 			}
 
 			/// <summary></summary>
-			public RuntimeValidationException(string message)
+			public DevelopmentValidationException(string message)
 				: base(message)
 			{
 			}
 
 			/// <summary></summary>
-			public RuntimeValidationException(string message, Exception innerException)
+			public DevelopmentValidationException(string message, Exception innerException)
 				: base(message, innerException)
 			{
 			}
 
 			/// <summary></summary>
-			protected RuntimeValidationException(SerializationInfo info, StreamingContext context)
+			protected DevelopmentValidationException(SerializationInfo info, StreamingContext context)
 				: base(info, context)
 			{
 			}
@@ -778,32 +778,52 @@ namespace MKY.CommandLine
 		protected virtual bool Validate()
 		{
 		#if (DEBUG)
-			List<string> optionStrings = new List<string>();
-			foreach (FieldInfo field in GetMemberFields())
+			var messageLead = "Validation failed for " + GetType() + "!";
+			var fields = GetMemberFields();
+			var optionStrings = new List<string>(fields.Length); // Preset the initial capacity to improve memory management.
+			foreach (var field in fields)
 			{
 				foreach (var att in GetOptionArgAttributes(field))
 				{
 					if (!SupportOptionArgs)
 					{
-						string message = "Option argument defined, but support for option arguments in not enabled in constructor call";
-						Debug.WriteLine("Runtime validation failed for " + GetType() + message);
-						throw (new RuntimeValidationException(message));
+						string message = " Option argument defined, but support for option arguments has not been not enabled!";
+						Debug.WriteLine(messageLead + message);
+						throw (new DevelopmentValidationException(messageLead + message));
+
+						// When executing this validation from the NUnit based test with debugger attached,
+						// the debugger will stop below stating "...Exception was unhandled by user code"
+						// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+						// Simply continue execution [F5] to continue test execution. Optionally disable
+						// the [Break when this exception type is user-unhandled] setting.
 					}
 
 					if (field.FieldType.IsArray && !SupportArrayOptionArgs)
 					{
-						string message = "Array option argument defined, but support for array option arguments in not enabled in constructor call";
-						Debug.WriteLine("Runtime validation failed for " + GetType() + message);
-						throw (new RuntimeValidationException(message));
+						string message = " Array option argument defined, but support for array option arguments has not been not enabled!";
+						Debug.WriteLine(messageLead + message);
+						throw (new DevelopmentValidationException(messageLead + message));
+
+						// When executing this validation from the NUnit based test with debugger attached,
+						// the debugger will stop below stating "...Exception was unhandled by user code"
+						// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+						// Simply continue execution [F5] to continue test execution. Optionally disable
+						// the [Break when this exception type is user-unhandled] setting.
 					}
 
 					foreach (var attShortName in att.ShortNames)
 					{
 						if (optionStrings.Contains(attShortName))
 						{
-							string message = "Duplicate command line argument " + attShortName;
-							Debug.WriteLine("Runtime validation failed for " + GetType() + message);
-							throw (new RuntimeValidationException(message));
+							string message = " Duplicate command line argument " + attShortName + "!";
+							Debug.WriteLine(messageLead + message);
+							throw (new DevelopmentValidationException(messageLead + message));
+
+							// When executing this validation from the NUnit based test with debugger attached,
+							// the debugger will stop below stating "...Exception was unhandled by user code"
+							// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+							// Simply continue execution [F5] to continue test execution. Optionally disable
+							// the [Break when this exception type is user-unhandled] setting.
 						}
 						else
 						{
@@ -815,9 +835,15 @@ namespace MKY.CommandLine
 					{
 						if (optionStrings.Contains(attName))
 						{
-							string message = "Duplicate command line argument " + attName;
-							Debug.WriteLine("Runtime validation failed for " + GetType() + message);
-							throw (new RuntimeValidationException(message));
+							string message = " Duplicate command line argument " + attName + "!";
+							Debug.WriteLine(messageLead + message);
+							throw (new DevelopmentValidationException(messageLead + message));
+
+							// When executing this validation from the NUnit based test with debugger attached,
+							// the debugger will stop below stating "...Exception was unhandled by user code"
+							// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+							// Simply continue execution [F5] to continue test execution. Optionally disable
+							// the [Break when this exception type is user-unhandled] setting.
 						}
 						else
 						{
@@ -830,9 +856,15 @@ namespace MKY.CommandLine
 				{
 					if (!SupportValueArgs)
 					{
-						string message = "Value argument defined, but support for value arguments in not enabled in constructor call";
-						Debug.WriteLine("Runtime validation failed for " + GetType() + message);
-						throw (new RuntimeValidationException(message));
+						string message = ". Value argument defined, but support for value arguments has not been not enabled!";
+						Debug.WriteLine(messageLead + message);
+						throw (new DevelopmentValidationException(messageLead + message));
+
+						// When executing this validation from the NUnit based test with debugger attached,
+						// the debugger will stop below stating "...Exception was unhandled by user code"
+						// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+						// Simply continue execution [F5] to continue test execution. Optionally disable
+						// the [Break when this exception type is user-unhandled] setting.
 					}
 				}
 			}
