@@ -33,6 +33,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+using MKY;
+
 using YAT.Format.Settings;
 
 #endregion
@@ -40,7 +42,7 @@ using YAT.Format.Settings;
 namespace YAT.Log
 {
 	/// <summary></summary>
-	public class Provider : IDisposable
+	public class Provider : IDisposable, IDisposableEx
 	{
 		#region Fields
 		//==========================================================================================

@@ -31,6 +31,8 @@ using System;
 using System.IO;
 using System.Text;
 
+using MKY;
+
 using YAT.Domain;
 
 #endregion
@@ -40,7 +42,7 @@ namespace YAT.Log.Utilities
 	/// <summary>
 	/// Utility class providing text writer functionality for YAT.
 	/// </summary>
-	public class TextWriter : IDisposable
+	public class TextWriter : IDisposable, IDisposableEx
 	{
 		private StreamWriter writer;
 		private object writerSyncObj = new object();

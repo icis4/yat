@@ -41,7 +41,7 @@ using MKY.Diagnostics;
 namespace MKY.Time
 {
 	/// <summary></summary>
-	public class Chronometer : IDisposable
+	public class Chronometer : IDisposable, IDisposableEx
 	{
 		#region Fields
 		//==========================================================================================
@@ -49,7 +49,7 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName);
 

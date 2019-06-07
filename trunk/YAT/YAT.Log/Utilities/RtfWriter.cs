@@ -52,7 +52,7 @@ namespace YAT.Log.Utilities
 	/// <remarks>
 	/// Wraps an 'netrtfwriter' based <see cref="RtfDocument"/> into an object.
 	/// </remarks>
-	public class RtfWriter : IDisposable
+	public class RtfWriter : IDisposable, IDisposableEx
 	{
 		private struct FormatDescriptor
 		{

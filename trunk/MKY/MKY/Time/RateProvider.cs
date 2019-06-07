@@ -22,12 +22,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 using MKY.Diagnostics;
+
+#endregion
 
 namespace MKY.Time
 {
@@ -52,7 +59,7 @@ namespace MKY.Time
 	#endregion
 
 		/// <summary></summary>
-	public class RateProvider : IDisposable
+	public class RateProvider : IDisposable, IDisposableEx
 	{
 		#region Fields
 		//==========================================================================================
@@ -60,7 +67,7 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RateProvider).FullName);
 

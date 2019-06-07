@@ -41,7 +41,7 @@ namespace MKY.Settings
 	/// Generic class to handle any kind of document settings, e.g. MDI application settings.
 	/// </summary>
 	/// <typeparam name="TSettings">The type of the settings.</typeparam>
-	public class DocumentSettingsHandler<TSettings> : IDisposable
+	public class DocumentSettingsHandler<TSettings> : IDisposable, IDisposableEx
 		where TSettings : SettingsItem, new()
 	{
 		#region Fields

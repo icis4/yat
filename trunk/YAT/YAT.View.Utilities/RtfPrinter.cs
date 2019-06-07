@@ -28,11 +28,12 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
+
+using MKY;
 
 using YAT.Domain;
 using YAT.Format.Settings;
@@ -44,7 +45,7 @@ namespace YAT.View.Utilities
 	/// <summary>
 	/// Utility class providing RTF printer functionality for YAT.
 	/// </summary>
-	public class RtfPrinter : IDisposable
+	public class RtfPrinter : IDisposable, IDisposableEx
 	{
 		private Color foreColorBrushColor;
 		private Brush foreColorBrush;

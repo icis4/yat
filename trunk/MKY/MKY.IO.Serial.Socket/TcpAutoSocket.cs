@@ -70,7 +70,7 @@ namespace MKY.IO.Serial.Socket
 	/// of these classes for additional information.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
-	public class TcpAutoSocket : IIOProvider, IDisposable
+	public class TcpAutoSocket : IIOProvider, IDisposable, IDisposableEx
 	{
 		#region Types
 		//==========================================================================================
@@ -118,7 +118,7 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(TcpAutoSocket).FullName);
 

@@ -59,7 +59,7 @@ namespace YAT.Model
 	/// Workspaces (.yaw) of the YAT application model.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public class Workspace : IDisposable, IGuidProvider
+	public class Workspace : IGuidProvider, IDisposable, IDisposableEx
 	{
 		#region Constants
 		//==========================================================================================
@@ -100,7 +100,7 @@ namespace YAT.Model
 		public bool DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification { get; set; }
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Workspace).FullName);
 
@@ -1235,8 +1235,8 @@ namespace YAT.Model
 				else
 					OnTimedStatusTextRequest("Workspace successfully closed.");
 
-				// Discard potential exceptions already before signalling the close! Required to
-				// prevent exceptions on still ongoing asynchronous callbacks trying to synchronize
+				// Discard potential exceptions already BEFORE signalling the close! Required to
+				// prevent exceptions on still pending asynchronous callbacks trying to synchronize
 				// event callbacks onto the workspace form which is going to be closed/disposed by
 				// the handler of the 'Closed' event below!
 				// Note there so far is no "workspace" form. Still be prepared for potential future

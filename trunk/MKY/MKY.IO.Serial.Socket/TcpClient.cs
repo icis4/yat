@@ -85,7 +85,7 @@ namespace MKY.IO.Serial.Socket
 	/// that were interconnected with each other. See remarks of this class for details.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Azevedo' is a name.")]
-	public class TcpClient : IIOProvider, IDisposable, ALAZ.SystemEx.NetEx.SocketsEx.ISocketService
+	public class TcpClient : IIOProvider, ALAZ.SystemEx.NetEx.SocketsEx.ISocketService, IDisposable, IDisposableEx
 	{
 		#region Types
 		//==========================================================================================
@@ -130,7 +130,7 @@ namespace MKY.IO.Serial.Socket
 		private int instanceId;
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(TcpClient).FullName);
 

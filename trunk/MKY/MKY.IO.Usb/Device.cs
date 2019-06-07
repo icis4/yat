@@ -45,7 +45,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Encapsulates functions and properties that are common to all USB devices.
 	/// </summary>
-	public abstract class Device : IDisposable, IDeviceInfo, IDevice
+	public abstract class Device : IDevice, IDeviceInfo, IDisposable, IDisposableEx
 	{
 		#region Static Events
 		//==========================================================================================
@@ -600,7 +600,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Device).FullName);
 

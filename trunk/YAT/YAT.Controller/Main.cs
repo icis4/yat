@@ -85,7 +85,7 @@ namespace YAT.Controller
 	/// their own context.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
-	public class Main : IDisposable
+	public class Main : IDisposable, IDisposableEx
 	{
 		#region Constants
 		//==========================================================================================

@@ -69,7 +69,7 @@ namespace YAT.Domain
 			End
 		}
 
-		private class LineState : IDisposable
+		private class LineState : IDisposable, IDisposableEx
 		{
 			public LinePosition             Position  { get; set; }
 			public DisplayElementCollection Elements  { get; set; }

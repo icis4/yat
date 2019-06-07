@@ -48,7 +48,7 @@ namespace YAT.Domain
 	/// Defines a buffered serial interface. The buffers contain raw byte content,
 	/// no formatting is done.
 	/// </summary>
-	public class RawTerminal : IDisposable
+	public class RawTerminal : IDisposable, IDisposableEx
 	{
 		#region Constants
 		//==========================================================================================
@@ -74,7 +74,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName);
 
