@@ -572,6 +572,8 @@ namespace YAT.Model
 		/// </summary>
 		public bool NewIsRequestedImplicitly(out Domain.IOType implicitIOType)
 		{
+			bool isRequestedImplicitly = false;
+
 			implicitIOType = Domain.IOType.Unknown;
 
 			if (!string.IsNullOrEmpty(RequestedFilePath)) {
@@ -582,9 +584,10 @@ namespace YAT.Model
 				return (false);
 			}
 
-			if (OptionIsGiven("TerminalType") || OptionIsGiven("IOType")) {
-				// IOType is either default or explicitly set.
-				return (true);
+			if (OptionIsGiven("TerminalType") || OptionIsGiven("PortType")) { // Called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
+				// IOType is either default (SerialPort) or explicitly set (by the "PortType" option).
+				// Continue evaluation to detect additional/subsequent options.
+				isRequestedImplicitly = true;
 			}
 
 			if (OptionIsGiven("SerialPort")) {
@@ -614,7 +617,7 @@ namespace YAT.Model
 				return (true);
 			}
 
-			return (false);
+			return (isRequestedImplicitly);
 		}
 
 		#endregion

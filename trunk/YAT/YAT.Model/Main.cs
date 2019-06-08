@@ -574,7 +574,8 @@ namespace YAT.Model
 			}
 
 			// Prio 7 = Retrieve the requested terminal within the workspace and validate it:
-			Domain.IOType implicitIOType;
+			Domain.IOType implicitIOType = Domain.IOType.Unknown;
+			bool updateDependentDefaults = false;
 			if (this.startArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
 			{
 				if (this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
@@ -630,8 +631,10 @@ namespace YAT.Model
 
 				if (implicitIOType != Domain.IOType.Unknown)
 					this.startArgs.TerminalSettingsHandler.Settings.IOType = implicitIOType;
-			}
-			else
+
+				updateDependentDefaults = true; // Same as when using the on the 'New Terminal' or 'Terminal Settings' dialog,
+			}                                   // termial or I/O type dependent settings must be updated to their defaults.
+			else                                // But this must happen AFTER having processed the args into the settings!
 			{
 				this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Disable the operation.
 			}
@@ -641,6 +644,12 @@ namespace YAT.Model
 			{
 				if (!ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettingsHandler.Settings.Terminal))
 					return (false);
+
+				if (updateDependentDefaults) // See comments further above.
+				{
+					this.startArgs.TerminalSettingsHandler.Settings.Terminal.UpdateTerminalTypeDependentDefaults();
+					this.startArgs.TerminalSettingsHandler.Settings.Terminal.UpdateIOTypeDependentSettings();
+				}
 
 				if (this.commandLineArgs.OptionIsGiven("StartTerminal"))
 					this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted = this.commandLineArgs.StartTerminal;
@@ -719,7 +728,7 @@ namespace YAT.Model
 					return (false);
 			}
 
-			if (this.commandLineArgs.OptionIsGiven("PortType"))
+			if (this.commandLineArgs.OptionIsGiven("PortType")) // Called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
 			{
 				Domain.IOType ioType;
 				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
