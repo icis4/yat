@@ -51,7 +51,41 @@ namespace MKY.Time
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName);
+		/// <remarks>
+		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/> to
+		/// prevent the following issue:
+		/// 
+		/// <![CDATA[
+		/// System.Reflection.TargetInvocationException was unhandled by user code
+		///   Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
+		///   Source=mscorlib
+		///   StackTrace:
+		///        bei System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+		///        bei System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+		///        bei System.Delegate.DynamicInvokeImpl(Object[] args)
+		///        bei MKY.EventHelper.Item.InvokeOnCurrentThread(Delegate sink, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 595.
+		///        bei MKY.EventHelper.Item.RaiseSync[TEventArgs](Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 399.
+		///        bei MKY.Time.Chronometer.OnTimeSpanChanged(TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\MKY\MKY\Time\Chronometer.cs:Zeile 350.
+		///        bei MKY.Time.Chronometer.timer_Elapsed(Object sender, ElapsedEventArgs e) in D:\Workspace\YAT\Trunk\MKY\MKY\Time\Chronometer.cs:Zeile 330.
+		///        bei System.Timers.Timer.MyTimerCallback(Object state)
+		///   InnerException: 
+		///        Message=Invoke oder BeginInvoke kann für ein Steuerelement erst aufgerufen werden, wenn das Fensterhandle erstellt wurde.
+		///        Source=System.Windows.Forms
+		///        StackTrace:
+		///             bei System.Windows.Forms.Control.WaitForWaitHandle(WaitHandle waitHandle)
+		///             bei System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+		///             bei System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+		///             bei MKY.EventHelper.Item.InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 567.
+		///             bei MKY.EventHelper.Item.RaiseSync[TEventArgs](Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 397.
+		///             bei YAT.Model.Terminal.OnIOConnectTimeChanged(TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 5258.
+		///             bei YAT.Model.Terminal.totalConnectChrono_TimeSpanChanged(Object sender, TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 4204.
+		/// ]]>
+		/// 
+		/// The chronos get properly terminated, but apparently there may still be pending
+		/// asynchronuos 'zombie' callback that later throw an exception. No true solution
+		/// has been found.
+		/// </remarks>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
 
 		private System.Timers.Timer timer;
 
