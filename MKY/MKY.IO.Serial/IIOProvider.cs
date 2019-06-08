@@ -27,9 +27,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 using MKY.Contracts;
 
@@ -40,7 +38,7 @@ namespace MKY.IO.Serial
 	/// <summary>
 	/// Generic I/O interface that is usable for any kind of serial communication.
 	/// </summary>
-	public interface IIOProvider : IDisposable
+	public interface IIOProvider : IDisposable, IDisposableEx
 	{
 		#region Events
 		//==========================================================================================
