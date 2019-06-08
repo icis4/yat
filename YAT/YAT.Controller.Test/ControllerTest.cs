@@ -449,7 +449,7 @@ namespace YAT.Controller.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did YAT open with a serial COM port terminal?",
+				"Did YAT open a binary serial COM port terminal automatically sending '11h' (XOn)?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
