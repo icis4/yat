@@ -380,7 +380,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			sb.AppendLine("..." + sentBytes.ToString(CultureInfo.CurrentCulture) + " bytes.");
 			sb.AppendLine("Received...");
 			sb.AppendLine("..." + receivedBytes.ToString(CultureInfo.CurrentCulture) + " bytes, while...");
-			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.CurrentCulture) + " errors occured.");
+			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.CurrentCulture) + " errors occurred.");
 			sb.AppendLine();
 
 			if (exact)
@@ -484,7 +484,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			sb.Append    ("..." + receivedBytes.ToString(CultureInfo.CurrentCulture) + " bytes in ");
 			sb.AppendLine(        receivedLines.ToString(CultureInfo.CurrentCulture) + " lines, resulting in...");
 			sb.AppendLine("..." + (exact ? "exactly " : "an average of ") + bytesPerLine.ToString((exact ? "F1" : "F3"), CultureInfo.CurrentCulture) + " bytes per line, while...");
-			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.CurrentCulture) + " errors occured.");
+			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.CurrentCulture) + " errors occurred.");
 			sb.AppendLine();
 
 			if (exact)
