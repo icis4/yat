@@ -164,7 +164,7 @@ namespace MKY.IO.Usb
 		public void CreateReports(SerialHidReportFormat format, byte[] payload)
 		{
 			// Calculate usable length:
-			int usableLength = MaxByteLength - format.HeaderByteLength;
+			int usableLength = (MaxByteLength - format.HeaderByteLength);
 
 			// Create the temporary report container:
 			List<byte[]> reports = new List<byte[]>();
@@ -174,12 +174,12 @@ namespace MKY.IO.Usb
 			while (accumulatedPayloadLength < (payload.Length))
 			{
 				// Evaluate the required lengths:
-				int remainingPayloadLength = payload.Length - accumulatedPayloadLength;
+				int remainingPayloadLength = (payload.Length - accumulatedPayloadLength);
 				int payloadLength = ((remainingPayloadLength <= usableLength) ? (remainingPayloadLength) : (usableLength));
 
 				// Create the report, one or two bytes may be used by the report header,
 				// an additional byte may be needed for the terminating zero:
-				int effectiveLength = format.HeaderByteLength + payloadLength;
+				int effectiveLength = (format.HeaderByteLength + payloadLength);
 				if (format.AppendTerminatingZero)
 					effectiveLength += 1;
 
