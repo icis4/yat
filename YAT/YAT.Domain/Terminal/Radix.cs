@@ -106,7 +106,7 @@ namespace YAT.Domain
 		public const Radix TextDefault = Radix.String;
 
 		/// <summary>Default for binary terminals is <see cref="Radix.Hex"/>.</summary>
-		public const Radix BinaryDefault = Radix.String;
+		public const Radix BinaryDefault = Radix.Hex;
 
 		/// <summary>
 		/// Default is <see cref="TextDefault"/> as its value of
