@@ -56,7 +56,7 @@ namespace YAT.Model
 	/// <summary>
 	/// Provides the YAT application model which can handle workspaces (.yaw) and terminals (.yat).
 	/// </summary>
-	public class Main : IDisposable, IGuidProvider
+	public class Main : IGuidProvider, IDisposable, IDisposableEx
 	{
 		#region Fields
 		//==========================================================================================
@@ -64,7 +64,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
-		/// A dedicated event helper to allow autonomously ignoring exceptions when disposed.
+		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Main).FullName);
 
@@ -1197,8 +1197,8 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "..."); // "YAT" or "YATConsole", as indicated in main title bar.
 
-				// Discard potential exceptions already before signalling the close! Required to
-				// prevent exceptions on still ongoing asynchronous callbacks trying to synchronize
+				// Discard potential exceptions already BEFORE signalling the close! Required to
+				// prevent exceptions on still pending asynchronous callbacks trying to synchronize
 				// event callbacks onto the main form which is going to be closed/disposed by
 				// the handler of the 'Exited' event below!
 				this.eventHelper.DiscardAllExceptions();
@@ -1212,6 +1212,9 @@ namespace YAT.Model
 				// the subscribers is not fixed, i.e. a subscriber may dispose of the main before
 				// 'View.Main' receives the event callback!
 				Dispose();
+
+				// Finally, allow a short moment to let pending asynchronous callbacks be executed:
+				Thread.Sleep(50);
 
 				cancel = false;
 				return (this.result);
