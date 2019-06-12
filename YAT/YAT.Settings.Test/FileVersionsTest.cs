@@ -78,7 +78,7 @@ namespace YAT.Settings.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"This test requires connected USB Ser/HID device 'VID:0EB8 PID:2303 SNR:YAT.8_SerHID'." + Environment.NewLine +
+				"This test requires connected USB Ser/HID device 'VID:0EB8 PID:2303 SNR:YAT.8'." + Environment.NewLine +
 				"Ensure that device is connected.",
 				"Precondition",
 				MessageBoxButtons.OKCancel,
