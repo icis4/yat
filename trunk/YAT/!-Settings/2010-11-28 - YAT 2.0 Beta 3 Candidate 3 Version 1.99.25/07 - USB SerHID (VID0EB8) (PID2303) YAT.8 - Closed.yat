@@ -53,7 +53,7 @@
           <DeviceInfo>
             <VendorId>3768</VendorId>
             <ProductId>8963</ProductId>
-            <SerialNumber>YAT.8_SerHID</SerialNumber>
+            <SerialNumber>YAT.8</SerialNumber>
           </DeviceInfo>
           <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>
