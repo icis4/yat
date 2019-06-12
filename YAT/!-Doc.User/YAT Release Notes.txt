@@ -214,8 +214,8 @@ Important changes:
   automatically changed when the port type gets changed. This automatism is only applied if the
   settings are at their defaults, i.e. have not been changed by the user; otherwise, the user is
   asked whether the settings shall be changed (related to feature request #335).
-- Simple find/search function now allows to explicitly enable/disable the regex option (related
-  feature requests #11 and #79 implemented in previous release).
+- Simple find/search function now allows to explicitly enable/disable the regex option (feature
+  request #332, related to feature requests #11 and #79 implemented in previous release).
 - Option to enable/disable <...> and \... escape sequences has been separated for [Send Text] and
   [Send File]. By default, escapes are enabled for [Send Text] and disabled for [Send File].
 - [Send File] now also sends (formatted) text files for binary terminals, including support for
