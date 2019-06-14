@@ -98,7 +98,7 @@ namespace YAT.Model.Test.Settings
 		public virtual void TestFixtureSetUp()
 		{
 			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
-			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
+			// \remind (2017-10-09 / MKY) even better to be replaced by a runtime check for availability of a weighing capable MT-SICS device.
 			var dr = MessageBoxEx.Show
 			(
 				"This test requires a weighing MT-SICS device:" + Environment.NewLine +
