@@ -21,18 +21,27 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.Configuration;
 
+using NUnit.Framework;
+
+#endregion
+
 namespace MKY.IO.Usb.Test
 {
 	#region Section
-	//==========================================================================================
+	//==============================================================================================
 	// Section
-	//==========================================================================================
+	//==============================================================================================
 
 	/// <summary>
 	/// Type representing the configuration section.
@@ -73,20 +82,20 @@ namespace MKY.IO.Usb.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public virtual bool MTSicsDeviceAIsConnected { get; set; }
+		public virtual bool MTSicsDeviceAIsAvailable { get; set; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public virtual bool MTSicsDeviceBIsConnected { get; set; }
+		public virtual bool MTSicsDeviceBIsAvailable { get; set; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public virtual bool TILaunchPadDeviceAIsConnected { get; set; }
+		public virtual bool TILaunchPadDeviceAIsAvailable { get; set; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public virtual bool TILaunchPadDeviceBIsConnected { get; set; }
+		public virtual bool TILaunchPadDeviceBIsAvailable { get; set; }
 
 		#endregion
 
@@ -167,9 +176,9 @@ namespace MKY.IO.Usb.Test
 	#endregion
 
 	#region Provider
-	//==========================================================================================
+	//===============================================================================================
 	// Provider
-	//==========================================================================================
+	//===============================================================================================
 
 	/// <remarks>
 	/// Separate class needed to create the default configuration. To create the defaults, these
@@ -199,7 +208,7 @@ namespace MKY.IO.Usb.Test
 		static ConfigurationProvider()
 		{
 			ConfigurationSection configuration;
-			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+			if (Provider.TryOpenAndMergeConfigurations(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
 				// Set which physical items are available on the current machine:
 				SerialHidDeviceCollection availableDevices = new SerialHidDeviceCollection();
@@ -213,16 +222,16 @@ namespace MKY.IO.Usb.Test
 					configuration.DeviceBIsAvailable = availableDevices.Contains(di);
 
 				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceA, out di))
-					configuration.MTSicsDeviceAIsConnected = availableDevices.Contains(di);
+					configuration.MTSicsDeviceAIsAvailable = availableDevices.Contains(di);
 
 				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceB, out di))
-					configuration.MTSicsDeviceBIsConnected = availableDevices.Contains(di);
+					configuration.MTSicsDeviceBIsAvailable = availableDevices.Contains(di);
 
 				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.TILaunchPadDeviceA, out di))
-					configuration.TILaunchPadDeviceAIsConnected = availableDevices.Contains(di);
+					configuration.TILaunchPadDeviceAIsAvailable = availableDevices.Contains(di);
 
 				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.TILaunchPadDeviceB, out di))
-					configuration.TILaunchPadDeviceBIsConnected = availableDevices.Contains(di);
+					configuration.TILaunchPadDeviceBIsAvailable = availableDevices.Contains(di);
 
 				// Activate the effective configuration:
 				StaticConfiguration = configuration;
@@ -239,13 +248,13 @@ namespace MKY.IO.Usb.Test
 	#endregion
 
 	#region Categories
-	//==========================================================================================
+	//===============================================================================================
 	// Categories
-	//==========================================================================================
+	//===============================================================================================
 
 	/// <remarks>
 	/// Note that NUnit category strings may not contain the following characters as specified
-	/// by <see cref="NUnit.Framework.CategoryAttribute"/>: ',' '+' '-' and '!'
+	/// by <see cref="CategoryAttribute"/>: ',' '+' '-' and '!'
 	/// 
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
@@ -262,26 +271,26 @@ namespace MKY.IO.Usb.Test
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string MTSicsDeviceAIsConnected = "USB Ser/HID MT SICS device A '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string MTSicsDeviceAIsAvailable = "USB Ser/HID MT SICS device A '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string MTSicsDeviceBIsConnected = "USB Ser/HID MT SICS device B '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string MTSicsDeviceBIsAvailable = "USB Ser/HID MT SICS device B '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
-		public static readonly string TILaunchPadDeviceAIsConnected = "USB Ser/HID TI LaunchPad device A '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string TILaunchPadDeviceAIsAvailable = "USB Ser/HID TI LaunchPad device A '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsAvailable ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string TILaunchPadDeviceBIsConnected = "USB Ser/HID TI LaunchPad device B '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string TILaunchPadDeviceBIsAvailable = "USB Ser/HID TI LaunchPad device B '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : "*NOT* ") + "connected" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class DeviceAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class DeviceAIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public DeviceAIsAvailableCategoryAttribute()
@@ -293,7 +302,7 @@ namespace MKY.IO.Usb.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class DeviceBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class DeviceBIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public DeviceBIsAvailableCategoryAttribute()
@@ -306,11 +315,11 @@ namespace MKY.IO.Usb.Test
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class MTSicsDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class MTSicsDeviceAIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
-		public MTSicsDeviceAIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.MTSicsDeviceAIsConnected)
+		public MTSicsDeviceAIsAvailableCategoryAttribute()
+			: base(ConfigurationCategoryStrings.MTSicsDeviceAIsAvailable)
 		{
 		}
 	}
@@ -319,11 +328,11 @@ namespace MKY.IO.Usb.Test
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class MTSicsDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class MTSicsDeviceBIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
-		public MTSicsDeviceBIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.MTSicsDeviceBIsConnected)
+		public MTSicsDeviceBIsAvailableCategoryAttribute()
+			: base(ConfigurationCategoryStrings.MTSicsDeviceBIsAvailable)
 		{
 		}
 	}
@@ -331,11 +340,11 @@ namespace MKY.IO.Usb.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class TILaunchPadDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class TILaunchPadDeviceAIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
-		public TILaunchPadDeviceAIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.TILaunchPadDeviceAIsConnected)
+		public TILaunchPadDeviceAIsAvailableCategoryAttribute()
+			: base(ConfigurationCategoryStrings.TILaunchPadDeviceAIsAvailable)
 		{
 		}
 	}
@@ -343,12 +352,88 @@ namespace MKY.IO.Usb.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class TILaunchPadDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class TILaunchPadDeviceBIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
-		public TILaunchPadDeviceBIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.TILaunchPadDeviceBIsConnected)
+		public TILaunchPadDeviceBIsAvailableCategoryAttribute()
+			: base(ConfigurationCategoryStrings.TILaunchPadDeviceBIsAvailable)
 		{
+		}
+	}
+
+	#endregion
+
+	#region Self-Tests
+	//==============================================================================================
+	// Self-Tests
+	//==============================================================================================
+
+	/// <summary></summary>
+	[TestFixture]
+	public class CategoryTest
+	{
+		/// <summary>
+		/// This self-test ensures that the given categories are instantiated at least once,
+		/// such the tester for sure gets informed in case an infrastructure is not available.
+		/// </summary>
+		/// <remarks>
+		/// The below code also serves as a template for tests that require this infrastructure
+		/// and shall probe for it during test execution. Alternatively, tests can apply the
+		/// category attribute to the test and can then get excluded by the tester.
+		/// </remarks>
+		[Test, DeviceAIsAvailableCategory, DeviceBIsAvailableCategory]
+		public virtual void TestPortIsAvailableCategories()
+		{
+			if (!ConfigurationProvider.Configuration.DeviceAIsAvailable)
+				Assert.Ignore("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!ConfigurationProvider.Configuration.DeviceBIsAvailable)
+				Assert.Ignore("'DeviceB' is not available, therefore this test is excluded. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		}
+
+		/// <summary>
+		/// This self-test ensures that the given categories are instantiated at least once,
+		/// such the tester for sure gets informed in case an infrastructure is not available.
+		/// </summary>
+		/// <remarks>
+		/// The below code also serves as a template for tests that require this infrastructure
+		/// and shall probe for it during test execution. Alternatively, tests can apply the
+		/// category attribute to the test and can then get excluded by the tester.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[Test, MTSicsDeviceAIsAvailableCategory, MTSicsDeviceBIsAvailableCategory]
+		public virtual void TestMTSicsDeviceIsAvailableCategories()
+		{
+			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
+				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
+				Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		}
+
+		/// <summary>
+		/// This self-test ensures that the given categories are instantiated at least once,
+		/// such the tester for sure gets informed in case an infrastructure is not available.
+		/// </summary>
+		/// <remarks>
+		/// The below code also serves as a template for tests that require this infrastructure
+		/// and shall probe for it during test execution. Alternatively, tests can apply the
+		/// category attribute to the test and can then get excluded by the tester.
+		/// </remarks>
+		[Test, TILaunchPadDeviceAIsAvailableCategory, TILaunchPadDeviceBIsAvailableCategory]
+		public virtual void TestTILaunchPadDeviceIsAvailableCategories()
+		{
+			if (!ConfigurationProvider.Configuration.TILaunchPadDeviceAIsAvailable)
+				Assert.Ignore("'TILaunchPadDeviceA' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceA' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable)
+				Assert.Ignore("'TILaunchPadDeviceB' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceB' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 	}
 

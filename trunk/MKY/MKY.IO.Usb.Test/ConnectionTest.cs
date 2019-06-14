@@ -40,7 +40,7 @@ namespace MKY.IO.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, DeviceAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'DeviceAIsAvailable' is probed below.
 		public virtual void TestConnectDisconnectA()
 		{
 			if (!ConfigurationProvider.Configuration.DeviceAIsAvailable)
@@ -51,7 +51,7 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <summary></summary>
-		[Test, DeviceBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'DeviceBIsAvailable' is probed below.
 		public virtual void TestConnectDisconnectB()
 		{
 			if (!ConfigurationProvider.Configuration.DeviceBIsAvailable)

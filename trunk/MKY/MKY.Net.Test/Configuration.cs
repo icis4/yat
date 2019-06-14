@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
@@ -29,12 +34,16 @@ using System.Net.NetworkInformation;
 
 using MKY.Configuration;
 
+using NUnit.Framework;
+
+#endregion
+
 namespace MKY.Net.Test
 {
 	#region Section
-	//==========================================================================================
+	//===============================================================================================
 	// Section
-	//==========================================================================================
+	//===============================================================================================
 
 	/// <summary>
 	/// Type representing the configuration section.
@@ -74,7 +83,7 @@ namespace MKY.Net.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "int", Justification = "Work arond naming conflict.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "int", Justification = "Work around naming conflict.")]
 		public virtual int MTSicsDeviceTcpPortAsInt { get; set; }
 
 		#endregion
@@ -110,6 +119,18 @@ namespace MKY.Net.Test
 			get { return (this.properties); }
 		}
 
+		/// <summary></summary>
+		public virtual bool IPv4LoopbackIsAvailable
+		{
+			get { return (true); } // Assumed to be always on, not configurable so far.
+		}
+
+		/// <summary></summary>
+		public virtual bool IPv6LoopbackIsAvailable
+		{
+			get { return (true); } // Assumed to be always on, not configurable so far.
+		}
+
 		/// <remarks>Currently limited to a single specific interface.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual string IPv4SpecificInterface
@@ -137,9 +158,9 @@ namespace MKY.Net.Test
 	#endregion
 
 	#region Provider
-	//==========================================================================================
+	//===============================================================================================
 	// Provider
-	//==========================================================================================
+	//===============================================================================================
 
 	/// <remarks>
 	/// Separate class needed to create the default configuration. To create the defaults, these
@@ -169,7 +190,7 @@ namespace MKY.Net.Test
 		static ConfigurationProvider()
 		{
 			ConfigurationSection configuration;
-			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+			if (Provider.TryOpenAndMergeConfigurations(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
 				// Set which physical items are available on the current machine:
 				IPNetworkInterfaceCollection inferfaces = new IPNetworkInterfaceCollection();
@@ -215,13 +236,13 @@ namespace MKY.Net.Test
 	#endregion
 
 	#region Categories
-	//==========================================================================================
+	//===============================================================================================
 	// Categories
-	//==========================================================================================
+	//===============================================================================================
 
 	/// <remarks>
 	/// Note that NUnit category strings may not contain the following characters as specified
-	/// by <see cref="NUnit.Framework.CategoryAttribute"/>: ',' '+' '-' and '!'
+	/// by <see cref="CategoryAttribute"/>: ',' '+' '-' and '!'
 	/// 
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
@@ -252,7 +273,7 @@ namespace MKY.Net.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class IPv4LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class IPv4LoopbackIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public IPv4LoopbackIsAvailableCategoryAttribute()
@@ -264,7 +285,7 @@ namespace MKY.Net.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class IPv6LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class IPv6LoopbackIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public IPv6LoopbackIsAvailableCategoryAttribute()
@@ -277,7 +298,7 @@ namespace MKY.Net.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class IPv4SpecificInterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class IPv4SpecificInterfaceIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public IPv4SpecificInterfaceIsAvailableCategoryAttribute()
@@ -290,7 +311,7 @@ namespace MKY.Net.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class IPv6SpecificInterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class IPv6SpecificInterfaceIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public IPv6SpecificInterfaceIsAvailableCategoryAttribute()
@@ -302,12 +323,84 @@ namespace MKY.Net.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class MTSicsDeviceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class MTSicsDeviceIsAvailableCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public MTSicsDeviceIsAvailableCategoryAttribute()
 			: base(ConfigurationCategoryStrings.MTSicsDeviceIsAvailable)
 		{
+		}
+	}
+
+	#endregion
+
+	#region Self-Tests
+	//==============================================================================================
+	// Self-Tests
+	//==============================================================================================
+
+	/// <summary></summary>
+	[TestFixture]
+	public class CategoryTest
+	{
+		/// <summary>
+		/// This self-test ensures that the given categories are instantiated at least once,
+		/// such the tester for sure gets informed in case an infrastructure is not available.
+		/// </summary>
+		/// <remarks>
+		/// The below code also serves as a template for tests that require this infrastructure
+		/// and shall probe for it during test execution. Alternatively, tests can apply the
+		/// category attribute to the test and can then get excluded by the tester.
+		/// </remarks>
+		[Test, IPv4LoopbackIsAvailableCategory, IPv6LoopbackIsAvailableCategory]
+		public virtual void TestLoopbackCategories()
+		{
+			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
+				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!ConfigurationProvider.Configuration.IPv6LoopbackIsAvailable)
+				Assert.Ignore("No IPv6 loopback is available, therefore this test is excluded. Ensure that IPv6 loopback is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		}
+
+		/// <summary>
+		/// This self-test ensures that the given categories are instantiated at least once,
+		/// such the tester for sure gets informed in case an infrastructure is not available.
+		/// </summary>
+		/// <remarks>
+		/// The below code also serves as a template for tests that require this infrastructure
+		/// and shall probe for it during test execution. Alternatively, tests can apply the
+		/// category attribute to the test and can then get excluded by the tester.
+		/// </remarks>
+		[Test, IPv4SpecificInterfaceIsAvailableCategory, IPv6SpecificInterfaceIsAvailableCategory]
+		public virtual void TestSpecificInterfaceCategories()
+		{
+			if (!ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
+				Assert.Ignore("No specific IPv4 interface is available, therefore this test is excluded. Ensure that specific IPv4 interface is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
+				Assert.Ignore("No specific IPv6 interface is available, therefore this test is excluded. Ensure that specific IPv6 interface is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		}
+
+		/// <summary>
+		/// This self-test ensures that the given categories are instantiated at least once,
+		/// such the tester for sure gets informed in case an infrastructure is not available.
+		/// </summary>
+		/// <remarks>
+		/// The below code also serves as a template for tests that require this infrastructure
+		/// and shall probe for it during test execution. Alternatively, tests can apply the
+		/// category attribute to the test and can then get excluded by the tester.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[Test, MTSicsDeviceIsAvailableCategory]
+		public virtual void TestMTSicsDeviceIsAvailableCategory()
+		{
+			if (!ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable)
+				Assert.Ignore("'MTSicsDevice' is not available, therefore this test is excluded. Ensure that 'MTSicsDevice' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 	}
 

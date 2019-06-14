@@ -108,6 +108,10 @@
       <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
       <Name>MKY.IO.Ports.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports\MKY.IO.Ports.csproj">
+      <Project>{d8940035-d30a-48a3-ac28-e8a4b8910cb9}</Project>
+      <Name>MKY.IO.Ports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>

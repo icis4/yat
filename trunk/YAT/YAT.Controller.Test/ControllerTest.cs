@@ -256,9 +256,11 @@ namespace YAT.Controller.Test
 		/// COM1 and COM2 will be opened in this test case
 		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).
 		/// </remarks>
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable.
 		public virtual void TestWorkspaceCommandLineArgRun()
 		{
+			AssertWorkspaceCommandLineArgRunPreconditions();
+
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
 			using (var m = new Main(new string[]{ workspaceFilePathForTest }))
 			{
@@ -381,9 +383,11 @@ namespace YAT.Controller.Test
 		/// COM1 and COM2 will be opened in this test case
 		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).
 		/// </remarks>
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory, InteractiveCategory]
+		[Test] // Test is mandatory, it shall not be excludable.
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
+			AssertWorkspaceCommandLineArgRunPreconditions();
+
 			var dr = MessageBoxEx.Show
 			(
 				"This test will open YAT with two serial COM port terminals." + Environment.NewLine +
@@ -524,6 +528,26 @@ namespace YAT.Controller.Test
 
 			var clonedFilePath = this.tempPath + Path.DirectorySeparatorChar + Path.GetFileName(filePath);
 			return (clonedFilePath);
+		}
+
+		/// <summary>
+		/// Asserts that COM1 and COM2 are configured and available.
+		/// </summary>
+		protected virtual void AssertWorkspaceCommandLineArgRunPreconditions()
+		{
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA != "COM1")
+				Assert.Fail("This test case requires that 'PortA' is configured to 'COM1'!");
+
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB != "COM2")
+				Assert.Fail("This test case requires that 'PortB' is configured to 'COM2'!");
+
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
+				Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine, therefore this test is excluded.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
+				Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine, therefore this test is excluded.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
