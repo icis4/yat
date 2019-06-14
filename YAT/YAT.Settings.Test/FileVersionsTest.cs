@@ -62,32 +62,6 @@ namespace YAT.Settings.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
-			// \remind (2017-10-09 / MKY) even better to be eliminated and moved to related tests as attributes.
-			var dr = MessageBoxEx.Show
-			(
-				"This test requires open serial ports 'COM1' and 'COM2'." + Environment.NewLine +
-				"Ensure that VSPE is running and providing these ports.",
-				"Precondition",
-				MessageBoxButtons.OKCancel,
-				MessageBoxIcon.Information
-			);
-
-			if (dr != DialogResult.OK)
-				Assert.Ignore("Tester has canceled");
-
-			dr = MessageBoxEx.Show
-			(
-				"This test requires connected USB Ser/HID device 'VID:0EB8 PID:2303 SNR:YAT.8'." + Environment.NewLine +
-				"Ensure that device is connected.",
-				"Precondition",
-				MessageBoxButtons.OKCancel,
-				MessageBoxIcon.Information
-			);
-
-			if (dr != DialogResult.OK)
-				Assert.Ignore("Tester has canceled");
-
 			// Create temporary in-memory application settings for this test run:
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
 
@@ -118,7 +92,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V2_0_0_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -126,7 +100,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V2_0_0_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -197,7 +171,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_90_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -205,7 +179,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_90_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -276,7 +250,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_80_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -284,7 +258,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_80_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -347,7 +321,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_70_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -355,7 +329,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_70_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -418,7 +392,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_52_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -426,7 +400,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_52_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -437,7 +411,8 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_52_TerminalSettingsCase03()
 		{
-			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
+		////Case03 of V1.99.5x fail (bugs #232 and #246 "Issues with [Alternate]TolerantXmlSerializer").
+		////ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -489,7 +464,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_51_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -497,7 +472,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_51_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -508,7 +483,8 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_51_TerminalSettingsCase03()
 		{
-			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
+		////Case03 of V1.99.5x fail (bugs #232 and #246 "Issues with [Alternate]TolerantXmlSerializer").
+		////ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -560,7 +536,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_50_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -568,7 +544,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_50_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -579,7 +555,8 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_50_TerminalSettingsCase03()
 		{
-			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
+		////Case03 of V1.99.5x fail (bugs #232 and #246 "Issues with [Alternate]TolerantXmlSerializer").
+		////ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -631,7 +608,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_34_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -639,7 +616,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_34_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -702,7 +679,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_33_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -710,7 +687,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_33_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -773,7 +750,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_32_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -781,7 +758,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_32_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -844,7 +821,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_30_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -852,7 +829,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_30_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -915,7 +892,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_28_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -923,7 +900,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_28_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -986,7 +963,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_26_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -994,7 +971,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_26_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -1057,7 +1034,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_25_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -1065,7 +1042,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_25_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -1120,7 +1097,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_24_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -1128,7 +1105,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_24_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -1167,7 +1144,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_22_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -1175,7 +1152,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_22_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -1265,11 +1242,6 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase02(string filePath)
 		{
-			ExecuteSettingsCase02(filePath, false);
-		}
-
-		private void ExecuteSettingsCase02(string filePath, bool ignoreBaudRate)
-		{
 			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -1280,7 +1252,7 @@ namespace YAT.Settings.Test
 
 				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
-				VerifySettingsCase02(t, ignoreBaudRate);
+				VerifySettingsCase02(t);
 			}
 		}
 
@@ -1451,20 +1423,22 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase01(Model.Terminal terminal)
 		{
-			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
+			AssertSettingsCase01Preconditions();
 
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA == "COM1")
-			{
-				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
-					Assert.That(terminal.IsOpen, "Terminal is not open on COM1!");
-				else
-					Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine, therefore this test is excluded.");
-					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-			}
-			else
-			{
+			Assert.That(terminal.SettingsRoot.TerminalType, Is.EqualTo(Domain.TerminalType.Text), "Terminal isn't text!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
+			Assert.That(terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, Is.EqualTo(9600), "Serial port baud rate isn't set to 9600!");
+			Assert.That(terminal.IsOpen, "Terminal is not open!");
+		}
+
+		private static void AssertSettingsCase01Preconditions()
+		{
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA != "COM1")
 				Assert.Fail("This test case requires that 'PortA' is configured to 'COM1'!");
-			}
+
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
+				Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine, therefore this test is excluded.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		#endregion
@@ -1474,26 +1448,24 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 02 :: Terminal :: COM2 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
+		private static void VerifySettingsCase02(Model.Terminal terminal)
 		{
+			AssertSettingsCase02Preconditions();
+
 			Assert.That(terminal.SettingsRoot.TerminalType, Is.EqualTo(Domain.TerminalType.Binary), "Terminal isn't binary!");
 			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(2), "Serial port isn't set to COM2!");
+			Assert.That(terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, Is.EqualTo(115200), "Serial port baud rate isn't set to 115200!");
+			Assert.That(terminal.IsOpen, "Terminal is not open!");
+		}
 
-			if (!ignoreBaudRate) // Optionally ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
-				Assert.That(terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, Is.EqualTo(115200), "Serial port baud rate isn't set to 115200!");
-
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB == "COM2")
-			{
-				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
-					Assert.That(terminal.IsOpen, "Terminal is not open on COM2!");
-				else
-					Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine, therefore this test is excluded.");
-					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-			}
-			else
-			{
+		private static void AssertSettingsCase02Preconditions()
+		{
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB != "COM2")
 				Assert.Fail("This test case requires that 'PortB' is configured to 'COM2'!");
-			}
+
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
+				Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine, therefore this test is excluded.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		#endregion
