@@ -61,16 +61,20 @@ namespace MKY.IO.Ports.Test.SerialPort
 		// Tests > Close/Reopen
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		[Test, MTSicsDeviceAIsConnectedCategory]
+		/// <remarks>
+		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// </remarks>
+		[Test, MTSicsDeviceAIsAvailableCategory]
 		public virtual void TestCloseReopenSerialPort()
 		{
 			TestCloseReopen(new System.IO.Ports.SerialPort());
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-		[Test, MTSicsDeviceAIsConnectedCategory]
+		[Test, MTSicsDeviceAIsAvailableCategory]
 		public virtual void TestCloseReopenSerialPortEx()
 		{
 			TestCloseReopen(new SerialPortEx());
@@ -78,8 +82,8 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 		private static void TestCloseReopen(System.IO.Ports.SerialPort port)
 		{
-			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
-				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
+				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and connected if passing this test is required.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
@@ -157,23 +161,29 @@ namespace MKY.IO.Ports.Test.SerialPort
 		// Tests > Disconnect/Reconnect
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1)]
+		/// <remarks>
+		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// </remarks>
+		[Test, MTSicsDeviceAIsAvailableCategory, MinuteDurationCategory(1)]
 		public virtual void TestDisconnectReconnectSerialPort()
 		{
 			TestDisconnectReconnect(new System.IO.Ports.SerialPort(), false); // See comments in TestDisconnectReconnect().
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1)]
+		[Test, MTSicsDeviceAIsAvailableCategory, MinuteDurationCategory(1)]
 		public virtual void TestDisconnectReconnectSerialPortEx()
 		{
 			TestDisconnectReconnect(new SerialPortEx(), false); // See comments in TestDisconnectReconnect().
 		}
 
-		/// <summary></summary>
-		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
+		/// <remarks>
+		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// </remarks>
+		[Test, MTSicsDeviceAIsAvailableCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
 		public virtual void TestDisconnectReconnectSerialPortExWithContinuousReceiving()
 		{
 			TestDisconnectReconnect(new SerialPortEx(), true); // See comments in TestDisconnectReconnect().
@@ -193,8 +203,8 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Keep constructor of effective type in order to later recreate a port object of the same type:
 			ConstructorInfo ci = port.GetType().GetConstructor(Type.EmptyTypes);
 
-			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
-				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
+				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and connected if passing this test is required.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!UsbHubControl.Probe())

@@ -466,17 +466,17 @@ namespace YAT.Model.Test
 		{
 			get
 			{
-				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
-					!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ||
+					!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedSerialPortMTSicsDeviceATextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_MTSicsDeviceA"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsAvailable, "SerialPort_MTSicsDeviceA"));
 				}
 
-				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedSerialPortMTSicsDeviceBTextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_MTSicsDeviceB"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsAvailable, "SerialPort_MTSicsDeviceB"));
 				}
 			}
 		}
@@ -497,17 +497,17 @@ namespace YAT.Model.Test
 		{
 			get
 			{
-				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
-					!MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
+				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ||
+					!MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUsbSerialHidMTSicsDeviceATextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_MTSicsDeviceA"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsAvailable, "UsbSerialHid_MTSicsDeviceA"));
 				}
 
-				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
 				{
 					var settingsDelegate = new Pair<TerminalSettingsDelegate<string>, string>(GetStartedUsbSerialHidMTSicsDeviceBTextSettings, null);
-					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_MTSicsDeviceB"));
+					yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsAvailable, "UsbSerialHid_MTSicsDeviceB"));
 				}
 			}
 		}
@@ -586,14 +586,14 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceATextSettings()
 		{
-			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
 			{
 				var settings = GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 
-			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
@@ -607,14 +607,14 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceBTextSettings()
 		{
-			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
 			{
 				var settings = GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 
-			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
@@ -1110,14 +1110,14 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceATextSettings()
 		{
-			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
+			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
 			{
 				var settings = GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 
-			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
@@ -1131,14 +1131,14 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceBTextSettings()
 		{
-			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
 			{
 				var settings = GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
 				ConfigureMTSicsSettings(settings);
 				return (settings);
 			}
 
-			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);

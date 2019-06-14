@@ -35,13 +35,13 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
+using MKY.IO.Ports.Test;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
 using NUnit.Framework;
 
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
 
 #endregion
 
@@ -156,8 +156,8 @@ namespace YAT.Model.Test.Transmission
 
 	/// <remarks>
 	/// It can be argued that this test would be better located in YAT.Domain.Test. It currently is
-	/// located here because line counts and rates are calculated in <see cref="YAT.Model.Terminal"/>
-	/// and required when evaluating the test result.
+	/// located here because line counts and rates are calculated in <see cref="Terminal"/> and are
+	/// required when evaluating the test result.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[TestFixture]
@@ -213,9 +213,12 @@ namespace YAT.Model.Test.Transmission
 		// Tests
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
+		[MTSicsDeviceAIsAvailableCategory, MTSicsDeviceBIsAvailableCategory]
 		public virtual void Transmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor, string stimulus, string expected, int transmissionCount)
 		{
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);

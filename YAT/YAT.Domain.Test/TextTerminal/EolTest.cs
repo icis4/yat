@@ -128,9 +128,13 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, IPv4LoopbackIsAvailableCategory, TestCaseSource(typeof(ByteSequenceTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(ByteSequenceTestData), "TestCases")] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
 		public virtual void TestByteSequence(Encoding encoding, string eolAB, string eolBA)
 		{
+			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
+				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			const int WaitForDisposal = 100;
 
 			using (var parser = new Domain.Parser.Parser(encoding, Domain.Parser.Modes.RadixAndAsciiEscapes))
@@ -253,9 +257,13 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		[Test, IPv4LoopbackIsAvailableCategory]
+		[Test] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
 		public virtual void TestEolNone()
 		{
+			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
+				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			const int WaitForOperation = 100;
 			const int WaitForDisposal = 100;
 
