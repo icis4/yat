@@ -104,7 +104,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
-    <Compile Include="ConfigurationFilesDefaulter.cs" />
+    <Compile Include="ConfigurationTemplate\Generator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DummyMain.cs" />
   </ItemGroup>
@@ -184,6 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="!-ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ConfigurationTemplate\YAT.Test.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
