@@ -21,7 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Text;
+using System.Windows.Forms;
+
 using MKY.Configuration;
+using MKY.Windows.Forms;
 
 using NUnit.Framework;
 
@@ -35,15 +39,38 @@ namespace MKY.Net.Test.ConfigurationTemplate
 		[Test]
 		public virtual void GenerateTemplate()
 		{
-			var c = File.CreateEmpty("MKY.Net.Test.config");
-			AddSectionGroups(c, "Template");
+			const string DefaultSectionName = "Template";
+			GenerateTemplate(DefaultSectionName);
+
+			// Tell user how to proceed:
+			var sb = new StringBuilder();
+			foreach (var l in TemplateGenerator.DefaultInstructions_1through7)
+				sb.AppendLine(l);
+
+			sb.AppendLine(@" 8. Update the solution's effective configuration e.g.");
+			sb.AppendLine(@"     "".\<Solution>.Test.config"" as required.");
+			sb.AppendLine(@"     (The generic base configuration.)");
+			sb.AppendLine(@" 9. Update the test assembly effective configurations in e.g.");
+			sb.AppendLine(@"     ""..\!-TestConfig"" as required.");
+			sb.AppendLine(@"     (The machine dependent configuration to be merged in.)");
+
+			MessageBoxEx.Show(sb.ToString(), "Instructions", MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
+
+		/// <summary></summary>
+		public static void GenerateTemplate(string sectionName)
+		{
+			var c = TemplateGenerator.CreateEmpty("MKY.Net.Test.config");
+			{
+				AddSectionGroups(c, sectionName);
+			}
 			c.Save(System.Configuration.ConfigurationSaveMode.Full, true);
 		}
 
 		/// <summary></summary>
 		public static void AddSectionGroups(System.Configuration.Configuration configuration, string sectionName)
 		{
-			File.AddSectionGroups
+			TemplateGenerator.AddSectionGroups
 			(
 				configuration,
 				ConfigurationConstants.SelectionGroupName,
@@ -51,25 +78,6 @@ namespace MKY.Net.Test.ConfigurationTemplate
 				sectionName,
 				new ConfigurationSection()
 			);
-
-			// Proceed as follows to generate template as well as effective configuration files:
-			//  1. Activate and build the "Debug Test" configuration.
-			//  2. Start NUnit and execute explicit test case => template file gets created.
-			//  3. Go to "<Project>\bin\Debug" and filter for "*.config".
-			//  4. Clean template files from unnecessary information:
-			//      a) Remove the following sections:
-			//          > "appSettings"
-			//          > "configProtectedData"
-			//          > "connectionStrings"
-			//          > "system.diagnostics"
-			//          > "system.windows.forms"
-			//      b) Remove the version information:
-			//          > In all "<sectionGroup..." remove all content from ", System.Configuration, Version=..." up to the closing quote.
-			//            Attention: Files including the assembly information "System.Configuration" result in TypeLoadException's! Why? No clue...
-			//          > In all "<section..." remove all content from ", Version=..." up to the very last closing quote.
-			//  5. Move template file to "<Project>\ConfigurationTemplate".
-			//  6. Compare the new template file against the former template file.
-			//  7. Update the effective configuration file as needed.
 		}
 	}
 }

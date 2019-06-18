@@ -22,8 +22,11 @@
 //==================================================================================================
 
 using System.Configuration;
+using System.Text;
+using System.Windows.Forms;
 
 using MKY.Configuration;
+using MKY.Windows.Forms;
 
 using NUnit.Framework;
 
@@ -37,47 +40,61 @@ namespace YAT.Test.ConfigurationTemplate
 		[Test]
 		public virtual void GenerateTemplate()
 		{
-			var c = File.CreateEmpty("YAT.Test.config");
+			const string DefaultSectionName = "Template";
 
-			// Add default sections for each test assembly to the overall configuration:
+			// Create dedicated configurations and save templates:
+			{
+				MKY.IO.Ports.Test.ConfigurationTemplate.Generator.GenerateTemplate(DefaultSectionName);
+			////MKY.IO.Serial.SerialPort.Test
+			////MKY.IO.Serial.Socket.Test
+			////MKY.IO.Serial.Usb.Test
+				MKY.IO.Usb.Test.ConfigurationTemplate.Generator.GenerateTemplate(DefaultSectionName);
+				MKY.Net.Test.ConfigurationTemplate.Generator.GenerateTemplate(DefaultSectionName);
+			////MKY.Test
+			////MKY.Win32.Test
+			////MKY.Windows.Forms.Test
+			////YAT.Controller.Test
+			////YAT.Domain.Test
+			////YAT.View.Test
+			////YAT.Model.Test
+			////YAT.Settings.Test
+			////YAT.Test
+			}
 
-			MKY.IO.Ports.Test.ConfigurationTemplate.Generator.AddSectionGroups(c, "Template");
-		////MKY.IO.Serial.SerialPort.Test
-		////MKY.IO.Serial.Socket.Test
-		////MKY.IO.Serial.Usb.Test
-			MKY.IO.Usb.Test.ConfigurationTemplate.Generator.AddSectionGroups(c, "Template");
-			MKY.Net.Test.ConfigurationTemplate.Generator.AddSectionGroups(c, "Template");
-		////MKY.Test
-		////MKY.Win32.Test
-		////MKY.Windows.Forms.Test
-		////YAT.Controller.Test
-		////YAT.Domain.Test
-		////YAT.View.Test
-		////YAT.Model.Test
-		////YAT.Settings.Test
-		////YAT.Test
-
+			// Create overall configuration save template:
+			var c = TemplateGenerator.CreateEmpty("YAT.Test.config");
+			{
+				MKY.IO.Ports.Test.ConfigurationTemplate.Generator.AddSectionGroups(c, DefaultSectionName);
+			////MKY.IO.Serial.SerialPort.Test
+			////MKY.IO.Serial.Socket.Test
+			////MKY.IO.Serial.Usb.Test
+				MKY.IO.Usb.Test.ConfigurationTemplate.Generator.AddSectionGroups(c, DefaultSectionName);
+				MKY.Net.Test.ConfigurationTemplate.Generator.AddSectionGroups(c, DefaultSectionName);
+			////MKY.Test
+			////MKY.Win32.Test
+			////MKY.Windows.Forms.Test
+			////YAT.Controller.Test
+			////YAT.Domain.Test
+			////YAT.View.Test
+			////YAT.Model.Test
+			////YAT.Settings.Test
+			////YAT.Test
+			}
 			c.Save(ConfigurationSaveMode.Full, true);
 
-			// Proceed as follows to generate template as well as effective configuration files:
-			//  1. Activate and build the "Debug Test" configuration.
-			//  2. Start NUnit and execute explicit test case => template file gets created.
-			//  3. Go to "<Project>\bin\Debug" and filter for "*.config".
-			//  4. Clean template files from unnecessary information:
-			//      a) Remove the following sections:
-			//          > "appSettings"
-			//          > "configProtectedData"
-			//          > "connectionStrings"
-			//          > "system.diagnostics"
-			//          > "system.windows.forms"
-			//      b) Remove the version information:
-			//          > In all "<sectionGroup..." remove all content from ", System.Configuration, Version=..." up to the closing quote.
-			//            Attention: Files including the assembly information "System.Configuration" result in TypeLoadException's! Why? No clue...
-			//          > In all "<section..." remove all content from ", Version=..." up to the very last closing quote.
-			//  5. Move template file to "<Project>\ConfigurationTemplate".
-			//  6. Compare the new template file against the former template file.
-			//  7. Update the effective solution file ".\YAT.Test.config" as required. (This is the generic base configuration.)
-			//  8. Update the effective assembly files in e.g. "..\!-TestConfig" as required. (This is the user/machine dependent configuration to be merged with.)
+			// Tell user how to proceed:
+			var sb = new StringBuilder();
+			foreach (var l in TemplateGenerator.DefaultInstructions_1through7)
+				sb.AppendLine(l);
+
+			sb.AppendLine(@" 8. Update the solution's effective configuration e.g.");
+			sb.AppendLine(@"     "".\YAT.Test.config"" as required.");
+			sb.AppendLine(@"     (The generic base configuration.)");
+			sb.AppendLine(@" 9. Update the test assembly effective configurations in e.g.");
+			sb.AppendLine(@"     ""..\!-TestConfig"" as required.");
+			sb.AppendLine(@"     (The machine dependent configuration to be merged in.)");
+
+			MessageBoxEx.Show(sb.ToString(), "Instructions", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

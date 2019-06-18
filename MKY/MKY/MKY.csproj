@@ -103,7 +103,7 @@
     <Compile Include="Configuration\MergeableConfigurationSection.cs" />
     <Compile Include="Configuration\Provider.cs" />
     <Compile Include="Configuration\SelectionSection.cs" />
-    <Compile Include="Configuration\File.cs" />
+    <Compile Include="Configuration\TemplateGenerator.cs" />
     <Compile Include="Configuration\Selector.cs" />
     <Compile Include="Contracts\CallingContract.cs" />
     <Compile Include="Contracts\ImmutableContract.cs" />
