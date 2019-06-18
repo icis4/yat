@@ -54,16 +54,16 @@ namespace MKY.IO.Ports.Test
 		// Fields
 		//==========================================================================================
 
-		private ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection();
+		private ConfigurationPropertyCollection properties; // = null;
 
 		private ConfigurationProperty portA = new ConfigurationProperty("PortA", typeof(string), "COM1");
 		private ConfigurationProperty portB = new ConfigurationProperty("PortB", typeof(string), "COM2");
 
-		private ConfigurationProperty mtSicsDeviceA = new ConfigurationProperty("MTSicsDeviceA", typeof(string), "COM14"); // MCT
-		private ConfigurationProperty mtSicsDeviceB = new ConfigurationProperty("MTSicsDeviceB", typeof(string), "COM43"); // MT
+		private ConfigurationProperty mtSicsDeviceA = new ConfigurationProperty("MTSicsDeviceA", typeof(string), "COM11");
+		private ConfigurationProperty mtSicsDeviceB = new ConfigurationProperty("MTSicsDeviceB", typeof(string), "COM12");
 
-		private ConfigurationProperty tiLaunchPadDeviceA = new ConfigurationProperty("TILaunchPadDeviceA", typeof(string), "COM51");
-		private ConfigurationProperty tiLaunchPadDeviceB = new ConfigurationProperty("TILaunchPadDeviceB", typeof(string), "COM52");
+		private ConfigurationProperty tiLaunchPadDeviceA = new ConfigurationProperty("TILaunchPadDeviceA", typeof(string), "COM21");
+		private ConfigurationProperty tiLaunchPadDeviceB = new ConfigurationProperty("TILaunchPadDeviceB", typeof(string), "COM22");
 
 		private ConfigurationProperty loopbackPairs = new ConfigurationProperty("LoopbackPairs", typeof(SerialPortPairConfigurationElementCollection), null /* DefaultValue doesn't work with a collection => Must be added in constructor */);
 		private ConfigurationProperty loopbackSelfs = new ConfigurationProperty("LoopbackSelfs", typeof(SerialPortConfigurationElementCollection),     null /* DefaultValue doesn't work with a collection => Must be added in constructor */);
@@ -121,26 +121,24 @@ namespace MKY.IO.Ports.Test
 		/// </summary>
 		public ConfigurationSection()
 		{
-			this.properties.Add(this.portA); // COM1.
-			this.properties.Add(this.portB); // COM2.
+			this.properties = new ConfigurationPropertyCollection();
 
-			this.properties.Add(this.mtSicsDeviceA); // COM41
-			this.properties.Add(this.mtSicsDeviceB); // COM42
+			this.properties.Add(this.portA);
+			this.properties.Add(this.portB);
 
-			this.properties.Add(this.tiLaunchPadDeviceA); // COM51
-			this.properties.Add(this.tiLaunchPadDeviceB); // COM52
+			this.properties.Add(this.mtSicsDeviceA);
+			this.properties.Add(this.mtSicsDeviceB);
+
+			this.properties.Add(this.tiLaunchPadDeviceA);
+			this.properties.Add(this.tiLaunchPadDeviceB);
 
 			this.properties.Add(this.loopbackPairs);
-			SerialPortPairConfigurationElementCollection pairs = (SerialPortPairConfigurationElementCollection)this["LoopbackPairs"];
-			pairs.Add( "COM1",  "COM2"); // VSPE pair as configured in "\!-Tools".
-			pairs.Add("COM11", "COM12"); // MCT
-			pairs.Add("COM21", "COM22"); // FTDI
-			pairs.Add("COM31", "COM32"); // Prolific
+			var pairs = (SerialPortPairConfigurationElementCollection)this["LoopbackPairs"];
+			pairs.Add("COM1", "COM2");
 
 			this.properties.Add(this.loopbackSelfs);
-			SerialPortConfigurationElementCollection selfs = (SerialPortConfigurationElementCollection)this["LoopbackSelfs"];
-			selfs.Add("COM13"); // MCT
-			selfs.Add("COM23"); // FTDI
+			var selfs = (SerialPortConfigurationElementCollection)this["LoopbackSelfs"];
+			selfs.Add("COM3");
 		}
 
 		#endregion
@@ -322,7 +320,7 @@ namespace MKY.IO.Ports.Test
 	/// <remarks>
 	/// Note that NUnit category strings may not contain the following characters as specified
 	/// by <see cref="CategoryAttribute"/>: ',' '+' '-' and '!'
-	/// 
+	///
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	public static class ConfigurationCategoryStrings

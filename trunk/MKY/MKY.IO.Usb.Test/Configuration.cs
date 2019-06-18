@@ -53,7 +53,7 @@ namespace MKY.IO.Usb.Test
 		// Fields
 		//==========================================================================================
 
-		private ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection();
+		private ConfigurationPropertyCollection properties; // = null
 
 		private ConfigurationProperty deviceA = new ConfigurationProperty("DeviceA", typeof(string), "VID:0ABC PID:1234 SNR:XYZ");
 		private ConfigurationProperty deviceB = new ConfigurationProperty("DeviceB", typeof(string), "VID:0ABC PID:1234 SNR:XYZ");
@@ -109,6 +109,8 @@ namespace MKY.IO.Usb.Test
 		/// </summary>
 		public ConfigurationSection()
 		{
+			this.properties = new ConfigurationPropertyCollection();
+
 			this.properties.Add(this.deviceA);
 			this.properties.Add(this.deviceB);
 
