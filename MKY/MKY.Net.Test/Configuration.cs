@@ -55,12 +55,12 @@ namespace MKY.Net.Test
 		// Fields
 		//==========================================================================================
 
-		private ConfigurationPropertyCollection properties;
+		private ConfigurationPropertyCollection properties; // = null
 
 		private ConfigurationProperty ipv4SpecificInterface = new ConfigurationProperty("IPv4SpecificInterface", typeof(string), "TAP-Win32 Adapter");
 		private ConfigurationProperty ipv6SpecificInterface = new ConfigurationProperty("IPv6SpecificInterface", typeof(string), "TAP-Win32 Adapter");
 
-		private ConfigurationProperty mtSicsDeviceTcpPort = new ConfigurationProperty("MTSicsDeviceTcpPort", typeof(string), "55600"); // ExBal
+		private ConfigurationProperty mtSicsDeviceTcpPort = new ConfigurationProperty("MTSicsDeviceTcpPort", typeof(string), "10000");
 
 		#endregion
 
@@ -243,7 +243,7 @@ namespace MKY.Net.Test
 	/// <remarks>
 	/// Note that NUnit category strings may not contain the following characters as specified
 	/// by <see cref="CategoryAttribute"/>: ',' '+' '-' and '!'
-	/// 
+	///
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	public static class ConfigurationCategoryStrings
