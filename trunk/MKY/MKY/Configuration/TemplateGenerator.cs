@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Configuration;
 
 namespace MKY.Configuration
@@ -28,8 +29,40 @@ namespace MKY.Configuration
 	/// <summary>
 	/// Utilities to deal with a configuration file.
 	/// </summary>
-	public static class File
+	public static class TemplateGenerator
 	{
+		/// <summary>
+		/// Returns an array of strings containing default instructions to generate template and configuration files.
+		/// </summary>
+		public static readonly string[] DefaultInstructions_1through7 =
+		{
+			@"Proceed as follows to generate template as well as effective configuration files:",
+			@"",
+			@" 1. Activate and build the ""Debug Test"" configuration.",
+			@" 2. Start NUnit and explicitly execute this test case.",
+			@"     => Template file gets created.",
+			@" 3. Go to ""<Project>\bin\Debug"" and filter for ""*.config"".",
+			@" 4. Clean template files from unnecessary information:",
+			@"     a) Remove the following sections:",
+			@"         > ""appSettings""",
+			@"         > ""configProtectedData""",
+			@"         > ""connectionStrings""",
+			@"         > ""system.diagnostics""",
+			@"         > ""system.windows.forms""",
+			@"     b) Remove the version information:",
+			@"         > In all ""<sectionGroup..."" remove all content from",
+			@"            "", System.Configuration, Version=...""",
+			@"            up to the closing quote.",
+			@"            Note: Files including the assembly information",
+			@"                      ""System.Configuration"" result in",
+			@"                      'TypeLoadException'! Why? No clue...",
+			@"         > In all ""<section..."" remove all content from",
+			@"            "", Version=..."" up to the very last closing quote.",
+			@" 5. Move template file to ""<Project>\ConfigurationTemplate"".",
+			@" 6. Compare the new against the former template file.",
+			@" 7. Merge the commentary information into the new file."
+		};
+
 		/// <summary>
 		/// Creates an empty configuration for the given file.
 		/// </summary>
