@@ -40,6 +40,18 @@ The implementation is based on the simple PowerShell command line...
 (Get-ChildItem -Include *.cs -Recurse | Select-String "^(\s*)//" -NotMatch | Select-String "^(\s*)$" -NotMatch).Count
 ...as documented at https://www.limilabs.com/blog/source-lines-of-code-count-using-powershell.
 
+To use this approach on any other project, it can be used as e.g.
+ > $files = Get-ChildItem -File -Include @("*.h","*.hpp","*.c","*.cpp") -Recurse
+ > $fileCount = ($files).Count
+ > $locCount  = ($files | Get-Content | Measure-Object -Line).Lines
+ > $slocCount = ($files | Select-String "^(\s*)//" -NotMatch | Select-String "^(\s*)$" -NotMatch).Count
+ > $clocCount = ($files | Select-String "//").Count
+ > $message  = "$fileCount files`n"
+ > $message += "$locCount LOC`n"
+ > $message += "$slocCount SLOC`n"
+ > $message += "$clocCount CLOC"
+ > Write-Host $message
+
 Alternatives:
  > https://github.com/AlDanial/cloc (quite powerful, but way more complex than needed for YAT).
  > Others as listed at https://github.com/AlDanial/cloc#Other_Counters (not evaluated).
