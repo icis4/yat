@@ -50,7 +50,7 @@ TIMEOUT 9
 ECHO.
 ECHO Hub 1: Enabling devices . . .
 %_cmd% A6YJ5BDF 010111
-:: !!! "Out 6" is disabled (010111 instead of 110111) because TI boards don't work concurrently !!!
+:: !!! "Out 6" is disabled (010111 instead of 110111) because TI LauchPad composite devices don't work concurrently !!!
 :: Time required for execution is below 3 seconds.
 :: Time required to load the drivers is below 2 seconds.
 ::  => 5 seconds timeout:
