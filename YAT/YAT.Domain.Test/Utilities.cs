@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
@@ -192,6 +193,8 @@ namespace YAT.Domain.Test
 			}
 			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount));
 
+			Debug.WriteLine("Tx = (" + byteCountTx + "/" + lineCountTx + ")(bytes/lines)");
+
 			Console.Out.WriteLine("...done");
 		}
 
@@ -253,6 +256,9 @@ namespace YAT.Domain.Test
 			}
 			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount) ||
 			       (byteCountRx != expectedTotalByteCount) || (lineCountRx != expectedTotalLineCount));
+
+			Debug.WriteLine("Tx = (" + byteCountTx + "/" + lineCountTx + ")(bytes/lines)" +
+			               " Rx = (" + byteCountRx + "/" + lineCountRx + ")(bytes/lines)");
 
 			Console.Out.WriteLine("...done");
 		}

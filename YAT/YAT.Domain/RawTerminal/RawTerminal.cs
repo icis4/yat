@@ -892,10 +892,28 @@ namespace YAT.Domain
 		{
 			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
+			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		public virtual string ToDiagnosticsString()
+		{
+			// See below why AssertNotDisposed() is not called on such basic method!
+
+			return (ToDiagnosticsString(""));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			if (IsDisposed)
@@ -918,7 +936,12 @@ namespace YAT.Domain
 			return (sb.ToString());
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToShortIOString()
 		{
 			if (IsDisposed)

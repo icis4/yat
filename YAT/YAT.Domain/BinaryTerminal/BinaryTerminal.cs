@@ -153,11 +153,11 @@ namespace YAT.Domain
 			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 			/// "Types that declare disposable members should also implement IDisposable. If the type
 			///  does not own any unmanaged resources, do not implement a finalizer on it."
-			/// 
+			///
 			/// Well, true for best performance on finalizing. However, it's not easy to find missing
 			/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 			/// is kept for DEBUG, indicating missing calls.
-			/// 
+			///
 			/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 			/// </remarks>
 			~LineState()
@@ -1046,10 +1046,15 @@ namespace YAT.Domain
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
 
-			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
+			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public override string ToDiagnosticsString(string indent)
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.

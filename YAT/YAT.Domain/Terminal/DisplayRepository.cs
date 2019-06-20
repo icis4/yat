@@ -294,10 +294,26 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
+			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		public virtual string ToDiagnosticsString()
+		{
+			return (ToDiagnosticsString(""));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> LineCapacity: " +    Capacity.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
@@ -306,13 +322,23 @@ namespace YAT.Domain
 					indent + "> Lines: " + Environment.NewLine + LinesToDiagnosticsString(indent + "   "));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string LinesToDiagnosticsString()
 		{
 			return (LinesToDiagnosticsString(""));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string LinesToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();

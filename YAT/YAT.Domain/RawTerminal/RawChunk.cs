@@ -150,13 +150,23 @@ namespace YAT.Domain
 			return (ContentAsPrintableString);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString()
 		{
 			return (ToDiagnosticsString(""));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();

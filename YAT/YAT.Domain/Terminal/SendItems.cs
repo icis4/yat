@@ -62,13 +62,23 @@ namespace YAT.Domain
 		// Object Members
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="object.ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString()
 		{
 			return (ToDiagnosticsString(""));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="object.ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public abstract string ToDiagnosticsString(string indent);
 
 		#endregion
@@ -100,13 +110,20 @@ namespace YAT.Domain
 		// Object Members
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (DataAsPrintableString);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public override string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> Data: " + DataAsPrintableString + Environment.NewLine);
@@ -153,13 +170,20 @@ namespace YAT.Domain
 		// Object Members
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (DataAsPrintableString);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public override string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> Data         : " + DataAsPrintableString + Environment.NewLine +
@@ -195,13 +219,20 @@ namespace YAT.Domain
 		// Object Members
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (FilePath);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> FilePath     : " + FilePath     + Environment.NewLine +
