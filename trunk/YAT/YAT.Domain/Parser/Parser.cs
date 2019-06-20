@@ -46,7 +46,7 @@ namespace YAT.Domain.Parser
 	/// This parser provides all functionality to parse any parsable text to send (commands, files).
 	/// The parser is implemented using the state pattern. The states are implemented in a separate
 	/// file 'States.cs'.
-	/// 
+	///
 	/// The abstract base class <see cref="ParserState"/> defines the state's interface and provides
 	/// some common methods. The concrete state classes implement the required states:
 	///  - <see cref="DefaultState"/>       : Default parser, handles contiguous sequences.
@@ -253,11 +253,11 @@ namespace YAT.Domain.Parser
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Parser()
@@ -565,7 +565,8 @@ namespace YAT.Domain.Parser
 					{
 						// Signal that parsing resulted in a parse error and
 						//   return the part of the string that could be parsed:
-						successfullyParsed = StringEx.Left(s, s.Length - remaining.Length);
+						int successfullyParsedLength = Math.Max(0, (s.Length - remaining.Length - 1));
+						successfullyParsed = StringEx.Left(s, successfullyParsedLength);
 						result = this.result.ToArray();
 						return (false);
 					}
