@@ -174,7 +174,9 @@ namespace YAT.Domain
 			return (QueueToString());
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public virtual string QueueToString()
 		{
 			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
@@ -186,13 +188,23 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString()
 		{
 			return (ToDiagnosticsString(""));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			return (indent + "> Capacity: " + this.capacity + Environment.NewLine +
@@ -200,13 +212,23 @@ namespace YAT.Domain
 					QueueToDiagnosticsString(indent + "   "));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="QueueToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string QueueToDiagnosticsString()
 		{
 			return (QueueToDiagnosticsString(""));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="QueueToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string QueueToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();

@@ -293,17 +293,17 @@ namespace YAT.Domain.Test.Parser
 		/// https://www.branah.com/unicode-converter
 		/// https://r12a.github.io/app-conversion/
 		/// https://r12a.github.io/app-encodings/
-		/// 
+		///
 		/// Useless online tools:
 		/// https://www.motobit.com/util/charset-codepage-conversion.asp (not working for advanced characters)
 		/// http://www.njstar.com/cms/unicode-to-dbcs-code-conversion (no access to bytes)
 		/// http://codepage-encoding.online-domain-tools.com/ (always encodes 16 bits)
 		/// http://string-functions.com/encodedecode.aspx (no access to bytes)
-		/// 
+		///
 		/// Rather use simple .NET application:
 		/// <![CDATA[
 		/// var lines = File.ReadAllLines("Encoding-UTF-8.txt", Encoding.UTF8);
-		/// 
+		///
 		/// var lookup = new Dictionary<int, string>();
 		/// lookup.Add(950,   "Encoding-CJK-Big5-[950].txt");
 		/// lookup.Add(20936, "Encoding-CJK-GB2312-[20936].txt");
@@ -311,11 +311,11 @@ namespace YAT.Domain.Test.Parser
 		/// lookup.Add(936,   "Encoding-CJK-GBK-[936].txt");
 		/// lookup.Add(949,   "Encoding-CJK-KSC-[949].txt");
 		/// lookup.Add(932,   "Encoding-CJK-ShiftJIS-[932].txt");
-		/// 
+		///
 		/// foreach (var kvp in lookup)
 		/// {
 		/// 	var e = Encoding.GetEncoding(kvp.Key);
-		/// 
+		///
 		/// 	using (var stream = File.Open(kvp.Value, FileMode.Create, FileAccess.Write))
 		/// 	{
 		/// 		using (var writer = new BinaryWriter(stream))
@@ -323,7 +323,7 @@ namespace YAT.Domain.Test.Parser
 		/// 			for (int i = 0; i < lines.Length; i++)
 		/// 			{
 		/// 				writer.Write(e.GetBytes(lines[i]));
-		/// 
+		///
 		/// 				if (i < (lines.Length - 1))
 		/// 					writer.Write(e.GetBytes(Environment.NewLine));
 		/// 			}
@@ -331,7 +331,7 @@ namespace YAT.Domain.Test.Parser
 		/// 	}
 		/// }
 		/// ]]>
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
@@ -707,7 +707,9 @@ namespace YAT.Domain.Test.Parser
 		{
 			get							// Erroneous input		Expected substring		Expected message
 			{
-				yield return (new TestCaseData(@"A<AAA",		@"A<AA",		@"""AAA"" is an invalid ASCII mnemonic.").SetName("Invalid ASCII"));
+				yield return (new TestCaseData(@"A<A",			@"A<",			@"""A"" is an invalid ASCII mnemonic.").SetName("Invalid ASCII 1"));
+				yield return (new TestCaseData(@"A<AA",			@"A<A",			@"""AA"" is an invalid ASCII mnemonic.").SetName("Invalid ASCII 2"));
+				yield return (new TestCaseData(@"A<AAA",		@"A<AA",		@"""AAA"" is an invalid ASCII mnemonic.").SetName("Invalid ASCII 3"));
 
 				yield return (new TestCaseData(@"A\d(A7)",		@"A\d(",		@"""A"" is an invalid decimal value.").SetName("Invalid decimal value 1"));
 				yield return (new TestCaseData(@"A\d(A77)",		@"A\d(",		@"""A"" is an invalid decimal value.").SetName("Invalid decimal value 2"));

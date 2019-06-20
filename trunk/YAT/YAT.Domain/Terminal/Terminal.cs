@@ -316,7 +316,7 @@ namespace YAT.Domain
 		/// elements would likely be more error prone since...
 		/// ...exact sequence of adding and removing elements has to exactly match.
 		/// ...an already added element would likely have to be unfolded to remove parts of it!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineSentReplaced;
@@ -326,7 +326,7 @@ namespace YAT.Domain
 		/// elements would likely be more error prone since...
 		/// ...exact sequence of adding and removing elements has to exactly match.
 		/// ...an already added element would likely have to be unfolded to remove parts of it!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineReceivedReplaced;
@@ -438,11 +438,11 @@ namespace YAT.Domain
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Terminal()
@@ -4163,12 +4163,30 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
+			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToDiagnosticsString("")); // No 'real' ToString() method required yet.
+			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		public virtual string ToDiagnosticsString()
+		{
+			// See below why AssertNotDisposed() is not called on such basic method!
+
+			return (ToDiagnosticsString(""));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			if (IsDisposed)
@@ -4209,7 +4227,12 @@ namespace YAT.Domain
 			return (sb.ToString());
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
 		public virtual string ToShortIOString()
 		{
 			if (IsDisposed)

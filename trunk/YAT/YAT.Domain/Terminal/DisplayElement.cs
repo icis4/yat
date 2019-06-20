@@ -31,7 +31,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -999,8 +998,8 @@ namespace YAT.Domain
 
 			sb.Append(indent); sb.Append("> Type:         "); sb.AppendLine(GetType().Name);
 			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(Direction.ToString());
-			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(Origin != null ? Origin.ToString() : "'null'");
-			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(Text   != null ? Text              :    ""   );
+			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(Origin != null ? Origin.Count.ToString() : "Null");
+			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(Text   != null ? Text                    :   ""  );
 			sb.Append(indent); sb.Append("> ByteCount:    "); sb.AppendLine(ByteCount.ToString(CultureInfo.CurrentCulture));
 			sb.Append(indent); sb.Append("> Flags:        "); sb.AppendLine(Attributes.ToString());
 
