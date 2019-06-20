@@ -349,7 +349,7 @@ namespace MKY.IO.Ports.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
-		public static readonly string TILaunchPadDeviceBIsAvailable = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : "*NOT* ") + "available on '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "'" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : " because TI LauchPad composite devices don't work concurrently => EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
+		public static readonly string TILaunchPadDeviceBIsAvailable = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : "*NOT* ") + "available on '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "'" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : " because such devices don't work concurrently => EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	////public static readonly string TILaunchPadDeviceBIsAvailable = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : "*NOT* ") + "available on '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "'" + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <summary></summary>
