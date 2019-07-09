@@ -147,7 +147,7 @@ Fixed bugs:
   fix to former bugs #408 and #409.
 - Attempted to fix rare 'TargetInvocationException' caused by 'IndexOutOfRangeException' (bug #446).
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
-- [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449).
+- [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449, #458).
 - [Advanced Settings > Disable escapes on [Send Text]] no longer leads to an 'ArgumentException'
   in some cases (bug #454).
 - Command line option [TransmitText] again allows keywords (related to bug #454).
