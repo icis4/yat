@@ -193,7 +193,7 @@ namespace YAT.Domain.Test
 			}
 			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount));
 
-			Debug.WriteLine("Tx = (" + byteCountTx + "/" + lineCountTx + ")(bytes/lines)");
+			Debug.WriteLine("Tx of " + byteCountTx + " bytes / " + lineCountTx + " lines completed");
 
 			Console.Out.WriteLine("...done");
 		}
@@ -257,8 +257,8 @@ namespace YAT.Domain.Test
 			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount) ||
 			       (byteCountRx != expectedTotalByteCount) || (lineCountRx != expectedTotalLineCount));
 
-			Debug.WriteLine("Tx = (" + byteCountTx + "/" + lineCountTx + ")(bytes/lines)" +
-			               " Rx = (" + byteCountRx + "/" + lineCountRx + ")(bytes/lines)");
+			Debug.WriteLine("Tx of " + byteCountTx + " bytes / " + lineCountTx + " lines completed");
+			Debug.WriteLine("Rx of " + byteCountRx + " bytes / " + lineCountRx + " lines completed");
 
 			Console.Out.WriteLine("...done");
 		}
