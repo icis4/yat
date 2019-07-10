@@ -44,7 +44,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private byte[] payload;
@@ -190,6 +190,7 @@ namespace MKY.IO.Usb
 			////	report = new byte[MaxByteLength];    // C# value-type arrays are initialized to 0.
 			////else
 			////	report = new byte[effectiveLength];  // C# value-type arrays are initialized to 0.
+			////// Also see "\!-Doc\SerHID Profile Description.txt" for USB HID constraints.
 
 				// Windows HID.dll requires that output reports are always filled!
 				byte[] report = new byte[MaxByteLength]; // C# value-type arrays are initialized to 0.

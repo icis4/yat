@@ -10,12 +10,10 @@ that this profile doesn't need any driver installation if the USB Host is a pers
 
 References
 ----------
-[1] USB Implementers Forum           http://www.usb.org
-[2] USB Specification 2.0 & 3.0      http://www.usb.org/developers/docs/
-[3] USB Class Specifications         http://www.usb.org/developers/devclass_docs
-[4] USB HID Specification 1.11       http://www.usb.org/developers/devclass_docs/HID1_11.pdf
-
-[5] Using V-USB and the HID Class    http://hackaday.com/2012/02/09/learning-to-use-the-v-usb-avr-usb-firmware-library/
+[1] USB Implementers Forum        https://www.usb.org/
+[2] USB Specification 2.0 & 3.0   https://www.usb.org/documents ([Category] = [Specification] then [Search])
+[3] USB HID Specification 1.11    https://www.usb.org/document-library/device-class-definition-hid-111
+[4] Using V-USB and the HID Class https://hackaday.com/2012/02/09/learning-to-use-the-v-usb-avr-usb-firmware-library/
 
 
 Pros and Cons of the Ser/HID Device profile
@@ -24,7 +22,7 @@ Pros and Cons of the Ser/HID Device profile
 + Does not require any driver installation
 + Is very versatile and extendable
 - Needs a Ser/HID capable middleware on the PC (e.g. MKY.IO.Usb)
-- Needs a Ser/HID implementation on the device (e.g. [5])
+- Needs a Ser/HID implementation on the device (e.g. [4])
 - Is not an official USB HID Device profile
 
 
@@ -69,9 +67,37 @@ Or, implement 4 pipes:
  > Interrupt OUT
 
 MKY.IO.Usb can handle both variants since it uses the Win32 'hid.dll' which itself is capable of
-handling both variants. For details about pipes of HID devices see [4], chapter 4.4. For an example
-implementation of Ser/HID on a device, see [5].
+handling both variants. For details about pipes of HID devices see [3], chapter 4.4. For an example
+implementation of Ser/HID on a device, see [4].
 
 
-------------------------------------------------------------------
+Constraints by the USB and HID specifications
+---------------------------------------------
+[2] section 5.7.3 [Interrupt Transfer Packet Size Constraints]
+   "support maximum data payload sizes from 0 to 64 bytes for full-speed interrupt endpoints,
+    from 0 to 8 bytes for low-speed interrupt endpoints, and from 0 to 1024 bytes for highspeed
+    interrupt endpoints"
+and
+   "The USB does not require that data packets be exactly the maximum size; i.e., if a data packet
+    is less than the maximum, it does not need to be padded to the maximum size."
+
+While this is the general USB specification, additional constraints apply to the HID class:
+
+[3] section 5.6 [Reports]
+   "but is limited in size to 8 bytes for low-speed devices and 64 bytes for high-speed devices."
+and
+   "Only Input reports are sent via the Interrupt In pipe. Feature and Output reports must be
+    initiated by the host via the Control pipe or an optional Interrupt Out pipe.
+
+[3] section 4.2 [Subclass]
+   "a HID class device identifies its data protocol and the type of data provided within its Report
+    descriptor"
+
+This statement can be interpreted as only the announced report size is valid. While quiestionably
+this interpretation makes sense, since HID reports are expected to have a specific format/content,
+so it makes sense to always having to keep the same format.
+
+
+------------------------------------------------------------------------------------
+2019-07 / Matthias Kläy, while analyzing/verifying report sizes other than 64 (63+1)
 2012-03 / Matthias Kläy, based on documentation by Adrian Rempfler
