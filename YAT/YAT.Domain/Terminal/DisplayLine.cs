@@ -63,10 +63,10 @@ namespace YAT.Domain
 		/// Can be used to preset the initial capacity of display element collections. A value of
 		/// 18 would reflect the maximum elements in case of string radix and EOL shown:
 		/// start, stamp, sep, span, sep, delta, sep, port, sep, direction, sep, content, eol, sep, length, sep, duration, linebreak
-		/// 
+		///
 		/// However, this is not a typical use case, thus using a reduced value of 16 which is the
 		/// most typical 2^n value.
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'linebreak' is a YAT display element.")]
@@ -460,12 +460,20 @@ namespace YAT.Domain
 			int i = 0;
 			foreach (var de in this)
 			{
-				sb.Append(indent + "> DisplayElement#" + (i++) + ":" + Environment.NewLine);
-				sb.Append(de.ToString(indent + "   "));
+				sb.Append(indent);
+				sb.Append("> #");
+				sb.Append(i++);
+				sb.Append(" = ");
+				sb.Append(de.ToDiagnosticsString());
+				sb.AppendLine();
 			}
 
 			if (i == 0)
-				sb.AppendLine(indent + "<NONE>");
+			{
+				sb.Append(indent);
+				sb.Append("None");
+				sb.AppendLine();
+			}
 
 			return (sb.ToString());
 		}

@@ -992,16 +992,41 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToString(string indent)
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact.
+		/// </remarks>
+		public virtual string ToDiagnosticsString()
+		{
+			return (ToDiagnosticsString(""));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact.
+		/// </remarks>
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 
-			sb.Append(indent); sb.Append("> Type:         "); sb.AppendLine(GetType().Name);
-			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(Direction.ToString());
-			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine((Origin != null) ? Origin.Count.ToString() : "Null");
-			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine((Text   != null) ? StringEx.ConvertToPrintableString(Text) : "Null");
-			sb.Append(indent); sb.Append("> ByteCount:    "); sb.AppendLine(ByteCount.ToString(CultureInfo.CurrentCulture));
-			sb.Append(indent); sb.Append("> Flags:        "); sb.AppendLine(Attributes.ToString());
+			sb.Append(indent);
+			sb.Append((Text != null) ? (@"""" + StringEx.ConvertToPrintableString(Text) + @"""") : "None");
+			sb.Append(" | CharCount = ");
+			sb.Append(CharCount.ToString(CultureInfo.CurrentCulture));
+			sb.Append(" | ByteCount = ");
+			sb.Append(ByteCount.ToString(CultureInfo.CurrentCulture));
+			sb.Append(" | OriginCount = ");
+			sb.Append((Origin != null) ? Origin.Count.ToString() : "None");
+			sb.Append(" | Type = ");
+			sb.Append(GetType().Name);
+			sb.Append(" | Direction = ");
+			sb.Append(Direction.ToString());
+			sb.Append(" | Flags = ");
+			sb.Append(Attributes.ToString());
 
 			return (sb.ToString());
 		}
