@@ -112,10 +112,10 @@ namespace YAT.View.Controls
 
 		// State:
 		private const MonitorActivityState  ActivityStateDefault  = MonitorActivityState.Inactive;
-		private const double MinImageOpacity       =  0.00; //   0%
+		private const double MinImageOpacity       =  0.20; //  20%
 		private const double MaxImageOpacity       =  1.00; // 100%
-		private const double ImageOpacityIncrement = +0.10; // +10%
-		private const double ImageOpacityDecrement = -0.10; // -10%
+		private const double ImageOpacityIncrement = +0.10; // +10% resulting in approx. 2 s intervals
+		private const double ImageOpacityDecrement = -0.10; // -10%            (timer has 100 ms ticks)
 
 		// Lines:
 		private const int MaxLineCountDefault = Domain.Settings.DisplaySettings.MaxLineCountDefault;
@@ -1117,9 +1117,9 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Intentionally initializing to 0 and not ControlEx.InvalidIndex. Doing so would result in
 		/// an unnecessary initial VerticalScrollToIndex() request.
-		/// 
+		///
 		/// This also matches to behavior of <see cref="ListBox.TopIndex"/>:
-		/// 
+		///
 		/// Initially, the item with the index position zero (0) is at the top of the visible region
 		/// of the ListBox. If the contents of the ListBox have been scrolled, another item might be
 		/// at the top of the control's display area.
@@ -1134,10 +1134,10 @@ namespace YAT.View.Controls
 
 		/// <remarks>
 		/// Note that the 'MeasureItem' event is not needed for 'OwnerDrawnFixed' (item height only).
-		/// 
+		///
 		/// ListBox
 		/// -------
-		/// 
+		///
 		/// Whether we like it or not, <see cref="System.Windows.Forms.ListBox.OnDrawItem"/> calls
 		/// this method pretty often. Actually it's called twice each time a new line is added. In
 		/// addition, another call is needed for the next still empty line. Thus:
@@ -1146,30 +1146,30 @@ namespace YAT.View.Controls
 		/// 3rd line received => 7                     at index 0 | 1 | 2 | 0 | 1 | 2 | 3
 		/// ...
 		/// Nth line received => 2*N + 1               at index 0 | 1 | 2...N | 0 | 1 | 2...N | N+1
-		/// 
+		///
 		/// Each call takes a 0..2 ms. For 25 lines this results in something like:
 		/// 51 x 2 ms = 100 ms per update!
 		/// At least scrolling is handled properly, i.e. as soon as the listbox starts to scroll,
 		/// the number of calls doesn't increase anymore.
-		/// 
+		///
 		/// Example measurements for SIR @ 18 samples per second:
 		/// 1.99.20 => 30% CPU usage
 		/// 1.99.22 with owner drawn and delayed scrolling => 25% CPU usage
 		/// 1.99.22 with owner drawn without DrawItem() => 10% CPU usage
 		/// 1.99.22 with normal drawn => 20% CPU usage
-		/// 
+		///
 		/// Double-buffered = <c>true</c> (form and control) doesn't make much difference either...
-		/// 
-		/// 
+		///
+		///
 		/// FastListBox
 		/// -----------
-		/// 
+		///
 		/// Fast and smooth :-)
-		/// 
+		///
 		/// CPU usage is about the same as above, however, FastListBox has no flickering at all
 		/// whereas the standard ListBox has.
-		/// 
-		/// 
+		///
+		///
 		/// Timed updated FastListBox
 		/// -------------------------
 		/// In case of really large data, the FastListBox still proved too slow. Thus, a timed
@@ -1183,7 +1183,7 @@ namespace YAT.View.Controls
 		///       before this event is invoked, thus it increases flickering too...
 		/// 3. Temporarily suspending the adding of elements. The elements are then added upon
 		///    the next update. See <see cref="MonitorUpdateHasToBePerformed()"/> for details.
-		/// 
+		///
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
@@ -1312,7 +1312,7 @@ namespace YAT.View.Controls
 				if (this.imageOpacityState == OpacityState.Incrementing)
 				{
 					this.imageOpacity += ImageOpacityIncrement;
-					if (this.imageOpacity > MaxImageOpacity)
+					if (this.imageOpacity >= MaxImageOpacity)
 					{
 						this.imageOpacity = MaxImageOpacity;
 						this.imageOpacityState = OpacityState.Decrementing;
@@ -1321,7 +1321,7 @@ namespace YAT.View.Controls
 				else
 				{
 					this.imageOpacity += ImageOpacityDecrement;
-					if (this.imageOpacity < MinImageOpacity)
+					if (this.imageOpacity <= MinImageOpacity)
 					{
 						this.imageOpacity = MinImageOpacity;
 						this.imageOpacityState = OpacityState.Incrementing;
@@ -1329,10 +1329,12 @@ namespace YAT.View.Controls
 				}
 			#if (FALSE)
 				// \fixme:
-				// Don't know how to alter image opacity yet.
+				// Don't know how to alter image opacity (yet).
 				pictureBox_Monitor.Image.Opacity = this.imageOpacity
 			#endif
-				if (this.imageOpacity >= ((MaxImageOpacity - MinImageOpacity) / 2))
+				const double ImageOpacitySpan = (MaxImageOpacity - MinImageOpacity);
+				const double ImageOpacityThreshold = MinImageOpacity + (ImageOpacitySpan * 0.9); // 10/90 duty cycle.
+				if (this.imageOpacity >= ImageOpacityThreshold)
 					pictureBox_Monitor.Image = this.imageActive;
 				else
 					pictureBox_Monitor.Image = null;
@@ -1930,7 +1932,7 @@ namespace YAT.View.Controls
 
 		/// <summary>
 		/// The update rate is calculated reverse-proportional to the total CPU load:
-		/// 
+		///
 		///      update interval in ms
 		///                 ^
 		///      max = 1250 |-------------xx|
@@ -1941,11 +1943,11 @@ namespace YAT.View.Controls
 		/// min = immediate |xxxxx          |
 		///       (means 0) o-----------------> total CPU load in %
 		///                 0  25  50  75  100
-		/// 
+		///
 		/// Up to 25%, the update is done immediately.
 		/// Above 95%, the update is done every 1250 milliseconds.
 		/// Quadratic inbetween, at y = x^2.
-		/// 
+		///
 		/// Rationale:
 		///  - For better user expericence, interval shall gradually increase.
 		///  - Even at high CPU load, there shall still be some updating.
