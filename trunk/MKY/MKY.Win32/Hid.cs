@@ -589,7 +589,7 @@ namespace MKY.Win32
 
 			/// <remarks>
 			/// USB specifies that serial is a string, not limited to a number!
-			/// 
+			///
 			/// Saying hello to StyleCop ;-.
 			/// </remarks>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
@@ -950,7 +950,7 @@ namespace MKY.Win32
 		/// - Interrupt OUT transfers (WriteFile uses control transfers and Set_Report)
 		/// - <see cref="NativeMethods.HidD_GetNumInputBuffers"/> and <see cref="NativeMethods.HidD_SetNumInputBuffers"/>
 		/// (Not yet tested on a Windows 98 Standard Edition system.)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to a device.</param>
@@ -983,7 +983,7 @@ namespace MKY.Win32
 		/// - Interrupt OUT transfers (WriteFile uses control transfers and Set_Report)
 		/// - <see cref="NativeMethods.HidD_GetNumInputBuffers"/> and <see cref="NativeMethods.HidD_SetNumInputBuffers"/>
 		/// (Not yet tested on a Windows 98 Standard Edition system.)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to the device.</param>
@@ -1084,7 +1084,7 @@ namespace MKY.Win32
 
 			// \remind (2010-03-21 / MKY)
 			// The following two lines demonstrate how the device's value capabilities can be retrieved.
-			// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'.
+			// However, due to some reason HidP_GetValueCaps() overwrites 'deviceHandle'.
 			// Before making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
 			//
 		////HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
