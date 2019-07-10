@@ -75,6 +75,17 @@ for details.
 Currently, MKY.IO.Usb only supports true HID devices, i.e. devices that are handled by HID.
 
 
+Implementation Details
 ----------------------
+
+ > Read/Write is done via 'FileStream'
+ > File handle is created via 'CreateFile()' (kernel32.dll) providing an HID device path retrieved via the Windows device management infrastructure (setupapi.dll, user32.dll)
+
+This implementation has been challenged by [FR#186  HID data transfer](https://sourceforge.net/p/y-a-terminal/feature-requests/186/)
+that requests using 'HidD_SetOutputReport()' instead of the file.
+
+
+----------------------
+2019-07 / Matthias Kläy
 2012-12 / Matthias Kläy
 2010-04 / Matthias Kläy
