@@ -359,16 +359,17 @@ namespace YAT.View.Controls
 				return;
 
 			string message =
-				"The Windows HID infrastructure requires that output reports are always filled. " +
-				"As a consequence, this option must be kept enabled.";
+				"USB HID is designed to use complete reports; " +
+				"the Windows HID infrastructure even enforces this constraint. " +
+				"As a consequence, this option must always be kept enabled.";
 
-			// Windows HID.dll requires that output reports are always filled!
+			// Windows HID.dll requires that input as well as output reports are always filled!
 			// Still, enable the check box in order to make tool tip visible to the user.
 			MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Limitation of Windows HID",
+				"USB HID Constraint",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);
