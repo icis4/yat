@@ -449,51 +449,51 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPreset(SerialHidReportFormatPresetEx formatPreset)
+		public static implicit operator SerialHidReportFormatPreset(SerialHidReportFormatPresetEx preset)
 		{
-			return ((SerialHidReportFormatPreset)formatPreset.UnderlyingEnum);
+			return ((SerialHidReportFormatPreset)preset.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPresetEx(SerialHidReportFormatPreset formatPreset)
+		public static implicit operator SerialHidReportFormatPresetEx(SerialHidReportFormatPreset preset)
 		{
-			return (new SerialHidReportFormatPresetEx(formatPreset));
+			return (new SerialHidReportFormatPresetEx(preset));
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormat(SerialHidReportFormatPresetEx formatPreset)
+		public static implicit operator SerialHidReportFormat(SerialHidReportFormatPresetEx preset)
 		{
-			return (formatPreset.ToReportFormat());
+			return (preset.ToReportFormat());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidRxFilterUsage(SerialHidReportFormatPresetEx formatPreset)
+		public static implicit operator SerialHidRxFilterUsage(SerialHidReportFormatPresetEx preset)
 		{
-			return (formatPreset.ToRxFilterUsage());
+			return (preset.ToRxFilterUsage());
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(SerialHidReportFormatPresetEx formatPreset)
+		public static implicit operator int(SerialHidReportFormatPresetEx preset)
 		{
-			return (formatPreset.GetHashCode());
+			return (preset.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPresetEx(int formatPreset)
+		public static implicit operator SerialHidReportFormatPresetEx(int preset)
 		{
-			return (new SerialHidReportFormatPresetEx((SerialHidReportFormatPreset)formatPreset));
+			return (new SerialHidReportFormatPresetEx((SerialHidReportFormatPreset)preset));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(SerialHidReportFormatPresetEx formatPreset)
+		public static implicit operator string(SerialHidReportFormatPresetEx preset)
 		{
-			return (formatPreset.ToString());
+			return (preset.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPresetEx(string formatPreset)
+		public static implicit operator SerialHidReportFormatPresetEx(string preset)
 		{
-			return (Parse(formatPreset));
+			return (Parse(preset));
 		}
 
 		#endregion
