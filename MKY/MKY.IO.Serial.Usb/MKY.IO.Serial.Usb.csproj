@@ -96,6 +96,7 @@
     <Compile Include="SerialHidFlowControl.cs" />
     <Compile Include="SerialHidDevice.cs" />
     <Compile Include="SerialHidDeviceSettings.cs" />
+    <Compile Include="SerialHidFlowControlPreset.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.snk" />
