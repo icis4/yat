@@ -389,6 +389,16 @@ namespace YAT.View.Forms
 					usbSerialHidDeviceSettings.RxFilterUsage = preset.ToRxFilterUsage();
 				}
 			}
+
+			// Also try to automatically select the flow control preset:
+			if (deviceInfo != null)
+			{
+				MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx preset;
+				if (MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx.TryParse(deviceInfo, out preset))
+				{
+					usbSerialHidDeviceSettings.FlowControl = preset.ToFlowControl();
+				}
+			}
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
@@ -505,7 +515,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// This functionality is partly duplicated in <see cref="NewTerminal.SetControls"/>.
 		/// Changes here must be applied there too!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void SetControls()
@@ -611,7 +621,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// This functionality is partly duplicated in <see cref="NewTerminal.SetControls"/>.
 		/// Changes here must be applied there too!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void SetControlsVisibiliy(Domain.IOType ioType)
