@@ -163,8 +163,8 @@ namespace YAT.Domain.Test
 			// Calculate timeout:
 			int timeout = WaitTimeoutForLineTransmission;
 
-			int byteCountTx = 0;
-			int lineCountTx = 0;
+			int txByteCount = 0;
+			int txLineCount = 0;
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
@@ -177,23 +177,23 @@ namespace YAT.Domain.Test
 					Assert.Fail("Transmission timeout! Not enough data sent within expected interval.");
 				}
 
-				byteCountTx = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
-				if (byteCountTx > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
+				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of sent bytes = " + byteCountTx +
+					            " Number of sent bytes = " + txByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				lineCountTx = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
-				if (lineCountTx > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
+				if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of sent lines = " + lineCountTx +
+					            " Number of sent lines = " + txLineCount +
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 			}
-			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount));
+			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount));
 
-			Debug.WriteLine("Tx of " + byteCountTx + " bytes / " + lineCountTx + " lines completed");
+			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 
 			Console.Out.WriteLine("...done");
 		}
@@ -210,10 +210,10 @@ namespace YAT.Domain.Test
 			// Calculate timeout:
 			int timeout = WaitTimeoutForLineTransmission;
 
-			int byteCountTx = 0;
-			int lineCountTx = 0;
-			int byteCountRx = 0;
-			int lineCountRx = 0;
+			int txByteCount = 0;
+			int txLineCount = 0;
+			int rxByteCount = 0;
+			int rxLineCount = 0;
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
@@ -226,39 +226,39 @@ namespace YAT.Domain.Test
 					Assert.Fail("Transmission timeout! Not enough data transmitted within expected interval.");
 				}
 
-				byteCountTx = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
-				if (byteCountTx > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
+				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of sent bytes = " + byteCountTx +
+					            " Number of sent bytes = " + txByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				lineCountTx = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
-				if (lineCountTx > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
+				if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of sent lines = " + lineCountTx +
+					            " Number of sent lines = " + txLineCount +
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 
-				byteCountRx = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
-				if (byteCountRx > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
+				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of received bytes = " + byteCountRx +
+					            " Number of received bytes = " + rxByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				lineCountRx = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
-				if (lineCountRx > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
+				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of received lines = " + lineCountRx +
+					            " Number of received lines = " + rxLineCount +
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 			}
-			while ((byteCountTx != expectedTotalByteCount) || (lineCountTx != expectedTotalLineCount) ||
-			       (byteCountRx != expectedTotalByteCount) || (lineCountRx != expectedTotalLineCount));
+			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount) ||
+			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
 
-			Debug.WriteLine("Tx of " + byteCountTx + " bytes / " + lineCountTx + " lines completed");
-			Debug.WriteLine("Rx of " + byteCountRx + " bytes / " + lineCountRx + " lines completed");
+			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
+			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
 			Console.Out.WriteLine("...done");
 		}
