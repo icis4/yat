@@ -86,7 +86,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestClearCompleteLine()
 		{
-			// Create terminals from settings and check whether B receives from A
+			// Create terminals from settings and check whether B receives from A:
 			using (var terminalA = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
 			{
 				using (var terminalB = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
@@ -137,7 +137,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestClearIncompleteLine()
 		{
-			// Create terminals from settings and check whether B receives from A
+			// Create terminals from settings and check whether B receives from A:
 			using (var terminalA = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
 			{
 				using (var terminalB = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
@@ -173,7 +173,7 @@ namespace YAT.Model.Test
 						Assert.Fail("Incomplete line not received!");
 
 					// Create test set to verify clear:
-					var testSetCleared = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected
+					var testSetCleared = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
 
 					// Clear data:
 					terminalA.ClearRepositories();
