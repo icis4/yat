@@ -127,7 +127,7 @@ namespace YAT.Model
 
 		/// <summary>
 		/// Workaround to the following issue:
-		/// 
+		///
 		/// A test (e.g. 'FileHandlingTest') needs to verify the settings files after calling
 		/// <see cref="Main.Exit()"/>. But at that moment, the settings have already been disposed
 		/// of and can no longer be accessed.
@@ -136,7 +136,7 @@ namespace YAT.Model
 		/// The second approach was to retrieve the required information *before* exiting, i.e.
 		/// calling <see cref="Main.Exit()"/>. But that doesn't work at all, since auto-save paths
 		/// are only evaluated *at* <see cref="Main.Exit()"/>.
-		/// 
+		///
 		/// This workaround is considered the best option to solve this issue.
 		/// </summary>
 		/// <remarks>
@@ -150,7 +150,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/> to
 		/// prevent the following issue:
-		/// 
+		///
 		/// <![CDATA[
 		/// System.Reflection.TargetInvocationException was unhandled by user code
 		///   Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
@@ -164,7 +164,7 @@ namespace YAT.Model
 		///        bei MKY.Time.Chronometer.OnTimeSpanChanged(TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\MKY\MKY\Time\Chronometer.cs:Zeile 350.
 		///        bei MKY.Time.Chronometer.timer_Elapsed(Object sender, ElapsedEventArgs e) in D:\Workspace\YAT\Trunk\MKY\MKY\Time\Chronometer.cs:Zeile 330.
 		///        bei System.Timers.Timer.MyTimerCallback(Object state)
-		///   InnerException: 
+		///   InnerException:
 		///        Message=Invoke oder BeginInvoke kann für ein Steuerelement erst aufgerufen werden, wenn das Fensterhandle erstellt wurde.
 		///        Source=System.Windows.Forms
 		///        StackTrace:
@@ -176,7 +176,7 @@ namespace YAT.Model
 		///             bei YAT.Model.Terminal.OnIOConnectTimeChanged(TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 5258.
 		///             bei YAT.Model.Terminal.totalConnectChrono_TimeSpanChanged(Object sender, TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 4204.
 		/// ]]>
-		/// 
+		///
 		/// The chronos get properly terminated, but apparently there may still be pending
 		/// asynchronuos 'zombie' callback that later throw an exception. No true solution
 		/// has been found.
@@ -473,11 +473,11 @@ namespace YAT.Model
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Terminal()
@@ -2062,7 +2062,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// In case of a workspace close, <see cref="CloseConsiderately"/> below must be called
 		/// with the first argument set to <c>true</c>.
-		/// 
+		///
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
 		/// the terminal(s), thus, this method will not try to auto save.
 		/// </remarks>
@@ -2081,7 +2081,7 @@ namespace YAT.Model
 		/// of this, the workspace would be saved after the terminal has already been closed, i.e.
 		/// removed from the workspace. Therefore, the terminal has to signal such cases to the
 		/// workspace.
-		/// 
+		///
 		/// Cases (similar to cases in Model.Workspace):
 		/// - Workspace close
 		///   - auto,   no file,       auto save    => auto save, if it fails => nothing  : (w1a)
@@ -2099,7 +2099,7 @@ namespace YAT.Model
 		///   - normal, no file anymore             => question                           :  --
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (t4a)
 		///   - normal, existing file, no auto save => question                           : (t4b)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual bool CloseConsiderately(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
@@ -4245,7 +4245,11 @@ namespace YAT.Model
 		// Terminal > Data Status
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the byte count of the raw terminal repository. The count of the
+		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryByteCount"/>
+		/// may be used to retrieve the formatted terminal byte count.
+		/// </remarks>
 		public virtual int TxByteCount
 		{
 			get
@@ -4256,7 +4260,11 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the line count of the raw terminal repository. The count of the
+		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryLineCount"/>
+		/// may be used to retrieve the formatted terminal line count.
+		/// </remarks>
 		public virtual int TxLineCount
 		{
 			get
@@ -4267,7 +4275,11 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the byte count of the raw terminal repository. The count of the
+		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryByteCount"/>
+		/// may be used to retrieve the formatted terminal byte count.
+		/// </remarks>
 		public virtual int RxByteCount
 		{
 			get
@@ -4278,7 +4290,11 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the line count of the raw terminal repository. The count of the
+		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryLineCount"/>
+		/// may be used to retrieve the formatted terminal line count.
+		/// </remarks>
 		public virtual int RxLineCount
 		{
 			get
@@ -4289,7 +4305,10 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the rate of the raw terminal repository.
+		/// The rate of the formatted terminal repository slightly lags behind.
+		/// </remarks>
 		public virtual int TxByteRate
 		{
 			get
@@ -4300,7 +4319,10 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the rate of the raw terminal repository.
+		/// The rate of the formatted terminal repository slightly lags behind.
+		/// </remarks>
 		public virtual int TxLineRate
 		{
 			get
@@ -4311,7 +4333,10 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the rate of the raw terminal repository.
+		/// The rate of the formatted terminal repository slightly lags behind.
+		/// </remarks>
 		public virtual int RxByteRate
 		{
 			get
@@ -4322,7 +4347,10 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the rate of the raw terminal repository.
+		/// The rate of the formatted terminal repository slightly lags behind.
+		/// </remarks>
 		public virtual int RxLineRate
 		{
 			get
@@ -4333,7 +4361,12 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the data count of the raw terminal repository. The count of the
+		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryByteCount"/>
+		/// and <see cref="GetRepositoryLineCount"/> may be used to retrieve the formatted terminal
+		/// data count.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -4348,7 +4381,10 @@ namespace YAT.Model
 			rxLineCount = this.rxLineCount;
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The value corresponds to the rate of the raw terminal repository.
+		/// The rate of the formatted terminal repository slightly lags behind.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -4439,6 +4475,26 @@ namespace YAT.Model
 
 			OnIORateChanged_Promptly(e);
 			OnIORateChanged_Decimated(e);
+		}
+
+		/// <remarks>
+		/// The value corresponds to the byte count of the formatted terminal repository.
+		/// </remarks>
+		public virtual int GetRepositoryByteCount(Domain.RepositoryType repository)
+		{
+			AssertNotDisposed();
+
+			return (this.terminal.GetRepositoryByteCount(repository));
+		}
+
+		/// <remarks>
+		/// The value corresponds to the line count of the formatted terminal repository.
+		/// </remarks>
+		public virtual int GetRepositoryLineCount(Domain.RepositoryType repository)
+		{
+			AssertNotDisposed();
+
+			return (this.terminal.GetRepositoryLineCount(repository));
 		}
 
 		#endregion
