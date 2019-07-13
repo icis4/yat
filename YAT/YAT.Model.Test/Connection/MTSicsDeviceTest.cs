@@ -236,13 +236,13 @@ namespace YAT.Model.Test.Connection
 		/// <remarks>
 		/// There is a similar method in 'MKY.IO.Ports.Test.SerialPort.ConnectionTest'.
 		/// Changes here may have to be applied there too.
-		/// 
+		///
 		/// Tests implemented below:
 		///  - Disconnect/Reconnect without sending.
 		///  - Disconnect/Reconnect with previous and subsequent sending.
 		///  - Disconnect/Reconnect while continuous receiving.
 		///  - Disconnect, then manually close.
-		/// 
+		///
 		/// Tests that should be added in addition:
 		///  - Disconnect, then try to send something.
 		///     => Either, terminal must detect disconnect (FTDI, MCT, Prolific, ToriLogic/Thesycon).
