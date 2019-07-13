@@ -695,7 +695,7 @@ namespace YAT.Domain
 			// Potentially suppress line:
 			if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
-			#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
+			#if (DEBUG) // See explanation at Terminal.ProcessAndSignalRawChunk().
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
 				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
@@ -966,22 +966,23 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		private void ProcessAndSignalPortOrDirectionLineBreak(DateTime ts, string ps, IODirection d)
 		{
+			var directionToSignal = this.bidirLineState.Direction;
 			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
+			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
 			bool clearAlreadyStartedLine = false;
 
 			ProcessPortOrDirectionLineBreak(ts, ps, d, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
-			if ((elementsToAdd.Count > 0) || (linesToAdd.Count > 0)) {
-				OnDisplayElementsAdded(this.bidirLineState.Direction, elementsToAdd);
-				OnDisplayLinesAdded(   this.bidirLineState.Direction, linesToAdd);
-			}
+			if (elementsToAdd.Count > 0)
+				OnDisplayElementsAdded(directionToSignal, elementsToAdd);
 
-		#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
-			if (clearAlreadyStartedLine) {
-				OnCurrentDisplayLineCleared(this.bidirLineState.Direction);
-			}
+			if (linesToAdd.Count > 0)
+				OnDisplayLinesAdded(directionToSignal, linesToAdd);
+
+		#if (DEBUG) // See explanation at Terminal.ProcessAndSignalRawChunk().
+			if (clearAlreadyStartedLine)
+				OnCurrentDisplayLineCleared(directionToSignal);
 		#endif
 		}
 
@@ -989,21 +990,21 @@ namespace YAT.Domain
 		private void ProcessAndSignalChunkOrTimedLineBreak(DateTime ts, IODirection d)
 		{
 			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			var linesToAdd    = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
+			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
 			bool clearAlreadyStartedLine = false;
 
 			ProcessChunkOrTimedLineBreak(ts, d, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
-			if ((elementsToAdd.Count > 0) || (linesToAdd.Count > 0)) {
+			if (elementsToAdd.Count > 0)
 				OnDisplayElementsAdded(d, elementsToAdd);
-				OnDisplayLinesAdded(   d, linesToAdd);
-			}
 
-		#if (DEBUG) // See explanation at 'Terminal.ProcessAndSignalRawChunk().
-			if (clearAlreadyStartedLine) {
+			if (linesToAdd.Count > 0)
+				OnDisplayLinesAdded(d, linesToAdd);
+
+		#if (DEBUG) // See explanation at Terminal.ProcessAndSignalRawChunk().
+			if (clearAlreadyStartedLine)
 				OnCurrentDisplayLineCleared(d);
-			}
 		#endif
 		}
 
