@@ -534,16 +534,17 @@ namespace MKY.IO.Ports.Test
 		/// and shall probe for it during test execution. Alternatively, tests can apply the
 		/// category attribute to the test and can then get excluded by the tester.
 		/// </remarks>
-		[Test, TILaunchPadDeviceAIsAvailableCategory, TILaunchPadDeviceBIsAvailableCategory]
+		[Test, TILaunchPadDeviceAIsAvailableCategory] // Device B excluded because TI LaunchPad devices don't work concurrently.
+	////[Test, TILaunchPadDeviceAIsAvailableCategory, TILaunchPadDeviceBIsAvailableCategory]
 		public virtual void TestTILaunchPadDeviceIsAvailableCategories()
 		{
 			if (!ConfigurationProvider.Configuration.TILaunchPadDeviceAIsAvailable)
 				Assert.Ignore("'TILaunchPadDeviceA' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceA' is properly configured and available if passing this test is required.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			if (!ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable)
-				Assert.Ignore("'TILaunchPadDeviceB' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceB' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		////if (!ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable) Device B excluded because TI LaunchPad devices don't work concurrently.
+		////	Assert.Ignore("'TILaunchPadDeviceB' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceB' is properly configured and available if passing this test is required.");
+		////	//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
