@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
@@ -1340,6 +1341,10 @@ namespace YAT.Model.Test
 			// Calculate timeout:
 			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
 
+			int txByteCount = 0;
+			int txLineCount = 0;
+			int rxByteCount = 0;
+			int rxLineCount = 0;
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
@@ -1352,36 +1357,45 @@ namespace YAT.Model.Test
 					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
 				}
 
-				if (terminalTx.TxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+				txByteCount = terminalTx.GetRepositoryByteCount(Domain.RepositoryType.Tx);
+				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of sent bytes = " + terminalTx.TxByteCount +
+					            " Number of sent bytes = " + txByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				if (terminalTx.TxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				txLineCount = terminalTx.GetRepositoryLineCount(Domain.RepositoryType.Tx);
+				if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of sent lines = " + terminalTx.TxLineCount +
+					            " Number of sent lines = " + txLineCount +
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 
-				if (terminalRx.RxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
+				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of received bytes = " + terminalRx.RxByteCount +
+					            " Number of received bytes = " + rxByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				if (terminalRx.RxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
+				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of received lines = " + terminalRx.RxLineCount +
+					            " Number of received lines = " + rxLineCount +
 					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 			}
-			while ((terminalRx.RxByteCount != expectedTotalByteCount) || (terminalRx.RxLineCount != expectedTotalLineCount));
+			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount) ||
+			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
 
-			// Attention: Terminal line count is not always equal to display line count!
-			//  > Terminal line count = number of *completed* lines in terminal
-			//  > Display line count = number of lines in view
-			// This function uses terminal line count for verification!
+			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
+			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
+
+			// Also assert count properties:
+			Assert.That(terminalTx.TxByteCount, Is.EqualTo(expectedTotalByteCount));
+			Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCount));
+			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
+			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount));
 
 			Console.Out.WriteLine("...done");
 		}
@@ -1390,11 +1404,13 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalRxByteCount, int expectedTotalRxLineCount)
+		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
-			int timeout = (WaitTimeoutForLineTransmission * expectedTotalRxLineCount);
+			int timeout = (WaitTimeoutForLineTransmission * expectedTotalLineCount);
 
+			int rxByteCount = 0;
+			int rxLineCount = 0;
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
@@ -1407,24 +1423,27 @@ namespace YAT.Model.Test
 					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
 				}
 
-				if (terminalRx.RxByteCount > expectedTotalRxByteCount) { // Break in case of too much data to improve speed of test.
+				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
+				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of received bytes = " + terminalRx.RxByteCount +
-					            " mismatches expected = " + expectedTotalRxByteCount + ".");
+					            " Number of received bytes = " + rxByteCount +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				if (terminalRx.RxLineCount > expectedTotalRxLineCount) { // Break in case of too much data to improve speed of test.
+				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
+				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-					            " Number of received lines = " + terminalRx.RxLineCount +
-					            " mismatches expected = " + expectedTotalRxLineCount + ".");
+					            " Number of received lines = " + rxLineCount +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
 				}
 			}
-			while ((terminalRx.RxByteCount != expectedTotalRxByteCount) || (terminalRx.RxLineCount != expectedTotalRxLineCount));
+			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
 
-			// Attention: Terminal line count is not always equal to display line count!
-			//  > Terminal line count = number of *completed* lines in terminal
-			//  > Display line count = number of lines in view
-			// This function uses terminal line count for verification!
+			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
+
+			// Also assert count properties:
+			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
+			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount));
 
 			Console.Out.WriteLine("...done");
 		}
