@@ -165,6 +165,9 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsInEdit.Terminal.TerminalType = terminalSelection.TerminalType;
+
+			// Changing 'TerminalType' will silently update the 'TerminalType' dependent settings!
+
 			SetControls();
 		}
 
