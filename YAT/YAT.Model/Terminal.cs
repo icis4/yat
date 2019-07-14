@@ -4261,9 +4261,8 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the line count of the raw terminal repository. The count of the
-		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryLineCount"/>
-		/// may be used to retrieve the formatted terminal line count.
+		/// The value corresponds to the completed line count of the formatted terminal repository.
+		/// <see cref="GetRepositoryLineCount"/> may be used to include incomplete line count.
 		/// </remarks>
 		public virtual int TxLineCount
 		{
@@ -4291,9 +4290,8 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the line count of the raw terminal repository. The count of the
-		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryLineCount"/>
-		/// may be used to retrieve the formatted terminal line count.
+		/// The value corresponds to the completed line count of the formatted terminal repository.
+		/// <see cref="GetRepositoryLineCount"/> may be used to include incomplete line count.
 		/// </remarks>
 		public virtual int RxLineCount
 		{
@@ -4320,8 +4318,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the rate of the raw terminal repository.
-		/// The rate of the formatted terminal repository slightly lags behind.
+		/// The value corresponds to the completed line count of the formatted terminal repository.
 		/// </remarks>
 		public virtual int TxLineRate
 		{
@@ -4348,8 +4345,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the rate of the raw terminal repository.
-		/// The rate of the formatted terminal repository slightly lags behind.
+		/// The value corresponds to the completed line count of the formatted terminal repository.
 		/// </remarks>
 		public virtual int RxLineRate
 		{
@@ -4362,10 +4358,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the data count of the raw terminal repository. The count of the
-		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryByteCount"/>
-		/// and <see cref="GetRepositoryLineCount"/> may be used to retrieve the formatted terminal
-		/// data count.
+		/// See remarks of <see cref="TxByteCount"/>, <see cref="TxLineCount"/>, <see cref="RxByteCount"/>, <see cref="RxLineCount"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -4382,8 +4375,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the rate of the raw terminal repository.
-		/// The rate of the formatted terminal repository slightly lags behind.
+		/// See remarks of <see cref="TxByteRate"/>, <see cref="TxLineRate"/>, <see cref="RxByteRate"/>, <see cref="RxLineRate"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
