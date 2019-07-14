@@ -364,7 +364,12 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public virtual void UpdateIOTypeDependentSettings()
 		{
-			UpdateIOTypeDependentSettings(((IOTypeEx)IO.IOType).IsUdpSocket);
+			bool isUdpSocket = false;
+
+			if (IO != null)
+				isUdpSocket = ((IOTypeEx)IO.IOType).IsUdpSocket;
+
+			UpdateIOTypeDependentSettings(isUdpSocket);
 		}
 
 		/// <remarks>
