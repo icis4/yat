@@ -148,8 +148,8 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:                                                    // LineStart + EOL + LineBreak result in three more elements.
-					var testSetInitial   = new Utilities.TestSet(new Types.Command(@"A"),          1, new int[] { 4 }, new int[] { 3 }, true);
-					var testSetContinued = new Utilities.TestSet(new Types.Command(@"B\!(NoEOL)"), 2, new int[] { 5 }, new int[] { 4 }, true);
+					var testSetInitial   = new Utilities.TestSet(new Types.Command(@"A"),          1, new int[] { 4 },    new int[] { 3 },    true);
+					var testSetContinued = new Utilities.TestSet(new Types.Command(@"B\!(NoEOL)"), 1, new int[] { 4, 2 }, new int[] { 3, 1 }, true);
 
 					// Send test command:
 					terminalA.SendText(testSetInitial.Command);
