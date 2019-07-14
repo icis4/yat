@@ -230,10 +230,10 @@ namespace YAT.Model.Test
 			/// <summary>The test command.</summary>
 			public Types.Command Command { get; }
 
-			/// <summary>The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</summary>
-			public int ExpectedLineCount { get; }
+			/// <summary>The expected number of completed lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</summary>
+			public int ExpectedLineCountCompleted { get; }
 
-			/// <summary>The expected number of display elements per display line.</summary>
+			/// <summary>The expected number of display elements per display line, including incomplete lines.</summary>
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedElementCounts { get; }
 
@@ -258,12 +258,12 @@ namespace YAT.Model.Test
 			{
 				Command = command;
 
-				ExpectedLineCount = command.TextLines.Length;
+				ExpectedLineCountCompleted = command.TextLines.Length;
 
-				ExpectedElementCounts = new int[ExpectedLineCount];
-				ExpectedCharCounts    = new int[ExpectedLineCount];
-				ExpectedByteCounts    = new int[ExpectedLineCount];
-				for (int i = 0; i < ExpectedLineCount; i++)
+				ExpectedElementCounts = new int[ExpectedLineCountCompleted];
+				ExpectedCharCounts    = new int[ExpectedLineCountCompleted];
+				ExpectedByteCounts    = new int[ExpectedLineCountCompleted];
+				for (int i = 0; i < ExpectedLineCountCompleted; i++)
 				{
 					ExpectedElementCounts[i] = 4; // LineStart + Data + EOL + LineBreak.
 					ExpectedCharCounts[i]    = command.TextLines[i].Length + 2; // Content + EOL.
@@ -276,8 +276,8 @@ namespace YAT.Model.Test
 
 			/// <summary></summary>
 			/// <param name="command">The test command.</param>
-			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
-			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
+			/// <param name="expectedLineCount">The expected number of completed lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
+			/// <param name="expectedElementCounts">The expected number of display elements per display line, including incomplete lines.</param>
 			/// <param name="expectedCharAndByteCounts">
 			/// The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character,
 			/// which equals the expected number of raw byte content per display line, without hidden EOL or control bytes.
@@ -292,8 +292,8 @@ namespace YAT.Model.Test
 
 			/// <summary></summary>
 			/// <param name="command">The test command.</param>
-			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
-			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
+			/// <param name="expectedLineCount">The expected number of completed lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
+			/// <param name="expectedElementCounts">The expected number of display elements per display line, including incomplete lines.</param>
 			/// <param name="expectedCharCounts">The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character.</param>
 			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, without hidden EOL or control bytes.</param>
 			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
@@ -303,12 +303,21 @@ namespace YAT.Model.Test
 			{
 				Command = command;
 
-				ExpectedLineCount         = expectedLineCount;
-				ExpectedElementCounts     = expectedElementCounts;
-				ExpectedCharCounts        = expectedCharCounts;
-				ExpectedByteCounts        = expectedByteCounts;
-				ExpectedAlsoApplyToA      = expectedAlsoApplyToA;
-				ClearedIsExpectedInTheEnd = clearedIsExpectedInTheEnd;
+				ExpectedLineCountCompleted = expectedLineCount;
+				ExpectedElementCounts      = expectedElementCounts;
+				ExpectedCharCounts         = expectedCharCounts;
+				ExpectedByteCounts         = expectedByteCounts;
+				ExpectedAlsoApplyToA       = expectedAlsoApplyToA;
+				ClearedIsExpectedInTheEnd  = clearedIsExpectedInTheEnd;
+			}
+
+			/// <summary>The expected number of lines in the display, including incomplete lines.</summary>
+			public int ExpectedLineCountDisplayed
+			{
+				get
+				{
+					return (ExpectedElementCounts.Length);
+				}
 			}
 
 			/// <summary>The expected number of display elements in total.</summary>
@@ -368,7 +377,7 @@ namespace YAT.Model.Test
 				{
 					int hashCode = (Command != null ? Command.GetHashCode() : 0);
 
-					hashCode = (hashCode * 397) ^  ExpectedLineCount                                    .GetHashCode();
+					hashCode = (hashCode * 397) ^  ExpectedLineCountCompleted                           .GetHashCode();
 					hashCode = (hashCode * 397) ^ (ExpectedElementCounts != null ? ExpectedElementCounts.GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (ExpectedCharCounts    != null ? ExpectedCharCounts   .GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (ExpectedByteCounts    != null ? ExpectedByteCounts   .GetHashCode() : 0);
@@ -400,12 +409,12 @@ namespace YAT.Model.Test
 			{
 				return
 				(
-					ObjectEx            .Equals(Command,               other.Command) &&
-					ExpectedLineCount   .Equals(                       other.ExpectedLineCount) &&
-					ArrayEx       .ValuesEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
-					ArrayEx       .ValuesEqual( ExpectedCharCounts,    other.ExpectedCharCounts) &&
-					ArrayEx       .ValuesEqual( ExpectedByteCounts,    other.ExpectedByteCounts) &&
-					ExpectedAlsoApplyToA.Equals(                       other.ExpectedAlsoApplyToA)
+					ObjectEx                  .Equals(Command,               other.Command) &&
+					ExpectedLineCountCompleted.Equals(                       other.ExpectedLineCountCompleted) &&
+					ArrayEx             .ValuesEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
+					ArrayEx             .ValuesEqual( ExpectedCharCounts,    other.ExpectedCharCounts) &&
+					ArrayEx             .ValuesEqual( ExpectedByteCounts,    other.ExpectedByteCounts) &&
+					ExpectedAlsoApplyToA      .Equals(                       other.ExpectedAlsoApplyToA)
 				);
 			}
 
@@ -1319,7 +1328,7 @@ namespace YAT.Model.Test
 
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
 		{
-			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCount);
+			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountDisplayed, testSet.ExpectedLineCountCompleted);
 		}
 
 		/// <remarks>
@@ -1329,18 +1338,24 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleByteCount, int expectedPerCycleLineCount, int cycle = 1)
+		/// <remarks>
+		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
+		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		/// </remarks>
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			// Calculate total expected counts at the receiver side:
-			int expectedTotalByteCount = (expectedPerCycleByteCount * cycle);
-			int expectedTotalLineCount = (expectedPerCycleLineCount * cycle);
+			WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+		}
 
-			// Calculate timeout factor per line, taking cases with 0 lines into account:
-			int timeoutFactorPerLine = ((expectedPerCycleLineCount > 0) ? (expectedPerCycleLineCount) : (1));
-
-			// Calculate timeout:
-			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
-
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		/// <remarks>
+		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// </remarks>
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		{
 			int txByteCount = 0;
 			int txLineCount = 0;
 			int rxByteCount = 0;
@@ -1365,10 +1380,10 @@ namespace YAT.Model.Test
 				}
 
 				txLineCount = terminalTx.GetRepositoryLineCount(Domain.RepositoryType.Tx);
-				if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				if (txLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
 					            " Number of sent lines = " + txLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
 				}
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
@@ -1379,23 +1394,23 @@ namespace YAT.Model.Test
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
-				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				if (rxLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
 					            " Number of received lines = " + rxLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
 				}
 			}
-			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount) ||
-			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
+			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCountDisplayed) ||
+			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCountDisplayed));
 
 			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
 			// Also assert count properties:
 			Assert.That(terminalTx.TxByteCount, Is.EqualTo(expectedTotalByteCount));
-		////Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCount)); <= reflects *completed* lines only!
+			Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
-		////Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount)); <= reflects *completed* lines only!
+			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 
 			Console.Out.WriteLine("...done");
 		}
@@ -1404,10 +1419,46 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		/// <remarks>
+		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// </remarks>
+		internal static void WaitForTransmissionCycle(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleByteCount, int expectedPerCycleLineCountCompleted, int cycle)
+		{
+			// Calculate total expected counts at the receiver side:
+			int expectedTotalByteCount          = (expectedPerCycleByteCount * cycle);
+			int expectedTotalLineCountCompleted = (expectedPerCycleLineCountCompleted * cycle);
+			int expectedTotalLineCountDisplayed = ((expectedTotalLineCountCompleted > 0) ? (expectedTotalLineCountCompleted) : (1));
+
+			// Calculate timeout factor per line, taking cases with 0 lines into account:
+			int timeoutFactorPerLine = ((expectedPerCycleLineCountCompleted > 0) ? (expectedPerCycleLineCountCompleted) : (1));
+
+			// Calculate timeout:
+			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
+
+			WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		/// <remarks>
+		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
+		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		/// </remarks>
 		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
+			WaitForReceiving(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted)
+		{
 			// Calculate timeout:
-			int timeout = (WaitTimeoutForLineTransmission * expectedTotalLineCount);
+			int timeout = (WaitTimeoutForLineTransmission * expectedTotalLineCountDisplayed);
 
 			int rxByteCount = 0;
 			int rxLineCount = 0;
@@ -1431,19 +1482,19 @@ namespace YAT.Model.Test
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
-				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+				if (rxLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
 					            " Number of received lines = " + rxLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
 				}
 			}
-			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
+			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCountDisplayed));
 
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
 			// Also assert count properties:
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
-		////Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount)); <= reflects *completed* lines only!
+			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 
 			Console.Out.WriteLine("...done");
 		}
@@ -1456,13 +1507,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet)
-		{
-			VerifyLines(displayLinesA, displayLinesB, testSet, 1); // Single cycle.
-		}
-
-		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet, int cycle)
+		internal static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet, int cycle = 1)
 		{
 			// Attention: Display line count is not always equal to terminal line count!
 			//  > Display line count = number of lines in view
