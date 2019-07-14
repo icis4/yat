@@ -158,6 +158,14 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		/// <remarks>
+		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
+		/// i.e. complete as well as incomplete lines.
+		/// </remarks>
+		/// <remarks>
+		/// Comparison against the completed number of lines is not (yet) possible, change #375
+		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
+		/// </remarks>
 		internal static void WaitForSending(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
@@ -204,6 +212,14 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// </remarks>
+		/// <remarks>
+		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
+		/// i.e. complete as well as incomplete lines.
+		/// </remarks>
+		/// <remarks>
+		/// Comparison against the completed number of lines is not (yet) possible, change #375
+		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
 		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
