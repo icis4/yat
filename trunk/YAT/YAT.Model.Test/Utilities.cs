@@ -1393,9 +1393,9 @@ namespace YAT.Model.Test
 
 			// Also assert count properties:
 			Assert.That(terminalTx.TxByteCount, Is.EqualTo(expectedTotalByteCount));
-			Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCount));
+		////Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCount)); <= reflects *completed* lines only!
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
-			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount));
+		////Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount)); <= reflects *completed* lines only!
 
 			Console.Out.WriteLine("...done");
 		}
@@ -1443,7 +1443,7 @@ namespace YAT.Model.Test
 
 			// Also assert count properties:
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
-			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount));
+		////Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCount)); <= reflects *completed* lines only!
 
 			Console.Out.WriteLine("...done");
 		}
