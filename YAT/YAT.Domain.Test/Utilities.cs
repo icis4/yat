@@ -84,7 +84,7 @@ namespace YAT.Domain.Test
 		internal static TerminalSettings GetTextSettings()
 		{
 			var settings = new TerminalSettings();
-			settings.TerminalType = TerminalType.Text;
+			settings.TerminalType = TerminalType.Text; // Setting 'TerminalType' will silently update the 'TerminalType' dependent settings!
 			settings.TextTerminal.ShowEol = true; // Required for easier test verification (byte count).
 			return (settings);
 		}

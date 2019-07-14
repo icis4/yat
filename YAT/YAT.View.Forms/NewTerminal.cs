@@ -368,7 +368,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.TerminalType                            = this.newTerminalSettings.TerminalType;
 			this.terminalSettings.Terminal.UpdateTerminalTypeDependentDefaults();
 			this.terminalSettings.Terminal.IO.IOType                               = this.newTerminalSettings.IOType;
-			this.terminalSettings.Terminal.UpdateIOTypeDependentSettings();
+			this.terminalSettings.Terminal.UpdateIOTypeDependentSettings(); // Needed because the parent settings don't notice the 'IOType' change above!
 
 			this.terminalSettings.Terminal.IO.SerialPort.PortId                    = this.newTerminalSettings.SerialPortId;
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.BaudRate    = this.newTerminalSettings.SerialPortCommunication.BaudRate;

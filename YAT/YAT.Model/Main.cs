@@ -196,11 +196,11 @@ namespace YAT.Model
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Main()
@@ -462,7 +462,7 @@ namespace YAT.Model
 			// created/loaded. They have already been processed and validated for a first time
 			// BEFORE the application settings were created/loaded. This first processing happens
 			// in YAT.Controller.Main.Run().
-			// 
+			//
 			// In case of automated testing, the command line arguments may also be processed and
 			// validated here for the first time.
 
@@ -723,9 +723,15 @@ namespace YAT.Model
 			{
 				Domain.TerminalType terminalType;
 				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
+				{
 					terminalSettings.TerminalType = terminalType;
+
+					// Changing 'TerminalType' will silently update the 'TerminalType' dependent settings!
+				}
 				else
+				{
 					return (false);
+				}
 			}
 
 			if (this.commandLineArgs.OptionIsGiven("PortType")) // Called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
@@ -736,7 +742,7 @@ namespace YAT.Model
 					if (terminalSettings.IO.IOType != ioType)
 					{
 						terminalSettings.IO.IOType = ioType;
-						terminalSettings.UpdateIOTypeDependentSettings(); // Update because I/O type has changed.
+						terminalSettings.UpdateIOTypeDependentSettings(); // Needed because the parent settings don't notice the 'IOType' change above!
 					}
 				}
 				else

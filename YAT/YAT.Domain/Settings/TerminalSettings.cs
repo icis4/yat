@@ -28,8 +28,6 @@ using System.Xml.Serialization;
 
 using MKY.Text;
 
-using YAT.Domain.Utilities;
-
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
@@ -76,6 +74,9 @@ namespace YAT.Domain.Settings
 			TextTerminal   = new TextTerminalSettings(settingsType);
 			BinaryTerminal = new BinaryTerminalSettings(settingsType);
 
+			UpdateTerminalTypeDependentDefaults(); // Force update *after* all settings
+			UpdateIOTypeDependentSettings();       // objects got created.
+
 			ClearChanged();
 		}
 
@@ -99,6 +100,9 @@ namespace YAT.Domain.Settings
 			TextTerminal   = new TextTerminalSettings(rhs.TextTerminal);
 			BinaryTerminal = new BinaryTerminalSettings(rhs.BinaryTerminal);
 
+			UpdateTerminalTypeDependentDefaults(); // Force update *after* all settings
+			UpdateIOTypeDependentSettings();       // objects got created.
+
 			ClearChanged();
 		}
 
@@ -110,6 +114,9 @@ namespace YAT.Domain.Settings
 			base.SetMyDefaults();
 
 			TerminalType = TerminalTypeDefault;
+
+			UpdateTerminalTypeDependentDefaults(); // Force update in case type already
+			UpdateIOTypeDependentSettings();       // was 'Text' before.
 		}
 
 		#region Properties
