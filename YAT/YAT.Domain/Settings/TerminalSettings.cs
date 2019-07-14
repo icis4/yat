@@ -331,7 +331,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2019-04-27 / MKY)
-		/// Not a 'nice' solution, but it works...
+		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
 		/// </remarks>
 		public virtual void UpdateTerminalTypeDependentDefaults()
 		{
@@ -340,7 +340,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2019-04-27 / MKY)
-		/// Not a 'nice' solution, but it works...
+		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
 		/// </remarks>
 		public virtual void UpdateTerminalTypeDependentDefaults(bool isBinary)
 		{
@@ -360,7 +360,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2018-02-23 / MKY)
-		/// Not a 'nice' solution, but it works...
+		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
 		/// </remarks>
 		public virtual void UpdateIOTypeDependentSettings()
 		{
@@ -374,7 +374,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2018-02-23 / MKY)
-		/// Not a 'nice' solution, but it works...
+		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
 		/// </remarks>
 		public virtual void UpdateIOTypeDependentSettings(bool isUdpSocket)
 		{
@@ -400,7 +400,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2018-02-23 / MKY)
-		/// Not a 'nice' solution, but it works...
+		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
 		/// </remarks>
 		public virtual bool IOTypeDependentSettingsWereDefaults(bool isUdpSocket)
 		{
