@@ -171,7 +171,7 @@ namespace YAT.Model.Test.Settings
 				terminal.SendText(send);                      // EOL
 				expectedTotalByteCount += expected.Length + 2;
 				expectedTotalLineCount += 1;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				send     = @"COM 0 7 3 1"; // Request change to 19200 baud.
 				expected =  "COM A";       // Still expected at 9600 baud.
@@ -180,7 +180,7 @@ namespace YAT.Model.Test.Settings
 				terminal.SendText(send);                      // EOL
 				expectedTotalByteCount += expected.Length + 2 + 1; // \remind (2018-07-28 / MKY) additional <XOn> is received on MCT, though that should be consumed/hidden as XOn/XOff is active...
 				expectedTotalLineCount += 1;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				Thread.Sleep(500);
 
@@ -191,7 +191,7 @@ namespace YAT.Model.Test.Settings
 				terminal.SendText(send);                      // EOL
 				expectedTotalByteCount += expected.Length + 2;
 				expectedTotalLineCount += 1;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				send     = @"COM 0 6 0 1"; // Request change to 9600/7/E.
 				expected =  "COM A";       // Still expected at 19200 baud.
@@ -200,7 +200,7 @@ namespace YAT.Model.Test.Settings
 				terminal.SendText(send);                      // EOL
 				expectedTotalByteCount += expected.Length + 2 + 1; // \remind (2018-07-28 / MKY) additional <XOn> is received on MCT, though that should be consumed/hidden as XOn/XOff is active...
 				expectedTotalLineCount += 1;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				Thread.Sleep(500);
 				                                    //// 2 = Even
@@ -211,7 +211,7 @@ namespace YAT.Model.Test.Settings
 				terminal.SendText(send);                      // EOL
 				expectedTotalByteCount += expected.Length + 2;
 				expectedTotalLineCount += 1;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				send     = @"COM 0 6 3 1"; // Request revert to defaults of 9600/8/N.
 				expected =  "COM A";       // Still expected at 9600/7/E.
@@ -220,7 +220,7 @@ namespace YAT.Model.Test.Settings
 				terminal.SendText(send);                      // EOL
 				expectedTotalByteCount += expected.Length + 2 + 1; // \remind (2018-07-28 / MKY) additional <XOn> is received on MCT, though that should be consumed/hidden as XOn/XOff is active...
 				expectedTotalLineCount += 1;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				Thread.Sleep(500);
 				                                      //// 0 = None
@@ -231,7 +231,7 @@ namespace YAT.Model.Test.Settings
 				terminal.SendText(send);                      // EOL
 				expectedTotalByteCount += expected.Length + 2;
 				expectedTotalLineCount += 2;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 			}
 		}
 

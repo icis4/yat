@@ -235,7 +235,7 @@ namespace YAT.Model.Test.Connection
 			terminalA.SendText(text);
 			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
 			expectedTotalLineCountA++;
-			Utilities.WaitForTransmission(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
 
 			text = "B >> A"; // Response B >> A
 			terminalB.SendText(text);
@@ -245,7 +245,7 @@ namespace YAT.Model.Test.Connection
 				expectedTotalByteCountB *= 2;
 				expectedTotalLineCountB *= 2;
 			}
-			Utilities.WaitForTransmission(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 
 			if (disconnectIdentifier == 'A')
 			{
@@ -291,7 +291,7 @@ namespace YAT.Model.Test.Connection
 			terminalA.SendText(text);
 			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
 			expectedTotalLineCountA++;
-			Utilities.WaitForTransmission(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
 
 			text = "B >> A"; // Response B >> A
 			terminalB.SendText(text);
@@ -301,7 +301,7 @@ namespace YAT.Model.Test.Connection
 				expectedTotalByteCountB *= 2;
 				expectedTotalLineCountB *= 2;
 			}
-			Utilities.WaitForTransmission(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 		}
 
 		#endregion
