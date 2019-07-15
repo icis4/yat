@@ -259,9 +259,9 @@ namespace YAT.Domain.Test.TextTerminal
 		private static void WaitForTransmissionEolAware(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			if (eolIsSymmetric)
-				Utilities.WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 			else
-				Utilities.WaitForSending(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
 		}
 
 		/// <summary></summary>

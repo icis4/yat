@@ -158,7 +158,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
 				Assert.That(terminal.StopIO(),      Is.True);
@@ -175,7 +175,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalLineCount++;
 				expectedTotalByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// --- Test: Close/Reopen while continuous receiving. ----------------------------------
 
@@ -337,7 +337,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalRxLineCount++;
 				expectedTotalRxByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
 				Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
@@ -357,7 +357,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalRxLineCount++;
 				expectedTotalRxByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Verify that subsequently calling StartIO() also works:
 				Assert.That(terminal.StartIO(),     Is.True);
@@ -369,7 +369,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalRxLineCount++;
 				expectedTotalRxByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
 				Assert.That(terminal.StopIO(),      Is.True);
@@ -388,7 +388,7 @@ namespace YAT.Model.Test.Connection
 				terminal.SendText(emptyCommand);
 				expectedTotalRxLineCount++;
 				expectedTotalRxByteCount += emptyCommandExpected.Length;
-				Utilities.WaitForReceiving(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
+				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// --- Test: Disconnect/Reconnect while continuous receiving. ----------------------
 

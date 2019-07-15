@@ -341,9 +341,9 @@ namespace YAT.Model.Test.Transmission
 				);
 
 				var expectedTotalByteCount = (repeatCount * (RepeatingTestData.TestString.Length + 2)); // Content + EOL.
-				Utilities.WaitForTransmission(terminalA, terminalB, expectedTotalByteCount, expectedTotalLineCount: repeatCount);
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCount, expectedTotalLineCount: repeatCount);
 				if (doTwoWay) {
-					Utilities.WaitForTransmission(terminalB, terminalA, expectedTotalByteCount, expectedTotalLineCount: repeatCount);
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCount, expectedTotalLineCount: repeatCount);
 				}
 
 				// Verify transmission:

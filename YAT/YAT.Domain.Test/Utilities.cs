@@ -166,7 +166,7 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForSending(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForSendingAndVerifyCounts(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
 			int timeout = WaitTimeoutForLineTransmission;
@@ -221,7 +221,7 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
 			int timeout = WaitTimeoutForLineTransmission;
