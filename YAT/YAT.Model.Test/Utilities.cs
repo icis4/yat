@@ -1326,9 +1326,9 @@ namespace YAT.Model.Test
 			Console.Out.WriteLine("...done");
 		}
 
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
+		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
 		{
-			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountDisplayed, testSet.ExpectedLineCountCompleted);
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountDisplayed, testSet.ExpectedLineCountCompleted);
 		}
 
 		/// <remarks>
@@ -1342,9 +1342,9 @@ namespace YAT.Model.Test
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
 
 		/// <remarks>
@@ -1354,7 +1354,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
 			int txByteCount = 0;
 			int txLineCount = 0;
@@ -1422,20 +1422,18 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		internal static void WaitForTransmissionCycle(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleByteCount, int expectedPerCycleLineCountCompleted, int cycle)
+		internal static void WaitForTransmissionCycleAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle)
 		{
 			// Calculate total expected counts at the receiver side:
-			int expectedTotalByteCount          = (expectedPerCycleByteCount * cycle);
-			int expectedTotalLineCountCompleted = (expectedPerCycleLineCountCompleted * cycle);
-			int expectedTotalLineCountDisplayed = ((expectedTotalLineCountCompleted > 0) ? (expectedTotalLineCountCompleted) : (1));
-
-			// Calculate timeout factor per line, taking cases with 0 lines into account:
-			int timeoutFactorPerLine = ((expectedPerCycleLineCountCompleted > 0) ? (expectedPerCycleLineCountCompleted) : (1));
+			int expectedTotalByteCount          = (testSet.ExpectedTotalByteCount     * cycle);
+			int expectedTotalLineCountDisplayed = (testSet.ExpectedLineCountDisplayed * cycle);
+			int expectedTotalLineCountCompleted = (testSet.ExpectedLineCountCompleted * cycle);
 
 			// Calculate timeout:
+			int timeoutFactorPerLine = ((testSet.ExpectedLineCountCompleted > 0) ? (testSet.ExpectedLineCountCompleted) : (1)); // Take cases with 0 lines into account!
 			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
 
-			WaitForTransmission(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
 		/// <remarks>
@@ -1446,20 +1444,17 @@ namespace YAT.Model.Test
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			WaitForReceiving(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
 
 		/// <remarks>
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted)
+		internal static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
-			// Calculate timeout:
-			int timeout = (WaitTimeoutForLineTransmission * expectedTotalLineCountDisplayed);
-
 			int rxByteCount = 0;
 			int rxLineCount = 0;
 			int waitTime = 0;
@@ -1497,6 +1492,27 @@ namespace YAT.Model.Test
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 
 			Console.Out.WriteLine("...done");
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		/// <remarks>
+		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// </remarks>
+		internal static void WaitForReceivingCycleAndVerifyCounts(Terminal terminalRx, TestSet testSet, int cycle)
+		{
+			// Calculate total expected counts at the receiver side:
+			int expectedTotalByteCount          = (testSet.ExpectedTotalByteCount     * cycle);
+			int expectedTotalLineCountDisplayed = (testSet.ExpectedLineCountDisplayed * cycle);
+			int expectedTotalLineCountCompleted = (testSet.ExpectedLineCountCompleted * cycle);
+
+			// Calculate timeout:
+			int timeoutFactorPerLine = ((testSet.ExpectedLineCountCompleted > 0) ? (testSet.ExpectedLineCountCompleted) : (1)); // Take cases with 0 lines into account!
+			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
+
+			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
 		#endregion

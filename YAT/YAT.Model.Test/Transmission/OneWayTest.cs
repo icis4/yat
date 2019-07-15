@@ -424,7 +424,10 @@ namespace YAT.Model.Test.Transmission
 			{
 				// Send test command:
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountCompleted, cycle);
+				if (testSet.ExpectedAlsoApplyToA)
+					Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycle);
+				else
+					Utilities.WaitForReceivingCycleAndVerifyCounts(terminalB, testSet, cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
