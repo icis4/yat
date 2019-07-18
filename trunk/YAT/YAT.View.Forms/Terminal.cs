@@ -1488,21 +1488,6 @@ namespace YAT.View.Forms
 
 				ToolStripComboBoxHelper.Select(toolStripComboBox_MonitorContextMenu_Panels_Orientation, (OrientationEx)this.settingsRoot.Layout.MonitorOrientation);
 
-				// Hide "Hide" item if only this monitor is visible
-				bool hideIsAllowed = false;
-				switch (monitorType)
-				{
-					case Domain.RepositoryType.None: /* Nothing to do. */ break;
-
-					case Domain.RepositoryType.Tx:    hideIsAllowed = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
-					case Domain.RepositoryType.Bidir: hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
-					case Domain.RepositoryType.Rx:    hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + monitorType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-				toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
-				toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
-
 				bool isShowable = (this.settingsRoot.Display.TxRadixIsShowable ||
 				                   this.settingsRoot.Display.RxRadixIsShowable);
 				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention: Same code exists further above as well as in 'View.Forms.AdvancedTerminalSettings'.
@@ -1586,24 +1571,6 @@ namespace YAT.View.Forms
 				return;
 
 			SetMonitorOrientation((OrientationEx)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_Hide_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			var monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
-			switch (monitorType)
-			{
-				case Domain.RepositoryType.None: /* Nothing to do. */ break;
-
-				case Domain.RepositoryType.Tx:    this.settingsRoot.Layout.TxMonitorPanelIsVisible    = false; break;
-				case Domain.RepositoryType.Bidir: this.settingsRoot.Layout.BidirMonitorPanelIsVisible = false; break;
-				case Domain.RepositoryType.Rx:    this.settingsRoot.Layout.RxMonitorPanelIsVisible    = false; break;
-
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + monitorType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Format_Click(object sender, EventArgs e)

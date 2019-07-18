@@ -46,7 +46,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Separator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripComboBox_MonitorContextMenu_Panels_Orientation = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripMenuItem_MonitorContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime = new System.Windows.Forms.ToolStripMenuItem();
@@ -379,7 +378,6 @@ namespace YAT.View.Forms
 			// 
 			this.contextMenuStrip_Monitor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_MonitorContextMenu_Panels,
-            this.toolStripMenuItem_MonitorContextMenu_Hide,
             this.toolStripMenuItem_MonitorContextMenu_Separator_1,
             this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime,
             this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime,
@@ -468,13 +466,6 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MonitorContextMenu_Panels_Orientation.Name = "toolStripComboBox_MonitorContextMenu_Panels_Orientation";
 			this.toolStripComboBox_MonitorContextMenu_Panels_Orientation.Size = new System.Drawing.Size(165, 23);
 			this.toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MonitorContextMenu_Panels_Orientation_SelectedIndexChanged);
-			// 
-			// toolStripMenuItem_MonitorContextMenu_Hide
-			// 
-			this.toolStripMenuItem_MonitorContextMenu_Hide.Name = "toolStripMenuItem_MonitorContextMenu_Hide";
-			this.toolStripMenuItem_MonitorContextMenu_Hide.Size = new System.Drawing.Size(267, 22);
-			this.toolStripMenuItem_MonitorContextMenu_Hide.Text = "Hide";
-			this.toolStripMenuItem_MonitorContextMenu_Hide.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Hide_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_1
 			// 
@@ -3202,7 +3193,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Panels_Tx;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Panels_Bidir;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Panels_Rx;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Hide;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_SaveToFile;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_CopyToClipboard;
