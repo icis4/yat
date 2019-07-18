@@ -2103,6 +2103,9 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Panels:
+				toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
+
 				// Pages:
 				var pages = this.settingsRoot.PredefinedCommand.Pages;
 
@@ -2333,12 +2336,12 @@ namespace YAT.View.Forms
 			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, c);
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_Panels_Predefined_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Layout.PredefinedPanelIsVisible = false;
+			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
 		}
 
 		#endregion
