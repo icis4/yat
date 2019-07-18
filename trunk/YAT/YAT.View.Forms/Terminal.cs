@@ -2233,7 +2233,7 @@ namespace YAT.View.Forms
 		private int contextMenuStrip_Predefined_SelectedCommand; // = 0;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Command contextMenuStrip_Predefined_CopyToSendText; // = null;
+		private Command contextMenuStrip_Predefined_CopyToSendTextOrFile; // = null;
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
@@ -2243,11 +2243,11 @@ namespace YAT.View.Forms
 				var c = predefined.GetCommandFromId(id);
 
 				contextMenuStrip_Predefined_SelectedCommand = id;
-				contextMenuStrip_Predefined_CopyToSendText = c;
+				contextMenuStrip_Predefined_CopyToSendTextOrFile = c;
 
 				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = true;
 
-				var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendText;
+				var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile;
 				mi.Visible = true;
 				if (c != null)
 				{
@@ -2282,7 +2282,7 @@ namespace YAT.View.Forms
 			{
 				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = false;
 
-				toolStripMenuItem_PredefinedContextMenu_CopyToSendText.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile.Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = false;
 			}
@@ -2333,12 +2333,12 @@ namespace YAT.View.Forms
 				ShowPredefinedCommandSettings(predefined.SelectedPage, 1);
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendText_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			var c = new Command(contextMenuStrip_Predefined_CopyToSendText); // Clone command to ensure decoupling.
+			var c = new Command(contextMenuStrip_Predefined_CopyToSendTextOrFile); // Clone command to ensure decoupling.
 			if (c != null)
 			{
 				if (c.IsText)
