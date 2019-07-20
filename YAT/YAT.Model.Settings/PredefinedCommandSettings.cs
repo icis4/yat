@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
@@ -36,6 +35,9 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	public class PredefinedCommandSettings : MKY.Settings.SettingsItem, IEquatable<PredefinedCommandSettings>
 	{
+		/// <summary></summary>
+		public const int FirstCommandPerPage = 1;
+
 		/// <summary></summary>
 		public const int MaxCommandsPerPage = 12;
 
@@ -98,6 +100,21 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public int TotalDefinedCommandCount
+		{
+			get
+			{
+				int n = 0;
+
+				foreach (var p in Pages)
+					n += p.DefinedCommandCount;
+
+				return (n);
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -111,41 +128,6 @@ namespace YAT.Model.Settings
 			this.pages = new PredefinedCommandPageCollection();
 			this.pages.Add(new PredefinedCommandPage("Page 1"));
 			SetMyChanged();
-		}
-
-		/// <summary>
-		/// Sets the given predefined command.
-		/// </summary>
-		/// <param name="pageIndex">Page index 0..max-1.</param>
-		/// <param name="commandIndex">Command index 0..max-1.</param>
-		/// <param name="command">Command to be set.</param>
-		public virtual void SetCommand(int pageIndex, int commandIndex, Command command)
-		{
-			if ((pageIndex == 0) && (this.pages.Count == 0))
-				CreateDefaultPage();
-
-			if ((pageIndex >= 0) && (pageIndex < this.pages.Count))
-			{
-				var page = this.pages[pageIndex];
-				if ((commandIndex >= 0) && (commandIndex < MaxCommandsPerPage))
-				{
-					page.SetCommand(commandIndex, command);
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets the given predefined command.
-		/// </summary>
-		/// <param name="pageIndex">Page index 0..max-1.</param>
-		/// <param name="commandIndex">Command index 0..max-1.</param>
-		public virtual Command GetCommand(int pageIndex, int commandIndex)
-		{
-			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
-				return (this.pages[pageIndex].Commands[commandIndex]);
-			else
-				return (null);
 		}
 
 		/// <summary>
@@ -174,6 +156,55 @@ namespace YAT.Model.Settings
 				return (false);
 
 			return (command.IsDefined);
+		}
+
+		/// <summary>
+		/// Gets the given predefined command.
+		/// </summary>
+		/// <param name="pageIndex">Page index 0..max-1.</param>
+		/// <param name="commandIndex">Command index 0..max-1.</param>
+		public virtual Command GetCommand(int pageIndex, int commandIndex)
+		{
+			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
+				return (this.pages[pageIndex].Commands[commandIndex]);
+			else
+				return (null);
+		}
+
+		/// <summary>
+		/// Sets the given predefined command.
+		/// </summary>
+		/// <param name="pageIndex">Page index 0..max-1.</param>
+		/// <param name="commandIndex">Command index 0..max-1.</param>
+		/// <param name="command">Command to be set.</param>
+		public virtual void SetCommand(int pageIndex, int commandIndex, Command command)
+		{
+			if ((pageIndex == 0) && (this.pages.Count == 0))
+				CreateDefaultPage();
+
+			if ((pageIndex >= 0) && (pageIndex < this.pages.Count))
+			{
+				var page = this.pages[pageIndex];
+				if ((commandIndex >= 0) && (commandIndex < MaxCommandsPerPage))
+				{
+					page.SetCommand(commandIndex, command);
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Clears the given predefined command.
+		/// </summary>
+		/// <param name="pageIndex">Page index 0..max-1.</param>
+		/// <param name="commandIndex">Command index 0..max-1.</param>
+		public virtual void ClearCommand(int pageIndex, int commandIndex)
+		{
+			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
+			{
+				this.pages[pageIndex].Commands[commandIndex].Clear();
+				SetMyChanged();
+			}
 		}
 
 		#endregion

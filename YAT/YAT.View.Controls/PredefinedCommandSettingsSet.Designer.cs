@@ -38,7 +38,7 @@
 			this.textBox_SingleLineText = new MKY.Windows.Forms.TextBoxEx();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_SetFile = new System.Windows.Forms.Button();
-			this.button_Delete = new System.Windows.Forms.Button();
+			this.button_Clear = new System.Windows.Forms.Button();
 			this.comboBox_ExplicitDefaultRadix = new System.Windows.Forms.ComboBox();
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
@@ -137,17 +137,17 @@
 			this.toolTip.SetToolTip(this.button_SetFile, resources.GetString("button_SetFile.ToolTip"));
 			this.button_SetFile.Click += new System.EventHandler(this.button_SetFile_Click);
 			// 
-			// button_Delete
+			// button_Clear
 			// 
-			this.button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.button_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Delete.Image = global::YAT.View.Controls.Properties.Resources.Image_Tool_lightning_16x16;
-			this.button_Delete.Location = new System.Drawing.Point(476, 0);
-			this.button_Delete.Name = "button_Delete";
-			this.button_Delete.Size = new System.Drawing.Size(24, 21);
-			this.button_Delete.TabIndex = 7;
-			this.toolTip.SetToolTip(this.button_Delete, "Clear command");
-			this.button_Delete.Click += new System.EventHandler(this.button_Delete_Click);
+			this.button_Clear.Image = global::YAT.View.Controls.Properties.Resources.Image_Tool_lightning_16x16;
+			this.button_Clear.Location = new System.Drawing.Point(476, 0);
+			this.button_Clear.Name = "button_Clear";
+			this.button_Clear.Size = new System.Drawing.Size(24, 21);
+			this.button_Clear.TabIndex = 7;
+			this.toolTip.SetToolTip(this.button_Clear, "Clear command");
+			this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
 			// 
 			// comboBox_ExplicitDefaultRadix
 			// 
@@ -193,7 +193,7 @@
 			// panel_Command
 			// 
 			this.panel_Command.Controls.Add(this.checkBox_IsFile);
-			this.panel_Command.Controls.Add(this.button_Delete);
+			this.panel_Command.Controls.Add(this.button_Clear);
 			this.panel_Command.Controls.Add(this.label_Shortcut);
 			this.panel_Command.Controls.Add(this.textBox_Description);
 			this.panel_Command.Controls.Add(this.textBox_SingleLineText);
@@ -234,7 +234,7 @@
 		private MKY.Windows.Forms.TextBoxEx textBox_SingleLineText;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Button button_SetFile;
-		private System.Windows.Forms.Button button_Delete;
+		private System.Windows.Forms.Button button_Clear;
 		private System.Windows.Forms.SplitContainer splitContainer_ExplicitDefaultRadix;
 		private System.Windows.Forms.ComboBox comboBox_ExplicitDefaultRadix;
 		private System.Windows.Forms.Panel panel_ExplicitDefaultRadix;

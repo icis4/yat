@@ -217,7 +217,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary>
-		/// Returns command at the specified id.
+		/// Returns command at the specified <paramref name="id"/>.
 		/// Returns <c>null</c> if command is undefined or invalid.
 		/// </summary>
 		public virtual Command GetCommandFromId(int id)

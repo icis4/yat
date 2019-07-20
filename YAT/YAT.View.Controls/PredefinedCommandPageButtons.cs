@@ -173,7 +173,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns command at the specified id.
+		/// Returns command at the specified <paramref name="id"/>.
 		/// Returns <c>null</c> if command is undefined or invalid.
 		/// </summary>
 		public virtual Command GetCommandFromId(int id)
@@ -184,10 +184,11 @@ namespace YAT.View.Controls
 			{
 				if ((i >= 0) && (i < this.commands.Count))
 				{
-					if (this.commands[i] != null)
+					var c = this.commands[i];
+					if (c != null)
 					{
-						if (this.commands[i].IsDefined)
-							return (this.commands[i]);
+						if (c.IsDefined)
+							return (c);
 					}
 				}
 			}
@@ -201,13 +202,13 @@ namespace YAT.View.Controls
 		/// </summary>
 		public virtual int GetCommandIdFromLocation(Point point)
 		{
-			Point requested = PointToClient(point);
-
+			Point requested = PointToClient(point); // Using Control.PointToClient() is OK since buttons
+			                                        // are directly placed onto control (no group box).
 			// Ensure that location is within control:
 			if ((requested.X < 0) || (requested.X > Width))  return (0);
 			if ((requested.Y < 0) || (requested.Y > Height)) return (0);
 
-			// Find corresponding button:
+			// Find the corresponding button:
 			for (int i = 0; i < this.buttons_commands.Count; i++)
 			{
 				if (requested.Y <= this.buttons_commands[i].Bottom)
@@ -221,7 +222,7 @@ namespace YAT.View.Controls
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or invalid.
 		/// </summary>
-		public Command GetCommandFromLocation(Point point)
+		public virtual Command GetCommandFromLocation(Point point)
 		{
 			return (GetCommandFromId(GetCommandIdFromLocation(point)));
 		}
@@ -235,7 +236,7 @@ namespace YAT.View.Controls
 
 		private void button_Command_Click(object sender, EventArgs e)
 		{
-			CommandRequest(ControlEx.TagToIndex(sender));
+			CommandRequest(ControlEx.TagToInt32(sender));
 		}
 
 		#endregion

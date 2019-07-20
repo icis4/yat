@@ -296,6 +296,14 @@ namespace YAT.View.Controls
 			}
 		}
 
+		/// <summary>
+		/// Clears the command.
+		/// </summary>
+		public virtual void ClearCommand()
+		{
+			Command = null;
+		}
+
 		#endregion
 
 		#region Control Event Handlers
@@ -463,7 +471,7 @@ namespace YAT.View.Controls
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. TextBox.Leave()
 		/// 2. TextBox.Validating()
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void textBox_SingleLineText_Leave(object sender, EventArgs e)
@@ -494,7 +502,7 @@ namespace YAT.View.Controls
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. TextBox.Leave()
 		/// 2. TextBox.Validating()
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void textBox_SingleLineText_Validating(object sender, CancelEventArgs e)
@@ -563,11 +571,9 @@ namespace YAT.View.Controls
 			ConfirmDescription(textBox_Description.Text);
 		}
 
-		private void button_Delete_Click(object sender, EventArgs e)
+		private void button_Clear_Click(object sender, EventArgs e)
 		{
-			this.command.Clear();
-			SetControls();
-			OnCommandChanged(EventArgs.Empty);
+			ClearCommand();
 		}
 
 		#endregion
@@ -694,7 +700,7 @@ namespace YAT.View.Controls
 					checkBox_IsFile.Checked = false;
 
 					// Delete:
-					button_Delete.Enabled = true;
+					button_Clear.Enabled = true;
 				}
 				else if (this.command.IsFilePath)
 				{
@@ -734,7 +740,7 @@ namespace YAT.View.Controls
 					checkBox_IsFile.Checked = true;
 
 					// Delete:
-					button_Delete.Enabled = true;
+					button_Clear.Enabled = true;
 				}
 				else
 				{
@@ -763,7 +769,7 @@ namespace YAT.View.Controls
 					checkBox_IsFile.Checked = false;
 
 					// Delete:
-					button_Delete.Enabled = false;
+					button_Clear.Enabled = false;
 				}
 			}
 			finally
