@@ -2178,21 +2178,33 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainContextMenu_File_New_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			ShowNewTerminalDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_Open_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			ShowOpenFileDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			ShowOpenWorkspaceFromFileDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_Exit_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			Close();
 		}
 
@@ -2267,7 +2279,7 @@ namespace YAT.View.Forms
 		/// </summary>
 		/// <remarks>
 		/// Is this a .NET bug?
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void contextMenuStrip_FileRecent_Paint(object sender, PaintEventArgs e)
@@ -2294,7 +2306,10 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
 		{
-			this.main.OpenRecent(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			this.main.OpenRecent(ToolStripMenuItemEx.TagToInt32(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		#endregion
@@ -2313,8 +2328,8 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
 
 			ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
 			ApplicationSettings.SaveLocalUserSettings();
@@ -2322,8 +2337,8 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_StatusContextMenu_ShowTime_Click(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
 
 			ApplicationSettings.LocalUserSettings.MainWindow.ShowTime = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
 			ApplicationSettings.SaveLocalUserSettings();
@@ -2331,8 +2346,8 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_StatusContextMenu_ShowChrono_Click(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
 
 			ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono = !ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
 			ApplicationSettings.SaveLocalUserSettings();
@@ -2340,6 +2355,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_StatusContextMenu_Preferences_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			ShowPreferences();
 		}
 
