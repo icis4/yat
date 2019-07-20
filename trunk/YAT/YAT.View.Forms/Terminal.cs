@@ -1436,7 +1436,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			RequestPreset(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			RequestPreset(ToolStripMenuItemEx.TagToInt32(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		#endregion
@@ -2196,26 +2196,63 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary>
-		/// Temporary reference to command to be copied.
-		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int contextMenuStrip_Predefined_SelectedCommand; // = 0;
-
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Command contextMenuStrip_Predefined_CopyToSendTextOrFile; // = null;
+		private int contextMenuStrip_Predefined_SelectedCommandId; // = 0;
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
 			if (contextMenuStrip_Predefined.SourceControl == groupBox_Predefined)
 			{
+				// Attention:
+				// Similar code exists in...
+				// ...View.Forms.PredefinedCommandSettings.contextMenuStrip_Commands_Opening()
+				// Changes here may have to be applied there too.
+
 				var id = predefined.GetCommandIdFromLocation(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
 				var c = predefined.GetCommandFromId(id);
 
-				contextMenuStrip_Predefined_SelectedCommand = id;
-				contextMenuStrip_Predefined_CopyToSendTextOrFile = c;
+				contextMenuStrip_Predefined_SelectedCommandId = id;
 
-				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Panels.Visible = true;
+
+				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel            .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics.Visible = true;
+
+				toolStripMenuItem_PredefinedContextMenu_UpBy  .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+				toolStripMenuItem_PredefinedContextMenu_DownBy.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_DownBy.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Enabled = (id != 1);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Enabled = (id != 2);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Enabled = (id != 3);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Enabled = (id != 4);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Enabled = (id != 5);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Enabled = (id != 6);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Enabled = (id != 7);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Enabled = (id != 8);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Enabled = (id != 9);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Enabled = (id != 10);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Enabled = (id != 11);
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Enabled = (id != 12);
+
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Enabled = (id != 1);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Enabled = (id != 2);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Enabled = (id != 3);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Enabled = (id != 4);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Enabled = (id != 5);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Enabled = (id != 6);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Enabled = (id != 7);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Enabled = (id != 8);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Enabled = (id != 9);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Enabled = (id != 10);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Enabled = (id != 11);
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Enabled = (id != 12);
+
+				toolStripMenuItem_PredefinedContextMenu_MoveTo.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 
 				var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile;
 				mi.Visible = true;
@@ -2227,12 +2264,12 @@ namespace YAT.View.Forms
 					else if (c.IsFilePath)
 						mi.Text = "Copy to Send File";
 					else
-						mi.Text = "Copy";
+						mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
 				}
 				else
 				{
 					mi.Enabled = false;
-					mi.Text = "Copy";
+					mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
 				}
 
 				// There is a limitaion in Windows.Forms:
@@ -2244,28 +2281,46 @@ namespace YAT.View.Forms
 				send.ValidateSendTextInput();
 
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command.IsText));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command.IsFilePath));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command != null) && (this.settingsRoot.SendFile.Command.IsFilePath));
+				toolStripMenuItem_PredefinedContextMenu_Clear           .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Clear           .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			}
 			else
 			{
-				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Panels.Visible = false;
 
+				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel            .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics.Visible = false;
+
+				toolStripMenuItem_PredefinedContextMenu_UpBy                .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_DownBy              .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo              .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo              .Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile.Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText    .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile    .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Clear               .Visible = false;
 			}
 
 			contextMenuStrip_Predefined_SetMenuItems();
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_Panels_Predefined_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SendPredefined(ToolStripMenuItemEx.TagToIndex(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Command_I_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			SendPredefined(ToolStripMenuItemEx.TagToInt32(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
@@ -2289,7 +2344,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			predefined.SelectedPage = ToolStripMenuItemEx.TagToIndex(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			predefined.SelectedPage = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
@@ -2297,10 +2352,157 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			if (contextMenuStrip_Predefined_SelectedCommand != 0)
-				ShowPredefinedCommandSettings(predefined.SelectedPage, contextMenuStrip_Predefined_SelectedCommand);
+			if (contextMenuStrip_Predefined_SelectedCommandId != 0)
+				ShowPredefinedCommandSettings(predefined.SelectedPage, contextMenuStrip_Predefined_SelectedCommandId);
 			else
 				ShowPredefinedCommandSettings(predefined.SelectedPage, 1);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_UpBy_N_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_UpBy_N_Click()
+			// Changes here may have to be applied there too.
+
+			var selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
+			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			for (int i = 0; i < n; i++)
+			{
+				Up(selectedCommandId);
+
+				selectedCommandId--;
+				if (selectedCommandId < Model.Settings.PredefinedCommandSettings.FirstCommandPerPage)
+					selectedCommandId = Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage;
+			}
+		}
+
+		private void Up(int selectedCommandId)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.Up()
+			// Changes here may have to be applied there too.
+
+			var sc = predefined.GetCommandFromId(selectedCommandId);
+			if (sc != null)
+				sc = new Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ((selectedCommandId > Model.Settings.PredefinedCommandSettings.FirstCommandPerPage) ? (selectedCommandId - 1) : (Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage));
+			var tc = predefined.GetCommandFromId(targetCommandId);
+			if (tc != null)
+				tc = new Command(tc); // Clone command to ensure decoupling.
+
+			if (tc != null)
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, selectedCommandId - 1, tc);
+			else
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, selectedCommandId - 1);
+
+			if (sc != null)
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
+			else
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_DownBy_N_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_DownBy_N_Click()
+			// Changes here may have to be applied there too.
+
+			var selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
+			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			for (int i = 0; i < n; i++)
+			{
+				Down(selectedCommandId);
+
+				selectedCommandId++;
+				if (selectedCommandId > Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage)
+					selectedCommandId = Model.Settings.PredefinedCommandSettings.FirstCommandPerPage;
+			}
+		}
+
+		private void Down(int selectedCommandId)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.Down()
+			// Changes here may have to be applied there too.
+
+			var sc = predefined.GetCommandFromId(selectedCommandId);
+			if (sc != null)
+				sc = new Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ((selectedCommandId < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage) ? (selectedCommandId + 1) : (Model.Settings.PredefinedCommandSettings.FirstCommandPerPage));
+			var tc = predefined.GetCommandFromId(targetCommandId);
+			if (tc != null)
+				tc = new Command(tc); // Clone command to ensure decoupling.
+
+			if (tc != null)
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, selectedCommandId - 1, tc);
+			else
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, selectedCommandId - 1);
+
+			if (sc != null)
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
+			else
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1);
+			}
+			else
+			{
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
+			}
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_CopyTo_I_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_CopyTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
+			}
+			else
+			{
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
+			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile_Click(object sender, EventArgs e)
@@ -2308,13 +2510,14 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			var c = new Command(contextMenuStrip_Predefined_CopyToSendTextOrFile); // Clone command to ensure decoupling.
-			if (c != null)
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
 			{
-				if (c.IsText)
-					this.settingsRoot.SendText.Command = c;
-				else if (c.IsFilePath)
-					this.settingsRoot.SendFile.Command = c;
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				if (sc.IsText)
+					this.settingsRoot.SendText.Command = sc;
+				else if (sc.IsFilePath)
+					this.settingsRoot.SendFile.Command = sc;
 			}
 		}
 
@@ -2323,8 +2526,12 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			var c = new Command(this.settingsRoot.SendText.Command); // Clone command to ensure decoupling.
-			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, c);
+			var sc = this.settingsRoot.SendText.Command;
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
+			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
@@ -2332,16 +2539,49 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			var c = new Command(this.settingsRoot.SendFile.Command); // Clone command to ensure decoupling.
-			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, c);
+			var sc = this.settingsRoot.SendFile.Command;
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
+			}
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_Panels_Predefined_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_Clear_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_Clear_Click()
+			// Changes here may have to be applied there too.
+
+			this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_ExportToFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// PENDING
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// PENDING
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_LinkToFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// PENDING
 		}
 
 		#endregion

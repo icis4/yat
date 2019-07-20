@@ -44,8 +44,8 @@ SET _target=..\%_targetFormsTool%
 FORFILES /C "CMD /C COPY @FILE %_target%\Image_Tool_@FNAME_16x16.@EXT"
 
 SET _target=..\%_targetControlsTool%
-COPY lightning.png           %_target%\Image_Tool_lightning_16x16.png
 COPY arrow_refresh_small.png %_target%\Image_Tool_arrow_refresh_small_16x16.png
+COPY lightning.png           %_target%\Image_Tool_lightning_16x16.png
 
 CD..
 ::--------------------------------------------------------------------------------------------------

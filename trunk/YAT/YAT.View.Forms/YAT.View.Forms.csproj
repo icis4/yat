@@ -442,7 +442,10 @@
     <Content Include="Resources\Tool\Image_Tool_script_lightning_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_script_save_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_setting_tools_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_export_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_import_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_table_lightning_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_link_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_table_refresh_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_table_rows_insert_above_word_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_table_rows_insert_below_word_16x16.png" />

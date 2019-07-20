@@ -255,14 +255,29 @@ namespace YAT.View.Forms
 			InsertPage();
 		}
 
+		private void button_InsertPagesFromFile_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
 		private void button_AddPage_Click(object sender, EventArgs e)
 		{
 			AddPage();
 		}
 
+		private void button_AddPagesFromFile_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
 		private void button_CopyPage_Click(object sender, EventArgs e)
 		{
 			CopyPage();
+		}
+
+		private void button_ExportPageToFile_Click(object sender, EventArgs e)
+		{
+			// PENDING
 		}
 
 		private void button_DeletePage_Click(object sender, EventArgs e)
@@ -280,9 +295,19 @@ namespace YAT.View.Forms
 			MovePageDown();
 		}
 
-		private void button_DeletePages_Click(object sender, EventArgs e)
+		private void button_DeleteAllPages_Click(object sender, EventArgs e)
 		{
-			DeletePages();
+			DeleteAllPages();
+		}
+
+		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
+		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
+		{
+			// PENDING
 		}
 
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
@@ -290,13 +315,28 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			GetCommandFromSettingsSet(ControlEx.TagToIndex(sender));
+			SetCommandFromSettingsSet(ControlEx.TagToInt32(sender));
 			SetClearControls();
 		}
 
 		private void button_ClearPage_Click(object sender, EventArgs e)
 		{
 			ClearPage();
+		}
+
+		private void button_LinkToFile_Click(object sender, EventArgs e)
+		{
+			// PENDING ShowLinkFileDialog();
+		}
+
+		private void pathLabel_LinkedTo_Click(object sender, EventArgs e)
+		{
+			// PENDING ShowLinkFileDialog();
+		}
+
+		private void button_ClearLink_Click(object sender, EventArgs e)
+		{
+			// PENDING ClearLink();
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -313,6 +353,205 @@ namespace YAT.View.Forms
 		{
 			ShowHelp();
 		}
+
+		#region Controls Event Handlers > Commands Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Commands Context Menu
+		//------------------------------------------------------------------------------------------
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int contextMenuStrip_Commands_SelectedCommandId; // = 0;
+
+		private void contextMenuStrip_Commands_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.contextMenuStrip_Predefined_Opening()
+			// Changes here may have to be applied there too.
+
+			var id = GetSettingsSetIdFromLocation(new Point(contextMenuStrip_Commands.Left, contextMenuStrip_Commands.Top));
+			var c = GetCommandFromId(id);
+
+			contextMenuStrip_Commands_SelectedCommandId = id;
+
+			toolStripMenuItem_CommandContextMenu_UpBy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_DownBy.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+
+			toolStripMenuItem_CommandContextMenu_MoveTo_1 .Enabled = (id != 1);
+			toolStripMenuItem_CommandContextMenu_MoveTo_2 .Enabled = (id != 2);
+			toolStripMenuItem_CommandContextMenu_MoveTo_3 .Enabled = (id != 3);
+			toolStripMenuItem_CommandContextMenu_MoveTo_4 .Enabled = (id != 4);
+			toolStripMenuItem_CommandContextMenu_MoveTo_5 .Enabled = (id != 5);
+			toolStripMenuItem_CommandContextMenu_MoveTo_6 .Enabled = (id != 6);
+			toolStripMenuItem_CommandContextMenu_MoveTo_7 .Enabled = (id != 7);
+			toolStripMenuItem_CommandContextMenu_MoveTo_8 .Enabled = (id != 8);
+			toolStripMenuItem_CommandContextMenu_MoveTo_9 .Enabled = (id != 9);
+			toolStripMenuItem_CommandContextMenu_MoveTo_10.Enabled = (id != 10);
+			toolStripMenuItem_CommandContextMenu_MoveTo_11.Enabled = (id != 11);
+			toolStripMenuItem_CommandContextMenu_MoveTo_12.Enabled = (id != 12);
+
+			toolStripMenuItem_CommandContextMenu_CopyTo_1 .Enabled = (id != 1);
+			toolStripMenuItem_CommandContextMenu_CopyTo_2 .Enabled = (id != 2);
+			toolStripMenuItem_CommandContextMenu_CopyTo_3 .Enabled = (id != 3);
+			toolStripMenuItem_CommandContextMenu_CopyTo_4 .Enabled = (id != 4);
+			toolStripMenuItem_CommandContextMenu_CopyTo_5 .Enabled = (id != 5);
+			toolStripMenuItem_CommandContextMenu_CopyTo_6 .Enabled = (id != 6);
+			toolStripMenuItem_CommandContextMenu_CopyTo_7 .Enabled = (id != 7);
+			toolStripMenuItem_CommandContextMenu_CopyTo_8 .Enabled = (id != 8);
+			toolStripMenuItem_CommandContextMenu_CopyTo_9 .Enabled = (id != 9);
+			toolStripMenuItem_CommandContextMenu_CopyTo_10.Enabled = (id != 10);
+			toolStripMenuItem_CommandContextMenu_CopyTo_11.Enabled = (id != 11);
+			toolStripMenuItem_CommandContextMenu_CopyTo_12.Enabled = (id != 12);
+
+			toolStripMenuItem_CommandContextMenu_MoveTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_CopyTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_Clear .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_UpBy_N_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_UpBy_N_Click()
+			// Changes here may have to be applied there too.
+
+			var selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
+			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			for (int i = 0; i < n; i++)
+			{
+				Up(selectedCommandId);
+
+				selectedCommandId--;
+				if (selectedCommandId < Model.Settings.PredefinedCommandSettings.FirstCommandPerPage)
+					selectedCommandId = Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage;
+			}
+		}
+
+		private void Up(int selectedCommandId)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.Up()
+			// Changes here may have to be applied there too.
+
+			var ss = GetSettingsSetFromId(selectedCommandId);
+			var sc = ss.Command;
+			if (sc != null)
+				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ((selectedCommandId > Model.Settings.PredefinedCommandSettings.FirstCommandPerPage) ? (selectedCommandId - 1) : (Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage));
+			var ts = GetSettingsSetFromId(targetCommandId);
+			var tc = ts.Command;
+			if (tc != null)
+				tc = new Model.Types.Command(tc); // Clone command to ensure decoupling.
+
+			ts.Command = sc;
+			ss.Command = tc;
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_DownBy_N_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_DownBy_N_Click()
+			// Changes here may have to be applied there too.
+
+			var selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
+			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			for (int i = 0; i < n; i++)
+			{
+				Down(selectedCommandId);
+
+				selectedCommandId++;
+				if (selectedCommandId > Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage)
+					selectedCommandId = Model.Settings.PredefinedCommandSettings.FirstCommandPerPage;
+			}
+		}
+
+		private void Down(int selectedCommandId)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.Down()
+			// Changes here may have to be applied there too.
+
+			var ss = GetSettingsSetFromId(selectedCommandId);
+			var sc = ss.Command;
+			if (sc != null)
+				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ((selectedCommandId < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage) ? (selectedCommandId + 1) : (Model.Settings.PredefinedCommandSettings.FirstCommandPerPage));
+			var ts = GetSettingsSetFromId(targetCommandId);
+			var tc = ts.Command;
+			if (tc != null)
+				tc = new Model.Types.Command(tc); // Clone command to ensure decoupling.
+
+			ts.Command = sc;
+			ss.Command = tc;
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_MoveTo_I_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var ss = GetSettingsSetFromId(contextMenuStrip_Commands_SelectedCommandId);
+			var sc = ss.Command;
+			if (sc != null)
+				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			var ts = GetSettingsSetFromId(targetCommandId);
+			ts.Command = sc;
+			ss.ClearCommand();
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_CopyTo_I_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_CopyTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var ss = GetSettingsSetFromId(contextMenuStrip_Commands_SelectedCommandId);
+			var sc = ss.Command;
+			if (sc != null)
+				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			var ts = GetSettingsSetFromId(targetCommandId);
+			ts.Command = sc;
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_Clear_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Clear_Click()
+			// Changes here may have to be applied there too.
+
+			var selectedSet = GetSettingsSetFromId(contextMenuStrip_Commands_SelectedCommandId);
+			selectedSet.ClearCommand();
+		}
+
+		#endregion
 
 		#endregion
 
@@ -381,6 +620,7 @@ namespace YAT.View.Forms
 			SetPagesControls();
 			SetPageControls();
 			SetClearControls();
+			SetLinkControls();
 		}
 
 		private void SetPagesControls()
@@ -390,6 +630,7 @@ namespace YAT.View.Forms
 			{
 				int pageCount = this.settingsInEdit.Pages.Count;
 				bool pageIsSelected = (this.selectedPage != 0);
+				int totalDefinedCommandCount = this.settingsInEdit.TotalDefinedCommandCount;
 
 				// Page list:
 				if (pageCount > 0)
@@ -410,14 +651,19 @@ namespace YAT.View.Forms
 				}
 
 				// Page list buttons:
-				button_NamePage    .Enabled = pageIsSelected;
-				button_InsertPage  .Enabled = pageIsSelected;
-				button_AddPage     .Enabled = true;
-				button_CopyPage    .Enabled = pageIsSelected;
-				button_DeletePage  .Enabled = pageIsSelected; // Deleting a sole page is permissible.
-				button_MovePageUp  .Enabled = pageIsSelected && (this.selectedPage > 1);
-				button_MovePageDown.Enabled = pageIsSelected && (this.selectedPage < pageCount);
-				button_DeletePages .Enabled = (pageCount > 0); // Deleting a sole page is permissible.
+				button_NamePage              .Enabled = pageIsSelected;
+				button_InsertPage            .Enabled = pageIsSelected;
+				button_InsertPagesFromFile   .Enabled = pageIsSelected;
+			////button_AddPage               .Enabled = true;
+			////button_AddPagesFromFile      .Enabled = true;
+				button_CopyPage              .Enabled = pageIsSelected;
+				button_ExportPageToFile      .Enabled = pageIsSelected;
+				button_DeletePage            .Enabled = pageIsSelected; // Deleting a sole page is permissible.
+				button_MovePageUp            .Enabled = pageIsSelected && (this.selectedPage > 1);
+				button_MovePageDown          .Enabled = pageIsSelected && (this.selectedPage < pageCount);
+				button_DeleteAllPages        .Enabled = (pageCount > 0); // Deleting a sole page is permissible.
+				button_ExportAllPagesToFile  .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
+			////button_ImportAllPagesFromFile.Enabled = true;
 
 				// Selected page:
 				if (pageIsSelected)
@@ -473,6 +719,24 @@ namespace YAT.View.Forms
 					commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
 
 				button_ClearPage.Enabled = (commandCount > 0);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void SetLinkControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				// PENDING
+
+				pathLabel_LinkedTo.Enabled = false;
+				pathLabel_LinkedTo.Visible = false;
+				button_ClearLink.Enabled = false;
+				button_ClearLink.Visible = false;
 			}
 			finally
 			{
@@ -618,7 +882,7 @@ namespace YAT.View.Forms
 		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void DeletePages()
+		private void DeleteAllPages()
 		{
 			if (MessageBoxEx.Show
 				(
@@ -644,12 +908,76 @@ namespace YAT.View.Forms
 		// Non-Public Methods > Selected Page
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		/// <param name="command">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-		private void GetCommandFromSettingsSet(int command)
+		/// <summary>
+		/// Returns command at the specified <paramref name="id"/>.
+		/// Returns <c>null</c> if command is undefined or invalid.
+		/// </summary>
+		public virtual Model.Types.Command GetCommandFromId(int id)
 		{
-			var page = this.settingsInEdit.Pages[SelectedPageIndex];
-			page.SetCommand(command - 1, this.predefinedCommandSettingsSets[command - 1].Command);
+			var ss = GetSettingsSetFromId(id);
+			if (ss != null)
+				return (ss.Command);
+
+			return (null);
+		}
+
+		/// <summary>
+		/// Returns settings set at the specified <paramref name="id"/>.
+		/// Returns <c>null</c> if command is undefined or invalid.
+		/// </summary>
+		protected virtual Controls.PredefinedCommandSettingsSet GetSettingsSetFromId(int id)
+		{
+			int i = (id - 1); // ID = 1..max
+			if ((i >= 0) && (i < this.predefinedCommandSettingsSets.Count))
+				return (this.predefinedCommandSettingsSets[i]);
+
+			return (null);
+		}
+
+		/// <summary>
+		/// Returns settings set ID (1..max) that is assigned to the set at the specified location.
+		/// Returns 0 if no set.
+		/// </summary>
+		protected virtual int GetSettingsSetIdFromLocation(Point point)
+		{
+			Point requested = groupBox_Page.PointToClient(point);
+
+			// Ensure that location is within control:
+			if ((requested.X < 0) || (requested.X > Width))  return (0);
+			if ((requested.Y < 0) || (requested.Y > Height)) return (0);
+
+			// Ensure that location is around sets:
+			if (requested.Y < predefinedCommandSettingsSet_1.Top)     return (0);
+			if (requested.Y > predefinedCommandSettingsSet_12.Bottom) return (0);
+
+			// Find the corresponding set:
+			for (int i = 0; i < this.predefinedCommandSettingsSets.Count; i++)
+			{
+				if (requested.Y <= this.predefinedCommandSettingsSets[i].Bottom)
+					return (i + 1); // ID = 1..max
+			}
+
+			return (0);
+		}
+
+		/// <summary>
+		/// Returns settings set that is assigned to the set at the specified location.
+		/// Returns <c>null</c> if no set or if set is undefined or invalid.
+		/// </summary>
+		protected virtual Controls.PredefinedCommandSettingsSet GetSettingsSetFromLocation(Point point)
+		{
+			return (GetSettingsSetFromId(GetSettingsSetIdFromLocation(point)));
+		}
+
+		/// <param name="id">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
+		protected virtual void SetCommandFromSettingsSet(int id)
+		{
+			if (this.settingsInEdit.Pages != null)
+			{
+				var i = (id - 1);
+				var p = this.settingsInEdit.Pages[SelectedPageIndex];
+				p.SetCommand(i, this.predefinedCommandSettingsSets[i].Command);
+			}
 		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

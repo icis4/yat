@@ -101,6 +101,24 @@ namespace YAT.Model.Types
 			set { this.commands = value; }
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public int DefinedCommandCount
+		{
+			get
+			{
+				int n = 0;
+
+				foreach (var c in Commands)
+				{
+					if ((c != null) && (c.IsDefined))
+						n++;
+				}
+
+				return (n);
+			}
+		}
+
 		#endregion
 
 		#region Methods
