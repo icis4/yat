@@ -42,34 +42,35 @@ namespace MKY.Windows.Forms
 		public const int InvalidIndex = -1;
 
 		/// <summary>
-		/// Converts the tag property of <paramref name="sender"/> into an index value.
+		/// Converts the tag property of <paramref name="sender"/> into an integer value.
 		/// </summary>
 		/// <param name="sender">Control to retrieve the tag from.</param>
 		/// <returns>
-		/// Index value if the tag property of <paramref name="sender"/> is a valid value;
-		/// <see cref="InvalidIndex"/> otherwise.
+		/// Value of the tag property of <paramref name="sender"/>.
 		/// </returns>
-		public static int TagToIndex(object sender)
+		/// <exception cref="ArgumentException"><paramref name="sender"/> is not a <see cref="Control"/>.</exception>
+		/// <exception cref="ArgumentException">The tag property of <paramref name="sender"/> is not a string.</exception>
+		/// <exception cref="OverflowException">The tag property of <paramref name="sender"/> represents a number less than <see cref="int.MinValue"/> or greater than <see cref="int.MaxValue"/>.</exception>
+		/// <exception cref="OverflowException">The tag property of <paramref name="sender"/> includes non-zero, fractional digits.</exception>
+		public static int TagToInt32(object sender)
 		{
 			// Attention:
-			// Same code exists in ToolStripMenuItemEx.TagToIndex().
+			// Same code exists in ToolStripMenuItemEx.TagToInt().
 			// Changes here must be applied there too.
 
-			var control = sender as Control;
+			var control = (sender as Control);
 			if (control != null)
 			{
-				var tag = control.Tag as string;
+				var tag = (control.Tag as string);
 				if (tag != null)
 				{
-					int index;
-					if (int.TryParse(tag, NumberStyles.Integer, CultureInfo.InvariantCulture, out index))
-						return (index);
+					return (int.Parse(tag, NumberStyles.Integer, CultureInfo.InvariantCulture)); // Throw if invalid format.
 				}
 
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Sender has an invalid tag '" + tag + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "sender"));
 			}
 
-			throw (new ArgumentOutOfRangeException("sender", sender, MessageHelper.InvalidExecutionPreamble + "'" + sender + "' is no control!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + sender + "' is no 'Control'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "sender"));
 		}
 
 		/// <summary>
