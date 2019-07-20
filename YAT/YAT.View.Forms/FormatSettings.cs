@@ -221,7 +221,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			GetFormatFromControl(ControlEx.TagToIndex(sender));
+			GetFormatFromControl(ControlEx.TagToInt32(sender));
 			SetControls();
 		}
 
@@ -230,7 +230,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			GetCustomColorsFromControl(ControlEx.TagToIndex(sender));
+			GetCustomColorsFromControl(ControlEx.TagToInt32(sender));
 			SetControls();
 		}
 
