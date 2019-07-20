@@ -386,7 +386,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Tool\Image_Tool_arrow_refresh_small_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_broom_16x16.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
