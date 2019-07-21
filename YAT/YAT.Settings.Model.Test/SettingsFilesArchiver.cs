@@ -38,12 +38,10 @@ using MKY.Xml.Schema;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
-using YAT.Settings.Workspace;
 
 #endregion
 
-namespace YAT.Settings.Test
+namespace YAT.Settings.Model.Test
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Archiver", Justification = "'Archiver' is a correct English term.")]

@@ -27,6 +27,8 @@ using System.Windows.Forms;
 
 using MKY.Windows.Forms;
 
+using YAT.Settings.Application;
+
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
@@ -39,8 +41,8 @@ namespace YAT.View.Forms
 
 		private SettingControlsHelper isSettingControls;
 
-		private Settings.Application.LocalUserSettingsRoot settings;
-		private Settings.Application.LocalUserSettingsRoot settingsInEdit;
+		private LocalUserSettingsRoot settings;
+		private LocalUserSettingsRoot settingsInEdit;
 
 		#endregion
 
@@ -50,7 +52,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Preferences(Settings.Application.LocalUserSettingsRoot settings)
+		public Preferences(LocalUserSettingsRoot settings)
 		{
 			InitializeComponent();
 
@@ -68,7 +70,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Settings.Application.LocalUserSettingsRoot SettingsResult
+		public LocalUserSettingsRoot SettingsResult
 		{
 			get { return (this.settings); }
 		}
@@ -80,10 +82,10 @@ namespace YAT.View.Forms
 		// Settings
 		//==========================================================================================
 
-		private void KeepAndCloneAndAttachSettings(Settings.Application.LocalUserSettingsRoot settings)
+		private void KeepAndCloneAndAttachSettings(LocalUserSettingsRoot settings)
 		{
 			this.settings = settings;
-			this.settingsInEdit = new Settings.Application.LocalUserSettingsRoot(settings);
+			this.settingsInEdit = new LocalUserSettingsRoot(settings);
 			this.settingsInEdit.Changed += settings_Form_Changed;
 		}
 

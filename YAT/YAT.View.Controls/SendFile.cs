@@ -68,7 +68,7 @@ namespace YAT.View.Controls
 	/// <remarks>
 	/// Note that similar code exists in <see cref="SendText"/> and <see cref="PredefinedCommandSettingsSet"/>.
 	/// The diff among these three implementations shall be kept as small as possible.
-	/// 
+	///
 	/// For a future refactoring, consider to separate the common code into a common view-model.
 	/// </remarks>
 	[DefaultEvent("SendCommandRequest")]

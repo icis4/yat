@@ -35,9 +35,8 @@
     <assembly path="YAT\YAT.Model.Types\bin\Debug\YAT.Model.Types.dll" />
     <assembly path="YAT\YAT.Application\bin\Debug\YAT.Application.dll" />
     <assembly path="YAT\YAT.Settings.Application\bin\Debug\YAT.Settings.Application.dll" />
-    <assembly path="YAT\YAT.Settings.Terminal\bin\Debug\YAT.Settings.Terminal.dll" />
-    <assembly path="YAT\YAT.Settings.Test\bin\Debug\YAT.Settings.Test.dll" />
-    <assembly path="YAT\YAT.Settings.Workspace\bin\Debug\YAT.Settings.Workspace.dll" />
+    <assembly path="YAT\YAT.Settings.Model\bin\Debug\YAT.Settings.Model.dll" />
+    <assembly path="YAT\YAT.Settings.Model.Test\bin\Debug\YAT.Settings.Model.Test.dll" />
     <assembly path="YAT\YAT.Test\bin\Debug\YAT.Test.exe" />
     <assembly path="YAT\YAT.View.Controls\bin\Debug\YAT.View.Controls.dll" />
     <assembly path="YAT\YAT.View.Forms\bin\Debug\YAT.View.Forms.dll" />
@@ -80,9 +79,8 @@
     <assembly path="YAT\YAT.Model.Types\bin\Release\YAT.Model.Types.dll" />
     <assembly path="YAT\YAT.Application\bin\Release\YAT.Application.dll" />
     <assembly path="YAT\YAT.Settings.Application\bin\Release\YAT.Settings.Application.dll" />
-    <assembly path="YAT\YAT.Settings.Terminal\bin\Release\YAT.Settings.Terminal.dll" />
-    <assembly path="YAT\YAT.Settings.Test\bin\Release\YAT.Settings.Test.dll" />
-    <assembly path="YAT\YAT.Settings.Workspace\bin\Release\YAT.Settings.Workspace.dll" />
+    <assembly path="YAT\YAT.Settings.Model\bin\Release\YAT.Settings.Model.dll" />
+    <assembly path="YAT\YAT.Settings.Model.Test\bin\Release\YAT.Settings.Model.Test.dll" />
     <assembly path="YAT\YAT.Test\bin\Release\YAT.Test.exe" />
     <assembly path="YAT\YAT.View.Controls\bin\Release\YAT.View.Controls.dll" />
     <assembly path="YAT\YAT.View.Forms\bin\Release\YAT.View.Forms.dll" />

@@ -38,7 +38,7 @@ using YAT.Model.Settings;
 
 #endregion
 
-namespace YAT.Settings.Workspace
+namespace YAT.Settings.Model
 {
 	/// <summary></summary>
 	[XmlRoot("Settings")]

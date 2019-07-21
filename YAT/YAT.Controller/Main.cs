@@ -203,11 +203,11 @@ namespace YAT.Controller
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Main()
@@ -388,36 +388,36 @@ namespace YAT.Controller
 		/// Do not directly call this method for normal or console operation. Call <see cref="Run()"/>
 		/// or <see cref="RunFromConsole"/> instead. Call this method directly for automated testing
 		/// purposes only.
-		/// 
+		///
 		/// There are the following use cases to run YAT. This Run() method supports all these
 		/// use cases as shown below:
-		/// 
+		///
 		/// 1. 'Normal' GUI operation
 		///    > Start YAT from the Windows start menu
 		///    > Equal to start YAT.exe directly
 		///    ==> Run(false, true);
-		/// 
+		///
 		/// 2. 'File' triggered GUI operation
 		///    > Start YAT by executing a .yaw or .yat file
 		///    > Uses file type relationship as defined by YAT.Setup
 		///    ==> Run(false, true);
-		/// 
+		///
 		/// 3. 'cmd console' operation with GUI
 		///    > Must use 'YATConsole' to ensure that output is properly routed back to console
 		///    ==> Run(true, true);
-		/// 
+		///
 		/// 4. 'PowerShell' operation with GUI
 		///    > Must use 'YATConsole' to ensure that output is properly routed back to PowerShell
 		///    ==> Run(true, true);
-		/// 
+		///
 		/// 5. 'cmd console' operation with console only, no GUI at all
 		///    > Must use 'YATConsole' with the -NoView/-nv option
 		///    ==> Run(true, false);
-		/// 
+		///
 		/// 6. 'PowerShell' operation with console only, no GUI at all
 		///    > Must use 'YATConsole' with the -NoView/-nv option
 		///    ==> Run(true, false);
-		/// 
+		///
 		/// 7. YAT testing
 		///    ==> Run(false, true) or Run(true, true) to test the view (e.g. view stress test)
 		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. controller test)
@@ -1282,7 +1282,7 @@ namespace YAT.Controller
 		///     at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped* lpOverlapped, Int32& lpNumberOfBytesTransferred, Boolean bWait)
 		///     at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
 		///     ...
-		/// 
+		///
 		/// Message:
 		///     Safe handle has been closed
 		/// Source:
@@ -1292,7 +1292,7 @@ namespace YAT.Controller
 		///     at Microsoft.Win32.UnsafeNativeMethods.WaitCommEvent(SafeFileHandle, hFile, Int32* lpEvtMask, Native...
 		///     at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
 		///     ...
-		/// 
+		///
 		/// Message:
 		///     Das SafeHandle wurde geschlossen.
 		/// Source:
@@ -1303,7 +1303,7 @@ namespace YAT.Controller
 		///     bei System.Threading.EventWaitHandle.Set()
 		///     bei System.IO.Ports.SerialStream.AsyncFSCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped pOverlapped)
 		///     ...
-		/// 
+		///
 		/// Message:
 		///     Das SafeHandle wurde geschlossen.
 		/// Source:

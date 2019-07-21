@@ -128,13 +128,9 @@
       <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>
       <Name>YAT.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
-      <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
-      <Name>YAT.Settings.Application</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Test\YAT.Settings.Test.csproj">
+    <ProjectReference Include="..\YAT.Settings.Model.Test\YAT.Settings.Model.Test.csproj">
       <Project>{306722B1-7554-46FD-A8BE-99185753CD51}</Project>
-      <Name>YAT.Settings.Test</Name>
+      <Name>YAT.Settings.Model.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>

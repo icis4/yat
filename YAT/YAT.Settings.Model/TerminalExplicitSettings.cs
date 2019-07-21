@@ -27,10 +27,10 @@ using System.Xml.Serialization;
 
 using MKY;
 
-namespace YAT.Settings.Terminal
+namespace YAT.Settings.Model
 {
 	/// <summary></summary>
-	public class ExplicitSettings : MKY.Settings.SettingsItem, IEquatable<ExplicitSettings>
+	public class TerminalExplicitSettings : MKY.Settings.SettingsItem, IEquatable<TerminalExplicitSettings>
 	{
 		/// <summary></summary>
 		public const bool LogIsOnDefault = false;
@@ -42,28 +42,28 @@ namespace YAT.Settings.Terminal
 		private string userName;
 
 		private Domain.Settings.TerminalSettings terminal;
-		private Model.Settings.PredefinedCommandSettings predefinedCommand;
-		private Model.Settings.AutoResponseSettings autoResponse;
-		private Model.Settings.AutoActionSettings autoAction;
+		private YAT.Model.Settings.PredefinedCommandSettings predefinedCommand;
+		private YAT.Model.Settings.AutoResponseSettings autoResponse;
+		private YAT.Model.Settings.AutoActionSettings autoAction;
 		private Format.Settings.FormatSettings format;
 		private Log.Settings.LogSettings log;
 
 		/// <summary></summary>
-		public ExplicitSettings()
+		public TerminalExplicitSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public ExplicitSettings(MKY.Settings.SettingsType settingsType)
+		public TerminalExplicitSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
 
 			Terminal          = new Domain.Settings.TerminalSettings(SettingsType);
-			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(SettingsType);
-			AutoResponse      = new Model.Settings.AutoResponseSettings(SettingsType);
-			AutoAction        = new Model.Settings.AutoActionSettings(SettingsType);
+			PredefinedCommand = new YAT.Model.Settings.PredefinedCommandSettings(SettingsType);
+			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(SettingsType);
+			AutoAction        = new YAT.Model.Settings.AutoActionSettings(SettingsType);
 			Format            = new Format.Settings.FormatSettings(SettingsType);
 			Log               = new Log.Settings.LogSettings(SettingsType);
 
@@ -74,16 +74,16 @@ namespace YAT.Settings.Terminal
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public ExplicitSettings(ExplicitSettings rhs)
+		public TerminalExplicitSettings(TerminalExplicitSettings rhs)
 			: base(rhs)
 		{
 			LogIsOn  = rhs.LogIsOn;
 			UserName = rhs.UserName;
 
 			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
-			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
-			AutoResponse      = new Model.Settings.AutoResponseSettings(rhs.AutoResponse);
-			AutoAction        = new Model.Settings.AutoActionSettings(rhs.AutoAction);
+			PredefinedCommand = new YAT.Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
+			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(rhs.AutoResponse);
+			AutoAction        = new YAT.Model.Settings.AutoActionSettings(rhs.AutoAction);
 			Format            = new Format.Settings.FormatSettings(rhs.Format);
 			Log               = new Log.Settings.LogSettings(rhs.Log);
 
@@ -109,13 +109,13 @@ namespace YAT.Settings.Terminal
 		/// <remarks>
 		/// This property is intentionally located in 'explicit' for the following reasons:
 		///  > The decision whether or not to log something is something explicit.
-		///  > Opposed to <see cref="ImplicitSettings.TerminalIsStarted"/>, logging produces data.
+		///  > Opposed to <see cref="TerminalImplicitSettings.TerminalIsStarted"/>, logging produces data.
 		///  > Logging is coupled to the terminal state, so it will only become active then the
 		///    terminal is started.
-		/// 
-		/// Note that this setting as well as <see cref="ImplicitSettings.TerminalIsStarted"/> both
+		///
+		/// Note that this setting as well as <see cref="TerminalImplicitSettings.TerminalIsStarted"/> both
 		/// used to be 'implicit' up to 1.99.34 and then got moved to 'explicit' for 1.99.50/51/52.
-		/// But, as described in <see cref="ImplicitSettings.TerminalIsStarted"/>, that setting got
+		/// But, as described in <see cref="TerminalImplicitSettings.TerminalIsStarted"/>, that setting got
 		/// reverted for 1.99.70+ while this settings is kept here for the above stated reasons.
 		/// </remarks>
 		[XmlElement("LogIsOn")]
@@ -166,7 +166,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("PredefinedCommand")]
-		public Model.Settings.PredefinedCommandSettings PredefinedCommand
+		public YAT.Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
 			get { return (this.predefinedCommand); }
 			set
@@ -183,7 +183,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("AutoResponse")]
-		public virtual Model.Settings.AutoResponseSettings AutoResponse
+		public virtual YAT.Model.Settings.AutoResponseSettings AutoResponse
 		{
 			get { return (this.autoResponse); }
 			set
@@ -200,7 +200,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("AutoAction")]
-		public virtual Model.Settings.AutoActionSettings AutoAction
+		public virtual YAT.Model.Settings.AutoActionSettings AutoAction
 		{
 			get { return (this.autoAction); }
 			set
@@ -281,7 +281,7 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as ExplicitSettings));
+			return (Equals(obj as TerminalExplicitSettings));
 		}
 
 		/// <summary>
@@ -291,7 +291,7 @@ namespace YAT.Settings.Terminal
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(ExplicitSettings other)
+		public bool Equals(TerminalExplicitSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -309,7 +309,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(ExplicitSettings lhs, ExplicitSettings rhs)
+		public static bool operator ==(TerminalExplicitSettings lhs, TerminalExplicitSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -322,7 +322,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(ExplicitSettings lhs, ExplicitSettings rhs)
+		public static bool operator !=(TerminalExplicitSettings lhs, TerminalExplicitSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

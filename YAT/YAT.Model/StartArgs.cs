@@ -37,9 +37,7 @@ using MKY;
 using MKY.CommandLine;
 using MKY.Settings;
 
-using YAT.Settings.Application;
-using YAT.Settings.Terminal;
-using YAT.Settings.Workspace;
+using YAT.Settings.Model;
 
 #endregion
 

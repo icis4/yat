@@ -66,7 +66,7 @@ using MKY.Windows.Forms;
 using YAT.Application.Utilities;
 using YAT.Model.Types;
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
+using YAT.Settings.Model;
 using YAT.View.Controls;
 
 #endregion

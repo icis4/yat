@@ -161,9 +161,9 @@
       <Project>{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}</Project>
       <Name>YAT.Model.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Test\YAT.Settings.Test.csproj">
+    <ProjectReference Include="..\YAT.Settings.Model.Test\YAT.Settings.Model.Test.csproj">
       <Project>{306722B1-7554-46FD-A8BE-99185753CD51}</Project>
-      <Name>YAT.Settings.Test</Name>
+      <Name>YAT.Settings.Model.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.View.Test\YAT.View.Test.csproj">
       <Project>{b1fa3c03-5924-47ff-90ad-d5d38027df0c}</Project>

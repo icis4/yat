@@ -26,11 +26,9 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms;
 
 using MKY.Collections.Generic;
 using MKY.Settings;
@@ -38,7 +36,6 @@ using MKY.Settings;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
 
 #endregion
 

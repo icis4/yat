@@ -26,7 +26,6 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -38,7 +37,6 @@ using NUnit;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
 
 #endregion
 

@@ -98,7 +98,6 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorkspaceSettingsRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\YAT.snk" />

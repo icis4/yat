@@ -110,6 +110,10 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
+      <Project>{69a8cbb4-7d00-4a3d-9cf7-220dd02c2eb7}</Project>
+      <Name>YAT.Settings.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.View.Forms\YAT.View.Forms.csproj">
       <Project>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</Project>
       <Name>YAT.View.Forms</Name>
@@ -121,10 +125,6 @@
     <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
       <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>
       <Name>YAT.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
-      <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
-      <Name>YAT.Settings.Application</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
