@@ -8,8 +8,8 @@
     <ProjectGuid>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YAT.Settings</RootNamespace>
-    <AssemblyName>YAT.Settings</AssemblyName>
+    <RootNamespace>YAT.Settings.Model</RootNamespace>
+    <AssemblyName>YAT.Settings.Model</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -33,7 +33,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Debug\YAT.Settings.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\YAT.Settings.Model.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -44,7 +44,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Release\YAT.Settings.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\YAT.Settings.Model.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
