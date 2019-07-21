@@ -35,6 +35,8 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Windows.Forms;
 
+using YAT.Settings.Model;
+
 #endregion
 
 namespace YAT.View.Forms
@@ -49,8 +51,8 @@ namespace YAT.View.Forms
 
 		private SettingControlsHelper isSettingControls;
 
-		private Settings.Terminal.ExplicitSettings settings;
-		private Settings.Terminal.ExplicitSettings settingsInEdit;
+		private TerminalExplicitSettings settings;
+		private TerminalExplicitSettings settingsInEdit;
 
 		#endregion
 
@@ -60,7 +62,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public AdvancedTerminalSettings(Settings.Terminal.ExplicitSettings settings)
+		public AdvancedTerminalSettings(TerminalExplicitSettings settings)
 		{
 			InitializeComponent();
 
@@ -78,7 +80,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Settings.Terminal.ExplicitSettings SettingsResult
+		public TerminalExplicitSettings SettingsResult
 		{
 			get { return (this.settings); }
 		}
@@ -90,10 +92,10 @@ namespace YAT.View.Forms
 		// Settings
 		//==========================================================================================
 
-		private void KeepAndCloneAndAttachSettings(Settings.Terminal.ExplicitSettings settings)
+		private void KeepAndCloneAndAttachSettings(TerminalExplicitSettings settings)
 		{
 			this.settings = settings;
-			this.settingsInEdit = new Settings.Terminal.ExplicitSettings(settings);
+			this.settingsInEdit = new TerminalExplicitSettings(settings);
 			this.settingsInEdit.Changed += settings_Form_Changed;
 		}
 
@@ -1338,7 +1340,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = Domain.Settings.SendSettings.DefaultLineRepeatDefault;
 
 				// User:
-				this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
+				this.settingsInEdit.UserName = TerminalExplicitSettings.UserNameDefault;
 
 				// Update dependent settings:
 				this.settingsInEdit.Terminal.UpdateTerminalTypeDependentDefaults();

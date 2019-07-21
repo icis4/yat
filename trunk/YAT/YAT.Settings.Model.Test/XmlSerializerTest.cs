@@ -38,11 +38,10 @@ using NUnit.Framework;
 using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
 
 #endregion
 
-namespace YAT.Settings.Test
+namespace YAT.Settings.Model.Test
 {
 	/// <summary></summary>
 	[TestFixture]
@@ -182,8 +181,8 @@ namespace YAT.Settings.Test
 			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ExplicitSettings", FileExtension);
-			var s = new ExplicitSettings();
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(ExplicitSettings), s);
+			var s = new TerminalExplicitSettings();
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(TerminalExplicitSettings), s);
 		}
 
 		#endregion
@@ -200,8 +199,8 @@ namespace YAT.Settings.Test
 			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ImplicitSettings", FileExtension);
-			var s = new ImplicitSettings();
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(ImplicitSettings), s);
+			var s = new TerminalImplicitSettings();
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(TerminalImplicitSettings), s);
 		}
 
 		#endregion

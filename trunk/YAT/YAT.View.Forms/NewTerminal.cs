@@ -31,10 +31,10 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
-using MKY.Collections.Specialized;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
+using YAT.Settings.Model;
 
 #endregion
 
@@ -53,7 +53,7 @@ namespace YAT.View.Forms
 		private Model.Settings.NewTerminalSettings newTerminalSettings;
 		private Model.Settings.NewTerminalSettings newTerminalSettingsInEdit;
 
-		private Settings.Terminal.TerminalSettingsRoot terminalSettings;
+		private TerminalSettingsRoot terminalSettings;
 
 		#endregion
 
@@ -91,7 +91,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public Settings.Terminal.TerminalSettingsRoot TerminalSettingsResult
+		public TerminalSettingsRoot TerminalSettingsResult
 		{
 			get { return (this.terminalSettings); }
 		}
@@ -363,7 +363,7 @@ namespace YAT.View.Forms
 			UpdateNewTerminalSettings();
 
 			// Create document settings and fill it with new terminal settings:
-			this.terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
+			this.terminalSettings = new TerminalSettingsRoot();
 
 			this.terminalSettings.Terminal.TerminalType                            = this.newTerminalSettings.TerminalType;
 			this.terminalSettings.Terminal.UpdateTerminalTypeDependentDefaults();

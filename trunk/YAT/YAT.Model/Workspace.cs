@@ -48,8 +48,7 @@ using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Model.Utilities;
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
-using YAT.Settings.Workspace;
+using YAT.Settings.Model;
 
 #endregion
 
@@ -82,7 +81,7 @@ namespace YAT.Model
 
 		/// <summary>
 		/// Workaround to the following issue:
-		/// 
+		///
 		/// A test (e.g. 'FileHandlingTest') needs to verify the settings files after calling
 		/// <see cref="Main.Exit()"/>. But at that moment, the settings have already been disposed
 		/// of and can no longer be accessed.
@@ -91,7 +90,7 @@ namespace YAT.Model
 		/// The second approach was to retrieve the required information *before* exiting, i.e.
 		/// calling <see cref="Main.Exit()"/>. But that doesn't work at all, since auto-save paths
 		/// are only evaluated *at* <see cref="Main.Exit()"/>.
-		/// 
+		///
 		/// This workaround is considered the best option to solve this issue.
 		/// </summary>
 		/// <remarks>
@@ -268,11 +267,11 @@ namespace YAT.Model
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Workspace()
@@ -878,7 +877,7 @@ namespace YAT.Model
 		///  3. Intentionally save the workspace as.
 		///      => The user expects to save the terminal as well.
 		///      => No saving the terminal would lead to a normal file referring to an auto file!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual bool SaveAs(string filePath)
@@ -988,7 +987,7 @@ namespace YAT.Model
 		/// Close() of the workspace is called. Without taking care of this, the workspace would
 		/// be removed as the active workspace from the local user settings. Therefore, the
 		/// workspace has to signal such cases to main.
-		/// 
+		///
 		/// Cases (similar to cases in Model.Terminal):
 		/// - Main exit
 		///   - auto,   no file,       auto save    => auto save, if it fails => nothing  : (m1a)
@@ -1010,7 +1009,7 @@ namespace YAT.Model
 		/// Save and close must be done sequentially:
 		/// 1. Save terminals and workspace
 		/// 2. Close terminals and workspace, but only if save was successful
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual bool CloseConsiderately(bool isMainExit)
@@ -2128,7 +2127,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool, bool, bool)"/>
 		/// below must be called with the first argument set to <c>true</c>.
-		/// 
+		///
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
 		/// the terminal(s), thus, this method will not try to auto save.
 		/// </remarks>

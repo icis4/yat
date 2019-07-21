@@ -26,7 +26,6 @@
 // Using
 //==================================================================================================
 
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.Settings;

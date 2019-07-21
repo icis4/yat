@@ -42,7 +42,7 @@ using MKY.Net;
 
 using NUnit.Framework;
 
-using YAT.Settings.Terminal;
+using YAT.Settings.Model;
 
 #endregion
 

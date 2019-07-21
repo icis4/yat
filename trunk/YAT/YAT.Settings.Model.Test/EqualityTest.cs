@@ -38,11 +38,11 @@ using MKY.Test.Equality.Methods;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
+using YAT.Settings.Model;
 
 #endregion
 
-namespace YAT.Settings.Test
+namespace YAT.Settings.Model.Test
 {
 	/// <summary></summary>
 	[TestFixture]

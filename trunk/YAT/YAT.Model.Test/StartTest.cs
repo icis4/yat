@@ -35,7 +35,7 @@ using MKY.Settings;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
-using YAT.Settings.Test;
+using YAT.Settings.Model.Test;
 
 #endregion
 

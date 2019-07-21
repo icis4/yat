@@ -36,6 +36,7 @@ using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
+using YAT.Settings.Model;
 
 #endregion
 
@@ -54,8 +55,8 @@ namespace YAT.View.Forms
 		private int terminalId; // = 0;
 		private bool terminalIsOpen; // = false;
 
-		private Settings.Terminal.ExplicitSettings settings;
-		private Settings.Terminal.ExplicitSettings settingsInEdit;
+		private TerminalExplicitSettings settings;
+		private TerminalExplicitSettings settingsInEdit;
 
 		#endregion
 
@@ -68,19 +69,19 @@ namespace YAT.View.Forms
 		/// Initializes a new instance of the <see cref="TerminalSettings"/> class.
 		/// </summary>
 		/// <remarks>
-		/// Using <see cref="Settings.Terminal.ExplicitSettings"/> instead of simply using
+		/// Using <see cref="TerminalExplicitSettings"/> instead of simply using
 		/// <see cref="Domain.Settings.TerminalSettings"/> for two reasons:
 		/// <list type="bullet">
-		/// <item><description>Handling of <see cref="Settings.Terminal.ExplicitSettings.UserName"/>.</description></item>
+		/// <item><description>Handling of <see cref="TerminalExplicitSettings.UserName"/>.</description></item>
 		/// <item><description>Prepared for future migration to tree view dialog containing all settings.</description></item>
 		/// </list>
 		/// </remarks>
-		public TerminalSettings(Settings.Terminal.ExplicitSettings settings)
+		public TerminalSettings(TerminalExplicitSettings settings)
 		{
 			InitializeComponent();
 
 			this.settings = settings;
-			this.settingsInEdit = new Settings.Terminal.ExplicitSettings(settings);
+			this.settingsInEdit = new TerminalExplicitSettings(settings);
 
 			// Set visible/invisible before accessing any settings, to ensure that the correct
 			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
@@ -111,7 +112,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public Settings.Terminal.ExplicitSettings SettingsResult
+		public TerminalExplicitSettings SettingsResult
 		{
 			get { return (this.settings); }
 		}

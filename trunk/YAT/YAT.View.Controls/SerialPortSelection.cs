@@ -326,7 +326,7 @@ namespace YAT.View.Controls
 		/// Without precaution, and in case of no ports, the message box may appear twice due to
 		/// the recursion described above (out of doc tag due to words not recognized by StyleCop).
 		/// This issue is fixed by setting 'portListIsBeingSetOrIsAlreadySet' upon entering this method.
-		/// 
+		///
 		/// Note that the same fix has been implemented in <see cref="SocketSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
 		/// </remarks>
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]

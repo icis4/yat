@@ -32,7 +32,7 @@ using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
-namespace YAT.Settings.Test
+namespace YAT.Settings.Model.Test
 {
 	#region Types
 	//==========================================================================================

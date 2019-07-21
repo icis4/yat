@@ -25,39 +25,39 @@
 using System;
 using System.Xml.Serialization;
 
-namespace YAT.Settings.Terminal
+namespace YAT.Settings.Model
 {
 	/// <summary></summary>
-	public class ImplicitSettings : MKY.Settings.SettingsItem, IEquatable<ImplicitSettings>
+	public class TerminalImplicitSettings : MKY.Settings.SettingsItem, IEquatable<TerminalImplicitSettings>
 	{
 		/// <summary></summary>
 		public const bool TerminalIsStartedDefault = true;
 
 		private bool terminalIsStarted;
 
-		private Model.Settings.SendTextSettings sendText;
-		private Model.Settings.SendFileSettings sendFile;
-		private Model.Settings.PredefinedSettings predefined;
-		private Model.Settings.WindowSettings window;
-		private Model.Settings.LayoutSettings layout;
+		private YAT.Model.Settings.SendTextSettings sendText;
+		private YAT.Model.Settings.SendFileSettings sendFile;
+		private YAT.Model.Settings.PredefinedSettings predefined;
+		private YAT.Model.Settings.WindowSettings window;
+		private YAT.Model.Settings.LayoutSettings layout;
 
 		/// <summary></summary>
-		public ImplicitSettings()
+		public TerminalImplicitSettings()
 			: this(MKY.Settings.SettingsType.Implicit)
 		{
 		}
 
 		/// <summary></summary>
-		public ImplicitSettings(MKY.Settings.SettingsType settingsType)
+		public TerminalImplicitSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
 
-			SendText   = new Model.Settings.SendTextSettings(SettingsType);
-			SendFile   = new Model.Settings.SendFileSettings(SettingsType);
-			Predefined = new Model.Settings.PredefinedSettings(SettingsType);
-			Window     = new Model.Settings.WindowSettings(SettingsType);
-			Layout     = new Model.Settings.LayoutSettings(SettingsType);
+			SendText   = new YAT.Model.Settings.SendTextSettings(SettingsType);
+			SendFile   = new YAT.Model.Settings.SendFileSettings(SettingsType);
+			Predefined = new YAT.Model.Settings.PredefinedSettings(SettingsType);
+			Window     = new YAT.Model.Settings.WindowSettings(SettingsType);
+			Layout     = new YAT.Model.Settings.LayoutSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -66,16 +66,16 @@ namespace YAT.Settings.Terminal
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public ImplicitSettings(ImplicitSettings rhs)
+		public TerminalImplicitSettings(TerminalImplicitSettings rhs)
 			: base(rhs)
 		{
 			TerminalIsStarted = rhs.TerminalIsStarted;
 
-			SendText   = new Model.Settings.SendTextSettings(rhs.SendText);
-			SendFile   = new Model.Settings.SendFileSettings(rhs.SendFile);
-			Predefined = new Model.Settings.PredefinedSettings(rhs.Predefined);
-			Window     = new Model.Settings.WindowSettings(rhs.Window);
-			Layout     = new Model.Settings.LayoutSettings(rhs.Layout);
+			SendText   = new YAT.Model.Settings.SendTextSettings(rhs.SendText);
+			SendFile   = new YAT.Model.Settings.SendFileSettings(rhs.SendFile);
+			Predefined = new YAT.Model.Settings.PredefinedSettings(rhs.Predefined);
+			Window     = new YAT.Model.Settings.WindowSettings(rhs.Window);
+			Layout     = new YAT.Model.Settings.LayoutSettings(rhs.Layout);
 
 			ClearChanged();
 		}
@@ -101,8 +101,8 @@ namespace YAT.Settings.Terminal
 		///    do this several times during a session. Such changes shall not be indicated.
 		///  > A port that has previously been available may not be available right now. Such change
 		///    shall neither be indicated.
-		/// 
-		/// Note that this setting as well as <see cref="ExplicitSettings.LogIsOn"/> both used to
+		///
+		/// Note that this setting as well as <see cref="TerminalExplicitSettings.LogIsOn"/> both used to
 		/// be 'implicit' up to 1.99.34 and then got moved to 'explicit' for 1.99.50/51/52. But,
 		/// this just leads to too many occasions where a user is asked for "Save Terminal?" where
 		/// it just doesn't make much sense. So it was decided to revert that change for 1.99.70+.
@@ -123,7 +123,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("SendText")]
-		public virtual Model.Settings.SendTextSettings SendText
+		public virtual YAT.Model.Settings.SendTextSettings SendText
 		{
 			get { return (this.sendText); }
 			set
@@ -140,7 +140,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("SendFile")]
-		public virtual Model.Settings.SendFileSettings SendFile
+		public virtual YAT.Model.Settings.SendFileSettings SendFile
 		{
 			get { return (this.sendFile); }
 			set
@@ -157,7 +157,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("Predefined")]
-		public virtual Model.Settings.PredefinedSettings Predefined
+		public virtual YAT.Model.Settings.PredefinedSettings Predefined
 		{
 			get { return (this.predefined); }
 			set
@@ -174,7 +174,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("Window")]
-		public virtual Model.Settings.WindowSettings Window
+		public virtual YAT.Model.Settings.WindowSettings Window
 		{
 			get { return (this.window); }
 			set
@@ -191,7 +191,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("Layout")]
-		public virtual Model.Settings.LayoutSettings Layout
+		public virtual YAT.Model.Settings.LayoutSettings Layout
 		{
 			get { return (this.layout); }
 			set
@@ -237,7 +237,7 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as ImplicitSettings));
+			return (Equals(obj as TerminalImplicitSettings));
 		}
 
 		/// <summary>
@@ -247,7 +247,7 @@ namespace YAT.Settings.Terminal
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(ImplicitSettings other)
+		public bool Equals(TerminalImplicitSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -264,7 +264,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(ImplicitSettings lhs, ImplicitSettings rhs)
+		public static bool operator ==(TerminalImplicitSettings lhs, TerminalImplicitSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -277,7 +277,7 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(ImplicitSettings lhs, ImplicitSettings rhs)
+		public static bool operator !=(TerminalImplicitSettings lhs, TerminalImplicitSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

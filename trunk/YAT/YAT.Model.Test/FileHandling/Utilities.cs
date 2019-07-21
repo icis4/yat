@@ -35,6 +35,7 @@ using MKY.Settings;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
+using YAT.Settings.Model;
 
 #endregion
 
@@ -49,9 +50,9 @@ namespace YAT.Model.Test.FileHandling
 		// Settings
 		//==========================================================================================
 
-		internal static DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(Test.Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(Test.Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()));
 		}
 
 		#endregion

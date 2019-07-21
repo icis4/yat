@@ -36,13 +36,14 @@ using MKY.Windows.Forms;
 
 using NUnit.Framework;
 
+using YAT.Model;
+using YAT.Model.Types;
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
-using YAT.Settings.Workspace;
+using YAT.Settings.Model;
 
 #endregion
 
-namespace YAT.Settings.Test
+namespace YAT.Settings.Model.Test
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Text is given by the test case identification/name.")]
@@ -1222,7 +1223,7 @@ namespace YAT.Settings.Test
 			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (var t = new Model.Terminal(sh))
+			using (var t = new Terminal(sh))
 			{
 				// Required if COM1 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
@@ -1245,7 +1246,7 @@ namespace YAT.Settings.Test
 			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (var t = new Model.Terminal(sh))
+			using (var t = new Terminal(sh))
 			{
 				// Required if COM2 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
@@ -1268,7 +1269,7 @@ namespace YAT.Settings.Test
 			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (var t = new Model.Terminal(sh))
+			using (var t = new Terminal(sh))
 			{
 				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
@@ -1288,7 +1289,7 @@ namespace YAT.Settings.Test
 			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (var w = new Model.Workspace(sh))
+			using (var w = new Workspace(sh))
 			{
 				w.OpenTerminals();
 				VerifySettingsCase04(w);
@@ -1307,7 +1308,7 @@ namespace YAT.Settings.Test
 			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (var t = new Model.Terminal(sh))
+			using (var t = new Terminal(sh))
 			{
 				// Required if COM1 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
@@ -1330,7 +1331,7 @@ namespace YAT.Settings.Test
 			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (var w = new Model.Workspace(sh))
+			using (var w = new Workspace(sh))
 			{
 				w.OpenTerminals();
 				VerifySettingsCase06(w);
@@ -1349,7 +1350,7 @@ namespace YAT.Settings.Test
 			var sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (var t = new Model.Terminal(sh))
+			using (var t = new Terminal(sh))
 			{
 				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
 
@@ -1369,7 +1370,7 @@ namespace YAT.Settings.Test
 			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (var w = new Model.Workspace(sh))
+			using (var w = new Workspace(sh))
 			{
 				w.OpenTerminals();
 				VerifySettingsCase08(w);
@@ -1388,7 +1389,7 @@ namespace YAT.Settings.Test
 			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (var w = new Model.Workspace(sh))
+			using (var w = new Workspace(sh))
 			{
 				w.OpenTerminals();
 				VerifySettingsCase09(w);
@@ -1402,7 +1403,7 @@ namespace YAT.Settings.Test
 		// Settings Cases > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
+		private void terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
 		{
 			e.Result = DialogResult.OK;
 		}
@@ -1421,7 +1422,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 01 :: Terminal :: COM1 / Open / Default
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase01(Model.Terminal terminal)
+		private static void VerifySettingsCase01(Terminal terminal)
 		{
 			AssertSettingsCase01Preconditions();
 
@@ -1448,7 +1449,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 02 :: Terminal :: COM2 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase02(Model.Terminal terminal)
+		private static void VerifySettingsCase02(Terminal terminal)
 		{
 			AssertSettingsCase02Preconditions();
 
@@ -1475,15 +1476,15 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 03 :: Terminal :: COM1 / Closed / Predefined
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase03(Model.Terminal terminal)
+		private static void VerifySettingsCase03(Terminal terminal)
 		{
 			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 			Assert.That(terminal.IsOpen, Is.False, "Terminal is not closed on COM1!");
 
 			Assert.That(terminal.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(2), "Predefined commands do not contain 2 pages!");
 
-			Model.Types.PredefinedCommandPage page;
-			Model.Types.Command command;
+			PredefinedCommandPage page;
+			Command command;
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[0];
 			Assert.That(page.PageName, Is.EqualTo("First Page"), "First predefined command pages has wrong name!");
@@ -1525,7 +1526,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 04 :: Workspace :: 2 Terminals on COM1 / COM2
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase04(Model.Workspace workspace)
+		private static void VerifySettingsCase04(Workspace workspace)
 		{
 			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 		}
@@ -1537,7 +1538,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 05 :: Terminal :: COM1 / Open / Recent
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase05(Model.Terminal terminal)
+		private static void VerifySettingsCase05(Terminal terminal)
 		{
 			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
 
@@ -1553,7 +1554,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 06 :: Workspace :: 2 TCP/IP AutoSocket Terminals
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase06(Model.Workspace workspace)
+		private static void VerifySettingsCase06(Workspace workspace)
 		{
 			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 
@@ -1568,7 +1569,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2303) YAT.8 / Closed
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase07(Model.Terminal terminal)
+		private static void VerifySettingsCase07(Terminal terminal)
 		{
 			Assert.That(terminal.SettingsRoot.IOType, Is.EqualTo(Domain.IOType.UsbSerialHid), "Terminal isn't USB Ser/HID!");
 
@@ -1583,7 +1584,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 08 :: Workspace :: 2 TCP/IP AutoSocket Terminals / Unicode Predefined
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase08(Model.Workspace workspace)
+		private static void VerifySettingsCase08(Workspace workspace)
 		{
 			Assert.That(workspace.TerminalCount, Is.EqualTo(2), "Workspace doesn't contain 2 terminals!");
 
@@ -1592,8 +1593,8 @@ namespace YAT.Settings.Test
 
 			Assert.That(t1.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(1), "Predefined commands do not contain 1 page!");
 
-			Model.Types.PredefinedCommandPage p;
-			Model.Types.Command c;
+			PredefinedCommandPage p;
+			Command c;
 
 			p = t1.SettingsRoot.PredefinedCommand.Pages[0];
 			Assert.That(p.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
@@ -1633,7 +1634,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase09(Model.Workspace workspace)
+		private static void VerifySettingsCase09(Workspace workspace)
 		{
 			Assert.That(workspace.TerminalCount, Is.EqualTo(6), "Workspace doesn't contain 6 terminals!");
 
@@ -1644,8 +1645,8 @@ namespace YAT.Settings.Test
 
 				Assert.That(t.SettingsRoot.PredefinedCommand.Pages.Count, Is.EqualTo(1), "Predefined commands do not contain 1 page!");
 
-				Model.Types.PredefinedCommandPage p;
-				Model.Types.Command c;
+				PredefinedCommandPage p;
+				Command c;
 
 				p = t.SettingsRoot.PredefinedCommand.Pages[0];
 				Assert.That(p.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");

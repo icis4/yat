@@ -140,17 +140,9 @@
       <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>
       <Name>YAT.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
-      <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
-      <Name>YAT.Settings.Application</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Terminal\YAT.Settings.Terminal.csproj">
+    <ProjectReference Include="..\YAT.Settings.Model\YAT.Settings.Model.csproj">
       <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
-      <Name>YAT.Settings.Terminal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Workspace\YAT.Settings.Workspace.csproj">
-      <Project>{942BA759-57F9-4213-BDC8-E9A8325631B0}</Project>
-      <Name>YAT.Settings.Workspace</Name>
+      <Name>YAT.Settings.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.View.Controls\YAT.View.Controls.csproj">
       <Project>{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}</Project>

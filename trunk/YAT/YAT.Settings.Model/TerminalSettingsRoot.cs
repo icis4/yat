@@ -35,10 +35,11 @@ using System.Xml.Serialization;
 using MKY;
 
 using YAT.Application.Utilities;
+using YAT.Model.Types;
 
 #endregion
 
-namespace YAT.Settings.Terminal
+namespace YAT.Settings.Model
 {
 	/// <summary></summary>
 	[XmlRoot("Settings")]
@@ -53,17 +54,17 @@ namespace YAT.Settings.Terminal
 		private bool autoSaved;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
-		private ExplicitSettings explicit_;
+		private TerminalExplicitSettings explicit_;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'implicit' is a key word.")]
-		private ImplicitSettings implicit_;
+		private TerminalImplicitSettings implicit_;
 
 		/// <summary></summary>
 		public TerminalSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			Explicit = new ExplicitSettings(MKY.Settings.SettingsType.Explicit);
-			Implicit = new ImplicitSettings(MKY.Settings.SettingsType.Implicit);
+			Explicit = new TerminalExplicitSettings(MKY.Settings.SettingsType.Explicit);
+			Implicit = new TerminalImplicitSettings(MKY.Settings.SettingsType.Implicit);
 
 			ClearChanged();
 		}
@@ -72,8 +73,8 @@ namespace YAT.Settings.Terminal
 		public TerminalSettingsRoot(TerminalSettingsRoot rhs)
 			: base(rhs)
 		{
-			Explicit = new ExplicitSettings(rhs.Explicit);
-			Implicit = new ImplicitSettings(rhs.Implicit);
+			Explicit = new TerminalExplicitSettings(rhs.Explicit);
+			Implicit = new TerminalImplicitSettings(rhs.Implicit);
 
 			ClearChanged();
 		}
@@ -144,7 +145,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("Explicit")]
-		public virtual ExplicitSettings Explicit
+		public virtual TerminalExplicitSettings Explicit
 		{
 			get { return (this.explicit_); }
 			set
@@ -161,7 +162,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlElement("Implicit")]
-		public virtual ImplicitSettings Implicit
+		public virtual TerminalImplicitSettings Implicit
 		{
 			get { return (this.implicit_); }
 			set
@@ -335,7 +336,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.PredefinedCommandSettings PredefinedCommand
+		public virtual YAT.Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
 			get { return (this.explicit_.PredefinedCommand); }
 			set { this.explicit_.PredefinedCommand = value;  }
@@ -343,7 +344,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.AutoResponseSettings AutoResponse
+		public virtual YAT.Model.Settings.AutoResponseSettings AutoResponse
 		{
 			get { return (this.explicit_.AutoResponse); }
 			set { this.explicit_.AutoResponse = value;  }
@@ -351,7 +352,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.AutoActionSettings AutoAction
+		public virtual YAT.Model.Settings.AutoActionSettings AutoAction
 		{
 			get { return (this.explicit_.AutoAction); }
 			set { this.explicit_.AutoAction = value;  }
@@ -359,7 +360,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Format.Settings.FormatSettings Format
+		public virtual YAT.Format.Settings.FormatSettings Format
 		{
 			get { return (this.explicit_.Format); }
 			set { this.explicit_.Format = value;  }
@@ -367,7 +368,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Log.Settings.LogSettings Log
+		public virtual YAT.Log.Settings.LogSettings Log
 		{
 			get { return (this.explicit_.Log); }
 			set { this.explicit_.Log = value;  }
@@ -375,7 +376,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.SendTextSettings SendText
+		public virtual YAT.Model.Settings.SendTextSettings SendText
 		{
 			get { return (this.implicit_.SendText); }
 			set { this.implicit_.SendText = value;  }
@@ -383,7 +384,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.SendFileSettings SendFile
+		public virtual YAT.Model.Settings.SendFileSettings SendFile
 		{
 			get { return (this.implicit_.SendFile); }
 			set { this.implicit_.SendFile = value;  }
@@ -391,7 +392,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.PredefinedSettings Predefined
+		public virtual YAT.Model.Settings.PredefinedSettings Predefined
 		{
 			get { return (this.implicit_.Predefined); }
 			set { this.implicit_.Predefined = value;  }
@@ -399,7 +400,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.WindowSettings Window
+		public virtual YAT.Model.Settings.WindowSettings Window
 		{
 			get { return (this.implicit_.Window); }
 			set { this.implicit_.Window = value;  }
@@ -407,7 +408,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.LayoutSettings Layout
+		public virtual YAT.Model.Settings.LayoutSettings Layout
 		{
 			get { return (this.implicit_.Layout); }
 			set { this.implicit_.Layout = value;  }
@@ -423,31 +424,31 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		public virtual Model.Types.AutoTriggerEx[] GetValidAutoTriggerItems()
+		public virtual AutoTriggerEx[] GetValidAutoTriggerItems()
 		{
-			Model.Types.AutoTriggerEx[] triggers = Model.Types.AutoTriggerEx.GetAllItems();
-			List<Model.Types.AutoTriggerEx> a = new List<Model.Types.AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
+			AutoTriggerEx[] triggers = AutoTriggerEx.GetAllItems();
+			List<AutoTriggerEx> a = new List<AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
 
-			foreach (Model.Types.AutoTriggerEx trigger in triggers)
+			foreach (AutoTriggerEx trigger in triggers)
 			{
-				switch ((Model.Types.AutoTrigger)trigger)
+				switch ((AutoTrigger)trigger)
 				{
-					case Model.Types.AutoTrigger.PredefinedCommand1:
-					case Model.Types.AutoTrigger.PredefinedCommand2:
-					case Model.Types.AutoTrigger.PredefinedCommand3:
-					case Model.Types.AutoTrigger.PredefinedCommand4:
-					case Model.Types.AutoTrigger.PredefinedCommand5:
-					case Model.Types.AutoTrigger.PredefinedCommand6:
-					case Model.Types.AutoTrigger.PredefinedCommand7:
-					case Model.Types.AutoTrigger.PredefinedCommand8:
-					case Model.Types.AutoTrigger.PredefinedCommand9:
-					case Model.Types.AutoTrigger.PredefinedCommand10:
-					case Model.Types.AutoTrigger.PredefinedCommand11:
-					case Model.Types.AutoTrigger.PredefinedCommand12:
+					case AutoTrigger.PredefinedCommand1:
+					case AutoTrigger.PredefinedCommand2:
+					case AutoTrigger.PredefinedCommand3:
+					case AutoTrigger.PredefinedCommand4:
+					case AutoTrigger.PredefinedCommand5:
+					case AutoTrigger.PredefinedCommand6:
+					case AutoTrigger.PredefinedCommand7:
+					case AutoTrigger.PredefinedCommand8:
+					case AutoTrigger.PredefinedCommand9:
+					case AutoTrigger.PredefinedCommand10:
+					case AutoTrigger.PredefinedCommand11:
+					case AutoTrigger.PredefinedCommand12:
 					{
 						int pageId = Predefined.SelectedPage;
 						int commandId = trigger.ToPredefinedCommandId();
-						if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
+						if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 						{
 							var c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValidText(Send.Text.ToParseMode()))) // Trigger can never be a file command.
@@ -457,17 +458,17 @@ namespace YAT.Settings.Terminal
 						break;
 					}
 
-					case Model.Types.AutoTrigger.Explicit:
+					case AutoTrigger.Explicit:
 					{
-						var c = new Model.Types.Command(AutoResponse.Trigger); // No explicit default radix available (yet).
+						var c = new Command(AutoResponse.Trigger); // No explicit default radix available (yet).
 						if (c.IsValidText(Send.Text.ToParseMode())) // Trigger can never be a file command.
 							a.Add(trigger);
 
 						break;
 					}
 
-					case Model.Types.AutoTrigger.AnyLine:
-					case Model.Types.AutoTrigger.None:
+					case AutoTrigger.AnyLine:
+					case AutoTrigger.None:
 					default:
 					{
 						a.Add(trigger); // Always add these fixed responses.
@@ -482,16 +483,16 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
-		public virtual Model.Types.AutoResponseEx[] GetValidAutoResponseItems(string rootDirectoryForFile)
+		public virtual AutoResponseEx[] GetValidAutoResponseItems(string rootDirectoryForFile)
 		{
-			var responses = Model.Types.AutoResponseEx.GetAllItems();
-			var l = new List<Model.Types.AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
+			var responses = AutoResponseEx.GetAllItems();
+			var l = new List<AutoResponseEx>(responses.Length); // Preset the required capacity to improve memory management.
 
-			foreach (Model.Types.AutoResponseEx response in responses)
+			foreach (AutoResponseEx response in responses)
 			{
-				switch ((Model.Types.AutoResponse)response)
+				switch ((AutoResponse)response)
 				{
-					case Model.Types.AutoResponse.SendText:
+					case YAT.Model.Types.AutoResponse.SendText:
 					{
 						var c = SendText.Command;
 						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
@@ -500,7 +501,7 @@ namespace YAT.Settings.Terminal
 						break;
 					}
 
-					case Model.Types.AutoResponse.SendFile:
+					case YAT.Model.Types.AutoResponse.SendFile:
 					{
 						var c = SendFile.Command;
 						if ((c != null) && (c.IsValidFilePath(rootDirectoryForFile)))
@@ -509,22 +510,22 @@ namespace YAT.Settings.Terminal
 						break;
 					}
 
-					case Model.Types.AutoResponse.PredefinedCommand1:
-					case Model.Types.AutoResponse.PredefinedCommand2:
-					case Model.Types.AutoResponse.PredefinedCommand3:
-					case Model.Types.AutoResponse.PredefinedCommand4:
-					case Model.Types.AutoResponse.PredefinedCommand5:
-					case Model.Types.AutoResponse.PredefinedCommand6:
-					case Model.Types.AutoResponse.PredefinedCommand7:
-					case Model.Types.AutoResponse.PredefinedCommand8:
-					case Model.Types.AutoResponse.PredefinedCommand9:
-					case Model.Types.AutoResponse.PredefinedCommand10:
-					case Model.Types.AutoResponse.PredefinedCommand11:
-					case Model.Types.AutoResponse.PredefinedCommand12:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand1:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand2:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand3:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand4:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand5:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand6:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand7:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand8:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand9:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand10:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand11:
+					case YAT.Model.Types.AutoResponse.PredefinedCommand12:
 					{
 						int pageId = Predefined.SelectedPage;
 						int commandId = response.ToPredefinedCommandId();
-						if (commandId != Model.Types.AutoResponseEx.InvalidPredefinedCommandId)
+						if (commandId != AutoResponseEx.InvalidPredefinedCommandId)
 						{
 							var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValid(Send.Text.ToParseMode(), rootDirectoryForFile)))
@@ -534,17 +535,17 @@ namespace YAT.Settings.Terminal
 						break;
 					}
 
-					case Model.Types.AutoResponse.Explicit:
+					case YAT.Model.Types.AutoResponse.Explicit:
 					{
-						var c = new Model.Types.Command(AutoResponse.Response); // No explicit default radix available (yet).
+						var c = new Command(AutoResponse.Response); // No explicit default radix available (yet).
 						if (c.IsValid(Send.Text.ToParseMode(), rootDirectoryForFile))
 							l.Add(response);
 
 						break;
 					}
 
-					case Model.Types.AutoResponse.None:
-					case Model.Types.AutoResponse.Trigger:
+					case YAT.Model.Types.AutoResponse.None:
+					case YAT.Model.Types.AutoResponse.Trigger:
 					default:
 					{
 						l.Add(response); // Always add these fixed responses.
@@ -560,16 +561,16 @@ namespace YAT.Settings.Terminal
 		/// The currently valid response items usable for automatic action.
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with GetValidAutoResponseItems() above.")]
-		public virtual Model.Types.AutoActionEx[] GetValidAutoActionItems()
+		public virtual AutoActionEx[] GetValidAutoActionItems()
 		{
-			return (Model.Types.AutoActionEx.GetItems()); // No restrictions (so far).
+			return (AutoActionEx.GetItems()); // No restrictions (so far).
 		}
 
 		/// <summary>
 		/// The currently active response used for automatic response.
 		/// </summary>
 		[XmlIgnore]
-		public virtual Model.Types.Command ActiveAutoResponseTrigger
+		public virtual Command ActiveAutoResponseTrigger
 		{
 			get
 			{
@@ -584,7 +585,7 @@ namespace YAT.Settings.Terminal
 		/// The currently active response used for automatic action.
 		/// </summary>
 		[XmlIgnore]
-		public virtual Model.Types.Command ActiveAutoActionTrigger
+		public virtual Command ActiveAutoActionTrigger
 		{
 			get
 			{
@@ -598,28 +599,28 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Gets the active automatic trigger.
 		/// </summary>
-		protected virtual Model.Types.Command GetActiveAutoTrigger(Model.Types.AutoTriggerEx trigger)
+		protected virtual Command GetActiveAutoTrigger(AutoTriggerEx trigger)
 		{
-			Model.Types.Command response = null;
+			Command response = null;
 
-			switch ((Model.Types.AutoTrigger)trigger)
+			switch ((AutoTrigger)trigger)
 			{
-				case Model.Types.AutoTrigger.PredefinedCommand1:
-				case Model.Types.AutoTrigger.PredefinedCommand2:
-				case Model.Types.AutoTrigger.PredefinedCommand3:
-				case Model.Types.AutoTrigger.PredefinedCommand4:
-				case Model.Types.AutoTrigger.PredefinedCommand5:
-				case Model.Types.AutoTrigger.PredefinedCommand6:
-				case Model.Types.AutoTrigger.PredefinedCommand7:
-				case Model.Types.AutoTrigger.PredefinedCommand8:
-				case Model.Types.AutoTrigger.PredefinedCommand9:
-				case Model.Types.AutoTrigger.PredefinedCommand10:
-				case Model.Types.AutoTrigger.PredefinedCommand11:
-				case Model.Types.AutoTrigger.PredefinedCommand12:
+				case AutoTrigger.PredefinedCommand1:
+				case AutoTrigger.PredefinedCommand2:
+				case AutoTrigger.PredefinedCommand3:
+				case AutoTrigger.PredefinedCommand4:
+				case AutoTrigger.PredefinedCommand5:
+				case AutoTrigger.PredefinedCommand6:
+				case AutoTrigger.PredefinedCommand7:
+				case AutoTrigger.PredefinedCommand8:
+				case AutoTrigger.PredefinedCommand9:
+				case AutoTrigger.PredefinedCommand10:
+				case AutoTrigger.PredefinedCommand11:
+				case AutoTrigger.PredefinedCommand12:
 				{
 					int pageId = Predefined.SelectedPage;
 					int commandId = trigger.ToPredefinedCommandId();
-					if (commandId != Model.Types.AutoTriggerEx.InvalidPredefinedCommandId)
+					if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 					{
 						var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode()))) // Trigger can never be a file command.
@@ -629,17 +630,17 @@ namespace YAT.Settings.Terminal
 					break;
 				}
 
-				case Model.Types.AutoTrigger.Explicit:
+				case AutoTrigger.Explicit:
 				{
-					var c = new Model.Types.Command(trigger); // No explicit default radix available (yet).
+					var c = new Command(trigger); // No explicit default radix available (yet).
 					if (c.IsValidText(Send.Text.ToParseMode())) // Trigger can never be a file command.
 						response = c;
 
 					break;
 				}
 
-				case Model.Types.AutoTrigger.AnyLine:
-				case Model.Types.AutoTrigger.None:
+				case AutoTrigger.AnyLine:
+				case AutoTrigger.None:
 				default:
 				{
 					break;

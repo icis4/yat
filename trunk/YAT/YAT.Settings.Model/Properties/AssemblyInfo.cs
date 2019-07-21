@@ -29,8 +29,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("YAT.Settings.Terminal")]
-[assembly: AssemblyDescription("YAT terminal settings")]
+[assembly: AssemblyTitle("YAT.Settings")]
+[assembly: AssemblyDescription("YAT settings")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("YAT")]

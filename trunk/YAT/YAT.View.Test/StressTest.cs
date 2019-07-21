@@ -42,9 +42,7 @@ using YAT.Application.Utilities;
 using YAT.Domain;
 using YAT.Model.Settings;
 using YAT.Model.Types;
-using YAT.Settings.Application;
-using YAT.Settings.Terminal;
-using YAT.Settings.Workspace;
+using YAT.Settings.Model;
 
 #endregion
 

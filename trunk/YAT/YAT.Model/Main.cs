@@ -46,8 +46,7 @@ using YAT.Application.Utilities;
 using YAT.Model.Types;
 using YAT.Model.Utilities;
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
-using YAT.Settings.Workspace;
+using YAT.Settings.Model;
 
 #endregion
 

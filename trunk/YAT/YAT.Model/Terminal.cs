@@ -52,7 +52,7 @@ using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Model.Utilities;
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
+using YAT.Settings.Model;
 
 #endregion
 
@@ -1391,14 +1391,14 @@ namespace YAT.Model
 		/// Applies new terminal settings.
 		/// </summary>
 		/// <remarks>
-		/// Using <see cref="ExplicitSettings"/> instead of simply using
+		/// Using <see cref="TerminalExplicitSettings"/> instead of simply using
 		/// <see cref="Domain.Settings.TerminalSettings"/> for two reasons:
 		/// <list type="bullet">
-		/// <item><description>Handling of <see cref="ExplicitSettings.UserName"/>.</description></item>
+		/// <item><description>Handling of <see cref="TerminalExplicitSettings.UserName"/>.</description></item>
 		/// <item><description>Prepared for future migration to tree view dialog containing all settings.</description></item>
 		/// </list>
 		/// </remarks>
-		public virtual void ApplyTerminalSettings(ExplicitSettings settings)
+		public virtual void ApplyTerminalSettings(TerminalExplicitSettings settings)
 		{
 			AssertNotDisposed();
 
