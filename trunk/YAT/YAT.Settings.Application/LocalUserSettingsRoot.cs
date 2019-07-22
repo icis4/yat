@@ -119,7 +119,7 @@ namespace YAT.Settings.Application
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
-			get { return ("Modifying this file may cause undefined behavior!"); }
+			get { return ("Modifying structure and/or content may cause undefined behavior!"); }
 			set { } // Do nothing.
 		}
 
