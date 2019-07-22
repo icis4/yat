@@ -88,8 +88,8 @@ YAT 2.1.0 :: 2019-0?-??
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Predefined commands can now be reordered (feature request #376), exported and imported to a .yap
-  file (feature requests #28, #73, #257) or even linked to a .yap file (feature request #29).
+- Predefined commands can now be reordered (feature request #376), exported and imported to a .yacp
+  file (feature requests #28, #73, #257) or even linked to a .yacp file (feature request #29).
 - Additional keyword \!(PortSettings()) that allows re-configuring the port settings before or after
   sending data; and dedicated keywords \!(Baud()), \!(DataBits()), \!(Parity()), \!(StopBits()) and
   \!(FlowControl()) to change a dedicated port setting on-the-fly (feature request #71, partly

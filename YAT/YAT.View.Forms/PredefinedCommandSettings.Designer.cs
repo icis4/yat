@@ -1108,8 +1108,8 @@
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ImportAllPagesFromFile.TabIndex = 12;
 			this.button_ImportAllPagesFromFile.Text = "I&mport All from File...";
-			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yap file. The current pages are replaced.\r\n\r\nUse [Insert] [" +
-        "...] or [Add] [...] to import additively.");
+			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yacp file. The current pages are replaced.\r\n\r\nUse [Insert] " +
+        "[...] or [Add] [...] to import additively.");
 			this.button_ImportAllPagesFromFile.Click += new System.EventHandler(this.button_ImportAllPagesFromFile_Click);
 			// 
 			// button_ExportAllPagesToFile
@@ -1119,7 +1119,7 @@
 			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ExportAllPagesToFile.TabIndex = 11;
 			this.button_ExportAllPagesToFile.Text = "E&xport All to File...";
-			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Exports pages from a .yap file.\r\n\r\nUse [Copy] [...] to export a single page.");
+			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Exports pages from a .yacp file.\r\n\r\nUse [Copy] [...] to export a single page.");
 			this.button_ExportAllPagesToFile.Click += new System.EventHandler(this.button_ExportAllPagesToFile_Click);
 			// 
 			// button_ExportPageToFile
