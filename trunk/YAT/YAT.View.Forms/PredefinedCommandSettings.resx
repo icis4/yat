@@ -128,7 +128,7 @@
   </metadata>
   <data name="button_LinkToFile.ToolTip" xml:space="preserve">
     <value>By default, predefined command definitions are stored in the .yat terminal settings, i.e. are fixed to a particular terminal.
-Linking to a .yap file allows reusing predefined command definitions among multiple terminals or even multiple users.</value>
+Linking to a .yacp file allows reusing predefined command definitions among multiple terminals or even multiple users.</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>57</value>
