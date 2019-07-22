@@ -77,7 +77,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Default of 48 bytes reflects the typical USB report size of 64, minus some bytes of
 		/// meta data, minus some spare bytes, to a value that looks 'well' for computer engineers.
-		/// 
+		///
 		/// Some concrete values 'measured' by experiment:
 		///  > Prolific USB/COM @ MT MKY looses data as soon as chunks above 356 bytes are sent.
 		///  > Dell docking station @ MT SST (SPI/COM Intel chipset, Microsoft driver), looses
@@ -179,6 +179,10 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public SerialPortSettings(SerialPortId portId, SerialCommunicationSettings communication)
 		{
 			SetMyDefaults();
@@ -198,7 +202,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Creates new port settings from <paramref name="rhs"/>.
 		/// </summary>
 		/// <remarks>
-		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public SerialPortSettings(SerialPortSettings rhs)
@@ -227,8 +231,8 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <remarks>
-		/// Set fields through properties to ensure correct setting of changed flag.
-		/// 
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
+		///
 		/// Attention: Do not use <see cref="Ports.SerialPortId.FirstAvailablePort"/>
 		/// for the default port. <see cref="Ports.SerialPortId.FirstStandardPort"/>
 		/// is way better performing and good enough for most use cases.

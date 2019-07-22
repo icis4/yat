@@ -67,7 +67,10 @@ namespace YAT.Model.Settings
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public NewTerminalSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -79,7 +82,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public NewTerminalSettings(NewTerminalSettings rhs)
@@ -116,8 +119,8 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Set fields through properties to ensure correct setting of changed flag.
-		/// 
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
+		///
 		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
 		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
 		/// is way better performing and good enough for most use cases.
