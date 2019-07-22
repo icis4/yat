@@ -53,7 +53,10 @@ namespace YAT.Settings.Model
 		private bool autoSaved;
 		private WorkspaceSettings workspace;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public WorkspaceSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
@@ -62,7 +65,10 @@ namespace YAT.Settings.Model
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public WorkspaceSettingsRoot(WorkspaceSettingsRoot rhs)
 			: base(rhs)
 		{
@@ -258,7 +264,7 @@ namespace YAT.Settings.Model
 				base.Equals(other) && // Compare all settings nodes.
 
 				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion)
-				//// Do not consider AutoSaved.
+				//// Do not consider 'AutoSaved' since that doesn't change value equality.
 			);
 		}
 

@@ -56,7 +56,10 @@ namespace YAT.Settings.Application
 		private Model.Settings.ViewSettings view;
 		private ExtensionSettings extensions;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public RoamingUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
@@ -68,7 +71,10 @@ namespace YAT.Settings.Application
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public RoamingUserSettingsRoot(RoamingUserSettingsRoot rhs)
 			: base(rhs)
 		{

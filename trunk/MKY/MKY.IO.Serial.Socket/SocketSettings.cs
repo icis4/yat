@@ -171,6 +171,10 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort, int localUdpPort, AutoInterval tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode = UdpServerSendModeDefault)
 		{
@@ -195,7 +199,7 @@ namespace MKY.IO.Serial.Socket
 		/// Creates new port settings from <paramref name="rhs"/>.
 		/// </summary>
 		/// <remarks>
-		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public SocketSettings(SocketSettings rhs)
@@ -219,7 +223,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Set fields through properties to ensure correct setting of changed flag.
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{

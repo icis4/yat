@@ -59,7 +59,10 @@ namespace YAT.Settings.Model
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'implicit' is a key word.")]
 		private TerminalImplicitSettings implicit_;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public TerminalSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
@@ -69,7 +72,10 @@ namespace YAT.Settings.Model
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public TerminalSettingsRoot(TerminalSettingsRoot rhs)
 			: base(rhs)
 		{
@@ -785,7 +791,7 @@ namespace YAT.Settings.Model
 				base.Equals(other) && // Compare all settings nodes.
 
 				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion)
-				//// Do not consider AutoSaved.
+				//// Do not consider 'AutoSaved' since that doesn't change value equality.
 			);
 		}
 

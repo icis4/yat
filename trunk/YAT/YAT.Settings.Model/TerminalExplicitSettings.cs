@@ -54,7 +54,10 @@ namespace YAT.Settings.Model
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
 		public TerminalExplicitSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -71,7 +74,7 @@ namespace YAT.Settings.Model
 		}
 
 		/// <remarks>
-		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public TerminalExplicitSettings(TerminalExplicitSettings rhs)
@@ -91,7 +94,7 @@ namespace YAT.Settings.Model
 		}
 
 		/// <remarks>
-		/// Set fields through properties to ensure correct setting of changed flag.
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{

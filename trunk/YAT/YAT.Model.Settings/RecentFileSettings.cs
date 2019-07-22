@@ -54,18 +54,19 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public RecentFileSettings(RecentFileSettings rhs)
 			: base(rhs)
 		{
 			FilePaths = new RecentItemCollection<string>(rhs.FilePaths);
+
 			ClearChanged();
 		}
 
 		/// <remarks>
-		/// Set fields through properties to ensure correct setting of changed flag.
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
