@@ -98,6 +98,8 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CommandPagesSettingsRoot.cs" />
+    <Compile Include="CommandSettingsRoot.cs" />
     <Compile Include="TerminalExplicitSettings.cs" />
     <Compile Include="TerminalImplicitSettings.cs" />
     <Compile Include="TerminalSettingsRoot.cs" />
