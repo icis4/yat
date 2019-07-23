@@ -311,8 +311,8 @@ namespace YAT.View.Forms
 			// Try to automatically select one of the report format presets:
 			if (deviceInfo != null)
 			{
-				MKY.IO.Usb.SerialHidReportFormatPresetEx preset;
-				if (MKY.IO.Usb.SerialHidReportFormatPresetEx.TryParse(deviceInfo, out preset))
+				MKY.IO.Usb.SerialHidDeviceSettingsPresetEx preset;
+				if (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
 				{
 					usbSerialHidDeviceSettings.ReportFormat  = preset.ToReportFormat();
 					usbSerialHidDeviceSettings.RxFilterUsage = preset.ToRxFilterUsage();
@@ -328,6 +328,11 @@ namespace YAT.View.Forms
 					usbSerialHidDeviceSettings.FlowControl = preset.ToFlowControl();
 				}
 			}
+		}
+
+		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettingsInEdit.UsbSerialHidPreset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
@@ -391,6 +396,7 @@ namespace YAT.View.Forms
 
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial       = this.newTerminalSettings.UsbSerialHidMatchSerial;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.Preset            = this.newTerminalSettings.UsbSerialHidPreset;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage     = this.newTerminalSettings.UsbSerialHidRxFilterUsage;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
@@ -505,7 +511,8 @@ namespace YAT.View.Forms
 
 				usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
 
-													  ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the LocalUserSettings.
+				                                       ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the LocalUserSettings.
+				usbSerialHidDeviceSettings.Preset        = this.newTerminalSettingsInEdit.UsbSerialHidPreset;
 				usbSerialHidDeviceSettings.ReportFormat  = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
 				usbSerialHidDeviceSettings.RxFilterUsage = this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage;
 				usbSerialHidDeviceSettings.FlowControl   = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;

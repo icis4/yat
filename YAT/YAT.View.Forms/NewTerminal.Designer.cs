@@ -182,6 +182,7 @@ namespace YAT.View.Forms
 			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
 			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 258);
 			this.usbSerialHidDeviceSettings.TabIndex = 4;
+			this.usbSerialHidDeviceSettings.PresetChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_PresetChanged);
 			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
 			this.usbSerialHidDeviceSettings.RxFilterUsageChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_RxFilterUsageChanged);
 			this.usbSerialHidDeviceSettings.FlowControlChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_FlowControlChanged);

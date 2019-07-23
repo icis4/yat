@@ -94,6 +94,12 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public const bool MatchSerialDefault = true;
 
+		/// <remarks>
+		/// None shall be the preset, the report format and filter usage defaults still result in
+		/// the <see cref="SerialHidDeviceSettingsPreset.Common"/> default.
+		/// </remarks>
+		public const SerialHidDeviceSettingsPreset PresetDefault = SerialHidDeviceSettingsPreset.None;
+
 		/// <summary></summary>
 		public static readonly SerialHidReportFormat ReportFormatDefault = new SerialHidReportFormat
 		(

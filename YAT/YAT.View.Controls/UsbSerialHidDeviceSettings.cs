@@ -50,7 +50,8 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private static readonly MKY.IO.Usb.SerialHidReportFormat  ReportFormatDefault  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
+		private const           MKY.IO.Usb.SerialHidDeviceSettingsPreset PresetDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.PresetDefault;
+		private static readonly MKY.IO.Usb.SerialHidReportFormat   ReportFormatDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
 		private static readonly MKY.IO.Usb.SerialHidRxFilterUsage RxFilterUsageDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxFilterUsageDefault;
 
 		private const MKY.IO.Serial.Usb.SerialHidFlowControl FlowControlDefault = MKY.IO.Serial.Usb.SerialHidFlowControl.None;
@@ -67,7 +68,8 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private MKY.IO.Usb.SerialHidReportFormat reportFormat = ReportFormatDefault;
+		private MKY.IO.Usb.SerialHidDeviceSettingsPreset preset = PresetDefault;
+		private MKY.IO.Usb.SerialHidReportFormat reportFormat   = ReportFormatDefault;
 		private MKY.IO.Usb.SerialHidRxFilterUsage rxFilterUsage = RxFilterUsageDefault;
 
 		private MKY.IO.Serial.Usb.SerialHidFlowControl flowControl = FlowControlDefault;
@@ -79,6 +81,11 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Events
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the Preset property is changed.")]
+		public event EventHandler PresetChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -124,6 +131,42 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[Category("USB Ser/HID")]
+		[Description("One of the available presets.")]
+		[DefaultValue(PresetDefault)]
+		public MKY.IO.Usb.SerialHidDeviceSettingsPreset Preset
+		{
+			get { return (this.preset); }
+			set
+			{
+				if (this.preset != value)
+				{
+					if (value != MKY.IO.Usb.SerialHidDeviceSettingsPreset.None) // Only true presets shall change the other properties.
+					{
+						// Keep preset to be able to restore ambiguous presets:
+						if (value == MKY.IO.Usb.SerialHidDeviceSettingsPreset.YAT)         // But do not keep [YAT] preset as
+							this.preset = MKY.IO.Usb.SerialHidDeviceSettingsPreset.Common; // that shall be redirected to [Common].
+						else
+							this.preset = value;
+
+						this.reportFormat  = ((MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)value).ToReportFormat();
+						this.rxFilterUsage = ((MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)value).ToRxFilterUsage();
+						SetControls(); // Assign field instead of properties to reduce the number of SetControls() invocations.
+						OnPresetChanged(EventArgs.Empty);
+						OnReportFormatChanged(EventArgs.Empty);
+						OnRxFilterUsageChanged(EventArgs.Empty);
+					}
+					else
+					{
+						this.preset = value;
+						SetControls();
+						OnPresetChanged(EventArgs.Empty);
+					}
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Usb.SerialHidReportFormat ReportFormat
@@ -160,6 +203,13 @@ namespace YAT.View.Controls
 					this.rxFilterUsage = value;
 					SetControls();
 					OnRxFilterUsageChanged(EventArgs.Empty);
+				}
+				else
+				{
+					// Set controls even if format did not change. This ensures that the preset
+					// selection is updated with the current format, i.e. "<No preset selected>"
+					// is changed to the preset in use (if applicable).
+					SetControls();
 				}
 			}
 		}
@@ -384,21 +434,11 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			var preset = (comboBox_Preset.SelectedItem as MKY.IO.Usb.SerialHidReportFormatPresetEx);
+			var preset = (comboBox_Preset.SelectedItem as MKY.IO.Usb.SerialHidDeviceSettingsPresetEx);
 			if (preset != null)
 			{
-				if (preset != MKY.IO.Usb.SerialHidReportFormatPreset.None)
-				{
-					this.reportFormat  = preset;
-					this.rxFilterUsage = preset;
-					SetControls();
-					OnReportFormatChanged(EventArgs.Empty);
-					OnRxFilterUsageChanged(EventArgs.Empty);
-				}
-				else
-				{
-					SetControls();
-				}
+				Preset = preset;
+			////SetControls() will be called by the Preset property method.
 			}
 			else
 			{
@@ -439,7 +479,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				comboBox_Preset     .Items.AddRange(MKY.IO.Usb.SerialHidReportFormatPresetEx.GetItems());
+				comboBox_Preset     .Items.AddRange(MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.GetItems());
 				comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.Usb.SerialHidFlowControlEx.GetItems());
 			}
 			finally
@@ -499,13 +539,11 @@ namespace YAT.View.Controls
 			////checkBox_FillLastReport.Checked           = (Enabled ? this.reportFormat.FillLastReport : false);
 				checkBox_FillLastReport.Checked           = true; // Windows HID.dll requires that output reports are always filled!
 
-				reportFormatPreview.Format  = this.reportFormat;
-
-				var preset = MKY.IO.Usb.SerialHidReportFormatPresetEx.FromReportFormatAndRxFilterUsage(this.reportFormat, this.rxFilterUsage);
+				reportFormatPreview.Format = this.reportFormat;
 
 				if (Enabled)
 				{
-					comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidReportFormatPresetEx)preset;
+					comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)this.preset;
 
 					// Note that 'DropDownList' requires that an item like "[No preset selected]" is
 					// listed. It is not possible to set the 'SelectedIndex' to 'ControlEx.InvalidIndex'
@@ -518,7 +556,7 @@ namespace YAT.View.Controls
 
 				string linkText;
 				string linkUri;
-				if (((MKY.IO.Usb.SerialHidReportFormatPresetEx)preset).HasInfoLink(out linkText, out linkUri))
+				if (((MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)preset).HasInfoLink(out linkText, out linkUri))
 				{
 					linkLabel_Info.Links.Clear();
 					linkLabel_Info.Text = linkText;
@@ -553,6 +591,12 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Event Raising
 		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void OnPresetChanged(EventArgs e)
+		{
+			EventHelper.RaiseSync(PresetChanged, this, e);
+		}
 
 		/// <summary></summary>
 		protected virtual void OnReportFormatChanged(EventArgs e)

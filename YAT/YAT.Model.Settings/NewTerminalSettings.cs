@@ -54,6 +54,7 @@ namespace YAT.Model.Settings
 
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
 		private bool usbSerialHidMatchSerial;
+		private MKY.IO.Usb.SerialHidDeviceSettingsPreset usbSerialHidPreset;
 		private MKY.IO.Usb.SerialHidReportFormat usbSerialHidReportFormat;
 		private MKY.IO.Usb.SerialHidRxFilterUsage usbSerialHidRxFilterUsage;
 		private MKY.IO.Serial.Usb.SerialHidFlowControl usbSerialHidFlowControl;
@@ -108,6 +109,7 @@ namespace YAT.Model.Settings
 
 			UsbSerialHidDeviceInfo    = rhs.UsbSerialHidDeviceInfo;
 			UsbSerialHidMatchSerial   = rhs.UsbSerialHidMatchSerial;
+			UsbSerialHidPreset        = rhs.UsbSerialHidPreset;
 			UsbSerialHidReportFormat  = rhs.UsbSerialHidReportFormat;
 			UsbSerialHidRxFilterUsage = rhs.UsbSerialHidRxFilterUsage;
 			UsbSerialHidFlowControl   = rhs.UsbSerialHidFlowControl;
@@ -119,6 +121,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
 		/// Fields are assigned via properties to ensure correct setting of changed flag.
 		///
 		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
@@ -149,6 +152,7 @@ namespace YAT.Model.Settings
 
 			UsbSerialHidDeviceInfo    = null;
 			UsbSerialHidMatchSerial   = MKY.IO.Serial.Usb.SerialHidDeviceSettings.MatchSerialDefault;
+			UsbSerialHidPreset        = MKY.IO.Serial.Usb.SerialHidDeviceSettings.PresetDefault;
 			UsbSerialHidReportFormat  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
 			UsbSerialHidRxFilterUsage = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxFilterUsageDefault;
 			UsbSerialHidFlowControl   = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
@@ -498,6 +502,21 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("UsbSerialHidPreset")]
+		public virtual MKY.IO.Usb.SerialHidDeviceSettingsPreset UsbSerialHidPreset
+		{
+			get { return (this.usbSerialHidPreset); }
+			set
+			{
+				if (this.usbSerialHidPreset != value)
+				{
+					this.usbSerialHidPreset = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("UsbSerialHidReportFormat")]
 		public virtual MKY.IO.Usb.SerialHidReportFormat UsbSerialHidReportFormat
 		{
@@ -612,6 +631,7 @@ namespace YAT.Model.Settings
 
 				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo             != null ? UsbSerialHidDeviceInfo            .GetHashCode() : 0); // May be 'null' if no devices are available!
 				hashCode = (hashCode * 397) ^  UsbSerialHidMatchSerial                                                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidPreset                                                             .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                                                       .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidRxFilterUsage                                                      .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                                        .GetHashCode();
@@ -651,7 +671,7 @@ namespace YAT.Model.Settings
 				TerminalType.Equals(other.TerminalType) &&
 				IOType      .Equals(other.IOType)       &&
 
-				ObjectEx.Equals(SerialPortId, other.SerialPortId)                &&
+				ObjectEx.Equals(SerialPortId, other.SerialPortId)                 &&
 				SerialPortCommunication  .Equals(other.SerialPortCommunication)   &&
 				SerialPortAliveMonitor   .Equals(other.SerialPortAliveMonitor)    &&
 				SerialPortAutoReopen     .Equals(other.SerialPortAutoReopen)      &&
@@ -668,6 +688,7 @@ namespace YAT.Model.Settings
 
 				ObjectEx.Equals(UsbSerialHidDeviceInfo, other.UsbSerialHidDeviceInfo) &&
 				UsbSerialHidMatchSerial  .Equals(other.UsbSerialHidMatchSerial)   &&
+				UsbSerialHidPreset       .Equals(other.UsbSerialHidPreset)        &&
 				UsbSerialHidReportFormat .Equals(other.UsbSerialHidReportFormat)  &&
 				UsbSerialHidRxFilterUsage.Equals(other.UsbSerialHidRxFilterUsage) &&
 				UsbSerialHidFlowControl  .Equals(other.UsbSerialHidFlowControl)   &&

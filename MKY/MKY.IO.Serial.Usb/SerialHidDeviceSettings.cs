@@ -51,6 +51,9 @@ namespace MKY.IO.Serial.Usb
 		public const bool MatchSerialDefault = IO.Usb.SerialHidDevice.MatchSerialDefault;
 
 		/// <summary></summary>
+		public const SerialHidDeviceSettingsPreset PresetDefault = IO.Usb.SerialHidDevice.PresetDefault;
+
+		/// <summary></summary>
 		public static readonly SerialHidReportFormat ReportFormatDefault = IO.Usb.SerialHidDevice.ReportFormatDefault;
 
 		/// <summary></summary>
@@ -77,6 +80,7 @@ namespace MKY.IO.Serial.Usb
 		private DeviceInfo deviceInfo;
 		private bool matchSerial;
 
+		private SerialHidDeviceSettingsPreset preset;
 		private SerialHidReportFormat reportFormat;
 		private SerialHidRxFilterUsage rxFilterUsage;
 
@@ -121,6 +125,7 @@ namespace MKY.IO.Serial.Usb
 
 			MatchSerial = rhs.MatchSerial;
 
+			Preset        = rhs.Preset;
 			ReportFormat  = rhs.ReportFormat;
 			RxFilterUsage = rhs.RxFilterUsage;
 
@@ -142,6 +147,7 @@ namespace MKY.IO.Serial.Usb
 			DeviceInfo  = new DeviceInfo(); // Required for XML serialization.
 			MatchSerial = MatchSerialDefault;
 
+			Preset        = PresetDefault;
 			ReportFormat  = ReportFormatDefault;
 			RxFilterUsage = RxFilterUsageDefault;
 
@@ -183,6 +189,21 @@ namespace MKY.IO.Serial.Usb
 				if (this.matchSerial != value)
 				{
 					this.matchSerial = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Preset")]
+		public virtual SerialHidDeviceSettingsPreset Preset
+		{
+			get { return (this.preset); }
+			set
+			{
+				if (this.preset != value)
+				{
+					this.preset = value;
 					SetMyChanged();
 				}
 			}
@@ -327,6 +348,7 @@ namespace MKY.IO.Serial.Usb
 				hashCode = (hashCode * 397) ^ (DeviceInfo != null ? DeviceInfo.GetHashCode() : 0); // May be 'null' if no devices are available!
 				hashCode = (hashCode * 397) ^  MatchSerial                    .GetHashCode();
 
+				hashCode = (hashCode * 397) ^  Preset                         .GetHashCode();
 				hashCode = (hashCode * 397) ^  ReportFormat                   .GetHashCode();
 				hashCode = (hashCode * 397) ^  RxFilterUsage                  .GetHashCode();
 
@@ -364,14 +386,15 @@ namespace MKY.IO.Serial.Usb
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ObjectEx.Equals(DeviceInfo, other.DeviceInfo) &&
+				ObjectEx.Equals(DeviceInfo, other.DeviceInfo)  &&
 				MatchSerial.Equals(         other.MatchSerial) &&
 
-				ReportFormat .Equals(other.ReportFormat) &&
+				Preset       .Equals(other.Preset)        &&
+				ReportFormat .Equals(other.ReportFormat)  &&
 				RxFilterUsage.Equals(other.RxFilterUsage) &&
 
 				FlowControl.Equals(other.FlowControl) &&
-				AutoOpen   .Equals(other.AutoOpen) &&
+				AutoOpen   .Equals(other.AutoOpen)    &&
 
 				IncludeNonPayloadData.Equals(other.IncludeNonPayloadData)
 			);

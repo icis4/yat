@@ -386,8 +386,8 @@ namespace YAT.View.Forms
 			// Try to automatically select one of the report format presets:
 			if (deviceInfo != null)
 			{
-				MKY.IO.Usb.SerialHidReportFormatPresetEx preset;
-				if (MKY.IO.Usb.SerialHidReportFormatPresetEx.TryParse(deviceInfo, out preset))
+				MKY.IO.Usb.SerialHidDeviceSettingsPresetEx preset;
+				if (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
 				{
 					usbSerialHidDeviceSettings.ReportFormat  = preset.ToReportFormat();
 					usbSerialHidDeviceSettings.RxFilterUsage = preset.ToRxFilterUsage();
@@ -403,6 +403,11 @@ namespace YAT.View.Forms
 					usbSerialHidDeviceSettings.FlowControl = preset.ToFlowControl();
 				}
 			}
+		}
+
+		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
+		{
+			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.Preset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
@@ -593,6 +598,7 @@ namespace YAT.View.Forms
 				usbSerialHidDeviceSelection.DeviceInfo = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 
 				                                       ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the LocalUserSettings.
+				usbSerialHidDeviceSettings.Preset        = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.Preset;
 				usbSerialHidDeviceSettings.ReportFormat  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
 				usbSerialHidDeviceSettings.RxFilterUsage = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage;
 				usbSerialHidDeviceSettings.FlowControl   = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;
