@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
-  <SettingsVersion>1.6.0</SettingsVersion>
-  <ProductVersion>2.0.0</ProductVersion>
-  <Warning>Modifying this file may cause undefined behavior!</Warning>
+  <SettingsVersion>1.7.0</SettingsVersion>
+  <ProductVersion>2.1.0</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2018-04-05T22:03:09.6639481+02:00</TimeStamp>
+    <TimeStamp>2019-07-23T20:53:36.4992708+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -26,7 +26,7 @@
             <Parity>None</Parity>
             <StopBits>One</StopBits>
             <FlowControl>None</FlowControl>
-            <RfrPin>Disabled</RfrPin>
+            <RtsPin>Disabled</RtsPin>
             <DtrPin>Disabled</DtrPin>
           </Communication>
           <AliveMonitor>
@@ -80,6 +80,7 @@
             <SerialNumber />
           </DeviceInfo>
           <MatchSerial>true</MatchSerial>
+          <Preset>None</Preset>
           <ReportFormat>
             <UseId>true</UseId>
             <Id>0</Id>
@@ -115,8 +116,8 @@
         <TxRadix>String</TxRadix>
         <RxRadix>String</RxRadix>
         <ShowRadix>true</ShowRadix>
-        <ShowBufferLineNumbers>false</ShowBufferLineNumbers>
-        <ShowTotalLineNumbers>false</ShowTotalLineNumbers>
+        <ShowLineNumbers>false</ShowLineNumbers>
+        <LineNumberSelection>Total</LineNumberSelection>
         <ShowTimeStamp>false</ShowTimeStamp>
         <TimeStampFormat>HH:mm:ss.fff</TimeStampFormat>
         <TimeStampUseUTC>false</TimeStampUseUTC>
@@ -127,18 +128,24 @@
         <ShowPort>false</ShowPort>
         <ShowDirection>false</ShowDirection>
         <ShowLength>false</ShowLength>
-        <MaxLineCount>1000</MaxLineCount>
-        <MaxBytePerLineCount>1000</MaxBytePerLineCount>
-        <ShowCopyOfActiveLine>false</ShowCopyOfActiveLine>
+        <LengthSelection>CharCount</LengthSelection>
+        <ShowDuration>false</ShowDuration>
+        <TimeDurationFormat>[d \days ][h][h\:][m][m\:][s]s\.fff</TimeDurationFormat>
+        <IncludePortControl>false</IncludePortControl>
         <PortLineBreakEnabled>true</PortLineBreakEnabled>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
         <ChunkLineBreakEnabled>false</ChunkLineBreakEnabled>
+        <MaxLineCount>1000</MaxLineCount>
+        <MaxLineLength>1000</MaxLineLength>
+        <ShowCopyOfActiveLine>false</ShowCopyOfActiveLine>
         <InfoSeparator> </InfoSeparator>
         <InfoEnclosure>()</InfoEnclosure>
       </Display>
       <CharReplace>
         <ReplaceControlChars>true</ReplaceControlChars>
         <ControlCharRadix>AsciiMnemonic</ControlCharRadix>
+        <ReplaceBell>false</ReplaceBell>
+        <ReplaceBackspace>false</ReplaceBackspace>
         <ReplaceTab>false</ReplaceTab>
         <ReplaceSpace>false</ReplaceSpace>
       </CharReplace>
@@ -175,6 +182,27 @@
         <RxEol>&lt;CR&gt;&lt;LF&gt;</RxEol>
         <Encoding>1252</Encoding>
         <ShowEol>false</ShowEol>
+        <SeparateTxRxDisplay>false</SeparateTxRxDisplay>
+        <TxDisplay>
+          <LengthLineBreak>
+            <Enabled>false</Enabled>
+            <Length>80</Length>
+          </LengthLineBreak>
+          <TimedLineBreak>
+            <Enabled>false</Enabled>
+            <Timeout>500</Timeout>
+          </TimedLineBreak>
+        </TxDisplay>
+        <RxDisplay>
+          <LengthLineBreak>
+            <Enabled>false</Enabled>
+            <Length>80</Length>
+          </LengthLineBreak>
+          <TimedLineBreak>
+            <Enabled>false</Enabled>
+            <Timeout>500</Timeout>
+          </TimedLineBreak>
+        </RxDisplay>
         <LineSendDelay>
           <Enabled>false</Enabled>
           <Delay>500</Delay>
@@ -280,6 +308,10 @@
         <Color>Green</Color>
         <FontStyle>Regular</FontStyle>
       </TimeDeltaFormat>
+      <TimeDurationFormat>
+        <Color>Green</Color>
+        <FontStyle>Regular</FontStyle>
+      </TimeDurationFormat>
       <PortFormat>
         <Color>Green</Color>
         <FontStyle>Regular</FontStyle>
@@ -296,6 +328,10 @@
         <Color>Black</Color>
         <FontStyle>Regular</FontStyle>
       </WhiteSpacesFormat>
+      <IOControlFormat>
+        <Color>Gold</Color>
+        <FontStyle>Bold</FontStyle>
+      </IOControlFormat>
       <ErrorFormat>
         <Color>DarkOrange</Color>
         <FontStyle>Bold</FontStyle>
@@ -307,6 +343,8 @@
     <Log>
       <RootPath>C:\Users\Matthias\Documents\YAT</RootPath>
       <RootFileName>YAT-Log</RootFileName>
+      <PortLog>false</PortLog>
+      <PortExtension>.log</PortExtension>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
       <RawLogRx>false</RawLogRx>
@@ -315,13 +353,13 @@
       <NeatLogBidir>true</NeatLogBidir>
       <NeatLogRx>false</NeatLogRx>
       <NeatExtension>.log</NeatExtension>
-      <NameFormat>false</NameFormat>
-      <NameChannel>false</NameChannel>
+      <NameType>false</NameType>
+      <NameDirection>false</NameDirection>
       <NameDate>true</NameDate>
       <NameTime>true</NameTime>
       <NameSeparator>-</NameSeparator>
-      <FolderFormat>false</FolderFormat>
-      <FolderChannel>false</FolderChannel>
+      <FolderType>false</FolderType>
+      <FolderDirection>false</FolderDirection>
       <WriteMode>Create</WriteMode>
       <TextEncoding>UTF8</TextEncoding>
       <EmitEncodingPreamble>true</EmitEncodingPreamble>
