@@ -42,11 +42,11 @@ using YAT.Model.Types;
 namespace YAT.Settings.Model
 {
 	/// <summary></summary>
-	[XmlRoot("Settings")]
+	[XmlRoot("TerminalSettings")]
 	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, IEquatable<TerminalSettingsRoot>, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.6.0";
+		private string settingsVersion = "1.7.0";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
