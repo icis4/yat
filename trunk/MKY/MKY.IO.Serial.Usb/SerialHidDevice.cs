@@ -214,11 +214,11 @@ namespace MKY.IO.Serial.Usb
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~SerialHidDevice()
@@ -822,6 +822,7 @@ namespace MKY.IO.Serial.Usb
 					// Ensure to create device info from VID/PID/SNR since system path is not saved.
 					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.Serial);
 					this.device.MatchSerial           = this.settings.MatchSerial;
+				////                                    this.settings.Preset does not to be considered when creating a device.
 					this.device.ReportFormat          = this.settings.ReportFormat;
 					this.device.RxFilterUsage         = this.settings.RxFilterUsage;
 					this.device.AutoOpen              = this.settings.AutoOpen;

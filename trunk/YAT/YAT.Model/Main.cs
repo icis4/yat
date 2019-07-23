@@ -941,8 +941,8 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("FormatPreset"))
 				{
-					terminalSettings.IO.UsbSerialHidDevice.ReportFormat  = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.commandLineArgs.FormatPreset;
-					terminalSettings.IO.UsbSerialHidDevice.RxFilterUsage = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.commandLineArgs.FormatPreset;
+					terminalSettings.IO.UsbSerialHidDevice.ReportFormat  = (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)this.commandLineArgs.FormatPreset;
+					terminalSettings.IO.UsbSerialHidDevice.RxFilterUsage = (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)this.commandLineArgs.FormatPreset;
 				}
 				if (this.commandLineArgs.OptionIsGiven("FlowControl"))
 				{
@@ -999,6 +999,7 @@ namespace YAT.Model
 
 			temp.IO.UsbSerialHidDevice.DeviceInfo    = newTerminalSettings.UsbSerialHidDeviceInfo;
 			temp.IO.UsbSerialHidDevice.MatchSerial   = newTerminalSettings.UsbSerialHidMatchSerial;
+			temp.IO.UsbSerialHidDevice.Preset        = newTerminalSettings.UsbSerialHidPreset;
 			temp.IO.UsbSerialHidDevice.ReportFormat  = newTerminalSettings.UsbSerialHidReportFormat;
 			temp.IO.UsbSerialHidDevice.RxFilterUsage = newTerminalSettings.UsbSerialHidRxFilterUsage;
 			temp.IO.UsbSerialHidDevice.FlowControl   = newTerminalSettings.UsbSerialHidFlowControl;
@@ -1026,6 +1027,7 @@ namespace YAT.Model
 
 				newTerminalSettings.UsbSerialHidDeviceInfo    = temp.IO.UsbSerialHidDevice.DeviceInfo;
 				newTerminalSettings.UsbSerialHidMatchSerial   = temp.IO.UsbSerialHidDevice.MatchSerial;
+				newTerminalSettings.UsbSerialHidPreset        = temp.IO.UsbSerialHidDevice.Preset;
 				newTerminalSettings.UsbSerialHidReportFormat  = temp.IO.UsbSerialHidDevice.ReportFormat;
 				newTerminalSettings.UsbSerialHidRxFilterUsage = temp.IO.UsbSerialHidDevice.RxFilterUsage;
 				newTerminalSettings.UsbSerialHidFlowControl   = temp.IO.UsbSerialHidDevice.FlowControl;
