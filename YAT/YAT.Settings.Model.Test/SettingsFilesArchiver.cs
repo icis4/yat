@@ -83,6 +83,24 @@ namespace YAT.Settings.Model.Test
 
 		/// <summary></summary>
 		[Test]
+		public virtual void ArchiveCommandSettings()
+		{
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandDefinitionRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			ArchiveSchema (document, StaticPaths.Path, "CommandDefinitionSchema");
+			ArchiveDefault(document, StaticPaths.Path, "CommandDefinitionDefault");
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void ArchiveCommandPagesSettings()
+		{
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPagesDefinitionRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			ArchiveSchema (document, StaticPaths.Path, "CommandPagesDefinitionSchema");
+			ArchiveDefault(document, StaticPaths.Path, "CommandPagesDefinitionDefault");
+		}
+
+		/// <summary></summary>
+		[Test]
 		public virtual void ArchiveTerminalSettings()
 		{
 			// Terminal settings may rely on properly loaded applications settings.
