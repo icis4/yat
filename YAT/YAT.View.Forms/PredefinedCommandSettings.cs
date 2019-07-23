@@ -405,6 +405,9 @@ namespace YAT.View.Forms
 
 			toolStripMenuItem_CommandContextMenu_MoveTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			toolStripMenuItem_CommandContextMenu_CopyTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_Cut   .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_Copy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_Paste .Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
 			toolStripMenuItem_CommandContextMenu_Clear .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 		}
 
