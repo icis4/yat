@@ -33,29 +33,30 @@ using System.Xml.Serialization;
 using MKY;
 
 using YAT.Application.Utilities;
-using YAT.Model.Types;
+using YAT.Model.Settings;
 
 #endregion
 
 namespace YAT.Settings.Model
 {
 	/// <summary></summary>
-	[XmlRoot("Settings")]
-	public class CommandSettingsRoot : MKY.Settings.SettingsItem, IEquatable<CommandSettingsRoot>
+	[XmlRoot("CommandPagesDefinition")]
+	public class CommandPagesDefinitionRoot : MKY.Settings.SettingsItem, IEquatable<CommandPagesDefinitionRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.0.0";
+		private string settingsVersion = "1.0.2";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
 
-		private Command command;
+		private PredefinedCommandSettings predefinedCommand;
 
 		/// <summary></summary>
-		public CommandSettingsRoot()
+		public CommandPagesDefinitionRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			SetMyDefaults();
+			PredefinedCommand = new PredefinedCommandSettings(MKY.Settings.SettingsType.Explicit);
+
 			ClearChanged();
 		}
 
@@ -63,22 +64,12 @@ namespace YAT.Settings.Model
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public CommandSettingsRoot(CommandSettingsRoot rhs)
+		public CommandPagesDefinitionRoot(CommandPagesDefinitionRoot rhs)
 			: base(rhs)
 		{
-			Command = new Command(rhs.Command);
+			PredefinedCommand = new PredefinedCommandSettings(rhs.PredefinedCommand);
 
 			ClearChanged();
-		}
-
-		/// <remarks>
-		/// Fields are assigned via properties to ensure correct setting of changed flag.
-		/// </remarks>
-		protected override void SetMyDefaults()
-		{
-			base.SetMyDefaults();
-
-			Command = new Command();
 		}
 
 		#region Properties
@@ -86,11 +77,11 @@ namespace YAT.Settings.Model
 		// Properties
 		//==========================================================================================
 
-		/// <remarks>File type is a kind of title, therefore capital 'C' and 'D'.</remarks>
+		/// <remarks>File type is a kind of title, therefore capital 'C', 'P' and 'D'.</remarks>
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationEx.ProductName + " Command Definition"); } // File identification shall differ for "YAT" and "YATConsole".
+			get { return (ApplicationEx.ProductName + " Command Page(s) Definition"); } // File identification shall differ for "YAT" and "YATConsole".
 			set { } // Do nothing.
 		}
 
@@ -127,16 +118,18 @@ namespace YAT.Settings.Model
 		}
 
 		/// <summary></summary>
-		[XmlElement("Command")]
-		public virtual Command Command
+		[XmlElement("PredefinedCommand")]
+		public virtual PredefinedCommandSettings PredefinedCommand
 		{
-			get { return (this.command); }
+			get { return (this.predefinedCommand); }
 			set
 			{
-				if (this.command != value)
+				if (this.predefinedCommand != value)
 				{
-					this.command = value;
-					SetMyChanged();
+					var oldNode = this.predefinedCommand;
+					this.predefinedCommand = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
 		}
@@ -162,7 +155,6 @@ namespace YAT.Settings.Model
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (ProductVersion != null ? ProductVersion.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (Command        != null ? Command       .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -173,7 +165,7 @@ namespace YAT.Settings.Model
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as CommandSettingsRoot));
+			return (Equals(obj as CommandPagesDefinitionRoot));
 		}
 
 		/// <summary>
@@ -183,7 +175,7 @@ namespace YAT.Settings.Model
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(CommandSettingsRoot other)
+		public bool Equals(CommandPagesDefinitionRoot other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -193,15 +185,14 @@ namespace YAT.Settings.Model
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion) &&
-				ObjectEx.Equals(                 Command,        other.Command)
+				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(CommandSettingsRoot lhs, CommandSettingsRoot rhs)
+		public static bool operator ==(CommandPagesDefinitionRoot lhs, CommandPagesDefinitionRoot rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -214,7 +205,7 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(CommandSettingsRoot lhs, CommandSettingsRoot rhs)
+		public static bool operator !=(CommandPagesDefinitionRoot lhs, CommandPagesDefinitionRoot rhs)
 		{
 			return (!(lhs == rhs));
 		}
