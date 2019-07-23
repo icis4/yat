@@ -11,8 +11,8 @@
           <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="Saved" type="SaveInfo" />
           <xs:element minOccurs="1" maxOccurs="1" name="AutoSaved" type="xs:boolean" />
-          <xs:element minOccurs="0" maxOccurs="1" name="Explicit" type="ExplicitSettings" />
-          <xs:element minOccurs="0" maxOccurs="1" name="Implicit" type="ImplicitSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Explicit" type="TerminalExplicitSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Implicit" type="TerminalImplicitSettings" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -129,7 +129,7 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="ImplicitSettings">
+  <xs:complexType name="TerminalImplicitSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
@@ -149,6 +149,8 @@
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="RootPath" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="RootFileName" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PortLog" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PortExtension" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="RawLogTx" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="RawLogBidir" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="RawLogRx" type="xs:boolean" />
@@ -157,13 +159,13 @@
           <xs:element minOccurs="1" maxOccurs="1" name="NeatLogBidir" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="NeatLogRx" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="NeatExtension" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" name="NameFormat" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="NameChannel" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NameType" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NameDirection" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="NameDate" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="NameTime" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="NameSeparator" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" name="FolderFormat" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="FolderChannel" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FolderType" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FolderDirection" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="WriteMode" type="LogFileWriteMode" />
           <xs:element minOccurs="1" maxOccurs="1" name="TextEncoding" type="TextEncoding" />
           <xs:element minOccurs="1" maxOccurs="1" name="EmitEncodingPreamble" type="xs:boolean" />
@@ -196,10 +198,12 @@
           <xs:element minOccurs="0" maxOccurs="1" name="TimeStampFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="TimeSpanFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="TimeDeltaFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TimeDurationFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="PortFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="DirectionFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="LengthFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="WhiteSpacesFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="IOControlFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="ErrorFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="BackFormat" type="BackFormat" />
         </xs:sequence>
@@ -276,27 +280,27 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="LengthLineBreak" type="BinaryLengthLineBreak" />
-          <xs:element minOccurs="1" maxOccurs="1" name="SequenceLineBreakBefore" type="BinarySequenceLineBreak" />
-          <xs:element minOccurs="1" maxOccurs="1" name="SequenceLineBreakAfter" type="BinarySequenceLineBreak" />
-          <xs:element minOccurs="1" maxOccurs="1" name="TimedLineBreak" type="BinaryTimedLineBreak" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LengthLineBreak" type="LengthSettingTuple" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SequenceLineBreakBefore" type="BinarySequenceSettingTuple" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SequenceLineBreakAfter" type="BinarySequenceSettingTuple" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TimedLineBreak" type="TimeoutSettingTuple" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="BinaryLengthLineBreak">
+  <xs:complexType name="LengthSettingTuple">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="Length" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="BinarySequenceLineBreak">
+  <xs:complexType name="BinarySequenceSettingTuple">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
       <xs:element minOccurs="0" maxOccurs="1" name="Sequence" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="BinaryTimedLineBreak">
+  <xs:complexType name="TimeoutSettingTuple">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="Timeout" type="xs:int" />
@@ -323,6 +327,16 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="TextDisplaySettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="LengthLineBreak" type="LengthSettingTuple" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TimedLineBreak" type="TimeoutSettingTuple" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="TextTerminalSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
@@ -332,25 +346,22 @@
           <xs:element minOccurs="0" maxOccurs="1" name="RxEol" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="Encoding" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowEol" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="LineSendDelay" type="TextLineSendDelay" />
-          <xs:element minOccurs="1" maxOccurs="1" name="WaitForResponse" type="WaitForResponse" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SeparateTxRxDisplay" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TxDisplay" type="TextDisplaySettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RxDisplay" type="TextDisplaySettings" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LineSendDelay" type="TextLineSendDelaySettingTuple" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WaitForResponse" type="TimeoutSettingTuple" />
           <xs:element minOccurs="1" maxOccurs="1" name="CharSubstitution" type="CharSubstitution" />
           <xs:element minOccurs="0" maxOccurs="1" name="TextExclusion" type="TextExclusionSettings" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="TextLineSendDelay">
+  <xs:complexType name="TextLineSendDelaySettingTuple">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="Delay" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="LineInterval" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="WaitForResponse">
-    <xs:sequence>
-      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
-      <xs:element minOccurs="1" maxOccurs="1" name="Timeout" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:simpleType name="CharSubstitution">
@@ -394,12 +405,12 @@
           <xs:element minOccurs="1" maxOccurs="1" name="DefaultLineInterval" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="DefaultLineRepeat" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="SignalXOnBeforeEachTransmission" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="SignalXOnPeriodically" type="PeriodicSetting" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SignalXOnPeriodically" type="PeriodicSettingTuple" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="PeriodicSetting">
+  <xs:complexType name="PeriodicSettingTuple">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="Interval" type="xs:int" />
@@ -422,6 +433,8 @@
         <xs:sequence>
           <xs:element minOccurs="1" maxOccurs="1" name="ReplaceControlChars" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ControlCharRadix" type="ControlCharRadix" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ReplaceBell" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ReplaceBackspace" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ReplaceTab" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ReplaceSpace" type="xs:boolean" />
         </xs:sequence>
@@ -447,8 +460,8 @@
           <xs:element minOccurs="1" maxOccurs="1" name="TxRadix" type="Radix" />
           <xs:element minOccurs="1" maxOccurs="1" name="RxRadix" type="Radix" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowRadix" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="ShowBufferLineNumbers" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="ShowTotalLineNumbers" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowLineNumbers" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LineNumberSelection" type="LineNumberSelection" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowTimeStamp" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="TimeStampFormat" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="TimeStampUseUTC" type="xs:boolean" />
@@ -459,18 +472,34 @@
           <xs:element minOccurs="1" maxOccurs="1" name="ShowPort" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowDirection" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowLength" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="MaxLineCount" type="xs:int" />
-          <xs:element minOccurs="1" maxOccurs="1" name="MaxBytePerLineCount" type="xs:int" />
-          <xs:element minOccurs="1" maxOccurs="1" name="ShowCopyOfActiveLine" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LengthSelection" type="LengthSelection" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowDuration" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TimeDurationFormat" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IncludePortControl" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="PortLineBreakEnabled" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="DirectionLineBreakEnabled" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ChunkLineBreakEnabled" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="MaxLineCount" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="MaxLineLength" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowCopyOfActiveLine" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="InfoSeparator" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="InfoEnclosure" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:simpleType name="LineNumberSelection">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Total" />
+      <xs:enumeration value="Buffer" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="LengthSelection">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ByteCount" />
+      <xs:enumeration value="CharCount" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="BufferSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
@@ -499,6 +528,7 @@
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="DeviceInfo" type="DeviceInfo" />
           <xs:element minOccurs="1" maxOccurs="1" name="MatchSerial" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Preset" type="SerialHidDeviceSettingsPreset" />
           <xs:element minOccurs="1" maxOccurs="1" name="ReportFormat" type="SerialHidReportFormat" />
           <xs:element minOccurs="1" maxOccurs="1" name="RxFilterUsage" type="SerialHidRxFilterUsage" />
           <xs:element minOccurs="1" maxOccurs="1" name="FlowControl" type="SerialHidFlowControl" />
@@ -515,6 +545,19 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SerialNumber" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
+  <xs:simpleType name="SerialHidDeviceSettingsPreset">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Plain" />
+      <xs:enumeration value="Common" />
+      <xs:enumeration value="LengthIndicated" />
+      <xs:enumeration value="ZeroTerminated" />
+      <xs:enumeration value="MT_SerHid" />
+      <xs:enumeration value="TI_HidApi" />
+      <xs:enumeration value="Signal11_HidApi" />
+      <xs:enumeration value="YAT" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="SerialHidReportFormat">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="UseId" type="xs:boolean" />
@@ -595,7 +638,7 @@
           <xs:element minOccurs="1" maxOccurs="1" name="Parity" type="Parity" />
           <xs:element minOccurs="1" maxOccurs="1" name="StopBits" type="StopBits" />
           <xs:element minOccurs="1" maxOccurs="1" name="FlowControl" type="SerialFlowControl" />
-          <xs:element minOccurs="1" maxOccurs="1" name="RfrPin" type="SerialControlPinState" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RtsPin" type="SerialControlPinState" />
           <xs:element minOccurs="1" maxOccurs="1" name="DtrPin" type="SerialControlPinState" />
         </xs:sequence>
       </xs:extension>
@@ -746,7 +789,7 @@
       <xs:enumeration value="Binary" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="ExplicitSettings">
+  <xs:complexType name="TerminalExplicitSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>

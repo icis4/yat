@@ -25,6 +25,7 @@
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="TextSendFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="BinarySendFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PortLogFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="RawLogFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="NeatLogFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="MonitorFiles" type="xs:string" />

@@ -46,7 +46,7 @@
           <xs:element minOccurs="1" maxOccurs="1" name="Parity" type="Parity" />
           <xs:element minOccurs="1" maxOccurs="1" name="StopBits" type="StopBits" />
           <xs:element minOccurs="1" maxOccurs="1" name="FlowControl" type="SerialFlowControl" />
-          <xs:element minOccurs="1" maxOccurs="1" name="RfrPin" type="SerialControlPinState" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RtsPin" type="SerialControlPinState" />
           <xs:element minOccurs="1" maxOccurs="1" name="DtrPin" type="SerialControlPinState" />
         </xs:sequence>
       </xs:extension>
@@ -117,6 +117,7 @@
           <xs:element minOccurs="1" maxOccurs="1" name="UdpServerSendMode" type="UdpServerSendMode" />
           <xs:element minOccurs="0" maxOccurs="1" name="UsbSerialHidDeviceInfo" type="DeviceInfo" />
           <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidMatchSerial" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidPreset" type="SerialHidDeviceSettingsPreset" />
           <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidReportFormat" type="SerialHidReportFormat" />
           <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidRxFilterUsage" type="SerialHidRxFilterUsage" />
           <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidFlowControl" type="SerialHidFlowControl" />
@@ -176,6 +177,19 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SerialNumber" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
+  <xs:simpleType name="SerialHidDeviceSettingsPreset">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Plain" />
+      <xs:enumeration value="Common" />
+      <xs:enumeration value="LengthIndicated" />
+      <xs:enumeration value="ZeroTerminated" />
+      <xs:enumeration value="MT_SerHid" />
+      <xs:enumeration value="TI_HidApi" />
+      <xs:enumeration value="Signal11_HidApi" />
+      <xs:enumeration value="YAT" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="SerialHidReportFormat">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="UseId" type="xs:boolean" />
