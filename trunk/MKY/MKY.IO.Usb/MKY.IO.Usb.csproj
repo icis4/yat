@@ -100,7 +100,7 @@
     </Compile>
     <Compile Include="Predicates.cs" />
     <Compile Include="SerialHidRxFilterUsage.cs" />
-    <Compile Include="SerialHidReportFormatPreset.cs" />
+    <Compile Include="SerialHidDeviceSettingsPreset.cs" />
     <Compile Include="SerialHidReports.cs" />
     <Compile Include="SerialHidDeviceCollection.cs" />
     <Compile Include="HidDeviceCollection.cs" />

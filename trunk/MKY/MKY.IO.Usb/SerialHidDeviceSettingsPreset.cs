@@ -35,7 +35,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Usb
 {
-	#region Enum SerialHidReportFormatPreset
+	#region Enum SerialHidDeviceSettingsPreset
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -44,7 +44,7 @@ namespace MKY.IO.Usb
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum SerialHidReportFormatPreset
+	public enum SerialHidDeviceSettingsPreset
 	{
 		None,
 		Plain,
@@ -70,7 +70,7 @@ namespace MKY.IO.Usb
 	#endregion
 
 	/// <summary>
-	/// Extended enum SerialHidReportFormatPresetEx.
+	/// Extended enum SerialHidDeviceSettingsPresetEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -79,7 +79,7 @@ namespace MKY.IO.Usb
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class SerialHidReportFormatPresetEx : EnumEx
+	public class SerialHidDeviceSettingsPresetEx : EnumEx
 	{
 		#region String Definitions
 
@@ -98,8 +98,8 @@ namespace MKY.IO.Usb
 		private const string             ZeroTerminated_string      =   "Zero terminated (report ID + payload + zero)";
 		private static readonly string[] ZeroTerminated_stringStart = { "Zero", "<Zero", "[Zero" };
 
-		private const string             MT_SerHid_string      =   "MT Ser/HID";                           // OHAUS is MT's 2nd brand.
-		private static readonly string[] MT_SerHid_stringStart = { "MT", "METTLER TOLEDO", "Mettler-Toledo", "OH" }; // Covers "OHAUS".
+		private const string             MT_SerHid_string      =   "MT Ser/HID (same as [Zero terminated])";
+		private static readonly string[] MT_SerHid_stringStart = { "MT", "METTLER TOLEDO", "Mettler-Toledo", "OH" }; // Covers "OHAUS", MT's 2nd brand.
 
 		private const string             Signal11_HidApi_string      =   "Signal 11 HID API";
 		private static readonly string[] Signal11_HidApi_stringStart = { "Signal" }; // Covers "Signal11" and "Signal 11".
@@ -107,7 +107,7 @@ namespace MKY.IO.Usb
 		private const string             TI_HidApi_string      =   "TI HID API";                // Note that comparison will be done with 'OrdinalIgnoreCase'.
 		private static readonly string[] TI_HidApi_stringStart = { "TI", "Texas Instruments" }; // Also note that comparison could be improved such as e.g.
 		                                                                                        // strings "Texas" and "Instruments" are individually compared.
-		private const string             YAT_string      =   "YAT default";
+		private const string             YAT_string      =   "YAT default (resulting in [Common])";
 		private static readonly string[] YAT_stringStart = { "YAT" };
 
 		/// <summary></summary>
@@ -145,17 +145,17 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		/// <summary>Default is <see cref="SerialHidReportFormatPreset.YAT"/>.</summary>
-		public const SerialHidReportFormatPreset Default = SerialHidReportFormatPreset.YAT;
+		/// <summary>Default is <see cref="SerialHidDeviceSettingsPreset.YAT"/>.</summary>
+		public const SerialHidDeviceSettingsPreset Default = SerialHidDeviceSettingsPreset.YAT;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
-		public SerialHidReportFormatPresetEx()
+		public SerialHidDeviceSettingsPresetEx()
 			: this(Default)
 		{
 		}
 
 		/// <summary></summary>
-		public SerialHidReportFormatPresetEx(SerialHidReportFormatPreset preset)
+		public SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset preset)
 			: base(preset)
 		{
 		}
@@ -171,17 +171,17 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public override string ToString()
 		{
-			switch ((SerialHidReportFormatPreset)UnderlyingEnum)
+			switch ((SerialHidDeviceSettingsPreset)UnderlyingEnum)
 			{
-				case SerialHidReportFormatPreset.None:            return (None_string);
-				case SerialHidReportFormatPreset.Plain:           return (Plain_string);
-				case SerialHidReportFormatPreset.Common:          return (Common_string);
-				case SerialHidReportFormatPreset.LengthIndicated: return (LengthIndicated_string);
-				case SerialHidReportFormatPreset.ZeroTerminated:  return (ZeroTerminated_string);
-				case SerialHidReportFormatPreset.MT_SerHid:       return (MT_SerHid_string);
-				case SerialHidReportFormatPreset.Signal11_HidApi: return (Signal11_HidApi_string);
-				case SerialHidReportFormatPreset.TI_HidApi:       return (TI_HidApi_string);
-				case SerialHidReportFormatPreset.YAT:             return (YAT_string);
+				case SerialHidDeviceSettingsPreset.None:            return (None_string);
+				case SerialHidDeviceSettingsPreset.Plain:           return (Plain_string);
+				case SerialHidDeviceSettingsPreset.Common:          return (Common_string);
+				case SerialHidDeviceSettingsPreset.LengthIndicated: return (LengthIndicated_string);
+				case SerialHidDeviceSettingsPreset.ZeroTerminated:  return (ZeroTerminated_string);
+				case SerialHidDeviceSettingsPreset.MT_SerHid:       return (MT_SerHid_string);
+				case SerialHidDeviceSettingsPreset.Signal11_HidApi: return (Signal11_HidApi_string);
+				case SerialHidDeviceSettingsPreset.TI_HidApi:       return (TI_HidApi_string);
+				case SerialHidDeviceSettingsPreset.YAT:             return (YAT_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -221,16 +221,16 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public bool HasInfoLink(out string linkText, out string linkUri)
 		{
-			switch ((SerialHidReportFormatPreset)UnderlyingEnum)
+			switch ((SerialHidDeviceSettingsPreset)UnderlyingEnum)
 			{
-				case SerialHidReportFormatPreset.Signal11_HidApi:
+				case SerialHidDeviceSettingsPreset.Signal11_HidApi:
 				{
 					linkText = Signal11_HidApi_LinkText;
 					linkUri  = Signal11_HidApi_LinkUri;
 					return (true);
 				}
 
-				case SerialHidReportFormatPreset.TI_HidApi:
+				case SerialHidDeviceSettingsPreset.TI_HidApi:
 				{
 					linkText = TI_HidApi_LinkText;
 					linkUri  = TI_HidApi_LinkUri;
@@ -256,19 +256,19 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static SerialHidReportFormatPresetEx[] GetItems()
+		public static SerialHidDeviceSettingsPresetEx[] GetItems()
 		{
-			var a = new List<SerialHidReportFormatPresetEx>(8); // Preset the required capacity to improve memory management.
+			var a = new List<SerialHidDeviceSettingsPresetEx>(8); // Preset the required capacity to improve memory management.
 
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.None));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Plain));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Common));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.LengthIndicated));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.ZeroTerminated));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.MT_SerHid));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Signal11_HidApi));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.TI_HidApi));
-			a.Add(new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.YAT));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.None));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Plain));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Common));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.LengthIndicated));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.ZeroTerminated));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.MT_SerHid));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Signal11_HidApi));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.TI_HidApi));
+			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.YAT));
 
 			return (a.ToArray());
 		}
@@ -283,9 +283,9 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static SerialHidReportFormatPresetEx Parse(string s)
+		public static SerialHidDeviceSettingsPresetEx Parse(string s)
 		{
-			SerialHidReportFormatPresetEx result;
+			SerialHidDeviceSettingsPresetEx result;
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
@@ -295,12 +295,12 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out SerialHidReportFormatPresetEx result)
+		public static bool TryParse(string s, out SerialHidDeviceSettingsPresetEx result)
 		{
-			SerialHidReportFormatPreset enumResult;
+			SerialHidDeviceSettingsPreset enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new SerialHidReportFormatPresetEx(enumResult);
+				result = new SerialHidDeviceSettingsPresetEx(enumResult);
 				return (true);
 			}
 			else
@@ -313,64 +313,64 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out SerialHidReportFormatPreset result)
+		public static bool TryParse(string s, out SerialHidDeviceSettingsPreset result)
 		{
 			if (s != null)
 				s = s.Trim();
 
 			if (string.IsNullOrEmpty(s)) // None!
 			{
-				result = SerialHidReportFormatPreset.None;
+				result = SerialHidDeviceSettingsPreset.None;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, None_stringStart))
 			{
-				result = SerialHidReportFormatPreset.None;
+				result = SerialHidDeviceSettingsPreset.None;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, Plain_stringStart))
 			{
-				result = SerialHidReportFormatPreset.Plain;
+				result = SerialHidDeviceSettingsPreset.Plain;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, Common_stringStart))
 			{
-				result = SerialHidReportFormatPreset.Common;
+				result = SerialHidDeviceSettingsPreset.Common;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, LengthIndicated_stringStart))
 			{
-				result = SerialHidReportFormatPreset.LengthIndicated;
+				result = SerialHidDeviceSettingsPreset.LengthIndicated;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, ZeroTerminated_stringStart))
 			{
-				result = SerialHidReportFormatPreset.ZeroTerminated;
+				result = SerialHidDeviceSettingsPreset.ZeroTerminated;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, MT_SerHid_stringStart))
 			{
-				result = SerialHidReportFormatPreset.MT_SerHid;
+				result = SerialHidDeviceSettingsPreset.MT_SerHid;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, Signal11_HidApi_stringStart))
 			{
-				result = SerialHidReportFormatPreset.Signal11_HidApi;
+				result = SerialHidDeviceSettingsPreset.Signal11_HidApi;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, TI_HidApi_stringStart))
 			{
-				result = SerialHidReportFormatPreset.TI_HidApi;
+				result = SerialHidDeviceSettingsPreset.TI_HidApi;
 				return (true);
 			}
 			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, YAT_stringStart))
 			{
-				result = SerialHidReportFormatPreset.YAT;
+				result = SerialHidDeviceSettingsPreset.YAT;
 				return (true);
 			}
 			else // Invalid string!
 			{
-				result = new SerialHidReportFormatPresetEx(); // Default!
+				result = new SerialHidDeviceSettingsPresetEx(); // Default!
 				return (false);
 			}
 		}
@@ -386,17 +386,17 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public SerialHidReportFormat ToReportFormat()
 		{
-			switch ((SerialHidReportFormatPreset)UnderlyingEnum)
+			switch ((SerialHidDeviceSettingsPreset)UnderlyingEnum)
 			{
-				case SerialHidReportFormatPreset.None:            return (new SerialHidReportFormat(true,  0x00,                            false, false, true )); // = Common.
-				case SerialHidReportFormatPreset.Plain:           return (new SerialHidReportFormat(false, 0x00,                            false, false, true ));
-				case SerialHidReportFormatPreset.Common:          return (new SerialHidReportFormat(true,  0x00,                            false, false, true ));
-				case SerialHidReportFormatPreset.LengthIndicated: return (new SerialHidReportFormat(true,  0x00,                            true,  false, true ));
-				case SerialHidReportFormatPreset.ZeroTerminated:  return (new SerialHidReportFormat(true,  0x00,                            false, true,  true ));
-				case SerialHidReportFormatPreset.MT_SerHid:       return (new SerialHidReportFormat(true,  MT_SerHid_ReportId,              false, true,  true )); // = ZeroTerminated since report ID = 0x00.
-				case SerialHidReportFormatPreset.Signal11_HidApi: return (new SerialHidReportFormat(true,  Signal11_HidApi_DefaultReportId, false, false, true )); // = Common since default report ID = 0x00.
-				case SerialHidReportFormatPreset.TI_HidApi:       return (new SerialHidReportFormat(true,  TI_HidApi_ReportId,              true,  false, true ));
-				case SerialHidReportFormatPreset.YAT:             return (new SerialHidReportFormat(true,  0x00,                            false, false, true )); // = Common.
+				case SerialHidDeviceSettingsPreset.None:            return (new SerialHidReportFormat(true,  0x00,                            false, false, true )); // = Common.
+				case SerialHidDeviceSettingsPreset.Plain:           return (new SerialHidReportFormat(false, 0x00,                            false, false, true ));
+				case SerialHidDeviceSettingsPreset.Common:          return (new SerialHidReportFormat(true,  0x00,                            false, false, true ));
+				case SerialHidDeviceSettingsPreset.LengthIndicated: return (new SerialHidReportFormat(true,  0x00,                            true,  false, true ));
+				case SerialHidDeviceSettingsPreset.ZeroTerminated:  return (new SerialHidReportFormat(true,  0x00,                            false, true,  true ));
+				case SerialHidDeviceSettingsPreset.MT_SerHid:       return (new SerialHidReportFormat(true,  MT_SerHid_ReportId,              false, true,  true )); // = ZeroTerminated since report ID = 0x00.
+				case SerialHidDeviceSettingsPreset.Signal11_HidApi: return (new SerialHidReportFormat(true,  Signal11_HidApi_DefaultReportId, false, false, true )); // = Common since default report ID = 0x00.
+				case SerialHidDeviceSettingsPreset.TI_HidApi:       return (new SerialHidReportFormat(true,  TI_HidApi_ReportId,              true,  false, true ));
+				case SerialHidDeviceSettingsPreset.YAT:             return (new SerialHidReportFormat(true,  0x00,                            false, false, true )); // = Common.
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -406,28 +406,28 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public SerialHidRxFilterUsage ToRxFilterUsage()
 		{
-			switch ((SerialHidReportFormatPreset)UnderlyingEnum)
+			switch ((SerialHidDeviceSettingsPreset)UnderlyingEnum)
 			{
-				case SerialHidReportFormatPreset.None:            return (new SerialHidRxFilterUsage(false, false, 0x00 )); // = Common.
-				case SerialHidReportFormatPreset.Plain:           return (new SerialHidRxFilterUsage(false, false, 0x00 ));
-				case SerialHidReportFormatPreset.Common:          return (new SerialHidRxFilterUsage(false, false, 0x00 ));
-				case SerialHidReportFormatPreset.LengthIndicated: return (new SerialHidRxFilterUsage(false, false, 0x00 ));
-				case SerialHidReportFormatPreset.ZeroTerminated:  return (new SerialHidRxFilterUsage(false, false, 0x00 ));
-				case SerialHidReportFormatPreset.MT_SerHid:       return (new SerialHidRxFilterUsage(false, false, MT_SerHid_ReportId ));
-				case SerialHidReportFormatPreset.Signal11_HidApi: return (new SerialHidRxFilterUsage(true,  true,  Signal11_HidApi_DefaultReportId ));
-				case SerialHidReportFormatPreset.TI_HidApi:       return (new SerialHidRxFilterUsage(false, false, TI_HidApi_ReportId ));
-				case SerialHidReportFormatPreset.YAT:             return (new SerialHidRxFilterUsage(false, false, 0x00 )); // = Common.
+				case SerialHidDeviceSettingsPreset.None:            return (new SerialHidRxFilterUsage(false, false, 0x00 )); // = Common.
+				case SerialHidDeviceSettingsPreset.Plain:           return (new SerialHidRxFilterUsage(false, false, 0x00 ));
+				case SerialHidDeviceSettingsPreset.Common:          return (new SerialHidRxFilterUsage(false, false, 0x00 ));
+				case SerialHidDeviceSettingsPreset.LengthIndicated: return (new SerialHidRxFilterUsage(false, false, 0x00 ));
+				case SerialHidDeviceSettingsPreset.ZeroTerminated:  return (new SerialHidRxFilterUsage(false, false, 0x00 ));
+				case SerialHidDeviceSettingsPreset.MT_SerHid:       return (new SerialHidRxFilterUsage(false, false, MT_SerHid_ReportId ));
+				case SerialHidDeviceSettingsPreset.Signal11_HidApi: return (new SerialHidRxFilterUsage(true,  true,  Signal11_HidApi_DefaultReportId ));
+				case SerialHidDeviceSettingsPreset.TI_HidApi:       return (new SerialHidRxFilterUsage(false, false, TI_HidApi_ReportId ));
+				case SerialHidDeviceSettingsPreset.YAT:             return (new SerialHidRxFilterUsage(false, false, 0x00 )); // = Common.
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		public static SerialHidReportFormatPreset FromReportFormatAndRxFilterUsage(SerialHidReportFormat reportFormat, SerialHidRxFilterUsage rxFilterUsage)
+		public static SerialHidDeviceSettingsPreset FromReportFormatAndRxFilterUsage(SerialHidReportFormat reportFormat, SerialHidRxFilterUsage rxFilterUsage)
 		{
 			foreach (var preset in GetItems())
 			{
-				if (preset != SerialHidReportFormatPreset.None)
+				if (preset != SerialHidDeviceSettingsPreset.None)
 				{
 					if ((reportFormat  == preset.ToReportFormat()) &&
 						(rxFilterUsage == preset.ToRxFilterUsage()))
@@ -438,7 +438,7 @@ namespace MKY.IO.Usb
 			}
 
 			// Not found:
-			return (SerialHidReportFormatPreset.None);
+			return (SerialHidDeviceSettingsPreset.None);
 		}
 
 		#endregion
@@ -449,49 +449,49 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPreset(SerialHidReportFormatPresetEx preset)
+		public static implicit operator SerialHidDeviceSettingsPreset(SerialHidDeviceSettingsPresetEx preset)
 		{
-			return ((SerialHidReportFormatPreset)preset.UnderlyingEnum);
+			return ((SerialHidDeviceSettingsPreset)preset.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPresetEx(SerialHidReportFormatPreset preset)
+		public static implicit operator SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset preset)
 		{
-			return (new SerialHidReportFormatPresetEx(preset));
+			return (new SerialHidDeviceSettingsPresetEx(preset));
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormat(SerialHidReportFormatPresetEx preset)
+		public static implicit operator SerialHidReportFormat(SerialHidDeviceSettingsPresetEx preset)
 		{
 			return (preset.ToReportFormat());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidRxFilterUsage(SerialHidReportFormatPresetEx preset)
+		public static implicit operator SerialHidRxFilterUsage(SerialHidDeviceSettingsPresetEx preset)
 		{
 			return (preset.ToRxFilterUsage());
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(SerialHidReportFormatPresetEx preset)
+		public static implicit operator int(SerialHidDeviceSettingsPresetEx preset)
 		{
 			return (preset.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPresetEx(int preset)
+		public static implicit operator SerialHidDeviceSettingsPresetEx(int preset)
 		{
-			return (new SerialHidReportFormatPresetEx((SerialHidReportFormatPreset)preset));
+			return (new SerialHidDeviceSettingsPresetEx((SerialHidDeviceSettingsPreset)preset));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(SerialHidReportFormatPresetEx preset)
+		public static implicit operator string(SerialHidDeviceSettingsPresetEx preset)
 		{
 			return (preset.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialHidReportFormatPresetEx(string preset)
+		public static implicit operator SerialHidDeviceSettingsPresetEx(string preset)
 		{
 			return (Parse(preset));
 		}

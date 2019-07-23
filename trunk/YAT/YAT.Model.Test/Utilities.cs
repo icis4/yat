@@ -1174,7 +1174,7 @@ namespace YAT.Model.Test
 			settings.Terminal.IO.UsbSerialHidDevice.FlowControl = SerialHidFlowControl.Software;
 
 			// Set required USB Ser/HID format:
-			var deviceFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)MKY.IO.Usb.SerialHidReportFormatPreset.MT_SerHid;
+			var deviceFormat = (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)MKY.IO.Usb.SerialHidDeviceSettingsPreset.MT_SerHid;
 			settings.Terminal.IO.UsbSerialHidDevice.ReportFormat = deviceFormat.ToReportFormat();
 			settings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage = deviceFormat.ToRxFilterUsage();
 		}
