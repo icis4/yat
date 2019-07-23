@@ -2285,6 +2285,12 @@ namespace YAT.View.Forms
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command != null) && (this.settingsRoot.SendFile.Command.IsFilePath));
+				toolStripMenuItem_PredefinedContextMenu_Cut             .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Cut             .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+				toolStripMenuItem_PredefinedContextMenu_Copy            .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Copy            .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+				toolStripMenuItem_PredefinedContextMenu_Paste           .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Paste           .Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
 				toolStripMenuItem_PredefinedContextMenu_Clear           .Visible = true;
 				toolStripMenuItem_PredefinedContextMenu_Clear           .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			}
@@ -2303,6 +2309,9 @@ namespace YAT.View.Forms
 				toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile.Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText    .Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile    .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Cut                 .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Copy                .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Paste               .Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_Clear               .Visible = false;
 			}
 
