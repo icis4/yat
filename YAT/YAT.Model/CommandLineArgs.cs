@@ -275,7 +275,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "FormatPreset", ShortName = "fp", Description =
-			"One of the presets to specify the report format USB Ser/HID. Valid values are " + MKY.IO.Usb.SerialHidReportFormatPresetEx.UserSummary + "." + EnvironmentEx.NewLineConstWorkaround +
+			"One of the presets to specify the report format USB Ser/HID. Valid values are " + MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.UserSummary + "." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string FormatPreset;
 
