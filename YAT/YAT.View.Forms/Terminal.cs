@@ -2215,8 +2215,9 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_PredefinedContextMenu_Panels.Visible = true;
 
-				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel            .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel               .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics   .Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Visible = true;
 
 				toolStripMenuItem_PredefinedContextMenu_UpBy  .Visible = true;
 				toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
@@ -2291,8 +2292,9 @@ namespace YAT.View.Forms
 			{
 				toolStripMenuItem_PredefinedContextMenu_Panels.Visible = false;
 
-				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel            .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel               .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics   .Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Visible = false;
 
 				toolStripMenuItem_PredefinedContextMenu_UpBy                .Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_DownBy              .Visible = false;
@@ -2545,6 +2547,36 @@ namespace YAT.View.Forms
 				sc = new Command(sc); // Clone command to ensure decoupling.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
 			}
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Cut_Click(object sender, EventArgs e)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Cut_Click()
+			// Changes here may have to be applied there too.
+
+			// PENDING CutToClipboard();
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Copy_Click(object sender, EventArgs e)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Copy_Click()
+			// Changes here may have to be applied there too.
+
+			// PENDING CopyToClipboard();
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Paste_Click(object sender, EventArgs e)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_Paste_Click()
+			// Changes here may have to be applied there too.
+
+			// PENDING PasteFromClipboard();
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Clear_Click(object sender, EventArgs e)

@@ -537,6 +537,36 @@ namespace YAT.View.Forms
 			ts.Command = sc;
 		}
 
+		private void toolStripMenuItem_CommandContextMenu_Cut_Click(object sender, EventArgs e)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Cut_Click()
+			// Changes here may have to be applied there too.
+
+			// PENDING CutToClipboard();
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_Copy_Click(object sender, EventArgs e)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Copy_Click()
+			// Changes here may have to be applied there too.
+
+			// PENDING CopyToClipboard();
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_Paste_Click(object sender, EventArgs e)
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Paste_Click()
+			// Changes here may have to be applied there too.
+
+			// PENDING PasteFromClipboard();
+		}
+
 		private void toolStripMenuItem_CommandContextMenu_Clear_Click(object sender, EventArgs e)
 		{
 		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
