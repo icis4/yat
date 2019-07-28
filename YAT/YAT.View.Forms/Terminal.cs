@@ -2607,7 +2607,12 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsHelper.ShowSaveAsFileDialog(this.settingsRoot.PredefinedCommand, IndicatedName, this);
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.button_ExportAllPagesToFile_Click()
+			// Changes here may have to be applied there too.
+
+			CommandPagesSettingsHelper.SaveToFile(this, this.settingsRoot.PredefinedCommand, IndicatedName);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -2615,13 +2620,28 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			// PENDING
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.button_ImportAllPagesFromFile_Click()
+			// Changes here may have to be applied there too.
+
+			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
+			if (CommandPagesSettingsHelper.LoadFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			{
+				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
+				// settingsRoot_Changed() will update the form.
+			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_LinkToFile_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.ShowLinkFileDialog()
+			// Changes here may have to be applied there too.
 
 			// PENDING
 		}
