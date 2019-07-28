@@ -4725,7 +4725,7 @@ namespace YAT.Model
 
 				OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to switch log on.", ex, yatLead, yatText),
+					ErrorHelper.ComposeMessage("Unable to switch log on!", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -4752,7 +4752,7 @@ namespace YAT.Model
 
 				OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to clear log.", ex, yatLead, yatText),
+					ErrorHelper.ComposeMessage("Unable to clear log!", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -4777,7 +4777,7 @@ namespace YAT.Model
 			{
 				OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to clear log.", ex),
+					ErrorHelper.ComposeMessage("Unable to clear log!", ex),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
