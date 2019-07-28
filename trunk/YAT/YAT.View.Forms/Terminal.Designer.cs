@@ -1851,7 +1851,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_export_16x16;
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Name = "toolStripMenuItem_PredefinedContextMenu_ExportToFile";
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Text = "E&xport All to File...";
+			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Text = "E&xport to File...";
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_ExportToFile_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_ImportFromFile
@@ -1859,7 +1859,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_import_16x16;
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Name = "toolStripMenuItem_PredefinedContextMenu_ImportFromFile";
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport All from File...";
+			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport from File...";
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_LinkToFile

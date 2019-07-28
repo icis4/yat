@@ -283,7 +283,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			CommandPagesSettingsHelper.SaveToFile(this, this.settingsInEdit, this.selectedPage, this.indicatedName);
 		}
 
 		private void button_DeletePage_Click(object sender, EventArgs e)
@@ -308,11 +308,6 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.Terminal.button_ExportAllPagesToFile_Click()
-			// Changes here may have to be applied there too.
-
 			CommandPagesSettingsHelper.SaveToFile(this, this.settingsInEdit, this.indicatedName);
 		}
 

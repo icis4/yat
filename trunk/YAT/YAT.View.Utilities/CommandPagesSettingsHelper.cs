@@ -53,6 +53,50 @@ namespace YAT.View.Utilities
 	public static class CommandPagesSettingsHelper
 	{
 		/// <summary></summary>
+		public static bool Export(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPage, string indicatedName)
+		{
+			var pageCount = commandPages.Pages.Count;
+			if (pageCount > 1)
+			{
+				var message = new StringBuilder();
+				message.AppendLine("Would you like to export all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
+				message.Append("or just the currently selected page " + selectedPage.ToString(CultureInfo.CurrentUICulture) + " [No]?");
+
+				switch (MessageBoxEx.Show
+				(
+					owner,
+					message.ToString(),
+					"Export Mode",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question
+				))
+				{
+					case DialogResult.Yes: return (SaveToFile(owner, commandPages, indicatedName));
+					case DialogResult.No:  return (SaveToFile(owner, commandPages, selectedPage, indicatedName));
+					default:               return (false);
+				}
+			}
+			else // Just a single page => save without asking:
+			{
+				return (SaveToFile(owner, commandPages, indicatedName));
+			}
+		}
+
+		/// <summary>
+		/// Prompts the user to export the given page to a file.
+		/// </summary>
+		public static bool SaveToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPage, string indicatedName)
+		{
+			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
+			p.Pages.Clear();
+			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPage - 1])); // Clone page to ensure decoupling.
+
+			return (SaveToFile(owner, p, indicatedName));
+		}
+
+		/// <summary>
+		/// Prompts the user to export all pages to a file.
+		/// </summary>
 		public static bool SaveToFile(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
 		{
 			var sfd = new SaveFileDialog();
@@ -150,8 +194,8 @@ namespace YAT.View.Utilities
 						message.Append(imported.TotalDefinedCommandCount);
 						message.AppendLine(" commands.");
 						message.AppendLine();
-						message.Append("Would you like to replace all currently configured predefined commands by the imported [Yes],");
-						message.Append(" or append the imported to the currently configured predefined commands [No]?");
+						message.AppendLine("Would you like to replace all currently configured predefined commands by the imported [Yes],");
+						message.Append("or append the imported to the currently configured predefined commands [No]?");
 
 						switch (MessageBoxEx.Show
 						(
@@ -174,6 +218,10 @@ namespace YAT.View.Utilities
 								{
 									// Clone...
 									commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
+
+									// ...add default page if yet empty...
+									if (commandPagesOld.Pages.Count == 0)
+										commandPagesNew.Pages.Add(PredefinedCommandSettings.DefaultPage);
 
 									// ...then append:
 									foreach (var p in imported.Pages)
@@ -208,9 +256,16 @@ namespace YAT.View.Utilities
 									{
 										case DialogResult.Yes:
 										{
-											// Clone and enlarge...
+											// Clone...
 											commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
-										  //commandPagesNew.MaxCommandsPerPage = cpMaxCommandsPerPage; PENDING
+
+											// ...add default page if yet empty...
+											if (commandPagesOld.Pages.Count == 0)
+												commandPagesNew.Pages.Add(PredefinedCommandSettings.DefaultPage);
+
+											// ...enlarge...
+										  //commandPagesNew.MaxCommandsPerPage = cpMaxCommandsPerPage;
+											// !!! PENDING !!!
 
 											// ... then append:
 											foreach (var p in imported.Pages)
@@ -233,7 +288,7 @@ namespace YAT.View.Utilities
 													if (n <= 1)
 														spreadPage.PageName = p.PageName;
 													else
-														spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " (spread {0} of {1})", i, n);
+														spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
 
 													for (int j = 0; j < PredefinedCommandSettings.MaxCommandsPerPage; j++)
 													{

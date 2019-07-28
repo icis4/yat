@@ -2607,12 +2607,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.button_ExportAllPagesToFile_Click()
-			// Changes here may have to be applied there too.
-
-			CommandPagesSettingsHelper.SaveToFile(this, this.settingsRoot.PredefinedCommand, IndicatedName);
+			CommandPagesSettingsHelper.Export(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPage, IndicatedName);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
