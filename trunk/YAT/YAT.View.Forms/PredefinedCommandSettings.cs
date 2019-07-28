@@ -268,7 +268,12 @@ namespace YAT.View.Forms
 
 		private void button_InsertPagesFromFile_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandPagesSettingsHelper.ImportFromFileAndInsert(this, this.settingsInEdit, this.selectedPage, out settingsInEditNew))
+			{
+				this.settingsInEdit = settingsInEditNew;
+				SetControls();
+			}
 		}
 
 		private void button_AddPage_Click(object sender, EventArgs e)
@@ -283,7 +288,12 @@ namespace YAT.View.Forms
 
 		private void button_AddPagesFromFile_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandPagesSettingsHelper.ImportFromFileAndAdd(this, this.settingsInEdit, out settingsInEditNew))
+			{
+				this.settingsInEdit = settingsInEditNew;
+				SetControls();
+			}
 		}
 
 		private void button_DuplicatePage_Click(object sender, EventArgs e)
@@ -298,7 +308,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsHelper.SaveToFile(this, this.settingsInEdit, this.selectedPage, this.indicatedName);
+			CommandPagesSettingsHelper.ExportSelectedPageToFile(this, this.settingsInEdit, this.selectedPage, this.indicatedName);
 		}
 
 		private void button_DeletePage_Click(object sender, EventArgs e)
@@ -328,7 +338,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsHelper.SaveToFile(this, this.settingsInEdit, this.indicatedName);
+			CommandPagesSettingsHelper.ExportPagesToFile(this, this.settingsInEdit, this.indicatedName);
 		}
 
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
@@ -339,7 +349,7 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.LoadFromFile(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.ImportAllPagesFromFile(this, this.settingsInEdit, out settingsInEditNew))
 			{
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();

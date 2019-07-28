@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace YAT.Model.Types
 {
@@ -50,6 +51,32 @@ namespace YAT.Model.Types
 			// Perfom a deep copy to break references:
 			foreach (PredefinedCommandPage pcp in collection)
 				Add(new PredefinedCommandPage(pcp));
+		}
+
+		/// <summary></summary>
+		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int maxCommandsPerPage)
+		{
+			foreach (var p in collection)
+			{
+				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (maxCommandsPerPage)));
+				for (int i = 0; i < n; i++)
+				{
+					var spreadPage = new PredefinedCommandPage();
+
+					if (n <= 1)
+						spreadPage.PageName = p.PageName;
+					else
+						spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
+
+					for (int j = 0; j < maxCommandsPerPage; j++)
+					{
+						int indexImported = ((i * maxCommandsPerPage) + j);
+						spreadPage.Commands.Add(p.Commands[indexImported]);
+					}
+
+					Add(spreadPage);
+				}
+			}
 		}
 	}
 }

@@ -2316,6 +2316,19 @@ namespace YAT.View.Forms
 				toolStripMenuItem_PredefinedContextMenu_Clear               .Visible = false;
 			}
 
+			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
+			{
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "E&xport Page to File...";
+				toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Page from File...";
+				toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Page to File...";
+			}
+			else
+			{
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "E&xport Pages to File...";
+				toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Pages from File...";
+				toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Pages to File...";
+			}
+
 			contextMenuStrip_Predefined_SetMenuItems();
 		}
 
@@ -2607,7 +2620,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsHelper.Export(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPage, IndicatedName);
+			CommandPagesSettingsHelper.ExportToFile(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPage, IndicatedName);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -2621,7 +2634,7 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.LoadFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			if (CommandPagesSettingsHelper.ImportAllPagesFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
