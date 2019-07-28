@@ -261,6 +261,11 @@ namespace YAT.View.Forms
 			InsertPage();
 		}
 
+		private void button_InsertPageFromClipboard_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
 		private void button_InsertPagesFromFile_Click(object sender, EventArgs e)
 		{
 			// PENDING
@@ -271,14 +276,24 @@ namespace YAT.View.Forms
 			AddPage();
 		}
 
+		private void button_AddPagesFromClipboard_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
 		private void button_AddPagesFromFile_Click(object sender, EventArgs e)
 		{
 			// PENDING
 		}
 
-		private void button_CopyPage_Click(object sender, EventArgs e)
+		private void button_DuplicatePage_Click(object sender, EventArgs e)
 		{
-			CopyPage();
+			DuplicatePage();
+		}
+
+		private void button_CopyPageToClipboard_Click(object sender, EventArgs e)
+		{
+			// PENDING
 		}
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
@@ -289,6 +304,11 @@ namespace YAT.View.Forms
 		private void button_DeletePage_Click(object sender, EventArgs e)
 		{
 			DeletePage();
+		}
+
+		private void button_CutPageToClipboard_Click(object sender, EventArgs e)
+		{
+			// PENDING
 		}
 
 		private void button_MovePageUp_Click(object sender, EventArgs e)
@@ -714,7 +734,7 @@ namespace YAT.View.Forms
 				button_InsertPagesFromFile   .Enabled = pageIsSelected;
 			////button_AddPage               .Enabled = true;
 			////button_AddPagesFromFile      .Enabled = true;
-				button_CopyPage              .Enabled = pageIsSelected;
+				button_DuplicatePage              .Enabled = pageIsSelected;
 				button_ExportPageToFile      .Enabled = pageIsSelected;
 				button_DeletePage            .Enabled = pageIsSelected; // Deleting a sole page is permissible.
 				button_MovePageUp            .Enabled = pageIsSelected && (this.selectedPage > 1);
@@ -871,8 +891,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Code uses term "duplicate" whereas view uses "copy".
+		/// </remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void CopyPage()
+		private void DuplicatePage()
 		{
 			string pageName;
 			if (TextInputBox.Show
