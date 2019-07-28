@@ -308,12 +308,27 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsHelper.ShowSaveAsFileDialog(this.settingsInEdit, this.indicatedName, this);
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.button_ExportAllPagesToFile_Click()
+			// Changes here may have to be applied there too.
+
+			CommandPagesSettingsHelper.SaveToFile(this, this.settingsInEdit, this.indicatedName);
 		}
 
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click()
+			// Changes here may have to be applied there too.
+
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandPagesSettingsHelper.LoadFromFile(this, this.settingsInEdit, out settingsInEditNew))
+			{
+				this.settingsInEdit = settingsInEditNew;
+				SetControls();
+			}
 		}
 
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
@@ -338,6 +353,15 @@ namespace YAT.View.Forms
 		private void pathLabel_LinkedTo_Click(object sender, EventArgs e)
 		{
 			// PENDING ShowLinkFileDialog();
+		}
+
+		private void ShowLinkFileDialog()
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_LinkToFile_Click()
+			// Changes here may have to be applied there too.
+
 		}
 
 		private void button_ClearLink_Click(object sender, EventArgs e)

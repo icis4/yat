@@ -28,7 +28,9 @@
 //==================================================================================================
 
 using System;
+using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
@@ -38,6 +40,7 @@ using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
+using YAT.Model.Types;
 using YAT.Model.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Model;
@@ -50,7 +53,7 @@ namespace YAT.View.Utilities
 	public static class CommandPagesSettingsHelper
 	{
 		/// <summary></summary>
-		public static bool ShowSaveAsFileDialog(PredefinedCommandSettings commandPages, string indicatedName, IWin32Window owner)
+		public static bool SaveToFile(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
 		{
 			var sfd = new SaveFileDialog();
 			sfd.Title = ((commandPages.Pages.Count <= 1) ? "Save Command Page As" : "Save Command Pages As");
@@ -88,8 +91,6 @@ namespace YAT.View.Utilities
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-
-				return (false);
 			}
 
 			return (false);
@@ -105,8 +106,8 @@ namespace YAT.View.Utilities
 
 				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>(root);
 				sh.SettingsFilePath = fileName;
-
 				sh.Save();
+
 				exception = null;
 				return (true);
 			}
@@ -117,10 +118,204 @@ namespace YAT.View.Utilities
 			}
 		}
 
+		/// <summary></summary>
+		public static bool LoadFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		{
+			var ofd = new OpenFileDialog();
+			ofd.Title = "Open Command Page(s)";
+			ofd.Filter      = ExtensionHelper.CommandPagesFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.CommandPagesFilesFilterDefault;
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesFile);
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
-//				"The file contains {1} page{} with a total of {} command definitions"
-	//			"Would you like to replace the currently configured predefined commands by the imported commands (Yes), or append the imported commands to the currently configured (No)?
+			var dr = ofd.ShowDialog(owner);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
+			{
+				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
 
+				PredefinedCommandSettings cp;
+				Exception ex;
+				if (LoadFromFile(ofd.FileName, out cp, out ex))
+				{
+					if (cp.Pages.Count >= 1)
+					{
+						int cpMaxCommandsPerPage = PredefinedCommandSettings.MaxCommandsPerPage; // Preparation for 12/24/36/48/72 commands per page.
+
+						var message = new StringBuilder();
+						message.Append("File contains ");
+						message.Append(cp.Pages.Count);
+						message.Append(cp.Pages.Count == 1 ? " page" : " pages");
+						message.Append(" with a total of ");
+						message.Append(cp.TotalDefinedCommandCount);
+						message.AppendLine(" commands.");
+						message.AppendLine();
+						message.Append("Would you like to replace all currently configured predefined commands by the imported [Yes],");
+						message.Append(" or append the imported to the currently configured predefined commands [No]?");
+
+						switch (MessageBoxEx.Show
+						(
+							owner,
+							message.ToString(),
+							"Import Mode",
+							MessageBoxButtons.YesNoCancel,
+							MessageBoxIcon.Question
+						))
+						{
+							case DialogResult.Yes:
+							{
+								commandPagesNew = cp;
+								return (true);
+							}
+
+							case DialogResult.No:
+							{
+								if (cpMaxCommandsPerPage <= PredefinedCommandSettings.MaxCommandsPerPage)
+								{
+									// Clone...
+									commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
+
+									// ...then append:
+									foreach (var p in cp.Pages)
+										commandPagesNew.Pages.Add(p);
+
+									return (true);
+								}
+								else // (cpMaxCommandsPerPage > PredefinedCommandSettings.MaxCommandsPerPage)
+								{
+									// Enlarge or spread:
+
+									message = new StringBuilder();
+									message.Append("File contains ");
+									message.Append(cp.Pages.Count == 1 ? " page" : " pages");
+									message.Append(" with up to ");
+									message.Append(cpMaxCommandsPerPage);
+									message.Append(" commands per page, but currently ");
+									message.Append(PredefinedCommandSettings.MaxCommandsPerPage);
+									message.AppendLine(" commands per page are configured.");
+									message.AppendLine();
+									message.Append("Would you like to enlarge all pages to " + cpMaxCommandsPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
+									message.Append(" or spread the imported commands to " + PredefinedCommandSettings.MaxCommandsPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+
+									switch (MessageBoxEx.Show
+									(
+										owner,
+										message.ToString(),
+										"Import Mode",
+										MessageBoxButtons.YesNoCancel,
+										MessageBoxIcon.Question
+									))
+									{
+										case DialogResult.Yes:
+										{
+											// Clone and enlarge...
+											commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
+										  //commandPagesNew.MaxCommandsPerPage = cpMaxCommandsPerPage; PENDING
+
+											// ... then append:
+											foreach (var p in cp.Pages)
+												commandPagesNew.Pages.Add(p);
+
+											return (true);
+										}
+
+										case DialogResult.No:
+										{
+											// Clone and spread...
+											commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
+											foreach (var p in cp.Pages)
+											{
+												int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (PredefinedCommandSettings.MaxCommandsPerPage)));
+												for (int i = 0; i < p.Commands.Count; i += PredefinedCommandSettings.MaxCommandsPerPage)
+												{
+													var spreadPage = new PredefinedCommandPage();
+													spreadPage.PageName = p.PageName;
+
+													for (int j = 0; j < PredefinedCommandSettings.MaxCommandsPerPage; j++)
+														spreadPage.Commands.Add(p.Commands[i + j]);
+
+													commandPagesNew.Pages.Add(spreadPage);
+												}
+											}
+
+											return (true);
+										}
+
+										default:
+										{
+											break; // Nothing to do.
+										}
+									}
+								}
+								break;
+							}
+
+							default:
+							{
+								break; // Nothing to do.
+							}
+						}
+					}
+					else
+					{
+						MessageBoxEx.Show
+						(
+							"File contains no pages.",
+							"No Pages",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
+					}
+				}
+				else
+				{
+					string errorMessage;
+					if (!string.IsNullOrEmpty(ofd.FileName))
+						errorMessage = ErrorHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
+					else
+						errorMessage = ErrorHelper.ComposeMessage("Unable to open file!", ex);
+
+					MessageBoxEx.Show
+					(
+						errorMessage,
+						"File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+				}
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool LoadFromFile(string fileName, out PredefinedCommandSettings commandPages, out Exception exception)
+		{
+			try
+			{
+				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
+				sh.SettingsFilePath = fileName;
+				if (sh.Load())
+				{
+					commandPages = sh.Settings.PredefinedCommand;
+					exception = null;
+					return (true);
+				}
+				else
+				{
+					commandPages = null;
+					exception = null;
+					return (true);
+				}
+			}
+			catch (Exception ex)
+			{
+				commandPages = null;
+				exception = ex;
+				return (false);
+			}
+		}
 	}
 }
 
