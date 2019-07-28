@@ -41,7 +41,7 @@ namespace YAT.Settings.Model
 {
 	/// <summary></summary>
 	[XmlRoot("CommandPagesDefinition")]
-	public class CommandPagesDefinitionRoot : MKY.Settings.SettingsItem, IEquatable<CommandPagesDefinitionRoot>
+	public class CommandPagesSettingsRoot : MKY.Settings.SettingsItem, IEquatable<CommandPagesSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.0.2";
@@ -52,7 +52,7 @@ namespace YAT.Settings.Model
 		private PredefinedCommandSettings predefinedCommand;
 
 		/// <summary></summary>
-		public CommandPagesDefinitionRoot()
+		public CommandPagesSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
 			PredefinedCommand = new PredefinedCommandSettings(MKY.Settings.SettingsType.Explicit);
@@ -64,7 +64,7 @@ namespace YAT.Settings.Model
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public CommandPagesDefinitionRoot(CommandPagesDefinitionRoot rhs)
+		public CommandPagesSettingsRoot(CommandPagesSettingsRoot rhs)
 			: base(rhs)
 		{
 			PredefinedCommand = new PredefinedCommandSettings(rhs.PredefinedCommand);
@@ -165,7 +165,7 @@ namespace YAT.Settings.Model
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as CommandPagesDefinitionRoot));
+			return (Equals(obj as CommandPagesSettingsRoot));
 		}
 
 		/// <summary>
@@ -175,7 +175,7 @@ namespace YAT.Settings.Model
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(CommandPagesDefinitionRoot other)
+		public bool Equals(CommandPagesSettingsRoot other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -192,7 +192,7 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(CommandPagesDefinitionRoot lhs, CommandPagesDefinitionRoot rhs)
+		public static bool operator ==(CommandPagesSettingsRoot lhs, CommandPagesSettingsRoot rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -205,7 +205,7 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(CommandPagesDefinitionRoot lhs, CommandPagesDefinitionRoot rhs)
+		public static bool operator !=(CommandPagesSettingsRoot lhs, CommandPagesSettingsRoot rhs)
 		{
 			return (!(lhs == rhs));
 		}
