@@ -775,13 +775,13 @@ namespace YAT.View.Forms
 					"You may also cancel and set different extensions, or manually change the settings.";
 
 				switch (MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Naming Conflict",
-					MessageBoxButtons.YesNoCancel,
-					MessageBoxIcon.Question
-				))
+					(
+						this,
+						message,
+						"Naming Conflict",
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+					))
 				{
 					case DialogResult.Yes: this.settingsInEdit.NameType   = true; break;
 					case DialogResult.No:  this.settingsInEdit.FolderType = true; break;
@@ -800,13 +800,13 @@ namespace YAT.View.Forms
 					"You may also cancel and manually change the settings.";
 
 				switch (MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Naming Conflict",
-					MessageBoxButtons.YesNoCancel,
-					MessageBoxIcon.Question
-				))
+					(
+						this,
+						message,
+						"Naming Conflict",
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+					))
 				{
 					case DialogResult.Yes: this.settingsInEdit.NameDirection   = true; break;
 					case DialogResult.No:  this.settingsInEdit.FolderDirection = true; break;
@@ -826,13 +826,13 @@ namespace YAT.View.Forms
 					"You may also cancel and set different extensions, or manually change the settings.";
 
 				switch (MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Naming Conflict",
-					MessageBoxButtons.YesNoCancel,
-					MessageBoxIcon.Question
-				))
+					(
+						this,
+						message,
+						"Naming Conflict",
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+					))
 				{
 					case DialogResult.Yes: this.settingsInEdit.NameType   = true; break;
 					case DialogResult.No:  this.settingsInEdit.FolderType = true; break;
