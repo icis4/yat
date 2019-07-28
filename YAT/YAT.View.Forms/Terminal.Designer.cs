@@ -202,8 +202,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_PredefinedContextMenu_Cut = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_Copy = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_Paste = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_Clear = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -396,10 +400,6 @@ namespace YAT.View.Forms
 			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_PredefinedContextMenu_Cut = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Copy = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Paste = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -1834,6 +1834,32 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Text = "Copy from Send File";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click);
 			// 
+			// toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics
+			// 
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics";
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Size = new System.Drawing.Size(217, 6);
+			// 
+			// toolStripMenuItem_PredefinedContextMenu_Cut
+			// 
+			this.toolStripMenuItem_PredefinedContextMenu_Cut.Name = "toolStripMenuItem_PredefinedContextMenu_Cut";
+			this.toolStripMenuItem_PredefinedContextMenu_Cut.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Cut.Text = "Cut to Clipboard";
+			this.toolStripMenuItem_PredefinedContextMenu_Cut.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Cut_Click);
+			// 
+			// toolStripMenuItem_PredefinedContextMenu_Copy
+			// 
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Name = "toolStripMenuItem_PredefinedContextMenu_Copy";
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Text = "Copy to Clipboard";
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Copy_Click);
+			// 
+			// toolStripMenuItem_PredefinedContextMenu_Paste
+			// 
+			this.toolStripMenuItem_PredefinedContextMenu_Paste.Name = "toolStripMenuItem_PredefinedContextMenu_Paste";
+			this.toolStripMenuItem_PredefinedContextMenu_Paste.Size = new System.Drawing.Size(220, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Paste.Text = "Paste from Clipboard";
+			this.toolStripMenuItem_PredefinedContextMenu_Paste.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Paste_Click);
+			// 
 			// toolStripMenuItem_PredefinedContextMenu_Clear
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Clear.Name = "toolStripMenuItem_PredefinedContextMenu_Clear";
@@ -1841,17 +1867,17 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_Clear.Text = "Clear";
 			this.toolStripMenuItem_PredefinedContextMenu_Clear.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Clear_Click);
 			// 
-			// toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics
+			// toolStripMenuItem_PredefinedContextMenu_Separator_6
 			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics";
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Size = new System.Drawing.Size(217, 6);
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_6.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_6";
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_6.Size = new System.Drawing.Size(217, 6);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_ExportToFile
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_export_16x16;
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Name = "toolStripMenuItem_PredefinedContextMenu_ExportToFile";
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Text = "E&xport to File...";
+			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Text = "E&xport Page(s) to File...";
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_ExportToFile_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_ImportFromFile
@@ -1859,7 +1885,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_import_16x16;
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Name = "toolStripMenuItem_PredefinedContextMenu_ImportFromFile";
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport from File...";
+			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Page(s) from File...";
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_LinkToFile
@@ -1867,7 +1893,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_link_16x16;
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Name = "toolStripMenuItem_PredefinedContextMenu_LinkToFile";
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Text = "&Link All to File...";
+			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Text = "&Link Page(s) to File...";
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_LinkToFile_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_Predefined
@@ -3678,32 +3704,6 @@ namespace YAT.View.Forms
 			// timer_IOStatusIndicator
 			// 
 			this.timer_IOStatusIndicator.Tick += new System.EventHandler(this.timer_IOStatusIndicator_Tick);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Separator_6
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_6.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_6";
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_6.Size = new System.Drawing.Size(217, 6);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Cut
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Cut.Name = "toolStripMenuItem_PredefinedContextMenu_Cut";
-			this.toolStripMenuItem_PredefinedContextMenu_Cut.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Cut.Text = "Cut";
-			this.toolStripMenuItem_PredefinedContextMenu_Cut.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Cut_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Copy
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Name = "toolStripMenuItem_PredefinedContextMenu_Copy";
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Text = "Copy";
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Copy_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Paste
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Paste.Name = "toolStripMenuItem_PredefinedContextMenu_Paste";
-			this.toolStripMenuItem_PredefinedContextMenu_Paste.Size = new System.Drawing.Size(220, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Paste.Text = "Paste";
-			this.toolStripMenuItem_PredefinedContextMenu_Paste.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Paste_Click);
 			// 
 			// Terminal
 			// 
