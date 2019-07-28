@@ -87,6 +87,9 @@
 			this.toolStripMenuItem_CommandContextMenu_CopyTo_11 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_CommandContextMenu_CopyTo_12 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_CommandContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_CommandContextMenu_Cut = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_CommandContextMenu_Copy = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_CommandContextMenu_Paste = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_CommandContextMenu_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.label_ExplicitDefaultRadix = new System.Windows.Forms.Label();
 			this.predefinedCommandSettingsSet_12 = new YAT.View.Controls.PredefinedCommandSettingsSet();
@@ -125,12 +128,16 @@
 			this.label_Example = new System.Windows.Forms.Label();
 			this.button_Help = new System.Windows.Forms.Button();
 			this.groupBox_Pages = new System.Windows.Forms.GroupBox();
+			this.button_CutPageToClipboard = new System.Windows.Forms.Button();
+			this.button_CopyPageToClipboard = new System.Windows.Forms.Button();
+			this.button_AddPagesFromClipboard = new System.Windows.Forms.Button();
+			this.button_InsertPageFromClipboard = new System.Windows.Forms.Button();
 			this.button_ImportAllPagesFromFile = new System.Windows.Forms.Button();
 			this.button_ExportAllPagesToFile = new System.Windows.Forms.Button();
 			this.button_ExportPageToFile = new System.Windows.Forms.Button();
 			this.button_InsertPagesFromFile = new System.Windows.Forms.Button();
 			this.button_AddPagesFromFile = new System.Windows.Forms.Button();
-			this.button_CopyPage = new System.Windows.Forms.Button();
+			this.button_DuplicatePage = new System.Windows.Forms.Button();
 			this.listBox_Pages = new System.Windows.Forms.ListBox();
 			this.button_DeleteAllPages = new System.Windows.Forms.Button();
 			this.button_MovePageUp = new System.Windows.Forms.Button();
@@ -143,9 +150,6 @@
 			this.button_LinkToFile = new System.Windows.Forms.Button();
 			this.button_ClearLink = new System.Windows.Forms.Button();
 			this.pathLabel_LinkedTo = new MKY.Windows.Forms.PathLabel();
-			this.toolStripMenuItem_CommandContextMenu_Copy = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_CommandContextMenu_Cut = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_CommandContextMenu_Paste = new System.Windows.Forms.ToolStripMenuItem();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -155,7 +159,7 @@
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(642, 417);
+			this.button_OK.Location = new System.Drawing.Point(674, 417);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 5;
@@ -166,7 +170,7 @@
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(723, 417);
+			this.button_Cancel.Location = new System.Drawing.Point(755, 417);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 6;
@@ -224,7 +228,7 @@
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Data);
 			this.groupBox_Page.Controls.Add(this.label_Example);
-			this.groupBox_Page.Location = new System.Drawing.Point(268, 12);
+			this.groupBox_Page.Location = new System.Drawing.Point(300, 12);
 			this.groupBox_Page.Name = "groupBox_Page";
 			this.groupBox_Page.Size = new System.Drawing.Size(620, 392);
 			this.groupBox_Page.TabIndex = 1;
@@ -245,7 +249,7 @@
             this.toolStripMenuItem_CommandContextMenu_Paste,
             this.toolStripMenuItem_CommandContextMenu_Clear});
 			this.contextMenuStrip_Commands.Name = "contextMenuStrip_Commands";
-			this.contextMenuStrip_Commands.Size = new System.Drawing.Size(153, 214);
+			this.contextMenuStrip_Commands.Size = new System.Drawing.Size(122, 192);
 			this.contextMenuStrip_Commands.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Commands_Opening);
 			// 
 			// toolStripMenuItem_CommandContextMenu_UpBy
@@ -263,7 +267,7 @@
             this.toolStripMenuItem_CommandContextMenu_UpBy_10,
             this.toolStripMenuItem_CommandContextMenu_UpBy_11});
 			this.toolStripMenuItem_CommandContextMenu_UpBy.Name = "toolStripMenuItem_CommandContextMenu_UpBy";
-			this.toolStripMenuItem_CommandContextMenu_UpBy.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_CommandContextMenu_UpBy.Size = new System.Drawing.Size(121, 22);
 			this.toolStripMenuItem_CommandContextMenu_UpBy.Text = "Up by";
 			// 
 			// toolStripMenuItem_CommandContextMenu_UpBy_1
@@ -369,7 +373,7 @@
             this.toolStripMenuItem_CommandContextMenu_DownBy_10,
             this.toolStripMenuItem_CommandContextMenu_DownBy_11});
 			this.toolStripMenuItem_CommandContextMenu_DownBy.Name = "toolStripMenuItem_CommandContextMenu_DownBy";
-			this.toolStripMenuItem_CommandContextMenu_DownBy.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_CommandContextMenu_DownBy.Size = new System.Drawing.Size(121, 22);
 			this.toolStripMenuItem_CommandContextMenu_DownBy.Text = "Down by";
 			// 
 			// toolStripMenuItem_CommandContextMenu_DownBy_1
@@ -463,7 +467,7 @@
 			// toolStripMenuItem_CommandContextMenu_Separator_1
 			// 
 			this.toolStripMenuItem_CommandContextMenu_Separator_1.Name = "toolStripMenuItem_CommandContextMenu_Separator_1";
-			this.toolStripMenuItem_CommandContextMenu_Separator_1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem_CommandContextMenu_Separator_1.Size = new System.Drawing.Size(118, 6);
 			// 
 			// toolStripMenuItem_CommandContextMenu_MoveTo
 			// 
@@ -481,7 +485,7 @@
             this.toolStripMenuItem_CommandContextMenu_MoveTo_11,
             this.toolStripMenuItem_CommandContextMenu_MoveTo_12});
 			this.toolStripMenuItem_CommandContextMenu_MoveTo.Name = "toolStripMenuItem_CommandContextMenu_MoveTo";
-			this.toolStripMenuItem_CommandContextMenu_MoveTo.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_CommandContextMenu_MoveTo.Size = new System.Drawing.Size(121, 22);
 			this.toolStripMenuItem_CommandContextMenu_MoveTo.Text = "Move to";
 			// 
 			// toolStripMenuItem_CommandContextMenu_MoveTo_1
@@ -596,7 +600,7 @@
             this.toolStripMenuItem_CommandContextMenu_CopyTo_11,
             this.toolStripMenuItem_CommandContextMenu_CopyTo_12});
 			this.toolStripMenuItem_CommandContextMenu_CopyTo.Name = "toolStripMenuItem_CommandContextMenu_CopyTo";
-			this.toolStripMenuItem_CommandContextMenu_CopyTo.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_CommandContextMenu_CopyTo.Size = new System.Drawing.Size(121, 22);
 			this.toolStripMenuItem_CommandContextMenu_CopyTo.Text = "Copy to";
 			// 
 			// toolStripMenuItem_CommandContextMenu_CopyTo_1
@@ -698,12 +702,33 @@
 			// toolStripMenuItem_CommandContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_CommandContextMenu_Separator_2.Name = "toolStripMenuItem_CommandContextMenu_Separator_2";
-			this.toolStripMenuItem_CommandContextMenu_Separator_2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem_CommandContextMenu_Separator_2.Size = new System.Drawing.Size(118, 6);
+			// 
+			// toolStripMenuItem_CommandContextMenu_Cut
+			// 
+			this.toolStripMenuItem_CommandContextMenu_Cut.Name = "toolStripMenuItem_CommandContextMenu_Cut";
+			this.toolStripMenuItem_CommandContextMenu_Cut.Size = new System.Drawing.Size(121, 22);
+			this.toolStripMenuItem_CommandContextMenu_Cut.Text = "Cut";
+			this.toolStripMenuItem_CommandContextMenu_Cut.Click += new System.EventHandler(this.toolStripMenuItem_CommandContextMenu_Cut_Click);
+			// 
+			// toolStripMenuItem_CommandContextMenu_Copy
+			// 
+			this.toolStripMenuItem_CommandContextMenu_Copy.Name = "toolStripMenuItem_CommandContextMenu_Copy";
+			this.toolStripMenuItem_CommandContextMenu_Copy.Size = new System.Drawing.Size(121, 22);
+			this.toolStripMenuItem_CommandContextMenu_Copy.Text = "Copy";
+			this.toolStripMenuItem_CommandContextMenu_Copy.Click += new System.EventHandler(this.toolStripMenuItem_CommandContextMenu_Copy_Click);
+			// 
+			// toolStripMenuItem_CommandContextMenu_Paste
+			// 
+			this.toolStripMenuItem_CommandContextMenu_Paste.Name = "toolStripMenuItem_CommandContextMenu_Paste";
+			this.toolStripMenuItem_CommandContextMenu_Paste.Size = new System.Drawing.Size(121, 22);
+			this.toolStripMenuItem_CommandContextMenu_Paste.Text = "Paste";
+			this.toolStripMenuItem_CommandContextMenu_Paste.Click += new System.EventHandler(this.toolStripMenuItem_CommandContextMenu_Paste_Click);
 			// 
 			// toolStripMenuItem_CommandContextMenu_Clear
 			// 
 			this.toolStripMenuItem_CommandContextMenu_Clear.Name = "toolStripMenuItem_CommandContextMenu_Clear";
-			this.toolStripMenuItem_CommandContextMenu_Clear.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_CommandContextMenu_Clear.Size = new System.Drawing.Size(121, 22);
 			this.toolStripMenuItem_CommandContextMenu_Clear.Text = "Clear";
 			this.toolStripMenuItem_CommandContextMenu_Clear.Click += new System.EventHandler(this.toolStripMenuItem_CommandContextMenu_Clear_Click);
 			// 
@@ -1074,7 +1099,7 @@
 			// button_Help
 			// 
 			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Help.Location = new System.Drawing.Point(804, 417);
+			this.button_Help.Location = new System.Drawing.Point(836, 417);
 			this.button_Help.Name = "button_Help";
 			this.button_Help.Size = new System.Drawing.Size(75, 23);
 			this.button_Help.TabIndex = 7;
@@ -1086,12 +1111,16 @@
 			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Pages.Controls.Add(this.button_CutPageToClipboard);
+			this.groupBox_Pages.Controls.Add(this.button_CopyPageToClipboard);
+			this.groupBox_Pages.Controls.Add(this.button_AddPagesFromClipboard);
+			this.groupBox_Pages.Controls.Add(this.button_InsertPageFromClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_ImportAllPagesFromFile);
 			this.groupBox_Pages.Controls.Add(this.button_ExportAllPagesToFile);
 			this.groupBox_Pages.Controls.Add(this.button_ExportPageToFile);
 			this.groupBox_Pages.Controls.Add(this.button_InsertPagesFromFile);
 			this.groupBox_Pages.Controls.Add(this.button_AddPagesFromFile);
-			this.groupBox_Pages.Controls.Add(this.button_CopyPage);
+			this.groupBox_Pages.Controls.Add(this.button_DuplicatePage);
 			this.groupBox_Pages.Controls.Add(this.listBox_Pages);
 			this.groupBox_Pages.Controls.Add(this.button_DeleteAllPages);
 			this.groupBox_Pages.Controls.Add(this.button_MovePageUp);
@@ -1102,17 +1131,61 @@
 			this.groupBox_Pages.Controls.Add(this.button_NamePage);
 			this.groupBox_Pages.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Pages.Name = "groupBox_Pages";
-			this.groupBox_Pages.Size = new System.Drawing.Size(250, 392);
+			this.groupBox_Pages.Size = new System.Drawing.Size(282, 392);
 			this.groupBox_Pages.TabIndex = 0;
 			this.groupBox_Pages.TabStop = false;
 			this.groupBox_Pages.Text = "&Pages";
+			// 
+			// button_CutPageToClipboard
+			// 
+			this.button_CutPageToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
+			this.button_CutPageToClipboard.Location = new System.Drawing.Point(219, 148);
+			this.button_CutPageToClipboard.Name = "button_CutPageToClipboard";
+			this.button_CutPageToClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_CutPageToClipboard.TabIndex = 12;
+			this.toolTip.SetToolTip(this.button_CutPageToClipboard, "Cut the current page to the clipboard");
+			this.button_CutPageToClipboard.UseVisualStyleBackColor = true;
+			this.button_CutPageToClipboard.Click += new System.EventHandler(this.button_CutPageToClipboard_Click);
+			// 
+			// button_CopyPageToClipboard
+			// 
+			this.button_CopyPageToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
+			this.button_CopyPageToClipboard.Location = new System.Drawing.Point(219, 119);
+			this.button_CopyPageToClipboard.Name = "button_CopyPageToClipboard";
+			this.button_CopyPageToClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_CopyPageToClipboard.TabIndex = 9;
+			this.toolTip.SetToolTip(this.button_CopyPageToClipboard, "Copy the current page to the clipboard");
+			this.button_CopyPageToClipboard.UseVisualStyleBackColor = true;
+			this.button_CopyPageToClipboard.Click += new System.EventHandler(this.button_CopyPageToClipboard_Click);
+			// 
+			// button_AddPagesFromClipboard
+			// 
+			this.button_AddPagesFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
+			this.button_AddPagesFromClipboard.Location = new System.Drawing.Point(219, 90);
+			this.button_AddPagesFromClipboard.Name = "button_AddPagesFromClipboard";
+			this.button_AddPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_AddPagesFromClipboard.TabIndex = 6;
+			this.toolTip.SetToolTip(this.button_AddPagesFromClipboard, "Paste a page from the clipboard and add it");
+			this.button_AddPagesFromClipboard.UseVisualStyleBackColor = true;
+			this.button_AddPagesFromClipboard.Click += new System.EventHandler(this.button_AddPagesFromClipboard_Click);
+			// 
+			// button_InsertPageFromClipboard
+			// 
+			this.button_InsertPageFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
+			this.button_InsertPageFromClipboard.Location = new System.Drawing.Point(219, 61);
+			this.button_InsertPageFromClipboard.Name = "button_InsertPageFromClipboard";
+			this.button_InsertPageFromClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_InsertPageFromClipboard.TabIndex = 3;
+			this.toolTip.SetToolTip(this.button_InsertPageFromClipboard, "Paste a page from the clipboard and insert it");
+			this.button_InsertPageFromClipboard.UseVisualStyleBackColor = true;
+			this.button_InsertPageFromClipboard.Click += new System.EventHandler(this.button_InsertPageFromClipboard_Click);
 			// 
 			// button_ImportAllPagesFromFile
 			// 
 			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(12, 354);
 			this.button_ImportAllPagesFromFile.Name = "button_ImportAllPagesFromFile";
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
-			this.button_ImportAllPagesFromFile.TabIndex = 12;
+			this.button_ImportAllPagesFromFile.TabIndex = 16;
 			this.button_ImportAllPagesFromFile.Text = "I&mport All from File...";
 			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yacp file. The current pages are replaced.\r\n\r\nUse [Insert] " +
         "[...] or [Add] [...] to import additively.");
@@ -1123,49 +1196,52 @@
 			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(12, 325);
 			this.button_ExportAllPagesToFile.Name = "button_ExportAllPagesToFile";
 			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
-			this.button_ExportAllPagesToFile.TabIndex = 11;
+			this.button_ExportAllPagesToFile.TabIndex = 15;
 			this.button_ExportAllPagesToFile.Text = "E&xport All to File...";
 			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Exports pages from a .yacp file.\r\n\r\nUse [Copy] [...] to export a single page.");
 			this.button_ExportAllPagesToFile.Click += new System.EventHandler(this.button_ExportAllPagesToFile_Click);
 			// 
 			// button_ExportPageToFile
 			// 
-			this.button_ExportPageToFile.Location = new System.Drawing.Point(219, 119);
+			this.button_ExportPageToFile.Location = new System.Drawing.Point(251, 119);
 			this.button_ExportPageToFile.Name = "button_ExportPageToFile";
 			this.button_ExportPageToFile.Size = new System.Drawing.Size(25, 23);
-			this.button_ExportPageToFile.TabIndex = 7;
+			this.button_ExportPageToFile.TabIndex = 10;
 			this.button_ExportPageToFile.Text = "...";
+			this.toolTip.SetToolTip(this.button_ExportPageToFile, "Export the current page to a .yacp file");
 			this.button_ExportPageToFile.UseVisualStyleBackColor = true;
 			this.button_ExportPageToFile.Click += new System.EventHandler(this.button_ExportPageToFile_Click);
 			// 
 			// button_InsertPagesFromFile
 			// 
-			this.button_InsertPagesFromFile.Location = new System.Drawing.Point(219, 61);
+			this.button_InsertPagesFromFile.Location = new System.Drawing.Point(251, 61);
 			this.button_InsertPagesFromFile.Name = "button_InsertPagesFromFile";
 			this.button_InsertPagesFromFile.Size = new System.Drawing.Size(25, 23);
-			this.button_InsertPagesFromFile.TabIndex = 3;
+			this.button_InsertPagesFromFile.TabIndex = 4;
 			this.button_InsertPagesFromFile.Text = "...";
+			this.toolTip.SetToolTip(this.button_InsertPagesFromFile, "Import page(s) from a .yacp file and insert the page(s)");
 			this.button_InsertPagesFromFile.UseVisualStyleBackColor = true;
 			this.button_InsertPagesFromFile.Click += new System.EventHandler(this.button_InsertPagesFromFile_Click);
 			// 
 			// button_AddPagesFromFile
 			// 
-			this.button_AddPagesFromFile.Location = new System.Drawing.Point(219, 90);
+			this.button_AddPagesFromFile.Location = new System.Drawing.Point(251, 90);
 			this.button_AddPagesFromFile.Name = "button_AddPagesFromFile";
 			this.button_AddPagesFromFile.Size = new System.Drawing.Size(25, 23);
-			this.button_AddPagesFromFile.TabIndex = 5;
+			this.button_AddPagesFromFile.TabIndex = 7;
 			this.button_AddPagesFromFile.Text = "...";
+			this.toolTip.SetToolTip(this.button_AddPagesFromFile, "Import page(s) from a .yacp file and add the page(s)");
 			this.button_AddPagesFromFile.UseVisualStyleBackColor = true;
 			this.button_AddPagesFromFile.Click += new System.EventHandler(this.button_AddPagesFromFile_Click);
 			// 
-			// button_CopyPage
+			// button_DuplicatePage
 			// 
-			this.button_CopyPage.Location = new System.Drawing.Point(138, 119);
-			this.button_CopyPage.Name = "button_CopyPage";
-			this.button_CopyPage.Size = new System.Drawing.Size(75, 23);
-			this.button_CopyPage.TabIndex = 6;
-			this.button_CopyPage.Text = "&Copy...";
-			this.button_CopyPage.Click += new System.EventHandler(this.button_CopyPage_Click);
+			this.button_DuplicatePage.Location = new System.Drawing.Point(138, 119);
+			this.button_DuplicatePage.Name = "button_DuplicatePage";
+			this.button_DuplicatePage.Size = new System.Drawing.Size(75, 23);
+			this.button_DuplicatePage.TabIndex = 8;
+			this.button_DuplicatePage.Text = "&Copy...";
+			this.button_DuplicatePage.Click += new System.EventHandler(this.button_DuplicatePage_Click);
 			// 
 			// listBox_Pages
 			// 
@@ -1182,7 +1258,7 @@
 			this.button_DeleteAllPages.Location = new System.Drawing.Point(138, 354);
 			this.button_DeleteAllPages.Name = "button_DeleteAllPages";
 			this.button_DeleteAllPages.Size = new System.Drawing.Size(75, 23);
-			this.button_DeleteAllPages.TabIndex = 13;
+			this.button_DeleteAllPages.TabIndex = 17;
 			this.button_DeleteAllPages.Text = "De&lete All...";
 			this.button_DeleteAllPages.Click += new System.EventHandler(this.button_DeleteAllPages_Click);
 			// 
@@ -1191,7 +1267,7 @@
 			this.button_MovePageUp.Location = new System.Drawing.Point(138, 258);
 			this.button_MovePageUp.Name = "button_MovePageUp";
 			this.button_MovePageUp.Size = new System.Drawing.Size(75, 23);
-			this.button_MovePageUp.TabIndex = 9;
+			this.button_MovePageUp.TabIndex = 13;
 			this.button_MovePageUp.Text = "&Up";
 			this.button_MovePageUp.Click += new System.EventHandler(this.button_MovePageUp_Click);
 			// 
@@ -1200,7 +1276,7 @@
 			this.button_MovePageDown.Location = new System.Drawing.Point(138, 287);
 			this.button_MovePageDown.Name = "button_MovePageDown";
 			this.button_MovePageDown.Size = new System.Drawing.Size(75, 23);
-			this.button_MovePageDown.TabIndex = 10;
+			this.button_MovePageDown.TabIndex = 14;
 			this.button_MovePageDown.Text = "&Down";
 			this.button_MovePageDown.Click += new System.EventHandler(this.button_MovePageDown_Click);
 			// 
@@ -1209,7 +1285,7 @@
 			this.button_DeletePage.Location = new System.Drawing.Point(138, 148);
 			this.button_DeletePage.Name = "button_DeletePage";
 			this.button_DeletePage.Size = new System.Drawing.Size(75, 23);
-			this.button_DeletePage.TabIndex = 8;
+			this.button_DeletePage.TabIndex = 11;
 			this.button_DeletePage.Text = "D&elete...";
 			this.button_DeletePage.Click += new System.EventHandler(this.button_DeletePage_Click);
 			// 
@@ -1227,7 +1303,7 @@
 			this.button_AddPage.Location = new System.Drawing.Point(138, 90);
 			this.button_AddPage.Name = "button_AddPage";
 			this.button_AddPage.Size = new System.Drawing.Size(75, 23);
-			this.button_AddPage.TabIndex = 4;
+			this.button_AddPage.TabIndex = 5;
 			this.button_AddPage.Text = "&Add...";
 			this.button_AddPage.Click += new System.EventHandler(this.button_AddPage_Click);
 			// 
@@ -1255,7 +1331,7 @@
 			// 
 			this.button_ClearLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_ClearLink.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_lightning_16x16;
-			this.button_ClearLink.Location = new System.Drawing.Point(504, 417);
+			this.button_ClearLink.Location = new System.Drawing.Point(536, 417);
 			this.button_ClearLink.Name = "button_ClearLink";
 			this.button_ClearLink.Size = new System.Drawing.Size(24, 23);
 			this.button_ClearLink.TabIndex = 4;
@@ -1269,32 +1345,11 @@
 			this.pathLabel_LinkedTo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pathLabel_LinkedTo.Location = new System.Drawing.Point(150, 417);
 			this.pathLabel_LinkedTo.Name = "pathLabel_LinkedTo";
-			this.pathLabel_LinkedTo.Size = new System.Drawing.Size(348, 23);
+			this.pathLabel_LinkedTo.Size = new System.Drawing.Size(380, 23);
 			this.pathLabel_LinkedTo.TabIndex = 3;
 			this.pathLabel_LinkedTo.Text = "<Undefined>";
 			this.pathLabel_LinkedTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_LinkedTo.Click += new System.EventHandler(this.pathLabel_LinkedTo_Click);
-			// 
-			// toolStripMenuItem_CommandContextMenu_Copy
-			// 
-			this.toolStripMenuItem_CommandContextMenu_Copy.Name = "toolStripMenuItem_CommandContextMenu_Copy";
-			this.toolStripMenuItem_CommandContextMenu_Copy.Size = new System.Drawing.Size(152, 22);
-			this.toolStripMenuItem_CommandContextMenu_Copy.Text = "Copy";
-			this.toolStripMenuItem_CommandContextMenu_Copy.Click += new System.EventHandler(this.toolStripMenuItem_CommandContextMenu_Copy_Click);
-			// 
-			// toolStripMenuItem_CommandContextMenu_Cut
-			// 
-			this.toolStripMenuItem_CommandContextMenu_Cut.Name = "toolStripMenuItem_CommandContextMenu_Cut";
-			this.toolStripMenuItem_CommandContextMenu_Cut.Size = new System.Drawing.Size(152, 22);
-			this.toolStripMenuItem_CommandContextMenu_Cut.Text = "Cut";
-			this.toolStripMenuItem_CommandContextMenu_Cut.Click += new System.EventHandler(this.toolStripMenuItem_CommandContextMenu_Cut_Click);
-			// 
-			// toolStripMenuItem_CommandContextMenu_Paste
-			// 
-			this.toolStripMenuItem_CommandContextMenu_Paste.Name = "toolStripMenuItem_CommandContextMenu_Paste";
-			this.toolStripMenuItem_CommandContextMenu_Paste.Size = new System.Drawing.Size(152, 22);
-			this.toolStripMenuItem_CommandContextMenu_Paste.Text = "Paste";
-			this.toolStripMenuItem_CommandContextMenu_Paste.Click += new System.EventHandler(this.toolStripMenuItem_CommandContextMenu_Paste_Click);
 			// 
 			// PredefinedCommandSettings
 			// 
@@ -1302,7 +1357,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(900, 452);
+			this.ClientSize = new System.Drawing.Size(932, 452);
 			this.Controls.Add(this.button_ClearLink);
 			this.Controls.Add(this.button_LinkToFile);
 			this.Controls.Add(this.pathLabel_LinkedTo);
@@ -1375,7 +1430,7 @@
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_12;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_11;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_10;
-		private System.Windows.Forms.Button button_CopyPage;
+		private System.Windows.Forms.Button button_DuplicatePage;
 		private System.Windows.Forms.Label label_Clear;
 		private System.Windows.Forms.Label label_ExplicitDefaultRadix;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Commands;
@@ -1444,5 +1499,9 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CommandContextMenu_Cut;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CommandContextMenu_Copy;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_CommandContextMenu_Paste;
+		private System.Windows.Forms.Button button_InsertPageFromClipboard;
+		private System.Windows.Forms.Button button_CutPageToClipboard;
+		private System.Windows.Forms.Button button_CopyPageToClipboard;
+		private System.Windows.Forms.Button button_AddPagesFromClipboard;
 	}
 }
