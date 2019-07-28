@@ -41,7 +41,7 @@ namespace YAT.Settings.Model
 {
 	/// <summary></summary>
 	[XmlRoot("CommandDefinition")]
-	public class CommandDefinitionRoot : MKY.Settings.SettingsItem, IEquatable<CommandDefinitionRoot>
+	public class CommandSettingsRoot : MKY.Settings.SettingsItem, IEquatable<CommandSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.0.2";
@@ -52,7 +52,7 @@ namespace YAT.Settings.Model
 		private Command command;
 
 		/// <summary></summary>
-		public CommandDefinitionRoot()
+		public CommandSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
 			SetMyDefaults();
@@ -63,7 +63,7 @@ namespace YAT.Settings.Model
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public CommandDefinitionRoot(CommandDefinitionRoot rhs)
+		public CommandSettingsRoot(CommandSettingsRoot rhs)
 			: base(rhs)
 		{
 			Command = new Command(rhs.Command);
@@ -173,7 +173,7 @@ namespace YAT.Settings.Model
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as CommandDefinitionRoot));
+			return (Equals(obj as CommandSettingsRoot));
 		}
 
 		/// <summary>
@@ -183,7 +183,7 @@ namespace YAT.Settings.Model
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(CommandDefinitionRoot other)
+		public bool Equals(CommandSettingsRoot other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -201,7 +201,7 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(CommandDefinitionRoot lhs, CommandDefinitionRoot rhs)
+		public static bool operator ==(CommandSettingsRoot lhs, CommandSettingsRoot rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -214,7 +214,7 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(CommandDefinitionRoot lhs, CommandDefinitionRoot rhs)
+		public static bool operator !=(CommandSettingsRoot lhs, CommandSettingsRoot rhs)
 		{
 			return (!(lhs == rhs));
 		}
