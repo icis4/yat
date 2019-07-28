@@ -37,6 +37,8 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Windows.Forms;
 
+using YAT.View.Utilities;
+
 #endregion
 
 namespace YAT.View.Forms
@@ -76,14 +78,15 @@ namespace YAT.View.Forms
 		private SizeF scale = new SizeF(1.0f, 1.0f);
 
 		private StartupControl startupControl = new StartupControl(1, 1);
-		private SettingControlsHelper isSettingControls;
+		private SettingControlsHelper isSettingControls; // = false;
 
-		private Model.Settings.PredefinedCommandSettings settings;
-		private Model.Settings.PredefinedCommandSettings settingsInEdit;
+		private Model.Settings.PredefinedCommandSettings settings;       // = null;
+		private Model.Settings.PredefinedCommandSettings settingsInEdit; // = null;
 		private int selectedPage = 1;
+		private string indicatedName;                                    // = null;
 
-		private List<Label> predefinedCommandSettingsSetLabels;
-		private List<Controls.PredefinedCommandSettingsSet> predefinedCommandSettingsSets;
+		private List<Label> predefinedCommandSettingsSetLabels;                            // = null;
+		private List<Controls.PredefinedCommandSettingsSet> predefinedCommandSettingsSets; // = null;
 
 		#endregion
 
@@ -99,7 +102,8 @@ namespace YAT.View.Forms
 		/// <param name="rootDirectoryForFile">The root path for file commands.</param>
 		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPage, int requestedCommand)
+		/// <param name="indicatedName">The indicated terminal name.</param>
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPage, int requestedCommand, string indicatedName)
 		{
 			InitializeComponent();
 
@@ -118,6 +122,8 @@ namespace YAT.View.Forms
 
 			this.startupControl.RequestedPage    = requestedPage;
 			this.startupControl.RequestedCommand = requestedCommand;
+
+			this.indicatedName = indicatedName;
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -302,7 +308,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			CommandPagesSettingsHelper.ShowSaveAsFileDialog(this.settingsInEdit, this.indicatedName, this);
 		}
 
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
@@ -728,7 +734,7 @@ namespace YAT.View.Forms
 						this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[i];
 
 					for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
-						this.predefinedCommandSettingsSets[i].Command = new Model.Types.Command();
+						this.predefinedCommandSettingsSets[i].Command = null;
 				}
 				else
 				{

@@ -102,6 +102,7 @@
     <Compile Include="AsciiTableDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CommandPagesSettingsHelper.cs" />
     <Compile Include="RtfPrinter.cs" />
     <Compile Include="RtfWriterHelper.cs" />
     <Compile Include="TextWriterHelper.cs" />
@@ -117,6 +118,10 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
+      <Project>{a3e80010-9146-47ef-87b0-138a60406a9e}</Project>
+      <Name>YAT.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1c44a8c0-7805-4172-8746-2db750803fff}</Project>
       <Name>YAT.Domain</Name>
@@ -125,9 +130,25 @@
       <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
       <Name>YAT.Format</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
+      <Project>{e9ff1d5e-84e0-4adb-94ec-662903931295}</Project>
+      <Name>YAT.Model.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
+      <Project>{651ba67d-9b00-4245-9c99-481f20273a62}</Project>
+      <Name>YAT.Model.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
       <Project>{93a4ca8c-a158-4994-ab07-9577bdae6f9b}</Project>
       <Name>YAT.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
+      <Project>{69a8cbb4-7d00-4a3d-9cf7-220dd02c2eb7}</Project>
+      <Name>YAT.Settings.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Model\YAT.Settings.Model.csproj">
+      <Project>{fe2d334f-b2d8-4a07-b63d-93ba775dbbcf}</Project>
+      <Name>YAT.Settings.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

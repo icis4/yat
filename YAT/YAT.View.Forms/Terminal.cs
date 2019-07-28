@@ -68,6 +68,7 @@ using YAT.Model.Types;
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 using YAT.View.Controls;
+using YAT.View.Utilities;
 
 #endregion
 
@@ -2606,7 +2607,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			// PENDING
+			CommandPagesSettingsHelper.ShowSaveAsFileDialog(this.settingsRoot.PredefinedCommand, IndicatedName, this);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -3205,9 +3206,9 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// This is the automatically assigned terminal name. The name is either an incrementally
-		/// assigned 'Terminal1', 'Terminal2',... or the file name once the terminal has been saved
-		/// by the user, e.g. 'MyTerminal.yat'.
+		/// The indicated terminal name. The name is either an incrementally assigned 'Terminal1',
+		/// 'Terminal2',... or the file name once the terminal has been saved by the user, e.g.
+		/// 'MyTerminal.yat'.
 		/// </summary>
 		/// <remarks>
 		/// Using term "IndicatedName" because <see cref="Control.Name"/> already exists.
@@ -4651,7 +4652,7 @@ namespace YAT.View.Forms
 			string initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.MonitorFiles;
 
 			var sfd = new SaveFileDialog();
-			sfd.Title = "Save As";
+			sfd.Title = "Save Monitor As";
 			sfd.Filter      = ExtensionHelper.TextFilesFilter; // Fixed to text files since monitor displays lines.
 			sfd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
@@ -4865,7 +4866,8 @@ namespace YAT.View.Forms
 				this.settingsRoot.Send.Text.ToParseMode(),
 				Path.GetDirectoryName(this.terminal.SettingsFilePath),
 				page,
-				command
+				command,
+				IndicatedName
 			);
 
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
@@ -5599,11 +5601,11 @@ namespace YAT.View.Forms
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
-			// Check whether the terminal has already been saved as a .yat file.
+			// Check whether the terminal has already been saved as a .yat file:
 			if (StringEx.EndsWithOrdinalIgnoreCase(IndicatedName, ExtensionHelper.TerminalFile))
 				sfd.FileName = IndicatedName;
 			else
-				sfd.FileName = IndicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "The returned string does not include the period."!
+				sfd.FileName = IndicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
 
 			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
