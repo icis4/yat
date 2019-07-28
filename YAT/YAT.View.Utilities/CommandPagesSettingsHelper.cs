@@ -134,20 +134,20 @@ namespace YAT.View.Utilities
 				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
-				PredefinedCommandSettings cp;
+				PredefinedCommandSettings imported;
 				Exception ex;
-				if (LoadFromFile(ofd.FileName, out cp, out ex))
+				if (LoadFromFile(ofd.FileName, out imported, out ex))
 				{
-					if (cp.Pages.Count >= 1)
+					if (imported.Pages.Count >= 1)
 					{
 						int cpMaxCommandsPerPage = PredefinedCommandSettings.MaxCommandsPerPage; // Preparation for 12/24/36/48/72 commands per page.
 
 						var message = new StringBuilder();
 						message.Append("File contains ");
-						message.Append(cp.Pages.Count);
-						message.Append(cp.Pages.Count == 1 ? " page" : " pages");
+						message.Append(imported.Pages.Count);
+						message.Append(imported.Pages.Count == 1 ? " page" : " pages");
 						message.Append(" with a total of ");
-						message.Append(cp.TotalDefinedCommandCount);
+						message.Append(imported.TotalDefinedCommandCount);
 						message.AppendLine(" commands.");
 						message.AppendLine();
 						message.Append("Would you like to replace all currently configured predefined commands by the imported [Yes],");
@@ -164,7 +164,7 @@ namespace YAT.View.Utilities
 						{
 							case DialogResult.Yes:
 							{
-								commandPagesNew = cp;
+								commandPagesNew = imported;
 								return (true);
 							}
 
@@ -176,8 +176,8 @@ namespace YAT.View.Utilities
 									commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
 
 									// ...then append:
-									foreach (var p in cp.Pages)
-										commandPagesNew.Pages.Add(p);
+									foreach (var p in imported.Pages)
+										commandPagesNew.Pages.Add(p); // No clone needed as just imported.
 
 									return (true);
 								}
@@ -187,7 +187,7 @@ namespace YAT.View.Utilities
 
 									message = new StringBuilder();
 									message.Append("File contains ");
-									message.Append(cp.Pages.Count == 1 ? " page" : " pages");
+									message.Append(imported.Pages.Count == 1 ? " page" : " pages");
 									message.Append(" with up to ");
 									message.Append(cpMaxCommandsPerPage);
 									message.Append(" commands per page, but currently ");
@@ -213,8 +213,8 @@ namespace YAT.View.Utilities
 										  //commandPagesNew.MaxCommandsPerPage = cpMaxCommandsPerPage; PENDING
 
 											// ... then append:
-											foreach (var p in cp.Pages)
-												commandPagesNew.Pages.Add(p);
+											foreach (var p in imported.Pages)
+												commandPagesNew.Pages.Add(p); // No clone needed as just imported.
 
 											return (true);
 										}
@@ -223,18 +223,25 @@ namespace YAT.View.Utilities
 										{
 											// Clone and spread...
 											commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
-											foreach (var p in cp.Pages)
+											foreach (var p in imported.Pages)
 											{
 												int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (PredefinedCommandSettings.MaxCommandsPerPage)));
-												for (int i = 0; i < p.Commands.Count; i += PredefinedCommandSettings.MaxCommandsPerPage)
+												for (int i = 0; i < n; i++)
 												{
 													var spreadPage = new PredefinedCommandPage();
-													spreadPage.PageName = p.PageName;
+
+													if (n <= 1)
+														spreadPage.PageName = p.PageName;
+													else
+														spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " (spread {0} of {1})", i, n);
 
 													for (int j = 0; j < PredefinedCommandSettings.MaxCommandsPerPage; j++)
-														spreadPage.Commands.Add(p.Commands[i + j]);
+													{
+														int indexImported = (i * PredefinedCommandSettings.MaxCommandsPerPage) + j;
+														spreadPage.Commands.Add(p.Commands[indexImported]); // No clone needed as just imported.
+													}
 
-													commandPagesNew.Pages.Add(spreadPage);
+													commandPagesNew.Pages.Add(spreadPage); // No clone needed as just created.
 												}
 											}
 
