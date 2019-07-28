@@ -135,7 +135,12 @@ namespace YAT.Model.Types
 			{
 				if (index < this.commands.Count)
 				{
-					this.commands[index] = new Command(command);
+					if ((command != null) && (command.IsDefined))
+						this.commands[index] = new Command(command); // Clone command to ensure decoupling.
+					else if (index == (this.commands.Count - 1))
+						this.commands.RemoveAt(index); // Remove command if it is last.
+					else
+						this.commands[index] = new Command(); // Clear command.
 				}
 				else
 				{
@@ -143,6 +148,7 @@ namespace YAT.Model.Types
 					while (this.commands.Count < (index))
 						this.commands.Add(new Command());
 
+					// Add command:
 					this.commands.Add(new Command(command));
 				}
 			}
