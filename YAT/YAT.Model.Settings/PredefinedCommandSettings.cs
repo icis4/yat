@@ -41,6 +41,9 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const int MaxCommandsPerPage = 12;
 
+		/// <summary></summary>
+		public static readonly PredefinedCommandPage DefaultPage = new PredefinedCommandPage("Page 1");
+
 		private PredefinedCommandPageCollection pages;
 
 		/// <summary></summary>
@@ -127,7 +130,7 @@ namespace YAT.Model.Settings
 		public virtual void CreateDefaultPage()
 		{
 			this.pages = new PredefinedCommandPageCollection();
-			this.pages.Add(new PredefinedCommandPage("Page 1"));
+			this.pages.Add(DefaultPage);
 			SetMyChanged();
 		}
 
