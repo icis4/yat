@@ -22,11 +22,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.IO;
 using System.Xml.Serialization;
 
 using MKY.IO;
+
+#endregion
 
 namespace YAT.Application.Settings
 {
@@ -35,6 +42,9 @@ namespace YAT.Application.Settings
 	{
 		/// <summary></summary>
 		public static readonly string MainFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
+
+		/// <summary></summary>
+		public static readonly string CommandFilesDefault = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
 
 		/// <summary></summary>
 		public static readonly string SendFilesDefault    = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
@@ -46,6 +56,7 @@ namespace YAT.Application.Settings
 		public static readonly string MonitorFilesDefault = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
 
 		private string mainFiles;
+		private string commandFiles;
 		private string sendFiles;
 		private string logFiles;
 		private string monitorFiles;
@@ -72,6 +83,7 @@ namespace YAT.Application.Settings
 			: base(rhs)
 		{
 			MainFiles    = rhs.MainFiles;
+			CommandFiles = rhs.CommandFiles;
 			SendFiles    = rhs.SendFiles;
 			LogFiles     = rhs.LogFiles;
 			MonitorFiles = rhs.MonitorFiles;
@@ -87,6 +99,7 @@ namespace YAT.Application.Settings
 			base.SetMyDefaults();
 
 			MainFiles    = MainFilesDefault;
+			CommandFiles = CommandFilesDefault;
 			SendFiles    = SendFilesDefault;
 			LogFiles     = LogFilesDefault;
 			MonitorFiles = MonitorFilesDefault;
@@ -107,6 +120,21 @@ namespace YAT.Application.Settings
 				if (this.mainFiles != value)
 				{
 					this.mainFiles = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("CommandFiles")]
+		public virtual string CommandFiles
+		{
+			get { return (this.commandFiles); }
+			set
+			{
+				if (this.commandFiles != value)
+				{
+					this.commandFiles = value;
 					SetMyChanged();
 				}
 			}
@@ -178,6 +206,7 @@ namespace YAT.Application.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (MainFiles    != null ? MainFiles   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (CommandFiles != null ? CommandFiles.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (SendFiles    != null ? SendFiles   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (LogFiles     != null ? LogFiles    .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (MonitorFiles != null ? MonitorFiles.GetHashCode() : 0);
@@ -211,9 +240,10 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(MainFiles,    other.MainFiles) &&
-				PathEx.Equals(SendFiles,    other.SendFiles) &&
-				PathEx.Equals(LogFiles,     other.LogFiles) &&
+				PathEx.Equals(MainFiles,    other.MainFiles)    &&
+				PathEx.Equals(CommandFiles, other.CommandFiles) &&
+				PathEx.Equals(SendFiles,    other.SendFiles)    &&
+				PathEx.Equals(LogFiles,     other.LogFiles)     &&
 				PathEx.Equals(MonitorFiles, other.MonitorFiles)
 			);
 		}

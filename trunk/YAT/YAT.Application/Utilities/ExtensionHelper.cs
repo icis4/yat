@@ -59,7 +59,7 @@ namespace YAT.Application.Utilities
 		public static string TerminalFile
 		{
 			get { return (terminalFile); }
-			set { terminalFile = value; }
+			set { terminalFile = value;  }
 		}
 
 		/// <summary></summary>
@@ -89,7 +89,7 @@ namespace YAT.Application.Utilities
 		public static string WorkspaceFile
 		{
 			get { return (workspaceFile); }
-			set { workspaceFile = value; }
+			set { workspaceFile = value;  }
 		}
 
 		/// <summary></summary>
@@ -128,6 +128,78 @@ namespace YAT.Application.Utilities
 		public static int TerminalOrWorkspaceFilesFilterDefault
 		{
 			get { return (3); }
+		}
+
+		#endregion
+
+		#region Command/CommandPages
+		//------------------------------------------------------------------------------------------
+		// Command/CommandPages
+		//------------------------------------------------------------------------------------------
+
+		private static string commandFile  = ".yac";
+		private static string commandPagesFile = ".yacp";
+
+		/// <summary>
+		/// Allows to alter the file extension used for command files,
+		/// e.g. ".ab3" instead of ".yac".
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
+		public static string CommandFile
+		{
+			get { return (commandFile); }
+			set { commandFile = value;  }
+		}
+
+		/// <summary></summary>
+		public static bool IsCommandFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (PathEx.Equals(extension, CommandFile));
+		}
+
+		/// <remarks>
+		/// Prepended "Single" to clearly distiguish from command pages.
+		/// </remarks>
+		public static string CommandFilesFilter
+		{
+			get { return ("Single Command Files (*" + CommandFile + ")|*" + CommandFile); }
+		}
+
+		/// <summary></summary>
+		public static int CommandFilesFilterDefault
+		{
+			get { return (1); }
+		}
+
+		/// <summary>
+		/// Allows to alter the file extension used for command page(s) files,
+		/// e.g. ".ab4" instead of ".yacp".
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
+		public static string CommandPagesFile
+		{
+			get { return (commandPagesFile); }
+			set { commandPagesFile = value;  }
+		}
+
+		/// <summary></summary>
+		public static bool IsCommandPageFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (PathEx.Equals(extension, CommandPagesFile));
+		}
+
+		/// <summary></summary>
+		public static string CommandPagesFilesFilter
+		{
+			get { return ("Command Page(s) Files (*" + CommandPagesFile + ")|*" + CommandPagesFile); }
+		}
+
+		/// <summary></summary>
+		public static int CommandPagesFilesFilterDefault
+		{
+			get { return (1); }
 		}
 
 		#endregion
