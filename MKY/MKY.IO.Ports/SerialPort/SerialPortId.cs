@@ -108,10 +108,13 @@ namespace MKY.IO.Ports
 		/// for available ports takes quite some time, especially if checking whether the ports
 		/// are in use.
 		/// </remarks>
+		/// <remarks>
+		/// Must be implemented as property (instead of a readonly) since <see cref="SerialPortId"/>
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
 		public static SerialPortId FirstStandardPort
 		{
-			// Must be implemented as property that creates a new object on each call to ensure that
-			// there aren't multiple clients referencing (and modifying) the same object.
 			get { return (new SerialPortId(FirstStandardPortNumber)); }
 		}
 
