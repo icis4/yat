@@ -103,6 +103,7 @@
     <Compile Include="AutoResponse.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="FindOptions.cs" />
+    <Compile Include="PredefinedCommandPageLayout.cs" />
     <Compile Include="WorkspaceLayout.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="PredefinedCommandPage.cs" />
