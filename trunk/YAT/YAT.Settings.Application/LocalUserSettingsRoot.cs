@@ -41,12 +41,12 @@ using YAT.Application.Utilities;
 
 namespace YAT.Settings.Application
 {
-	/// <summary></summary>
-	[XmlRoot("LocalUserSettings")]
+	/// <remarks>Root name is relevant for <see cref="AlternateXmlElements"/>.</remarks>
+	[XmlRoot("Settings")]
 	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<LocalUserSettingsRoot>, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.6.1";
+		private string settingsVersion = "1.7.0";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
@@ -101,7 +101,7 @@ namespace YAT.Settings.Application
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationEx.ProductName + " local user settings"); } // File identification shall differ for "YAT" and "YATConsole".
+			get { return (ApplicationEx.ProductName + " Local User Settings"); } // File identification shall differ for "YAT" and "YATConsole".
 			set { } // Do nothing.
 		}
 

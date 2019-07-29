@@ -39,8 +39,8 @@ using YAT.Model.Settings;
 
 namespace YAT.Settings.Model
 {
-	/// <summary></summary>
-	[XmlRoot("CommandPagesDefinition")]
+	/// <remarks>Root name is relevant for potential future 'AlternateXmlElements'.</remarks>
+	[XmlRoot("Settings")]
 	public class CommandPagesSettingsRoot : MKY.Settings.SettingsItem, IEquatable<CommandPagesSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
@@ -81,7 +81,7 @@ namespace YAT.Settings.Model
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationEx.ProductName + " Command Page(s) Definition"); } // File identification shall differ for "YAT" and "YATConsole".
+			get { return (ApplicationEx.ProductName + " Command Pages Definition"); } // File identification shall differ for "YAT" and "YATConsole".
 			set { } // Do nothing.
 		}
 

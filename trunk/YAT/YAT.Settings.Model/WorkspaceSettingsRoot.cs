@@ -40,8 +40,8 @@ using YAT.Model.Settings;
 
 namespace YAT.Settings.Model
 {
-	/// <summary></summary>
-	[XmlRoot("WorkspaceSettings")]
+	/// <remarks>Root name is relevant for <see cref="AlternateXmlElements"/>.</remarks>
+	[XmlRoot("Settings")]
 	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem, IEquatable<WorkspaceSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>

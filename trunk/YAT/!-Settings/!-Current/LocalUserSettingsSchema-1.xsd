@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="LocalUserSettings" nillable="true" type="LocalUserSettingsRoot" />
+  <xs:element name="Settings" nillable="true" type="LocalUserSettingsRoot" />
   <xs:complexType name="LocalUserSettingsRoot">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
@@ -272,6 +272,7 @@
       <xs:extension base="SettingsItem">
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="MainFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CommandFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="SendFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="LogFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="MonitorFiles" type="xs:string" />

@@ -39,8 +39,8 @@ using YAT.Model.Types;
 
 namespace YAT.Settings.Model
 {
-	/// <summary></summary>
-	[XmlRoot("CommandDefinition")]
+	/// <remarks>Root name is relevant for potential future 'AlternateXmlElements'.</remarks>
+	[XmlRoot("Settings")]
 	public class CommandSettingsRoot : MKY.Settings.SettingsItem, IEquatable<CommandSettingsRoot>
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
