@@ -77,7 +77,7 @@ namespace YAT.View.Controls
 	/// <summary>
 	/// This monitor implements a list box based terminal monitor in a speed optimized way.
 	/// </summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public partial class Monitor : UserControl
 	{
 		#region Types

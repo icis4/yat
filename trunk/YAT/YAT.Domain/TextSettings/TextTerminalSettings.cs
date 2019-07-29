@@ -43,7 +43,7 @@ using MKY.Text.RegularExpressions;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public class TextTerminalSettings : MKY.Settings.SettingsItem, IEquatable<TextTerminalSettings>
 	{
 		#region Constants

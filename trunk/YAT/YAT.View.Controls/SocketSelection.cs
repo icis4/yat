@@ -45,7 +45,7 @@ using MKY.Windows.Forms;
 namespace YAT.View.Controls
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	[DefaultEvent("HostNameOrAddressChanged")]
 	public partial class SocketSelection : UserControl, IOnFormDeactivateWorkaround
 	{

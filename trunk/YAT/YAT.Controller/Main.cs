@@ -84,7 +84,7 @@ namespace YAT.Controller
 	/// This class is separated into its own project for those who want to use YAT components within
 	/// their own context.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public class Main : IDisposable, IDisposableEx
 	{
 		#region Constants

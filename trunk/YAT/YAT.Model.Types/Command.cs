@@ -52,7 +52,7 @@ namespace YAT.Model.Types
 	/// This class cannot be implemented immutable [ImmutableObject(true)] because it is directly
 	/// serialized to .yat files (.xml). Default serialization requires { set } fields/properties.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	[Serializable]
 	public class Command : IEquatable<Command>, IComparable
 	{
