@@ -295,6 +295,18 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		public static implicit operator string(WorkspaceLayoutEx layout)
+		{
+			return (layout.ToString());
+		}
+
+		/// <summary></summary>
+		public static implicit operator WorkspaceLayoutEx(string layout)
+		{
+			return (Parse(layout));
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public static implicit operator MdiLayout(WorkspaceLayoutEx layout)
 		{
