@@ -97,6 +97,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="CommandPageSettingsRoot.cs" />
     <Compile Include="CommandPagesSettingsRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommandSettingsRoot.cs" />

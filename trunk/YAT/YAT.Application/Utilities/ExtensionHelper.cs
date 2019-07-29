@@ -138,7 +138,8 @@ namespace YAT.Application.Utilities
 		//------------------------------------------------------------------------------------------
 
 		private static string commandFile  = ".yac";
-		private static string commandPagesFile = ".yacp";
+		private static string commandPageFile = ".yacp";
+		private static string commandPagesFile = ".yacps";
 
 		/// <summary>
 		/// Allows to alter the file extension used for command files,
@@ -158,12 +159,10 @@ namespace YAT.Application.Utilities
 			return (PathEx.Equals(extension, CommandFile));
 		}
 
-		/// <remarks>
-		/// Prepended "Single" to clearly distiguish from command pages.
-		/// </remarks>
+		/// <summary></summary>
 		public static string CommandFilesFilter
 		{
-			get { return ("Single Command Files (*" + CommandFile + ")|*" + CommandFile); }
+			get { return ("Command Files (*" + CommandFile + ")|*" + CommandFile); }
 		}
 
 		/// <summary></summary>
@@ -173,8 +172,40 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary>
-		/// Allows to alter the file extension used for command page(s) files,
+		/// Allows to alter the file extension used for command page files,
 		/// e.g. ".ab4" instead of ".yacp".
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
+		public static string CommandPageFile
+		{
+			get { return (commandPageFile); }
+			set { commandPageFile = value;  }
+		}
+
+		/// <summary></summary>
+		public static bool IsCommandPageFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (PathEx.Equals(extension, CommandPageFile));
+		}
+
+		/// <remarks>
+		/// Prepended "Single" to clearly distiguish from complete command pages.
+		/// </remarks>
+		public static string CommandPageFilesFilter
+		{
+			get { return ("Single Command Page Files (*" + CommandPageFile + ")|*" + CommandPageFile); }
+		}
+
+		/// <summary></summary>
+		public static int CommandPageFilesFilterDefault
+		{
+			get { return (1); }
+		}
+
+		/// <summary>
+		/// Allows to alter the file extension used for command pages files,
+		/// e.g. ".ab5" instead of ".yacps".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
 		public static string CommandPagesFile
@@ -184,22 +215,43 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool IsCommandPageFile(string filePath)
+		public static bool IsCommandPagesFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
 			return (PathEx.Equals(extension, CommandPagesFile));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Prepended "Complete" to clearly distiguish from single command page.
+		/// </remarks>
 		public static string CommandPagesFilesFilter
 		{
-			get { return ("Command Page(s) Files (*" + CommandPagesFile + ")|*" + CommandPagesFile); }
+			get { return ("Complete Command Pages Files (*" + CommandPagesFile + ")|*" + CommandPagesFile); }
 		}
 
 		/// <summary></summary>
 		public static int CommandPagesFilesFilterDefault
 		{
 			get { return (1); }
+		}
+
+		/// <summary></summary>
+		public static string CommandPageOrPagesFilesFilter
+		{
+			get
+			{
+				return (CommandPageFilesFilter +
+						"|" +
+						CommandPagesFilesFilter +
+						"|" +
+						"Single Command Page and Complete Command Pages Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile);
+			}
+		}
+
+		/// <summary></summary>
+		public static int CommandPageOrPagesFilesFilterDefault
+		{
+			get { return (3); }
 		}
 
 		#endregion

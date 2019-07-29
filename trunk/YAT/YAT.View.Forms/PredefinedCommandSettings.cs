@@ -338,7 +338,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsHelper.ExportPagesToFile(this, this.settingsInEdit, this.indicatedName);
+			CommandPagesSettingsHelper.ExportAllPagesToFile(this, this.settingsInEdit, this.indicatedName);
 		}
 
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
@@ -349,7 +349,7 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportAllPagesFromFile(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsInEdit, out settingsInEditNew))
 			{
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();

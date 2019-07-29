@@ -2809,7 +2809,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Select a file...");
 
 			var ofd = new OpenFileDialog();
-			ofd.Title = "Open Terminal or Workspace";
+			ofd.Title       = "Open Terminal or Workspace";
 			ofd.Filter      = ExtensionHelper.TerminalOrWorkspaceFilesFilter;
 			ofd.FilterIndex = ExtensionHelper.TerminalOrWorkspaceFilesFilterDefault;
 			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
@@ -2857,7 +2857,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Select a file...");
 
 			var ofd = new OpenFileDialog();
-			ofd.Title = "Open Workspace";
+			ofd.Title       = "Open Workspace";
 			ofd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
 			ofd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
 			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceFile);
@@ -2883,7 +2883,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Select a workspace file name...");
 
 			var sfd = new SaveFileDialog();
-			sfd.Title = "Save Workspace As";
+			sfd.Title       = "Save Workspace As";
 			sfd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceFile);

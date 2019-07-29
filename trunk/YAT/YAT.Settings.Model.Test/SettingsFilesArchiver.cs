@@ -92,6 +92,15 @@ namespace YAT.Settings.Model.Test
 
 		/// <summary></summary>
 		[Test]
+		public virtual void ArchiveCommandPageSettings()
+		{
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPageSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			ArchiveSchema (document, StaticPaths.Path, "CommandPageDefinitionSchema");
+			ArchiveDefault(document, StaticPaths.Path, "CommandPageDefinitionDefault");
+		}
+
+		/// <summary></summary>
+		[Test]
 		public virtual void ArchiveCommandPagesSettings()
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPagesSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
