@@ -40,7 +40,7 @@ using MKY.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public class SocketSettings : Settings.SettingsItem, IEquatable<SocketSettings>
 	{
 		#region Constants
@@ -48,9 +48,15 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
-		public static readonly IPHostEx RemoteHostDefault = new IPHostEx(IPHost.Localhost);
+		/// <remarks>
+		/// Must be implemented as property (instead of a readonly) since <see cref="IPHostEx"/>
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
+		public static IPHostEx RemoteHostDefault
+		{
+			get { return (new IPHostEx(IPHost.Localhost)); }
+		}
 
 		/// <remarks>
 		/// Must be implemented as property that creates a new object on each call to ensure that
@@ -61,9 +67,15 @@ namespace MKY.IO.Serial.Socket
 			get { return (new IPNetworkInterfaceEx(IPNetworkInterface.Any).ToDescriptorPair()); }
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
-		public static readonly IPFilterEx LocalFilterDefault = new IPFilterEx(IPFilter.Any);
+		/// <remarks>
+		/// Must be implemented as property (instead of a readonly) since <see cref="IPFilterEx"/>
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
+		public static IPFilterEx LocalFilterDefault
+		{
+			get { return (new IPFilterEx(IPFilter.Any)); }
+		}
 
 		/// <summary></summary>
 		public const int RemotePortDefault = 10000;
