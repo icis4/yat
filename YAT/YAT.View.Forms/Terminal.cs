@@ -2319,14 +2319,14 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
 			{
 				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "E&xport Page to File...";
-				toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Page from File...";
-				toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Page to File...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Page(s) from File..." is fixed.
+			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Page(s) to File..." is fixed.
 			}
 			else
 			{
-				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "E&xport Pages to File...";
-				toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Pages from File...";
-				toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Pages to File...";
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "E&xport Page(s) to File...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Page(s) from File..." is fixed.
+			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Page(s) to File..." is fixed.
 			}
 
 			contextMenuStrip_Predefined_SetMenuItems();
@@ -2634,7 +2634,7 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.ImportAllPagesFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
@@ -4680,7 +4680,7 @@ namespace YAT.View.Forms
 			string initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.MonitorFiles;
 
 			var sfd = new SaveFileDialog();
-			sfd.Title = "Save Monitor As";
+			sfd.Title       = "Save Monitor As";
 			sfd.Filter      = ExtensionHelper.TextFilesFilter; // Fixed to text files since monitor displays lines.
 			sfd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
@@ -5623,7 +5623,7 @@ namespace YAT.View.Forms
 			SetFixedStatusText("Saving terminal as...");
 
 			var sfd = new SaveFileDialog();
-			sfd.Title = "Save " + IndicatedName + " As";
+			sfd.Title       = "Save " + IndicatedName + " As";
 			sfd.Filter      = ExtensionHelper.TerminalFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.TerminalFilesFilterDefault;
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);

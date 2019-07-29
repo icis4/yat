@@ -79,19 +79,27 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (ExportPagesToFile(       owner, commandPages,               indicatedName));
+					case DialogResult.Yes: return (ExportAllPagesToFile(    owner, commandPages,               indicatedName));
 					case DialogResult.No:  return (ExportSelectedPageToFile(owner, commandPages, selectedPage, indicatedName));
 					default:               return (false);
 				}
 			}
 			else // Just a single page => save without asking:
 			{
-				return (ExportPagesToFile(owner, commandPages, indicatedName));
+				return (ExportToFile(owner, commandPages, false, indicatedName));
 			}
 		}
 
 		/// <summary>
-		/// Prompts the user to export the given page to a file.
+		/// Prompts the user to export the given page to a .yapcs file.
+		/// </summary>
+		public static bool ExportAllPagesToFile(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
+		{
+			return (ExportToFile(owner, commandPages, false, indicatedName));
+		}
+
+		/// <summary>
+		/// Prompts the user to export the given page to a .yapc file.
 		/// </summary>
 		public static bool ExportSelectedPageToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPage, string indicatedName)
 		{
@@ -99,19 +107,27 @@ namespace YAT.View.Utilities
 			p.Pages.Clear();
 			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPage - 1])); // Clone page to ensure decoupling.
 
-			return (ExportPagesToFile(owner, p, indicatedName));
+			return (ExportToFile(owner, p, true, indicatedName));
 		}
 
-		/// <summary>
-		/// Prompts the user to export all pages to a file.
-		/// </summary>
-		public static bool ExportPagesToFile(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
+		/// <summary></summary>
+		private static bool ExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, bool isSelected, string indicatedName)
 		{
 			var sfd = new SaveFileDialog();
-			sfd.Title = ((commandPages.Pages.Count <= 1) ? "Save Command Page As" : "Save Command Pages As");
-			sfd.Filter      = ExtensionHelper.CommandPagesFilesFilter;
-			sfd.FilterIndex = ExtensionHelper.CommandPagesFilesFilterDefault;
-			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesFile);
+			if ((commandPages.Pages.Count == 1) && isSelected)
+			{
+				sfd.Title       = "Save Command Page As";
+				sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
+				sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
+				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			}
+			else
+			{
+				sfd.Title       = "Save Command Pages As";
+				sfd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
+				sfd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
+				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesFile);
+			}
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
 			// Check whether the terminal has already been saved as a .yat file:
@@ -149,16 +165,28 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool SaveToFile(PredefinedCommandSettings commandPages, string fileName, out Exception exception)
+		private static bool SaveToFile(PredefinedCommandSettings commandPages, string filePath, out Exception exception)
 		{
 			try
 			{
-				var root = new CommandPagesSettingsRoot();
-				root.PredefinedCommand = commandPages;
+				if ((commandPages.Pages.Count == 1) && ExtensionHelper.IsCommandPageFile(filePath))
+				{
+					var root = new CommandPageSettingsRoot();
+					root.Page = commandPages.Pages[0];
 
-				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>(root);
-				sh.SettingsFilePath = fileName;
-				sh.Save();
+					var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>(root);
+					sh.SettingsFilePath = filePath;
+					sh.Save();
+				}
+				else
+				{
+					var root = new CommandPagesSettingsRoot();
+					root.PredefinedCommand = commandPages;
+
+					var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>(root);
+					sh.SettingsFilePath = filePath;
+					sh.Save();
+				}
 
 				exception = null;
 				return (true);
@@ -171,7 +199,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportAllPagesFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
@@ -354,10 +382,10 @@ namespace YAT.View.Utilities
 		public static bool ShowFileOpenDialogAndLoadFromFile(IWin32Window owner, out PredefinedCommandSettings commandPages)
 		{
 			var ofd = new OpenFileDialog();
-			ofd.Title = "Open Command Page(s)";
-			ofd.Filter      = ExtensionHelper.CommandPagesFilesFilter;
-			ofd.FilterIndex = ExtensionHelper.CommandPagesFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesFile);
+			ofd.Title       = "Open Command Page(s)";
+			ofd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
 			var dr = ofd.ShowDialog(owner);
@@ -375,13 +403,26 @@ namespace YAT.View.Utilities
 					}
 					else
 					{
-						MessageBoxEx.Show
-						(
-							"File contains no pages.",
-							"No Pages",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
-						);
+						if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
+						{
+							MessageBoxEx.Show
+							(
+								"File contains no page.",
+								"No Page",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+							);
+						}
+						else
+						{
+							MessageBoxEx.Show
+							(
+								"File contains no pages.",
+								"No Pages",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+							);
+						}
 					}
 				}
 				else
@@ -407,23 +448,44 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool LoadFromFile(string fileName, out PredefinedCommandSettings commandPages, out Exception exception)
+		private static bool LoadFromFile(string filePath, out PredefinedCommandSettings commandPages, out Exception exception)
 		{
 			try
 			{
-				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
-				sh.SettingsFilePath = fileName;
-				if (sh.Load())
+				if (ExtensionHelper.IsCommandPageFile(filePath))
 				{
-					commandPages = sh.Settings.PredefinedCommand;
-					exception = null;
-					return (true);
+					var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+					sh.SettingsFilePath = filePath;
+					if (sh.Load())
+					{
+						commandPages = new PredefinedCommandSettings();
+						commandPages.Pages.Add(sh.Settings.Page); // No clone needed as just imported.
+						exception = null;
+						return (true);
+					}
+					else
+					{
+						commandPages = null;
+						exception = null;
+						return (true);
+					}
 				}
 				else
 				{
-					commandPages = null;
-					exception = null;
-					return (true);
+					var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
+					sh.SettingsFilePath = filePath;
+					if (sh.Load())
+					{
+						commandPages = sh.Settings.PredefinedCommand;
+						exception = null;
+						return (true);
+					}
+					else
+					{
+						commandPages = null;
+						exception = null;
+						return (true);
+					}
 				}
 			}
 			catch (Exception ex)

@@ -1187,8 +1187,8 @@
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ImportAllPagesFromFile.TabIndex = 16;
 			this.button_ImportAllPagesFromFile.Text = "I&mport All from File...";
-			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yacp file. The current pages are replaced.\r\n\r\nUse [Insert] " +
-        "[...] or [Add] [...] to import additively.");
+			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yacps file. The current pages are replaced.\r\n\r\nUse [Insert]" +
+        " [...] or [Add] [...] to import additively.");
 			this.button_ImportAllPagesFromFile.Click += new System.EventHandler(this.button_ImportAllPagesFromFile_Click);
 			// 
 			// button_ExportAllPagesToFile
@@ -1198,7 +1198,7 @@
 			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ExportAllPagesToFile.TabIndex = 15;
 			this.button_ExportAllPagesToFile.Text = "E&xport All to File...";
-			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Exports pages from a .yacp file.\r\n\r\nUse [Copy] [...] to export a single page.");
+			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Exports pages to a .yacps file.\r\n\r\nUse [Copy] [...] to export a single page.");
 			this.button_ExportAllPagesToFile.Click += new System.EventHandler(this.button_ExportAllPagesToFile_Click);
 			// 
 			// button_ExportPageToFile
@@ -1219,7 +1219,7 @@
 			this.button_InsertPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_InsertPagesFromFile.TabIndex = 4;
 			this.button_InsertPagesFromFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_InsertPagesFromFile, "Import page(s) from a .yacp file and insert the page(s)");
+			this.toolTip.SetToolTip(this.button_InsertPagesFromFile, "Import page(s) from a .yacp or .yacps file and insert the page(s)");
 			this.button_InsertPagesFromFile.UseVisualStyleBackColor = true;
 			this.button_InsertPagesFromFile.Click += new System.EventHandler(this.button_InsertPagesFromFile_Click);
 			// 
@@ -1230,7 +1230,7 @@
 			this.button_AddPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_AddPagesFromFile.TabIndex = 7;
 			this.button_AddPagesFromFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_AddPagesFromFile, "Import page(s) from a .yacp file and add the page(s)");
+			this.toolTip.SetToolTip(this.button_AddPagesFromFile, "Import page(s) from a .yacp or .yacps file and add the page(s)");
 			this.button_AddPagesFromFile.UseVisualStyleBackColor = true;
 			this.button_AddPagesFromFile.Click += new System.EventHandler(this.button_AddPagesFromFile_Click);
 			// 
