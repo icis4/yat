@@ -41,8 +41,8 @@ using YAT.Model.Types;
 
 namespace YAT.Settings.Model
 {
-	/// <summary></summary>
-	[XmlRoot("TerminalSettings")]
+	/// <remarks>Root name is relevant for <see cref="AlternateXmlElements"/>.</remarks>
+	[XmlRoot("Settings")]
 	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, IEquatable<TerminalSettingsRoot>, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>

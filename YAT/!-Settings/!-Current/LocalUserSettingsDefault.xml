@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LocalUserSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <FileType>YAT local user settings</FileType>
-  <SettingsVersion>1.6.1</SettingsVersion>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FileType>YAT Local User Settings</FileType>
+  <SettingsVersion>1.7.0</SettingsVersion>
   <ProductVersion>2.1.0</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2019-07-23T20:53:35.9290772+02:00</TimeStamp>
+    <TimeStamp>2019-07-29T20:56:16.1163466+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <General>
@@ -22,6 +22,7 @@
   </General>
   <Paths>
     <MainFiles>C:\Users\Matthias\Documents\YAT</MainFiles>
+    <CommandFiles>C:\Users\Matthias\Documents\YAT</CommandFiles>
     <SendFiles>C:\Users\Matthias\Documents\YAT</SendFiles>
     <LogFiles>C:\Users\Matthias\Documents\YAT</LogFiles>
     <MonitorFiles>C:\Users\Matthias\Documents\YAT</MonitorFiles>
@@ -105,4 +106,4 @@
   <RecentFiles>
     <FilePathsCapacity>8</FilePathsCapacity>
   </RecentFiles>
-</LocalUserSettings>
+</Settings>
