@@ -56,6 +56,10 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int maxCommandsPerPage)
 		{
+			// Attention:
+			// Similar code exists in InsertSpreaded() further below.
+			// Changes here may have to be applied there too.
+
 			foreach (var p in collection)
 			{
 				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (maxCommandsPerPage)));
@@ -75,6 +79,36 @@ namespace YAT.Model.Types
 					}
 
 					Add(spreadPage);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public void InsertSpreaded(int index, IEnumerable<PredefinedCommandPage> collection, int maxCommandsPerPage)
+		{
+			// Attention:
+			// Similar code exists in AddSpreaded() further above.
+			// Changes here may have to be applied there too.
+
+			foreach (var p in collection)
+			{
+				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (maxCommandsPerPage)));
+				for (int i = 0; i < n; i++)
+				{
+					var spreadPage = new PredefinedCommandPage();
+
+					if (n <= 1)
+						spreadPage.PageName = p.PageName;
+					else
+						spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
+
+					for (int j = 0; j < maxCommandsPerPage; j++)
+					{
+						int indexImported = ((i * maxCommandsPerPage) + j);
+						spreadPage.Commands.Add(p.Commands[indexImported]);
+					}
+
+					Insert(index, spreadPage);
 				}
 			}
 		}

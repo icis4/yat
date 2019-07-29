@@ -171,16 +171,6 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPage, out PredefinedCommandSettings commandPagesNew)
-		{
-		}
-
-		/// <summary></summary>
-		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
-		{
-		}
-
-		/// <summary></summary>
 		public static bool ImportAllPagesFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
@@ -197,7 +187,7 @@ namespace YAT.View.Utilities
 				message.AppendLine(" commands.");
 				message.AppendLine();
 				message.AppendLine("Would you like to replace all currently configured predefined commands by the imported [Yes],");
-				message.Append("or append the imported to the currently configured predefined commands [No]?");
+				message.Append("or add the imported to the currently configured predefined commands [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -215,49 +205,100 @@ namespace YAT.View.Utilities
 					}
 
 					case DialogResult.No:
-					{
-						ImportMode mode;
-						if (ConfirmImport(owner, imported, cpMaxCommandsPerPage, out mode))
-						{
-							// Clone...
-							commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
-
-							// ...add default page if yet empty...
-							if (commandPagesOld.Pages.Count == 0)
-								commandPagesNew.Pages.Add(PredefinedCommandSettings.DefaultPage);
-
-							switch (mode)
-							{
-								case (ImportMode.Neutral):
-								{
-									// ...then append:
-									commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
-									return (true);
-								}
-								case (ImportMode.Enlarge):
-								{
-									// ...enlarge...
-									//commandPagesNew.MaxCommandsPerPage = cpMaxCommandsPerPage;
-									// !!! PENDING !!!
-
-									// ... then append:
-									commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
-									return (true);
-								}
-								case (ImportMode.Spread):
-								{
-									// ...and then spread:
-									commandPagesNew.Pages.AddSpreaded(imported.Pages, PredefinedCommandSettings.MaxCommandsPerPage); // No clone needed as just imported.
-									return (true);
-								}
-
-								default:
-								{
-									break; // Nothing to do.
-								}
-							}
-						}
+					{                                                                                                 // Specifying 'NoPage' will add (not insert).
+						AddOrInsert(owner, commandPagesOld, imported, cpMaxCommandsPerPage, PredefinedCommandSettings.NoPage, out commandPagesNew);
 						break;
+					}
+
+					default:
+					{
+						break; // Nothing to do.
+					}
+				}
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPage, out PredefinedCommandSettings commandPagesNew)
+		{
+			PredefinedCommandSettings imported;
+			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			{
+				int cpMaxCommandsPerPage = PredefinedCommandSettings.MaxCommandsPerPage; // Preparation for 12/24/36/48/72 commands per page.
+				                                                                            // Specifying a page will insert (instead of add).
+				return (AddOrInsert(owner, commandPagesOld, imported, cpMaxCommandsPerPage, selectedPage, out commandPagesNew));
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		{
+			PredefinedCommandSettings imported;
+			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			{
+				int cpMaxCommandsPerPage = PredefinedCommandSettings.MaxCommandsPerPage; // Preparation for 12/24/36/48/72 commands per page.
+				                                                                                                      // Specifying 'NoPage' will add (not insert).
+				return (AddOrInsert(owner, commandPagesOld, imported, cpMaxCommandsPerPage, PredefinedCommandSettings.NoPage, out commandPagesNew));
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandSettings imported, int cpMaxCommandsPerPage, int selectedPage, out PredefinedCommandSettings commandPagesNew)
+		{
+			ImportMode mode;
+			if (ConfirmImport(owner, imported, cpMaxCommandsPerPage, out mode))
+			{
+				// Clone...
+				commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
+
+				// ...add default page if yet empty...
+				if (commandPagesOld.Pages.Count == 0)
+					commandPagesNew.Pages.Add(PredefinedCommandSettings.DefaultPage);
+
+				switch (mode)
+				{
+					case (ImportMode.Neutral):
+					{
+						// ...then add or insert:
+						if (selectedPage == PredefinedCommandSettings.NoPage)
+							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
+						else
+							commandPagesNew.Pages.InsertRange((selectedPage - 1), imported.Pages); // No clone needed as just imported.
+
+						return (true);
+					}
+					case (ImportMode.Enlarge):
+					{
+						// ...enlarge...
+						//commandPagesNew.MaxCommandsPerPage = cpMaxCommandsPerPage;
+						// !!! PENDING !!!
+
+						// ... then add or insert:
+						if (selectedPage == PredefinedCommandSettings.NoPage)
+							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
+						else
+							commandPagesNew.Pages.InsertRange((selectedPage - 1), imported.Pages); // No clone needed as just imported.
+
+						return (true);
+					}
+					case (ImportMode.Spread):
+					{
+						// ...and then spread:
+						if (selectedPage == PredefinedCommandSettings.NoPage)
+							commandPagesNew.Pages.AddSpreaded(imported.Pages, PredefinedCommandSettings.MaxCommandsPerPage); // No clone needed as just imported.
+						else
+							commandPagesNew.Pages.InsertSpreaded((selectedPage - 1), imported.Pages, PredefinedCommandSettings.MaxCommandsPerPage); // No clone needed as just imported.
+
+						return (true);
 					}
 
 					default:
