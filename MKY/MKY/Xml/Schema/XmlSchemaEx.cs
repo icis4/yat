@@ -46,22 +46,6 @@ namespace MKY.Xml.Schema
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class XmlSchemaEx
 	{
-		/// <summary>
-		/// GUID serialization by default does work, but compiling or saving a schema containing a
-		/// GUID throws an exception (type 'http://microsoft.com/wsdl/types/:guid' is not declared)
-		/// as the GUID type somehow got forgotten in the default /wsdl/types. This XML schema
-		/// provides the missing schema.
-		/// </summary>
-		/// <remarks>
-		/// The code has be taken from the following link:
-		/// http://stackoverflow.com/questions/687884/what-is-the-correct-way-of-using-the-guid-type-in-a-xsd-file
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
-		public static readonly XmlSchema GuidSchema;
-
 		private static readonly string GuidSchemaString =
 			@"<?xml version=""1.0"" encoding=""utf-8""?>"                                    + Environment.NewLine +
 			@"<xs:schema xmlns:xs=""http://www.w3.org/2001/XMLSchema"""                      + Environment.NewLine +
@@ -78,12 +62,34 @@ namespace MKY.Xml.Schema
 			@"    </xs:simpleType>"                                                          + Environment.NewLine +
 			@"</xs:schema>";
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "'GuidSchemaString' must be readonly because it refers to Environment.NewLine.")]
-		static XmlSchemaEx()
+		/// <summary>
+		/// GUID serialization by default does work, but compiling or saving a schema containing a
+		/// GUID throws an exception (type 'http://microsoft.com/wsdl/types/:guid' is not declared)
+		/// as the GUID type somehow got forgotten in the default /wsdl/types. This XML schema
+		/// provides the missing schema.
+		/// </summary>
+		/// <remarks>
+		/// The code has be taken from the following link:
+		/// http://stackoverflow.com/questions/687884/what-is-the-correct-way-of-using-the-guid-type-in-a-xsd-file
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		/// <remarks>
+		/// Must be implemented as property (instead of a readonly) since <see cref="XmlSchema"/>
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
+		public static XmlSchema GuidSchema
 		{
-			using (var sr = new StringReader(GuidSchemaString))
-				GuidSchema = XmlSchema.Read(sr, ValidationCallback);
+			get
+			{
+				using (var sr = new StringReader(GuidSchemaString))
+				{
+					var guidSchema = XmlSchema.Read(sr, ValidationCallback);
+					return (guidSchema);
+				}
+			}
 		}
 
 		private static void ValidationCallback(object sender, ValidationEventArgs args)
