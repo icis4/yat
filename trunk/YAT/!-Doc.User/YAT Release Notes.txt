@@ -92,6 +92,7 @@ New:
   exported/imported to a single page .yacp or complete set of pages .yacps file (feature requests
   #28, #73, #257), and even linked to one or multiple single page .yacp file(s) or a complete set
   of pages .yacps file (feature request #29).
+- Option to show more predefined commands (12, 24, 36, 48, 72) added (feature requests #256, #344).
 - Additional keyword \!(PortSettings()) that allows re-configuring the port settings before or after
   sending data; and dedicated keywords \!(Baud()), \!(DataBits()), \!(Parity()), \!(StopBits()) and
   \!(FlowControl()) to change a dedicated port setting on-the-fly (feature request #71, partly
