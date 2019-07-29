@@ -150,19 +150,28 @@
 			this.button_LinkToFile = new System.Windows.Forms.Button();
 			this.button_ClearLink = new System.Windows.Forms.Button();
 			this.pathLabel_LinkedTo = new MKY.Windows.Forms.PathLabel();
+			this.comboBox_Layout = new System.Windows.Forms.ComboBox();
+			this.button_Subpage_1A = new System.Windows.Forms.Button();
+			this.button_Subpage_1B = new System.Windows.Forms.Button();
+			this.button_Subpage_1C = new System.Windows.Forms.Button();
+			this.button_Subpage_2A = new System.Windows.Forms.Button();
+			this.button_Subpage_2B = new System.Windows.Forms.Button();
+			this.button_Subpage_2C = new System.Windows.Forms.Button();
+			this.groupBox_Layout = new System.Windows.Forms.GroupBox();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
+			this.groupBox_Layout.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_OK
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(674, 417);
+			this.button_OK.Location = new System.Drawing.Point(662, 446);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
-			this.button_OK.TabIndex = 5;
+			this.button_OK.TabIndex = 6;
 			this.button_OK.Text = "OK";
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
@@ -170,17 +179,17 @@
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(755, 417);
+			this.button_Cancel.Location = new System.Drawing.Point(743, 446);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
-			this.button_Cancel.TabIndex = 6;
+			this.button_Cancel.TabIndex = 7;
 			this.button_Cancel.Text = "Cancel";
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// button_ClearPage
 			// 
 			this.button_ClearPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_ClearPage.Location = new System.Drawing.Point(536, 354);
+			this.button_ClearPage.Location = new System.Drawing.Point(536, 383);
 			this.button_ClearPage.Name = "button_ClearPage";
 			this.button_ClearPage.Size = new System.Drawing.Size(75, 23);
 			this.button_ClearPage.TabIndex = 35;
@@ -228,10 +237,10 @@
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Data);
 			this.groupBox_Page.Controls.Add(this.label_Example);
-			this.groupBox_Page.Location = new System.Drawing.Point(300, 12);
+			this.groupBox_Page.Location = new System.Drawing.Point(288, 12);
 			this.groupBox_Page.Name = "groupBox_Page";
-			this.groupBox_Page.Size = new System.Drawing.Size(620, 392);
-			this.groupBox_Page.TabIndex = 1;
+			this.groupBox_Page.Size = new System.Drawing.Size(620, 421);
+			this.groupBox_Page.TabIndex = 2;
 			this.groupBox_Page.TabStop = false;
 			this.groupBox_Page.Text = "<Page>";
 			// 
@@ -734,8 +743,9 @@
 			// 
 			// label_ExplicitDefaultRadix
 			// 
+			this.label_ExplicitDefaultRadix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExplicitDefaultRadix.AutoSize = true;
-			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(13, 16);
+			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(13, 31);
 			this.label_ExplicitDefaultRadix.Name = "label_ExplicitDefaultRadix";
 			this.label_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 13);
 			this.label_ExplicitDefaultRadix.TabIndex = 0;
@@ -744,9 +754,9 @@
 			// 
 			// predefinedCommandSettingsSet_12
 			// 
-			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(30, 318);
+			this.predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(30, 344);
 			this.predefinedCommandSettingsSet_12.Name = "predefinedCommandSettingsSet_12";
 			this.predefinedCommandSettingsSet_12.ShortcutString = "Shift+F12";
 			this.predefinedCommandSettingsSet_12.Size = new System.Drawing.Size(584, 21);
@@ -756,9 +766,9 @@
 			// 
 			// predefinedCommandSettingsSet_11
 			// 
-			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(30, 292);
+			this.predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(30, 317);
 			this.predefinedCommandSettingsSet_11.Name = "predefinedCommandSettingsSet_11";
 			this.predefinedCommandSettingsSet_11.ShortcutString = "Shift+F11";
 			this.predefinedCommandSettingsSet_11.Size = new System.Drawing.Size(584, 21);
@@ -768,9 +778,9 @@
 			// 
 			// predefinedCommandSettingsSet_10
 			// 
-			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(30, 266);
+			this.predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(30, 290);
 			this.predefinedCommandSettingsSet_10.Name = "predefinedCommandSettingsSet_10";
 			this.predefinedCommandSettingsSet_10.ShortcutString = "Shift+F10";
 			this.predefinedCommandSettingsSet_10.Size = new System.Drawing.Size(584, 21);
@@ -780,9 +790,9 @@
 			// 
 			// predefinedCommandSettingsSet_9
 			// 
-			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(30, 240);
+			this.predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(30, 263);
 			this.predefinedCommandSettingsSet_9.Name = "predefinedCommandSettingsSet_9";
 			this.predefinedCommandSettingsSet_9.ShortcutString = "Shift+F9";
 			this.predefinedCommandSettingsSet_9.Size = new System.Drawing.Size(584, 21);
@@ -792,9 +802,9 @@
 			// 
 			// predefinedCommandSettingsSet_8
 			// 
-			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(30, 214);
+			this.predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(30, 236);
 			this.predefinedCommandSettingsSet_8.Name = "predefinedCommandSettingsSet_8";
 			this.predefinedCommandSettingsSet_8.ShortcutString = "Shift+F8";
 			this.predefinedCommandSettingsSet_8.Size = new System.Drawing.Size(584, 21);
@@ -804,9 +814,9 @@
 			// 
 			// predefinedCommandSettingsSet_7
 			// 
-			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(30, 188);
+			this.predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(30, 209);
 			this.predefinedCommandSettingsSet_7.Name = "predefinedCommandSettingsSet_7";
 			this.predefinedCommandSettingsSet_7.ShortcutString = "Shift+F7";
 			this.predefinedCommandSettingsSet_7.Size = new System.Drawing.Size(584, 21);
@@ -816,9 +826,9 @@
 			// 
 			// predefinedCommandSettingsSet_6
 			// 
-			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(30, 162);
+			this.predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(30, 182);
 			this.predefinedCommandSettingsSet_6.Name = "predefinedCommandSettingsSet_6";
 			this.predefinedCommandSettingsSet_6.ShortcutString = "Shift+F6";
 			this.predefinedCommandSettingsSet_6.Size = new System.Drawing.Size(584, 21);
@@ -828,9 +838,9 @@
 			// 
 			// predefinedCommandSettingsSet_5
 			// 
-			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(30, 136);
+			this.predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(30, 155);
 			this.predefinedCommandSettingsSet_5.Name = "predefinedCommandSettingsSet_5";
 			this.predefinedCommandSettingsSet_5.ShortcutString = "Shift+F5";
 			this.predefinedCommandSettingsSet_5.Size = new System.Drawing.Size(584, 21);
@@ -840,9 +850,9 @@
 			// 
 			// predefinedCommandSettingsSet_4
 			// 
-			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(30, 110);
+			this.predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(30, 128);
 			this.predefinedCommandSettingsSet_4.Name = "predefinedCommandSettingsSet_4";
 			this.predefinedCommandSettingsSet_4.ShortcutString = "Shift+F4";
 			this.predefinedCommandSettingsSet_4.Size = new System.Drawing.Size(584, 21);
@@ -852,9 +862,9 @@
 			// 
 			// predefinedCommandSettingsSet_3
 			// 
-			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(30, 84);
+			this.predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(30, 101);
 			this.predefinedCommandSettingsSet_3.Name = "predefinedCommandSettingsSet_3";
 			this.predefinedCommandSettingsSet_3.ShortcutString = "Shift+F3";
 			this.predefinedCommandSettingsSet_3.Size = new System.Drawing.Size(584, 21);
@@ -864,9 +874,9 @@
 			// 
 			// predefinedCommandSettingsSet_1
 			// 
-			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(30, 32);
+			this.predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(30, 47);
 			this.predefinedCommandSettingsSet_1.Name = "predefinedCommandSettingsSet_1";
 			this.predefinedCommandSettingsSet_1.Size = new System.Drawing.Size(584, 21);
 			this.predefinedCommandSettingsSet_1.TabIndex = 7;
@@ -875,9 +885,9 @@
 			// 
 			// predefinedCommandSettingsSet_2
 			// 
-			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(30, 58);
+			this.predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(30, 74);
 			this.predefinedCommandSettingsSet_2.Name = "predefinedCommandSettingsSet_2";
 			this.predefinedCommandSettingsSet_2.ShortcutString = "Shift+F2";
 			this.predefinedCommandSettingsSet_2.Size = new System.Drawing.Size(584, 21);
@@ -887,8 +897,9 @@
 			// 
 			// label_File
 			// 
+			this.label_File.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_File.AutoSize = true;
-			this.label_File.Location = new System.Drawing.Point(87, 16);
+			this.label_File.Location = new System.Drawing.Point(87, 31);
 			this.label_File.Name = "label_File";
 			this.label_File.Size = new System.Drawing.Size(48, 13);
 			this.label_File.TabIndex = 1;
@@ -897,8 +908,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_12
 			// 
+			this.label_predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_12.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(6, 322);
+			this.label_predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(6, 348);
 			this.label_predefinedCommandSettingsSet_12.Name = "label_predefinedCommandSettingsSet_12";
 			this.label_predefinedCommandSettingsSet_12.Size = new System.Drawing.Size(22, 13);
 			this.label_predefinedCommandSettingsSet_12.TabIndex = 28;
@@ -906,8 +918,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_11
 			// 
+			this.label_predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_11.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(6, 296);
+			this.label_predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(6, 321);
 			this.label_predefinedCommandSettingsSet_11.Name = "label_predefinedCommandSettingsSet_11";
 			this.label_predefinedCommandSettingsSet_11.Size = new System.Drawing.Size(22, 13);
 			this.label_predefinedCommandSettingsSet_11.TabIndex = 26;
@@ -915,8 +928,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_10
 			// 
+			this.label_predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_10.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(6, 270);
+			this.label_predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(6, 294);
 			this.label_predefinedCommandSettingsSet_10.Name = "label_predefinedCommandSettingsSet_10";
 			this.label_predefinedCommandSettingsSet_10.Size = new System.Drawing.Size(22, 13);
 			this.label_predefinedCommandSettingsSet_10.TabIndex = 24;
@@ -924,8 +938,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_9
 			// 
+			this.label_predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_9.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(12, 244);
+			this.label_predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(12, 267);
 			this.label_predefinedCommandSettingsSet_9.Name = "label_predefinedCommandSettingsSet_9";
 			this.label_predefinedCommandSettingsSet_9.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_9.TabIndex = 22;
@@ -933,8 +948,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_8
 			// 
+			this.label_predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_8.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(12, 218);
+			this.label_predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(12, 240);
 			this.label_predefinedCommandSettingsSet_8.Name = "label_predefinedCommandSettingsSet_8";
 			this.label_predefinedCommandSettingsSet_8.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_8.TabIndex = 20;
@@ -942,8 +958,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_7
 			// 
+			this.label_predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_7.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(12, 192);
+			this.label_predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(12, 213);
 			this.label_predefinedCommandSettingsSet_7.Name = "label_predefinedCommandSettingsSet_7";
 			this.label_predefinedCommandSettingsSet_7.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_7.TabIndex = 18;
@@ -951,8 +968,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_6
 			// 
+			this.label_predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_6.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(12, 166);
+			this.label_predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(12, 186);
 			this.label_predefinedCommandSettingsSet_6.Name = "label_predefinedCommandSettingsSet_6";
 			this.label_predefinedCommandSettingsSet_6.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_6.TabIndex = 16;
@@ -960,8 +978,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_5
 			// 
+			this.label_predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_5.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(12, 140);
+			this.label_predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(12, 159);
 			this.label_predefinedCommandSettingsSet_5.Name = "label_predefinedCommandSettingsSet_5";
 			this.label_predefinedCommandSettingsSet_5.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_5.TabIndex = 14;
@@ -969,8 +988,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_4
 			// 
+			this.label_predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_4.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(12, 114);
+			this.label_predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(12, 132);
 			this.label_predefinedCommandSettingsSet_4.Name = "label_predefinedCommandSettingsSet_4";
 			this.label_predefinedCommandSettingsSet_4.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_4.TabIndex = 12;
@@ -978,8 +998,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_3
 			// 
+			this.label_predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_3.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(12, 88);
+			this.label_predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(12, 105);
 			this.label_predefinedCommandSettingsSet_3.Name = "label_predefinedCommandSettingsSet_3";
 			this.label_predefinedCommandSettingsSet_3.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_3.TabIndex = 10;
@@ -987,8 +1008,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_2
 			// 
+			this.label_predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_2.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(12, 62);
+			this.label_predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(12, 78);
 			this.label_predefinedCommandSettingsSet_2.Name = "label_predefinedCommandSettingsSet_2";
 			this.label_predefinedCommandSettingsSet_2.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_2.TabIndex = 8;
@@ -998,7 +1020,7 @@
 			// 
 			this.label_ExampleBinary_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleBinary_Description.AutoSize = true;
-			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(402, 368);
+			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(402, 397);
 			this.label_ExampleBinary_Description.Name = "label_ExampleBinary_Description";
 			this.label_ExampleBinary_Description.Size = new System.Drawing.Size(72, 13);
 			this.label_ExampleBinary_Description.TabIndex = 34;
@@ -1008,7 +1030,7 @@
 			// 
 			this.label_ExampleBinary_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleBinary_Data.AutoSize = true;
-			this.label_ExampleBinary_Data.Location = new System.Drawing.Point(67, 368);
+			this.label_ExampleBinary_Data.Location = new System.Drawing.Point(67, 397);
 			this.label_ExampleBinary_Data.Name = "label_ExampleBinary_Data";
 			this.label_ExampleBinary_Data.Size = new System.Drawing.Size(66, 13);
 			this.label_ExampleBinary_Data.TabIndex = 33;
@@ -1016,8 +1038,9 @@
 			// 
 			// label_predefinedCommandSettingsSet_1
 			// 
+			this.label_predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_1.AutoSize = true;
-			this.label_predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(12, 36);
+			this.label_predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(12, 51);
 			this.label_predefinedCommandSettingsSet_1.Name = "label_predefinedCommandSettingsSet_1";
 			this.label_predefinedCommandSettingsSet_1.Size = new System.Drawing.Size(16, 13);
 			this.label_predefinedCommandSettingsSet_1.TabIndex = 6;
@@ -1025,9 +1048,9 @@
 			// 
 			// label_Clear
 			// 
-			this.label_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Clear.AutoSize = true;
-			this.label_Clear.Location = new System.Drawing.Point(583, 16);
+			this.label_Clear.Location = new System.Drawing.Point(583, 31);
 			this.label_Clear.Name = "label_Clear";
 			this.label_Clear.Size = new System.Drawing.Size(34, 13);
 			this.label_Clear.TabIndex = 5;
@@ -1036,9 +1059,9 @@
 			// 
 			// label_Shortcut
 			// 
-			this.label_Shortcut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Shortcut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Shortcut.AutoSize = true;
-			this.label_Shortcut.Location = new System.Drawing.Point(527, 16);
+			this.label_Shortcut.Location = new System.Drawing.Point(527, 31);
 			this.label_Shortcut.Name = "label_Shortcut";
 			this.label_Shortcut.Size = new System.Drawing.Size(50, 13);
 			this.label_Shortcut.TabIndex = 4;
@@ -1047,8 +1070,9 @@
 			// 
 			// label_Data
 			// 
+			this.label_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Data.AutoSize = true;
-			this.label_Data.Location = new System.Drawing.Point(135, 16);
+			this.label_Data.Location = new System.Drawing.Point(135, 31);
 			this.label_Data.Name = "label_Data";
 			this.label_Data.Size = new System.Drawing.Size(52, 13);
 			this.label_Data.TabIndex = 2;
@@ -1057,9 +1081,9 @@
 			// 
 			// label_Description
 			// 
-			this.label_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Description.AutoSize = true;
-			this.label_Description.Location = new System.Drawing.Point(401, 16);
+			this.label_Description.Location = new System.Drawing.Point(401, 31);
 			this.label_Description.Name = "label_Description";
 			this.label_Description.Size = new System.Drawing.Size(63, 13);
 			this.label_Description.TabIndex = 3;
@@ -1070,7 +1094,7 @@
 			// 
 			this.label_ExampleText_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleText_Description.AutoSize = true;
-			this.label_ExampleText_Description.Location = new System.Drawing.Point(402, 350);
+			this.label_ExampleText_Description.Location = new System.Drawing.Point(402, 379);
 			this.label_ExampleText_Description.Name = "label_ExampleText_Description";
 			this.label_ExampleText_Description.Size = new System.Drawing.Size(72, 13);
 			this.label_ExampleText_Description.TabIndex = 32;
@@ -1080,7 +1104,7 @@
 			// 
 			this.label_ExampleText_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleText_Data.AutoSize = true;
-			this.label_ExampleText_Data.Location = new System.Drawing.Point(67, 350);
+			this.label_ExampleText_Data.Location = new System.Drawing.Point(67, 379);
 			this.label_ExampleText_Data.Name = "label_ExampleText_Data";
 			this.label_ExampleText_Data.Size = new System.Drawing.Size(28, 13);
 			this.label_ExampleText_Data.TabIndex = 31;
@@ -1090,7 +1114,7 @@
 			// 
 			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
-			this.label_Example.Location = new System.Drawing.Point(6, 359);
+			this.label_Example.Location = new System.Drawing.Point(6, 388);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(55, 13);
 			this.label_Example.TabIndex = 30;
@@ -1099,18 +1123,17 @@
 			// button_Help
 			// 
 			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Help.Location = new System.Drawing.Point(836, 417);
+			this.button_Help.Location = new System.Drawing.Point(824, 446);
 			this.button_Help.Name = "button_Help";
 			this.button_Help.Size = new System.Drawing.Size(75, 23);
-			this.button_Help.TabIndex = 7;
+			this.button_Help.TabIndex = 8;
 			this.button_Help.Text = "Help";
 			this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
 			// 
 			// groupBox_Pages
 			// 
-			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_Pages.Controls.Add(this.button_CutPageToClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_CopyPageToClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_AddPagesFromClipboard);
@@ -1129,17 +1152,17 @@
 			this.groupBox_Pages.Controls.Add(this.button_InsertPage);
 			this.groupBox_Pages.Controls.Add(this.button_AddPage);
 			this.groupBox_Pages.Controls.Add(this.button_NamePage);
-			this.groupBox_Pages.Location = new System.Drawing.Point(12, 12);
+			this.groupBox_Pages.Location = new System.Drawing.Point(12, 127);
 			this.groupBox_Pages.Name = "groupBox_Pages";
-			this.groupBox_Pages.Size = new System.Drawing.Size(282, 392);
-			this.groupBox_Pages.TabIndex = 0;
+			this.groupBox_Pages.Size = new System.Drawing.Size(270, 306);
+			this.groupBox_Pages.TabIndex = 1;
 			this.groupBox_Pages.TabStop = false;
 			this.groupBox_Pages.Text = "&Pages";
 			// 
 			// button_CutPageToClipboard
 			// 
 			this.button_CutPageToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
-			this.button_CutPageToClipboard.Location = new System.Drawing.Point(219, 148);
+			this.button_CutPageToClipboard.Location = new System.Drawing.Point(201, 134);
 			this.button_CutPageToClipboard.Name = "button_CutPageToClipboard";
 			this.button_CutPageToClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_CutPageToClipboard.TabIndex = 12;
@@ -1150,7 +1173,7 @@
 			// button_CopyPageToClipboard
 			// 
 			this.button_CopyPageToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
-			this.button_CopyPageToClipboard.Location = new System.Drawing.Point(219, 119);
+			this.button_CopyPageToClipboard.Location = new System.Drawing.Point(201, 105);
 			this.button_CopyPageToClipboard.Name = "button_CopyPageToClipboard";
 			this.button_CopyPageToClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_CopyPageToClipboard.TabIndex = 9;
@@ -1161,7 +1184,7 @@
 			// button_AddPagesFromClipboard
 			// 
 			this.button_AddPagesFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
-			this.button_AddPagesFromClipboard.Location = new System.Drawing.Point(219, 90);
+			this.button_AddPagesFromClipboard.Location = new System.Drawing.Point(201, 76);
 			this.button_AddPagesFromClipboard.Name = "button_AddPagesFromClipboard";
 			this.button_AddPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_AddPagesFromClipboard.TabIndex = 6;
@@ -1172,7 +1195,7 @@
 			// button_InsertPageFromClipboard
 			// 
 			this.button_InsertPageFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
-			this.button_InsertPageFromClipboard.Location = new System.Drawing.Point(219, 61);
+			this.button_InsertPageFromClipboard.Location = new System.Drawing.Point(201, 47);
 			this.button_InsertPageFromClipboard.Name = "button_InsertPageFromClipboard";
 			this.button_InsertPageFromClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_InsertPageFromClipboard.TabIndex = 3;
@@ -1182,7 +1205,8 @@
 			// 
 			// button_ImportAllPagesFromFile
 			// 
-			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(12, 354);
+			this.button_ImportAllPagesFromFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(12, 268);
 			this.button_ImportAllPagesFromFile.Name = "button_ImportAllPagesFromFile";
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ImportAllPagesFromFile.TabIndex = 16;
@@ -1193,7 +1217,8 @@
 			// 
 			// button_ExportAllPagesToFile
 			// 
-			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(12, 325);
+			this.button_ExportAllPagesToFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(12, 239);
 			this.button_ExportAllPagesToFile.Name = "button_ExportAllPagesToFile";
 			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ExportAllPagesToFile.TabIndex = 15;
@@ -1203,7 +1228,7 @@
 			// 
 			// button_ExportPageToFile
 			// 
-			this.button_ExportPageToFile.Location = new System.Drawing.Point(251, 119);
+			this.button_ExportPageToFile.Location = new System.Drawing.Point(233, 105);
 			this.button_ExportPageToFile.Name = "button_ExportPageToFile";
 			this.button_ExportPageToFile.Size = new System.Drawing.Size(25, 23);
 			this.button_ExportPageToFile.TabIndex = 10;
@@ -1214,7 +1239,7 @@
 			// 
 			// button_InsertPagesFromFile
 			// 
-			this.button_InsertPagesFromFile.Location = new System.Drawing.Point(251, 61);
+			this.button_InsertPagesFromFile.Location = new System.Drawing.Point(233, 47);
 			this.button_InsertPagesFromFile.Name = "button_InsertPagesFromFile";
 			this.button_InsertPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_InsertPagesFromFile.TabIndex = 4;
@@ -1225,7 +1250,7 @@
 			// 
 			// button_AddPagesFromFile
 			// 
-			this.button_AddPagesFromFile.Location = new System.Drawing.Point(251, 90);
+			this.button_AddPagesFromFile.Location = new System.Drawing.Point(233, 76);
 			this.button_AddPagesFromFile.Name = "button_AddPagesFromFile";
 			this.button_AddPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_AddPagesFromFile.TabIndex = 7;
@@ -1236,82 +1261,87 @@
 			// 
 			// button_DuplicatePage
 			// 
-			this.button_DuplicatePage.Location = new System.Drawing.Point(138, 119);
+			this.button_DuplicatePage.Location = new System.Drawing.Point(138, 105);
 			this.button_DuplicatePage.Name = "button_DuplicatePage";
-			this.button_DuplicatePage.Size = new System.Drawing.Size(75, 23);
+			this.button_DuplicatePage.Size = new System.Drawing.Size(57, 23);
 			this.button_DuplicatePage.TabIndex = 8;
 			this.button_DuplicatePage.Text = "&Copy...";
 			this.button_DuplicatePage.Click += new System.EventHandler(this.button_DuplicatePage_Click);
 			// 
 			// listBox_Pages
 			// 
+			this.listBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.listBox_Pages.FormattingEnabled = true;
 			this.listBox_Pages.HorizontalScrollbar = true;
-			this.listBox_Pages.Location = new System.Drawing.Point(12, 32);
+			this.listBox_Pages.Location = new System.Drawing.Point(12, 19);
 			this.listBox_Pages.Name = "listBox_Pages";
-			this.listBox_Pages.Size = new System.Drawing.Size(120, 277);
+			this.listBox_Pages.Size = new System.Drawing.Size(120, 212);
 			this.listBox_Pages.TabIndex = 0;
 			this.listBox_Pages.SelectedIndexChanged += new System.EventHandler(this.listBox_Pages_SelectedIndexChanged);
 			// 
 			// button_DeleteAllPages
 			// 
-			this.button_DeleteAllPages.Location = new System.Drawing.Point(138, 354);
+			this.button_DeleteAllPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_DeleteAllPages.Location = new System.Drawing.Point(138, 268);
 			this.button_DeleteAllPages.Name = "button_DeleteAllPages";
-			this.button_DeleteAllPages.Size = new System.Drawing.Size(75, 23);
+			this.button_DeleteAllPages.Size = new System.Drawing.Size(120, 23);
 			this.button_DeleteAllPages.TabIndex = 17;
 			this.button_DeleteAllPages.Text = "De&lete All...";
 			this.button_DeleteAllPages.Click += new System.EventHandler(this.button_DeleteAllPages_Click);
 			// 
 			// button_MovePageUp
 			// 
-			this.button_MovePageUp.Location = new System.Drawing.Point(138, 258);
+			this.button_MovePageUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_MovePageUp.Location = new System.Drawing.Point(138, 180);
 			this.button_MovePageUp.Name = "button_MovePageUp";
-			this.button_MovePageUp.Size = new System.Drawing.Size(75, 23);
+			this.button_MovePageUp.Size = new System.Drawing.Size(57, 23);
 			this.button_MovePageUp.TabIndex = 13;
 			this.button_MovePageUp.Text = "&Up";
 			this.button_MovePageUp.Click += new System.EventHandler(this.button_MovePageUp_Click);
 			// 
 			// button_MovePageDown
 			// 
-			this.button_MovePageDown.Location = new System.Drawing.Point(138, 287);
+			this.button_MovePageDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_MovePageDown.Location = new System.Drawing.Point(138, 209);
 			this.button_MovePageDown.Name = "button_MovePageDown";
-			this.button_MovePageDown.Size = new System.Drawing.Size(75, 23);
+			this.button_MovePageDown.Size = new System.Drawing.Size(57, 23);
 			this.button_MovePageDown.TabIndex = 14;
 			this.button_MovePageDown.Text = "&Down";
 			this.button_MovePageDown.Click += new System.EventHandler(this.button_MovePageDown_Click);
 			// 
 			// button_DeletePage
 			// 
-			this.button_DeletePage.Location = new System.Drawing.Point(138, 148);
+			this.button_DeletePage.Location = new System.Drawing.Point(138, 134);
 			this.button_DeletePage.Name = "button_DeletePage";
-			this.button_DeletePage.Size = new System.Drawing.Size(75, 23);
+			this.button_DeletePage.Size = new System.Drawing.Size(57, 23);
 			this.button_DeletePage.TabIndex = 11;
 			this.button_DeletePage.Text = "D&elete...";
 			this.button_DeletePage.Click += new System.EventHandler(this.button_DeletePage_Click);
 			// 
 			// button_InsertPage
 			// 
-			this.button_InsertPage.Location = new System.Drawing.Point(138, 61);
+			this.button_InsertPage.Location = new System.Drawing.Point(138, 47);
 			this.button_InsertPage.Name = "button_InsertPage";
-			this.button_InsertPage.Size = new System.Drawing.Size(75, 23);
+			this.button_InsertPage.Size = new System.Drawing.Size(57, 23);
 			this.button_InsertPage.TabIndex = 2;
 			this.button_InsertPage.Text = "&Insert...";
 			this.button_InsertPage.Click += new System.EventHandler(this.button_InsertPage_Click);
 			// 
 			// button_AddPage
 			// 
-			this.button_AddPage.Location = new System.Drawing.Point(138, 90);
+			this.button_AddPage.Location = new System.Drawing.Point(138, 76);
 			this.button_AddPage.Name = "button_AddPage";
-			this.button_AddPage.Size = new System.Drawing.Size(75, 23);
+			this.button_AddPage.Size = new System.Drawing.Size(57, 23);
 			this.button_AddPage.TabIndex = 5;
 			this.button_AddPage.Text = "&Add...";
 			this.button_AddPage.Click += new System.EventHandler(this.button_AddPage_Click);
 			// 
 			// button_NamePage
 			// 
-			this.button_NamePage.Location = new System.Drawing.Point(138, 32);
+			this.button_NamePage.Location = new System.Drawing.Point(138, 18);
 			this.button_NamePage.Name = "button_NamePage";
-			this.button_NamePage.Size = new System.Drawing.Size(75, 23);
+			this.button_NamePage.Size = new System.Drawing.Size(57, 23);
 			this.button_NamePage.TabIndex = 1;
 			this.button_NamePage.Text = "&Name...";
 			this.button_NamePage.Click += new System.EventHandler(this.button_NamePage_Click);
@@ -1319,11 +1349,11 @@
 			// button_LinkToFile
 			// 
 			this.button_LinkToFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_LinkToFile.Location = new System.Drawing.Point(24, 417);
+			this.button_LinkToFile.Location = new System.Drawing.Point(24, 446);
 			this.button_LinkToFile.Name = "button_LinkToFile";
 			this.button_LinkToFile.Size = new System.Drawing.Size(120, 23);
-			this.button_LinkToFile.TabIndex = 2;
-			this.button_LinkToFile.Text = "&Link All to File...";
+			this.button_LinkToFile.TabIndex = 3;
+			this.button_LinkToFile.Text = "Lin&k All to File...";
 			this.toolTip.SetToolTip(this.button_LinkToFile, resources.GetString("button_LinkToFile.ToolTip"));
 			this.button_LinkToFile.Click += new System.EventHandler(this.button_LinkToFile_Click);
 			// 
@@ -1331,10 +1361,10 @@
 			// 
 			this.button_ClearLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_ClearLink.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_lightning_16x16;
-			this.button_ClearLink.Location = new System.Drawing.Point(536, 417);
+			this.button_ClearLink.Location = new System.Drawing.Point(524, 446);
 			this.button_ClearLink.Name = "button_ClearLink";
 			this.button_ClearLink.Size = new System.Drawing.Size(24, 23);
-			this.button_ClearLink.TabIndex = 4;
+			this.button_ClearLink.TabIndex = 5;
 			this.toolTip.SetToolTip(this.button_ClearLink, "Clear link");
 			this.button_ClearLink.Click += new System.EventHandler(this.button_ClearLink_Click);
 			// 
@@ -1343,13 +1373,98 @@
 			this.pathLabel_LinkedTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_LinkedTo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_LinkedTo.Location = new System.Drawing.Point(150, 417);
+			this.pathLabel_LinkedTo.Location = new System.Drawing.Point(150, 446);
 			this.pathLabel_LinkedTo.Name = "pathLabel_LinkedTo";
-			this.pathLabel_LinkedTo.Size = new System.Drawing.Size(380, 23);
-			this.pathLabel_LinkedTo.TabIndex = 3;
+			this.pathLabel_LinkedTo.Size = new System.Drawing.Size(368, 23);
+			this.pathLabel_LinkedTo.TabIndex = 4;
 			this.pathLabel_LinkedTo.Text = "<Undefined>";
 			this.pathLabel_LinkedTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_LinkedTo.Click += new System.EventHandler(this.pathLabel_LinkedTo_Click);
+			// 
+			// comboBox_Layout
+			// 
+			this.comboBox_Layout.FormattingEnabled = true;
+			this.comboBox_Layout.Location = new System.Drawing.Point(12, 18);
+			this.comboBox_Layout.Name = "comboBox_Layout";
+			this.comboBox_Layout.Size = new System.Drawing.Size(120, 21);
+			this.comboBox_Layout.TabIndex = 0;
+			this.comboBox_Layout.SelectedIndexChanged += new System.EventHandler(this.comboBox_Layout_SelectedIndexChanged);
+			// 
+			// button_Subpage_1A
+			// 
+			this.button_Subpage_1A.Location = new System.Drawing.Point(138, 17);
+			this.button_Subpage_1A.Name = "button_Subpage_1A";
+			this.button_Subpage_1A.Size = new System.Drawing.Size(57, 23);
+			this.button_Subpage_1A.TabIndex = 1;
+			this.button_Subpage_1A.Text = "1..12";
+			this.button_Subpage_1A.UseVisualStyleBackColor = true;
+			this.button_Subpage_1A.Click += new System.EventHandler(this.button_Subpage_1A_Click);
+			// 
+			// button_Subpage_1B
+			// 
+			this.button_Subpage_1B.Location = new System.Drawing.Point(138, 46);
+			this.button_Subpage_1B.Name = "button_Subpage_1B";
+			this.button_Subpage_1B.Size = new System.Drawing.Size(57, 23);
+			this.button_Subpage_1B.TabIndex = 2;
+			this.button_Subpage_1B.Text = "13..24";
+			this.button_Subpage_1B.UseVisualStyleBackColor = true;
+			this.button_Subpage_1B.Click += new System.EventHandler(this.button_Subpage_1B_Click);
+			// 
+			// button_Subpage_1C
+			// 
+			this.button_Subpage_1C.Location = new System.Drawing.Point(138, 75);
+			this.button_Subpage_1C.Name = "button_Subpage_1C";
+			this.button_Subpage_1C.Size = new System.Drawing.Size(57, 23);
+			this.button_Subpage_1C.TabIndex = 3;
+			this.button_Subpage_1C.Text = "25..36";
+			this.button_Subpage_1C.UseVisualStyleBackColor = true;
+			this.button_Subpage_1C.Click += new System.EventHandler(this.button_Subpage_1C_Click);
+			// 
+			// button_Subpage_2A
+			// 
+			this.button_Subpage_2A.Location = new System.Drawing.Point(201, 17);
+			this.button_Subpage_2A.Name = "button_Subpage_2A";
+			this.button_Subpage_2A.Size = new System.Drawing.Size(57, 23);
+			this.button_Subpage_2A.TabIndex = 4;
+			this.button_Subpage_2A.Text = "37..48";
+			this.button_Subpage_2A.UseVisualStyleBackColor = true;
+			this.button_Subpage_2A.Click += new System.EventHandler(this.button_Subpage_2A_Click);
+			// 
+			// button_Subpage_2B
+			// 
+			this.button_Subpage_2B.Location = new System.Drawing.Point(201, 46);
+			this.button_Subpage_2B.Name = "button_Subpage_2B";
+			this.button_Subpage_2B.Size = new System.Drawing.Size(57, 23);
+			this.button_Subpage_2B.TabIndex = 5;
+			this.button_Subpage_2B.Text = "49..64";
+			this.button_Subpage_2B.UseVisualStyleBackColor = true;
+			this.button_Subpage_2B.Click += new System.EventHandler(this.button_Subpage_2B_Click);
+			// 
+			// button_Subpage_2C
+			// 
+			this.button_Subpage_2C.Location = new System.Drawing.Point(201, 75);
+			this.button_Subpage_2C.Name = "button_Subpage_2C";
+			this.button_Subpage_2C.Size = new System.Drawing.Size(57, 23);
+			this.button_Subpage_2C.TabIndex = 6;
+			this.button_Subpage_2C.Text = "65..72";
+			this.button_Subpage_2C.UseVisualStyleBackColor = true;
+			this.button_Subpage_2C.Click += new System.EventHandler(this.button_Subpage_2C_Click);
+			// 
+			// groupBox_Layout
+			// 
+			this.groupBox_Layout.Controls.Add(this.comboBox_Layout);
+			this.groupBox_Layout.Controls.Add(this.button_Subpage_2C);
+			this.groupBox_Layout.Controls.Add(this.button_Subpage_1A);
+			this.groupBox_Layout.Controls.Add(this.button_Subpage_1C);
+			this.groupBox_Layout.Controls.Add(this.button_Subpage_2A);
+			this.groupBox_Layout.Controls.Add(this.button_Subpage_2B);
+			this.groupBox_Layout.Controls.Add(this.button_Subpage_1B);
+			this.groupBox_Layout.Location = new System.Drawing.Point(12, 12);
+			this.groupBox_Layout.Name = "groupBox_Layout";
+			this.groupBox_Layout.Size = new System.Drawing.Size(270, 109);
+			this.groupBox_Layout.TabIndex = 0;
+			this.groupBox_Layout.TabStop = false;
+			this.groupBox_Layout.Text = "Page La&yout";
 			// 
 			// PredefinedCommandSettings
 			// 
@@ -1357,7 +1472,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(932, 452);
+			this.ClientSize = new System.Drawing.Size(920, 481);
+			this.Controls.Add(this.groupBox_Layout);
 			this.Controls.Add(this.button_ClearLink);
 			this.Controls.Add(this.button_LinkToFile);
 			this.Controls.Add(this.pathLabel_LinkedTo);
@@ -1378,6 +1494,7 @@
 			this.groupBox_Page.PerformLayout();
 			this.contextMenuStrip_Commands.ResumeLayout(false);
 			this.groupBox_Pages.ResumeLayout(false);
+			this.groupBox_Layout.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -1503,5 +1620,13 @@
 		private System.Windows.Forms.Button button_CutPageToClipboard;
 		private System.Windows.Forms.Button button_CopyPageToClipboard;
 		private System.Windows.Forms.Button button_AddPagesFromClipboard;
+		private System.Windows.Forms.ComboBox comboBox_Layout;
+		private System.Windows.Forms.Button button_Subpage_1A;
+		private System.Windows.Forms.Button button_Subpage_1B;
+		private System.Windows.Forms.Button button_Subpage_1C;
+		private System.Windows.Forms.Button button_Subpage_2A;
+		private System.Windows.Forms.Button button_Subpage_2B;
+		private System.Windows.Forms.Button button_Subpage_2C;
+		private System.Windows.Forms.GroupBox groupBox_Layout;
 	}
 }

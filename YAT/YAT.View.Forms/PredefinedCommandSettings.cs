@@ -242,6 +242,44 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void comboBox_Layout_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			// PENDING
+		}
+
+		private void button_Subpage_1A_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
+		private void button_Subpage_1B_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
+		private void button_Subpage_1C_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
+		private void button_Subpage_2A_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
+		private void button_Subpage_2B_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
+		private void button_Subpage_2C_Click(object sender, EventArgs e)
+		{
+			// PENDING
+		}
+
 		private void listBox_Pages_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
