@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
@@ -30,19 +35,34 @@ using MKY.Collections;
 
 using YAT.Model.Types;
 
+#endregion
+
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	public class PredefinedCommandSettings : MKY.Settings.SettingsItem, IEquatable<PredefinedCommandSettings>
 	{
 		/// <summary></summary>
+		public const int NoPage = 0;
+
+		/// <summary></summary>
+		public const int FirstPage = 1;
+
+		/// <summary></summary>
 		public const int FirstCommandPerPage = 1;
 
 		/// <summary></summary>
 		public const int MaxCommandsPerPage = 12;
 
-		/// <summary></summary>
-		public static readonly PredefinedCommandPage DefaultPage = new PredefinedCommandPage("Page 1");
+		/// <remarks>
+		/// Must be implemented as property (instead of a readonly) since <see cref="PredefinedCommandPage"/>
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
+		public static PredefinedCommandPage DefaultPage
+		{
+			get { return (new PredefinedCommandPage("Page 1")); }
+		}
 
 		private PredefinedCommandPageCollection pages;
 

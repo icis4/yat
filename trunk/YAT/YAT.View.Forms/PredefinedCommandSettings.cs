@@ -650,8 +650,8 @@ namespace YAT.View.Forms
 
 		private int SelectedPageIndex
 		{
-			get { return (this.selectedPage - 1); }
-			set { this.selectedPage = value + 1; }
+			get { return (this.selectedPage - 1);  }
+			set { this.selectedPage = (value + 1); }
 		}
 
 		#region Non-Public Methods > Controls
