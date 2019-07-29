@@ -41,7 +41,7 @@ using NUnit.Framework;
 namespace MKY.Test.Net
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public static class IPHostTestData
 	{
 		#region Constants

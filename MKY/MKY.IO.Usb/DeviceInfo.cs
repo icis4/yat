@@ -38,7 +38,7 @@ using System.Xml.Serialization;
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	[Serializable]
 	public class DeviceInfo : IEquatable<DeviceInfo>, IComparable
 	{

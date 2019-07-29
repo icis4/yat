@@ -29,7 +29,7 @@ using System.Xml.Serialization;
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public class GeneralSettings : MKY.Settings.SettingsItem, IEquatable<GeneralSettings>
 	{
 		/// <summary></summary>
