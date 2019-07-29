@@ -103,8 +103,10 @@ namespace YAT.Model.Types
 
 		private const string Automatic_string      = "Automatic";
 		private const string Cascade_string        = "Cascade";
-		private const string TileHorizontal_string = "TileHorizontal";
-		private const string TileVertical_string   = "TileVertical";
+		private const string TileHorizontal_string = "Tile Horizontal";
+		private const string TileHorizontal_stringPart  = "Horizontal";
+		private const string TileVertical_string   = "Tile Vertical";
+		private const string TileVertical_stringPart    = "Vertical";
 		private const string Manual_string         = "Manual";
 		private const string Minimize_string       = "Minimize";
 		private const string Maximize_string       = "Maximize";
@@ -231,12 +233,12 @@ namespace YAT.Model.Types
 				result = WorkspaceLayout.Cascade;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileHorizontal_string))
+			else if (s.Contains(TileHorizontal_stringPart))
 			{
 				result = WorkspaceLayout.TileHorizontal;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileVertical_string))
+			else if (s.Contains(TileVertical_stringPart))
 			{
 				result = WorkspaceLayout.TileVertical;
 				return (true);
