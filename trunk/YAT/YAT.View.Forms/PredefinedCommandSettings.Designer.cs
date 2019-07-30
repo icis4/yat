@@ -152,11 +152,11 @@
 			this.pathLabel_LinkedTo = new MKY.Windows.Forms.PathLabel();
 			this.comboBox_Layout = new System.Windows.Forms.ComboBox();
 			this.groupBox_Layout = new System.Windows.Forms.GroupBox();
-			this.checkBox_Subpage_2C = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_3B = new System.Windows.Forms.CheckBox();
 			this.checkBox_Subpage_2B = new System.Windows.Forms.CheckBox();
-			this.checkBox_Subpage_2A = new System.Windows.Forms.CheckBox();
-			this.checkBox_Subpage_1C = new System.Windows.Forms.CheckBox();
 			this.checkBox_Subpage_1B = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_3A = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_2A = new System.Windows.Forms.CheckBox();
 			this.checkBox_Subpage_1A = new System.Windows.Forms.CheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
 			this.groupBox_Page.SuspendLayout();
@@ -1390,11 +1390,11 @@
 			// 
 			// groupBox_Layout
 			// 
-			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2C);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_3B);
 			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2B);
-			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2A);
-			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1C);
 			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1B);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_3A);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2A);
 			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1A);
 			this.groupBox_Layout.Controls.Add(this.label_SubpageSelection);
 			this.groupBox_Layout.Controls.Add(this.comboBox_Layout);
@@ -1405,17 +1405,17 @@
 			this.groupBox_Layout.TabStop = false;
 			this.groupBox_Layout.Text = "La&yout";
 			// 
-			// checkBox_Subpage_2C
+			// checkBox_Subpage_3B
 			// 
-			this.checkBox_Subpage_2C.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox_Subpage_2C.Location = new System.Drawing.Point(201, 75);
-			this.checkBox_Subpage_2C.Name = "checkBox_Subpage_2C";
-			this.checkBox_Subpage_2C.Size = new System.Drawing.Size(57, 23);
-			this.checkBox_Subpage_2C.TabIndex = 7;
-			this.checkBox_Subpage_2C.Text = "65..72";
-			this.checkBox_Subpage_2C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox_Subpage_2C.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_2C.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2C_CheckedChanged);
+			this.checkBox_Subpage_3B.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_3B.Location = new System.Drawing.Point(201, 75);
+			this.checkBox_Subpage_3B.Name = "checkBox_Subpage_3B";
+			this.checkBox_Subpage_3B.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_3B.TabIndex = 7;
+			this.checkBox_Subpage_3B.Text = "65..72";
+			this.checkBox_Subpage_3B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_3B.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_3B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_3B_CheckedChanged);
 			// 
 			// checkBox_Subpage_2B
 			// 
@@ -1429,41 +1429,41 @@
 			this.checkBox_Subpage_2B.UseVisualStyleBackColor = true;
 			this.checkBox_Subpage_2B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2B_CheckedChanged);
 			// 
-			// checkBox_Subpage_2A
-			// 
-			this.checkBox_Subpage_2A.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox_Subpage_2A.Location = new System.Drawing.Point(201, 17);
-			this.checkBox_Subpage_2A.Name = "checkBox_Subpage_2A";
-			this.checkBox_Subpage_2A.Size = new System.Drawing.Size(57, 23);
-			this.checkBox_Subpage_2A.TabIndex = 5;
-			this.checkBox_Subpage_2A.Text = "37..48";
-			this.checkBox_Subpage_2A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox_Subpage_2A.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_2A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2A_CheckedChanged);
-			// 
-			// checkBox_Subpage_1C
-			// 
-			this.checkBox_Subpage_1C.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox_Subpage_1C.Location = new System.Drawing.Point(138, 75);
-			this.checkBox_Subpage_1C.Name = "checkBox_Subpage_1C";
-			this.checkBox_Subpage_1C.Size = new System.Drawing.Size(57, 23);
-			this.checkBox_Subpage_1C.TabIndex = 4;
-			this.checkBox_Subpage_1C.Text = "25..36";
-			this.checkBox_Subpage_1C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox_Subpage_1C.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_1C.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_1C_CheckedChanged);
-			// 
 			// checkBox_Subpage_1B
 			// 
 			this.checkBox_Subpage_1B.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox_Subpage_1B.Location = new System.Drawing.Point(138, 46);
+			this.checkBox_Subpage_1B.Location = new System.Drawing.Point(201, 17);
 			this.checkBox_Subpage_1B.Name = "checkBox_Subpage_1B";
 			this.checkBox_Subpage_1B.Size = new System.Drawing.Size(57, 23);
-			this.checkBox_Subpage_1B.TabIndex = 3;
-			this.checkBox_Subpage_1B.Text = "13..24";
+			this.checkBox_Subpage_1B.TabIndex = 5;
+			this.checkBox_Subpage_1B.Text = "37..48";
 			this.checkBox_Subpage_1B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.checkBox_Subpage_1B.UseVisualStyleBackColor = true;
 			this.checkBox_Subpage_1B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_1B_CheckedChanged);
+			// 
+			// checkBox_Subpage_3A
+			// 
+			this.checkBox_Subpage_3A.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_3A.Location = new System.Drawing.Point(138, 75);
+			this.checkBox_Subpage_3A.Name = "checkBox_Subpage_3A";
+			this.checkBox_Subpage_3A.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_3A.TabIndex = 4;
+			this.checkBox_Subpage_3A.Text = "25..36";
+			this.checkBox_Subpage_3A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_3A.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_3A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_3A_CheckedChanged);
+			// 
+			// checkBox_Subpage_2A
+			// 
+			this.checkBox_Subpage_2A.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_2A.Location = new System.Drawing.Point(138, 46);
+			this.checkBox_Subpage_2A.Name = "checkBox_Subpage_2A";
+			this.checkBox_Subpage_2A.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_2A.TabIndex = 3;
+			this.checkBox_Subpage_2A.Text = "13..24";
+			this.checkBox_Subpage_2A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_2A.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_2A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2A_CheckedChanged);
 			// 
 			// checkBox_Subpage_1A
 			// 
@@ -1644,11 +1644,11 @@
 		private System.Windows.Forms.ComboBox comboBox_Layout;
 		private System.Windows.Forms.GroupBox groupBox_Layout;
 		private System.Windows.Forms.Label label_SubpageSelection;
-		private System.Windows.Forms.CheckBox checkBox_Subpage_2C;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_3B;
 		private System.Windows.Forms.CheckBox checkBox_Subpage_2B;
-		private System.Windows.Forms.CheckBox checkBox_Subpage_2A;
-		private System.Windows.Forms.CheckBox checkBox_Subpage_1C;
 		private System.Windows.Forms.CheckBox checkBox_Subpage_1B;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_3A;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_2A;
 		private System.Windows.Forms.CheckBox checkBox_Subpage_1A;
 	}
 }
