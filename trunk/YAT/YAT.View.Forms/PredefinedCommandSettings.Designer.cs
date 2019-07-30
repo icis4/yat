@@ -151,13 +151,14 @@
 			this.button_ClearLink = new System.Windows.Forms.Button();
 			this.pathLabel_LinkedTo = new MKY.Windows.Forms.PathLabel();
 			this.comboBox_Layout = new System.Windows.Forms.ComboBox();
-			this.button_Subpage_1A = new System.Windows.Forms.Button();
-			this.button_Subpage_1B = new System.Windows.Forms.Button();
-			this.button_Subpage_1C = new System.Windows.Forms.Button();
-			this.button_Subpage_2A = new System.Windows.Forms.Button();
-			this.button_Subpage_2B = new System.Windows.Forms.Button();
-			this.button_Subpage_2C = new System.Windows.Forms.Button();
 			this.groupBox_Layout = new System.Windows.Forms.GroupBox();
+			this.checkBox_Subpage_2C = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_2B = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_2A = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_1C = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_1B = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_1A = new System.Windows.Forms.CheckBox();
+			this.label_SubpageSelection = new System.Windows.Forms.Label();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -198,7 +199,8 @@
 			// 
 			// groupBox_Page
 			// 
-			this.groupBox_Page.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.groupBox_Page.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Page.ContextMenuStrip = this.contextMenuStrip_Commands;
 			this.groupBox_Page.Controls.Add(this.label_ExplicitDefaultRadix);
@@ -242,7 +244,7 @@
 			this.groupBox_Page.Size = new System.Drawing.Size(620, 421);
 			this.groupBox_Page.TabIndex = 2;
 			this.groupBox_Page.TabStop = false;
-			this.groupBox_Page.Text = "<Page>";
+			this.groupBox_Page.Text = "<Page/Subpage>";
 			// 
 			// contextMenuStrip_Commands
 			// 
@@ -743,7 +745,6 @@
 			// 
 			// label_ExplicitDefaultRadix
 			// 
-			this.label_ExplicitDefaultRadix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExplicitDefaultRadix.AutoSize = true;
 			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(13, 31);
 			this.label_ExplicitDefaultRadix.Name = "label_ExplicitDefaultRadix";
@@ -754,7 +755,7 @@
 			// 
 			// predefinedCommandSettingsSet_12
 			// 
-			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(30, 344);
 			this.predefinedCommandSettingsSet_12.Name = "predefinedCommandSettingsSet_12";
@@ -766,7 +767,7 @@
 			// 
 			// predefinedCommandSettingsSet_11
 			// 
-			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(30, 317);
 			this.predefinedCommandSettingsSet_11.Name = "predefinedCommandSettingsSet_11";
@@ -778,7 +779,7 @@
 			// 
 			// predefinedCommandSettingsSet_10
 			// 
-			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(30, 290);
 			this.predefinedCommandSettingsSet_10.Name = "predefinedCommandSettingsSet_10";
@@ -790,7 +791,7 @@
 			// 
 			// predefinedCommandSettingsSet_9
 			// 
-			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(30, 263);
 			this.predefinedCommandSettingsSet_9.Name = "predefinedCommandSettingsSet_9";
@@ -802,7 +803,7 @@
 			// 
 			// predefinedCommandSettingsSet_8
 			// 
-			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(30, 236);
 			this.predefinedCommandSettingsSet_8.Name = "predefinedCommandSettingsSet_8";
@@ -814,7 +815,7 @@
 			// 
 			// predefinedCommandSettingsSet_7
 			// 
-			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(30, 209);
 			this.predefinedCommandSettingsSet_7.Name = "predefinedCommandSettingsSet_7";
@@ -826,7 +827,7 @@
 			// 
 			// predefinedCommandSettingsSet_6
 			// 
-			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(30, 182);
 			this.predefinedCommandSettingsSet_6.Name = "predefinedCommandSettingsSet_6";
@@ -838,7 +839,7 @@
 			// 
 			// predefinedCommandSettingsSet_5
 			// 
-			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(30, 155);
 			this.predefinedCommandSettingsSet_5.Name = "predefinedCommandSettingsSet_5";
@@ -850,7 +851,7 @@
 			// 
 			// predefinedCommandSettingsSet_4
 			// 
-			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(30, 128);
 			this.predefinedCommandSettingsSet_4.Name = "predefinedCommandSettingsSet_4";
@@ -862,7 +863,7 @@
 			// 
 			// predefinedCommandSettingsSet_3
 			// 
-			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(30, 101);
 			this.predefinedCommandSettingsSet_3.Name = "predefinedCommandSettingsSet_3";
@@ -874,7 +875,7 @@
 			// 
 			// predefinedCommandSettingsSet_1
 			// 
-			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(30, 47);
 			this.predefinedCommandSettingsSet_1.Name = "predefinedCommandSettingsSet_1";
@@ -885,7 +886,7 @@
 			// 
 			// predefinedCommandSettingsSet_2
 			// 
-			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(30, 74);
 			this.predefinedCommandSettingsSet_2.Name = "predefinedCommandSettingsSet_2";
@@ -897,7 +898,6 @@
 			// 
 			// label_File
 			// 
-			this.label_File.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_File.AutoSize = true;
 			this.label_File.Location = new System.Drawing.Point(87, 31);
 			this.label_File.Name = "label_File";
@@ -908,7 +908,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_12
 			// 
-			this.label_predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_12.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(6, 348);
 			this.label_predefinedCommandSettingsSet_12.Name = "label_predefinedCommandSettingsSet_12";
@@ -918,7 +917,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_11
 			// 
-			this.label_predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_11.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(6, 321);
 			this.label_predefinedCommandSettingsSet_11.Name = "label_predefinedCommandSettingsSet_11";
@@ -928,7 +926,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_10
 			// 
-			this.label_predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_10.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(6, 294);
 			this.label_predefinedCommandSettingsSet_10.Name = "label_predefinedCommandSettingsSet_10";
@@ -938,7 +935,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_9
 			// 
-			this.label_predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_9.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(12, 267);
 			this.label_predefinedCommandSettingsSet_9.Name = "label_predefinedCommandSettingsSet_9";
@@ -948,7 +944,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_8
 			// 
-			this.label_predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_8.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(12, 240);
 			this.label_predefinedCommandSettingsSet_8.Name = "label_predefinedCommandSettingsSet_8";
@@ -958,7 +953,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_7
 			// 
-			this.label_predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_7.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(12, 213);
 			this.label_predefinedCommandSettingsSet_7.Name = "label_predefinedCommandSettingsSet_7";
@@ -968,7 +962,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_6
 			// 
-			this.label_predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_6.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(12, 186);
 			this.label_predefinedCommandSettingsSet_6.Name = "label_predefinedCommandSettingsSet_6";
@@ -978,7 +971,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_5
 			// 
-			this.label_predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_5.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(12, 159);
 			this.label_predefinedCommandSettingsSet_5.Name = "label_predefinedCommandSettingsSet_5";
@@ -988,7 +980,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_4
 			// 
-			this.label_predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_4.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(12, 132);
 			this.label_predefinedCommandSettingsSet_4.Name = "label_predefinedCommandSettingsSet_4";
@@ -998,7 +989,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_3
 			// 
-			this.label_predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_3.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(12, 105);
 			this.label_predefinedCommandSettingsSet_3.Name = "label_predefinedCommandSettingsSet_3";
@@ -1008,7 +998,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_2
 			// 
-			this.label_predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_2.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(12, 78);
 			this.label_predefinedCommandSettingsSet_2.Name = "label_predefinedCommandSettingsSet_2";
@@ -1020,6 +1009,8 @@
 			// 
 			this.label_ExampleBinary_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleBinary_Description.AutoSize = true;
+			this.label_ExampleBinary_Description.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_ExampleBinary_Description.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(402, 397);
 			this.label_ExampleBinary_Description.Name = "label_ExampleBinary_Description";
 			this.label_ExampleBinary_Description.Size = new System.Drawing.Size(72, 13);
@@ -1030,6 +1021,8 @@
 			// 
 			this.label_ExampleBinary_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleBinary_Data.AutoSize = true;
+			this.label_ExampleBinary_Data.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_ExampleBinary_Data.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_ExampleBinary_Data.Location = new System.Drawing.Point(67, 397);
 			this.label_ExampleBinary_Data.Name = "label_ExampleBinary_Data";
 			this.label_ExampleBinary_Data.Size = new System.Drawing.Size(66, 13);
@@ -1038,7 +1031,6 @@
 			// 
 			// label_predefinedCommandSettingsSet_1
 			// 
-			this.label_predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_predefinedCommandSettingsSet_1.AutoSize = true;
 			this.label_predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(12, 51);
 			this.label_predefinedCommandSettingsSet_1.Name = "label_predefinedCommandSettingsSet_1";
@@ -1048,7 +1040,7 @@
 			// 
 			// label_Clear
 			// 
-			this.label_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Clear.AutoSize = true;
 			this.label_Clear.Location = new System.Drawing.Point(583, 31);
 			this.label_Clear.Name = "label_Clear";
@@ -1059,7 +1051,7 @@
 			// 
 			// label_Shortcut
 			// 
-			this.label_Shortcut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Shortcut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Shortcut.AutoSize = true;
 			this.label_Shortcut.Location = new System.Drawing.Point(527, 31);
 			this.label_Shortcut.Name = "label_Shortcut";
@@ -1070,7 +1062,6 @@
 			// 
 			// label_Data
 			// 
-			this.label_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Data.AutoSize = true;
 			this.label_Data.Location = new System.Drawing.Point(135, 31);
 			this.label_Data.Name = "label_Data";
@@ -1081,7 +1072,7 @@
 			// 
 			// label_Description
 			// 
-			this.label_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Description.AutoSize = true;
 			this.label_Description.Location = new System.Drawing.Point(401, 31);
 			this.label_Description.Name = "label_Description";
@@ -1094,6 +1085,8 @@
 			// 
 			this.label_ExampleText_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleText_Description.AutoSize = true;
+			this.label_ExampleText_Description.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_ExampleText_Description.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_ExampleText_Description.Location = new System.Drawing.Point(402, 379);
 			this.label_ExampleText_Description.Name = "label_ExampleText_Description";
 			this.label_ExampleText_Description.Size = new System.Drawing.Size(72, 13);
@@ -1104,6 +1097,8 @@
 			// 
 			this.label_ExampleText_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleText_Data.AutoSize = true;
+			this.label_ExampleText_Data.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_ExampleText_Data.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_ExampleText_Data.Location = new System.Drawing.Point(67, 379);
 			this.label_ExampleText_Data.Name = "label_ExampleText_Data";
 			this.label_ExampleText_Data.Size = new System.Drawing.Size(28, 13);
@@ -1114,6 +1109,8 @@
 			// 
 			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
+			this.label_Example.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Example.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Example.Location = new System.Drawing.Point(6, 388);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(55, 13);
@@ -1383,88 +1380,111 @@
 			// 
 			// comboBox_Layout
 			// 
+			this.comboBox_Layout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Layout.FormattingEnabled = true;
-			this.comboBox_Layout.Location = new System.Drawing.Point(12, 18);
+			this.comboBox_Layout.Location = new System.Drawing.Point(12, 47);
 			this.comboBox_Layout.Name = "comboBox_Layout";
 			this.comboBox_Layout.Size = new System.Drawing.Size(120, 21);
 			this.comboBox_Layout.TabIndex = 0;
 			this.comboBox_Layout.SelectedIndexChanged += new System.EventHandler(this.comboBox_Layout_SelectedIndexChanged);
 			// 
-			// button_Subpage_1A
-			// 
-			this.button_Subpage_1A.Location = new System.Drawing.Point(138, 17);
-			this.button_Subpage_1A.Name = "button_Subpage_1A";
-			this.button_Subpage_1A.Size = new System.Drawing.Size(57, 23);
-			this.button_Subpage_1A.TabIndex = 1;
-			this.button_Subpage_1A.Text = "1..12";
-			this.button_Subpage_1A.UseVisualStyleBackColor = true;
-			this.button_Subpage_1A.Click += new System.EventHandler(this.button_Subpage_1A_Click);
-			// 
-			// button_Subpage_1B
-			// 
-			this.button_Subpage_1B.Location = new System.Drawing.Point(138, 46);
-			this.button_Subpage_1B.Name = "button_Subpage_1B";
-			this.button_Subpage_1B.Size = new System.Drawing.Size(57, 23);
-			this.button_Subpage_1B.TabIndex = 2;
-			this.button_Subpage_1B.Text = "13..24";
-			this.button_Subpage_1B.UseVisualStyleBackColor = true;
-			this.button_Subpage_1B.Click += new System.EventHandler(this.button_Subpage_1B_Click);
-			// 
-			// button_Subpage_1C
-			// 
-			this.button_Subpage_1C.Location = new System.Drawing.Point(138, 75);
-			this.button_Subpage_1C.Name = "button_Subpage_1C";
-			this.button_Subpage_1C.Size = new System.Drawing.Size(57, 23);
-			this.button_Subpage_1C.TabIndex = 3;
-			this.button_Subpage_1C.Text = "25..36";
-			this.button_Subpage_1C.UseVisualStyleBackColor = true;
-			this.button_Subpage_1C.Click += new System.EventHandler(this.button_Subpage_1C_Click);
-			// 
-			// button_Subpage_2A
-			// 
-			this.button_Subpage_2A.Location = new System.Drawing.Point(201, 17);
-			this.button_Subpage_2A.Name = "button_Subpage_2A";
-			this.button_Subpage_2A.Size = new System.Drawing.Size(57, 23);
-			this.button_Subpage_2A.TabIndex = 4;
-			this.button_Subpage_2A.Text = "37..48";
-			this.button_Subpage_2A.UseVisualStyleBackColor = true;
-			this.button_Subpage_2A.Click += new System.EventHandler(this.button_Subpage_2A_Click);
-			// 
-			// button_Subpage_2B
-			// 
-			this.button_Subpage_2B.Location = new System.Drawing.Point(201, 46);
-			this.button_Subpage_2B.Name = "button_Subpage_2B";
-			this.button_Subpage_2B.Size = new System.Drawing.Size(57, 23);
-			this.button_Subpage_2B.TabIndex = 5;
-			this.button_Subpage_2B.Text = "49..64";
-			this.button_Subpage_2B.UseVisualStyleBackColor = true;
-			this.button_Subpage_2B.Click += new System.EventHandler(this.button_Subpage_2B_Click);
-			// 
-			// button_Subpage_2C
-			// 
-			this.button_Subpage_2C.Location = new System.Drawing.Point(201, 75);
-			this.button_Subpage_2C.Name = "button_Subpage_2C";
-			this.button_Subpage_2C.Size = new System.Drawing.Size(57, 23);
-			this.button_Subpage_2C.TabIndex = 6;
-			this.button_Subpage_2C.Text = "65..72";
-			this.button_Subpage_2C.UseVisualStyleBackColor = true;
-			this.button_Subpage_2C.Click += new System.EventHandler(this.button_Subpage_2C_Click);
-			// 
 			// groupBox_Layout
 			// 
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2C);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2B);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2A);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1C);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1B);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1A);
+			this.groupBox_Layout.Controls.Add(this.label_SubpageSelection);
 			this.groupBox_Layout.Controls.Add(this.comboBox_Layout);
-			this.groupBox_Layout.Controls.Add(this.button_Subpage_2C);
-			this.groupBox_Layout.Controls.Add(this.button_Subpage_1A);
-			this.groupBox_Layout.Controls.Add(this.button_Subpage_1C);
-			this.groupBox_Layout.Controls.Add(this.button_Subpage_2A);
-			this.groupBox_Layout.Controls.Add(this.button_Subpage_2B);
-			this.groupBox_Layout.Controls.Add(this.button_Subpage_1B);
 			this.groupBox_Layout.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Layout.Name = "groupBox_Layout";
 			this.groupBox_Layout.Size = new System.Drawing.Size(270, 109);
 			this.groupBox_Layout.TabIndex = 0;
 			this.groupBox_Layout.TabStop = false;
-			this.groupBox_Layout.Text = "Page La&yout";
+			this.groupBox_Layout.Text = "La&yout";
+			// 
+			// checkBox_Subpage_2C
+			// 
+			this.checkBox_Subpage_2C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_2C.Location = new System.Drawing.Point(201, 75);
+			this.checkBox_Subpage_2C.Name = "checkBox_Subpage_2C";
+			this.checkBox_Subpage_2C.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_2C.TabIndex = 7;
+			this.checkBox_Subpage_2C.Text = "65..72";
+			this.checkBox_Subpage_2C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_2C.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_2C.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2C_CheckedChanged);
+			// 
+			// checkBox_Subpage_2B
+			// 
+			this.checkBox_Subpage_2B.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_2B.Location = new System.Drawing.Point(201, 46);
+			this.checkBox_Subpage_2B.Name = "checkBox_Subpage_2B";
+			this.checkBox_Subpage_2B.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_2B.TabIndex = 6;
+			this.checkBox_Subpage_2B.Text = "49..64";
+			this.checkBox_Subpage_2B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_2B.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_2B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2B_CheckedChanged);
+			// 
+			// checkBox_Subpage_2A
+			// 
+			this.checkBox_Subpage_2A.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_2A.Location = new System.Drawing.Point(201, 17);
+			this.checkBox_Subpage_2A.Name = "checkBox_Subpage_2A";
+			this.checkBox_Subpage_2A.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_2A.TabIndex = 5;
+			this.checkBox_Subpage_2A.Text = "37..48";
+			this.checkBox_Subpage_2A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_2A.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_2A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2A_CheckedChanged);
+			// 
+			// checkBox_Subpage_1C
+			// 
+			this.checkBox_Subpage_1C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_1C.Location = new System.Drawing.Point(138, 75);
+			this.checkBox_Subpage_1C.Name = "checkBox_Subpage_1C";
+			this.checkBox_Subpage_1C.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_1C.TabIndex = 4;
+			this.checkBox_Subpage_1C.Text = "25..36";
+			this.checkBox_Subpage_1C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_1C.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_1C.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_1C_CheckedChanged);
+			// 
+			// checkBox_Subpage_1B
+			// 
+			this.checkBox_Subpage_1B.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_1B.Location = new System.Drawing.Point(138, 46);
+			this.checkBox_Subpage_1B.Name = "checkBox_Subpage_1B";
+			this.checkBox_Subpage_1B.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_1B.TabIndex = 3;
+			this.checkBox_Subpage_1B.Text = "13..24";
+			this.checkBox_Subpage_1B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_1B.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_1B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_1B_CheckedChanged);
+			// 
+			// checkBox_Subpage_1A
+			// 
+			this.checkBox_Subpage_1A.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_1A.Location = new System.Drawing.Point(138, 17);
+			this.checkBox_Subpage_1A.Name = "checkBox_Subpage_1A";
+			this.checkBox_Subpage_1A.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_1A.TabIndex = 2;
+			this.checkBox_Subpage_1A.Text = "1..12";
+			this.checkBox_Subpage_1A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_1A.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_1A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_1A_CheckedChanged);
+			// 
+			// label_SubpageSelection
+			// 
+			this.label_SubpageSelection.AutoSize = true;
+			this.label_SubpageSelection.Location = new System.Drawing.Point(78, 22);
+			this.label_SubpageSelection.Name = "label_SubpageSelection";
+			this.label_SubpageSelection.Size = new System.Drawing.Size(54, 13);
+			this.label_SubpageSelection.TabIndex = 1;
+			this.label_SubpageSelection.Text = "Selection:";
 			// 
 			// PredefinedCommandSettings
 			// 
@@ -1495,6 +1515,7 @@
 			this.contextMenuStrip_Commands.ResumeLayout(false);
 			this.groupBox_Pages.ResumeLayout(false);
 			this.groupBox_Layout.ResumeLayout(false);
+			this.groupBox_Layout.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1621,12 +1642,13 @@
 		private System.Windows.Forms.Button button_CopyPageToClipboard;
 		private System.Windows.Forms.Button button_AddPagesFromClipboard;
 		private System.Windows.Forms.ComboBox comboBox_Layout;
-		private System.Windows.Forms.Button button_Subpage_1A;
-		private System.Windows.Forms.Button button_Subpage_1B;
-		private System.Windows.Forms.Button button_Subpage_1C;
-		private System.Windows.Forms.Button button_Subpage_2A;
-		private System.Windows.Forms.Button button_Subpage_2B;
-		private System.Windows.Forms.Button button_Subpage_2C;
 		private System.Windows.Forms.GroupBox groupBox_Layout;
+		private System.Windows.Forms.Label label_SubpageSelection;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_2C;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_2B;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_2A;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_1C;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_1B;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_1A;
 	}
 }

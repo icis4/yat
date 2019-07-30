@@ -250,33 +250,51 @@ namespace YAT.View.Forms
 			// PENDING
 		}
 
-		private void button_Subpage_1A_Click(object sender, EventArgs e)
+		private void checkBox_Subpage_1A_CheckedChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// PENDING
 		}
 
-		private void button_Subpage_1B_Click(object sender, EventArgs e)
+		private void checkBox_Subpage_1B_CheckedChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// PENDING
 		}
 
-		private void button_Subpage_1C_Click(object sender, EventArgs e)
+		private void checkBox_Subpage_1C_CheckedChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// PENDING
 		}
 
-		private void button_Subpage_2A_Click(object sender, EventArgs e)
+		private void checkBox_Subpage_2A_CheckedChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// PENDING
 		}
 
-		private void button_Subpage_2B_Click(object sender, EventArgs e)
+		private void checkBox_Subpage_2B_CheckedChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// PENDING
 		}
 
-		private void button_Subpage_2C_Click(object sender, EventArgs e)
+		private void checkBox_Subpage_2C_CheckedChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// PENDING
 		}
 
@@ -1144,6 +1162,7 @@ namespace YAT.View.Forms
 		}
 
 		#endregion
+
 	}
 }
 
