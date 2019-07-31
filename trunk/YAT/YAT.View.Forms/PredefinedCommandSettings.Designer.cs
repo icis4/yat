@@ -159,6 +159,9 @@
 			this.checkBox_Subpage_2A = new System.Windows.Forms.CheckBox();
 			this.checkBox_Subpage_1A = new System.Windows.Forms.CheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
+			this.checkBox_Subpage_1C = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_2C = new System.Windows.Forms.CheckBox();
+			this.checkBox_Subpage_3C = new System.Windows.Forms.CheckBox();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -169,7 +172,7 @@
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(662, 446);
+			this.button_OK.Location = new System.Drawing.Point(725, 446);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 6;
@@ -180,7 +183,7 @@
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(743, 446);
+			this.button_Cancel.Location = new System.Drawing.Point(806, 446);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 7;
@@ -239,7 +242,7 @@
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Data);
 			this.groupBox_Page.Controls.Add(this.label_Example);
-			this.groupBox_Page.Location = new System.Drawing.Point(288, 12);
+			this.groupBox_Page.Location = new System.Drawing.Point(351, 12);
 			this.groupBox_Page.Name = "groupBox_Page";
 			this.groupBox_Page.Size = new System.Drawing.Size(620, 421);
 			this.groupBox_Page.TabIndex = 2;
@@ -1120,7 +1123,7 @@
 			// button_Help
 			// 
 			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Help.Location = new System.Drawing.Point(824, 446);
+			this.button_Help.Location = new System.Drawing.Point(887, 446);
 			this.button_Help.Name = "button_Help";
 			this.button_Help.Size = new System.Drawing.Size(75, 23);
 			this.button_Help.TabIndex = 8;
@@ -1151,7 +1154,7 @@
 			this.groupBox_Pages.Controls.Add(this.button_NamePage);
 			this.groupBox_Pages.Location = new System.Drawing.Point(12, 127);
 			this.groupBox_Pages.Name = "groupBox_Pages";
-			this.groupBox_Pages.Size = new System.Drawing.Size(270, 306);
+			this.groupBox_Pages.Size = new System.Drawing.Size(333, 306);
 			this.groupBox_Pages.TabIndex = 1;
 			this.groupBox_Pages.TabStop = false;
 			this.groupBox_Pages.Text = "&Pages";
@@ -1159,7 +1162,7 @@
 			// button_CutPageToClipboard
 			// 
 			this.button_CutPageToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
-			this.button_CutPageToClipboard.Location = new System.Drawing.Point(201, 134);
+			this.button_CutPageToClipboard.Location = new System.Drawing.Point(264, 134);
 			this.button_CutPageToClipboard.Name = "button_CutPageToClipboard";
 			this.button_CutPageToClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_CutPageToClipboard.TabIndex = 12;
@@ -1170,7 +1173,7 @@
 			// button_CopyPageToClipboard
 			// 
 			this.button_CopyPageToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
-			this.button_CopyPageToClipboard.Location = new System.Drawing.Point(201, 105);
+			this.button_CopyPageToClipboard.Location = new System.Drawing.Point(264, 105);
 			this.button_CopyPageToClipboard.Name = "button_CopyPageToClipboard";
 			this.button_CopyPageToClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_CopyPageToClipboard.TabIndex = 9;
@@ -1181,7 +1184,7 @@
 			// button_AddPagesFromClipboard
 			// 
 			this.button_AddPagesFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
-			this.button_AddPagesFromClipboard.Location = new System.Drawing.Point(201, 76);
+			this.button_AddPagesFromClipboard.Location = new System.Drawing.Point(264, 76);
 			this.button_AddPagesFromClipboard.Name = "button_AddPagesFromClipboard";
 			this.button_AddPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_AddPagesFromClipboard.TabIndex = 6;
@@ -1192,7 +1195,7 @@
 			// button_InsertPageFromClipboard
 			// 
 			this.button_InsertPageFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
-			this.button_InsertPageFromClipboard.Location = new System.Drawing.Point(201, 47);
+			this.button_InsertPageFromClipboard.Location = new System.Drawing.Point(264, 47);
 			this.button_InsertPageFromClipboard.Name = "button_InsertPageFromClipboard";
 			this.button_InsertPageFromClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_InsertPageFromClipboard.TabIndex = 3;
@@ -1225,7 +1228,7 @@
 			// 
 			// button_ExportPageToFile
 			// 
-			this.button_ExportPageToFile.Location = new System.Drawing.Point(233, 105);
+			this.button_ExportPageToFile.Location = new System.Drawing.Point(296, 105);
 			this.button_ExportPageToFile.Name = "button_ExportPageToFile";
 			this.button_ExportPageToFile.Size = new System.Drawing.Size(25, 23);
 			this.button_ExportPageToFile.TabIndex = 10;
@@ -1236,7 +1239,7 @@
 			// 
 			// button_InsertPagesFromFile
 			// 
-			this.button_InsertPagesFromFile.Location = new System.Drawing.Point(233, 47);
+			this.button_InsertPagesFromFile.Location = new System.Drawing.Point(296, 47);
 			this.button_InsertPagesFromFile.Name = "button_InsertPagesFromFile";
 			this.button_InsertPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_InsertPagesFromFile.TabIndex = 4;
@@ -1247,7 +1250,7 @@
 			// 
 			// button_AddPagesFromFile
 			// 
-			this.button_AddPagesFromFile.Location = new System.Drawing.Point(233, 76);
+			this.button_AddPagesFromFile.Location = new System.Drawing.Point(296, 76);
 			this.button_AddPagesFromFile.Name = "button_AddPagesFromFile";
 			this.button_AddPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_AddPagesFromFile.TabIndex = 7;
@@ -1260,7 +1263,7 @@
 			// 
 			this.button_DuplicatePage.Location = new System.Drawing.Point(138, 105);
 			this.button_DuplicatePage.Name = "button_DuplicatePage";
-			this.button_DuplicatePage.Size = new System.Drawing.Size(57, 23);
+			this.button_DuplicatePage.Size = new System.Drawing.Size(120, 23);
 			this.button_DuplicatePage.TabIndex = 8;
 			this.button_DuplicatePage.Text = "&Copy...";
 			this.button_DuplicatePage.Click += new System.EventHandler(this.button_DuplicatePage_Click);
@@ -1292,17 +1295,18 @@
 			this.button_MovePageUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.button_MovePageUp.Location = new System.Drawing.Point(138, 180);
 			this.button_MovePageUp.Name = "button_MovePageUp";
-			this.button_MovePageUp.Size = new System.Drawing.Size(57, 23);
+			this.button_MovePageUp.Size = new System.Drawing.Size(120, 23);
 			this.button_MovePageUp.TabIndex = 13;
 			this.button_MovePageUp.Text = "&Up";
 			this.button_MovePageUp.Click += new System.EventHandler(this.button_MovePageUp_Click);
 			// 
 			// button_MovePageDown
 			// 
-			this.button_MovePageDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_MovePageDown.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_MovePageDown.Location = new System.Drawing.Point(138, 209);
 			this.button_MovePageDown.Name = "button_MovePageDown";
-			this.button_MovePageDown.Size = new System.Drawing.Size(57, 23);
+			this.button_MovePageDown.Size = new System.Drawing.Size(120, 23);
 			this.button_MovePageDown.TabIndex = 14;
 			this.button_MovePageDown.Text = "&Down";
 			this.button_MovePageDown.Click += new System.EventHandler(this.button_MovePageDown_Click);
@@ -1311,7 +1315,7 @@
 			// 
 			this.button_DeletePage.Location = new System.Drawing.Point(138, 134);
 			this.button_DeletePage.Name = "button_DeletePage";
-			this.button_DeletePage.Size = new System.Drawing.Size(57, 23);
+			this.button_DeletePage.Size = new System.Drawing.Size(120, 23);
 			this.button_DeletePage.TabIndex = 11;
 			this.button_DeletePage.Text = "D&elete...";
 			this.button_DeletePage.Click += new System.EventHandler(this.button_DeletePage_Click);
@@ -1320,7 +1324,7 @@
 			// 
 			this.button_InsertPage.Location = new System.Drawing.Point(138, 47);
 			this.button_InsertPage.Name = "button_InsertPage";
-			this.button_InsertPage.Size = new System.Drawing.Size(57, 23);
+			this.button_InsertPage.Size = new System.Drawing.Size(120, 23);
 			this.button_InsertPage.TabIndex = 2;
 			this.button_InsertPage.Text = "&Insert...";
 			this.button_InsertPage.Click += new System.EventHandler(this.button_InsertPage_Click);
@@ -1329,7 +1333,7 @@
 			// 
 			this.button_AddPage.Location = new System.Drawing.Point(138, 76);
 			this.button_AddPage.Name = "button_AddPage";
-			this.button_AddPage.Size = new System.Drawing.Size(57, 23);
+			this.button_AddPage.Size = new System.Drawing.Size(120, 23);
 			this.button_AddPage.TabIndex = 5;
 			this.button_AddPage.Text = "&Add...";
 			this.button_AddPage.Click += new System.EventHandler(this.button_AddPage_Click);
@@ -1338,7 +1342,7 @@
 			// 
 			this.button_NamePage.Location = new System.Drawing.Point(138, 18);
 			this.button_NamePage.Name = "button_NamePage";
-			this.button_NamePage.Size = new System.Drawing.Size(57, 23);
+			this.button_NamePage.Size = new System.Drawing.Size(120, 23);
 			this.button_NamePage.TabIndex = 1;
 			this.button_NamePage.Text = "&Name...";
 			this.button_NamePage.Click += new System.EventHandler(this.button_NamePage_Click);
@@ -1358,7 +1362,7 @@
 			// 
 			this.button_ClearLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_ClearLink.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_lightning_16x16;
-			this.button_ClearLink.Location = new System.Drawing.Point(524, 446);
+			this.button_ClearLink.Location = new System.Drawing.Point(609, 446);
 			this.button_ClearLink.Name = "button_ClearLink";
 			this.button_ClearLink.Size = new System.Drawing.Size(24, 23);
 			this.button_ClearLink.TabIndex = 5;
@@ -1372,7 +1376,7 @@
 			this.pathLabel_LinkedTo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pathLabel_LinkedTo.Location = new System.Drawing.Point(150, 446);
 			this.pathLabel_LinkedTo.Name = "pathLabel_LinkedTo";
-			this.pathLabel_LinkedTo.Size = new System.Drawing.Size(368, 23);
+			this.pathLabel_LinkedTo.Size = new System.Drawing.Size(453, 23);
 			this.pathLabel_LinkedTo.TabIndex = 4;
 			this.pathLabel_LinkedTo.Text = "<Undefined>";
 			this.pathLabel_LinkedTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1390,7 +1394,12 @@
 			// 
 			// groupBox_Layout
 			// 
+			this.groupBox_Layout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_3C);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2C);
 			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_3B);
+			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1C);
 			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_2B);
 			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_1B);
 			this.groupBox_Layout.Controls.Add(this.checkBox_Subpage_3A);
@@ -1400,7 +1409,7 @@
 			this.groupBox_Layout.Controls.Add(this.comboBox_Layout);
 			this.groupBox_Layout.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Layout.Name = "groupBox_Layout";
-			this.groupBox_Layout.Size = new System.Drawing.Size(270, 109);
+			this.groupBox_Layout.Size = new System.Drawing.Size(333, 109);
 			this.groupBox_Layout.TabIndex = 0;
 			this.groupBox_Layout.TabStop = false;
 			this.groupBox_Layout.Text = "La&yout";
@@ -1412,10 +1421,11 @@
 			this.checkBox_Subpage_3B.Name = "checkBox_Subpage_3B";
 			this.checkBox_Subpage_3B.Size = new System.Drawing.Size(57, 23);
 			this.checkBox_Subpage_3B.TabIndex = 7;
+			this.checkBox_Subpage_3B.Tag = "3B";
 			this.checkBox_Subpage_3B.Text = "65..72";
 			this.checkBox_Subpage_3B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.checkBox_Subpage_3B.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_3B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_3B_CheckedChanged);
+			this.checkBox_Subpage_3B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
 			// 
 			// checkBox_Subpage_2B
 			// 
@@ -1424,10 +1434,11 @@
 			this.checkBox_Subpage_2B.Name = "checkBox_Subpage_2B";
 			this.checkBox_Subpage_2B.Size = new System.Drawing.Size(57, 23);
 			this.checkBox_Subpage_2B.TabIndex = 6;
+			this.checkBox_Subpage_2B.Tag = "2B";
 			this.checkBox_Subpage_2B.Text = "49..64";
 			this.checkBox_Subpage_2B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.checkBox_Subpage_2B.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_2B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2B_CheckedChanged);
+			this.checkBox_Subpage_2B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
 			// 
 			// checkBox_Subpage_1B
 			// 
@@ -1436,10 +1447,11 @@
 			this.checkBox_Subpage_1B.Name = "checkBox_Subpage_1B";
 			this.checkBox_Subpage_1B.Size = new System.Drawing.Size(57, 23);
 			this.checkBox_Subpage_1B.TabIndex = 5;
+			this.checkBox_Subpage_1B.Tag = "1B";
 			this.checkBox_Subpage_1B.Text = "37..48";
 			this.checkBox_Subpage_1B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.checkBox_Subpage_1B.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_1B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_1B_CheckedChanged);
+			this.checkBox_Subpage_1B.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
 			// 
 			// checkBox_Subpage_3A
 			// 
@@ -1448,10 +1460,11 @@
 			this.checkBox_Subpage_3A.Name = "checkBox_Subpage_3A";
 			this.checkBox_Subpage_3A.Size = new System.Drawing.Size(57, 23);
 			this.checkBox_Subpage_3A.TabIndex = 4;
+			this.checkBox_Subpage_3A.Tag = "3A";
 			this.checkBox_Subpage_3A.Text = "25..36";
 			this.checkBox_Subpage_3A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.checkBox_Subpage_3A.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_3A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_3A_CheckedChanged);
+			this.checkBox_Subpage_3A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
 			// 
 			// checkBox_Subpage_2A
 			// 
@@ -1460,10 +1473,11 @@
 			this.checkBox_Subpage_2A.Name = "checkBox_Subpage_2A";
 			this.checkBox_Subpage_2A.Size = new System.Drawing.Size(57, 23);
 			this.checkBox_Subpage_2A.TabIndex = 3;
+			this.checkBox_Subpage_2A.Tag = "2A";
 			this.checkBox_Subpage_2A.Text = "13..24";
 			this.checkBox_Subpage_2A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.checkBox_Subpage_2A.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_2A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_2A_CheckedChanged);
+			this.checkBox_Subpage_2A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
 			// 
 			// checkBox_Subpage_1A
 			// 
@@ -1472,10 +1486,11 @@
 			this.checkBox_Subpage_1A.Name = "checkBox_Subpage_1A";
 			this.checkBox_Subpage_1A.Size = new System.Drawing.Size(57, 23);
 			this.checkBox_Subpage_1A.TabIndex = 2;
+			this.checkBox_Subpage_1A.Tag = "1A";
 			this.checkBox_Subpage_1A.Text = "1..12";
 			this.checkBox_Subpage_1A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.checkBox_Subpage_1A.UseVisualStyleBackColor = true;
-			this.checkBox_Subpage_1A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_1A_CheckedChanged);
+			this.checkBox_Subpage_1A.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
 			// 
 			// label_SubpageSelection
 			// 
@@ -1486,13 +1501,52 @@
 			this.label_SubpageSelection.TabIndex = 1;
 			this.label_SubpageSelection.Text = "Selection:";
 			// 
+			// checkBox_Subpage_1C
+			// 
+			this.checkBox_Subpage_1C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_1C.Location = new System.Drawing.Point(264, 17);
+			this.checkBox_Subpage_1C.Name = "checkBox_Subpage_1C";
+			this.checkBox_Subpage_1C.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_1C.TabIndex = 8;
+			this.checkBox_Subpage_1C.Tag = "1C";
+			this.checkBox_Subpage_1C.Text = "73..84";
+			this.checkBox_Subpage_1C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_1C.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_1C.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
+			// 
+			// checkBox_Subpage_2C
+			// 
+			this.checkBox_Subpage_2C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_2C.Location = new System.Drawing.Point(264, 46);
+			this.checkBox_Subpage_2C.Name = "checkBox_Subpage_2C";
+			this.checkBox_Subpage_2C.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_2C.TabIndex = 9;
+			this.checkBox_Subpage_2C.Tag = "2C";
+			this.checkBox_Subpage_2C.Text = "85..96";
+			this.checkBox_Subpage_2C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_2C.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_2C.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
+			// 
+			// checkBox_Subpage_3C
+			// 
+			this.checkBox_Subpage_3C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox_Subpage_3C.Location = new System.Drawing.Point(264, 75);
+			this.checkBox_Subpage_3C.Name = "checkBox_Subpage_3C";
+			this.checkBox_Subpage_3C.Size = new System.Drawing.Size(57, 23);
+			this.checkBox_Subpage_3C.TabIndex = 10;
+			this.checkBox_Subpage_2C.Tag = "2C";
+			this.checkBox_Subpage_3C.Text = "97..108";
+			this.checkBox_Subpage_3C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox_Subpage_3C.UseVisualStyleBackColor = true;
+			this.checkBox_Subpage_3C.CheckedChanged += new System.EventHandler(this.checkBox_Subpage_CheckedChanged);
+			// 
 			// PredefinedCommandSettings
 			// 
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(920, 481);
+			this.ClientSize = new System.Drawing.Size(983, 481);
 			this.Controls.Add(this.groupBox_Layout);
 			this.Controls.Add(this.button_ClearLink);
 			this.Controls.Add(this.button_LinkToFile);
@@ -1650,5 +1704,8 @@
 		private System.Windows.Forms.CheckBox checkBox_Subpage_3A;
 		private System.Windows.Forms.CheckBox checkBox_Subpage_2A;
 		private System.Windows.Forms.CheckBox checkBox_Subpage_1A;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_3C;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_2C;
+		private System.Windows.Forms.CheckBox checkBox_Subpage_1C;
 	}
 }

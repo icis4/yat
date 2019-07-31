@@ -250,51 +250,12 @@ namespace YAT.View.Forms
 			// PENDING
 		}
 
-		private void checkBox_Subpage_1A_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Subpage_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			// PENDING
-		}
-
-		private void checkBox_Subpage_2A_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			// PENDING
-		}
-
-		private void checkBox_Subpage_3A_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			// PENDING
-		}
-
-		private void checkBox_Subpage_1B_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			// PENDING
-		}
-
-		private void checkBox_Subpage_2B_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			// PENDING
-		}
-
-		private void checkBox_Subpage_3B_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
+			// Tag To Subpage
 			// PENDING
 		}
 
