@@ -667,6 +667,12 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				var pages = this.settingsRoot.PredefinedCommand.Pages;
+
+				int pageCount = 0;
+				if (pages != null)
+					pageCount = pages.Count;
+
 				// Prepare the menu item properties based on state and settings.
 				//
 				// Attention:
@@ -703,12 +709,14 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked      =  this.settingsRoot.Send.Text.SendImmediately;
 				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked =  this.settingsRoot.Send.Text.EnableEscapes;
 
+				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled =  this.settingsRoot.SendText.Command.IsMultiLineText;
+
 				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Checked       = this.settingsRoot.Send.File.SkipEmptyLines;
 				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Checked = this.settingsRoot.Send.File.EnableEscapes;
 
-				toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked =  this.settingsRoot.Send.CopyPredefined;
+				toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
 
-				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled =  this.settingsRoot.SendText.Command.IsMultiLineText;
+				toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Enabled = (pageCount > 0);
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
@@ -791,6 +799,11 @@ namespace YAT.View.Forms
 			this.settingsRoot.Send.Text.EnableEscapes = !this.settingsRoot.Send.Text.EnableEscapes;
 		}
 
+		private void toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.SendText.ExpandMultiLineText();
+		}
+
 		private void toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.File.SkipEmptyLines = !this.settingsRoot.Send.File.SkipEmptyLines;
@@ -806,9 +819,15 @@ namespace YAT.View.Forms
 			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText_Click(object sender, EventArgs e)
+		// While the purpose of
+		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedCommand...
+		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedPage...
+		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedDefine...
+		// ...is questionable in the 'Send' menu, they must be there to activate the shortcuts.
+
+		private void toolStripMenuItem_TerminalMenu_Send_PredefinedDefine_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.SendText.ExpandMultiLineText();
+			ShowPredefinedCommandSettings(predefined.SelectedPage, 1);
 		}
 
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -2393,15 +2412,99 @@ namespace YAT.View.Forms
 		////SetPredefinedLayout((PredefinedLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem); PENDING
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
+		// While the purpose of
+		// ...toolStripComboBox_PredefinedContextMenu_Command...
+		// ...is questionable in the 'Predefined' context menu, it is there as kind of title for the items below.
+
+		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			if (contextMenuStrip_Predefined_SelectedCommandId != 0)
-				ShowPredefinedCommandSettings(predefined.SelectedPage, contextMenuStrip_Predefined_SelectedCommandId);
+			var sc = this.settingsRoot.SendFile.Command;
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
+			}
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendText_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			var sc = this.settingsRoot.SendText.Command;
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
+			}
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				if (sc.IsText)
+					this.settingsRoot.SendText.Command = sc;
+				else if (sc.IsFilePath)
+					this.settingsRoot.SendFile.Command = sc;
+			}
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_CopyTo_I_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_CopyTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
+			}
 			else
-				ShowPredefinedCommandSettings(predefined.SelectedPage, 1);
+			{
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
+			}
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1);
+			}
+			else
+			{
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
+			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_UpBy_N_Click(object sender, EventArgs e)
@@ -2502,97 +2605,6 @@ namespace YAT.View.Forms
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
-			// Changes here may have to be applied there too.
-
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
-			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1);
-			}
-			else
-			{
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
-			}
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_CopyTo_I_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_CopyTo_I_Click()
-			// Changes here may have to be applied there too.
-
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
-			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, targetCommandId - 1, sc);
-			}
-			else
-			{
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, targetCommandId - 1);
-			}
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
-			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				if (sc.IsText)
-					this.settingsRoot.SendText.Command = sc;
-				else if (sc.IsFilePath)
-					this.settingsRoot.SendFile.Command = sc;
-			}
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendText_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			var sc = this.settingsRoot.SendText.Command;
-			if (sc != null)
-			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
-			}
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			var sc = this.settingsRoot.SendFile.Command;
-			if (sc != null)
-			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
-			}
-		}
-
 		private void toolStripMenuItem_PredefinedContextMenu_Cut_Click(object sender, EventArgs e)
 		{
 			// Attention:
@@ -2635,6 +2647,21 @@ namespace YAT.View.Forms
 
 			this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1);
 		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			if (contextMenuStrip_Predefined_SelectedCommandId != 0)
+				ShowPredefinedCommandSettings(predefined.SelectedPage, contextMenuStrip_Predefined_SelectedCommandId);
+			else
+				ShowPredefinedCommandSettings(predefined.SelectedPage, 1);
+		}
+
+		// While the purpose of
+		// ...toolStripComboBox_PredefinedContextMenu_Page...
+		// ...is questionable in the 'Predefined' context menu, it is there as kind of title for the items below.
 
 		private void toolStripMenuItem_PredefinedContextMenu_ExportToFile_Click(object sender, EventArgs e)
 		{
@@ -2858,13 +2885,17 @@ namespace YAT.View.Forms
 
 				if (pageCount > 0)
 				{
+					toolStripMenuItem_PageContextMenu_Previous .Visible = true;
 					toolStripMenuItem_PageContextMenu_Previous .Enabled = (predefined.SelectedPage > 1);
+					toolStripMenuItem_PageContextMenu_Next     .Visible = true;
 					toolStripMenuItem_PageContextMenu_Next     .Enabled = (predefined.SelectedPage < pageCount);
 					toolStripMenuItem_PageContextMenu_Separator.Visible = true;
 				}
 				else
 				{
+					toolStripMenuItem_PageContextMenu_Previous .Visible = false;
 					toolStripMenuItem_PageContextMenu_Previous .Enabled = false;
+					toolStripMenuItem_PageContextMenu_Next     .Visible = false;
 					toolStripMenuItem_PageContextMenu_Next     .Enabled = false;
 					toolStripMenuItem_PageContextMenu_Separator.Visible = false;
 				}
