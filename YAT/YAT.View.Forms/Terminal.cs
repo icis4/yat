@@ -2196,6 +2196,9 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_84.Visible = (cIsDefined && (np >= 85));
 			toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Visible =           (cIsDefined && (np >= 85));
 			toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Enabled =           (cIsDefined && (id != 85));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_96.Visible = (cIsDefined && (np >= 97));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_97.Visible =           (cIsDefined && (np >= 97));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_97.Enabled =           (cIsDefined && (id != 97));
 
 			toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Visible =            cIsDefined;
 			toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Enabled =           (cIsDefined && (id != 1));
@@ -2264,6 +2267,9 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_84.Visible = (cIsDefined && (np >= 85));
 			toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Visible =           (cIsDefined && (np >= 85));
 			toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Enabled =           (cIsDefined && (id != 85));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_96.Visible = (cIsDefined && (np >= 96));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Visible =           (cIsDefined && (np >= 96));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Enabled =           (cIsDefined && (id != 96));
 
 			toolStripMenuItem_PredefinedContextMenu_UpBy  .Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = cIsDefined;
@@ -2306,6 +2312,8 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_UpBy_72.Visible =           (cIsDefined && (np > 72));
 			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_84.Visible = (cIsDefined && (np > 84));
 			toolStripMenuItem_PredefinedContextMenu_UpBy_84.Visible =           (cIsDefined && (np > 84));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_96.Visible = (cIsDefined && (np > 96));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_96.Visible =           (cIsDefined && (np > 96));
 
 			toolStripMenuItem_PredefinedContextMenu_DownBy_1 .Visible =            cIsDefined;
 			toolStripMenuItem_PredefinedContextMenu_DownBy_2 .Visible =            cIsDefined;
@@ -2343,6 +2351,8 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_DownBy_72.Visible =           (cIsDefined && (np > 72));
 			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_84.Visible = (cIsDefined && (np > 84));
 			toolStripMenuItem_PredefinedContextMenu_DownBy_84.Visible =           (cIsDefined && (np > 84));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_96.Visible = (cIsDefined && (np > 96));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_96.Visible =           (cIsDefined && (np > 96));
 
 			toolStripMenuItem_PredefinedContextMenu_Cut  .Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_Cut  .Enabled = cIsDefined;

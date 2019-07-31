@@ -123,9 +123,6 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>15, 12</value>
   </metadata>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>15, 12</value>
-  </metadata>
   <data name="button_LinkToFile.ToolTip" xml:space="preserve">
     <value>By default, predefined command definitions are stored in the .yat terminal settings, i.e. are fixed to a particular terminal.
 Linking to a .yacp file allows reusing predefined command definitions among multiple terminals or even multiple users.</value>

@@ -53,11 +53,12 @@ namespace YAT.Model.Types
 		OneByOne,
 		TwoByOne,
 		ThreeByOne,
-		FourByOne,
 		OneByTwo,
 		TwoByTwo,
 		ThreeByTwo,
-		FourByTwo
+		OneByThree,
+		TwoByThree,
+		ThreeByThree
 	}
 
 	#pragma warning restore 1591
@@ -77,22 +78,24 @@ namespace YAT.Model.Types
 	{
 		#region String Definitions
 
-		private const string             OneByOne_string               =                "12 (1x12)";
-		private static readonly string[] OneByOne_stringAlternatives   = new string[] { "12", "1x12" };
-		private const string             TwoByOne_string               =                "24 (2x12)";
-		private static readonly string[] TwoByOne_stringAlternatives   = new string[] { "24", "2x12" };
-		private const string             ThreeByOne_string             =                "36 (3x12)";
-		private static readonly string[] ThreeByOne_stringAlternatives = new string[] { "36", "3x12)" };
-		private const string             FourByOne_string              =                "48 (4x12)";
-		private static readonly string[] FourByOne_stringAlternatives  = new string[] { "48", "4x12)" };
-		private const string             OneByTwo_string               =                "24 (1x2x12)";
-		private static readonly string[] OneByTwo_stringAlternatives   = new string[] { "24", "1x2x12)" };
-		private const string             TwoByTwo_string               =                "48 (2x2x12)";
-		private static readonly string[] TwoByTwo_stringAlternatives   = new string[] { "48", "2x2x12)" };
-		private const string             ThreeByTwo_string             =                "72 (3x2x12)";
-		private static readonly string[] ThreeByTwo_stringAlternatives = new string[] { "72", "3x2x12)" };
-		private const string             FourByTwo_string              =                "96 (4x2x12)";
-		private static readonly string[] FourByTwo_stringAlternatives  = new string[] { "96", "4x2x12)" };
+		private const string             OneByOne_string                 =                 "12 (1x12)";
+		private static readonly string[] OneByOne_stringAlternatives     = new string[] {  "12", "1x12" };
+		private const string             TwoByOne_string                 =                 "24 (2x12)";
+		private static readonly string[] TwoByOne_stringAlternatives     = new string[] {  "24", "2x12" };
+		private const string             ThreeByOne_string               =                 "36 (3x12)";
+		private static readonly string[] ThreeByOne_stringAlternatives   = new string[] {  "36", "3x12)" };
+		private const string             OneByTwo_string                 =                 "24 (1x2x12)";
+		private static readonly string[] OneByTwo_stringAlternatives     = new string[] {  "24", "1x2x12)" };
+		private const string             TwoByTwo_string                 =                 "48 (2x2x12)";
+		private static readonly string[] TwoByTwo_stringAlternatives     = new string[] {  "48", "2x2x12)" };
+		private const string             ThreeByTwo_string               =                 "72 (3x2x12)";
+		private static readonly string[] ThreeByTwo_stringAlternatives   = new string[] {  "72", "3x2x12)" };
+		private const string             OneByThree_string               =                 "36 (1x3x12)";
+		private static readonly string[] OneByThree_stringAlternatives   = new string[] {  "36", "1x3x12)" };
+		private const string             TwoByThree_string               =                 "72 (2x3x12)";
+		private static readonly string[] TwoByThree_stringAlternatives   = new string[] {  "72", "2x3x12)" };
+		private const string             ThreeByThree_string             =                "108 (3x3x12)";
+		private static readonly string[] ThreeByThree_stringAlternatives = new string[] { "108", "3x3x12)" };
 
 		#endregion
 
@@ -124,14 +127,15 @@ namespace YAT.Model.Types
 		{
 			switch ((PredefinedCommandPageLayout)UnderlyingEnum)
 			{
-				case PredefinedCommandPageLayout.OneByOne:   return (OneByOne_string);
-				case PredefinedCommandPageLayout.TwoByOne:   return (TwoByOne_string);
-				case PredefinedCommandPageLayout.ThreeByOne: return (ThreeByOne_string);
-				case PredefinedCommandPageLayout.FourByOne:  return (FourByOne_string);
-				case PredefinedCommandPageLayout.OneByTwo:   return (OneByTwo_string);
-				case PredefinedCommandPageLayout.TwoByTwo:   return (TwoByTwo_string);
-				case PredefinedCommandPageLayout.ThreeByTwo: return (ThreeByTwo_string);
-				case PredefinedCommandPageLayout.FourByTwo:  return (FourByTwo_string);
+				case PredefinedCommandPageLayout.OneByOne:     return (OneByOne_string);
+				case PredefinedCommandPageLayout.TwoByOne:     return (TwoByOne_string);
+				case PredefinedCommandPageLayout.ThreeByOne:   return (ThreeByOne_string);
+				case PredefinedCommandPageLayout.OneByTwo:     return (OneByTwo_string);
+				case PredefinedCommandPageLayout.TwoByTwo:     return (TwoByTwo_string);
+				case PredefinedCommandPageLayout.ThreeByTwo:   return (ThreeByTwo_string);
+				case PredefinedCommandPageLayout.OneByThree:   return (OneByThree_string);
+				case PredefinedCommandPageLayout.TwoByThree:   return (TwoByThree_string);
+				case PredefinedCommandPageLayout.ThreeByThree: return (ThreeByThree_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -149,16 +153,17 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static PredefinedCommandPageLayoutEx[] GetItems()
 		{
-			var a = new List<PredefinedCommandPageLayoutEx>(8); // Preset the required capacity to improve memory management.
+			var a = new List<PredefinedCommandPageLayoutEx>(9); // Preset the required capacity to improve memory management.
 
 			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByOne));
 			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByOne));
 			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByOne));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.FourByOne));
 			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByTwo));
 			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByTwo));
 			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByTwo));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.FourByTwo));
+			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByThree));
+			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByThree));
+			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByThree));
 
 			return (a.ToArray());
 		}
@@ -226,12 +231,6 @@ namespace YAT.Model.Types
 				result = PredefinedCommandPageLayout.ThreeByOne;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, FourByOne_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, FourByOne_stringAlternatives))
-			{
-				result = PredefinedCommandPageLayout.FourByOne;
-				return (true);
-			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, OneByTwo_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, OneByTwo_stringAlternatives))
 			{
@@ -250,10 +249,22 @@ namespace YAT.Model.Types
 				result = PredefinedCommandPageLayout.ThreeByTwo;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, FourByTwo_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, FourByTwo_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, OneByThree_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, OneByThree_stringAlternatives))
 			{
-				result = PredefinedCommandPageLayout.FourByTwo;
+				result = PredefinedCommandPageLayout.OneByThree;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, TwoByThree_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, TwoByThree_stringAlternatives))
+			{
+				result = PredefinedCommandPageLayout.TwoByThree;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ThreeByThree_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ThreeByThree_stringAlternatives))
+			{
+				result = PredefinedCommandPageLayout.ThreeByThree;
 				return (true);
 			}
 			else // Invalid string!
@@ -265,10 +276,50 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		#region ToCommandsPerPage
+		#region To...PerPage
 		//==========================================================================================
-		// ToCommandsPerPage
+		// To...PerPage
 		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
+		public int ToRowsPerPage()
+		{
+			switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+			{
+				case PredefinedCommandPageLayout.OneByOne:
+				case PredefinedCommandPageLayout.TwoByOne:
+				case PredefinedCommandPageLayout.ThreeByOne:   return (1);
+				case PredefinedCommandPageLayout.OneByTwo:
+				case PredefinedCommandPageLayout.TwoByTwo:
+				case PredefinedCommandPageLayout.ThreeByTwo:   return (2);
+				case PredefinedCommandPageLayout.OneByThree:
+				case PredefinedCommandPageLayout.TwoByThree:
+				case PredefinedCommandPageLayout.ThreeByThree: return (3);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
+		public int ToColmnsPerPage()
+		{
+			switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+			{
+				case PredefinedCommandPageLayout.OneByOne:
+				case PredefinedCommandPageLayout.OneByTwo:
+				case PredefinedCommandPageLayout.OneByThree:   return (1);
+				case PredefinedCommandPageLayout.TwoByOne:
+				case PredefinedCommandPageLayout.TwoByTwo:
+				case PredefinedCommandPageLayout.TwoByThree:   return (2);
+				case PredefinedCommandPageLayout.ThreeByOne:
+				case PredefinedCommandPageLayout.ThreeByTwo:
+				case PredefinedCommandPageLayout.ThreeByThree: return (3);
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
@@ -276,14 +327,15 @@ namespace YAT.Model.Types
 		{
 			switch ((PredefinedCommandPageLayout)UnderlyingEnum)
 			{
-				case PredefinedCommandPageLayout.OneByOne:   return (12);
-				case PredefinedCommandPageLayout.TwoByOne:   return (24);
-				case PredefinedCommandPageLayout.ThreeByOne: return (36);
-				case PredefinedCommandPageLayout.FourByOne:  return (48);
-				case PredefinedCommandPageLayout.OneByTwo:   return (24);
-				case PredefinedCommandPageLayout.TwoByTwo:   return (48);
-				case PredefinedCommandPageLayout.ThreeByTwo: return (72);
-				case PredefinedCommandPageLayout.FourByTwo:  return (96);
+				case PredefinedCommandPageLayout.OneByOne:     return ( 12);
+				case PredefinedCommandPageLayout.TwoByOne:     return ( 24);
+				case PredefinedCommandPageLayout.ThreeByOne:   return ( 36);
+				case PredefinedCommandPageLayout.OneByTwo:     return ( 24);
+				case PredefinedCommandPageLayout.TwoByTwo:     return ( 48);
+				case PredefinedCommandPageLayout.ThreeByTwo:   return ( 72);
+				case PredefinedCommandPageLayout.OneByThree:   return ( 36);
+				case PredefinedCommandPageLayout.TwoByThree:   return ( 72);
+				case PredefinedCommandPageLayout.ThreeByThree: return (108);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -313,14 +365,14 @@ namespace YAT.Model.Types
 	////{
 	////	return (layout.GetHashCode());
 	////}
-	//// Excluded to prevent accidental misuse with the number of commands per page.
+	//// Excluded to prevent accidental misuse with the number of rows/colmuns/commands per page.
 
 	/////// <summary></summary>
 	////public static implicit operator PredefinedCommandPageLayoutEx(int layout)
 	////{
 	////	return (new PredefinedCommandPageLayoutEx((PredefinedCommandPageLayout)layout));
 	////}
-	//// Excluded to prevent accidental misuse with the number of commands per page.
+	//// Excluded to prevent accidental misuse with the number of rows/colmuns/commands per page.
 
 		/// <summary></summary>
 		public static implicit operator string(PredefinedCommandPageLayoutEx layout)
