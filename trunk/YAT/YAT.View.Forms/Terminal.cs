@@ -2057,139 +2057,12 @@ namespace YAT.View.Forms
 		// Controls Event Handlers > Predefined Context Menu
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private List<ToolStripMenuItem> menuItems_Predefined_Commands;
-
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private List<ToolStripMenuItem> menuItems_Predefined_Pages;
-
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1303:ConstFieldNamesMustBeginWithUpperCaseLetter", Justification = "'MaxPages' indeed starts with an upper case letter.")]
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private const int menuItems_Predefined_MaxPagesWithMenuItem = 9;
-
 		private void contextMenuStrip_Predefined_Initialize()
-		{
-			this.menuItems_Predefined_Commands = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
-			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
-
-			this.menuItems_Predefined_Pages = new List<ToolStripMenuItem>(menuItems_Predefined_MaxPagesWithMenuItem); // Preset the required capacity to improve memory management.
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_1);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_2);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_3);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_4);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_5);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_6);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_7);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_8);
-			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_9);
-		}
-
-		/// <remarks>
-		/// Must be called each time the corresponding context state changes, because shortcuts
-		/// associated to menu items are only active when items are visible and enabled.
-		/// </remarks>
-		private void contextMenuStrip_Predefined_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
 			try
 			{
-				// Panels:
-				toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
-
-				// Pages:
-				var pages = this.settingsRoot.PredefinedCommand.Pages;
-
-				int pageCount = 0;
-				if (pages != null)
-					pageCount = pages.Count;
-
-				if (pageCount > 0)
-				{
-					toolStripMenuItem_PredefinedContextMenu_Page_Previous .Enabled = (predefined.SelectedPage > 1);
-					toolStripMenuItem_PredefinedContextMenu_Page_Next     .Enabled = (predefined.SelectedPage < pageCount);
-					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = true;
-				}
-				else
-				{
-					toolStripMenuItem_PredefinedContextMenu_Page_Previous .Enabled = false;
-					toolStripMenuItem_PredefinedContextMenu_Page_Next     .Enabled = false;
-					toolStripMenuItem_PredefinedContextMenu_Page_Separator.Visible = false;
-				}
-
-				for (int i = 0; i < Math.Min(pageCount, menuItems_Predefined_MaxPagesWithMenuItem); i++)
-				{
-					this.menuItems_Predefined_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, pages[i].PageName);
-					this.menuItems_Predefined_Pages[i].Visible =  true;
-					this.menuItems_Predefined_Pages[i].Enabled = (pageCount > 1); // No need to navigate a single page.
-				}
-
-				for (int i = pageCount; i < menuItems_Predefined_MaxPagesWithMenuItem; i++)
-				{
-					this.menuItems_Predefined_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, "<Undefined>");
-					this.menuItems_Predefined_Pages[i].Visible =  false;
-					this.menuItems_Predefined_Pages[i].Enabled =  false;
-				}
-
-				// Commands:
-				List<Command> commands = null;
-				if (pageCount > 0)
-					commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
-
-				int commandCount = 0;
-				if (commands != null)
-					commandCount = commands.Count;
-
-				for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
-				{
-					bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-					bool isValid = (isDefined && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath) && this.terminal.IsReadyToSend);
-
-					if (isDefined)
-					{
-						if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-							this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.ControlText;
-
-						if (this.menuItems_Predefined_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-							this.menuItems_Predefined_Commands[i].Font = SystemFonts.DefaultFont;
-
-						this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
-						this.menuItems_Predefined_Commands[i].Enabled = isValid;
-					}
-					else
-					{
-						if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-							this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
-
-						if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-							this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
-
-						this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
-						this.menuItems_Predefined_Commands[i].Enabled = true;
-					}
-				}
-
-				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
-				{
-					if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
-
-					if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-						this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
-
-					this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
-					this.menuItems_Predefined_Commands[i].Enabled = true;
-				}
+				toolStripComboBox_PredefinedContextMenu_Layout.Items.AddRange(PredefinedCommandPageLayoutEx.GetItems());
 			}
 			finally
 			{
@@ -2202,134 +2075,296 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
-			if (contextMenuStrip_Predefined.SourceControl == groupBox_Predefined)
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.contextMenuStrip_Commands_Opening()
+			// Changes here may have to be applied there too.
+
+			var np = 12; // PENDING
+			var id = predefined.GetCommandIdFromLocation(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
+			var c  = predefined.GetCommandFromId(id);
+			var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
+
+			contextMenuStrip_Predefined_SelectedCommandId = id;
+
+			toolStripMenuItem_PredefinedContextMenu_Panels           .Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
+
+			//ToolStripComboBoxHelper.Select(toolStripComboBox_PredefinedContextMenu_Layout, (PredefinedCommandPageLayoutEx)this.settingsRoot.Layout.MonitorOrientation); PENDING
+
+			toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
+			toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command != null) && (this.settingsRoot.SendFile.Command.IsFilePath));
+
+			var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile;
+			mi.Visible = true;
+			if (c != null)
 			{
-				// Attention:
-				// Similar code exists in...
-				// ...View.Forms.PredefinedCommandSettings.contextMenuStrip_Commands_Opening()
-				// Changes here may have to be applied there too.
-
-				var id = predefined.GetCommandIdFromLocation(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
-				var c = predefined.GetCommandFromId(id);
-
-				contextMenuStrip_Predefined_SelectedCommandId = id;
-
-				toolStripMenuItem_PredefinedContextMenu_Panels.Visible = true;
-
-				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel               .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics   .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Visible = true;
-
-				toolStripMenuItem_PredefinedContextMenu_UpBy  .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-				toolStripMenuItem_PredefinedContextMenu_DownBy.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_DownBy.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Enabled = (id != 1);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Enabled = (id != 2);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Enabled = (id != 3);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Enabled = (id != 4);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Enabled = (id != 5);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Enabled = (id != 6);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Enabled = (id != 7);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Enabled = (id != 8);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Enabled = (id != 9);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Enabled = (id != 10);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Enabled = (id != 11);
-				toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Enabled = (id != 12);
-
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Enabled = (id != 1);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Enabled = (id != 2);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Enabled = (id != 3);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Enabled = (id != 4);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Enabled = (id != 5);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Enabled = (id != 6);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Enabled = (id != 7);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Enabled = (id != 8);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Enabled = (id != 9);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Enabled = (id != 10);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Enabled = (id != 11);
-				toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Enabled = (id != 12);
-
-				toolStripMenuItem_PredefinedContextMenu_MoveTo.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_MoveTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-				toolStripMenuItem_PredefinedContextMenu_CopyTo.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-
-				var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile;
-				mi.Visible = true;
-				if (c != null)
-				{
-					mi.Enabled = (c.IsText || c.IsFilePath);
-					if (c.IsText)
-						mi.Text = "Copy to Send Text";
-					else if (c.IsFilePath)
-						mi.Text = "Copy to Send File";
-					else
-						mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
-				}
+				mi.Enabled = (c.IsText || c.IsFilePath);
+				if (c.IsText)
+					mi.Text = "Copy to Send Text";
+				else if (c.IsFilePath)
+					mi.Text = "Copy to Send File";
 				else
-				{
-					mi.Enabled = false;
 					mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
-				}
-
-				// There is a limitaion in Windows.Forms:
-				//  1. Edit command in SendText
-				//  2. Right-click to open the predefined context menu
-				//     => SendText should get validated, but actually isn't!
-				//
-				// Workaround:
-				send.ValidateSendTextInput();
-
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command != null) && (this.settingsRoot.SendFile.Command.IsFilePath));
-				toolStripMenuItem_PredefinedContextMenu_Cut             .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Cut             .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-				toolStripMenuItem_PredefinedContextMenu_Copy            .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Copy            .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-				toolStripMenuItem_PredefinedContextMenu_Paste           .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Paste           .Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
-				toolStripMenuItem_PredefinedContextMenu_Clear           .Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Clear           .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			}
 			else
 			{
-				toolStripMenuItem_PredefinedContextMenu_Panels.Visible = false;
-
-				toolStripMenuItem_PredefinedContextMenu_Separator_1_AfterPanel               .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Separator_4_BeforeCommandSpecifics   .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Separator_5_InbetweenCommandSpecifics.Visible = false;
-
-				toolStripMenuItem_PredefinedContextMenu_UpBy                .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_DownBy              .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_MoveTo              .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_CopyTo              .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile.Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText    .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile    .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Cut                 .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Copy                .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Paste               .Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Clear               .Visible = false;
+				mi.Enabled = false;
+				mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
 			}
+
+			// There is a limitaion in Windows.Forms:
+			//  1. Edit command in SendText
+			//  2. Right-click to open the predefined context menu
+			//     => SendText should get validated, but actually isn't!
+			//
+			// Workaround:
+			send.ValidateSendTextInput();
+
+			toolStripMenuItem_PredefinedContextMenu_CopyTo.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo.Enabled = cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo.Enabled = cIsDefined;
+
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Enabled =           (cIsDefined && (id != 1));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Enabled =           (cIsDefined && (id != 2));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Enabled =           (cIsDefined && (id != 3));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Enabled =           (cIsDefined && (id != 4));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Enabled =           (cIsDefined && (id != 5));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Enabled =           (cIsDefined && (id != 6));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Enabled =           (cIsDefined && (id != 7));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Enabled =           (cIsDefined && (id != 8));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Enabled =           (cIsDefined && (id != 9));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Enabled =           (cIsDefined && (id != 10));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Enabled =           (cIsDefined && (id != 11));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Enabled =           (cIsDefined && (id != 12));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_12.Visible = (cIsDefined && (np >= 13));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_13.Visible =           (cIsDefined && (np >= 13));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_13.Enabled =           (cIsDefined && (id != 13));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_14.Visible =           (cIsDefined && (np >= 14));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_14.Enabled =           (cIsDefined && (id != 14));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_15.Visible =           (cIsDefined && (np >= 15));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_15.Enabled =           (cIsDefined && (id != 15));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_16.Visible =           (cIsDefined && (np >= 16));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_16.Enabled =           (cIsDefined && (id != 16));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_17.Visible =           (cIsDefined && (np >= 17));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_17.Enabled =           (cIsDefined && (id != 17));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_18.Visible =           (cIsDefined && (np >= 18));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_18.Enabled =           (cIsDefined && (id != 18));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_19.Visible =           (cIsDefined && (np >= 19));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_19.Enabled =           (cIsDefined && (id != 19));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_20.Visible =           (cIsDefined && (np >= 20));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_20.Enabled =           (cIsDefined && (id != 20));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_21.Visible =           (cIsDefined && (np >= 21));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_21.Enabled =           (cIsDefined && (id != 21));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_22.Visible =           (cIsDefined && (np >= 22));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_22.Enabled =           (cIsDefined && (id != 22));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_23.Visible =           (cIsDefined && (np >= 23));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_23.Enabled =           (cIsDefined && (id != 23));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_24.Visible =           (cIsDefined && (np >= 24));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_24.Enabled =           (cIsDefined && (id != 24));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_24.Visible = (cIsDefined && (np >= 25));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_25.Visible =           (cIsDefined && (np >= 25));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_25.Enabled =           (cIsDefined && (id != 25));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_36.Visible = (cIsDefined && (np >= 37));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_37.Visible =           (cIsDefined && (np >= 37));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_37.Enabled =           (cIsDefined && (id != 37));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_48.Visible = (cIsDefined && (np >= 49));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_49.Visible =           (cIsDefined && (np >= 49));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_49.Enabled =           (cIsDefined && (id != 49));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_60.Visible = (cIsDefined && (np >= 61));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_61.Visible =           (cIsDefined && (np >= 61));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_61.Enabled =           (cIsDefined && (id != 61));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_72.Visible = (cIsDefined && (np >= 73));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_73.Visible =           (cIsDefined && (np >= 73));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_73.Enabled =           (cIsDefined && (id != 73));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_84.Visible = (cIsDefined && (np >= 85));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Visible =           (cIsDefined && (np >= 85));
+			toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Enabled =           (cIsDefined && (id != 85));
+
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Enabled =           (cIsDefined && (id != 1));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Enabled =           (cIsDefined && (id != 2));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Enabled =           (cIsDefined && (id != 3));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Enabled =           (cIsDefined && (id != 4));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Enabled =           (cIsDefined && (id != 5));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Enabled =           (cIsDefined && (id != 6));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Enabled =           (cIsDefined && (id != 7));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Enabled =           (cIsDefined && (id != 8));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Enabled =           (cIsDefined && (id != 9));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Enabled =           (cIsDefined && (id != 10));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Enabled =           (cIsDefined && (id != 11));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Enabled =           (cIsDefined && (id != 12));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_12.Visible = (cIsDefined && (np >= 13));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_13.Visible =           (cIsDefined && (np >= 13));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_13.Enabled =           (cIsDefined && (id != 13));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_14.Visible =           (cIsDefined && (np >= 14));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_14.Enabled =           (cIsDefined && (id != 14));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_15.Visible =           (cIsDefined && (np >= 15));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_15.Enabled =           (cIsDefined && (id != 15));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_16.Visible =           (cIsDefined && (np >= 16));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_16.Enabled =           (cIsDefined && (id != 16));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_17.Visible =           (cIsDefined && (np >= 17));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_17.Enabled =           (cIsDefined && (id != 17));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_18.Visible =           (cIsDefined && (np >= 18));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_18.Enabled =           (cIsDefined && (id != 18));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_19.Visible =           (cIsDefined && (np >= 19));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_19.Enabled =           (cIsDefined && (id != 19));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_20.Visible =           (cIsDefined && (np >= 20));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_20.Enabled =           (cIsDefined && (id != 20));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_21.Visible =           (cIsDefined && (np >= 21));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_21.Enabled =           (cIsDefined && (id != 21));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_22.Visible =           (cIsDefined && (np >= 22));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_22.Enabled =           (cIsDefined && (id != 22));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_23.Visible =           (cIsDefined && (np >= 23));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_23.Enabled =           (cIsDefined && (id != 23));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_24.Visible =           (cIsDefined && (np >= 24));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_24.Enabled =           (cIsDefined && (id != 24));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_24.Visible = (cIsDefined && (np >= 25));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_25.Visible =           (cIsDefined && (np >= 25));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_25.Enabled =           (cIsDefined && (id != 25));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_36.Visible = (cIsDefined && (np >= 37));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_37.Visible =           (cIsDefined && (np >= 37));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_37.Enabled =           (cIsDefined && (id != 37));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_48.Visible = (cIsDefined && (np >= 49));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_49.Visible =           (cIsDefined && (np >= 49));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_49.Enabled =           (cIsDefined && (id != 49));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_60.Visible = (cIsDefined && (np >= 61));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_61.Visible =           (cIsDefined && (np >= 61));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_61.Enabled =           (cIsDefined && (id != 61));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_72.Visible = (cIsDefined && (np >= 73));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_73.Visible =           (cIsDefined && (np >= 73));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_73.Enabled =           (cIsDefined && (id != 73));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_84.Visible = (cIsDefined && (np >= 85));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Visible =           (cIsDefined && (np >= 85));
+			toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Enabled =           (cIsDefined && (id != 85));
+
+			toolStripMenuItem_PredefinedContextMenu_UpBy  .Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_DownBy.Enabled = cIsDefined;
+
+			toolStripMenuItem_PredefinedContextMenu_UpBy_1 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_2 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_3 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_4 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_5 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_6 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_7 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_8 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_9 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_10.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_11.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_12.Visible = (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_12.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_13.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_14.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_15.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_16.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_17.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_18.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_19.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_20.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_21.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_22.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_23.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_24.Visible = (cIsDefined && (np > 24));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_24.Visible =           (cIsDefined && (np > 24));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_36.Visible = (cIsDefined && (np > 36));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_36.Visible =           (cIsDefined && (np > 36));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_48.Visible = (cIsDefined && (np > 48));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_48.Visible =           (cIsDefined && (np > 48));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_60.Visible = (cIsDefined && (np > 60));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_60.Visible =           (cIsDefined && (np > 60));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_72.Visible = (cIsDefined && (np > 72));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_72.Visible =           (cIsDefined && (np > 72));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_84.Visible = (cIsDefined && (np > 84));
+			toolStripMenuItem_PredefinedContextMenu_UpBy_84.Visible =           (cIsDefined && (np > 84));
+
+			toolStripMenuItem_PredefinedContextMenu_DownBy_1 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_2 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_3 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_4 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_5 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_6 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_7 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_8 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_9 .Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_10.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_11.Visible =            cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_12.Visible = (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_12.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_13.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_14.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_15.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_16.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_17.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_18.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_19.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_20.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_21.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_22.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_23.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_24.Visible = (cIsDefined && (np > 24));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_24.Visible =           (cIsDefined && (np > 24));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_36.Visible = (cIsDefined && (np > 36));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_36.Visible =           (cIsDefined && (np > 36));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_48.Visible = (cIsDefined && (np > 48));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_48.Visible =           (cIsDefined && (np > 48));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_60.Visible = (cIsDefined && (np > 60));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_60.Visible =           (cIsDefined && (np > 60));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_72.Visible = (cIsDefined && (np > 72));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_72.Visible =           (cIsDefined && (np > 72));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_84.Visible = (cIsDefined && (np > 84));
+			toolStripMenuItem_PredefinedContextMenu_DownBy_84.Visible =           (cIsDefined && (np > 84));
+
+			toolStripMenuItem_PredefinedContextMenu_Cut  .Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_Cut  .Enabled = cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_Copy .Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_Copy .Enabled = cIsDefined;
+			toolStripMenuItem_PredefinedContextMenu_Paste.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
+			toolStripMenuItem_PredefinedContextMenu_Clear.Visible = true;
+			toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
 
 			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
 			{
-				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "E&xport Page to File...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Page(s) from File..." is fixed.
-			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Page(s) to File..." is fixed.
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "Export Page to File...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "Import Page(s) from File..." is fixed.
+			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "Link Page(s) to File..." is fixed.
 			}
 			else
 			{
-				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "E&xport Page(s) to File...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "I&mport Page(s) from File..." is fixed.
-			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "&Link Page(s) to File..." is fixed.
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "Export Page(s) to File...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "Import Page(s) from File..." is fixed.
+			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "Link Page(s) to File..." is fixed.
 			}
-
-			contextMenuStrip_Predefined_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Panels_Predefined_Click(object sender, EventArgs e)
@@ -2340,36 +2375,12 @@ namespace YAT.View.Forms
 			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_Command_I_Click(object sender, EventArgs e)
+		private void toolStripComboBox_PredefinedContextMenu_Layout_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+			if (this.isSettingControls)
 				return;
 
-			SendPredefined(ToolStripMenuItemEx.TagToInt32(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			predefined.NextPage();
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			predefined.PreviousPage();
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Page_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			predefined.SelectedPage = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+		////SetPredefinedLayout((PredefinedLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem); PENDING
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
@@ -2652,6 +2663,250 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			// PENDING
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Command Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Command Context Menu
+		//------------------------------------------------------------------------------------------
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private List<ToolStripMenuItem> menuItems_Commands;
+
+		private void contextMenuStrip_Command_Initialize()
+		{
+			this.menuItems_Commands = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_1);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_2);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_3);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_4);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_5);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_6);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_7);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_8);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_9);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_10);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_11);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_12);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_13);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_14);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_15);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_16);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_17);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_18);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_19);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_20);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_21);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_22);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_23);
+			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_24);
+		}
+
+		/// <remarks>
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Command_SetMenuItems()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				var pages = this.settingsRoot.PredefinedCommand.Pages;
+
+				int pageCount = 0;
+				if (pages != null)
+					pageCount = pages.Count;
+
+				List<Command> commands = null;
+				if (pageCount > 0)
+					commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
+
+				int commandCount = 0;
+				if (commands != null)
+					commandCount = commands.Count;
+
+				for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
+				{
+					bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
+					bool isValid = (isDefined && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath) && this.terminal.IsReadyToSend);
+
+					if (isDefined)
+					{
+						if (this.menuItems_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+							this.menuItems_Commands[i].ForeColor = SystemColors.ControlText;
+
+						if (this.menuItems_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+							this.menuItems_Commands[i].Font = SystemFonts.DefaultFont;
+
+						this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
+						this.menuItems_Commands[i].Enabled = isValid;
+					}
+					else
+					{
+						if (this.menuItems_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;
+
+						if (this.menuItems_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							this.menuItems_Commands[i].Font = DrawingEx.DefaultFontItalic;
+
+						this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
+						this.menuItems_Commands[i].Enabled = true;
+					}
+				}
+
+				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
+				{
+					if (this.menuItems_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;
+
+					if (this.menuItems_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+						this.menuItems_Commands[i].Font = DrawingEx.DefaultFontItalic;
+
+					this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
+					this.menuItems_Commands[i].Enabled = true;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void contextMenuStrip_Command_Opening(object sender, CancelEventArgs e)
+		{
+			var np = 12; // PENDING
+
+			toolStripMenuItem_CommandContextMenu_Separator_12.Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_13          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_14          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_15          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_16          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_17          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_18          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_19          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_20          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_21          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_22          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_23          .Visible = (np > 12);
+			toolStripMenuItem_CommandContextMenu_24          .Visible = (np > 12);
+
+			contextMenuStrip_Command_SetMenuItems(); // Ensure that shortcuts are activated.
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_I_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			SendPredefined(ToolStripMenuItemEx.TagToInt32(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Page Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Page Context Menu
+		//------------------------------------------------------------------------------------------
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private List<ToolStripMenuItem> menuItems_Pages;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1303:ConstFieldNamesMustBeginWithUpperCaseLetter", Justification = "'MaxPages' indeed starts with an upper case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private const int menuItems_Page_MaxPagesWithMenuItem = 9;
+
+		private void contextMenuStrip_Page_Initialize()
+		{
+			this.menuItems_Pages = new List<ToolStripMenuItem>(menuItems_Page_MaxPagesWithMenuItem); // Preset the required capacity to improve memory management.
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_1);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_2);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_3);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_4);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_5);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_6);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_7);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_8);
+			this.menuItems_Pages.Add(toolStripMenuItem_PageContextMenu_9);
+		}
+
+		/// <remarks>
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Page_SetMenuItems()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				var pages = this.settingsRoot.PredefinedCommand.Pages;
+
+				int pageCount = 0;
+				if (pages != null)
+					pageCount = pages.Count;
+
+				if (pageCount > 0)
+				{
+					toolStripMenuItem_PageContextMenu_Previous .Enabled = (predefined.SelectedPage > 1);
+					toolStripMenuItem_PageContextMenu_Next     .Enabled = (predefined.SelectedPage < pageCount);
+					toolStripMenuItem_PageContextMenu_Separator.Visible = true;
+				}
+				else
+				{
+					toolStripMenuItem_PageContextMenu_Previous .Enabled = false;
+					toolStripMenuItem_PageContextMenu_Next     .Enabled = false;
+					toolStripMenuItem_PageContextMenu_Separator.Visible = false;
+				}
+
+				for (int i = 0; i < Math.Min(pageCount, menuItems_Page_MaxPagesWithMenuItem); i++)
+				{
+					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, pages[i].PageName);
+					this.menuItems_Pages[i].Visible =  true;
+					this.menuItems_Pages[i].Enabled = (pageCount > 1); // No need to navigate a single page.
+				}
+
+				for (int i = pageCount; i < menuItems_Page_MaxPagesWithMenuItem; i++)
+				{
+					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, "<Undefined>");
+					this.menuItems_Pages[i].Visible =  false;
+					this.menuItems_Pages[i].Enabled =  false;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void contextMenuStrip_Page_Opening(object sender, CancelEventArgs e)
+		{
+
+			contextMenuStrip_Page_SetMenuItems(); // Ensure that shortcuts are activated.
+		}
+
+		private void toolStripMenuItem_PageContextMenu_Next_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			predefined.NextPage();
+		}
+
+		private void toolStripMenuItem_PageContextMenu_Previous_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			predefined.PreviousPage();
+		}
+
+		private void toolStripMenuItem_PageContextMenu_I_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			predefined.SelectedPage = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		#endregion
@@ -3875,6 +4130,8 @@ namespace YAT.View.Forms
 
 			contextMenuStrip_Preset_Initialize();
 			contextMenuStrip_Predefined_Initialize();
+			contextMenuStrip_Command_Initialize();
+			contextMenuStrip_Page_Initialize();
 			contextMenuStrip_Monitor_Initialize();
 
 			toolStripStatusLabel_TerminalStatus_Initialize();
@@ -4182,7 +4439,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void SetPredefinedControls()
 		{
-			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
+			contextMenuStrip_Command_SetMenuItems(); // Ensure that shortcuts are activated.
+			contextMenuStrip_Page_SetMenuItems();    // Ensure that shortcuts are activated.
 
 			this.isSettingControls.Enter();
 			try
