@@ -42,6 +42,8 @@
 			this.button_Command_11 = new System.Windows.Forms.Button();
 			this.button_Command_12 = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.label_Shortcuts_1_12 = new System.Windows.Forms.Label();
+			this.label_Shortcuts_13_24 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// button_Command_8
@@ -49,7 +51,7 @@
 			this.button_Command_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_8.Enabled = false;
-			this.button_Command_8.Location = new System.Drawing.Point(0, 165);
+			this.button_Command_8.Location = new System.Drawing.Point(0, 175);
 			this.button_Command_8.Name = "button_Command_8";
 			this.button_Command_8.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_8.TabIndex = 7;
@@ -63,7 +65,7 @@
 			this.button_Command_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_7.Enabled = false;
-			this.button_Command_7.Location = new System.Drawing.Point(0, 143);
+			this.button_Command_7.Location = new System.Drawing.Point(0, 153);
 			this.button_Command_7.Name = "button_Command_7";
 			this.button_Command_7.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_7.TabIndex = 6;
@@ -77,7 +79,7 @@
 			this.button_Command_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_6.Enabled = false;
-			this.button_Command_6.Location = new System.Drawing.Point(0, 121);
+			this.button_Command_6.Location = new System.Drawing.Point(0, 131);
 			this.button_Command_6.Name = "button_Command_6";
 			this.button_Command_6.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_6.TabIndex = 5;
@@ -91,7 +93,7 @@
 			this.button_Command_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_5.Enabled = false;
-			this.button_Command_5.Location = new System.Drawing.Point(0, 99);
+			this.button_Command_5.Location = new System.Drawing.Point(0, 109);
 			this.button_Command_5.Name = "button_Command_5";
 			this.button_Command_5.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_5.TabIndex = 4;
@@ -105,7 +107,7 @@
 			this.button_Command_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_4.Enabled = false;
-			this.button_Command_4.Location = new System.Drawing.Point(0, 66);
+			this.button_Command_4.Location = new System.Drawing.Point(0, 80);
 			this.button_Command_4.Name = "button_Command_4";
 			this.button_Command_4.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_4.TabIndex = 3;
@@ -119,7 +121,7 @@
 			this.button_Command_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_3.Enabled = false;
-			this.button_Command_3.Location = new System.Drawing.Point(0, 44);
+			this.button_Command_3.Location = new System.Drawing.Point(0, 58);
 			this.button_Command_3.Name = "button_Command_3";
 			this.button_Command_3.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_3.TabIndex = 2;
@@ -133,7 +135,7 @@
 			this.button_Command_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_2.Enabled = false;
-			this.button_Command_2.Location = new System.Drawing.Point(0, 22);
+			this.button_Command_2.Location = new System.Drawing.Point(0, 36);
 			this.button_Command_2.Name = "button_Command_2";
 			this.button_Command_2.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_2.TabIndex = 1;
@@ -147,7 +149,7 @@
 			this.button_Command_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_1.Enabled = false;
-			this.button_Command_1.Location = new System.Drawing.Point(0, 0);
+			this.button_Command_1.Location = new System.Drawing.Point(0, 14);
 			this.button_Command_1.Name = "button_Command_1";
 			this.button_Command_1.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_1.TabIndex = 0;
@@ -161,7 +163,7 @@
 			this.button_Command_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_9.Enabled = false;
-			this.button_Command_9.Location = new System.Drawing.Point(0, 198);
+			this.button_Command_9.Location = new System.Drawing.Point(0, 204);
 			this.button_Command_9.Name = "button_Command_9";
 			this.button_Command_9.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_9.TabIndex = 8;
@@ -175,7 +177,7 @@
 			this.button_Command_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_10.Enabled = false;
-			this.button_Command_10.Location = new System.Drawing.Point(0, 220);
+			this.button_Command_10.Location = new System.Drawing.Point(0, 226);
 			this.button_Command_10.Name = "button_Command_10";
 			this.button_Command_10.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_10.TabIndex = 9;
@@ -189,7 +191,7 @@
 			this.button_Command_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_11.Enabled = false;
-			this.button_Command_11.Location = new System.Drawing.Point(0, 242);
+			this.button_Command_11.Location = new System.Drawing.Point(0, 248);
 			this.button_Command_11.Name = "button_Command_11";
 			this.button_Command_11.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_11.TabIndex = 10;
@@ -203,7 +205,7 @@
 			this.button_Command_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Command_12.Enabled = false;
-			this.button_Command_12.Location = new System.Drawing.Point(0, 264);
+			this.button_Command_12.Location = new System.Drawing.Point(0, 270);
 			this.button_Command_12.Name = "button_Command_12";
 			this.button_Command_12.Size = new System.Drawing.Size(176, 22);
 			this.button_Command_12.TabIndex = 11;
@@ -212,9 +214,37 @@
 			this.toolTip.SetToolTip(this.button_Command_12, "Send command");
 			this.button_Command_12.Click += new System.EventHandler(this.button_Command_Click);
 			// 
+			// label_Shortcuts_1_12
+			// 
+			this.label_Shortcuts_1_12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Shortcuts_1_12.AutoSize = true;
+			this.label_Shortcuts_1_12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Shortcuts_1_12.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_Shortcuts_1_12.Location = new System.Drawing.Point(76, 0);
+			this.label_Shortcuts_1_12.Name = "label_Shortcuts_1_12";
+			this.label_Shortcuts_1_12.Size = new System.Drawing.Size(100, 13);
+			this.label_Shortcuts_1_12.TabIndex = 12;
+			this.label_Shortcuts_1_12.Text = "[Ctrl+] Shift+F1..F12";
+			this.label_Shortcuts_1_12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label_Shortcuts_13_24
+			// 
+			this.label_Shortcuts_13_24.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Shortcuts_13_24.AutoSize = true;
+			this.label_Shortcuts_13_24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Shortcuts_13_24.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_Shortcuts_13_24.Location = new System.Drawing.Point(70, 0);
+			this.label_Shortcuts_13_24.Name = "label_Shortcuts_13_24";
+			this.label_Shortcuts_13_24.Size = new System.Drawing.Size(106, 13);
+			this.label_Shortcuts_13_24.TabIndex = 13;
+			this.label_Shortcuts_13_24.Text = "[Ctrl+] Shift+F13..F24";
+			this.label_Shortcuts_13_24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// PredefinedCommandPageButtons
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+			this.Controls.Add(this.label_Shortcuts_1_12);
+			this.Controls.Add(this.label_Shortcuts_13_24);
 			this.Controls.Add(this.button_Command_12);
 			this.Controls.Add(this.button_Command_11);
 			this.Controls.Add(this.button_Command_10);
@@ -227,10 +257,10 @@
 			this.Controls.Add(this.button_Command_3);
 			this.Controls.Add(this.button_Command_2);
 			this.Controls.Add(this.button_Command_1);
-			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
 			this.Name = "PredefinedCommandPageButtons";
-			this.Size = new System.Drawing.Size(176, 286);
+			this.Size = new System.Drawing.Size(176, 292);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -249,5 +279,7 @@
 		private System.Windows.Forms.Button button_Command_11;
 		private System.Windows.Forms.Button button_Command_12;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.Label label_Shortcuts_1_12;
+		private System.Windows.Forms.Label label_Shortcuts_13_24;
 	}
 }

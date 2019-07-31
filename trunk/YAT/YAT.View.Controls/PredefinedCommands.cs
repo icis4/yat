@@ -222,7 +222,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		public virtual Command GetCommandFromId(int id)
 		{
-			return (pageButtons.GetCommandFromId(id));
+			return (pageButtons_1A.GetCommandFromId(id));
 		}
 
 		/// <summary>
@@ -231,7 +231,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		public virtual int GetCommandIdFromLocation(Point point)
 		{
-			return (pageButtons.GetCommandIdFromLocation(point));
+			return (pageButtons_1A.GetCommandIdFromLocation(point));
 		}
 
 		/// <summary>
@@ -240,7 +240,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		public virtual Command GetCommandFromLocation(Point point)
 		{
-			return (pageButtons.GetCommandFromLocation(point));
+			return (pageButtons_1A.GetCommandFromLocation(point));
 		}
 
 		#endregion
@@ -295,14 +295,14 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				pageButtons.ParseModeForText      = this.parseModeForText;
-				pageButtons.RootDirectoryForFile  = this.rootDirectoryForFile;
-				pageButtons.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+				pageButtons_1A.ParseModeForText      = this.parseModeForText;
+				pageButtons_1A.RootDirectoryForFile  = this.rootDirectoryForFile;
+				pageButtons_1A.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
 				if ((this.pages != null) && (this.pages.Count > 0) &&
 				    (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
 				{
-					pageButtons.Commands = this.pages[SelectedPageIndex].Commands;
+					pageButtons_1A.Commands = this.pages[SelectedPageIndex].Commands;
 
 					button_PagePrevious.Enabled = (this.selectedPage > 1);
 					button_PageNext.Enabled     = (this.selectedPage < this.pages.Count);
