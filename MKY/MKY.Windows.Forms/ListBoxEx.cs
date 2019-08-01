@@ -789,7 +789,7 @@ namespace MKY.Windows.Forms
 		/// Flag in a addition to configuration items to allow selective debugging of just a single
 		/// list box, in order to reduce debug output.
 		/// </remarks>
-		[Category("Scroll")]
+		[Category("Behavior")]
 		[Description("Enables or disables debugging.")]
 		[DefaultValue(DebugEnabledDefault)]
 		public virtual bool DebugEnabled

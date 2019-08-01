@@ -48,7 +48,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Category("Action")]
+		[Category("Property Changed")]
 		[Description("Event raised the tick interval elapsed or the time span was reset.")]
 		public event EventHandler<TimeSpanEventArgs> TimeSpanChanged;
 

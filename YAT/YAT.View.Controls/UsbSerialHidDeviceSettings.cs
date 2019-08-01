@@ -131,7 +131,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Category("USB Ser/HID")]
+		[Category("Data")]
 		[Description("One of the available presets.")]
 		[DefaultValue(PresetDefault)]
 		public MKY.IO.Usb.SerialHidDeviceSettingsPreset Preset
@@ -215,7 +215,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("USB Ser/HID")]
+		[Category("Data")]
 		[Description("The flow control type.")]
 		[DefaultValue(FlowControlDefault)]
 		public virtual MKY.IO.Serial.Usb.SerialHidFlowControl FlowControl
@@ -233,7 +233,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("USB Ser/HID")]
+		[Category("Data")]
 		[Description("The auto open setting.")]
 		[DefaultValue(AutoOpenDefault)]
 		public bool AutoOpen

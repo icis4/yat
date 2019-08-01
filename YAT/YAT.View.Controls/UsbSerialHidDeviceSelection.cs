@@ -95,7 +95,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Category("USB Device")]
+		[Category("Device")]
 		[Description("USB device info.")]
 		public DeviceInfo DeviceInfo
 		{

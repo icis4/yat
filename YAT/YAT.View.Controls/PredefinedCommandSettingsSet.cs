@@ -187,7 +187,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Command")]
+		[Category("Behavior")]
 		[Description("Whether to use an explicit default radix.")]
 		[DefaultValue(Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault)]
 		public virtual bool UseExplicitDefaultRadix
@@ -243,7 +243,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Command")]
+		[Category("Appearance")]
 		[Description("The command shortcut.")]
 		[DefaultValue(ShortcutStringDefault)]
 		public virtual string ShortcutString
