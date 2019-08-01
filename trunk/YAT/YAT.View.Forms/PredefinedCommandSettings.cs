@@ -250,7 +250,7 @@ namespace YAT.View.Forms
 			// PENDING
 		}
 
-		private void checkBox_Subpage_CheckedChanged(object sender, EventArgs e)
+		private void subpageCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;

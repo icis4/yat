@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
@@ -67,6 +68,7 @@ namespace YAT.View.Controls
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<Button> buttons_commands;
 
+		private int subpage;
 		private List<Command> commands;
 
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
@@ -111,6 +113,24 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Category("Behavior")]
+		[Description("The represented subpage.")]
+		[DefaultValue(1)]
+		public virtual int Subpage
+		{
+			get { return (this.subpage); }
+			set
+			{
+				this.subpage = value;
+
+				label_Shortcuts_1_12 .Visible = (this.subpage == 1);
+				label_Shortcuts_13_24.Visible = (this.subpage == 2);
+
+				Tag = this.subpage.ToString(CultureInfo.InvariantCulture);
+			}
+		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]

@@ -99,6 +99,9 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="PredefinedCommandSubpageCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TextDisplaySettingsSet.cs">
       <SubType>UserControl</SubType>
     </Compile>
