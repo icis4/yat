@@ -214,7 +214,7 @@ namespace YAT.View.Controls
 		public event EventHandler TextFocusedChanged;
 
 		/// <summary></summary>
-		[Category("Notification")]
+		[Category("Action")]
 		[Description("Event raised when the TextFind has changed.")]
 		public event EventHandler FindChanged;
 
@@ -257,7 +257,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Appearance")]
 		[Description("Configures status panel visibility.")]
 		[DefaultValue(ShowStatusPanelDefault)]
 		public virtual bool ShowStatusPanel
@@ -274,7 +274,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Behavior")]
 		[Description("The repository type.")]
 		[DefaultValue(RepositoryTypeDefault)]
 		public virtual Domain.RepositoryType RepositoryType
@@ -292,7 +292,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Behavior")]
 		[Description("The activity state.")]
 		[DefaultValue(ActivityStateDefault)]
 		public virtual MonitorActivityState ActivityState
@@ -309,7 +309,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Behavior")]
 		[Description("The maxmimal number of lines to display.")]
 		[DefaultValue(MaxLineCountDefault)]
 		public virtual int MaxLineCount
@@ -352,7 +352,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Appearance")]
 		[Description("Show line numbers.")]
 		[DefaultValue(ShowLineNumbersDefault)]
 		public virtual bool ShowLineNumbers
@@ -369,7 +369,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Appearance")]
 		[Description("Line number selection.")]
 		[DefaultValue(LineNumberSelectionDefault)]
 		public virtual Domain.Utilities.LineNumberSelection LineNumberSelection
@@ -393,7 +393,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Appearance")]
 		[Description("Show the time status.")]
 		[DefaultValue(ShowTimeStatusDefault)]
 		public virtual bool ShowTimeStatus
@@ -411,7 +411,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		/// <remarks>A default value of TimeSpan.Zero is not possible because it is not constant.</remarks>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The active connection time.")]
 		public virtual TimeSpan ActiveConnectTime
 		{
@@ -421,7 +421,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		/// <remarks>A default value of TimeSpan.Zero is not possible because it is not constant.</remarks>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The total connection time.")]
 		public virtual TimeSpan TotalConnectTime
 		{
@@ -430,7 +430,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Appearance")]
 		[Description("Show the data status.")]
 		[DefaultValue(ShowDataStatusDefault)]
 		public virtual bool ShowDataStatus
@@ -447,7 +447,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Tx byte count.")]
 		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int TxByteCount
@@ -457,7 +457,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Tx line count.")]
 		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int TxLineCount
@@ -467,7 +467,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Rx byte count.")]
 		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int RxByteCount
@@ -477,7 +477,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Rx line count.")]
 		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
 		public virtual int RxLineCount
@@ -487,7 +487,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Tx byte rate.")]
 		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int TxByteRate
@@ -497,7 +497,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Tx line rate.")]
 		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int TxLineRate
@@ -507,7 +507,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Rx byte rate.")]
 		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int RxByteRate
@@ -517,7 +517,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Monitor")]
+		[Category("Action")]
 		[Description("The Rx line rate.")]
 		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
 		public virtual int RxLineRate
@@ -529,7 +529,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Name only "Active" instead of "LastActive" for simplicity.
 		/// </remarks>
-		[Category("Monitor")]
+		[Category("Appearance")]
 		[Description("Show a copy of the active line.")]
 		[DefaultValue(ShowCopyOfActiveLineDefault)]
 		public virtual bool ShowCopyOfActiveLine
@@ -558,7 +558,7 @@ namespace YAT.View.Controls
 		/// Flag in a addition to configuration item to allow selective debugging of just a single
 		/// monitor, e.g. the bidir monitor, to reduce debug output.
 		/// </remarks>
-		[Category("Scroll")]
+		[Category("Bevavior")]
 		[Description("Enables or disables debugging.")]
 		[DefaultValue(DebugEnabledDefault)]
 		public virtual bool DebugEnabled

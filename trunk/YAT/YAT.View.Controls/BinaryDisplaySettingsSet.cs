@@ -60,7 +60,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Category("Property Changed")]
+		[Category("Data")]
 		[Description("Event raised when any of the settings properties is changed.")]
 		public event EventHandler SettingsChanged;
 
