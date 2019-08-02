@@ -61,14 +61,14 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPage, string indicatedName)
+		public static bool ExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
 		{
 			var pageCount = commandPages.Pages.Count;
 			if (pageCount > 1)
 			{
 				var message = new StringBuilder();
 				message.AppendLine("Would you like to export all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
-				message.Append("or just the currently selected page " + selectedPage.ToString(CultureInfo.CurrentUICulture) + " [No]?");
+				message.Append("or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -79,8 +79,8 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (ExportAllPagesToFile(    owner, commandPages,               indicatedName));
-					case DialogResult.No:  return (ExportSelectedPageToFile(owner, commandPages, selectedPage, indicatedName));
+					case DialogResult.Yes: return (ExportAllPagesToFile(    owner, commandPages,                 indicatedName));
+					case DialogResult.No:  return (ExportSelectedPageToFile(owner, commandPages, selectedPageId, indicatedName));
 					default:               return (false);
 				}
 			}
@@ -101,11 +101,11 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Prompts the user to export the given page to a .yapc file.
 		/// </summary>
-		public static bool ExportSelectedPageToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPage, string indicatedName)
+		public static bool ExportSelectedPageToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
 		{
 			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
 			p.Pages.Clear();
-			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPage - 1])); // Clone page to ensure decoupling.
+			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
 
 			return (ExportToFile(owner, p, true, indicatedName));
 		}
@@ -199,13 +199,11 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
 		{
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
 			{
-				int cpMaxCommandsPerPage = PredefinedCommandSettings.MaxCommandsPerPage; // Preparation for 12/24/36/48/72 commands per page.
-
 				var message = new StringBuilder();
 				message.Append("File contains ");
 				message.Append(imported.Pages.Count);
@@ -228,13 +226,13 @@ namespace YAT.View.Utilities
 				{
 					case DialogResult.Yes:
 					{
-						commandPagesNew = imported;
+						Import(owner, commandCapacityPerPageOld, imported, out commandPagesNew, out commandCapacityPerPageNew);
 						return (true);
 					}
 
 					case DialogResult.No:
-					{                                                                                                 // Specifying 'NoPage' will add (not insert).
-						AddOrInsert(owner, commandPagesOld, imported, cpMaxCommandsPerPage, PredefinedCommandSettings.NoPage, out commandPagesNew);
+					{                                                                                             // Specifying 'NoPageId' will add (not insert).
+						AddOrInsert(owner, commandPagesOld, commandCapacityPerPageOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew, out commandCapacityPerPageNew);
 						break;
 					}
 
@@ -246,85 +244,96 @@ namespace YAT.View.Utilities
 			}
 
 			commandPagesNew = null;
+			commandCapacityPerPageNew = 0;
 			return (false);
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPage, out PredefinedCommandSettings commandPagesNew)
+		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
 		{
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
 			{
-				int cpMaxCommandsPerPage = PredefinedCommandSettings.MaxCommandsPerPage; // Preparation for 12/24/36/48/72 commands per page.
-				                                                                            // Specifying a page will insert (instead of add).
-				return (AddOrInsert(owner, commandPagesOld, imported, cpMaxCommandsPerPage, selectedPage, out commandPagesNew));
+				                                                              // Specifying the 'selectedPageId' will insert (instead of add).
+				return (AddOrInsert(owner, commandPagesOld, commandCapacityPerPageOld, imported, selectedPageId, out commandPagesNew, out commandCapacityPerPageNew));
 			}
 
 			commandPagesNew = null;
+			commandCapacityPerPageNew = 0;
 			return (false);
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
 		{
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
 			{
-				int cpMaxCommandsPerPage = PredefinedCommandSettings.MaxCommandsPerPage; // Preparation for 12/24/36/48/72 commands per page.
-				                                                                                                      // Specifying 'NoPage' will add (not insert).
-				return (AddOrInsert(owner, commandPagesOld, imported, cpMaxCommandsPerPage, PredefinedCommandSettings.NoPage, out commandPagesNew));
+				                                                                                                  // Specifying 'NoPageId' will add (not insert).
+				return (AddOrInsert(owner, commandPagesOld, commandCapacityPerPageOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew, out commandCapacityPerPageNew));
 			}
 
 			commandPagesNew = null;
+			commandCapacityPerPageNew = 0;
 			return (false);
 		}
 
 		/// <summary></summary>
-		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandSettings imported, int cpMaxCommandsPerPage, int selectedPage, out PredefinedCommandSettings commandPagesNew)
+		private static bool Import(IWin32Window owner, int commandCapacityPerPageOld, PredefinedCommandSettings imported, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
 		{
 			ImportMode mode;
-			if (ConfirmImport(owner, imported, cpMaxCommandsPerPage, out mode))
+			if (ConfirmImport(owner, imported, commandCapacityPerPageOld, out mode, out commandCapacityPerPageNew))
+			{
+				commandPagesNew = imported;
+				return (true);
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, PredefinedCommandSettings imported, int selectedPageId, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
+		{
+			ImportMode mode;
+			if (ConfirmImport(owner, imported, commandCapacityPerPageOld, out mode, out commandCapacityPerPageNew))
 			{
 				// Clone...
 				commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
 
 				// ...add default page if yet empty...
 				if (commandPagesOld.Pages.Count == 0)
-					commandPagesNew.Pages.Add(PredefinedCommandSettings.DefaultPage);
+					commandPagesNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
 
 				switch (mode)
 				{
 					case (ImportMode.Neutral):
 					{
 						// ...then add or insert:
-						if (selectedPage == PredefinedCommandSettings.NoPage)
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
 							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
 						else
-							commandPagesNew.Pages.InsertRange((selectedPage - 1), imported.Pages); // No clone needed as just imported.
+							commandPagesNew.Pages.InsertRange((selectedPageId - 1), imported.Pages); // No clone needed as just imported.
 
 						return (true);
 					}
 					case (ImportMode.Enlarge):
 					{
-						// ...enlarge...
-						//commandPagesNew.MaxCommandsPerPage = cpMaxCommandsPerPage;
-						// !!! PENDING !!!
-
 						// ... then add or insert:
-						if (selectedPage == PredefinedCommandSettings.NoPage)
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
 							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
 						else
-							commandPagesNew.Pages.InsertRange((selectedPage - 1), imported.Pages); // No clone needed as just imported.
+							commandPagesNew.Pages.InsertRange((selectedPageId - 1), imported.Pages); // No clone needed as just imported.
 
 						return (true);
 					}
 					case (ImportMode.Spread):
 					{
 						// ...and then spread:
-						if (selectedPage == PredefinedCommandSettings.NoPage)
-							commandPagesNew.Pages.AddSpreaded(imported.Pages, PredefinedCommandSettings.MaxCommandsPerPage); // No clone needed as just imported.
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+							commandPagesNew.Pages.AddSpreaded(imported.Pages, commandCapacityPerPageNew); // No clone needed as just imported.
 						else
-							commandPagesNew.Pages.InsertSpreaded((selectedPage - 1), imported.Pages, PredefinedCommandSettings.MaxCommandsPerPage); // No clone needed as just imported.
+							commandPagesNew.Pages.InsertSpreaded((selectedPageId - 1), imported.Pages, commandCapacityPerPageNew); // No clone needed as just imported.
 
 						return (true);
 					}
@@ -341,26 +350,29 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandSettings imported, int cpMaxCommandsPerPage, out ImportMode mode)
+		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandSettings imported, int commandCapacityPerPageOld, out ImportMode mode, out int commandCapacityPerPageNew)
 		{
-			if (cpMaxCommandsPerPage <= PredefinedCommandSettings.MaxCommandsPerPage)
+			if (imported.Pages.MaxCommandCountPerPage <= commandCapacityPerPageOld)
 			{
 				mode = ImportMode.Neutral;
+				commandCapacityPerPageNew = commandCapacityPerPageOld;
 				return (true);
 			}
 			else
 			{
+				var nextCommandCapacityPerPage = PredefinedCommandPageLayoutEx.GetMatchingCommandCapacityPerPage(imported.Pages.MaxCommandCountPerPage);
+
 				var message = new StringBuilder();
 				message.Append("File contains ");
 				message.Append(imported.Pages.Count == 1 ? " page" : " pages");
 				message.Append(" with up to ");
-				message.Append(cpMaxCommandsPerPage);
+				message.Append(imported.Pages.MaxCommandCountPerPage);
 				message.Append(" commands per page, but currently ");
-				message.Append(PredefinedCommandSettings.MaxCommandsPerPage);
+				message.Append(commandCapacityPerPageOld);
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
-				message.Append("Would you like to enlarge all pages to " + cpMaxCommandsPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the imported commands to " + PredefinedCommandSettings.MaxCommandsPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append("Would you like to enlarge all pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
+				message.Append(" or spread the imported commands to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -371,9 +383,9 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: mode = ImportMode.Enlarge; return (true);
-					case DialogResult.No:  mode = ImportMode.Spread;  return (true);
-					default:               mode = ImportMode.None;    return (false);
+					case DialogResult.Yes: mode = ImportMode.Enlarge; commandCapacityPerPageNew = nextCommandCapacityPerPage; return (true);
+					case DialogResult.No:  mode = ImportMode.Spread;  commandCapacityPerPageNew = commandCapacityPerPageOld;  return (true);
+					default:               mode = ImportMode.None;    commandCapacityPerPageNew = commandCapacityPerPageOld;  return (false);
 				}
 			}
 		}

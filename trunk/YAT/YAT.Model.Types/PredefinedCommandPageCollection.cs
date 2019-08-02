@@ -32,6 +32,25 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class PredefinedCommandPageCollection : List<PredefinedCommandPage>
 	{
+		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		public const int NoPageId = 0;
+
+		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		public const int FirstPageId = 1;
+
+		/// <summary></summary>
+		public const int MaxCapacity = int.MaxValue;
+
+		/// <remarks>
+		/// Must be implemented as property (instead of a readonly) since <see cref="PredefinedCommandPage"/>
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
+		public static PredefinedCommandPage DefaultPage
+		{
+			get { return (new PredefinedCommandPage("Page 1")); }
+		}
+
 		/// <summary></summary>
 		public PredefinedCommandPageCollection()
 			: base()
@@ -54,7 +73,26 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int maxCommandsPerPage)
+		public int MaxCommandCountPerPage
+		{
+			get
+			{
+				int max = 0;
+
+				foreach (var p in this) {
+					if (p.Commands != null) {
+						if (max < p.Commands.Count) {
+							max = p.Commands.Count;
+						}
+					}
+				}
+
+				return (max);
+			}
+		}
+
+		/// <summary></summary>
+		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			// Attention:
 			// Similar code exists in InsertSpreaded() further below.
@@ -62,7 +100,7 @@ namespace YAT.Model.Types
 
 			foreach (var p in collection)
 			{
-				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (maxCommandsPerPage)));
+				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (commandCapacityPerPage)));
 				for (int i = 0; i < n; i++)
 				{
 					var spreadPage = new PredefinedCommandPage();
@@ -72,9 +110,9 @@ namespace YAT.Model.Types
 					else
 						spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
 
-					for (int j = 0; j < maxCommandsPerPage; j++)
+					for (int j = 0; j < commandCapacityPerPage; j++)
 					{
-						int indexImported = ((i * maxCommandsPerPage) + j);
+						int indexImported = ((i * commandCapacityPerPage) + j);
 						spreadPage.Commands.Add(p.Commands[indexImported]);
 					}
 
@@ -84,7 +122,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public void InsertSpreaded(int index, IEnumerable<PredefinedCommandPage> collection, int maxCommandsPerPage)
+		public void InsertSpreaded(int index, IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			// Attention:
 			// Similar code exists in AddSpreaded() further above.
@@ -92,7 +130,7 @@ namespace YAT.Model.Types
 
 			foreach (var p in collection)
 			{
-				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (maxCommandsPerPage)));
+				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (commandCapacityPerPage)));
 				for (int i = 0; i < n; i++)
 				{
 					var spreadPage = new PredefinedCommandPage();
@@ -102,9 +140,9 @@ namespace YAT.Model.Types
 					else
 						spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
 
-					for (int j = 0; j < maxCommandsPerPage; j++)
+					for (int j = 0; j < commandCapacityPerPage; j++)
 					{
-						int indexImported = ((i * maxCommandsPerPage) + j);
+						int indexImported = ((i * commandCapacityPerPage) + j);
 						spreadPage.Commands.Add(p.Commands[indexImported]);
 					}
 

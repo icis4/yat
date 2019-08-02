@@ -43,6 +43,22 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class PredefinedCommandPage : IEquatable<PredefinedCommandPage>, IComparable
 	{
+		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		public const int NoCommandId = 0;
+
+		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		public const int FirstCommandIdPerPage = 1;
+
+		/// <remarks>Limited to a) keep view simple for most use cases and b) ease implementation.</remarks>
+		public const int CommandCapacityPerSubpage = 12;
+
+		/// <remarks>F-shortcuts are available F1..F24.</remarks>
+		/// <remarks>Possible capacities are 12 or 24.</remarks>
+		public const int MaxCommandCapacityWithShortcut = 24;
+
+		/// <remarks>Possible capacities are 12, 24, 36, 48, 72 or 108.</remarks>
+		public const int MaxCommandCapacityPerPage = 108;
+
 		private string pageName;
 		private List<Command> commands;
 
