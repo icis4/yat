@@ -43,27 +43,9 @@ namespace YAT.Model.Settings
 	public class PredefinedCommandSettings : MKY.Settings.SettingsItem, IEquatable<PredefinedCommandSettings>
 	{
 		/// <summary></summary>
-		public const int NoPage = 0;
+		public const PredefinedCommandPageLayout PageLayoutDefault = PredefinedCommandPageLayout.OneByOne;
 
-		/// <summary></summary>
-		public const int FirstPage = 1;
-
-		/// <summary></summary>
-		public const int FirstCommandPerPage = 1;
-
-		/// <summary></summary>
-		public const int MaxCommandsPerPage = 12;
-
-		/// <remarks>
-		/// Must be implemented as property (instead of a readonly) since <see cref="PredefinedCommandPage"/>
-		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
-		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
-		/// </remarks>
-		public static PredefinedCommandPage DefaultPage
-		{
-			get { return (new PredefinedCommandPage("Page 1")); }
-		}
-
+		private PredefinedCommandPageLayout pageLayout;
 		private PredefinedCommandPageCollection pages;
 
 		/// <summary></summary>
@@ -87,6 +69,7 @@ namespace YAT.Model.Settings
 		public PredefinedCommandSettings(PredefinedCommandSettings rhs)
 			: base(rhs)
 		{
+			PageLayout = rhs.PageLayout;
 			Pages = new PredefinedCommandPageCollection(rhs.Pages);
 
 			ClearChanged();
@@ -99,6 +82,7 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
+			PageLayout = PageLayoutDefault;
 			Pages = new PredefinedCommandPageCollection();
 		}
 
@@ -106,6 +90,21 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("PageLayout")]
+		public PredefinedCommandPageLayout PageLayout
+		{
+			get { return (this.pageLayout); }
+			set
+			{
+				if (this.pageLayout != value)
+				{
+					this.pageLayout = value;
+					SetMyChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
@@ -150,15 +149,15 @@ namespace YAT.Model.Settings
 		public virtual void CreateDefaultPage()
 		{
 			this.pages = new PredefinedCommandPageCollection();
-			this.pages.Add(DefaultPage);
+			this.pages.Add(PredefinedCommandPageCollection.DefaultPage);
 			SetMyChanged();
 		}
 
 		/// <summary>
 		/// Validates the given predefined arguments.
 		/// </summary>
-		/// <param name="pageIndex">Page index 0..max-1.</param>
-		/// <param name="commandIndex">Command index 0..max-1.</param>
+		/// <param name="pageIndex">Page index 0..(count-1).</param>
+		/// <param name="commandIndex">Command index 0..(<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>-1).</param>
 		public bool ValidateWhetherCommandIsDefined(int pageIndex, int commandIndex)
 		{
 			// Validate page index:
@@ -185,8 +184,8 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Gets the given predefined command.
 		/// </summary>
-		/// <param name="pageIndex">Page index 0..max-1.</param>
-		/// <param name="commandIndex">Command index 0..max-1.</param>
+		/// <param name="pageIndex">Page index 0..(count-1).</param>
+		/// <param name="commandIndex">Command index 0..(<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>-1).</param>
 		public virtual Command GetCommand(int pageIndex, int commandIndex)
 		{
 			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
@@ -198,8 +197,8 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Sets the given predefined command.
 		/// </summary>
-		/// <param name="pageIndex">Page index 0..max-1.</param>
-		/// <param name="commandIndex">Command index 0..max-1.</param>
+		/// <param name="pageIndex">Page index 0..(count-1).</param>
+		/// <param name="commandIndex">Command index 0..(<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>-1).</param>
 		/// <param name="command">Command to be set.</param>
 		public virtual void SetCommand(int pageIndex, int commandIndex, Command command)
 		{
@@ -209,7 +208,7 @@ namespace YAT.Model.Settings
 			if ((pageIndex >= 0) && (pageIndex < this.pages.Count))
 			{
 				var page = this.pages[pageIndex];
-				if ((commandIndex >= 0) && (commandIndex < MaxCommandsPerPage))
+				if ((commandIndex >= 0) && (commandIndex < PredefinedCommandPage.MaxCommandCapacityPerPage))
 				{
 					page.SetCommand(commandIndex, command);
 					SetMyChanged();
@@ -220,8 +219,8 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Clears the given predefined command.
 		/// </summary>
-		/// <param name="pageIndex">Page index 0..max-1.</param>
-		/// <param name="commandIndex">Command index 0..max-1.</param>
+		/// <param name="pageIndex">Page index 0..(count-1).</param>
+		/// <param name="commandIndex">Command index 0..(<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>-1).</param>
 		public virtual void ClearCommand(int pageIndex, int commandIndex)
 		{
 			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
@@ -251,7 +250,8 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ Pages.GetHashCode();
+				hashCode = (hashCode * 397) ^ PageLayout.GetHashCode();
+				hashCode = (hashCode * 397) ^ Pages     .GetHashCode();
 
 				return (hashCode);
 			}
@@ -282,6 +282,7 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
+				PageLayout.Equals(other.PageLayout) &&
 				IEnumerableEx.ItemsEqual(Pages, other.Pages)
 			);
 		}

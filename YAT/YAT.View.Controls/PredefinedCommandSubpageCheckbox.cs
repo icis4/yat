@@ -63,9 +63,16 @@ namespace YAT.View.Controls
 
 					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.subpage.ToString(CultureInfo.InvariantCulture) + "' is a subpage value that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-
-				Tag = this.subpage.ToString(CultureInfo.InvariantCulture);
 			}
+		}
+
+		/// <remarks>Overridden to hide in designer since fixed by code.</remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override string Text
+		{
+			get { return base.Text;  }
+			set { base.Text = value; }
 		}
 	}
 }

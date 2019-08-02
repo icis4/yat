@@ -127,8 +127,6 @@ namespace YAT.View.Controls
 
 				label_Shortcuts_1_12 .Visible = (this.subpage == 1);
 				label_Shortcuts_13_24.Visible = (this.subpage == 2);
-
-				Tag = this.subpage.ToString(CultureInfo.InvariantCulture);
 			}
 		}
 
@@ -268,7 +266,7 @@ namespace YAT.View.Controls
 
 		private void InitializeButtons()
 		{
-			this.buttons_commands = new List<Button>(PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
+			this.buttons_commands = new List<Button>(PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
 			this.buttons_commands.Add(button_Command_1);
 			this.buttons_commands.Add(button_Command_2);
 			this.buttons_commands.Add(button_Command_3);
@@ -321,7 +319,8 @@ namespace YAT.View.Controls
 					toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 				}
 			}
-			for (int i = commandCount; i < PredefinedCommandSettings.MaxCommandsPerPage; i++)
+
+			for (int i = commandCount; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 			{
 				if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 					this.buttons_commands[i].ForeColor = SystemColors.GrayText;
@@ -336,30 +335,30 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void CommandRequest(int command)
+		private void CommandRequest(int commandId)
 		{
 			bool isDefined =
 			(
 				(this.commands != null) &&
-				(this.commands.Count >= command) &&
-				(this.commands[command - 1] != null) &&
-				(this.commands[command - 1].IsDefined)
+				(this.commands.Count >= commandId) &&
+				(this.commands[commandId - 1] != null) &&
+				(this.commands[commandId - 1].IsDefined)
 			);
 
 			if (isDefined)
-				RequestSendCommand(command);
+				RequestSendCommand(commandId);
 			else
-				RequestDefineCommand(command);
+				RequestDefineCommand(commandId);
 		}
 
-		private void RequestSendCommand(int command)
+		private void RequestSendCommand(int commandId)
 		{
-			OnSendCommandRequest(new PredefinedCommandEventArgs(command));
+			OnSendCommandRequest(new PredefinedCommandEventArgs(commandId));
 		}
 
-		private void RequestDefineCommand(int command)
+		private void RequestDefineCommand(int commandId)
 		{
-			OnDefineCommandRequest(new PredefinedCommandEventArgs(command));
+			OnDefineCommandRequest(new PredefinedCommandEventArgs(commandId));
 		}
 
 		#endregion

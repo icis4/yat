@@ -54,17 +54,17 @@ namespace YAT.View.Forms
 		private struct StartupControl
 		{
 			/// <summary></summary>
-			public int RequestedPage;
+			public int RequestedPageId;
 
 			/// <summary></summary>
-			public int RequestedCommand;
+			public int RequestedCommandId;
 
-			/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-			/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-			public StartupControl(int requestedPage, int requestedCommand)
+			/// <param name="requestedPageId">Page 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+			/// <param name="requestedCommandId">Command 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+			public StartupControl(int requestedPageId, int requestedCommandId)
 			{
-				RequestedPage    = requestedPage;
-				RequestedCommand = requestedCommand;
+				RequestedPageId    = requestedPageId;
+				RequestedCommandId = requestedCommandId;
 			}
 		}
 
@@ -82,9 +82,15 @@ namespace YAT.View.Forms
 
 		private Model.Settings.PredefinedCommandSettings settings;       // = null;
 		private Model.Settings.PredefinedCommandSettings settingsInEdit; // = null;
-		private int selectedPage = 1;
+		private int selectedPageId = 1;
+		private int selectedSubpageId = 1;
 		private string indicatedName;                                    // = null;
 
+		private Point subpageCheckBoxLocationTopLeft;
+		private Point subpageCheckBoxLocationLeftAbove;
+		private Point subpageCheckBoxLocationCenter;
+		private Point subpageCheckBoxLocationRightBelow;
+		private Point subpageCheckBoxLocationBottomRight;
 		private List<Label> predefinedCommandSettingsSetLabels;                            // = null;
 		private List<Controls.PredefinedCommandSettingsSet> predefinedCommandSettingsSets; // = null;
 
@@ -100,10 +106,11 @@ namespace YAT.View.Forms
 		/// <param name="useExplicitDefaultRadix">Whether to use an explicit default radix.</param>
 		/// <param name="parseModeForText">The parse mode related to the command.</param>
 		/// <param name="rootDirectoryForFile">The root path for file commands.</param>
-		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
+		/// <param name="pageLayout">The current page layout.</param>
+		/// <param name="requestedPageId">Page 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+		/// <param name="requestedCommandId">Command 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		/// <param name="indicatedName">The indicated terminal name.</param>
-		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPage, int requestedCommand, string indicatedName)
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPageId, int requestedCommandId, string indicatedName)
 		{
 			InitializeComponent();
 
@@ -120,9 +127,10 @@ namespace YAT.View.Forms
 				pcss.RootDirectoryForFile    = rootDirectoryForFile;
 			}
 
-			this.startupControl.RequestedPage    = requestedPage;
-			this.startupControl.RequestedCommand = requestedCommand;
+			this.startupControl.RequestedPageId    = requestedPageId;
+			this.startupControl.RequestedCommandId = requestedCommandId;
 
+		////this.selectedPageId will be set by PredefinedCommandSettings_Shown().
 			this.indicatedName = indicatedName;
 
 			// SetControls() is initially called in the 'Shown' event handler.
@@ -142,9 +150,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public int SelectedPage
+		public int SelectedPageId
 		{
-			get { return (this.selectedPage); }
+			get { return (this.selectedPageId); }
 		}
 
 		#endregion
@@ -218,19 +226,24 @@ namespace YAT.View.Forms
 			int pageCount = this.settingsInEdit.Pages.Count;
 			if (pageCount > 0)
 			{
-				this.selectedPage = Int32Ex.Limit(this.startupControl.RequestedPage, 1, pageCount); // 'Count' is 1 or above.
+				this.selectedPageId = Int32Ex.Limit(this.startupControl.RequestedPageId, 1, pageCount); // 'Count' is 1 or above.
 			}
 			else // Create a page if no page exists yet:
 			{
 				this.settingsInEdit.CreateDefaultPage();
-				this.selectedPage = 1;
+				this.selectedPageId = 1;
 			}
+
+			var requestedCommandId = Int32Ex.Limit(this.startupControl.RequestedCommandId, 1, Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
+			var requestedCommandIndex = (requestedCommandId - 1);
+			var requestedSubpageIndex = (requestedCommandIndex / Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+			this.selectedSubpageId = (requestedSubpageIndex + 1);
 
 			// Initially set controls and validate its contents where needed:
 			SetControls();
 
-			var requestedCommand = Int32Ex.Limit(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // 'Max' is 1 or above.
-			var requestedControl = this.predefinedCommandSettingsSets[requestedCommand - 1];
+			var requestedControlIndex = (requestedCommandIndex % Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+			var requestedControl = this.predefinedCommandSettingsSets[requestedControlIndex];
 			requestedControl.PrepareUserInput(); // See remarks of this method!
 			requestedControl.Select();
 		}
@@ -247,16 +260,17 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			// PENDING
+			this.settingsInEdit.PageLayout = (Model.Types.PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem;
+			SetControls();
 		}
 
-		private void subpageCheckBox_CheckedChanged(object sender, EventArgs e)
+		private void subpageCheckBox_I_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			// Tag To Subpage
-			// PENDING
+			this.selectedSubpageId = ((Controls.PredefinedCommandSubpageCheckBox)sender).Subpage;
+			SetControls();
 		}
 
 		private void listBox_Pages_SelectedIndexChanged(object sender, EventArgs e)
@@ -285,9 +299,12 @@ namespace YAT.View.Forms
 
 		private void button_InsertPagesFromFile_Click(object sender, EventArgs e)
 		{
+			int commandCapacityPerPageOld = CommandCapacityPerPage;
+			int commandCapacityPerPageNew;
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFileAndInsert(this, this.settingsInEdit, this.selectedPage, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.ImportFromFileAndInsert(this, this.settingsInEdit, commandCapacityPerPageOld, this.selectedPageId, out settingsInEditNew, out commandCapacityPerPageNew))
 			{
+				CommandCapacityPerPage = commandCapacityPerPageNew;
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
 			}
@@ -305,9 +322,12 @@ namespace YAT.View.Forms
 
 		private void button_AddPagesFromFile_Click(object sender, EventArgs e)
 		{
+			int commandCapacityPerPageOld = CommandCapacityPerPage;
+			int commandCapacityPerPageNew;
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFileAndAdd(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.ImportFromFileAndAdd(this, this.settingsInEdit, commandCapacityPerPageOld, out settingsInEditNew, out commandCapacityPerPageNew))
 			{
+				CommandCapacityPerPage = commandCapacityPerPageNew;
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
 			}
@@ -325,7 +345,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsHelper.ExportSelectedPageToFile(this, this.settingsInEdit, this.selectedPage, this.indicatedName);
+			CommandPagesSettingsHelper.ExportSelectedPageToFile(this, this.settingsInEdit, this.selectedPageId, this.indicatedName);
 		}
 
 		private void button_DeletePage_Click(object sender, EventArgs e)
@@ -365,9 +385,12 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click()
 			// Changes here may have to be applied there too.
 
+			int commandCapacityPerPageOld = CommandCapacityPerPage;
+			int commandCapacityPerPageNew;
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsInEdit, commandCapacityPerPageOld, out settingsInEditNew, out commandCapacityPerPageNew))
 			{
+				CommandCapacityPerPage = commandCapacityPerPageNew;
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
 			}
@@ -500,8 +523,8 @@ namespace YAT.View.Forms
 				Up(selectedCommandId);
 
 				selectedCommandId--;
-				if (selectedCommandId < Model.Settings.PredefinedCommandSettings.FirstCommandPerPage)
-					selectedCommandId = Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage;
+				if (selectedCommandId < Model.Types.PredefinedCommandPage.FirstCommandIdPerPage)
+					selectedCommandId = Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage;
 			}
 		}
 
@@ -517,7 +540,7 @@ namespace YAT.View.Forms
 			if (sc != null)
 				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
 
-			var targetCommandId = ((selectedCommandId > Model.Settings.PredefinedCommandSettings.FirstCommandPerPage) ? (selectedCommandId - 1) : (Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage));
+			var targetCommandId = ((selectedCommandId > Model.Types.PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage));
 			var ts = GetSettingsSetFromId(targetCommandId);
 			var tc = ts.Command;
 			if (tc != null)
@@ -544,8 +567,8 @@ namespace YAT.View.Forms
 				Down(selectedCommandId);
 
 				selectedCommandId++;
-				if (selectedCommandId > Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage)
-					selectedCommandId = Model.Settings.PredefinedCommandSettings.FirstCommandPerPage;
+				if (selectedCommandId > Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage)
+					selectedCommandId = Model.Types.PredefinedCommandPage.FirstCommandIdPerPage;
 			}
 		}
 
@@ -561,7 +584,7 @@ namespace YAT.View.Forms
 			if (sc != null)
 				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
 
-			var targetCommandId = ((selectedCommandId < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage) ? (selectedCommandId + 1) : (Model.Settings.PredefinedCommandSettings.FirstCommandPerPage));
+			var targetCommandId = ((selectedCommandId < Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (Model.Types.PredefinedCommandPage.FirstCommandIdPerPage));
 			var ts = GetSettingsSetFromId(targetCommandId);
 			var tc = ts.Command;
 			if (tc != null)
@@ -665,10 +688,22 @@ namespace YAT.View.Forms
 		// Non-Public Methods
 		//==========================================================================================
 
+		/// <remarks><see cref="SetControls"/> is not called by this private property.</remarks>
+		private int CommandCapacityPerPage
+		{
+			get { return (((Model.Types.PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage); }
+			set
+			{
+				if (CommandCapacityPerPage != value)
+					this.settingsInEdit.PageLayout = Model.Types.PredefinedCommandPageLayoutEx.GetMatchingItem(value);
+			}
+		}
+
+		/// <remarks><see cref="SetControls"/> is not called by this private property.</remarks>
 		private int SelectedPageIndex
 		{
-			get { return (this.selectedPage - 1);  }
-			set { this.selectedPage = (value + 1); }
+			get { return (this.selectedPageId - 1);  }
+			set { this.selectedPageId = (value + 1); }
 		}
 
 		#region Non-Public Methods > Controls
@@ -678,6 +713,17 @@ namespace YAT.View.Forms
 
 		private void InitializeControls(bool useExplicitDefaultRadix)
 		{
+			comboBox_Layout.Items.AddRange(Model.Types.PredefinedCommandPageLayoutEx.GetItems());
+
+			var deltaX = ((subpageCheckBox_1B.Left - subpageCheckBox_1A.Left) + (subpageCheckBox_1B.Left - subpageCheckBox_1A.Right));
+			var deltaY = ((subpageCheckBox_2A.Top  - subpageCheckBox_1A.Top)  + (subpageCheckBox_2A.Top  - subpageCheckBox_1A.Bottom));
+
+			this.subpageCheckBoxLocationTopLeft     = subpageCheckBox_1A.Location;
+			this.subpageCheckBoxLocationLeftAbove   = new Point((subpageCheckBox_1A.Left + deltaX), (subpageCheckBox_2A.Top - deltaY));
+			this.subpageCheckBoxLocationCenter      = subpageCheckBox_2B.Location;
+			this.subpageCheckBoxLocationRightBelow  = new Point((subpageCheckBox_2B.Left + deltaX), (subpageCheckBox_3B.Top - deltaY));
+			this.subpageCheckBoxLocationBottomRight = subpageCheckBox_3C.Location;
+
 			if (!useExplicitDefaultRadix) // Default
 			{
 				label_ExplicitDefaultRadix.Visible = false;
@@ -691,7 +737,7 @@ namespace YAT.View.Forms
 				label_Data.Left = (int)((this.scale.Width * 135) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 			}
 
-			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
+			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_1);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_2);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_3);
@@ -705,7 +751,7 @@ namespace YAT.View.Forms
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_11);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_12);
 
-			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capacity to improve memory management.
+			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_1);
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_2);
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_3);
@@ -722,19 +768,49 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
+			SetLayoutControls();
 			SetPagesControls();
 			SetPageControls();
 			SetClearControls();
 			SetLinkControls();
 		}
 
+		private void SetLayoutControls()
+		{
+			SuspendLayout();
+			this.isSettingControls.Enter();
+			try
+			{
+				Model.Types.PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsInEdit.PageLayout;
+				comboBox_Layout.SelectedItem = pageLayoutEx;
+
+			////subpageCheckBox_1A.Visible = true;
+				subpageCheckBox_2A.Visible = (pageLayoutEx.RowsPerPage >= 2);
+				subpageCheckBox_3A.Visible = (pageLayoutEx.RowsPerPage >= 3);
+				subpageCheckBox_1B.Visible =                                    (pageLayoutEx.ColumnsPerPage >= 2);
+				subpageCheckBox_2B.Visible = (pageLayoutEx.RowsPerPage >= 2) && (pageLayoutEx.ColumnsPerPage >= 2);
+				subpageCheckBox_3B.Visible = (pageLayoutEx.RowsPerPage >= 3) && (pageLayoutEx.ColumnsPerPage >= 2);
+				subpageCheckBox_1C.Visible =                                    (pageLayoutEx.ColumnsPerPage >= 3);
+				subpageCheckBox_2C.Visible = (pageLayoutEx.RowsPerPage >= 2) && (pageLayoutEx.ColumnsPerPage >= 3);
+				subpageCheckBox_3C.Visible = (pageLayoutEx.RowsPerPage >= 3) && (pageLayoutEx.ColumnsPerPage >= 3);
+
+				//subpageCheckBox_1A.Location = PENDING
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+				ResumeLayout();
+			}
+		}
+
 		private void SetPagesControls()
 		{
+			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
 				int pageCount = this.settingsInEdit.Pages.Count;
-				bool pageIsSelected = (this.selectedPage != 0);
+				bool pageIsSelected = (this.selectedPageId != 0);
 				int totalDefinedCommandCount = this.settingsInEdit.TotalDefinedCommandCount;
 
 				// Page list:
@@ -764,8 +840,8 @@ namespace YAT.View.Forms
 				button_DuplicatePage              .Enabled = pageIsSelected;
 				button_ExportPageToFile      .Enabled = pageIsSelected;
 				button_DeletePage            .Enabled = pageIsSelected; // Deleting a sole page is permissible.
-				button_MovePageUp            .Enabled = pageIsSelected && (this.selectedPage > 1);
-				button_MovePageDown          .Enabled = pageIsSelected && (this.selectedPage < pageCount);
+				button_MovePageUp            .Enabled = pageIsSelected && (this.selectedPageId > 1);
+				button_MovePageDown          .Enabled = pageIsSelected && (this.selectedPageId < pageCount);
 				button_DeleteAllPages        .Enabled = (pageCount > 0); // Deleting a sole page is permissible.
 				button_ExportAllPagesToFile  .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
 			////button_ImportAllPagesFromFile.Enabled = true;
@@ -779,27 +855,29 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
+				ResumeLayout();
 			}
 		}
 
 		private void SetPageControls()
 		{
+			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
-				if (this.selectedPage != 0)
+				if (this.selectedPageId != 0)
 				{
 					groupBox_Page.Enabled = true;
 
 					int pageCount = this.settingsInEdit.Pages.Count;
 					int commandCount = 0;
-					if (pageCount >= this.selectedPage)
+					if (pageCount >= this.selectedPageId)
 						commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
 
 					for (int i = 0; i < commandCount; i++)
 						this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[i];
 
-					for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
+					for (int i = commandCount; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 						this.predefinedCommandSettingsSets[i].Command = null;
 				}
 				else
@@ -810,17 +888,19 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
+				ResumeLayout();
 			}
 		}
 
 		private void SetClearControls()
 		{
+			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
 				int pageCount = this.settingsInEdit.Pages.Count;
 				int commandCount = 0;
-				if (pageCount >= this.selectedPage)
+				if (pageCount >= this.selectedPageId)
 					commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
 
 				button_ClearPage.Enabled = (commandCount > 0);
@@ -828,11 +908,13 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
+				ResumeLayout();
 			}
 		}
 
 		private void SetLinkControls()
 		{
+			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
@@ -846,6 +928,7 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
+				ResumeLayout();
 			}
 		}
 
@@ -878,7 +961,7 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void InsertPage()
 		{
-			int pageNumber = this.selectedPage;
+			int pageNumber = this.selectedPageId;
 			string pageName;
 			if (TextInputBox.Show
 				(
@@ -890,7 +973,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				var pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
+				var pcp = new Model.Types.PredefinedCommandPage(Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
 				this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 				SetControls();
 			}
@@ -911,9 +994,9 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				var pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
+				var pcp = new Model.Types.PredefinedCommandPage(Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
 				this.settingsInEdit.Pages.Add(pcp);
-				this.selectedPage = this.settingsInEdit.Pages.Count;
+				this.selectedPageId = this.settingsInEdit.Pages.Count;
 				SetControls();
 			}
 		}
@@ -959,13 +1042,13 @@ namespace YAT.View.Forms
 				if (this.settingsInEdit.Pages.Count > 1)
 				{
 					this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
-					this.selectedPage = Int32Ex.Limit(this.selectedPage, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // 'max' must be 1 or above.
+					this.selectedPageId = Int32Ex.Limit(this.selectedPageId, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // 'max' must be 1 or above.
 					SetControls();
 				}
 				else // Same behavior as DeletePages() further below.
 				{
 					this.settingsInEdit.CreateDefaultPage();
-					this.selectedPage = 1;
+					this.selectedPageId = 1;
 					SetControls();
 				}
 			}
@@ -975,7 +1058,7 @@ namespace YAT.View.Forms
 		{
 			var pcp = this.settingsInEdit.Pages[SelectedPageIndex];
 			this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
-			this.selectedPage--;
+			this.selectedPageId--;
 			this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 			SetPagesControls();
 		}
@@ -984,7 +1067,7 @@ namespace YAT.View.Forms
 		{
 			var pcp = this.settingsInEdit.Pages[SelectedPageIndex];
 			this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
-			this.selectedPage++;
+			this.selectedPageId++;
 			this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 			SetPagesControls();
 		}
@@ -1004,7 +1087,7 @@ namespace YAT.View.Forms
 				== DialogResult.Yes)
 			{
 				this.settingsInEdit.CreateDefaultPage();
-				this.selectedPage = 1;
+				this.selectedPageId = 1;
 				SetControls();
 			}
 		}
@@ -1077,7 +1160,7 @@ namespace YAT.View.Forms
 			return (GetSettingsSetFromId(GetSettingsSetIdFromLocation(point)));
 		}
 
-		/// <param name="id">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
+		/// <param name="id">Command 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		protected virtual void SetCommandFromSettingsSet(int id)
 		{
 			if (this.settingsInEdit.Pages != null)

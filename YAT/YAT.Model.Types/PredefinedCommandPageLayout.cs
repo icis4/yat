@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 using MKY;
 
@@ -276,69 +277,99 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		#region To...PerPage
+		#region ...PerPage
 		//==========================================================================================
-		// To...PerPage
+		// ...PerPage
 		//==========================================================================================
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
-		public int ToRowsPerPage()
+		public int RowsPerPage
 		{
-			switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+			get
 			{
-				case PredefinedCommandPageLayout.OneByOne:
-				case PredefinedCommandPageLayout.TwoByOne:
-				case PredefinedCommandPageLayout.ThreeByOne:   return (1);
-				case PredefinedCommandPageLayout.OneByTwo:
-				case PredefinedCommandPageLayout.TwoByTwo:
-				case PredefinedCommandPageLayout.ThreeByTwo:   return (2);
-				case PredefinedCommandPageLayout.OneByThree:
-				case PredefinedCommandPageLayout.TwoByThree:
-				case PredefinedCommandPageLayout.ThreeByThree: return (3);
+				switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+				{
+					case PredefinedCommandPageLayout.OneByOne:
+					case PredefinedCommandPageLayout.TwoByOne:
+					case PredefinedCommandPageLayout.ThreeByOne:   return (1);
+					case PredefinedCommandPageLayout.OneByTwo:
+					case PredefinedCommandPageLayout.TwoByTwo:
+					case PredefinedCommandPageLayout.ThreeByTwo:   return (2);
+					case PredefinedCommandPageLayout.OneByThree:
+					case PredefinedCommandPageLayout.TwoByThree:
+					case PredefinedCommandPageLayout.ThreeByThree: return (3);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
-		public int ToColmnsPerPage()
+		public int ColumnsPerPage
 		{
-			switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+			get
 			{
-				case PredefinedCommandPageLayout.OneByOne:
-				case PredefinedCommandPageLayout.OneByTwo:
-				case PredefinedCommandPageLayout.OneByThree:   return (1);
-				case PredefinedCommandPageLayout.TwoByOne:
-				case PredefinedCommandPageLayout.TwoByTwo:
-				case PredefinedCommandPageLayout.TwoByThree:   return (2);
-				case PredefinedCommandPageLayout.ThreeByOne:
-				case PredefinedCommandPageLayout.ThreeByTwo:
-				case PredefinedCommandPageLayout.ThreeByThree: return (3);
+				switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+				{
+					case PredefinedCommandPageLayout.OneByOne:
+					case PredefinedCommandPageLayout.OneByTwo:
+					case PredefinedCommandPageLayout.OneByThree:   return (1);
+					case PredefinedCommandPageLayout.TwoByOne:
+					case PredefinedCommandPageLayout.TwoByTwo:
+					case PredefinedCommandPageLayout.TwoByThree:   return (2);
+					case PredefinedCommandPageLayout.ThreeByOne:
+					case PredefinedCommandPageLayout.ThreeByTwo:
+					case PredefinedCommandPageLayout.ThreeByThree: return (3);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
-		public int ToCommandsPerPage()
+		public int CommandCapacityPerPage
 		{
-			switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+			get
 			{
-				case PredefinedCommandPageLayout.OneByOne:     return ( 12);
-				case PredefinedCommandPageLayout.TwoByOne:     return ( 24);
-				case PredefinedCommandPageLayout.ThreeByOne:   return ( 36);
-				case PredefinedCommandPageLayout.OneByTwo:     return ( 24);
-				case PredefinedCommandPageLayout.TwoByTwo:     return ( 48);
-				case PredefinedCommandPageLayout.ThreeByTwo:   return ( 72);
-				case PredefinedCommandPageLayout.OneByThree:   return ( 36);
-				case PredefinedCommandPageLayout.TwoByThree:   return ( 72);
-				case PredefinedCommandPageLayout.ThreeByThree: return (108);
+				switch ((PredefinedCommandPageLayout)UnderlyingEnum)
+				{
+					case PredefinedCommandPageLayout.OneByOne:     return ( 12);
+					case PredefinedCommandPageLayout.TwoByOne:     return ( 24);
+					case PredefinedCommandPageLayout.ThreeByOne:   return ( 36);
+					case PredefinedCommandPageLayout.OneByTwo:     return ( 24);
+					case PredefinedCommandPageLayout.TwoByTwo:     return ( 48);
+					case PredefinedCommandPageLayout.ThreeByTwo:   return ( 72);
+					case PredefinedCommandPageLayout.OneByThree:   return ( 36);
+					case PredefinedCommandPageLayout.TwoByThree:   return ( 72);
+					case PredefinedCommandPageLayout.ThreeByThree: return (108);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
+		}
+
+		/// <summary></summary>
+		public static int GetMatchingCommandCapacityPerPage(int commandCount)
+		{
+			return (GetMatchingItem(commandCount).CommandCapacityPerPage);
+		}
+
+		/// <summary>
+		/// Gets the item for best matches the given count.
+		/// </summary>
+		public static PredefinedCommandPageLayoutEx GetMatchingItem(int commandCount)
+		{
+			if      (commandCount <=  12) return (PredefinedCommandPageLayout.OneByOne);
+			else if (commandCount <=  24) return (PredefinedCommandPageLayout.OneByTwo);
+			else if (commandCount <=  36) return (PredefinedCommandPageLayout.OneByThree);
+			else if (commandCount <=  48) return (PredefinedCommandPageLayout.TwoByTwo);
+			else if (commandCount <=  72) return (PredefinedCommandPageLayout.TwoByThree);
+			else if (commandCount <= 108) return (PredefinedCommandPageLayout.ThreeByThree);
+
+			else throw (new ArgumentOutOfRangeException("count", commandCount, MessageHelper.InvalidExecutionPreamble + "'" + commandCount.ToString(CultureInfo.InvariantCulture) + "' is a count that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

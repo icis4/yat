@@ -1424,7 +1424,7 @@
 			this.subpageCheckBox_3B.TabIndex = 7;
 			this.subpageCheckBox_3B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3B.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_3B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_3B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_2B
 			// 
@@ -1436,7 +1436,7 @@
 			this.subpageCheckBox_2B.TabIndex = 6;
 			this.subpageCheckBox_2B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2B.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_2B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_2B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_1B
 			// 
@@ -1448,7 +1448,7 @@
 			this.subpageCheckBox_1B.TabIndex = 5;
 			this.subpageCheckBox_1B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_1B.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_1B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_1B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_3A
 			// 
@@ -1460,7 +1460,7 @@
 			this.subpageCheckBox_3A.TabIndex = 4;
 			this.subpageCheckBox_3A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3A.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_3A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_3A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_2A
 			// 
@@ -1472,7 +1472,7 @@
 			this.subpageCheckBox_2A.TabIndex = 3;
 			this.subpageCheckBox_2A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2A.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_2A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_2A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_1A
 			// 
@@ -1484,7 +1484,7 @@
 			this.subpageCheckBox_1A.TabIndex = 2;
 			this.subpageCheckBox_1A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_1A.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_1A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_1A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// label_SubpageSelection
 			// 
@@ -1505,7 +1505,7 @@
 			this.subpageCheckBox_1C.TabIndex = 8;
 			this.subpageCheckBox_1C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_1C.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_1C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_1C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_2C
 			// 
@@ -1517,7 +1517,7 @@
 			this.subpageCheckBox_2C.TabIndex = 9;
 			this.subpageCheckBox_2C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2C.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_2C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_2C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_3C
 			// 
@@ -1529,7 +1529,7 @@
 			this.subpageCheckBox_3C.TabIndex = 10;
 			this.subpageCheckBox_3C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3C.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_3C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_CheckedChanged);
+			this.subpageCheckBox_3C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// PredefinedCommandSettings
 			// 
