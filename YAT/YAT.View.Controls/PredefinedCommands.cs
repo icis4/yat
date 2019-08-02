@@ -51,7 +51,7 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int SelectedPageDefault = 1;
+		private const int SelectedPageIdDefault = 1;
 
 		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
 		private const bool TerminalIsReadyToSendDefault = false;
@@ -65,7 +65,7 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 		private PredefinedCommandPageCollection pages;
-		private int selectedPage = SelectedPageDefault;
+		private int selectedIdPage = SelectedPageIdDefault;
 
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
@@ -80,8 +80,8 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the SelectedPage property is changed.")]
-		public event EventHandler SelectedPageChanged;
+		[Description("Event raised when the SelectedPageId property is changed.")]
+		public event EventHandler SelectedPageIdChanged;
 
 		/// <summary></summary>
 		[Category("Action")]
@@ -126,9 +126,9 @@ namespace YAT.View.Controls
 				this.pages = value;
 
 				if ((this.pages == null) || (this.pages.Count == 0)) // even if no pages, select page 1 anyway
-					SelectedPage = 1;
-				else if (this.selectedPage > this.pages.Count)
-					SelectedPage = this.pages.Count;
+					SelectedIdPage = 1;
+				else if (this.selectedIdPage > this.pages.Count)
+					SelectedIdPage = this.pages.Count;
 				else
 					SetControls();
 			}
@@ -137,21 +137,21 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Commands")]
 		[Description("The selected page.")]
-		[DefaultValue(SelectedPageDefault)]
-		public virtual int SelectedPage
+		[DefaultValue(SelectedPageIdDefault)]
+		public virtual int SelectedIdPage
 		{
-			get { return (this.selectedPage); }
+			get { return (this.selectedIdPage); }
 			set
 			{
-				int selectedPageNew;
+				int selectedPageIdNew;
 				if ((this.pages != null) && (this.pages.Count > 0))
-					selectedPageNew = Int32Ex.Limit(value, SelectedPageDefault, this.pages.Count); // 'Count' is 1 or above.
+					selectedPageIdNew = Int32Ex.Limit(value, SelectedPageIdDefault, this.pages.Count); // 'Count' is 1 or above.
 				else
-					selectedPageNew = SelectedPageDefault;
+					selectedPageIdNew = SelectedPageIdDefault;
 
-				if (this.selectedPage != selectedPageNew)
+				if (this.selectedIdPage != selectedPageIdNew)
 				{
-					this.selectedPage = selectedPageNew;
+					this.selectedIdPage = selectedPageIdNew;
 					SetControls();
 					OnSelectedPageChanged(EventArgs.Empty);
 				}
@@ -207,13 +207,13 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void NextPage()
 		{
-			SelectedPage++;
+			SelectedIdPage++;
 		}
 
 		/// <summary></summary>
 		public virtual void PreviousPage()
 		{
-			SelectedPage--;
+			SelectedIdPage--;
 		}
 
 		/// <summary>
@@ -252,12 +252,12 @@ namespace YAT.View.Controls
 
 		private void pageButtons_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
-			RequestSendCommand(e.Command);
+			RequestSendCommand(e.CommandId);
 		}
 
 		private void pageButtons_DefineCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
-			RequestDefineCommand(e.Command);
+			RequestDefineCommand(e.CommandId);
 		}
 
 		private void button_PagePrevious_Click(object sender, EventArgs e)
@@ -275,7 +275,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			SelectedPage = comboBox_Pages.SelectedIndex + 1;
+			SelectedIdPage = (comboBox_Pages.SelectedIndex + 1);
 		}
 
 		#endregion
@@ -287,7 +287,7 @@ namespace YAT.View.Controls
 
 		private int SelectedPageIndex
 		{
-			get { return (this.selectedPage - 1); }
+			get { return (this.selectedIdPage - 1); }
 		}
 
 		private void SetControls()
@@ -300,15 +300,15 @@ namespace YAT.View.Controls
 				pageButtons_1A.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
 				if ((this.pages != null) && (this.pages.Count > 0) &&
-				    (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
+				    (this.selectedIdPage >= 1) && (this.selectedIdPage <= this.pages.Count))
 				{
 					pageButtons_1A.Commands = this.pages[SelectedPageIndex].Commands;
 
-					button_PagePrevious.Enabled = (this.selectedPage > 1);
-					button_PageNext.Enabled     = (this.selectedPage < this.pages.Count);
+					button_PagePrevious.Enabled = (this.selectedIdPage > 1);
+					button_PageNext.Enabled     = (this.selectedIdPage < this.pages.Count);
 
 					label_Page.Enabled = this.terminalIsReadyToSend;
-					label_Page.Text = "Page " + this.selectedPage + "/" + this.pages.Count;
+					label_Page.Text = "Page " + this.selectedIdPage + "/" + this.pages.Count;
 
 					comboBox_Pages.Enabled = (this.pages.Count > 1); // No need to navigate a single page.
 					comboBox_Pages.Items.Clear();
@@ -336,14 +336,14 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void RequestSendCommand(int command)
+		private void RequestSendCommand(int commandId)
 		{
-			OnSendCommandRequest(new PredefinedCommandEventArgs(this.selectedPage, command));
+			OnSendCommandRequest(new PredefinedCommandEventArgs(this.selectedIdPage, commandId));
 		}
 
-		private void RequestDefineCommand(int command)
+		private void RequestDefineCommand(int commandId)
 		{
-			OnDefineCommandRequest(new PredefinedCommandEventArgs(this.selectedPage, command));
+			OnDefineCommandRequest(new PredefinedCommandEventArgs(this.selectedIdPage, commandId));
 		}
 
 		#endregion
@@ -356,7 +356,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnSelectedPageChanged(EventArgs e)
 		{
-			EventHelper.RaiseSync(SelectedPageChanged, this, e);
+			EventHelper.RaiseSync(SelectedPageIdChanged, this, e);
 		}
 
 		/// <summary></summary>

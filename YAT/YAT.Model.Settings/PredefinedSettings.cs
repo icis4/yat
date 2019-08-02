@@ -30,7 +30,7 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	public class PredefinedSettings : MKY.Settings.SettingsItem, IEquatable<PredefinedSettings>
 	{
-		private int selectedPage;
+		private int selectedPageId;
 
 		/// <summary></summary>
 		public PredefinedSettings()
@@ -53,7 +53,7 @@ namespace YAT.Model.Settings
 		public PredefinedSettings(PredefinedSettings rhs)
 			: base(rhs)
 		{
-			SelectedPage = rhs.SelectedPage;
+			SelectedPageId = rhs.SelectedPageId;
 
 			ClearChanged();
 		}
@@ -65,7 +65,7 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			SelectedPage = 1;
+			SelectedPageId = 1;
 		}
 
 		#region Properties
@@ -74,15 +74,15 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("SelectedPage")]
-		public virtual int SelectedPage
+		[XmlElement("SelectedPageId")]
+		public virtual int SelectedPageId
 		{
-			get { return (this.selectedPage); }
+			get { return (this.selectedPageId); }
 			set
 			{
-				if (this.selectedPage != value)
+				if (this.selectedPageId != value)
 				{
-					this.selectedPage = value;
+					this.selectedPageId = value;
 					SetMyChanged();
 				}
 			}
@@ -108,7 +108,7 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ SelectedPage;
+				hashCode = (hashCode * 397) ^ SelectedPageId;
 
 				return (hashCode);
 			}
@@ -139,7 +139,7 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SelectedPage.Equals(other.SelectedPage)
+				SelectedPageId.Equals(other.SelectedPageId)
 			);
 		}
 

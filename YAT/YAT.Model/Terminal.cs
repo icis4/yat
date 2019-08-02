@@ -3953,18 +3953,18 @@ namespace YAT.Model
 		/// <summary>
 		/// Send requested predefined command.
 		/// </summary>
-		/// <param name="page">Page 1..max.</param>
-		/// <param name="command">Command 1..max.</param>
-		public virtual bool SendPredefined(int page, int command)
+		/// <param name="pageId">Page 1..max.</param>
+		/// <param name="commandId">Command 1..max.</param>
+		public virtual bool SendPredefined(int pageId, int commandId)
 		{
 			AssertNotDisposed();
 
 			// Verify arguments:
-			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(page - 1, command - 1))
+			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(pageId - 1, commandId - 1))
 				return (false);
 
 			// Process command:
-			var c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			var c = this.settingsRoot.PredefinedCommand.Pages[pageId - 1].Commands[commandId - 1];
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
 				SendText(c);
@@ -3993,18 +3993,18 @@ namespace YAT.Model
 		/// Copy the requested predefined command, not taking copy predefined settings
 		/// <see cref="Domain.Settings.SendSettings.CopyPredefined"/> into account.
 		/// </summary>
-		/// <param name="page">Page 1..max.</param>
-		/// <param name="command">Command 1..max.</param>
-		public virtual bool CopyPredefined(int page, int command)
+		/// <param name="pageId">Page 1..max.</param>
+		/// <param name="commandId">Command 1..max.</param>
+		public virtual bool CopyPredefined(int pageId, int commandId)
 		{
 			AssertNotDisposed();
 
 			// Verify arguments:
-			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(page - 1, command - 1))
+			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(pageId - 1, commandId - 1))
 				return (false);
 
 			// Process command:
-			var c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			var c = this.settingsRoot.PredefinedCommand.Pages[pageId - 1].Commands[commandId - 1];
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
 				this.settingsRoot.SendText.Command = new Command(c); // Clone command to ensure decoupling.
@@ -5021,7 +5021,7 @@ namespace YAT.Model
 			this.autoResponseCount++; // Incrementing before sending to have the effective count available during sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
 
-			int page = this.settingsRoot.Predefined.SelectedPage;
+			int page = this.settingsRoot.Predefined.SelectedPageId;
 			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
 			{
 				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence); break;
