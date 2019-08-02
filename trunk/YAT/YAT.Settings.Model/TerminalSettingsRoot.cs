@@ -452,7 +452,7 @@ namespace YAT.Settings.Model
 					case AutoTrigger.PredefinedCommand11:
 					case AutoTrigger.PredefinedCommand12:
 					{
-						int pageId = Predefined.SelectedPage;
+						int pageId = Predefined.SelectedPageId;
 						int commandId = trigger.ToPredefinedCommandId();
 						if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 						{
@@ -529,7 +529,7 @@ namespace YAT.Settings.Model
 					case YAT.Model.Types.AutoResponse.PredefinedCommand11:
 					case YAT.Model.Types.AutoResponse.PredefinedCommand12:
 					{
-						int pageId = Predefined.SelectedPage;
+						int pageId = Predefined.SelectedPageId;
 						int commandId = response.ToPredefinedCommandId();
 						if (commandId != AutoResponseEx.InvalidPredefinedCommandId)
 						{
@@ -624,7 +624,7 @@ namespace YAT.Settings.Model
 				case AutoTrigger.PredefinedCommand11:
 				case AutoTrigger.PredefinedCommand12:
 				{
-					int pageId = Predefined.SelectedPage;
+					int pageId = Predefined.SelectedPageId;
 					int commandId = trigger.ToPredefinedCommandId();
 					if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 					{
@@ -727,6 +727,7 @@ namespace YAT.Settings.Model
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                                new string[] { "LogIsOpen" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                                new string[] { "LogIsStarted" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "SendText",                                               new string[] { "SendCommand" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit", "Predefined"                                         }, "SelectedPageId",                                         new string[] { "SelectedPage" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit", "Layout"                                             }, "SendTextPanelIsVisible",                                 new string[] { "SendCommandPanelIsVisible" } )
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, new string[] { "Implicit", "TerminalIsStarted" },         new string[] { "Explicit", "TerminalIsStarted" } ),            => Should be moved, but doesn't work because names are at a deeper level. Should be solved using XML transformation. */
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, new string[] { "Explicit", "LogIsOn" },                   new string[] { "Implicit", "LogIsOn" } ),                      => Should be moved, but doesn't work because names are at a deeper level. Should be solved using XML transformation. */

@@ -30,22 +30,22 @@ namespace YAT.Model.Types
 	public class PredefinedCommandEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public int Page { get; }
+		public int PageId { get; }
 
 		/// <summary></summary>
-		public int Command { get; }
+		public int CommandId { get; }
 
 		/// <summary></summary>
-		public PredefinedCommandEventArgs(int command)
-			: this(1, command)
+		public PredefinedCommandEventArgs(int commandId)
+			: this(1, commandId)
 		{
 		}
 
 		/// <summary></summary>
-		public PredefinedCommandEventArgs(int page, int command)
+		public PredefinedCommandEventArgs(int pageId, int commandId)
 		{
-			Page    = page;
-			Command = command;
+			PageId    = pageId;
+			CommandId = commandId;
 		}
 	}
 }
