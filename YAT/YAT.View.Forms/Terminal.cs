@@ -2099,7 +2099,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.contextMenuStrip_Commands_Opening()
 			// Changes here may have to be applied there too.
 
-			var np = 12; // PENDING
+			PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsRoot.PredefinedCommand.PageLayout;
+			var np = pageLayoutEx.CommandCapacityPerPage;
 			var id = predefined.GetCommandIdFromLocation(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
 			var c  = predefined.GetCommandFromId(id);
 			var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
@@ -2110,7 +2111,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
 
-			//ToolStripComboBoxHelper.Select(toolStripComboBox_PredefinedContextMenu_Layout, (PredefinedCommandPageLayoutEx)this.settingsRoot.Layout.MonitorOrientation); PENDING
+			ToolStripComboBoxHelper.Select(toolStripComboBox_PredefinedContextMenu_Layout, pageLayoutEx);
 
 			toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
@@ -2409,7 +2410,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-		////SetPredefinedLayout((PredefinedLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem); PENDING
+			this.settingsRoot.PredefinedCommand.PageLayout = (PredefinedCommandPageLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem;
 		}
 
 		// While the purpose of
@@ -2816,7 +2817,8 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Command_Opening(object sender, CancelEventArgs e)
 		{
-			var np = 12; // PENDING
+			PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsRoot.PredefinedCommand.PageLayout;
+			var np = pageLayoutEx.CommandCapacityPerPage;
 
 			toolStripMenuItem_CommandContextMenu_Separator_12.Visible = (np > 12);
 			toolStripMenuItem_CommandContextMenu_13          .Visible = (np > 12);

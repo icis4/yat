@@ -106,7 +106,6 @@ namespace YAT.View.Forms
 		/// <param name="useExplicitDefaultRadix">Whether to use an explicit default radix.</param>
 		/// <param name="parseModeForText">The parse mode related to the command.</param>
 		/// <param name="rootDirectoryForFile">The root path for file commands.</param>
-		/// <param name="pageLayout">The current page layout.</param>
 		/// <param name="requestedPageId">Page 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		/// <param name="requestedCommandId">Command 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		/// <param name="indicatedName">The indicated terminal name.</param>
@@ -768,11 +767,15 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
+			SuspendLayout();
+
 			SetLayoutControls();
 			SetPagesControls();
 			SetPageControls();
 			SetClearControls();
 			SetLinkControls();
+
+			ResumeLayout();
 		}
 
 		private void SetLayoutControls()
@@ -784,17 +787,34 @@ namespace YAT.View.Forms
 				Model.Types.PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsInEdit.PageLayout;
 				comboBox_Layout.SelectedItem = pageLayoutEx;
 
-			////subpageCheckBox_1A.Visible = true;
-				subpageCheckBox_2A.Visible = (pageLayoutEx.RowsPerPage >= 2);
-				subpageCheckBox_3A.Visible = (pageLayoutEx.RowsPerPage >= 3);
-				subpageCheckBox_1B.Visible =                                    (pageLayoutEx.ColumnsPerPage >= 2);
-				subpageCheckBox_2B.Visible = (pageLayoutEx.RowsPerPage >= 2) && (pageLayoutEx.ColumnsPerPage >= 2);
-				subpageCheckBox_3B.Visible = (pageLayoutEx.RowsPerPage >= 3) && (pageLayoutEx.ColumnsPerPage >= 2);
-				subpageCheckBox_1C.Visible =                                    (pageLayoutEx.ColumnsPerPage >= 3);
-				subpageCheckBox_2C.Visible = (pageLayoutEx.RowsPerPage >= 2) && (pageLayoutEx.ColumnsPerPage >= 3);
-				subpageCheckBox_3C.Visible = (pageLayoutEx.RowsPerPage >= 3) && (pageLayoutEx.ColumnsPerPage >= 3);
+				subpageCheckBox_1A.Visible = (pageLayoutEx.ColumnsPerPage >  1) || (pageLayoutEx.RowsPerPage >  1);
+				subpageCheckBox_2A.Visible =                                       (pageLayoutEx.RowsPerPage >= 2);
+				subpageCheckBox_3A.Visible =                                       (pageLayoutEx.RowsPerPage >= 3);
+				subpageCheckBox_1B.Visible = (pageLayoutEx.ColumnsPerPage >= 2);
+				subpageCheckBox_2B.Visible = (pageLayoutEx.ColumnsPerPage >= 2) && (pageLayoutEx.RowsPerPage >= 2);
+				subpageCheckBox_3B.Visible = (pageLayoutEx.ColumnsPerPage >= 2) && (pageLayoutEx.RowsPerPage >= 3);
+				subpageCheckBox_1C.Visible = (pageLayoutEx.ColumnsPerPage >= 3);
+				subpageCheckBox_2C.Visible = (pageLayoutEx.ColumnsPerPage >= 3) && (pageLayoutEx.RowsPerPage >= 2);
+				subpageCheckBox_3C.Visible = (pageLayoutEx.ColumnsPerPage >= 3) && (pageLayoutEx.RowsPerPage >= 3);
 
-				//subpageCheckBox_1A.Location = PENDING
+				subpageCheckBox_1A.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationTopLeft    .X) : (this.subpageCheckBoxLocationLeftAbove .X));
+				subpageCheckBox_1A.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationTopLeft    .Y) : (this.subpageCheckBoxLocationLeftAbove .Y));
+				subpageCheckBox_2A.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationTopLeft    .X) : (this.subpageCheckBoxLocationLeftAbove .X));
+				subpageCheckBox_2A.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationCenter     .Y) : (this.subpageCheckBoxLocationRightBelow.Y));
+				subpageCheckBox_3A.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationTopLeft    .X) : (this.subpageCheckBoxLocationLeftAbove .X));
+			////subpageCheckBox_3A.Top             is fixed to                   this.subpageCheckBoxLocationBottomRight.Y
+				subpageCheckBox_1B.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationCenter     .X) : (this.subpageCheckBoxLocationRightBelow.X));
+				subpageCheckBox_1B.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationTopLeft    .Y) : (this.subpageCheckBoxLocationLeftAbove .Y));
+				subpageCheckBox_2B.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationCenter     .X) : (this.subpageCheckBoxLocationRightBelow.X));
+				subpageCheckBox_2B.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationCenter     .Y) : (this.subpageCheckBoxLocationRightBelow.Y));
+				subpageCheckBox_3B.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationCenter     .X) : (this.subpageCheckBoxLocationRightBelow.X));
+			////subpageCheckBox_3B.Top            is fixed to                    this.subpageCheckBoxLocationBottomRight.Y
+			////subpageCheckBox_1C.Left           is fixed to                    this.subpageCheckBoxLocationBottomRight.X
+				subpageCheckBox_1C.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationTopLeft    .Y) : (this.subpageCheckBoxLocationLeftAbove .Y));
+			////subpageCheckBox_2C.Left           is fixed to                    this.subpageCheckBoxLocationBottomRight.X
+				subpageCheckBox_2C.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationCenter     .Y) : (this.subpageCheckBoxLocationRightBelow.Y));
+			////subpageCheckBox_3C.Left           is fixed to                    this.subpageCheckBoxLocationBottomRight.X
+			////subpageCheckBox_3C.Top            is fixed to                    this.subpageCheckBoxLocationBottomRight.Y
 			}
 			finally
 			{
@@ -837,7 +857,7 @@ namespace YAT.View.Forms
 				button_InsertPagesFromFile   .Enabled = pageIsSelected;
 			////button_AddPage               .Enabled = true;
 			////button_AddPagesFromFile      .Enabled = true;
-				button_DuplicatePage              .Enabled = pageIsSelected;
+				button_DuplicatePage         .Enabled = pageIsSelected;
 				button_ExportPageToFile      .Enabled = pageIsSelected;
 				button_DeletePage            .Enabled = pageIsSelected; // Deleting a sole page is permissible.
 				button_MovePageUp            .Enabled = pageIsSelected && (this.selectedPageId > 1);
@@ -869,12 +889,13 @@ namespace YAT.View.Forms
 				{
 					groupBox_Page.Enabled = true;
 
-					int pageCount = this.settingsInEdit.Pages.Count;
+					int commandOffset = ((this.selectedSubpageId - 1) * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
 					int commandCount = 0;
-					if (pageCount >= this.selectedPageId)
-						commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
+					int pageCount = this.settingsInEdit.Pages.Count;
+					if (pageCount > SelectedPageIndex)
+						commandCount = (this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count - commandOffset);
 
-					for (int i = 0; i < commandCount; i++)
+					for (int i = commandOffset; i < commandCount; i++)
 						this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[i];
 
 					for (int i = commandCount; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
