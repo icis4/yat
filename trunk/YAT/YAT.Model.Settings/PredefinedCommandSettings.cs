@@ -223,10 +223,14 @@ namespace YAT.Model.Settings
 		/// <param name="commandIndex">Command index 0..(<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>-1).</param>
 		public virtual void ClearCommand(int pageIndex, int commandIndex)
 		{
-			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
+			if ((pageIndex >= 0) && (pageIndex < this.pages.Count))
 			{
-				this.pages[pageIndex].Commands[commandIndex].Clear();
-				SetMyChanged();
+				var page = this.pages[pageIndex];
+				if ((commandIndex >= 0) && (commandIndex < PredefinedCommandPage.MaxCommandCapacityPerPage))
+				{
+					page.ClearCommand(commandIndex);
+					SetMyChanged();
+				}
 			}
 		}
 

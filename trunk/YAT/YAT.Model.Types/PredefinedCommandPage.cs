@@ -148,21 +148,19 @@ namespace YAT.Model.Types
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
-		/// <param name="index">Index 0..max-1.</param>
+		/// <param name="index">Command index 0..(<see cref="MaxCommandCapacityPerPage"/> - 1).</param>
 		/// <param name="command">Command to be set.</param>
 		public virtual void SetCommand(int index, Command command)
 		{
-			if (index >= 0)
+			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
+				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if (command != null)
 			{
 				if (index < this.commands.Count)
 				{
-					if ((command != null) && (command.IsDefined))
-						this.commands[index] = new Command(command); // Clone command to ensure decoupling.
-					else if (index == (this.commands.Count - 1))
-						this.commands.RemoveAt(index); // Remove command if it is last.
-					else
-						this.commands[index] = new Command(); // Clear command.
+					// Replace command:
+					this.commands[index] = new Command(command); // Clone command to ensure decoupling.
 				}
 				else
 				{
@@ -172,6 +170,32 @@ namespace YAT.Model.Types
 
 					// Add command:
 					this.commands.Add(new Command(command));
+				}
+			}
+			else
+			{
+				ClearCommand(index);
+			}
+		}
+
+		/// <param name="index">Command index 0..(<see cref="MaxCommandCapacityPerPage"/> - 1).</param>
+		public virtual void ClearCommand(int index)
+		{
+			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
+				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if (index == (this.commands.Count - 1))
+			{
+				// Remove command:
+				this.commands.RemoveAt(index);
+
+				// Remove trailing command(s):
+				for (int i = (index - 1); i >= 0; i--)
+				{
+					if ((this.commands[i] == null) || (!this.commands[i].IsDefined))
+						this.commands.RemoveAt(index);
+					else
+						break;
 				}
 			}
 		}
