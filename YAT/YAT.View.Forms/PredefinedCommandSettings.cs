@@ -90,7 +90,7 @@ namespace YAT.View.Forms
 		private Point subpageCheckBoxLocationLeftAbove;
 		private Point subpageCheckBoxLocationCenter;
 		private Point subpageCheckBoxLocationRightBelow;
-		private Point subpageCheckBoxLocationBottomRight;
+	////private Point subpageCheckBoxLocationBottomRight; is not needed.
 		private List<Label> predefinedCommandSettingsSetLabels;                            // = null;
 		private List<Controls.PredefinedCommandSettingsSet> predefinedCommandSettingsSets; // = null;
 
@@ -701,26 +701,27 @@ namespace YAT.View.Forms
 		{
 			comboBox_Layout.Items.AddRange(Model.Types.PredefinedCommandPageLayoutEx.GetItems());
 
-			var deltaX = ((subpageCheckBox_1B.Left - subpageCheckBox_1A.Left) + (subpageCheckBox_1B.Left - subpageCheckBox_1A.Right));
-			var deltaY = ((subpageCheckBox_2A.Top  - subpageCheckBox_1A.Top)  + (subpageCheckBox_2A.Top  - subpageCheckBox_1A.Bottom));
+			          // (                     distance / 2                      )
+			var deltaX = ((subpageCheckBox_1B.Left - subpageCheckBox_1A.Left) / 2);
+			var deltaY = ((subpageCheckBox_2A.Top  - subpageCheckBox_1A.Top ) / 2);
 
 			this.subpageCheckBoxLocationTopLeft     = subpageCheckBox_1A.Location;
-			this.subpageCheckBoxLocationLeftAbove   = new Point((subpageCheckBox_1A.Left + deltaX), (subpageCheckBox_2A.Top - deltaY));
+			this.subpageCheckBoxLocationLeftAbove   = new Point((subpageCheckBox_1A.Left + deltaX), (subpageCheckBox_1A.Top + deltaY));
 			this.subpageCheckBoxLocationCenter      = subpageCheckBox_2B.Location;
-			this.subpageCheckBoxLocationRightBelow  = new Point((subpageCheckBox_2B.Left + deltaX), (subpageCheckBox_3B.Top - deltaY));
-			this.subpageCheckBoxLocationBottomRight = subpageCheckBox_3C.Location;
+			this.subpageCheckBoxLocationRightBelow  = new Point((subpageCheckBox_2B.Left + deltaX), (subpageCheckBox_2B.Top + deltaY));
+		////this.subpageCheckBoxLocationBottomRight = subpageCheckBox_3C.Location; is not needed.
 
-			if (!useExplicitDefaultRadix) // Default
+			if (!useExplicitDefaultRadix)
 			{
 				label_ExplicitDefaultRadix.Visible = false;
-				label_File.Left = (int)((this.scale.Width *   6) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-				label_Data.Left = (int)((this.scale.Width *  54) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				label_File.Left = (int)((this.scale.Width *   3) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				label_Data.Left = (int)((this.scale.Width *  52) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 			}
 			else
 			{
 				label_ExplicitDefaultRadix.Visible = true;
-				label_File.Left = (int)((this.scale.Width *  87) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-				label_Data.Left = (int)((this.scale.Width * 135) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				label_File.Left = (int)((this.scale.Width *  85) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				label_Data.Left = (int)((this.scale.Width * 133) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 			}
 
 			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
@@ -771,9 +772,30 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				Point location;
+				int subpage1, subpage2;
+				int leftA, leftB;
+				int top1, top2;
+
 				Model.Types.PredefinedCommandPageLayout pageLayout = this.settingsInEdit.PageLayout;
 				Model.Types.PredefinedCommandPageLayoutEx pageLayoutEx = pageLayout;
+
 				comboBox_Layout.SelectedItem = pageLayoutEx;
+
+				switch (pageLayout)
+				{                                                            // \remind (2019-08-05 / MKY):
+					case Model.Types.PredefinedCommandPageLayout.TwoByOne:   // Could initially be calculated.
+					case Model.Types.PredefinedCommandPageLayout.ThreeByOne: location = new Point(103, 16); break;
+					case Model.Types.PredefinedCommandPageLayout.OneByTwo:   location = new Point(167, 31); break;
+					case Model.Types.PredefinedCommandPageLayout.OneByThree: location = new Point(135, 31); break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:   location = new Point(167, 16); break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: location = new Point(135, 16); break;
+					case Model.Types.PredefinedCommandPageLayout.ThreeByTwo: location = new Point( 71, 16); break;
+					default:                                                 location = new Point( 40, 16); break;
+				}
+
+				label_SubpageSelection.Location = location;
+				label_SubpageSelection.Visible = (pageLayout != Model.Types.PredefinedCommandPageLayout.OneByOne);
 
 				// Attention:
 				// Similar code exists in...
@@ -781,16 +803,44 @@ namespace YAT.View.Forms
 				// Changes here may have to be applied there too.
 
 			////subpageCheckBox_1A.Subpage = 1 is fixed.
-				subpageCheckBox_2A.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.ThreeByTwo)   ? (4) : (2));
+			////subpageCheckBox_2A.Subpage = 2 is fixed.
 			////subpageCheckBox_3A.Subpage = 3 is fixed.
-				subpageCheckBox_1B.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.OneByTwo)   ||
-				                              (pageLayout == Model.Types.PredefinedCommandPageLayout.OneByThree) ||
-				                              (pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByThree)   ? (2) : (4));
-				subpageCheckBox_2B.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByTwo)     ? (4) : (5));
-				subpageCheckBox_3B.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.ThreeByThree) ? (8) : (6));
-				subpageCheckBox_1C.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.OneByThree) ||
-				                              (pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByThree)   ? (3) : (7));
-				subpageCheckBox_2C.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByThree)   ? (6) : (8));
+
+				switch (pageLayout)
+				{
+					case Model.Types.PredefinedCommandPageLayout.OneByTwo:
+					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpage1 = 2; break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage1 = 3; break;
+					default:                                                 subpage1 = 4; break;
+				}
+
+				switch (pageLayout)
+				{
+					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage2 = 4; break;
+					default:                                                 subpage2 = 5; break;
+				}
+
+				subpageCheckBox_1B.Subpage = subpage1;
+				subpageCheckBox_2B.Subpage = subpage2;
+			////subpageCheckBox_3B.Subpage = 6 is fixed
+
+				switch (pageLayout)
+				{
+					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpage1 = 3; break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage1 = 5; break;
+					default:                                                 subpage1 = 7; break;
+				}
+
+				switch (pageLayout)
+				{
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage2 = 6; break;
+					default:                                                 subpage2 = 8; break;
+				}
+
+				subpageCheckBox_1C.Subpage = subpage1;
+				subpageCheckBox_2C.Subpage = subpage2;
 			////subpageCheckBox_3C.Subpage = 9 is fixed.
 
 				subpageCheckBox_1A.Visible = (pageLayoutEx.ColumnsPerPage >  1) || (pageLayoutEx.RowsPerPage >  1);
@@ -803,24 +853,38 @@ namespace YAT.View.Forms
 				subpageCheckBox_2C.Visible = (pageLayoutEx.ColumnsPerPage >= 3) && (pageLayoutEx.RowsPerPage >= 2);
 				subpageCheckBox_3C.Visible = (pageLayoutEx.ColumnsPerPage >= 3) && (pageLayoutEx.RowsPerPage >= 3);
 
-				subpageCheckBox_1A.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationTopLeft    .X) : (this.subpageCheckBoxLocationLeftAbove .X));
-				subpageCheckBox_1A.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationTopLeft    .Y) : (this.subpageCheckBoxLocationLeftAbove .Y));
-				subpageCheckBox_2A.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationTopLeft    .X) : (this.subpageCheckBoxLocationLeftAbove .X));
-				subpageCheckBox_2A.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationCenter     .Y) : (this.subpageCheckBoxLocationRightBelow.Y));
-				subpageCheckBox_3A.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationTopLeft    .X) : (this.subpageCheckBoxLocationLeftAbove .X));
-			////subpageCheckBox_3A.Top             is fixed to                   this.subpageCheckBoxLocationBottomRight.Y
-				subpageCheckBox_1B.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationCenter     .X) : (this.subpageCheckBoxLocationRightBelow.X));
-				subpageCheckBox_1B.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationTopLeft    .Y) : (this.subpageCheckBoxLocationLeftAbove .Y));
-				subpageCheckBox_2B.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationCenter     .X) : (this.subpageCheckBoxLocationRightBelow.X));
-				subpageCheckBox_2B.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationCenter     .Y) : (this.subpageCheckBoxLocationRightBelow.Y));
-				subpageCheckBox_3B.Left = ((pageLayoutEx.ColumnsPerPage >= 3) ? (this.subpageCheckBoxLocationCenter     .X) : (this.subpageCheckBoxLocationRightBelow.X));
-			////subpageCheckBox_3B.Top            is fixed to                    this.subpageCheckBoxLocationBottomRight.Y
-			////subpageCheckBox_1C.Left           is fixed to                    this.subpageCheckBoxLocationBottomRight.X
-				subpageCheckBox_1C.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationTopLeft    .Y) : (this.subpageCheckBoxLocationLeftAbove .Y));
-			////subpageCheckBox_2C.Left           is fixed to                    this.subpageCheckBoxLocationBottomRight.X
-				subpageCheckBox_2C.Top  = ((pageLayoutEx.RowsPerPage    >= 3) ? (this.subpageCheckBoxLocationCenter     .Y) : (this.subpageCheckBoxLocationRightBelow.Y));
-			////subpageCheckBox_3C.Left           is fixed to                    this.subpageCheckBoxLocationBottomRight.X
-			////subpageCheckBox_3C.Top            is fixed to                    this.subpageCheckBoxLocationBottomRight.Y
+				if      (pageLayoutEx.ColumnsPerPage >= 3)    leftA = this.subpageCheckBoxLocationTopLeft   .X;
+				else if (pageLayoutEx.ColumnsPerPage >= 2)    leftA = this.subpageCheckBoxLocationLeftAbove .X;
+				else /* (pageLayoutEx.ColumnsPerPage >= 1) */ leftA = this.subpageCheckBoxLocationCenter    .X;
+
+				if      (pageLayoutEx.ColumnsPerPage >= 3)    leftB = this.subpageCheckBoxLocationCenter    .X;
+				else /* (pageLayoutEx.ColumnsPerPage >= 2) */ leftB = this.subpageCheckBoxLocationRightBelow.X;
+
+				if      (pageLayoutEx.RowsPerPage    >= 3)    top1  = this.subpageCheckBoxLocationTopLeft   .Y;
+				else if (pageLayoutEx.RowsPerPage    >= 2)    top1  = this.subpageCheckBoxLocationLeftAbove .Y;
+				else /* (pageLayoutEx.RowsPerPage    >= 1) */ top1  = this.subpageCheckBoxLocationCenter    .Y;
+
+				if      (pageLayoutEx.RowsPerPage    >= 3)    top2  = this.subpageCheckBoxLocationCenter    .Y;
+				else /* (pageLayoutEx.RowsPerPage    >= 2) */ top2  = this.subpageCheckBoxLocationRightBelow.Y;
+
+				subpageCheckBox_1A.Left = leftA;
+				subpageCheckBox_1A.Top  = top1;
+				subpageCheckBox_2A.Left = leftA;
+				subpageCheckBox_2A.Top  = top2;
+				subpageCheckBox_3A.Left = leftA;
+			////subpageCheckBox_3A.Top  = top3 is fixed.
+				subpageCheckBox_1B.Left = leftB;
+				subpageCheckBox_1B.Top  = top1;
+				subpageCheckBox_2B.Left = leftB;
+				subpageCheckBox_2B.Top  = top2;
+				subpageCheckBox_3B.Left = leftB;
+			////subpageCheckBox_3B.Top  = top3 is fixed.
+			////subpageCheckBox_1C.Left = leftC is fixed.
+				subpageCheckBox_1C.Top  = top1;
+			////subpageCheckBox_2C.Left = leftC is fixed.
+				subpageCheckBox_2C.Top  = top2;
+			////subpageCheckBox_3C.Left = leftC is fixed.
+			////subpageCheckBox_3C.Top  = top3 is fixed.
 			}
 			finally
 			{
@@ -896,16 +960,15 @@ namespace YAT.View.Forms
 					groupBox_Page.Enabled = true;
 
 					int commandOffset = ((this.selectedSubpageId - 1) * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
-					int commandCount = 0;
-					int pageCount = this.settingsInEdit.Pages.Count;
-					if (pageCount > SelectedPageIndex)
-						commandCount = (this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count - commandOffset);
 
-					for (int i = commandOffset; i < commandCount; i++)
-						this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[i];
-
-					for (int i = commandCount; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
-						this.predefinedCommandSettingsSets[i].Command = null;
+					for (int i = 0; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
+					{
+						int commandIndex = (commandOffset + i);
+						if (commandIndex < this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count)
+							this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[commandIndex];
+						else
+							this.predefinedCommandSettingsSets[i].Command = null;
+					}
 				}
 				else
 				{
@@ -1233,7 +1296,6 @@ namespace YAT.View.Forms
 		}
 
 		#endregion
-
 	}
 }
 

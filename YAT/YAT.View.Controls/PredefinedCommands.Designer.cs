@@ -217,6 +217,7 @@
 			this.pageButtons_2A.Location = new System.Drawing.Point(3, 292);
 			this.pageButtons_2A.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.pageButtons_2A.Name = "pageButtons_2A";
+			this.pageButtons_2A.ShowSeparatorLine = true;
 			this.pageButtons_2A.Size = new System.Drawing.Size(136, 292);
 			this.pageButtons_2A.Subpage = 2;
 			this.pageButtons_2A.TabIndex = 1;

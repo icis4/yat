@@ -53,7 +53,7 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int SubpageDefault = 1;
+		private const int SubpageDefault = PredefinedCommandPage.FirstSubpageId;
 		private const bool ShowSeparatorLineDefault = false;
 
 		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
@@ -71,9 +71,9 @@ namespace YAT.View.Controls
 
 	////private SettingControlsHelper isSettingControls; is not needed (yet).
 
-		private int subpage;
-		private bool showSeparatorLine;
-		private List<Command> commands;
+		private int subpage = SubpageDefault;
+		private bool showSeparatorLine = ShowSeparatorLineDefault;
+		private List<Command> commands; // = null;
 
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
@@ -335,7 +335,7 @@ namespace YAT.View.Controls
 			{
 				label_SeparatorLine.Visible = this.showSeparatorLine;
 
-				label_Shortcuts_1_12 .Visible = (this.subpage == 1);
+				 label_Shortcuts_1_12.Visible = (this.subpage == 1);
 				label_Shortcuts_13_24.Visible = (this.subpage == 2);
 
 				SetCommandControls();
