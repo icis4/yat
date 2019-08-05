@@ -284,7 +284,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
-		public int RowsPerPage
+		public int ColumnsPerPage
 		{
 			get
 			{
@@ -307,7 +307,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
-		public int ColumnsPerPage
+		public int RowsPerPage
 		{
 			get
 			{

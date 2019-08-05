@@ -217,29 +217,27 @@
 			// 
 			// label_Shortcuts_1_12
 			// 
-			this.label_Shortcuts_1_12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Shortcuts_1_12.AutoSize = true;
 			this.label_Shortcuts_1_12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Shortcuts_1_12.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Shortcuts_1_12.Location = new System.Drawing.Point(76, 0);
+			this.label_Shortcuts_1_12.Location = new System.Drawing.Point(0, 0);
 			this.label_Shortcuts_1_12.Name = "label_Shortcuts_1_12";
 			this.label_Shortcuts_1_12.Size = new System.Drawing.Size(100, 13);
 			this.label_Shortcuts_1_12.TabIndex = 1;
 			this.label_Shortcuts_1_12.Text = "[Ctrl+] Shift+F1..F12";
-			this.label_Shortcuts_1_12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label_Shortcuts_1_12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_Shortcuts_13_24
 			// 
-			this.label_Shortcuts_13_24.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Shortcuts_13_24.AutoSize = true;
 			this.label_Shortcuts_13_24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Shortcuts_13_24.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Shortcuts_13_24.Location = new System.Drawing.Point(70, 0);
+			this.label_Shortcuts_13_24.Location = new System.Drawing.Point(0, 0);
 			this.label_Shortcuts_13_24.Name = "label_Shortcuts_13_24";
 			this.label_Shortcuts_13_24.Size = new System.Drawing.Size(106, 13);
 			this.label_Shortcuts_13_24.TabIndex = 2;
 			this.label_Shortcuts_13_24.Text = "[Ctrl+] Shift+F13..F24";
-			this.label_Shortcuts_13_24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.label_Shortcuts_13_24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_SeparatorLine
 			// 

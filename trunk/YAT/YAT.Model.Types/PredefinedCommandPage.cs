@@ -60,6 +60,9 @@ namespace YAT.Model.Types
 		public const int MaxCommandCapacityPerPage = 108;
 
 		/// <remarks>Subpages are numbered 1..9.</remarks>
+		public const int FirstSubpageId = 1;
+
+		/// <remarks>Subpages are numbered 1..9.</remarks>
 		public const int MaxSubpageCount = 9;
 
 		private string pageName;

@@ -152,6 +152,10 @@
 			this.pathLabel_LinkedTo = new MKY.Windows.Forms.PathLabel();
 			this.comboBox_Layout = new System.Windows.Forms.ComboBox();
 			this.groupBox_Layout = new System.Windows.Forms.GroupBox();
+			this.label_Layout = new System.Windows.Forms.Label();
+			this.subpageCheckBox_3C = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
+			this.subpageCheckBox_2C = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
+			this.subpageCheckBox_1C = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_3B = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_2B = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_1B = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
@@ -159,9 +163,6 @@
 			this.subpageCheckBox_2A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_1A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
-			this.subpageCheckBox_1C = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
-			this.subpageCheckBox_2C = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
-			this.subpageCheckBox_3C = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -749,7 +750,7 @@
 			// label_ExplicitDefaultRadix
 			// 
 			this.label_ExplicitDefaultRadix.AutoSize = true;
-			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(13, 31);
+			this.label_ExplicitDefaultRadix.Location = new System.Drawing.Point(9, 31);
 			this.label_ExplicitDefaultRadix.Name = "label_ExplicitDefaultRadix";
 			this.label_ExplicitDefaultRadix.Size = new System.Drawing.Size(74, 13);
 			this.label_ExplicitDefaultRadix.TabIndex = 0;
@@ -1066,7 +1067,7 @@
 			// label_Data
 			// 
 			this.label_Data.AutoSize = true;
-			this.label_Data.Location = new System.Drawing.Point(135, 31);
+			this.label_Data.Location = new System.Drawing.Point(141, 31);
 			this.label_Data.Name = "label_Data";
 			this.label_Data.Size = new System.Drawing.Size(52, 13);
 			this.label_Data.TabIndex = 2;
@@ -1077,7 +1078,7 @@
 			// 
 			this.label_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Description.AutoSize = true;
-			this.label_Description.Location = new System.Drawing.Point(401, 31);
+			this.label_Description.Location = new System.Drawing.Point(398, 31);
 			this.label_Description.Name = "label_Description";
 			this.label_Description.Size = new System.Drawing.Size(63, 13);
 			this.label_Description.TabIndex = 3;
@@ -1389,30 +1390,75 @@
 			this.comboBox_Layout.Location = new System.Drawing.Point(12, 47);
 			this.comboBox_Layout.Name = "comboBox_Layout";
 			this.comboBox_Layout.Size = new System.Drawing.Size(120, 21);
-			this.comboBox_Layout.TabIndex = 0;
+			this.comboBox_Layout.TabIndex = 1;
 			this.comboBox_Layout.SelectedIndexChanged += new System.EventHandler(this.comboBox_Layout_SelectedIndexChanged);
 			// 
 			// groupBox_Layout
 			// 
 			this.groupBox_Layout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Layout.Controls.Add(this.label_Layout);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_3C);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_2C);
-			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_3B);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_1C);
+			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_3B);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_2B);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_1B);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_3A);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_2A);
 			this.groupBox_Layout.Controls.Add(this.subpageCheckBox_1A);
-			this.groupBox_Layout.Controls.Add(this.label_SubpageSelection);
 			this.groupBox_Layout.Controls.Add(this.comboBox_Layout);
+			this.groupBox_Layout.Controls.Add(this.label_SubpageSelection);
 			this.groupBox_Layout.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Layout.Name = "groupBox_Layout";
 			this.groupBox_Layout.Size = new System.Drawing.Size(333, 109);
 			this.groupBox_Layout.TabIndex = 0;
 			this.groupBox_Layout.TabStop = false;
 			this.groupBox_Layout.Text = "La&yout";
+			// 
+			// label_Layout
+			// 
+			this.label_Layout.AutoSize = true;
+			this.label_Layout.Location = new System.Drawing.Point(9, 31);
+			this.label_Layout.Name = "label_Layout";
+			this.label_Layout.Size = new System.Drawing.Size(108, 13);
+			this.label_Layout.TabIndex = 0;
+			this.label_Layout.Text = "Commands per Page:";
+			// 
+			// subpageCheckBox_3C
+			// 
+			this.subpageCheckBox_3C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.subpageCheckBox_3C.Location = new System.Drawing.Point(264, 75);
+			this.subpageCheckBox_3C.Name = "subpageCheckBox_3C";
+			this.subpageCheckBox_3C.Size = new System.Drawing.Size(57, 23);
+			this.subpageCheckBox_3C.Subpage = 9;
+			this.subpageCheckBox_3C.TabIndex = 11;
+			this.subpageCheckBox_3C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.subpageCheckBox_3C.UseVisualStyleBackColor = true;
+			this.subpageCheckBox_3C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
+			// 
+			// subpageCheckBox_2C
+			// 
+			this.subpageCheckBox_2C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.subpageCheckBox_2C.Location = new System.Drawing.Point(264, 46);
+			this.subpageCheckBox_2C.Name = "subpageCheckBox_2C";
+			this.subpageCheckBox_2C.Size = new System.Drawing.Size(57, 23);
+			this.subpageCheckBox_2C.Subpage = 8;
+			this.subpageCheckBox_2C.TabIndex = 10;
+			this.subpageCheckBox_2C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.subpageCheckBox_2C.UseVisualStyleBackColor = true;
+			this.subpageCheckBox_2C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
+			// subpageCheckBox_1C
+			// 
+			this.subpageCheckBox_1C.Appearance = System.Windows.Forms.Appearance.Button;
+			this.subpageCheckBox_1C.Location = new System.Drawing.Point(264, 17);
+			this.subpageCheckBox_1C.Name = "subpageCheckBox_1C";
+			this.subpageCheckBox_1C.Size = new System.Drawing.Size(57, 23);
+			this.subpageCheckBox_1C.Subpage = 7;
+			this.subpageCheckBox_1C.TabIndex = 9;
+			this.subpageCheckBox_1C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.subpageCheckBox_1C.UseVisualStyleBackColor = true;
+			this.subpageCheckBox_1C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
 			// 
 			// subpageCheckBox_3B
 			// 
@@ -1421,10 +1467,11 @@
 			this.subpageCheckBox_3B.Name = "subpageCheckBox_3B";
 			this.subpageCheckBox_3B.Size = new System.Drawing.Size(57, 23);
 			this.subpageCheckBox_3B.Subpage = 6;
-			this.subpageCheckBox_3B.TabIndex = 7;
+			this.subpageCheckBox_3B.TabIndex = 8;
 			this.subpageCheckBox_3B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3B.UseVisualStyleBackColor = true;
 			this.subpageCheckBox_3B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
+			// 
 			// 
 			// subpageCheckBox_2B
 			// 
@@ -1433,7 +1480,7 @@
 			this.subpageCheckBox_2B.Name = "subpageCheckBox_2B";
 			this.subpageCheckBox_2B.Size = new System.Drawing.Size(57, 23);
 			this.subpageCheckBox_2B.Subpage = 5;
-			this.subpageCheckBox_2B.TabIndex = 6;
+			this.subpageCheckBox_2B.TabIndex = 7;
 			this.subpageCheckBox_2B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2B.UseVisualStyleBackColor = true;
 			this.subpageCheckBox_2B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
@@ -1445,7 +1492,7 @@
 			this.subpageCheckBox_1B.Name = "subpageCheckBox_1B";
 			this.subpageCheckBox_1B.Size = new System.Drawing.Size(57, 23);
 			this.subpageCheckBox_1B.Subpage = 4;
-			this.subpageCheckBox_1B.TabIndex = 5;
+			this.subpageCheckBox_1B.TabIndex = 6;
 			this.subpageCheckBox_1B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_1B.UseVisualStyleBackColor = true;
 			this.subpageCheckBox_1B.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
@@ -1457,7 +1504,7 @@
 			this.subpageCheckBox_3A.Name = "subpageCheckBox_3A";
 			this.subpageCheckBox_3A.Size = new System.Drawing.Size(57, 23);
 			this.subpageCheckBox_3A.Subpage = 3;
-			this.subpageCheckBox_3A.TabIndex = 4;
+			this.subpageCheckBox_3A.TabIndex = 5;
 			this.subpageCheckBox_3A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3A.UseVisualStyleBackColor = true;
 			this.subpageCheckBox_3A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
@@ -1469,7 +1516,7 @@
 			this.subpageCheckBox_2A.Name = "subpageCheckBox_2A";
 			this.subpageCheckBox_2A.Size = new System.Drawing.Size(57, 23);
 			this.subpageCheckBox_2A.Subpage = 2;
-			this.subpageCheckBox_2A.TabIndex = 3;
+			this.subpageCheckBox_2A.TabIndex = 4;
 			this.subpageCheckBox_2A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2A.UseVisualStyleBackColor = true;
 			this.subpageCheckBox_2A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
@@ -1480,8 +1527,7 @@
 			this.subpageCheckBox_1A.Location = new System.Drawing.Point(138, 17);
 			this.subpageCheckBox_1A.Name = "subpageCheckBox_1A";
 			this.subpageCheckBox_1A.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_1A.Subpage = 1;
-			this.subpageCheckBox_1A.TabIndex = 2;
+			this.subpageCheckBox_1A.TabIndex = 3;
 			this.subpageCheckBox_1A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_1A.UseVisualStyleBackColor = true;
 			this.subpageCheckBox_1A.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
@@ -1489,47 +1535,11 @@
 			// label_SubpageSelection
 			// 
 			this.label_SubpageSelection.AutoSize = true;
-			this.label_SubpageSelection.Location = new System.Drawing.Point(78, 22);
+			this.label_SubpageSelection.Location = new System.Drawing.Point(40, 16);
 			this.label_SubpageSelection.Name = "label_SubpageSelection";
-			this.label_SubpageSelection.Size = new System.Drawing.Size(54, 13);
-			this.label_SubpageSelection.TabIndex = 1;
-			this.label_SubpageSelection.Text = "Selection:";
-			// 
-			// subpageCheckBox_1C
-			// 
-			this.subpageCheckBox_1C.Appearance = System.Windows.Forms.Appearance.Button;
-			this.subpageCheckBox_1C.Location = new System.Drawing.Point(264, 17);
-			this.subpageCheckBox_1C.Name = "subpageCheckBox_1C";
-			this.subpageCheckBox_1C.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_1C.Subpage = 7;
-			this.subpageCheckBox_1C.TabIndex = 8;
-			this.subpageCheckBox_1C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.subpageCheckBox_1C.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_1C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
-			// 
-			// subpageCheckBox_2C
-			// 
-			this.subpageCheckBox_2C.Appearance = System.Windows.Forms.Appearance.Button;
-			this.subpageCheckBox_2C.Location = new System.Drawing.Point(264, 46);
-			this.subpageCheckBox_2C.Name = "subpageCheckBox_2C";
-			this.subpageCheckBox_2C.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_2C.Subpage = 8;
-			this.subpageCheckBox_2C.TabIndex = 9;
-			this.subpageCheckBox_2C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.subpageCheckBox_2C.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_2C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
-			// 
-			// subpageCheckBox_3C
-			// 
-			this.subpageCheckBox_3C.Appearance = System.Windows.Forms.Appearance.Button;
-			this.subpageCheckBox_3C.Location = new System.Drawing.Point(264, 75);
-			this.subpageCheckBox_3C.Name = "subpageCheckBox_3C";
-			this.subpageCheckBox_3C.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_2C.Subpage = 9;
-			this.subpageCheckBox_3C.TabIndex = 10;
-			this.subpageCheckBox_3C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.subpageCheckBox_3C.UseVisualStyleBackColor = true;
-			this.subpageCheckBox_3C.CheckedChanged += new System.EventHandler(this.subpageCheckBox_I_CheckedChanged);
+			this.label_SubpageSelection.Size = new System.Drawing.Size(100, 13);
+			this.label_SubpageSelection.TabIndex = 2;
+			this.label_SubpageSelection.Text = "Subpage Selection:";
 			// 
 			// PredefinedCommandSettings
 			// 
@@ -1689,14 +1699,15 @@
 		private System.Windows.Forms.ComboBox comboBox_Layout;
 		private System.Windows.Forms.GroupBox groupBox_Layout;
 		private System.Windows.Forms.Label label_SubpageSelection;
+		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_3C;
+		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_2C;
+		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_1C;
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_3B;
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_2B;
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_1B;
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_3A;
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_2A;
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_1A;
-		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_3C;
-		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_2C;
-		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_1C;
+		private System.Windows.Forms.Label label_Layout;
 	}
 }
