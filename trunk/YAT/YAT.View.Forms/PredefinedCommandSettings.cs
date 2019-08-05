@@ -298,12 +298,9 @@ namespace YAT.View.Forms
 
 		private void button_InsertPagesFromFile_Click(object sender, EventArgs e)
 		{
-			int commandCapacityPerPageOld = CommandCapacityPerPage;
-			int commandCapacityPerPageNew;
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFileAndInsert(this, this.settingsInEdit, commandCapacityPerPageOld, this.selectedPageId, out settingsInEditNew, out commandCapacityPerPageNew))
+			if (CommandPagesSettingsHelper.ImportFromFileAndInsert(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
 			{
-				CommandCapacityPerPage = commandCapacityPerPageNew;
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
 			}
@@ -321,12 +318,9 @@ namespace YAT.View.Forms
 
 		private void button_AddPagesFromFile_Click(object sender, EventArgs e)
 		{
-			int commandCapacityPerPageOld = CommandCapacityPerPage;
-			int commandCapacityPerPageNew;
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFileAndAdd(this, this.settingsInEdit, commandCapacityPerPageOld, out settingsInEditNew, out commandCapacityPerPageNew))
+			if (CommandPagesSettingsHelper.ImportFromFileAndAdd(this, this.settingsInEdit, out settingsInEditNew))
 			{
-				CommandCapacityPerPage = commandCapacityPerPageNew;
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
 			}
@@ -384,12 +378,9 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click()
 			// Changes here may have to be applied there too.
 
-			int commandCapacityPerPageOld = CommandCapacityPerPage;
-			int commandCapacityPerPageNew;
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsInEdit, commandCapacityPerPageOld, out settingsInEditNew, out commandCapacityPerPageNew))
+			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsInEdit, out settingsInEditNew))
 			{
-				CommandCapacityPerPage = commandCapacityPerPageNew;
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
 			}
@@ -682,21 +673,10 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Non-Public Methods
+		#region Non-Public Properties
 		//==========================================================================================
-		// Non-Public Methods
+		// Non-Public Properties
 		//==========================================================================================
-
-		/// <remarks><see cref="SetControls"/> is not called by this private property.</remarks>
-		private int CommandCapacityPerPage
-		{
-			get { return (((Model.Types.PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage); }
-			set
-			{
-				if (CommandCapacityPerPage != value)
-					this.settingsInEdit.PageLayout = Model.Types.PredefinedCommandPageLayoutEx.GetMatchingItem(value);
-			}
-		}
 
 		/// <remarks><see cref="SetControls"/> is not called by this private property.</remarks>
 		private int SelectedPageIndex
@@ -704,6 +684,13 @@ namespace YAT.View.Forms
 			get { return (this.selectedPageId - 1);  }
 			set { this.selectedPageId = (value + 1); }
 		}
+
+		#endregion
+
+		#region Non-Public Methods
+		//==========================================================================================
+		// Non-Public Methods
+		//==========================================================================================
 
 		#region Non-Public Methods > Controls
 		//------------------------------------------------------------------------------------------
@@ -784,8 +771,27 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				Model.Types.PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsInEdit.PageLayout;
+				Model.Types.PredefinedCommandPageLayout pageLayout = this.settingsInEdit.PageLayout;
+				Model.Types.PredefinedCommandPageLayoutEx pageLayoutEx = pageLayout;
 				comboBox_Layout.SelectedItem = pageLayoutEx;
+
+				// Attention:
+				// Similar code exists in...
+				// ...View.Controls.PredefinedCommands.SetControls()
+				// Changes here may have to be applied there too.
+
+			////subpageCheckBox_1A.Subpage = 1 is fixed.
+				subpageCheckBox_2A.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.ThreeByTwo)   ? (4) : (2));
+			////subpageCheckBox_3A.Subpage = 3 is fixed.
+				subpageCheckBox_1B.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.OneByTwo)   ||
+				                              (pageLayout == Model.Types.PredefinedCommandPageLayout.OneByThree) ||
+				                              (pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByThree)   ? (2) : (4));
+				subpageCheckBox_2B.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByTwo)     ? (4) : (5));
+				subpageCheckBox_3B.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.ThreeByThree) ? (8) : (6));
+				subpageCheckBox_1C.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.OneByThree) ||
+				                              (pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByThree)   ? (3) : (7));
+				subpageCheckBox_2C.Subpage = ((pageLayout == Model.Types.PredefinedCommandPageLayout.TwoByThree)   ? (6) : (8));
+			////subpageCheckBox_3C.Subpage = 9 is fixed.
 
 				subpageCheckBox_1A.Visible = (pageLayoutEx.ColumnsPerPage >  1) || (pageLayoutEx.RowsPerPage >  1);
 				subpageCheckBox_2A.Visible =                                       (pageLayoutEx.RowsPerPage >= 2);

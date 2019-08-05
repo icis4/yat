@@ -32,14 +32,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Drawing;
 using MKY.Windows.Forms;
 
-using YAT.Model.Settings;
 using YAT.Model.Types;
 
 #endregion
@@ -55,6 +53,9 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		private const int SubpageDefault = 1;
+		private const bool ShowSeparatorLineDefault = false;
+
 		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
 		private const bool TerminalIsReadyToSendDefault = false;
 
@@ -68,7 +69,10 @@ namespace YAT.View.Controls
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<Button> buttons_commands;
 
+	////private SettingControlsHelper isSettingControls; is not needed (yet).
+
 		private int subpage;
+		private bool showSeparatorLine;
 		private List<Command> commands;
 
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
@@ -103,8 +107,9 @@ namespace YAT.View.Controls
 		public PredefinedCommandPageButtons()
 		{
 			InitializeComponent();
-			InitializeButtons();
-			SetControls();
+
+			InitializeControls();
+		////SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -117,16 +122,28 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Behavior")]
 		[Description("The represented subpage.")]
-		[DefaultValue(1)]
+		[DefaultValue(SubpageDefault)]
 		public virtual int Subpage
 		{
 			get { return (this.subpage); }
 			set
 			{
 				this.subpage = value;
+				SetControls();
+			}
+		}
 
-				label_Shortcuts_1_12 .Visible = (this.subpage == 1);
-				label_Shortcuts_13_24.Visible = (this.subpage == 2);
+		/// <summary></summary>
+		[Category("Appearance")]
+		[Description("An optional separator line.")]
+		[DefaultValue(ShowSeparatorLineDefault)]
+		public virtual bool ShowSeparatorLine
+		{
+			get { return (this.showSeparatorLine); }
+			set
+			{
+				this.showSeparatorLine = value;
+				SetControls();
 			}
 		}
 
@@ -140,7 +157,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.commands = value;
-				SetControls();
+				SetCommandControls();
 			}
 		}
 
@@ -153,7 +170,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.parseModeForText = value;
-				SetControls();
+				SetCommandControls();
 			}
 		}
 
@@ -166,7 +183,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.rootDirectoryForFile = value;
-				SetControls();
+				SetCommandControls();
 			}
 		}
 
@@ -179,7 +196,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.terminalIsReadyToSend = value;
-				SetControls();
+				SetCommandControls();
 			}
 		}
 
@@ -247,6 +264,35 @@ namespace YAT.View.Controls
 
 		#endregion
 
+		#region Control Event Handlers
+		//==========================================================================================
+		// Control Event Handlers
+		//==========================================================================================
+
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool isStartingUp = true;
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
+		private void PredefinedCommandPageButtons_Paint(object sender, PaintEventArgs e)
+		{
+			if (this.isStartingUp)
+			{
+				this.isStartingUp = false;
+
+				SetControls();
+			}
+		}
+
+		#endregion
+
 		#region Controls Event Handlers
 		//==========================================================================================
 		// Controls Event Handlers
@@ -264,7 +310,7 @@ namespace YAT.View.Controls
 		// Non-Public Methods
 		//==========================================================================================
 
-		private void InitializeButtons()
+		private void InitializeControls()
 		{
 			this.buttons_commands = new List<Button>(PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
 			this.buttons_commands.Add(button_Command_1);
@@ -283,29 +329,68 @@ namespace YAT.View.Controls
 
 		private void SetControls()
 		{
-			int commandCount = 0;
-			if (this.commands != null)
-				commandCount = this.commands.Count;
-
-			for (int i = 0; i < commandCount; i++)
+			SuspendLayout();
+		////this.isSettingControls.Enter(); is not needed (yet).
+			try
 			{
-				bool isDefined = ((this.commands[i] != null) && this.commands[i].IsDefined);
-				bool isValid = (isDefined && this.terminalIsReadyToSend && this.commands[i].IsValid(this.parseModeForText, this.rootDirectoryForFile));
+				label_SeparatorLine.Visible = this.showSeparatorLine;
 
-				if (isDefined)
+				label_Shortcuts_1_12 .Visible = (this.subpage == 1);
+				label_Shortcuts_13_24.Visible = (this.subpage == 2);
+
+				SetCommandControls();
+			}
+			finally
+			{
+			////this.isSettingControls.Leave(); is not needed (yet).
+				ResumeLayout();
+			}
+		}
+
+		private void SetCommandControls()
+		{
+			SuspendLayout();
+		////this.isSettingControls.Enter(); is not needed (yet).
+			try
+			{
+				int commandCount = 0;
+				if (this.commands != null)
+					commandCount = this.commands.Count;
+
+				for (int i = 0; i < commandCount; i++)
 				{
-					if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-						this.buttons_commands[i].ForeColor = SystemColors.ControlText;
+					bool isDefined = ((this.commands[i] != null) && this.commands[i].IsDefined);
+					bool isValid = (isDefined && this.terminalIsReadyToSend && this.commands[i].IsValid(this.parseModeForText, this.rootDirectoryForFile));
 
-					if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-						this.buttons_commands[i].Font = SystemFonts.DefaultFont;
+					if (isDefined)
+					{
+						if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+							this.buttons_commands[i].ForeColor = SystemColors.ControlText;
 
-					this.buttons_commands[i].Text = this.commands[i].Description;
-					this.buttons_commands[i].Enabled = isValid;
+						if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+							this.buttons_commands[i].Font = SystemFonts.DefaultFont;
 
-					toolTip.SetToolTip(this.buttons_commands[i], @"Send """ + this.commands[i].SingleLineText + @"""");
+						this.buttons_commands[i].Text = this.commands[i].Description;
+						this.buttons_commands[i].Enabled = isValid;
+
+						toolTip.SetToolTip(this.buttons_commands[i], @"Send """ + this.commands[i].SingleLineText + @"""");
+					}
+					else
+					{
+						if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							this.buttons_commands[i].ForeColor = SystemColors.GrayText;
+
+						if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;
+
+						this.buttons_commands[i].Text = Command.DefineCommandText;
+						this.buttons_commands[i].Enabled = true;
+
+						toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
+					}
 				}
-				else
+
+				for (int i = commandCount; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 				{
 					if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						this.buttons_commands[i].ForeColor = SystemColors.GrayText;
@@ -319,19 +404,10 @@ namespace YAT.View.Controls
 					toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 				}
 			}
-
-			for (int i = commandCount; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
+			finally
 			{
-				if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-					this.buttons_commands[i].ForeColor = SystemColors.GrayText;
-
-				if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-					this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;
-
-				this.buttons_commands[i].Text = Command.DefineCommandText;
-				this.buttons_commands[i].Enabled = true;
-
-				toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
+			////this.isSettingControls.Leave(); is not needed (yet).
+				ResumeLayout();
 			}
 		}
 

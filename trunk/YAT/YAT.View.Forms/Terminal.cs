@@ -2682,12 +2682,9 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.button_ImportAllPagesFromFile_Click()
 			// Changes here may have to be applied there too.
 
-			int commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)ApplicationSettings.RoamingUserSettings.View.PredefinedCommandPageLayout).CommandCapacityPerPage;
-			int commandCapacityPerPageNew;
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsRoot.PredefinedCommand, commandCapacityPerPageOld, out predefinedCommandNew, out commandCapacityPerPageNew))
+			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
-				RefreshPredefinedCommandPageLayout(commandCapacityPerPageNew);
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
 			}
@@ -5205,21 +5202,8 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
-				RefreshPredefinedCommandPageLayout(f.CommandCapacityPerPage);
 				this.settingsRoot.PredefinedCommand = f.SettingsResult;
 				this.settingsRoot.Predefined.SelectedPageId = f.SelectedPageId;
-			}
-		}
-
-		private void RefreshPredefinedCommandPageLayout(int commandCapacityPerPage)
-		{
-			int commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)ApplicationSettings.RoamingUserSettings.View.PredefinedCommandPageLayout).CommandCapacityPerPage;
-			if (commandCapacityPerPageOld != commandCapacityPerPage)
-			{
-				ApplicationSettings.RoamingUserSettings.View.PredefinedCommandPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(commandCapacityPerPage);
-				ApplicationSettings.SaveRoamingUserSettings();
-
-				SetPredefinedControls();
 			}
 		}
 
