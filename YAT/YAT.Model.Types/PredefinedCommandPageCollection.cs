@@ -32,10 +32,10 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class PredefinedCommandPageCollection : List<PredefinedCommandPage>
 	{
-		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		/// <remarks>Commands and pages are numbered 1..max, 0 indicates none/invalid.</remarks>
 		public const int NoPageId = 0;
 
-		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		/// <remarks>Commands and pages are numbered 1..max, 0 indicates none/invalid.</remarks>
 		public const int FirstPageId = 1;
 
 		/// <summary></summary>

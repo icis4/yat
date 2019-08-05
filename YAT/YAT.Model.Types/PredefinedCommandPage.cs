@@ -43,10 +43,10 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class PredefinedCommandPage : IEquatable<PredefinedCommandPage>, IComparable
 	{
-		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		/// <remarks>Commands and pages are numbered 1..max, 0 indicates none/invalid.</remarks>
 		public const int NoCommandId = 0;
 
-		/// <remarks>Commands and pages are numberd 1..max, 0 indicates none/invalid.</remarks>
+		/// <remarks>Commands and pages are numbered 1..max, 0 indicates none/invalid.</remarks>
 		public const int FirstCommandIdPerPage = 1;
 
 		/// <remarks>Limited to a) keep view simple for most use cases and b) ease implementation.</remarks>
@@ -58,6 +58,9 @@ namespace YAT.Model.Types
 
 		/// <remarks>Possible capacities are 12, 24, 36, 48, 72 or 108.</remarks>
 		public const int MaxCommandCapacityPerPage = 108;
+
+		/// <remarks>Subpages are numbered 1..9.</remarks>
+		public const int MaxSubpageCount = 9;
 
 		private string pageName;
 		private List<Command> commands;

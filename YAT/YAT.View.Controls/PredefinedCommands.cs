@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -51,6 +52,7 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		private const PredefinedCommandPageLayout PageLayoutDefault = PredefinedCommandPageLayoutEx.Default;
 		private const int SelectedPageIdDefault = 1;
 
 		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
@@ -63,7 +65,11 @@ namespace YAT.View.Controls
 		// Fields
 		//==========================================================================================
 
+		private List<PredefinedCommandPageButtons> pageButtons;
+
 		private SettingControlsHelper isSettingControls;
+
+		private PredefinedCommandPageLayout pageLayout;
 		private PredefinedCommandPageCollection pages;
 		private int selectedIdPage = SelectedPageIdDefault;
 
@@ -77,6 +83,11 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Events
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the PageLayoutChanged property is changed.")]
+		public event EventHandler PageLayoutChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -104,7 +115,9 @@ namespace YAT.View.Controls
 		public PredefinedCommands()
 		{
 			InitializeComponent();
-			SetControls();
+
+			InitializeControls();
+		////SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -113,6 +126,24 @@ namespace YAT.View.Controls
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Category("Appearance")]
+		[Description("The page layout.")]
+		[DefaultValue(PageLayoutDefault)]
+		public virtual PredefinedCommandPageLayout PageLayout
+		{
+			get { return (this.pageLayout); }
+			set
+			{
+				if (this.pageLayout != value)
+				{
+					this.pageLayout = value;
+					SetControls();
+					OnPageLayoutChanged(EventArgs.Empty);
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
@@ -153,7 +184,7 @@ namespace YAT.View.Controls
 				{
 					this.selectedIdPage = selectedPageIdNew;
 					SetControls();
-					OnSelectedPageChanged(EventArgs.Empty);
+					OnSelectedPageIdChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -245,6 +276,35 @@ namespace YAT.View.Controls
 
 		#endregion
 
+		#region Control Event Handlers
+		//==========================================================================================
+		// Control Event Handlers
+		//==========================================================================================
+
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool isStartingUp = true;
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
+		private void PredefinedCommands_Paint(object sender, PaintEventArgs e)
+		{
+			if (this.isStartingUp)
+			{
+				this.isStartingUp = false;
+
+				SetControls();
+			}
+		}
+
+		#endregion
+
 		#region Controls Event Handlers
 		//==========================================================================================
 		// Controls Event Handlers
@@ -280,9 +340,9 @@ namespace YAT.View.Controls
 
 		#endregion
 
-		#region Non-Public Methods
+		#region Non-Public Properties
 		//==========================================================================================
-		// Non-Public Methods
+		// Non-Public Properties
 		//==========================================================================================
 
 		private int SelectedPageIndex
@@ -290,19 +350,65 @@ namespace YAT.View.Controls
 			get { return (this.selectedIdPage - 1); }
 		}
 
+		#endregion
+
+		#region Non-Public Methods
+		//==========================================================================================
+		// Non-Public Methods
+		//==========================================================================================
+
+		private void InitializeControls()
+		{
+			this.pageButtons = new List<PredefinedCommandPageButtons>(PredefinedCommandPage.MaxSubpageCount); // Preset the required capacity to improve memory management.
+			this.pageButtons.Add(pageButtons_1A);
+			this.pageButtons.Add(pageButtons_1B);
+			this.pageButtons.Add(pageButtons_1C);
+			this.pageButtons.Add(pageButtons_2A);
+			this.pageButtons.Add(pageButtons_2B);
+			this.pageButtons.Add(pageButtons_2C);
+			this.pageButtons.Add(pageButtons_3A);
+			this.pageButtons.Add(pageButtons_3B);
+			this.pageButtons.Add(pageButtons_3C);
+		}
+
 		private void SetControls()
 		{
+			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
-				pageButtons_1A.ParseModeForText      = this.parseModeForText;
-				pageButtons_1A.RootDirectoryForFile  = this.rootDirectoryForFile;
-				pageButtons_1A.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+				PredefinedCommandPageLayout pageLayout = this.pageLayout;
+
+				// Attention:
+				// Similar code exists in...
+				// ...View.Forms.PredefinedCommandSettings.SetControls()
+				// Changes here may have to be applied there too.
+
+			////pageButtons_1A.Subpage = 1 is fixed.
+				pageButtons_2A.Subpage = ((pageLayout == PredefinedCommandPageLayout.ThreeByTwo)   ? (4) : (2));
+			////pageButtons_3A.Subpage = 3 is fixed.
+				pageButtons_1B.Subpage = ((pageLayout == PredefinedCommandPageLayout.OneByTwo)   ||
+				                          (pageLayout == PredefinedCommandPageLayout.OneByThree) ||
+				                          (pageLayout == PredefinedCommandPageLayout.TwoByThree)   ? (2) : (4));
+				pageButtons_2B.Subpage = ((pageLayout == PredefinedCommandPageLayout.TwoByTwo)     ? (4) : (5));
+				pageButtons_3B.Subpage = ((pageLayout == PredefinedCommandPageLayout.ThreeByThree) ? (8) : (6));
+				pageButtons_1C.Subpage = ((pageLayout == PredefinedCommandPageLayout.OneByThree) ||
+				                          (pageLayout == PredefinedCommandPageLayout.TwoByThree)   ? (3) : (7));
+				pageButtons_2C.Subpage = ((pageLayout == PredefinedCommandPageLayout.TwoByThree)   ? (6) : (8));
+			////pageButtons_3C.Subpage = 9 is fixed.
+
+				foreach (var pb in this.pageButtons)
+				{
+					pb.ParseModeForText      = this.parseModeForText;
+					pb.RootDirectoryForFile  = this.rootDirectoryForFile;
+					pb.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+				}
 
 				if ((this.pages != null) && (this.pages.Count > 0) &&
 				    (this.selectedIdPage >= 1) && (this.selectedIdPage <= this.pages.Count))
 				{
-					pageButtons_1A.Commands = this.pages[SelectedPageIndex].Commands;
+					foreach (var pb in this.pageButtons)
+						pb.Commands = this.pages[SelectedPageIndex].Commands;
 
 					button_PagePrevious.Enabled = (this.selectedIdPage > 1);
 					button_PageNext.Enabled     = (this.selectedIdPage < this.pages.Count);
@@ -320,6 +426,9 @@ namespace YAT.View.Controls
 				}
 				else
 				{
+					foreach (var pb in this.pageButtons)
+						pb.Commands = null;
+
 					button_PagePrevious.Enabled = false;
 					button_PageNext.Enabled = false;
 
@@ -333,6 +442,7 @@ namespace YAT.View.Controls
 			finally
 			{
 				this.isSettingControls.Leave();
+				ResumeLayout();
 			}
 		}
 
@@ -354,7 +464,13 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnSelectedPageChanged(EventArgs e)
+		protected virtual void OnPageLayoutChanged(EventArgs e)
+		{
+			EventHelper.RaiseSync(PageLayoutChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnSelectedPageIdChanged(EventArgs e)
 		{
 			EventHelper.RaiseSync(SelectedPageIdChanged, this, e);
 		}
