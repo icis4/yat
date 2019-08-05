@@ -199,7 +199,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
+		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
@@ -226,13 +226,13 @@ namespace YAT.View.Utilities
 				{
 					case DialogResult.Yes:
 					{
-						Import(owner, commandCapacityPerPageOld, imported, out commandPagesNew, out commandCapacityPerPageNew);
+						Import(owner, commandPagesOld.PageLayout, imported, out commandPagesNew);
 						return (true);
 					}
 
 					case DialogResult.No:
-					{                                                                                             // Specifying 'NoPageId' will add (not insert).
-						AddOrInsert(owner, commandPagesOld, commandCapacityPerPageOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew, out commandCapacityPerPageNew);
+					{                                                                  // Specifying 'NoPageId' will add (not insert).
+						AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew);
 						break;
 					}
 
@@ -244,45 +244,43 @@ namespace YAT.View.Utilities
 			}
 
 			commandPagesNew = null;
-			commandCapacityPerPageNew = 0;
 			return (false);
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
+		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
 			{
-				                                                              // Specifying the 'selectedPageId' will insert (instead of add).
-				return (AddOrInsert(owner, commandPagesOld, commandCapacityPerPageOld, imported, selectedPageId, out commandPagesNew, out commandCapacityPerPageNew));
+				                                   // Specifying the 'selectedPageId' will insert (instead of add).
+				return (AddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
 			}
 
 			commandPagesNew = null;
-			commandCapacityPerPageNew = 0;
 			return (false);
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
+		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
 			{
-				                                                                                                  // Specifying 'NoPageId' will add (not insert).
-				return (AddOrInsert(owner, commandPagesOld, commandCapacityPerPageOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew, out commandCapacityPerPageNew));
+				                                                                       // Specifying 'NoPageId' will add (not insert).
+				return (AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew));
 			}
 
 			commandPagesNew = null;
-			commandCapacityPerPageNew = 0;
 			return (false);
 		}
 
 		/// <summary></summary>
-		private static bool Import(IWin32Window owner, int commandCapacityPerPageOld, PredefinedCommandSettings imported, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
+		private static bool Import(IWin32Window owner, PredefinedCommandPageLayout pageLayoutOld, PredefinedCommandSettings imported, out PredefinedCommandSettings commandPagesNew)
 		{
 			ImportMode mode;
-			if (ConfirmImport(owner, imported, commandCapacityPerPageOld, out mode, out commandCapacityPerPageNew))
+			PredefinedCommandPageLayout pageLayoutNew;
+			if (ConfirmImport(owner, imported, pageLayoutOld, out mode, out pageLayoutNew))
 			{
 				commandPagesNew = imported;
 				return (true);
@@ -293,13 +291,17 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int commandCapacityPerPageOld, PredefinedCommandSettings imported, int selectedPageId, out PredefinedCommandSettings commandPagesNew, out int commandCapacityPerPageNew)
+		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandSettings imported, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
 		{
 			ImportMode mode;
-			if (ConfirmImport(owner, imported, commandCapacityPerPageOld, out mode, out commandCapacityPerPageNew))
+			PredefinedCommandPageLayout pageLayoutNew;
+			if (ConfirmImport(owner, imported, commandPagesOld.PageLayout, out mode, out pageLayoutNew))
 			{
 				// Clone...
 				commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
+
+				// ...potentially adjust layout...
+				commandPagesNew.PageLayout = pageLayoutNew;
 
 				// ...add default page if yet empty...
 				if (commandPagesOld.Pages.Count == 0)
@@ -329,6 +331,8 @@ namespace YAT.View.Utilities
 					}
 					case (ImportMode.Spread):
 					{
+							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+
 						// ...and then spread:
 						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
 							commandPagesNew.Pages.AddSpreaded(imported.Pages, commandCapacityPerPageNew); // No clone needed as just imported.
@@ -350,17 +354,19 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandSettings imported, int commandCapacityPerPageOld, out ImportMode mode, out int commandCapacityPerPageNew)
+		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandSettings imported, PredefinedCommandPageLayout pageLayoutOld, out ImportMode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
+			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
 			if (imported.Pages.MaxCommandCountPerPage <= commandCapacityPerPageOld)
 			{
 				mode = ImportMode.Neutral;
-				commandCapacityPerPageNew = commandCapacityPerPageOld;
+				pageLayoutNew = pageLayoutOld;
 				return (true);
 			}
 			else
 			{
-				var nextCommandCapacityPerPage = PredefinedCommandPageLayoutEx.GetMatchingCommandCapacityPerPage(imported.Pages.MaxCommandCountPerPage);
+				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(imported.Pages.MaxCommandCountPerPage);
+				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
 
 				var message = new StringBuilder();
 				message.Append("File contains ");
@@ -383,9 +389,9 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: mode = ImportMode.Enlarge; commandCapacityPerPageNew = nextCommandCapacityPerPage; return (true);
-					case DialogResult.No:  mode = ImportMode.Spread;  commandCapacityPerPageNew = commandCapacityPerPageOld;  return (true);
-					default:               mode = ImportMode.None;    commandCapacityPerPageNew = commandCapacityPerPageOld;  return (false);
+					case DialogResult.Yes: mode = ImportMode.Enlarge; pageLayoutNew = nextPageLayout; return (true);
+					case DialogResult.No:  mode = ImportMode.Spread;  pageLayoutNew = pageLayoutOld;  return (true);
+					default:               mode = ImportMode.None;    pageLayoutNew = pageLayoutOld;  return (false);
 				}
 			}
 		}
