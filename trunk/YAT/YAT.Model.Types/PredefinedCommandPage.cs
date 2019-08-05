@@ -193,7 +193,7 @@ namespace YAT.Model.Types
 				for (int i = (index - 1); i >= 0; i--)
 				{
 					if ((this.commands[i] == null) || (!this.commands[i].IsDefined))
-						this.commands.RemoveAt(index);
+						this.commands.RemoveAt(i);
 					else
 						break;
 				}
