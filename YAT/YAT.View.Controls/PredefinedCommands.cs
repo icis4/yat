@@ -377,7 +377,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				int subpage1, subpage2;
+				int subpageId1, subpageId2;
 
 				PredefinedCommandPageLayout pageLayout = this.pageLayout;
 
@@ -393,38 +393,38 @@ namespace YAT.View.Controls
 				switch (pageLayout)
 				{
 					case PredefinedCommandPageLayout.OneByTwo:
-					case PredefinedCommandPageLayout.OneByThree: subpage1 = 2; break;
+					case PredefinedCommandPageLayout.OneByThree: subpageId1 = 2; break;
 					case PredefinedCommandPageLayout.TwoByTwo:
-					case PredefinedCommandPageLayout.TwoByThree: subpage1 = 3; break;
-					default:                                     subpage1 = 4; break;
+					case PredefinedCommandPageLayout.TwoByThree: subpageId1 = 3; break;
+					default:                                     subpageId1 = 4; break;
 				}
 
 				switch (pageLayout)
 				{
 					case PredefinedCommandPageLayout.TwoByTwo:
-					case PredefinedCommandPageLayout.TwoByThree: subpage2 = 4; break;
-					default:                                     subpage2 = 5; break;
+					case PredefinedCommandPageLayout.TwoByThree: subpageId2 = 4; break;
+					default:                                     subpageId2 = 5; break;
 				}
 
-				pageButtons_1B.Subpage = subpage1;
-				pageButtons_2B.Subpage = subpage2;
+				pageButtons_1B.SubpageId = subpageId1;
+				pageButtons_2B.SubpageId = subpageId2;
 			////pageButtons_3B.Subpage = 6 is fixed.
 
 				switch (pageLayout)
 				{
-					case PredefinedCommandPageLayout.OneByThree: subpage1 = 3; break;
-					case PredefinedCommandPageLayout.TwoByThree: subpage1 = 5; break;
-					default:                                     subpage1 = 7; break;
+					case PredefinedCommandPageLayout.OneByThree: subpageId1 = 3; break;
+					case PredefinedCommandPageLayout.TwoByThree: subpageId1 = 5; break;
+					default:                                     subpageId1 = 7; break;
 				}
 
 				switch (pageLayout)
 				{
-					case PredefinedCommandPageLayout.TwoByThree: subpage2 = 6; break;
-					default:                                     subpage2 = 8; break;
+					case PredefinedCommandPageLayout.TwoByThree: subpageId2 = 6; break;
+					default:                                     subpageId2 = 8; break;
 				}
 
-				pageButtons_1C.Subpage = subpage1;
-				pageButtons_2C.Subpage = subpage2;
+				pageButtons_1C.SubpageId = subpageId1;
+				pageButtons_2C.SubpageId = subpageId2;
 			////pageButtons_3C.Subpage = 9 is fixed.
 
 				foreach (var pb in this.pageButtons)

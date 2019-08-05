@@ -268,7 +268,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.selectedSubpageId = ((Controls.PredefinedCommandSubpageCheckBox)sender).Subpage;
+			this.selectedSubpageId = ((Controls.PredefinedCommandSubpageCheckBox)sender).SubpageId;
 			SetControls();
 		}
 
@@ -782,7 +782,7 @@ namespace YAT.View.Forms
 			try
 			{
 				Point location;
-				int subpage1, subpage2;
+				int subpageId1, subpageId2;
 				int leftA, leftB;
 				int top1, top2;
 
@@ -818,38 +818,38 @@ namespace YAT.View.Forms
 				switch (pageLayout)
 				{
 					case Model.Types.PredefinedCommandPageLayout.OneByTwo:
-					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpage1 = 2; break;
+					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpageId1 = 2; break;
 					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage1 = 3; break;
-					default:                                                 subpage1 = 4; break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId1 = 3; break;
+					default:                                                 subpageId1 = 4; break;
 				}
 
 				switch (pageLayout)
 				{
 					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage2 = 4; break;
-					default:                                                 subpage2 = 5; break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId2 = 4; break;
+					default:                                                 subpageId2 = 5; break;
 				}
 
-				subpageCheckBox_1B.Subpage = subpage1;
-				subpageCheckBox_2B.Subpage = subpage2;
+				subpageCheckBox_1B.SubpageId = subpageId1;
+				subpageCheckBox_2B.SubpageId = subpageId2;
 			////subpageCheckBox_3B.Subpage = 6 is fixed
 
 				switch (pageLayout)
 				{
-					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpage1 = 3; break;
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage1 = 5; break;
-					default:                                                 subpage1 = 7; break;
+					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpageId1 = 3; break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId1 = 5; break;
+					default:                                                 subpageId1 = 7; break;
 				}
 
 				switch (pageLayout)
 				{
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpage2 = 6; break;
-					default:                                                 subpage2 = 8; break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId2 = 6; break;
+					default:                                                 subpageId2 = 8; break;
 				}
 
-				subpageCheckBox_1C.Subpage = subpage1;
-				subpageCheckBox_2C.Subpage = subpage2;
+				subpageCheckBox_1C.SubpageId = subpageId1;
+				subpageCheckBox_2C.SubpageId = subpageId2;
 			////subpageCheckBox_3C.Subpage = 9 is fixed.
 
 				subpageCheckBox_1A.Visible = (pageLayoutEx.ColumnsPerPage >  1) || (pageLayoutEx.RowsPerPage >  1);
@@ -968,11 +968,21 @@ namespace YAT.View.Forms
 				{
 					groupBox_Page.Enabled = true;
 
+					// Attention:
+					// Similar code exists in...
+					// ...View.Controls.PredefinedCommandPageButtons.SetCommandControls()
+					// Changes here may have to be applied there too.
+
 					for (int i = 0; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 					{
+						int commandCount = 0;
+						var commands = this.settingsInEdit.Pages[SelectedPageIndex].Commands;
+						if (commands != null)
+							commandCount = commands.Count;
+
 						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
-						if (commandIndex < this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count)
-							this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[commandIndex];
+						if (commandIndex < commandCount)
+							this.predefinedCommandSettingsSets[i].Command = commands[commandIndex];
 						else
 							this.predefinedCommandSettingsSets[i].Command = null;
 					}

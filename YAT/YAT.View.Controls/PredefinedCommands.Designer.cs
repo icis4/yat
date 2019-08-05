@@ -154,7 +154,7 @@
 			this.pageButtons_3C.Name = "pageButtons_3C";
 			this.pageButtons_3C.ShowSeparatorLine = true;
 			this.pageButtons_3C.Size = new System.Drawing.Size(136, 73);
-			this.pageButtons_3C.Subpage = 9;
+			this.pageButtons_3C.SubpageId = 9;
 			this.pageButtons_3C.TabIndex = 8;
 			this.pageButtons_3C.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_3C.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -167,7 +167,7 @@
 			this.pageButtons_3B.Name = "pageButtons_3B";
 			this.pageButtons_3B.ShowSeparatorLine = true;
 			this.pageButtons_3B.Size = new System.Drawing.Size(136, 73);
-			this.pageButtons_3B.Subpage = 6;
+			this.pageButtons_3B.SubpageId = 6;
 			this.pageButtons_3B.TabIndex = 5;
 			this.pageButtons_3B.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_3B.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -180,7 +180,7 @@
 			this.pageButtons_3A.Name = "pageButtons_3A";
 			this.pageButtons_3A.ShowSeparatorLine = true;
 			this.pageButtons_3A.Size = new System.Drawing.Size(136, 73);
-			this.pageButtons_3A.Subpage = 3;
+			this.pageButtons_3A.SubpageId = 3;
 			this.pageButtons_3A.TabIndex = 2;
 			this.pageButtons_3A.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_3A.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -193,7 +193,7 @@
 			this.pageButtons_2C.Name = "pageButtons_2C";
 			this.pageButtons_2C.ShowSeparatorLine = true;
 			this.pageButtons_2C.Size = new System.Drawing.Size(136, 292);
-			this.pageButtons_2C.Subpage = 8;
+			this.pageButtons_2C.SubpageId = 8;
 			this.pageButtons_2C.TabIndex = 7;
 			this.pageButtons_2C.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_2C.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -206,7 +206,7 @@
 			this.pageButtons_2B.Name = "pageButtons_2B";
 			this.pageButtons_2B.ShowSeparatorLine = true;
 			this.pageButtons_2B.Size = new System.Drawing.Size(136, 292);
-			this.pageButtons_2B.Subpage = 5;
+			this.pageButtons_2B.SubpageId = 5;
 			this.pageButtons_2B.TabIndex = 4;
 			this.pageButtons_2B.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_2B.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -219,7 +219,7 @@
 			this.pageButtons_2A.Name = "pageButtons_2A";
 			this.pageButtons_2A.ShowSeparatorLine = true;
 			this.pageButtons_2A.Size = new System.Drawing.Size(136, 292);
-			this.pageButtons_2A.Subpage = 2;
+			this.pageButtons_2A.SubpageId = 2;
 			this.pageButtons_2A.TabIndex = 1;
 			this.pageButtons_2A.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_2A.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -231,7 +231,7 @@
 			this.pageButtons_1C.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.pageButtons_1C.Name = "pageButtons_1C";
 			this.pageButtons_1C.Size = new System.Drawing.Size(136, 292);
-			this.pageButtons_1C.Subpage = 7;
+			this.pageButtons_1C.SubpageId = 7;
 			this.pageButtons_1C.TabIndex = 6;
 			this.pageButtons_1C.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_1C.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
@@ -243,7 +243,7 @@
 			this.pageButtons_1B.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.pageButtons_1B.Name = "pageButtons_1B";
 			this.pageButtons_1B.Size = new System.Drawing.Size(136, 292);
-			this.pageButtons_1B.Subpage = 4;
+			this.pageButtons_1B.SubpageId = 4;
 			this.pageButtons_1B.TabIndex = 3;
 			this.pageButtons_1B.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons_1B.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);

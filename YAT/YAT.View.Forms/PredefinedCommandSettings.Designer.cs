@@ -1431,7 +1431,7 @@
 			this.subpageCheckBox_3C.Location = new System.Drawing.Point(264, 75);
 			this.subpageCheckBox_3C.Name = "subpageCheckBox_3C";
 			this.subpageCheckBox_3C.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_3C.Subpage = 9;
+			this.subpageCheckBox_3C.SubpageId = 9;
 			this.subpageCheckBox_3C.TabIndex = 11;
 			this.subpageCheckBox_3C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3C.UseVisualStyleBackColor = true;
@@ -1443,7 +1443,7 @@
 			this.subpageCheckBox_2C.Location = new System.Drawing.Point(264, 46);
 			this.subpageCheckBox_2C.Name = "subpageCheckBox_2C";
 			this.subpageCheckBox_2C.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_2C.Subpage = 8;
+			this.subpageCheckBox_2C.SubpageId = 8;
 			this.subpageCheckBox_2C.TabIndex = 10;
 			this.subpageCheckBox_2C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2C.UseVisualStyleBackColor = true;
@@ -1455,7 +1455,7 @@
 			this.subpageCheckBox_1C.Location = new System.Drawing.Point(264, 17);
 			this.subpageCheckBox_1C.Name = "subpageCheckBox_1C";
 			this.subpageCheckBox_1C.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_1C.Subpage = 7;
+			this.subpageCheckBox_1C.SubpageId = 7;
 			this.subpageCheckBox_1C.TabIndex = 9;
 			this.subpageCheckBox_1C.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_1C.UseVisualStyleBackColor = true;
@@ -1467,7 +1467,7 @@
 			this.subpageCheckBox_3B.Location = new System.Drawing.Point(201, 75);
 			this.subpageCheckBox_3B.Name = "subpageCheckBox_3B";
 			this.subpageCheckBox_3B.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_3B.Subpage = 6;
+			this.subpageCheckBox_3B.SubpageId = 6;
 			this.subpageCheckBox_3B.TabIndex = 8;
 			this.subpageCheckBox_3B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3B.UseVisualStyleBackColor = true;
@@ -1479,7 +1479,7 @@
 			this.subpageCheckBox_2B.Location = new System.Drawing.Point(201, 46);
 			this.subpageCheckBox_2B.Name = "subpageCheckBox_2B";
 			this.subpageCheckBox_2B.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_2B.Subpage = 5;
+			this.subpageCheckBox_2B.SubpageId = 5;
 			this.subpageCheckBox_2B.TabIndex = 7;
 			this.subpageCheckBox_2B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2B.UseVisualStyleBackColor = true;
@@ -1491,7 +1491,7 @@
 			this.subpageCheckBox_1B.Location = new System.Drawing.Point(201, 17);
 			this.subpageCheckBox_1B.Name = "subpageCheckBox_1B";
 			this.subpageCheckBox_1B.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_1B.Subpage = 4;
+			this.subpageCheckBox_1B.SubpageId = 4;
 			this.subpageCheckBox_1B.TabIndex = 6;
 			this.subpageCheckBox_1B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_1B.UseVisualStyleBackColor = true;
@@ -1503,7 +1503,7 @@
 			this.subpageCheckBox_3A.Location = new System.Drawing.Point(138, 75);
 			this.subpageCheckBox_3A.Name = "subpageCheckBox_3A";
 			this.subpageCheckBox_3A.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_3A.Subpage = 3;
+			this.subpageCheckBox_3A.SubpageId = 3;
 			this.subpageCheckBox_3A.TabIndex = 5;
 			this.subpageCheckBox_3A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_3A.UseVisualStyleBackColor = true;
@@ -1515,7 +1515,7 @@
 			this.subpageCheckBox_2A.Location = new System.Drawing.Point(138, 46);
 			this.subpageCheckBox_2A.Name = "subpageCheckBox_2A";
 			this.subpageCheckBox_2A.Size = new System.Drawing.Size(57, 23);
-			this.subpageCheckBox_2A.Subpage = 2;
+			this.subpageCheckBox_2A.SubpageId = 2;
 			this.subpageCheckBox_2A.TabIndex = 4;
 			this.subpageCheckBox_2A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.subpageCheckBox_2A.UseVisualStyleBackColor = true;

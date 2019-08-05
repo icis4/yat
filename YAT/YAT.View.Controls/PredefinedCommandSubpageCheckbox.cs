@@ -38,9 +38,9 @@ namespace YAT.View.Controls
 	/// </summary>
 	public class PredefinedCommandSubpageCheckBox : CheckBox
 	{
-		private const int SubpageDefault = PredefinedCommandPage.FirstSubpageId;
+		private const int SubpageIdDefault = PredefinedCommandPage.FirstSubpageId;
 
-		private int subpage = SubpageDefault;
+		private int subpageId = SubpageIdDefault;
 
 		/// <summary>
 		/// Startup flag only used in the following event handler.
@@ -75,20 +75,20 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Behavior")]
 		[Description("The represented subpage.")]
-		[DefaultValue(SubpageDefault)]
-		public virtual int Subpage
+		[DefaultValue(SubpageIdDefault)]
+		public virtual int SubpageId
 		{
-			get { return (this.subpage); }
+			get { return (this.subpageId); }
 			set
 			{
-				this.subpage = value;
+				this.subpageId = value;
 				SetControls();
 			}
 		}
 
 		private void SetControls()
 		{
-			switch (this.subpage)
+			switch (SubpageId)
 			{
 				case 1: Text =  "1..12";  break;
 				case 2: Text = "13..24";  break;
@@ -100,7 +100,7 @@ namespace YAT.View.Controls
 				case 8: Text = "85..96";  break;
 				case 9: Text = "97..108"; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.subpage.ToString(CultureInfo.InvariantCulture) + "' is a subpage value that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString(CultureInfo.InvariantCulture) + "' is a subpage ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 	}
