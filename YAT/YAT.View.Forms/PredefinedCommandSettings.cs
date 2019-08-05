@@ -277,7 +277,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			SelectedPageIndex = listBox_Pages.SelectedIndex;
+			this.selectedPageId = (listBox_Pages.SelectedIndex + 1);
 			SetControls();
 		}
 
@@ -454,26 +454,13 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.contextMenuStrip_Predefined_Opening()
 			// Changes here may have to be applied there too.
 
-			var id = GetSettingsSetIdFromLocation(new Point(contextMenuStrip_Commands.Left, contextMenuStrip_Commands.Top));
+			var id = GetCommandIdFromLocation(new Point(contextMenuStrip_Commands.Left, contextMenuStrip_Commands.Top));
 			var c = GetCommandFromId(id);
 
 			contextMenuStrip_Commands_SelectedCommandId = id;
 
-			toolStripMenuItem_CommandContextMenu_UpBy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-			toolStripMenuItem_CommandContextMenu_DownBy.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-
-			toolStripMenuItem_CommandContextMenu_MoveTo_1 .Enabled = (id != 1);
-			toolStripMenuItem_CommandContextMenu_MoveTo_2 .Enabled = (id != 2);
-			toolStripMenuItem_CommandContextMenu_MoveTo_3 .Enabled = (id != 3);
-			toolStripMenuItem_CommandContextMenu_MoveTo_4 .Enabled = (id != 4);
-			toolStripMenuItem_CommandContextMenu_MoveTo_5 .Enabled = (id != 5);
-			toolStripMenuItem_CommandContextMenu_MoveTo_6 .Enabled = (id != 6);
-			toolStripMenuItem_CommandContextMenu_MoveTo_7 .Enabled = (id != 7);
-			toolStripMenuItem_CommandContextMenu_MoveTo_8 .Enabled = (id != 8);
-			toolStripMenuItem_CommandContextMenu_MoveTo_9 .Enabled = (id != 9);
-			toolStripMenuItem_CommandContextMenu_MoveTo_10.Enabled = (id != 10);
-			toolStripMenuItem_CommandContextMenu_MoveTo_11.Enabled = (id != 11);
-			toolStripMenuItem_CommandContextMenu_MoveTo_12.Enabled = (id != 12);
+			toolStripMenuItem_CommandContextMenu_MoveTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_CopyTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 
 			toolStripMenuItem_CommandContextMenu_CopyTo_1 .Enabled = (id != 1);
 			toolStripMenuItem_CommandContextMenu_CopyTo_2 .Enabled = (id != 2);
@@ -488,12 +475,69 @@ namespace YAT.View.Forms
 			toolStripMenuItem_CommandContextMenu_CopyTo_11.Enabled = (id != 11);
 			toolStripMenuItem_CommandContextMenu_CopyTo_12.Enabled = (id != 12);
 
-			toolStripMenuItem_CommandContextMenu_MoveTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-			toolStripMenuItem_CommandContextMenu_CopyTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_MoveTo_1 .Enabled = (id != 1);
+			toolStripMenuItem_CommandContextMenu_MoveTo_2 .Enabled = (id != 2);
+			toolStripMenuItem_CommandContextMenu_MoveTo_3 .Enabled = (id != 3);
+			toolStripMenuItem_CommandContextMenu_MoveTo_4 .Enabled = (id != 4);
+			toolStripMenuItem_CommandContextMenu_MoveTo_5 .Enabled = (id != 5);
+			toolStripMenuItem_CommandContextMenu_MoveTo_6 .Enabled = (id != 6);
+			toolStripMenuItem_CommandContextMenu_MoveTo_7 .Enabled = (id != 7);
+			toolStripMenuItem_CommandContextMenu_MoveTo_8 .Enabled = (id != 8);
+			toolStripMenuItem_CommandContextMenu_MoveTo_9 .Enabled = (id != 9);
+			toolStripMenuItem_CommandContextMenu_MoveTo_10.Enabled = (id != 10);
+			toolStripMenuItem_CommandContextMenu_MoveTo_11.Enabled = (id != 11);
+			toolStripMenuItem_CommandContextMenu_MoveTo_12.Enabled = (id != 12);
+
+			toolStripMenuItem_CommandContextMenu_UpBy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_DownBy.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+
 			toolStripMenuItem_CommandContextMenu_Cut   .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			toolStripMenuItem_CommandContextMenu_Copy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			toolStripMenuItem_CommandContextMenu_Paste .Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
 			toolStripMenuItem_CommandContextMenu_Clear .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_CopyTo_I_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_CopyTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
+			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			var tc = GetCommandFromId(targetCommandId);
+
+			tc = tcNew;
+
+			SetControls();
+		}
+
+		private void toolStripMenuItem_CommandContextMenu_MoveTo_I_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
+			// Changes here may have to be applied there too.
+
+			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
+			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+
+			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			var tc = GetCommandFromId(targetCommandId);
+
+			tc = tcNew;
+			this.settingsInEdit.ClearCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId);
+
+			SetControls();
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_UpBy_N_Click(object sender, EventArgs e)
@@ -516,8 +560,11 @@ namespace YAT.View.Forms
 				if (selectedCommandId < Model.Types.PredefinedCommandPage.FirstCommandIdPerPage)
 					selectedCommandId = Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage;
 			}
+
+			SetControls();
 		}
 
+		/// <remarks>This private method does not call <see cref="SetControls()"/>.</remarks>
 		private void Up(int selectedCommandId)
 		{
 			// Attention:
@@ -525,19 +572,15 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Up()
 			// Changes here may have to be applied there too.
 
-			var ss = GetSettingsSetFromId(selectedCommandId);
-			var sc = ss.Command;
-			if (sc != null)
-				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+			var sc = GetCommandFromId(selectedCommandId);
+			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId > Model.Types.PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage));
-			var ts = GetSettingsSetFromId(targetCommandId);
-			var tc = ts.Command;
-			if (tc != null)
-				tc = new Model.Types.Command(tc); // Clone command to ensure decoupling.
+			var tc = GetCommandFromId(targetCommandId);
+			var scNew = new Model.Types.Command(tc); // Clone command to ensure decoupling.
 
-			ts.Command = sc;
-			ss.Command = tc;
+			tc = tcNew;
+			sc = scNew;
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_DownBy_N_Click(object sender, EventArgs e)
@@ -560,8 +603,11 @@ namespace YAT.View.Forms
 				if (selectedCommandId > Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage)
 					selectedCommandId = Model.Types.PredefinedCommandPage.FirstCommandIdPerPage;
 			}
+
+			SetControls();
 		}
 
+		/// <remarks>This private method does not call <see cref="SetControls()"/>.</remarks>
 		private void Down(int selectedCommandId)
 		{
 			// Attention:
@@ -569,60 +615,15 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Down()
 			// Changes here may have to be applied there too.
 
-			var ss = GetSettingsSetFromId(selectedCommandId);
-			var sc = ss.Command;
-			if (sc != null)
-				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+			var sc = GetCommandFromId(selectedCommandId);
+			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId < Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (Model.Types.PredefinedCommandPage.FirstCommandIdPerPage));
-			var ts = GetSettingsSetFromId(targetCommandId);
-			var tc = ts.Command;
-			if (tc != null)
-				tc = new Model.Types.Command(tc); // Clone command to ensure decoupling.
+			var tc = GetCommandFromId(targetCommandId);
+			var scNew = new Model.Types.Command(tc); // Clone command to ensure decoupling.
 
-			ts.Command = sc;
-			ss.Command = tc;
-		}
-
-		private void toolStripMenuItem_CommandContextMenu_MoveTo_I_Click(object sender, EventArgs e)
-		{
-		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
-
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
-			// Changes here may have to be applied there too.
-
-			var ss = GetSettingsSetFromId(contextMenuStrip_Commands_SelectedCommandId);
-			var sc = ss.Command;
-			if (sc != null)
-				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
-
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-			var ts = GetSettingsSetFromId(targetCommandId);
-			ts.Command = sc;
-			ss.ClearCommand();
-		}
-
-		private void toolStripMenuItem_CommandContextMenu_CopyTo_I_Click(object sender, EventArgs e)
-		{
-		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
-
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_CopyTo_I_Click()
-			// Changes here may have to be applied there too.
-
-			var ss = GetSettingsSetFromId(contextMenuStrip_Commands_SelectedCommandId);
-			var sc = ss.Command;
-			if (sc != null)
-				sc = new Model.Types.Command(sc); // Clone command to ensure decoupling.
-
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-			var ts = GetSettingsSetFromId(targetCommandId);
-			ts.Command = sc;
+			tc = tcNew;
+			sc = scNew;
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_Cut_Click(object sender, EventArgs e)
@@ -665,8 +666,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Clear_Click()
 			// Changes here may have to be applied there too.
 
-			var selectedSet = GetSettingsSetFromId(contextMenuStrip_Commands_SelectedCommandId);
-			selectedSet.ClearCommand();
+			this.settingsInEdit.ClearCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId);
+			SetControls();
 		}
 
 		#endregion
@@ -678,11 +679,19 @@ namespace YAT.View.Forms
 		// Non-Public Properties
 		//==========================================================================================
 
-		/// <remarks><see cref="SetControls"/> is not called by this private property.</remarks>
 		private int SelectedPageIndex
 		{
-			get { return (this.selectedPageId - 1);  }
-			set { this.selectedPageId = (value + 1); }
+			get { return (this.selectedPageId - 1); }
+		}
+
+		private int SelectedSubpageIndex
+		{
+			get { return (this.selectedSubpageId - 1); }
+		}
+
+		private int SelectedSubpageCommandIndexOffset
+		{
+			get { return (SelectedSubpageIndex * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage); }
 		}
 
 		#endregion
@@ -784,14 +793,14 @@ namespace YAT.View.Forms
 
 				switch (pageLayout)
 				{                                                            // \remind (2019-08-05 / MKY):
-					case Model.Types.PredefinedCommandPageLayout.TwoByOne:   // Could initially be calculated.
-					case Model.Types.PredefinedCommandPageLayout.ThreeByOne: location = new Point(103, 16); break;
-					case Model.Types.PredefinedCommandPageLayout.OneByTwo:   location = new Point(167, 31); break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByOne:   // Could be calculated initially.
+					case Model.Types.PredefinedCommandPageLayout.ThreeByOne: location = new Point(101, 16); break;
+					case Model.Types.PredefinedCommandPageLayout.OneByTwo:   location = new Point(165, 31); break;
 					case Model.Types.PredefinedCommandPageLayout.OneByThree: location = new Point(135, 31); break;
-					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:   location = new Point(167, 16); break;
+					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:   location = new Point(165, 16); break;
 					case Model.Types.PredefinedCommandPageLayout.TwoByThree: location = new Point(135, 16); break;
-					case Model.Types.PredefinedCommandPageLayout.ThreeByTwo: location = new Point( 71, 16); break;
-					default:                                                 location = new Point( 40, 16); break;
+					case Model.Types.PredefinedCommandPageLayout.ThreeByTwo: location = new Point( 69, 16); break;
+					default:                                                 location = new Point( 38, 16); break;
 				}
 
 				label_SubpageSelection.Location = location;
@@ -959,11 +968,9 @@ namespace YAT.View.Forms
 				{
 					groupBox_Page.Enabled = true;
 
-					int commandOffset = ((this.selectedSubpageId - 1) * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
-
 					for (int i = 0; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 					{
-						int commandIndex = (commandOffset + i);
+						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
 						if (commandIndex < this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count)
 							this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[commandIndex];
 						else
@@ -1193,24 +1200,19 @@ namespace YAT.View.Forms
 		/// Returns command at the specified <paramref name="id"/>.
 		/// Returns <c>null</c> if command is undefined or invalid.
 		/// </summary>
-		public virtual Model.Types.Command GetCommandFromId(int id)
+		protected virtual Model.Types.Command GetCommandFromId(int id)
 		{
-			var ss = GetSettingsSetFromId(id);
-			if (ss != null)
-				return (ss.Command);
-
-			return (null);
-		}
-
-		/// <summary>
-		/// Returns settings set at the specified <paramref name="id"/>.
-		/// Returns <c>null</c> if command is undefined or invalid.
-		/// </summary>
-		protected virtual Controls.PredefinedCommandSettingsSet GetSettingsSetFromId(int id)
-		{
-			int i = (id - 1); // ID = 1..max
-			if ((i >= 0) && (i < this.predefinedCommandSettingsSets.Count))
-				return (this.predefinedCommandSettingsSets[i]);
+			if (this.settingsInEdit.Pages != null)
+			{
+				var p = this.settingsInEdit.Pages[SelectedPageIndex];
+				if (p != null)
+				{
+					var i = (id - 1);
+					i += SelectedSubpageCommandIndexOffset;
+					if (i < p.Commands.Count)
+						return (p.Commands[i]);
+				}
+			}
 
 			return (null);
 		}
@@ -1219,7 +1221,7 @@ namespace YAT.View.Forms
 		/// Returns settings set ID (1..max) that is assigned to the set at the specified location.
 		/// Returns 0 if no set.
 		/// </summary>
-		protected virtual int GetSettingsSetIdFromLocation(Point point)
+		protected virtual int GetCommandIdFromLocation(Point point)
 		{
 			Point requested = groupBox_Page.PointToClient(point);
 
@@ -1235,29 +1237,26 @@ namespace YAT.View.Forms
 			for (int i = 0; i < this.predefinedCommandSettingsSets.Count; i++)
 			{
 				if (requested.Y <= this.predefinedCommandSettingsSets[i].Bottom)
-					return (i + 1); // ID = 1..max
+				{
+					var id = (i + 1); // ID = 1..max
+					id += (SelectedSubpageIndex * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+					return (id);
+				}
 			}
 
 			return (0);
 		}
 
-		/// <summary>
-		/// Returns settings set that is assigned to the set at the specified location.
-		/// Returns <c>null</c> if no set or if set is undefined or invalid.
-		/// </summary>
-		protected virtual Controls.PredefinedCommandSettingsSet GetSettingsSetFromLocation(Point point)
-		{
-			return (GetSettingsSetFromId(GetSettingsSetIdFromLocation(point)));
-		}
-
-		/// <param name="id">Command 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+		/// <param name="id">Command 1..<see cref="Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>
 		protected virtual void SetCommandFromSettingsSet(int id)
 		{
 			if (this.settingsInEdit.Pages != null)
 			{
-				var i = (id - 1);
+				int relativeCommandIndex = (id - 1);
+				int absoluteCommandIndex = (SelectedSubpageCommandIndexOffset + relativeCommandIndex);
+
 				var p = this.settingsInEdit.Pages[SelectedPageIndex];
-				p.SetCommand(i, this.predefinedCommandSettingsSets[i].Command);
+				p.SetCommand(absoluteCommandIndex, this.predefinedCommandSettingsSets[relativeCommandIndex].Command);
 			}
 		}
 
