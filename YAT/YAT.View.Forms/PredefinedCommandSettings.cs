@@ -392,6 +392,7 @@ namespace YAT.View.Forms
 				return;
 
 			SetCommandFromSettingsSet(ControlEx.TagToInt32(sender));
+			SetPagesControls(); // Needed since some 'Export...' options depend on command availability.
 			SetClearControls();
 		}
 
@@ -894,6 +895,16 @@ namespace YAT.View.Forms
 				subpageCheckBox_2C.Top  = top2;
 			////subpageCheckBox_3C.Left = leftC is fixed.
 			////subpageCheckBox_3C.Top  = top3 is fixed.
+
+				subpageCheckBox_1A.Checked = (subpageCheckBox_1A.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_2A.Checked = (subpageCheckBox_2A.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_3A.Checked = (subpageCheckBox_3A.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_1B.Checked = (subpageCheckBox_1B.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_2B.Checked = (subpageCheckBox_2B.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_3B.Checked = (subpageCheckBox_3B.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_1C.Checked = (subpageCheckBox_1C.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_2C.Checked = (subpageCheckBox_2C.SubpageId == this.selectedSubpageId);
+				subpageCheckBox_3C.Checked = (subpageCheckBox_3C.SubpageId == this.selectedSubpageId);
 			}
 			finally
 			{
