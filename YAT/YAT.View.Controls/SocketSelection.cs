@@ -154,7 +154,8 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			// SetControls() is initially called in the 'Paint' event handler.
+			InitializeControls();
+		////SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -425,7 +426,6 @@ namespace YAT.View.Controls
 			{
 				this.isStartingUp = false;
 
-				InitializeControls();
 				SetControls();
 			}
 

@@ -74,8 +74,7 @@ namespace YAT.View.Forms
 
 			KeepAndCloneAndAttachSettings(settings);
 			InitializeControls();
-
-			// SetControls() is initially called in the 'Shown' event handler.
+		////SetControls() is initially called in the 'Shown' event handler.
 		}
 
 		#endregion

@@ -99,8 +99,7 @@ namespace YAT.View.Forms
 			this.timeDurationFormat = timeDurationFormat;
 
 			InitializeControls();
-
-			// SetControls() is initially called in the 'Shown' event handler.
+		////SetControls() is initially called in the 'Shown' event handler.
 		}
 
 		#endregion
