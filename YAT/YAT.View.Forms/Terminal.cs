@@ -2118,15 +2118,11 @@ namespace YAT.View.Forms
 
 			contextMenuStrip_Predefined_SelectedCommandId = id;
 
-			toolStripMenuItem_PredefinedContextMenu_Panels           .Visible = true;
-			toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
 
 			ToolStripComboBoxHelper.Select(toolStripComboBox_PredefinedContextMenu_Layout, pageLayoutEx);
 
-			toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
-			toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command != null) && (this.settingsRoot.SendFile.Command.IsFilePath));
 
 			var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile;
@@ -2155,9 +2151,7 @@ namespace YAT.View.Forms
 			// Workaround:
 			send.ValidateSendTextInput();
 
-			toolStripMenuItem_PredefinedContextMenu_CopyTo.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_CopyTo.Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_MoveTo.Enabled = cIsDefined;
 
 			toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Visible =            cIsDefined;
@@ -2302,9 +2296,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Visible =           (cIsDefined && (np >= 96));
 			toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Enabled =           (cIsDefined && (id != 96));
 
-			toolStripMenuItem_PredefinedContextMenu_UpBy  .Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_DownBy.Enabled = cIsDefined;
 
 			toolStripMenuItem_PredefinedContextMenu_UpBy_1 .Visible =            cIsDefined;
@@ -2385,13 +2377,9 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_96.Visible = (cIsDefined && (np > 96));
 			toolStripMenuItem_PredefinedContextMenu_DownBy_96.Visible =           (cIsDefined && (np > 96));
 
-			toolStripMenuItem_PredefinedContextMenu_Cut  .Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_Cut  .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_Copy .Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_Copy .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_Paste.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
-			toolStripMenuItem_PredefinedContextMenu_Clear.Visible = true;
 			toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
 
 			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)

@@ -37,6 +37,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Windows.Forms;
 
+using YAT.Model.Types;
 using YAT.View.Utilities;
 
 #endregion
@@ -59,8 +60,8 @@ namespace YAT.View.Forms
 			/// <summary></summary>
 			public int RequestedCommandId;
 
-			/// <param name="requestedPageId">Page 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
-			/// <param name="requestedCommandId">Command 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+			/// <param name="requestedPageId">Page 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+			/// <param name="requestedCommandId">Command 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 			public StartupControl(int requestedPageId, int requestedCommandId)
 			{
 				RequestedPageId    = requestedPageId;
@@ -106,8 +107,8 @@ namespace YAT.View.Forms
 		/// <param name="useExplicitDefaultRadix">Whether to use an explicit default radix.</param>
 		/// <param name="parseModeForText">The parse mode related to the command.</param>
 		/// <param name="rootDirectoryForFile">The root path for file commands.</param>
-		/// <param name="requestedPageId">Page 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
-		/// <param name="requestedCommandId">Command 1..<see cref="Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+		/// <param name="requestedPageId">Page 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
+		/// <param name="requestedCommandId">Command 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		/// <param name="indicatedName">The indicated terminal name.</param>
 		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPageId, int requestedCommandId, string indicatedName)
 		{
@@ -259,7 +260,7 @@ namespace YAT.View.Forms
 				return;
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.Change(this, this.settingsInEdit, (Model.Types.PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.Change(this, this.settingsInEdit, (PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
 			{
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
@@ -378,7 +379,7 @@ namespace YAT.View.Forms
 		{
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_ImportFromFile_Click()
 			// Changes here may have to be applied there too.
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
@@ -418,7 +419,7 @@ namespace YAT.View.Forms
 		{
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_LinkToFile_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_LinkToFile_Click()
 			// Changes here may have to be applied there too.
 
 		}
@@ -460,42 +461,238 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.contextMenuStrip_Predefined_Opening()
 			// Changes here may have to be applied there too.
 
+			PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsInEdit.PageLayout;
+			var np = pageLayoutEx.CommandCapacityPerPage;
 			var id = GetCommandIdFromLocation(new Point(contextMenuStrip_Commands.Left, contextMenuStrip_Commands.Top));
 			var c = GetCommandFromId(id);
+			var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
 
 			contextMenuStrip_Commands_SelectedCommandId = id;
 
 			toolStripMenuItem_CommandContextMenu_MoveTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			toolStripMenuItem_CommandContextMenu_CopyTo.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 
-			toolStripMenuItem_CommandContextMenu_CopyTo_1 .Enabled = (id != 1);
-			toolStripMenuItem_CommandContextMenu_CopyTo_2 .Enabled = (id != 2);
-			toolStripMenuItem_CommandContextMenu_CopyTo_3 .Enabled = (id != 3);
-			toolStripMenuItem_CommandContextMenu_CopyTo_4 .Enabled = (id != 4);
-			toolStripMenuItem_CommandContextMenu_CopyTo_5 .Enabled = (id != 5);
-			toolStripMenuItem_CommandContextMenu_CopyTo_6 .Enabled = (id != 6);
-			toolStripMenuItem_CommandContextMenu_CopyTo_7 .Enabled = (id != 7);
-			toolStripMenuItem_CommandContextMenu_CopyTo_8 .Enabled = (id != 8);
-			toolStripMenuItem_CommandContextMenu_CopyTo_9 .Enabled = (id != 9);
-			toolStripMenuItem_CommandContextMenu_CopyTo_10.Enabled = (id != 10);
-			toolStripMenuItem_CommandContextMenu_CopyTo_11.Enabled = (id != 11);
-			toolStripMenuItem_CommandContextMenu_CopyTo_12.Enabled = (id != 12);
+			toolStripMenuItem_CommandContextMenu_CopyTo_1 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_1 .Enabled =           (cIsDefined && (id != 1));
+			toolStripMenuItem_CommandContextMenu_CopyTo_2 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_2 .Enabled =           (cIsDefined && (id != 2));
+			toolStripMenuItem_CommandContextMenu_CopyTo_3 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_3 .Enabled =           (cIsDefined && (id != 3));
+			toolStripMenuItem_CommandContextMenu_CopyTo_4 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_4 .Enabled =           (cIsDefined && (id != 4));
+			toolStripMenuItem_CommandContextMenu_CopyTo_5 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_5 .Enabled =           (cIsDefined && (id != 5));
+			toolStripMenuItem_CommandContextMenu_CopyTo_6 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_6 .Enabled =           (cIsDefined && (id != 6));
+			toolStripMenuItem_CommandContextMenu_CopyTo_7 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_7 .Enabled =           (cIsDefined && (id != 7));
+			toolStripMenuItem_CommandContextMenu_CopyTo_8 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_8 .Enabled =           (cIsDefined && (id != 8));
+			toolStripMenuItem_CommandContextMenu_CopyTo_9 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_9 .Enabled =           (cIsDefined && (id != 9));
+			toolStripMenuItem_CommandContextMenu_CopyTo_10.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_10.Enabled =           (cIsDefined && (id != 10));
+			toolStripMenuItem_CommandContextMenu_CopyTo_11.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_11.Enabled =           (cIsDefined && (id != 11));
+			toolStripMenuItem_CommandContextMenu_CopyTo_12.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_CopyTo_12.Enabled =           (cIsDefined && (id != 12));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_12.Visible = (cIsDefined && (np >= 13));
+			toolStripMenuItem_CommandContextMenu_CopyTo_13.Visible =           (cIsDefined && (np >= 13));
+			toolStripMenuItem_CommandContextMenu_CopyTo_13.Enabled =           (cIsDefined && (id != 13));
+			toolStripMenuItem_CommandContextMenu_CopyTo_14.Visible =           (cIsDefined && (np >= 14));
+			toolStripMenuItem_CommandContextMenu_CopyTo_14.Enabled =           (cIsDefined && (id != 14));
+			toolStripMenuItem_CommandContextMenu_CopyTo_15.Visible =           (cIsDefined && (np >= 15));
+			toolStripMenuItem_CommandContextMenu_CopyTo_15.Enabled =           (cIsDefined && (id != 15));
+			toolStripMenuItem_CommandContextMenu_CopyTo_16.Visible =           (cIsDefined && (np >= 16));
+			toolStripMenuItem_CommandContextMenu_CopyTo_16.Enabled =           (cIsDefined && (id != 16));
+			toolStripMenuItem_CommandContextMenu_CopyTo_17.Visible =           (cIsDefined && (np >= 17));
+			toolStripMenuItem_CommandContextMenu_CopyTo_17.Enabled =           (cIsDefined && (id != 17));
+			toolStripMenuItem_CommandContextMenu_CopyTo_18.Visible =           (cIsDefined && (np >= 18));
+			toolStripMenuItem_CommandContextMenu_CopyTo_18.Enabled =           (cIsDefined && (id != 18));
+			toolStripMenuItem_CommandContextMenu_CopyTo_19.Visible =           (cIsDefined && (np >= 19));
+			toolStripMenuItem_CommandContextMenu_CopyTo_19.Enabled =           (cIsDefined && (id != 19));
+			toolStripMenuItem_CommandContextMenu_CopyTo_20.Visible =           (cIsDefined && (np >= 20));
+			toolStripMenuItem_CommandContextMenu_CopyTo_20.Enabled =           (cIsDefined && (id != 20));
+			toolStripMenuItem_CommandContextMenu_CopyTo_21.Visible =           (cIsDefined && (np >= 21));
+			toolStripMenuItem_CommandContextMenu_CopyTo_21.Enabled =           (cIsDefined && (id != 21));
+			toolStripMenuItem_CommandContextMenu_CopyTo_22.Visible =           (cIsDefined && (np >= 22));
+			toolStripMenuItem_CommandContextMenu_CopyTo_22.Enabled =           (cIsDefined && (id != 22));
+			toolStripMenuItem_CommandContextMenu_CopyTo_23.Visible =           (cIsDefined && (np >= 23));
+			toolStripMenuItem_CommandContextMenu_CopyTo_23.Enabled =           (cIsDefined && (id != 23));
+			toolStripMenuItem_CommandContextMenu_CopyTo_24.Visible =           (cIsDefined && (np >= 24));
+			toolStripMenuItem_CommandContextMenu_CopyTo_24.Enabled =           (cIsDefined && (id != 24));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_24.Visible = (cIsDefined && (np >= 25));
+			toolStripMenuItem_CommandContextMenu_CopyTo_25.Visible =           (cIsDefined && (np >= 25));
+			toolStripMenuItem_CommandContextMenu_CopyTo_25.Enabled =           (cIsDefined && (id != 25));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_36.Visible = (cIsDefined && (np >= 37));
+			toolStripMenuItem_CommandContextMenu_CopyTo_37.Visible =           (cIsDefined && (np >= 37));
+			toolStripMenuItem_CommandContextMenu_CopyTo_37.Enabled =           (cIsDefined && (id != 37));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_48.Visible = (cIsDefined && (np >= 49));
+			toolStripMenuItem_CommandContextMenu_CopyTo_49.Visible =           (cIsDefined && (np >= 49));
+			toolStripMenuItem_CommandContextMenu_CopyTo_49.Enabled =           (cIsDefined && (id != 49));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_60.Visible = (cIsDefined && (np >= 61));
+			toolStripMenuItem_CommandContextMenu_CopyTo_61.Visible =           (cIsDefined && (np >= 61));
+			toolStripMenuItem_CommandContextMenu_CopyTo_61.Enabled =           (cIsDefined && (id != 61));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_72.Visible = (cIsDefined && (np >= 73));
+			toolStripMenuItem_CommandContextMenu_CopyTo_73.Visible =           (cIsDefined && (np >= 73));
+			toolStripMenuItem_CommandContextMenu_CopyTo_73.Enabled =           (cIsDefined && (id != 73));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_84.Visible = (cIsDefined && (np >= 85));
+			toolStripMenuItem_CommandContextMenu_CopyTo_85.Visible =           (cIsDefined && (np >= 85));
+			toolStripMenuItem_CommandContextMenu_CopyTo_85.Enabled =           (cIsDefined && (id != 85));
+			toolStripMenuItem_CommandContextMenu_CopyTo_Separator_96.Visible = (cIsDefined && (np >= 97));
+			toolStripMenuItem_CommandContextMenu_CopyTo_97.Visible =           (cIsDefined && (np >= 97));
+			toolStripMenuItem_CommandContextMenu_CopyTo_97.Enabled =           (cIsDefined && (id != 97));
 
-			toolStripMenuItem_CommandContextMenu_MoveTo_1 .Enabled = (id != 1);
-			toolStripMenuItem_CommandContextMenu_MoveTo_2 .Enabled = (id != 2);
-			toolStripMenuItem_CommandContextMenu_MoveTo_3 .Enabled = (id != 3);
-			toolStripMenuItem_CommandContextMenu_MoveTo_4 .Enabled = (id != 4);
-			toolStripMenuItem_CommandContextMenu_MoveTo_5 .Enabled = (id != 5);
-			toolStripMenuItem_CommandContextMenu_MoveTo_6 .Enabled = (id != 6);
-			toolStripMenuItem_CommandContextMenu_MoveTo_7 .Enabled = (id != 7);
-			toolStripMenuItem_CommandContextMenu_MoveTo_8 .Enabled = (id != 8);
-			toolStripMenuItem_CommandContextMenu_MoveTo_9 .Enabled = (id != 9);
-			toolStripMenuItem_CommandContextMenu_MoveTo_10.Enabled = (id != 10);
-			toolStripMenuItem_CommandContextMenu_MoveTo_11.Enabled = (id != 11);
-			toolStripMenuItem_CommandContextMenu_MoveTo_12.Enabled = (id != 12);
+			toolStripMenuItem_CommandContextMenu_MoveTo_1 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_1 .Enabled =           (cIsDefined && (id != 1));
+			toolStripMenuItem_CommandContextMenu_MoveTo_2 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_2 .Enabled =           (cIsDefined && (id != 2));
+			toolStripMenuItem_CommandContextMenu_MoveTo_3 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_3 .Enabled =           (cIsDefined && (id != 3));
+			toolStripMenuItem_CommandContextMenu_MoveTo_4 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_4 .Enabled =           (cIsDefined && (id != 4));
+			toolStripMenuItem_CommandContextMenu_MoveTo_5 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_5 .Enabled =           (cIsDefined && (id != 5));
+			toolStripMenuItem_CommandContextMenu_MoveTo_6 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_6 .Enabled =           (cIsDefined && (id != 6));
+			toolStripMenuItem_CommandContextMenu_MoveTo_7 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_7 .Enabled =           (cIsDefined && (id != 7));
+			toolStripMenuItem_CommandContextMenu_MoveTo_8 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_8 .Enabled =           (cIsDefined && (id != 8));
+			toolStripMenuItem_CommandContextMenu_MoveTo_9 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_9 .Enabled =           (cIsDefined && (id != 9));
+			toolStripMenuItem_CommandContextMenu_MoveTo_10.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_10.Enabled =           (cIsDefined && (id != 10));
+			toolStripMenuItem_CommandContextMenu_MoveTo_11.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_11.Enabled =           (cIsDefined && (id != 11));
+			toolStripMenuItem_CommandContextMenu_MoveTo_12.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_MoveTo_12.Enabled =           (cIsDefined && (id != 12));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_12.Visible = (cIsDefined && (np >= 13));
+			toolStripMenuItem_CommandContextMenu_MoveTo_13.Visible =           (cIsDefined && (np >= 13));
+			toolStripMenuItem_CommandContextMenu_MoveTo_13.Enabled =           (cIsDefined && (id != 13));
+			toolStripMenuItem_CommandContextMenu_MoveTo_14.Visible =           (cIsDefined && (np >= 14));
+			toolStripMenuItem_CommandContextMenu_MoveTo_14.Enabled =           (cIsDefined && (id != 14));
+			toolStripMenuItem_CommandContextMenu_MoveTo_15.Visible =           (cIsDefined && (np >= 15));
+			toolStripMenuItem_CommandContextMenu_MoveTo_15.Enabled =           (cIsDefined && (id != 15));
+			toolStripMenuItem_CommandContextMenu_MoveTo_16.Visible =           (cIsDefined && (np >= 16));
+			toolStripMenuItem_CommandContextMenu_MoveTo_16.Enabled =           (cIsDefined && (id != 16));
+			toolStripMenuItem_CommandContextMenu_MoveTo_17.Visible =           (cIsDefined && (np >= 17));
+			toolStripMenuItem_CommandContextMenu_MoveTo_17.Enabled =           (cIsDefined && (id != 17));
+			toolStripMenuItem_CommandContextMenu_MoveTo_18.Visible =           (cIsDefined && (np >= 18));
+			toolStripMenuItem_CommandContextMenu_MoveTo_18.Enabled =           (cIsDefined && (id != 18));
+			toolStripMenuItem_CommandContextMenu_MoveTo_19.Visible =           (cIsDefined && (np >= 19));
+			toolStripMenuItem_CommandContextMenu_MoveTo_19.Enabled =           (cIsDefined && (id != 19));
+			toolStripMenuItem_CommandContextMenu_MoveTo_20.Visible =           (cIsDefined && (np >= 20));
+			toolStripMenuItem_CommandContextMenu_MoveTo_20.Enabled =           (cIsDefined && (id != 20));
+			toolStripMenuItem_CommandContextMenu_MoveTo_21.Visible =           (cIsDefined && (np >= 21));
+			toolStripMenuItem_CommandContextMenu_MoveTo_21.Enabled =           (cIsDefined && (id != 21));
+			toolStripMenuItem_CommandContextMenu_MoveTo_22.Visible =           (cIsDefined && (np >= 22));
+			toolStripMenuItem_CommandContextMenu_MoveTo_22.Enabled =           (cIsDefined && (id != 22));
+			toolStripMenuItem_CommandContextMenu_MoveTo_23.Visible =           (cIsDefined && (np >= 23));
+			toolStripMenuItem_CommandContextMenu_MoveTo_23.Enabled =           (cIsDefined && (id != 23));
+			toolStripMenuItem_CommandContextMenu_MoveTo_24.Visible =           (cIsDefined && (np >= 24));
+			toolStripMenuItem_CommandContextMenu_MoveTo_24.Enabled =           (cIsDefined && (id != 24));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_24.Visible = (cIsDefined && (np >= 25));
+			toolStripMenuItem_CommandContextMenu_MoveTo_25.Visible =           (cIsDefined && (np >= 25));
+			toolStripMenuItem_CommandContextMenu_MoveTo_25.Enabled =           (cIsDefined && (id != 25));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_36.Visible = (cIsDefined && (np >= 37));
+			toolStripMenuItem_CommandContextMenu_MoveTo_37.Visible =           (cIsDefined && (np >= 37));
+			toolStripMenuItem_CommandContextMenu_MoveTo_37.Enabled =           (cIsDefined && (id != 37));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_48.Visible = (cIsDefined && (np >= 49));
+			toolStripMenuItem_CommandContextMenu_MoveTo_49.Visible =           (cIsDefined && (np >= 49));
+			toolStripMenuItem_CommandContextMenu_MoveTo_49.Enabled =           (cIsDefined && (id != 49));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_60.Visible = (cIsDefined && (np >= 61));
+			toolStripMenuItem_CommandContextMenu_MoveTo_61.Visible =           (cIsDefined && (np >= 61));
+			toolStripMenuItem_CommandContextMenu_MoveTo_61.Enabled =           (cIsDefined && (id != 61));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_72.Visible = (cIsDefined && (np >= 73));
+			toolStripMenuItem_CommandContextMenu_MoveTo_73.Visible =           (cIsDefined && (np >= 73));
+			toolStripMenuItem_CommandContextMenu_MoveTo_73.Enabled =           (cIsDefined && (id != 73));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_84.Visible = (cIsDefined && (np >= 85));
+			toolStripMenuItem_CommandContextMenu_MoveTo_85.Visible =           (cIsDefined && (np >= 85));
+			toolStripMenuItem_CommandContextMenu_MoveTo_85.Enabled =           (cIsDefined && (id != 85));
+			toolStripMenuItem_CommandContextMenu_MoveTo_Separator_96.Visible = (cIsDefined && (np >= 96));
+			toolStripMenuItem_CommandContextMenu_MoveTo_97.Visible =           (cIsDefined && (np >= 96));
+			toolStripMenuItem_CommandContextMenu_MoveTo_97.Enabled =           (cIsDefined && (id != 96));
 
 			toolStripMenuItem_CommandContextMenu_UpBy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			toolStripMenuItem_CommandContextMenu_DownBy.Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_UpBy_1 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_2 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_3 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_4 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_5 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_6 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_7 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_8 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_9 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_10.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_11.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_12.Visible = (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_12.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_13.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_14.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_15.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_16.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_17.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_18.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_19.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_20.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_21.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_22.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_23.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_24.Visible = (cIsDefined && (np > 24));
+			toolStripMenuItem_CommandContextMenu_UpBy_24.Visible =           (cIsDefined && (np > 24));
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_36.Visible = (cIsDefined && (np > 36));
+			toolStripMenuItem_CommandContextMenu_UpBy_36.Visible =           (cIsDefined && (np > 36));
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_48.Visible = (cIsDefined && (np > 48));
+			toolStripMenuItem_CommandContextMenu_UpBy_48.Visible =           (cIsDefined && (np > 48));
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_60.Visible = (cIsDefined && (np > 60));
+			toolStripMenuItem_CommandContextMenu_UpBy_60.Visible =           (cIsDefined && (np > 60));
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_72.Visible = (cIsDefined && (np > 72));
+			toolStripMenuItem_CommandContextMenu_UpBy_72.Visible =           (cIsDefined && (np > 72));
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_84.Visible = (cIsDefined && (np > 84));
+			toolStripMenuItem_CommandContextMenu_UpBy_84.Visible =           (cIsDefined && (np > 84));
+			toolStripMenuItem_CommandContextMenu_UpBy_Separator_96.Visible = (cIsDefined && (np > 96));
+			toolStripMenuItem_CommandContextMenu_UpBy_96.Visible =           (cIsDefined && (np > 96));
+
+			toolStripMenuItem_CommandContextMenu_DownBy_1 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_2 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_3 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_4 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_5 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_6 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_7 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_8 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_9 .Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_10.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_11.Visible =            cIsDefined;
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_12.Visible = (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_12.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_13.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_14.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_15.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_16.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_17.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_18.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_19.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_20.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_21.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_22.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_23.Visible =           (cIsDefined && (np > 12));
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_24.Visible = (cIsDefined && (np > 24));
+			toolStripMenuItem_CommandContextMenu_DownBy_24.Visible =           (cIsDefined && (np > 24));
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_36.Visible = (cIsDefined && (np > 36));
+			toolStripMenuItem_CommandContextMenu_DownBy_36.Visible =           (cIsDefined && (np > 36));
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_48.Visible = (cIsDefined && (np > 48));
+			toolStripMenuItem_CommandContextMenu_DownBy_48.Visible =           (cIsDefined && (np > 48));
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_60.Visible = (cIsDefined && (np > 60));
+			toolStripMenuItem_CommandContextMenu_DownBy_60.Visible =           (cIsDefined && (np > 60));
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_72.Visible = (cIsDefined && (np > 72));
+			toolStripMenuItem_CommandContextMenu_DownBy_72.Visible =           (cIsDefined && (np > 72));
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_84.Visible = (cIsDefined && (np > 84));
+			toolStripMenuItem_CommandContextMenu_DownBy_84.Visible =           (cIsDefined && (np > 84));
+			toolStripMenuItem_CommandContextMenu_DownBy_Separator_96.Visible = (cIsDefined && (np > 96));
+			toolStripMenuItem_CommandContextMenu_DownBy_96.Visible =           (cIsDefined && (np > 96));
 
 			toolStripMenuItem_CommandContextMenu_Cut   .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
 			toolStripMenuItem_CommandContextMenu_Copy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
@@ -510,11 +707,11 @@ namespace YAT.View.Forms
 
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_CopyTo_I_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_CopyTo_I_Click()
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+			var tcNew = new Command(sc); // Clone command to ensure decoupling.
 
 			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			var tc = GetCommandFromId(targetCommandId);
@@ -533,11 +730,11 @@ namespace YAT.View.Forms
 
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_MoveTo_I_Click()
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+			var tcNew = new Command(sc); // Clone command to ensure decoupling.
 
 			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			var tc = GetCommandFromId(targetCommandId);
@@ -557,7 +754,7 @@ namespace YAT.View.Forms
 
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_UpBy_N_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_UpBy_N_Click()
 			// Changes here may have to be applied there too.
 
 			int resultingTargetCommandId = 0;
@@ -568,8 +765,8 @@ namespace YAT.View.Forms
 				Up(selectedCommandId, out resultingTargetCommandId);
 
 				selectedCommandId--;
-				if (selectedCommandId < Model.Types.PredefinedCommandPage.FirstCommandIdPerPage)
-					selectedCommandId = Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage;
+				if (selectedCommandId < PredefinedCommandPage.FirstCommandIdPerPage)
+					selectedCommandId = PredefinedCommandPage.MaxCommandCapacityPerPage;
 			}
 
 			ActivateSubpage(resultingTargetCommandId);
@@ -586,11 +783,11 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(selectedCommandId);
-			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+			var tcNew = new Command(sc); // Clone command to ensure decoupling.
 
-			targetCommandId = ((selectedCommandId > Model.Types.PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage));
+			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (PredefinedCommandPage.MaxCommandCapacityPerPage));
 			var tc = GetCommandFromId(targetCommandId);
-			var scNew = new Model.Types.Command(tc); // Clone command to ensure decoupling.
+			var scNew = new Command(tc); // Clone command to ensure decoupling.
 
 			tc = tcNew;
 			sc = scNew;
@@ -603,7 +800,7 @@ namespace YAT.View.Forms
 
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_DownBy_N_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_DownBy_N_Click()
 			// Changes here may have to be applied there too.
 
 			int resultingTargetCommandId = 0;
@@ -614,8 +811,8 @@ namespace YAT.View.Forms
 				Down(selectedCommandId, out resultingTargetCommandId);
 
 				selectedCommandId++;
-				if (selectedCommandId > Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage)
-					selectedCommandId = Model.Types.PredefinedCommandPage.FirstCommandIdPerPage;
+				if (selectedCommandId > PredefinedCommandPage.MaxCommandCapacityPerPage)
+					selectedCommandId = PredefinedCommandPage.FirstCommandIdPerPage;
 			}
 
 			ActivateSubpage(resultingTargetCommandId);
@@ -632,11 +829,11 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(selectedCommandId);
-			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
+			var tcNew = new Command(sc); // Clone command to ensure decoupling.
 
-			targetCommandId = ((selectedCommandId < Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (Model.Types.PredefinedCommandPage.FirstCommandIdPerPage));
+			targetCommandId = ((selectedCommandId < PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
-			var scNew = new Model.Types.Command(tc); // Clone command to ensure decoupling.
+			var scNew = new Command(tc); // Clone command to ensure decoupling.
 
 			tc = tcNew;
 			sc = scNew;
@@ -646,7 +843,7 @@ namespace YAT.View.Forms
 		{
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Cut_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Cut_Click()
 			// Changes here may have to be applied there too.
 
 			// PENDING CutToClipboard();
@@ -656,7 +853,7 @@ namespace YAT.View.Forms
 		{
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Copy_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Copy_Click()
 			// Changes here may have to be applied there too.
 
 			// PENDING CopyToClipboard();
@@ -666,7 +863,7 @@ namespace YAT.View.Forms
 		{
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Paste_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Paste_Click()
 			// Changes here may have to be applied there too.
 
 			// PENDING PasteFromClipboard();
@@ -679,7 +876,7 @@ namespace YAT.View.Forms
 
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Clear_Click()
+			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Clear_Click()
 			// Changes here may have to be applied there too.
 
 			this.settingsInEdit.ClearCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId);
@@ -707,7 +904,7 @@ namespace YAT.View.Forms
 
 		private int SelectedSubpageCommandIndexOffset
 		{
-			get { return (SelectedSubpageIndex * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage); }
+			get { return (SelectedSubpageIndex * PredefinedCommandPage.CommandCapacityPerSubpage); }
 		}
 
 		#endregion
@@ -724,7 +921,7 @@ namespace YAT.View.Forms
 
 		private void InitializeControls(bool useExplicitDefaultRadix)
 		{
-			comboBox_Layout.Items.AddRange(Model.Types.PredefinedCommandPageLayoutEx.GetItems());
+			comboBox_Layout.Items.AddRange(PredefinedCommandPageLayoutEx.GetItems());
 
 			          // (                     distance / 2                      )
 			var deltaX = ((subpageCheckBox_1B.Left - subpageCheckBox_1A.Left) / 2);
@@ -749,7 +946,7 @@ namespace YAT.View.Forms
 				label_Data.Left = (int)((this.scale.Width * 133) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 			}
 
-			this.predefinedCommandSettingsSetLabels = new List<Label>(Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
+			this.predefinedCommandSettingsSetLabels = new List<Label>(PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_1);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_2);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_3);
@@ -763,7 +960,7 @@ namespace YAT.View.Forms
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_11);
 			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_12);
 
-			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
+			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_1);
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_2);
 			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_3);
@@ -802,25 +999,25 @@ namespace YAT.View.Forms
 				int leftA, leftB;
 				int top1, top2;
 
-				Model.Types.PredefinedCommandPageLayout pageLayout = this.settingsInEdit.PageLayout;
-				Model.Types.PredefinedCommandPageLayoutEx pageLayoutEx = pageLayout;
+				PredefinedCommandPageLayout pageLayout = this.settingsInEdit.PageLayout;
+				PredefinedCommandPageLayoutEx pageLayoutEx = pageLayout;
 
 				comboBox_Layout.SelectedItem = pageLayoutEx;
 
 				switch (pageLayout)
 				{                                                            // \remind (2019-08-05 / MKY):
-					case Model.Types.PredefinedCommandPageLayout.TwoByOne:   // Could be calculated initially.
-					case Model.Types.PredefinedCommandPageLayout.ThreeByOne: location = new Point(101, 16); break;
-					case Model.Types.PredefinedCommandPageLayout.OneByTwo:   location = new Point(165, 31); break;
-					case Model.Types.PredefinedCommandPageLayout.OneByThree: location = new Point(135, 31); break;
-					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:   location = new Point(165, 16); break;
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: location = new Point(135, 16); break;
-					case Model.Types.PredefinedCommandPageLayout.ThreeByTwo: location = new Point( 69, 16); break;
+					case PredefinedCommandPageLayout.TwoByOne:   // Could be calculated initially.
+					case PredefinedCommandPageLayout.ThreeByOne: location = new Point(101, 16); break;
+					case PredefinedCommandPageLayout.OneByTwo:   location = new Point(165, 31); break;
+					case PredefinedCommandPageLayout.OneByThree: location = new Point(135, 31); break;
+					case PredefinedCommandPageLayout.TwoByTwo:   location = new Point(165, 16); break;
+					case PredefinedCommandPageLayout.TwoByThree: location = new Point(135, 16); break;
+					case PredefinedCommandPageLayout.ThreeByTwo: location = new Point( 69, 16); break;
 					default:                                                 location = new Point( 38, 16); break;
 				}
 
 				label_SubpageSelection.Location = location;
-				label_SubpageSelection.Visible = (pageLayout != Model.Types.PredefinedCommandPageLayout.OneByOne);
+				label_SubpageSelection.Visible = (pageLayout != PredefinedCommandPageLayout.OneByOne);
 
 				// Attention:
 				// Similar code exists in...
@@ -833,17 +1030,17 @@ namespace YAT.View.Forms
 
 				switch (pageLayout)
 				{
-					case Model.Types.PredefinedCommandPageLayout.OneByTwo:
-					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpageId1 = 2; break;
-					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId1 = 3; break;
+					case PredefinedCommandPageLayout.OneByTwo:
+					case PredefinedCommandPageLayout.OneByThree: subpageId1 = 2; break;
+					case PredefinedCommandPageLayout.TwoByTwo:
+					case PredefinedCommandPageLayout.TwoByThree: subpageId1 = 3; break;
 					default:                                                 subpageId1 = 4; break;
 				}
 
 				switch (pageLayout)
 				{
-					case Model.Types.PredefinedCommandPageLayout.TwoByTwo:
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId2 = 4; break;
+					case PredefinedCommandPageLayout.TwoByTwo:
+					case PredefinedCommandPageLayout.TwoByThree: subpageId2 = 4; break;
 					default:                                                 subpageId2 = 5; break;
 				}
 
@@ -853,14 +1050,14 @@ namespace YAT.View.Forms
 
 				switch (pageLayout)
 				{
-					case Model.Types.PredefinedCommandPageLayout.OneByThree: subpageId1 = 3; break;
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId1 = 5; break;
+					case PredefinedCommandPageLayout.OneByThree: subpageId1 = 3; break;
+					case PredefinedCommandPageLayout.TwoByThree: subpageId1 = 5; break;
 					default:                                                 subpageId1 = 7; break;
 				}
 
 				switch (pageLayout)
 				{
-					case Model.Types.PredefinedCommandPageLayout.TwoByThree: subpageId2 = 6; break;
+					case PredefinedCommandPageLayout.TwoByThree: subpageId2 = 6; break;
 					default:                                                 subpageId2 = 8; break;
 				}
 
@@ -1006,7 +1203,7 @@ namespace YAT.View.Forms
 					if (commands != null)
 						commandCount = commands.Count;
 
-					for (int i = 0; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
+					for (int i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 					{
 						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
 						if (commandIndex < commandCount)
@@ -1108,7 +1305,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				var pcp = new Model.Types.PredefinedCommandPage(Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
+				var pcp = new PredefinedCommandPage(PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
 				this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 				SetControls();
 			}
@@ -1129,7 +1326,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				var pcp = new Model.Types.PredefinedCommandPage(Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
+				var pcp = new PredefinedCommandPage(PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
 				this.settingsInEdit.Pages.Add(pcp);
 				this.selectedPageId = this.settingsInEdit.Pages.Count;
 				SetControls();
@@ -1153,7 +1350,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				var pcp = new Model.Types.PredefinedCommandPage(this.settingsInEdit.Pages[SelectedPageIndex]);
+				var pcp = new PredefinedCommandPage(this.settingsInEdit.Pages[SelectedPageIndex]);
 				pcp.PageName = pageName;
 				this.settingsInEdit.Pages.Insert(SelectedPageIndex + 1, pcp);
 				SetControls();
@@ -1238,7 +1435,7 @@ namespace YAT.View.Forms
 		/// Returns command at the specified <paramref name="id"/>.
 		/// Returns <c>null</c> if command is undefined or invalid.
 		/// </summary>
-		protected virtual Model.Types.Command GetCommandFromId(int id)
+		protected virtual Command GetCommandFromId(int id)
 		{
 			if (this.settingsInEdit.Pages != null)
 			{
@@ -1278,7 +1475,7 @@ namespace YAT.View.Forms
 				if (pt.Y <= this.predefinedCommandSettingsSets[i].Bottom)
 				{
 					var id = (i + 1); // ID = 1..max
-					id += (SelectedSubpageIndex * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+					id += (SelectedSubpageIndex * PredefinedCommandPage.CommandCapacityPerSubpage);
 					return (id);
 				}
 			}
@@ -1286,7 +1483,7 @@ namespace YAT.View.Forms
 			return (0);
 		}
 
-		/// <param name="setId">Set 1..<see cref="Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>
+		/// <param name="setId">Set 1..<see cref="PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>
 		protected virtual void SetCommandFromSettingsSet(int setId)
 		{
 			if (this.settingsInEdit.Pages != null)
@@ -1302,20 +1499,20 @@ namespace YAT.View.Forms
 		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
 		protected virtual void ActivateSubpage(int requestedCommandId)
 		{
-			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
+			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
 
 			var requestedCommandIndex = (requestedCommandId - 1);
-			var requestedSubpageIndex = (requestedCommandIndex / Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+			var requestedSubpageIndex = (requestedCommandIndex / PredefinedCommandPage.CommandCapacityPerSubpage);
 			this.selectedSubpageId = (requestedSubpageIndex + 1);
 		}
 
 		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
 		protected virtual void SelectSet(int requestedCommandId)
 		{
-			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
+			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
 
 			var requestedCommandIndex = (requestedCommandId - 1);
-			var requestedSetIndex = (requestedCommandIndex % Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+			var requestedSetIndex = (requestedCommandIndex % PredefinedCommandPage.CommandCapacityPerSubpage);
 			var requestedSet = this.predefinedCommandSettingsSets[requestedSetIndex];
 			requestedSet.PrepareUserInput(); // See remarks of this method!
 			requestedSet.Select();
