@@ -52,9 +52,8 @@ namespace YAT.Model.Types
 		/// <remarks>Limited to a) keep view simple for most use cases and b) ease implementation.</remarks>
 		public const int CommandCapacityPerSubpage = 12;
 
-		/// <remarks>F-shortcuts are available F1..F24.</remarks>
-		/// <remarks>Possible capacities are 12 or 24.</remarks>
-		public const int MaxCommandCapacityWithShortcut = 24;
+		/// <remarks>F1..F12 are available, F13..F24 don't seem supported by Windows (any longer).</remarks>
+		public const int CommandCapacityWithShortcut = 12;
 
 		/// <remarks>Possible capacities are 12, 24, 36, 48, 72 or 108.</remarks>
 		public const int MaxCommandCapacityPerPage = 108;

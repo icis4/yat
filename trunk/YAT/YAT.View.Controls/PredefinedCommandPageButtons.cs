@@ -351,9 +351,8 @@ namespace YAT.View.Controls
 			try
 			{
 				label_SeparatorLine.Visible = this.showSeparatorLine;
-
-				 label_Shortcuts_1_12.Visible = (this.subpageId == 1);
-				label_Shortcuts_13_24.Visible = (this.subpageId == 2);
+				label_Shortcuts_1_12.Visible = (this.subpageId == 1);
+			////label_Shortcuts_13_24.Visible = (this.subpageId == 2); makes no sense since Windows doesn't seem to support F13..F24 (any longer).
 
 				SetCommandControls();
 			}
@@ -373,14 +372,15 @@ namespace YAT.View.Controls
 				// Attention:
 				// Similar code exists in...
 				// ...View.Forms.PredefinedCommandSettings.SetPageControls()
+				// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
 				// Changes here may have to be applied there too.
+
+				int commandCount = 0;
+				if (this.commands != null)
+					commandCount = this.commands.Count;
 
 				for (int i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 				{
-					int commandCount = 0;
-					if (this.commands != null)
-						commandCount = this.commands.Count;
-
 					bool isDefined = false;
 					int commandIndex = (SubpageCommandIndexOffset + i);
 					if (commandIndex < commandCount)
