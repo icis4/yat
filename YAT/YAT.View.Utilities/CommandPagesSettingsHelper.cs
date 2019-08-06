@@ -52,9 +52,9 @@ namespace YAT.View.Utilities
 	/// <summary></summary>
 	public static class CommandPagesSettingsHelper
 	{
-		private enum ImportMode
+		private enum Mode
 		{
-			None,
+			Cancel,
 			Neutral,
 			Enlarge,
 			Spread
@@ -199,204 +199,6 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
-		{
-			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
-			{
-				var message = new StringBuilder();
-				message.Append("File contains ");
-				message.Append(imported.Pages.Count);
-				message.Append(imported.Pages.Count == 1 ? " page" : " pages");
-				message.Append(" with a total of ");
-				message.Append(imported.TotalDefinedCommandCount);
-				message.AppendLine(" commands.");
-				message.AppendLine();
-				message.AppendLine("Would you like to replace all currently configured predefined commands by the imported [Yes],");
-				message.Append("or add the imported to the currently configured predefined commands [No]?");
-
-				switch (MessageBoxEx.Show
-					(
-						owner,
-						message.ToString(),
-						"Import Mode",
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
-					))
-				{
-					case DialogResult.Yes:
-					{
-						Import(owner, commandPagesOld.PageLayout, imported, out commandPagesNew);
-						return (true);
-					}
-
-					case DialogResult.No:
-					{                                                                  // Specifying 'NoPageId' will add (not insert).
-						AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew);
-						break;
-					}
-
-					default:
-					{
-						break; // Nothing to do.
-					}
-				}
-			}
-
-			commandPagesNew = null;
-			return (false);
-		}
-
-		/// <summary></summary>
-		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
-		{
-			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
-			{
-				                                   // Specifying the 'selectedPageId' will insert (instead of add).
-				return (AddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
-			}
-
-			commandPagesNew = null;
-			return (false);
-		}
-
-		/// <summary></summary>
-		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
-		{
-			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
-			{
-				                                                                       // Specifying 'NoPageId' will add (not insert).
-				return (AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew));
-			}
-
-			commandPagesNew = null;
-			return (false);
-		}
-
-		/// <summary></summary>
-		private static bool Import(IWin32Window owner, PredefinedCommandPageLayout pageLayoutOld, PredefinedCommandSettings imported, out PredefinedCommandSettings commandPagesNew)
-		{
-			ImportMode mode;
-			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmImport(owner, imported, pageLayoutOld, out mode, out pageLayoutNew))
-			{
-				commandPagesNew = imported;
-				return (true);
-			}
-
-			commandPagesNew = null;
-			return (false);
-		}
-
-		/// <summary></summary>
-		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandSettings imported, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
-		{
-			ImportMode mode;
-			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmImport(owner, imported, commandPagesOld.PageLayout, out mode, out pageLayoutNew))
-			{
-				// Clone...
-				commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
-
-				// ...potentially adjust layout...
-				commandPagesNew.PageLayout = pageLayoutNew;
-
-				// ...add default page if yet empty...
-				if (commandPagesOld.Pages.Count == 0)
-					commandPagesNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
-
-				switch (mode)
-				{
-					case (ImportMode.Neutral):
-					{
-						// ...then add or insert:
-						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
-						else
-							commandPagesNew.Pages.InsertRange((selectedPageId - 1), imported.Pages); // No clone needed as just imported.
-
-						return (true);
-					}
-					case (ImportMode.Enlarge):
-					{
-						// ... then add or insert:
-						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
-						else
-							commandPagesNew.Pages.InsertRange((selectedPageId - 1), imported.Pages); // No clone needed as just imported.
-
-						return (true);
-					}
-					case (ImportMode.Spread):
-					{
-							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
-
-						// ...and then spread:
-						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-							commandPagesNew.Pages.AddSpreaded(imported.Pages, commandCapacityPerPageNew); // No clone needed as just imported.
-						else
-							commandPagesNew.Pages.InsertSpreaded((selectedPageId - 1), imported.Pages, commandCapacityPerPageNew); // No clone needed as just imported.
-
-						return (true);
-					}
-
-					default:
-					{
-						break; // Nothing to do.
-					}
-				}
-			}
-
-			commandPagesNew = null;
-			return (false);
-		}
-
-		/// <summary></summary>
-		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandSettings imported, PredefinedCommandPageLayout pageLayoutOld, out ImportMode mode, out PredefinedCommandPageLayout pageLayoutNew)
-		{
-			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
-			if (imported.Pages.MaxCommandCountPerPage <= commandCapacityPerPageOld)
-			{
-				mode = ImportMode.Neutral;
-				pageLayoutNew = pageLayoutOld;
-				return (true);
-			}
-			else
-			{
-				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(imported.Pages.MaxCommandCountPerPage);
-				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
-
-				var message = new StringBuilder();
-				message.Append("File contains ");
-				message.Append(imported.Pages.Count == 1 ? " page" : " pages");
-				message.Append(" with up to ");
-				message.Append(imported.Pages.MaxCommandCountPerPage);
-				message.Append(" commands per page, but currently ");
-				message.Append(commandCapacityPerPageOld);
-				message.AppendLine(" commands per page are configured.");
-				message.AppendLine();
-				message.Append("Would you like to enlarge all pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the imported commands to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
-
-				switch (MessageBoxEx.Show
-					(
-						owner,
-						message.ToString(),
-						"Import Mode",
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
-					))
-				{
-					case DialogResult.Yes: mode = ImportMode.Enlarge; pageLayoutNew = nextPageLayout; return (true);
-					case DialogResult.No:  mode = ImportMode.Spread;  pageLayoutNew = pageLayoutOld;  return (true);
-					default:               mode = ImportMode.None;    pageLayoutNew = pageLayoutOld;  return (false);
-				}
-			}
-		}
-
-		/// <summary></summary>
 		public static bool ShowFileOpenDialogAndLoadFromFile(IWin32Window owner, out PredefinedCommandSettings commandPages)
 		{
 			var ofd = new OpenFileDialog();
@@ -512,6 +314,307 @@ namespace YAT.View.Utilities
 				exception = ex;
 				return (false);
 			}
+		}
+
+		/// <summary></summary>
+		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		{
+			PredefinedCommandSettings imported;
+			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			{
+				var message = new StringBuilder();
+				message.Append("File contains ");
+				message.Append(imported.Pages.Count);
+				message.Append(imported.Pages.Count == 1 ? " page" : " pages");
+				message.Append(" with a total of ");
+				message.Append(imported.TotalDefinedCommandCount);
+				message.AppendLine(" commands.");
+				message.AppendLine();
+				message.AppendLine("Would you like to replace all currently configured predefined commands by the imported [Yes],");
+				message.Append("or add the imported to the currently configured predefined commands [No]?");
+
+				switch (MessageBoxEx.Show
+					(
+						owner,
+						message.ToString(),
+						"Import Mode",
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+					))
+				{
+					case DialogResult.Yes:
+					{
+						Import(owner, commandPagesOld.PageLayout, imported, out commandPagesNew);
+						return (true);
+					}
+
+					case DialogResult.No:
+					{                                                                  // Specifying 'NoPageId' will add (not insert).
+						AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew);
+						break;
+					}
+
+					default:
+					{
+						break; // Nothing to do.
+					}
+				}
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
+		{
+			PredefinedCommandSettings imported;
+			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			{
+				                                   // Specifying the 'selectedPageId' will insert (instead of add).
+				return (AddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		{
+			PredefinedCommandSettings imported;
+			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			{
+				                                                                       // Specifying 'NoPageId' will add (not insert).
+				return (AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew));
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		private static bool Import(IWin32Window owner, PredefinedCommandPageLayout pageLayoutOld, PredefinedCommandSettings imported, out PredefinedCommandSettings commandPagesNew)
+		{
+			Mode mode;
+			PredefinedCommandPageLayout pageLayoutNew;
+			if (ConfirmImport(owner, imported, pageLayoutOld, out mode, out pageLayoutNew))
+			{
+				commandPagesNew = imported;
+				return (true);
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandSettings imported, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
+		{
+			// Attention:
+			// Similar code exists in Change() further below.
+			// Changes here may have to be applied there too.
+
+			Mode mode;
+			PredefinedCommandPageLayout pageLayoutNew;
+			if (ConfirmImport(owner, imported, commandPagesOld.PageLayout, out mode, out pageLayoutNew))
+			{
+				// Clone...
+				commandPagesNew = new PredefinedCommandSettings(commandPagesOld);
+
+				// ...potentially adjust layout...
+				commandPagesNew.PageLayout = pageLayoutNew;
+
+				// ...add default page if yet empty...
+				if (commandPagesOld.Pages.Count == 0)
+					commandPagesNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
+
+				switch (mode)
+				{
+					case (Mode.Neutral):
+					{
+						// ...then add or insert:
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
+						else
+							commandPagesNew.Pages.InsertRange((selectedPageId - 1), imported.Pages); // No clone needed as just imported.
+
+						return (true);
+					}
+
+					case (Mode.Enlarge):
+					{
+						// ... then add or insert:
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+							commandPagesNew.Pages.AddRange(imported.Pages); // No clone needed as just imported.
+						else
+							commandPagesNew.Pages.InsertRange((selectedPageId - 1), imported.Pages); // No clone needed as just imported.
+
+						return (true);
+					}
+
+					case (Mode.Spread):
+					{
+							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+
+						// ...and then spread:
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+							commandPagesNew.Pages.AddSpreaded(imported.Pages, commandCapacityPerPageNew); // No clone needed as just imported.
+						else
+							commandPagesNew.Pages.InsertSpreaded((selectedPageId - 1), imported.Pages, commandCapacityPerPageNew); // No clone needed as just imported.
+
+						return (true);
+					}
+
+					default:
+					{
+						break; // Nothing to do.
+					}
+				}
+			}
+
+			commandPagesNew = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandSettings imported, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
+		{
+			// Attention:
+			// Similar code exists in ConfirmChange() below.
+			// Changes here may have to be applied there too.
+
+			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
+			if (imported.Pages.MaxCommandCountPerPage <= commandCapacityPerPageOld)
+			{
+				mode = Mode.Neutral;
+				pageLayoutNew = pageLayoutOld;
+				return (true);
+			}
+			else
+			{
+				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(imported.Pages.MaxCommandCountPerPage);
+				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
+
+				var message = new StringBuilder();
+				message.Append("The imported file contains ");
+				message.Append(imported.Pages.Count == 1 ? " page" : " pages");
+				message.Append(" with up to ");
+				message.Append(imported.Pages.MaxCommandCountPerPage);
+				message.Append(" commands per page, but currently ");
+				message.Append(commandCapacityPerPageOld);
+				message.AppendLine(" commands per page are configured.");
+				message.AppendLine();
+				message.Append("Would you like to enlarge all pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
+				message.Append(" or spread the imported commands to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+
+				switch (MessageBoxEx.Show
+					(
+						owner,
+						message.ToString(),
+						"Import Mode",
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+					))
+				{
+					case DialogResult.Yes: mode = Mode.Enlarge; pageLayoutNew = nextPageLayout; return (true);
+					case DialogResult.No:  mode = Mode.Spread;  pageLayoutNew = pageLayoutOld;  return (true);
+					default:               mode = Mode.Cancel;  pageLayoutNew = pageLayoutOld;  return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		private static bool ConfirmChange(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandPageLayout pageLayoutRequested, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
+		{
+			// Attention:
+			// Similar code exists in ConfirmImport() above.
+			// Changes here may have to be applied there too.
+
+			var pageLayoutOld = commandPagesOld.PageLayout;
+
+			var commandCapacityPerPageOld       = ((PredefinedCommandPageLayoutEx)pageLayoutOld)      .CommandCapacityPerPage;
+			var commandCapacityPerPageRequested = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
+			if (commandPagesOld.Pages.MaxCommandCountPerPage <= commandCapacityPerPageRequested)
+			{
+				mode = Mode.Neutral;
+				pageLayoutNew = pageLayoutRequested;
+				return (true);
+			}
+			else
+			{
+				var message = new StringBuilder();
+				message.Append("The currently configured predefined commands contain up to ");
+				message.Append(commandPagesOld.Pages.MaxCommandCountPerPage);
+				message.Append(" commands per page, but only ");
+				message.Append(commandCapacityPerPageRequested);
+				message.AppendLine(" commands per page are requested now.");
+				message.AppendLine();
+				message.Append("Would you like to enlarge all pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
+				message.Append(" or spread the pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+
+				switch (MessageBoxEx.Show
+					(
+						owner,
+						message.ToString(),
+						"Change Mode",
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+					))
+				{
+					case DialogResult.Yes: mode = Mode.Enlarge; pageLayoutNew = pageLayoutRequested; return (true);
+					case DialogResult.No:  mode = Mode.Spread;  pageLayoutNew = pageLayoutOld;       return (true);
+					default:               mode = Mode.Cancel;  pageLayoutNew = pageLayoutOld;       return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public static bool Change(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandPageLayout pageLayoutRequested, out PredefinedCommandSettings commandPagesNew)
+		{
+			// Attention:
+			// Similar code exists in AddOrInsert() further above.
+			// Changes here may have to be applied there too.
+
+			Mode mode;
+			PredefinedCommandPageLayout pageLayoutNew;
+			if (ConfirmChange(owner, commandPagesOld, pageLayoutRequested, out mode, out pageLayoutNew))
+			{
+				// Create...
+				commandPagesNew = new PredefinedCommandSettings();
+
+				// ...set layout...
+				commandPagesNew.PageLayout = pageLayoutNew;
+
+				// ...add default page if yet empty...
+				if (commandPagesOld.Pages.Count == 0)
+					commandPagesNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
+
+				switch (mode)
+				{
+					case (Mode.Neutral):
+					case (Mode.Enlarge):
+					{
+						commandPagesNew.Pages.AddRange(new PredefinedCommandPageCollection(commandPagesOld.Pages)); // Clone pages to ensure decoupling.
+						return (true);
+					}
+
+					case (Mode.Spread):
+					{
+						var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
+						commandPagesNew.Pages.AddSpreaded(new PredefinedCommandPageCollection(commandPagesOld.Pages), commandCapacityPerPageNew); // Clone pages to ensure decoupling.
+						return (true);
+					}
+
+					default:
+					{
+						break; // Nothing to do.
+					}
+				}
+			}
+
+			commandPagesNew = null;
+			return (false);
 		}
 	}
 }

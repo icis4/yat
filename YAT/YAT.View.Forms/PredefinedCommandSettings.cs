@@ -258,8 +258,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.PageLayout = (Model.Types.PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem;
-			SetControls();
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandPagesSettingsHelper.Change(this, this.settingsInEdit, (Model.Types.PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
+			{
+				this.settingsInEdit = settingsInEditNew;
+				SetControls();
+			}
 		}
 
 		private void subpageCheckBox_I_CheckedChanged(object sender, EventArgs e)
