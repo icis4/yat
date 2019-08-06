@@ -76,7 +76,7 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Boolean just *is* 'bool'...")]
 	public static class ContextMenuStripShortcutModalFormWorkaround
 	{
-		private static int staticCount; // = 0;
+		private static int staticCounter; // = 0;
 
 		/// <summary>
 		/// Gets a value indicating whether a modal dialog is currently being shown.
@@ -90,8 +90,8 @@ namespace MKY.Windows.Forms
 			{
 				DebugAssertIsMainThread("Property called from non-main thread!");
 
-				return (staticCount > 0); // No need to use 'Interlocked.Read()' as access to
-			}                             // 'Windows.Forms' must be synchronized anyway.
+				return (staticCounter > 0); // No need to use 'Interlocked.Read()' as access to
+			}                               // 'Windows.Forms' must be synchronized anyway.
 		}
 
 		/// <summary>
@@ -106,8 +106,8 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			staticCount++; // No need to use 'Interlocked.Increment()' as access to
-		}                  // 'Windows.Forms' must be synchronized anyway.
+			staticCounter++; // No need to use 'Interlocked.Increment()' as access to
+		}                    // 'Windows.Forms' must be synchronized anyway.
 
 		/// <summary>
 		/// To be called each time after showing a modal dialog using <see cref="Form.ShowDialog()"/>.
@@ -121,10 +121,10 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			staticCount--; // No need to use 'Interlocked.Decrement()' as access to
-			               // 'Windows.Forms' must be synchronized anyway.
-			if (staticCount < 0)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Count has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			staticCounter--; // No need to use 'Interlocked.Decrement()' as access to
+			                 // 'Windows.Forms' must be synchronized anyway.
+			if (staticCounter < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>
