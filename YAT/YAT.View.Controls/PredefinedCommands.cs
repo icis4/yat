@@ -35,6 +35,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections;
 using MKY.Windows.Forms;
 
 using YAT.Model.Types;
@@ -77,6 +78,8 @@ namespace YAT.View.Controls
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
+
+		private int commandStateUpdatedSuspendedCount; // = 0;
 
 		#endregion
 
@@ -155,14 +158,17 @@ namespace YAT.View.Controls
 			get { return (this.pages); }
 			set
 			{
-				this.pages = value;
+				if (!IEnumerableEx.ItemsEqual(this.pages, value))
+				{
+					this.pages = value;
 
-				if ((this.pages == null) || (this.pages.Count == 0)) // Select page 1 even if there are no pages.
-					SelectedPageId = 1;
-				else if (this.selectedPageId > this.pages.Count)
-					SelectedPageId = this.pages.Count;
+					if ((this.pages == null) || (this.pages.Count == 0)) // Select page 1 even if there are no pages.
+						SelectedPageId = 1;
+					else if (this.selectedPageId > this.pages.Count)
+						SelectedPageId = this.pages.Count;
 
-				SetCommandControls();
+					SetCommandControls();
+				}
 			}
 		}
 
@@ -207,7 +213,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.parseModeForText = value;
-				SetCommandControls();
+				SetCommandStateControls();
 			}
 		}
 
@@ -220,7 +226,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.rootDirectoryForFile = value;
-				SetCommandControls();
+				SetCommandStateControls();
 			}
 		}
 
@@ -233,7 +239,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.terminalIsReadyToSend = value;
-				SetCommandControls();
+				SetCommandStateControls();
 			}
 		}
 
@@ -263,11 +269,8 @@ namespace YAT.View.Controls
 		public virtual Command GetCommandFromId(int id)
 		{
 			List<Command> commands = null;
-			if ((this.pages != null) && (this.pages.Count > 0) &&
-				(SelectedPageIndex >= 0) && (SelectedPageIndex < this.pages.Count))
-			{
+			if ((this.pages != null) && (this.pages.Count > 0))
 				commands = this.pages[SelectedPageIndex].Commands;
-			}
 
 			if (commands != null)
 			{
@@ -312,6 +315,28 @@ namespace YAT.View.Controls
 		public virtual Command GetCommandFromLocation(Point location)
 		{
 			return (GetCommandFromId(GetCommandIdFromLocation(location)));
+		}
+
+		/// <remarks>Useful to improve performance.</remarks>
+		public virtual void SuspendCommandStateUpdate()
+		{
+			foreach (var set in this.buttonSets)
+				set.SuspendCommandStateUpdate();
+
+			this.commandStateUpdatedSuspendedCount++;
+		}
+
+		/// <remarks>Useful to improve performance.</remarks>
+		public virtual void ResumeCommandStateUpdate()
+		{
+			this.commandStateUpdatedSuspendedCount--;
+			if (this.commandStateUpdatedSuspendedCount <= 0)
+			{
+				this.commandStateUpdatedSuspendedCount = 0; // Prevent misuse.
+
+				foreach (var set in this.buttonSets)
+					set.ResumeCommandStateUpdate();
+			}
 		}
 
 		#endregion
@@ -403,18 +428,13 @@ namespace YAT.View.Controls
 
 		private void SetControls()
 		{
-			SuspendLayout();
-
 			SetPageLayoutControls();
 			SetCommandControls();
 			SetSelectedPageControls();
-
-			ResumeLayout();
 		}
 
 		private void SetPageLayoutControls()
 		{
-			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
@@ -472,50 +492,85 @@ namespace YAT.View.Controls
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
 			}
 		}
 
 		private void SetCommandControls()
 		{
-			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
-				foreach (var pb in this.buttonSets)
-				{
-					pb.ParseModeForText      = this.parseModeForText;
-					pb.RootDirectoryForFile  = this.rootDirectoryForFile;
-					pb.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-				}
+				SetCommandTextControls();
+				SetCommandStateControls();
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
 
-				if ((this.pages != null) && (this.pages.Count > 0) &&
-				    (SelectedPageIndex >= 0) && (SelectedPageIndex < this.pages.Count))
+		private void SetCommandTextControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				List<Command> commands = null;
+				if ((this.pages != null) && (this.pages.Count > 0))
+					commands = this.pages[SelectedPageIndex].Commands;
+
+				foreach (var set in this.buttonSets)
 				{
-					foreach (var pb in this.buttonSets)
-						pb.Commands = this.pages[SelectedPageIndex].Commands;
-				}
-				else
-				{
-					foreach (var pb in this.buttonSets)
-						pb.Commands = null;
+					if (set.Visible)
+					{
+						set.Commands = commands;
+					}
+					else
+					{
+						// Simply skip in order to improve performance.
+					}
 				}
 			}
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
+			}
+		}
+
+		private void SetCommandStateControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				List<Command> commands = null;
+				if ((this.pages != null) && (this.pages.Count > 0))
+					commands = this.pages[SelectedPageIndex].Commands;
+
+				foreach (var set in this.buttonSets)
+				{
+					if (set.Visible)
+					{
+						set.ParseModeForText      = this.parseModeForText;
+						set.RootDirectoryForFile  = this.rootDirectoryForFile;
+						set.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+					}
+					else
+					{
+						// Simply skip in order to improve performance.
+					}
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
 			}
 		}
 
 		private void SetSelectedPageControls()
 		{
-			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
-				if ((this.pages != null) && (this.pages.Count > 0) &&
-				    (this.selectedPageId >= 1) && (this.selectedPageId <= this.pages.Count))
+				if ((this.pages != null) && (this.pages.Count > 0))
 				{
 					button_PagePrevious.Enabled = (this.selectedPageId > 1);
 					button_PageNext.Enabled     = (this.selectedPageId < this.pages.Count);
@@ -546,13 +601,12 @@ namespace YAT.View.Controls
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
 			}
 		}
 
 		private void AdjustSubpagePanel(PredefinedCommandPageLayout layout)
 		{
-			SuspendLayout();
+			SuspendLayout(); // Useful as the 'Size' and 'Location' properties of the underlying sets will get changed.
 			this.isSettingControls.Enter();
 			try
 			{
