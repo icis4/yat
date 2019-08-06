@@ -40,7 +40,7 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Boolean just *is* 'bool'...")]
 	public struct SettingControlsHelper : IEquatable<SettingControlsHelper>
 	{
-		private int count; // = 0;
+		private int counter; // = 0;
 
 		/// <summary>
 		/// Gets a value indicating whether the parent of this instance is currently setting the
@@ -55,8 +55,8 @@ namespace MKY.Windows.Forms
 			{
 				DebugAssertIsMainThread("Property called from non-main thread!");
 
-				return (this.count > 0); // No need to use 'Interlocked.Read()' as access to
-			}                            // 'Windows.Forms' must be synchronized anyway.
+				return (this.counter > 0); // No need to use 'Interlocked.Read()' as access to
+			}                              // 'Windows.Forms' must be synchronized anyway.
 		}
 
 		/// <summary>
@@ -67,8 +67,8 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			this.count++; // No need to use 'Interlocked.Increment()' as access to
-		}                 // 'Windows.Forms' must be synchronized anyway.
+			this.counter++; // No need to use 'Interlocked.Increment()' as access to
+		}                   // 'Windows.Forms' must be synchronized anyway.
 
 		/// <summary>
 		/// To be called each time after setting the values of the <see cref="Control"/> objects
@@ -78,10 +78,10 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			this.count--; // No need to use 'Interlocked.Decrement()' as access to
-			              // 'Windows.Forms' must be synchronized anyway.
-			if (this.count < 0)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Count has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			this.counter--; // No need to use 'Interlocked.Decrement()' as access to
+			                // 'Windows.Forms' must be synchronized anyway.
+			if (this.counter < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -114,7 +114,7 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return (this.count);
+			return (this.counter);
 		}
 
 		/// <summary>
@@ -133,7 +133,7 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public bool Equals(SettingControlsHelper other)
 		{
-			return (this.count.Equals(other.count));
+			return (this.counter.Equals(other.counter));
 		}
 
 		/// <summary>
