@@ -46,7 +46,7 @@ namespace YAT.View.Controls
 {
 	/// <summary></summary>
 	[DefaultEvent("SendCommandRequest")]
-	public partial class PredefinedCommandPageButtons : UserControl
+	public partial class PredefinedCommandButtonSet : UserControl
 	{
 		#region Constants
 		//==========================================================================================
@@ -104,7 +104,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public PredefinedCommandPageButtons()
+		public PredefinedCommandButtonSet()
 		{
 			InitializeComponent();
 
@@ -235,18 +235,19 @@ namespace YAT.View.Controls
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromLocation(Point point)
+		public virtual int GetCommandIdFromLocation(Point location)
 		{
-			Point requested = PointToClient(point); // Using Control.PointToClient() is OK since buttons
-			                                        // are directly placed onto control (no group box).
+			Point pt = PointToClient(location); // Using Control.PointToClient() is OK since buttons are directly placed onto control.
+			// No using GetChildAtPoint() to also support clicking inbetween buttons.
+
 			// Ensure that location is within control:
-			if ((requested.X < 0) || (requested.X > Width))  return (0);
-			if ((requested.Y < 0) || (requested.Y > Height)) return (0);
+			if ((pt.X < 0) || (pt.X > Width))  return (0);
+			if ((pt.Y < 0) || (pt.Y > Height)) return (0);
 
 			// Find the corresponding button:
 			for (int i = 0; i < this.buttons_commands.Count; i++)
 			{
-				if (requested.Y <= this.buttons_commands[i].Bottom)
+				if (pt.Y <= this.buttons_commands[i].Bottom)
 					return (i + 1); // ID = 1..max
 			}
 
@@ -257,9 +258,9 @@ namespace YAT.View.Controls
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or invalid.
 		/// </summary>
-		public virtual Command GetCommandFromLocation(Point point)
+		public virtual Command GetCommandFromLocation(Point location)
 		{
-			return (GetCommandFromId(GetCommandIdFromLocation(point)));
+			return (GetCommandFromId(GetCommandIdFromLocation(location)));
 		}
 
 		#endregion
@@ -281,7 +282,7 @@ namespace YAT.View.Controls
 		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
 		/// are shown on top of a properly painted control or form.
 		/// </remarks>
-		private void PredefinedCommandPageButtons_Paint(object sender, PaintEventArgs e)
+		private void PredefinedCommandButtonSet_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
 			{
@@ -310,12 +311,14 @@ namespace YAT.View.Controls
 		// Non-Public Properties
 		//==========================================================================================
 
-		private int SubpageIndex
+		/// <summary></summary>
+		protected virtual int SubpageIndex
 		{
 			get { return (this.subpageId - 1); }
 		}
 
-		private int SubpageCommandIndexOffset
+		/// <summary></summary>
+		protected virtual int SubpageCommandIndexOffset
 		{
 			get { return (SubpageIndex * PredefinedCommandPage.CommandCapacityPerSubpage); }
 		}
@@ -371,6 +374,7 @@ namespace YAT.View.Controls
 			{
 				// Attention:
 				// Similar code exists in...
+				// ...CommandRequest() further below
 				// ...View.Forms.PredefinedCommandSettings.SetPageControls()
 				// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
 				// Changes here may have to be applied there too.
@@ -381,10 +385,14 @@ namespace YAT.View.Controls
 
 				for (int i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 				{
-					bool isDefined = false;
 					int commandIndex = (SubpageCommandIndexOffset + i);
-					if (commandIndex < commandCount)
-						isDefined = ((this.commands[commandIndex] != null) && (this.commands[commandIndex].IsDefined));
+
+					bool isDefined =
+					(
+						(commandIndex < commandCount) &&
+						(this.commands[commandIndex] != null) &&
+						(this.commands[commandIndex].IsDefined)
+					);
 
 					if (isDefined)
 					{
@@ -423,30 +431,46 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void CommandRequest(int commandId)
+		private void CommandRequest(int relativeCommandId)
 		{
+			int relativeCommandIndex = (relativeCommandId - 1);
+			int absoluteCommandIndex = (SubpageCommandIndexOffset + relativeCommandIndex);
+			int absoluteCommandId    = (absoluteCommandIndex + 1);
+
+			// Attention:
+			// Similar code exists in...
+			// ...SetCommandControls() further above
+			// ...View.Forms.PredefinedCommandSettings.SetPageControls()
+			// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
+			// Changes here may have to be applied there too.
+
+			int commandCount = 0;
+			if (this.commands != null)
+				commandCount = this.commands.Count;
+
 			bool isDefined =
 			(
-				(this.commands != null) &&
-				(this.commands.Count >= commandId) &&
-				(this.commands[commandId - 1] != null) &&
-				(this.commands[commandId - 1].IsDefined)
+				(absoluteCommandIndex < commandCount) &&
+				(this.commands[absoluteCommandIndex] != null) &&
+				(this.commands[absoluteCommandIndex].IsDefined)
 			);
 
 			if (isDefined)
-				RequestSendCommand(commandId);
+				RequestSendCommand(absoluteCommandId);
 			else
-				RequestDefineCommand(commandId);
+				RequestDefineCommand(absoluteCommandId);
 		}
 
-		private void RequestSendCommand(int commandId)
+		/// <summary></summary>
+		protected virtual void RequestSendCommand(int commandId)
 		{
-			OnSendCommandRequest(new PredefinedCommandEventArgs(commandId));
+			OnSendCommandRequest(new PredefinedCommandEventArgs(commandId)); // e.PageId is not defined since set doesn't know the page.
 		}
 
-		private void RequestDefineCommand(int commandId)
+		/// <summary></summary>
+		protected virtual void RequestDefineCommand(int commandId)
 		{
-			OnDefineCommandRequest(new PredefinedCommandEventArgs(commandId));
+			OnDefineCommandRequest(new PredefinedCommandEventArgs(commandId)); // e.PageId is not defined since set doesn't know the page.
 		}
 
 		#endregion

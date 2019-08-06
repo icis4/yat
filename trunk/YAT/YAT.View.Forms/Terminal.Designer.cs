@@ -325,6 +325,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Send = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_SendContextMenu_Panels = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText = new System.Windows.Forms.ToolStripMenuItem();
@@ -400,8 +402,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedDefine = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse = new System.Windows.Forms.ToolStripMenuItem();
@@ -434,13 +434,15 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripComboBox_TerminalMenu_View_Panels_Orientation = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripComboBox_TerminalMenu_View_Panels_PageLayout = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
@@ -1249,7 +1251,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_CommandContextMenu_12});
 			this.contextMenuStrip_Command.Name = "contextMenuStrip1";
 			this.contextMenuStrip_Command.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand;
-			this.contextMenuStrip_Command.Size = new System.Drawing.Size(221, 538);
+			this.contextMenuStrip_Command.Size = new System.Drawing.Size(221, 268);
 			this.contextMenuStrip_Command.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Command_Opening);
 			// 
 			// toolStripMenuItem_CommandContextMenu_1
@@ -2938,6 +2940,20 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Text = "Link Page(s) to File...";
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_LinkToFile_Click);
 			// 
+			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommand
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.DropDown = this.contextMenuStrip_Command;
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedCommand";
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.Text = "Predefined &Commands";
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_PredefinedPage
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.DropDown = this.contextMenuStrip_Page;
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedPage";
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Text = "Predefined Commands Pa&ge";
+			// 
 			// contextMenuStrip_Send
 			// 
 			this.contextMenuStrip_Send.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -3601,20 +3617,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_6";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Size = new System.Drawing.Size(330, 6);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommand
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.DropDown = this.contextMenuStrip_Command;
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedCommand";
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommand.Text = "Predefined &Commands";
-			// 
-			// toolStripMenuItem_TerminalMenu_Send_PredefinedPage
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.DropDown = this.contextMenuStrip_Page;
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedPage";
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Text = "Predefined Commands Pa&ge";
-			// 
 			// toolStripMenuItem_TerminalMenu_Send_PredefinedDefine
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedDefine.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedDefine";
@@ -3908,13 +3910,15 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir,
             this.toolStripMenuItem_TerminalMenu_View_Panels_Rx,
             this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1,
-            this.toolStripComboBox_TerminalMenu_View_Panels_Orientation,
+            this.toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation,
             this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_2,
             this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined,
             this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3,
+            this.toolStripComboBox_TerminalMenu_View_Panels_PageLayout,
+            this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4,
             this.toolStripMenuItem_TerminalMenu_View_Panels_SendText,
             this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile,
-            this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4,
+            this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_5,
             this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll});
 			this.toolStripMenuItem_TerminalMenu_View_Panels.Name = "toolStripMenuItem_TerminalMenu_View_Panels";
 			this.toolStripMenuItem_TerminalMenu_View_Panels.Size = new System.Drawing.Size(267, 22);
@@ -3948,12 +3952,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_1";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1.Size = new System.Drawing.Size(225, 6);
 			// 
-			// toolStripComboBox_TerminalMenu_View_Panels_Orientation
+			// toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation
 			// 
-			this.toolStripComboBox_TerminalMenu_View_Panels_Orientation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.toolStripComboBox_TerminalMenu_View_Panels_Orientation.Name = "toolStripComboBox_TerminalMenu_View_Panels_Orientation";
-			this.toolStripComboBox_TerminalMenu_View_Panels_Orientation.Size = new System.Drawing.Size(165, 23);
-			this.toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_View_Panels_Orientation_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation.Name = "toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation";
+			this.toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation.Size = new System.Drawing.Size(165, 23);
+			this.toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation_SelectedIndexChanged);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_2
 			// 
@@ -3974,6 +3978,17 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_3";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3.Size = new System.Drawing.Size(225, 6);
 			// 
+			// toolStripComboBox_TerminalMenu_View_Panels_PageLayout
+			// 
+			this.toolStripComboBox_TerminalMenu_View_Panels_PageLayout.Name = "toolStripComboBox_TerminalMenu_View_Panels_PageLayout";
+			this.toolStripComboBox_TerminalMenu_View_Panels_PageLayout.Size = new System.Drawing.Size(165, 23);
+			this.toolStripComboBox_TerminalMenu_View_Panels_PageLayout.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_View_Panels_PageLayout_SelectedIndexChanged);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_4
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_4";
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4.Size = new System.Drawing.Size(225, 6);
+			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_SendText
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = true;
@@ -3992,10 +4007,10 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Text = "Send &File Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_4
+			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_5
 			// 
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_5.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_5";
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_5.Size = new System.Drawing.Size(225, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll
 			// 
@@ -4948,7 +4963,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Clear;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_1;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_4;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_View_Panels_Orientation;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Presets;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowEol;
 		private System.Windows.Forms.Panel panel_Send;
@@ -5308,5 +5323,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PageContextMenu_9;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_PredefinedPage;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_PredefinedDefine;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_View_Panels_PageLayout;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Panels_Separator_5;
 	}
 }

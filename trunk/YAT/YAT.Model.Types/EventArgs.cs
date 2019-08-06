@@ -37,7 +37,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public PredefinedCommandEventArgs(int commandId)
-			: this(1, commandId)
+			: this(PredefinedCommandPageCollection.NoPageId, commandId)
 		{
 		}
 
