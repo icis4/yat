@@ -75,7 +75,7 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			SuspendLayout();
+			SuspendLayout(); // Useful as the 'Location' property will get changed.
 			Location = startupLocation;
 			ResumeLayout();
 
