@@ -100,7 +100,7 @@ namespace YAT.View.Forms
 		private void KeepAndCloneAndAttachSettings(Log.Settings.LogSettings settings)
 		{
 			this.settings = settings;
-			this.settingsInEdit = new Log.Settings.LogSettings(settings);
+			this.settingsInEdit = new Log.Settings.LogSettings(settings); // Clone to ensure decoupling.
 			this.settingsInEdit.Changed += settings_Form_Changed;
 
 			// Note that extensions are handled via 'ApplicationSettings'.
