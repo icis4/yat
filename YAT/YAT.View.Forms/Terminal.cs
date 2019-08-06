@@ -827,7 +827,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_PredefinedDefine_Click(object sender, EventArgs e)
 		{
-			ShowPredefinedCommandSettings(predefined.SelectedIdPage, 1);
+			ShowPredefinedCommandSettings(predefined.SelectedPageId, 1);
 		}
 
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -1132,7 +1132,8 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
+				toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation.Items.AddRange(OrientationEx.GetItems());
+				toolStripComboBox_TerminalMenu_View_Panels_PageLayout.Items.AddRange(PredefinedCommandPageLayoutEx.GetItems());
 			}
 			finally
 			{
@@ -1160,19 +1161,21 @@ namespace YAT.View.Forms
 
 				// Layout, disable monitor item if the other monitors are hidden:
 				toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
+				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
 				toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
 				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
-				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_View_Panels_Orientation, (OrientationEx)this.settingsRoot.Layout.MonitorOrientation);
-
-				toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
-				toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation, (OrientationEx)this.settingsRoot.Layout.MonitorOrientation);
 
 				toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
+
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_View_Panels_PageLayout, (PredefinedCommandPageLayoutEx)this.settingsRoot.PredefinedCommand.PageLayout);
+
+				toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
+				toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
 				// Connect time:
 				bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
@@ -1258,17 +1261,25 @@ namespace YAT.View.Forms
 			this.settingsRoot.Layout.RxMonitorPanelIsVisible = !this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 		}
 
-		private void toolStripComboBox_TerminalMenu_View_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			SetMonitorOrientation((OrientationEx)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
+			SetMonitorOrientation((OrientationEx)toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Predefined_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
+		}
+
+		private void toolStripComboBox_TerminalMenu_View_Panels_PageLayout_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			SetPageLayout((PredefinedCommandPageLayoutEx)toolStripComboBox_TerminalMenu_View_Panels_PageLayout.SelectedItem);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_SendText_Click(object sender, EventArgs e)
@@ -2410,14 +2421,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.Change(this, this.settingsRoot.PredefinedCommand, (PredefinedCommandPageLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem, out predefinedCommandNew))
-			{
-				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
-				// settingsRoot_Changed() will update the form.
-			}
-
-			this.settingsRoot.PredefinedCommand.PageLayout = (PredefinedCommandPageLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem;
+			SetPageLayout((PredefinedCommandPageLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem);
 		}
 
 		// While the purpose of
@@ -2433,7 +2437,7 @@ namespace YAT.View.Forms
 			if (sc != null)
 			{
 				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
 			}
 		}
 
@@ -2446,7 +2450,7 @@ namespace YAT.View.Forms
 			if (sc != null)
 			{
 				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
 			}
 		}
 
@@ -2482,11 +2486,11 @@ namespace YAT.View.Forms
 			if (sc != null)
 			{
 				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, targetCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
 			}
 			else
 			{
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, targetCommandId - 1);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
 			}
 		}
 
@@ -2506,12 +2510,12 @@ namespace YAT.View.Forms
 			if (sc != null)
 			{
 				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, targetCommandId - 1, sc);
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1);
 			}
 			else
 			{
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, targetCommandId - 1);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
 			}
 		}
 
@@ -2554,14 +2558,14 @@ namespace YAT.View.Forms
 				tc = new Command(tc); // Clone command to ensure decoupling.
 
 			if (tc != null)
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, selectedCommandId - 1, tc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);
 			else
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, selectedCommandId - 1);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, selectedCommandId - 1);
 
 			if (sc != null)
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, targetCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
 			else
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, targetCommandId - 1);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_DownBy_N_Click(object sender, EventArgs e)
@@ -2603,14 +2607,14 @@ namespace YAT.View.Forms
 				tc = new Command(tc); // Clone command to ensure decoupling.
 
 			if (tc != null)
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, selectedCommandId - 1, tc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);
 			else
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, selectedCommandId - 1);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, selectedCommandId - 1);
 
 			if (sc != null)
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedIdPage - 1, targetCommandId - 1, sc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
 			else
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, targetCommandId - 1);
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Cut_Click(object sender, EventArgs e)
@@ -2653,7 +2657,7 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_Clear_Click()
 			// Changes here may have to be applied there too.
 
-			this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedIdPage - 1, contextMenuStrip_Predefined_SelectedCommandId - 1);
+			this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
@@ -2662,9 +2666,9 @@ namespace YAT.View.Forms
 				return;
 
 			if (contextMenuStrip_Predefined_SelectedCommandId != 0)
-				ShowPredefinedCommandSettings(predefined.SelectedIdPage, contextMenuStrip_Predefined_SelectedCommandId);
+				ShowPredefinedCommandSettings(predefined.SelectedPageId, contextMenuStrip_Predefined_SelectedCommandId);
 			else
-				ShowPredefinedCommandSettings(predefined.SelectedIdPage, 1);
+				ShowPredefinedCommandSettings(predefined.SelectedPageId, 1);
 		}
 
 		// While the purpose of
@@ -2676,7 +2680,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsHelper.ExportToFile(this, this.settingsRoot.PredefinedCommand, predefined.SelectedIdPage, IndicatedName);
+			CommandPagesSettingsHelper.ExportToFile(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -2746,6 +2750,13 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Similar code exists in...
+				// ...View.Controls.PredefinedCommandButtonSet.SetCommandControls()
+				// ...View.Controls.PredefinedCommandButtonSet.CommandRequest()
+				// ...View.Forms.PredefinedCommandSettings.SetPageControls()
+				// Changes here may have to be applied there too.
+
 				var pages = this.settingsRoot.PredefinedCommand.Pages;
 
 				int pageCount = 0;
@@ -2754,11 +2765,21 @@ namespace YAT.View.Forms
 
 				List<Command> commands = null;
 				if (pageCount > 0)
-					commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedIdPage - 1].Commands;
+					commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPageIndex].Commands;
+
+				int commandCount = 0;
+				if (commands != null)
+					commandCount = commands.Count;
 
 				for (int i = 0; i < PredefinedCommandPage.CommandCapacityWithShortcut; i++)
 				{
-					bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
+					bool isDefined =
+					(
+						(i < commandCount) &&
+						(commands[i] != null) &&
+						(commands[i].IsDefined)
+					);
+
 					if (isDefined)
 					{
 						bool isValid = (this.terminal.IsReadyToSend && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath));
@@ -2850,9 +2871,9 @@ namespace YAT.View.Forms
 				if (pageCount > 0)
 				{
 					toolStripMenuItem_PageContextMenu_Previous .Visible = true;
-					toolStripMenuItem_PageContextMenu_Previous .Enabled = (predefined.SelectedIdPage > 1);
+					toolStripMenuItem_PageContextMenu_Previous .Enabled = (predefined.SelectedPageId > 1);
 					toolStripMenuItem_PageContextMenu_Next     .Visible = true;
-					toolStripMenuItem_PageContextMenu_Next     .Enabled = (predefined.SelectedIdPage < pageCount);
+					toolStripMenuItem_PageContextMenu_Next     .Enabled = (predefined.SelectedPageId < pageCount);
 					toolStripMenuItem_PageContextMenu_Separator.Visible = true;
 				}
 				else
@@ -2911,7 +2932,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			predefined.SelectedIdPage = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			predefined.SelectedPageId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 		}
 
 		#endregion
@@ -3311,7 +3332,7 @@ namespace YAT.View.Forms
 				return;
 
 			if (this.settingsRoot != null)
-				this.settingsRoot.Implicit.Predefined.SelectedPageId = predefined.SelectedIdPage;
+				this.settingsRoot.Implicit.Predefined.SelectedPageId = predefined.SelectedPageId;
 		}
 
 		private void predefined_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
@@ -5114,6 +5135,16 @@ namespace YAT.View.Forms
 		// Predefined Panel
 		//==========================================================================================
 
+		private void SetPageLayout(PredefinedCommandPageLayout layout)
+		{
+			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
+			if (CommandPagesSettingsHelper.Change(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
+			{
+				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
+				// settingsRoot_Changed() will update the form.
+			}
+		}
+
 		private void SelectPredefinedPanel()
 		{
 			predefined.Select();
@@ -5122,7 +5153,7 @@ namespace YAT.View.Forms
 		/// <param name="commandId">Command 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		private void CopyPredefined(int commandId)
 		{
-			int pageId = predefined.SelectedIdPage;
+			int pageId = predefined.SelectedPageId;
 			if (!this.terminal.CopyPredefined(pageId, commandId))
 			{
 				// If command is invalid, show settings dialog.
@@ -5135,7 +5166,7 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal.IsReadyToSend)
 			{
-				int pageId = predefined.SelectedIdPage;
+				int pageId = predefined.SelectedPageId;
 				if (!this.terminal.SendPredefined(pageId, commandId))
 				{
 					// If command is invalid, show settings dialog.
@@ -5238,7 +5269,8 @@ namespace YAT.View.Forms
 				this.isSettingControls.Enter();
 				try
 				{
-					predefined.Pages = this.settingsRoot.PredefinedCommand.Pages;
+					predefined.Pages      = this.settingsRoot.PredefinedCommand.Pages;
+					predefined.PageLayout = this.settingsRoot.PredefinedCommand.PageLayout;
 				}
 				finally
 				{
@@ -5308,7 +5340,7 @@ namespace YAT.View.Forms
 				this.isSettingControls.Enter();
 				try
 				{
-					predefined.SelectedIdPage = this.settingsRoot.Predefined.SelectedPageId;
+					predefined.SelectedPageId = this.settingsRoot.Predefined.SelectedPageId;
 				}
 				finally
 				{

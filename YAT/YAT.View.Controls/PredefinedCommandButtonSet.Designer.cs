@@ -1,6 +1,6 @@
 ﻿namespace YAT.View.Controls
 {
-	partial class PredefinedCommandPageButtons
+	partial class PredefinedCommandButtonSet
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -223,7 +223,7 @@
 			this.label_Shortcuts_1_12.Name = "label_Shortcuts_1_12";
 			this.label_Shortcuts_1_12.Size = new System.Drawing.Size(100, 13);
 			this.label_Shortcuts_1_12.TabIndex = 1;
-			this.label_Shortcuts_1_12.Text = "[Ctrl+] Shift+F1..F12";
+			this.label_Shortcuts_1_12.Text = "[Ctrl+] Shift+F1..F12 to send | to copy";
 			this.label_Shortcuts_1_12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_SeparatorLine
@@ -236,7 +236,7 @@
 			this.label_SeparatorLine.Size = new System.Drawing.Size(172, 2);
 			this.label_SeparatorLine.TabIndex = 0;
 			// 
-			// PredefinedCommandPageButtons
+			// PredefinedCommandButtonSet
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.Controls.Add(this.label_Shortcuts_1_12);
@@ -253,9 +253,9 @@
 			this.Controls.Add(this.button_Command_2);
 			this.Controls.Add(this.button_Command_1);
 			this.Controls.Add(this.label_SeparatorLine);
-			this.Name = "PredefinedCommandPageButtons";
+			this.Name = "PredefinedCommandButtonSet";
 			this.Size = new System.Drawing.Size(176, 292);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.PredefinedCommandPageButtons_Paint);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.PredefinedCommandButtonSet_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

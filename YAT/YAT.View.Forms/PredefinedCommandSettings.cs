@@ -827,9 +827,9 @@ namespace YAT.View.Forms
 				// ...View.Controls.PredefinedCommands.SetControls()
 				// Changes here may have to be applied there too.
 
-			////subpageCheckBox_1A.Subpage = 1 is fixed.
-			////subpageCheckBox_2A.Subpage = 2 is fixed.
-			////subpageCheckBox_3A.Subpage = 3 is fixed.
+			////subpageCheckBox_1A.SubpageId = 1 is fixed.
+			////subpageCheckBox_2A.SubpageId = 2 is fixed.
+			////subpageCheckBox_3A.SubpageId = 3 is fixed.
 
 				switch (pageLayout)
 				{
@@ -849,7 +849,7 @@ namespace YAT.View.Forms
 
 				subpageCheckBox_1B.SubpageId = subpageId1;
 				subpageCheckBox_2B.SubpageId = subpageId2;
-			////subpageCheckBox_3B.Subpage = 6 is fixed
+			////subpageCheckBox_3B.SubpageId = 6 is fixed
 
 				switch (pageLayout)
 				{
@@ -866,7 +866,7 @@ namespace YAT.View.Forms
 
 				subpageCheckBox_1C.SubpageId = subpageId1;
 				subpageCheckBox_2C.SubpageId = subpageId2;
-			////subpageCheckBox_3C.Subpage = 9 is fixed.
+			////subpageCheckBox_3C.SubpageId = 9 is fixed.
 
 				subpageCheckBox_1A.Visible = (pageLayoutEx.ColumnsPerPage >  1) || (pageLayoutEx.RowsPerPage >  1);
 				subpageCheckBox_2A.Visible =                                       (pageLayoutEx.RowsPerPage >= 2);
@@ -996,17 +996,18 @@ namespace YAT.View.Forms
 
 					// Attention:
 					// Similar code exists in...
-					// ...View.Controls.PredefinedCommandPageButtons.SetCommandControls()
+					// ...View.Controls.PredefinedCommandButtonSet.SetCommandControls()
+					// ...View.Controls.PredefinedCommandButtonSet.CommandRequest()
 					// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
 					// Changes here may have to be applied there too.
 
+					int commandCount = 0;
+					var commands = this.settingsInEdit.Pages[SelectedPageIndex].Commands;
+					if (commands != null)
+						commandCount = commands.Count;
+
 					for (int i = 0; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 					{
-						int commandCount = 0;
-						var commands = this.settingsInEdit.Pages[SelectedPageIndex].Commands;
-						if (commands != null)
-							commandCount = commands.Count;
-
 						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
 						if (commandIndex < commandCount)
 							this.predefinedCommandSettingsSets[i].Command = commands[commandIndex];
@@ -1258,22 +1259,23 @@ namespace YAT.View.Forms
 		/// Returns settings set ID (1..max) that is assigned to the set at the specified location.
 		/// Returns 0 if no set.
 		/// </summary>
-		protected virtual int GetCommandIdFromLocation(Point point)
+		protected virtual int GetCommandIdFromLocation(Point location)
 		{
-			Point requested = groupBox_Page.PointToClient(point);
+			Point pt = groupBox_Page.PointToClient(location);
+			// No using GetChildAtPoint() to also support clicking inbetween sets.
 
 			// Ensure that location is within control:
-			if ((requested.X < 0) || (requested.X > Width))  return (0);
-			if ((requested.Y < 0) || (requested.Y > Height)) return (0);
+			if ((pt.X < 0) || (pt.X > Width))  return (0);
+			if ((pt.Y < 0) || (pt.Y > Height)) return (0);
 
 			// Ensure that location is around sets:
-			if (requested.Y < predefinedCommandSettingsSet_1.Top)     return (0);
-			if (requested.Y > predefinedCommandSettingsSet_12.Bottom) return (0);
+			if (pt.Y < predefinedCommandSettingsSet_1.Top)     return (0);
+			if (pt.Y > predefinedCommandSettingsSet_12.Bottom) return (0);
 
 			// Find the corresponding set:
 			for (int i = 0; i < this.predefinedCommandSettingsSets.Count; i++)
 			{
-				if (requested.Y <= this.predefinedCommandSettingsSets[i].Bottom)
+				if (pt.Y <= this.predefinedCommandSettingsSets[i].Bottom)
 				{
 					var id = (i + 1); // ID = 1..max
 					id += (SelectedSubpageIndex * Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
@@ -1289,8 +1291,8 @@ namespace YAT.View.Forms
 		{
 			if (this.settingsInEdit.Pages != null)
 			{
-				int relativeCommandIndex = (setId - 1);
-				int absoluteCommandIndex = (SelectedSubpageCommandIndexOffset + relativeCommandIndex);
+				var relativeCommandIndex = (setId - 1);
+				var absoluteCommandIndex = (SelectedSubpageCommandIndexOffset + relativeCommandIndex);
 
 				var p = this.settingsInEdit.Pages[SelectedPageIndex];
 				p.SetCommand(absoluteCommandIndex, this.predefinedCommandSettingsSets[relativeCommandIndex].Command);

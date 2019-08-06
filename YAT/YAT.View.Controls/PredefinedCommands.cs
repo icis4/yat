@@ -65,13 +65,14 @@ namespace YAT.View.Controls
 		// Fields
 		//==========================================================================================
 
-		private List<PredefinedCommandPageButtons> pageButtons;
+		private List<PredefinedCommandButtonSet> buttonSets;
+		private float buttonSetHeight;
 
 		private SettingControlsHelper isSettingControls;
 
 		private PredefinedCommandPageLayout pageLayout;
 		private PredefinedCommandPageCollection pages;
-		private int selectedIdPage = SelectedPageIdDefault;
+		private int selectedPageId = SelectedPageIdDefault;
 
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
@@ -139,7 +140,7 @@ namespace YAT.View.Controls
 				if (this.pageLayout != value)
 				{
 					this.pageLayout = value;
-					SetControls();
+					SetPageLayoutControls();
 					OnPageLayoutChanged(EventArgs.Empty);
 				}
 			}
@@ -156,12 +157,12 @@ namespace YAT.View.Controls
 			{
 				this.pages = value;
 
-				if ((this.pages == null) || (this.pages.Count == 0)) // even if no pages, select page 1 anyway
-					SelectedIdPage = 1;
-				else if (this.selectedIdPage > this.pages.Count)
-					SelectedIdPage = this.pages.Count;
-				else
-					SetControls();
+				if ((this.pages == null) || (this.pages.Count == 0)) // Select page 1 even if there are no pages.
+					SelectedPageId = 1;
+				else if (this.selectedPageId > this.pages.Count)
+					SelectedPageId = this.pages.Count;
+
+				SetCommandControls();
 			}
 		}
 
@@ -169,9 +170,9 @@ namespace YAT.View.Controls
 		[Category("Commands")]
 		[Description("The selected page.")]
 		[DefaultValue(SelectedPageIdDefault)]
-		public virtual int SelectedIdPage
+		public virtual int SelectedPageId
 		{
-			get { return (this.selectedIdPage); }
+			get { return (this.selectedPageId); }
 			set
 			{
 				int selectedPageIdNew;
@@ -180,13 +181,21 @@ namespace YAT.View.Controls
 				else
 					selectedPageIdNew = SelectedPageIdDefault;
 
-				if (this.selectedIdPage != selectedPageIdNew)
+				if (this.selectedPageId != selectedPageIdNew)
 				{
-					this.selectedIdPage = selectedPageIdNew;
-					SetControls();
+					this.selectedPageId = selectedPageIdNew;
+					SetSelectedPageControls();
 					OnSelectedPageIdChanged(EventArgs.Empty);
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual int SelectedPageIndex
+		{
+			get { return (SelectedPageId - 1); }
 		}
 
 		/// <summary></summary>
@@ -198,7 +207,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.parseModeForText = value;
-				SetControls();
+				SetCommandControls();
 			}
 		}
 
@@ -211,7 +220,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.rootDirectoryForFile = value;
-				SetControls();
+				SetCommandControls();
 			}
 		}
 
@@ -224,7 +233,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.terminalIsReadyToSend = value;
-				SetControls();
+				SetCommandControls();
 			}
 		}
 
@@ -238,13 +247,13 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void NextPage()
 		{
-			SelectedIdPage++;
+			SelectedPageId++;
 		}
 
 		/// <summary></summary>
 		public virtual void PreviousPage()
 		{
-			SelectedIdPage--;
+			SelectedPageId--;
 		}
 
 		/// <summary>
@@ -253,25 +262,56 @@ namespace YAT.View.Controls
 		/// </summary>
 		public virtual Command GetCommandFromId(int id)
 		{
-			return (pageButtons_1A.GetCommandFromId(id));
+			List<Command> commands = null;
+			if ((this.pages != null) && (this.pages.Count > 0) &&
+				(SelectedPageIndex >= 0) && (SelectedPageIndex < this.pages.Count))
+			{
+				commands = this.pages[SelectedPageIndex].Commands;
+			}
+
+			if (commands != null)
+			{
+				int i = (id - 1); // ID = 1..max
+				if ((i >= 0) && (i < commands.Count))
+				{
+					var c = commands[i];
+					if (c != null)
+					{
+						if (c.IsDefined)
+							return (c);
+					}
+				}
+			}
+
+			return (null);
 		}
 
 		/// <summary>
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromLocation(Point point)
+		public virtual int GetCommandIdFromLocation(Point location)
 		{
-			return (pageButtons_1A.GetCommandIdFromLocation(point));
+			Point pt = tableLayoutPanel_Subpages.PointToClient(location);
+
+			var child = tableLayoutPanel_Subpages.GetChildAtPoint(pt);
+			if (child != null)
+			{
+				var set = (child as PredefinedCommandButtonSet);
+				if (set != null)
+					return (set.GetCommandIdFromLocation(location));
+			}
+
+			return (0);
 		}
 
 		/// <summary>
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or invalid.
 		/// </summary>
-		public virtual Command GetCommandFromLocation(Point point)
+		public virtual Command GetCommandFromLocation(Point location)
 		{
-			return (pageButtons_1A.GetCommandFromLocation(point));
+			return (GetCommandFromId(GetCommandIdFromLocation(location)));
 		}
 
 		#endregion
@@ -310,14 +350,14 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void pageButtons_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
+		private void buttonSet_I_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
-			RequestSendCommand(e.CommandId);
+			RequestSendCommand(SelectedPageId, e.CommandId); // e.PageId is not defined since set doesn't know the page.
 		}
 
-		private void pageButtons_DefineCommandRequest(object sender, PredefinedCommandEventArgs e)
+		private void buttonSet_I_DefineCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
-			RequestDefineCommand(e.CommandId);
+			RequestDefineCommand(SelectedPageId, e.CommandId); // e.PageId is not defined since set doesn't know the page.
 		}
 
 		private void button_PagePrevious_Click(object sender, EventArgs e)
@@ -335,19 +375,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			SelectedIdPage = (comboBox_Pages.SelectedIndex + 1);
-		}
-
-		#endregion
-
-		#region Non-Public Properties
-		//==========================================================================================
-		// Non-Public Properties
-		//==========================================================================================
-
-		private int SelectedPageIndex
-		{
-			get { return (this.selectedIdPage - 1); }
+			SelectedPageId = (comboBox_Pages.SelectedIndex + 1);
 		}
 
 		#endregion
@@ -359,19 +387,32 @@ namespace YAT.View.Controls
 
 		private void InitializeControls()
 		{
-			this.pageButtons = new List<PredefinedCommandPageButtons>(PredefinedCommandPage.MaxSubpageCount); // Preset the required capacity to improve memory management.
-			this.pageButtons.Add(pageButtons_1A);
-			this.pageButtons.Add(pageButtons_1B);
-			this.pageButtons.Add(pageButtons_1C);
-			this.pageButtons.Add(pageButtons_2A);
-			this.pageButtons.Add(pageButtons_2B);
-			this.pageButtons.Add(pageButtons_2C);
-			this.pageButtons.Add(pageButtons_3A);
-			this.pageButtons.Add(pageButtons_3B);
-			this.pageButtons.Add(pageButtons_3C);
+			this.buttonSets = new List<PredefinedCommandButtonSet>(PredefinedCommandPage.MaxSubpageCount); // Preset the required capacity to improve memory management.
+			this.buttonSets.Add(buttonSet_1A);
+			this.buttonSets.Add(buttonSet_1B);
+			this.buttonSets.Add(buttonSet_1C);
+			this.buttonSets.Add(buttonSet_2A);
+			this.buttonSets.Add(buttonSet_2B);
+			this.buttonSets.Add(buttonSet_2C);
+			this.buttonSets.Add(buttonSet_3A);
+			this.buttonSets.Add(buttonSet_3B);
+			this.buttonSets.Add(buttonSet_3C);
+
+			this.buttonSetHeight = buttonSet_1A.Height;
 		}
 
 		private void SetControls()
+		{
+			SuspendLayout();
+
+			SetPageLayoutControls();
+			SetCommandControls();
+			SetSelectedPageControls();
+
+			ResumeLayout();
+		}
+
+		private void SetPageLayoutControls()
 		{
 			SuspendLayout();
 			this.isSettingControls.Enter();
@@ -379,16 +420,17 @@ namespace YAT.View.Controls
 			{
 				int subpageId1, subpageId2;
 
-				PredefinedCommandPageLayout pageLayout = this.pageLayout;
+				var pageLayout = this.pageLayout;
+				AdjustSubpagePanel(pageLayout);
 
 				// Attention:
 				// Similar code exists in...
 				// ...View.Forms.PredefinedCommandSettings.SetControls()
 				// Changes here may have to be applied there too.
 
-			////pageButtons_1A.Subpage = 1 is fixed.
-			////pageButtons_2A.Subpage = 2 is fixed.
-			////pageButtons_3A.Subpage = 3 is fixed.
+			////buttonSet_1A.SubpageId = 1 is fixed.
+			////buttonSet_2A.SubpageId = 2 is fixed.
+			////buttonSet_3A.SubpageId = 3 is fixed.
 
 				switch (pageLayout)
 				{
@@ -406,9 +448,9 @@ namespace YAT.View.Controls
 					default:                                     subpageId2 = 5; break;
 				}
 
-				pageButtons_1B.SubpageId = subpageId1;
-				pageButtons_2B.SubpageId = subpageId2;
-			////pageButtons_3B.Subpage = 6 is fixed.
+				buttonSet_1B.SubpageId = subpageId1;
+				buttonSet_2B.SubpageId = subpageId2;
+			////buttonSet_3B.SubpageId = 6 is fixed.
 
 				switch (pageLayout)
 				{
@@ -423,11 +465,24 @@ namespace YAT.View.Controls
 					default:                                     subpageId2 = 8; break;
 				}
 
-				pageButtons_1C.SubpageId = subpageId1;
-				pageButtons_2C.SubpageId = subpageId2;
-			////pageButtons_3C.Subpage = 9 is fixed.
+				buttonSet_1C.SubpageId = subpageId1;
+				buttonSet_2C.SubpageId = subpageId2;
+			////buttonSet_3C.SubpageId = 9 is fixed.
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+				ResumeLayout();
+			}
+		}
 
-				foreach (var pb in this.pageButtons)
+		private void SetCommandControls()
+		{
+			SuspendLayout();
+			this.isSettingControls.Enter();
+			try
+			{
+				foreach (var pb in this.buttonSets)
 				{
 					pb.ParseModeForText      = this.parseModeForText;
 					pb.RootDirectoryForFile  = this.rootDirectoryForFile;
@@ -435,16 +490,38 @@ namespace YAT.View.Controls
 				}
 
 				if ((this.pages != null) && (this.pages.Count > 0) &&
-				    (this.selectedIdPage >= 1) && (this.selectedIdPage <= this.pages.Count))
+				    (SelectedPageIndex >= 0) && (SelectedPageIndex < this.pages.Count))
 				{
-					foreach (var pb in this.pageButtons)
+					foreach (var pb in this.buttonSets)
 						pb.Commands = this.pages[SelectedPageIndex].Commands;
+				}
+				else
+				{
+					foreach (var pb in this.buttonSets)
+						pb.Commands = null;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+				ResumeLayout();
+			}
+		}
 
-					button_PagePrevious.Enabled = (this.selectedIdPage > 1);
-					button_PageNext.Enabled     = (this.selectedIdPage < this.pages.Count);
+		private void SetSelectedPageControls()
+		{
+			SuspendLayout();
+			this.isSettingControls.Enter();
+			try
+			{
+				if ((this.pages != null) && (this.pages.Count > 0) &&
+				    (this.selectedPageId >= 1) && (this.selectedPageId <= this.pages.Count))
+				{
+					button_PagePrevious.Enabled = (this.selectedPageId > 1);
+					button_PageNext.Enabled     = (this.selectedPageId < this.pages.Count);
 
 					label_Page.Enabled = this.terminalIsReadyToSend;
-					label_Page.Text = "Page " + this.selectedIdPage + "/" + this.pages.Count;
+					label_Page.Text = "Page " + this.selectedPageId + "/" + this.pages.Count;
 
 					comboBox_Pages.Enabled = (this.pages.Count > 1); // No need to navigate a single page.
 					comboBox_Pages.Items.Clear();
@@ -456,9 +533,6 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					foreach (var pb in this.pageButtons)
-						pb.Commands = null;
-
 					button_PagePrevious.Enabled = false;
 					button_PageNext.Enabled = false;
 
@@ -476,14 +550,178 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void RequestSendCommand(int commandId)
+		private void AdjustSubpagePanel(PredefinedCommandPageLayout layout)
 		{
-			OnSendCommandRequest(new PredefinedCommandEventArgs(this.selectedIdPage, commandId));
+			SuspendLayout();
+			this.isSettingControls.Enter();
+			try
+			{
+				// Reset layout...
+				this.tableLayoutPanel_Subpages.ColumnStyles.Clear();
+				this.tableLayoutPanel_Subpages.RowStyles.Clear();
+				this.tableLayoutPanel_Subpages.Controls.Clear();
+
+				// ...then recreate:
+				switch (layout)
+				{
+					case PredefinedCommandPageLayout.OneByOne:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 1;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.RowCount = 1;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.TwoByOne:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 1;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.RowCount = 2;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.ThreeByOne:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 1;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.RowCount = 3;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.OneByTwo:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 2;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						this.tableLayoutPanel_Subpages.RowCount = 1;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.TwoByTwo:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 2;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						this.tableLayoutPanel_Subpages.RowCount = 2;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.ThreeByTwo:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 2;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						this.tableLayoutPanel_Subpages.RowCount = 2;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3B, 1, 2);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.OneByThree:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 3;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.RowCount = 1;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.TwoByThree:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 3;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.RowCount = 2;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2C, 2, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					case PredefinedCommandPageLayout.ThreeByThree:
+					{
+						this.tableLayoutPanel_Subpages.ColumnCount = 3;
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						this.tableLayoutPanel_Subpages.RowCount = 3;
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
+						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3C, 2, 2);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3B, 1, 2);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2C, 2, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
+						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+						break;
+					}
+
+					default:
+					{
+						throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a page layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+				ResumeLayout();
+			}
 		}
 
-		private void RequestDefineCommand(int commandId)
+		/// <summary></summary>
+		protected virtual void RequestSendCommand(int pageId, int commandId)
 		{
-			OnDefineCommandRequest(new PredefinedCommandEventArgs(this.selectedIdPage, commandId));
+			OnSendCommandRequest(new PredefinedCommandEventArgs(pageId, commandId));
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestDefineCommand(int pageId, int commandId)
+		{
+			OnDefineCommandRequest(new PredefinedCommandEventArgs(pageId, commandId));
 		}
 
 		#endregion
