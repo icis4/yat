@@ -79,6 +79,8 @@ namespace YAT.View.Controls
 		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
+		private int commandStateUpdatedSuspendedCount; // = 0;
+
 		#endregion
 
 		#region Events
@@ -170,7 +172,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.parseModeForText = value;
-				SetCommandControls();
+				SetCommandStateControls();
 			}
 		}
 
@@ -183,7 +185,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.rootDirectoryForFile = value;
-				SetCommandControls();
+				SetCommandStateControls();
 			}
 		}
 
@@ -196,7 +198,7 @@ namespace YAT.View.Controls
 			set
 			{
 				this.terminalIsReadyToSend = value;
-				SetCommandControls();
+				SetCommandStateControls();
 			}
 		}
 
@@ -248,7 +250,12 @@ namespace YAT.View.Controls
 			for (int i = 0; i < this.buttons_commands.Count; i++)
 			{
 				if (pt.Y <= this.buttons_commands[i].Bottom)
-					return (i + 1); // ID = 1..max
+				{
+					int relativeCommandIndex = i;
+					int absoluteCommandIndex = (SubpageCommandIndexOffset + relativeCommandIndex);
+					int absoluteCommandId    = (absoluteCommandIndex + 1);
+					return (absoluteCommandId);
+				}
 			}
 
 			return (0);
@@ -261,6 +268,23 @@ namespace YAT.View.Controls
 		public virtual Command GetCommandFromLocation(Point location)
 		{
 			return (GetCommandFromId(GetCommandIdFromLocation(location)));
+		}
+
+		/// <remarks>Useful to improve performance.</remarks>
+		public virtual void SuspendCommandStateUpdate()
+		{
+			this.commandStateUpdatedSuspendedCount++;
+		}
+
+		/// <remarks>Useful to improve performance.</remarks>
+		public virtual void ResumeCommandStateUpdate()
+		{
+			this.commandStateUpdatedSuspendedCount--;
+			if (this.commandStateUpdatedSuspendedCount <= 0)
+			{
+				this.commandStateUpdatedSuspendedCount = 0; // Prevent misuse.
+				SetCommandStateControls();
+			}
 		}
 
 		#endregion
@@ -349,7 +373,6 @@ namespace YAT.View.Controls
 
 		private void SetControls()
 		{
-			SuspendLayout();
 		////this.isSettingControls.Enter(); is not needed (yet).
 			try
 			{
@@ -362,18 +385,31 @@ namespace YAT.View.Controls
 			finally
 			{
 			////this.isSettingControls.Leave(); is not needed (yet).
-				ResumeLayout();
 			}
 		}
 
 		private void SetCommandControls()
 		{
-			SuspendLayout();
+		////this.isSettingControls.Enter(); is not needed (yet).
+			try
+			{
+				SetCommandTextControls();
+				SetCommandStateControls();
+			}
+			finally
+			{
+			////this.isSettingControls.Leave(); is not needed (yet).
+			}
+		}
+
+		private void SetCommandTextControls()
+		{
 		////this.isSettingControls.Enter(); is not needed (yet).
 			try
 			{
 				// Attention:
 				// Similar code exists in...
+				// ...SetCommandStateControls() below
 				// ...CommandRequest() further below
 				// ...View.Forms.PredefinedCommandSettings.SetPageControls()
 				// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
@@ -396,7 +432,53 @@ namespace YAT.View.Controls
 
 					if (isDefined)
 					{
-						bool isValid = (this.terminalIsReadyToSend && this.commands[i].IsValid(this.parseModeForText, this.rootDirectoryForFile));
+						this.buttons_commands[i].Text = this.commands[commandIndex].Description;
+						toolTip.SetToolTip(this.buttons_commands[i], @"Send """ + this.commands[commandIndex].SingleLineText + @"""");
+					}
+					else
+					{
+						this.buttons_commands[i].Text = Command.DefineCommandText;
+						toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
+					}
+				}
+			}
+			finally
+			{
+			////this.isSettingControls.Leave(); is not needed (yet).
+			}
+		}
+
+		private void SetCommandStateControls()
+		{
+		////this.isSettingControls.Enter(); is not needed (yet).
+			try
+			{
+				// Attention:
+				// Similar code exists in...
+				// ...SetCommandTextControls() above
+				// ...CommandRequest() further below
+				// ...View.Forms.PredefinedCommandSettings.SetPageControls()
+				// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
+				// Changes here may have to be applied there too.
+
+				int commandCount = 0;
+				if (this.commands != null)
+					commandCount = this.commands.Count;
+
+				for (int i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
+				{
+					int commandIndex = (SubpageCommandIndexOffset + i);
+
+					bool isDefined =
+					(
+						(commandIndex < commandCount) &&
+						(this.commands[commandIndex] != null) &&
+						(this.commands[commandIndex].IsDefined)
+					);
+
+					if (isDefined)
+					{
+						bool isValid = (this.terminalIsReadyToSend && this.commands[commandIndex].IsValid(this.parseModeForText, this.rootDirectoryForFile));
 
 						if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 							this.buttons_commands[i].ForeColor = SystemColors.ControlText;
@@ -404,10 +486,7 @@ namespace YAT.View.Controls
 						if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 							this.buttons_commands[i].Font = SystemFonts.DefaultFont;
 
-						this.buttons_commands[i].Text = this.commands[i].Description;
 						this.buttons_commands[i].Enabled = isValid;
-
-						toolTip.SetToolTip(this.buttons_commands[i], @"Send """ + this.commands[i].SingleLineText + @"""");
 					}
 					else
 					{
@@ -417,17 +496,13 @@ namespace YAT.View.Controls
 						if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
 							this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;
 
-						this.buttons_commands[i].Text = Command.DefineCommandText;
 						this.buttons_commands[i].Enabled = true;
-
-						toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 					}
 				}
 			}
 			finally
 			{
 			////this.isSettingControls.Leave(); is not needed (yet).
-				ResumeLayout();
 			}
 		}
 
@@ -439,7 +514,8 @@ namespace YAT.View.Controls
 
 			// Attention:
 			// Similar code exists in...
-			// ...SetCommandControls() further above
+			// ...SetCommandTextControls() further above
+			// ...SetCommandStateControls() further above
 			// ...View.Forms.PredefinedCommandSettings.SetPageControls()
 			// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
 			// Changes here may have to be applied there too.

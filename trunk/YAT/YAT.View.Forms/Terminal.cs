@@ -2497,9 +2497,13 @@ namespace YAT.View.Forms
 			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
 			if (sc != null)
 			{
+				this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
+
 				sc = new Command(sc); // Clone command to ensure decoupling.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1);
+
+				this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
 			}
 			else
 			{
@@ -2517,6 +2521,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_UpBy_N_Click()
 			// Changes here may have to be applied there too.
 
+			this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
+
 			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
 			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
@@ -2527,6 +2533,8 @@ namespace YAT.View.Forms
 				if (selectedCommandId < PredefinedCommandPage.FirstCommandIdPerPage)
 					selectedCommandId = PredefinedCommandPage.MaxCommandCapacityPerPage;
 			}
+
+			this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
 		}
 
 		private void Up(int selectedCommandId)
@@ -2566,6 +2574,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_DownBy_N_Click()
 			// Changes here may have to be applied there too.
 
+			this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
+
 			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
 			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
@@ -2576,6 +2586,8 @@ namespace YAT.View.Forms
 				if (selectedCommandId > PredefinedCommandPage.MaxCommandCapacityPerPage)
 					selectedCommandId = PredefinedCommandPage.FirstCommandIdPerPage;
 			}
+
+			this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
 		}
 
 		private void Down(int selectedCommandId)
@@ -2740,7 +2752,8 @@ namespace YAT.View.Forms
 			{
 				// Attention:
 				// Similar code exists in...
-				// ...View.Controls.PredefinedCommandButtonSet.SetCommandControls()
+				// ...View.Controls.PredefinedCommandButtonSet.SetCommandTextControls()
+				// ...View.Controls.PredefinedCommandButtonSet.SetCommandStateControls()
 				// ...View.Controls.PredefinedCommandButtonSet.CommandRequest()
 				// ...View.Forms.PredefinedCommandSettings.SetPageControls()
 				// Changes here may have to be applied there too.
@@ -4153,15 +4166,21 @@ namespace YAT.View.Forms
 
 		private void ApplyWindowSettings()
 		{
-			SuspendLayout();
 			WindowState = this.settingsRoot.Window.State;
 			if (WindowState == FormWindowState.Normal)
 			{
-				StartPosition = FormStartPosition.Manual;
-				Location      = this.settingsRoot.Window.Location;
-				Size          = this.settingsRoot.Window.Size;
+				SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+				try
+				{
+					StartPosition = FormStartPosition.Manual;
+					Location      = this.settingsRoot.Window.Location;
+					Size          = this.settingsRoot.Window.Size;
+				}
+				finally
+				{
+					ResumeLayout();
+				}
 			}
-			ResumeLayout();
 		}
 
 		private void SaveWindowSettings()
@@ -4170,7 +4189,7 @@ namespace YAT.View.Forms
 			if (WindowState == FormWindowState.Normal)
 			{
 				this.settingsRoot.Window.Location = Location;
-				this.settingsRoot.Window.Size = Size;
+				this.settingsRoot.Window.Size     = Size;
 			}
 		}
 
@@ -4182,11 +4201,10 @@ namespace YAT.View.Forms
 
 		private void LayoutTerminal()
 		{
+			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
 			this.isSettingControls.Enter();
 			try
 			{
-				SuspendLayout();
-
 				if (!this.isUpdatingSplitterRatio) // Required to prevent recursion/reverting of predefined splitter distance due to rounding errors.
 				{
 					// splitContainer_Predefined:
@@ -4411,12 +4429,11 @@ namespace YAT.View.Forms
 				}
 
 				AdjustSendSplitter();
-
-				ResumeLayout();
 			}
 			finally
 			{
 				this.isSettingControls.Leave();
+				ResumeLayout();
 			}
 		}
 
@@ -4459,9 +4476,13 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				predefined.SuspendCommandStateUpdate();
+
 				predefined.ParseModeForText      = this.settingsRoot.Send.Text.ToParseMode();
 				predefined.RootDirectoryForFile  = Path.GetDirectoryName(this.terminal.SettingsFilePath);
 				predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
+
+				predefined.ResumeCommandStateUpdate();
 			}
 			finally
 			{
@@ -4724,17 +4745,22 @@ namespace YAT.View.Forms
 		{
 			this.settingsRoot.Layout.MonitorOrientation = orientation;
 
-			SuspendLayout();
+			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+			try
 			{
 				splitContainer_TxMonitor.Orientation = orientation;
 				splitContainer_RxMonitor.Orientation = orientation;
 			}
-			ResumeLayout();
+			finally
+			{
+				ResumeLayout();
+			}
 		}
 
 		private void SetMonitorSettings()
 		{
-			SuspendLayout();
+			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+			try
 			{
 				monitor_Tx   .MaxLineCount = this.settingsRoot.Display.MaxLineCount;
 				monitor_Bidir.MaxLineCount = this.settingsRoot.Display.MaxLineCount;
@@ -4752,7 +4778,10 @@ namespace YAT.View.Forms
 				monitor_Bidir.ShowCopyOfActiveLine = this.settingsRoot.Display.ShowCopyOfActiveLine;
 				monitor_Rx   .ShowCopyOfActiveLine = this.settingsRoot.Display.ShowCopyOfActiveLine;
 			}
-			ResumeLayout();
+			finally
+			{
+				ResumeLayout();
+			}
 		}
 
 		private void SetMonitorIOStatus()
@@ -6118,352 +6147,356 @@ namespace YAT.View.Forms
 		private void SetIOControlControls()
 		{
 			SuspendLayout(); // Prevent flickering when visibility of status labels temporarily changes.
-
-			Image on  = Properties.Resources.Image_Status_Green_12x12;
-			Image off = Properties.Resources.Image_Status_Red_12x12;
-
-			bool isOpen = ((this.terminal != null) && (this.terminal.IsOpen));
-
-			bool isSerialPort   = false;
-			bool isUsbSerialHid = false;
-
-			if (this.settingsRoot != null)
+			try
 			{
-				isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
-				isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
-			}
+				Image on  = Properties.Resources.Image_Status_Green_12x12;
+				Image off = Properties.Resources.Image_Status_Red_12x12;
 
-			if (isSerialPort)
-			{
-				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+				bool isOpen = ((this.terminal != null) && (this.terminal.IsOpen));
+
+				bool isSerialPort   = false;
+				bool isUsbSerialHid = false;
+
+				if (this.settingsRoot != null)
 				{
-					sl.Visible = true;
-					sl.Enabled = isOpen;
+					isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+					isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
 				}
 
-				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultText)
-					kvp.Key.Text = kvp.Value;
-
-				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultToolTipText)
-					kvp.Key.ToolTipText = kvp.Value;
-
-				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+				if (isSerialPort)
 				{
-					var pinCount = ((this.terminal != null) ? (this.terminal.SerialPortControlPinCount) : (new MKY.IO.Ports.SerialPortControlPinCount()));
-
-					toolStripStatusLabel_TerminalStatus_RTS.Text += (" | " + pinCount.RtsDisableCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_CTS.Text += (" | " + pinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_DTR.Text += (" | " + pinCount.DtrDisableCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_DSR.Text += (" | " + pinCount.DsrDisableCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_DCD.Text += (" | " + pinCount.DcdCount.ToString(CultureInfo.CurrentCulture));
-
-					toolStripStatusLabel_TerminalStatus_RTS.ToolTipText += (" | Disable Count");
-					toolStripStatusLabel_TerminalStatus_CTS.ToolTipText += (" | Disable Count");
-					toolStripStatusLabel_TerminalStatus_DTR.ToolTipText += (" | Disable Count");
-					toolStripStatusLabel_TerminalStatus_DSR.ToolTipText += (" | Disable Count");
-					toolStripStatusLabel_TerminalStatus_DCD.ToolTipText += (" | Count");
-
-					var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
-					var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
-					var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
-					var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
-
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
-
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
-				}
-
-				if (this.settingsRoot.Terminal.Status.ShowBreakCount)
-				{
-					var inputBreakCount      = ((this.terminal != null) ? (this.terminal.InputBreakCount)  : (0));
-					var outputBreakCount     = ((this.terminal != null) ? (this.terminal.OutputBreakCount) : (0));
-
-					toolStripStatusLabel_TerminalStatus_InputBreak.Text  += (" | " + inputBreakCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Text += (" | " + outputBreakCount.ToString(CultureInfo.CurrentCulture));
-
-					toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText  += (" | Input Break Count");
-					toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
-				}
-
-				if (isOpen)
-				{
-					var pins = new MKY.IO.Ports.SerialPortControlPins();
-					bool inputBreak = false;
-					bool outputBreak = false;
-
-					var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-					if (port != null)
-					{
-						try // Fail-safe implementation, especially catching exceptions while closing.
-						{
-							pins        = port.ControlPins;
-							inputBreak  = port.InputBreak;
-							outputBreak = port.OutputBreak;
-						}
-						catch (Exception ex)
-						{
-							DebugEx.WriteException(GetType(), ex, "Failed to retrieve control pin state");
-						}
-					}
-					else
-					{
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
-
-					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
-					bool indicateXOnXOff = allowXOnXOff; // Indication only works if manual XOn/XOff (bug #214).
-					bool inputIsXOn      = false;
-					bool outputIsXOn     = false;
-
-					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
-					if (x != null)
-					{
-						try // Fail-safe implementation, especially catching exceptions while closing.
-						{
-						////indicateXOnXOff = x.XOnXOffIsInUse; >> See above (bug #214).
-							inputIsXOn      = x.InputIsXOn;
-							outputIsXOn     = x.OutputIsXOn;
-						}
-						catch (Exception ex)
-						{
-							DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
-						}
-					}
-
-					if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialPort.SerialFlowControl.RS485)
-					{
-						if (pins.Rts)
-							TriggerRtsLuminescence();
-					}
-					else
-					{
-						Image rtsImage = (pins.Rts ? on : off);
-
-						if (toolStripStatusLabel_TerminalStatus_RTS.Image != rtsImage) // Improve performance by only assigning if different.
-							toolStripStatusLabel_TerminalStatus_RTS.Image = rtsImage;
-					}
-
-					Image ctsImage = (pins.Cts ? on : off);
-					Image dtrImage = (pins.Dtr ? on : off);
-					Image dsrImage = (pins.Dsr ? on : off);
-					Image dcdImage = (pins.Dcd ? on : off);
-
-					if (toolStripStatusLabel_TerminalStatus_CTS.Image != ctsImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_CTS.Image = ctsImage;
-
-					if (toolStripStatusLabel_TerminalStatus_DTR.Image != dtrImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_DTR.Image = dtrImage;
-
-					if (toolStripStatusLabel_TerminalStatus_DSR.Image != dsrImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_DSR.Image = dsrImage;
-
-					if (toolStripStatusLabel_TerminalStatus_DCD.Image != dcdImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_DCD.Image = dcdImage;
-
-					bool allowRts = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically;
-					bool allowDtr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically;
-
-					Color rtsForeColor = (allowRts ? SystemColors.ControlText : SystemColors.GrayText);
-					Color dtrForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
-
-					if (toolStripStatusLabel_TerminalStatus_RTS.ForeColor != rtsForeColor) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_RTS.ForeColor = rtsForeColor;
-
-					if (toolStripStatusLabel_TerminalStatus_CTS.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
-
-					if (toolStripStatusLabel_TerminalStatus_DTR.ForeColor != dtrForeColor) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_DTR.ForeColor = dtrForeColor;
-
-					if (toolStripStatusLabel_TerminalStatus_DSR.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
-
-					if (toolStripStatusLabel_TerminalStatus_DCD.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
-
-					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
-
-					Image inputXOnXOffImage  = (inputIsXOn  ? on : off);
-					Image outputXOnXOffImage = (outputIsXOn ? on : off);
-
-					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
-
-					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
-
-					Color inputXOnXOffForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
-
-					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
-
-					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
-
-					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
-					bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
-
-					toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
-					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
-
-					Image inputBreakImage  = (inputBreak  ? off : on);
-					Image outputBreakImage = (outputBreak ? off : on);
-
-					if (toolStripStatusLabel_TerminalStatus_InputBreak.Image != inputBreakImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputBreak.Image = inputBreakImage;
-
-					if (toolStripStatusLabel_TerminalStatus_OutputBreak.Image != outputBreakImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputBreak.Image = outputBreakImage;
-
-					if (toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = SystemColors.GrayText;
-
-					Color manualBreakColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
-
-					if (toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor != manualBreakColor) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = manualBreakColor;
-
-					// Attention:
-					// Do not modify the 'Enabled' property. Labels must always be enabled,
-					// otherwise picture get's greyed out, but it must either be green or red.
-					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
-					// checks whether an operation is allowed.
-				}
-				else // = isClosed
-				{
-					// By default, all are disabled:
-
 					foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
 					{
-						if (sl.Image != off) // Improve performance by only assigning if different.
-							sl.Image = off;
-
-						if (sl.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-							sl.ForeColor = SystemColors.GrayText;
+						sl.Visible = true;
+						sl.Enabled = isOpen;
 					}
 
-					// Exceptions:
+					foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultText)
+						kvp.Key.Text = kvp.Value;
 
-					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
-					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+					foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultToolTipText)
+						kvp.Key.ToolTipText = kvp.Value;
 
-					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
-					toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
-					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
-				}
-			}
-			else if (isUsbSerialHid)
-			{
-				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
-				{
-					sl.Visible = false;
-					sl.Enabled = isOpen;
-				}
-
-				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultText)
-					kvp.Key.Text = kvp.Value;
-
-				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultToolTipText)
-					kvp.Key.ToolTipText = kvp.Value;
-
-				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
-				{
-					var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
-					var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
-					var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
-					var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
-
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
-
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
-				}
-
-				if (isOpen)
-				{
-					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
-					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
-					bool inputIsXOn      = false;
-					bool outputIsXOn     = false;
-
-					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
-					if (x != null)
+					if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
 					{
-						try // Fail-safe implementation, especially catching exceptions while closing.
-						{
-							indicateXOnXOff = x.XOnXOffIsInUse;
-							inputIsXOn      = x.InputIsXOn;
-							outputIsXOn     = x.OutputIsXOn;
-						}
-						catch (Exception ex)
-						{
-							DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
-						}
+						var pinCount = ((this.terminal != null) ? (this.terminal.SerialPortControlPinCount) : (new MKY.IO.Ports.SerialPortControlPinCount()));
+
+						toolStripStatusLabel_TerminalStatus_RTS.Text += (" | " + pinCount.RtsDisableCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_CTS.Text += (" | " + pinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_DTR.Text += (" | " + pinCount.DtrDisableCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_DSR.Text += (" | " + pinCount.DsrDisableCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_DCD.Text += (" | " + pinCount.DcdCount.ToString(CultureInfo.CurrentCulture));
+
+						toolStripStatusLabel_TerminalStatus_RTS.ToolTipText += (" | Disable Count");
+						toolStripStatusLabel_TerminalStatus_CTS.ToolTipText += (" | Disable Count");
+						toolStripStatusLabel_TerminalStatus_DTR.ToolTipText += (" | Disable Count");
+						toolStripStatusLabel_TerminalStatus_DSR.ToolTipText += (" | Disable Count");
+						toolStripStatusLabel_TerminalStatus_DCD.ToolTipText += (" | Count");
+
+						var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
+						var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
+						var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
+						var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
+
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
+
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
 					}
 
-					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+					if (this.settingsRoot.Terminal.Status.ShowBreakCount)
+					{
+						var inputBreakCount      = ((this.terminal != null) ? (this.terminal.InputBreakCount)  : (0));
+						var outputBreakCount     = ((this.terminal != null) ? (this.terminal.OutputBreakCount) : (0));
 
-					Image inputXOnXOffImage = (inputIsXOn ? on : off);
-					Image outputXOnXOffImage = (outputIsXOn ? on : off);
+						toolStripStatusLabel_TerminalStatus_InputBreak.Text  += (" | " + inputBreakCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_OutputBreak.Text += (" | " + outputBreakCount.ToString(CultureInfo.CurrentCulture));
 
-					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
+						toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText  += (" | Input Break Count");
+						toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
+					}
 
-					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
+					if (isOpen)
+					{
+						var pins = new MKY.IO.Ports.SerialPortControlPins();
+						bool inputBreak = false;
+						bool outputBreak = false;
 
-					Color inputXOnXOffForeColor = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+						var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+						if (port != null)
+						{
+							try // Fail-safe implementation, especially catching exceptions while closing.
+							{
+								pins        = port.ControlPins;
+								inputBreak  = port.InputBreak;
+								outputBreak = port.OutputBreak;
+							}
+							catch (Exception ex)
+							{
+								DebugEx.WriteException(GetType(), ex, "Failed to retrieve control pin state");
+							}
+						}
+						else
+						{
+							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
 
-					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
+						bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
+						bool indicateXOnXOff = allowXOnXOff; // Indication only works if manual XOn/XOff (bug #214).
+						bool inputIsXOn      = false;
+						bool outputIsXOn     = false;
 
-					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+						var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+						if (x != null)
+						{
+							try // Fail-safe implementation, especially catching exceptions while closing.
+							{
+							////indicateXOnXOff = x.XOnXOffIsInUse; >> See above (bug #214).
+								inputIsXOn      = x.InputIsXOn;
+								outputIsXOn     = x.OutputIsXOn;
+							}
+							catch (Exception ex)
+							{
+								DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
+							}
+						}
 
-					// Attention:
-					// Do not modify the 'Enabled' property. Labels must always be enabled,
-					// otherwise picture get's greyed out, but it must either be green or red.
-					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
-					// checks whether an operation is allowed.
+						if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialPort.SerialFlowControl.RS485)
+						{
+							if (pins.Rts)
+								TriggerRtsLuminescence();
+						}
+						else
+						{
+							Image rtsImage = (pins.Rts ? on : off);
+
+							if (toolStripStatusLabel_TerminalStatus_RTS.Image != rtsImage) // Improve performance by only assigning if different.
+								toolStripStatusLabel_TerminalStatus_RTS.Image = rtsImage;
+						}
+
+						Image ctsImage = (pins.Cts ? on : off);
+						Image dtrImage = (pins.Dtr ? on : off);
+						Image dsrImage = (pins.Dsr ? on : off);
+						Image dcdImage = (pins.Dcd ? on : off);
+
+						if (toolStripStatusLabel_TerminalStatus_CTS.Image != ctsImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_CTS.Image = ctsImage;
+
+						if (toolStripStatusLabel_TerminalStatus_DTR.Image != dtrImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_DTR.Image = dtrImage;
+
+						if (toolStripStatusLabel_TerminalStatus_DSR.Image != dsrImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_DSR.Image = dsrImage;
+
+						if (toolStripStatusLabel_TerminalStatus_DCD.Image != dcdImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_DCD.Image = dcdImage;
+
+						bool allowRts = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically;
+						bool allowDtr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically;
+
+						Color rtsForeColor = (allowRts ? SystemColors.ControlText : SystemColors.GrayText);
+						Color dtrForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
+
+						if (toolStripStatusLabel_TerminalStatus_RTS.ForeColor != rtsForeColor) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_RTS.ForeColor = rtsForeColor;
+
+						if (toolStripStatusLabel_TerminalStatus_CTS.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
+
+						if (toolStripStatusLabel_TerminalStatus_DTR.ForeColor != dtrForeColor) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_DTR.ForeColor = dtrForeColor;
+
+						if (toolStripStatusLabel_TerminalStatus_DSR.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
+
+						if (toolStripStatusLabel_TerminalStatus_DCD.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
+
+						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+
+						Image inputXOnXOffImage  = (inputIsXOn  ? on : off);
+						Image outputXOnXOffImage = (outputIsXOn ? on : off);
+
+						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
+
+						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
+
+						Color inputXOnXOffForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+
+						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
+
+						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+
+						bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+						bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
+
+						toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
+						toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
+						toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
+
+						Image inputBreakImage  = (inputBreak  ? off : on);
+						Image outputBreakImage = (outputBreak ? off : on);
+
+						if (toolStripStatusLabel_TerminalStatus_InputBreak.Image != inputBreakImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputBreak.Image = inputBreakImage;
+
+						if (toolStripStatusLabel_TerminalStatus_OutputBreak.Image != outputBreakImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputBreak.Image = outputBreakImage;
+
+						if (toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = SystemColors.GrayText;
+
+						Color manualBreakColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
+
+						if (toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor != manualBreakColor) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = manualBreakColor;
+
+						// Attention:
+						// Do not modify the 'Enabled' property. Labels must always be enabled,
+						// otherwise picture get's greyed out, but it must either be green or red.
+						// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
+						// checks whether an operation is allowed.
+					}
+					else // = isClosed
+					{
+						// By default, all are disabled:
+
+						foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+						{
+							if (sl.Image != off) // Improve performance by only assigning if different.
+								sl.Image = off;
+
+							if (sl.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+								sl.ForeColor = SystemColors.GrayText;
+						}
+
+						// Exceptions:
+
+						bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
+						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+
+						bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+						toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
+						toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
+						toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
+					}
 				}
-				else // = isClosed
+				else if (isUsbSerialHid)
 				{
-					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
-					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+					foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+					{
+						sl.Visible = false;
+						sl.Enabled = isOpen;
+					}
 
-					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != off) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = off;
+					foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultText)
+						kvp.Key.Text = kvp.Value;
 
-					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != off) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = off;
+					foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultToolTipText)
+						kvp.Key.ToolTipText = kvp.Value;
 
-					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = SystemColors.GrayText;
+					if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+					{
+						var sentXOnCount      = ((this.terminal != null) ? (this.terminal.SentXOnCount)      : (0));
+						var sentXOffCount     = ((this.terminal != null) ? (this.terminal.SentXOffCount)     : (0));
+						var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
+						var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
 
-					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
+
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
+					}
+
+					if (isOpen)
+					{
+						bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
+						bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
+						bool inputIsXOn      = false;
+						bool outputIsXOn     = false;
+
+						var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+						if (x != null)
+						{
+							try // Fail-safe implementation, especially catching exceptions while closing.
+							{
+								indicateXOnXOff = x.XOnXOffIsInUse;
+								inputIsXOn      = x.InputIsXOn;
+								outputIsXOn     = x.OutputIsXOn;
+							}
+							catch (Exception ex)
+							{
+								DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
+							}
+						}
+
+						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+
+						Image inputXOnXOffImage = (inputIsXOn ? on : off);
+						Image outputXOnXOffImage = (outputIsXOn ? on : off);
+
+						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
+
+						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
+
+						Color inputXOnXOffForeColor = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+
+						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
+
+						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+
+						// Attention:
+						// Do not modify the 'Enabled' property. Labels must always be enabled,
+						// otherwise picture get's greyed out, but it must either be green or red.
+						// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
+						// checks whether an operation is allowed.
+					}
+					else // = isClosed
+					{
+						bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
+						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+
+						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != off) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = off;
+
+						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != off) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = off;
+
+						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = SystemColors.GrayText;
+
+						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+					}
+				}
+				else
+				{
+					foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+						sl.Visible = false;
 				}
 			}
-			else
+			finally
 			{
-				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
-					sl.Visible = false;
+				ResumeLayout();
 			}
-
-			ResumeLayout();
 		}
 
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback.")]
