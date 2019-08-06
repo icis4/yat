@@ -982,6 +982,7 @@ namespace YAT.View.Forms
 					// Attention:
 					// Similar code exists in...
 					// ...View.Controls.PredefinedCommandPageButtons.SetCommandControls()
+					// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
 					// Changes here may have to be applied there too.
 
 					for (int i = 0; i < Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage; i++)

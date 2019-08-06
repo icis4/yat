@@ -43,7 +43,6 @@
 			this.button_Command_12 = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.label_Shortcuts_1_12 = new System.Windows.Forms.Label();
-			this.label_Shortcuts_13_24 = new System.Windows.Forms.Label();
 			this.label_SeparatorLine = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
@@ -227,18 +226,6 @@
 			this.label_Shortcuts_1_12.Text = "[Ctrl+] Shift+F1..F12";
 			this.label_Shortcuts_1_12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// label_Shortcuts_13_24
-			// 
-			this.label_Shortcuts_13_24.AutoSize = true;
-			this.label_Shortcuts_13_24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_Shortcuts_13_24.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Shortcuts_13_24.Location = new System.Drawing.Point(0, 0);
-			this.label_Shortcuts_13_24.Name = "label_Shortcuts_13_24";
-			this.label_Shortcuts_13_24.Size = new System.Drawing.Size(106, 13);
-			this.label_Shortcuts_13_24.TabIndex = 2;
-			this.label_Shortcuts_13_24.Text = "[Ctrl+] Shift+F13..F24";
-			this.label_Shortcuts_13_24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// label_SeparatorLine
 			// 
 			this.label_SeparatorLine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -253,7 +240,6 @@
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.Controls.Add(this.label_Shortcuts_1_12);
-			this.Controls.Add(this.label_Shortcuts_13_24);
 			this.Controls.Add(this.button_Command_12);
 			this.Controls.Add(this.button_Command_11);
 			this.Controls.Add(this.button_Command_10);
@@ -291,7 +277,6 @@
 		private System.Windows.Forms.Button button_Command_12;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_Shortcuts_1_12;
-		private System.Windows.Forms.Label label_Shortcuts_13_24;
 		private System.Windows.Forms.Label label_SeparatorLine;
 	}
 }

@@ -2715,7 +2715,7 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Command_Initialize()
 		{
-			this.menuItems_Commands = new List<ToolStripMenuItem>(PredefinedCommandPage.MaxCommandCapacityWithShortcut); // Preset the required capacity to improve memory management.
+			this.menuItems_Commands = new List<ToolStripMenuItem>(PredefinedCommandPage.CommandCapacityWithShortcut); // Preset the required capacity to improve memory management.
 			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_1);
 			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_2);
 			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_3);
@@ -2728,18 +2728,6 @@ namespace YAT.View.Forms
 			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_10);
 			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_11);
 			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_12);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_13);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_14);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_15);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_16);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_17);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_18);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_19);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_20);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_21);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_22);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_23);
-			this.menuItems_Commands.Add(toolStripMenuItem_CommandContextMenu_24);
 		}
 
 		/// <remarks>
@@ -2761,17 +2749,13 @@ namespace YAT.View.Forms
 				if (pageCount > 0)
 					commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedIdPage - 1].Commands;
 
-				int commandCount = 0;
-				if (commands != null)
-					commandCount = commands.Count;
-
-				for (int i = 0; i < Math.Min(commandCount, PredefinedCommandPage.MaxCommandCapacityWithShortcut); i++)
+				for (int i = 0; i < PredefinedCommandPage.CommandCapacityWithShortcut; i++)
 				{
 					bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-					bool isValid = (isDefined && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath) && this.terminal.IsReadyToSend);
-
 					if (isDefined)
 					{
+						bool isValid = (this.terminal.IsReadyToSend && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath));
+
 						if (this.menuItems_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 							this.menuItems_Commands[i].ForeColor = SystemColors.ControlText;
 
@@ -2793,18 +2777,6 @@ namespace YAT.View.Forms
 						this.menuItems_Commands[i].Enabled = true;
 					}
 				}
-
-				for (int i = commandCount; i < PredefinedCommandPage.MaxCommandCapacityWithShortcut; i++)
-				{
-					if (this.menuItems_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;
-
-					if (this.menuItems_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-						this.menuItems_Commands[i].Font = DrawingEx.DefaultFontItalic;
-
-					this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
-					this.menuItems_Commands[i].Enabled = true;
-				}
 			}
 			finally
 			{
@@ -2814,23 +2786,6 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Command_Opening(object sender, CancelEventArgs e)
 		{
-			PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsRoot.PredefinedCommand.PageLayout;
-			var np = pageLayoutEx.CommandCapacityPerPage;
-
-			toolStripMenuItem_CommandContextMenu_Separator_12.Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_13          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_14          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_15          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_16          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_17          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_18          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_19          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_20          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_21          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_22          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_23          .Visible = (np > 12);
-			toolStripMenuItem_CommandContextMenu_24          .Visible = (np > 12);
-
 			contextMenuStrip_Command_SetMenuItems(); // Ensure that shortcuts are activated.
 		}
 
