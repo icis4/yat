@@ -84,7 +84,7 @@ namespace YAT.View.Forms
 		private void KeepAndCloneAndAttachSettings(LocalUserSettingsRoot settings)
 		{
 			this.settings = settings;
-			this.settingsInEdit = new LocalUserSettingsRoot(settings);
+			this.settingsInEdit = new LocalUserSettingsRoot(settings); // Clone to ensure decoupling.
 			this.settingsInEdit.Changed += settings_Form_Changed;
 		}
 

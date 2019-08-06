@@ -94,7 +94,7 @@ namespace YAT.View.Forms
 		private void KeepAndCloneAndAttachSettings(TerminalExplicitSettings settings)
 		{
 			this.settings = settings;
-			this.settingsInEdit = new TerminalExplicitSettings(settings);
+			this.settingsInEdit = new TerminalExplicitSettings(settings); // Clone to ensure decoupling.
 			this.settingsInEdit.Changed += settings_Form_Changed;
 		}
 

@@ -106,7 +106,7 @@ namespace YAT.View.Forms
 		private void KeepAndCloneAndAttachSettings(Domain.Settings.TextTerminalSettings settings)
 		{
 			this.settings = settings;
-			this.settingsInEdit = new Domain.Settings.TextTerminalSettings(settings);
+			this.settingsInEdit = new Domain.Settings.TextTerminalSettings(settings); // Clone to ensure decoupling.
 			this.settingsInEdit.Changed += settings_Form_Changed;
 		}
 

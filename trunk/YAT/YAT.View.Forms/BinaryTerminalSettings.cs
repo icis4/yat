@@ -89,7 +89,7 @@ namespace YAT.View.Forms
 		private void KeepAndCloneAndAttachSettings(Domain.Settings.BinaryTerminalSettings settings)
 		{
 			this.settings = settings;
-			this.settingsInEdit = new Domain.Settings.BinaryTerminalSettings(settings);
+			this.settingsInEdit = new Domain.Settings.BinaryTerminalSettings(settings); // Clone to ensure decoupling.
 			this.settingsInEdit.Changed += settings_Form_Changed;
 		}
 

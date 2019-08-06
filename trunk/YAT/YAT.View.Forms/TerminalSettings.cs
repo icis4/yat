@@ -81,7 +81,7 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			this.settings = settings;
-			this.settingsInEdit = new TerminalExplicitSettings(settings);
+			this.settingsInEdit = new TerminalExplicitSettings(settings); // Clone to ensure decoupling.
 
 			// Set visible/invisible before accessing any settings, to ensure that the correct
 			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
