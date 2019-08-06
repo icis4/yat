@@ -2410,6 +2410,13 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
+			if (CommandPagesSettingsHelper.Change(this, this.settingsRoot.PredefinedCommand, (PredefinedCommandPageLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem, out predefinedCommandNew))
+			{
+				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
+				// settingsRoot_Changed() will update the form.
+			}
+
 			this.settingsRoot.PredefinedCommand.PageLayout = (PredefinedCommandPageLayoutEx)toolStripComboBox_PredefinedContextMenu_Layout.SelectedItem;
 		}
 
