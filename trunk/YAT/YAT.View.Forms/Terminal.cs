@@ -2112,7 +2112,7 @@ namespace YAT.View.Forms
 
 			PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsRoot.PredefinedCommand.PageLayout;
 			var np = pageLayoutEx.CommandCapacityPerPage;
-			var id = predefined.GetCommandIdFromLocation(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
+			var id = predefined.GetCommandIdFromLocation(Cursor.Position);
 			var c  = predefined.GetCommandFromId(id);
 			var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
 
@@ -2523,21 +2523,22 @@ namespace YAT.View.Forms
 
 			this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
 
+			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsRoot.PredefinedCommand.PageLayout).CommandCapacityPerPage;
 			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
 			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
-				Up(selectedCommandId);
+				Up(selectedCommandId, lastCommandIdPerPage);
 
 				selectedCommandId--;
 				if (selectedCommandId < PredefinedCommandPage.FirstCommandIdPerPage)
-					selectedCommandId = PredefinedCommandPage.MaxCommandCapacityPerPage;
+					selectedCommandId =                       lastCommandIdPerPage;
 			}
 
 			this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
 		}
 
-		private void Up(int selectedCommandId)
+		private void Up(int selectedCommandId, int lastCommandIdPerPage)
 		{
 			// Attention:
 			// Similar code exists in...
@@ -2548,17 +2549,17 @@ namespace YAT.View.Forms
 			if (sc != null)
 				sc = new Command(sc); // Clone command to ensure decoupling.
 
-			var targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (PredefinedCommandPage.MaxCommandCapacityPerPage));
+			var targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 			var tc = predefined.GetCommandFromId(targetCommandId);
 			if (tc != null)
 				tc = new Command(tc); // Clone command to ensure decoupling.
 
-			if (tc != null)
+			if (tc != null)                                                       // Replace selected by target.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);
 			else
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, selectedCommandId - 1);
 
-			if (sc != null)
+			if (sc != null)                                                       // Replace target by selected.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
 			else
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
@@ -2576,21 +2577,22 @@ namespace YAT.View.Forms
 
 			this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
 
+			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsRoot.PredefinedCommand.PageLayout).CommandCapacityPerPage;
 			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
 			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
-				Down(selectedCommandId);
+				Down(selectedCommandId, lastCommandIdPerPage);
 
 				selectedCommandId++;
-				if (selectedCommandId > PredefinedCommandPage.MaxCommandCapacityPerPage)
+				if (selectedCommandId >                       lastCommandIdPerPage)
 					selectedCommandId = PredefinedCommandPage.FirstCommandIdPerPage;
 			}
 
 			this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
 		}
 
-		private void Down(int selectedCommandId)
+		private void Down(int selectedCommandId, int lastCommandIdPerPage)
 		{
 			// Attention:
 			// Similar code exists in...
@@ -2601,17 +2603,17 @@ namespace YAT.View.Forms
 			if (sc != null)
 				sc = new Command(sc); // Clone command to ensure decoupling.
 
-			var targetCommandId = ((selectedCommandId < PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
+			var targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 			var tc = predefined.GetCommandFromId(targetCommandId);
 			if (tc != null)
 				tc = new Command(tc); // Clone command to ensure decoupling.
 
-			if (tc != null)
+			if (tc != null)                                                       // Replace selected by target.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);
 			else
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, selectedCommandId - 1);
 
-			if (sc != null)
+			if (sc != null)                                                       // Replace target by selected.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
 			else
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
@@ -5285,7 +5287,7 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Enter();
 				try
-				{
+				{              // See remarks!
 					predefined.Pages      = this.settingsRoot.PredefinedCommand.Pages;
 					predefined.PageLayout = this.settingsRoot.PredefinedCommand.PageLayout;
 				}

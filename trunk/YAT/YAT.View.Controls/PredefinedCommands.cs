@@ -149,7 +149,14 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// For performance reasons, opposed to other control properties, this property does not
+		/// only set the propery if it has changed, but rather sets it always. Reasons:
+		/// <list type="bullet">
+		/// <item><description><code>IEnumerableEx.ItemsEqual()</code> takes time.</description></item>
+		/// <item><description>This property is only set by the parent terminal if the commands changed indeed.</description></item>
+		/// </list>
+		/// </remarks>
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -158,8 +165,8 @@ namespace YAT.View.Controls
 			get { return (this.pages); }
 			set
 			{
-				if (!IEnumerableEx.ItemsEqual(this.pages, value))
-				{
+			////if (!IEnumerableEx.ItemsEqual(this.pages, value)) <= See remarks above for explanation.
+			////{
 					this.pages = value;
 
 					if ((this.pages == null) || (this.pages.Count == 0)) // Select page 1 even if there are no pages.
@@ -168,7 +175,7 @@ namespace YAT.View.Controls
 						SelectedPageId = this.pages.Count;
 
 					SetCommandControls();
-				}
+			////}
 			}
 		}
 
