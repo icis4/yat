@@ -106,7 +106,10 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Commands are intentionally organized as pages but not as subpages.
+		/// Reason: Subpages are only a representation of the view, but not the settings.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlElement("Pages")]
@@ -117,7 +120,7 @@ namespace YAT.Model.Settings
 			{
 				if (!IEnumerableEx.ItemsEqual(this.pages, value))
 				{
-					this.pages = value;
+					this.pages = new PredefinedCommandPageCollection(value); // Clone to ensure decoupling.
 					SetMyChanged();
 				}
 			}
