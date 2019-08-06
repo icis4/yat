@@ -115,7 +115,7 @@ namespace YAT.Model.Settings
 			get { return (this.pages); }
 			set
 			{
-				if (this.pages != value)
+				if (!IEnumerableEx.ItemsEqual(this.pages, value))
 				{
 					this.pages = value;
 					SetMyChanged();

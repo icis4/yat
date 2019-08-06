@@ -977,20 +977,16 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
-			SuspendLayout();
-
 			SetLayoutControls();
 			SetPagesControls();
 			SetPageControls();
 			SetClearControls();
 			SetLinkControls();
-
-			ResumeLayout();
 		}
 
 		private void SetLayoutControls()
 		{
-			SuspendLayout();
+			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
 			this.isSettingControls.Enter();
 			try
 			{
@@ -1127,7 +1123,6 @@ namespace YAT.View.Forms
 
 		private void SetPagesControls()
 		{
-			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
@@ -1177,13 +1172,11 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
 			}
 		}
 
 		private void SetPageControls()
 		{
-			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
@@ -1193,7 +1186,8 @@ namespace YAT.View.Forms
 
 					// Attention:
 					// Similar code exists in...
-					// ...View.Controls.PredefinedCommandButtonSet.SetCommandControls()
+					// ...View.Controls.PredefinedCommandButtonSet.SetCommandTextControls()
+					// ...View.Controls.PredefinedCommandButtonSet.SetCommandStateControls()
 					// ...View.Controls.PredefinedCommandButtonSet.CommandRequest()
 					// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
 					// Changes here may have to be applied there too.
@@ -1220,13 +1214,11 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
 			}
 		}
 
 		private void SetClearControls()
 		{
-			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
@@ -1240,13 +1232,11 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
 			}
 		}
 
 		private void SetLinkControls()
 		{
-			SuspendLayout();
 			this.isSettingControls.Enter();
 			try
 			{
@@ -1260,7 +1250,6 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
 			}
 		}
 

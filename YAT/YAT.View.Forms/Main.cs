@@ -2413,33 +2413,37 @@ namespace YAT.View.Forms
 		{
 			if (ApplicationSettings.LocalUserSettingsSuccessfullyLoadedFromFile)
 			{
-				SuspendLayout();
-
-				// Window state:
-				WindowState = ApplicationSettings.LocalUserSettings.MainWindow.WindowState;
-
-				// Start position:
-				var savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
-				var savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location;
-				var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;
-
-				var savedBounds = new Rectangle(savedLocation, savedSize);
-				var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
-				if (isWithinBounds) // Restore saved settings if within bounds:
+				SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+				try
 				{
-					StartPosition = savedStartPosition;
-					Location      = savedLocation;
-					Size          = savedSize;
+					// Window state:
+					WindowState = ApplicationSettings.LocalUserSettings.MainWindow.WindowState;
+
+					// Start position:
+					var savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
+					var savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location;
+					var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;
+
+					var savedBounds = new Rectangle(savedLocation, savedSize);
+					var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
+					if (isWithinBounds) // Restore saved settings if within bounds:
+					{
+						StartPosition = savedStartPosition;
+						Location      = savedLocation;
+						Size          = savedSize;
+					}
+					else // Let the operating system adjust the position if out of bounds:
+					{
+						StartPosition = FormStartPosition.WindowsDefaultBounds;
+					}
+
+					// Note that check must be done regardless of the window state, since the state may
+					// be changed by the user at any time after the initial layout.
 				}
-				else // Let the operating system adjust the position if out of bounds:
+				finally
 				{
-					StartPosition = FormStartPosition.WindowsDefaultBounds;
+					ResumeLayout();
 				}
-
-				// Note that check must be done regardless of the window state, since the state may
-				// be changed by the user at any time after the initial layout.
-
-				ResumeLayout();
 			}
 		}
 

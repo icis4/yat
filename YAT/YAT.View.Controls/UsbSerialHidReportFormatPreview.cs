@@ -319,11 +319,10 @@ namespace YAT.View.Controls
 
 		private void SetControls()
 		{
+			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
 			this.isSettingControls.Enter();
 			try
 			{
-				SuspendLayout();
-
 				label_Id1.Enabled = Enabled;
 				label_Id2.Enabled = Enabled;
 				label_IdLine.Visible = Enabled;
@@ -390,12 +389,11 @@ namespace YAT.View.Controls
 				label_FillerBytes.Width = Width - offset;
 				label_FillerBytes.Text = ExactOrNearest(this.fillerBytesText, offset);
 				label_FillerBytesRemarks.Left = offset + this.initialLeftOffset[label_FillerBytesRemarks];
-
-				ResumeLayout();
 			}
 			finally
 			{
 				this.isSettingControls.Leave();
+				ResumeLayout();
 			}
 		}
 
