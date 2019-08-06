@@ -2518,8 +2518,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_UpBy_N_Click()
 			// Changes here may have to be applied there too.
 
-			var selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
-			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
+			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
 				Up(selectedCommandId);
@@ -2567,8 +2567,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_DownBy_N_Click()
 			// Changes here may have to be applied there too.
 
-			var selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
-			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
+			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
 				Down(selectedCommandId);

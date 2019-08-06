@@ -233,18 +233,12 @@ namespace YAT.View.Forms
 				this.selectedPageId = 1;
 			}
 
-			var requestedCommandId = Int32Ex.Limit(this.startupControl.RequestedCommandId, 1, Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
-			var requestedCommandIndex = (requestedCommandId - 1);
-			var requestedSubpageIndex = (requestedCommandIndex / Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
-			this.selectedSubpageId = (requestedSubpageIndex + 1);
+			ActivateSubpage(this.startupControl.RequestedCommandId);
 
 			// Initially set controls and validate its contents where needed:
 			SetControls();
 
-			var requestedControlIndex = (requestedCommandIndex % Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
-			var requestedControl = this.predefinedCommandSettingsSets[requestedControlIndex];
-			requestedControl.PrepareUserInput(); // See remarks of this method!
-			requestedControl.Select();
+			SelectSet(this.startupControl.RequestedCommandId);
 		}
 
 		#endregion
@@ -253,6 +247,11 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Controls Event Handlers
 		//==========================================================================================
+
+		#region Controls Event Handlers > Non-Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Non-Menu
+		//------------------------------------------------------------------------------------------
 
 		private void comboBox_Layout_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -440,6 +439,8 @@ namespace YAT.View.Forms
 			ShowHelp();
 		}
 
+		#endregion
+
 		#region Controls Event Handlers > Commands Context Menu
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Commands Context Menu
@@ -516,7 +517,9 @@ namespace YAT.View.Forms
 
 			tc = tcNew;
 
+			ActivateSubpage(targetCommandId);
 			SetControls();
+			SelectSet(targetCommandId);
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_MoveTo_I_Click(object sender, EventArgs e)
@@ -538,7 +541,9 @@ namespace YAT.View.Forms
 			tc = tcNew;
 			this.settingsInEdit.ClearCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId);
 
+			ActivateSubpage(targetCommandId);
 			SetControls();
+			SelectSet(targetCommandId);
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_UpBy_N_Click(object sender, EventArgs e)
@@ -551,22 +556,25 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_UpBy_N_Click()
 			// Changes here may have to be applied there too.
 
-			var selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
-			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			int resultingTargetCommandId = 0;
+			int selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
+			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
-				Up(selectedCommandId);
+				Up(selectedCommandId, out resultingTargetCommandId);
 
 				selectedCommandId--;
 				if (selectedCommandId < Model.Types.PredefinedCommandPage.FirstCommandIdPerPage)
 					selectedCommandId = Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage;
 			}
 
+			ActivateSubpage(resultingTargetCommandId);
 			SetControls();
+			SelectSet(resultingTargetCommandId);
 		}
 
-		/// <remarks>This private method does not call <see cref="SetControls()"/>.</remarks>
-		private void Up(int selectedCommandId)
+		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
+		private void Up(int selectedCommandId, out int targetCommandId)
 		{
 			// Attention:
 			// Similar code exists in...
@@ -576,7 +584,7 @@ namespace YAT.View.Forms
 			var sc = GetCommandFromId(selectedCommandId);
 			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
 
-			var targetCommandId = ((selectedCommandId > Model.Types.PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage));
+			targetCommandId = ((selectedCommandId > Model.Types.PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage));
 			var tc = GetCommandFromId(targetCommandId);
 			var scNew = new Model.Types.Command(tc); // Clone command to ensure decoupling.
 
@@ -594,22 +602,25 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_DownBy_N_Click()
 			// Changes here may have to be applied there too.
 
-			var selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
-			var n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			int resultingTargetCommandId = 0;
+			int selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
+			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
-				Down(selectedCommandId);
+				Down(selectedCommandId, out resultingTargetCommandId);
 
 				selectedCommandId++;
 				if (selectedCommandId > Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage)
 					selectedCommandId = Model.Types.PredefinedCommandPage.FirstCommandIdPerPage;
 			}
 
+			ActivateSubpage(resultingTargetCommandId);
 			SetControls();
+			SelectSet(resultingTargetCommandId);
 		}
 
-		/// <remarks>This private method does not call <see cref="SetControls()"/>.</remarks>
-		private void Down(int selectedCommandId)
+		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
+		private void Down(int selectedCommandId, out int targetCommandId)
 		{
 			// Attention:
 			// Similar code exists in...
@@ -619,7 +630,7 @@ namespace YAT.View.Forms
 			var sc = GetCommandFromId(selectedCommandId);
 			var tcNew = new Model.Types.Command(sc); // Clone command to ensure decoupling.
 
-			var targetCommandId = ((selectedCommandId < Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (Model.Types.PredefinedCommandPage.FirstCommandIdPerPage));
+			targetCommandId = ((selectedCommandId < Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (Model.Types.PredefinedCommandPage.FirstCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
 			var scNew = new Model.Types.Command(tc); // Clone command to ensure decoupling.
 
@@ -1213,9 +1224,9 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Non-Public Methods > Selected Page
+		#region Non-Public Methods > Selected Page/Subpage
 		//------------------------------------------------------------------------------------------
-		// Non-Public Methods > Selected Page
+		// Non-Public Methods > Selected Page/Subpage
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1269,12 +1280,12 @@ namespace YAT.View.Forms
 			return (0);
 		}
 
-		/// <param name="id">Command 1..<see cref="Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>
-		protected virtual void SetCommandFromSettingsSet(int id)
+		/// <param name="setId">Set 1..<see cref="Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>
+		protected virtual void SetCommandFromSettingsSet(int setId)
 		{
 			if (this.settingsInEdit.Pages != null)
 			{
-				int relativeCommandIndex = (id - 1);
+				int relativeCommandIndex = (setId - 1);
 				int absoluteCommandIndex = (SelectedSubpageCommandIndexOffset + relativeCommandIndex);
 
 				var p = this.settingsInEdit.Pages[SelectedPageIndex];
@@ -1282,8 +1293,31 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
+		protected virtual void ActivateSubpage(int requestedCommandId)
+		{
+			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
+
+			var requestedCommandIndex = (requestedCommandId - 1);
+			var requestedSubpageIndex = (requestedCommandIndex / Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+			this.selectedSubpageId = (requestedSubpageIndex + 1);
+		}
+
+		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
+		protected virtual void SelectSet(int requestedCommandId)
+		{
+			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, Model.Types.PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
+
+			var requestedCommandIndex = (requestedCommandId - 1);
+			var requestedSetIndex = (requestedCommandIndex % Model.Types.PredefinedCommandPage.CommandCapacityPerSubpage);
+			var requestedSet = this.predefinedCommandSettingsSets[requestedSetIndex];
+			requestedSet.PrepareUserInput(); // See remarks of this method!
+			requestedSet.Select();
+		}
+
+		/// <summary></summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ClearPage()
+		protected virtual void ClearPage()
 		{
 			if (MessageBoxEx.Show
 				(
@@ -1303,8 +1337,9 @@ namespace YAT.View.Forms
 
 		#endregion
 
+		/// <summary></summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowHelp()
+		protected virtual void ShowHelp()
 		{
 			MessageBoxEx.Show
 			(
