@@ -36,6 +36,8 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class ControlEx
 	{
+		private const int WM_SETREDRAW = 0x000B;
+
 		/// <summary>
 		/// An invalid index is represented by -1 in <see cref="System.Windows.Forms"/> controls.
 		/// </summary>
@@ -106,6 +108,31 @@ namespace MKY.Windows.Forms
 			}
 
 			return (false);
+		}
+
+		/// <summary>
+		/// Suspends painting of the specified control.
+		/// </summary>
+		public static void SuspendUpdate(Control control)
+		{
+			Message msg = Message.Create(control.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+
+			NativeWindow window = NativeWindow.FromHandle(control.Handle);
+			window.DefWndProc(ref msg);
+		}
+
+		/// <summary>
+		/// Resumes painting of the specified control.
+		/// </summary>
+		public static void ResumeUpdate(Control control)
+		{
+			IntPtr wparam = new IntPtr(1); // C "true" as an IntPtr.
+			Message msg = Message.Create(control.Handle, WM_SETREDRAW, wparam, IntPtr.Zero);
+
+			NativeWindow window = NativeWindow.FromHandle(control.Handle);
+			window.DefWndProc(ref msg);
+
+			control.Invalidate();
 		}
 	}
 }

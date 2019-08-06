@@ -201,6 +201,7 @@
     <Compile Include="Windows.Forms\NativeMessageHandler.cs" />
     <Compile Include="Windows.Forms\OrientationEx.cs" />
     <Compile Include="Windows.Forms\ScreenEx.cs" />
+    <Compile Include="Windows.Forms\SuspendUpdateHelper.cs" />
     <Compile Include="Windows.Forms\SettingControlsHelper.cs" />
     <Compile Include="Windows.Forms\SizeHelper.cs" />
     <Compile Include="Windows.Forms\SplitContainerHelper.cs" />
