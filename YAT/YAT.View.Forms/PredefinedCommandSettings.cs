@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Security.Permissions;
@@ -115,7 +116,7 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			this.settings = settings;
-			this.settingsInEdit = new Model.Settings.PredefinedCommandSettings(settings);
+			this.settingsInEdit = new Model.Settings.PredefinedCommandSettings(settings); // Clone to ensure decoupling.
 
 			InitializeControls(useExplicitDefaultRadix);
 
@@ -454,7 +455,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int contextMenuStrip_Commands_SelectedCommandId; // = 0;
 
-		private void contextMenuStrip_Commands_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		private void contextMenuStrip_Commands_Opening(object sender, CancelEventArgs e)
 		{
 			// Attention:
 			// Similar code exists in...
@@ -463,7 +464,7 @@ namespace YAT.View.Forms
 
 			PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsInEdit.PageLayout;
 			var np = pageLayoutEx.CommandCapacityPerPage;
-			var id = GetCommandIdFromLocation(new Point(contextMenuStrip_Commands.Left, contextMenuStrip_Commands.Top));
+			var id = GetCommandIdFromLocation(Cursor.Position);
 			var c = GetCommandFromId(id);
 			var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
 
@@ -757,16 +758,17 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_UpBy_N_Click()
 			// Changes here may have to be applied there too.
 
+			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage;
 			int resultingTargetCommandId = 0;
 			int selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
 			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
-				Up(selectedCommandId, out resultingTargetCommandId);
+				Up(selectedCommandId, lastCommandIdPerPage, out resultingTargetCommandId);
 
 				selectedCommandId--;
 				if (selectedCommandId < PredefinedCommandPage.FirstCommandIdPerPage)
-					selectedCommandId = PredefinedCommandPage.MaxCommandCapacityPerPage;
+					selectedCommandId =                       lastCommandIdPerPage;
 			}
 
 			ActivateSubpage(resultingTargetCommandId);
@@ -775,7 +777,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
-		private void Up(int selectedCommandId, out int targetCommandId)
+		private void Up(int selectedCommandId, int lastCommandIdPerPage, out int targetCommandId)
 		{
 			// Attention:
 			// Similar code exists in...
@@ -783,11 +785,11 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(selectedCommandId);
-			var tcNew = new Command(sc); // Clone command to ensure decoupling.
+			var tcNew = new Command(sc); // Replace target by selected. Clone command to ensure decoupling.
 
-			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (PredefinedCommandPage.MaxCommandCapacityPerPage));
+			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
-			var scNew = new Command(tc); // Clone command to ensure decoupling.
+			var scNew = new Command(tc); // Replace selected by target. Clone command to ensure decoupling.
 
 			tc = tcNew;
 			sc = scNew;
@@ -803,15 +805,16 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_DownBy_N_Click()
 			// Changes here may have to be applied there too.
 
+			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage;
 			int resultingTargetCommandId = 0;
 			int selectedCommandId = contextMenuStrip_Commands_SelectedCommandId;
 			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
 			for (int i = 0; i < n; i++)
 			{
-				Down(selectedCommandId, out resultingTargetCommandId);
+				Down(selectedCommandId, lastCommandIdPerPage, out resultingTargetCommandId);
 
 				selectedCommandId++;
-				if (selectedCommandId > PredefinedCommandPage.MaxCommandCapacityPerPage)
+				if (selectedCommandId >                       lastCommandIdPerPage)
 					selectedCommandId = PredefinedCommandPage.FirstCommandIdPerPage;
 			}
 
@@ -821,7 +824,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
-		private void Down(int selectedCommandId, out int targetCommandId)
+		private void Down(int selectedCommandId, int lastCommandIdPerPage, out int targetCommandId)
 		{
 			// Attention:
 			// Similar code exists in...
@@ -829,11 +832,11 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(selectedCommandId);
-			var tcNew = new Command(sc); // Clone command to ensure decoupling.
+			var tcNew = new Command(sc);  // Replace target by selected. Clone command to ensure decoupling.
 
-			targetCommandId = ((selectedCommandId < PredefinedCommandPage.MaxCommandCapacityPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
+			targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
-			var scNew = new Command(tc); // Clone command to ensure decoupling.
+			var scNew = new Command(tc); // Replace selected by target. Clone command to ensure decoupling.
 
 			tc = tcNew;
 			sc = scNew;
@@ -1294,7 +1297,8 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				var pcp = new PredefinedCommandPage(PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
+				int commandCapacityPerPage = ((PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage;
+				var pcp = new PredefinedCommandPage(commandCapacityPerPage, pageName);
 				this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 				SetControls();
 			}
@@ -1315,7 +1319,8 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.OK)
 			{
-				var pcp = new PredefinedCommandPage(PredefinedCommandPage.MaxCommandCapacityPerPage, pageName);
+				int commandCapacityPerPage = ((PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage;
+				var pcp = new PredefinedCommandPage(commandCapacityPerPage, pageName);
 				this.settingsInEdit.Pages.Add(pcp);
 				this.selectedPageId = this.settingsInEdit.Pages.Count;
 				SetControls();
