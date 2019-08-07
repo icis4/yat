@@ -103,8 +103,8 @@ namespace YAT.Domain.Settings
 			TextTerminal   = new TextTerminalSettings(rhs.TextTerminal);
 			BinaryTerminal = new BinaryTerminalSettings(rhs.BinaryTerminal);
 
-			UpdateTerminalTypeDependentDefaults(); // Force update *after* all settings
-			UpdateIOTypeDependentSettings();       // objects got created.
+		////UpdateTerminalTypeDependentDefaults() must not be invoked, 'rhs' settings
+		////UpdateIOTypeDependentSettings()       would get overridden otherwise!
 
 			ClearChanged();
 		}
