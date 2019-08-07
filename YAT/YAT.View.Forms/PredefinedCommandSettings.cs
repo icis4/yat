@@ -724,8 +724,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.ClearCommand(SelectedPageIndex, targetCommandIndex);
 			}
 
+			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(targetCommandIndex + 1);
-			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
 			SelectSet(targetCommandIndex + 1);
 		}
@@ -758,8 +758,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.ClearCommand(SelectedPageIndex, targetCommandIndex);
 			}
 
+			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(targetCommandIndex + 1);
-			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
 			SelectSet(targetCommandIndex + 1);
 		}
@@ -791,8 +791,8 @@ namespace YAT.View.Forms
 
 			this.settingsInEdit.ResumeChangeEvent();
 
+			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(resultingTargetCommandId);
-			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
 			SelectSet(resultingTargetCommandId);
 		}
@@ -852,8 +852,8 @@ namespace YAT.View.Forms
 
 			this.settingsInEdit.ResumeChangeEvent();
 
+			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(resultingTargetCommandId);
-			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
 			SelectSet(resultingTargetCommandId);
 		}
