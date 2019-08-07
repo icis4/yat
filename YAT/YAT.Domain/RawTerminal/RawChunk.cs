@@ -170,10 +170,12 @@ namespace YAT.Domain
 		public virtual string ToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
+
 			sb.AppendLine(indent + "> Content:   " + ContentAsPrintableString);
 			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.CurrentCulture), 2));
 			sb.AppendLine(indent + "> PortStamp: " + PortStamp);
 			sb.AppendLine(indent + "> Direction: " + Direction);
+
 			return (sb.ToString());
 		}
 
