@@ -396,7 +396,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			SetCommandFromSettingsSet(ControlEx.TagToInt32(sender));
+			UpdateCommandFromSettingsSet(ControlEx.TagToInt32(sender));
 			SetPagesControls(); // Needed since some 'Export...' options depend on command availability.
 			SetClearControls();
 		}
@@ -711,17 +711,23 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_CopyTo_I_Click()
 			// Changes here may have to be applied there too.
 
+			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
+
 			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			var tcNew = new Command(sc); // Clone command to ensure decoupling.
+			if (sc != null)
+			{
+				sc = new Command(sc); // Clone command to ensure decoupling. // Replace target by selected:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, sc);
+			}
+			else
+			{                                              // Clear target:
+				this.settingsInEdit.ClearCommand(SelectedPageIndex, targetCommandIndex);
+			}
 
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-			var tc = GetCommandFromId(targetCommandId);
-
-			tc = tcNew;
-
-			ActivateSubpage(targetCommandId);
+			ActivateSubpage(targetCommandIndex + 1);
+			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
-			SelectSet(targetCommandId);
+			SelectSet(targetCommandIndex + 1);
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_MoveTo_I_Click(object sender, EventArgs e)
@@ -734,18 +740,28 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_MoveTo_I_Click()
 			// Changes here may have to be applied there too.
 
+			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
+
 			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			var tcNew = new Command(sc); // Clone command to ensure decoupling.
+			if (sc != null)
+			{
+				this.settingsInEdit.SuspendChangeEvent();
 
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-			var tc = GetCommandFromId(targetCommandId);
+				sc = new Command(sc); // Clone command to ensure decoupling. // Replace target by selected:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
+				this.settingsInEdit.ClearCommand(SelectedPageIndex, (contextMenuStrip_Commands_SelectedCommandId - 1));
 
-			tc = tcNew;
-			this.settingsInEdit.ClearCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId);
+				this.settingsInEdit.ResumeChangeEvent();
+			}
+			else
+			{                                              // Clear target:
+				this.settingsInEdit.ClearCommand(SelectedPageIndex, targetCommandIndex);
+			}
 
-			ActivateSubpage(targetCommandId);
+			ActivateSubpage(targetCommandIndex + 1);
+			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
-			SelectSet(targetCommandId);
+			SelectSet(targetCommandIndex + 1);
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_UpBy_N_Click(object sender, EventArgs e)
@@ -757,6 +773,8 @@ namespace YAT.View.Forms
 			// Similar code exists in...
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_UpBy_N_Click()
 			// Changes here may have to be applied there too.
+
+			this.settingsInEdit.SuspendChangeEvent();
 
 			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage;
 			int resultingTargetCommandId = 0;
@@ -771,7 +789,10 @@ namespace YAT.View.Forms
 					selectedCommandId =                       lastCommandIdPerPage;
 			}
 
+			this.settingsInEdit.ResumeChangeEvent();
+
 			ActivateSubpage(resultingTargetCommandId);
+			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
 			SelectSet(resultingTargetCommandId);
 		}
@@ -785,14 +806,23 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(selectedCommandId);
-			var tcNew = new Command(sc); // Replace target by selected. Clone command to ensure decoupling.
+			if (sc != null)
+				sc = new Command(sc); // Clone command to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
-			var scNew = new Command(tc); // Replace selected by target. Clone command to ensure decoupling.
+			if (tc != null)
+				tc = new Command(tc); // Clone command to ensure decoupling.
 
-			tc = tcNew;
-			sc = scNew;
+			if (tc != null)                            // Replace selected by target:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, selectedCommandId - 1, tc);
+			else                                           // Clear selected:
+				this.settingsInEdit.ClearCommand(SelectedPageIndex, selectedCommandId - 1);
+
+			if (sc != null)                            // Replace target by selected:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandId - 1, sc);
+			else                                           // Clear target:
+				this.settingsInEdit.ClearCommand(SelectedPageIndex, targetCommandId - 1);
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_DownBy_N_Click(object sender, EventArgs e)
@@ -804,6 +834,8 @@ namespace YAT.View.Forms
 			// Similar code exists in...
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_DownBy_N_Click()
 			// Changes here may have to be applied there too.
+
+			this.settingsInEdit.SuspendChangeEvent();
 
 			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout).CommandCapacityPerPage;
 			int resultingTargetCommandId = 0;
@@ -818,7 +850,10 @@ namespace YAT.View.Forms
 					selectedCommandId = PredefinedCommandPage.FirstCommandIdPerPage;
 			}
 
+			this.settingsInEdit.ResumeChangeEvent();
+
 			ActivateSubpage(resultingTargetCommandId);
+			DeselectSets(); // Ensure that SetControls() is done without cursor in one of the sets!
 			SetControls();
 			SelectSet(resultingTargetCommandId);
 		}
@@ -832,14 +867,23 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			var sc = GetCommandFromId(selectedCommandId);
-			var tcNew = new Command(sc);  // Replace target by selected. Clone command to ensure decoupling.
+			if (sc != null)
+				sc = new Command(sc); // Clone command to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
-			var scNew = new Command(tc); // Replace selected by target. Clone command to ensure decoupling.
+			if (tc != null)
+				tc = new Command(tc); // Clone command to ensure decoupling.
 
-			tc = tcNew;
-			sc = scNew;
+			if (tc != null)                            // Replace selected by target:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, selectedCommandId - 1, tc);
+			else                                           // Clear selected:
+				this.settingsInEdit.ClearCommand(SelectedPageIndex, selectedCommandId - 1);
+
+			if (sc != null)                            // Replace target by selected:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandId - 1, sc);
+			else                                           // Clear target:
+				this.settingsInEdit.ClearCommand(SelectedPageIndex, targetCommandId - 1);
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_Cut_Click(object sender, EventArgs e)
@@ -1203,8 +1247,8 @@ namespace YAT.View.Forms
 					for (int i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
 					{
 						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
-						if (commandIndex < commandCount)
-							this.predefinedCommandSettingsSets[i].Command = commands[commandIndex];
+						if ((commandIndex < commandCount) && (commands[commandIndex] != null))
+							this.predefinedCommandSettingsSets[i].Command = new Command(commands[commandIndex]); // Clone command to ensure decoupling.
 						else
 							this.predefinedCommandSettingsSets[i].Command = null;
 					}
@@ -1478,7 +1522,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <param name="setId">Set 1..<see cref="PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>
-		protected virtual void SetCommandFromSettingsSet(int setId)
+		protected virtual void UpdateCommandFromSettingsSet(int setId)
 		{
 			if (this.settingsInEdit.Pages != null)
 			{
@@ -1486,7 +1530,11 @@ namespace YAT.View.Forms
 				var absoluteCommandIndex = (SelectedSubpageCommandIndexOffset + relativeCommandIndex);
 
 				var p = this.settingsInEdit.Pages[SelectedPageIndex];
-				p.SetCommand(absoluteCommandIndex, this.predefinedCommandSettingsSets[relativeCommandIndex].Command);
+				var c = this.predefinedCommandSettingsSets[relativeCommandIndex].Command;
+				if ((c != null) && (c.IsDefined)) // Filter-out "<Enter text...>" dummy commands.
+					p.SetCommand(absoluteCommandIndex, new Command(c)); // Clone command to ensure decoupling.
+				else
+					p.ClearCommand(absoluteCommandIndex);
 			}
 		}
 
@@ -1508,8 +1556,14 @@ namespace YAT.View.Forms
 			var requestedCommandIndex = (requestedCommandId - 1);
 			var requestedSetIndex = (requestedCommandIndex % PredefinedCommandPage.CommandCapacityPerSubpage);
 			var requestedSet = this.predefinedCommandSettingsSets[requestedSetIndex];
-			requestedSet.PrepareUserInput(); // See remarks of this method!
+			requestedSet.PrepareUserInput(); // See remarks of that method!
 			requestedSet.Select();
+		}
+
+		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
+		protected virtual void DeselectSets()
+		{
+			button_Cancel.Select(); // Select a control that is always active.
 		}
 
 		/// <summary></summary>

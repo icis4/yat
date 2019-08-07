@@ -2416,29 +2416,29 @@ namespace YAT.View.Forms
 		// ...toolStripComboBox_PredefinedContextMenu_Command...
 		// ...is questionable in the 'Predefined' context menu, it is there as kind of title for the items below.
 
-		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			var sc = this.settingsRoot.SendFile.Command;
-			if (sc != null)
-			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
-			}
-		}
-
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendText_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			var sc = this.settingsRoot.SendText.Command;
-			if (sc != null)
+			var c = this.settingsRoot.SendText.Command;
+			if (c != null)
 			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, sc);
+				c = new Command(c); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, c);
+			}
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			var c = this.settingsRoot.SendFile.Command;
+			if (c != null)
+			{
+				c = new Command(c); // Clone command to ensure decoupling.
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, c);
 			}
 		}
 
@@ -2455,6 +2455,8 @@ namespace YAT.View.Forms
 					this.settingsRoot.SendText.Command = sc;
 				else if (sc.IsFilePath)
 					this.settingsRoot.SendFile.Command = sc;
+				else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + @"Invalid command """ + sc.ToDiagnosticsString() + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2468,17 +2470,17 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_CopyTo_I_Click()
 			// Changes here may have to be applied there too.
 
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
 			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
 			if (sc != null)
 			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
+				sc = new Command(sc); // Clone command to ensure decoupling.      // Replace target by selected:
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc);
 			}
 			else
-			{
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
+			{                                                                         // Clear target:
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandIndex);
 			}
 		}
 
@@ -2492,22 +2494,22 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_MoveTo_I_Click()
 			// Changes here may have to be applied there too.
 
-			var targetCommandId = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
 			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
 			if (sc != null)
 			{
 				this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
 
-				sc = new Command(sc); // Clone command to ensure decoupling.
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1);
+				sc = new Command(sc); // Clone command to ensure decoupling.      // Replace target by selected:
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
 
 				this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
 			}
 			else
-			{
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
+			{                                                                         // Clear target:
+				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandIndex);
 			}
 		}
 
@@ -2554,14 +2556,14 @@ namespace YAT.View.Forms
 			if (tc != null)
 				tc = new Command(tc); // Clone command to ensure decoupling.
 
-			if (tc != null)                                                       // Replace selected by target.
+			if (tc != null)                                                       // Replace selected by target:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);
-			else
+			else                                                                      // Clear selected:
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, selectedCommandId - 1);
 
-			if (sc != null)                                                       // Replace target by selected.
+			if (sc != null)                                                       // Replace target by selected:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
-			else
+			else                                                                      // Clear target:
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
 		}
 
@@ -2608,14 +2610,14 @@ namespace YAT.View.Forms
 			if (tc != null)
 				tc = new Command(tc); // Clone command to ensure decoupling.
 
-			if (tc != null)                                                       // Replace selected by target.
+			if (tc != null)                                                       // Replace selected by target:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);
-			else
+			else                                                                      // Clear selected:
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, selectedCommandId - 1);
 
-			if (sc != null)                                                       // Replace target by selected.
+			if (sc != null)                                                       // Replace target by selected:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandId - 1, sc);
-			else
+			else                                                                      // Clear target:
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, targetCommandId - 1);
 		}
 

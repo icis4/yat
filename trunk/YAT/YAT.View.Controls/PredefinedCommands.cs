@@ -173,6 +173,8 @@ namespace YAT.View.Controls
 						SelectedPageId = 1;
 					else if (this.selectedPageId > this.pages.Count)
 						SelectedPageId = this.pages.Count;
+					else
+						SetSelectedPageControls();
 
 					SetCommandControls();
 			////}
