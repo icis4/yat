@@ -753,6 +753,48 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		public virtual string ToDiagnosticsString()
+		{
+			return (ToDiagnosticsString(""));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact.
+		/// </remarks>
+		public virtual string ToDiagnosticsString(string indent)
+		{
+			var sb = new StringBuilder();
+
+			sb.Append(indent);
+			sb.Append(Caption);
+			sb.Append(" | IsDefined = ");
+			sb.Append(IsDefined.ToString(CultureInfo.CurrentCulture));
+			sb.Append(" | Description = ");
+			sb.Append((Description != null) ? Description : "<None>");
+			sb.Append(" | DefaultRadix = ");
+			sb.Append(DefaultRadix.ToString());
+			sb.Append(" | ");
+			sb.Append((TextLines != null) ? TextLines.Length.ToString(CultureInfo.CurrentCulture) : "0");
+			sb.Append(" TextLines | IsFilePath = ");
+			sb.Append(IsFilePath.ToString(CultureInfo.CurrentCulture));
+			sb.Append(" | FilePath = ");
+			sb.Append((FilePath != null) ? FilePath : "<None>");
+
+			return (sb.ToString());
+		}
+
+		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
 		/// <remarks>

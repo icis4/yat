@@ -236,7 +236,7 @@ namespace YAT.Domain
 			int i = 0;
 			foreach (var re in ToChunks())
 			{
-				sb.Append(indent + "> RawChunk#" + (i++) + ":" + Environment.NewLine);
+				sb.AppendLine(indent + "> RawChunk#" + (i++) + ":");
 				sb.Append(re.ToDiagnosticsString(indent + "   "));
 			}
 
