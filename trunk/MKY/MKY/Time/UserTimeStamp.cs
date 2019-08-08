@@ -25,13 +25,11 @@
 using System;
 using System.Xml.Serialization;
 
-using MKY;
-
-namespace YAT.Application.Utilities
+namespace MKY.Time
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct SaveInfo : IEquatable<SaveInfo>
+	public struct UserTimeStamp : IEquatable<UserTimeStamp>
 	{
 		/// <summary></summary>
 		[XmlElement("TimeStamp")]
@@ -41,8 +39,21 @@ namespace YAT.Application.Utilities
 		[XmlElement("UserName")]
 		public string UserName { get; set; }
 
-		/// <summary></summary>
-		public SaveInfo(DateTime timeStamp, string userName)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:UserTimeStamp`1"/> struct.
+		/// </summary>
+		/// <param name="userName">The user name.</param>
+		public UserTimeStamp(string userName)
+			: this(DateTime.Now, userName)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:UserTimeStamp`1"/> struct.
+		/// </summary>
+		/// <param name="timeStamp">The time stamp.</param>
+		/// <param name="userName">The user name.</param>
+		public UserTimeStamp(DateTime timeStamp, string userName)
 		{
 			TimeStamp = timeStamp;
 			UserName  = userName;
@@ -77,8 +88,8 @@ namespace YAT.Application.Utilities
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SaveInfo)
-				return (Equals((SaveInfo)obj));
+			if (obj is UserTimeStamp)
+				return (Equals((UserTimeStamp)obj));
 			else
 				return (false);
 		}
@@ -90,7 +101,7 @@ namespace YAT.Application.Utilities
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(SaveInfo other)
+		public bool Equals(UserTimeStamp other)
 		{
 			return
 			(
@@ -102,7 +113,7 @@ namespace YAT.Application.Utilities
 		/// <summary>
 		/// Determines whether the two specified objects have value equality.
 		/// </summary>
-		public static bool operator ==(SaveInfo lhs, SaveInfo rhs)
+		public static bool operator ==(UserTimeStamp lhs, UserTimeStamp rhs)
 		{
 			return (lhs.Equals(rhs));
 		}
@@ -110,7 +121,7 @@ namespace YAT.Application.Utilities
 		/// <summary>
 		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
-		public static bool operator !=(SaveInfo lhs, SaveInfo rhs)
+		public static bool operator !=(UserTimeStamp lhs, UserTimeStamp rhs)
 		{
 			return (!(lhs == rhs));
 		}
