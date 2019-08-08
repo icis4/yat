@@ -289,7 +289,7 @@ namespace MKY.Settings
 					// Try to open existing file of current version:
 					try
 					{
-						var settings = (TSettings)LoadFromFile(typeof(TSettings), this.alternateXmlElements);
+						var settings = LoadFromFile<TSettings>(this.alternateXmlElements);
 						if (settings != null)
 						{
 							this.settings = settings;
@@ -331,7 +331,7 @@ namespace MKY.Settings
 							string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
 							try
 							{
-								var settings = (TSettings)LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
+								var settings = LoadFromFile<TSettings>(this.alternateXmlElements, oldFilePath);
 								if (settings != null)
 								{
 									this.settings = settings;
@@ -358,7 +358,7 @@ namespace MKY.Settings
 			/// Use of exception instead of boolean return value to ease handling of errors:
 			///  - Exception will contain the reason for the failure
 			///  - 'good-weather' case be easier implemented, kind of scripted
-			///  
+			///
 			/// Saying hello to StyleCop ;-.
 			/// </remarks>
 			/// <exception cref="Exception">
@@ -370,7 +370,7 @@ namespace MKY.Settings
 
 				if ((this.effectiveFileAccess & FileAccessFlags.Write) != 0)
 				{
-					SaveToFile(typeof(TSettings), this.settings);
+					SaveToFile<TSettings>(this.settings);
 					this.settings.ClearChanged();
 				}
 			}
@@ -520,11 +520,11 @@ namespace MKY.Settings
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~ApplicationSettingsHandler()
@@ -998,7 +998,7 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
-		///  
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
@@ -1056,7 +1056,7 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
-		///  
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
@@ -1077,7 +1077,7 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
-		///  
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
@@ -1098,7 +1098,7 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
-		///  
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">

@@ -108,7 +108,7 @@ namespace YAT.Domain.Utilities
 		private static int LinesFromRawFile(string filePath, out string[] lines)
 		{
 			var type = typeof(List<XmlTransferRawLine>);
-			var deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+			var deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(type, filePath);
 			var rawLines = (deserializedLines as List<XmlTransferRawLine>);
 			if (rawLines != null)
 			{
@@ -146,7 +146,7 @@ namespace YAT.Domain.Utilities
 		private static int LinesFromTextFile(string filePath, out string[] lines)
 		{
 			var type = typeof(List<XmlTransferTextLine>);
-			var deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+			var deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(type, filePath);
 			var textLines = (deserializedLines as List<XmlTransferTextLine>);
 			if (textLines != null)
 			{

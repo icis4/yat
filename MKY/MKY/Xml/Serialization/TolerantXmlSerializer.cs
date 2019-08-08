@@ -107,7 +107,7 @@ namespace MKY.Xml.Serialization
 		public object Deserialize(XmlReader reader)
 		{
 			// Read input stream.
-			XmlDocument inputDocument = XmlDocumentEx.FromReader(reader);
+			XmlDocument inputDocument = XmlDocumentEx.LoadFromReader(reader);
 
 		#if (WRITE_DOCUMENTS_TO_FILES)
 			WriteDocumentToFile(inputDocument, "InputDocument");
@@ -146,7 +146,7 @@ namespace MKY.Xml.Serialization
 		#endif
 
 			// Create object tree from output document.
-			return (XmlDocumentEx.ToObjectTree(outputDocument, this.type));
+			return (XmlDocumentEx.SaveToObjectTree(outputDocument, this.type));
 		}
 
 		#endregion

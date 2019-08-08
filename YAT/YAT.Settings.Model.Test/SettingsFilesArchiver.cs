@@ -189,7 +189,7 @@ namespace YAT.Settings.Model.Test
 
 		private static void ArchiveDefault(XmlDocument document, string path, string fileName)
 		{
-			XmlDocumentEx.ToFile(document, path, fileName);
+			XmlDocumentEx.SaveToFile(document, path, fileName);
 		}
 
 		#endregion

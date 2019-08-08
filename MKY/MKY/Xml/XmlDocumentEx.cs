@@ -51,8 +51,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Reads XML input stream into a document.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
-		public static XmlDocument FromReader(XmlReader reader)
+		public static XmlDocument LoadFromReader(XmlReader reader)
 		{
 			XmlDocument document = new XmlDocument();
 			document.Load(reader);
@@ -62,8 +61,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Creates and returns an object tree of the given type from a document.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
-		public static object ToObjectTree(XmlDocument document, Type type)
+		public static object SaveToObjectTree(XmlDocument document, Type type)
 		{
 			// Save the resulting document into a string:
 			var sb = new StringBuilder();
@@ -88,7 +86,6 @@ namespace MKY.Xml
 		/// </summary>
 		/// <param name="type">The type to be used.</param>
 		/// <param name="requiredSchema">Schema(s) required in addition to the default schema.</param>
-		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Emphasize type.")]
 		public static XmlDocument CreateDefaultDocument(Type type, params XmlSchema[] requiredSchema)
 		{
 			// Create an empty object tree of the type to be able to serialize it afterwards.
@@ -166,10 +163,9 @@ namespace MKY.Xml
 		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
-		public static void ToFile(XmlDocument document, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
+		public static void SaveToFile(XmlDocument document, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
 		{
-			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, fileNameWithoutExtension, fileExtension);
+			SaveToFile(document, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, fileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>
@@ -181,19 +177,26 @@ namespace MKY.Xml
 		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
-		public static void ToFile(XmlDocument document, Encoding encoding, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
+		public static void SaveToFile(XmlDocument document, Encoding encoding, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
 		{
 			string filePath = path + fileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
 			using (var sw = new StreamWriter(filePath, false, encoding))
 			{
-				var xws = new XmlWriterSettings();
-				xws.Indent = true;
+				SaveToWriter(document, sw);
+			}
+		}
 
-				using (var xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace in XML content!
-				{
-					document.Save(xw);
-				}
+		/// <summary>
+		/// Writes the given XML document to the given output writer.
+		/// </summary>
+		public static void SaveToWriter(XmlDocument document, TextWriter output)
+		{
+			var xws = new XmlWriterSettings();
+			xws.Indent = true;
+
+			using (var xw = XmlWriter.Create(output, xws)) // Use dedicated XML writer to e.g. preserve whitespace in XML content!
+			{
+				document.Save(xw);
 			}
 		}
 	}
