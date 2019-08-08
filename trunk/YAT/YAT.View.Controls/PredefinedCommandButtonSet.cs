@@ -54,7 +54,6 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		private const int SubpageIdDefault = PredefinedCommandPage.FirstSubpageId;
-		private const bool ShowSeparatorLineDefault = false;
 
 		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
 		private const bool TerminalIsReadyToSendDefault = false;
@@ -72,7 +71,6 @@ namespace YAT.View.Controls
 	////private SettingControlsHelper isSettingControls; is not needed (yet).
 
 		private int subpageId = SubpageIdDefault;
-		private bool showSeparatorLine = ShowSeparatorLineDefault;
 		private List<Command> commands; // = null;
 
 		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
@@ -131,20 +129,6 @@ namespace YAT.View.Controls
 			set
 			{
 				this.subpageId = value;
-				SetControls();
-			}
-		}
-
-		/// <summary></summary>
-		[Category("Appearance")]
-		[Description("An optional separator line.")]
-		[DefaultValue(ShowSeparatorLineDefault)]
-		public virtual bool ShowSeparatorLine
-		{
-			get { return (this.showSeparatorLine); }
-			set
-			{
-				this.showSeparatorLine = value;
 				SetControls();
 			}
 		}
@@ -376,9 +360,20 @@ namespace YAT.View.Controls
 		////this.isSettingControls.Enter(); is not needed (yet).
 			try
 			{
-				label_SeparatorLine.Visible = this.showSeparatorLine;
-				label_Shortcuts_1_12.Visible = (this.subpageId == 1);
-			////label_Shortcuts_13_24.Visible = (this.subpageId == 2); makes no sense since Windows doesn't seem to support F13..F24 (any longer).
+				switch (SubpageId)
+				{
+					case 1: label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send | to copy"; break;
+					case 2: label_Hint.Text = "13..24";  break;
+					case 3: label_Hint.Text = "25..36";  break;
+					case 4: label_Hint.Text = "37..48";  break;
+					case 5: label_Hint.Text = "49..60";  break;
+					case 6: label_Hint.Text = "61..72";  break;
+					case 7: label_Hint.Text = "73..84";  break;
+					case 8: label_Hint.Text = "85..96";  break;
+					case 9: label_Hint.Text = "97..108"; break;
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString() + "' is an ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 
 				SetCommandControls();
 			}

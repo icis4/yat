@@ -153,7 +153,6 @@
 			this.buttonSet_3C.Location = new System.Drawing.Point(287, 584);
 			this.buttonSet_3C.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.buttonSet_3C.Name = "buttonSet_3C";
-			this.buttonSet_3C.ShowSeparatorLine = true;
 			this.buttonSet_3C.Size = new System.Drawing.Size(136, 59);
 			this.buttonSet_3C.SubpageId = 9;
 			this.buttonSet_3C.TabIndex = 8;
@@ -166,7 +165,6 @@
 			this.buttonSet_3B.Location = new System.Drawing.Point(145, 584);
 			this.buttonSet_3B.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.buttonSet_3B.Name = "buttonSet_3B";
-			this.buttonSet_3B.ShowSeparatorLine = true;
 			this.buttonSet_3B.Size = new System.Drawing.Size(136, 59);
 			this.buttonSet_3B.SubpageId = 6;
 			this.buttonSet_3B.TabIndex = 5;
@@ -179,7 +177,6 @@
 			this.buttonSet_3A.Location = new System.Drawing.Point(3, 584);
 			this.buttonSet_3A.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.buttonSet_3A.Name = "buttonSet_3A";
-			this.buttonSet_3A.ShowSeparatorLine = true;
 			this.buttonSet_3A.Size = new System.Drawing.Size(136, 59);
 			this.buttonSet_3A.SubpageId = 3;
 			this.buttonSet_3A.TabIndex = 2;
@@ -192,7 +189,6 @@
 			this.buttonSet_2C.Location = new System.Drawing.Point(287, 292);
 			this.buttonSet_2C.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.buttonSet_2C.Name = "buttonSet_2C";
-			this.buttonSet_2C.ShowSeparatorLine = true;
 			this.buttonSet_2C.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_2C.SubpageId = 8;
 			this.buttonSet_2C.TabIndex = 7;
@@ -205,7 +201,6 @@
 			this.buttonSet_2B.Location = new System.Drawing.Point(145, 292);
 			this.buttonSet_2B.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.buttonSet_2B.Name = "buttonSet_2B";
-			this.buttonSet_2B.ShowSeparatorLine = true;
 			this.buttonSet_2B.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_2B.SubpageId = 5;
 			this.buttonSet_2B.TabIndex = 4;
@@ -218,7 +213,6 @@
 			this.buttonSet_2A.Location = new System.Drawing.Point(3, 292);
 			this.buttonSet_2A.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.buttonSet_2A.Name = "buttonSet_2A";
-			this.buttonSet_2A.ShowSeparatorLine = true;
 			this.buttonSet_2A.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_2A.SubpageId = 2;
 			this.buttonSet_2A.TabIndex = 1;

@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -77,8 +78,6 @@ namespace YAT.View.Forms
 		// Fields
 		//==========================================================================================
 
-		private SizeF scale = new SizeF(1.0f, 1.0f);
-
 		private StartupControl startupControl = new StartupControl(1, 1);
 		private SettingControlsHelper isSettingControls; // = false;
 
@@ -95,6 +94,7 @@ namespace YAT.View.Forms
 	////private Point subpageCheckBoxLocationBottomRight; is not needed.
 		private List<Label> predefinedCommandSettingsSetLabels;                            // = null;
 		private List<Controls.PredefinedCommandSettingsSet> predefinedCommandSettingsSets; // = null;
+		private int dataLabelLeft;
 
 		#endregion
 
@@ -154,21 +154,6 @@ namespace YAT.View.Forms
 		public int SelectedPageId
 		{
 			get { return (this.selectedPageId); }
-		}
-
-		#endregion
-
-		#region Form Scaling
-		//==========================================================================================
-		// Form Special Keys
-		//==========================================================================================
-
-		/// <summary></summary>
-		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
-		{
-			this.scale = new SizeF(this.scale.Width * factor.Width, this.scale.Height * factor.Height);
-
-			base.ScaleControl(factor, specified);
 		}
 
 		#endregion
@@ -396,7 +381,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			UpdateCommandFromSettingsSet(ControlEx.TagToInt32(sender));
+			UpdateCommandFromSettingsSetId(ControlEx.TagToInt32(sender));
 			SetPagesControls(); // Needed since some 'Export...' options depend on command availability.
 			SetClearControls();
 		}
@@ -983,14 +968,12 @@ namespace YAT.View.Forms
 			if (!useExplicitDefaultRadix)
 			{
 				label_ExplicitDefaultRadix.Visible = false;
-				label_File.Left = (int)((this.scale.Width *   3) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-				label_Data.Left = (int)((this.scale.Width *  52) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				label_Data.Left = label_ExplicitDefaultRadix.Left;
 			}
 			else
 			{
 				label_ExplicitDefaultRadix.Visible = true;
-				label_File.Left = (int)((this.scale.Width *  85) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
-				label_Data.Left = (int)((this.scale.Width * 133) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+			////label_Data.Left is kept at the designed location.
 			}
 
 			this.predefinedCommandSettingsSetLabels = new List<Label>(PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
@@ -1048,7 +1031,7 @@ namespace YAT.View.Forms
 				comboBox_Layout.SelectedItem = pageLayoutEx;
 
 				switch (pageLayout)
-				{                                                            // \remind (2019-08-05 / MKY):
+				{                                                // \remind (2019-08-05 / MKY):
 					case PredefinedCommandPageLayout.TwoByOne:   // Could be calculated initially.
 					case PredefinedCommandPageLayout.ThreeByOne: location = new Point(101, 16); break;
 					case PredefinedCommandPageLayout.OneByTwo:   location = new Point(165, 31); break;
@@ -1056,7 +1039,7 @@ namespace YAT.View.Forms
 					case PredefinedCommandPageLayout.TwoByTwo:   location = new Point(165, 16); break;
 					case PredefinedCommandPageLayout.TwoByThree: location = new Point(135, 16); break;
 					case PredefinedCommandPageLayout.ThreeByTwo: location = new Point( 69, 16); break;
-					default:                                                 location = new Point( 38, 16); break;
+					default:                                     location = new Point( 38, 16); break;
 				}
 
 				label_SubpageSelection.Location = location;
@@ -1251,6 +1234,11 @@ namespace YAT.View.Forms
 							this.predefinedCommandSettingsSets[i].Command = new Command(commands[commandIndex]); // Clone command to ensure decoupling.
 						else
 							this.predefinedCommandSettingsSets[i].Command = null;
+
+						int commandId = (commandIndex + 1);
+						string commandIdValue = commandId.ToString(CultureInfo.CurrentUICulture);
+						string commandIdText = commandIdValue.Insert((commandIdValue.Length - 1), "&") + ":";
+						this.predefinedCommandSettingsSetLabels[i].Text = commandIdText;
 					}
 				}
 				else
@@ -1481,7 +1469,6 @@ namespace YAT.View.Forms
 				if (p != null)
 				{
 					var i = (id - 1);
-					i += SelectedSubpageCommandIndexOffset;
 					if (i < p.Commands.Count)
 						return (p.Commands[i]);
 				}
@@ -1522,7 +1509,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <param name="setId">Set 1..<see cref="PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>
-		protected virtual void UpdateCommandFromSettingsSet(int setId)
+		protected virtual void UpdateCommandFromSettingsSetId(int setId)
 		{
 			if (this.settingsInEdit.Pages != null)
 			{

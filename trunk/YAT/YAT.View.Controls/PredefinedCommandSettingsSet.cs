@@ -242,16 +242,6 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
-		[Category("Appearance")]
-		[Description("The command shortcut.")]
-		[DefaultValue(ShortcutStringDefault)]
-		public virtual string ShortcutString
-		{
-			get { return (label_Shortcut.Text); }
-			set { label_Shortcut.Text = value; }
-		}
-
 		/// <remarks>Dedicated function for symmetricity with <see cref="SendText"/>.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void SetEditFocusState(EditFocusState state)
@@ -270,10 +260,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Required to be called "from the outside" because...
 		/// ...if called in the constructor of the control, SetControls() has not yet been called.
-		/// ...if called in the 'Paint' handler of the control, the last terminal in the application
-		///    gets selected.    (due to the fact that an application  ^ ^ only has one focus)
-		/// ...if called in the 'Enter' handler of the control, the (front) input gets selected even
-		///    when focus enters "from the back".
+		/// ...if called in the 'Enter' handler of the control, it doesn't work ?!?
 		/// </remarks>
 		public virtual void PrepareUserInput()
 		{
@@ -284,7 +271,7 @@ namespace YAT.View.Controls
 				{
 					button_SetFile.Select();
 				}
-				else // incl. IsText
+				else  // command.IsText:
 				{
 					textBox_SingleLineText.Select();
 					textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
@@ -334,12 +321,18 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <remarks>
-		/// Do not modify <see cref="isValidated"/>. Command may already have been validated.
-		/// </remarks>
 		private void PredefinedCommandSettingsSet_Enter(object sender, EventArgs e)
 		{
+			// Reset the focus state each time the control is entered.
+			// In case the text field initially gets the focus, that event will set the state.
+			// In case [Default Radix] initially gets the focus, the state will remain inactive.
 			SetEditFocusState(EditFocusState.EditIsInactive);
+
+			// \remind (2019-08-08 / MKY)
+			// There is a not-so-nice behavior in case [Default Radix] is active:
+			//  > Upon entering the dialog, the text field gets selected, OK.
+			//  > When using a Alt+<0..9> shortcut, the [Default Radix] get selected.
+			// No solution found, but considered acceptable since most won't use [Default Radix].
 		}
 
 		#endregion
@@ -573,7 +566,9 @@ namespace YAT.View.Controls
 
 		private void button_Clear_Click(object sender, EventArgs e)
 		{
-			ClearCommand();
+			checkBox_IsFile.Select(); // Move cursor to a "safe" location as the clear button will
+			                          // get disabled, which would lead the cursor being moved into
+			ClearCommand();           // the text field, thus immediately creating a command again!
 		}
 
 		#endregion
@@ -636,7 +631,8 @@ namespace YAT.View.Controls
 
 				if (this.useExplicitDefaultRadix)
 				{
-					bool explicitDefaultRadixIsTakenIntoAccount = false;
+					bool explicitDefaultRadixIsTakenIntoAccount = true;
+
 					if ((this.command != null) && (this.command.IsFilePath))
 					{
 						if (this.terminalType == Domain.TerminalType.Text)
@@ -656,6 +652,7 @@ namespace YAT.View.Controls
 					}
 
 					comboBox_ExplicitDefaultRadix.Enabled = explicitDefaultRadixIsTakenIntoAccount;
+					comboBox_ExplicitDefaultRadix.TabStop = explicitDefaultRadixIsTakenIntoAccount;
 
 					Domain.RadixEx resultingDefaultRadix = this.command.DefaultRadix;
 					ComboBoxHelper.Select(comboBox_ExplicitDefaultRadix, resultingDefaultRadix, resultingDefaultRadix);
