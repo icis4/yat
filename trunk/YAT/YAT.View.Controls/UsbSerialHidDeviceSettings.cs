@@ -75,6 +75,9 @@ namespace YAT.View.Controls
 		private MKY.IO.Serial.Usb.SerialHidFlowControl flowControl = FlowControlDefault;
 		private bool autoOpen                                      = AutoOpenDefault;
 
+		private int lineLabelTopDefault;
+		private int lineLabelTopShifted;
+
 		#endregion
 
 		#region Events
@@ -481,6 +484,9 @@ namespace YAT.View.Controls
 			{
 				comboBox_Preset     .Items.AddRange(MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.GetItems());
 				comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.Usb.SerialHidFlowControlEx.GetItems());
+
+				this.lineLabelTopDefault = label_Line.Top;
+				this.lineLabelTopShifted = (comboBox_Preset.Bottom + ((comboBox_FlowControl.Top - comboBox_Preset.Bottom) / 2));
 			}
 			finally
 			{
@@ -562,10 +568,14 @@ namespace YAT.View.Controls
 					linkLabel_Info.Text = linkText;
 					linkLabel_Info.Links.Add(0, linkText.Length, linkUri);
 					linkLabel_Info.Visible = true;
+
+					label_Line.Top = this.lineLabelTopDefault;
 				}
 				else
 				{
 					linkLabel_Info.Visible = false;
+
+					label_Line.Top = this.lineLabelTopShifted; // Shift to middle of gap.
 				}
 
 				if (Enabled)

@@ -212,7 +212,7 @@
 			this.label_Line.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.label_Line.Location = new System.Drawing.Point(3, 208);
 			this.label_Line.Name = "label_Line";
-			this.label_Line.Size = new System.Drawing.Size(254, 2);
+			this.label_Line.Size = new System.Drawing.Size(255, 1);
 			this.label_Line.TabIndex = 19;
 			// 
 			// label_Preset
