@@ -123,7 +123,7 @@ namespace YAT.Model.Settings
 				}
 
 				// Create GUID from file path:
-				if (PathEx.IsDefined(this.filePath) && (this.guid == Guid.Empty))
+				if (!string.IsNullOrEmpty(this.filePath) && (this.guid == Guid.Empty))
 				{
 					Guid guid;
 					if (GuidEx.TryParseTolerantly(Path.GetFileNameWithoutExtension(this.filePath), out guid))
@@ -187,7 +187,7 @@ namespace YAT.Model.Settings
 		{
 			get
 			{
-				return (PathEx.IsDefined(this.filePath) && (this.guid != Guid.Empty));
+				return (!string.IsNullOrEmpty(this.filePath) && (this.guid != Guid.Empty));
 			}
 		}
 
