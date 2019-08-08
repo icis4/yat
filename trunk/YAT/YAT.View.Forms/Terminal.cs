@@ -49,6 +49,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -2379,7 +2380,7 @@ namespace YAT.View.Forms
 
 			toolStripMenuItem_PredefinedContextMenu_Cut  .Enabled = cIsDefined;
 			toolStripMenuItem_PredefinedContextMenu_Copy .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
+			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) && (CommandClipboardHelper.TextIsAvailable));
 			toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
 
 			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
@@ -2628,7 +2629,26 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Cut_Click()
 			// Changes here may have to be applied there too.
 
-			// PENDING CutToClipboard();
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
+			{
+				SetFixedStatusText("Preparing cutting...");
+				Cursor = Cursors.WaitCursor;
+				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
+				SetFixedStatusText("Cutting selected command to clipboard...");
+				if (CommandClipboardHelper.TrySet(sc))
+				{
+					this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
+
+					Cursor = Cursors.Default;
+					SetTimedStatusText("Cutting done");
+				}
+				else
+				{
+					Cursor = Cursors.Default;
+					SetFixedStatusText("Cutting failed!");
+				}
+			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Copy_Click(object sender, EventArgs e)
@@ -2638,7 +2658,24 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Copy_Click()
 			// Changes here may have to be applied there too.
 
-			// PENDING CopyToClipboard();
+			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
+			if (sc != null)
+			{
+				SetFixedStatusText("Preparing copying...");
+				Cursor = Cursors.WaitCursor;
+				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
+				SetFixedStatusText("Copying selected command to clipboard...");
+				if (CommandClipboardHelper.TrySet(sc))
+				{
+					Cursor = Cursors.Default;
+					SetTimedStatusText("Copying done");
+				}
+				else
+				{
+					Cursor = Cursors.Default;
+					SetFixedStatusText("Copying failed!");
+				}
+			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Paste_Click(object sender, EventArgs e)
@@ -2648,7 +2685,9 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_Paste_Click()
 			// Changes here may have to be applied there too.
 
-			// PENDING PasteFromClipboard();
+			Command cc;
+			if (CommandClipboardHelper.TryGet(out cc))
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, cc);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Clear_Click(object sender, EventArgs e)
@@ -2684,7 +2723,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsHelper.ExportToFile(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
+			CommandPagesSettingsHelper.TryExportToFile(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -2698,7 +2737,7 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			if (CommandPagesSettingsHelper.TryImportFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
@@ -4955,23 +4994,20 @@ namespace YAT.View.Forms
 			monitor.SelectNone();
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void CopyMonitorToClipboard(Controls.Monitor monitor)
 		{
 			try
 			{
 				SetFixedStatusText("Preparing copying...");
 				Cursor = Cursors.WaitCursor;
-
 				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
 				SetFixedStatusText("Copying selected lines to clipboard...");
-				Utilities.RtfWriterHelper.CopyLinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
-
+				RtfWriterHelper.CopyLinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
 				Cursor = Cursors.Default;
 				SetTimedStatusText("Copying done");
 			}
-			catch
-			{
+			catch (ExternalException) // The clipboard could not be cleared. This typically
+			{                         // occurs when it is being used by another process.
 				Cursor = Cursors.Default;
 				SetFixedStatusText("Copying failed!");
 			}
@@ -5029,11 +5065,11 @@ namespace YAT.View.Forms
 				}
 				else if (ExtensionHelper.IsRtfFile(filePath))
 				{
-					savedCount = Utilities.RtfWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = RtfWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				}
 				else
 				{
-					savedCount = Utilities.TextWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = TextWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				}
 
 				if (savedCount == requestedCount)
@@ -5159,7 +5195,7 @@ namespace YAT.View.Forms
 		private void SetPageLayout(PredefinedCommandPageLayout layout)
 		{
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.Change(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
+			if (CommandPagesSettingsHelper.TryChange(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
