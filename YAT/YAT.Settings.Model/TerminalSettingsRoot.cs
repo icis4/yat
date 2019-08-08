@@ -33,8 +33,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Time;
 
-using YAT.Application.Utilities;
 using YAT.Model.Types;
 
 #endregion
@@ -91,12 +91,12 @@ namespace YAT.Settings.Model
 		// Properties
 		//==========================================================================================
 
-		/// <remarks>File type is a kind of title, therefore capital 'T' and 'S'.</remarks>
-		[XmlElement("FileType")]
-		public virtual string FileType
+		/// <remarks>Settings name is kind of a title, therefore capital 'T' and 'S'.</remarks>
+		[XmlElement("SettingsName")]
+		public virtual string SettingsName
 		{
-			get { return (ApplicationEx.ProductName + " Terminal Settings"); } // File identification shall differ for "YAT" and "YATConsole".
-			set { } // Do nothing.
+			get { return (ApplicationEx.CommonName + " Terminal Settings"); } // Name shall *not* differ for "YAT" and "YATConsole"
+			set { } // Do nothing.                                            // in order to allow exchanging settings.
 		}
 
 		/// <summary></summary>
@@ -124,10 +124,10 @@ namespace YAT.Settings.Model
 		}
 
 		/// <summary></summary>
-		[XmlElement("Saved")]
-		public virtual SaveInfo Saved
+		[XmlElement("Mark")]
+		public virtual UserTimeStamp Mark
 		{
-			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
+			get { return (new UserTimeStamp(DateTime.Now, Environment.UserName)); }
 			set { } // Do nothing.
 		}
 
@@ -689,6 +689,8 @@ namespace YAT.Settings.Model
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
 		{                                                // XML path:                                                                                    local name of XML element:                                               alternate local name(s), i.e. former name(s) of XML element:
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, "SettingsName",                                           new string[] { "FileType" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                                                                   }, "Mark",                                                   new string[] { "Saved" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, "Endianness",                                             new string[] { "Endianess" } ),
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, new string[] { "SerialPort", "IndicateBreakStates" },     new string[] { "IndicateSerialPortBreakStates" } ),          => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, new string[] { "SerialPort", "OutputBreakIsModifiable" }, new string[] { "SerialPortOutputBreakIsModifiable" } ),      => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */

@@ -31,8 +31,8 @@ using System;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Time;
 
-using YAT.Application.Utilities;
 using YAT.Model.Settings;
 
 #endregion
@@ -78,12 +78,12 @@ namespace YAT.Settings.Model
 		// Properties
 		//==========================================================================================
 
-		/// <remarks>File type is a kind of title, therefore capital 'C', 'P' and 'D'.</remarks>
-		[XmlElement("FileType")]
-		public virtual string FileType
+		/// <remarks>Settings name is kind of a title, therefore capital 'C', 'P' and 'D'.</remarks>
+		[XmlElement("SettingsName")]
+		public virtual string SettingsName
 		{
-			get { return (ApplicationEx.ProductName + " Command Pages Definition"); } // File identification shall differ for "YAT" and "YATConsole".
-			set { } // Do nothing.
+			get { return (ApplicationEx.CommonName + " Command Pages Definition"); } // Name shall *not* differ for "YAT" and "YATConsole"
+			set { } // Do nothing.                                                   // in order to allow exchanging settings.
 		}
 
 		/// <summary></summary>
@@ -111,10 +111,10 @@ namespace YAT.Settings.Model
 		}
 
 		/// <summary></summary>
-		[XmlElement("Saved")]
-		public virtual SaveInfo Saved
+		[XmlElement("Mark")]
+		public virtual UserTimeStamp Mark
 		{
-			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
+			get { return (new UserTimeStamp(DateTime.Now, Environment.UserName)); }
 			set { } // Do nothing.
 		}
 

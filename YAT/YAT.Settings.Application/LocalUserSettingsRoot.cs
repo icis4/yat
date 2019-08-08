@@ -33,9 +33,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Time;
 
 using YAT.Application.Settings;
-using YAT.Application.Utilities;
 
 #endregion
 
@@ -98,12 +98,12 @@ namespace YAT.Settings.Application
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		[XmlElement("FileType")]
-		public virtual string FileType
+		/// <remarks>Settings name is kind of a title, therefore capital 'L', 'U' and 'S'.</remarks>
+		[XmlElement("SettingsName")]
+		public virtual string SettingsName
 		{
-			get { return (ApplicationEx.ProductName + " Local User Settings"); } // File identification shall differ for "YAT" and "YATConsole".
-			set { } // Do nothing.
+			get { return (ApplicationEx.ProductName + " Local User Settings"); } // Name shall differ for "YAT" and "YATConsole"
+			set { } // Do nothing.                                               // in order to get separate user settings.
 		}
 
 		/// <summary></summary>
@@ -131,10 +131,10 @@ namespace YAT.Settings.Application
 		}
 
 		/// <summary></summary>
-		[XmlElement("Saved")]
-		public virtual SaveInfo Saved
+		[XmlElement("Mark")]
+		public virtual UserTimeStamp Mark
 		{
-			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
+			get { return (new UserTimeStamp(DateTime.Now, Environment.UserName)); }
 			set { } // Do nothing.
 		}
 
@@ -252,8 +252,10 @@ namespace YAT.Settings.Application
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
-		{                                                // XML path:                  local name of XML element:           alternate local name(s), i.e. former name(s) of XML element:
+		{                                                // XML path:                                 local name of XML element:            alternate local name(s), i.e. former name(s) of XML element:
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document"                            }, "Settings",            new string[] { "LocalUserSettings" } ), // Accidentally named the root explicitly until and including YAT 2.0.0 Final.
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                }, "SettingsName",        new string[] { "FileType" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings"                }, "Mark",                new string[] { "Saved" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFiles",           new string[] { "TerminalFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFilesPath",       new string[] { "WorkspaceFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "SendFiles",           new string[] { "SendFilesPath" } ),
