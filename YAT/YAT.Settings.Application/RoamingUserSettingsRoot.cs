@@ -41,9 +41,10 @@ using YAT.Application.Utilities;
 
 namespace YAT.Settings.Application
 {
-	/// <remarks>Root name is relevant for potential future 'AlternateXmlElements'.</remarks>
+	/// <remarks>Root name is relevant for <see cref="AlternateXmlElements"/>.</remarks>
+	/// <remarks>An explicit name makes little sense as this is the very root of the XML.</remarks>
 	[XmlRoot("Settings")]
-	public class RoamingUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<RoamingUserSettingsRoot>
+	public class RoamingUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<RoamingUserSettingsRoot>, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.2.0";
@@ -197,6 +198,29 @@ namespace YAT.Settings.Application
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
 			}
+		}
+
+		#endregion
+
+		#region Alternate Elements
+		//==========================================================================================
+		// Alternate Elements
+		//==========================================================================================
+
+		/// <summary>
+		/// Alternate XML elements for backward compatibility with old settings.
+		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
+		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
+		{                                                // XML path: local name of XML element: alternate local name(s), i.e. former name(s) of XML element:
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document"            }, "Settings", new string[] { "RoamingUserSettings" } ), // Accidentally named the root explicitly until and including YAT 2.0.0 Final.
+		};
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual IEnumerable<MKY.Xml.AlternateXmlElement> AlternateXmlElements
+		{
+			get { return (StaticAlternateXmlElements); }
 		}
 
 		#endregion
