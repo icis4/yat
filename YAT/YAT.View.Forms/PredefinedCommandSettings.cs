@@ -94,7 +94,6 @@ namespace YAT.View.Forms
 	////private Point subpageCheckBoxLocationBottomRight; is not needed.
 		private List<Label> predefinedCommandSettingsSetLabels;                            // = null;
 		private List<Controls.PredefinedCommandSettingsSet> predefinedCommandSettingsSets; // = null;
-		private int dataLabelLeft;
 
 		#endregion
 
@@ -246,7 +245,7 @@ namespace YAT.View.Forms
 				return;
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.Change(this, this.settingsInEdit, (PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.TryChange(this, this.settingsInEdit, (PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
 			{
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
@@ -283,13 +282,18 @@ namespace YAT.View.Forms
 
 		private void button_InsertPageFromClipboard_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandClipboardHelper.TryInsert(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
+			{
+				this.settingsInEdit = settingsInEditNew;
+				SetControls();
+			}
 		}
 
 		private void button_InsertPagesFromFile_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFileAndInsert(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.TryImportFromFileAndInsert(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
 			{
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
@@ -303,13 +307,18 @@ namespace YAT.View.Forms
 
 		private void button_AddPagesFromClipboard_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandClipboardHelper.TryAdd(this, this.settingsInEdit, out settingsInEditNew))
+			{
+				this.settingsInEdit = settingsInEditNew;
+				SetControls();
+			}
 		}
 
 		private void button_AddPagesFromFile_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFileAndAdd(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.TryImportFromFileAndAdd(this, this.settingsInEdit, out settingsInEditNew))
 			{
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
@@ -323,12 +332,13 @@ namespace YAT.View.Forms
 
 		private void button_CopyPageToClipboard_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
+			CommandClipboardHelper.TrySet(this.settingsInEdit, this.selectedPageId);
 		}
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsHelper.ExportSelectedPageToFile(this, this.settingsInEdit, this.selectedPageId, this.indicatedName);
+			CommandPagesSettingsHelper.TryExportSelectedPageToFile(this, this.settingsInEdit, this.selectedPageId, this.indicatedName);
 		}
 
 		private void button_DeletePage_Click(object sender, EventArgs e)
@@ -338,7 +348,9 @@ namespace YAT.View.Forms
 
 		private void button_CutPageToClipboard_Click(object sender, EventArgs e)
 		{
-			// PENDING
+			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
+			if (CommandClipboardHelper.TrySet(this.settingsInEdit, this.selectedPageId))
+				DeletePage();
 		}
 
 		private void button_MovePageUp_Click(object sender, EventArgs e)
@@ -358,7 +370,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsHelper.ExportAllPagesToFile(this, this.settingsInEdit, this.indicatedName);
+			CommandPagesSettingsHelper.TryExportAllPagesToFile(this, this.settingsInEdit, this.indicatedName);
 		}
 
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
@@ -369,7 +381,7 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsHelper.ImportFromFile(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsHelper.TryImportFromFile(this, this.settingsInEdit, out settingsInEditNew))
 			{
 				this.settingsInEdit = settingsInEditNew;
 				SetControls();
@@ -680,10 +692,10 @@ namespace YAT.View.Forms
 			toolStripMenuItem_CommandContextMenu_DownBy_Separator_96.Visible = (cIsDefined && (np > 96));
 			toolStripMenuItem_CommandContextMenu_DownBy_96.Visible =           (cIsDefined && (np > 96));
 
-			toolStripMenuItem_CommandContextMenu_Cut   .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-			toolStripMenuItem_CommandContextMenu_Copy  .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
-			toolStripMenuItem_CommandContextMenu_Paste .Enabled = ((id != 0) /* && (PENDING ClipboardContainsCommand)*/);
-			toolStripMenuItem_CommandContextMenu_Clear .Enabled = ((id != 0) && (c != null) && (c.IsDefined));
+			toolStripMenuItem_CommandContextMenu_Cut   .Enabled = cIsDefined;
+			toolStripMenuItem_CommandContextMenu_Copy  .Enabled = cIsDefined;
+			toolStripMenuItem_CommandContextMenu_Paste .Enabled = ((id != 0) && (CommandClipboardHelper.TextIsAvailable));
+			toolStripMenuItem_CommandContextMenu_Clear .Enabled = cIsDefined;
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_CopyTo_I_Click(object sender, EventArgs e)
@@ -878,7 +890,18 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Cut_Click()
 			// Changes here may have to be applied there too.
 
-			// PENDING CutToClipboard();
+			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
+			if (sc != null)
+			{
+				Cursor = Cursors.WaitCursor;
+				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
+				if (CommandClipboardHelper.TrySet(sc))
+				{
+					this.settingsInEdit.ClearCommand(SelectedPageIndex, (contextMenuStrip_Commands_SelectedCommandId - 1));
+					SetControls();
+				}
+				Cursor = Cursors.Default;
+			}
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_Copy_Click(object sender, EventArgs e)
@@ -888,7 +911,14 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Copy_Click()
 			// Changes here may have to be applied there too.
 
-			// PENDING CopyToClipboard();
+			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
+			if (sc != null)
+			{
+				Cursor = Cursors.WaitCursor;
+				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
+				CommandClipboardHelper.TrySet(sc);
+				Cursor = Cursors.Default;
+			}
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_Paste_Click(object sender, EventArgs e)
@@ -898,7 +928,12 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Paste_Click()
 			// Changes here may have to be applied there too.
 
-			// PENDING PasteFromClipboard();
+			Command cc;
+			if (CommandClipboardHelper.TryGet(out cc))
+			{
+				this.settingsInEdit.SetCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId - 1, cc);
+				SetControls();
+			}
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_Clear_Click(object sender, EventArgs e)

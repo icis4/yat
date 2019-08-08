@@ -61,7 +61,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
+		public static bool TryExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
 		{
 			var pageCount = commandPages.Pages.Count;
 			if (pageCount > 1)
@@ -79,39 +79,39 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (ExportAllPagesToFile(    owner, commandPages,                 indicatedName));
-					case DialogResult.No:  return (ExportSelectedPageToFile(owner, commandPages, selectedPageId, indicatedName));
+					case DialogResult.Yes: return (TryExportAllPagesToFile(    owner, commandPages,                 indicatedName));
+					case DialogResult.No:  return (TryExportSelectedPageToFile(owner, commandPages, selectedPageId, indicatedName));
 					default:               return (false);
 				}
 			}
 			else // Just a single page => save without asking:
 			{
-				return (ExportToFile(owner, commandPages, false, indicatedName));
+				return (TryExportToFile(owner, commandPages, false, indicatedName));
 			}
 		}
 
 		/// <summary>
 		/// Prompts the user to export the given page to a .yapcs file.
 		/// </summary>
-		public static bool ExportAllPagesToFile(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
+		public static bool TryExportAllPagesToFile(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
 		{
-			return (ExportToFile(owner, commandPages, false, indicatedName));
+			return (TryExportToFile(owner, commandPages, false, indicatedName));
 		}
 
 		/// <summary>
 		/// Prompts the user to export the given page to a .yapc file.
 		/// </summary>
-		public static bool ExportSelectedPageToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
+		public static bool TryExportSelectedPageToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
 		{
 			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
 			p.Pages.Clear();
 			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
 
-			return (ExportToFile(owner, p, true, indicatedName));
+			return (TryExportToFile(owner, p, true, indicatedName));
 		}
 
 		/// <summary></summary>
-		private static bool ExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, bool isSelected, string indicatedName)
+		private static bool TryExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, bool isSelected, string indicatedName)
 		{
 			var sfd = new SaveFileDialog();
 			if ((commandPages.Pages.Count == 1) && isSelected)
@@ -143,7 +143,7 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (SaveToFile(commandPages, sfd.FileName, out ex))
+				if (TrySaveToFile(commandPages, sfd.FileName, out ex))
 					return (true);
 
 				string errorMessage;
@@ -165,7 +165,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool SaveToFile(PredefinedCommandSettings commandPages, string filePath, out Exception exception)
+		private static bool TrySaveToFile(PredefinedCommandSettings commandPages, string filePath, out Exception exception)
 		{
 			try
 			{
@@ -199,7 +199,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ShowFileOpenDialogAndLoadFromFile(IWin32Window owner, out PredefinedCommandSettings commandPages)
+		public static bool ShowFileOpenDialogAndTryLoadFromFile(IWin32Window owner, out PredefinedCommandSettings commandPages)
 		{
 			var ofd = new OpenFileDialog();
 			ofd.Title       = "Open Command Page(s)";
@@ -215,7 +215,7 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (LoadFromFile(ofd.FileName, out commandPages, out ex))
+				if (TryLoadFromFile(ofd.FileName, out commandPages, out ex))
 				{
 					if (commandPages.Pages.Count >= 1)
 					{
@@ -268,7 +268,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool LoadFromFile(string filePath, out PredefinedCommandSettings commandPages, out Exception exception)
+		private static bool TryLoadFromFile(string filePath, out PredefinedCommandSettings commandPages, out Exception exception)
 		{
 			try
 			{
@@ -317,10 +317,10 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		public static bool TryImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			if (ShowFileOpenDialogAndTryLoadFromFile(owner, out imported))
 			{
 				var message = new StringBuilder();
 				message.Append("File contains ");
@@ -344,13 +344,13 @@ namespace YAT.View.Utilities
 				{
 					case DialogResult.Yes:
 					{
-						Import(owner, commandPagesOld.PageLayout, imported, out commandPagesNew);
+						TryImport(owner, commandPagesOld.PageLayout, imported, out commandPagesNew);
 						return (true);
 					}
 
 					case DialogResult.No:
 					{                                                                  // Specifying 'NoPageId' will add (not insert).
-						AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew);
+						TryAddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew);
 						break;
 					}
 
@@ -366,13 +366,13 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
+		public static bool TryImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			if (ShowFileOpenDialogAndTryLoadFromFile(owner, out imported))
 			{
 				                                   // Specifying the 'selectedPageId' will insert (instead of add).
-				return (AddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
+				return (TryAddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
 			}
 
 			commandPagesNew = null;
@@ -380,13 +380,13 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		public static bool TryImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndLoadFromFile(owner, out imported))
+			if (ShowFileOpenDialogAndTryLoadFromFile(owner, out imported))
 			{
 				                                                                       // Specifying 'NoPageId' will add (not insert).
-				return (AddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew));
+				return (TryAddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew));
 			}
 
 			commandPagesNew = null;
@@ -394,7 +394,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool Import(IWin32Window owner, PredefinedCommandPageLayout pageLayoutOld, PredefinedCommandSettings imported, out PredefinedCommandSettings commandPagesNew)
+		private static bool TryImport(IWin32Window owner, PredefinedCommandPageLayout pageLayoutOld, PredefinedCommandSettings imported, out PredefinedCommandSettings commandPagesNew)
 		{
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
@@ -409,7 +409,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool AddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandSettings imported, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
+		private static bool TryAddOrInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandSettings imported, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
 		{
 			// Attention:
 			// Similar code exists in Change() further below.
@@ -570,7 +570,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool Change(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandPageLayout pageLayoutRequested, out PredefinedCommandSettings commandPagesNew)
+		public static bool TryChange(IWin32Window owner, PredefinedCommandSettings commandPagesOld, PredefinedCommandPageLayout pageLayoutRequested, out PredefinedCommandSettings commandPagesNew)
 		{
 			// Attention:
 			// Similar code exists in AddOrInsert() further above.
