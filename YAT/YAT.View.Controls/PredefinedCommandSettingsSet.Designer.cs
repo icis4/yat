@@ -33,7 +33,6 @@
 			this.pathLabel_FilePath = new MKY.Windows.Forms.PathLabel();
 			this.checkBox_IsFile = new System.Windows.Forms.CheckBox();
 			this.button_SetMultiLineText = new System.Windows.Forms.Button();
-			this.label_Shortcut = new System.Windows.Forms.Label();
 			this.textBox_Description = new MKY.Windows.Forms.TextBoxEx();
 			this.textBox_SingleLineText = new MKY.Windows.Forms.TextBoxEx();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -52,74 +51,58 @@
 			// 
 			// pathLabel_FilePath
 			// 
-			this.pathLabel_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.pathLabel_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_FilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_FilePath.Location = new System.Drawing.Point(24, 1);
+			this.pathLabel_FilePath.Location = new System.Drawing.Point(0, 1);
 			this.pathLabel_FilePath.Name = "pathLabel_FilePath";
-			this.pathLabel_FilePath.Size = new System.Drawing.Size(229, 20);
-			this.pathLabel_FilePath.TabIndex = 2;
+			this.pathLabel_FilePath.Size = new System.Drawing.Size(232, 20);
+			this.pathLabel_FilePath.TabIndex = 1;
 			this.pathLabel_FilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolTip.SetToolTip(this.pathLabel_FilePath, "File path, use [...] to browse for a file");
 			this.pathLabel_FilePath.Click += new System.EventHandler(this.pathLabel_FilePath_Click);
 			// 
 			// checkBox_IsFile
 			// 
-			this.checkBox_IsFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox_IsFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBox_IsFile.AutoSize = true;
-			this.checkBox_IsFile.Location = new System.Drawing.Point(3, 3);
+			this.checkBox_IsFile.Location = new System.Drawing.Point(269, 4);
 			this.checkBox_IsFile.Name = "checkBox_IsFile";
 			this.checkBox_IsFile.Size = new System.Drawing.Size(15, 14);
-			this.checkBox_IsFile.TabIndex = 0;
+			this.checkBox_IsFile.TabIndex = 4;
 			this.toolTip.SetToolTip(this.checkBox_IsFile, "Tick to set file, untick to set text");
 			this.checkBox_IsFile.CheckedChanged += new System.EventHandler(this.checkBox_IsFile_CheckedChanged);
 			// 
 			// button_SetMultiLineText
 			// 
-			this.button_SetMultiLineText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SetMultiLineText.Location = new System.Drawing.Point(259, 0);
+			this.button_SetMultiLineText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_SetMultiLineText.Location = new System.Drawing.Point(238, 0);
 			this.button_SetMultiLineText.Name = "button_SetMultiLineText";
 			this.button_SetMultiLineText.Size = new System.Drawing.Size(25, 21);
-			this.button_SetMultiLineText.TabIndex = 3;
+			this.button_SetMultiLineText.TabIndex = 2;
 			this.button_SetMultiLineText.Text = "...";
 			this.toolTip.SetToolTip(this.button_SetMultiLineText, "Enter multi-line text.\r\n\r\nLines will be sent sequentially,\r\nby default, the EOL s" +
         "equence\r\nwill be appended to each line.");
 			this.button_SetMultiLineText.Click += new System.EventHandler(this.button_SetMultiLineText_Click);
 			// 
-			// label_Shortcut
-			// 
-			this.label_Shortcut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_Shortcut.Location = new System.Drawing.Point(416, 0);
-			this.label_Shortcut.Name = "label_Shortcut";
-			this.label_Shortcut.Size = new System.Drawing.Size(55, 21);
-			this.label_Shortcut.TabIndex = 6;
-			this.label_Shortcut.Text = "Shift+F1";
-			this.label_Shortcut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// textBox_Description
 			// 
-			this.textBox_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_Description.Location = new System.Drawing.Point(290, 1);
+			this.textBox_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_Description.Location = new System.Drawing.Point(289, 1);
 			this.textBox_Description.Name = "textBox_Description";
-			this.textBox_Description.Size = new System.Drawing.Size(120, 20);
+			this.textBox_Description.Size = new System.Drawing.Size(181, 20);
 			this.textBox_Description.TabIndex = 5;
 			this.toolTip.SetToolTip(this.textBox_Description, "Command description");
 			this.textBox_Description.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Description_Validating);
 			// 
 			// textBox_SingleLineText
 			// 
-			this.textBox_SingleLineText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.textBox_SingleLineText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_SingleLineText.Location = new System.Drawing.Point(24, 1);
+			this.textBox_SingleLineText.Location = new System.Drawing.Point(0, 1);
 			this.textBox_SingleLineText.Name = "textBox_SingleLineText";
-			this.textBox_SingleLineText.Size = new System.Drawing.Size(229, 20);
-			this.textBox_SingleLineText.TabIndex = 1;
+			this.textBox_SingleLineText.Size = new System.Drawing.Size(232, 20);
+			this.textBox_SingleLineText.TabIndex = 0;
 			this.toolTip.SetToolTip(this.textBox_SingleLineText, "Enter text, use [...] to enter multi-line text");
 			this.textBox_SingleLineText.TextChanged += new System.EventHandler(this.textBox_SingleLineText_TextChanged);
 			this.textBox_SingleLineText.Enter += new System.EventHandler(this.textBox_SingleLineText_Enter);
@@ -129,23 +112,22 @@
 			// button_SetFile
 			// 
 			this.button_SetFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SetFile.Location = new System.Drawing.Point(259, 0);
+			this.button_SetFile.Location = new System.Drawing.Point(238, 0);
 			this.button_SetFile.Name = "button_SetFile";
 			this.button_SetFile.Size = new System.Drawing.Size(25, 21);
-			this.button_SetFile.TabIndex = 4;
+			this.button_SetFile.TabIndex = 3;
 			this.button_SetFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_SetFile, resources.GetString("button_SetFile.ToolTip"));
 			this.button_SetFile.Click += new System.EventHandler(this.button_SetFile_Click);
 			// 
 			// button_Clear
 			// 
-			this.button_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Clear.Image = global::YAT.View.Controls.Properties.Resources.Image_Tool_lightning_16x16;
 			this.button_Clear.Location = new System.Drawing.Point(476, 0);
 			this.button_Clear.Name = "button_Clear";
 			this.button_Clear.Size = new System.Drawing.Size(24, 21);
-			this.button_Clear.TabIndex = 7;
+			this.button_Clear.TabIndex = 6;
 			this.toolTip.SetToolTip(this.button_Clear, "Clear command");
 			this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
 			// 
@@ -165,6 +147,7 @@
 			// splitContainer_ExplicitDefaultRadix
 			// 
 			this.splitContainer_ExplicitDefaultRadix.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer_ExplicitDefaultRadix.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
 			this.splitContainer_ExplicitDefaultRadix.IsSplitterFixed = true;
 			this.splitContainer_ExplicitDefaultRadix.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer_ExplicitDefaultRadix.Name = "splitContainer_ExplicitDefaultRadix";
@@ -194,7 +177,6 @@
 			// 
 			this.panel_Command.Controls.Add(this.checkBox_IsFile);
 			this.panel_Command.Controls.Add(this.button_Clear);
-			this.panel_Command.Controls.Add(this.label_Shortcut);
 			this.panel_Command.Controls.Add(this.textBox_Description);
 			this.panel_Command.Controls.Add(this.textBox_SingleLineText);
 			this.panel_Command.Controls.Add(this.pathLabel_FilePath);
@@ -229,7 +211,6 @@
 		private MKY.Windows.Forms.PathLabel pathLabel_FilePath;
 		private System.Windows.Forms.CheckBox checkBox_IsFile;
 		private System.Windows.Forms.Button button_SetMultiLineText;
-		private System.Windows.Forms.Label label_Shortcut;
 		private MKY.Windows.Forms.TextBoxEx textBox_Description;
 		private MKY.Windows.Forms.TextBoxEx textBox_SingleLineText;
 		private System.Windows.Forms.ToolTip toolTip;

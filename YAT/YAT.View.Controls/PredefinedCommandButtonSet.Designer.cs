@@ -41,9 +41,9 @@
 			this.button_Command_10 = new System.Windows.Forms.Button();
 			this.button_Command_11 = new System.Windows.Forms.Button();
 			this.button_Command_12 = new System.Windows.Forms.Button();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.label_Shortcuts_1_12 = new System.Windows.Forms.Label();
 			this.label_SeparatorLine = new System.Windows.Forms.Label();
+			this.label_Hint = new System.Windows.Forms.Label();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
 			// 
 			// button_Command_8
@@ -214,17 +214,17 @@
 			this.toolTip.SetToolTip(this.button_Command_12, "Send command");
 			this.button_Command_12.Click += new System.EventHandler(this.button_Command_Click);
 			// 
-			// label_Shortcuts_1_12
+			// label_Hint
 			// 
-			this.label_Shortcuts_1_12.AutoSize = true;
-			this.label_Shortcuts_1_12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_Shortcuts_1_12.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Shortcuts_1_12.Location = new System.Drawing.Point(0, 0);
-			this.label_Shortcuts_1_12.Name = "label_Shortcuts_1_12";
-			this.label_Shortcuts_1_12.Size = new System.Drawing.Size(100, 13);
-			this.label_Shortcuts_1_12.TabIndex = 1;
-			this.label_Shortcuts_1_12.Text = "[Ctrl+] Shift+F1..F12 to send | to copy";
-			this.label_Shortcuts_1_12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.label_Hint.AutoSize = true;
+			this.label_Hint.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Hint.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_Hint.Location = new System.Drawing.Point(0, 0);
+			this.label_Hint.Name = "label_Hint";
+			this.label_Hint.Size = new System.Drawing.Size(100, 13);
+			this.label_Hint.TabIndex = 1;
+			this.label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send | to copy";
+			this.label_Hint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_SeparatorLine
 			// 
@@ -233,13 +233,13 @@
 			this.label_SeparatorLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.label_SeparatorLine.Location = new System.Drawing.Point(2, 7);
 			this.label_SeparatorLine.Name = "label_SeparatorLine";
-			this.label_SeparatorLine.Size = new System.Drawing.Size(172, 2);
+			this.label_SeparatorLine.Size = new System.Drawing.Size(172, 1);
 			this.label_SeparatorLine.TabIndex = 0;
 			// 
 			// PredefinedCommandButtonSet
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
-			this.Controls.Add(this.label_Shortcuts_1_12);
+			this.Controls.Add(this.label_Hint);
 			this.Controls.Add(this.button_Command_12);
 			this.Controls.Add(this.button_Command_11);
 			this.Controls.Add(this.button_Command_10);
@@ -275,8 +275,8 @@
 		private System.Windows.Forms.Button button_Command_10;
 		private System.Windows.Forms.Button button_Command_11;
 		private System.Windows.Forms.Button button_Command_12;
-		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.Label label_Shortcuts_1_12;
 		private System.Windows.Forms.Label label_SeparatorLine;
+		private System.Windows.Forms.Label label_Hint;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }
