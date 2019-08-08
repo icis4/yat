@@ -35,6 +35,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
+using MKY.Diagnostics;
 using MKY.Text;
 
 #endregion
@@ -54,26 +55,56 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
 		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void SerializeToFile(string filePath, Type type, object obj)
+		public static void SerializeToFile(Type type, object obj, string filePath)
 		{
-			SerializeToFile(filePath, type, obj, EncodingEx.EnvironmentRecommendedUTF8Encoding);
+			SerializeToFile(type, obj, filePath, EncodingEx.EnvironmentRecommendedUTF8Encoding);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void SerializeToFile(string filePath, Type type, object obj, Encoding encoding)
+		public static void SerializeToFile(Type type, object obj, string filePath,Encoding encoding)
 		{
 			using (var sw = new StreamWriter(filePath, false, encoding))
 			{
-				var xws = new XmlWriterSettings();
-				xws.Indent = true;
+				SerializeToWriter(type, obj, sw);
+			}
+		}
 
-				using (var xw = XmlWriter.Create(sw, xws)) // Use dedicated XML writer to e.g. preserve whitespace in XML content!
-				{
-					var serializer = new XmlSerializer(type);
-					serializer.Serialize(xw, obj);
-				}
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static void SerializeToString(Type type, object obj, ref StringBuilder sb)
+		{
+			using (var sw = new StringWriter(sb))
+			{
+				SerializeToWriter(type, obj, sw);
+			}
+		}
+
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static void SerializeToWriter(Type type, object obj, TextWriter output)
+		{
+			var xws = new XmlWriterSettings();
+			xws.Indent = true;
+
+			using (var xw = XmlWriter.Create(output, xws)) // Use dedicated XML writer to e.g. preserve whitespace in XML content!
+			{
+				var serializer = new XmlSerializer(type);
+				serializer.Serialize(xw, obj);
 			}
 		}
 
@@ -84,24 +115,53 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// Assuming UTF-8 with or without BOM.
 		/// </remarks>
-		public static object DeserializeFromFile(string filePath, Type type)
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object DeserializeFromFile(Type type, string filePath)
 		{
-			return (DeserializeFromFile(filePath, Encoding.UTF8, true, type));
+			return (DeserializeFromFile(type, filePath, Encoding.UTF8, true));
 		}
 
-		/// <summary></summary>
-		public static object DeserializeFromFile(string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, Type type)
+		/// <remarks>
+		/// Not implementable using default arguments because <see cref="Encoding.UTF8"/> is non-const.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object DeserializeFromFile(Type type, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks)
 		{
-			object settings = null;
 			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
 			{
-				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
-				{
-					var serializer = new XmlSerializer(type);
-					settings = serializer.Deserialize(xr);
-				}
+				return (DeserializeFromReader(type, sr));
 			}
-			return (settings);
+		}
+
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object DeserializeFromString(Type type, string s)
+		{
+			using (var sr = new StringReader(s))
+			{
+				return (DeserializeFromReader(type, sr));
+			}
+		}
+
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object DeserializeFromReader(Type type, TextReader input)
+		{
+			using (var xr = XmlReader.Create(input)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
+			{
+				var serializer = new XmlSerializer(type);
+				return (serializer.Deserialize(xr));
+			}
 		}
 
 		/// <remarks>
@@ -110,26 +170,62 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// Assuming UTF-8 with or without BOM.
 		/// </remarks>
-		public static object TolerantDeserializeFromFile(string filePath, Type type)
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object TolerantDeserializeFromFile(Type type, string filePath)
 		{
-			return (TolerantDeserializeFromFile(filePath, Encoding.UTF8, true, type));
+			return (TolerantDeserializeFromFile(type, filePath, Encoding.UTF8, true));
 		}
 
 		/// <remarks>
 		/// For details on tolerant serialization <see cref="TolerantXmlSerializer"/>.
 		/// </remarks>
-		public static object TolerantDeserializeFromFile(string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, Type type)
+		/// <remarks>
+		/// Not implementable using default arguments because <see cref="Encoding.UTF8"/> is non-const.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object TolerantDeserializeFromFile(Type type, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks)
 		{
-			object settings = null;
 			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
 			{
-				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
-				{
-					var serializer = new TolerantXmlSerializer(type);
-					settings = serializer.Deserialize(xr);
-				}
+				return (TolerantDeserializeFromReader(type, sr));
 			}
-			return (settings);
+		}
+
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="TolerantXmlSerializer"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object TolerantDeserializeFromString(Type type, string s)
+		{
+			using (var sr = new StringReader(s))
+			{
+				return (TolerantDeserializeFromReader(type, sr));
+			}
+		}
+
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="TolerantXmlSerializer"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object TolerantDeserializeFromReader(Type type, TextReader input)
+		{
+			using (var xr = XmlReader.Create(input)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
+			{
+				var serializer = new TolerantXmlSerializer(type);
+				return (serializer.Deserialize(xr));
+			}
 		}
 
 		/// <remarks>
@@ -138,26 +234,200 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// Assuming UTF-8 with or without BOM.
 		/// </remarks>
-		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object AlternateTolerantDeserializeFromFile(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath)
 		{
-			return (AlternateTolerantDeserializeFromFile(filePath, Encoding.UTF8, true, type, alternateXmlElements));
+			return (AlternateTolerantDeserializeFromFile(type, alternateXmlElements, filePath, Encoding.UTF8, true));
 		}
 
 		/// <remarks>
 		/// For details on tolerant serialization <see cref="AlternateTolerantXmlSerializer"/>.
 		/// </remarks>
-		public static object AlternateTolerantDeserializeFromFile(string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
+		/// <remarks>
+		/// Not implementable using default arguments because <see cref="Encoding.UTF8"/> is non-const.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object AlternateTolerantDeserializeFromFile(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks)
 		{
-			object settings = null;
 			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
 			{
-				using (var xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
+				return (AlternateTolerantDeserializeFromReader(type, alternateXmlElements, sr));
+			}
+		}
+
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object AlternateTolerantDeserializeFromString(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string s)
+		{
+			using (var sr = new StringReader(s))
+			{
+				return (AlternateTolerantDeserializeFromReader(type, alternateXmlElements, sr));
+			}
+		}
+
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object AlternateTolerantDeserializeFromReader(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, TextReader input)
+		{
+			using (var xr = XmlReader.Create(input)) // Use dedicated XML reader to e.g. preserve whitespace in XML content!
+			{
+				var serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
+				return (serializer.Deserialize(xr));
+			}
+		}
+
+		/// <summary>
+		/// This method loads settings from a reader. If the schema of the settings doesn't match,
+		/// this method tries to load the settings using tolerant XML interpretation by making use
+		/// of <see cref="TolerantXmlSerializer"/> or <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </summary>
+		/// <remarks>
+		/// Assuming UTF-8 with or without BOM.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static object TryDeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, out object result)
+		{
+			return (TryDeserializeFromFileInsisting(type, alternateXmlElements, filePath, Encoding.UTF8, true, out result));
+		}
+
+		/// <summary>
+		/// This method loads settings from a reader. If the schema of the settings doesn't match,
+		/// this method tries to load the settings using tolerant XML interpretation by making use
+		/// of <see cref="TolerantXmlSerializer"/> or <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </summary>
+		/// <remarks>
+		/// Not implementable using default arguments because <see cref="Encoding.UTF8"/> is non-const.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static bool TryDeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, out object result)
+		{
+			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
+			{
+				return (TryDeserializeFromReaderInsisting(type, alternateXmlElements, sr, out result));
+			}
+		}
+
+		/// <summary>
+		/// This method loads settings from a reader. If the schema of the settings doesn't match,
+		/// this method tries to load the settings using tolerant XML interpretation by making use
+		/// of <see cref="TolerantXmlSerializer"/> or <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </summary>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static bool TryDeserializeFromStringInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string s, out object result)
+		{
+			using (var sr = new StringReader(s))
+			{
+				return (TryDeserializeFromReaderInsisting(type, alternateXmlElements, sr, out result));
+			}
+		}
+
+		/// <summary>
+		/// This method loads settings from a reader. If the schema of the settings doesn't match,
+		/// this method tries to load the settings using tolerant XML interpretation by making use
+		/// of <see cref="TolerantXmlSerializer"/> or <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </summary>
+		/// <remarks>
+		/// There are some issues with tolerant XML interpretation in case of lists. See YAT bug
+		/// #3537940>#232 "Issues with TolerantXmlSerializer" for details. The following solutions
+		/// could fix these issues:
+		///  > Fix these issues in <see cref="TolerantXmlSerializer"/>
+		///  > Implement a different variant of tolerant XML interpretation
+		///     > Use of the default XML serialization to only process parts of the XML tree
+		///  > Use of SerializationBinder (feature request #3392369)
+		///  > Use of XSLT
+		///     > Requires that every setting's schema is archived
+		///     > Requires an incremental XSLT chain from every former schema
+		///       (Alternatively, an immediate XSLT from every former schema)
+		///
+		/// Decision 2012-06: For the moment, the current solution is kept, rationale:
+		///  > Creating an XSLT is time consuming for each release
+		///  > Creating an XSLT fully or partly automatically requires an (expensive) tool
+		///  > Current solution isn't perfect but good enough and easy to handle (no efforts)
+		///  > Current solution also works for other software that makes use of MKY or YAT code
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		/// <remarks>
+		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
+		/// same as <see cref="XmlSerializer"/>.
+		/// </remarks>
+		public static bool TryDeserializeFromReaderInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, TextReader input, out object result)
+		{
+			// First, always try standard deserialization:
+			//  > This is the fastest way of deserialization
+			//  > Tolerant deserialization has some severe issues (see comments above)
+			//
+			// However:
+			// Standard deserialization might succeed even with an outdated schema! Then,
+			// available alternate elements are not considered. But this issue is considered
+			// less severe than the issues described above.
+			try
+			{
+				result = DeserializeFromReader(type, input);
+				return (true);
+			}
+			catch (Exception exStandard)
+			{
+				DebugEx.WriteException(type, exStandard, "Standard deserialization has failed!");
+
+				if (alternateXmlElements == null)
 				{
-					var serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
-					settings = serializer.Deserialize(xr);
+					// Try to open existing file with tolerant deserialization:
+					try
+					{
+						result = TolerantDeserializeFromReader(type, input);
+						return (true);
+					}
+					catch (Exception exTolerant)
+					{
+						DebugEx.WriteException(type, exTolerant, "Tolerant deserialization has failed!");
+						throw; // Rethrow!
+					}
+				}
+				else
+				{
+					// Try to open existing file with alternate-tolerant deserialization:
+					try
+					{
+						result = AlternateTolerantDeserializeFromReader(type, alternateXmlElements, input);
+						return (true);
+					}
+					catch (Exception exAlternateTolerant)
+					{
+						DebugEx.WriteException(type, exAlternateTolerant, "Alternate-tolerant deserialization has failed!");
+						throw; // Rethrow!
+					}
 				}
 			}
-			return (settings);
 		}
 	}
 }

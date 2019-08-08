@@ -126,7 +126,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool FilePathIsDefined
 		{
-			get { return (PathEx.IsDefined(this.filePath)); }
+			get { return (!string.IsNullOrEmpty(this.filePath)); }
 		}
 
 		/// <summary>
@@ -248,17 +248,17 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
-		public object LoadFromFile(Type type)
+		public T LoadFromFile<T>()
 		{
-			return (LoadFromFile(type, null));
+			return (LoadFromFile<T>(null));
 		}
 
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
-		public object LoadFromFile(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
+		public T LoadFromFile<T>(IEnumerable<AlternateXmlElement> alternateXmlElements)
 		{
-			return (LoadFromFile(this.filePath, type, alternateXmlElements));
+			return (LoadFromFile<T>(alternateXmlElements, this.filePath));
 		}
 
 		/// <summary>
@@ -266,32 +266,11 @@ namespace MKY.Settings
 		/// this method tries to load the settings using tolerant XML interpretation by making use
 		/// of <see cref="TolerantXmlSerializer"/> or <see cref="AlternateTolerantXmlSerializer"/>.
 		/// </summary>
-		/// <remarks>
-		/// There are some issues with tolerant XML interpretation in case of lists. See YAT bug
-		/// #3537940>#232 "Issues with TolerantXmlSerializer" for details. The following solutions
-		/// could fix these issues:
-		///  > Fix these issues in <see cref="TolerantXmlSerializer"/>
-		///  > Implement a different variant of tolerant XML interpretation
-		///     > Use of the default XML serialization to only process parts of the XML tree
-		///  > Use of SerializationBinder (feature request #3392369)
-		///  > Use of XSLT
-		///     > Requires that every setting's schema is archived
-		///     > Requires an incremental XSLT chain from every former schema
-		///       (Alternatively, an immediate XSLT from every former schema)
-		/// 
-		/// Decision 2012-06: For the moment, the current solution is kept, rationale:
-		///  > Creating an XSLT is time consuming for each release
-		///  > Creating an XSLT fully or partly automatically requires an (expensive) tool
-		///  > Current solution isn't perfect but good enough and easy to handle (no efforts)
-		///  > Current solution also works for other software that makes use of MKY or YAT code
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public object LoadFromFile(string filePath, Type type, IEnumerable<AlternateXmlElement> alternateXmlElements)
+		public T LoadFromFile<T>(IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath)
 		{
 			bool success = false;
 			object result = null; // If not successful, return <c>null</c>.
@@ -299,56 +278,7 @@ namespace MKY.Settings
 			// First check for file to minimize exceptions thrown:
 			if (FileEx.IsReadable(filePath))
 			{
-				// First, always try standard deserialization:
-				//  > This is the fastest way of deserialization
-				//  > Tolerant deserialization has some severe issues (see comments above)
-				//
-				// However:
-				// Standard deserialization might succeed even with an outdated schema! Then,
-				// available alternate elements are not considered. But this issue is considered
-				// less severe than the issues described above.
-				try
-				{
-					result = XmlSerializerEx.DeserializeFromFile(filePath, type);
-					success = true;
-				}
-				catch (Exception exStandard)
-				{
-					bool rethrow = false;
-					DebugEx.WriteException(this.parentType, exStandard, "Standard deserialization has failed!");
-
-					if (alternateXmlElements == null)
-					{
-						// Try to open existing file with tolerant deserialization:
-						try
-						{
-							result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
-							success = true;
-						}
-						catch (Exception exTolerant)
-						{
-							DebugEx.WriteException(this.parentType, exTolerant, "Tolerant deserialization has failed!");
-							rethrow = true; // Rethrow! But use the standard error message, as that output line/char numbers and not just the char at line 1.
-						}
-					}
-					else
-					{
-						// Try to open existing file with alternate-tolerant deserialization:
-						try
-						{
-							result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
-							success = true;
-						}
-						catch (Exception exAlternateTolerant)
-						{
-							DebugEx.WriteException(this.parentType, exAlternateTolerant, "Alternate-tolerant deserialization has failed!");
-							rethrow = true; // Rethrow! But use the standard error message, as that output line/char numbers and not just the char at line 1.
-						}
-					}
-
-					if (rethrow)
-						throw; // Rethrow!
-				}
+				result = XmlSerializerEx.TryDeserializeFromFileInsisting(typeof(T), alternateXmlElements, filePath, out result);
 			}
 
 			if (success)
@@ -359,7 +289,7 @@ namespace MKY.Settings
 				this.lastAccessTimeUtc = File.GetLastAccessTimeUtc(filePath);
 			}
 
-			return (result);
+			return ((T)result);
 		}
 
 		#endregion
@@ -372,16 +302,16 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		public bool SaveToFile(Type type, object settings)
+		public bool SaveToFile<T>(T settings)
 		{
-			return (SaveToFile(this.filePath, type, settings));
+			return (SaveToFile(settings, this.filePath));
 		}
 
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public bool SaveToFile(string filePath, Type type, object settings)
+		public bool SaveToFile<T>(T settings, string filePath)
 		{
 			bool success = false;
 
@@ -401,7 +331,7 @@ namespace MKY.Settings
 
 				try
 				{
-					XmlSerializerEx.SerializeToFile(filePath, type, settings);
+					XmlSerializerEx.SerializeToFile(typeof(T), settings, filePath);
 
 					this.lastAccessFilePath = filePath;
 					this.lastAccessTimeUtc = File.GetLastAccessTimeUtc(filePath);

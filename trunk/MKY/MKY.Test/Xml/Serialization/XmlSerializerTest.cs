@@ -96,11 +96,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "BooleanFalse", FileExtension);
 			b = false;
-			TestSerializationChain(filePath, typeof(bool), b);
+			TestSerializationChain(typeof(bool), b, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "BooleanTrue", FileExtension);
 			b = true;
-			TestSerializationChain(filePath, typeof(bool), b);
+			TestSerializationChain(typeof(bool), b, filePath);
 		}
 
 		#endregion
@@ -124,11 +124,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnum_0_Horizontal", FileExtension);
 			e = Orientation.Horizontal;
-			TestSerializationChain(filePath, typeof(Orientation), e);
+			TestSerializationChain(typeof(Orientation), e, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnum_1_Vertical", FileExtension);
 			e = Orientation.Vertical;
-			TestSerializationChain(filePath, typeof(Orientation), e);
+			TestSerializationChain(typeof(Orientation), e, filePath);
 		}
 
 		#endregion
@@ -150,11 +150,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnumEx_0_Horizontal", FileExtension);
 			x = (OrientationEx)Orientation.Horizontal;
-			TestSerializationChain(filePath, typeof(OrientationEx), x);
+			TestSerializationChain(typeof(OrientationEx), x, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnumEx_1_Vertical", FileExtension);
 			x = (OrientationEx)Orientation.Vertical;
-			TestSerializationChain(filePath, typeof(OrientationEx), x);
+			TestSerializationChain(typeof(OrientationEx), x, filePath);
 		#endif
 		}
 
@@ -180,15 +180,15 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_ASCII_20127", FileExtension);
 			e = SupportedEncoding.ASCII;
-			TestSerializationChain(filePath, typeof(SupportedEncoding), e);
+			TestSerializationChain(typeof(SupportedEncoding), e, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_Windows1252", FileExtension);
 			e = SupportedEncoding.Windows1252;
-			TestSerializationChain(filePath, typeof(SupportedEncoding), e);
+			TestSerializationChain(typeof(SupportedEncoding), e, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_UTF8_65001", FileExtension);
 			e = SupportedEncoding.UTF8;
-			TestSerializationChain(filePath, typeof(SupportedEncoding), e);
+			TestSerializationChain(typeof(SupportedEncoding), e, filePath);
 		#endif
 		}
 
@@ -211,15 +211,15 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_ASCII_20127", FileExtension);
 			x = (EncodingEx)SupportedEncoding.ASCII;
-			TestSerializationChain(filePath, typeof(EncodingEx), x);
+			TestSerializationChain(typeof(EncodingEx), x, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_Windows1252", FileExtension);
 			x = (EncodingEx)SupportedEncoding.Windows1252;
-			TestSerializationChain(filePath, typeof(EncodingEx), x);
+			TestSerializationChain(typeof(EncodingEx), x, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_UTF8_65001", FileExtension);
 			x = (EncodingEx)SupportedEncoding.UTF8;
-			TestSerializationChain(filePath, typeof(EncodingEx), x);
+			TestSerializationChain(typeof(EncodingEx), x, filePath);
 		#endif
 		}
 
@@ -238,11 +238,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Array", FileExtension);
 			var a = new string[] { "A", "B" };
-			TestSerializationChain(filePath, typeof(string[]), a);
+			TestSerializationChain(typeof(string[]), a, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ArrayEmpty", FileExtension);
 			var ae = new string[] { };
-			TestSerializationChain(filePath, typeof(string[]), ae);
+			TestSerializationChain(typeof(string[]), ae, filePath);
 		#if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "MultiArray", FileExtension);
@@ -251,7 +251,7 @@ namespace MKY.Test.Xml.Serialization
 				{ "A", "AA" },
 				{ "B", "BB" },
 			};
-			TestSerialization(filePath, typeof(string[,]), ma);
+			TestSerialization(typeof(string[,]), ma, filePath);
 		#endif
 			filePath = Temp.MakeTempFilePath(GetType(), "ArrayOfArraysOnInit", FileExtension);
 			var aai = new string[][]
@@ -259,7 +259,7 @@ namespace MKY.Test.Xml.Serialization
 					new string[] { "A", "AA" },
 					new string[] { "B", "BB" },
 				};
-			TestSerializationChain(filePath, typeof(string[][]), aai);
+			TestSerializationChain(typeof(string[][]), aai, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ArrayOfArraysByCreate", FileExtension);
 			var aac = (string[][])Array.CreateInstance(typeof(string[]), 2);
@@ -271,7 +271,7 @@ namespace MKY.Test.Xml.Serialization
 			aac[0][1] = "AA";
 			aac[1][0] = "B";
 			aac[1][1] = "BB";
-			TestSerializationChain(filePath, typeof(string[][]), aac);
+			TestSerializationChain(typeof(string[][]), aac, filePath);
 		}
 
 		#endregion
@@ -291,18 +291,18 @@ namespace MKY.Test.Xml.Serialization
 			var l = new List<string>(2); // Preset the required capacity to improve memory management.
 			l.Add("A");
 			l.Add("B");
-			TestSerializationChain(filePath, typeof(List<string>), l);
+			TestSerializationChain(typeof(List<string>), l, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ListEmpty", FileExtension);
 			var le = new List<string>();
-			TestSerializationChain(filePath, typeof(List<string>), le);
+			TestSerializationChain(typeof(List<string>), le, filePath);
 		#if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "ListOfArrays", FileExtension);
 			var la = new List<string[]>(2); // Preset the required capacity to improve memory management.
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
-			Test_Serialization(filePath, typeof(List<string>), la);
+			Test_Serialization(typeof(List<string>), la, filePath);
 		#endif
 		#if (FALSE)
 			// Doesn't work, not supported for serialization.
@@ -310,7 +310,7 @@ namespace MKY.Test.Xml.Serialization
 			var ll = new List<List<string>>(2); // Preset the required capacity to improve memory management.
 			ll.Add(l);
 			ll.Add(l);
-			Test_Serialization(filePath, typeof(List<string>), ll);
+			Test_Serialization(typeof(List<string>), ll, filePath);
 		#endif
 		}
 
@@ -333,7 +333,7 @@ namespace MKY.Test.Xml.Serialization
 			var l = new Dictionary<string, string>(2); // Preset the required capacity to improve memory management.
 			l.Add("1", "A");
 			l.Add("2", "B");
-			TestSerialization(filePath, typeof(Dictionary<string, string>), l);
+			TestSerialization(typeof(Dictionary<string, string>), l, filePath);
 		#endif
 		#if (FALSE)
 			// Doesn't work, not supported for serialization.
@@ -341,7 +341,7 @@ namespace MKY.Test.Xml.Serialization
 			var le = new Dictionary<string, string>(2); // Preset the required capacity to improve memory management.
 			l.Add("1", "A");
 			l.Add("2", "B");
-			TestSerialization(filePath, typeof(Dictionary<string, string>), le);
+			TestSerialization(typeof(Dictionary<string, string>), le, filePath);
 		#endif
 			filePath = Temp.MakeTempFilePath(GetType(), "DictionaryToArrayOfArrays", FileExtension);
 			var l = new Dictionary<string, string>(2); // Preset the required capacity to improve memory management.
@@ -366,7 +366,7 @@ namespace MKY.Test.Xml.Serialization
 				i++;
 			}
 
-			TestSerializationChain(filePath, typeof(string[][]), aa);
+			TestSerializationChain(typeof(string[][]), aa, filePath);
 		}
 
 		#endregion
@@ -385,7 +385,7 @@ namespace MKY.Test.Xml.Serialization
 			nsd.Name = "Test";
 			nsd.Add("1", "A");
 			nsd.Add("2", "B");
-			TestSerializationChain(filePath, typeof(NamedStringDictionary), nsd);
+			TestSerializationChain(typeof(NamedStringDictionary), nsd, filePath);
 		}
 
 		#endregion
@@ -403,17 +403,17 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePair", FileExtension);
 			var p = new KeyValuePair<int, string>(0, "null");
-			TestSerializationChain(filePath, typeof(KeyValuePair<int, string>), p);
+			TestSerializationChain(typeof(KeyValuePair<int, string>), p, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePairList", FileExtension);
 			var l = new List<KeyValuePair<int, string>>(2); // Preset the required capacity to improve memory management.
 			l.Add(new KeyValuePair<int, string>(1, "eins"));
 			l.Add(new KeyValuePair<int, string>(2, "zwei"));
-			TestSerializationChain(filePath, typeof(List<KeyValuePair<int, string>>), l);
+			TestSerializationChain(typeof(List<KeyValuePair<int, string>>), l, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePairArray", FileExtension);
 			var a = l.ToArray();
-			TestSerializationChain(filePath, typeof(KeyValuePair<int, string>[]), a);
+			TestSerializationChain(typeof(KeyValuePair<int, string>[]), a, filePath);
 		}
 
 		#endregion
@@ -431,21 +431,21 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Pair1", FileExtension);
 			var p1 = new Pair<int, string>(0, "null");
-			TestSerializationChain(filePath, typeof(Pair<int, string>), p1);
+			TestSerializationChain(typeof(Pair<int, string>), p1, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Pair2", FileExtension);
 			var p2 = new Pair<int[], string>(new int[] { 0, 1, 2 }, "null");
-			TestSerializationChain(filePath, typeof(Pair<int[], string>), p2);
+			TestSerializationChain(typeof(Pair<int[], string>), p2, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "PairList", FileExtension);
 			var l = new List<Pair<int, string>>(2); // Preset the required capacity to improve memory management.
 			l.Add(new Pair<int, string>(1, "eins"));
 			l.Add(new Pair<int, string>(2, "zwei"));
-			TestSerializationChain(filePath, typeof(List<Pair<int, string>>), l);
+			TestSerializationChain(typeof(List<Pair<int, string>>), l, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "PairArray", FileExtension);
 			var a = l.ToArray();
-			TestSerializationChain(filePath, typeof(Pair<int, string>[]), a);
+			TestSerializationChain(typeof(Pair<int, string>[]), a, filePath);
 		}
 
 		#endregion
@@ -463,17 +463,17 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItem", FileExtension);
 			var ri = new RecentItem<string>("RI");
-			TestSerializationChain(filePath, typeof(RecentItem<string>), ri);
+			TestSerializationChain(typeof(RecentItem<string>), ri, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemList", FileExtension);
 			var l = new List<RecentItem<string>>(2); // Preset the required capacity to improve memory management.
 			l.Add(new RecentItem<string>("RIL1"));
 			l.Add(new RecentItem<string>("RIL2"));
-			TestSerializationChain(filePath, typeof(List<RecentItem<string>>), l);
+			TestSerializationChain(typeof(List<RecentItem<string>>), l, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemArray", FileExtension);
 			var a = l.ToArray();
-			TestSerializationChain(filePath, typeof(RecentItem<string>[]), a);
+			TestSerializationChain(typeof(RecentItem<string>[]), a, filePath);
 		}
 
 		#endregion
@@ -492,11 +492,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Guid", FileExtension);
 			guid = System.Guid.NewGuid();
-			TestSerializationChain(filePath, typeof(System.Guid), guid);
+			TestSerializationChain(typeof(System.Guid), guid, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "GuidEmpty", FileExtension);
 			guid = System.Guid.Empty;
-			TestSerializationChain(filePath, typeof(System.Guid), guid);
+			TestSerializationChain(typeof(System.Guid), guid, filePath);
 		}
 
 		#endregion
@@ -512,25 +512,25 @@ namespace MKY.Test.Xml.Serialization
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void TestSerializationChain(string filePath, Type type, object obj)
+		public static void TestSerializationChain(Type type, object obj, string filePath)
 		{
 			// Save:
-			TestSerializeToFile(filePath, type, obj);
+			TestSerializeToFile(type, obj, filePath);
 
 			// Load:
-			TestDeserializeFromFile(filePath, type);
-			TestTolerantDeserializeFromFile(filePath, type);
-			TestAlternateTolerantDeserializeFromFile(filePath, type);
+			TestDeserializeFromFile(type, filePath);
+			TestTolerantDeserializeFromFile(type, filePath);
+			TestAlternateTolerantDeserializeFromFile(type, filePath);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void TestSerializeToFile(string filePath, Type type, object obj)
+		public static void TestSerializeToFile(Type type, object obj, string filePath)
 		{
 			try
 			{
-				XmlSerializerEx.SerializeToFile(filePath, type, obj);
+				XmlSerializerEx.SerializeToFile(type, obj, filePath);
 			}
 			catch (Exception ex)
 			{
@@ -541,11 +541,11 @@ namespace MKY.Test.Xml.Serialization
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public static object TestDeserializeFromFile(string filePath, Type type)
+		public static object TestDeserializeFromFile(Type type, string filePath)
 		{
 			try
 			{
-				return (XmlSerializerEx.DeserializeFromFile(filePath, type));
+				return (XmlSerializerEx.DeserializeFromFile(type, filePath));
 			}
 			catch (Exception ex)
 			{
@@ -558,11 +558,11 @@ namespace MKY.Test.Xml.Serialization
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public static object TestTolerantDeserializeFromFile(string filePath, Type type)
+		public static object TestTolerantDeserializeFromFile(Type type, string filePath)
 		{
 			try
 			{
-				return (XmlSerializerEx.TolerantDeserializeFromFile(filePath, type));
+				return (XmlSerializerEx.TolerantDeserializeFromFile(type, filePath));
 			}
 			catch (Exception ex)
 			{
@@ -575,11 +575,11 @@ namespace MKY.Test.Xml.Serialization
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public static object TestAlternateTolerantDeserializeFromFile(string filePath, Type type)
+		public static object TestAlternateTolerantDeserializeFromFile(Type type, string filePath)
 		{
 			try
 			{
-				return (XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, null));
+				return (XmlSerializerEx.AlternateTolerantDeserializeFromFile(type, null, filePath));
 			}
 			catch (Exception ex)
 			{

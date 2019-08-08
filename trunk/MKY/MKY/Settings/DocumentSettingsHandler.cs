@@ -123,11 +123,11 @@ namespace MKY.Settings
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~DocumentSettingsHandler()
@@ -328,7 +328,7 @@ namespace MKY.Settings
 			AssertNotDisposed();
 
 			// Try to open existing file of current version.
-			var settings = (TSettings)this.fileHandler.LoadFromFile(this.settings.GetType(), this.alternateXmlElements);
+			var settings = this.fileHandler.LoadFromFile<TSettings>(this.alternateXmlElements);
 			if (settings != null)
 			{
 				this.settings = settings;
@@ -347,7 +347,7 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
-		///  
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
@@ -357,7 +357,7 @@ namespace MKY.Settings
 		{
 			AssertNotDisposed();
 
-			this.fileHandler.SaveToFile(typeof(TSettings), this.settings);
+			this.fileHandler.SaveToFile<TSettings>(this.settings);
 			this.settings.ClearChanged();
 		}
 

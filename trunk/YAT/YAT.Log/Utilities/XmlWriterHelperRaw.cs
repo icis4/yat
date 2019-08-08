@@ -56,7 +56,7 @@ namespace YAT.Log.Utilities
 			if (count > 0)
 			{
 				Type type = typeof(List<XmlTransferRawLine>);
-				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
+				XmlSerializerEx.SerializeToFile(type, transferLines, filePath);
 
 				if (addSchema)
 					XmlSchemaEx.ToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
