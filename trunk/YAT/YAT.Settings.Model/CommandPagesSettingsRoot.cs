@@ -40,6 +40,7 @@ using YAT.Model.Settings;
 namespace YAT.Settings.Model
 {
 	/// <remarks>Root name is relevant for potential future 'AlternateXmlElements'.</remarks>
+	/// <remarks>An explicit name makes little sense as this is the very root of the XML.</remarks>
 	[XmlRoot("Settings")]
 	public class CommandPagesSettingsRoot : MKY.Settings.SettingsItem, IEquatable<CommandPagesSettingsRoot>
 	{

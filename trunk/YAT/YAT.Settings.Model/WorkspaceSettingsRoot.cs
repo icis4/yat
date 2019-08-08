@@ -41,6 +41,7 @@ using YAT.Model.Settings;
 namespace YAT.Settings.Model
 {
 	/// <remarks>Root name is relevant for <see cref="AlternateXmlElements"/>.</remarks>
+	/// <remarks>An explicit name makes little sense as this is the very root of the XML.</remarks>
 	[XmlRoot("Settings")]
 	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem, IEquatable<WorkspaceSettingsRoot>
 	{
