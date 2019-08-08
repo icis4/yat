@@ -257,18 +257,6 @@ namespace MKY.IO
 		#region Is...()
 
 		/// <summary>
-		/// Returns whether the directory or file path is defined.
-		/// </summary>
-		public static bool IsDefined(string path)
-		{
-			// String validation:
-			if (string.IsNullOrEmpty(path))
-				return (false);
-
-			return (true);
-		}
-
-		/// <summary>
 		/// Returns whether the directory or file path is valid.
 		/// </summary>
 		/// <remarks>
@@ -412,7 +400,7 @@ namespace MKY.IO
 		/// Returns <paramref name="directoryPathB"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareDirectoryPaths(string directoryPathA, string directoryPathB)
@@ -431,7 +419,7 @@ namespace MKY.IO
 		/// Returns <paramref name="filePath"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareDirectoryAndFilePaths(string directoryPath, string filePath)
@@ -453,7 +441,7 @@ namespace MKY.IO
 		/// Returns <paramref name="directoryPath"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareFileAndDirectoryPaths(string filePath, string directoryPath)
@@ -472,7 +460,7 @@ namespace MKY.IO
 		/// Returns <paramref name="filePathB"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareFilePaths(string filePathA, string filePathB)
@@ -497,7 +485,7 @@ namespace MKY.IO
 		/// Returns <paramref name="directoryPathB"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineDirectoryPaths(string directoryPathA, string directoryPathB)
@@ -518,7 +506,7 @@ namespace MKY.IO
 		/// Returns <paramref name="filePath"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineDirectoryAndFilePaths(string directoryPath, string filePath)
@@ -542,7 +530,7 @@ namespace MKY.IO
 		/// Returns <paramref name="directoryPath"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineFileAndDirectoryPaths(string filePath, string directoryPath)
@@ -563,7 +551,7 @@ namespace MKY.IO
 		/// Returns <paramref name="filePathB"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineFilePaths(string filePathA, string filePathB)
