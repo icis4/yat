@@ -270,6 +270,8 @@
 			this.subpageCheckBox_2A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_1A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
+			this.button_ImportAllPagesFromClipboard = new System.Windows.Forms.Button();
+			this.button_ExportAllPagesToClipboard = new System.Windows.Forms.Button();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -2095,6 +2097,8 @@
 			// 
 			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Pages.Controls.Add(this.button_ExportAllPagesToClipboard);
+			this.groupBox_Pages.Controls.Add(this.button_ImportAllPagesFromClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_CutPageToClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_CopyPageToClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_AddPagesFromClipboard);
@@ -2170,7 +2174,7 @@
 			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(12, 268);
 			this.button_ImportAllPagesFromFile.Name = "button_ImportAllPagesFromFile";
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
-			this.button_ImportAllPagesFromFile.TabIndex = 16;
+			this.button_ImportAllPagesFromFile.TabIndex = 17;
 			this.button_ImportAllPagesFromFile.Text = "I&mport All from File...";
 			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yacps file. The current pages are replaced.\r\n\r\nUse [Insert]" +
         " [...] or [Add] [...] to import additively.");
@@ -2247,7 +2251,7 @@
 			this.button_DeleteAllPages.Location = new System.Drawing.Point(138, 268);
 			this.button_DeleteAllPages.Name = "button_DeleteAllPages";
 			this.button_DeleteAllPages.Size = new System.Drawing.Size(120, 23);
-			this.button_DeleteAllPages.TabIndex = 17;
+			this.button_DeleteAllPages.TabIndex = 19;
 			this.button_DeleteAllPages.Text = "De&lete All...";
 			this.button_DeleteAllPages.Click += new System.EventHandler(this.button_DeleteAllPages_Click);
 			// 
@@ -2498,6 +2502,28 @@
 			this.label_SubpageSelection.Size = new System.Drawing.Size(100, 13);
 			this.label_SubpageSelection.TabIndex = 2;
 			this.label_SubpageSelection.Text = "Subpage Selection:";
+			// 
+			// button_ImportAllPagesFromClipboard
+			// 
+			this.button_ImportAllPagesFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
+			this.button_ImportAllPagesFromClipboard.Location = new System.Drawing.Point(264, 268);
+			this.button_ImportAllPagesFromClipboard.Name = "button_ImportAllPagesFromClipboard";
+			this.button_ImportAllPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_ImportAllPagesFromClipboard.TabIndex = 18;
+			this.toolTip.SetToolTip(this.button_ImportAllPagesFromClipboard, "Paste a page from the clipboard and insert it");
+			this.button_ImportAllPagesFromClipboard.UseVisualStyleBackColor = true;
+			this.button_ImportAllPagesFromClipboard.Click += new System.EventHandler(this.button_ImportAllPagesFromClipboard_Click);
+			// 
+			// button_ExportAllPagesToClipboard
+			// 
+			this.button_ExportAllPagesToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
+			this.button_ExportAllPagesToClipboard.Location = new System.Drawing.Point(264, 239);
+			this.button_ExportAllPagesToClipboard.Name = "button_ExportAllPagesToClipboard";
+			this.button_ExportAllPagesToClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_ExportAllPagesToClipboard.TabIndex = 16;
+			this.toolTip.SetToolTip(this.button_ExportAllPagesToClipboard, "Cut the current page to the clipboard");
+			this.button_ExportAllPagesToClipboard.UseVisualStyleBackColor = true;
+			this.button_ExportAllPagesToClipboard.Click += new System.EventHandler(this.button_ExportAllPagesToClipboard_Click);
 			// 
 			// PredefinedCommandSettings
 			// 
@@ -2775,5 +2801,7 @@
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_2A;
 		private YAT.View.Controls.PredefinedCommandSubpageCheckBox subpageCheckBox_1A;
 		private System.Windows.Forms.Label label_Layout;
+		private System.Windows.Forms.Button button_ExportAllPagesToClipboard;
+		private System.Windows.Forms.Button button_ImportAllPagesFromClipboard;
 	}
 }
