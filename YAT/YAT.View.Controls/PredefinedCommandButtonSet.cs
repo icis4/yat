@@ -362,17 +362,23 @@ namespace YAT.View.Controls
 			{
 				switch (SubpageId)
 				{
-					case 1: label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send | to copy"; break;
-					case 2: label_Hint.Text = "13..24";  break;
-					case 3: label_Hint.Text = "25..36";  break;
-					case 4: label_Hint.Text = "37..48";  break;
-					case 5: label_Hint.Text = "49..60";  break;
-					case 6: label_Hint.Text = "61..72";  break;
-					case 7: label_Hint.Text = "73..84";  break;
-					case 8: label_Hint.Text = "85..96";  break;
-					case 9: label_Hint.Text = "97..108"; break;
+					case 1:
+						label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send | to copy";
+						break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString() + "' is an ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+						label_Hint.Text = PredefinedCommandPage.SubpageIdToString(SubpageId);
+						break;
+
+					default:
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString() + "' is an ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				SetCommandControls();
