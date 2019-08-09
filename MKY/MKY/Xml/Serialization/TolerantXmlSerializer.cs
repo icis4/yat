@@ -80,9 +80,9 @@ namespace MKY.Xml.Serialization
 			this.type = type;
 			this.defaultDocument = XmlDocumentEx.CreateDefaultDocument(type, XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
 
-#if (WRITE_SCHEMAS_TO_FILES)
+		#if (WRITE_SCHEMAS_TO_FILES)
 			WriteSchemasToFiles(this.defaultDocument.Schemas, "DefaultSchema");
-#endif
+		#endif
 		}
 
 		#endregion
@@ -209,7 +209,7 @@ namespace MKY.Xml.Serialization
 		/// </summary>
 		/// <remarks>
 		/// This method assumes that both navigators are pointing to an XML node with the same name.
-		/// 
+		///
 		/// Important:
 		/// Input navigator must be used as the primary navigator to ensure that all elements of
 		/// the input are traversed, including those that are not available/filled on an empty
