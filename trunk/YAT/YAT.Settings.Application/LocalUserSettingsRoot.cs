@@ -43,8 +43,12 @@ using YAT.Application.Settings;
 namespace YAT.Settings.Application
 {
 	/// <remarks>Root name is relevant for <see cref="AlternateXmlElements"/>.</remarks>
-	/// <remarks>An explicit name makes little sense as this is the very root of the XML.</remarks>
-	[XmlRoot("Settings")]
+	/// <remarks>
+	/// An explicit name makes little sense as this is the very root of the XML. But accidentally
+	/// named the root explicitly. Should be renamed, but doesn't work because root is not properly
+	/// handled by the alternate tolerant deserialization. To be solved using XML transformation.
+	/// </remarks>
+	[XmlRoot("LocalUserSettings")] // Attention, see remark above!
 	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<LocalUserSettingsRoot>, IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
@@ -254,7 +258,7 @@ namespace YAT.Settings.Application
 		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
 		private static readonly AlternateXmlElement[] StaticAlternateXmlElements =
 		{                                        // XML path:                                 local name of XML element:            alternate local name(s), i.e. former name(s) of XML element:
-			new AlternateXmlElement(new string[] { "#document"                            }, "Settings",            new string[] { "LocalUserSettings" } ), // Accidentally named the root explicitly until and including YAT 2.0.0 Final.
+		/*	new AlternateXmlElement(new string[] { "#document"                            }, "Settings",            new string[] { "LocalUserSettings" } ), => Accidentally named the root explicitly. Should be renamed, but doesn't work because root is not properly handled by the alternate tolerant deserialization. To be solved using XML transformation. */
 			new AlternateXmlElement(new string[] { "#document", "Settings"                }, "SettingsName",        new string[] { "FileType" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings"                }, "Mark",                new string[] { "Saved" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFiles",           new string[] { "TerminalFilesPath" } ),
