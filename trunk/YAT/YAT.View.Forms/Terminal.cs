@@ -2383,17 +2383,25 @@ namespace YAT.View.Forms
 			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) && (CommandSettingsClipboardHelper.ClipboardContainsText));
 			toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
 
+			var hasPages = (this.settingsRoot.PredefinedCommand.Pages.Count >= 1);
+			toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Enabled = hasPages;
+			toolStripMenuItem_PredefinedContextMenu_ExportToFile     .Enabled = hasPages;
+
 			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
 			{
-				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "Export Page to File...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "Import Page(s) from File..." is fixed.
-			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "Link Page(s) to File..." is fixed.
+				toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page to Clipboard...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page to File...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
+			////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
 			}
 			else
 			{
-				toolStripMenuItem_PredefinedContextMenu_ExportToFile  .Text = "Export Page(s) to File...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile.Text = "Import Page(s) from File..." is fixed.
-			////toolStripMenuItem_PredefinedContextMenu_LinkToFile    .Text = "Link Page(s) to File..." is fixed.
+				toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page(s) to Clipboard...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page(s) to File...";
+			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
+			////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
 			}
 		}
 
@@ -2713,7 +2721,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsClipboardHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
+			CommandPagesSettingsClipboardHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard_Click(object sender, EventArgs e)
@@ -2760,7 +2768,7 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.ShowLinkFileDialog()
 			// Changes here may have to be applied there too.
 
-			// PENDING
+			// PENDING ShowLinkFileDialog();
 		}
 
 		#endregion
