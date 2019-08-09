@@ -102,8 +102,9 @@
     <Compile Include="AsciiTableDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CommandClipboardHelper.cs" />
-    <Compile Include="CommandPagesSettingsHelper.cs" />
+    <Compile Include="CommandPagesSettingsClipboardHelper.cs" />
+    <Compile Include="CommandSettingsClipboardHelper.cs" />
+    <Compile Include="CommandPagesSettingsFileHelper.cs" />
     <Compile Include="RtfPrinter.cs" />
     <Compile Include="RtfWriterHelper.cs" />
     <Compile Include="TextWriterHelper.cs" />

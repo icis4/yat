@@ -27,30 +27,27 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Globalization;
-using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY;
-using MKY.IO;
-using MKY.Settings;
 using MKY.Windows.Forms;
+using MKY.Xml.Serialization;
 
-using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;
-using YAT.Model.Utilities;
-using YAT.Settings.Application;
 using YAT.Settings.Model;
 
 #endregion
 
 namespace YAT.View.Utilities
 {
-	/// <summary></summary>
-	public static class CommandPagesSettingsHelper
+	/// <remarks>
+	/// Duplicate implementation as "Clipboard" and "File" to deal with subtle differences rather
+	/// than making the implementation less comprehensive. Separate classes to ease diffing.
+	/// </remarks>
+	public static class CommandPagesSettingsClipboardHelper
 	{
 		private enum Mode
 		{
@@ -61,7 +58,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool TryExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
+		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
 		{
 			var pageCount = commandPages.Pages.Count;
 			if (pageCount > 1)
@@ -79,248 +76,76 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (TryExportAllPagesToFile(    owner, commandPages,                 indicatedName));
-					case DialogResult.No:  return (TryExportSelectedPageToFile(owner, commandPages, selectedPageId, indicatedName));
+					case DialogResult.Yes: return (TryExportAllPages(    owner, commandPages,                 indicatedName));
+					case DialogResult.No:  return (TryExportSelectedPage(owner, commandPages, selectedPageId, indicatedName));
 					default:               return (false);
 				}
 			}
-			else // Just a single page => save without asking:
+			else // Just a single page => export without asking:
 			{
-				return (TryExportToFile(owner, commandPages, false, indicatedName));
+				return (TryExport(owner, commandPages, indicatedName));
 			}
 		}
 
 		/// <summary>
-		/// Prompts the user to export the given page to a .yapcs file.
+		/// Export all pages to the clipboard.
 		/// </summary>
-		public static bool TryExportAllPagesToFile(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
+		public static bool TryExportAllPages(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
 		{
-			return (TryExportToFile(owner, commandPages, false, indicatedName));
+			return (TryExport(owner, commandPages, indicatedName));
 		}
 
 		/// <summary>
-		/// Prompts the user to export the given page to a .yapc file.
+		/// Export the given page to the clipboard.
 		/// </summary>
-		public static bool TryExportSelectedPageToFile(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
+		public static bool TryExportSelectedPage(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
 		{
 			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
 			p.Pages.Clear();
 			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
 
-			return (TryExportToFile(owner, p, true, indicatedName));
+			return (TryExport(owner, p, indicatedName));
 		}
 
 		/// <summary></summary>
-		private static bool TryExportToFile(IWin32Window owner, PredefinedCommandSettings commandPages, bool isSelected, string indicatedName)
+		private static bool TryExport(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
 		{
-			var sfd = new SaveFileDialog();
-			if ((commandPages.Pages.Count == 1) && isSelected)
-			{
-				sfd.Title       = "Save Command Page As";
-				sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
-				sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
-				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
-			}
-			else
-			{
-				sfd.Title       = "Save Command Pages As";
-				sfd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
-				sfd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
-				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesFile);
-			}
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
-
-			// Check whether the terminal has already been saved as a .yat file:
-			if (StringEx.EndsWithOrdinalIgnoreCase(indicatedName, ExtensionHelper.TerminalFile))
-				sfd.FileName = indicatedName;
-			else
-				sfd.FileName = indicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
-
-			var dr = sfd.ShowDialog(owner);
-			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
-			{
-				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUserSettings();
-
-				Exception ex;
-				if (TrySaveToFile(commandPages, sfd.FileName, out ex))
-					return (true);
-
-				string errorMessage;
-				if (!string.IsNullOrEmpty(sfd.FileName))
-					errorMessage = ErrorHelper.ComposeMessage("Unable to save", sfd.FileName, ex);
-				else
-					errorMessage = ErrorHelper.ComposeMessage("Unable to save file!", ex);
-
-				MessageBoxEx.Show
-				(
-					errorMessage,
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-			}
-
-			return (false);
+			return (false); // PENDING
 		}
 
 		/// <summary></summary>
-		private static bool TrySaveToFile(PredefinedCommandSettings commandPages, string filePath, out Exception exception)
+		public static bool TrySet(PredefinedCommandSettings commandPages, int selectedPageId)
 		{
+			var root = new CommandPageSettingsRoot();
+			root.Page = commandPages.Pages[selectedPageId - 1];
+
+			var sb = new StringBuilder();
+			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, ref sb);
+
 			try
 			{
-				if ((commandPages.Pages.Count == 1) && ExtensionHelper.IsCommandPageFile(filePath))
-				{
-					var root = new CommandPageSettingsRoot();
-					root.Page = commandPages.Pages[0];
-
-					var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>(root);
-					sh.SettingsFilePath = filePath;
-					sh.Save();
-				}
-				else
-				{
-					var root = new CommandPagesSettingsRoot();
-					root.PredefinedCommand = commandPages;
-
-					var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>(root);
-					sh.SettingsFilePath = filePath;
-					sh.Save();
-				}
-
-				exception = null;
+				Clipboard.SetText(sb.ToString());
 				return (true);
 			}
-			catch (Exception ex)
-			{
-				exception = ex;
+			catch (ExternalException) // The clipboard could not be cleared. This typically
+			{                         // occurs when it is being used by another process.
 				return (false);
 			}
 		}
 
 		/// <summary></summary>
-		public static bool ShowFileOpenDialogAndTryLoadFromFile(IWin32Window owner, out PredefinedCommandSettings commandPages)
+		public static bool TryGet(out PredefinedCommandSettings commandPages)
 		{
-			var ofd = new OpenFileDialog();
-			ofd.Title       = "Open Command Page(s)";
-			ofd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
-			ofd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
-			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
-
-			var dr = ofd.ShowDialog(owner);
-			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
-			{
-				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUserSettings();
-
-				Exception ex;
-				if (TryLoadFromFile(ofd.FileName, out commandPages, out ex))
-				{
-					if (commandPages.Pages.Count >= 1)
-					{
-						return (true);
-					}
-					else
-					{
-						if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
-						{
-							MessageBoxEx.Show
-							(
-								"File contains no page.",
-								"No Page",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
-						else
-						{
-							MessageBoxEx.Show
-							(
-								"File contains no pages.",
-								"No Pages",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
-					}
-				}
-				else
-				{
-					string errorMessage;
-					if (!string.IsNullOrEmpty(ofd.FileName))
-						errorMessage = ErrorHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
-					else
-						errorMessage = ErrorHelper.ComposeMessage("Unable to open file!", ex);
-
-					MessageBoxEx.Show
-					(
-						errorMessage,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-				}
-			}
-
+			// PENDING
 			commandPages = null;
 			return (false);
 		}
 
 		/// <summary></summary>
-		private static bool TryLoadFromFile(string filePath, out PredefinedCommandSettings commandPages, out Exception exception)
-		{
-			try
-			{
-				if (ExtensionHelper.IsCommandPageFile(filePath))
-				{
-					var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>();
-					sh.SettingsFilePath = filePath;
-					if (sh.Load())
-					{
-						commandPages = new PredefinedCommandSettings();
-						commandPages.Pages.Add(sh.Settings.Page); // No clone needed as just imported.
-						exception = null;
-						return (true);
-					}
-					else
-					{
-						commandPages = null;
-						exception = null;
-						return (true);
-					}
-				}
-				else
-				{
-					var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
-					sh.SettingsFilePath = filePath;
-					if (sh.Load())
-					{
-						commandPages = sh.Settings.PredefinedCommand;
-						exception = null;
-						return (true);
-					}
-					else
-					{
-						commandPages = null;
-						exception = null;
-						return (true);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				commandPages = null;
-				exception = ex;
-				return (false);
-			}
-		}
-
-		/// <summary></summary>
-		public static bool TryImportFromFile(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		public static bool TryGetAndImport(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
 			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndTryLoadFromFile(owner, out imported))
+			if (TryGet(out imported))
 			{
 				var message = new StringBuilder();
 				message.Append("File contains ");
@@ -349,7 +174,7 @@ namespace YAT.View.Utilities
 					}
 
 					case DialogResult.No:
-					{                                                                  // Specifying 'NoPageId' will add (not insert).
+					{                                                                     // Specifying 'NoPageId' will add (not insert).
 						TryAddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew);
 						break;
 					}
@@ -366,29 +191,17 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool TryImportFromFileAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
+		public static bool TryGetAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
 		{
-			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndTryLoadFromFile(owner, out imported))
-			{
-				                                   // Specifying the 'selectedPageId' will insert (instead of add).
-				return (TryAddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
-			}
-
+			// PENDING
 			commandPagesNew = null;
 			return (false);
 		}
 
 		/// <summary></summary>
-		public static bool TryImportFromFileAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
+		public static bool TryGetAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
-			PredefinedCommandSettings imported;
-			if (ShowFileOpenDialogAndTryLoadFromFile(owner, out imported))
-			{
-				                                                                       // Specifying 'NoPageId' will add (not insert).
-				return (TryAddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew));
-			}
-
+			// PENDING
 			commandPagesNew = null;
 			return (false);
 		}

@@ -45,10 +45,10 @@ using YAT.Settings.Model;
 namespace YAT.View.Utilities
 {
 	/// <summary></summary>
-	public static class CommandClipboardHelper
+	public static class CommandSettingsClipboardHelper
 	{
 		/// <summary></summary>
-		public static bool TextIsAvailable
+		public static bool ClipboardContainsText
 		{
 			get
 			{
@@ -68,26 +68,6 @@ namespace YAT.View.Utilities
 		{
 			var root = new CommandSettingsRoot();
 			root.Command = c;
-
-			var sb = new StringBuilder();
-			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, ref sb);
-
-			try
-			{
-				Clipboard.SetText(sb.ToString());
-				return (true);
-			}
-			catch (ExternalException) // The clipboard could not be cleared. This typically
-			{                         // occurs when it is being used by another process.
-				return (false);
-			}
-		}
-
-		/// <summary></summary>
-		public static bool TrySet(PredefinedCommandSettings commandPages, int selectedPageId)
-		{
-			var root = new CommandPageSettingsRoot();
-			root.Page = commandPages.Pages[selectedPageId - 1];
 
 			var sb = new StringBuilder();
 			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, ref sb);
@@ -152,18 +132,6 @@ namespace YAT.View.Utilities
 
 			c = null;
 			return (false);
-		}
-
-		/// <summary></summary>
-		public static bool TryInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
-		{
-
-		}
-
-		/// <summary></summary>
-		public static bool TryAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
-		{
-
 		}
 	}
 }

@@ -2380,7 +2380,7 @@ namespace YAT.View.Forms
 
 			toolStripMenuItem_PredefinedContextMenu_Cut  .Enabled = cIsDefined;
 			toolStripMenuItem_PredefinedContextMenu_Copy .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) && (CommandClipboardHelper.TextIsAvailable));
+			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) && (CommandSettingsClipboardHelper.ClipboardContainsText));
 			toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
 
 			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
@@ -2636,7 +2636,7 @@ namespace YAT.View.Forms
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
 				SetFixedStatusText("Cutting selected command to clipboard...");
-				if (CommandClipboardHelper.TrySet(sc))
+				if (CommandSettingsClipboardHelper.TrySet(sc))
 				{
 					this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
 
@@ -2665,7 +2665,7 @@ namespace YAT.View.Forms
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
 				SetFixedStatusText("Copying selected command to clipboard...");
-				if (CommandClipboardHelper.TrySet(sc))
+				if (CommandSettingsClipboardHelper.TrySet(sc))
 				{
 					Cursor = Cursors.Default;
 					SetTimedStatusText("Copying done");
@@ -2680,13 +2680,8 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Paste_Click(object sender, EventArgs e)
 		{
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_Paste_Click()
-			// Changes here may have to be applied there too.
-
 			Command cc;
-			if (CommandClipboardHelper.TryGet(out cc))
+			if (CommandSettingsClipboardHelper.TryGet(out cc))
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, cc);
 		}
 
@@ -2694,11 +2689,6 @@ namespace YAT.View.Forms
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
-
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_CommandContextMenu_Clear_Click()
-			// Changes here may have to be applied there too.
 
 			this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1);
 		}
@@ -2718,12 +2708,33 @@ namespace YAT.View.Forms
 		// ...toolStripComboBox_PredefinedContextMenu_Page...
 		// ...is questionable in the 'Predefined' context menu, it is there as kind of title for the items below.
 
+		private void toolStripMenuItem_PredefinedContextMenu_ExportToClipboard_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			CommandPagesSettingsClipboardHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
+			if (CommandPagesSettingsClipboardHelper.TryGetAndImport(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			{
+				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
+				// settingsRoot_Changed() will update the form.
+			}
+		}
+
 		private void toolStripMenuItem_PredefinedContextMenu_ExportToFile_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsHelper.TryExportToFile(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
+			CommandPagesSettingsFileHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -2731,13 +2742,8 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.button_ImportAllPagesFromFile_Click()
-			// Changes here may have to be applied there too.
-
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.TryImportFromFile(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			if (CommandPagesSettingsFileHelper.TryLoadAndImport(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
@@ -5195,7 +5201,7 @@ namespace YAT.View.Forms
 		private void SetPageLayout(PredefinedCommandPageLayout layout)
 		{
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsHelper.TryChange(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
+			if (CommandPagesSettingsFileHelper.TryChange(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
