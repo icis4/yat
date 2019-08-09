@@ -174,17 +174,28 @@ namespace YAT.View.Utilities
 					return (true);
 				}
 
-				// For some reason, default deserialization will wrongly deserialize a 'CommandPageSettingsRoot' as
-				// a 'CommandPagesSettingsRoot' above. Working around this by checking for Pages.Count > 0.
+				// For some reason, default deserialization will wrongly deserializes a 'CommandPageSettingsRoot'
+				// as a 'CommandPagesSettingsRoot' above. Working around this by checking for (Pages.Count > 0).
+
+				// Alternatively, this helper could always set/get a 'CommandPagesSettingsRoot' to/from the clipboard.
+				// However, decided to not do this for two reasons:
+				//  > Symmetricity with file export/import to .yacp/.yacps
+				//  > Issue described here and below still applies, thus a workaround/check would still be needed.
 			}
 
 			// Then, try to deserialize from single page:
 			if (XmlSerializerEx.TryDeserializeFromStringInsisting(typeof(CommandPageSettingsRoot), alternateXmlElements, s, out root))
 			{
 				var rootCasted = (CommandPageSettingsRoot)root;
-				commandPages = new PredefinedCommandSettings();
-				commandPages.Pages.Add(rootCasted.Page);
-				return (true);
+				if ((rootCasted.Page != null) && (rootCasted.Page.DefinedCommandCount > 0))
+				{
+					commandPages = new PredefinedCommandSettings();
+					commandPages.Pages.Add(rootCasted.Page);
+					return (true);
+				}
+
+				// For the same reason as above, default deserialization likely wrongly deserializes something else
+				// as a 'CommandPageSettingsRoot' above. Working around this by checking for (Page.DefinedCommandCount > 0).
 			}
 
 			commandPages = null;
