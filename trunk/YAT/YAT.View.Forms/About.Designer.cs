@@ -188,9 +188,10 @@
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Home.Location = new System.Drawing.Point(12, 520);
 			this.linkLabel_Home.Name = "linkLabel_Home";
-			this.linkLabel_Home.Size = new System.Drawing.Size(256, 13);
+			this.linkLabel_Home.Size = new System.Drawing.Size(479, 13);
 			this.linkLabel_Home.TabIndex = 15;
-			this.linkLabel_Home.Text = "Visit YAT at SourceForge.net. Feedback is welcome.";
+			this.linkLabel_Home.Text = "Visit YAT at SourceForge.net, or contact y-a-terminal@users.sourceforge.net. Feed" +
+    "back is welcome.";
 			this.linkLabel_Home.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// linkLabel_Trademark
