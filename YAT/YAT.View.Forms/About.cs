@@ -373,11 +373,17 @@ namespace YAT.View.Forms
 			linkLabel_Home.Text = "";
 			textBefore = "Visit YAT at ";
 			textLink   =              "SourceForge.net";
-			textAfter  =                             ". Feedback is welcome.";
 			linkLabel_Home.Text += textBefore;
 			linkStart = linkLabel_Home.Text.Length;
 			linkLabel_Home.Text += textLink;
 			linkLabel_Home.Links.Add(linkStart, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
+			textBefore =                             ", or contact ";
+			textLink   =                                          "y-a-terminal@users.sourceforge.net";
+			textAfter  =                                                                            ". Feedback is welcome.";
+			linkLabel_Home.Text += textBefore;
+			linkStart = linkLabel_Home.Text.Length;
+			linkLabel_Home.Text += textLink;
+			linkLabel_Home.Links.Add(linkStart, textLink.Length, "mailto:y-a-terminal@users.sourceforge.net");
 			linkLabel_Home.Text += textAfter;
 
 			// Author:
