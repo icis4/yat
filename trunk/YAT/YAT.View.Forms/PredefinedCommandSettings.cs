@@ -1247,7 +1247,7 @@ namespace YAT.View.Forms
 				else
 					sb.Append("<No Page Selected>");
 
-				if (this.settingsInEdit.PageLayout != PredefinedCommandPageLayout.OneByOne)
+				if ((this.settingsInEdit.PageLayout != PredefinedCommandPageLayout.OneByOne) && (this.selectedSubpageId != PredefinedCommandPage.NoSubpageId))
 					sb.Append(" | Subpage " + PredefinedCommandPage.SubpageIdToString(this.selectedSubpageId));
 
 				groupBox_Page.Text = sb.ToString();

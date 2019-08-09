@@ -59,13 +59,16 @@ namespace YAT.Model.Types
 		/// <remarks>Possible capacities are 12, 24, 36, 48, 72 or 108.</remarks>
 		public const int MaxCommandCapacityPerPage = 108;
 
-		/// <remarks>Subpages are numbered 1..9.</remarks>
+		/// <remarks>Subpages are numbered 1..9, 0 indicates none/invalid.</remarks>
+		public const int NoSubpageId = 0;
+
+		/// <remarks>Subpages are numbered 1..9, 0 indicates none/invalid.</remarks>
 		public const int FirstSubpageId = 1;
 
-		/// <remarks>Subpages are numbered 1..9.</remarks>
+		/// <remarks>Subpages are numbered 1..9, 0 indicates none/invalid.</remarks>
 		public const int LastSubpageId = MaxSubpageCount;
 
-		/// <remarks>Subpages are numbered 1..9.</remarks>
+		/// <remarks>Subpages are numbered 1..9, 0 indicates none/invalid.</remarks>
 		public const int MaxSubpageCount = 9;
 
 		private string pageName;
