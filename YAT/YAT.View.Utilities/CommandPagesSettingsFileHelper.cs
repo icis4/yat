@@ -87,9 +87,9 @@ namespace YAT.View.Utilities
 					default:               return (false);
 				}
 			}
-			else // Just a single page => export all without asking:
-			{                           // Specifying 'false' will export all pages (not the selected).
-				return (TryExport(owner, commandPages, false, indicatedName));
+			else // Just a single page => export without asking, the chosen file extension will select the format:
+			{
+				return (TryExport(owner, commandPages, indicatedName));
 			}
 		}
 
@@ -97,8 +97,8 @@ namespace YAT.View.Utilities
 		/// Prompts the user to export all pages to a .yapcs file.
 		/// </summary>
 		public static bool TryExportAllPages(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
-		{                           // Specifying 'false' will export all pages (not the selected).
-			return (TryExport(owner, commandPages, false, indicatedName));
+		{
+			return (TryExport(owner, commandPages, indicatedName));
 		}
 
 		/// <summary>
@@ -109,15 +109,15 @@ namespace YAT.View.Utilities
 			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
 			p.Pages.Clear();
 			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
-			             // Specifying 'true' will export a single page (not all pages).
-			return (TryExport(owner, p, true, indicatedName));
+
+			return (TryExport(owner, p, indicatedName));
 		}
 
 		/// <summary></summary>
-		private static bool TryExport(IWin32Window owner, PredefinedCommandSettings commandPages, bool isSelected, string indicatedName)
+		private static bool TryExport(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
 		{
 			var sfd = new SaveFileDialog();
-			if ((commandPages.Pages.Count == 1) && isSelected)
+			if (commandPages.Pages.Count == 1)
 			{
 				sfd.Title       = "Save Command Page As";
 				sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
@@ -374,7 +374,7 @@ namespace YAT.View.Utilities
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndTryLoad(owner, out imported))
 			{
-				                                        // Specifying a 'selectedPageId' will insert (instead of add).
+				                                          // Specifying 'selectedPageId' will insert (instead of add).
 				return (TryAddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
 			}
 

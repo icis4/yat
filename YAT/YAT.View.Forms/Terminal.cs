@@ -2689,8 +2689,16 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_PredefinedContextMenu_Paste_Click(object sender, EventArgs e)
 		{
 			Command cc;
+			SetFixedStatusText("Pasting from clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
 			if (CommandSettingsClipboardHelper.TryGet(out cc))
+			{
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, cc);
+				SetTimedStatusText("Pasting done");
+			}
+			else
+			{
+				SetFixedStatusText("Pasting failed!");
+			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Clear_Click(object sender, EventArgs e)
@@ -2721,7 +2729,11 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsClipboardHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId);
+			SetFixedStatusText("Exporting to clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
+			if (CommandPagesSettingsClipboardHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId))
+				SetTimedStatusText("Exporting done");
+			else
+				SetFixedStatusText("Exporting failed!");
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard_Click(object sender, EventArgs e)
@@ -2729,11 +2741,17 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
+			SetFixedStatusText("Importing from clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
 			if (CommandPagesSettingsClipboardHelper.TryGetAndImport(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
+				SetTimedStatusText("Importing done");
+			}
+			else
+			{
+				SetFixedStatusText("Importing failed!");
 			}
 		}
 
@@ -2742,7 +2760,11 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			CommandPagesSettingsFileHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName);
+			SetFixedStatusText("Exporting to file..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
+			if (CommandPagesSettingsFileHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName))
+				SetTimedStatusText("Exporting done");
+			else
+				SetFixedStatusText("Exporting failed!");
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -2750,11 +2772,17 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
+			SetFixedStatusText("Importing from file..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
 			if (CommandPagesSettingsFileHelper.TryLoadAndImport(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
+				SetTimedStatusText("Importing done");
+			}
+			else
+			{
+				SetFixedStatusText("Importing failed!");
 			}
 		}
 

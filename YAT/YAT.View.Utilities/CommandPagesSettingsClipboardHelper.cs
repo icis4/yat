@@ -83,8 +83,8 @@ namespace YAT.View.Utilities
 				}
 			}
 			else // Just a single page => export all without asking:
-			{                                                    // Specifying 'NoPageId' will export all pages (not the selected).
-				return (TryExport(commandPages, PredefinedCommandPageCollection.NoPageId));
+			{                    // Specifying 'selectedPageId' will export the single page.
+				return (TryExport(commandPages, selectedPageId));
 			}
 		}
 
@@ -104,7 +104,7 @@ namespace YAT.View.Utilities
 			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
 			p.Pages.Clear();
 			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
-			    // Specifying a 'selectedPageId' will export a single page (not all pages).
+			      // Specifying 'selectedPageId' will export a single page (not all pages).
 			return (TryExport(p, selectedPageId));
 		}
 
@@ -126,7 +126,7 @@ namespace YAT.View.Utilities
 			{
 				var root = new CommandPageSettingsRoot();
 				root.Page = commandPages.Pages[selectedPageId - 1];
-				XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, ref sb);
+				XmlSerializerEx.SerializeToString(typeof(CommandPageSettingsRoot), root, ref sb);
 			}
 			else
 			{
@@ -168,8 +168,14 @@ namespace YAT.View.Utilities
 			if (XmlSerializerEx.TryDeserializeFromStringInsisting(typeof(CommandPagesSettingsRoot), alternateXmlElements, s, out root))
 			{
 				var rootCasted = (CommandPagesSettingsRoot)root;
-				commandPages = rootCasted.PredefinedCommand;
-				return (true);
+				if ((rootCasted.PredefinedCommand.Pages != null) && (rootCasted.PredefinedCommand.Pages.Count > 0))
+				{
+					commandPages = rootCasted.PredefinedCommand;
+					return (true);
+				}
+
+				// For some reason, default deserialization will wrongly deserialize a 'CommandPageSettingsRoot' as
+				// a 'CommandPagesSettingsRoot' above. Working around this by checking for Pages.Count > 0.
 			}
 
 			// Then, try to deserialize from single page:
@@ -240,7 +246,7 @@ namespace YAT.View.Utilities
 			PredefinedCommandSettings imported;
 			if (TryGet(out imported))
 			{
-				                                        // Specifying a 'selectedPageId' will insert (instead of add).
+				                                          // Specifying 'selectedPageId' will insert (instead of add).
 				return (TryAddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
 			}
 
