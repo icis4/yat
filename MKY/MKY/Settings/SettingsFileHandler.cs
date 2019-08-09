@@ -278,7 +278,7 @@ namespace MKY.Settings
 			// First check for file to minimize exceptions thrown:
 			if (FileEx.IsReadable(filePath))
 			{
-				result = XmlSerializerEx.TryDeserializeFromFileInsisting(typeof(T), alternateXmlElements, filePath, out result);
+				success = XmlSerializerEx.TryDeserializeFromFileInsisting(typeof(T), alternateXmlElements, filePath, out result);
 			}
 
 			if (success)

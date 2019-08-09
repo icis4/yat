@@ -308,7 +308,7 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
-		public static object TryDeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, out object result)
+		public static bool TryDeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, out object result)
 		{
 			return (TryDeserializeFromFileInsisting(type, alternateXmlElements, filePath, Encoding.UTF8, true, out result));
 		}
