@@ -137,10 +137,13 @@ namespace YAT.Model.Types
 			{
 				int n = 0;
 
-				foreach (var c in Commands)
+				if (Commands != null)
 				{
-					if ((c != null) && (c.IsDefined))
-						n++;
+					foreach (var c in Commands)
+					{
+						if ((c != null) && (c.IsDefined))
+							n++;
+					}
 				}
 
 				return (n);
