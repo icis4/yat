@@ -87,8 +87,8 @@ namespace YAT.View.Utilities
 					default:               return (false);
 				}
 			}
-			else // Just a single page => export without asking:
-			{
+			else // Just a single page => export all without asking:
+			{                           // Specifying 'false' will export all pages (not the selected).
 				return (TryExport(owner, commandPages, false, indicatedName));
 			}
 		}
@@ -97,7 +97,7 @@ namespace YAT.View.Utilities
 		/// Prompts the user to export all pages to a .yapcs file.
 		/// </summary>
 		public static bool TryExportAllPages(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
-		{
+		{                           // Specifying 'false' will export all pages (not the selected).
 			return (TryExport(owner, commandPages, false, indicatedName));
 		}
 
@@ -109,7 +109,7 @@ namespace YAT.View.Utilities
 			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
 			p.Pages.Clear();
 			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
-
+			             // Specifying 'true' will export a single page (not all pages).
 			return (TryExport(owner, p, true, indicatedName));
 		}
 
@@ -374,7 +374,7 @@ namespace YAT.View.Utilities
 			PredefinedCommandSettings imported;
 			if (ShowFileOpenDialogAndTryLoad(owner, out imported))
 			{
-				                                      // Specifying the 'selectedPageId' will insert (instead of add).
+				                                        // Specifying a 'selectedPageId' will insert (instead of add).
 				return (TryAddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
 			}
 

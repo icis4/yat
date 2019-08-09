@@ -385,7 +385,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToClipboard_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsClipboardHelper.TryExportAllPages(this, this.settingsInEdit, this.indicatedName);
+			CommandPagesSettingsClipboardHelper.TryExportAllPages(this.settingsInEdit);
 		}
 
 		private void button_ImportAllPagesFromClipboard_Click(object sender, EventArgs e)
@@ -1193,7 +1193,11 @@ namespace YAT.View.Forms
 			{
 				int pageCount = this.settingsInEdit.Pages.Count;
 				bool pageIsSelected = (this.selectedPageId != 0);
+
 				int totalDefinedCommandCount = this.settingsInEdit.TotalDefinedCommandCount;
+				int selectedPageDefinedCommandCount = 0;
+				if (pageIsSelected)
+					selectedPageDefinedCommandCount = this.settingsInEdit.Pages[SelectedPageIndex].DefinedCommandCount;
 
 				// Page list:
 				if (pageCount > 0)
@@ -1214,19 +1218,25 @@ namespace YAT.View.Forms
 				}
 
 				// Page list buttons:
-				button_NamePage              .Enabled = pageIsSelected;
-				button_InsertPage            .Enabled = pageIsSelected;
-				button_InsertPagesFromFile   .Enabled = pageIsSelected;
-			////button_AddPage               .Enabled = true;
-			////button_AddPagesFromFile      .Enabled = true;
-				button_DuplicatePage         .Enabled = pageIsSelected;
-				button_ExportPageToFile      .Enabled = pageIsSelected;
-				button_DeletePage            .Enabled = pageIsSelected; // Deleting a sole page is permissible.
-				button_MovePageUp            .Enabled = pageIsSelected && (this.selectedPageId > 1);
-				button_MovePageDown          .Enabled = pageIsSelected && (this.selectedPageId < pageCount);
-				button_DeleteAllPages        .Enabled = (pageCount > 0); // Deleting a sole page is permissible.
-				button_ExportAllPagesToFile  .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
-			////button_ImportAllPagesFromFile.Enabled = true;
+				button_NamePage                   .Enabled =  pageIsSelected;
+				button_InsertPage                 .Enabled =  pageIsSelected;
+				button_InsertPagesFromFile        .Enabled =  pageIsSelected;
+				button_InsertPageFromClipboard    .Enabled =  pageIsSelected;
+			////button_AddPage                    .Enabled =  true;
+			////button_AddPagesFromFile           .Enabled =  true;
+			////button_AddPagesFromClipboard      .Enabled =  true;
+				button_DuplicatePage              .Enabled =  pageIsSelected;
+				button_ExportPageToFile           .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0));
+				button_CopyPageToClipboard        .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0));
+				button_CutPageToClipboard         .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0)); // Deleting a sole page is permissible.
+				button_DeletePage                 .Enabled =  pageIsSelected;                                           // Deleting a sole page is permissible.
+				button_MovePageUp                 .Enabled = (pageIsSelected && (this.selectedPageId > 1));
+				button_MovePageDown               .Enabled = (pageIsSelected && (this.selectedPageId < pageCount));
+				button_DeleteAllPages             .Enabled = (pageCount > 0);                                           // Deleting a sole page is permissible.
+				button_ExportAllPagesToFile       .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
+				button_ExportAllPagesToClipboard  .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
+			////button_ImportAllPagesFromFile     .Enabled =  true;
+			////button_ImportAllPagesFromClipboard.Enabled =  true;
 
 				// Selected page:
 				if (pageIsSelected)
@@ -1310,7 +1320,7 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				// PENDING
+				// PENDING implement link logic
 
 				pathLabel_LinkedTo.Enabled = false;
 				pathLabel_LinkedTo.Visible = false;

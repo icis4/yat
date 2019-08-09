@@ -33,6 +33,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
+using MKY.Xml;
 using MKY.Xml.Serialization;
 
 using YAT.Model.Settings;
@@ -58,7 +59,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
+		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId)
 		{
 			var pageCount = commandPages.Pages.Count;
 			if (pageCount > 1)
@@ -76,51 +77,63 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (TryExportAllPages(    owner, commandPages,                 indicatedName));
-					case DialogResult.No:  return (TryExportSelectedPage(owner, commandPages, selectedPageId, indicatedName));
+					case DialogResult.Yes: return (TryExportAllPages(    commandPages));
+					case DialogResult.No:  return (TryExportSelectedPage(commandPages, selectedPageId));
 					default:               return (false);
 				}
 			}
-			else // Just a single page => export without asking:
-			{
-				return (TryExport(owner, commandPages, indicatedName));
+			else // Just a single page => export all without asking:
+			{                                                    // Specifying 'NoPageId' will export all pages (not the selected).
+				return (TryExport(commandPages, PredefinedCommandPageCollection.NoPageId));
 			}
 		}
 
 		/// <summary>
 		/// Export all pages to the clipboard.
 		/// </summary>
-		public static bool TryExportAllPages(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
-		{
-			return (TryExport(owner, commandPages, indicatedName));
+		public static bool TryExportAllPages(PredefinedCommandSettings commandPages)
+		{                                                    // Specifying 'NoPageId' will export all pages (not the selected).
+			return (TryExport(commandPages, PredefinedCommandPageCollection.NoPageId));
 		}
 
 		/// <summary>
 		/// Export the given page to the clipboard.
 		/// </summary>
-		public static bool TryExportSelectedPage(IWin32Window owner, PredefinedCommandSettings commandPages, int selectedPageId, string indicatedName)
+		public static bool TryExportSelectedPage(PredefinedCommandSettings commandPages, int selectedPageId)
 		{
 			var p = new PredefinedCommandSettings(commandPages); // Clone page to get same properties.
 			p.Pages.Clear();
 			p.Pages.Add(new PredefinedCommandPage(commandPages.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
-
-			return (TryExport(owner, p, indicatedName));
+			    // Specifying a 'selectedPageId' will export a single page (not all pages).
+			return (TryExport(p, selectedPageId));
 		}
 
-		/// <summary></summary>
-		private static bool TryExport(IWin32Window owner, PredefinedCommandSettings commandPages, string indicatedName)
+		/// <remarks>
+		/// 1:1 wrapper for <see cref="TrySet(PredefinedCommandSettings, int)"/> for symmetricity with
+		/// <see cref="CommandPagesSettingsFileHelper.TryExport(IWin32Window, PredefinedCommandSettings, int, string)"/>.
+		/// </remarks>
+		private static bool TryExport(PredefinedCommandSettings commandPages, int selectedPageId)
 		{
-			return (false); // PENDING
+			return (TrySet(commandPages, selectedPageId));
 		}
 
 		/// <summary></summary>
 		public static bool TrySet(PredefinedCommandSettings commandPages, int selectedPageId)
 		{
-			var root = new CommandPageSettingsRoot();
-			root.Page = commandPages.Pages[selectedPageId - 1];
-
 			var sb = new StringBuilder();
-			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, ref sb);
+
+			if ((commandPages.Pages.Count == 1) && (selectedPageId != PredefinedCommandPageCollection.NoPageId))
+			{
+				var root = new CommandPageSettingsRoot();
+				root.Page = commandPages.Pages[selectedPageId - 1];
+				XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, ref sb);
+			}
+			else
+			{
+				var root = new CommandPagesSettingsRoot();
+				root.PredefinedCommand = commandPages;
+				XmlSerializerEx.SerializeToString(typeof(CommandPagesSettingsRoot), root, ref sb);
+			}
 
 			try
 			{
@@ -136,7 +149,38 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		public static bool TryGet(out PredefinedCommandSettings commandPages)
 		{
-			// PENDING
+			string s;
+
+			try
+			{
+				s = Clipboard.GetText();
+			}
+			catch (ExternalException) // The clipboard could not be cleared. This typically
+			{                         // occurs when it is being used by another process.
+				commandPages = null;
+				return (false);
+			}
+
+			AlternateXmlElement[] alternateXmlElements = null; // Neither CommandPagesSettingsRoot nor CommandPageSettingsRoot (yet) have alternate elements.
+			object root;
+
+			// First, try to deserialize from whole set of pages:
+			if (XmlSerializerEx.TryDeserializeFromStringInsisting(typeof(CommandPagesSettingsRoot), alternateXmlElements, s, out root))
+			{
+				var rootCasted = (CommandPagesSettingsRoot)root;
+				commandPages = rootCasted.PredefinedCommand;
+				return (true);
+			}
+
+			// Then, try to deserialize from single page:
+			if (XmlSerializerEx.TryDeserializeFromStringInsisting(typeof(CommandPageSettingsRoot), alternateXmlElements, s, out root))
+			{
+				var rootCasted = (CommandPageSettingsRoot)root;
+				commandPages = new PredefinedCommandSettings();
+				commandPages.Pages.Add(rootCasted.Page);
+				return (true);
+			}
+
 			commandPages = null;
 			return (false);
 		}
@@ -148,7 +192,7 @@ namespace YAT.View.Utilities
 			if (TryGet(out imported))
 			{
 				var message = new StringBuilder();
-				message.Append("File contains ");
+				message.Append("Clipboard contains ");
 				message.Append(imported.Pages.Count);
 				message.Append(imported.Pages.Count == 1 ? " page" : " pages");
 				message.Append(" with a total of ");
@@ -193,7 +237,13 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		public static bool TryGetAndInsert(IWin32Window owner, PredefinedCommandSettings commandPagesOld, int selectedPageId, out PredefinedCommandSettings commandPagesNew)
 		{
-			// PENDING
+			PredefinedCommandSettings imported;
+			if (TryGet(out imported))
+			{
+				                                        // Specifying a 'selectedPageId' will insert (instead of add).
+				return (TryAddOrInsert(owner, commandPagesOld, imported, selectedPageId, out commandPagesNew));
+			}
+
 			commandPagesNew = null;
 			return (false);
 		}
@@ -201,7 +251,13 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		public static bool TryGetAndAdd(IWin32Window owner, PredefinedCommandSettings commandPagesOld, out PredefinedCommandSettings commandPagesNew)
 		{
-			// PENDING
+			PredefinedCommandSettings imported;
+			if (TryGet(out imported))
+			{
+				                                                                          // Specifying 'NoPageId' will add (not insert).
+				return (TryAddOrInsert(owner, commandPagesOld, imported, PredefinedCommandPageCollection.NoPageId, out commandPagesNew));
+			}
+
 			commandPagesNew = null;
 			return (false);
 		}
