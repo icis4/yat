@@ -34,6 +34,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Permissions;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
@@ -1239,10 +1240,17 @@ namespace YAT.View.Forms
 			////button_ImportAllPagesFromClipboard.Enabled =  true;
 
 				// Selected page:
+				var sb = new StringBuilder();
+
 				if (pageIsSelected)
-					groupBox_Page.Text = this.settingsInEdit.Pages[SelectedPageIndex].PageName;
+					sb.Append(this.settingsInEdit.Pages[SelectedPageIndex].PageName);
 				else
-					groupBox_Page.Text = "<No Page Selected>";
+					sb.Append("<No Page Selected>");
+
+				if (this.settingsInEdit.PageLayout != PredefinedCommandPageLayout.OneByOne)
+					sb.Append(" | Subpage " + PredefinedCommandPage.SubpageIdToString(this.selectedSubpageId));
+
+				groupBox_Page.Text = sb.ToString();
 			}
 			finally
 			{

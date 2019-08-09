@@ -88,20 +88,7 @@ namespace YAT.View.Controls
 
 		private void SetControls()
 		{
-			switch (SubpageId)
-			{
-				case 1: Text =  "1..12";  break;
-				case 2: Text = "13..24";  break;
-				case 3: Text = "25..36";  break;
-				case 4: Text = "37..48";  break;
-				case 5: Text = "49..64";  break;
-				case 6: Text = "65..72";  break;
-				case 7: Text = "73..84";  break;
-				case 8: Text = "85..96";  break;
-				case 9: Text = "97..108"; break;
-
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString(CultureInfo.InvariantCulture) + "' is a subpage ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
+			Text = PredefinedCommandPage.SubpageIdToString(SubpageId);
 		}
 	}
 }

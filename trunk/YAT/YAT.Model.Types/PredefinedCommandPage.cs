@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Xml.Serialization;
 
 using MKY;
@@ -60,6 +61,9 @@ namespace YAT.Model.Types
 
 		/// <remarks>Subpages are numbered 1..9.</remarks>
 		public const int FirstSubpageId = 1;
+
+		/// <remarks>Subpages are numbered 1..9.</remarks>
+		public const int LastSubpageId = MaxSubpageCount;
 
 		/// <remarks>Subpages are numbered 1..9.</remarks>
 		public const int MaxSubpageCount = 9;
@@ -203,6 +207,25 @@ namespace YAT.Model.Types
 							break;
 					}
 				}
+			}
+		}
+
+		/// <param name="subpageId">Subpage ID <see cref="FirstSubpageId"/>..<see cref="LastSubpageId"/>.</param>
+		public static string SubpageIdToString(int subpageId)
+		{
+			switch (subpageId)
+			{
+				case 1: return ( "1..12" );
+				case 2: return ("13..24" );
+				case 3: return ("25..36" );
+				case 4: return ("37..48" );
+				case 5: return ("49..64" );
+				case 6: return ("65..72" );
+				case 7: return ("73..84" );
+				case 8: return ("85..96" );
+				case 9: return ("97..108");
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + subpageId.ToString(CultureInfo.InvariantCulture) + "' is a subpage ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
