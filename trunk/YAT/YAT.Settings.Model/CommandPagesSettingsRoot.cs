@@ -28,12 +28,14 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Collections;
 using MKY.Time;
 
-using YAT.Model.Settings;
+using YAT.Model.Types;
 
 #endregion
 
@@ -50,14 +52,13 @@ namespace YAT.Settings.Model
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
 
-		private PredefinedCommandSettings predefinedCommand;
+		private PredefinedCommandPageCollection pages;
 
 		/// <summary></summary>
 		public CommandPagesSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			PredefinedCommand = new PredefinedCommandSettings(MKY.Settings.SettingsType.Explicit);
-
+			SetMyDefaults();
 			ClearChanged();
 		}
 
@@ -68,9 +69,19 @@ namespace YAT.Settings.Model
 		public CommandPagesSettingsRoot(CommandPagesSettingsRoot rhs)
 			: base(rhs)
 		{
-			PredefinedCommand = new PredefinedCommandSettings(rhs.PredefinedCommand);
+			Pages = new PredefinedCommandPageCollection(rhs.Pages);
 
 			ClearChanged();
+		}
+
+		/// <remarks>
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
+		/// </remarks>
+		protected override void SetMyDefaults()
+		{
+			base.SetMyDefaults();
+
+			Pages = new PredefinedCommandPageCollection();
 		}
 
 		#region Properties
@@ -118,19 +129,22 @@ namespace YAT.Settings.Model
 			set { } // Do nothing.
 		}
 
-		/// <summary></summary>
-		[XmlElement("PredefinedCommand")]
-		public virtual PredefinedCommandSettings PredefinedCommand
+		/// <remarks>
+		/// Commands are intentionally organized as pages but not as subpages.
+		/// Reason: Subpages are only a representation of the view, but not the settings.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("Pages")]
+		public PredefinedCommandPageCollection Pages
 		{
-			get { return (this.predefinedCommand); }
+			get { return (this.pages); }
 			set
 			{
-				if (this.predefinedCommand != value)
+				if (!IEnumerableEx.ItemsEqual(this.pages, value))
 				{
-					var oldNode = this.predefinedCommand;
-					this.predefinedCommand = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
+					this.pages = new PredefinedCommandPageCollection(value); // Clone to ensure decoupling.
+					SetMyChanged();
 				}
 			}
 		}
@@ -156,6 +170,7 @@ namespace YAT.Settings.Model
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (ProductVersion != null ? ProductVersion.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (Pages          != null ? Pages         .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -186,7 +201,8 @@ namespace YAT.Settings.Model
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion)
+				StringEx.EqualsOrdinalIgnoreCase(ProductVersion, other.ProductVersion) &&
+				ObjectEx.Equals(                 Pages,          other.Pages)
 			);
 		}
 

@@ -126,21 +126,6 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlIgnore]
-		public int TotalDefinedCommandCount
-		{
-			get
-			{
-				int n = 0;
-
-				foreach (var p in Pages)
-					n += p.DefinedCommandCount;
-
-				return (n);
-			}
-		}
-
 		#endregion
 
 		#region Methods
