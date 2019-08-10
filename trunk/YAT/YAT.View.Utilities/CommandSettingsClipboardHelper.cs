@@ -28,15 +28,16 @@
 //==================================================================================================
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Xml;
 using MKY.Xml.Serialization;
 
-using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Settings.Model;
 
@@ -99,9 +100,18 @@ namespace YAT.View.Utilities
 			}
 
 			// First, try to deserialize from XML:
-			AlternateXmlElement[] alternateXmlElements = null; // CommandSettingsRoot does not (yet) have alternate elements.
-			object root;
-			if (XmlSerializerEx.TryDeserializeFromStringInsisting(typeof(CommandSettingsRoot), alternateXmlElements, s, out root))
+			object root = null;
+			try
+			{
+				AlternateXmlElement[] alternateXmlElements = null; // CommandSettingsRoot does not (yet) have alternate elements.
+				root = XmlSerializerEx.DeserializeFromStringInsisting(typeof(CommandSettingsRoot), alternateXmlElements, s);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(typeof(CommandPagesSettingsClipboardHelper), ex, "Deserialization from XML has failed, trying to make use of plain text.");
+			}
+
+			if (root != null)
 			{
 				var rootCasted = (CommandSettingsRoot)root;
 				c = rootCasted.Command;
@@ -117,8 +127,8 @@ namespace YAT.View.Utilities
 			}
 
 			// Then, probe for file path:
-			if (PathEx.IsValid(s))
-			{
+			if (PathEx.IsValid(s) && File.Exists(s)) // IsValid() is not sufficient, as "ABC" will successfully be resolved to
+			{                                        // a path relative to the current working directory, e.g. "C:\MyWork\ABC".
 				c = new Command("", true, s); // Simply use whole string, no matter whether absolute or relative path.
 				return (true);
 			}
