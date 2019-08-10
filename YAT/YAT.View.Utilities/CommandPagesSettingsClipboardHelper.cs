@@ -27,11 +27,13 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Diagnostics;
 using MKY.Windows.Forms;
 using MKY.Xml;
 using MKY.Xml.Serialization;
@@ -160,11 +162,19 @@ namespace YAT.View.Utilities
 				return (false);
 			}
 
-			AlternateXmlElement[] alternateXmlElements = null; // Neither CommandPagesSettingsRoot nor CommandPageSettingsRoot (yet) have alternate elements.
-			object root;
-
 			// First, try to deserialize from whole set of pages:
-			if (XmlSerializerEx.TryDeserializeFromStringInsisting(typeof(CommandPagesSettingsRoot), alternateXmlElements, s, out root))
+			object root = null;
+			try
+			{
+				AlternateXmlElement[] alternateXmlElements = null; // Neither CommandPagesSettingsRoot nor CommandPageSettingsRoot (yet) have alternate elements.
+				root = XmlSerializerEx.DeserializeFromStringInsisting(typeof(CommandPagesSettingsRoot), alternateXmlElements, s);
+			}
+			catch (Exception exPages)
+			{
+				DebugEx.WriteException(typeof(CommandPagesSettingsClipboardHelper), exPages, "Deserialization from whole set of pages has failed, trying from single page.");
+			}
+
+			if (root != null)
 			{
 				var rootCasted = (CommandPagesSettingsRoot)root;
 				if ((rootCasted.Pages != null) && (rootCasted.Pages.Count > 0))
@@ -185,7 +195,17 @@ namespace YAT.View.Utilities
 			}
 
 			// Then, try to deserialize from single page:
-			if (XmlSerializerEx.TryDeserializeFromStringInsisting(typeof(CommandPageSettingsRoot), alternateXmlElements, s, out root))
+			try
+			{
+				AlternateXmlElement[] alternateXmlElements = null; // Neither CommandPagesSettingsRoot nor CommandPageSettingsRoot (yet) have alternate elements.
+				root = XmlSerializerEx.DeserializeFromStringInsisting(typeof(CommandPageSettingsRoot), alternateXmlElements, s);
+			}
+			catch (Exception exPage)
+			{
+				DebugEx.WriteException(typeof(CommandPagesSettingsClipboardHelper), exPage, "Deserialization from single page has failed too!");
+			}
+
+			if (root != null)
 			{
 				var rootCasted = (CommandPageSettingsRoot)root;
 				if ((rootCasted.Page != null) && (rootCasted.Page.DefinedCommandCount > 0))

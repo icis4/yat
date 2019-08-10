@@ -308,9 +308,9 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
-		public static bool TryDeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, out object result)
+		public static object DeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath)
 		{
-			return (TryDeserializeFromFileInsisting(type, alternateXmlElements, filePath, Encoding.UTF8, true, out result));
+			return (DeserializeFromFileInsisting(type, alternateXmlElements, filePath, Encoding.UTF8, true));
 		}
 
 		/// <summary>
@@ -325,11 +325,11 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
-		public static bool TryDeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks, out object result)
+		public static object DeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks)
 		{
 			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
 			{
-				return (TryDeserializeFromReaderInsisting(type, alternateXmlElements, sr, out result));
+				return (DeserializeFromReaderInsisting(type, alternateXmlElements, sr));
 			}
 		}
 
@@ -342,11 +342,11 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
-		public static bool TryDeserializeFromStringInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string s, out object result)
+		public static object DeserializeFromStringInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string s)
 		{
 			using (var sr = new StringReader(s))
 			{
-				return (TryDeserializeFromReaderInsisting(type, alternateXmlElements, sr, out result));
+				return (DeserializeFromReaderInsisting(type, alternateXmlElements, sr));
 			}
 		}
 
@@ -380,7 +380,7 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
-		public static bool TryDeserializeFromReaderInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, TextReader input, out object result)
+		public static object DeserializeFromReaderInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, TextReader input)
 		{
 			// First, always try standard deserialization:
 			//  > This is the fastest way of deserialization
@@ -392,24 +392,22 @@ namespace MKY.Xml.Serialization
 			// less severe than the issues described above.
 			try
 			{
-				result = DeserializeFromReader(type, input);
-				return (true);
+				return (DeserializeFromReader(type, input));
 			}
 			catch (Exception exStandard)
 			{
-				DebugEx.WriteException(type, exStandard, "Standard deserialization has failed!");
+				DebugEx.WriteException(type, exStandard, "Standard deserialization has failed, trying tolerantly.");
 
 				if (alternateXmlElements == null)
 				{
 					// Try to open existing file with tolerant deserialization:
 					try
 					{
-						result = TolerantDeserializeFromReader(type, input);
-						return (true);
+						return (TolerantDeserializeFromReader(type, input));
 					}
 					catch (Exception exTolerant)
 					{
-						DebugEx.WriteException(type, exTolerant, "Tolerant deserialization has failed!");
+						DebugEx.WriteException(type, exTolerant, "Tolerant deserialization has failed, rethrowing!");
 						throw; // Rethrow!
 					}
 				}
@@ -418,12 +416,11 @@ namespace MKY.Xml.Serialization
 					// Try to open existing file with alternate-tolerant deserialization:
 					try
 					{
-						result = AlternateTolerantDeserializeFromReader(type, alternateXmlElements, input);
-						return (true);
+						return (AlternateTolerantDeserializeFromReader(type, alternateXmlElements, input));
 					}
 					catch (Exception exAlternateTolerant)
 					{
-						DebugEx.WriteException(type, exAlternateTolerant, "Alternate-tolerant deserialization has failed!");
+						DebugEx.WriteException(type, exAlternateTolerant, "Alternate-tolerant deserialization has failed, rethrowing!");
 						throw; // Rethrow!
 					}
 				}

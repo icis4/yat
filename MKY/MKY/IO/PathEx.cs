@@ -275,7 +275,8 @@ namespace MKY.IO
 			// Path validation:
 			try
 			{
-				return (!string.IsNullOrEmpty(Path.GetFullPath(path)));
+				var fullPath = Path.GetFullPath(path);
+				return (!string.IsNullOrEmpty(fullPath));
 			}
 			catch // Path.GetFullPath() throws if path is invalid.
 			{
