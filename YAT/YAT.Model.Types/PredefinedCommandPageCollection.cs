@@ -92,6 +92,20 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		public int TotalDefinedCommandCount
+		{
+			get
+			{
+				int n = 0;
+
+				foreach (var p in this)
+					n += p.DefinedCommandCount;
+
+				return (n);
+			}
+		}
+
+		/// <summary></summary>
 		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			// Attention:

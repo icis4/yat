@@ -334,7 +334,7 @@ namespace YAT.View.Forms
 		private void button_CopyPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			CommandPagesSettingsClipboardHelper.TrySet(this.settingsInEdit, this.selectedPageId);
+			CommandPagesSettingsClipboardHelper.TryExportSelectedPage(this.settingsInEdit, this.selectedPageId);
 		}
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
@@ -350,7 +350,7 @@ namespace YAT.View.Forms
 		private void button_CutPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			if (CommandPagesSettingsClipboardHelper.TrySet(this.settingsInEdit, this.selectedPageId))
+			if (CommandPagesSettingsClipboardHelper.TryExportSelectedPage(this.settingsInEdit, this.selectedPageId))
 				DeletePage();
 		}
 
@@ -1195,7 +1195,7 @@ namespace YAT.View.Forms
 				int pageCount = this.settingsInEdit.Pages.Count;
 				bool pageIsSelected = (this.selectedPageId != 0);
 
-				int totalDefinedCommandCount = this.settingsInEdit.TotalDefinedCommandCount;
+				int totalDefinedCommandCount = this.settingsInEdit.Pages.TotalDefinedCommandCount;
 				int selectedPageDefinedCommandCount = 0;
 				if (pageIsSelected)
 					selectedPageDefinedCommandCount = this.settingsInEdit.Pages[SelectedPageIndex].DefinedCommandCount;
