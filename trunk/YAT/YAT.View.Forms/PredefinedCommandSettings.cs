@@ -724,7 +724,7 @@ namespace YAT.View.Forms
 			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
 			if (sc != null)
 			{
-				sc = new Command(sc); // Clone command to ensure decoupling. // Replace target by selected:
+				sc = new Command(sc); // Clone to ensure decoupling. // Replace target by selected:
 				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, sc);
 			}
 			else
@@ -755,7 +755,7 @@ namespace YAT.View.Forms
 			{
 				this.settingsInEdit.SuspendChangeEvent();
 
-				sc = new Command(sc); // Clone command to ensure decoupling. // Replace target by selected:
+				sc = new Command(sc); // Clone to ensure decoupling. // Replace target by selected:
 				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
 				this.settingsInEdit.ClearCommand(SelectedPageIndex, (contextMenuStrip_Commands_SelectedCommandId - 1));
 
@@ -815,12 +815,12 @@ namespace YAT.View.Forms
 
 			var sc = GetCommandFromId(selectedCommandId);
 			if (sc != null)
-				sc = new Command(sc); // Clone command to ensure decoupling.
+				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
 			if (tc != null)
-				tc = new Command(tc); // Clone command to ensure decoupling.
+				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                            // Replace selected by target:
 				this.settingsInEdit.SetCommand(SelectedPageIndex, selectedCommandId - 1, tc);
@@ -876,12 +876,12 @@ namespace YAT.View.Forms
 
 			var sc = GetCommandFromId(selectedCommandId);
 			if (sc != null)
-				sc = new Command(sc); // Clone command to ensure decoupling.
+				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 			var tc = GetCommandFromId(targetCommandId);
 			if (tc != null)
-				tc = new Command(tc); // Clone command to ensure decoupling.
+				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                            // Replace selected by target:
 				this.settingsInEdit.SetCommand(SelectedPageIndex, selectedCommandId - 1, tc);
@@ -1284,7 +1284,7 @@ namespace YAT.View.Forms
 					{
 						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
 						if ((commandIndex < commandCount) && (commands[commandIndex] != null))
-							this.predefinedCommandSettingsSets[i].Command = new Command(commands[commandIndex]); // Clone command to ensure decoupling.
+							this.predefinedCommandSettingsSets[i].Command = new Command(commands[commandIndex]); // Clone to ensure decoupling.
 						else
 							this.predefinedCommandSettingsSets[i].Command = null;
 
@@ -1572,7 +1572,7 @@ namespace YAT.View.Forms
 				var p = this.settingsInEdit.Pages[SelectedPageIndex];
 				var c = this.predefinedCommandSettingsSets[relativeCommandIndex].Command;
 				if ((c != null) && (c.IsDefined)) // Filter-out "<Enter text...>" dummy commands.
-					p.SetCommand(absoluteCommandIndex, new Command(c)); // Clone command to ensure decoupling.
+					p.SetCommand(absoluteCommandIndex, new Command(c)); // Clone to ensure decoupling.
 				else
 					p.ClearCommand(absoluteCommandIndex);
 			}

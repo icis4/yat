@@ -73,7 +73,7 @@ namespace YAT.Model.Settings
 		public SendTextSettings(SendTextSettings rhs)
 			: base(rhs)
 		{
-			Command = new Command(rhs.Command); // Clone command to ensure decoupling.
+			Command = new Command(rhs.Command); // Clone to ensure decoupling.
 			RecentCommands = new RecentItemCollection<Command>(rhs.RecentCommands);
 
 			ClearChanged();
@@ -155,7 +155,7 @@ namespace YAT.Model.Settings
 						singleLine.Append(line);
 					}
 
-					var c = new Command(Command); // Clone command to ensure decoupling.
+					var c = new Command(Command); // Clone to ensure decoupling.
 					c.ClearDescription();
 					c.SingleLineText = singleLine.ToString();
 					Command = c;

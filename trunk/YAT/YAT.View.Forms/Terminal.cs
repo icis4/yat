@@ -2433,7 +2433,7 @@ namespace YAT.View.Forms
 			var c = this.settingsRoot.SendText.Command;
 			if (c != null)
 			{
-				c = new Command(c); // Clone command to ensure decoupling.
+				c = new Command(c); // Clone to ensure decoupling.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, c);
 			}
 		}
@@ -2446,7 +2446,7 @@ namespace YAT.View.Forms
 			var c = this.settingsRoot.SendFile.Command;
 			if (c != null)
 			{
-				c = new Command(c); // Clone command to ensure decoupling.
+				c = new Command(c); // Clone to ensure decoupling.
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, c);
 			}
 		}
@@ -2459,7 +2459,7 @@ namespace YAT.View.Forms
 			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
 			if (sc != null)
 			{
-				sc = new Command(sc); // Clone command to ensure decoupling.
+				sc = new Command(sc); // Clone to ensure decoupling.
 				if (sc.IsText)
 					this.settingsRoot.SendText.Command = sc;
 				else if (sc.IsFilePath)
@@ -2484,7 +2484,7 @@ namespace YAT.View.Forms
 			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
 			if (sc != null)
 			{
-				sc = new Command(sc); // Clone command to ensure decoupling.      // Replace target by selected:
+				sc = new Command(sc); // Clone to ensure decoupling.              // Replace target by selected:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc);
 			}
 			else
@@ -2510,7 +2510,7 @@ namespace YAT.View.Forms
 			{
 				this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
 
-				sc = new Command(sc); // Clone command to ensure decoupling.      // Replace target by selected:
+				sc = new Command(sc); // Clone to ensure decoupling.              // Replace target by selected:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
 				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
 
@@ -2558,12 +2558,12 @@ namespace YAT.View.Forms
 
 			var sc = predefined.GetCommandFromId(selectedCommandId);
 			if (sc != null)
-				sc = new Command(sc); // Clone command to ensure decoupling.
+				sc = new Command(sc); // Clone to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 			var tc = predefined.GetCommandFromId(targetCommandId);
 			if (tc != null)
-				tc = new Command(tc); // Clone command to ensure decoupling.
+				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                                                       // Replace selected by target:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);
@@ -2612,12 +2612,12 @@ namespace YAT.View.Forms
 
 			var sc = predefined.GetCommandFromId(selectedCommandId);
 			if (sc != null)
-				sc = new Command(sc); // Clone command to ensure decoupling.
+				sc = new Command(sc); // Clone to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 			var tc = predefined.GetCommandFromId(targetCommandId);
 			if (tc != null)
-				tc = new Command(tc); // Clone command to ensure decoupling.
+				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                                                       // Replace selected by target:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, selectedCommandId - 1, tc);

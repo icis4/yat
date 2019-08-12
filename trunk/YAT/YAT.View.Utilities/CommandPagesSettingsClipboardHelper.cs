@@ -104,7 +104,7 @@ namespace YAT.View.Utilities
 		public static bool TryExportSelectedPage(PredefinedCommandSettings settings, int selectedPageId)
 		{
 			var pages = new PredefinedCommandPageCollection();
-			pages.Add(new PredefinedCommandPage(settings.Pages[selectedPageId - 1])); // Clone page to ensure decoupling.
+			pages.Add(new PredefinedCommandPage(settings.Pages[selectedPageId - 1])); // Clone to ensure decoupling.
 			          // Specifying 'selectedPageId' will export a single page (not all pages).
 			return (TryExport(pages, selectedPageId));
 		}
@@ -504,14 +504,14 @@ namespace YAT.View.Utilities
 					case (Mode.Neutral):
 					case (Mode.Enlarge):
 					{
-						settingsNew.Pages.AddRange(new PredefinedCommandPageCollection(settingsOld.Pages)); // Clone pages to ensure decoupling.
+						settingsNew.Pages.AddRange(new PredefinedCommandPageCollection(settingsOld.Pages)); // Clone to ensure decoupling.
 						return (true);
 					}
 
 					case (Mode.Spread):
 					{
 						var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
-						settingsNew.Pages.AddSpreaded(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageNew); // Clone pages to ensure decoupling.
+						settingsNew.Pages.AddSpreaded(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageNew); // Clone to ensure decoupling.
 						return (true);
 					}
 

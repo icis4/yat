@@ -1813,7 +1813,7 @@ namespace YAT.Model
 			if (fixedId >= TerminalIds.FirstFixedId)
 				tsi.FixedId = fixedId;
 
-			tsi.Window = new WindowSettings(terminal.SettingsRoot.Window); // Clone window settings to ensure decoupling.
+			tsi.Window = new WindowSettings(terminal.SettingsRoot.Window); // Clone to ensure decoupling.
 
 			return (tsi);
 		}

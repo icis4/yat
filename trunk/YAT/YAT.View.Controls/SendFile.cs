@@ -189,7 +189,7 @@ namespace YAT.View.Controls
 				{
 					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-					this.recent = new RecentItemCollection<Command>(value); // Clone collection to ensure decoupling.
+					this.recent = new RecentItemCollection<Command>(value); // Clone to ensure decoupling.
 					SetRecentAndCommandControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
 					DebugCommandLeave();
