@@ -124,25 +124,28 @@
 			// 
 			// tableLayoutPanel_Subpages
 			// 
-			this.tableLayoutPanel_Subpages.ColumnCount = 3;
-			this.tableLayoutPanel_Subpages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel_Subpages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel_Subpages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3C, 2, 2);
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3B, 1, 2);
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2C, 2, 1);
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
-			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
+		////this.tableLayoutPanel_Subpages.ColumnCount = 3;
+			this.tableLayoutPanel_Subpages.ColumnCount = 1;
+		////this.tableLayoutPanel_Subpages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+		////this.tableLayoutPanel_Subpages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+		////this.tableLayoutPanel_Subpages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel_Subpages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3C, 2, 2);
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3B, 1, 2);
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2C, 2, 1);
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
+		////this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
 			this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
 			this.tableLayoutPanel_Subpages.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel_Subpages.Location = new System.Drawing.Point(3, 17);
 			this.tableLayoutPanel_Subpages.Name = "tableLayoutPanel_Subpages";
-			this.tableLayoutPanel_Subpages.RowCount = 3;
-			this.tableLayoutPanel_Subpages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 292F));
-			this.tableLayoutPanel_Subpages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 292F));
+		////this.tableLayoutPanel_Subpages.RowCount = 3;
+			this.tableLayoutPanel_Subpages.RowCount = 1;
+		////this.tableLayoutPanel_Subpages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 292F));
+		////this.tableLayoutPanel_Subpages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 292F));
 			this.tableLayoutPanel_Subpages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel_Subpages.Size = new System.Drawing.Size(426, 643);
 			this.tableLayoutPanel_Subpages.TabIndex = 0;
