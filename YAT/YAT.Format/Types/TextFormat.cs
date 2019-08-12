@@ -211,6 +211,8 @@ namespace YAT.Format.Types
 
 			return
 			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
 				StringEx.EqualsOrdinalIgnoreCase(Color_ForSerialization, other.Color_ForSerialization) &&
 				FontStyle.Equals(other.FontStyle)
 			);

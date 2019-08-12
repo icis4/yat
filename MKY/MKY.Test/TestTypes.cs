@@ -110,6 +110,8 @@ namespace MKY.Test
 
 			return
 			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
 				A.Equals(other.A) &&
 				B.Equals(other.B)
 			);

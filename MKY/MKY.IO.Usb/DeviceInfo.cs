@@ -545,6 +545,8 @@ namespace MKY.IO.Usb
 		{
 			return
 			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
 				VendorId .Equals(vendorId)  &&
 				ProductId.Equals(productId) &&
 				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
