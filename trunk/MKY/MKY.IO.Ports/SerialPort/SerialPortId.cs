@@ -450,7 +450,12 @@ namespace MKY.IO.Ports
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			return (EqualsName(other.Name)); // Only 'Name' is relevant. Other properties are for convenience only.
+			return
+			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
+				EqualsName(other.Name) // Only 'Name' is relevant. Other properties are for convenience only.
+			);
 		}
 
 		/// <summary>

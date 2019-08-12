@@ -841,6 +841,8 @@ namespace YAT.Model.Types
 
 			return
 			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
 				IsDefined.Equals(                   other.IsDefined)    &&
 				StringEx.EqualsOrdinal(Description, other.Description)  &&
 				DefaultRadix.Equals(                other.DefaultRadix) &&

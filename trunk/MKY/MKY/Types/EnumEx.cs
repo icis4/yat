@@ -283,7 +283,12 @@ namespace MKY
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum))); // 'Enum' does not overload the ==/!= operators!
+			return
+			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
+				(UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum)) // 'Enum' is a 'ValueType' but does
+			);                                                                            // not overload the ==/!= operators.
 		}
 
 		/// <summary>

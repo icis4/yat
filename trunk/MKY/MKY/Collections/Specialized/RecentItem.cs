@@ -146,7 +146,12 @@ namespace MKY.Collections.Specialized
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			return (ObjectEx.Equals(Item, other.Item)); // Do not consider time stamp.
+			return
+			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
+				ObjectEx.Equals(Item, other.Item) // Do not consider time stamp.
+			);
 		}
 
 		/// <summary>

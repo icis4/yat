@@ -243,6 +243,8 @@ namespace MKY.IO.Ports
 
 			return
 			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
 				BaudRate .Equals(other.BaudRate) &&
 				DataBits .Equals(other.DataBits) &&
 				Parity   .Equals(other.Parity)   &&
