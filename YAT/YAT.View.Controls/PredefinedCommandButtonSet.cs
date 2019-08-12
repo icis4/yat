@@ -363,7 +363,7 @@ namespace YAT.View.Controls
 				switch (SubpageId)
 				{
 					case 1:
-						label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send | to copy";
+						label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send [to copy]";
 						break;
 
 					case 2:
