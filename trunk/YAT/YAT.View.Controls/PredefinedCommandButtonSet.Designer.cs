@@ -223,7 +223,7 @@
 			this.label_Hint.Name = "label_Hint";
 			this.label_Hint.Size = new System.Drawing.Size(100, 13);
 			this.label_Hint.TabIndex = 1;
-			this.label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send | to copy";
+			this.label_Hint.Text = "[Ctrl+] Shift+F1..F12 to send [to copy]";
 			this.label_Hint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_SeparatorLine
