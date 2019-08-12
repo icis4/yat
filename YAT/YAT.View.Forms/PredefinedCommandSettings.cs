@@ -416,26 +416,29 @@ namespace YAT.View.Forms
 
 		private void button_LinkToFile_Click(object sender, EventArgs e)
 		{
-			// PENDING ShowLinkFileDialog();
+			ShowLinkFileDialog();
 		}
 
 		private void pathLabel_LinkedTo_Click(object sender, EventArgs e)
 		{
-			// PENDING ShowLinkFileDialog();
+			ShowLinkFileDialog();
 		}
 
 		private void ShowLinkFileDialog()
 		{
 			// Attention:
 			// Similar code exists in...
-			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_LinkToFile_Click()
+			// ...View.Forms.Terminal.ShowPredefinedCommandsLinkFileDialog()
 			// Changes here may have to be applied there too.
 
+			// PENDING
 		}
 
 		private void button_ClearLink_Click(object sender, EventArgs e)
 		{
-			// PENDING ClearLink();
+			this.settingsInEdit.Pages[SelectedPageIndex].ClearLink();
+			SetPageControls();
+			SetLinkControls();
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -1328,12 +1331,12 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				// PENDING implement link logic
+				bool isLinked = this.settingsInEdit.Pages[SelectedPageIndex].IsLinkedToFilePath;
 
-				pathLabel_LinkedTo.Enabled = false;
-				pathLabel_LinkedTo.Visible = false;
-				button_ClearLink.Enabled = false;
-				button_ClearLink.Visible = false;
+				pathLabel_LinkedTo.Enabled = isLinked;
+				pathLabel_LinkedTo.Visible = isLinked;
+				button_ClearLink.Enabled   = isLinked;
+				button_ClearLink.Visible   = isLinked;
 			}
 			finally
 			{

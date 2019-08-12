@@ -72,20 +72,26 @@ namespace YAT.Model.Types
 		public const int MaxSubpageCount = 9;
 
 		private string pageName;
-		private List<Command> commands;
+		private List<Command> commandsIntegrated;
+		private List<Command> commandsLinked;
+		private string linkFilePath;
 
 		/// <summary></summary>
 		public PredefinedCommandPage()
 		{
 			this.pageName = "";
-			this.commands = new List<Command>();
+			this.commandsIntegrated = new List<Command>();
+			this.commandsLinked     = new List<Command>(); // Even though typically not needed, same behavior as 'commandsIntegrated'.
+		////this.linkFilePath = null;
 		}
 
 		/// <summary></summary>
 		public PredefinedCommandPage(string pageName)
 		{
 			this.pageName = pageName;
-			this.commands = new List<Command>();
+			this.commandsIntegrated = new List<Command>();
+			this.commandsLinked     = new List<Command>(); // Even though typically not needed, same behavior as 'commandsIntegrated'.
+		////this.linkFilePath = null;
 		}
 
 		/// <summary></summary>
@@ -94,16 +100,24 @@ namespace YAT.Model.Types
 			this.pageName = rhs.pageName;
 
 			// Clone all commands:
-			this.commands = new List<Command>(rhs.commands.Count); // Preset the required capacity to improve memory management.
-			foreach (Command c in rhs.commands)
-				this.commands.Add(new Command(c));
+			this.commandsIntegrated = new List<Command>(rhs.commandsIntegrated.Count); // Preset the required capacity to improve memory management.
+			foreach (var c in rhs.commandsIntegrated)
+				this.commandsIntegrated.Add(new Command(c)); // Clone to ensure decoupling.
+
+			this.commandsLinked = new List<Command>(rhs.commandsLinked.Count); // Preset the required capacity to improve memory management.
+			foreach (var c in rhs.commandsLinked)
+				this.commandsLinked.Add(new Command(c)); // Clone to ensure decoupling.
+
+			this.linkFilePath = rhs.linkFilePath;
 		}
 
 		/// <summary></summary>
 		public PredefinedCommandPage(int capacity, string pageName)
 		{
 			this.pageName = pageName;
-			this.commands = new List<Command>(capacity);
+			this.commandsIntegrated = new List<Command>(capacity);
+			this.commandsLinked     = new List<Command>(capacity); // Even though typically not needed, same behavior as 'commandsIntegrated'.
+		////this.linkFilePath = null;
 		}
 
 		#region Properties
@@ -116,17 +130,67 @@ namespace YAT.Model.Types
 		public virtual string PageName
 		{
 			get { return (this.pageName); }
-			set { this.pageName = value; }
+			set { this.pageName = value;  }
+		}
+
+		/// <remarks>XML is named "Commands" for simplicity/comprehensibility as well as backward compatibility.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("Commands")]
+		public virtual List<Command> CommandsIntegrated
+		{
+			get { return (this.commandsIntegrated); }
+			set { this.commandsIntegrated = value;  }
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
-		[XmlElement("Commands")]
+		[XmlIgnore]
+		public virtual List<Command> CommandsLinked
+		{
+			get { return (this.commandsLinked); }
+			set { this.commandsLinked = value;  }
+		}
+
+		/// <summary>
+		/// The commands effectively in use, either <see cref="CommandsIntegrated"/>, or
+		/// <see cref="CommandsLinked"/> in case <see cref="LinkFilePath"/> is defined.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlIgnore]
 		public virtual List<Command> Commands
 		{
-			get { return (this.commands); }
-			set { this.commands = value; }
+			get
+			{
+				if (IsLinkedToFilePath)
+					return (this.commandsLinked);
+				else
+					return (this.commandsIntegrated);
+			}
+			set
+			{
+				if (IsLinkedToFilePath)
+					this.commandsLinked = value;
+				else
+					this.commandsIntegrated = value;
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("LinkFilePath")]
+		public virtual string LinkFilePath
+		{
+			get { return (this.linkFilePath); }
+			set { this.linkFilePath = value;  }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsLinkedToFilePath
+		{
+			get { return (!string.IsNullOrEmpty(LinkFilePath)); }
 		}
 
 		/// <summary></summary>
@@ -157,65 +221,6 @@ namespace YAT.Model.Types
 		// Methods
 		//==========================================================================================
 
-		/// <param name="index">Command index 0..(<see cref="MaxCommandCapacityPerPage"/> - 1).</param>
-		/// <param name="command">Command to be set.</param>
-		public virtual void SetCommand(int index, Command command)
-		{
-			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
-				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
-			if ((command != null) && (command.IsDefined)) // Prevent non-defined commands from being added to the list
-			{                                             // and potentially leading to adding even more non-defineds.
-				if (index < this.commands.Count)
-				{
-					// Replace command:
-					this.commands[index] = new Command(command); // Clone command to ensure decoupling.
-				}
-				else
-				{
-					// Fill-in empty commands:
-					while (this.commands.Count < (index))
-						this.commands.Add(new Command());
-
-					// Add command:
-					this.commands.Add(new Command(command));
-				}
-			}
-			else
-			{
-				ClearCommand(index);
-			}
-		}
-
-		/// <param name="index">Command index 0..(<see cref="MaxCommandCapacityPerPage"/> - 1).</param>
-		public virtual void ClearCommand(int index)
-		{
-			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
-				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
-			if (index < this.commands.Count)
-			{
-				if (index != (this.commands.Count - 1))
-				{
-					this.commands[index].Clear();
-				}
-				else // 'index' is/was the last command:
-				{
-					// Remove command:
-					this.commands.RemoveAt(index);
-
-					// Remove trailing command(s):
-					for (int i = (index - 1); i >= 0; i--)
-					{
-						if ((this.commands[i] == null) || (!this.commands[i].IsDefined))
-							this.commands.RemoveAt(i);
-						else
-							break;
-					}
-				}
-			}
-		}
-
 		/// <param name="subpageId">Subpage ID <see cref="FirstSubpageId"/>..<see cref="LastSubpageId"/>.</param>
 		public static string SubpageIdToString(int subpageId)
 		{
@@ -233,6 +238,81 @@ namespace YAT.Model.Types
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + subpageId.ToString(CultureInfo.InvariantCulture) + "' is a subpage ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+		}
+
+		/// <remarks>
+		/// Modifies the commands effectively in use, i.e. either <see cref="CommandsIntegrated"/>,
+		/// or <see cref="CommandsLinked"/> in case <see cref="LinkFilePath"/> is defined.
+		/// </remarks>
+		/// <param name="index">Command index 0..(<see cref="MaxCommandCapacityPerPage"/> - 1).</param>
+		/// <param name="command">Command to be set.</param>
+		public virtual void SetCommand(int index, Command command)
+		{
+			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
+				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if ((command != null) && (command.IsDefined)) // Prevent non-defined commands from being added to the list
+			{                                             // and potentially leading to adding even more non-defineds.
+				if (index < Commands.Count)
+				{
+					// Replace command:
+					Commands[index] = new Command(command); // Clone to ensure decoupling.
+				}
+				else
+				{
+					// Fill-in empty commands:
+					while (Commands.Count < (index))
+						Commands.Add(new Command());
+
+					// Add command:
+					Commands.Add(new Command(command));
+				}
+			}
+			else
+			{
+				ClearCommand(index);
+			}
+		}
+
+		/// <remarks>
+		/// Modifies the commands effectively in use, i.e. either <see cref="CommandsIntegrated"/>,
+		/// or <see cref="CommandsLinked"/> in case <see cref="LinkFilePath"/> is defined.
+		/// </remarks>
+		/// <param name="index">Command index 0..(<see cref="MaxCommandCapacityPerPage"/> - 1).</param>
+		public virtual void ClearCommand(int index)
+		{
+			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
+				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if (index < Commands.Count)
+			{
+				if (index != (Commands.Count - 1))
+				{
+					Commands[index].Clear();
+				}
+				else // 'index' is/was the last command:
+				{
+					// Remove command:
+					Commands.RemoveAt(index);
+
+					// Remove trailing command(s):
+					for (int i = (index - 1); i >= 0; i--)
+					{
+						if ((Commands[i] == null) || (!Commands[i].IsDefined))
+							Commands.RemoveAt(i);
+						else
+							break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Clears the link to a file.
+		/// </summary>
+		public virtual void ClearLink()
+		{
+			LinkFilePath = null;
 		}
 
 		#endregion
@@ -255,8 +335,15 @@ namespace YAT.Model.Types
 			{
 				int hashCode = 0;
 
-				foreach (Command c in Commands)
-					hashCode = (hashCode * 397) ^ c.GetHashCode();
+				hashCode = (hashCode * 397) ^ (PageName != null ? PageName.GetHashCode() : 0);
+
+				if (Commands != null)
+				{
+					foreach (var c in Commands) // Just hashing the commands effectively in use.
+						hashCode = (hashCode * 397) ^ c.GetHashCode();
+				}
+
+				hashCode = (hashCode * 397) ^ (LinkFilePath != null ? LinkFilePath.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -283,15 +370,14 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			// Compare page name, i.e. header of page:
-			if (!StringEx.EqualsOrdinal(PageName, other.PageName))
-				return (false);
+			return
+			(
+			////base.Equals(other) is not required when deriving from 'object'.
 
-			// Compare commands, i.e. contents of page:
-			if (!Commands.Count.Equals(other.Commands.Count))
-				return (false);
-
-			return (IEnumerableEx.ItemsEqual(Commands, other.Commands));
+				StringEx          .EqualsOrdinal(PageName,     other.PageName) &&
+				IEnumerableEx.ItemsEqual(        Commands,     other.Commands) && // Just comparing the commands effectively in use.
+				StringEx          .EqualsOrdinal(LinkFilePath, other.LinkFilePath)
+			);
 		}
 
 		/// <summary>
