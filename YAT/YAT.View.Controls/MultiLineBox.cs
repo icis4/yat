@@ -83,7 +83,7 @@ namespace YAT.View.Controls
 			this.parseMode = parseMode;
 
 			this.command = command;
-			this.commandInEdit = new Command(command); // Clone command to ensure decoupling.
+			this.commandInEdit = new Command(command); // Clone to ensure decoupling.
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}

@@ -74,7 +74,7 @@ namespace YAT.View.Controls
 	/// <remarks>
 	/// Note that similar code exists in <see cref="SendFile"/> and <see cref="PredefinedCommandSettingsSet"/>.
 	/// The diff among these three implementations shall be kept as small as possible.
-	/// 
+	///
 	/// For a future refactoring, consider to separate the common code into a common view-model.
 	/// </remarks>
 	[DefaultEvent("SendCommandRequest")]
@@ -237,7 +237,7 @@ namespace YAT.View.Controls
 				{
 					DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 					{
-						this.recent = new RecentItemCollection<Command>(value); // Clone collection to ensure decoupling.
+						this.recent = new RecentItemCollection<Command>(value); // Clone to ensure decoupling.
 						SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 					}
 					DebugUserInputLeave();
@@ -592,7 +592,7 @@ namespace YAT.View.Controls
 		/// 1. ComboBox.Leave()
 		/// 2. UserControl.Leave()
 		/// 3. ComboBox.Validating()
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void SendText_Leave(object sender, EventArgs e)
@@ -725,12 +725,12 @@ namespace YAT.View.Controls
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. ComboBox.Leave()
 		/// 2. ComboBox.Validating()
-		/// 
+		///
 		/// Event sequence when focus is leaving control, e.g. other MDI child activated.
 		/// 1. ComboBox.Leave()
 		/// 2. UserControl.Leave()
 		/// 3. ComboBox.Validating()
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void comboBox_SingleLineText_Leave(object sender, EventArgs e)
@@ -804,7 +804,7 @@ namespace YAT.View.Controls
 					var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
 					if (ri != null)
 					{
-						this.command = new Command(ri.Item); // Clone command to ensure decoupling.
+						this.command = new Command(ri.Item); // Clone to ensure decoupling.
 
 						ConfirmCommand();
 					}
@@ -817,12 +817,12 @@ namespace YAT.View.Controls
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. ComboBox.Leave()
 		/// 2. ComboBox.Validating()
-		/// 
+		///
 		/// Event sequence when focus is leaving control, e.g. other MDI child activated.
 		/// 1. ComboBox.Leave()
 		/// 2. UserControl.Leave()
 		/// 3. ComboBox.Validating()
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void comboBox_SingleLineText_Validating(object sender, CancelEventArgs e)

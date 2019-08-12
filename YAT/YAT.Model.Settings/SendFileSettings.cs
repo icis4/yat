@@ -64,7 +64,7 @@ namespace YAT.Model.Settings
 		public SendFileSettings(SendFileSettings rhs)
 			: base(rhs)
 		{
-			Command = new Command(rhs.Command); // Clone command to ensure decoupling.
+			Command = new Command(rhs.Command); // Clone to ensure decoupling.
 			RecentCommands = new RecentItemCollection<Command>(rhs.RecentCommands);
 
 			ClearChanged();

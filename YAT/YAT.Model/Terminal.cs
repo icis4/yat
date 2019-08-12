@@ -3843,7 +3843,7 @@ namespace YAT.Model
 				Command clone;
 				if (c.IsSingleLineText || c.IsMultiLineText)
 				{
-					clone = new Command(c); // 'Normal' case, simply clone the command to ensure decoupling.
+					clone = new Command(c); // 'Normal' case, simply clone the command.
 				}
 				else if (c.IsPartialTextEol)
 				{                                        // Create a single line text command,
@@ -3970,7 +3970,7 @@ namespace YAT.Model
 				SendText(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
-					this.settingsRoot.SendText.Command = new Command(c); // Clone command to ensure decoupling.
+					this.settingsRoot.SendText.Command = new Command(c); // Clone to ensure decoupling.
 
 				return (true);
 			}
@@ -3979,7 +3979,7 @@ namespace YAT.Model
 				SendFile(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
-					this.settingsRoot.SendFile.Command = new Command(c); // Clone command to ensure decoupling.
+					this.settingsRoot.SendFile.Command = new Command(c); // Clone to ensure decoupling.
 
 				return (true);
 			}
@@ -4007,12 +4007,12 @@ namespace YAT.Model
 			var c = this.settingsRoot.PredefinedCommand.Pages[pageId - 1].Commands[commandId - 1];
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
-				this.settingsRoot.SendText.Command = new Command(c); // Clone command to ensure decoupling.
+				this.settingsRoot.SendText.Command = new Command(c); // Clone to ensure decoupling.
 				return (true);
 			}
 			else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 			{
-				this.settingsRoot.SendFile.Command = new Command(c); // Clone command to ensure decoupling.
+				this.settingsRoot.SendFile.Command = new Command(c); // Clone to ensure decoupling.
 				return (true);
 			}
 			else

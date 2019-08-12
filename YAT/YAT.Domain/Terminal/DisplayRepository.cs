@@ -179,8 +179,8 @@ namespace YAT.Domain
 					Dequeue();
 
 				// Enqueue new line and reset current line:
-				base.Enqueue(this.currentLine.Clone());            // Clone elements to ensure decoupling.
-				this.lastLineAuxiliary = this.currentLine.Clone(); // Clone elements to ensure decoupling.
+				base.Enqueue(this.currentLine.Clone());            // Clone to ensure decoupling.
+				this.lastLineAuxiliary = this.currentLine.Clone(); // Clone to ensure decoupling.
 				this.currentLine.Clear();
 			}
 		}
@@ -254,7 +254,7 @@ namespace YAT.Domain
 
 			// Add current line if it contains elements:
 			if (this.currentLine.Count > 0)
-				lines.Add(this.currentLine.Clone()); // Clone elements to ensure decoupling.
+				lines.Add(this.currentLine.Clone()); // Clone to ensure decoupling.
 
 			return (lines);
 		}
