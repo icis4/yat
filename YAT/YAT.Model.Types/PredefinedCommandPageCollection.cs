@@ -72,7 +72,7 @@ namespace YAT.Model.Types
 				Add(new PredefinedCommandPage(pcp));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Explicitly name "Command" to clearly distiguish from list of pages.</remarks>
 		public int MaxCommandCountPerPage
 		{
 			get
@@ -91,15 +91,33 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Explicitly name "Command" to clearly distiguish from list of pages.</remarks>
 		public int TotalDefinedCommandCount
 		{
 			get
 			{
 				int n = 0;
 
-				foreach (var p in this)
+				foreach (var p in this) {
 					n += p.DefinedCommandCount;
+				}
+
+				return (n);
+			}
+		}
+
+		/// <summary>The number of pages linked to a file.</summary>
+		public int LinkedToFilePathCount
+		{
+			get
+			{
+				int n = 0;
+
+				foreach (var p in this) {
+					if (p.IsLinkedToFilePath) {
+						n++;
+					}
+				}
 
 				return (n);
 			}
@@ -109,7 +127,7 @@ namespace YAT.Model.Types
 		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			// Attention:
-			// Similar code exists in InsertSpreaded() further below.
+			// Similar code exists in InsertSpreaded() below.
 			// Changes here may have to be applied there too.
 
 			foreach (var p in collection)
@@ -139,7 +157,7 @@ namespace YAT.Model.Types
 		public void InsertSpreaded(int index, IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			// Attention:
-			// Similar code exists in AddSpreaded() further above.
+			// Similar code exists in AddSpreaded() above.
 			// Changes here may have to be applied there too.
 
 			foreach (var p in collection)
@@ -163,6 +181,13 @@ namespace YAT.Model.Types
 					Insert(index, spreadPage);
 				}
 			}
+		}
+
+		/// <summary></summary>
+		public void UnlinkAll()
+		{
+			foreach (var p in this)
+				p.Unlink();
 		}
 	}
 }

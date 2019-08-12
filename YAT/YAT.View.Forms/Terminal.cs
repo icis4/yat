@@ -2791,7 +2791,18 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			ShowPredefinedCommandsLinkFileDialog();
+			SetFixedStatusText("Linking to file..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
+			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
+			if (CommandPagesSettingsFileLinkHelper.TryLoadAndLink(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			{
+				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
+				// settingsRoot_Changed() will update the form.
+				SetTimedStatusText("Linking done");
+			}
+			else
+			{
+				SetFixedStatusText("Linking failed!");
+			}
 		}
 
 		#endregion
@@ -5292,17 +5303,6 @@ namespace YAT.View.Forms
 				this.settingsRoot.PredefinedCommand = f.SettingsResult;
 				this.settingsRoot.Predefined.SelectedPageId = f.SelectedPageId;
 			}
-		}
-
-		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowPredefinedCommandsLinkFileDialog()
-		{
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.ShowLinkFileDialog()
-			// Changes here may have to be applied there too.
-
-			// PENDING
 		}
 
 		#endregion

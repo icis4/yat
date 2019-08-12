@@ -310,9 +310,10 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Clears the link to a file.
 		/// </summary>
-		public virtual void ClearLink()
+		public virtual void Unlink()
 		{
-			LinkFilePath = null;
+			this.linkFilePath = null;
+			this.commandsLinked = new List<Command>();
 		}
 
 		#endregion

@@ -637,7 +637,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_File_Workspace_Open_Click(object sender, EventArgs e)
 		{
-			ShowOpenWorkspaceFromFileDialog();
+			ShowOpenWorkspaceFileDialog();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_Workspace_Close_Click(object sender, EventArgs e)
@@ -2197,7 +2197,7 @@ namespace YAT.View.Forms
 		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
 
-			ShowOpenWorkspaceFromFileDialog();
+			ShowOpenWorkspaceFileDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_Exit_Click(object sender, EventArgs e)
@@ -2856,7 +2856,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowOpenWorkspaceFromFileDialog()
+		private void ShowOpenWorkspaceFileDialog()
 		{
 			SetFixedStatusText("Select a file...");
 

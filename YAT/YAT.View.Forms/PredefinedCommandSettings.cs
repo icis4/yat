@@ -214,9 +214,9 @@ namespace YAT.View.Forms
 			{
 				this.selectedPageId = Int32Ex.Limit(this.startupControl.RequestedPageId, 1, pageCount); // 'Count' is 1 or above.
 			}
-			else // Create a page if no page exists yet:
+			else // Create a page if no page exists yet, same behavior as DeleteAllPages():
 			{
-				this.settingsInEdit.CreateDefaultPage();
+				this.settingsInEdit.ClearAndCreateDefaultPage();
 				this.selectedPageId = 1;
 			}
 
@@ -247,10 +247,7 @@ namespace YAT.View.Forms
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
 			if (CommandPagesSettingsFileHelper.TryChange(this, this.settingsInEdit, (PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
-			{
-				this.settingsInEdit = settingsInEditNew;
-				SetControls();
-			}
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void subpageCheckBox_I_CheckedChanged(object sender, EventArgs e)
@@ -285,20 +282,14 @@ namespace YAT.View.Forms
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
 			if (CommandPagesSettingsClipboardHelper.TryGetAndInsert(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
-			{
-				this.settingsInEdit = settingsInEditNew;
-				SetControls();
-			}
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void button_InsertPagesFromFile_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
 			if (CommandPagesSettingsFileHelper.TryLoadAndInsert(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
-			{
-				this.settingsInEdit = settingsInEditNew;
-				SetControls();
-			}
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void button_AddPage_Click(object sender, EventArgs e)
@@ -310,20 +301,14 @@ namespace YAT.View.Forms
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
 			if (CommandPagesSettingsClipboardHelper.TryGetAndAdd(this, this.settingsInEdit, out settingsInEditNew))
-			{
-				this.settingsInEdit = settingsInEditNew;
-				SetControls();
-			}
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void button_AddPagesFromFile_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
 			if (CommandPagesSettingsFileHelper.TryLoadAndAdd(this, this.settingsInEdit, out settingsInEditNew))
-			{
-				this.settingsInEdit = settingsInEditNew;
-				SetControls();
-			}
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void button_DuplicatePage_Click(object sender, EventArgs e)
@@ -334,12 +319,12 @@ namespace YAT.View.Forms
 		private void button_CopyPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			CommandPagesSettingsClipboardHelper.TryExportSelectedPage(this.settingsInEdit, this.selectedPageId);
+			CommandPagesSettingsClipboardHelper.TryExportOne(this.settingsInEdit, this.selectedPageId);
 		}
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsFileHelper.TryExportSelectedPage(this, this.settingsInEdit, this.selectedPageId, this.indicatedName);
+			CommandPagesSettingsFileHelper.TryExportOne(this, this.settingsInEdit, this.selectedPageId, this.indicatedName);
 		}
 
 		private void button_DeletePage_Click(object sender, EventArgs e)
@@ -350,7 +335,7 @@ namespace YAT.View.Forms
 		private void button_CutPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			if (CommandPagesSettingsClipboardHelper.TryExportSelectedPage(this.settingsInEdit, this.selectedPageId))
+			if (CommandPagesSettingsClipboardHelper.TryExportOne(this.settingsInEdit, this.selectedPageId))
 				DeletePage();
 		}
 
@@ -371,32 +356,26 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsFileHelper.TryExportAllPages(this, this.settingsInEdit, this.indicatedName);
+			CommandPagesSettingsFileHelper.TryExportAll(this, this.settingsInEdit, this.indicatedName);
 		}
 
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
 			if (CommandPagesSettingsFileHelper.TryLoadAndImport(this, this.settingsInEdit, out settingsInEditNew))
-			{
-				this.settingsInEdit = settingsInEditNew;
-				SetControls();
-			}
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void button_ExportAllPagesToClipboard_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsClipboardHelper.TryExportAllPages(this.settingsInEdit);
+			CommandPagesSettingsClipboardHelper.TryExportAll(this.settingsInEdit);
 		}
 
 		private void button_ImportAllPagesFromClipboard_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
 			if (CommandPagesSettingsClipboardHelper.TryGetAndImport(this, this.settingsInEdit, out settingsInEditNew))
-			{
-				this.settingsInEdit = settingsInEditNew;
-				SetControls();
-			}
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
@@ -426,19 +405,16 @@ namespace YAT.View.Forms
 
 		private void ShowLinkFileDialog()
 		{
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.Terminal.ShowPredefinedCommandsLinkFileDialog()
-			// Changes here may have to be applied there too.
-
-			// PENDING
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandPagesSettingsFileLinkHelper.TryLoadAndLink(this, this.settingsInEdit, out settingsInEditNew))
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void button_ClearLink_Click(object sender, EventArgs e)
 		{
-			this.settingsInEdit.Pages[SelectedPageIndex].ClearLink();
-			SetPageControls();
-			SetLinkControls();
+			Model.Settings.PredefinedCommandSettings settingsInEditNew;
+			if (CommandPagesSettingsFileLinkHelper.TryClearLink(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
+				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -1459,9 +1435,9 @@ namespace YAT.View.Forms
 					this.selectedPageId = Int32Ex.Limit(this.selectedPageId, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // 'max' must be 1 or above.
 					SetControls();
 				}
-				else // Same behavior as DeletePages() further below.
+				else // Same behavior as DeleteAllPages():
 				{
-					this.settingsInEdit.CreateDefaultPage();
+					this.settingsInEdit.ClearAndCreateDefaultPage();
 					this.selectedPageId = 1;
 					SetControls();
 				}
@@ -1500,7 +1476,25 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settingsInEdit.CreateDefaultPage();
+				this.settingsInEdit.ClearAndCreateDefaultPage();
+				this.selectedPageId = 1;
+				SetControls();
+			}
+		}
+
+		private void ApplySettingsAndSetControls(Model.Settings.PredefinedCommandSettings settings)
+		{
+			if (settings.Pages.Count > 0)
+			{
+				if (this.selectedPageId > settings.Pages.Count)
+					this.selectedPageId = settings.Pages.Count;
+
+				this.settingsInEdit = settings;
+				SetControls();
+			}
+			else // Same behavior as DeleteAllPages():
+			{
+				this.settingsInEdit.ClearAndCreateDefaultPage();
 				this.selectedPageId = 1;
 				SetControls();
 			}
