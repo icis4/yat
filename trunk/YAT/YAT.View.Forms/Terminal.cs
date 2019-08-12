@@ -717,7 +717,7 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
 
-				toolStripMenuItem_TerminalMenu_Send_PredefinedPage.Enabled = (pageCount > 0);
+				toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Enabled = (pageCount > 0);
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
@@ -821,12 +821,12 @@ namespace YAT.View.Forms
 		}
 
 		// While the purpose of
-		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedCommand...
-		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedPage...
-		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedDefine...
+		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedCommands...
+		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage...
+		// ...toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine...
 		// ...is questionable in the 'Send' menu, they must be there to activate the shortcuts.
 
-		private void toolStripMenuItem_TerminalMenu_Send_PredefinedDefine_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine_Click(object sender, EventArgs e)
 		{
 			ShowPredefinedCommandSettings(predefined.SelectedPageId, 1);
 		}
@@ -2791,12 +2791,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.ShowLinkFileDialog()
-			// Changes here may have to be applied there too.
-
-			// PENDING ShowLinkFileDialog();
+			ShowPredefinedCommandsLinkFileDialog();
 		}
 
 		#endregion
@@ -5297,6 +5292,17 @@ namespace YAT.View.Forms
 				this.settingsRoot.PredefinedCommand = f.SettingsResult;
 				this.settingsRoot.Predefined.SelectedPageId = f.SelectedPageId;
 			}
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowPredefinedCommandsLinkFileDialog()
+		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.PredefinedCommandSettings.ShowLinkFileDialog()
+			// Changes here may have to be applied there too.
+
+			// PENDING
 		}
 
 		#endregion
