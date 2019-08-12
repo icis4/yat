@@ -50,8 +50,9 @@ using YAT.Settings.Model;
 namespace YAT.View.Utilities
 {
 	/// <remarks>
-	/// Duplicate implementation as "Clipboard" and "File" to deal with subtle differences rather
-	/// than making the implementation less comprehensive. Separate classes to ease diffing.
+	/// Note there are similar implementations "Clipboard", "File" and "FileLink" to deal with
+	/// subtle differences. Intentionally kept in parallel rather than making the implementation
+	/// all-inclusive but less comprehensive. Separate classes to ease diffing.
 	/// </remarks>
 	public static class CommandPagesSettingsFileHelper
 	{
@@ -82,8 +83,9 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (TryExportAllPages(    owner, settings,                 indicatedName));
-					case DialogResult.No:  return (TryExportSelectedPage(owner, settings, selectedPageId, indicatedName));
+					case DialogResult.Yes: return (TryExportAll(owner, settings,                 indicatedName));
+					case DialogResult.No:  return (TryExportOne(owner, settings, selectedPageId, indicatedName));
+
 					default:               return (false);
 				}
 			}
@@ -96,7 +98,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Prompts the user to export all pages to a .yapcs file.
 		/// </summary>
-		public static bool TryExportAllPages(IWin32Window owner, PredefinedCommandSettings settings, string indicatedName)
+		public static bool TryExportAll(IWin32Window owner, PredefinedCommandSettings settings, string indicatedName)
 		{
 			return (TryExport(owner, settings.Pages, indicatedName));
 		}
@@ -104,10 +106,10 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Prompts the user to export the given page to a .yapc file.
 		/// </summary>
-		public static bool TryExportSelectedPage(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId, string indicatedName)
+		public static bool TryExportOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId, string indicatedName)
 		{
 			var pages = new PredefinedCommandPageCollection();
-			pages.Add(new PredefinedCommandPage(settings.Pages[selectedPageId - 1])); // Clone to ensure decoupling.
+			pages.Add(new PredefinedCommandPage(settings.Pages[pageId - 1])); // Clone to ensure decoupling.
 
 			return (TryExport(owner, pages, indicatedName));
 		}
@@ -212,7 +214,7 @@ namespace YAT.View.Utilities
 					if (sh.Load())
 					{
 						pages = new PredefinedCommandPageCollection();
-						pages.Add(sh.Settings.Page); // No clone needed as just imported.
+						pages.Add(sh.Settings.Page); // No clone needed as just loaded.
 						exception = null;
 						return (true);
 					}
@@ -250,7 +252,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ShowFileOpenDialogAndTryLoad(IWin32Window owner, out PredefinedCommandPageCollection pages)
+		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out PredefinedCommandPageCollection pages)
 		{
 			var ofd = new OpenFileDialog();
 			ofd.Title       = "Open Command Page(s)";
@@ -322,7 +324,7 @@ namespace YAT.View.Utilities
 		public static bool TryLoadAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
-			if (ShowFileOpenDialogAndTryLoad(owner, out pagesImported))
+			if (ShowOpenFileDialogAndTryLoad(owner, out pagesImported))
 			{
 				var message = new StringBuilder();
 				message.Append("File contains ");
@@ -332,8 +334,12 @@ namespace YAT.View.Utilities
 				message.Append(pagesImported.TotalDefinedCommandCount);
 				message.AppendLine(" commands.");
 				message.AppendLine();
-				message.AppendLine("Would you like to replace all currently configured predefined commands by the imported [Yes],");
-				message.Append("or add the imported to the currently configured predefined commands [No]?");
+				message.Append("Would you like to replace all currently configured predefined commands by the imported");
+				message.Append(pagesImported.Count == 1 ? " page" : " pages");
+				message.AppendLine(" [Yes],");
+				message.Append("or add the imported");
+				message.Append(pagesImported.Count == 1 ? " page" : " pages");
+				message.Append(" to the currently configured predefined commands [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -346,14 +352,12 @@ namespace YAT.View.Utilities
 				{
 					case DialogResult.Yes:
 					{
-						TryImport(owner, settingsOld, pagesImported, out settingsNew);
-						return (true);
+						return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
 					}
 
 					case DialogResult.No:
-					{                                                                      // Specifying 'NoPageId' will add (not insert).
-						TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew);
-						break;
+					{                                                                              // Specifying 'NoPageId' will add (not insert).
+						return (TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew));
 					}
 
 					default:
@@ -371,7 +375,7 @@ namespace YAT.View.Utilities
 		public static bool TryLoadAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
-			if (ShowFileOpenDialogAndTryLoad(owner, out pagesImported))
+			if (ShowOpenFileDialogAndTryLoad(owner, out pagesImported))
 			{
 				                                           // Specifying 'selectedPageId' will insert (instead of add).
 				return (TryAddOrInsert(owner, settingsOld, pagesImported, selectedPageId, out settingsNew));
@@ -385,7 +389,7 @@ namespace YAT.View.Utilities
 		public static bool TryLoadAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
-			if (ShowFileOpenDialogAndTryLoad(owner, out pagesImported))
+			if (ShowOpenFileDialogAndTryLoad(owner, out pagesImported))
 			{
 				                                                                           // Specifying 'NoPageId' will add (not insert).
 				return (TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew));
@@ -396,13 +400,16 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool TryImport(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageCollection pagesImported, out PredefinedCommandSettings settingsNew)
+		private static bool TryReplace(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageCollection pagesImported, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
 			if (ConfirmImport(owner, pagesImported, settingsOld.PageLayout, out mode, out pageLayoutNew))
 			{
+				// Clone...
 				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve properties.
+
+				// ...and replace the pages:
 				settingsNew.Pages.Clear();
 				settingsNew.Pages = pagesImported;
 				return (true);
@@ -429,51 +436,55 @@ namespace YAT.View.Utilities
 				// ...potentially adjust layout...
 				settingsNew.PageLayout = pageLayoutNew;
 
-				// ...add default page if yet empty...
-				if (settingsOld.Pages.Count == 0)
-					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
-
-				switch (mode)
+				// ...and then...
+				if (pagesImported.Count > 0)
 				{
-					case (Mode.Neutral):
+					switch (mode)
 					{
-						// ...then add or insert:
-						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-							settingsNew.Pages.AddRange(pagesImported); // No clone needed as just imported.
-						else
-							settingsNew.Pages.InsertRange((selectedPageId - 1), pagesImported); // No clone needed as just imported.
+						case (Mode.Neutral):
+						{
+							// ...add or insert:
+							if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+								settingsNew.Pages.AddRange(pagesImported); // No clone needed as just loaded.
+							else
+								settingsNew.Pages.InsertRange((selectedPageId - 1), pagesImported); // No clone needed as just loaded.
 
-						return (true);
+							return (true);
+						}
+
+						case (Mode.Enlarge):
+						{
+							// ...add or insert:
+							if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+								settingsNew.Pages.AddRange(pagesImported); // No clone needed as just loaded.
+							else
+								settingsNew.Pages.InsertRange((selectedPageId - 1), pagesImported); // No clone needed as just loaded.
+
+							return (true);
+						}
+
+						case (Mode.Spread):
+						{
+								var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+
+							// ...spread:
+							if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+								settingsNew.Pages.AddSpreaded(pagesImported, commandCapacityPerPageNew); // No clone needed as just loaded.
+							else
+								settingsNew.Pages.InsertSpreaded((selectedPageId - 1), pagesImported, commandCapacityPerPageNew); // No clone needed as just loaded.
+
+							return (true);
+						}
+
+						default:
+						{
+							break; // Nothing to do.
+						}
 					}
-
-					case (Mode.Enlarge):
-					{
-						// ... then add or insert:
-						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-							settingsNew.Pages.AddRange(pagesImported); // No clone needed as just imported.
-						else
-							settingsNew.Pages.InsertRange((selectedPageId - 1), pagesImported); // No clone needed as just imported.
-
-						return (true);
-					}
-
-					case (Mode.Spread):
-					{
-							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
-
-						// ...and then spread:
-						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-							settingsNew.Pages.AddSpreaded(pagesImported, commandCapacityPerPageNew); // No clone needed as just imported.
-						else
-							settingsNew.Pages.InsertSpreaded((selectedPageId - 1), pagesImported, commandCapacityPerPageNew); // No clone needed as just imported.
-
-						return (true);
-					}
-
-					default:
-					{
-						break; // Nothing to do.
-					}
+				}
+				else // ...add default page since empty:
+				{
+					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
 				}
 			}
 
@@ -590,30 +601,36 @@ namespace YAT.View.Utilities
 				// ...set layout...
 				settingsNew.PageLayout = pageLayoutNew;
 
-				// ...add default page if yet empty...
-				if (settingsOld.Pages.Count == 0)
-					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
-
-				switch (mode)
+				// ...and then...
+				if (settingsOld.Pages.Count > 0)
 				{
-					case (Mode.Neutral):
-					case (Mode.Enlarge):
+					switch (mode)
 					{
-						settingsNew.Pages.AddRange(new PredefinedCommandPageCollection(settingsOld.Pages)); // Clone to ensure decoupling.
-						return (true);
-					}
+						case (Mode.Neutral):
+						case (Mode.Enlarge):
+						{
+							// ...add:
+							settingsNew.Pages.AddRange(new PredefinedCommandPageCollection(settingsOld.Pages)); // Clone to ensure decoupling.
+							return (true);
+						}
 
-					case (Mode.Spread):
-					{
-						var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
-						settingsNew.Pages.AddSpreaded(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageNew); // Clone to ensure decoupling.
-						return (true);
-					}
+						case (Mode.Spread):
+						{
+							// ...spread:
+							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
+							settingsNew.Pages.AddSpreaded(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageNew); // Clone to ensure decoupling.
+							return (true);
+						}
 
-					default:
-					{
-						break; // Nothing to do.
+						default:
+						{
+							break; // Nothing to do.
+						}
 					}
+				}
+				else // ...add default page since empty:
+				{
+					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
 				}
 			}
 

@@ -134,7 +134,7 @@ namespace YAT.Model.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual void CreateDefaultPage()
+		public virtual void ClearAndCreateDefaultPage()
 		{
 			this.pages = new PredefinedCommandPageCollection();
 			this.pages.Add(PredefinedCommandPageCollection.DefaultPage);
@@ -191,7 +191,7 @@ namespace YAT.Model.Settings
 		public virtual void SetCommand(int pageIndex, int commandIndex, Command command)
 		{
 			if ((pageIndex == 0) && (this.pages.Count == 0))
-				CreateDefaultPage();
+				ClearAndCreateDefaultPage();
 
 			if ((pageIndex >= 0) && (pageIndex < this.pages.Count))
 			{
