@@ -137,32 +137,37 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
+				if (ExtensionHelper.IsCommandPagesFile(ofd.FileName))
+				{
+					if (TryLoad(ofd.FileName, out pages, out ex))
+					{
+						if (pages.Count < 1)
+						{
+							if (MessageBoxEx.Show
+								(
+								"File contains no pages.",
+								"No Pages",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								) == DialogResult.Cancel)
+							{
+								filePath = null;
+								pages = null;
+								return (false);
+							}
+						}
+
+						filePath = ofd.FileName;
+						return (true);
+					}
+				}
+				else // ExtensionHelper.IsCommandPageFile(ofd.FileName) and .txt or .xml or whatever
 				{
 					PredefinedCommandPage page;
 					if (TryLoad(ofd.FileName, out page, out ex))
 					{
 						pages = new PredefinedCommandPageCollection();
 						pages.Add(page); // No clone needed as just loaded.
-						filePath = ofd.FileName;
-						return (true);
-					}
-				}
-				else
-				{
-					if (TryLoad(ofd.FileName, out pages, out ex))
-					{
-						if (pages.Count < 1)
-						{
-							MessageBoxEx.Show
-							(
-								"File contains no pages.",
-								"No Pages",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
-
 						filePath = ofd.FileName;
 						return (true);
 					}

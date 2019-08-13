@@ -277,12 +277,40 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		private static bool TryLoad(string filePath, out PredefinedCommandSettings settings, out Exception exception)
+		{
+			try
+			{
+				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				sh.SettingsFilePath = filePath;
+				if (sh.Load())
+				{
+					settings = sh.Settings.PredefinedCommand; // No clone needed as just loaded.
+					exception = null;
+					return (true);
+				}
+				else
+				{
+					settings = null;
+					exception = null;
+					return (true);
+				}
+			}
+			catch (Exception ex)
+			{
+				settings = null;
+				exception = ex;
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out PredefinedCommandPageCollection pages)
 		{
 			var ofd = new OpenFileDialog();
 			ofd.Title       = "Open Command Page(s)";
-			ofd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
-			ofd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
+			ofd.Filter      = ExtensionHelper.CommandPageOrPagesOrTerminalFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.CommandPageOrPagesOrTerminalFilesFilterDefault;
 			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
@@ -293,31 +321,60 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
+				if (ExtensionHelper.IsTerminalFile(ofd.FileName))
+				{
+					PredefinedCommandSettings settings;
+					if (TryLoad(ofd.FileName, out settings, out ex))
+					{
+						if (settings.Pages.Count < 1)
+						{
+							if (MessageBoxEx.Show
+								(
+								"File contains no pages.",
+								"No Pages",
+								MessageBoxButtons.OKCancel,
+								MessageBoxIcon.Warning
+								) == DialogResult.Cancel)
+							{
+								pages = null;
+								return (false);
+							}
+						}
+
+						pages = new PredefinedCommandPageCollection();
+						pages.AddRange(settings.Pages); // No clone needed as just loaded.
+						return (true);
+					}
+				}
+				else if (ExtensionHelper.IsCommandPagesFile(ofd.FileName))
+				{
+					if (TryLoad(ofd.FileName, out pages, out ex))
+					{
+						if (pages.Count < 1)
+						{
+							if (MessageBoxEx.Show
+								(
+								"File contains no pages.",
+								"No Pages",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								) == DialogResult.Cancel)
+							{
+								pages = null;
+								return (false);
+							}
+						}
+
+						return (true);
+					}
+				}
+				else // ExtensionHelper.IsCommandPageFile(ofd.FileName) and .txt or .xml or whatever
 				{
 					PredefinedCommandPage page;
 					if (TryLoad(ofd.FileName, out page, out ex))
 					{
 						pages = new PredefinedCommandPageCollection();
 						pages.Add(page); // No clone needed as just loaded.
-						return (true);
-					}
-				}
-				else
-				{
-					if (TryLoad(ofd.FileName, out pages, out ex))
-					{
-						if (pages.Count < 1)
-						{
-							MessageBoxEx.Show
-							(
-								"File contains no pages.",
-								"No Pages",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
-
 						return (true);
 					}
 				}
