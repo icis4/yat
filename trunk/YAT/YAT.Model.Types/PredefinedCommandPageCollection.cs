@@ -138,9 +138,9 @@ namespace YAT.Model.Types
 					var spreadPage = new PredefinedCommandPage();
 
 					if (n <= 1)
-						spreadPage.PageName = p.PageName;
+						spreadPage.Name = p.Name;
 					else
-						spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
+						spreadPage.Name = p.Name + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
 
 					for (int j = 0; j < commandCapacityPerPage; j++)
 					{
@@ -168,9 +168,9 @@ namespace YAT.Model.Types
 					var spreadPage = new PredefinedCommandPage();
 
 					if (n <= 1)
-						spreadPage.PageName = p.PageName;
+						spreadPage.Name = p.Name;
 					else
-						spreadPage.PageName = p.PageName + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
+						spreadPage.Name = p.Name + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
 
 					for (int j = 0; j < commandCapacityPerPage; j++)
 					{

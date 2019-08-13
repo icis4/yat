@@ -2979,7 +2979,7 @@ namespace YAT.View.Forms
 
 				for (int i = 0; i < Math.Min(pageCount, menuItems_Page_MaxPagesWithMenuItem); i++)
 				{
-					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, pages[i].PageName);
+					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, pages[i].Name);
 					this.menuItems_Pages[i].Visible =  true;
 					this.menuItems_Pages[i].Enabled = (pageCount > 1); // No need to navigate a single page.
 				}

@@ -71,7 +71,7 @@ namespace YAT.Model.Types
 		/// <remarks>Subpages are numbered 1..9, 0 indicates none/invalid.</remarks>
 		public const int MaxSubpageCount = 9;
 
-		private string pageName;
+		private string name;
 		private List<Command> commandsIntegrated;
 		private List<Command> commandsLinked;
 		private string linkFilePath;
@@ -79,7 +79,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public PredefinedCommandPage()
 		{
-			this.pageName = "";
+			this.name = "";
 			this.commandsIntegrated = new List<Command>();
 			this.commandsLinked     = new List<Command>(); // Even though typically not needed, same behavior as 'commandsIntegrated'.
 		////this.linkFilePath = null;
@@ -88,7 +88,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public PredefinedCommandPage(string pageName)
 		{
-			this.pageName = pageName;
+			this.name = pageName;
 			this.commandsIntegrated = new List<Command>();
 			this.commandsLinked     = new List<Command>(); // Even though typically not needed, same behavior as 'commandsIntegrated'.
 		////this.linkFilePath = null;
@@ -97,7 +97,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public PredefinedCommandPage(PredefinedCommandPage rhs)
 		{
-			this.pageName = rhs.pageName;
+			this.name = rhs.name;
 
 			// Clone all commands:
 			this.commandsIntegrated = new List<Command>(rhs.commandsIntegrated.Count); // Preset the required capacity to improve memory management.
@@ -112,9 +112,9 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public PredefinedCommandPage(int capacity, string pageName)
+		public PredefinedCommandPage(int capacity, string name)
 		{
-			this.pageName = pageName;
+			this.name = name;
 			this.commandsIntegrated = new List<Command>(capacity);
 			this.commandsLinked     = new List<Command>(capacity); // Even though typically not needed, same behavior as 'commandsIntegrated'.
 		////this.linkFilePath = null;
@@ -126,11 +126,18 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("PageName")]
-		public virtual string PageName
+		[XmlIgnore()]
+		public virtual int Capacity
 		{
-			get { return (this.pageName); }
-			set { this.pageName = value;  }
+			get { return (Commands.Capacity); }
+		}
+
+		/// <summary></summary>
+		[XmlElement("Name")]
+		public virtual string Name
+		{
+			get { return (this.name); }
+			set { this.name = value;  }
 		}
 
 		/// <remarks>XML is named "Commands" for simplicity/comprehensibility as well as backward compatibility.</remarks>
@@ -336,7 +343,7 @@ namespace YAT.Model.Types
 			{
 				int hashCode = 0;
 
-				hashCode = (hashCode * 397) ^ (PageName != null ? PageName.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
 
 				if (Commands != null)
 				{
@@ -375,7 +382,7 @@ namespace YAT.Model.Types
 			(
 			////base.Equals(other) is not required when deriving from 'object'.
 
-				StringEx          .EqualsOrdinal(PageName,     other.PageName) &&
+				StringEx          .EqualsOrdinal(Name,         other.Name) &&
 				IEnumerableEx.ItemsEqual(        Commands,     other.Commands) && // Just comparing the commands effectively in use.
 				StringEx          .EqualsOrdinal(LinkFilePath, other.LinkFilePath)
 			);
@@ -417,7 +424,7 @@ namespace YAT.Model.Types
 		{
 			var other = (obj as PredefinedCommandPage);
 			if (other != null)
-				return (string.Compare(this.pageName, other.pageName, StringComparison.CurrentCulture));
+				return (string.Compare(this.name, other.name, StringComparison.CurrentCulture));
 			else
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'PredefinedCommandPage'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
 		}
