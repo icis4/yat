@@ -591,7 +591,7 @@ namespace YAT.View.Controls
 					comboBox_Pages.Items.Clear();
 
 					foreach (var p in this.pages)
-						comboBox_Pages.Items.Add(p.PageName);
+						comboBox_Pages.Items.Add(p.Name);
 
 					comboBox_Pages.SelectedIndex = SelectedPageIndex;
 				}

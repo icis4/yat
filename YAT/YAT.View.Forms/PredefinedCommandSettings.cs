@@ -1186,7 +1186,7 @@ namespace YAT.View.Forms
 					listBox_Pages.Items.Clear();
 
 					foreach (var p in this.settingsInEdit.Pages)
-						listBox_Pages.Items.Add(p.PageName);
+						listBox_Pages.Items.Add(p.Name);
 
 					if (pageIsSelected)
 						listBox_Pages.SelectedIndex = SelectedPageIndex;
@@ -1222,7 +1222,7 @@ namespace YAT.View.Forms
 				var sb = new StringBuilder();
 
 				if (pageIsSelected)
-					sb.Append(this.settingsInEdit.Pages[SelectedPageIndex].PageName);
+					sb.Append(this.settingsInEdit.Pages[SelectedPageIndex].Name);
 				else
 					sb.Append("<No Page Selected>");
 
@@ -1336,12 +1336,12 @@ namespace YAT.View.Forms
 					this,
 					"Enter page name:",
 					"Page Name",
-					this.settingsInEdit.Pages[SelectedPageIndex].PageName,
+					this.settingsInEdit.Pages[SelectedPageIndex].Name,
 					out pageName
 				)
 				== DialogResult.OK)
 			{
-				this.settingsInEdit.Pages[SelectedPageIndex].PageName = pageName;
+				this.settingsInEdit.Pages[SelectedPageIndex].Name = pageName;
 				SetPagesControls();
 			}
 		}
@@ -1403,13 +1403,13 @@ namespace YAT.View.Forms
 					this,
 					"Enter name of copy:",
 					"Page Name",
-					this.settingsInEdit.Pages[SelectedPageIndex].PageName + " (copy)",
+					this.settingsInEdit.Pages[SelectedPageIndex].Name + " (copy)",
 					out pageName
 				)
 				== DialogResult.OK)
 			{
 				var pcp = new PredefinedCommandPage(this.settingsInEdit.Pages[SelectedPageIndex]);
-				pcp.PageName = pageName;
+				pcp.Name = pageName;
 				this.settingsInEdit.Pages.Insert(SelectedPageIndex + 1, pcp);
 				SetControls();
 			}
@@ -1421,7 +1421,7 @@ namespace YAT.View.Forms
 			if (MessageBoxEx.Show
 				(
 					this,
-					"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].PageName + "'?",
+					"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].Name + "'?",
 					"Delete?",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question,
@@ -1610,7 +1610,7 @@ namespace YAT.View.Forms
 			if (MessageBoxEx.Show
 				(
 				this,
-				"Clear all commands of page '" + this.settingsInEdit.Pages[SelectedPageIndex].PageName + "'?",
+				"Clear all commands of page '" + this.settingsInEdit.Pages[SelectedPageIndex].Name + "'?",
 				"Clear?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
