@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading;
@@ -2006,13 +2007,16 @@ namespace YAT.Model
 		{
 			OnFixedStatusTextRequest("Saving terminal...");
 
-			bool success = false;
+			bool success;
 
 			try
 			{
 				this.settingsHandler.Settings.AutoSaved = isAutoSave;
 				this.settingsHandler.Save();
 				success = true;
+
+				if (this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+					success = TrySaveLinkedPredefinedCommandPages(this.settingsHandler.Settings.PredefinedCommand.Pages);
 
 				if (!isAutoSave)
 					this.fileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
@@ -2044,6 +2048,142 @@ namespace YAT.Model
 					MessageBoxIcon.Error
 				);
 				OnTimedStatusTextRequest("Terminal not saved!");
+
+				success = false;
+			}
+
+			return (success);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TrySaveLinkedPredefinedCommandPages(PredefinedCommandPageCollection pages)
+		{
+			// Attention:
+			// Similar code exists in TryLoadLinkedPredefinedCommandPages() below.
+			// Changes here may have to be applied there too.
+
+			bool success = true;
+
+			string pageOrPages = ((pages.LinkedToFilePathCount == 1) ? "page" : "pages");
+			OnFixedStatusTextRequest("Saving linked predefined command " + pageOrPages + "...");
+
+			foreach (var linkedPage in (pages.Where(p => p.IsLinkedToFilePath)))
+			{
+				var linkFilePath = linkedPage.LinkFilePath;
+				var linkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+
+				// Retrieve the file which contains the linked command page:
+				try
+				{
+					while (!string.IsNullOrEmpty(linkFilePath))
+					{
+						linkedSettingsHandler.SettingsFilePath = linkFilePath;
+						if (linkedSettingsHandler.Load())
+							linkFilePath = linkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
+					}
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex, "Error retrieving linked predefined command page!");
+
+					OnFixedStatusTextRequest("Error retrieving linked predefined command page!");
+					var dr = OnMessageInputRequest
+					(
+						ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", linkedPage.LinkFilePath, ex),
+						"Linked File Error",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Error
+					);
+					OnTimedStatusTextRequest("Linked predefined command page not retrieved!");
+
+					if (dr == DialogResult.Cancel)
+						return (false);
+					else
+						success = false;
+				}
+
+				// Update the linked command page:
+				linkedSettingsHandler.Settings.Page.Commands = linkedPage.Commands; // No clone needed as just temporary.
+
+				// Update the file which contains the linked command page:
+				try
+				{
+					linkedSettingsHandler.Save();
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex, "Error saving linked predefined command page!");
+
+					OnFixedStatusTextRequest("Error saving linked predefined command page!");
+					var dr = OnMessageInputRequest
+					(
+						ErrorHelper.ComposeMessage("Unable to save linked predefined command page file", linkedPage.LinkFilePath, ex),
+						"Linked File Error",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Error
+					);
+					OnTimedStatusTextRequest("Linked predefined command page not saved!");
+
+					if (dr == DialogResult.Cancel)
+						return (false);
+					else
+						success = false;
+				}
+			}
+
+			return (success);
+		}
+
+		/// <summary></summary>
+		public static bool TryLoadLinkedPredefinedCommandPages(PredefinedCommandPageCollection pages)
+		{
+			// Attention:
+			// Similar code exists in TrySaveLinkedPredefinedCommandPages() above.
+			// Changes here may have to be applied there too.
+
+			bool success = true;
+
+		////string pageOrPages = ((pages.LinkedToFilePathCount == 1) ? "page" : "pages");        <= No error messaging for this static method (yet).
+		////OnFixedStatusTextRequest("Saving linked predefined command " + pageOrPages + "..."); <= To be re-activated when needed, e.g. using callbacks.
+
+			foreach (var linkedPage in (pages.Where(p => p.IsLinkedToFilePath)))
+			{
+				var linkFilePath = linkedPage.LinkFilePath;
+				var linkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+
+				// Retrieve the file which contains the linked command page:
+				try
+				{
+					while (!string.IsNullOrEmpty(linkFilePath))
+					{
+						linkedSettingsHandler.SettingsFilePath = linkFilePath;
+						if (linkedSettingsHandler.Load())
+							linkFilePath = linkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
+					}
+				}
+				catch (Exception ex)
+				{
+				////DebugEx.WriteException(GetType(), ex, "Error retrieving linked predefined command page!");
+					DebugEx.WriteException(typeof(Terminal), ex, "Error retrieving linked predefined command page!");
+
+				////OnFixedStatusTextRequest("Error retrieving linked predefined command page!"); <= No error messaging for this static method (yet).
+				////var dr = OnMessageInputRequest                                                <= To be re-activated when needed, e.g. using callbacks.
+				////(
+				////	ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", linkedPage.LinkFilePath, ex),
+				////	"Linked File Error",
+				////	MessageBoxButtons.OKCancel,
+				////	MessageBoxIcon.Error
+				////);
+				////OnTimedStatusTextRequest("Linked predefined command page not retrieved!");
+
+				////if (dr == DialogResult.Cancel)
+				////	return (false);
+				////else
+						success = false;
+				}
+
+				// Update the linked command page:
+				linkedPage.Commands = linkedSettingsHandler.Settings.Page.Commands; // No clone needed as just temporary.
 			}
 
 			return (success);
