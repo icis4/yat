@@ -120,7 +120,7 @@ namespace YAT.Application.Utilities
 						"|" +
 						WorkspaceFilesFilter +
 						"|" +
-						ApplicationEx.CommonName + " Terminal and Workspace Files (*" + TerminalFile + ";*" + WorkspaceFile + ")|*" + TerminalFile + ";*" + WorkspaceFile);
+						"All " + ApplicationEx.CommonName + " Files (*" + TerminalFile + ";*" + WorkspaceFile + ")|*" + TerminalFile + ";*" + WorkspaceFile);
 			}
 		}
 
@@ -242,7 +242,7 @@ namespace YAT.Application.Utilities
 						"|" +
 						CommandPagesFilesFilter +
 						"|" +
-						"Both " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile);
+						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile);
 			}
 		}
 
@@ -261,11 +261,11 @@ namespace YAT.Application.Utilities
 						"|" +
 						CommandPagesFilesFilter +
 						"|" +
-						"Both " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile +
+						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile +
 						"|" +
 						TerminalFilesFilter +
 						"|" +
-						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile);
+						"All " + ApplicationEx.CommonName + " Command Page(s) Sources (*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile);
 			}
 		}
 
