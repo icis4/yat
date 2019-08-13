@@ -1188,10 +1188,16 @@ namespace YAT.Settings.Model.Test
 		{
 			var sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			sh.SettingsFilePath = filePath;
+
 			if (!sh.Load())
-			{
 				Assert.Fail("Terminal settings could not be loaded from " + sh.SettingsFilePath);
+
+			if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+			{
+				if (!Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages))
+					Assert.Fail("Linked predefined command page(s) could not be loaded for " + sh.SettingsFilePath);
 			}
+
 			return (sh);
 		}
 
@@ -1199,10 +1205,10 @@ namespace YAT.Settings.Model.Test
 		{
 			var sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 			sh.SettingsFilePath = filePath;
+
 			if (!sh.Load())
-			{
 				Assert.Fail("Workspace settings could not be loaded from " + sh.SettingsFilePath);
-			}
+
 			return (sh);
 		}
 
@@ -1487,7 +1493,7 @@ namespace YAT.Settings.Model.Test
 			Command command;
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[0];
-			Assert.That(page.PageName, Is.EqualTo("First Page"), "First predefined command pages has wrong name!");
+			Assert.That(page.Name, Is.EqualTo("First Page"), "First predefined command pages has wrong name!");
 			Assert.That(page.Commands.Count, Is.EqualTo(4), "First predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
 			Assert.That(command.Description,  Is.EqualTo("1A"));
@@ -1503,7 +1509,7 @@ namespace YAT.Settings.Model.Test
 			Assert.That(command.TextLines[0], Is.EqualTo("1D"));
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[1];
-			Assert.That(page.PageName, Is.EqualTo("Second Page"), "Second predefined command pages has wrong name!");
+			Assert.That(page.Name, Is.EqualTo("Second Page"), "Second predefined command pages has wrong name!");
 			Assert.That(page.Commands.Count, Is.EqualTo(4), "Second predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
 			Assert.That(command.Description,  Is.EqualTo("21")); // Ensures that numbers are properly parsed as well.
@@ -1597,7 +1603,7 @@ namespace YAT.Settings.Model.Test
 			Command c;
 
 			p = t1.SettingsRoot.PredefinedCommand.Pages[0];
-			Assert.That(p.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
+			Assert.That(p.Name, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
 			Assert.That(p.Commands.Count, Is.EqualTo(5), "First predefined command page doesn't contain 5 commands!");
 			c = p.Commands[0];
 			Assert.That(c.Description,  Is.EqualTo("abc"));
@@ -1649,7 +1655,7 @@ namespace YAT.Settings.Model.Test
 				Command c;
 
 				p = t.SettingsRoot.PredefinedCommand.Pages[0];
-				Assert.That(p.PageName, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
+				Assert.That(p.Name, Is.EqualTo("Page 1"), "First predefined command pages has wrong name!");
 				Assert.That(p.Commands.Count, Is.EqualTo(8), "First predefined command page doesn't contain 8 commands!"); // 7 + 1 dummy.
 				c = p.Commands[0];
 				Assert.That(c.Description,  Is.EqualTo("abc"));

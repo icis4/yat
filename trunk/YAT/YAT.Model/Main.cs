@@ -1655,11 +1655,13 @@ namespace YAT.Model
 		// Terminal > Private Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
 		private bool OpenTerminalFile(string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
 			return (OpenTerminalFile("", terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exception));
 		}
 
+		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			string absoluteTerminalFilePath;
@@ -1667,9 +1669,14 @@ namespace YAT.Model
 			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exception));
 		}
 
+		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
+			// Attention:
+			// Similar code exists in Workspace.OpenTerminalFile().
+			// Changes here may have to be applied there too.
+
 			absoluteTerminalFilePath = null;
 
 			// Try to combine workspace and terminal path:
@@ -1686,9 +1693,14 @@ namespace YAT.Model
 				sh.SettingsFilePath = absoluteTerminalFilePath;
 				if (sh.Load())
 				{
+					bool success = true;
+
+					if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+						success = Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages);
+
 					settingsHandler = sh;
 					exception = null;
-					return (true);
+					return (success);
 				}
 				else
 				{
@@ -1700,6 +1712,7 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
+
 				settingsHandler = null;
 				exception = ex;
 				return (false);

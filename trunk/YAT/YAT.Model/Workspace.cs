@@ -1758,6 +1758,10 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
 		{
+			// Attention:
+			// Similar code exists in Main.OpenTerminalFile().
+			// Changes here may have to be applied there too.
+
 			absoluteFilePath = null;
 
 			// Try to combine workspace and terminal path:
@@ -1774,9 +1778,14 @@ namespace YAT.Model
 				sh.SettingsFilePath = absoluteFilePath;
 				if (sh.Load())
 				{
+					bool success = true;
+
+					if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+						success = Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages);
+
 					settingsHandler = sh;
 					exception = null;
-					return (true);
+					return (success);
 				}
 				else
 				{
