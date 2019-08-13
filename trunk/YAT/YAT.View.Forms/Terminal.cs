@@ -2751,7 +2751,7 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				SetFixedStatusText("Importing failed!");
+				SetFixedStatusText("Importing failed! Clipboard does not contain a " + ApplicationEx.CommonName + " Command Page(s) definition.");
 			}
 		}
 
@@ -2782,7 +2782,7 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				SetFixedStatusText("Importing failed!");
+				SetFixedStatusText("Importing failed!"); // Opposed to clipboard above, TryLoadAndImport() already outputs a detailed error message.
 			}
 		}
 

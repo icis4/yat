@@ -137,7 +137,7 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (ExtensionHelper.IsCommandPagesFile(ofd.FileName))
+				if (ExtensionHelper.IsCommandPagesFile(ofd.FileName)) // .yacps explicitly.
 				{
 					if (TryLoad(ofd.FileName, out pages, out ex))
 					{
@@ -161,7 +161,7 @@ namespace YAT.View.Utilities
 						return (true);
 					}
 				}
-				else // ExtensionHelper.IsCommandPageFile(ofd.FileName) and .txt or .xml or whatever
+				else // ExtensionHelper.IsCommandPageFile(ofd.FileName) .yacp and .xml or .txt or whatever.
 				{
 					PredefinedCommandPage page;
 					if (TryLoad(ofd.FileName, out page, out ex))

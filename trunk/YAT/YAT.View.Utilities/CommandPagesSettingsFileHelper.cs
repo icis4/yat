@@ -96,7 +96,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary>
-		/// Prompts the user to export all pages to a .yapcs file.
+		/// Prompts the user to export all pages to a .yacps file.
 		/// </summary>
 		public static bool TryExportAll(IWin32Window owner, PredefinedCommandSettings settings, string indicatedName)
 		{
@@ -104,7 +104,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary>
-		/// Prompts the user to export the given page to a .yapc file.
+		/// Prompts the user to export the given page to a .yacp file.
 		/// </summary>
 		public static bool TryExportOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId, string indicatedName)
 		{
@@ -321,7 +321,29 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (ExtensionHelper.IsTerminalFile(ofd.FileName))
+				if (ExtensionHelper.IsCommandPagesFile(ofd.FileName)) // .yacps explicitly.
+				{
+					if (TryLoad(ofd.FileName, out pages, out ex))
+					{
+						if (pages.Count < 1)
+						{
+							if (MessageBoxEx.Show
+								(
+								"File contains no pages.",
+								"No Pages",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								) == DialogResult.Cancel)
+							{
+								pages = null;
+								return (false);
+							}
+						}
+
+						return (true);
+					}
+				}
+				else if (ExtensionHelper.IsTerminalFile(ofd.FileName)) // .yat integrated.
 				{
 					PredefinedCommandSettings settings;
 					if (TryLoad(ofd.FileName, out settings, out ex))
@@ -346,29 +368,7 @@ namespace YAT.View.Utilities
 						return (true);
 					}
 				}
-				else if (ExtensionHelper.IsCommandPagesFile(ofd.FileName))
-				{
-					if (TryLoad(ofd.FileName, out pages, out ex))
-					{
-						if (pages.Count < 1)
-						{
-							if (MessageBoxEx.Show
-								(
-								"File contains no pages.",
-								"No Pages",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-								) == DialogResult.Cancel)
-							{
-								pages = null;
-								return (false);
-							}
-						}
-
-						return (true);
-					}
-				}
-				else // ExtensionHelper.IsCommandPageFile(ofd.FileName) and .txt or .xml or whatever
+				else // ExtensionHelper.IsCommandPageFile(ofd.FileName) .yacp and .xml or .txt or whatever.
 				{
 					PredefinedCommandPage page;
 					if (TryLoad(ofd.FileName, out page, out ex))
