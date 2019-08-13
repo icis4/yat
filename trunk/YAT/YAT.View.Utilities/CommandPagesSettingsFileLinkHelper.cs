@@ -65,44 +65,51 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exception)
+		{
+			try
+			{
+				var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+				sh.SettingsFilePath = filePath;
+				if (sh.Load())
+				{
+					page = sh.Settings.Page; // No clone needed as just loaded.
+					exception = null;
+					return (true);
+				}
+				else
+				{
+					page = null;
+					exception = null;
+					return (true);
+				}
+			}
+			catch (Exception ex)
+			{
+				page = null;
+				exception = ex;
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
 		private static bool TryLoad(string filePath, out PredefinedCommandPageCollection pages, out Exception exception)
 		{
 			try
 			{
-				if (ExtensionHelper.IsCommandPageFile(filePath))
+				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
+				sh.SettingsFilePath = filePath;
+				if (sh.Load())
 				{
-					var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>();
-					sh.SettingsFilePath = filePath;
-					if (sh.Load())
-					{
-						pages = new PredefinedCommandPageCollection();
-						pages.Add(sh.Settings.Page); // No clone needed as just loaded.
-						exception = null;
-						return (true);
-					}
-					else
-					{
-						pages = null;
-						exception = null;
-						return (true);
-					}
+					pages = sh.Settings.Pages; // No clone needed as just loaded.
+					exception = null;
+					return (true);
 				}
 				else
 				{
-					var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
-					sh.SettingsFilePath = filePath;
-					if (sh.Load())
-					{
-						pages = sh.Settings.Pages;
-						exception = null;
-						return (true);
-					}
-					else
-					{
-						pages = null;
-						exception = null;
-						return (true);
-					}
+					pages = null;
+					exception = null;
+					return (true);
 				}
 			}
 			catch (Exception ex)
@@ -130,26 +137,22 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (TryLoad(ofd.FileName, out pages, out ex))
+				if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
 				{
-					if (pages.Count >= 1)
+					PredefinedCommandPage page;
+					if (TryLoad(ofd.FileName, out page, out ex))
 					{
+						pages = new PredefinedCommandPageCollection();
+						pages.Add(page); // No clone needed as just loaded.
 						filePath = ofd.FileName;
 						return (true);
 					}
-					else
+				}
+				else
+				{
+					if (TryLoad(ofd.FileName, out pages, out ex))
 					{
-						if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
-						{
-							MessageBoxEx.Show
-							(
-								"File contains no page.",
-								"No Page",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
-						else
+						if (pages.Count < 1)
 						{
 							MessageBoxEx.Show
 							(
@@ -159,31 +162,31 @@ namespace YAT.View.Utilities
 								MessageBoxIcon.Warning
 							);
 						}
+
+						filePath = ofd.FileName;
+						return (true);
 					}
 				}
-				else
-				{
-					string errorMessage;
-					if (!string.IsNullOrEmpty(ofd.FileName))
-						errorMessage = ErrorHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
-					else
-						errorMessage = ErrorHelper.ComposeMessage("Unable to open file!", ex);
 
-					MessageBoxEx.Show
-					(
-						errorMessage,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-				}
+				string errorMessage;
+				if (!string.IsNullOrEmpty(ofd.FileName))
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
+				else
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open file!", ex);
+
+				MessageBoxEx.Show
+				(
+					errorMessage,
+					"File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
 			}
 
 			filePath = null;
 			pages = null;
 			return (false);
 		}
-
 
 		/// <summary></summary>
 		public static bool TryLoadAndLink(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
@@ -264,7 +267,7 @@ namespace YAT.View.Utilities
 			if (ConfirmLink(owner, pagesToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
 			{
 				// Prepare the pages to link...
-				LinkExchange(filePathToLink, pagesToLink);
+				LinkExchange(filePathToLink, pagesToLink); // No clone needed as just loaded.
 
 				// ...clone the settings...
 				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve properties.
@@ -287,7 +290,7 @@ namespace YAT.View.Utilities
 			if (ConfirmLink(owner, pagesToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
 			{
 				// Prepare the pages to link...
-				LinkExchange(filePathToLink, pagesToLink);
+				LinkExchange(filePathToLink, pagesToLink); // No clone needed as just loaded.
 
 				// ...clone the settings...
 				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve pages and other properties.

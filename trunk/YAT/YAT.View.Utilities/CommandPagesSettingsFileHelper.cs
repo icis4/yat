@@ -89,7 +89,7 @@ namespace YAT.View.Utilities
 					default:               return (false);
 				}
 			}
-			else // Just a single page => export without asking, the chosen file extension will select the format:
+			else // If (pageCount <= 1) export without asking, the chosen file extension will select the format:
 			{
 				return (TryExport(owner, settings.Pages, indicatedName));
 			}
@@ -121,15 +121,15 @@ namespace YAT.View.Utilities
 			if (pages.Count == 1)
 			{
 				sfd.Title       = "Save Command Page As";
-				sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
-				sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
+				sfd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
+				sfd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
 				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
 			}
 			else
 			{
 				sfd.Title       = "Save Command Pages As";
-				sfd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
-				sfd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
+				sfd.Filter      = ExtensionHelper.CommandPagesFilesFilter;
+				sfd.FilterIndex = ExtensionHelper.CommandPagesFilesFilterDefault;
 				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesFile);
 			}
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
@@ -147,8 +147,16 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (TrySave(pages, sfd.FileName, out ex))
-					return (true);
+				if ((pages.Count == 1) && ExtensionHelper.IsCommandPageFile(sfd.FileName))
+				{
+					if (TrySave(pages[0], sfd.FileName, out ex))
+						return (true);
+				}
+				else
+				{
+					if (TrySave(pages, sfd.FileName, out ex))
+						return (true);
+				}
 
 				string errorMessage;
 				if (!string.IsNullOrEmpty(sfd.FileName))
@@ -169,28 +177,16 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static bool TrySave(PredefinedCommandPageCollection pages, string filePath, out Exception exception)
+		private static bool TrySave(PredefinedCommandPage page, string filePath, out Exception exception)
 		{
 			try
 			{
-				if ((pages.Count == 1) && ExtensionHelper.IsCommandPageFile(filePath))
-				{
-					var root = new CommandPageSettingsRoot();
-					root.Page = pages[0];
+				var root = new CommandPageSettingsRoot();
+				root.Page = page; // No clone needed as just temporary.
 
-					var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>(root);
-					sh.SettingsFilePath = filePath;
-					sh.Save();
-				}
-				else
-				{
-					var root = new CommandPagesSettingsRoot();
-					root.Pages = pages;
-
-					var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>(root);
-					sh.SettingsFilePath = filePath;
-					sh.Save();
-				}
+				var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>(root);
+				sh.SettingsFilePath = filePath;
+				sh.Save();
 
 				exception = null;
 				return (true);
@@ -203,44 +199,73 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		private static bool TrySave(PredefinedCommandPageCollection pages, string filePath, out Exception exception)
+		{
+			try
+			{
+				var root = new CommandPagesSettingsRoot();
+				root.Pages = pages; // No clone needed as just temporary.
+
+				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>(root);
+				sh.SettingsFilePath = filePath;
+				sh.Save();
+
+				exception = null;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				exception = ex;
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exception)
+		{
+			try
+			{
+				var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+				sh.SettingsFilePath = filePath;
+				if (sh.Load())
+				{
+					page = sh.Settings.Page; // No clone needed as just loaded.
+					exception = null;
+					return (true);
+				}
+				else
+				{
+					page = null;
+					exception = null;
+					return (true);
+				}
+			}
+			catch (Exception ex)
+			{
+				page = null;
+				exception = ex;
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
 		private static bool TryLoad(string filePath, out PredefinedCommandPageCollection pages, out Exception exception)
 		{
 			try
 			{
-				if (ExtensionHelper.IsCommandPageFile(filePath))
+				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
+				sh.SettingsFilePath = filePath;
+				if (sh.Load())
 				{
-					var sh = new DocumentSettingsHandler<CommandPageSettingsRoot>();
-					sh.SettingsFilePath = filePath;
-					if (sh.Load())
-					{
-						pages = new PredefinedCommandPageCollection();
-						pages.Add(sh.Settings.Page); // No clone needed as just loaded.
-						exception = null;
-						return (true);
-					}
-					else
-					{
-						pages = null;
-						exception = null;
-						return (true);
-					}
+					pages = sh.Settings.Pages; // No clone needed as just loaded.
+					exception = null;
+					return (true);
 				}
 				else
 				{
-					var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
-					sh.SettingsFilePath = filePath;
-					if (sh.Load())
-					{
-						pages = sh.Settings.Pages;
-						exception = null;
-						return (true);
-					}
-					else
-					{
-						pages = null;
-						exception = null;
-						return (true);
-					}
+					pages = null;
+					exception = null;
+					return (true);
 				}
 			}
 			catch (Exception ex)
@@ -268,25 +293,21 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (TryLoad(ofd.FileName, out pages, out ex))
+				if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
 				{
-					if (pages.Count >= 1)
+					PredefinedCommandPage page;
+					if (TryLoad(ofd.FileName, out page, out ex))
 					{
+						pages = new PredefinedCommandPageCollection();
+						pages.Add(page); // No clone needed as just loaded.
 						return (true);
 					}
-					else
+				}
+				else
+				{
+					if (TryLoad(ofd.FileName, out pages, out ex))
 					{
-						if (ExtensionHelper.IsCommandPageFile(ofd.FileName))
-						{
-							MessageBoxEx.Show
-							(
-								"File contains no page.",
-								"No Page",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
-						else
+						if (pages.Count < 1)
 						{
 							MessageBoxEx.Show
 							(
@@ -296,24 +317,24 @@ namespace YAT.View.Utilities
 								MessageBoxIcon.Warning
 							);
 						}
+
+						return (true);
 					}
 				}
-				else
-				{
-					string errorMessage;
-					if (!string.IsNullOrEmpty(ofd.FileName))
-						errorMessage = ErrorHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
-					else
-						errorMessage = ErrorHelper.ComposeMessage("Unable to open file!", ex);
 
-					MessageBoxEx.Show
-					(
-						errorMessage,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-				}
+				string errorMessage;
+				if (!string.IsNullOrEmpty(ofd.FileName))
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
+				else
+					errorMessage = ErrorHelper.ComposeMessage("Unable to open file!", ex);
+
+				MessageBoxEx.Show
+				(
+					errorMessage,
+					"File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
 			}
 
 			pages = null;

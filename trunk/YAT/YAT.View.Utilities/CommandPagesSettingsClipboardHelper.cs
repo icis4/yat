@@ -86,9 +86,9 @@ namespace YAT.View.Utilities
 					default:               return (false);
 				}
 			}
-			else // Just a single page => export without asking:
-			{                      // Specifying 'selectedPageId' will export a single page.
-				return (TryExport(settings.Pages, selectedPageId));
+			else // If (pageCount <= 1) export without asking:
+			{                      // Specifying '1' will export a single page (not all).
+				return (TryExport(settings.Pages, 1));
 			}
 		}
 
@@ -107,40 +107,51 @@ namespace YAT.View.Utilities
 		{
 			var pages = new PredefinedCommandPageCollection();
 			pages.Add(new PredefinedCommandPage(settings.Pages[pageId - 1])); // Clone to ensure decoupling.
-			          // Specifying 'pageId' will export a single page (not all pages).
-			return (TryExport(pages, pageId));
-		}
-
-		/// <remarks>
-		/// 1:1 wrapper for <see cref="TrySet(PredefinedCommandPageCollection, int)"/> for symmetricity with
-		/// <see cref="CommandPagesSettingsFileHelper.TryExport(IWin32Window, PredefinedCommandPageCollection, string)"/>.
-		/// </remarks>
-		private static bool TryExport(PredefinedCommandPageCollection pages, int selectedPageId)
-		{
-			return (TrySet(pages, selectedPageId));
+			          // Specifying '1' will export a single page (not all).
+			return (TryExport(pages, 1));
 		}
 
 		/// <summary></summary>
-		private static bool TrySet(PredefinedCommandPageCollection pages, int selectedPageId)
+		private static bool TryExport(PredefinedCommandPageCollection pages, int pageId)
 		{
-			var sb = new StringBuilder();
+			if ((pages.Count == 1) && (pageId != PredefinedCommandPageCollection.NoPageId))
+				return (TrySet(pages[0]));
+			else
+				return (TrySet(pages));
+		}
 
-			if ((pages.Count == 1) && (selectedPageId != PredefinedCommandPageCollection.NoPageId))
+		/// <summary></summary>
+		private static bool TrySet(PredefinedCommandPage page)
+		{
+			try
 			{
 				var root = new CommandPageSettingsRoot();
-				root.Page = pages[selectedPageId - 1];
+				root.Page = page;
+
+				var sb = new StringBuilder();
 				XmlSerializerEx.SerializeToString(typeof(CommandPageSettingsRoot), root, ref sb);
+				Clipboard.SetText(sb.ToString());
+
+				return (true);
 			}
-			else
+			catch (ExternalException) // The clipboard could not be cleared. This typically
+			{                         // occurs when it is being used by another process.
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		private static bool TrySet(PredefinedCommandPageCollection pages)
+		{
+			try
 			{
 				var root = new CommandPagesSettingsRoot();
 				root.Pages = pages;
-				XmlSerializerEx.SerializeToString(typeof(CommandPagesSettingsRoot), root, ref sb);
-			}
 
-			try
-			{
+				var sb = new StringBuilder();
+				XmlSerializerEx.SerializeToString(typeof(CommandPagesSettingsRoot), root, ref sb);
 				Clipboard.SetText(sb.ToString());
+
 				return (true);
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
