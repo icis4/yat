@@ -72,7 +72,7 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static string TerminalFilesFilter
 		{
-			get { return ("Terminal Files (*" + TerminalFile + ")|*" + TerminalFile); }
+			get { return (ApplicationEx.CommonName + " Terminal Files (*" + TerminalFile + ")|*" + TerminalFile); }
 		}
 
 		/// <summary></summary>
@@ -102,7 +102,7 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static string WorkspaceFilesFilter
 		{
-			get { return ("Workspace Files (*" + WorkspaceFile + ")|*" + WorkspaceFile); }
+			get { return (ApplicationEx.CommonName + " Workspace Files (*" + WorkspaceFile + ")|*" + WorkspaceFile); }
 		}
 
 		/// <summary></summary>
@@ -120,7 +120,7 @@ namespace YAT.Application.Utilities
 						"|" +
 						WorkspaceFilesFilter +
 						"|" +
-						"Terminal and Workspace Files (*" + TerminalFile + ";*" + WorkspaceFile + ")|*" + TerminalFile + ";*" + WorkspaceFile);
+						ApplicationEx.CommonName + " Terminal and Workspace Files (*" + TerminalFile + ";*" + WorkspaceFile + ")|*" + TerminalFile + ";*" + WorkspaceFile);
 			}
 		}
 
@@ -162,7 +162,7 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static string CommandFilesFilter
 		{
-			get { return ("Command Files (*" + CommandFile + ")|*" + CommandFile); }
+			get { return (ApplicationEx.CommonName + " Command Files (*" + CommandFile + ")|*" + CommandFile); }
 		}
 
 		/// <summary></summary>
@@ -189,12 +189,10 @@ namespace YAT.Application.Utilities
 			return (PathEx.Equals(extension, CommandPageFile));
 		}
 
-		/// <remarks>
-		/// Prepended "Single" to clearly distiguish from complete command pages.
-		/// </remarks>
+		/// <summary></summary>
 		public static string CommandPageFilesFilter
 		{
-			get { return ("Single Command Page Files (*" + CommandPageFile + ")|*" + CommandPageFile); }
+			get { return (ApplicationEx.CommonName + " Command Page Files (*" + CommandPageFile + ")|*" + CommandPageFile); }
 		}
 
 		/// <summary></summary>
@@ -222,11 +220,11 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Prepended "Complete" to clearly distiguish from single command page.
+		/// Prepended "Multiple" to clearly distiguish from single command page.
 		/// </remarks>
 		public static string CommandPagesFilesFilter
 		{
-			get { return ("Complete Command Pages Files (*" + CommandPagesFile + ")|*" + CommandPagesFile); }
+			get { return (ApplicationEx.CommonName + " Multiple Command Pages Files (*" + CommandPagesFile + ")|*" + CommandPagesFile); }
 		}
 
 		/// <summary></summary>
@@ -244,12 +242,35 @@ namespace YAT.Application.Utilities
 						"|" +
 						CommandPagesFilesFilter +
 						"|" +
-						"Single Command Page and Complete Command Pages Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile);
+						"Both " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile);
 			}
 		}
 
 		/// <summary></summary>
 		public static int CommandPageOrPagesFilesFilterDefault
+		{
+			get { return (3); }
+		}
+
+		/// <summary></summary>
+		public static string CommandPageOrPagesOrTerminalFilesFilter
+		{
+			get
+			{
+				return (CommandPageFilesFilter +
+						"|" +
+						CommandPagesFilesFilter +
+						"|" +
+						"Both " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile +
+						"|" +
+						TerminalFilesFilter +
+						"|" +
+						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile);
+			}
+		}
+
+		/// <summary></summary>
+		public static int CommandPageOrPagesOrTerminalFilesFilterDefault
 		{
 			get { return (3); }
 		}
