@@ -28,49 +28,21 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class CharReplaceSettings : MKY.Settings.SettingsItem, IEquatable<CharReplaceSettings>
+	public class CharActionSettings : MKY.Settings.SettingsItem, IEquatable<CharActionSettings>
 	{
-		/// <remarks>
-		/// Default is <see cref="ReplaceControlCharsBinaryDefault"/> as its value of
-		/// <c>false</c> is less intrusive.
-		/// </remarks>
-		public const bool ReplaceControlCharsDefault = ReplaceControlCharsBinaryDefault;
+		/// <summary></summary>
+		public const bool BeepOnBellDefault = false;
+
+		private bool beepOnBell;
 
 		/// <summary></summary>
-		public const bool ReplaceControlCharsTextDefault = true;
-
-		/// <summary></summary>
-		public const bool ReplaceControlCharsBinaryDefault = false;
-
-		/// <summary></summary>
-		public const ControlCharRadix ControlCharRadixDefault = ControlCharRadix.AsciiMnemonic;
-
-		/// <summary></summary>
-		public const bool ReplaceBackspaceDefault = false;
-
-		/// <summary></summary>
-		public const bool ReplaceTabDefault = false;
-
-		/// <summary></summary>
-		public const bool ReplaceSpaceDefault = false;
-
-		/// <summary></summary>
-		public const string SpaceReplaceChar = "␣";
-
-		private bool replaceControlChars;
-		private ControlCharRadix controlCharRadix;
-		private bool replaceBackspace;
-		private bool replaceTab;
-		private bool replaceSpace;
-
-		/// <summary></summary>
-		public CharReplaceSettings()
+		public CharActionSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public CharReplaceSettings(MKY.Settings.SettingsType settingsType)
+		public CharActionSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -81,14 +53,10 @@ namespace YAT.Domain.Settings
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public CharReplaceSettings(CharReplaceSettings rhs)
+		public CharActionSettings(CharActionSettings rhs)
 			: base(rhs)
 		{
-			ReplaceControlChars = rhs.ReplaceControlChars;
-			ControlCharRadix    = rhs.ControlCharRadix;
-			ReplaceBackspace    = rhs.ReplaceBackspace;
-			ReplaceTab          = rhs.ReplaceTab;
-			ReplaceSpace        = rhs.ReplaceSpace;
+			BeepOnBell = rhs.BeepOnBell;
 
 			ClearChanged();
 		}
@@ -100,11 +68,7 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			ReplaceControlChars = ReplaceControlCharsDefault;
-			ControlCharRadix    = ControlCharRadixDefault;
-			ReplaceBackspace    = ReplaceBackspaceDefault;
-			ReplaceTab          = ReplaceTabDefault;
-			ReplaceSpace        = ReplaceSpaceDefault;
+			BeepOnBell = BeepOnBellDefault;
 		}
 
 		#region Properties
@@ -113,75 +77,15 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("ReplaceControlChars")]
-		public virtual bool ReplaceControlChars
+		[XmlElement("BeepOnBell")]
+		public virtual bool BeepOnBell
 		{
-			get { return (this.replaceControlChars); }
+			get { return (this.beepOnBell); }
 			set
 			{
-				if (this.replaceControlChars != value)
+				if (this.beepOnBell != value)
 				{
-					this.replaceControlChars = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ControlCharRadix")]
-		public virtual ControlCharRadix ControlCharRadix
-		{
-			get { return (this.controlCharRadix); }
-			set
-			{
-				if (this.controlCharRadix != value)
-				{
-					this.controlCharRadix = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ReplaceBackspace")]
-		public virtual bool ReplaceBackspace
-		{
-			get { return (this.replaceBackspace); }
-			set
-			{
-				if (this.replaceBackspace != value)
-				{
-					this.replaceBackspace = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ReplaceTab")]
-		public virtual bool ReplaceTab
-		{
-			get { return (this.replaceTab); }
-			set
-			{
-				if (this.replaceTab != value)
-				{
-					this.replaceTab = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ReplaceSpace")]
-		public virtual bool ReplaceSpace
-		{
-			get { return (this.replaceSpace); }
-			set
-			{
-				if (this.replaceSpace != value)
-				{
-					this.replaceSpace = value;
+					this.beepOnBell = value;
 					SetMyChanged();
 				}
 			}
@@ -207,11 +111,7 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ ReplaceControlChars.GetHashCode();
-				hashCode = (hashCode * 397) ^ ControlCharRadix   .GetHashCode();
-				hashCode = (hashCode * 397) ^ ReplaceBackspace   .GetHashCode();
-				hashCode = (hashCode * 397) ^ ReplaceTab         .GetHashCode();
-				hashCode = (hashCode * 397) ^ ReplaceSpace       .GetHashCode();
+				hashCode = (hashCode * 397) ^ BeepOnBell.GetHashCode();
 
 				return (hashCode);
 			}
@@ -222,7 +122,7 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as CharReplaceSettings));
+			return (Equals(obj as CharActionSettings));
 		}
 
 		/// <summary>
@@ -232,7 +132,7 @@ namespace YAT.Domain.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(CharReplaceSettings other)
+		public bool Equals(CharActionSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -242,18 +142,14 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ReplaceControlChars.Equals(other.ReplaceControlChars) &&
-				ControlCharRadix   .Equals(other.ControlCharRadix)    &&
-				ReplaceBackspace   .Equals(other.ReplaceBackspace)    &&
-				ReplaceTab         .Equals(other.ReplaceTab)          &&
-				ReplaceSpace       .Equals(other.ReplaceSpace)
+				BeepOnBell.Equals(other.BeepOnBell)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(CharReplaceSettings lhs, CharReplaceSettings rhs)
+		public static bool operator ==(CharActionSettings lhs, CharActionSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -266,7 +162,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(CharReplaceSettings lhs, CharReplaceSettings rhs)
+		public static bool operator !=(CharActionSettings lhs, CharActionSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

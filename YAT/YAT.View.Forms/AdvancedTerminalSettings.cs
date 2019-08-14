@@ -475,14 +475,6 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.CharReplace.ControlCharRadix = (Domain.ControlCharRadixEx)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
-		private void checkBox_ReplaceBell_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			this.settingsInEdit.Terminal.CharReplace.ReplaceBell = checkBox_ReplaceBell.Checked;
-		}
-
 		private void checkBox_ReplaceBackspace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -505,6 +497,14 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsInEdit.Terminal.CharHide.HideXOnXOff = checkBox_HideXOnXOff.Checked;
+		}
+
+		private void checkBox_BeepOnBell_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.CharAction.BeepOnBell = checkBox_BeepOnBell.Checked;
 		}
 
 		private void checkBox_ReplaceSpace_CheckedChanged(object sender, EventArgs e)
@@ -1159,11 +1159,6 @@ namespace YAT.View.Forms
 				comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
 
-				bool replaceBellEnabled                     = (isText && replaceControlChars);
-				checkBox_ReplaceBell.Enabled                =  replaceBellEnabled;
-				checkBox_ReplaceBell.Checked                = (replaceBellEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceBell);
-				label_ReplaceBell.Enabled                   =  replaceBellEnabled;
-
 				bool replaceBackspaceEnabled                = (isText && replaceControlChars);
 				checkBox_ReplaceBackspace.Enabled           =  replaceBackspaceEnabled;
 				checkBox_ReplaceBackspace.Checked           = (replaceBackspaceEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace);
@@ -1180,6 +1175,10 @@ namespace YAT.View.Forms
 				checkBox_Hide0x00.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0x00;
 				checkBox_Hide0xFF.Enabled                   = this.settingsInEdit.Terminal.SupportsHide0xFF;
 				checkBox_Hide0xFF.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0xFF;
+
+				bool beepOnBellEnabled                      =  isText;
+				checkBox_BeepOnBell.Enabled                 =  beepOnBellEnabled;
+				checkBox_BeepOnBell.Checked                 = (beepOnBellEnabled && this.settingsInEdit.Terminal.CharAction.BeepOnBell);
 
 				groupBox_Display_UsbSerialHid.Enabled       = isUsbSerialHid;
 				checkBox_IncludeNonPayloadData.Checked      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
@@ -1295,10 +1294,10 @@ namespace YAT.View.Forms
 				// Char replace/hide:
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
 				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceBell         = Domain.Settings.CharReplaceSettings.ReplaceBellDefault;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace    = Domain.Settings.CharReplaceSettings.ReplaceBackspaceDefault;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
 				this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
+				this.settingsInEdit.Terminal.CharAction.BeepOnBell           = Domain.Settings.CharActionSettings.BeepOnBellDefault;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 				this.settingsInEdit.Terminal.CharHide.Hide0x00               = Domain.Settings.CharHideSettings.Hide0x00Default;
 				this.settingsInEdit.Terminal.CharHide.Hide0xFF               = Domain.Settings.CharHideSettings.Hide0xFFDefault;

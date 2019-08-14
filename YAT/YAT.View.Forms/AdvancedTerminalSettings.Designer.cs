@@ -110,8 +110,7 @@
 			this.label_ReplaceSpaceUnicode = new System.Windows.Forms.Label();
 			this.checkBox_ReplaceSpace = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_ControlChars = new System.Windows.Forms.GroupBox();
-			this.label_ReplaceBell = new System.Windows.Forms.Label();
-			this.checkBox_ReplaceBell = new System.Windows.Forms.CheckBox();
+			this.checkBox_BeepOnBell = new System.Windows.Forms.CheckBox();
 			this.label_ReplaceBackspace = new System.Windows.Forms.Label();
 			this.checkBox_ReplaceBackspace = new System.Windows.Forms.CheckBox();
 			this.label_ReplaceTab = new System.Windows.Forms.Label();
@@ -134,8 +133,8 @@
 			this.label_TxRadix = new System.Windows.Forms.Label();
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.label_LineBreakRemark = new System.Windows.Forms.Label();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.label_TextSettingsRemark = new System.Windows.Forms.Label();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
@@ -1093,8 +1092,7 @@
 			// 
 			this.groupBox_Display_ControlChars.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Display_ControlChars.Controls.Add(this.label_ReplaceBell);
-			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceBell);
+			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_BeepOnBell);
 			this.groupBox_Display_ControlChars.Controls.Add(this.label_ReplaceBackspace);
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceBackspace);
 			this.groupBox_Display_ControlChars.Controls.Add(this.label_ReplaceTab);
@@ -1109,48 +1107,35 @@
 			this.groupBox_Display_ControlChars.TabStop = false;
 			this.groupBox_Display_ControlChars.Text = "&ASCII Control Characters (0x00..0x1F, 0x7F)";
 			// 
-			// label_ReplaceBell
+			// checkBox_BeepOnBell
 			// 
-			this.label_ReplaceBell.AutoSize = true;
-			this.label_ReplaceBell.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.label_ReplaceBell.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_ReplaceBell.Location = new System.Drawing.Point(153, 46);
-			this.label_ReplaceBell.Name = "label_ReplaceBell";
-			this.label_ReplaceBell.Size = new System.Drawing.Size(44, 15);
-			this.label_ReplaceBell.TabIndex = 3;
-			this.label_ReplaceBell.Text = "<BEL>";
-			// 
-			// checkBox_ReplaceBell
-			// 
-			this.checkBox_ReplaceBell.AutoSize = true;
-			this.checkBox_ReplaceBell.Location = new System.Drawing.Point(6, 44);
-			this.checkBox_ReplaceBell.Name = "checkBox_ReplaceBell";
-			this.checkBox_ReplaceBell.Size = new System.Drawing.Size(149, 17);
-			this.checkBox_ReplaceBell.TabIndex = 2;
-			this.checkBox_ReplaceBell.Text = "Also replace bell (0x08) by";
-			this.toolTip.SetToolTip(this.checkBox_ReplaceBell, "Replaces bell by <BEL> instead of executing the bell, i.e. doing a beep.\r\n\r\nOnly " +
-        "available for text terminals.\r\nApplicable to any radix.");
-			this.checkBox_ReplaceBell.UseVisualStyleBackColor = true;
-			this.checkBox_ReplaceBell.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceBell_CheckedChanged);
+			this.checkBox_BeepOnBell.AutoSize = true;
+			this.checkBox_BeepOnBell.Location = new System.Drawing.Point(6, 113);
+			this.checkBox_BeepOnBell.Name = "checkBox_BeepOnBell";
+			this.checkBox_BeepOnBell.Size = new System.Drawing.Size(117, 17);
+			this.checkBox_BeepOnBell.TabIndex = 7;
+			this.checkBox_BeepOnBell.Text = "Beep on bell (0x07)";
+			this.checkBox_BeepOnBell.UseVisualStyleBackColor = true;
+			this.checkBox_BeepOnBell.CheckedChanged += new System.EventHandler(this.checkBox_BeepOnBell_CheckedChanged);
 			// 
 			// label_ReplaceBackspace
 			// 
 			this.label_ReplaceBackspace.AutoSize = true;
 			this.label_ReplaceBackspace.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.label_ReplaceBackspace.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_ReplaceBackspace.Location = new System.Drawing.Point(189, 69);
+			this.label_ReplaceBackspace.Location = new System.Drawing.Point(192, 46);
 			this.label_ReplaceBackspace.Name = "label_ReplaceBackspace";
 			this.label_ReplaceBackspace.Size = new System.Drawing.Size(37, 15);
-			this.label_ReplaceBackspace.TabIndex = 5;
+			this.label_ReplaceBackspace.TabIndex = 3;
 			this.label_ReplaceBackspace.Text = "<BS>";
 			// 
 			// checkBox_ReplaceBackspace
 			// 
 			this.checkBox_ReplaceBackspace.AutoSize = true;
-			this.checkBox_ReplaceBackspace.Location = new System.Drawing.Point(6, 67);
+			this.checkBox_ReplaceBackspace.Location = new System.Drawing.Point(6, 44);
 			this.checkBox_ReplaceBackspace.Name = "checkBox_ReplaceBackspace";
 			this.checkBox_ReplaceBackspace.Size = new System.Drawing.Size(186, 17);
-			this.checkBox_ReplaceBackspace.TabIndex = 4;
+			this.checkBox_ReplaceBackspace.TabIndex = 2;
 			this.checkBox_ReplaceBackspace.Text = "Also replace backspace (0x08) by";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceBackspace, "Replaces backspace by <BS> instead of executing the backspace, i.e. removing the " +
         "previous character.\r\n\r\nOnly available for text terminals.\r\nApplicable to any rad" +
@@ -1163,19 +1148,19 @@
 			this.label_ReplaceTab.AutoSize = true;
 			this.label_ReplaceTab.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.label_ReplaceTab.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_ReplaceTab.Location = new System.Drawing.Point(199, 92);
+			this.label_ReplaceTab.Location = new System.Drawing.Point(202, 69);
 			this.label_ReplaceTab.Name = "label_ReplaceTab";
 			this.label_ReplaceTab.Size = new System.Drawing.Size(44, 15);
-			this.label_ReplaceTab.TabIndex = 7;
+			this.label_ReplaceTab.TabIndex = 5;
 			this.label_ReplaceTab.Text = "<TAB>";
 			// 
 			// checkBox_HideXOnXOff
 			// 
 			this.checkBox_HideXOnXOff.AutoSize = true;
-			this.checkBox_HideXOnXOff.Location = new System.Drawing.Point(6, 113);
+			this.checkBox_HideXOnXOff.Location = new System.Drawing.Point(6, 90);
 			this.checkBox_HideXOnXOff.Name = "checkBox_HideXOnXOff";
 			this.checkBox_HideXOnXOff.Size = new System.Drawing.Size(158, 17);
-			this.checkBox_HideXOnXOff.TabIndex = 8;
+			this.checkBox_HideXOnXOff.TabIndex = 6;
 			this.checkBox_HideXOnXOff.Text = "Hide XOn/XOff (0x11/0x13)";
 			this.checkBox_HideXOnXOff.UseVisualStyleBackColor = true;
 			this.checkBox_HideXOnXOff.CheckedChanged += new System.EventHandler(this.checkBox_HideXOnXOff_CheckedChanged);
@@ -1194,10 +1179,10 @@
 			// checkBox_ReplaceTab
 			// 
 			this.checkBox_ReplaceTab.AutoSize = true;
-			this.checkBox_ReplaceTab.Location = new System.Drawing.Point(6, 90);
+			this.checkBox_ReplaceTab.Location = new System.Drawing.Point(6, 67);
 			this.checkBox_ReplaceTab.Name = "checkBox_ReplaceTab";
 			this.checkBox_ReplaceTab.Size = new System.Drawing.Size(196, 17);
-			this.checkBox_ReplaceTab.TabIndex = 6;
+			this.checkBox_ReplaceTab.TabIndex = 4;
 			this.checkBox_ReplaceTab.Text = "Also replace horizontal tab (0x09) by";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceTab, "Replaces tabulator characters by <TAB> instead of executing the tabulator, i.e. i" +
         "nserting a horizontal whitespace.\r\n\r\nOnly available for text terminals.\r\nOnly ap" +
@@ -1542,8 +1527,7 @@
 		private System.Windows.Forms.ComboBox comboBox_LengthSelection;
 		private System.Windows.Forms.CheckBox checkBox_ReplaceBackspace;
 		private System.Windows.Forms.Label label_ReplaceBackspace;
-		private System.Windows.Forms.CheckBox checkBox_ReplaceBell;
-		private System.Windows.Forms.Label label_ReplaceBell;
+		private System.Windows.Forms.CheckBox checkBox_BeepOnBell;
 		private System.Windows.Forms.Label label_LineBreakRemark;
 		private System.Windows.Forms.Label label_TextSettingsRemark;
 	}

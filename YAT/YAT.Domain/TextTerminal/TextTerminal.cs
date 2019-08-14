@@ -1410,13 +1410,13 @@ namespace YAT.Domain
 			{
 				case 0x07: // <BEL>
 				{
-					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBell))
+					if (TerminalSettings.CharAction.BeepOnBell)
 					{
-						if ((d == IODirection.Rx) && (!IsReloading))
+						if (!IsReloading)
 							SystemSounds.Beep.Play();
 
-						de = new DisplayElement.Nonentity();
-						return (true);
+						de = null;
+						return (false); // Signal that character shall "normally" be formatted, independent on beeping or not.
 					}
 
 					break;
