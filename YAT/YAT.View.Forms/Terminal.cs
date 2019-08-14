@@ -2106,302 +2106,310 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
-			// Attention:
-			// Similar code exists in...
-			// ...View.Forms.PredefinedCommandSettings.contextMenuStrip_Commands_Opening()
-			// Changes here may have to be applied there too.
-
-			PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsRoot.PredefinedCommand.PageLayout;
-			var np = pageLayoutEx.CommandCapacityPerPage;
-			var id = predefined.GetCommandIdFromLocation(Cursor.Position);
-			var c  = predefined.GetCommandFromId(id);
-			var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
-
-			contextMenuStrip_Predefined_SelectedCommandId = id;
-
-			toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
-
-			ToolStripComboBoxHelper.Select(toolStripComboBox_PredefinedContextMenu_Layout, pageLayoutEx);
-
-			toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
-			toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command != null) && (this.settingsRoot.SendFile.Command.IsFilePath));
-
-			var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile;
-			mi.Visible = true;
-			if (c != null)
+			this.isSettingControls.Enter();
+			try
 			{
-				mi.Enabled = (c.IsText || c.IsFilePath);
-				if (c.IsText)
-					mi.Text = "Copy to Send Text";
-				else if (c.IsFilePath)
-					mi.Text = "Copy to Send File";
+				// Attention:
+				// Similar code exists in...
+				// ...View.Forms.PredefinedCommandSettings.contextMenuStrip_Commands_Opening()
+				// Changes here may have to be applied there too.
+
+				PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsRoot.PredefinedCommand.PageLayout;
+				var np = pageLayoutEx.CommandCapacityPerPage;
+				var id = predefined.GetCommandIdFromLocation(Cursor.Position);
+				var c  = predefined.GetCommandFromId(id);
+				var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
+
+				contextMenuStrip_Predefined_SelectedCommandId = id;
+
+				toolStripMenuItem_PredefinedContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
+
+				ToolStripComboBoxHelper.Select(toolStripComboBox_PredefinedContextMenu_Layout, pageLayoutEx);
+
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command != null) && (this.settingsRoot.SendText.Command.IsText));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command != null) && (this.settingsRoot.SendFile.Command.IsFilePath));
+
+				var mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendTextOrFile;
+				mi.Visible = true;
+				if (c != null)
+				{
+					mi.Enabled = (c.IsText || c.IsFilePath);
+					if (c.IsText)
+						mi.Text = "Copy to Send Text";
+					else if (c.IsFilePath)
+						mi.Text = "Copy to Send File";
+					else
+						mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
+				}
 				else
+				{
+					mi.Enabled = false;
 					mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
+				}
+
+				// There is a limitaion in Windows.Forms:
+				//  1. Edit command in SendText
+				//  2. Right-click to open the predefined context menu
+				//     => SendText should get validated, but actually isn't!
+				//
+				// Workaround:
+				send.ValidateSendTextInput();
+
+				toolStripMenuItem_PredefinedContextMenu_CopyTo.Enabled = cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo.Enabled = cIsDefined;
+
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Enabled =           (cIsDefined && (id != 1));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Enabled =           (cIsDefined && (id != 2));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Enabled =           (cIsDefined && (id != 3));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Enabled =           (cIsDefined && (id != 4));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Enabled =           (cIsDefined && (id != 5));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Enabled =           (cIsDefined && (id != 6));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Enabled =           (cIsDefined && (id != 7));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Enabled =           (cIsDefined && (id != 8));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Enabled =           (cIsDefined && (id != 9));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Enabled =           (cIsDefined && (id != 10));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Enabled =           (cIsDefined && (id != 11));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Enabled =           (cIsDefined && (id != 12));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_12.Visible = (cIsDefined && (np >= 13));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_13.Visible =           (cIsDefined && (np >= 13));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_13.Enabled =           (cIsDefined && (id != 13));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_14.Visible =           (cIsDefined && (np >= 14));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_14.Enabled =           (cIsDefined && (id != 14));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_15.Visible =           (cIsDefined && (np >= 15));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_15.Enabled =           (cIsDefined && (id != 15));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_16.Visible =           (cIsDefined && (np >= 16));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_16.Enabled =           (cIsDefined && (id != 16));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_17.Visible =           (cIsDefined && (np >= 17));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_17.Enabled =           (cIsDefined && (id != 17));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_18.Visible =           (cIsDefined && (np >= 18));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_18.Enabled =           (cIsDefined && (id != 18));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_19.Visible =           (cIsDefined && (np >= 19));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_19.Enabled =           (cIsDefined && (id != 19));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_20.Visible =           (cIsDefined && (np >= 20));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_20.Enabled =           (cIsDefined && (id != 20));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_21.Visible =           (cIsDefined && (np >= 21));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_21.Enabled =           (cIsDefined && (id != 21));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_22.Visible =           (cIsDefined && (np >= 22));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_22.Enabled =           (cIsDefined && (id != 22));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_23.Visible =           (cIsDefined && (np >= 23));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_23.Enabled =           (cIsDefined && (id != 23));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_24.Visible =           (cIsDefined && (np >= 24));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_24.Enabled =           (cIsDefined && (id != 24));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_24.Visible = (cIsDefined && (np >= 25));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_25.Visible =           (cIsDefined && (np >= 25));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_25.Enabled =           (cIsDefined && (id != 25));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_36.Visible = (cIsDefined && (np >= 37));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_37.Visible =           (cIsDefined && (np >= 37));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_37.Enabled =           (cIsDefined && (id != 37));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_48.Visible = (cIsDefined && (np >= 49));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_49.Visible =           (cIsDefined && (np >= 49));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_49.Enabled =           (cIsDefined && (id != 49));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_60.Visible = (cIsDefined && (np >= 61));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_61.Visible =           (cIsDefined && (np >= 61));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_61.Enabled =           (cIsDefined && (id != 61));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_72.Visible = (cIsDefined && (np >= 73));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_73.Visible =           (cIsDefined && (np >= 73));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_73.Enabled =           (cIsDefined && (id != 73));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_84.Visible = (cIsDefined && (np >= 85));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Visible =           (cIsDefined && (np >= 85));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Enabled =           (cIsDefined && (id != 85));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_96.Visible = (cIsDefined && (np >= 97));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_97.Visible =           (cIsDefined && (np >= 97));
+				toolStripMenuItem_PredefinedContextMenu_CopyTo_97.Enabled =           (cIsDefined && (id != 97));
+
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Enabled =           (cIsDefined && (id != 1));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Enabled =           (cIsDefined && (id != 2));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Enabled =           (cIsDefined && (id != 3));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Enabled =           (cIsDefined && (id != 4));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Enabled =           (cIsDefined && (id != 5));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Enabled =           (cIsDefined && (id != 6));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Enabled =           (cIsDefined && (id != 7));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Enabled =           (cIsDefined && (id != 8));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Enabled =           (cIsDefined && (id != 9));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Enabled =           (cIsDefined && (id != 10));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Enabled =           (cIsDefined && (id != 11));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Enabled =           (cIsDefined && (id != 12));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_12.Visible = (cIsDefined && (np >= 13));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_13.Visible =           (cIsDefined && (np >= 13));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_13.Enabled =           (cIsDefined && (id != 13));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_14.Visible =           (cIsDefined && (np >= 14));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_14.Enabled =           (cIsDefined && (id != 14));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_15.Visible =           (cIsDefined && (np >= 15));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_15.Enabled =           (cIsDefined && (id != 15));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_16.Visible =           (cIsDefined && (np >= 16));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_16.Enabled =           (cIsDefined && (id != 16));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_17.Visible =           (cIsDefined && (np >= 17));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_17.Enabled =           (cIsDefined && (id != 17));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_18.Visible =           (cIsDefined && (np >= 18));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_18.Enabled =           (cIsDefined && (id != 18));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_19.Visible =           (cIsDefined && (np >= 19));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_19.Enabled =           (cIsDefined && (id != 19));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_20.Visible =           (cIsDefined && (np >= 20));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_20.Enabled =           (cIsDefined && (id != 20));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_21.Visible =           (cIsDefined && (np >= 21));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_21.Enabled =           (cIsDefined && (id != 21));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_22.Visible =           (cIsDefined && (np >= 22));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_22.Enabled =           (cIsDefined && (id != 22));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_23.Visible =           (cIsDefined && (np >= 23));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_23.Enabled =           (cIsDefined && (id != 23));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_24.Visible =           (cIsDefined && (np >= 24));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_24.Enabled =           (cIsDefined && (id != 24));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_24.Visible = (cIsDefined && (np >= 25));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_25.Visible =           (cIsDefined && (np >= 25));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_25.Enabled =           (cIsDefined && (id != 25));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_36.Visible = (cIsDefined && (np >= 37));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_37.Visible =           (cIsDefined && (np >= 37));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_37.Enabled =           (cIsDefined && (id != 37));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_48.Visible = (cIsDefined && (np >= 49));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_49.Visible =           (cIsDefined && (np >= 49));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_49.Enabled =           (cIsDefined && (id != 49));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_60.Visible = (cIsDefined && (np >= 61));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_61.Visible =           (cIsDefined && (np >= 61));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_61.Enabled =           (cIsDefined && (id != 61));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_72.Visible = (cIsDefined && (np >= 73));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_73.Visible =           (cIsDefined && (np >= 73));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_73.Enabled =           (cIsDefined && (id != 73));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_84.Visible = (cIsDefined && (np >= 85));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Visible =           (cIsDefined && (np >= 85));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Enabled =           (cIsDefined && (id != 85));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_96.Visible = (cIsDefined && (np >= 96));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Visible =           (cIsDefined && (np >= 96));
+				toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Enabled =           (cIsDefined && (id != 96));
+
+				toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy.Enabled = cIsDefined;
+
+				toolStripMenuItem_PredefinedContextMenu_UpBy_1 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_2 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_3 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_4 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_5 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_6 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_7 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_8 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_9 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_10.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_11.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_12.Visible = (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_12.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_13.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_14.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_15.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_16.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_17.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_18.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_19.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_20.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_21.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_22.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_23.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_24.Visible = (cIsDefined && (np > 24));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_24.Visible =           (cIsDefined && (np > 24));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_36.Visible = (cIsDefined && (np > 36));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_36.Visible =           (cIsDefined && (np > 36));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_48.Visible = (cIsDefined && (np > 48));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_48.Visible =           (cIsDefined && (np > 48));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_60.Visible = (cIsDefined && (np > 60));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_60.Visible =           (cIsDefined && (np > 60));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_72.Visible = (cIsDefined && (np > 72));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_72.Visible =           (cIsDefined && (np > 72));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_84.Visible = (cIsDefined && (np > 84));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_84.Visible =           (cIsDefined && (np > 84));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_96.Visible = (cIsDefined && (np > 96));
+				toolStripMenuItem_PredefinedContextMenu_UpBy_96.Visible =           (cIsDefined && (np > 96));
+
+				toolStripMenuItem_PredefinedContextMenu_DownBy_1 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_2 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_3 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_4 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_5 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_6 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_7 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_8 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_9 .Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_10.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_11.Visible =            cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_12.Visible = (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_12.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_13.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_14.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_15.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_16.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_17.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_18.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_19.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_20.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_21.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_22.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_23.Visible =           (cIsDefined && (np > 12));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_24.Visible = (cIsDefined && (np > 24));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_24.Visible =           (cIsDefined && (np > 24));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_36.Visible = (cIsDefined && (np > 36));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_36.Visible =           (cIsDefined && (np > 36));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_48.Visible = (cIsDefined && (np > 48));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_48.Visible =           (cIsDefined && (np > 48));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_60.Visible = (cIsDefined && (np > 60));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_60.Visible =           (cIsDefined && (np > 60));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_72.Visible = (cIsDefined && (np > 72));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_72.Visible =           (cIsDefined && (np > 72));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_84.Visible = (cIsDefined && (np > 84));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_84.Visible =           (cIsDefined && (np > 84));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_96.Visible = (cIsDefined && (np > 96));
+				toolStripMenuItem_PredefinedContextMenu_DownBy_96.Visible =           (cIsDefined && (np > 96));
+
+				toolStripMenuItem_PredefinedContextMenu_Cut  .Enabled = cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_Copy .Enabled = cIsDefined;
+				toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) && (CommandSettingsClipboardHelper.ClipboardContainsText));
+				toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
+
+				var hasPages = (this.settingsRoot.PredefinedCommand.Pages.Count >= 1);
+				toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Enabled = hasPages;
+				toolStripMenuItem_PredefinedContextMenu_ExportToFile     .Enabled = hasPages;
+
+				if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
+				{
+					toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page to Clipboard...";
+				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
+					toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page to File...";
+				////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
+				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
+				}
+				else
+				{
+					toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page(s) to Clipboard...";
+				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
+					toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page(s) to File...";
+				////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
+				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
+				}
 			}
-			else
+			finally
 			{
-				mi.Enabled = false;
-				mi.Text = "Copy to Send"; // Omitting "Text|File" since it rather confuses than explains.
-			}
-
-			// There is a limitaion in Windows.Forms:
-			//  1. Edit command in SendText
-			//  2. Right-click to open the predefined context menu
-			//     => SendText should get validated, but actually isn't!
-			//
-			// Workaround:
-			send.ValidateSendTextInput();
-
-			toolStripMenuItem_PredefinedContextMenu_CopyTo.Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo.Enabled = cIsDefined;
-
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_1 .Enabled =           (cIsDefined && (id != 1));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_2 .Enabled =           (cIsDefined && (id != 2));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_3 .Enabled =           (cIsDefined && (id != 3));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_4 .Enabled =           (cIsDefined && (id != 4));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_5 .Enabled =           (cIsDefined && (id != 5));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_6 .Enabled =           (cIsDefined && (id != 6));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_7 .Enabled =           (cIsDefined && (id != 7));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_8 .Enabled =           (cIsDefined && (id != 8));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_9 .Enabled =           (cIsDefined && (id != 9));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_10.Enabled =           (cIsDefined && (id != 10));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_11.Enabled =           (cIsDefined && (id != 11));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_12.Enabled =           (cIsDefined && (id != 12));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_12.Visible = (cIsDefined && (np >= 13));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_13.Visible =           (cIsDefined && (np >= 13));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_13.Enabled =           (cIsDefined && (id != 13));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_14.Visible =           (cIsDefined && (np >= 14));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_14.Enabled =           (cIsDefined && (id != 14));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_15.Visible =           (cIsDefined && (np >= 15));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_15.Enabled =           (cIsDefined && (id != 15));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_16.Visible =           (cIsDefined && (np >= 16));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_16.Enabled =           (cIsDefined && (id != 16));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_17.Visible =           (cIsDefined && (np >= 17));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_17.Enabled =           (cIsDefined && (id != 17));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_18.Visible =           (cIsDefined && (np >= 18));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_18.Enabled =           (cIsDefined && (id != 18));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_19.Visible =           (cIsDefined && (np >= 19));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_19.Enabled =           (cIsDefined && (id != 19));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_20.Visible =           (cIsDefined && (np >= 20));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_20.Enabled =           (cIsDefined && (id != 20));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_21.Visible =           (cIsDefined && (np >= 21));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_21.Enabled =           (cIsDefined && (id != 21));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_22.Visible =           (cIsDefined && (np >= 22));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_22.Enabled =           (cIsDefined && (id != 22));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_23.Visible =           (cIsDefined && (np >= 23));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_23.Enabled =           (cIsDefined && (id != 23));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_24.Visible =           (cIsDefined && (np >= 24));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_24.Enabled =           (cIsDefined && (id != 24));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_24.Visible = (cIsDefined && (np >= 25));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_25.Visible =           (cIsDefined && (np >= 25));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_25.Enabled =           (cIsDefined && (id != 25));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_36.Visible = (cIsDefined && (np >= 37));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_37.Visible =           (cIsDefined && (np >= 37));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_37.Enabled =           (cIsDefined && (id != 37));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_48.Visible = (cIsDefined && (np >= 49));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_49.Visible =           (cIsDefined && (np >= 49));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_49.Enabled =           (cIsDefined && (id != 49));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_60.Visible = (cIsDefined && (np >= 61));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_61.Visible =           (cIsDefined && (np >= 61));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_61.Enabled =           (cIsDefined && (id != 61));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_72.Visible = (cIsDefined && (np >= 73));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_73.Visible =           (cIsDefined && (np >= 73));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_73.Enabled =           (cIsDefined && (id != 73));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_84.Visible = (cIsDefined && (np >= 85));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Visible =           (cIsDefined && (np >= 85));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_85.Enabled =           (cIsDefined && (id != 85));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_Separator_96.Visible = (cIsDefined && (np >= 97));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_97.Visible =           (cIsDefined && (np >= 97));
-			toolStripMenuItem_PredefinedContextMenu_CopyTo_97.Enabled =           (cIsDefined && (id != 97));
-
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_1 .Enabled =           (cIsDefined && (id != 1));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_2 .Enabled =           (cIsDefined && (id != 2));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_3 .Enabled =           (cIsDefined && (id != 3));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_4 .Enabled =           (cIsDefined && (id != 4));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_5 .Enabled =           (cIsDefined && (id != 5));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_6 .Enabled =           (cIsDefined && (id != 6));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_7 .Enabled =           (cIsDefined && (id != 7));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_8 .Enabled =           (cIsDefined && (id != 8));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_9 .Enabled =           (cIsDefined && (id != 9));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_10.Enabled =           (cIsDefined && (id != 10));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_11.Enabled =           (cIsDefined && (id != 11));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_12.Enabled =           (cIsDefined && (id != 12));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_12.Visible = (cIsDefined && (np >= 13));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_13.Visible =           (cIsDefined && (np >= 13));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_13.Enabled =           (cIsDefined && (id != 13));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_14.Visible =           (cIsDefined && (np >= 14));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_14.Enabled =           (cIsDefined && (id != 14));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_15.Visible =           (cIsDefined && (np >= 15));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_15.Enabled =           (cIsDefined && (id != 15));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_16.Visible =           (cIsDefined && (np >= 16));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_16.Enabled =           (cIsDefined && (id != 16));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_17.Visible =           (cIsDefined && (np >= 17));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_17.Enabled =           (cIsDefined && (id != 17));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_18.Visible =           (cIsDefined && (np >= 18));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_18.Enabled =           (cIsDefined && (id != 18));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_19.Visible =           (cIsDefined && (np >= 19));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_19.Enabled =           (cIsDefined && (id != 19));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_20.Visible =           (cIsDefined && (np >= 20));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_20.Enabled =           (cIsDefined && (id != 20));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_21.Visible =           (cIsDefined && (np >= 21));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_21.Enabled =           (cIsDefined && (id != 21));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_22.Visible =           (cIsDefined && (np >= 22));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_22.Enabled =           (cIsDefined && (id != 22));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_23.Visible =           (cIsDefined && (np >= 23));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_23.Enabled =           (cIsDefined && (id != 23));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_24.Visible =           (cIsDefined && (np >= 24));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_24.Enabled =           (cIsDefined && (id != 24));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_24.Visible = (cIsDefined && (np >= 25));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_25.Visible =           (cIsDefined && (np >= 25));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_25.Enabled =           (cIsDefined && (id != 25));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_36.Visible = (cIsDefined && (np >= 37));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_37.Visible =           (cIsDefined && (np >= 37));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_37.Enabled =           (cIsDefined && (id != 37));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_48.Visible = (cIsDefined && (np >= 49));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_49.Visible =           (cIsDefined && (np >= 49));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_49.Enabled =           (cIsDefined && (id != 49));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_60.Visible = (cIsDefined && (np >= 61));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_61.Visible =           (cIsDefined && (np >= 61));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_61.Enabled =           (cIsDefined && (id != 61));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_72.Visible = (cIsDefined && (np >= 73));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_73.Visible =           (cIsDefined && (np >= 73));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_73.Enabled =           (cIsDefined && (id != 73));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_84.Visible = (cIsDefined && (np >= 85));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Visible =           (cIsDefined && (np >= 85));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_85.Enabled =           (cIsDefined && (id != 85));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_Separator_96.Visible = (cIsDefined && (np >= 96));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Visible =           (cIsDefined && (np >= 96));
-			toolStripMenuItem_PredefinedContextMenu_MoveTo_97.Enabled =           (cIsDefined && (id != 96));
-
-			toolStripMenuItem_PredefinedContextMenu_UpBy  .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy.Enabled = cIsDefined;
-
-			toolStripMenuItem_PredefinedContextMenu_UpBy_1 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_2 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_3 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_4 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_5 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_6 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_7 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_8 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_9 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_10.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_11.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_12.Visible = (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_12.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_13.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_14.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_15.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_16.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_17.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_18.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_19.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_20.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_21.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_22.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_23.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_24.Visible = (cIsDefined && (np > 24));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_24.Visible =           (cIsDefined && (np > 24));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_36.Visible = (cIsDefined && (np > 36));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_36.Visible =           (cIsDefined && (np > 36));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_48.Visible = (cIsDefined && (np > 48));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_48.Visible =           (cIsDefined && (np > 48));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_60.Visible = (cIsDefined && (np > 60));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_60.Visible =           (cIsDefined && (np > 60));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_72.Visible = (cIsDefined && (np > 72));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_72.Visible =           (cIsDefined && (np > 72));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_84.Visible = (cIsDefined && (np > 84));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_84.Visible =           (cIsDefined && (np > 84));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_Separator_96.Visible = (cIsDefined && (np > 96));
-			toolStripMenuItem_PredefinedContextMenu_UpBy_96.Visible =           (cIsDefined && (np > 96));
-
-			toolStripMenuItem_PredefinedContextMenu_DownBy_1 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_2 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_3 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_4 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_5 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_6 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_7 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_8 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_9 .Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_10.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_11.Visible =            cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_12.Visible = (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_12.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_13.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_14.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_15.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_16.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_17.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_18.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_19.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_20.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_21.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_22.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_23.Visible =           (cIsDefined && (np > 12));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_24.Visible = (cIsDefined && (np > 24));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_24.Visible =           (cIsDefined && (np > 24));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_36.Visible = (cIsDefined && (np > 36));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_36.Visible =           (cIsDefined && (np > 36));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_48.Visible = (cIsDefined && (np > 48));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_48.Visible =           (cIsDefined && (np > 48));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_60.Visible = (cIsDefined && (np > 60));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_60.Visible =           (cIsDefined && (np > 60));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_72.Visible = (cIsDefined && (np > 72));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_72.Visible =           (cIsDefined && (np > 72));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_84.Visible = (cIsDefined && (np > 84));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_84.Visible =           (cIsDefined && (np > 84));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_Separator_96.Visible = (cIsDefined && (np > 96));
-			toolStripMenuItem_PredefinedContextMenu_DownBy_96.Visible =           (cIsDefined && (np > 96));
-
-			toolStripMenuItem_PredefinedContextMenu_Cut  .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_Copy .Enabled = cIsDefined;
-			toolStripMenuItem_PredefinedContextMenu_Paste.Enabled = ((id != 0) && (CommandSettingsClipboardHelper.ClipboardContainsText));
-			toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
-
-			var hasPages = (this.settingsRoot.PredefinedCommand.Pages.Count >= 1);
-			toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Enabled = hasPages;
-			toolStripMenuItem_PredefinedContextMenu_ExportToFile     .Enabled = hasPages;
-
-			if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
-			{
-				toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page to Clipboard...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
-				toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page to File...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
-			////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
-			}
-			else
-			{
-				toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page(s) to Clipboard...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
-				toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page(s) to File...";
-			////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
-			////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
+				this.isSettingControls.Leave();
 			}
 		}
 
@@ -2999,7 +3007,6 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Page_Opening(object sender, CancelEventArgs e)
 		{
-
 			contextMenuStrip_Page_SetMenuItems(); // Ensure that shortcuts are activated.
 		}
 

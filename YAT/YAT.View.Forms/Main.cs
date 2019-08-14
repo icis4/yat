@@ -2321,9 +2321,17 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Status_Opening(object sender, CancelEventArgs e)
 		{
-			toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Checked = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
-			toolStripMenuItem_StatusContextMenu_ShowTime.Checked         = ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
-			toolStripMenuItem_StatusContextMenu_ShowChrono.Checked       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
+			this.isSettingControls.Enter();
+			try
+			{
+				toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Checked = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+				toolStripMenuItem_StatusContextMenu_ShowTime.Checked         = ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
+				toolStripMenuItem_StatusContextMenu_ShowChrono.Checked       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click(object sender, EventArgs e)
