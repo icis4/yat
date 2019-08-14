@@ -146,17 +146,20 @@ namespace YAT.View.Utilities
 			var commandCapacityPerPageRequested = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
 			if (settingsOld.Pages.MaxCommandCountPerPage <= commandCapacityPerPageRequested)
 			{
-				if ((settingsOld.Pages.Count > 1) &&                                     // There are pages for potential merge.
-				    ((commandCapacityPerPageRequested / commandCapacityPerPageOld) > 1)) // Ratio is OK for merge, e.g. 24:12 or 48:24, but not 36:24.
+				var potentialMergeRatio = (commandCapacityPerPageRequested / commandCapacityPerPageOld);
+
+				if ((settingsOld.Pages.Count > 1) && // There are pages for potential merge.
+				    (potentialMergeRatio > 1))       // Ratio is OK for merge, e.g. 24:12 or 48:24, but not 36:24.
 				{
 					var message = new StringBuilder();
-					message.Append("The currently configured predefined commands only contain up to ");
+					message.Append("The currently configured predefined commands contain up to ");
 					message.Append(settingsOld.Pages.MaxCommandCountPerPage);
-					message.Append(" commands per page, but ");
+					message.Append(" commands per page, and ");
 					message.Append(commandCapacityPerPageRequested);
 					message.AppendLine(" commands per page are requested now.");
 					message.AppendLine();
-					message.Append("Would you like to merge all pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page?");
+					message.Append("Would you like to merge each " + potentialMergeRatio.ToString(CultureInfo.CurrentUICulture));
+					message.Append(" pages to a single page of " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page?");
 
 					switch (MessageBoxEx.Show
 						(
@@ -187,7 +190,7 @@ namespace YAT.View.Utilities
 				message.Append(commandCapacityPerPageRequested);
 				message.AppendLine(" commands per page are requested now.");
 				message.AppendLine();
-				message.Append("Would you like to enlarge all pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
+				message.Append("Would you like to enlarge the pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
 				message.Append(" or spread the pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show

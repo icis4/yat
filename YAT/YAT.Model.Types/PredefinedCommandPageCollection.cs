@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace YAT.Model.Types
 {
@@ -144,8 +145,8 @@ namespace YAT.Model.Types
 
 					for (int j = 0; j < commandCapacityPerPage; j++)
 					{
-						int sourceIndex = ((i * commandCapacityPerPage) + j);
-						spreadPage.Commands.Add(p.Commands[sourceIndex]);
+						int cmdIdx = ((i * commandCapacityPerPage) + j);
+						spreadPage.Commands.Add(p.Commands[cmdIdx]);
 					}
 
 					Add(spreadPage);
@@ -174,8 +175,8 @@ namespace YAT.Model.Types
 
 					for (int j = 0; j < commandCapacityPerPage; j++)
 					{
-						int sourceIndex = ((i * commandCapacityPerPage) + j);
-						spreadPage.Commands.Add(p.Commands[sourceIndex]);
+						int cmdIdx = ((i * commandCapacityPerPage) + j);
+						spreadPage.Commands.Add(p.Commands[cmdIdx]);
 					}
 
 					Insert(index, spreadPage);
@@ -190,37 +191,55 @@ namespace YAT.Model.Types
 			// Similar code exists in InsertMerged() below.
 			// Changes here may have to be applied there too.
 
-			foreach (var p in collection)
+			int mergeRatio = (commandCapacityPerPageNew / commandCapacityPerPageOld);
+			if (mergeRatio > 1) // e.g. 24:12 = 2, or 48:24 = 2, but 36:24 = 1 requires no merge.
 			{
-				var mergePage = new PredefinedCommandPage();
-
-				int n = (commandCapacityPerPageNew / commandCapacityPerPageOld);
-				for (int i = 0; i < n; i++)
+				var enumerator = collection.GetEnumerator();
+				while (enumerator.MoveNext()) // Collection contains (more) elements:
 				{
-					if (i == 0)
-						mergePage.Name = p.Name;
-					else
-						mergePage.Name += (" + " + p.Name);
+					var mergePage = new PredefinedCommandPage();
 
-					int sourceIndex = 0;
-					while (sourceIndex < p.Commands.Count)
+					for (int i = 0; i < mergeRatio; i++)
 					{
-						mergePage.Commands.Add(p.Commands[sourceIndex]);
-						sourceIndex++;
-					}
+						var p = enumerator.Current;
 
-					if ((sourceIndex < commandCapacityPerPageOld) && // Source page was not completely filled.
-					    (i != (n - 1)))                              // This is not the last page to merge.
-					{
-						while (sourceIndex < commandCapacityPerPageOld)
+						if (i == 0)
+							mergePage.Name = p.Name;
+						else
+							mergePage.Name += (" + " + p.Name);
+
+						int cmdIdx = 0;
+						while (cmdIdx < p.Commands.Count)
 						{
-							mergePage.Commands.Add(new Command()); // Fill-in empty commands.
-							sourceIndex++;
+							mergePage.Commands.Add(p.Commands[cmdIdx]);
+							cmdIdx++;
+						}
+
+						if ((cmdIdx < commandCapacityPerPageOld) && // Source page was not completely filled.
+							(i != (mergeRatio - 1)))                // This is not the last page to merge.
+						{
+							while (cmdIdx < commandCapacityPerPageOld)
+							{
+								mergePage.Commands.Add(new Command()); // Fill-in empty commands.
+								cmdIdx++;
+							}
+						}
+
+						if (i < (mergeRatio - 1))
+						{
+							if (enumerator.MoveNext()) // Collection contains (more) elements:
+								continue;
+							else
+								break;
 						}
 					}
-				}
 
-				Add(mergePage);
+					Add(mergePage);
+				}
+			}
+			else
+			{
+				AddRange(collection);
 			}
 		}
 
@@ -231,37 +250,55 @@ namespace YAT.Model.Types
 			// Similar code exists in AddMerged() above.
 			// Changes here may have to be applied there too.
 
-			foreach (var p in collection)
+			int mergeRatio = (commandCapacityPerPageNew / commandCapacityPerPageOld);
+			if (mergeRatio > 1) // e.g. 24:12 = 2, or 48:24 = 2, but 36:24 = 1 requires no merge.
 			{
-				var mergePage = new PredefinedCommandPage();
-
-				int n = (commandCapacityPerPageNew / commandCapacityPerPageOld);
-				for (int i = 0; i < n; i++)
+				var enumerator = collection.GetEnumerator();
+				while (enumerator.MoveNext()) // Collection contains (more) elements:
 				{
-					if (i == 0)
-						mergePage.Name = p.Name;
-					else
-						mergePage.Name += (" + " + p.Name);
+					var mergePage = new PredefinedCommandPage();
 
-					int sourceIndex = 0;
-					while (sourceIndex < p.Commands.Count)
+					for (int i = 0; i < mergeRatio; i++)
 					{
-						mergePage.Commands.Add(p.Commands[sourceIndex]);
-						sourceIndex++;
-					}
+						var p = enumerator.Current;
 
-					if ((sourceIndex < commandCapacityPerPageOld) && // Source page was not completely filled.
-					    (i != (n - 1)))                              // This is not the last page to merge.
-					{
-						while (sourceIndex < commandCapacityPerPageOld)
+						if (i == 0)
+							mergePage.Name = p.Name;
+						else
+							mergePage.Name += (" + " + p.Name);
+
+						int cmdIdx = 0;
+						while (cmdIdx < p.Commands.Count)
 						{
-							mergePage.Commands.Add(new Command()); // Fill-in empty commands.
-							sourceIndex++;
+							mergePage.Commands.Add(p.Commands[cmdIdx]);
+							cmdIdx++;
+						}
+
+						if ((cmdIdx < commandCapacityPerPageOld) && // Source page was not completely filled.
+							(i != (mergeRatio - 1)))                // This is not the last page to merge.
+						{
+							while (cmdIdx < commandCapacityPerPageOld)
+							{
+								mergePage.Commands.Add(new Command()); // Fill-in empty commands.
+								cmdIdx++;
+							}
+						}
+
+						if (i < (mergeRatio - 1))
+						{
+							if (enumerator.MoveNext()) // Collection contains (more) elements:
+								continue;
+							else
+								break;
 						}
 					}
-				}
 
-				Insert(index, mergePage);
+					Insert(index, mergePage);
+				}
+			}
+			else
+			{
+				InsertRange(index, collection);
 			}
 		}
 
