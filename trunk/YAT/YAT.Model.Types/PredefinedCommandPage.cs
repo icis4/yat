@@ -134,8 +134,13 @@ namespace YAT.Model.Types
 			get { return (Commands.Capacity); }
 		}
 
-		/// <summary></summary>
-		[XmlElement("Name")]
+		/// <remarks>
+		/// \remind (2019-08-13..14 / MKY)
+		/// Property was renamed from "PageName" to "Name" on 2019-08-13 for no longer replicating
+		/// the class context in the the property name. However, detected on 2019-08-14 that this
+		/// change is not properly handled by the XML deserialization infrastructure, thus reverted.
+		/// </remarks>
+		[XmlElement("PageName")] // Backward compatibility! To be renamed when fixing bug #246.
 		public virtual string Name
 		{
 			get { return (this.name); }
