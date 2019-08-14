@@ -144,8 +144,8 @@ namespace YAT.Model.Types
 
 					for (int j = 0; j < commandCapacityPerPage; j++)
 					{
-						int indexImported = ((i * commandCapacityPerPage) + j);
-						spreadPage.Commands.Add(p.Commands[indexImported]);
+						int sourceIndex = ((i * commandCapacityPerPage) + j);
+						spreadPage.Commands.Add(p.Commands[sourceIndex]);
 					}
 
 					Add(spreadPage);
@@ -174,12 +174,94 @@ namespace YAT.Model.Types
 
 					for (int j = 0; j < commandCapacityPerPage; j++)
 					{
-						int indexImported = ((i * commandCapacityPerPage) + j);
-						spreadPage.Commands.Add(p.Commands[indexImported]);
+						int sourceIndex = ((i * commandCapacityPerPage) + j);
+						spreadPage.Commands.Add(p.Commands[sourceIndex]);
 					}
 
 					Insert(index, spreadPage);
 				}
+			}
+		}
+
+		/// <summary></summary>
+		public void AddMerged(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPageOld, int commandCapacityPerPageNew)
+		{
+			// Attention:
+			// Similar code exists in InsertMerged() below.
+			// Changes here may have to be applied there too.
+
+			foreach (var p in collection)
+			{
+				var mergePage = new PredefinedCommandPage();
+
+				int n = (commandCapacityPerPageNew / commandCapacityPerPageOld);
+				for (int i = 0; i < n; i++)
+				{
+					if (i == 0)
+						mergePage.Name = p.Name;
+					else
+						mergePage.Name += (" + " + p.Name);
+
+					int sourceIndex = 0;
+					while (sourceIndex < p.Commands.Count)
+					{
+						mergePage.Commands.Add(p.Commands[sourceIndex]);
+						sourceIndex++;
+					}
+
+					if ((sourceIndex < commandCapacityPerPageOld) && // Source page was not completely filled.
+					    (i != (n - 1)))                              // This is not the last page to merge.
+					{
+						while (sourceIndex < commandCapacityPerPageOld)
+						{
+							mergePage.Commands.Add(new Command()); // Fill-in empty commands.
+							sourceIndex++;
+						}
+					}
+				}
+
+				Add(mergePage);
+			}
+		}
+
+		/// <summary></summary>
+		public void InsertMerged(int index, IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPageOld, int commandCapacityPerPageNew)
+		{
+			// Attention:
+			// Similar code exists in AddMerged() above.
+			// Changes here may have to be applied there too.
+
+			foreach (var p in collection)
+			{
+				var mergePage = new PredefinedCommandPage();
+
+				int n = (commandCapacityPerPageNew / commandCapacityPerPageOld);
+				for (int i = 0; i < n; i++)
+				{
+					if (i == 0)
+						mergePage.Name = p.Name;
+					else
+						mergePage.Name += (" + " + p.Name);
+
+					int sourceIndex = 0;
+					while (sourceIndex < p.Commands.Count)
+					{
+						mergePage.Commands.Add(p.Commands[sourceIndex]);
+						sourceIndex++;
+					}
+
+					if ((sourceIndex < commandCapacityPerPageOld) && // Source page was not completely filled.
+					    (i != (n - 1)))                              // This is not the last page to merge.
+					{
+						while (sourceIndex < commandCapacityPerPageOld)
+						{
+							mergePage.Commands.Add(new Command()); // Fill-in empty commands.
+							sourceIndex++;
+						}
+					}
+				}
+
+				Insert(index, mergePage);
 			}
 		}
 

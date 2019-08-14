@@ -31,6 +31,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 
 using MKY;
@@ -126,7 +128,7 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlIgnore()]
+		[XmlIgnore]
 		public virtual int Capacity
 		{
 			get { return (Commands.Capacity); }
@@ -138,6 +140,29 @@ namespace YAT.Model.Types
 		{
 			get { return (this.name); }
 			set { this.name = value;  }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual string Caption
+		{
+			get
+			{
+				if (IsLinkedToFilePath)
+				{
+					var sb = new StringBuilder(Name);
+
+					sb.Append(" (linked to ");
+					sb.Append(Path.GetFileName(LinkFilePath));
+					sb.Append(")");
+
+					return (sb.ToString());
+				}
+				else
+				{
+					return (Name);
+				}
+			}
 		}
 
 		/// <remarks>XML is named "Commands" for simplicity/comprehensibility as well as backward compatibility.</remarks>

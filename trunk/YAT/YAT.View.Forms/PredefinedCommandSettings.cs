@@ -246,7 +246,7 @@ namespace YAT.View.Forms
 				return;
 
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsFileHelper.TryChange(this, this.settingsInEdit, (PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
+			if (CommandPagesSettingsChangeHelper.TryChange(this, this.settingsInEdit, (PredefinedCommandPageLayoutEx)comboBox_Layout.SelectedItem, out settingsInEditNew))
 				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
@@ -1186,7 +1186,7 @@ namespace YAT.View.Forms
 					listBox_Pages.Items.Clear();
 
 					foreach (var p in this.settingsInEdit.Pages)
-						listBox_Pages.Items.Add(p.Name);
+						listBox_Pages.Items.Add(p.Caption);
 
 					if (pageIsSelected)
 						listBox_Pages.SelectedIndex = SelectedPageIndex;
@@ -1222,7 +1222,7 @@ namespace YAT.View.Forms
 				var sb = new StringBuilder();
 
 				if (pageIsSelected)
-					sb.Append(this.settingsInEdit.Pages[SelectedPageIndex].Name);
+					sb.Append(this.settingsInEdit.Pages[SelectedPageIndex].Caption);
 				else
 					sb.Append("<No Page Selected>");
 
@@ -1421,7 +1421,7 @@ namespace YAT.View.Forms
 			if (MessageBoxEx.Show
 				(
 					this,
-					"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].Name + "'?",
+					"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].Caption + "'?",
 					"Delete?",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question,
@@ -1610,7 +1610,7 @@ namespace YAT.View.Forms
 			if (MessageBoxEx.Show
 				(
 				this,
-				"Clear all commands of page '" + this.settingsInEdit.Pages[SelectedPageIndex].Name + "'?",
+				"Clear all commands of page '" + this.settingsInEdit.Pages[SelectedPageIndex].Caption + "'?",
 				"Clear?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,

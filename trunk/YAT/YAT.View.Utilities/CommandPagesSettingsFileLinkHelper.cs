@@ -50,9 +50,9 @@ using YAT.Settings.Model;
 namespace YAT.View.Utilities
 {
 	/// <remarks>
-	/// Note there are similar implementations "Clipboard", "File" and "FileLink" to deal with
-	/// subtle differences. Intentionally kept in parallel rather than making the implementation
-	/// all-inclusive but less comprehensive. Separate classes to ease diffing.
+	/// Note there are similar implementations "Change", "Clipboard", "File" and "FileLink" to deal
+	/// with subtle differences in behavior. Intentionally kept in parallel rather than making the
+	/// implementation all-inclusive but less comprehensive. Separate classes to ease diffing.
 	/// </remarks>
 	public static class CommandPagesSettingsFileLinkHelper
 	{
@@ -326,7 +326,7 @@ namespace YAT.View.Utilities
 
 						case (Mode.Spread):
 						{
-								var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
 
 							// ...spread:
 							settingsNew.Pages.AddSpreaded(pagesToLink, commandCapacityPerPageNew); // No clone needed as just loaded.
@@ -360,7 +360,7 @@ namespace YAT.View.Utilities
 				pageLayoutNew = pageLayoutOld;
 				return (true);
 			}
-			else
+			else // The pages to link do not fit the currently configured page layout:
 			{
 				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(pagesToLink.MaxCommandCountPerPage);
 				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;

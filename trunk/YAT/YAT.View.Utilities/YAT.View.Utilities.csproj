@@ -103,6 +103,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CommandPagesSettingsClipboardHelper.cs" />
+    <Compile Include="CommandPagesSettingsChangeHelper.cs" />
     <Compile Include="CommandPagesSettingsFileLinkHelper.cs" />
     <Compile Include="CommandSettingsClipboardHelper.cs" />
     <Compile Include="CommandPagesSettingsFileHelper.cs" />

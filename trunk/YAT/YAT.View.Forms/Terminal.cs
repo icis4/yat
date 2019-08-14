@@ -2979,7 +2979,7 @@ namespace YAT.View.Forms
 
 				for (int i = 0; i < Math.Min(pageCount, menuItems_Page_MaxPagesWithMenuItem); i++)
 				{
-					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, pages[i].Name);
+					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, pages[i].Caption);
 					this.menuItems_Pages[i].Visible =  true;
 					this.menuItems_Pages[i].Enabled = (pageCount > 1); // No need to navigate a single page.
 				}
@@ -5243,7 +5243,7 @@ namespace YAT.View.Forms
 		private void SetPageLayout(PredefinedCommandPageLayout layout)
 		{
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsFileHelper.TryChange(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
+			if (CommandPagesSettingsChangeHelper.TryChange(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.

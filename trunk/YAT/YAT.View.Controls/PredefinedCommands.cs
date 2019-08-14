@@ -176,7 +176,7 @@ namespace YAT.View.Controls
 					else
 						SetSelectedPageControls();
 
-					SetCommandControls();
+					SetCommandControls(); // Update commands to newly selected page.
 			////}
 			}
 		}
@@ -201,6 +201,8 @@ namespace YAT.View.Controls
 					this.selectedPageId = selectedPageIdNew;
 					SetSelectedPageControls();
 					OnSelectedPageIdChanged(EventArgs.Empty);
+
+					SetCommandControls(); // Update commands to newly selected page.
 				}
 			}
 		}
@@ -591,7 +593,7 @@ namespace YAT.View.Controls
 					comboBox_Pages.Items.Clear();
 
 					foreach (var p in this.pages)
-						comboBox_Pages.Items.Add(p.Name);
+						comboBox_Pages.Items.Add(p.Caption);
 
 					comboBox_Pages.SelectedIndex = SelectedPageIndex;
 				}
