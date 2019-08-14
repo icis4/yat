@@ -80,7 +80,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public PredefinedCommandPage()
-			: this ("")
+			: this (PredefinedCommandPageCollection.FirstPageNameDefault)
 		{
 		}
 
@@ -112,7 +112,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public PredefinedCommandPage(int capacity)
-			: this (capacity, "")
+			: this (capacity, PredefinedCommandPageCollection.FirstPageNameDefault)
 		{
 		}
 
@@ -272,7 +272,7 @@ namespace YAT.Model.Types
 			// Similar code exists in Caption{get} further above.
 			// Changes here may have to be applied there too.
 
-			var sb = new StringBuilder("Page ");
+			var sb = new StringBuilder(PredefinedCommandPageCollection.StandardPageNamePrefix);
 			sb.Append(id);
 
 			if (page.IsLinkedToFilePath)

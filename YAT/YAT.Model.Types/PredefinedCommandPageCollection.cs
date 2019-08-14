@@ -22,10 +22,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+
+#endregion
 
 namespace YAT.Model.Types
 {
@@ -42,6 +51,17 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public const int MaxCapacity = int.MaxValue;
 
+		/// <summary></summary>
+		public const string StandardPageNamePrefix = "Page ";
+
+		/// <remarks>Constant (and not a generated readonly) for simplicity.</remarks>
+		public const string FirstPageNameDefault = "Page 1";
+
+		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+
+		/// <summary></summary>
+		public static readonly Regex StandardPageNameRegex = new Regex(StandardPageNamePrefix + @"(?<pageId>\d+)", Options);
+
 		/// <remarks>
 		/// Must be implemented as property (instead of a readonly) since <see cref="PredefinedCommandPage"/>
 		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
@@ -49,7 +69,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static PredefinedCommandPage DefaultPage
 		{
-			get { return (new PredefinedCommandPage("Page 1")); }
+			get { return (new PredefinedCommandPage(FirstPageNameDefault)); }
 		}
 
 		/// <summary></summary>
@@ -125,6 +145,29 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		public static string StandardPageName(int id)
+		{
+			var sb = new StringBuilder("Page ");
+
+			sb.Append(id);
+
+			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		public static bool IsStandardPageName(string name)
+		{
+			if (!string.IsNullOrEmpty(name))
+			{
+				var m = StandardPageNameRegex.Match(name);
+				if (m.Success)
+					return (true);
+			}
+
+			return (false);
+		}
+
+		/// <summary></summary>
 		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			foreach (var p in collection)
@@ -157,9 +200,9 @@ namespace YAT.Model.Types
 			{
 				var spreadPage = new PredefinedCommandPage(commandCapacityPerPage); // Preset the required capacity to improve memory management.
 
-				if (spreadRatio <= 1)
+				if (spreadRatio <= 1) // Keep page name unchanged.
 					spreadPage.Name = page.Name;
-				else
+				else                  // Standard named pages could be renumbered on spread, but decided against to make spread obvious to user.
 					spreadPage.Name = page.Name + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", (i + 1), spreadRatio);
 
 				for (int j = 0; j < commandCapacityPerPage; j++)
@@ -209,7 +252,7 @@ namespace YAT.Model.Types
 				{
 					var p = enumerator.Current;
 
-					if (i == 0)
+					if (i == 0) // Standard named pages could be renumbered on merge, but decided against to make merge obvious to user.
 						mergePage.Name = p.Name;
 					else
 						mergePage.Name += (" + " + p.Name);
@@ -262,7 +305,7 @@ namespace YAT.Model.Types
 		protected static PredefinedCommandPage CreateTruncation(PredefinedCommandPage page, int commandCapacityPerPage)
 		{
 			var truncatedCount = Math.Min(page.Commands.Count, commandCapacityPerPage);
-			var truncatedPage = new PredefinedCommandPage(commandCapacityPerPage, page.Name);
+			var truncatedPage = new PredefinedCommandPage(commandCapacityPerPage, page.Name); // Keep page name unchanged.
 			truncatedPage.Commands.AddRange(page.Commands.Take(truncatedCount));
 			return (truncatedPage);
 		}
