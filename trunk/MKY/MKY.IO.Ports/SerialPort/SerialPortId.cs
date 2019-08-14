@@ -68,7 +68,8 @@ namespace MKY.IO.Ports
 		/// First standard port name as string.
 		/// </summary>
 		/// <remarks>
-		/// Can be used as default string on attributes such as <see cref="DefaultValueAttribute"/>.
+		/// Can be used as default string on attributes such as <see cref="DefaultValueAttribute"/>,
+		/// must therefore be a constant (and not a readonly).
 		/// </remarks>
 		public const string FirstStandardPortName = "COM1";
 
