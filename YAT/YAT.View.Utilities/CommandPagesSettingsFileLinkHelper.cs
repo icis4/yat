@@ -205,7 +205,7 @@ namespace YAT.View.Utilities
 			if (ShowOpenFileDialogAndTryLoad(owner, out filePathToLink, out pagesToLink))
 			{
 				var message = new StringBuilder();
-				message.Append("File contains ");
+				message.Append("The file contains ");
 				message.Append(pagesToLink.Count);
 				message.Append(pagesToLink.Count == 1 ? " page" : " pages");
 				message.Append(" with a total of ");
@@ -223,7 +223,8 @@ namespace YAT.View.Utilities
 						message.ToString(),
 						"Link Mode",
 						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
+						MessageBoxIcon.Question,
+						MessageBoxDefaultButton.Button3
 					))
 				{
 					case DialogResult.Yes:
@@ -383,7 +384,8 @@ namespace YAT.View.Utilities
 						message.ToString(),
 						"Link Mode",
 						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
+						MessageBoxIcon.Question,
+						MessageBoxDefaultButton.Button3
 					))
 				{
 					case DialogResult.Yes: mode = Mode.Enlarge; pageLayoutNew = nextPageLayout; return (true);
