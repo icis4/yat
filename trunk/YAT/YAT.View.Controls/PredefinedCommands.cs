@@ -581,21 +581,38 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				if ((this.pages != null) && (this.pages.Count > 0))
+				// Attention:
+				// Similar code exists in...
+				// ...View.Forms.PredefinedCommandSettings.SetPagesControls()
+				// Changes here may have to be applied there too.
+
+				int pageCount = ((this.pages != null) ? (this.pages.Count) : (0));
+				bool pageIsSelected = (this.selectedPageId != 0);
+
+				if (pageCount > 0)
 				{
 					button_PagePrevious.Enabled = (this.selectedPageId > 1);
-					button_PageNext.Enabled     = (this.selectedPageId < this.pages.Count);
+					button_PageNext.Enabled     = (this.selectedPageId < pageCount);
 
 					label_Page.Enabled = this.terminalIsReadyToSend;
-					label_Page.Text = "Page " + this.selectedPageId + "/" + this.pages.Count;
+					label_Page.Text = "Page " + this.selectedPageId + "/" + pageCount;
 
-					comboBox_Pages.Enabled = (this.pages.Count > 1); // No need to navigate a single page.
+					comboBox_Pages.Enabled = (pageCount > 1); // No need to navigate a single page.
 					comboBox_Pages.Items.Clear();
 
+					int id = 1;
 					foreach (var p in this.pages)
-						comboBox_Pages.Items.Add(p.Caption);
+					{
+						if (!string.IsNullOrEmpty(p.Caption))
+							comboBox_Pages.Items.Add(p.Caption);
+						else
+							comboBox_Pages.Items.Add(PredefinedCommandPage.CaptionFallback(p, id));
 
-					comboBox_Pages.SelectedIndex = SelectedPageIndex;
+						id++;
+					}
+
+					if (pageIsSelected)
+						comboBox_Pages.SelectedIndex = SelectedPageIndex;
 				}
 				else
 				{

@@ -153,6 +153,10 @@ namespace YAT.Model.Types
 		{
 			get
 			{
+				// Attention:
+				// Similar code exists in CaptionFallback() further below.
+				// Changes here may have to be applied there too.
+
 				if (IsLinkedToFilePath)
 				{
 					var sb = new StringBuilder(Name);
@@ -257,6 +261,35 @@ namespace YAT.Model.Types
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
+
+		/// <summary></summary>
+		public static string CaptionFallback(PredefinedCommandPage page, int id)
+		{
+			// Attention:
+			// Similar code exists in Caption{get} further above.
+			// Changes here may have to be applied there too.
+
+			var sb = new StringBuilder("Page ");
+			sb.Append(id);
+
+			if (page.IsLinkedToFilePath)
+			{
+				sb.Append(" (linked to ");
+				sb.Append(Path.GetFileName(page.LinkFilePath));
+				sb.Append(")");
+			}
+
+			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		public static string CaptionOrFallback(PredefinedCommandPage page, int id)
+		{
+			if (!string.IsNullOrEmpty(page.Caption))
+				return (page.Caption);
+			else
+				return (CaptionFallback(page, id));
+		}
 
 		/// <param name="subpageId">Subpage ID <see cref="FirstSubpageId"/>..<see cref="LastSubpageId"/>.</param>
 		public static string SubpageIdToString(int subpageId)

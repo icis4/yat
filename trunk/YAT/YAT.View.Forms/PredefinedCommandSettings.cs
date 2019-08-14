@@ -1171,6 +1171,11 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Similar code exists in...
+				// ...View.Controls.PredefinedCommands.SetSelectedPageControls()
+				// Changes here may have to be applied there too.
+
 				int pageCount = this.settingsInEdit.Pages.Count;
 				bool pageIsSelected = (this.selectedPageId != 0);
 
@@ -1185,8 +1190,16 @@ namespace YAT.View.Forms
 					listBox_Pages.Enabled = true;
 					listBox_Pages.Items.Clear();
 
+					int id = 1;
 					foreach (var p in this.settingsInEdit.Pages)
-						listBox_Pages.Items.Add(p.Caption);
+					{
+						if (!string.IsNullOrEmpty(p.Caption))
+							listBox_Pages.Items.Add(p.Caption);
+						else
+							listBox_Pages.Items.Add(PredefinedCommandPage.CaptionFallback(p, id));
+
+						id++;
+					}
 
 					if (pageIsSelected)
 						listBox_Pages.SelectedIndex = SelectedPageIndex;
@@ -1222,7 +1235,7 @@ namespace YAT.View.Forms
 				var sb = new StringBuilder();
 
 				if (pageIsSelected)
-					sb.Append(this.settingsInEdit.Pages[SelectedPageIndex].Caption);
+					sb.Append(PredefinedCommandPage.CaptionOrFallback(this.settingsInEdit.Pages[SelectedPageIndex], SelectedPageIndex));
 				else
 					sb.Append("<No Page Selected>");
 
@@ -1421,7 +1434,7 @@ namespace YAT.View.Forms
 			if (MessageBoxEx.Show
 				(
 					this,
-					"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].Caption + "'?",
+					"Delete page '" + PredefinedCommandPage.CaptionOrFallback(this.settingsInEdit.Pages[SelectedPageIndex], SelectedPageIndex) + "'?",
 					"Delete?",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question,
@@ -1610,7 +1623,7 @@ namespace YAT.View.Forms
 			if (MessageBoxEx.Show
 				(
 				this,
-				"Clear all commands of page '" + this.settingsInEdit.Pages[SelectedPageIndex].Caption + "'?",
+				"Clear all commands of page '" + PredefinedCommandPage.CaptionOrFallback(this.settingsInEdit.Pages[SelectedPageIndex], SelectedPageIndex) + "'?",
 				"Clear?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
