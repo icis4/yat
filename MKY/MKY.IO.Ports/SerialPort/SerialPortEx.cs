@@ -92,6 +92,7 @@ namespace MKY.IO.Ports
 
 		private const string Undefined = "<Undefined>";
 
+		/// <remarks>Must be constant (and not a readonly) to be usable as attribute argument.</remarks>
 		private const string PortNameDefault = SerialPortId.FirstStandardPortName;
 		private const int    PortIdDefault   = SerialPortId.FirstStandardPortNumber;
 
@@ -252,11 +253,11 @@ namespace MKY.IO.Ports
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Component.Dispose()"/>. In order to detect such missing calls, the
 		/// finalizer is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "See remarks.")]
@@ -1063,26 +1064,26 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// The <see cref="System.IO.Ports.SerialPort"/> class has 3 different problems in disposal
 		/// in case of a USB serial device that is physically removed:
-		/// 
+		///
 		/// 1. The eventLoopRunner is asked to stop and <see cref="System.IO.Ports.SerialPort.IsOpen"/>
 		/// returns false. Upon disposal this property is checked and closing  the internal serial
 		/// stream is skipped, thus keeping the original handle open indefinitely (until the finalizer
 		/// runs which leads to the next problem).
-		/// 
+		///
 		/// The solution for this one is to manually close the internal serial stream. We can get
 		/// its reference by <see cref="System.IO.Ports.SerialPort.BaseStream" /> before the
 		/// exception has happened or by reflection and getting the "internalSerialStream" field.
-		/// 
+		///
 		/// 2. Closing the internal serial stream throws an exception and closes the internal handle
 		/// without waiting for its eventLoopRunner thread to finish, causing an uncatchable
 		/// ObjectDisposedException from it later on when the finalizer runs (which oddly avoids
 		/// throwing the exception but still fails to wait for the eventLoopRunner).
-		/// 
+		///
 		/// The solution is to manually ask the event loop runner thread to shutdown
 		/// (via reflection) and waiting for it before closing the internal serial stream.
-		/// 
+		///
 		/// 3. Since Dispose throws exceptions, the finalizer is not suppressed.
-		/// 
+		///
 		/// The solution is to suppress their finalizers at the beginning.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]

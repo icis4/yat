@@ -63,6 +63,7 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
+		/// <remarks>Must be constant (and not a readonly) to be usable as attribute argument.</remarks>
 		private const string PortIdDefault = SerialPortId.FirstStandardPortName;
 
 		#endregion
