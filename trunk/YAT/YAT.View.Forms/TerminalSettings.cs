@@ -731,10 +731,10 @@ namespace YAT.View.Forms
 				// Char replace/hide:
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
 				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceBell         = f.SettingsResult.Terminal.CharReplace.ReplaceBell;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace    = f.SettingsResult.Terminal.CharReplace.ReplaceBackspace;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = f.SettingsResult.Terminal.CharReplace.ReplaceTab;
 				this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = f.SettingsResult.Terminal.CharHide.HideXOnXOff;
+				this.settingsInEdit.Terminal.CharAction.BeepOnBell           = f.SettingsResult.Terminal.CharAction.BeepOnBell;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
 				this.settingsInEdit.Terminal.CharHide.Hide0x00               = f.SettingsResult.Terminal.CharHide.Hide0x00;
 				this.settingsInEdit.Terminal.CharHide.Hide0xFF               = f.SettingsResult.Terminal.CharHide.Hide0xFF;

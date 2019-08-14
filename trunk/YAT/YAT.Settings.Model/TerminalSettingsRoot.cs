@@ -320,6 +320,14 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
+		public virtual Domain.Settings.CharActionSettings CharAction
+		{
+			get { return (this.explicit_.Terminal.CharAction); }
+			set { this.explicit_.Terminal.CharAction = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
 		public virtual Domain.Settings.SendSettings Send
 		{
 			get { return (this.explicit_.Terminal.Send); }

@@ -45,6 +45,7 @@ namespace YAT.Domain.Settings
 		private DisplaySettings display;
 		private CharReplaceSettings charReplace;
 		private CharHideSettings charHide;
+		private CharActionSettings charAction;
 		private SendSettings send;
 
 		// Type dependent settings:
@@ -72,6 +73,7 @@ namespace YAT.Domain.Settings
 			Display     = new DisplaySettings(settingsType);
 			CharReplace = new CharReplaceSettings(settingsType);
 			CharHide    = new CharHideSettings(settingsType);
+			CharAction  = new CharActionSettings(settingsType);
 			Send        = new SendSettings(settingsType);
 
 			TextTerminal   = new TextTerminalSettings(settingsType);
@@ -98,6 +100,7 @@ namespace YAT.Domain.Settings
 			Display        = new DisplaySettings(rhs.Display);
 			CharReplace    = new CharReplaceSettings(rhs.CharReplace);
 			CharHide       = new CharHideSettings(rhs.CharHide);
+			CharAction     = new CharActionSettings(rhs.CharAction);
 			Send           = new SendSettings(rhs.Send);
 
 			TextTerminal   = new TextTerminalSettings(rhs.TextTerminal);
@@ -240,6 +243,23 @@ namespace YAT.Domain.Settings
 				{
 					var oldNode = this.charHide;
 					this.charHide = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("CharAction")]
+		public CharActionSettings CharAction
+		{
+			get { return (this.charAction); }
+			set
+			{
+				if (this.charAction != value)
+				{
+					var oldNode = this.charAction;
+					this.charAction = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

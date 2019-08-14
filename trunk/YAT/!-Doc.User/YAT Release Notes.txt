@@ -111,7 +111,8 @@ New:
      Useful to communicate with devices that do use text messages but no EOL sequence.
    > Timed line break (feature request #340).
      Also useful to communicate with devices that do use text messages but no EOL sequence.
-- Text terminals: Backspace (feature request #308) as well as bell controls are executed by default.
+- Text terminals: Additional option to let bell (0x07) beep (related to feature request #308).
+- Text terminals: Backspaces (0x08) are treated as backspaces by default (feature request #308).
                   Note that tabs have already been treated as tabs by default since YAT 1.99.22.
 
 Important changes:
