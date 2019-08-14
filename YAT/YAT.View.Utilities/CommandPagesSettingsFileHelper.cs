@@ -414,8 +414,7 @@ namespace YAT.View.Utilities
 				message.AppendLine();
 				message.Append("Would you like to replace all currently configured predefined commands by the imported");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.AppendLine(" [Yes],");
-				message.Append("or add the imported");
+				message.Append(" [Yes], or add the imported");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
 				message.Append(" to the currently configured predefined commands [No]?");
 
