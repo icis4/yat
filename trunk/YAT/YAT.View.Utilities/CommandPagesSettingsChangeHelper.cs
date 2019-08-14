@@ -60,18 +60,14 @@ namespace YAT.View.Utilities
 		{
 			Cancel,
 			Neutral,
-			Enlarge,
 			Spread,
-			Merge
+			Merge,
+			Truncate
 		}
 
 		/// <summary></summary>
 		public static bool TryChange(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageLayout pageLayoutRequested, out PredefinedCommandSettings settingsNew)
 		{
-			// Attention:
-			// Similar code exists in AddOrInsert() further above.
-			// Changes here may have to be applied there too.
-
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
 			if (ConfirmChange(owner, settingsOld, pageLayoutRequested, out mode, out pageLayoutNew))
@@ -88,7 +84,6 @@ namespace YAT.View.Utilities
 					switch (mode)
 					{
 						case (Mode.Neutral):
-						case (Mode.Enlarge):
 						{
 							// ...add:
 							settingsNew.Pages.AddRange(new PredefinedCommandPageCollection(settingsOld.Pages)); // Clone to ensure decoupling.
@@ -98,7 +93,7 @@ namespace YAT.View.Utilities
 
 						case (Mode.Spread):
 						{
-							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
+							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
 
 							// ...spread:
 							settingsNew.Pages.AddSpreaded(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageNew); // Clone to ensure decoupling.
@@ -113,6 +108,16 @@ namespace YAT.View.Utilities
 
 							// ...merge:
 							settingsNew.Pages.AddMerged(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageOld, commandCapacityPerPageNew); // Clone to ensure decoupling.
+
+							return (true);
+						}
+
+						case (Mode.Truncate):
+						{
+							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+
+							// ...truncate:
+							settingsNew.Pages.AddTruncated(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageNew); // Clone to ensure decoupling.
 
 							return (true);
 						}
@@ -136,17 +141,13 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		private static bool ConfirmChange(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageLayout pageLayoutRequested, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
-			// Attention:
-			// Similar code exists in ConfirmImport() above.
-			// Changes here may have to be applied there too.
-
 			var pageLayoutOld = settingsOld.PageLayout;
 
 			var commandCapacityPerPageOld       = ((PredefinedCommandPageLayoutEx)pageLayoutOld)      .CommandCapacityPerPage;
 			var commandCapacityPerPageRequested = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
-			if (settingsOld.Pages.MaxCommandCountPerPage <= commandCapacityPerPageRequested)
+			if (commandCapacityPerPageRequested >= settingsOld.Pages.MaxCommandCountPerPage)
 			{
-				var potentialMergeRatio = (commandCapacityPerPageRequested / commandCapacityPerPageOld);
+				int potentialMergeRatio = (commandCapacityPerPageRequested / commandCapacityPerPageOld);
 
 				if ((settingsOld.Pages.Count > 1) && // There are pages for potential merge.
 				    (potentialMergeRatio > 1))       // Ratio is OK for merge, e.g. 24:12 or 48:24, but not 36:24.
@@ -167,7 +168,8 @@ namespace YAT.View.Utilities
 							message.ToString(),
 							"Change Mode",
 							MessageBoxButtons.YesNoCancel,
-							MessageBoxIcon.Question
+							MessageBoxIcon.Question,
+							MessageBoxDefaultButton.Button3
 						))
 					{
 						case DialogResult.Yes: mode = Mode.Merge;  pageLayoutNew = pageLayoutRequested; return (true);
@@ -181,8 +183,10 @@ namespace YAT.View.Utilities
 				pageLayoutNew = pageLayoutRequested;
 				return (true);
 			}
-			else // The pages to import do not fit the currently configured page layout:
+			else // The current pages no longer fit the requested page layout:
 			{
+				int potentialSpreadRatio = (int)(Math.Ceiling(((double)(commandCapacityPerPageOld)) / (double)(commandCapacityPerPageRequested)));
+
 				var message = new StringBuilder();
 				message.Append("The currently configured predefined commands contain up to ");
 				message.Append(settingsOld.Pages.MaxCommandCountPerPage);
@@ -190,8 +194,9 @@ namespace YAT.View.Utilities
 				message.Append(commandCapacityPerPageRequested);
 				message.AppendLine(" commands per page are requested now.");
 				message.AppendLine();
-				message.Append("Would you like to enlarge the pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append("Would you like to spread each page to " + potentialSpreadRatio.ToString(CultureInfo.CurrentUICulture));
+				message.Append(" pages of " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
+				message.Append(" or truncate the pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -199,12 +204,13 @@ namespace YAT.View.Utilities
 						message.ToString(),
 						"Change Mode",
 						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
+						MessageBoxIcon.Question,
+						MessageBoxDefaultButton.Button3
 					))
 				{
-					case DialogResult.Yes: mode = Mode.Enlarge; pageLayoutNew = pageLayoutRequested; return (true);
-					case DialogResult.No:  mode = Mode.Spread;  pageLayoutNew = pageLayoutOld;       return (true);
-					default:               mode = Mode.Cancel;  pageLayoutNew = pageLayoutOld;       return (false);
+					case DialogResult.Yes: mode = Mode.Spread;   pageLayoutNew = pageLayoutRequested; return (true);
+					case DialogResult.No:  mode = Mode.Truncate; pageLayoutNew = pageLayoutRequested; return (true);
+					default:               mode = Mode.Cancel;   pageLayoutNew = pageLayoutOld;       return (false);
 				}
 			}
 		}

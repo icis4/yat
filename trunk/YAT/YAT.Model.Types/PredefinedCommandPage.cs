@@ -80,11 +80,8 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public PredefinedCommandPage()
+			: this ("")
 		{
-			this.name = "";
-			this.commandsIntegrated = new List<Command>();
-			this.commandsLinked     = new List<Command>(); // Even though typically not needed, same behavior as 'commandsIntegrated'.
-		////this.linkFilePath = null;
 		}
 
 		/// <summary></summary>
@@ -111,6 +108,12 @@ namespace YAT.Model.Types
 				this.commandsLinked.Add(new Command(c)); // Clone to ensure decoupling.
 
 			this.linkFilePath = rhs.linkFilePath;
+		}
+
+		/// <summary></summary>
+		public PredefinedCommandPage(int capacity)
+			: this (capacity, "")
+		{
 		}
 
 		/// <summary></summary>
@@ -362,18 +365,24 @@ namespace YAT.Model.Types
 				}
 				else // 'index' is/was the last command:
 				{
-					// Remove command:
 					Commands.RemoveAt(index);
-
-					// Remove trailing command(s):
-					for (int i = (index - 1); i >= 0; i--)
-					{
-						if ((Commands[i] == null) || (!Commands[i].IsDefined))
-							Commands.RemoveAt(i);
-						else
-							break;
-					}
+					RemoveTrailingCommands();
 				}
+			}
+		}
+
+		/// <remarks>
+		/// Modifies the commands effectively in use, i.e. either <see cref="CommandsIntegrated"/>,
+		/// or <see cref="CommandsLinked"/> in case <see cref="LinkFilePath"/> is defined.
+		/// </remarks>
+		public virtual void RemoveTrailingCommands()
+		{
+			for (int i = (Commands.Count - 1); i >= 0; i--)
+			{
+				if ((Commands[i] == null) || (!Commands[i].IsDefined))
+					Commands.RemoveAt(i);
+				else
+					break;
 			}
 		}
 

@@ -93,7 +93,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary>
-		/// Export all pages to the clipboard.
+		/// Exports all pages to the clipboard.
 		/// </summary>
 		public static bool TryExportAll(PredefinedCommandSettings settings)
 		{                                                      // Specifying 'NoPageId' will export all pages (not a single).
@@ -101,7 +101,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary>
-		/// Export the given page to the clipboard.
+		/// Exports the given page to the clipboard.
 		/// </summary>
 		public static bool TryExportOne(PredefinedCommandSettings settings, int pageId)
 		{
@@ -243,7 +243,7 @@ namespace YAT.View.Utilities
 			if (TryGet(out pagesImported))
 			{
 				var message = new StringBuilder();
-				message.Append("Clipboard contains ");
+				message.Append("The clipboard contains ");
 				message.Append(pagesImported.Count);
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
 				message.Append(" with a total of ");
@@ -263,7 +263,8 @@ namespace YAT.View.Utilities
 						message.ToString(),
 						"Import Mode",
 						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
+						MessageBoxIcon.Question,
+						MessageBoxDefaultButton.Button3
 					))
 				{
 					case DialogResult.Yes:
@@ -338,10 +339,6 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		private static bool TryAddOrInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageCollection pagesImported, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
-			// Attention:
-			// Similar code exists in Change() further below.
-			// Changes here may have to be applied there too.
-
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
 			if (ConfirmImport(owner, pagesImported, settingsOld.PageLayout, out mode, out pageLayoutNew))
@@ -424,7 +421,7 @@ namespace YAT.View.Utilities
 				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
 
 				var message = new StringBuilder();
-				message.Append("Clipboard contains ");
+				message.Append("The clipboard contains ");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
 				message.Append(" with up to ");
 				message.Append(pagesImported.MaxCommandCountPerPage);
@@ -433,7 +430,7 @@ namespace YAT.View.Utilities
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
 				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the imported commands to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append(" or spread the imported pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -441,7 +438,8 @@ namespace YAT.View.Utilities
 						message.ToString(),
 						"Import Mode",
 						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
+						MessageBoxIcon.Question,
+						MessageBoxDefaultButton.Button3
 					))
 				{
 					case DialogResult.Yes: mode = Mode.Enlarge; pageLayoutNew = nextPageLayout; return (true);

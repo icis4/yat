@@ -127,179 +127,144 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
-			// Attention:
-			// Similar code exists in InsertSpreaded() below.
-			// Changes here may have to be applied there too.
-
 			foreach (var p in collection)
 			{
-				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (commandCapacityPerPage)));
-				for (int i = 0; i < n; i++)
-				{
-					var spreadPage = new PredefinedCommandPage();
-
-					if (n <= 1)
-						spreadPage.Name = p.Name;
-					else
-						spreadPage.Name = p.Name + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
-
-					for (int j = 0; j < commandCapacityPerPage; j++)
-					{
-						int cmdIdx = ((i * commandCapacityPerPage) + j);
-						spreadPage.Commands.Add(p.Commands[cmdIdx]);
-					}
-
-					Add(spreadPage);
-				}
+				int spreadRatio = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (double)(commandCapacityPerPage)));
+				if (spreadRatio > 1) // e.g. 20:12 = 2, or 30:12 = 3, or 30:24 = 2.
+					AddRange(CreateSpread(p, commandCapacityPerPage, spreadRatio));
+				else
+					Add(p);
 			}
 		}
 
 		/// <summary></summary>
 		public void InsertSpreaded(int index, IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
-			// Attention:
-			// Similar code exists in AddSpreaded() above.
-			// Changes here may have to be applied there too.
-
 			foreach (var p in collection)
 			{
-				int n = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (commandCapacityPerPage)));
-				for (int i = 0; i < n; i++)
+				int spreadRatio = (int)(Math.Ceiling(((double)(p.Commands.Count)) / (double)(commandCapacityPerPage)));
+				if (spreadRatio > 1) // e.g. 20:12 = 2, or 30:12 = 3, or 30:24 = 2.
+					InsertRange(index, CreateSpread(p, commandCapacityPerPage, spreadRatio));
+				else
+					Insert(index, p);
+			}
+		}
+
+		/// <summary></summary>
+		protected static IEnumerable<PredefinedCommandPage> CreateSpread(PredefinedCommandPage page, int commandCapacityPerPage, int spreadRatio)
+		{
+			for (int i = 0; i < spreadRatio; i++)
+			{
+				var spreadPage = new PredefinedCommandPage(commandCapacityPerPage); // Preset the required capacity to improve memory management.
+
+				if (spreadRatio <= 1)
+					spreadPage.Name = page.Name;
+				else
+					spreadPage.Name = page.Name + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", (i + 1), spreadRatio);
+
+				for (int j = 0; j < commandCapacityPerPage; j++)
 				{
-					var spreadPage = new PredefinedCommandPage();
-
-					if (n <= 1)
-						spreadPage.Name = p.Name;
+					int cmdIdx = ((i * commandCapacityPerPage) + j);
+					if (cmdIdx < page.Commands.Count)
+						spreadPage.Commands.Add(page.Commands[cmdIdx]);
 					else
-						spreadPage.Name = p.Name + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", i, n);
-
-					for (int j = 0; j < commandCapacityPerPage; j++)
-					{
-						int cmdIdx = ((i * commandCapacityPerPage) + j);
-						spreadPage.Commands.Add(p.Commands[cmdIdx]);
-					}
-
-					Insert(index, spreadPage);
+						break;
 				}
+
+				spreadPage.RemoveTrailingCommands(); // May occur on intermediate spreads, should not occur on last spread.
+
+				yield return (spreadPage);
 			}
 		}
 
 		/// <summary></summary>
 		public void AddMerged(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPageOld, int commandCapacityPerPageNew)
 		{
-			// Attention:
-			// Similar code exists in InsertMerged() below.
-			// Changes here may have to be applied there too.
-
 			int mergeRatio = (commandCapacityPerPageNew / commandCapacityPerPageOld);
 			if (mergeRatio > 1) // e.g. 24:12 = 2, or 48:24 = 2, but 36:24 = 1 requires no merge.
-			{
-				var enumerator = collection.GetEnumerator();
-				while (enumerator.MoveNext()) // Collection contains (more) elements:
-				{
-					var mergePage = new PredefinedCommandPage();
-
-					for (int i = 0; i < mergeRatio; i++)
-					{
-						var p = enumerator.Current;
-
-						if (i == 0)
-							mergePage.Name = p.Name;
-						else
-							mergePage.Name += (" + " + p.Name);
-
-						int cmdIdx = 0;
-						while (cmdIdx < p.Commands.Count)
-						{
-							mergePage.Commands.Add(p.Commands[cmdIdx]);
-							cmdIdx++;
-						}
-
-						if ((cmdIdx < commandCapacityPerPageOld) && // Source page was not completely filled.
-							(i != (mergeRatio - 1)))                // This is not the last page to merge.
-						{
-							while (cmdIdx < commandCapacityPerPageOld)
-							{
-								mergePage.Commands.Add(new Command()); // Fill-in empty commands.
-								cmdIdx++;
-							}
-						}
-
-						if (i < (mergeRatio - 1))
-						{
-							if (enumerator.MoveNext()) // Collection contains (more) elements:
-								continue;
-							else
-								break;
-						}
-					}
-
-					Add(mergePage);
-				}
-			}
+				AddRange(CreateMerge(collection, commandCapacityPerPageOld, mergeRatio));
 			else
-			{
 				AddRange(collection);
-			}
 		}
 
 		/// <summary></summary>
 		public void InsertMerged(int index, IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPageOld, int commandCapacityPerPageNew)
 		{
-			// Attention:
-			// Similar code exists in AddMerged() above.
-			// Changes here may have to be applied there too.
-
 			int mergeRatio = (commandCapacityPerPageNew / commandCapacityPerPageOld);
 			if (mergeRatio > 1) // e.g. 24:12 = 2, or 48:24 = 2, but 36:24 = 1 requires no merge.
+				InsertRange(index, CreateMerge(collection, commandCapacityPerPageOld, mergeRatio));
+			else
+				InsertRange(index, collection);
+		}
+
+		/// <summary></summary>
+		protected static IEnumerable<PredefinedCommandPage> CreateMerge(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPageOld, int mergeRatio)
+		{
+			var enumerator = collection.GetEnumerator();
+			while (enumerator.MoveNext()) // Collection contains (more) elements:
 			{
-				var enumerator = collection.GetEnumerator();
-				while (enumerator.MoveNext()) // Collection contains (more) elements:
+				var mergePage = new PredefinedCommandPage(mergeRatio * commandCapacityPerPageOld); // Preset the required capacity to improve memory management.
+
+				for (int i = 0; i < mergeRatio; i++)
 				{
-					var mergePage = new PredefinedCommandPage();
+					var p = enumerator.Current;
 
-					for (int i = 0; i < mergeRatio; i++)
+					if (i == 0)
+						mergePage.Name = p.Name;
+					else
+						mergePage.Name += (" + " + p.Name);
+
+					int cmdIdx = 0;
+					while (cmdIdx < p.Commands.Count)
 					{
-						var p = enumerator.Current;
+						mergePage.Commands.Add(p.Commands[cmdIdx]);
+						cmdIdx++;
+					}
 
-						if (i == 0)
-							mergePage.Name = p.Name;
-						else
-							mergePage.Name += (" + " + p.Name);
-
-						int cmdIdx = 0;
-						while (cmdIdx < p.Commands.Count)
+					if ((cmdIdx < commandCapacityPerPageOld) && // Source page was not completely filled.
+						(i != (mergeRatio - 1)))                // This is not the last page to merge.
+					{
+						while (cmdIdx < commandCapacityPerPageOld)
 						{
-							mergePage.Commands.Add(p.Commands[cmdIdx]);
+							mergePage.Commands.Add(new Command()); // Fill-in empty commands.
 							cmdIdx++;
-						}
-
-						if ((cmdIdx < commandCapacityPerPageOld) && // Source page was not completely filled.
-							(i != (mergeRatio - 1)))                // This is not the last page to merge.
-						{
-							while (cmdIdx < commandCapacityPerPageOld)
-							{
-								mergePage.Commands.Add(new Command()); // Fill-in empty commands.
-								cmdIdx++;
-							}
-						}
-
-						if (i < (mergeRatio - 1))
-						{
-							if (enumerator.MoveNext()) // Collection contains (more) elements:
-								continue;
-							else
-								break;
 						}
 					}
 
-					Insert(index, mergePage);
+					if (i < (mergeRatio - 1))
+					{
+						if (enumerator.MoveNext()) // Collection contains (more) elements:
+							continue;
+						else
+							break;
+					}
 				}
+
+				yield return (mergePage);
 			}
-			else
-			{
-				InsertRange(index, collection);
-			}
+		}
+
+		/// <summary></summary>
+		public void AddTruncated(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
+		{
+			foreach (var p in collection)
+				Add(CreateTruncation(p, commandCapacityPerPage));
+		}
+
+		/// <summary></summary>
+		public void InsertTruncated(int index, IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
+		{
+			foreach (var p in collection)
+				Insert(index, CreateTruncation(p, commandCapacityPerPage));
+		}
+
+		/// <summary></summary>
+		protected static PredefinedCommandPage CreateTruncation(PredefinedCommandPage page, int commandCapacityPerPage)
+		{
+			var truncatedCount = Math.Min(page.Commands.Count, commandCapacityPerPage);
+			var truncatedPage = new PredefinedCommandPage(commandCapacityPerPage, page.Name);
+			truncatedPage.Commands.AddRange(page.Commands.Take(truncatedCount));
+			return (truncatedPage);
 		}
 
 		/// <summary></summary>
