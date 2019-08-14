@@ -50,9 +50,9 @@ using YAT.Settings.Model;
 namespace YAT.View.Utilities
 {
 	/// <remarks>
-	/// Note there are similar implementations "Clipboard", "File" and "FileLink" to deal with
-	/// subtle differences. Intentionally kept in parallel rather than making the implementation
-	/// all-inclusive but less comprehensive. Separate classes to ease diffing.
+	/// Note there are similar implementations "Change", "Clipboard", "File" and "FileLink" to deal
+	/// with subtle differences in behavior. Intentionally kept in parallel rather than making the
+	/// implementation all-inclusive but less comprehensive. Separate classes to ease diffing.
 	/// </remarks>
 	public static class CommandPagesSettingsFileHelper
 	{
@@ -543,7 +543,7 @@ namespace YAT.View.Utilities
 
 						case (Mode.Spread):
 						{
-								var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
 
 							// ...spread:
 							if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
@@ -573,10 +573,6 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandPageCollection pagesImported, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
-			// Attention:
-			// Similar code exists in ConfirmChange() below.
-			// Changes here may have to be applied there too.
-
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
 			if (pagesImported.MaxCommandCountPerPage <= commandCapacityPerPageOld)
 			{
@@ -584,7 +580,7 @@ namespace YAT.View.Utilities
 				pageLayoutNew = pageLayoutOld;
 				return (true);
 			}
-			else
+			else // The pages to import do not fit the currently configured page layout:
 			{
 				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(pagesImported.MaxCommandCountPerPage);
 				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
@@ -615,105 +611,6 @@ namespace YAT.View.Utilities
 					default:               mode = Mode.Cancel;  pageLayoutNew = pageLayoutOld;  return (false);
 				}
 			}
-		}
-
-		/// <summary></summary>
-		private static bool ConfirmChange(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageLayout pageLayoutRequested, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
-		{
-			// Attention:
-			// Similar code exists in ConfirmImport() above.
-			// Changes here may have to be applied there too.
-
-			var pageLayoutOld = settingsOld.PageLayout;
-
-			var commandCapacityPerPageOld       = ((PredefinedCommandPageLayoutEx)pageLayoutOld)      .CommandCapacityPerPage;
-			var commandCapacityPerPageRequested = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
-			if (settingsOld.Pages.MaxCommandCountPerPage <= commandCapacityPerPageRequested)
-			{
-				mode = Mode.Neutral;
-				pageLayoutNew = pageLayoutRequested;
-				return (true);
-			}
-			else
-			{
-				var message = new StringBuilder();
-				message.Append("The currently configured predefined commands contain up to ");
-				message.Append(settingsOld.Pages.MaxCommandCountPerPage);
-				message.Append(" commands per page, but only ");
-				message.Append(commandCapacityPerPageRequested);
-				message.AppendLine(" commands per page are requested now.");
-				message.AppendLine();
-				message.Append("Would you like to enlarge all pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
-
-				switch (MessageBoxEx.Show
-					(
-						owner,
-						message.ToString(),
-						"Change Mode",
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
-					))
-				{
-					case DialogResult.Yes: mode = Mode.Enlarge; pageLayoutNew = pageLayoutRequested; return (true);
-					case DialogResult.No:  mode = Mode.Spread;  pageLayoutNew = pageLayoutOld;       return (true);
-					default:               mode = Mode.Cancel;  pageLayoutNew = pageLayoutOld;       return (false);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public static bool TryChange(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageLayout pageLayoutRequested, out PredefinedCommandSettings settingsNew)
-		{
-			// Attention:
-			// Similar code exists in AddOrInsert() further above.
-			// Changes here may have to be applied there too.
-
-			Mode mode;
-			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmChange(owner, settingsOld, pageLayoutRequested, out mode, out pageLayoutNew))
-			{
-				// Create...
-				settingsNew = new PredefinedCommandSettings();
-
-				// ...set layout...
-				settingsNew.PageLayout = pageLayoutNew;
-
-				// ...and then...
-				if (settingsOld.Pages.Count > 0)
-				{
-					switch (mode)
-					{
-						case (Mode.Neutral):
-						case (Mode.Enlarge):
-						{
-							// ...add:
-							settingsNew.Pages.AddRange(new PredefinedCommandPageCollection(settingsOld.Pages)); // Clone to ensure decoupling.
-							return (true);
-						}
-
-						case (Mode.Spread):
-						{
-							// ...spread:
-							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
-							settingsNew.Pages.AddSpreaded(new PredefinedCommandPageCollection(settingsOld.Pages), commandCapacityPerPageNew); // Clone to ensure decoupling.
-							return (true);
-						}
-
-						default:
-						{
-							break; // Nothing to do.
-						}
-					}
-				}
-				else // ...add default page since empty:
-				{
-					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
-				}
-			}
-
-			settingsNew = null;
-			return (false);
 		}
 	}
 }
