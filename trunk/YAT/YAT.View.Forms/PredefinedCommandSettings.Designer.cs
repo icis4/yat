@@ -308,7 +308,7 @@
 			this.button_ClearPage.Name = "button_ClearPage";
 			this.button_ClearPage.Size = new System.Drawing.Size(75, 23);
 			this.button_ClearPage.TabIndex = 34;
-			this.button_ClearPage.Text = "Clear All...";
+			this.button_ClearPage.Text = "Clea&r All...";
 			this.button_ClearPage.Click += new System.EventHandler(this.button_ClearPage_Click);
 			// 
 			// groupBox_Page
@@ -2207,7 +2207,7 @@
 			// button_ImportAllPagesFromFile
 			// 
 			this.button_ImportAllPagesFromFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(12, 268);
+			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(138, 268);
 			this.button_ImportAllPagesFromFile.Name = "button_ImportAllPagesFromFile";
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ImportAllPagesFromFile.TabIndex = 18;
@@ -2219,7 +2219,7 @@
 			// button_ExportAllPagesToFile
 			// 
 			this.button_ExportAllPagesToFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(12, 239);
+			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(138, 239);
 			this.button_ExportAllPagesToFile.Name = "button_ExportAllPagesToFile";
 			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ExportAllPagesToFile.TabIndex = 16;
@@ -2284,7 +2284,7 @@
 			// button_DeleteAllPages
 			// 
 			this.button_DeleteAllPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_DeleteAllPages.Location = new System.Drawing.Point(138, 268);
+			this.button_DeleteAllPages.Location = new System.Drawing.Point(12, 254);
 			this.button_DeleteAllPages.Name = "button_DeleteAllPages";
 			this.button_DeleteAllPages.Size = new System.Drawing.Size(120, 23);
 			this.button_DeleteAllPages.TabIndex = 20;
@@ -2355,7 +2355,7 @@
 			this.button_LinkToFile.Name = "button_LinkToFile";
 			this.button_LinkToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_LinkToFile.TabIndex = 3;
-			this.button_LinkToFile.Text = "Lin&k Page to File...";
+			this.button_LinkToFile.Text = "Lin&k to File...";
 			this.toolTip.SetToolTip(this.button_LinkToFile, resources.GetString("button_LinkToFile.ToolTip"));
 			this.button_LinkToFile.Click += new System.EventHandler(this.button_LinkToFile_Click);
 			// 
