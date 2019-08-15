@@ -65,6 +65,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId, string indicatedName)
 		{
 			var pageCount = settings.Pages.Count;
@@ -98,6 +99,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Prompts the user to export all pages to a .yacps file.
 		/// </summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportAll(IWin32Window owner, PredefinedCommandSettings settings, string indicatedName)
 		{
 			return (TryExport(owner, settings.Pages, indicatedName));
@@ -106,6 +108,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Prompts the user to export the given page to a .yacp file.
 		/// </summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId, string indicatedName)
 		{
 			var pages = new PredefinedCommandPageCollection();
@@ -115,6 +118,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryExport(IWin32Window owner, PredefinedCommandPageCollection pages, string indicatedName)
 		{
 			var sfd = new SaveFileDialog();
@@ -305,6 +309,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out PredefinedCommandPageCollection pages)
 		{
 			var ofd = new OpenFileDialog();
@@ -399,6 +404,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
@@ -450,6 +456,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
@@ -464,6 +471,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
@@ -478,6 +486,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryReplace(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageCollection pagesImported, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
@@ -498,6 +507,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryAddOrInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageCollection pagesImported, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
@@ -567,6 +577,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandPageCollection pagesImported, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;

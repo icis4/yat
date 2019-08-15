@@ -66,6 +66,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryChange(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageLayout pageLayoutRequested, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
@@ -139,6 +140,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool ConfirmChange(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageLayout pageLayoutRequested, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var pageLayoutOld = settingsOld.PageLayout;
