@@ -243,22 +243,22 @@ namespace MKY.IO.Usb.Test
 					info = new DeviceInfo(vendorId, productId, serial);
 
 				// Serialize to file:
-				XmlSerializerTest.TestSerializeToFile(filePath, typeof(DeviceInfo), info);
+				XmlSerializerTest.TestSerializeToFile(typeof(DeviceInfo), info, filePath);
 
 				// Deserialize from file using different methods and verify the result:
-				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(DeviceInfo));
+				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestDeserializeFromFile(typeof(DeviceInfo), filePath);
 				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
 				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
 					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
 
-				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
+				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestTolerantDeserializeFromFile(typeof(DeviceInfo), filePath);
 				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
 				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
 				if (matchSerial)
 					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
 
-				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
+				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(typeof(DeviceInfo), filePath);
 				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
 				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
 				if (matchSerial)

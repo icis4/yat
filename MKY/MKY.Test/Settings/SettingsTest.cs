@@ -822,9 +822,9 @@ namespace MKY.Test.Settings
 			string filePath = Temp.MakeTempFilePath(GetType(), fileName, ".xml");
 
 			object objToSerialize = typeToSerialize.GetConstructor(Type.EmptyTypes).Invoke(null);
-			XmlSerializerTest.TestSerializeToFile(filePath, typeToSerialize, objToSerialize);
+			XmlSerializerTest.TestSerializeToFile(typeToSerialize, objToSerialize, filePath);
 
-			object objFromDeserialize = XmlSerializerTest.TestDeserializeFromFile(filePath, typeToDeserialize);
+			object objFromDeserialize = XmlSerializerTest.TestDeserializeFromFile(typeToDeserialize, filePath);
 
 			object objToTestAgainst = typeToDeserialize.GetConstructor(Type.EmptyTypes).Invoke(null);
 
