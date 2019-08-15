@@ -88,10 +88,10 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
-			Text = text;
-			Caption = caption;
-			Buttons  = buttons;
-			Icon = icon;
+			Text          = text;
+			Caption       = caption;
+			Buttons       = buttons;
+			Icon          = icon;
 			DefaultButton = defaultButton;
 		}
 	}
@@ -105,6 +105,25 @@ namespace YAT.Model
 		/// <summary></summary>
 		public DialogEventArgs()
 		{
+		}
+	}
+
+	/// <summary></summary>
+	public class SaveAsDialogEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public string FilePathOld { get; }
+
+		/// <summary></summary>
+		public string FilePathNew { get; set; }
+
+		/// <summary></summary>
+		public DialogResult Result { get; set; }
+
+		/// <summary></summary>
+		public SaveAsDialogEventArgs(string filePathOld)
+		{
+			FilePathOld = filePathOld;
 		}
 	}
 }

@@ -367,7 +367,7 @@ namespace YAT.View.Forms
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsFileHelper.TryLoadAndImport(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsFileHelper.TryLoadAndImportAll(this, this.settingsInEdit, out settingsInEditNew))
 				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
@@ -379,7 +379,7 @@ namespace YAT.View.Forms
 		private void button_ImportAllPagesFromClipboard_Click(object sender, EventArgs e)
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsClipboardHelper.TryGetAndImport(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsClipboardHelper.TryGetAndImportAll(this, this.settingsInEdit, out settingsInEditNew))
 				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
@@ -413,7 +413,7 @@ namespace YAT.View.Forms
 		private void ShowLinkFileDialog()
 		{
 			Model.Settings.PredefinedCommandSettings settingsInEditNew;
-			if (CommandPagesSettingsFileLinkHelper.TryLoadAndLink(this, this.settingsInEdit, out settingsInEditNew))
+			if (CommandPagesSettingsFileLinkHelper.TryLoadAndLink(this, this.settingsInEdit, this.selectedPageId, out settingsInEditNew))
 				ApplySettingsAndSetControls(settingsInEditNew);
 		}
 
@@ -1195,7 +1195,8 @@ namespace YAT.View.Forms
 						this.predefinedCommandSettingsSetLabels[i].Text = commandIdText;
 					}
 
-					pageIsLinked = this.settingsInEdit.Pages[SelectedPageIndex].IsLinkedToFilePath;
+					pageIsLinked            = this.settingsInEdit.Pages[SelectedPageIndex].IsLinkedToFilePath;
+					pathLabel_LinkedTo.Text = this.settingsInEdit.Pages[SelectedPageIndex].LinkFilePath; // Setting 'null' is permissible.
 				}
 
 				button_LinkToFile.Enabled  =  pageIsSelected;
@@ -1586,9 +1587,9 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Non-Public Methods > Selected Page/Subpage
+		#region Non-Public Methods > Page/Subpage
 		//------------------------------------------------------------------------------------------
-		// Non-Public Methods > Selected Page/Subpage
+		// Non-Public Methods > Page/Subpage
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>

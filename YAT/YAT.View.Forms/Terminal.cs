@@ -2396,7 +2396,7 @@ namespace YAT.View.Forms
 				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Paste Page(s) from Clipboard..." is fixed.
 					toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page to File...";
 				////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
-				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
+				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page to File..." is fixed.
 				}
 				else
 				{
@@ -2404,7 +2404,7 @@ namespace YAT.View.Forms
 				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Paste Page(s) from Clipboard..." is fixed.
 					toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page(s) to File...";
 				////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
-				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
+				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page to File..." is fixed.
 				}
 			}
 			finally
@@ -2801,7 +2801,7 @@ namespace YAT.View.Forms
 
 			SetFixedStatusText("Linking to file..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
-			if (CommandPagesSettingsFileLinkHelper.TryLoadAndLink(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
+			if (CommandPagesSettingsFileLinkHelper.TryLoadAndLink(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
@@ -5541,6 +5541,7 @@ namespace YAT.View.Forms
 				this.terminal.ResetStatusTextRequest   += terminal_ResetStatusTextRequest;
 				this.terminal.MessageInputRequest      += terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest  += terminal_SaveAsFileDialogRequest;
+				this.terminal.SaveCommandPageAsFileDialogRequest += terminal_SaveCommandPageAsFileDialogRequest;
 				this.terminal.CursorRequest            += terminal_CursorRequest;
 
 				this.terminal.Saved                    += terminal_Saved;
@@ -5580,6 +5581,7 @@ namespace YAT.View.Forms
 				this.terminal.ResetStatusTextRequest   -= terminal_ResetStatusTextRequest;
 				this.terminal.MessageInputRequest      -= terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest  -= terminal_SaveAsFileDialogRequest;
+				this.terminal.SaveCommandPageAsFileDialogRequest -= terminal_SaveCommandPageAsFileDialogRequest;
 				this.terminal.CursorRequest            -= terminal_CursorRequest;
 
 				this.terminal.Saved                    -= terminal_Saved;
@@ -5981,6 +5983,17 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void terminal_SaveCommandPageAsFileDialogRequest(object sender, Model.SaveAsDialogEventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			string filePathNew;
+			e.Result = ShowSaveCommandPageAsFileDialog(e.FilePathOld, out filePathNew);
+			e.FilePathNew = filePathNew;
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_CursorRequest(object sender, EventArgs<Cursor> e)
 		{
 			if (IsDisposed)
@@ -6055,6 +6068,39 @@ namespace YAT.View.Forms
 			else
 			{
 				ResetStatusText();
+			}
+
+			return (dr);
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private DialogResult ShowSaveCommandPageAsFileDialog(string filePathOld, out string filePathNew)
+		{
+			SetFixedStatusText("Saving command page as...");
+
+			var sfd = new SaveFileDialog();
+			sfd.Title       = "Save Command Page As";
+			sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
+			sfd.FileName    = Path.GetFileName(filePathOld);
+
+			var dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+
+				filePathNew = sfd.FileName;
+			}
+			else
+			{
+				ResetStatusText();
+
+				filePathNew = null;
 			}
 
 			return (dr);

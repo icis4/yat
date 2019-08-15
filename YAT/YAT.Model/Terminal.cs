@@ -313,6 +313,9 @@ namespace YAT.Model
 		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
 
 		/// <summary></summary>
+		public event EventHandler<SaveAsDialogEventArgs> SaveCommandPageAsFileDialogRequest;
+
+		/// <summary></summary>
 		public event EventHandler<EventArgs<Cursor>> CursorRequest;
 
 		/// <summary></summary>
@@ -1839,6 +1842,29 @@ namespace YAT.Model
 				}
 			}
 
+			if (this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+			{
+				foreach (var linkedPage in (this.settingsHandler.Settings.PredefinedCommand.Pages.Where(p => p.IsLinkedToFilePath)))
+				{    // !SettingsFileIsWritable                     || SettingsFileNoLongerExists
+					if (!FileEx.IsWritable(linkedPage.LinkFilePath) || !File.Exists(linkedPage.LinkFilePath))
+					{    // this.settingsRoot.ExplicitHaveChanged
+						if (linkedPage.ExplicitHaveChanged || saveEvenIfNotChanged)
+						{
+
+						if (userInteractionIsAllowed) {
+							string linkFilePathConfirmed;
+							if (RequestLinkFilePathFromUser(linkedPage.LinkFilePath, out linkFilePathConfirmed, out isCanceled))
+								linkedPage.LinkFilePath = linkFilePathConfirmed;
+							else
+								return (false); // Let save fail if file is restricted and user doesn't fix it.
+						}
+						else {
+							return (false); // Let save fail if file is restricted.
+						}
+					}
+				}
+			}
+
 			// -------------------------------------------------------------------------------------
 			// Save is feasible:
 			// -------------------------------------------------------------------------------------
@@ -1936,10 +1962,10 @@ namespace YAT.Model
 			isCanceled = false;
 
 			string reason;
-			if      ( SettingsFileNoLongerExists)
-				reason = "The file no longer exists.";
-			else if (!SettingsFileIsWritable)
+			if      (!SettingsFileIsWritable)
 				reason = "The file is write-protected.";
+			else if ( SettingsFileNoLongerExists)
+				reason = "The file no longer exists.";
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
@@ -1947,7 +1973,7 @@ namespace YAT.Model
 			message.AppendLine("Unable to save file");
 			message.AppendLine(this.settingsHandler.SettingsFilePath);
 			message.AppendLine();
-			message.Append    (reason + " Would you like to save the file at another location?");
+			message.Append(reason + " Would you like to save the file at another location? You may also fix the file and then confirm the current location.");
 
 			var dr = OnMessageInputRequest
 			(
@@ -1968,6 +1994,50 @@ namespace YAT.Model
 
 				default:
 					// No need for TextRequest("Canceled!") as parent will handle cancel.
+					isCanceled = true;
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected virtual bool RequestLinkFilePathFromUser(string linkFilePathRestricted, out string linkFilePathConfirmed, out bool isCanceled)
+		{
+			isCanceled = false;
+
+			string reason;
+			if      (!FileEx.IsWritable(linkFilePathRestricted))
+				reason = "The file is write-protected.";
+			else if (!File.Exists(linkFilePathRestricted))
+				reason = "The file no longer exists.";
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			var message = new StringBuilder();
+			message.AppendLine("Unable to save file");
+			message.AppendLine(linkFilePathRestricted);
+			message.AppendLine();
+			message.Append(reason + " Select another location or fix the file and then confirm the current location.");
+
+			var dr = OnMessageInputRequest
+			(
+				message.ToString(),
+				"File Error",
+				MessageBoxButtons.OKCancel,
+				MessageBoxIcon.Exclamation
+			);
+
+			switch (dr)
+			{
+				case DialogResult.OK:
+					var drSaveAs = OnSaveCommandPageAsFileDialogRequest(linkFilePathRestricted, out linkFilePathConfirmed);
+					isCanceled = (drSaveAs == DialogResult.Cancel);
+					return (drSaveAs == DialogResult.OK);
+
+				default:
+					// No need for TextRequest("Canceled!") as parent will handle cancel.
+					linkFilePathConfirmed = null;
 					isCanceled = true;
 					return (false);
 			}
@@ -5648,6 +5718,32 @@ namespace YAT.Model
 			}
 			else
 			{
+				return (DialogResult.None);
+			}
+		}
+
+		/// <summary>
+		/// Requests to show the 'SaveAs' dialog to let the user chose a file path.
+		/// If confirmed, the file will be saved to that path.
+		/// </summary>
+		protected virtual DialogResult OnSaveCommandPageAsFileDialogRequest(string filePathOld, out string filePathNew)
+		{
+			if (this.startArgs.Interactive)
+			{
+				OnCursorReset(); // Just in case...
+
+				var e = new SaveAsDialogEventArgs(filePathOld);
+				this.eventHelper.RaiseSync<SaveAsDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
+
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				filePathNew = e.FilePathNew;
+				return (e.Result);
+			}
+			else
+			{
+				filePathNew = null;
 				return (DialogResult.None);
 			}
 		}

@@ -60,8 +60,7 @@ namespace YAT.View.Utilities
 		{
 			Cancel,
 			Neutral,
-			Enlarge,
-			Spread
+			Enlarge
 		}
 
 		/// <summary></summary>
@@ -93,42 +92,14 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <summary></summary>
-		private static bool TryLoad(string filePath, out PredefinedCommandPageCollection pages, out Exception exception)
-		{
-			try
-			{
-				var sh = new DocumentSettingsHandler<CommandPagesSettingsRoot>();
-				sh.SettingsFilePath = filePath;
-				if (sh.Load())
-				{
-					pages = sh.Settings.Pages; // No clone needed as just loaded.
-					exception = null;
-					return (true);
-				}
-				else
-				{
-					pages = null;
-					exception = null;
-					return (true);
-				}
-			}
-			catch (Exception ex)
-			{
-				pages = null;
-				exception = ex;
-				return (false);
-			}
-		}
-
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out string filePath, out PredefinedCommandPageCollection pages)
+		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out string filePath, out PredefinedCommandPage page)
 		{
 			var ofd = new OpenFileDialog();
-			ofd.Title       = "Link Command Page(s)";
-			ofd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
-			ofd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
+			ofd.Title       = "Link Command Page";
+			ofd.Filter      = ExtensionHelper.CommandPageFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
 			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
@@ -139,69 +110,24 @@ namespace YAT.View.Utilities
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
-				if (ExtensionHelper.IsCommandPagesFile(ofd.FileName)) // .yacps explicitly.
+				if (TryLoad(ofd.FileName, out page, out ex))
 				{
-					if (TryLoad(ofd.FileName, out pages, out ex))
+					if (page.DefinedCommandCount < 1)
 					{
-						if (pages.Count < 1)
-						{
-							MessageBoxEx.Show
-							(
-								"File contains no command pages.",
-								"No Pages",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Exclamation
-							);
+						MessageBoxEx.Show
+						(
+							"File contains no commands.",
+							"No Commands",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Exclamation
+						);
 
-							filePath = null;
-							pages = null;
-							return (false);
-						}
-
-						if (pages.TotalDefinedCommandCount < 1)
-						{
-							MessageBoxEx.Show
-							(
-								((pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
-								"No Commands",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Exclamation
-							);
-
-							filePath = null;
-							pages = null;
-							return (false);
-						}
-
-						filePath = ofd.FileName;
-						return (true);
+						filePath = null;
+						return (false);
 					}
-				}
-				else // ExtensionHelper.IsCommandPageFile(ofd.FileName) .yacp and .xml or .txt or whatever.
-				{
-					PredefinedCommandPage page;
-					if (TryLoad(ofd.FileName, out page, out ex))
-					{
-						if (page.DefinedCommandCount < 1)
-						{
-							MessageBoxEx.Show
-							(
-								"Page contains no commands.",
-								"No Commands",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Exclamation
-							);
 
-							filePath = null;
-							pages = null;
-							return (false);
-						}
-
-						pages = new PredefinedCommandPageCollection();
-						pages.Add(page); // No clone needed as just loaded.
-						filePath = ofd.FileName;
-						return (true);
-					}
+					filePath = ofd.FileName;
+					return (true);
 				}
 
 				string errorMessage;
@@ -220,104 +146,18 @@ namespace YAT.View.Utilities
 			}
 
 			filePath = null;
-			pages = null;
+			page = null;
 			return (false);
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TryLoadAndLink(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
+		public static bool TryLoadAndLink(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
-			// Attention:
-			// Similar code exists in TryLoadAndImport() further above.
-			// Changes here may have to be applied there too.
-
 			string filePathToLink;
-			PredefinedCommandPageCollection pagesToLink;
-			if (ShowOpenFileDialogAndTryLoad(owner, out filePathToLink, out pagesToLink))
-			{
-				if (settingsOld.Pages.TotalDefinedCommandCount > 0)
-				{
-					var message = new StringBuilder();
-					message.Append("The file contains ");
-					message.Append(pagesToLink.Count);
-					message.Append(pagesToLink.Count == 1 ? " page" : " pages");
-					message.Append(" with a total of ");
-					message.Append(pagesToLink.TotalDefinedCommandCount);
-					message.AppendLine(" commands.");
-					message.AppendLine();
-					message.AppendLine("Would you like to link all configured predefined commands to the file [Yes],");
-					message.Append("or link the");
-					message.Append(pagesToLink.Count == 1 ? " page" : " pages");
-					message.Append(" in addition to the currently configured predefined commands [No]?");
-
-					switch (MessageBoxEx.Show
-						(
-							owner,
-							message.ToString(),
-							"Link Mode",
-							MessageBoxButtons.YesNoCancel,
-							MessageBoxIcon.Question,
-							MessageBoxDefaultButton.Button3
-						))
-					{
-						case DialogResult.Yes:
-						{
-							return (TryLinkAll(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
-						}
-
-						case DialogResult.No:
-						{
-							return (TryAddLinked(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
-						}
-
-						default:
-						{
-							break; // Nothing to do.
-						}
-					}
-				}
-				else // If (settingsOld.Pages.TotalDefinedCommandCount == 0) link all without asking:
-				{
-					return (TryLinkAll(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
-				}
-			}
-
-			settingsNew = null;
-			return (false);
-		}
-
-		/// <summary></summary>
-		private static void ChangeToLinked(string filePathToLink, PredefinedCommandPageCollection pagesToLink)
-		{
-			foreach (var p in pagesToLink)
-			{
-				if (p.IsLinkedToFilePath)
-					continue; // Nothing to do, itself linked to yet another file.
-
-				p.ChangeToLinked(filePathToLink);
-			}
-		}
-
-		/// <summary></summary>
-		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool TryLinkAll(IWin32Window owner, PredefinedCommandSettings settingsOld, string filePathToLink, PredefinedCommandPageCollection pagesToLink, out PredefinedCommandSettings settingsNew)
-		{
-			Mode mode;
-			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmLink(owner, pagesToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
-			{
-				// Prepare the pages to link...
-				ChangeToLinked(filePathToLink, pagesToLink); // No clone needed as just loaded.
-
-				// ...clone the settings...
-				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve properties.
-
-				// ...and replace the pages:
-				settingsNew.Pages.Clear();
-				settingsNew.Pages = pagesToLink;
-				return (true);
-			}
+			PredefinedCommandPage pageToLink;
+			if (ShowOpenFileDialogAndTryLoad(owner, out filePathToLink, out pageToLink))
+				return (TryLink(owner, settingsOld, selectedPageId, filePathToLink, pageToLink, out settingsNew));
 
 			settingsNew = null;
 			return (false);
@@ -325,61 +165,38 @@ namespace YAT.View.Utilities
 
 		/// <summary></summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool TryAddLinked(IWin32Window owner, PredefinedCommandSettings settingsOld, string filePathToLink, PredefinedCommandPageCollection pagesToLink, out PredefinedCommandSettings settingsNew)
+		private static bool TryLink(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, string filePathToLink, PredefinedCommandPage pageToLink, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmLink(owner, pagesToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
+			if (ConfirmLink(owner, pageToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
 			{
-				// Prepare the pages to link...
-				ChangeToLinked(filePathToLink, pagesToLink); // No clone needed as just loaded.
-
-				// ...clone the settings...
-				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve pages and other properties.
+				// Clone settings to preserve pages and other properties...
+				settingsNew = new PredefinedCommandSettings(settingsOld);
 
 				// ...potentially adjust layout...
 				settingsNew.PageLayout = pageLayoutNew;
 
-				// ...and then...
-				if (pagesToLink.Count > 0)
-				{
-					switch (mode)
-					{
-						case (Mode.Neutral):
-						{
-							// ...add:
-							settingsNew.Pages.AddRange(pagesToLink); // No clone needed as just loaded.
-
-							return (true);
-						}
-
-						case (Mode.Enlarge):
-						{
-							// ...add:
-							settingsNew.Pages.AddRange(pagesToLink); // No clone needed as just loaded.
-
-							return (true);
-						}
-
-						case (Mode.Spread):
-						{
-							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
-
-							// ...spread:
-							settingsNew.Pages.AddSpreaded(pagesToLink, commandCapacityPerPageNew); // No clone needed as just loaded.
-
-							return (true);
-						}
-
-						default:
-						{
-							break; // Nothing to do.
-						}
-					}
-				}
-				else // ...add default page since empty:
-				{
+				// ...add default page if yet empty...
+				if (settingsNew.Pages.Count == 0)
 					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
+
+				// ...and then...
+				switch (mode)
+				{
+					case (Mode.Neutral):
+					case (Mode.Enlarge):
+					{
+						// ...link:
+						settingsNew.Pages[selectedPageId - 1].Link(filePathToLink, pageToLink.Name, pageToLink.Commands); // No clone needed as just loaded.
+
+						return (true);
+					}
+
+					default: // incl. Mode.Cancel
+					{
+						break; // Do nothing.
+					}
 				}
 			}
 
@@ -389,10 +206,10 @@ namespace YAT.View.Utilities
 
 		/// <summary></summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool ConfirmLink(IWin32Window owner, PredefinedCommandPageCollection pagesToLink, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
+		private static bool ConfirmLink(IWin32Window owner, PredefinedCommandPage pageToLink, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
-			if (pagesToLink.MaxCommandCountPerPage <= commandCapacityPerPageOld)
+			if (pageToLink.DefinedCommandCount <= commandCapacityPerPageOld)
 			{
 				mode = Mode.Neutral;
 				pageLayoutNew = pageLayoutOld;
@@ -400,35 +217,36 @@ namespace YAT.View.Utilities
 			}
 			else // The pages to link do not fit the currently configured page layout:
 			{
-				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(pagesToLink.MaxCommandCountPerPage);
+				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(pageToLink.DefinedCommandCount);
 				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
 
 				var message = new StringBuilder();
-				message.Append("The file contains ");
-				message.Append(pagesToLink.Count == 1 ? " page" : " pages");
-				message.Append(" with up to ");
-				message.Append(pagesToLink.MaxCommandCountPerPage);
-				message.Append(" commands per page, but currently ");
+				message.Append("The file to link contains ");
+				message.Append(pageToLink.DefinedCommandCount);
+				message.Append(" commands, but currently ");
 				message.Append(commandCapacityPerPageOld);
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
-				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the linked commands to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append("Enlarge the current pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page?");
 
-				switch (MessageBoxEx.Show
+				if (MessageBoxEx.Show
 					(
 						owner,
 						message.ToString(),
-						"Link Mode",
-						MessageBoxButtons.YesNoCancel,
+						"Confirm Link",
+						MessageBoxButtons.OKCancel,
 						MessageBoxIcon.Question,
-						MessageBoxDefaultButton.Button3
-					))
+						MessageBoxDefaultButton.Button2
+					) == DialogResult.OK)
 				{
-					case DialogResult.Yes: mode = Mode.Enlarge; pageLayoutNew = nextPageLayout; return (true);
-					case DialogResult.No:  mode = Mode.Spread;  pageLayoutNew = pageLayoutOld;  return (true);
-					default:               mode = Mode.Cancel;  pageLayoutNew = pageLayoutOld;  return (false);
+					mode = Mode.Enlarge;
+					pageLayoutNew = nextPageLayout;
+					return (true);
 				}
+
+				mode = Mode.Cancel;
+				pageLayoutNew = pageLayoutOld;
+				return (false);
 			}
 		}
 
@@ -439,13 +257,13 @@ namespace YAT.View.Utilities
 			var message = new StringBuilder();
 			var linkedCount = settingsOld.Pages.LinkedToFilePathCount;
 
-			var selectedIsLinked = settingsOld.Pages[selectedPageId].IsLinkedToFilePath;
+			var selectedIsLinked = settingsOld.Pages[selectedPageId - 1].IsLinkedToFilePath;
 			if (selectedIsLinked)
 			{
 				if (linkedCount > 1)
 				{
-					message.AppendLine("Would you like to clear the link of all " + linkedCount.ToString(CultureInfo.CurrentUICulture) + " linked pages [Yes],");
-					message.Append("or just of the currently selected linked page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
+					message.Append("Would you like to clear the link of all " + linkedCount.ToString(CultureInfo.CurrentUICulture) + " linked pages [Yes],");
+					message.Append(" or just of the currently selected linked page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
 
 					switch (MessageBoxEx.Show
 						(
@@ -473,7 +291,7 @@ namespace YAT.View.Utilities
 			}
 			else if (linkedCount == 1)
 			{
-				message.Append("Clear the link of the linked page?");
+				message.Append("Clear the link of the page?");
 			}
 
 			if ((message != null) && (message.Length > 0))
@@ -500,8 +318,8 @@ namespace YAT.View.Utilities
 		/// <remarks>Boolean return for symmericity with other methods.</remarks>
 		private static bool TryClearLinkAll(PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
-			// Clone the settings...
-			settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve pages and other properties.
+			// Clone settings to preserve pages and other properties...
+			settingsNew = new PredefinedCommandSettings(settingsOld);
 
 			// ...and tell the collection to unlink each page:
 			settingsNew.Pages.UnlinkAll();
@@ -511,8 +329,8 @@ namespace YAT.View.Utilities
 		/// <remarks>Boolean return for symmericity with other methods.</remarks>
 		private static bool TryClearLinkOne(PredefinedCommandSettings settingsOld, int pageId, out PredefinedCommandSettings settingsNew)
 		{
-			// Clone the settings...
-			settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve pages and other properties.
+			// Clone settings to preserve pages and other properties...
+			settingsNew = new PredefinedCommandSettings(settingsOld);
 
 			// ...and unlink the page:
 			settingsNew.Pages[pageId - 1].Unlink();
