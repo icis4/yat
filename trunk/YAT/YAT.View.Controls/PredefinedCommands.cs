@@ -586,9 +586,7 @@ namespace YAT.View.Controls
 				// ...View.Forms.PredefinedCommandSettings.SetPagesControls()
 				// Changes here may have to be applied there too.
 
-				int pageCount = ((this.pages != null) ? (this.pages.Count) : (0));
-				bool pageIsSelected = (this.selectedPageId != 0);
-
+				var pageCount = ((this.pages != null) ? (this.pages.Count) : (0));
 				if (pageCount > 0)
 				{
 					button_PagePrevious.Enabled = (this.selectedPageId > 1);
@@ -611,6 +609,7 @@ namespace YAT.View.Controls
 						id++;
 					}
 
+					var pageIsSelected = (this.selectedPageId != 0);
 					if (pageIsSelected)
 						comboBox_Pages.SelectedIndex = SelectedPageIndex;
 				}

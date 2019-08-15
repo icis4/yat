@@ -339,7 +339,7 @@ namespace YAT.View.Utilities
 						{
 							MessageBoxEx.Show
 							(
-								"File contains no pages.",
+								"File contains no command pages.",
 								"No Pages",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Exclamation
@@ -375,7 +375,7 @@ namespace YAT.View.Utilities
 						{
 							MessageBoxEx.Show
 							(
-								"File contains no pages.",
+								"File contains no command pages.",
 								"No Pages",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Exclamation
