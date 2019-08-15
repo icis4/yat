@@ -73,9 +73,12 @@ namespace YAT.Model.Types
 		/// <remarks>Subpages are numbered 1..9, 0 indicates none/invalid.</remarks>
 		public const int MaxSubpageCount = 9;
 
-		private string name;
+		private string nameIntegrated;
+		private string nameLinked;
+
 		private List<Command> commandsIntegrated;
 		private List<Command> commandsLinked;
+
 		private string linkFilePath;
 
 		/// <summary></summary>
@@ -87,18 +90,21 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public PredefinedCommandPage(string pageName)
 		{
-			this.name = pageName;
+			this.nameIntegrated = pageName;
+		////this.nameLinked = null;
+
 			this.commandsIntegrated = new List<Command>();
 			this.commandsLinked     = new List<Command>(); // Even though typically not needed, same behavior as 'commandsIntegrated'.
+
 		////this.linkFilePath = null;
 		}
 
 		/// <summary></summary>
 		public PredefinedCommandPage(PredefinedCommandPage rhs)
 		{
-			this.name = rhs.name;
+			this.nameIntegrated = rhs.nameIntegrated;
+			this.nameLinked     = rhs.nameLinked;
 
-			// Clone all commands:
 			this.commandsIntegrated = new List<Command>(rhs.commandsIntegrated.Count); // Preset the required capacity to improve memory management.
 			foreach (var c in rhs.commandsIntegrated)
 				this.commandsIntegrated.Add(new Command(c)); // Clone to ensure decoupling.
@@ -119,9 +125,12 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public PredefinedCommandPage(int capacity, string name)
 		{
-			this.name = name;
+			this.nameIntegrated = name;
+		////this.nameLinked = null;
+
 			this.commandsIntegrated = new List<Command>(capacity);
 			this.commandsLinked     = new List<Command>(capacity); // Even though typically not needed, same behavior as 'commandsIntegrated'.
+
 		////this.linkFilePath = null;
 		}
 
@@ -138,16 +147,48 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// \remind (2019-08-13..14 / MKY)
+		/// \remind (2019-08-13..15 / MKY)
 		/// Property was renamed from "PageName" to "Name" on 2019-08-13 for no longer replicating
 		/// the class context in the the property name. However, detected on 2019-08-14 that this
 		/// change is not properly handled by the XML deserialization infrastructure, thus reverted.
+		/// On 2019-08-15 split into <see cref="NameIntegrated"/> and <see cref="NameLinked"/>.
 		/// </remarks>
 		[XmlElement("PageName")] // Backward compatibility! To be renamed when fixing bug #246.
+		public virtual string NameIntegrated
+		{
+			get { return (this.nameIntegrated); }
+			set { this.nameIntegrated = value;  }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual string NameLinked
+		{
+			get { return (this.nameLinked); }
+			set { this.nameLinked = value;  }
+		}
+
+		/// <summary>
+		/// The name effectively in use, either <see cref="NameIntegrated"/>, or
+		/// <see cref="NameLinked"/> in case <see cref="LinkFilePath"/> is defined.
+		/// </summary>
+		[XmlIgnore]
 		public virtual string Name
 		{
-			get { return (this.name); }
-			set { this.name = value;  }
+			get
+			{
+				if (IsLinkedToFilePath)
+					return (this.nameLinked);
+				else
+					return (this.nameIntegrated);
+			}
+			set
+			{
+				if (IsLinkedToFilePath)
+					this.nameLinked = value;
+				else
+					this.nameIntegrated = value;
+			}
 		}
 
 		/// <summary></summary>
@@ -387,12 +428,26 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary>
+		/// Activates the link to a file and set the currently integrated as linked commands.
+		/// </summary>
+		public virtual void ChangeToLinked(string filePath)
+		{
+			// Set file path...
+			LinkFilePath = filePath;
+
+			// ...and exchange commands:
+			CommandsLinked = CommandsIntegrated;
+			CommandsIntegrated = new List<Command>();
+		}
+
+		/// <summary>
 		/// Clears the link to a file.
 		/// </summary>
 		public virtual void Unlink()
 		{
-			this.linkFilePath = null;
-			this.commandsLinked = new List<Command>();
+			NameLinked = null;
+			CommandsLinked = new List<Command>();
+			LinkFilePath = null;
 		}
 
 		#endregion
@@ -414,7 +469,7 @@ namespace YAT.Model.Types
 			unchecked
 			{
 				int hashCode = 0;
-
+				                                // Just comparing the name effectively in use.
 				hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
 
 				if (Commands != null)
@@ -454,7 +509,7 @@ namespace YAT.Model.Types
 			(
 			////base.Equals(other) is not required when deriving from 'object'.
 
-				StringEx          .EqualsOrdinal(Name,         other.Name) &&
+				StringEx          .EqualsOrdinal(Name,         other.Name)     && // Just comparing the name effectively in use.
 				IEnumerableEx.ItemsEqual(        Commands,     other.Commands) && // Just comparing the commands effectively in use.
 				StringEx          .EqualsOrdinal(LinkFilePath, other.LinkFilePath)
 			);
@@ -496,7 +551,7 @@ namespace YAT.Model.Types
 		{
 			var other = (obj as PredefinedCommandPage);
 			if (other != null)
-				return (string.Compare(this.name, other.name, StringComparison.CurrentCulture));
+				return (string.Compare(this.Name, other.Name, StringComparison.CurrentCulture));
 			else
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'PredefinedCommandPage'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
 		}
