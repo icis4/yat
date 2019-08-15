@@ -310,73 +310,64 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		public bool SaveToFile<T>(T settings)
+		public void SaveToFile<T>(T settings)
 		{
-			return (SaveToFile(settings, this.filePath));
+			SaveToFile(settings, this.filePath);
 		}
 
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public bool SaveToFile<T>(T settings, string filePath)
+		public void SaveToFile<T>(T settings, string filePath)
 		{
-			bool success = false;
+			string backup = PathEx.GetUniqueTempPath(); // Backup file can be located anywhere.
 
-			if (FileEx.IsWritable(filePath))
+			try
 			{
-				string backup = PathEx.GetUniqueTempPath(); // Backup file can be located anywhere.
-
-				try
-				{
-					if (File.Exists(filePath))
-						File.Move(filePath, backup);
-				}
-				catch (Exception exBackup)
-				{
-					DebugEx.WriteException(GetType(), exBackup, "Exception while backing file up!");
-				}
-
-				try
-				{
-					XmlSerializerEx.SerializeToFile(typeof(T), settings, filePath);
-
-					this.lastAccessFilePath = filePath;
-					this.lastAccessTimeUtc = File.GetLastAccessTimeUtc(filePath);
-
-					success = true;
-				}
-				catch (Exception exPrimary)
-				{
-					DebugEx.WriteException(GetType(), exPrimary, "Exception while saving file!");
-
-					try
-					{
-						if (File.Exists(backup))
-							File.Move(backup, filePath);
-					}
-					catch (Exception exRestore)
-					{
-						DebugEx.WriteException(GetType(), exRestore, "Exception while restoring backup file!");
-					}
-
-					throw; // Rethrow!
-				}
-				finally
-				{
-					try
-					{
-						if (File.Exists(backup))
-							File.Delete(backup);
-					}
-					catch (Exception exCleanup)
-					{
-						DebugEx.WriteException(GetType(), exCleanup, "Exception while removing backup file!");
-					}
-				}
+				if (File.Exists(filePath))
+					File.Move(filePath, backup);
+			}
+			catch (Exception exBackup)
+			{
+				DebugEx.WriteException(GetType(), exBackup, "Exception while backing file up!");
 			}
 
-			return (success);
+			try
+			{
+				XmlSerializerEx.SerializeToFile(typeof(T), settings, filePath);
+
+				this.lastAccessFilePath = filePath;
+				this.lastAccessTimeUtc = File.GetLastAccessTimeUtc(filePath);
+			}
+			catch (Exception exPrimary)
+			{
+				DebugEx.WriteException(GetType(), exPrimary, "Exception while saving file!");
+
+				try
+				{
+					if (File.Exists(backup))
+						File.Move(backup, filePath);
+				}
+				catch (Exception exRestore)
+				{
+					DebugEx.WriteException(GetType(), exRestore, "Exception while restoring backup file!");
+				}
+
+				throw; // Rethrow!
+			}
+			finally
+			{
+				try
+				{
+					if (File.Exists(backup))
+						File.Delete(backup);
+				}
+				catch (Exception exCleanup)
+				{
+					DebugEx.WriteException(GetType(), exCleanup, "Exception while removing backup file!");
+				}
+			}
 		}
 
 		#endregion
