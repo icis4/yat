@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <FileType>YAT Terminal Settings</FileType>
+  <SettingsName>YAT Terminal Settings</SettingsName>
   <SettingsVersion>1.7.0</SettingsVersion>
   <ProductVersion>2.1.0</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
-  <Saved>
-    <TimeStamp>2019-07-29T20:56:16.6863485+02:00</TimeStamp>
+  <Mark>
+    <TimeStamp>2019-08-15T21:41:57.2921156+02:00</TimeStamp>
     <UserName>Matthias</UserName>
-  </Saved>
+  </Mark>
   <AutoSaved>false</AutoSaved>
   <Explicit>
     <LogIsOn>false</LogIsOn>
@@ -144,7 +144,6 @@
       <CharReplace>
         <ReplaceControlChars>true</ReplaceControlChars>
         <ControlCharRadix>AsciiMnemonic</ControlCharRadix>
-        <ReplaceBell>false</ReplaceBell>
         <ReplaceBackspace>false</ReplaceBackspace>
         <ReplaceTab>false</ReplaceTab>
         <ReplaceSpace>false</ReplaceSpace>
@@ -154,6 +153,9 @@
         <Hide0x00>false</Hide0x00>
         <Hide0xFF>false</Hide0xFF>
       </CharHide>
+      <CharAction>
+        <BeepOnBell>false</BeepOnBell>
+      </CharAction>
       <Send>
         <UseExplicitDefaultRadix>false</UseExplicitDefaultRadix>
         <CopyPredefined>false</CopyPredefined>
@@ -264,7 +266,9 @@
         </RxDisplay>
       </BinaryTerminal>
     </Terminal>
-    <PredefinedCommand />
+    <PredefinedCommand>
+      <PageLayout>OneByOne</PageLayout>
+    </PredefinedCommand>
     <AutoResponse>
       <Trigger>[None]</Trigger>
       <Response>[None]</Response>
@@ -388,7 +392,7 @@
       </Command>
     </SendFile>
     <Predefined>
-      <SelectedPage>1</SelectedPage>
+      <SelectedPageId>1</SelectedPageId>
     </Predefined>
     <Window>
       <State>Maximized</State>

@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <FileType>YAT Roaming User Settings</FileType>
+<RoamingUserSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SettingsName>YAT Roaming User Settings</SettingsName>
   <SettingsVersion>1.2.0</SettingsVersion>
   <ProductVersion>2.1.0</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
-  <Saved>
-    <TimeStamp>2019-07-29T20:56:16.3163153+02:00</TimeStamp>
+  <Mark>
+    <TimeStamp>2019-08-15T21:41:57.2621186+02:00</TimeStamp>
     <UserName>Matthias</UserName>
-  </Saved>
+  </Mark>
   <Socket>
     <RecentPorts>
       <Item>10000</Item>
-      <TimeStamp>2019-07-29T20:56:16.1663412+02:00</TimeStamp>
+      <TimeStamp>2019-08-15T21:41:57.1221231+02:00</TimeStamp>
     </RecentPorts>
     <RecentPorts>
       <Item>10001</Item>
-      <TimeStamp>2019-07-29T20:56:16.1663412+02:00</TimeStamp>
+      <TimeStamp>2019-08-15T21:41:57.1221231+02:00</TimeStamp>
     </RecentPorts>
   </Socket>
   <Find>
@@ -38,4 +38,4 @@
     <NeatLogFiles>.log</NeatLogFiles>
     <MonitorFiles>.rtf</MonitorFiles>
   </Extensions>
-</Settings>
+</RoamingUserSettings>
