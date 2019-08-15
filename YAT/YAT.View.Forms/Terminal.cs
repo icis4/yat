@@ -2648,21 +2648,21 @@ namespace YAT.View.Forms
 			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
 			if (sc != null)
 			{
-				SetFixedStatusText("Preparing cutting...");
+				SetFixedStatusText("Preparing cutting to clipboard...");
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
-				SetFixedStatusText("Cutting selected command to clipboard...");
+				SetFixedStatusText("Cutting to clipboard...");
 				if (CommandSettingsClipboardHelper.TrySet(sc))
 				{
 					this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
 
 					Cursor = Cursors.Default;
-					SetTimedStatusText("Cutting done");
+					SetTimedStatusText("Cutting to clipboard done");
 				}
 				else
 				{
 					Cursor = Cursors.Default;
-					SetFixedStatusText("Cutting failed!");
+					SetFixedStatusText("Cutting to clipboard failed!");
 				}
 			}
 		}
@@ -2677,19 +2677,19 @@ namespace YAT.View.Forms
 			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
 			if (sc != null)
 			{
-				SetFixedStatusText("Preparing copying...");
+				SetFixedStatusText("Preparing copying to clipboard...");
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-				SetFixedStatusText("Copying selected command to clipboard...");
+				SetFixedStatusText("Copying to clipboard...");
 				if (CommandSettingsClipboardHelper.TrySet(sc))
 				{
 					Cursor = Cursors.Default;
-					SetTimedStatusText("Copying done");
+					SetTimedStatusText("Copying to clipboard done");
 				}
 				else
 				{
 					Cursor = Cursors.Default;
-					SetFixedStatusText("Copying failed!");
+					SetFixedStatusText("Copying to clipboard failed!");
 				}
 			}
 		}
@@ -2701,11 +2701,11 @@ namespace YAT.View.Forms
 			if (CommandSettingsClipboardHelper.TryGet(out cc))
 			{
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, cc);
-				SetTimedStatusText("Pasting done");
+				SetTimedStatusText("Pasting from clipboard done");
 			}
 			else
 			{
-				SetFixedStatusText("Pasting failed!");
+				SetFixedStatusText("Pasting from clipboard failed!");
 			}
 		}
 
@@ -2739,9 +2739,9 @@ namespace YAT.View.Forms
 
 			SetFixedStatusText("Copying to clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
 			if (CommandPagesSettingsClipboardHelper.TrySet(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId))
-				SetTimedStatusText("Copying done");
+				SetTimedStatusText("Copying to clipboard done");
 			else
-				SetFixedStatusText("Copying failed!");
+				SetFixedStatusText("Copying to clipboard failed!");
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard_Click(object sender, EventArgs e)
@@ -2755,11 +2755,11 @@ namespace YAT.View.Forms
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
-				SetTimedStatusText("Pasting done");
+				SetTimedStatusText("Pasting from clipboard done");
 			}
 			else
 			{
-				SetFixedStatusText("Pasting failed! Clipboard does not contain a " + ApplicationEx.CommonName + " Command Page(s) definition.");
+				SetFixedStatusText("Pasting from clipboard failed!");
 			}
 		}
 
@@ -2770,9 +2770,9 @@ namespace YAT.View.Forms
 
 			SetFixedStatusText("Exporting to file..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
 			if (CommandPagesSettingsFileHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, IndicatedName))
-				SetTimedStatusText("Exporting done");
+				SetTimedStatusText("Exporting to file done");
 			else
-				SetFixedStatusText("Exporting failed!");
+				SetFixedStatusText("Exporting to file failed!");
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_ImportFromFile_Click(object sender, EventArgs e)
@@ -2786,11 +2786,11 @@ namespace YAT.View.Forms
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
-				SetTimedStatusText("Importing done");
+				SetTimedStatusText("Importing from file done");
 			}
 			else
 			{
-				SetFixedStatusText("Importing failed!"); // Opposed to clipboard above, TryLoadAndImport() already outputs a detailed error message.
+				SetFixedStatusText("Importing from file failed!"); // Opposed to clipboard above, TryLoadAndImport() already outputs a detailed error message.
 			}
 		}
 
@@ -2805,11 +2805,11 @@ namespace YAT.View.Forms
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
-				SetTimedStatusText("Linking done");
+				SetTimedStatusText("Linking to file done");
 			}
 			else
 			{
-				SetFixedStatusText("Linking failed!");
+				SetFixedStatusText("Linking to file failed!");
 			}
 		}
 

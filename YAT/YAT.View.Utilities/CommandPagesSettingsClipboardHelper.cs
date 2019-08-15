@@ -64,6 +64,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Copies to the clipboard, promting the user as required.
 		/// </summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TrySet(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId)
@@ -99,6 +100,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Copies all pages to the clipboard.
 		/// </summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TrySetAll(PredefinedCommandSettings settings)
@@ -109,6 +111,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Copies the given page to the clipboard.
 		/// </summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TrySetOne(PredefinedCommandSettings settings, int pageId)
@@ -119,6 +122,7 @@ namespace YAT.View.Utilities
 			return (TrySet(pages, 1));
 		}
 
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TrySet(PredefinedCommandPageCollection pages, int pageId)
@@ -129,6 +133,7 @@ namespace YAT.View.Utilities
 				return (TrySet(pages));
 		}
 
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		private static bool TrySet(PredefinedCommandPage page)
 		{
@@ -145,10 +150,20 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				MessageBoxEx.Show
+				(
+					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
+					"Make sure the clipboard is not blocked by another process.",
+					"Clipboard Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
 				return (false);
 			}
 		}
 
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		private static bool TrySet(PredefinedCommandPageCollection pages)
 		{
@@ -165,10 +180,20 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				MessageBoxEx.Show
+				(
+					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
+					"Make sure the clipboard is not blocked by another process.",
+					"Clipboard Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
 				return (false);
 			}
 		}
 
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		private static bool TryGet(out PredefinedCommandPageCollection pages)
 		{
@@ -180,6 +205,15 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				MessageBoxEx.Show
+				(
+					"Failed to paste from clipboard!" + Environment.NewLine + Environment.NewLine +
+					"Make sure the clipboard is not blocked by another process.",
+					"Clipboard Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
 				pages = null;
 				return (false);
 			}
@@ -198,15 +232,8 @@ namespace YAT.View.Utilities
 
 			if (root != null)
 			{
-				var rootCasted = (CommandPagesSettingsRoot)root;
-				if ((rootCasted.Pages != null) && (rootCasted.Pages.Count > 0))
-				{
-					pages = rootCasted.Pages;
-					return (true);
-				}
-
-				// For some reason, default deserialization will wrongly deserializes a 'CommandPageSettingsRoot'
-				// as a 'CommandPagesSettingsRoot' above. Working around this by checking for (Pages.Count > 0).
+				// For some reason, default deserialization will wrongly deserialize a 'CommandPageSettingsRoot'
+				// as a 'CommandPagesSettingsRoot'. Working around this by checking for (Pages.Count > 0).
 
 				// Alternatively, this helper could always set/get a 'CommandPagesSettingsRoot' to/from the clipboard.
 				// However, decided to not do this for four reasons:
@@ -214,6 +241,27 @@ namespace YAT.View.Utilities
 				//  > Simplicity for those who manually edit the XML text.
 				//  > Symmetricity to export/import to .yacp/.yacps file.
 				//  > Issue described here and below still applies, thus a workaround/check would still be needed.
+
+				var rootCasted = (CommandPagesSettingsRoot)root;
+				if ((rootCasted.Pages != null) && (rootCasted.Pages.Count > 0))
+				{
+					if (rootCasted.Pages.TotalDefinedCommandCount < 1)
+					{
+						MessageBoxEx.Show
+						(
+							((rootCasted.Pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
+							"No Commands",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Exclamation
+						);
+
+						pages = null;
+						return (false);
+					}
+
+					pages = rootCasted.Pages;
+					return (true);
+				}
 			}
 
 			// Then, try to deserialize from single page:
@@ -229,6 +277,9 @@ namespace YAT.View.Utilities
 
 			if (root != null)
 			{
+				// For the same reason as further above, default deserialization likely wrongly deserializes something else
+				// as a 'CommandPageSettingsRoot'. Working around this by checking for (Page.DefinedCommandCount > 0).
+
 				var rootCasted = (CommandPageSettingsRoot)root;
 				if ((rootCasted.Page != null) && (rootCasted.Page.DefinedCommandCount > 0))
 				{
@@ -236,15 +287,21 @@ namespace YAT.View.Utilities
 					pages.Add(rootCasted.Page);
 					return (true);
 				}
-
-				// For the same reason as above, default deserialization likely wrongly deserializes something else
-				// as a 'CommandPageSettingsRoot' above. Working around this by checking for (Page.DefinedCommandCount > 0).
 			}
+
+			MessageBoxEx.Show
+			(
+				"Clipboard does not contain valid " + ApplicationEx.CommonName + " command page(s) definition content.",
+				"Clipboard Content Not Valid",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Exclamation
+			);
 
 			pages = null;
 			return (false);
 		}
 
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
@@ -252,44 +309,51 @@ namespace YAT.View.Utilities
 			PredefinedCommandPageCollection pagesImported;
 			if (TryGet(out pagesImported))
 			{
-				var message = new StringBuilder();
-				message.Append("The clipboard contains ");
-				message.Append(pagesImported.Count);
-				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" with a total of ");
-				message.Append(pagesImported.TotalDefinedCommandCount);
-				message.AppendLine(" commands.");
-				message.AppendLine();
-				message.Append("Would you like to replace all currently configured predefined commands by the");
-				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" [Yes], or add the");
-				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" to the currently configured predefined commands [No]?");
-
-				switch (MessageBoxEx.Show
-					(
-						owner,
-						message.ToString(),
-						"Paste Mode",
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question,
-						MessageBoxDefaultButton.Button3
-					))
+				if (settingsOld.Pages.TotalDefinedCommandCount > 0)
 				{
-					case DialogResult.Yes:
-					{
-						return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
-					}
+					var message = new StringBuilder();
+					message.Append("The clipboard contains ");
+					message.Append(pagesImported.Count);
+					message.Append(pagesImported.Count == 1 ? " page" : " pages");
+					message.Append(" with a total of ");
+					message.Append(pagesImported.TotalDefinedCommandCount);
+					message.AppendLine(" commands.");
+					message.AppendLine();
+					message.Append("Would you like to replace all currently configured predefined commands by the");
+					message.Append(pagesImported.Count == 1 ? " page" : " pages");
+					message.Append(" [Yes], or add the");
+					message.Append(pagesImported.Count == 1 ? " page" : " pages");
+					message.Append(" to the currently configured predefined commands [No]?");
 
-					case DialogResult.No:
-					{                                                                              // Specifying 'NoPageId' will add (not insert).
-						return (TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew));
-					}
-
-					default:
+					switch (MessageBoxEx.Show
+						(
+							owner,
+							message.ToString(),
+							"Paste Mode",
+							MessageBoxButtons.YesNoCancel,
+							MessageBoxIcon.Question,
+							MessageBoxDefaultButton.Button3
+						))
 					{
-						break; // Nothing to do.
+						case DialogResult.Yes:
+						{
+							return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
+						}
+
+						case DialogResult.No:
+						{                                                                              // Specifying 'NoPageId' will add (not insert).
+							return (TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew));
+						}
+
+						default:
+						{
+							break; // Nothing to do.
+						}
 					}
+				}
+				else // If (settingsOld.Pages.TotalDefinedCommandCount == 0) replace without asking:
+				{
+					return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
 				}
 			}
 
@@ -297,6 +361,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
@@ -312,6 +377,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
