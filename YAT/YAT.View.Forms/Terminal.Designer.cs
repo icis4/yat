@@ -322,8 +322,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PageContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PageContextMenu_9 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_ExportToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -1180,8 +1180,8 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PredefinedContextMenu_Separator_6,
             this.toolStripMenuItem_PredefinedContextMenu_Page,
             this.toolStripMenuItem_PredefinedContextMenu_Separator_7,
-            this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard,
-            this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard,
+            this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard,
+            this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard,
             this.toolStripMenuItem_PredefinedContextMenu_ExportToFile,
             this.toolStripMenuItem_PredefinedContextMenu_ImportFromFile,
             this.toolStripMenuItem_PredefinedContextMenu_LinkToFile});
@@ -2918,21 +2918,21 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_7.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_7";
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_7.Size = new System.Drawing.Size(242, 6);
 			// 
-			// toolStripMenuItem_PredefinedContextMenu_ExportToClipboard
+			// toolStripMenuItem_PredefinedContextMenu_CopyToClipboard
 			// 
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Name = "toolStripMenuItem_PredefinedContextMenu_ExportToClipboard";
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Size = new System.Drawing.Size(245, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Text = "Export Page(s) to Clipboard...";
-			this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_ExportToClipboard_Click);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard.Name = "toolStripMenuItem_PredefinedContextMenu_CopyToClipboard";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard.Size = new System.Drawing.Size(245, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard.Text = "Copy Page(s) to Clipboard...";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyToClipboard_Click);
 			// 
-			// toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard
+			// toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard
 			// 
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Name = "toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard";
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Size = new System.Drawing.Size(245, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard...";
-			this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard_Click);
+			this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
+			this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard.Name = "toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard";
+			this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard.Size = new System.Drawing.Size(245, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard.Text = "Paste Page(s) from Clipboard...";
+			this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_ExportToFile
 			// 
@@ -5342,7 +5342,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_View_Panels_PageLayout;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Panels_Separator_5;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_ExportToClipboard;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_CopyToClipboard;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard;
 	}
 }

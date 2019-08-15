@@ -61,62 +61,67 @@ namespace YAT.View.Utilities
 			Spread
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Copies to the clipboard, promting the user as required.
+		/// </summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId)
+		public static bool TrySet(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId)
 		{
 			var pageCount = settings.Pages.Count;
 			if (pageCount > 1)
 			{
 				var message = new StringBuilder();
-				message.AppendLine("Would you like to export all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
+				message.AppendLine("Would you like to copy all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
 				message.Append("or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
 
 				switch (MessageBoxEx.Show
 					(
 						owner,
 						message.ToString(),
-						"Export Mode",
+						"Copy Mode",
 						MessageBoxButtons.YesNoCancel,
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (TryExportAll(settings));
-					case DialogResult.No:  return (TryExportOne(settings, selectedPageId));
+					case DialogResult.Yes: return (TrySetAll(settings));
+					case DialogResult.No:  return (TrySetOne(settings, selectedPageId));
 
 					default:               return (false);
 				}
 			}
-			else // If (pageCount <= 1) export without asking:
-			{                      // Specifying '1' will export a single page (not all).
-				return (TryExport(settings.Pages, 1));
+			else // If (pageCount <= 1) copy without asking:
+			{                   // Specifying '1' will copy a single page (not all).
+				return (TrySet(settings.Pages, 1));
 			}
 		}
 
 		/// <summary>
-		/// Exports all pages to the clipboard.
+		/// Copies all pages to the clipboard.
 		/// </summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TryExportAll(PredefinedCommandSettings settings)
-		{                                                      // Specifying 'NoPageId' will export all pages (not a single).
-			return (TryExport(settings.Pages, PredefinedCommandPageCollection.NoPageId));
+		public static bool TrySetAll(PredefinedCommandSettings settings)
+		{                                                   // Specifying 'NoPageId' will copy all pages (not a single).
+			return (TrySet(settings.Pages, PredefinedCommandPageCollection.NoPageId));
 		}
 
 		/// <summary>
-		/// Exports the given page to the clipboard.
+		/// Copies the given page to the clipboard.
 		/// </summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TryExportOne(PredefinedCommandSettings settings, int pageId)
+		public static bool TrySetOne(PredefinedCommandSettings settings, int pageId)
 		{
 			var pages = new PredefinedCommandPageCollection();
 			pages.Add(new PredefinedCommandPage(settings.Pages[pageId - 1])); // Clone to ensure decoupling.
-			          // Specifying '1' will export a single page (not all).
-			return (TryExport(pages, 1));
+			       // Specifying '1' will copy a single page (not all).
+			return (TrySet(pages, 1));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool TryExport(PredefinedCommandPageCollection pages, int pageId)
+		private static bool TrySet(PredefinedCommandPageCollection pages, int pageId)
 		{
 			if ((pages.Count == 1) && (pageId != PredefinedCommandPageCollection.NoPageId))
 				return (TrySet(pages[0]));
@@ -124,7 +129,7 @@ namespace YAT.View.Utilities
 				return (TrySet(pages));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		private static bool TrySet(PredefinedCommandPage page)
 		{
 			try
@@ -144,7 +149,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		private static bool TrySet(PredefinedCommandPageCollection pages)
 		{
 			try
@@ -164,7 +169,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		private static bool TryGet(out PredefinedCommandPageCollection pages)
 		{
 			string s;
@@ -240,7 +245,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
@@ -255,9 +260,9 @@ namespace YAT.View.Utilities
 				message.Append(pagesImported.TotalDefinedCommandCount);
 				message.AppendLine(" commands.");
 				message.AppendLine();
-				message.Append("Would you like to replace all currently configured predefined commands by the imported");
+				message.Append("Would you like to replace all currently configured predefined commands by the");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" [Yes], or add the imported");
+				message.Append(" [Yes], or add the");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
 				message.Append(" to the currently configured predefined commands [No]?");
 
@@ -265,7 +270,7 @@ namespace YAT.View.Utilities
 					(
 						owner,
 						message.ToString(),
-						"Import Mode",
+						"Paste Mode",
 						MessageBoxButtons.YesNoCancel,
 						MessageBoxIcon.Question,
 						MessageBoxDefaultButton.Button3
@@ -292,7 +297,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
@@ -307,7 +312,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
@@ -439,13 +444,13 @@ namespace YAT.View.Utilities
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
 				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the imported pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append(" or spread the pasted pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(
 						owner,
 						message.ToString(),
-						"Import Mode",
+						"Paste Mode",
 						MessageBoxButtons.YesNoCancel,
 						MessageBoxIcon.Question,
 						MessageBoxDefaultButton.Button3
