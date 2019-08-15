@@ -256,7 +256,7 @@ namespace YAT.View.Forms
 				return;
 
 			this.selectedSubpageId = ((Controls.PredefinedCommandSubpageCheckBox)sender).SubpageId;
-			SetControls();
+			SetPageControls();
 		}
 
 		private void listBox_Pages_SelectedIndexChanged(object sender, EventArgs e)
@@ -265,7 +265,7 @@ namespace YAT.View.Forms
 				return;
 
 			this.selectedPageId = (listBox_Pages.SelectedIndex + 1);
-			SetControls();
+			SetPageControls();
 		}
 
 		private void button_NamePage_Click(object sender, EventArgs e)
@@ -389,8 +389,10 @@ namespace YAT.View.Forms
 				return;
 
 			UpdateCommandFromSettingsSetId(ControlEx.TagToInt32(sender));
-			SetPagesControls(); // Needed since some 'Export...' options depend on command availability.
-			SetClearControls();
+		////SetPageControls() is not invoked for reasons described in remarks of method below.
+			SetClearControls(); // See remarks of method.
+		////SetPagesControls() is not invoked for reasons described in remarks of method below.
+			SetPagesButtonsControls(); // Needed since some 'Copy/Export...' options depend on command availability.
 		}
 
 		private void button_ClearPage_Click(object sender, EventArgs e)
@@ -726,7 +728,7 @@ namespace YAT.View.Forms
 
 			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(targetCommandIndex + 1);
-			SetControls();
+			SetPageControls();
 			SelectSet(targetCommandIndex + 1);
 		}
 
@@ -760,7 +762,7 @@ namespace YAT.View.Forms
 
 			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(targetCommandIndex + 1);
-			SetControls();
+			SetPageControls();
 			SelectSet(targetCommandIndex + 1);
 		}
 
@@ -793,7 +795,7 @@ namespace YAT.View.Forms
 
 			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(resultingTargetCommandId);
-			SetControls();
+			SetPageControls();
 			SelectSet(resultingTargetCommandId);
 		}
 
@@ -854,7 +856,7 @@ namespace YAT.View.Forms
 
 			DeselectSets(); // Ensure that subsequent actions are done without cursor in one of the sets!
 			ActivateSubpage(resultingTargetCommandId);
-			SetControls();
+			SetPageControls();
 			SelectSet(resultingTargetCommandId);
 		}
 
@@ -1038,11 +1040,208 @@ namespace YAT.View.Forms
 			SetLayoutControls();
 			SetPagesControls();
 			SetPageControls();
-			SetClearControls();
-			SetLinkControls();
 		}
 
 		private void SetLayoutControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				comboBox_Layout.SelectedItem = (PredefinedCommandPageLayoutEx)this.settingsInEdit.PageLayout;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void SetPagesControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				// Attention:
+				// Similar code exists in...
+				// ...View.Controls.PredefinedCommands.SetSelectedPageControls()
+				// Changes here may have to be applied there too.
+
+				var pageCount = this.settingsInEdit.Pages.Count;
+				if (pageCount > 0)
+				{
+					listBox_Pages.Enabled = true;
+					listBox_Pages.Items.Clear();
+
+					int id = 1;
+					foreach (var p in this.settingsInEdit.Pages)
+					{
+						if (!string.IsNullOrEmpty(p.Caption))
+							listBox_Pages.Items.Add(p.Caption);
+						else
+							listBox_Pages.Items.Add(PredefinedCommandPage.CaptionFallback(p, id));
+
+						id++;
+					}
+
+					var pageIsSelected = (this.selectedPageId != 0);
+					if (pageIsSelected)
+						listBox_Pages.SelectedIndex = SelectedPageIndex;
+				}
+				else
+				{
+					listBox_Pages.Enabled = false;
+					listBox_Pages.Items.Clear();
+				}
+
+				SetPagesButtonsControls();
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Needed as separate method for performance/flickering optimization.
+		/// <see cref="predefinedCommandSettingsSet_CommandChanged"/> requires to
+		/// update the pages buttons, but does not require to update the pages list.
+		/// </remarks>
+		private void SetPagesButtonsControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				int pageCount = this.settingsInEdit.Pages.Count;
+				bool pageIsSelected = (this.selectedPageId != 0);
+
+				int totalDefinedCommandCount = this.settingsInEdit.Pages.TotalDefinedCommandCount;
+				int selectedPageDefinedCommandCount = 0;
+				if (pageIsSelected)
+					selectedPageDefinedCommandCount = this.settingsInEdit.Pages[SelectedPageIndex].DefinedCommandCount;
+
+				button_NamePage                   .Enabled =  pageIsSelected;
+				button_RenumberPages              .Enabled = (pageCount > 0);
+				button_InsertPage                 .Enabled =  pageIsSelected;
+				button_InsertPagesFromFile        .Enabled =  pageIsSelected;
+				button_InsertPageFromClipboard    .Enabled =  pageIsSelected;
+			////button_AddPage                    .Enabled =  true;
+			////button_AddPagesFromFile           .Enabled =  true;
+			////button_AddPagesFromClipboard      .Enabled =  true;
+				button_DuplicatePage              .Enabled =  pageIsSelected;
+				button_ExportPageToFile           .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0));
+				button_CopyPageToClipboard        .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0));
+				button_CutPageToClipboard         .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0)); // Deleting a sole page is permissible.
+				button_DeletePage                 .Enabled =  pageIsSelected;                                           // Deleting a sole page is permissible.
+				button_MovePageUp                 .Enabled = (pageIsSelected && (this.selectedPageId > 1));
+				button_MovePageDown               .Enabled = (pageIsSelected && (this.selectedPageId < pageCount));
+				button_DeleteAllPages             .Enabled = (pageCount > 0);                                           // Deleting a sole page is permissible.
+				button_ExportAllPagesToFile       .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
+				button_ExportAllPagesToClipboard  .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
+			////button_ImportAllPagesFromFile     .Enabled =  true;
+			////button_ImportAllPagesFromClipboard.Enabled =  true;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void SetPageControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				var pageIsLinked = false;
+				var pageIsSelected = (this.selectedPageId != 0);
+
+				var sb = new StringBuilder();
+
+				if (pageIsSelected)
+					sb.Append(PredefinedCommandPage.CaptionOrFallback(this.settingsInEdit.Pages[SelectedPageIndex], SelectedPageIndex));
+				else
+					sb.Append("<No Page Selected>");
+
+				if ((this.settingsInEdit.PageLayout != PredefinedCommandPageLayout.OneByOne) && (this.selectedSubpageId != PredefinedCommandPage.NoSubpageId))
+					sb.Append(" | Subpage " + PredefinedCommandPage.SubpageIdToString(this.selectedSubpageId));
+
+				groupBox_Page.Text = sb.ToString();
+				groupBox_Page.Enabled = pageIsSelected;
+
+				if (pageIsSelected)
+				{
+					// Attention:
+					// Similar code exists in...
+					// ...View.Controls.PredefinedCommandButtonSet.SetCommandTextControls()
+					// ...View.Controls.PredefinedCommandButtonSet.SetCommandStateControls()
+					// ...View.Controls.PredefinedCommandButtonSet.CommandRequest()
+					// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
+					// Changes here may have to be applied there too.
+
+					int commandCount = 0;
+					var commands = this.settingsInEdit.Pages[SelectedPageIndex].Commands;
+					if (commands != null)
+						commandCount = commands.Count;
+
+					for (int i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
+					{
+						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
+						if ((commandIndex < commandCount) && (commands[commandIndex] != null))
+							this.predefinedCommandSettingsSets[i].Command = new Command(commands[commandIndex]); // Clone to ensure decoupling.
+						else
+							this.predefinedCommandSettingsSets[i].Command = null;
+
+						int commandId = (commandIndex + 1);
+						string commandIdValue = commandId.ToString(CultureInfo.CurrentUICulture);
+						string commandIdText = commandIdValue.Insert((commandIdValue.Length - 1), "&") + ":";
+						this.predefinedCommandSettingsSetLabels[i].Text = commandIdText;
+					}
+
+					pageIsLinked = this.settingsInEdit.Pages[SelectedPageIndex].IsLinkedToFilePath;
+				}
+
+				button_LinkToFile.Enabled  =  pageIsSelected;
+				pathLabel_LinkedTo.Enabled = (pageIsSelected && pageIsLinked);
+				pathLabel_LinkedTo.Visible = (pageIsSelected && pageIsLinked);
+				button_ClearLink.Enabled   = (pageIsSelected && pageIsLinked);
+				button_ClearLink.Visible   = (pageIsSelected && pageIsLinked);
+
+				SetPageSubpageControls();
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+
+			SetClearControls(); // See remarks below.
+		}
+
+		/// <remarks>
+		/// Needed as separate method for performance/flickering optimization.
+		/// <see cref="predefinedCommandSettingsSet_CommandChanged"/> will update
+		/// the command settings, but does not require the whole page to be updated.
+		/// Still, the clear controls need to be updated. This is done by this method.
+		/// </remarks>
+		private void SetClearControls()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				int pageCount = this.settingsInEdit.Pages.Count;
+				int commandCount = 0;
+				if (pageCount >= this.selectedPageId)
+					commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
+
+				button_ClearPage.Enabled = (commandCount > 0);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Separate method for not overburdening <see cref="SetPageControls"/>.
+		/// </remarks>
+		private void SetPageSubpageControls()
 		{
 			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
 			this.isSettingControls.Enter();
@@ -1055,8 +1254,6 @@ namespace YAT.View.Forms
 
 				PredefinedCommandPageLayout pageLayout = this.settingsInEdit.PageLayout;
 				PredefinedCommandPageLayoutEx pageLayoutEx = pageLayout;
-
-				comboBox_Layout.SelectedItem = pageLayoutEx;
 
 				switch (pageLayout)
 				{                                                // \remind (2019-08-05 / MKY):
@@ -1176,174 +1373,6 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 				ResumeLayout();
-			}
-		}
-
-		private void SetPagesControls()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				// Attention:
-				// Similar code exists in...
-				// ...View.Controls.PredefinedCommands.SetSelectedPageControls()
-				// Changes here may have to be applied there too.
-
-				int pageCount = this.settingsInEdit.Pages.Count;
-				bool pageIsSelected = (this.selectedPageId != 0);
-
-				int totalDefinedCommandCount = this.settingsInEdit.Pages.TotalDefinedCommandCount;
-				int selectedPageDefinedCommandCount = 0;
-				if (pageIsSelected)
-					selectedPageDefinedCommandCount = this.settingsInEdit.Pages[SelectedPageIndex].DefinedCommandCount;
-
-				// Page list:
-				if (pageCount > 0)
-				{
-					listBox_Pages.Enabled = true;
-					listBox_Pages.Items.Clear();
-
-					int id = 1;
-					foreach (var p in this.settingsInEdit.Pages)
-					{
-						if (!string.IsNullOrEmpty(p.Caption))
-							listBox_Pages.Items.Add(p.Caption);
-						else
-							listBox_Pages.Items.Add(PredefinedCommandPage.CaptionFallback(p, id));
-
-						id++;
-					}
-
-					if (pageIsSelected)
-						listBox_Pages.SelectedIndex = SelectedPageIndex;
-				}
-				else
-				{
-					listBox_Pages.Enabled = false;
-					listBox_Pages.Items.Clear();
-				}
-
-				// Page list buttons:
-				button_NamePage                   .Enabled =  pageIsSelected;
-				button_RenumberPages              .Enabled = (pageCount > 0);
-				button_InsertPage                 .Enabled =  pageIsSelected;
-				button_InsertPagesFromFile        .Enabled =  pageIsSelected;
-				button_InsertPageFromClipboard    .Enabled =  pageIsSelected;
-			////button_AddPage                    .Enabled =  true;
-			////button_AddPagesFromFile           .Enabled =  true;
-			////button_AddPagesFromClipboard      .Enabled =  true;
-				button_DuplicatePage              .Enabled =  pageIsSelected;
-				button_ExportPageToFile           .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0));
-				button_CopyPageToClipboard        .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0));
-				button_CutPageToClipboard         .Enabled = (pageIsSelected && (selectedPageDefinedCommandCount > 0)); // Deleting a sole page is permissible.
-				button_DeletePage                 .Enabled =  pageIsSelected;                                           // Deleting a sole page is permissible.
-				button_MovePageUp                 .Enabled = (pageIsSelected && (this.selectedPageId > 1));
-				button_MovePageDown               .Enabled = (pageIsSelected && (this.selectedPageId < pageCount));
-				button_DeleteAllPages             .Enabled = (pageCount > 0);                                           // Deleting a sole page is permissible.
-				button_ExportAllPagesToFile       .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
-				button_ExportAllPagesToClipboard  .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
-			////button_ImportAllPagesFromFile     .Enabled =  true;
-			////button_ImportAllPagesFromClipboard.Enabled =  true;
-
-				// Selected page:
-				var sb = new StringBuilder();
-
-				if (pageIsSelected)
-					sb.Append(PredefinedCommandPage.CaptionOrFallback(this.settingsInEdit.Pages[SelectedPageIndex], SelectedPageIndex));
-				else
-					sb.Append("<No Page Selected>");
-
-				if ((this.settingsInEdit.PageLayout != PredefinedCommandPageLayout.OneByOne) && (this.selectedSubpageId != PredefinedCommandPage.NoSubpageId))
-					sb.Append(" | Subpage " + PredefinedCommandPage.SubpageIdToString(this.selectedSubpageId));
-
-				groupBox_Page.Text = sb.ToString();
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-		}
-
-		private void SetPageControls()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				if (this.selectedPageId != 0)
-				{
-					groupBox_Page.Enabled = true;
-
-					// Attention:
-					// Similar code exists in...
-					// ...View.Controls.PredefinedCommandButtonSet.SetCommandTextControls()
-					// ...View.Controls.PredefinedCommandButtonSet.SetCommandStateControls()
-					// ...View.Controls.PredefinedCommandButtonSet.CommandRequest()
-					// ...View.Forms.Terminal.contextMenuStrip_Command_SetMenuItems()
-					// Changes here may have to be applied there too.
-
-					int commandCount = 0;
-					var commands = this.settingsInEdit.Pages[SelectedPageIndex].Commands;
-					if (commands != null)
-						commandCount = commands.Count;
-
-					for (int i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
-					{
-						int commandIndex = (SelectedSubpageCommandIndexOffset + i);
-						if ((commandIndex < commandCount) && (commands[commandIndex] != null))
-							this.predefinedCommandSettingsSets[i].Command = new Command(commands[commandIndex]); // Clone to ensure decoupling.
-						else
-							this.predefinedCommandSettingsSets[i].Command = null;
-
-						int commandId = (commandIndex + 1);
-						string commandIdValue = commandId.ToString(CultureInfo.CurrentUICulture);
-						string commandIdText = commandIdValue.Insert((commandIdValue.Length - 1), "&") + ":";
-						this.predefinedCommandSettingsSetLabels[i].Text = commandIdText;
-					}
-				}
-				else
-				{
-					groupBox_Page.Enabled = true;
-				}
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-		}
-
-		private void SetClearControls()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				int pageCount = this.settingsInEdit.Pages.Count;
-				int commandCount = 0;
-				if (pageCount >= this.selectedPageId)
-					commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
-
-				button_ClearPage.Enabled = (commandCount > 0);
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-		}
-
-		private void SetLinkControls()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				bool isLinked = this.settingsInEdit.Pages[SelectedPageIndex].IsLinkedToFilePath;
-
-				pathLabel_LinkedTo.Enabled = isLinked;
-				pathLabel_LinkedTo.Visible = isLinked;
-				button_ClearLink.Enabled   = isLinked;
-				button_ClearLink.Visible   = isLinked;
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
 			}
 		}
 
