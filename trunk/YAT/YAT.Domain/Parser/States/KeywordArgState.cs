@@ -50,11 +50,13 @@ namespace YAT.Domain.Parser
 	/// So far, this state can only deal with integer values. As soon as floating point, boolean,
 	/// enum or string values are required, this state will have to be extended accordingly. Ideas
 	/// for implementing support for string values: AllowEscape, ExpectFilePath.
-	/// 
+	///
+	/// String args will be required when completing FR #13, e.g. \!(Repeat(ABC, 5)).
+	///
 	/// Note that it was considered to implement this keyword argument handling using Regex, either
 	/// a Regex per argument, or a Regex per keyword. However, the big advantage of the YAT-style
-	/// parser is its capability to identify the first invalid character, and thus provide a better
-	/// error message to the user.
+	/// parser is its capability to quickly identify the first invalid character, and thus provide
+	/// a better error message to the user.
 	/// </remarks>
 	internal class KeywordArgState : ParserState
 	{

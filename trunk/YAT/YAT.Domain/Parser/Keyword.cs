@@ -47,6 +47,7 @@ namespace YAT.Domain.Parser
 		Delay,
 		LineDelay,
 		LineInterval,
+	////Repeat, is yet pending (FR #13) and requires parser support for strings.
 		LineRepeat,
 		Eol,
 		NoEol,
@@ -150,6 +151,7 @@ namespace YAT.Domain.Parser
 				case Keyword.Delay:                return (Delay_string);
 				case Keyword.LineDelay:            return (LineDelay_string);
 				case Keyword.LineInterval:         return (LineInterval_string);
+			////case Keyword.Repeat:               return (Repeat_string); is yet pending (FR #13) and requires parser support for strings.
 				case Keyword.LineRepeat:           return (LineRepeat_string);
 				case Keyword.Eol:                  return (Eol_string);
 				case Keyword.NoEol:                return (NoEol_string);
@@ -193,6 +195,7 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.Delay));
 			a.Add(new KeywordEx(Keyword.LineDelay));
 			a.Add(new KeywordEx(Keyword.LineInterval));
+		////a.Add(new KeywordEx(Keyword.Repeat)); is yet pending (FR #13) and requires parser support for strings.
 			a.Add(new KeywordEx(Keyword.LineRepeat));
 			a.Add(new KeywordEx(Keyword.Eol));
 			a.Add(new KeywordEx(Keyword.NoEol));
@@ -226,6 +229,7 @@ namespace YAT.Domain.Parser
 				case Keyword.Delay:        return (1);
 				case Keyword.LineDelay:    return (1);
 				case Keyword.LineInterval: return (1);
+			////case Keyword.Repeat:       return (3); is yet pending (FR #13) and requires parser support for strings.
 				case Keyword.LineRepeat:   return (1);
 				case Keyword.PortSettings: return (5);
 				case Keyword.Baud:         return (1);
@@ -251,6 +255,7 @@ namespace YAT.Domain.Parser
 				case Keyword.Delay:        return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineDelay:    return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineInterval: return (argValue >= 1); // Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+			////case Keyword.Repeat:       return (ValidateRepeatArg(argIndex, argValue)); is yet pending (FR #13) and requires parser support for strings.
 				                                                 //// Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
 				case Keyword.PortSettings: return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue) || MKY.IO.Ports.DataBitsEx.IsDefined(argValue) || MKY.IO.Ports.ParityEx.IsDefined(argValue) || MKY.IO.Ports.StopBitsEx.IsDefined(argValue) || MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue) );
@@ -292,6 +297,7 @@ namespace YAT.Domain.Parser
 				case Keyword.Delay:                return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineDelay:            return ("an integer value of 1 or more indicating the delay in milliseconds");    // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineInterval:         return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+			////case Keyword.Repeat:               return (RepeatArgMessage); is yet pending (FR #13) and requires parser support for strings.
 				case Keyword.LineRepeat:           return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
 				case Keyword.Eol:                  return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.NoEol:                return (noArgSupportedMessage);
@@ -390,6 +396,11 @@ namespace YAT.Domain.Parser
 				result = Keyword.LineInterval;
 				return (true);
 			}
+		////else if (StringEx.EqualsOrdinalIgnoreCase(s, Repeat_string)) is yet pending (FR #13) and requires parser support for strings.
+		////{
+		////	result = Keyword.Repeat;
+		////	return (true);
+		////}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineRepeat_string))
 			{
 				result = Keyword.LineRepeat;

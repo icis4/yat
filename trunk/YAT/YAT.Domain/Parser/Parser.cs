@@ -110,6 +110,7 @@ namespace YAT.Domain.Parser
 			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(1000))Send delayed"" or without argument according to the advanced settings." + Environment.NewLine +
 			@"Delay after ""Send something and then delay\!(" + (KeywordEx)Keyword.LineDelay + @"(1000))"" or without argument according to the advanced settings." + Environment.NewLine +
 			@"Interval ""Send something in interval\!(" + (KeywordEx)Keyword.LineInterval + @"(1000))"" or without argument according to the advanced settings." + Environment.NewLine +
+		////@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.Repeat + @"(OK, 10))"" or ""\!(" + (KeywordEx)Keyword.Repeat + @"(OK, 10, 10))"" with additional delay inbetween repetitions." + Environment.NewLine +
 			@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.LineRepeat + @"(10))"" or without argument according to the advanced settings." + Environment.NewLine +
 			@"Repeat ""Send something infinitely\!(" + (KeywordEx)Keyword.LineRepeat + @"(-1))"" or without argument according to the advanced settings." + Environment.NewLine +
 			@"Note that ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" will repeat as fast as possible, thus resulting in 100% load of the CPU core in use." + Environment.NewLine +
