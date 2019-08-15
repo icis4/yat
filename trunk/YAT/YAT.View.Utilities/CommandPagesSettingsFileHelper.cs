@@ -64,7 +64,9 @@ namespace YAT.View.Utilities
 			Spread
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Exports to a .yacp or .yacps file, promting the user as required.
+		/// </summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId, string indicatedName)
 		{
@@ -418,9 +420,9 @@ namespace YAT.View.Utilities
 				message.Append(pagesImported.TotalDefinedCommandCount);
 				message.AppendLine(" commands.");
 				message.AppendLine();
-				message.Append("Would you like to replace all currently configured predefined commands by the imported");
+				message.Append("Would you like to replace all currently configured predefined commands by the");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" [Yes], or add the imported");
+				message.Append(" [Yes], or add the");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
 				message.Append(" to the currently configured predefined commands [No]?");
 

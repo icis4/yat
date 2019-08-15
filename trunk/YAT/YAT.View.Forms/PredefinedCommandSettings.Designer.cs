@@ -235,6 +235,7 @@
 			this.label_Example = new System.Windows.Forms.Label();
 			this.button_Help = new System.Windows.Forms.Button();
 			this.groupBox_Pages = new System.Windows.Forms.GroupBox();
+			this.button_RenumberPages = new System.Windows.Forms.Button();
 			this.button_ExportAllPagesToClipboard = new System.Windows.Forms.Button();
 			this.button_ImportAllPagesFromClipboard = new System.Windows.Forms.Button();
 			this.button_CutPageToClipboard = new System.Windows.Forms.Button();
@@ -272,7 +273,6 @@
 			this.subpageCheckBox_2A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_1A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
-			this.button_RenumberPages = new System.Windows.Forms.Button();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -2126,6 +2126,17 @@
 			this.groupBox_Pages.TabStop = false;
 			this.groupBox_Pages.Text = "&Pages";
 			// 
+			// button_RenumberPages
+			// 
+			this.button_RenumberPages.Location = new System.Drawing.Point(264, 18);
+			this.button_RenumberPages.Name = "button_RenumberPages";
+			this.button_RenumberPages.Size = new System.Drawing.Size(57, 23);
+			this.button_RenumberPages.TabIndex = 2;
+			this.button_RenumberPages.Text = "1, 2, 3,...";
+			this.toolTip.SetToolTip(this.button_RenumberPages, "Renumber pages to \"Page 1\", \"Page 2\", \"Page 3\",...");
+			this.button_RenumberPages.UseVisualStyleBackColor = true;
+			this.button_RenumberPages.Click += new System.EventHandler(this.button_RenumberPages_Click);
+			// 
 			// button_ExportAllPagesToClipboard
 			// 
 			this.button_ExportAllPagesToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
@@ -2133,7 +2144,7 @@
 			this.button_ExportAllPagesToClipboard.Name = "button_ExportAllPagesToClipboard";
 			this.button_ExportAllPagesToClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_ExportAllPagesToClipboard.TabIndex = 17;
-			this.toolTip.SetToolTip(this.button_ExportAllPagesToClipboard, "Cut the current page to the clipboard");
+			this.toolTip.SetToolTip(this.button_ExportAllPagesToClipboard, "Copies all pages to the clipboard.\r\n\r\nUse [Copy] [>] to copy a single page.");
 			this.button_ExportAllPagesToClipboard.UseVisualStyleBackColor = true;
 			this.button_ExportAllPagesToClipboard.Click += new System.EventHandler(this.button_ExportAllPagesToClipboard_Click);
 			// 
@@ -2144,7 +2155,8 @@
 			this.button_ImportAllPagesFromClipboard.Name = "button_ImportAllPagesFromClipboard";
 			this.button_ImportAllPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_ImportAllPagesFromClipboard.TabIndex = 19;
-			this.toolTip.SetToolTip(this.button_ImportAllPagesFromClipboard, "Paste a page from the clipboard and insert it");
+			this.toolTip.SetToolTip(this.button_ImportAllPagesFromClipboard, "Paste all pages from the clipboard. The current pages are replaced.\r\n\r\nUse [Inser" +
+        "t] [v] or [Add] [v] to paste additively.");
 			this.button_ImportAllPagesFromClipboard.UseVisualStyleBackColor = true;
 			this.button_ImportAllPagesFromClipboard.Click += new System.EventHandler(this.button_ImportAllPagesFromClipboard_Click);
 			// 
@@ -2155,7 +2167,7 @@
 			this.button_CutPageToClipboard.Name = "button_CutPageToClipboard";
 			this.button_CutPageToClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_CutPageToClipboard.TabIndex = 13;
-			this.toolTip.SetToolTip(this.button_CutPageToClipboard, "Cut the current page to the clipboard");
+			this.toolTip.SetToolTip(this.button_CutPageToClipboard, "Cut the current page to the clipboard.");
 			this.button_CutPageToClipboard.UseVisualStyleBackColor = true;
 			this.button_CutPageToClipboard.Click += new System.EventHandler(this.button_CutPageToClipboard_Click);
 			// 
@@ -2166,7 +2178,7 @@
 			this.button_CopyPageToClipboard.Name = "button_CopyPageToClipboard";
 			this.button_CopyPageToClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_CopyPageToClipboard.TabIndex = 10;
-			this.toolTip.SetToolTip(this.button_CopyPageToClipboard, "Copy the current page to the clipboard");
+			this.toolTip.SetToolTip(this.button_CopyPageToClipboard, "Copy the current page to the clipboard.");
 			this.button_CopyPageToClipboard.UseVisualStyleBackColor = true;
 			this.button_CopyPageToClipboard.Click += new System.EventHandler(this.button_CopyPageToClipboard_Click);
 			// 
@@ -2177,7 +2189,7 @@
 			this.button_AddPagesFromClipboard.Name = "button_AddPagesFromClipboard";
 			this.button_AddPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_AddPagesFromClipboard.TabIndex = 7;
-			this.toolTip.SetToolTip(this.button_AddPagesFromClipboard, "Paste a page from the clipboard and add it");
+			this.toolTip.SetToolTip(this.button_AddPagesFromClipboard, "Paste page(s) from the clipboard and add.");
 			this.button_AddPagesFromClipboard.UseVisualStyleBackColor = true;
 			this.button_AddPagesFromClipboard.Click += new System.EventHandler(this.button_AddPagesFromClipboard_Click);
 			// 
@@ -2188,7 +2200,7 @@
 			this.button_InsertPageFromClipboard.Name = "button_InsertPageFromClipboard";
 			this.button_InsertPageFromClipboard.Size = new System.Drawing.Size(26, 23);
 			this.button_InsertPageFromClipboard.TabIndex = 4;
-			this.toolTip.SetToolTip(this.button_InsertPageFromClipboard, "Paste a page from the clipboard and insert it");
+			this.toolTip.SetToolTip(this.button_InsertPageFromClipboard, "Paste page(s) from the clipboard and insert.");
 			this.button_InsertPageFromClipboard.UseVisualStyleBackColor = true;
 			this.button_InsertPageFromClipboard.Click += new System.EventHandler(this.button_InsertPageFromClipboard_Click);
 			// 
@@ -2200,8 +2212,8 @@
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ImportAllPagesFromFile.TabIndex = 18;
 			this.button_ImportAllPagesFromFile.Text = "I&mport All from File...";
-			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yacps file. The current pages are replaced.\r\n\r\nUse [Insert]" +
-        " [...] or [Add] [...] to import additively.");
+			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Import all pages from a .yacps file. The current pages are replaced.\r\n\r\nUse [Inse" +
+        "rt] [...] or [Add] [...] to import additively.");
 			this.button_ImportAllPagesFromFile.Click += new System.EventHandler(this.button_ImportAllPagesFromFile_Click);
 			// 
 			// button_ExportAllPagesToFile
@@ -2212,7 +2224,7 @@
 			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_ExportAllPagesToFile.TabIndex = 16;
 			this.button_ExportAllPagesToFile.Text = "E&xport All to File...";
-			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Exports pages to a .yacps file.\r\n\r\nUse [Copy] [...] to export a single page.");
+			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Export all pages to a .yacps file.\r\n\r\nUse [Copy] [...] to export a single page.");
 			this.button_ExportAllPagesToFile.Click += new System.EventHandler(this.button_ExportAllPagesToFile_Click);
 			// 
 			// button_ExportPageToFile
@@ -2222,7 +2234,7 @@
 			this.button_ExportPageToFile.Size = new System.Drawing.Size(25, 23);
 			this.button_ExportPageToFile.TabIndex = 11;
 			this.button_ExportPageToFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_ExportPageToFile, "Export the current page to a .yacp file");
+			this.toolTip.SetToolTip(this.button_ExportPageToFile, "Export the current page to a .yacp file.");
 			this.button_ExportPageToFile.UseVisualStyleBackColor = true;
 			this.button_ExportPageToFile.Click += new System.EventHandler(this.button_ExportPageToFile_Click);
 			// 
@@ -2233,7 +2245,7 @@
 			this.button_InsertPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_InsertPagesFromFile.TabIndex = 5;
 			this.button_InsertPagesFromFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_InsertPagesFromFile, "Import page(s) from a .yacp or .yacps file and insert the page(s)");
+			this.toolTip.SetToolTip(this.button_InsertPagesFromFile, "Import page(s) from a .yacp or .yacps file and insert.");
 			this.button_InsertPagesFromFile.UseVisualStyleBackColor = true;
 			this.button_InsertPagesFromFile.Click += new System.EventHandler(this.button_InsertPagesFromFile_Click);
 			// 
@@ -2244,7 +2256,7 @@
 			this.button_AddPagesFromFile.Size = new System.Drawing.Size(25, 23);
 			this.button_AddPagesFromFile.TabIndex = 8;
 			this.button_AddPagesFromFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_AddPagesFromFile, "Import page(s) from a .yacp or .yacps file and add the page(s)");
+			this.toolTip.SetToolTip(this.button_AddPagesFromFile, "Import page(s) from a .yacp or .yacps file and add.");
 			this.button_AddPagesFromFile.UseVisualStyleBackColor = true;
 			this.button_AddPagesFromFile.Click += new System.EventHandler(this.button_AddPagesFromFile_Click);
 			// 
@@ -2343,7 +2355,7 @@
 			this.button_LinkToFile.Name = "button_LinkToFile";
 			this.button_LinkToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_LinkToFile.TabIndex = 3;
-			this.button_LinkToFile.Text = "Lin&k All to File...";
+			this.button_LinkToFile.Text = "Lin&k Page to File...";
 			this.toolTip.SetToolTip(this.button_LinkToFile, resources.GetString("button_LinkToFile.ToolTip"));
 			this.button_LinkToFile.Click += new System.EventHandler(this.button_LinkToFile_Click);
 			// 
@@ -2526,17 +2538,6 @@
 			this.label_SubpageSelection.Size = new System.Drawing.Size(100, 13);
 			this.label_SubpageSelection.TabIndex = 2;
 			this.label_SubpageSelection.Text = "Subpage Selection:";
-			// 
-			// button_RenumberPages
-			// 
-			this.button_RenumberPages.Location = new System.Drawing.Point(264, 18);
-			this.button_RenumberPages.Name = "button_RenumberPages";
-			this.button_RenumberPages.Size = new System.Drawing.Size(57, 23);
-			this.button_RenumberPages.TabIndex = 2;
-			this.button_RenumberPages.Text = "1, 2, 3,...";
-			this.toolTip.SetToolTip(this.button_RenumberPages, "Renumber pages to \"Page 1\", \"Page 2\", \"Page 3\",...");
-			this.button_RenumberPages.UseVisualStyleBackColor = true;
-			this.button_RenumberPages.Click += new System.EventHandler(this.button_RenumberPages_Click);
 			// 
 			// PredefinedCommandSettings
 			// 

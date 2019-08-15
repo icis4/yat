@@ -324,7 +324,7 @@ namespace YAT.View.Forms
 		private void button_CopyPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			CommandPagesSettingsClipboardHelper.TryExportOne(this.settingsInEdit, this.selectedPageId);
+			CommandPagesSettingsClipboardHelper.TrySetOne(this.settingsInEdit, this.selectedPageId);
 		}
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
@@ -340,7 +340,7 @@ namespace YAT.View.Forms
 		private void button_CutPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			if (CommandPagesSettingsClipboardHelper.TryExportOne(this.settingsInEdit, this.selectedPageId))
+			if (CommandPagesSettingsClipboardHelper.TrySetOne(this.settingsInEdit, this.selectedPageId))
 				DeletePage();
 		}
 
@@ -373,7 +373,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToClipboard_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsClipboardHelper.TryExportAll(this.settingsInEdit);
+			CommandPagesSettingsClipboardHelper.TrySetAll(this.settingsInEdit);
 		}
 
 		private void button_ImportAllPagesFromClipboard_Click(object sender, EventArgs e)
@@ -1390,7 +1390,7 @@ namespace YAT.View.Forms
 					this,
 					message,
 					"Renumber?",
-					MessageBoxButtons.YesNoCancel,
+					MessageBoxButtons.OKCancel,
 					MessageBoxIcon.Question,
 					MessageBoxDefaultButton.Button2
 				)

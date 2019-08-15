@@ -64,7 +64,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		public static bool TrySet(Command c)
 		{
 			var root = new CommandSettingsRoot();
@@ -84,7 +84,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		public static bool TryGet(out Command c)
 		{
 			string s;

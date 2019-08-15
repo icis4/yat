@@ -2387,21 +2387,21 @@ namespace YAT.View.Forms
 				toolStripMenuItem_PredefinedContextMenu_Clear.Enabled = cIsDefined;
 
 				var hasPages = (this.settingsRoot.PredefinedCommand.Pages.Count >= 1);
-				toolStripMenuItem_PredefinedContextMenu_ExportToClipboard.Enabled = hasPages;
+				toolStripMenuItem_PredefinedContextMenu_CopyToClipboard.Enabled = hasPages;
 				toolStripMenuItem_PredefinedContextMenu_ExportToFile     .Enabled = hasPages;
 
 				if (this.settingsRoot.PredefinedCommand.Pages.Count <= 1)
 				{
-					toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page to Clipboard...";
-				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
+					toolStripMenuItem_PredefinedContextMenu_CopyToClipboard    .Text = "Copy Page to Clipboard...";
+				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Paste Page(s) from Clipboard..." is fixed.
 					toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page to File...";
 				////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
 				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
 				}
 				else
 				{
-					toolStripMenuItem_PredefinedContextMenu_ExportToClipboard  .Text = "Export Page(s) to Clipboard...";
-				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Import Page(s) from Clipboard..." is fixed.
+					toolStripMenuItem_PredefinedContextMenu_CopyToClipboard    .Text = "Copy Page(s) to Clipboard...";
+				////toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard.Text = "Paste Page(s) from Clipboard..." is fixed.
 					toolStripMenuItem_PredefinedContextMenu_ExportToFile       .Text = "Export Page(s) to File...";
 				////toolStripMenuItem_PredefinedContextMenu_ImportFromFile     .Text = "Import Page(s) from File..." is fixed.
 				////toolStripMenuItem_PredefinedContextMenu_LinkToFile         .Text = "Link Page(s) to File..." is fixed.
@@ -2732,34 +2732,34 @@ namespace YAT.View.Forms
 		// ...toolStripComboBox_PredefinedContextMenu_Page...
 		// ...is questionable in the 'Predefined' context menu, it is there as kind of title for the items below.
 
-		private void toolStripMenuItem_PredefinedContextMenu_ExportToClipboard_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_CopyToClipboard_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetFixedStatusText("Exporting to clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
-			if (CommandPagesSettingsClipboardHelper.TryExport(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId))
-				SetTimedStatusText("Exporting done");
+			SetFixedStatusText("Copying to clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
+			if (CommandPagesSettingsClipboardHelper.TrySet(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId))
+				SetTimedStatusText("Copying done");
 			else
-				SetFixedStatusText("Exporting failed!");
+				SetFixedStatusText("Copying failed!");
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_ImportFromClipboard_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetFixedStatusText("Importing from clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
+			SetFixedStatusText("Pasting from clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
 			Model.Settings.PredefinedCommandSettings predefinedCommandNew;
 			if (CommandPagesSettingsClipboardHelper.TryGetAndImport(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
 				// settingsRoot_Changed() will update the form.
-				SetTimedStatusText("Importing done");
+				SetTimedStatusText("Pasting done");
 			}
 			else
 			{
-				SetFixedStatusText("Importing failed! Clipboard does not contain a " + ApplicationEx.CommonName + " Command Page(s) definition.");
+				SetFixedStatusText("Pasting failed! Clipboard does not contain a " + ApplicationEx.CommonName + " Command Page(s) definition.");
 			}
 		}
 
