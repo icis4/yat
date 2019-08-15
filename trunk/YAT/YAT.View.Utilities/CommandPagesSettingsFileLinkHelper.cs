@@ -65,6 +65,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exception)
 		{
 			try
@@ -121,6 +122,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out string filePath, out PredefinedCommandPageCollection pages)
 		{
 			var ofd = new OpenFileDialog();
@@ -194,6 +196,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndLink(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			// Attention:
@@ -249,23 +252,19 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		private static void LinkExchange(string filePathToLink, PredefinedCommandPageCollection pagesToLink)
+		private static void ChangeToLinked(string filePathToLink, PredefinedCommandPageCollection pagesToLink)
 		{
 			foreach (var p in pagesToLink)
 			{
 				if (p.IsLinkedToFilePath)
 					continue; // Nothing to do, itself linked to yet another file.
 
-				// Set file path...
-				p.LinkFilePath = filePathToLink;
-
-				// ...and exchange commands:
-				p.CommandsLinked = p.CommandsIntegrated;
-				p.CommandsIntegrated = new List<Command>();
+				p.ChangeToLinked(filePathToLink);
 			}
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryLinkAll(IWin32Window owner, PredefinedCommandSettings settingsOld, string filePathToLink, PredefinedCommandPageCollection pagesToLink, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
@@ -273,7 +272,7 @@ namespace YAT.View.Utilities
 			if (ConfirmLink(owner, pagesToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
 			{
 				// Prepare the pages to link...
-				LinkExchange(filePathToLink, pagesToLink); // No clone needed as just loaded.
+				ChangeToLinked(filePathToLink, pagesToLink); // No clone needed as just loaded.
 
 				// ...clone the settings...
 				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve properties.
@@ -289,6 +288,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryAddLinked(IWin32Window owner, PredefinedCommandSettings settingsOld, string filePathToLink, PredefinedCommandPageCollection pagesToLink, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
@@ -296,7 +296,7 @@ namespace YAT.View.Utilities
 			if (ConfirmLink(owner, pagesToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
 			{
 				// Prepare the pages to link...
-				LinkExchange(filePathToLink, pagesToLink); // No clone needed as just loaded.
+				ChangeToLinked(filePathToLink, pagesToLink); // No clone needed as just loaded.
 
 				// ...clone the settings...
 				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve pages and other properties.
@@ -352,6 +352,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool ConfirmLink(IWin32Window owner, PredefinedCommandPageCollection pagesToLink, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
@@ -396,6 +397,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryClearLink(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
 			var message = new StringBuilder();

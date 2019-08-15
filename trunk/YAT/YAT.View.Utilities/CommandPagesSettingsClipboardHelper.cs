@@ -62,6 +62,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId)
 		{
 			var pageCount = settings.Pages.Count;
@@ -95,6 +96,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Exports all pages to the clipboard.
 		/// </summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportAll(PredefinedCommandSettings settings)
 		{                                                      // Specifying 'NoPageId' will export all pages (not a single).
 			return (TryExport(settings.Pages, PredefinedCommandPageCollection.NoPageId));
@@ -103,6 +105,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Exports the given page to the clipboard.
 		/// </summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportOne(PredefinedCommandSettings settings, int pageId)
 		{
 			var pages = new PredefinedCommandPageCollection();
@@ -112,6 +115,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryExport(PredefinedCommandPageCollection pages, int pageId)
 		{
 			if ((pages.Count == 1) && (pageId != PredefinedCommandPageCollection.NoPageId))
@@ -237,6 +241,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
@@ -288,6 +293,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
@@ -302,6 +308,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
@@ -316,6 +323,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryReplace(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageCollection pagesImported, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
@@ -336,6 +344,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryAddOrInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, PredefinedCommandPageCollection pagesImported, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
 			Mode mode;
@@ -405,6 +414,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandPageCollection pagesImported, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
