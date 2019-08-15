@@ -273,6 +273,8 @@
 			this.subpageCheckBox_2A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_1A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
+			this.label_CopyExportAllPages = new System.Windows.Forms.Label();
+			this.label_PasteImportAllPages = new System.Windows.Forms.Label();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -2098,6 +2100,8 @@
 			// 
 			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Pages.Controls.Add(this.label_PasteImportAllPages);
+			this.groupBox_Pages.Controls.Add(this.label_CopyExportAllPages);
 			this.groupBox_Pages.Controls.Add(this.button_RenumberPages);
 			this.groupBox_Pages.Controls.Add(this.button_ExportAllPagesToClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_ImportAllPagesFromClipboard);
@@ -2154,7 +2158,7 @@
 			this.button_ImportAllPagesFromClipboard.Location = new System.Drawing.Point(264, 268);
 			this.button_ImportAllPagesFromClipboard.Name = "button_ImportAllPagesFromClipboard";
 			this.button_ImportAllPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
-			this.button_ImportAllPagesFromClipboard.TabIndex = 19;
+			this.button_ImportAllPagesFromClipboard.TabIndex = 20;
 			this.toolTip.SetToolTip(this.button_ImportAllPagesFromClipboard, "Paste all pages from the clipboard. The current pages are replaced.\r\n\r\nUse [Inser" +
         "t] [v] or [Add] [v] to paste additively.");
 			this.button_ImportAllPagesFromClipboard.UseVisualStyleBackColor = true;
@@ -2207,11 +2211,11 @@
 			// button_ImportAllPagesFromFile
 			// 
 			this.button_ImportAllPagesFromFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(138, 268);
+			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(296, 268);
 			this.button_ImportAllPagesFromFile.Name = "button_ImportAllPagesFromFile";
-			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
-			this.button_ImportAllPagesFromFile.TabIndex = 18;
-			this.button_ImportAllPagesFromFile.Text = "I&mport All from File...";
+			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(25, 23);
+			this.button_ImportAllPagesFromFile.TabIndex = 21;
+			this.button_ImportAllPagesFromFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Import all pages from a .yacps file. The current pages are replaced.\r\n\r\nUse [Inse" +
         "rt] [...] or [Add] [...] to import additively.");
 			this.button_ImportAllPagesFromFile.Click += new System.EventHandler(this.button_ImportAllPagesFromFile_Click);
@@ -2219,11 +2223,11 @@
 			// button_ExportAllPagesToFile
 			// 
 			this.button_ExportAllPagesToFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(138, 239);
+			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(296, 239);
 			this.button_ExportAllPagesToFile.Name = "button_ExportAllPagesToFile";
-			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
-			this.button_ExportAllPagesToFile.TabIndex = 16;
-			this.button_ExportAllPagesToFile.Text = "E&xport All to File...";
+			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(25, 23);
+			this.button_ExportAllPagesToFile.TabIndex = 18;
+			this.button_ExportAllPagesToFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Export all pages to a .yacps file.\r\n\r\nUse [Copy] [...] to export a single page.");
 			this.button_ExportAllPagesToFile.Click += new System.EventHandler(this.button_ExportAllPagesToFile_Click);
 			// 
@@ -2287,7 +2291,7 @@
 			this.button_DeleteAllPages.Location = new System.Drawing.Point(12, 254);
 			this.button_DeleteAllPages.Name = "button_DeleteAllPages";
 			this.button_DeleteAllPages.Size = new System.Drawing.Size(120, 23);
-			this.button_DeleteAllPages.TabIndex = 20;
+			this.button_DeleteAllPages.TabIndex = 22;
 			this.button_DeleteAllPages.Text = "De&lete All...";
 			this.button_DeleteAllPages.Click += new System.EventHandler(this.button_DeleteAllPages_Click);
 			// 
@@ -2296,7 +2300,7 @@
 			this.button_MovePageUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.button_MovePageUp.Location = new System.Drawing.Point(138, 180);
 			this.button_MovePageUp.Name = "button_MovePageUp";
-			this.button_MovePageUp.Size = new System.Drawing.Size(120, 23);
+			this.button_MovePageUp.Size = new System.Drawing.Size(57, 23);
 			this.button_MovePageUp.TabIndex = 14;
 			this.button_MovePageUp.Text = "&Up";
 			this.button_MovePageUp.Click += new System.EventHandler(this.button_MovePageUp_Click);
@@ -2307,7 +2311,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_MovePageDown.Location = new System.Drawing.Point(138, 209);
 			this.button_MovePageDown.Name = "button_MovePageDown";
-			this.button_MovePageDown.Size = new System.Drawing.Size(120, 23);
+			this.button_MovePageDown.Size = new System.Drawing.Size(57, 23);
 			this.button_MovePageDown.TabIndex = 15;
 			this.button_MovePageDown.Text = "&Down";
 			this.button_MovePageDown.Click += new System.EventHandler(this.button_MovePageDown_Click);
@@ -2539,6 +2543,24 @@
 			this.label_SubpageSelection.TabIndex = 2;
 			this.label_SubpageSelection.Text = "Subpage Selection:";
 			// 
+			// label_CopyExportAllPages
+			// 
+			this.label_CopyExportAllPages.AutoSize = true;
+			this.label_CopyExportAllPages.Location = new System.Drawing.Point(173, 249);
+			this.label_CopyExportAllPages.Name = "label_CopyExportAllPages";
+			this.label_CopyExportAllPages.Size = new System.Drawing.Size(83, 13);
+			this.label_CopyExportAllPages.TabIndex = 16;
+			this.label_CopyExportAllPages.Text = "Copy/E&xport All:";
+			// 
+			// label_PasteImportAllPages
+			// 
+			this.label_PasteImportAllPages.AutoSize = true;
+			this.label_PasteImportAllPages.Location = new System.Drawing.Point(171, 268);
+			this.label_PasteImportAllPages.Name = "label_PasteImportAllPages";
+			this.label_PasteImportAllPages.Size = new System.Drawing.Size(85, 13);
+			this.label_PasteImportAllPages.TabIndex = 19;
+			this.label_PasteImportAllPages.Text = "Paste/I&mport All:";
+			// 
 			// PredefinedCommandSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -2568,6 +2590,7 @@
 			this.groupBox_Page.PerformLayout();
 			this.contextMenuStrip_Commands.ResumeLayout(false);
 			this.groupBox_Pages.ResumeLayout(false);
+			this.groupBox_Pages.PerformLayout();
 			this.groupBox_Layout.ResumeLayout(false);
 			this.groupBox_Layout.PerformLayout();
 			this.ResumeLayout(false);
@@ -2818,5 +2841,7 @@
 		private System.Windows.Forms.Button button_ExportAllPagesToClipboard;
 		private System.Windows.Forms.Button button_ImportAllPagesFromClipboard;
 		private System.Windows.Forms.Button button_RenumberPages;
+		private System.Windows.Forms.Label label_PasteImportAllPages;
+		private System.Windows.Forms.Label label_CopyExportAllPages;
 	}
 }

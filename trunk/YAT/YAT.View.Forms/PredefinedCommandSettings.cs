@@ -1134,8 +1134,10 @@ namespace YAT.View.Forms
 				button_MovePageUp                 .Enabled = (pageIsSelected && (this.selectedPageId > 1));
 				button_MovePageDown               .Enabled = (pageIsSelected && (this.selectedPageId < pageCount));
 				button_DeleteAllPages             .Enabled = (pageCount > 0);                                           // Deleting a sole page is permissible.
+				label_CopyExportAllPages          .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
 				button_ExportAllPagesToFile       .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
 				button_ExportAllPagesToClipboard  .Enabled = (pageCount > 0) && (totalDefinedCommandCount > 0);
+			////label_PasteImportAllPages         .Enabled =  true;
 			////button_ImportAllPagesFromFile     .Enabled =  true;
 			////button_ImportAllPagesFromClipboard.Enabled =  true;
 			}
