@@ -236,43 +236,50 @@ namespace YAT.View.Utilities
 			PredefinedCommandPageCollection pagesToLink;
 			if (ShowOpenFileDialogAndTryLoad(owner, out filePathToLink, out pagesToLink))
 			{
-				var message = new StringBuilder();
-				message.Append("The file contains ");
-				message.Append(pagesToLink.Count);
-				message.Append(pagesToLink.Count == 1 ? " page" : " pages");
-				message.Append(" with a total of ");
-				message.Append(pagesToLink.TotalDefinedCommandCount);
-				message.AppendLine(" commands.");
-				message.AppendLine();
-				message.AppendLine("Would you like to link all configured predefined commands to the file [Yes],");
-				message.Append("or link the");
-				message.Append(pagesToLink.Count == 1 ? " page" : " pages");
-				message.Append(" in addition to the currently configured predefined commands [No]?");
-
-				switch (MessageBoxEx.Show
-					(
-						owner,
-						message.ToString(),
-						"Link Mode",
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question,
-						MessageBoxDefaultButton.Button3
-					))
+				if (settingsOld.Pages.TotalDefinedCommandCount > 0)
 				{
-					case DialogResult.Yes:
-					{
-						return (TryLinkAll(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
-					}
+					var message = new StringBuilder();
+					message.Append("The file contains ");
+					message.Append(pagesToLink.Count);
+					message.Append(pagesToLink.Count == 1 ? " page" : " pages");
+					message.Append(" with a total of ");
+					message.Append(pagesToLink.TotalDefinedCommandCount);
+					message.AppendLine(" commands.");
+					message.AppendLine();
+					message.AppendLine("Would you like to link all configured predefined commands to the file [Yes],");
+					message.Append("or link the");
+					message.Append(pagesToLink.Count == 1 ? " page" : " pages");
+					message.Append(" in addition to the currently configured predefined commands [No]?");
 
-					case DialogResult.No:
+					switch (MessageBoxEx.Show
+						(
+							owner,
+							message.ToString(),
+							"Link Mode",
+							MessageBoxButtons.YesNoCancel,
+							MessageBoxIcon.Question,
+							MessageBoxDefaultButton.Button3
+						))
 					{
-						return (TryAddLinked(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
-					}
+						case DialogResult.Yes:
+						{
+							return (TryLinkAll(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
+						}
 
-					default:
-					{
-						break; // Nothing to do.
+						case DialogResult.No:
+						{
+							return (TryAddLinked(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
+						}
+
+						default:
+						{
+							break; // Nothing to do.
+						}
 					}
+				}
+				else // If (settingsOld.Pages.TotalDefinedCommandCount == 0) link all without asking:
+				{
+					return (TryLinkAll(owner, settingsOld, filePathToLink, pagesToLink, out settingsNew));
 				}
 			}
 
