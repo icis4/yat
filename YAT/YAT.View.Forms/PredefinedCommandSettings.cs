@@ -273,6 +273,11 @@ namespace YAT.View.Forms
 			NamePage();
 		}
 
+		private void button_RenumberPages_Click(object sender, EventArgs e)
+		{
+			RenumberPages();
+		}
+
 		private void button_InsertPage_Click(object sender, EventArgs e)
 		{
 			InsertPage();
@@ -1220,6 +1225,7 @@ namespace YAT.View.Forms
 
 				// Page list buttons:
 				button_NamePage                   .Enabled =  pageIsSelected;
+				button_RenumberPages              .Enabled = (pageCount > 0);
 				button_InsertPage                 .Enabled =  pageIsSelected;
 				button_InsertPagesFromFile        .Enabled =  pageIsSelected;
 				button_InsertPageFromClipboard    .Enabled =  pageIsSelected;
@@ -1348,7 +1354,7 @@ namespace YAT.View.Forms
 		// Non-Public Methods > Pages
 		//------------------------------------------------------------------------------------------
 
-		[ModalBehaviorContract(ModalBehavior.Always)]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void NamePage()
 		{
 			string pageName;
@@ -1363,6 +1369,34 @@ namespace YAT.View.Forms
 				== DialogResult.OK)
 			{
 				this.settingsInEdit.Pages[SelectedPageIndex].Name = pageName;
+				SetPagesControls();
+			}
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void RenumberPages()
+		{
+			string message;
+			switch (this.settingsInEdit.Pages.Count)
+			{
+				case 1:  message = @"Renumber page to ""Page 1""?";                               break;
+				case 2:  message = @"Renumber pages to ""Page 1"", ""Page 2""?";                  break;
+				case 3:  message = @"Renumber pages to ""Page 1"", ""Page 2"" , ""Page 3""?";     break;
+				default: message = @"Renumber pages to ""Page 1"", ""Page 2"" , ""Page 3"",...?"; break;
+			}
+
+			if (MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Renumber?",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question,
+					MessageBoxDefaultButton.Button2
+				)
+				== DialogResult.OK)
+			{
+				this.settingsInEdit.Pages.Renumber();
 				SetPagesControls();
 			}
 		}

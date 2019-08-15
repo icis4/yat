@@ -311,6 +311,13 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		public void Renumber()
+		{
+			for (int i = 0; i < Count; i++)
+				this[i].Name = StandardPageName(i + 1);
+		}
+
+		/// <summary></summary>
 		public void UnlinkAll()
 		{
 			foreach (var p in this)
