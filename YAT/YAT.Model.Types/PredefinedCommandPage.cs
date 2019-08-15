@@ -329,7 +329,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public static string CaptionOrFallback(PredefinedCommandPage page, int id)
 		{
-			if (!string.IsNullOrEmpty(page.Caption))
+			if (!string.IsNullOrEmpty(page.Name)) // Name must be compared! Caption could be " (linked to ...)"!
 				return (page.Caption);
 			else
 				return (CaptionFallback(page, id));
@@ -438,6 +438,20 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary>
+		/// Updates the items effectively in use, i.e. <see cref="Name"/> and <see cref="Commands"/>.
+		/// </summary>
+		public virtual void UpdateEffectivelyInUse(PredefinedCommandPage other)
+		{
+			Name = other.Name;
+
+			Commands = new List<Command>(other.Commands.Count); // Preset the required capacity to improve memory management.
+			foreach (var c in other.Commands)
+				Commands.Add(new Command(c)); // Clone to ensure decoupling.
+
+		////LinkFilePath = other.LinkFilePath shall not be modified as that determines what effectively is in use.
+		}
+
+		/// <summary>
 		/// Clears the link to a file.
 		/// </summary>
 		public virtual void Unlink()
@@ -509,6 +523,30 @@ namespace YAT.Model.Types
 				StringEx          .EqualsOrdinal(Name,         other.Name)     && // Just comparing the name effectively in use.
 				IEnumerableEx.ItemsEqual(        Commands,     other.Commands) && // Just comparing the commands effectively in use.
 				StringEx          .EqualsOrdinal(LinkFilePath, other.LinkFilePath)
+			);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have reference or value equality
+		/// on the items effectively in use, i.e. <see cref="Name"/> and <see cref="Commands"/>.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public bool EqualsEffectivelyInUse(PredefinedCommandPage other)
+		{
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
+
+			return
+			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
+				StringEx          .EqualsOrdinal(Name,         other.Name)     && // The name effectively in use.
+				IEnumerableEx.ItemsEqual(        Commands,     other.Commands)    // The commands effectively in use.
+			////StringEx          .EqualsOrdinal(LinkFilePath, other.LinkFilePath)
 			);
 		}
 
