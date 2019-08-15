@@ -235,6 +235,8 @@
 			this.label_Example = new System.Windows.Forms.Label();
 			this.button_Help = new System.Windows.Forms.Button();
 			this.groupBox_Pages = new System.Windows.Forms.GroupBox();
+			this.button_ExportAllPagesToClipboard = new System.Windows.Forms.Button();
+			this.button_ImportAllPagesFromClipboard = new System.Windows.Forms.Button();
 			this.button_CutPageToClipboard = new System.Windows.Forms.Button();
 			this.button_CopyPageToClipboard = new System.Windows.Forms.Button();
 			this.button_AddPagesFromClipboard = new System.Windows.Forms.Button();
@@ -270,8 +272,7 @@
 			this.subpageCheckBox_2A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_1A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
-			this.button_ImportAllPagesFromClipboard = new System.Windows.Forms.Button();
-			this.button_ExportAllPagesToClipboard = new System.Windows.Forms.Button();
+			this.button_RenumberPages = new System.Windows.Forms.Button();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -2097,6 +2098,7 @@
 			// 
 			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Pages.Controls.Add(this.button_RenumberPages);
 			this.groupBox_Pages.Controls.Add(this.button_ExportAllPagesToClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_ImportAllPagesFromClipboard);
 			this.groupBox_Pages.Controls.Add(this.button_CutPageToClipboard);
@@ -2124,13 +2126,35 @@
 			this.groupBox_Pages.TabStop = false;
 			this.groupBox_Pages.Text = "&Pages";
 			// 
+			// button_ExportAllPagesToClipboard
+			// 
+			this.button_ExportAllPagesToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
+			this.button_ExportAllPagesToClipboard.Location = new System.Drawing.Point(264, 239);
+			this.button_ExportAllPagesToClipboard.Name = "button_ExportAllPagesToClipboard";
+			this.button_ExportAllPagesToClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_ExportAllPagesToClipboard.TabIndex = 17;
+			this.toolTip.SetToolTip(this.button_ExportAllPagesToClipboard, "Cut the current page to the clipboard");
+			this.button_ExportAllPagesToClipboard.UseVisualStyleBackColor = true;
+			this.button_ExportAllPagesToClipboard.Click += new System.EventHandler(this.button_ExportAllPagesToClipboard_Click);
+			// 
+			// button_ImportAllPagesFromClipboard
+			// 
+			this.button_ImportAllPagesFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
+			this.button_ImportAllPagesFromClipboard.Location = new System.Drawing.Point(264, 268);
+			this.button_ImportAllPagesFromClipboard.Name = "button_ImportAllPagesFromClipboard";
+			this.button_ImportAllPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
+			this.button_ImportAllPagesFromClipboard.TabIndex = 19;
+			this.toolTip.SetToolTip(this.button_ImportAllPagesFromClipboard, "Paste a page from the clipboard and insert it");
+			this.button_ImportAllPagesFromClipboard.UseVisualStyleBackColor = true;
+			this.button_ImportAllPagesFromClipboard.Click += new System.EventHandler(this.button_ImportAllPagesFromClipboard_Click);
+			// 
 			// button_CutPageToClipboard
 			// 
 			this.button_CutPageToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
 			this.button_CutPageToClipboard.Location = new System.Drawing.Point(264, 134);
 			this.button_CutPageToClipboard.Name = "button_CutPageToClipboard";
 			this.button_CutPageToClipboard.Size = new System.Drawing.Size(26, 23);
-			this.button_CutPageToClipboard.TabIndex = 12;
+			this.button_CutPageToClipboard.TabIndex = 13;
 			this.toolTip.SetToolTip(this.button_CutPageToClipboard, "Cut the current page to the clipboard");
 			this.button_CutPageToClipboard.UseVisualStyleBackColor = true;
 			this.button_CutPageToClipboard.Click += new System.EventHandler(this.button_CutPageToClipboard_Click);
@@ -2141,7 +2165,7 @@
 			this.button_CopyPageToClipboard.Location = new System.Drawing.Point(264, 105);
 			this.button_CopyPageToClipboard.Name = "button_CopyPageToClipboard";
 			this.button_CopyPageToClipboard.Size = new System.Drawing.Size(26, 23);
-			this.button_CopyPageToClipboard.TabIndex = 9;
+			this.button_CopyPageToClipboard.TabIndex = 10;
 			this.toolTip.SetToolTip(this.button_CopyPageToClipboard, "Copy the current page to the clipboard");
 			this.button_CopyPageToClipboard.UseVisualStyleBackColor = true;
 			this.button_CopyPageToClipboard.Click += new System.EventHandler(this.button_CopyPageToClipboard_Click);
@@ -2152,7 +2176,7 @@
 			this.button_AddPagesFromClipboard.Location = new System.Drawing.Point(264, 76);
 			this.button_AddPagesFromClipboard.Name = "button_AddPagesFromClipboard";
 			this.button_AddPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
-			this.button_AddPagesFromClipboard.TabIndex = 6;
+			this.button_AddPagesFromClipboard.TabIndex = 7;
 			this.toolTip.SetToolTip(this.button_AddPagesFromClipboard, "Paste a page from the clipboard and add it");
 			this.button_AddPagesFromClipboard.UseVisualStyleBackColor = true;
 			this.button_AddPagesFromClipboard.Click += new System.EventHandler(this.button_AddPagesFromClipboard_Click);
@@ -2163,7 +2187,7 @@
 			this.button_InsertPageFromClipboard.Location = new System.Drawing.Point(264, 47);
 			this.button_InsertPageFromClipboard.Name = "button_InsertPageFromClipboard";
 			this.button_InsertPageFromClipboard.Size = new System.Drawing.Size(26, 23);
-			this.button_InsertPageFromClipboard.TabIndex = 3;
+			this.button_InsertPageFromClipboard.TabIndex = 4;
 			this.toolTip.SetToolTip(this.button_InsertPageFromClipboard, "Paste a page from the clipboard and insert it");
 			this.button_InsertPageFromClipboard.UseVisualStyleBackColor = true;
 			this.button_InsertPageFromClipboard.Click += new System.EventHandler(this.button_InsertPageFromClipboard_Click);
@@ -2174,7 +2198,7 @@
 			this.button_ImportAllPagesFromFile.Location = new System.Drawing.Point(12, 268);
 			this.button_ImportAllPagesFromFile.Name = "button_ImportAllPagesFromFile";
 			this.button_ImportAllPagesFromFile.Size = new System.Drawing.Size(120, 23);
-			this.button_ImportAllPagesFromFile.TabIndex = 17;
+			this.button_ImportAllPagesFromFile.TabIndex = 18;
 			this.button_ImportAllPagesFromFile.Text = "I&mport All from File...";
 			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Imports pages from a .yacps file. The current pages are replaced.\r\n\r\nUse [Insert]" +
         " [...] or [Add] [...] to import additively.");
@@ -2186,7 +2210,7 @@
 			this.button_ExportAllPagesToFile.Location = new System.Drawing.Point(12, 239);
 			this.button_ExportAllPagesToFile.Name = "button_ExportAllPagesToFile";
 			this.button_ExportAllPagesToFile.Size = new System.Drawing.Size(120, 23);
-			this.button_ExportAllPagesToFile.TabIndex = 15;
+			this.button_ExportAllPagesToFile.TabIndex = 16;
 			this.button_ExportAllPagesToFile.Text = "E&xport All to File...";
 			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Exports pages to a .yacps file.\r\n\r\nUse [Copy] [...] to export a single page.");
 			this.button_ExportAllPagesToFile.Click += new System.EventHandler(this.button_ExportAllPagesToFile_Click);
@@ -2196,7 +2220,7 @@
 			this.button_ExportPageToFile.Location = new System.Drawing.Point(296, 105);
 			this.button_ExportPageToFile.Name = "button_ExportPageToFile";
 			this.button_ExportPageToFile.Size = new System.Drawing.Size(25, 23);
-			this.button_ExportPageToFile.TabIndex = 10;
+			this.button_ExportPageToFile.TabIndex = 11;
 			this.button_ExportPageToFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_ExportPageToFile, "Export the current page to a .yacp file");
 			this.button_ExportPageToFile.UseVisualStyleBackColor = true;
@@ -2207,7 +2231,7 @@
 			this.button_InsertPagesFromFile.Location = new System.Drawing.Point(296, 47);
 			this.button_InsertPagesFromFile.Name = "button_InsertPagesFromFile";
 			this.button_InsertPagesFromFile.Size = new System.Drawing.Size(25, 23);
-			this.button_InsertPagesFromFile.TabIndex = 4;
+			this.button_InsertPagesFromFile.TabIndex = 5;
 			this.button_InsertPagesFromFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_InsertPagesFromFile, "Import page(s) from a .yacp or .yacps file and insert the page(s)");
 			this.button_InsertPagesFromFile.UseVisualStyleBackColor = true;
@@ -2218,7 +2242,7 @@
 			this.button_AddPagesFromFile.Location = new System.Drawing.Point(296, 76);
 			this.button_AddPagesFromFile.Name = "button_AddPagesFromFile";
 			this.button_AddPagesFromFile.Size = new System.Drawing.Size(25, 23);
-			this.button_AddPagesFromFile.TabIndex = 7;
+			this.button_AddPagesFromFile.TabIndex = 8;
 			this.button_AddPagesFromFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_AddPagesFromFile, "Import page(s) from a .yacp or .yacps file and add the page(s)");
 			this.button_AddPagesFromFile.UseVisualStyleBackColor = true;
@@ -2229,7 +2253,7 @@
 			this.button_DuplicatePage.Location = new System.Drawing.Point(138, 105);
 			this.button_DuplicatePage.Name = "button_DuplicatePage";
 			this.button_DuplicatePage.Size = new System.Drawing.Size(120, 23);
-			this.button_DuplicatePage.TabIndex = 8;
+			this.button_DuplicatePage.TabIndex = 9;
 			this.button_DuplicatePage.Text = "&Copy...";
 			this.button_DuplicatePage.Click += new System.EventHandler(this.button_DuplicatePage_Click);
 			// 
@@ -2251,7 +2275,7 @@
 			this.button_DeleteAllPages.Location = new System.Drawing.Point(138, 268);
 			this.button_DeleteAllPages.Name = "button_DeleteAllPages";
 			this.button_DeleteAllPages.Size = new System.Drawing.Size(120, 23);
-			this.button_DeleteAllPages.TabIndex = 19;
+			this.button_DeleteAllPages.TabIndex = 20;
 			this.button_DeleteAllPages.Text = "De&lete All...";
 			this.button_DeleteAllPages.Click += new System.EventHandler(this.button_DeleteAllPages_Click);
 			// 
@@ -2261,7 +2285,7 @@
 			this.button_MovePageUp.Location = new System.Drawing.Point(138, 180);
 			this.button_MovePageUp.Name = "button_MovePageUp";
 			this.button_MovePageUp.Size = new System.Drawing.Size(120, 23);
-			this.button_MovePageUp.TabIndex = 13;
+			this.button_MovePageUp.TabIndex = 14;
 			this.button_MovePageUp.Text = "&Up";
 			this.button_MovePageUp.Click += new System.EventHandler(this.button_MovePageUp_Click);
 			// 
@@ -2272,7 +2296,7 @@
 			this.button_MovePageDown.Location = new System.Drawing.Point(138, 209);
 			this.button_MovePageDown.Name = "button_MovePageDown";
 			this.button_MovePageDown.Size = new System.Drawing.Size(120, 23);
-			this.button_MovePageDown.TabIndex = 14;
+			this.button_MovePageDown.TabIndex = 15;
 			this.button_MovePageDown.Text = "&Down";
 			this.button_MovePageDown.Click += new System.EventHandler(this.button_MovePageDown_Click);
 			// 
@@ -2281,7 +2305,7 @@
 			this.button_DeletePage.Location = new System.Drawing.Point(138, 134);
 			this.button_DeletePage.Name = "button_DeletePage";
 			this.button_DeletePage.Size = new System.Drawing.Size(120, 23);
-			this.button_DeletePage.TabIndex = 11;
+			this.button_DeletePage.TabIndex = 12;
 			this.button_DeletePage.Text = "D&elete...";
 			this.button_DeletePage.Click += new System.EventHandler(this.button_DeletePage_Click);
 			// 
@@ -2290,7 +2314,7 @@
 			this.button_InsertPage.Location = new System.Drawing.Point(138, 47);
 			this.button_InsertPage.Name = "button_InsertPage";
 			this.button_InsertPage.Size = new System.Drawing.Size(120, 23);
-			this.button_InsertPage.TabIndex = 2;
+			this.button_InsertPage.TabIndex = 3;
 			this.button_InsertPage.Text = "&Insert...";
 			this.button_InsertPage.Click += new System.EventHandler(this.button_InsertPage_Click);
 			// 
@@ -2299,7 +2323,7 @@
 			this.button_AddPage.Location = new System.Drawing.Point(138, 76);
 			this.button_AddPage.Name = "button_AddPage";
 			this.button_AddPage.Size = new System.Drawing.Size(120, 23);
-			this.button_AddPage.TabIndex = 5;
+			this.button_AddPage.TabIndex = 6;
 			this.button_AddPage.Text = "&Add...";
 			this.button_AddPage.Click += new System.EventHandler(this.button_AddPage_Click);
 			// 
@@ -2503,27 +2527,16 @@
 			this.label_SubpageSelection.TabIndex = 2;
 			this.label_SubpageSelection.Text = "Subpage Selection:";
 			// 
-			// button_ImportAllPagesFromClipboard
+			// button_RenumberPages
 			// 
-			this.button_ImportAllPagesFromClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_imports_16x16;
-			this.button_ImportAllPagesFromClipboard.Location = new System.Drawing.Point(264, 268);
-			this.button_ImportAllPagesFromClipboard.Name = "button_ImportAllPagesFromClipboard";
-			this.button_ImportAllPagesFromClipboard.Size = new System.Drawing.Size(26, 23);
-			this.button_ImportAllPagesFromClipboard.TabIndex = 18;
-			this.toolTip.SetToolTip(this.button_ImportAllPagesFromClipboard, "Paste a page from the clipboard and insert it");
-			this.button_ImportAllPagesFromClipboard.UseVisualStyleBackColor = true;
-			this.button_ImportAllPagesFromClipboard.Click += new System.EventHandler(this.button_ImportAllPagesFromClipboard_Click);
-			// 
-			// button_ExportAllPagesToClipboard
-			// 
-			this.button_ExportAllPagesToClipboard.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
-			this.button_ExportAllPagesToClipboard.Location = new System.Drawing.Point(264, 239);
-			this.button_ExportAllPagesToClipboard.Name = "button_ExportAllPagesToClipboard";
-			this.button_ExportAllPagesToClipboard.Size = new System.Drawing.Size(26, 23);
-			this.button_ExportAllPagesToClipboard.TabIndex = 16;
-			this.toolTip.SetToolTip(this.button_ExportAllPagesToClipboard, "Cut the current page to the clipboard");
-			this.button_ExportAllPagesToClipboard.UseVisualStyleBackColor = true;
-			this.button_ExportAllPagesToClipboard.Click += new System.EventHandler(this.button_ExportAllPagesToClipboard_Click);
+			this.button_RenumberPages.Location = new System.Drawing.Point(264, 18);
+			this.button_RenumberPages.Name = "button_RenumberPages";
+			this.button_RenumberPages.Size = new System.Drawing.Size(57, 23);
+			this.button_RenumberPages.TabIndex = 2;
+			this.button_RenumberPages.Text = "1, 2, 3,...";
+			this.toolTip.SetToolTip(this.button_RenumberPages, "Renumber pages to \"Page 1\", \"Page 2\", \"Page 3\",...");
+			this.button_RenumberPages.UseVisualStyleBackColor = true;
+			this.button_RenumberPages.Click += new System.EventHandler(this.button_RenumberPages_Click);
 			// 
 			// PredefinedCommandSettings
 			// 
@@ -2803,5 +2816,6 @@
 		private System.Windows.Forms.Label label_Layout;
 		private System.Windows.Forms.Button button_ExportAllPagesToClipboard;
 		private System.Windows.Forms.Button button_ImportAllPagesFromClipboard;
+		private System.Windows.Forms.Button button_RenumberPages;
 	}
 }
