@@ -839,7 +839,7 @@ namespace YAT.Model
 			message.AppendLine("Unable to save file");
 			message.AppendLine(this.settingsHandler.SettingsFilePath);
 			message.AppendLine();
-			message.Append    (reason + " Would you like to save the file at another location?");
+			message.Append(reason + " Would you like to save the file at another location? You may also fix the file and then confirm the current location.");
 
 			var dr = OnMessageInputRequest
 			(

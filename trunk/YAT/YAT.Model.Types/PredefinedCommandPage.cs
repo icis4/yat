@@ -428,16 +428,13 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary>
-		/// Activates the link to a file and set the currently integrated as linked commands.
+		/// Activates the link to a file.
 		/// </summary>
-		public virtual void ChangeToLinked(string filePath)
+		public virtual void Link(string filePath, string nameLinked, List<Command> commandsLinked)
 		{
-			// Set file path...
+			NameLinked = nameLinked;
+			CommandsLinked = commandsLinked;
 			LinkFilePath = filePath;
-
-			// ...and exchange commands:
-			CommandsLinked = CommandsIntegrated;
-			CommandsIntegrated = new List<Command>();
 		}
 
 		/// <summary>

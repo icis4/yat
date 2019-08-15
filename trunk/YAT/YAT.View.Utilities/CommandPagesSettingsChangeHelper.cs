@@ -123,9 +123,9 @@ namespace YAT.View.Utilities
 							return (true);
 						}
 
-						default:
+						default: // incl. Mode.Cancel
 						{
-							break; // Nothing to do.
+							break; // Do nothing.
 						}
 					}
 				}
@@ -147,7 +147,7 @@ namespace YAT.View.Utilities
 
 			var commandCapacityPerPageOld       = ((PredefinedCommandPageLayoutEx)pageLayoutOld)      .CommandCapacityPerPage;
 			var commandCapacityPerPageRequested = ((PredefinedCommandPageLayoutEx)pageLayoutRequested).CommandCapacityPerPage;
-			if (commandCapacityPerPageRequested >= settingsOld.Pages.MaxCommandCountPerPage)
+			if (commandCapacityPerPageRequested >= settingsOld.Pages.MaxDefinedCommandCountPerPage)
 			{
 				int potentialMergeRatio = (commandCapacityPerPageRequested / commandCapacityPerPageOld);
 
@@ -156,7 +156,7 @@ namespace YAT.View.Utilities
 				{
 					var message = new StringBuilder();
 					message.Append("The currently configured predefined commands contain up to ");
-					message.Append(settingsOld.Pages.MaxCommandCountPerPage);
+					message.Append(settingsOld.Pages.MaxDefinedCommandCountPerPage);
 					message.Append(" commands per page, and ");
 					message.Append(commandCapacityPerPageRequested);
 					message.AppendLine(" commands per page are requested now.");
@@ -191,7 +191,7 @@ namespace YAT.View.Utilities
 
 				var message = new StringBuilder();
 				message.Append("The currently configured predefined commands contain up to ");
-				message.Append(settingsOld.Pages.MaxCommandCountPerPage);
+				message.Append(settingsOld.Pages.MaxDefinedCommandCountPerPage);
 				message.Append(" commands per page, but only ");
 				message.Append(commandCapacityPerPageRequested);
 				message.AppendLine(" commands per page are requested now.");

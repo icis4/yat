@@ -2955,7 +2955,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_link_16x16;
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Name = "toolStripMenuItem_PredefinedContextMenu_LinkToFile";
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Size = new System.Drawing.Size(245, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Text = "Link Page(s) to File...";
+			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Text = "Link Page to File...";
 			this.toolStripMenuItem_PredefinedContextMenu_LinkToFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_LinkToFile_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommands

@@ -73,8 +73,8 @@ namespace YAT.View.Utilities
 			if (pageCount > 1)
 			{
 				var message = new StringBuilder();
-				message.AppendLine("Would you like to copy all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
-				message.Append("or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
+				message.Append("Would you like to copy all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
+				message.Append(" or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -304,6 +304,51 @@ namespace YAT.View.Utilities
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		public static bool TryGetAndImportAll(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
+		{
+			PredefinedCommandPageCollection pagesImported;
+			if (TryGet(out pagesImported))
+			{
+				if (settingsOld.Pages.TotalDefinedCommandCount > 0)
+				{
+					var message = new StringBuilder();
+					message.Append("The clipboard contains ");
+					message.Append(pagesImported.Count);
+					message.Append(pagesImported.Count == 1 ? " page" : " pages");
+					message.Append(" with a total of ");
+					message.Append(pagesImported.TotalDefinedCommandCount);
+					message.AppendLine(" commands.");
+					message.AppendLine();
+					message.Append("Replace the current");
+					message.Append(settingsOld.Pages.Count == 1 ? " page" : " pages");
+					message.Append("?");
+
+					if (MessageBoxEx.Show
+						(
+							owner,
+							message.ToString(),
+							"Confirm Paste",
+							MessageBoxButtons.OKCancel,
+							MessageBoxIcon.Question,
+							MessageBoxDefaultButton.Button2
+						) == DialogResult.OK)
+					{
+						return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
+					}
+				}
+				else // If (settingsOld.Pages.TotalDefinedCommandCount == 0) replace without asking:
+				{
+					return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
+				}
+			}
+
+			settingsNew = null;
+			return (false);
+		}
+
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
+		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
@@ -319,11 +364,15 @@ namespace YAT.View.Utilities
 					message.Append(pagesImported.TotalDefinedCommandCount);
 					message.AppendLine(" commands.");
 					message.AppendLine();
-					message.Append("Would you like to replace all currently configured predefined commands by the");
+					message.Append("Would you like to replace the current");
+					message.Append(settingsOld.Pages.Count == 1 ? " page" : " pages");
+					message.Append(" by the");
 					message.Append(pagesImported.Count == 1 ? " page" : " pages");
 					message.Append(" [Yes], or add the");
 					message.Append(pagesImported.Count == 1 ? " page" : " pages");
-					message.Append(" to the currently configured predefined commands [No]?");
+					message.Append(" to the current");
+					message.Append(settingsOld.Pages.Count == 1 ? " page" : " pages");
+					message.Append(" [No]?");
 
 					switch (MessageBoxEx.Show
 						(
@@ -422,61 +471,44 @@ namespace YAT.View.Utilities
 			PredefinedCommandPageLayout pageLayoutNew;
 			if (ConfirmImport(owner, pagesImported, settingsOld.PageLayout, out mode, out pageLayoutNew))
 			{
-				// Clone...
-				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve pages and other properties.
+				// Clone settings to preserve pages and other properties...
+				settingsNew = new PredefinedCommandSettings(settingsOld);
 
 				// ...potentially adjust layout...
 				settingsNew.PageLayout = pageLayoutNew;
 
 				// ...and then...
-				if (pagesImported.Count > 0)
+				switch (mode)
 				{
-					switch (mode)
+					case (Mode.Neutral):
+					case (Mode.Enlarge):
 					{
-						case (Mode.Neutral):
-						{
-							// ...add or insert:
-							if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-								settingsNew.Pages.AddRange(pagesImported); // No clone needed as just loaded.
-							else
-								settingsNew.Pages.InsertRange((selectedPageId - 1), pagesImported); // No clone needed as just loaded.
+						// ...add or insert:
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+							settingsNew.Pages.AddRange(pagesImported); // No clone needed as just loaded.
+						else
+							settingsNew.Pages.InsertRange((selectedPageId - 1), pagesImported); // No clone needed as just loaded.
 
-							return (true);
-						}
-
-						case (Mode.Enlarge):
-						{
-							// ...add or insert:
-							if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-								settingsNew.Pages.AddRange(pagesImported); // No clone needed as just loaded.
-							else
-								settingsNew.Pages.InsertRange((selectedPageId - 1), pagesImported); // No clone needed as just loaded.
-
-							return (true);
-						}
-
-						case (Mode.Spread):
-						{
-							var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
-
-							// ...spread:
-							if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
-								settingsNew.Pages.AddSpreaded(pagesImported, commandCapacityPerPageNew); // No clone needed as just loaded.
-							else
-								settingsNew.Pages.InsertSpreaded((selectedPageId - 1), pagesImported, commandCapacityPerPageNew); // No clone needed as just loaded.
-
-							return (true);
-						}
-
-						default:
-						{
-							break; // Nothing to do.
-						}
+						return (true);
 					}
-				}
-				else // ...add default page since empty:
-				{
-					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
+
+					case (Mode.Spread):
+					{
+						var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+
+						// ...spread:
+						if (selectedPageId == PredefinedCommandPageCollection.NoPageId)
+							settingsNew.Pages.AddSpreaded(pagesImported, commandCapacityPerPageNew); // No clone needed as just loaded.
+						else
+							settingsNew.Pages.InsertSpreaded((selectedPageId - 1), pagesImported, commandCapacityPerPageNew); // No clone needed as just loaded.
+
+						return (true);
+					}
+
+					default: // incl. Mode.Cancel
+					{
+						break; // Do nothing.
+					}
 				}
 			}
 
@@ -489,7 +521,7 @@ namespace YAT.View.Utilities
 		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandPageCollection pagesImported, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
-			if (pagesImported.MaxCommandCountPerPage <= commandCapacityPerPageOld)
+			if (pagesImported.MaxDefinedCommandCountPerPage <= commandCapacityPerPageOld)
 			{
 				mode = Mode.Neutral;
 				pageLayoutNew = pageLayoutOld;
@@ -497,14 +529,14 @@ namespace YAT.View.Utilities
 			}
 			else // The pages to import do not fit the currently configured page layout:
 			{
-				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(pagesImported.MaxCommandCountPerPage);
+				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(pagesImported.MaxDefinedCommandCountPerPage);
 				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
 
 				var message = new StringBuilder();
 				message.Append("The clipboard contains ");
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
 				message.Append(" with up to ");
-				message.Append(pagesImported.MaxCommandCountPerPage);
+				message.Append(pagesImported.MaxDefinedCommandCountPerPage);
 				message.Append(" commands per page, but currently ");
 				message.Append(commandCapacityPerPageOld);
 				message.AppendLine(" commands per page are configured.");

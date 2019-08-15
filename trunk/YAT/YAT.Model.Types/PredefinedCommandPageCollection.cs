@@ -94,17 +94,15 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>Explicitly name "Command" to clearly distiguish from list of pages.</remarks>
-		public int MaxCommandCountPerPage
+		public int MaxDefinedCommandCountPerPage
 		{
 			get
 			{
 				int max = 0;
 
 				foreach (var p in this) {
-					if (p.Commands != null) {
-						if (max < p.Commands.Count) {
-							max = p.Commands.Count;
-						}
+					if (max < p.DefinedCommandCount) {
+						max = p.DefinedCommandCount;
 					}
 				}
 
