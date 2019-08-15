@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="Settings" nillable="true" type="RoamingUserSettingsRoot" />
+  <xs:element name="RoamingUserSettings" nillable="true" type="RoamingUserSettingsRoot" />
   <xs:complexType name="RoamingUserSettingsRoot">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="FileType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SettingsName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="SettingsVersion" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" name="Saved" type="SaveInfo" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Mark" type="UserTimeStamp" />
           <xs:element minOccurs="0" maxOccurs="1" name="Socket" type="SocketSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Find" type="FindSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="View" type="ViewSettings" />
@@ -86,7 +86,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="SaveInfo">
+  <xs:complexType name="UserTimeStamp">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
       <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />

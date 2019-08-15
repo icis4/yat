@@ -5,11 +5,11 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="1" name="FileType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SettingsName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="SettingsVersion" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" name="Saved" type="SaveInfo" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Mark" type="UserTimeStamp" />
           <xs:element minOccurs="1" maxOccurs="1" name="AutoSaved" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="Explicit" type="TerminalExplicitSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Implicit" type="TerminalImplicitSettings" />
@@ -76,7 +76,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="SelectedPage" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SelectedPageId" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -265,15 +265,30 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="PageLayout" type="PredefinedCommandPageLayout" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="Pages" type="PredefinedCommandPage" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:simpleType name="PredefinedCommandPageLayout">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OneByOne" />
+      <xs:enumeration value="TwoByOne" />
+      <xs:enumeration value="ThreeByOne" />
+      <xs:enumeration value="OneByTwo" />
+      <xs:enumeration value="TwoByTwo" />
+      <xs:enumeration value="ThreeByTwo" />
+      <xs:enumeration value="OneByThree" />
+      <xs:enumeration value="TwoByThree" />
+      <xs:enumeration value="ThreeByThree" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="PredefinedCommandPage">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="PageName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Commands" type="Command" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LinkFilePath" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="BinaryDisplaySettings">
@@ -416,6 +431,15 @@
       <xs:element minOccurs="1" maxOccurs="1" name="Interval" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="CharActionSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="BeepOnBell" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="CharHideSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
@@ -433,7 +457,6 @@
         <xs:sequence>
           <xs:element minOccurs="1" maxOccurs="1" name="ReplaceControlChars" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ControlCharRadix" type="ControlCharRadix" />
-          <xs:element minOccurs="1" maxOccurs="1" name="ReplaceBell" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ReplaceBackspace" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ReplaceTab" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ReplaceSpace" type="xs:boolean" />
@@ -776,6 +799,7 @@
           <xs:element minOccurs="0" maxOccurs="1" name="Display" type="DisplaySettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="CharReplace" type="CharReplaceSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="CharHide" type="CharHideSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CharAction" type="CharActionSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Send" type="SendSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="TextTerminal" type="TextTerminalSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="BinaryTerminal" type="BinaryTerminalSettings" />
@@ -805,7 +829,7 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:complexType name="SaveInfo">
+  <xs:complexType name="UserTimeStamp">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
       <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
