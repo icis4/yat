@@ -539,6 +539,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(LineInterval)",				Domain.Parser.Keyword.LineInterval,         null));
 				yield return (new TestCaseData(@"\!(LineInterval())",			Domain.Parser.Keyword.LineInterval,         null));
 				yield return (new TestCaseData(@"\!(LineInterval(10))",			Domain.Parser.Keyword.LineInterval,         new int[] { 10 }));
+			////yield return (new TestCaseData(@"\!(Repeat)",					Domain.Parser.Keyword.Repeat,               null)); is yet pending (FR #13) and requires parser support for strings.
 				yield return (new TestCaseData(@"\!(LineRepeat)",				Domain.Parser.Keyword.LineRepeat,           null));
 				yield return (new TestCaseData(@"\!(LineRepeat())",				Domain.Parser.Keyword.LineRepeat,           null));
 				yield return (new TestCaseData(@"\!(LineRepeat(10))",			Domain.Parser.Keyword.LineRepeat,           new int[] { 10 }));

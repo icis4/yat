@@ -1301,6 +1301,10 @@ namespace YAT.Domain
 									break;
 								}
 
+							////case Parser.Keyword.Repeat: is yet pending (FR #13) and requires parser support for strings.
+							////{
+							////}
+
 								case Parser.Keyword.LineRepeat: // \remind For binary terminals, this is rather a 'PacketRepeat'.
 								{
 									if (isFirstRepetition)
