@@ -109,11 +109,11 @@ namespace YAT.Settings.Model.Test
 
 			filePath = Temp.MakeTempFilePath(GetType(), "EmptyArrayOfCommands", FileExtension);
 			var a = new Command[] { };
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(Command[]), a);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(Command[]), a, filePath);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "EmptyListOfCommands", FileExtension);
 			var l = new List<Command>();
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(List<Command>), l);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(List<Command>), l, filePath);
 		}
 
 		#endregion
@@ -135,7 +135,7 @@ namespace YAT.Settings.Model.Test
 
 			var rfs = new RecentFileSettings();
 			rfs.FilePaths = ric;
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(RecentFileSettings), rfs);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(RecentFileSettings), rfs, filePath);
 		}
 
 		#endregion
@@ -155,7 +155,7 @@ namespace YAT.Settings.Model.Test
 			var pcp = new PredefinedCommandPage();
 			pcp.Commands.Add(new Command("Hello", new string[] { "World" }));
 			pcp.Commands.Add(new Command("Hallo", new string[] { "Wält"  }));
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(PredefinedCommandPage), pcp);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(PredefinedCommandPage), pcp, filePath);
 
 			var c = new PredefinedCommandPageCollection();
 			c.Add(pcp);
@@ -164,7 +164,7 @@ namespace YAT.Settings.Model.Test
 			filePath = Temp.MakeTempFilePath(GetType(), "PredefinedCommandSettings", FileExtension);
 			var pcs = new PredefinedCommandSettings();
 			pcs.Pages = c;
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(PredefinedCommandSettings), pcs);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(PredefinedCommandSettings), pcs, filePath);
 		}
 
 		#endregion
@@ -182,7 +182,7 @@ namespace YAT.Settings.Model.Test
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ExplicitSettings", FileExtension);
 			var s = new TerminalExplicitSettings();
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(TerminalExplicitSettings), s);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(TerminalExplicitSettings), s, filePath);
 		}
 
 		#endregion
@@ -200,7 +200,7 @@ namespace YAT.Settings.Model.Test
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ImplicitSettings", FileExtension);
 			var s = new TerminalImplicitSettings();
-			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(TerminalImplicitSettings), s);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(TerminalImplicitSettings), s, filePath);
 		}
 
 		#endregion

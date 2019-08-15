@@ -83,22 +83,22 @@ namespace MKY.IO.Serial.Usb.Test
 					settings.DeviceInfo = new DeviceInfo(vendorId, productId, serial);
 
 				// Serialize to file:
-				XmlSerializerTest.TestSerializeToFile(filePath, typeof(SerialHidDeviceSettings), settings);
+				XmlSerializerTest.TestSerializeToFile(typeof(SerialHidDeviceSettings), settings, filePath);
 
 				// Deserialize from file using different methods and verify the result:
-				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
+				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestDeserializeFromFile(typeof(SerialHidDeviceSettings), filePath);
 				Assert.That(settingsDeserialized.DeviceInfo.VendorId,   Is.EqualTo(vendorId));
 				Assert.That(settingsDeserialized.DeviceInfo.ProductId,  Is.EqualTo(productId));
 				if (matchSerial) {
 					Assert.That(settingsDeserialized.DeviceInfo.Serial, Is.EqualTo(serial));
 				}
-				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
+				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestTolerantDeserializeFromFile(typeof(SerialHidDeviceSettings), filePath);
 				Assert.That(settingsDeserialized.DeviceInfo.VendorId,   Is.EqualTo(vendorId));
 				Assert.That(settingsDeserialized.DeviceInfo.ProductId,  Is.EqualTo(productId));
 				if (matchSerial) {
 					Assert.That(settingsDeserialized.DeviceInfo.Serial, Is.EqualTo(serial));
 				}
-				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(SerialHidDeviceSettings));
+				settingsDeserialized = (SerialHidDeviceSettings)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(typeof(SerialHidDeviceSettings), filePath);
 				Assert.That(settingsDeserialized.DeviceInfo.VendorId,   Is.EqualTo(vendorId));
 				Assert.That(settingsDeserialized.DeviceInfo.ProductId,  Is.EqualTo(productId));
 				if (matchSerial) {
