@@ -67,6 +67,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Exports to a .yacp or .yacps file, promting the user as required.
 		/// </summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId, string indicatedName)
 		{
@@ -101,6 +102,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Prompts the user to export all pages to a .yacps file.
 		/// </summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportAll(IWin32Window owner, PredefinedCommandSettings settings, string indicatedName)
 		{
@@ -110,6 +112,7 @@ namespace YAT.View.Utilities
 		/// <summary>
 		/// Prompts the user to export the given page to a .yacp file.
 		/// </summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId, string indicatedName)
 		{
@@ -119,7 +122,7 @@ namespace YAT.View.Utilities
 			return (TryExport(owner, pages, indicatedName));
 		}
 
-		/// <summary></summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryExport(IWin32Window owner, PredefinedCommandPageCollection pages, string indicatedName)
 		{
@@ -310,7 +313,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out PredefinedCommandPageCollection pages)
 		{
@@ -334,17 +337,30 @@ namespace YAT.View.Utilities
 					{
 						if (pages.Count < 1)
 						{
-							if (MessageBoxEx.Show
-								(
+							MessageBoxEx.Show
+							(
 								"File contains no pages.",
 								"No Pages",
 								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-								) == DialogResult.Cancel)
-							{
-								pages = null;
-								return (false);
-							}
+								MessageBoxIcon.Exclamation
+							);
+
+							pages = null;
+							return (false);
+						}
+
+						if (pages.TotalDefinedCommandCount < 1)
+						{
+							MessageBoxEx.Show
+							(
+								((pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
+								"No Commands",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation
+							);
+
+							pages = null;
+							return (false);
 						}
 
 						return (true);
@@ -357,17 +373,30 @@ namespace YAT.View.Utilities
 					{
 						if (settings.Pages.Count < 1)
 						{
-							if (MessageBoxEx.Show
-								(
+							MessageBoxEx.Show
+							(
 								"File contains no pages.",
 								"No Pages",
-								MessageBoxButtons.OKCancel,
-								MessageBoxIcon.Warning
-								) == DialogResult.Cancel)
-							{
-								pages = null;
-								return (false);
-							}
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation
+							);
+
+							pages = null;
+							return (false);
+						}
+
+						if (settings.Pages.TotalDefinedCommandCount < 1)
+						{
+							MessageBoxEx.Show
+							(
+								((settings.Pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
+								"No Commands",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation
+							);
+
+							pages = null;
+							return (false);
 						}
 
 						pages = new PredefinedCommandPageCollection();
@@ -380,6 +409,20 @@ namespace YAT.View.Utilities
 					PredefinedCommandPage page;
 					if (TryLoad(ofd.FileName, out page, out ex))
 					{
+						if (page.DefinedCommandCount < 1)
+						{
+							MessageBoxEx.Show
+							(
+								"Page contains no commands.",
+								"No Commands",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation
+							);
+
+							pages = null;
+							return (false);
+						}
+
 						pages = new PredefinedCommandPageCollection();
 						pages.Add(page); // No clone needed as just loaded.
 						return (true);
@@ -405,51 +448,58 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
 			if (ShowOpenFileDialogAndTryLoad(owner, out pagesImported))
 			{
-				var message = new StringBuilder();
-				message.Append("The file contains ");
-				message.Append(pagesImported.Count);
-				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" with a total of ");
-				message.Append(pagesImported.TotalDefinedCommandCount);
-				message.AppendLine(" commands.");
-				message.AppendLine();
-				message.Append("Would you like to replace all currently configured predefined commands by the");
-				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" [Yes], or add the");
-				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(" to the currently configured predefined commands [No]?");
-
-				switch (MessageBoxEx.Show
-					(
-						owner,
-						message.ToString(),
-						"Import Mode",
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question,
-						MessageBoxDefaultButton.Button3
-					))
+				if (settingsOld.Pages.TotalDefinedCommandCount > 0)
 				{
-					case DialogResult.Yes:
-					{
-						return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
-					}
+					var message = new StringBuilder();
+					message.Append("The file contains ");
+					message.Append(pagesImported.Count);
+					message.Append(pagesImported.Count == 1 ? " page" : " pages");
+					message.Append(" with a total of ");
+					message.Append(pagesImported.TotalDefinedCommandCount);
+					message.AppendLine(" commands.");
+					message.AppendLine();
+					message.Append("Would you like to replace all currently configured predefined commands by the");
+					message.Append(pagesImported.Count == 1 ? " page" : " pages");
+					message.Append(" [Yes], or add the");
+					message.Append(pagesImported.Count == 1 ? " page" : " pages");
+					message.Append(" to the currently configured predefined commands [No]?");
 
-					case DialogResult.No:
-					{                                                                              // Specifying 'NoPageId' will add (not insert).
-						return (TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew));
-					}
-
-					default:
+					switch (MessageBoxEx.Show
+						(
+							owner,
+							message.ToString(),
+							"Import Mode",
+							MessageBoxButtons.YesNoCancel,
+							MessageBoxIcon.Question,
+							MessageBoxDefaultButton.Button3
+						))
 					{
-						break; // Nothing to do.
+						case DialogResult.Yes:
+						{
+							return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
+						}
+
+						case DialogResult.No:
+						{                                                                              // Specifying 'NoPageId' will add (not insert).
+							return (TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew));
+						}
+
+						default:
+						{
+							break; // Nothing to do.
+						}
 					}
+				}
+				else // If (settingsOld.Pages.TotalDefinedCommandCount == 0) replace without asking:
+				{
+					return (TryReplace(owner, settingsOld, pagesImported, out settingsNew));
 				}
 			}
 
@@ -457,7 +507,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
@@ -472,7 +522,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{

@@ -121,7 +121,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out string filePath, out PredefinedCommandPageCollection pages)
 		{
@@ -145,18 +145,32 @@ namespace YAT.View.Utilities
 					{
 						if (pages.Count < 1)
 						{
-							if (MessageBoxEx.Show
-								(
+							MessageBoxEx.Show
+							(
 								"File contains no pages.",
 								"No Pages",
 								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-								) == DialogResult.Cancel)
-							{
-								filePath = null;
-								pages = null;
-								return (false);
-							}
+								MessageBoxIcon.Exclamation
+							);
+
+							filePath = null;
+							pages = null;
+							return (false);
+						}
+
+						if (pages.TotalDefinedCommandCount < 1)
+						{
+							MessageBoxEx.Show
+							(
+								((pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
+								"No Commands",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation
+							);
+
+							filePath = null;
+							pages = null;
+							return (false);
 						}
 
 						filePath = ofd.FileName;
@@ -168,6 +182,21 @@ namespace YAT.View.Utilities
 					PredefinedCommandPage page;
 					if (TryLoad(ofd.FileName, out page, out ex))
 					{
+						if (page.DefinedCommandCount < 1)
+						{
+							MessageBoxEx.Show
+							(
+								"Page contains no commands.",
+								"No Commands",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Exclamation
+							);
+
+							filePath = null;
+							pages = null;
+							return (false);
+						}
+
 						pages = new PredefinedCommandPageCollection();
 						pages.Add(page); // No clone needed as just loaded.
 						filePath = ofd.FileName;
@@ -195,7 +224,7 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryLoadAndLink(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{

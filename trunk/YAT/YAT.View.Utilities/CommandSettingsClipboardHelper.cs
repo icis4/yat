@@ -35,6 +35,7 @@ using System.Windows.Forms;
 
 using MKY.Diagnostics;
 using MKY.IO;
+using MKY.Windows.Forms;
 using MKY.Xml;
 using MKY.Xml.Serialization;
 
@@ -80,6 +81,15 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				MessageBoxEx.Show
+				(
+					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
+					"Make sure the clipboard is not blocked by another process.",
+					"Clipboard Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
 				return (false);
 			}
 		}
@@ -95,6 +105,15 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				MessageBoxEx.Show
+				(
+					"Failed to paste from clipboard!" + Environment.NewLine + Environment.NewLine +
+					"Make sure the clipboard is not blocked by another process.",
+					"Clipboard Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
 				c = null;
 				return (false);
 			}
@@ -139,6 +158,14 @@ namespace YAT.View.Utilities
 				c = new Command(s);
 				return (true);
 			}
+
+			MessageBoxEx.Show
+			(
+				"Clipboard does not contain valid " + ApplicationEx.CommonName + " command definition content.",
+				"Clipboard Content Not Valid",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Exclamation
+			);
 
 			c = null;
 			return (false);
