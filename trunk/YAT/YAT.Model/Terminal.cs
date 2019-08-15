@@ -1847,19 +1847,23 @@ namespace YAT.Model
 				foreach (var linkedPage in (this.settingsHandler.Settings.PredefinedCommand.Pages.Where(p => p.IsLinkedToFilePath)))
 				{    // !SettingsFileIsWritable                     || SettingsFileNoLongerExists
 					if (!FileEx.IsWritable(linkedPage.LinkFilePath) || !File.Exists(linkedPage.LinkFilePath))
-					{    // this.settingsRoot.ExplicitHaveChanged
-						if (linkedPage.ExplicitHaveChanged || saveEvenIfNotChanged)
+					{
+						// Checking whether any linked page has changed would require opening and comparing all pages
+						// already now. While technically possible, decided not to do it and just guess for change:
+						var havePresumablyChanged = this.settingsHandler.Settings.PredefinedCommand.ExplicitHaveChanged;
+						    // this.settingsRoot.ExplicitHaveChanged
+						if (havePresumablyChanged || saveEvenIfNotChanged)
 						{
-
-						if (userInteractionIsAllowed) {
-							string linkFilePathConfirmed;
-							if (RequestLinkFilePathFromUser(linkedPage.LinkFilePath, out linkFilePathConfirmed, out isCanceled))
-								linkedPage.LinkFilePath = linkFilePathConfirmed;
-							else
-								return (false); // Let save fail if file is restricted and user doesn't fix it.
-						}
-						else {
-							return (false); // Let save fail if file is restricted.
+							if (userInteractionIsAllowed) {
+								string linkFilePathConfirmed;
+								if (RequestLinkFilePathFromUser(linkedPage.LinkFilePath, out linkFilePathConfirmed, out isCanceled))
+									linkedPage.LinkFilePath = linkFilePathConfirmed;
+								else
+									return (false); // Let save fail if file is restricted and user doesn't fix it.
+							}
+							else {
+								return (false); // Let save fail if file is restricted.
+							}
 						}
 					}
 				}
@@ -2139,17 +2143,17 @@ namespace YAT.Model
 
 			foreach (var linkedPage in (pages.Where(p => p.IsLinkedToFilePath)))
 			{
-				var linkFilePath = linkedPage.LinkFilePath;
-				var linkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+				var resultingLinkFilePath = linkedPage.LinkFilePath;
+				var resultingLinkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
 
 				// Retrieve the file which contains the linked command page:
 				try
 				{
-					while (!string.IsNullOrEmpty(linkFilePath))
+					while (!string.IsNullOrEmpty(resultingLinkFilePath))
 					{
-						linkedSettingsHandler.SettingsFilePath = linkFilePath;
-						if (linkedSettingsHandler.Load())
-							linkFilePath = linkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
+						resultingLinkedSettingsHandler.SettingsFilePath = resultingLinkFilePath;
+						if (resultingLinkedSettingsHandler.Load())
+							resultingLinkFilePath = resultingLinkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
 					}
 				}
 				catch (Exception ex)
@@ -2159,7 +2163,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error retrieving linked predefined command page!");
 					var dr = OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", linkedPage.LinkFilePath, ex),
+						ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", resultingLinkFilePath, ex),
 						"Linked File Error",
 						MessageBoxButtons.OKCancel,
 						MessageBoxIcon.Error
@@ -2172,32 +2176,36 @@ namespace YAT.Model
 						success = false;
 				}
 
-				// Update the linked command page:
-				linkedSettingsHandler.Settings.Page.Commands = linkedPage.Commands; // No clone needed as just temporary.
-
-				// Update the file which contains the linked command page:
-				try
+				// Only save if needed:
+				if (!(resultingLinkedSettingsHandler.Settings.Page.EqualsEffectivelyInUse(linkedPage)))
 				{
-					linkedSettingsHandler.Save();
-				}
-				catch (Exception ex)
-				{
-					DebugEx.WriteException(GetType(), ex, "Error saving linked predefined command page!");
+					// Update the items effectively in use, i.e. 'Name' and 'Commands':
+					resultingLinkedSettingsHandler.Settings.Page.UpdateEffectivelyInUse(linkedPage); // Clone is done by the Update...() method.
 
-					OnFixedStatusTextRequest("Error saving linked predefined command page!");
-					var dr = OnMessageInputRequest
-					(
-						ErrorHelper.ComposeMessage("Unable to save linked predefined command page file", linkedPage.LinkFilePath, ex),
-						"Linked File Error",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Error
-					);
-					OnTimedStatusTextRequest("Linked predefined command page not saved!");
+					// Update the file which contains the linked command page:
+					try
+					{
+						resultingLinkedSettingsHandler.Save();
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(GetType(), ex, "Error saving linked predefined command page!");
 
-					if (dr == DialogResult.Cancel)
-						return (false);
-					else
-						success = false;
+						OnFixedStatusTextRequest("Error saving linked predefined command page!");
+						var dr = OnMessageInputRequest
+						(
+							ErrorHelper.ComposeMessage("Unable to save linked predefined command page file", resultingLinkFilePath, ex),
+							"Linked File Error",
+							MessageBoxButtons.OKCancel,
+							MessageBoxIcon.Error
+						);
+						OnTimedStatusTextRequest("Linked predefined command page not saved!");
+
+						if (dr == DialogResult.Cancel)
+							return (false);
+						else
+							success = false;
+					}
 				}
 			}
 
@@ -2218,17 +2226,17 @@ namespace YAT.Model
 
 			foreach (var linkedPage in (pages.Where(p => p.IsLinkedToFilePath)))
 			{
-				var linkFilePath = linkedPage.LinkFilePath;
-				var linkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+				var resultingLinkFilePath = linkedPage.LinkFilePath;
+				var resultingLinkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
 
 				// Retrieve the file which contains the linked command page:
 				try
 				{
-					while (!string.IsNullOrEmpty(linkFilePath))
+					while (!string.IsNullOrEmpty(resultingLinkFilePath))
 					{
-						linkedSettingsHandler.SettingsFilePath = linkFilePath;
-						if (linkedSettingsHandler.Load())
-							linkFilePath = linkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
+						resultingLinkedSettingsHandler.SettingsFilePath = resultingLinkFilePath;
+						if (resultingLinkedSettingsHandler.Load())
+							resultingLinkFilePath = resultingLinkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
 					}
 				}
 				catch (Exception ex)
@@ -2239,7 +2247,7 @@ namespace YAT.Model
 				////OnFixedStatusTextRequest("Error retrieving linked predefined command page!"); <= No error messaging for this static method (yet).
 				////var dr = OnMessageInputRequest                                                <= To be re-activated when needed, e.g. using callbacks.
 				////(
-				////	ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", linkedPage.LinkFilePath, ex),
+				////	ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", resultingLinkFilePath, ex),
 				////	"Linked File Error",
 				////	MessageBoxButtons.OKCancel,
 				////	MessageBoxIcon.Error
@@ -2252,8 +2260,8 @@ namespace YAT.Model
 						success = false;
 				}
 
-				// Update the linked command page:
-				linkedPage.Commands = linkedSettingsHandler.Settings.Page.Commands; // No clone needed as just temporary.
+				// Update the items effectively in use, i.e. 'Name' and 'Commands':
+				linkedPage.UpdateEffectivelyInUse(resultingLinkedSettingsHandler.Settings.Page); // Clone is done by the Update...() method.
 			}
 
 			return (success);
