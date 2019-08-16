@@ -1192,11 +1192,11 @@ namespace YAT.Settings.Model.Test
 			if (!sh.Load())
 				Assert.Fail("Terminal settings could not be loaded from " + sh.SettingsFilePath);
 
-			if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+			if (sh.Settings.HasLinkedSettings)
 			{
-				bool isCanceled;                                        // Note that update of 'Pages' will not set 'HaveChanged'.
-				if (!Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages, null, null, false, null, null, out isCanceled))
-					Assert.Fail("Linked predefined command page(s) could not be loaded for " + sh.SettingsFilePath);
+				bool isCanceled;
+				if (!Terminal.TryLoadLinkedSettings(sh.Settings, null, null, false, null, null, out isCanceled))
+					Assert.Fail("Linked settings could not be loaded for " + sh.SettingsFilePath);
 			}
 
 			return (sh);

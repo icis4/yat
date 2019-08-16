@@ -109,7 +109,7 @@ namespace YAT.Model
 	}
 
 	/// <summary></summary>
-	public class SaveAsDialogEventArgs : EventArgs
+	public class FilePathDialogEventArgs : EventArgs
 	{
 		/// <summary></summary>
 		public string FilePathOld { get; }
@@ -121,7 +121,7 @@ namespace YAT.Model
 		public DialogResult Result { get; set; }
 
 		/// <summary></summary>
-		public SaveAsDialogEventArgs(string filePathOld)
+		public FilePathDialogEventArgs(string filePathOld)
 		{
 			FilePathOld = filePathOld;
 		}

@@ -142,7 +142,10 @@ namespace YAT.Model
 		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
 
 		/// <summary></summary>
-		public event EventHandler<SaveAsDialogEventArgs> SaveCommandPageAsFileDialogRequest;
+		public event EventHandler<FilePathDialogEventArgs> SaveCommandPageAsFileDialogRequest;
+
+		/// <summary></summary>
+		public event EventHandler<FilePathDialogEventArgs> OpenCommandPageFileDialogRequest;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<Cursor>> CursorRequest;
@@ -832,15 +835,15 @@ namespace YAT.Model
 			isCanceled = false;
 
 			string reason;
-			if      ( SettingsFileNoLongerExists)
-				reason = "The file no longer exists.";
-			else if (!SettingsFileIsWritable)
+			if      (!SettingsFileIsWritable)
 				reason = "The file is write-protected.";
+			else if ( SettingsFileNoLongerExists)
+				reason = "The file no longer exists.";
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
-			message.AppendLine("Unable to save file");
+			message.AppendLine("Unable to save");
 			message.AppendLine(this.settingsHandler.SettingsFilePath);
 			message.AppendLine();
 			message.Append(reason + " Would you like to save the file at another location? You may also fix the file and then confirm the current location.");
@@ -1784,10 +1787,10 @@ namespace YAT.Model
 				{
 					bool success = true;
 
-					if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+					if (sh.Settings.HasLinkedSettings)
 					{
-						bool isCanceled;                                             // Note that update of 'Pages' will not set 'HaveChanged'.
-						success = Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages, OnFixedStatusTextRequest, OnTimedStatusTextRequest, true, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled);
+						bool isCanceled;
+						success = Terminal.TryLoadLinkedSettings(sh.Settings, OnFixedStatusTextRequest, OnTimedStatusTextRequest, true, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled);
 					}
 
 					settingsHandler = sh;
@@ -2403,11 +2406,35 @@ namespace YAT.Model
 			{
 				OnCursorReset(); // Just in case...
 
-				var e = new SaveAsDialogEventArgs(filePathOld);
-				this.eventHelper.RaiseSync<SaveAsDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
+				var e = new FilePathDialogEventArgs(filePathOld);
+				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				return (new FilePathDialogResult(e.Result, e.FilePathNew));
+			}
+			else
+			{
+				return (new FilePathDialogResult(DialogResult.None));
+			}
+		}
+
+		/// <summary>
+		/// Requests to show the 'Open' dialog to let the user chose a file path.
+		/// If confirmed, the file will be saved to that path.
+		/// </summary>
+		protected virtual FilePathDialogResult OnOpenCommandPageFileDialogRequest(string filePathOld)
+		{
+			if (this.startArgs.Interactive)
+			{
+				OnCursorReset(); // Just in case...
+
+				var e = new FilePathDialogEventArgs(filePathOld);
+				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(OpenCommandPageFileDialogRequest, this, e);
+
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (new FilePathDialogResult(e.Result, e.FilePathNew));
 			}

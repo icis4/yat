@@ -668,6 +668,21 @@ namespace YAT.Settings.Model
 
 		#endregion
 
+		#region Properties > Linked
+		//------------------------------------------------------------------------------------------
+		// Properties > Linked
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has linked settings.
+		/// </summary>
+		public virtual bool HasLinkedSettings
+		{
+			get { return (this.PredefinedCommand.Pages.LinkedToFilePathCount > 0); }
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Alternate Elements
