@@ -5542,6 +5542,7 @@ namespace YAT.View.Forms
 				this.terminal.MessageInputRequest                += terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest            += terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest += terminal_SaveCommandPageAsFileDialogRequest;
+				this.terminal.OpenCommandPageFileDialogRequest   += terminal_OpenCommandPageFileDialogRequest;
 				this.terminal.CursorRequest                      += terminal_CursorRequest;
 
 				this.terminal.Saved                              += terminal_Saved;
@@ -5582,6 +5583,7 @@ namespace YAT.View.Forms
 				this.terminal.MessageInputRequest                -= terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest            -= terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest -= terminal_SaveCommandPageAsFileDialogRequest;
+				this.terminal.OpenCommandPageFileDialogRequest   -= terminal_OpenCommandPageFileDialogRequest;
 				this.terminal.CursorRequest                      -= terminal_CursorRequest;
 
 				this.terminal.Saved                              -= terminal_Saved;
@@ -5983,13 +5985,24 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_SaveCommandPageAsFileDialogRequest(object sender, Model.SaveAsDialogEventArgs e)
+		private void terminal_SaveCommandPageAsFileDialogRequest(object sender, Model.FilePathDialogEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			string filePathNew;
-			e.Result = ShowSaveCommandPageAsFileDialog(e.FilePathOld, out filePathNew);
+			e.Result = CommandPagesSettingsFileLinkHelper.ShowSaveAsFileDialog(this, e.FilePathOld, out filePathNew);
+			e.FilePathNew = filePathNew;
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void terminal_OpenCommandPageFileDialogRequest(object sender, Model.FilePathDialogEventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			string filePathNew;
+			e.Result = CommandPagesSettingsFileLinkHelper.ShowOpenFileDialog(this, e.FilePathOld, out filePathNew);
 			e.FilePathNew = filePathNew;
 		}
 
@@ -6068,39 +6081,6 @@ namespace YAT.View.Forms
 			else
 			{
 				ResetStatusText();
-			}
-
-			return (dr);
-		}
-
-		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private DialogResult ShowSaveCommandPageAsFileDialog(string filePathOld, out string filePathNew)
-		{
-			SetFixedStatusText("Saving command page as...");
-
-			var sfd = new SaveFileDialog();
-			sfd.Title       = "Save Command Page As";
-			sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
-			sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
-			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
-			sfd.FileName    = Path.GetFileName(filePathOld);
-
-			var dr = sfd.ShowDialog(this);
-			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUserSettings();
-
-				filePathNew = sfd.FileName;
-			}
-			else
-			{
-				ResetStatusText();
-
-				filePathNew = null;
 			}
 
 			return (dr);

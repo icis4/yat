@@ -92,6 +92,66 @@ namespace YAT.View.Utilities
 			}
 		}
 
+		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		public static DialogResult ShowSaveAsFileDialog(Control owner, string filePathOld, out string filePathNew)
+		{
+			var sfd = new SaveFileDialog();
+			sfd.Title       = "Link Command Page";
+			sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
+			sfd.FileName    = Path.GetFileName(filePathOld);
+
+			var dr = sfd.ShowDialog(owner);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
+			{
+				owner.Refresh();
+
+				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+
+				filePathNew = sfd.FileName;
+			}
+			else
+			{
+				filePathNew = null;
+			}
+
+			return (dr);
+		}
+
+		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		public static DialogResult ShowOpenFileDialog(Control owner, string filePathOld, out string filePathNew)
+		{
+			var ofd = new OpenFileDialog();
+			ofd.Title       = "Link Command Page";
+			ofd.Filter      = ExtensionHelper.CommandPageFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
+			ofd.FileName    = Path.GetFileName(filePathOld);
+
+			var dr = ofd.ShowDialog(owner);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
+			{
+				owner.Refresh();
+
+				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+
+				filePathNew = ofd.FileName;
+			}
+			else
+			{
+				filePathNew = null;
+			}
+
+			return (dr);
+		}
+
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out string filePath, out PredefinedCommandPage page)

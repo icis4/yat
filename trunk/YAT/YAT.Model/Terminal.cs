@@ -314,7 +314,10 @@ namespace YAT.Model
 		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
 
 		/// <summary></summary>
-		public event EventHandler<SaveAsDialogEventArgs> SaveCommandPageAsFileDialogRequest;
+		public event EventHandler<FilePathDialogEventArgs> SaveCommandPageAsFileDialogRequest;
+
+		/// <summary></summary>
+		public event EventHandler<FilePathDialogEventArgs> OpenCommandPageFileDialogRequest;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<Cursor>> CursorRequest;
@@ -1827,7 +1830,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			// Attention:
-			// Similar code exists in TrySaveLinkedPredefinedCommandPageConsiderately() further below.
+			// Similar code exists in TrySaveLinkedCommandPageConsiderately() further below.
 			// Changes here may have to be applied there too.
 
 			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
@@ -1848,12 +1851,12 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Potentially save linked predefined commands:
+			// Potentially save linked settings:
 			// -------------------------------------------------------------------------------------
 
-			if (HasLinkedPredefinedCommandPages)
+			if (this.settingsRoot.HasLinkedSettings)
 			{
-				if (!TrySaveLinkedPredefinedCommandPages(userInteractionIsAllowed, saveEvenIfNotChanged, out isCanceled))
+				if (!TrySaveLinkedSettings(userInteractionIsAllowed, saveEvenIfNotChanged, out isCanceled))
 					return (false);
 			}
 
@@ -1962,7 +1965,7 @@ namespace YAT.Model
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
-			message.AppendLine("Unable to save file");
+			message.AppendLine("Unable to save");
 			message.AppendLine(this.settingsHandler.SettingsFilePath);
 			message.AppendLine();
 			message.Append(reason + " Would you like to save the file at another location? You may also fix the file and then confirm the current location.");
@@ -1995,10 +1998,10 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected static bool RequestRestrictedLinkFilePathFromUser(string linkFilePathRestricted,
-		                                                            Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
-		                                                            Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
-		                                                            out string linkFilePathConfirmed, out bool doUnlink, out bool isCanceled)
+		protected static bool RequestRestrictedLinkedFilePathFromUser(string linkFilePathRestricted,
+		                                                              Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                              Func<string, FilePathDialogResult> OnLinkedFilePathFileDialogRequest,
+		                                                              out string linkFilePathConfirmed, out bool doUnlink, out bool isCanceled)
 		{
 			string reason;
 			if      (!FileEx.IsWritable(linkFilePathRestricted))
@@ -2009,7 +2012,7 @@ namespace YAT.Model
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
-			message.AppendLine("Unable to save file");
+			message.AppendLine("Unable to access");
 			message.AppendLine(linkFilePathRestricted);
 			message.AppendLine();
 			message.AppendLine(reason);
@@ -2029,10 +2032,10 @@ namespace YAT.Model
 			{
 				case DialogResult.Yes:
 					doUnlink = false;
-					var drSaveAs = OnSaveCommandPageAsFileDialogRequest(linkFilePathRestricted);
-					linkFilePathConfirmed = drSaveAs.FilePath;
-					isCanceled = (drSaveAs.Result == DialogResult.Cancel);
-					return (drSaveAs.Result == DialogResult.OK);
+					var drFilePath = OnLinkedFilePathFileDialogRequest(linkFilePathRestricted);
+					linkFilePathConfirmed = drFilePath.FilePath;
+					isCanceled = (drFilePath.Result == DialogResult.Cancel);
+					return (drFilePath.Result == DialogResult.OK);
 
 				case DialogResult.No:
 					doUnlink = true;
@@ -2065,11 +2068,11 @@ namespace YAT.Model
 			// Set the new file path...
 			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
-			// ...potentially save linked predefined commands...
-			if (HasLinkedPredefinedCommandPages)
+			// ...potentially save linked settings...
+			if (this.settingsHandler.Settings.HasLinkedSettings)
 			{
 				bool isCanceled;
-				if (!TrySaveLinkedPredefinedCommandPages(true, true, out isCanceled))
+				if (!TrySaveLinkedSettings(true, true, out isCanceled))
 					return (false);
 			}
 
@@ -2135,21 +2138,15 @@ namespace YAT.Model
 			return (success);
 		}
 
-		/// <summary></summary>
-		protected virtual bool HasLinkedPredefinedCommandPages
-		{
-			get { return (this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0); }
-		}
-
 		/// <remarks>
 		/// Linked predefined commands pages shall be saved before the terminal itself is for two reasons:
 		///  > Changing links or even unlinking must happen prior to saving the terminal itself.
 		///  > Symmetricity with loading, where the terminal itself has to be loaded first.
 		/// </remarks>
-		protected virtual bool TrySaveLinkedPredefinedCommandPages(bool userInteractionIsAllowed, bool saveEvenIfNotChanged, out bool isCanceled)
+		protected virtual bool TrySaveLinkedSettings(bool userInteractionIsAllowed, bool saveEvenIfNotChanged, out bool isCanceled)
 		{
 			// Attention:
-			// Similar code exists in TryLoadLinkedPredefinedCommandPages() further below.
+			// Similar code exists in TryLoadLinkedSettings() further below.
 			// Changes here may have to be applied there too.
 
 			int linkedCount = this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount;
@@ -2177,7 +2174,7 @@ namespace YAT.Model
 				var explicitHaveChanged = !linkedSettingsHandler.Settings.Page.EqualsEffectivelyInUse(linkedPage);
 				if (explicitHaveChanged || saveEvenIfNotChanged)
 				{
-					if (TrySaveLinkedPredefinedCommandPageConsiderately(linkedPage, linkedSettingsHandler, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled)) {
+					if (TrySaveLinkedCommandPageConsiderately(linkedPage, linkedSettingsHandler, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled)) {
 						successCount++;
 					}
 					else {
@@ -2201,13 +2198,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected static bool TrySaveLinkedPredefinedCommandPageConsiderately(PredefinedCommandPage linkedPage,
-		                                                                      DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
-		                                                                      Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
-		                                                                      bool userInteractionIsAllowed,
-		                                                                      Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
-		                                                                      Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
-		                                                                      out bool isCanceled)
+		protected static bool TrySaveLinkedCommandPageConsiderately(PredefinedCommandPage linkedPage,
+		                                                            DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
+		                                                            Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
+		                                                            bool userInteractionIsAllowed,
+		                                                            Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                            Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
+		                                                            out bool isCanceled)
 		{
 			// Attention:
 			// Similar code exists in SaveConsiderately() further above.
@@ -2222,7 +2219,7 @@ namespace YAT.Model
 				if (userInteractionIsAllowed) {
 					string linkFilePathConfirmed;
 					bool doUnlink;
-					if (RequestRestrictedLinkFilePathFromUser(linkedPage.LinkFilePath, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
+					if (RequestRestrictedLinkedFilePathFromUser(linkedPage.LinkFilePath, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
 						linkedPage.LinkFilePath = linkFilePathConfirmed;
 					}
 					else if (doUnlink) {
@@ -2285,7 +2282,7 @@ namespace YAT.Model
 		                                                                      Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
 		                                                                      bool userInteractionIsAllowed,
 		                                                                      Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
-		                                                                      Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
+		                                                                      Func<string, FilePathDialogResult> OnOpenCommandPageFileDialogRequest,
 		                                                                      out DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
 		                                                                      out bool isCanceled)
 		{
@@ -2309,7 +2306,7 @@ namespace YAT.Model
 						if (userInteractionIsAllowed) {
 							string linkFilePathConfirmed;
 							bool doUnlink;
-							if (RequestRestrictedLinkFilePathFromUser(linkedPage.LinkFilePath, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
+							if (RequestRestrictedLinkedFilePathFromUser(currentFilePath, OnMessageInputRequest, OnOpenCommandPageFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
 								linkedPage.LinkFilePath = linkFilePathConfirmed;
 							}
 							else if (doUnlink) {
@@ -2375,18 +2372,18 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public static bool TryLoadLinkedPredefinedCommandPages(PredefinedCommandPageCollection pages,
-		                                                       Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
-		                                                       bool userInteractionIsAllowed,
-		                                                       Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
-		                                                       Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
-		                                                       out bool isCanceled)
+		public static bool TryLoadLinkedSettings(TerminalSettingsRoot settings,
+		                                         Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
+		                                         bool userInteractionIsAllowed,
+		                                         Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                         Func<string, FilePathDialogResult> OnOpenCommandPageFileDialogRequest,
+		                                         out bool isCanceled)
 		{
 			// Attention:
-			// Similar code exists in TrySaveLinkedPredefinedCommandPages() further above.
+			// Similar code exists in TrySaveLinkedCommandPages() further above.
 			// Changes here may have to be applied there too.
 
-			int linkedCount = pages.LinkedToFilePathCount;
+			int linkedCount = settings.PredefinedCommand.Pages.LinkedToFilePathCount;
 			int successCount = 0;
 
 			string pageOrPages = ((linkedCount == 1) ? "page" : "pages");
@@ -2394,12 +2391,12 @@ namespace YAT.Model
 			if (OnFixedStatusTextRequest != null)
 				OnFixedStatusTextRequest("Loading linked predefined command " + pageOrPages + "...");
 
-			foreach (var linkedPage in (pages.Where(p => p.IsLinkedToFilePath)))
+			foreach (var linkedPage in (settings.PredefinedCommand.Pages.Where(p => p.IsLinkedToFilePath)))
 			{
 				DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler;
 
 				// Load linked page:
-				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkedSettingsHandler, out isCanceled)) {
+				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnOpenCommandPageFileDialogRequest, out linkedSettingsHandler, out isCanceled)) {
 					successCount++;
 				}
 				else {
@@ -5897,11 +5894,35 @@ namespace YAT.Model
 			{
 				OnCursorReset(); // Just in case...
 
-				var e = new SaveAsDialogEventArgs(filePathOld);
-				this.eventHelper.RaiseSync<SaveAsDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
+				var e = new FilePathDialogEventArgs(filePathOld);
+				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				return (new FilePathDialogResult(e.Result, e.FilePathNew));
+			}
+			else
+			{
+				return (new FilePathDialogResult(DialogResult.None));
+			}
+		}
+
+		/// <summary>
+		/// Requests to show the 'Open' dialog to let the user chose a file path.
+		/// If confirmed, the file will be saved to that path.
+		/// </summary>
+		protected virtual FilePathDialogResult OnOpenCommandPageFileDialogRequest(string filePathOld)
+		{
+			if (this.startArgs.Interactive)
+			{
+				OnCursorReset(); // Just in case...
+
+				var e = new FilePathDialogEventArgs(filePathOld);
+				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(OpenCommandPageFileDialogRequest, this, e);
+
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (new FilePathDialogResult(e.Result, e.FilePathNew));
 			}

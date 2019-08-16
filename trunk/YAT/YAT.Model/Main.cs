@@ -1695,10 +1695,10 @@ namespace YAT.Model
 				{
 					bool success = true;
 
-					if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+					if (sh.Settings.HasLinkedSettings)
 					{
-						bool isCanceled;                                             // Note that update of 'Pages' will not set 'HaveChanged'.                         // No user interaction when opening command line requested terminal.
-						success = Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages, OnFixedStatusTextRequest, OnTimedStatusTextRequest, false, null, null, out isCanceled);
+						bool isCanceled;
+						success = Terminal.TryLoadLinkedSettings(sh.Settings, OnFixedStatusTextRequest, OnTimedStatusTextRequest, false, null, null, out isCanceled);
 					}
 
 					settingsHandler = sh;
