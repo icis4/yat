@@ -1856,7 +1856,7 @@ namespace YAT.Model
 
 			if (this.settingsRoot.HasLinkedSettings)
 			{
-				if (!TrySaveLinkedSettings(userInteractionIsAllowed, saveEvenIfNotChanged, out isCanceled))
+				if (!TrySaveLinkedSettings(userInteractionIsAllowed, canBeCanceled, out isCanceled))
 					return (false);
 			}
 
@@ -1944,7 +1944,8 @@ namespace YAT.Model
 					isCanceled = false;
 					return (true);
 
-				default: // incl. Cancel:
+				case DialogResult.Cancel:
+				default:
 					isCanceled = true;
 					return (false);
 			}
@@ -1954,13 +1955,11 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool RequestRestrictedSaveAsFromUser(bool isWorkspaceClose, bool autoSaveIsAllowed, bool canBeCanceled, out bool isCanceled)
 		{
-			isCanceled = false;
-
 			string reason;
-			if      (!SettingsFileIsWritable)
-				reason = "The file is write-protected.";
-			else if ( SettingsFileNoLongerExists)
+			if      ( SettingsFileNoLongerExists) // Shall be checked first, as that is first thing to verify.
 				reason = "The file no longer exists.";
+			else if (!SettingsFileIsWritable)
+				reason = "The file is write-protected.";
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
@@ -1981,12 +1980,15 @@ namespace YAT.Model
 			switch (dr)
 			{
 				case DialogResult.Yes:
+					isCanceled = false;
 					return (RequestNormalSaveAsFromUser(isWorkspaceClose, autoSaveIsAllowed, out isCanceled));
 
 				case DialogResult.No:
 					OnTimedStatusTextRequest("Terminal not saved!");
+					isCanceled = false;
 					return (true);
 
+				case DialogResult.Cancel:
 				default:
 					// No need for TextRequest("Canceled!") as parent will handle cancel.
 					isCanceled = true;
@@ -1998,16 +2000,74 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected static bool RequestRestrictedLinkedFilePathFromUser(string linkFilePathRestricted,
-		                                                              Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
-		                                                              Func<string, FilePathDialogResult> OnLinkedFilePathFileDialogRequest,
-		                                                              out string linkFilePathConfirmed, out bool doUnlink, out bool isCanceled)
+		protected static bool RequestRestrictedSaveCommandPageFromUser(string linkFilePathRestricted,
+		                                                               Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                               Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
+		                                                               out string linkFilePathNewOrConfirmed, out bool doUnlink, out bool isCanceled)
 		{
 			string reason;
-			if      (!FileEx.IsWritable(linkFilePathRestricted))
-				reason = "The file is write-protected.";
-			else if (!File.Exists(linkFilePathRestricted))
+			if      (!File.Exists(linkFilePathRestricted)) // Shall be checked first, as that is first thing to verify.
 				reason = "The file no longer exists.";
+			else if (!FileEx.IsWritable(linkFilePathRestricted))
+				reason = "The file is write-protected.";
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			var message = new StringBuilder();
+			message.AppendLine("Unable to save");
+			message.AppendLine(linkFilePathRestricted);
+			message.AppendLine();
+			message.AppendLine(reason);
+			message.AppendLine();
+			message.Append("Would you like to select another location or fix the file and then confirm the current location [Yes],");
+			message.Append(" or clear the link to the file [No]?");
+
+			var dr = OnMessageInputRequest
+			(
+				message.ToString(),
+				"File Error",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question
+			);
+
+			switch (dr)
+			{
+				case DialogResult.Yes:
+					doUnlink = false;
+					var drFilePath = OnSaveCommandPageAsFileDialogRequest(linkFilePathRestricted);
+					linkFilePathNewOrConfirmed = drFilePath.FilePath;
+					isCanceled = (drFilePath.Result == DialogResult.Cancel);
+					return (drFilePath.Result == DialogResult.OK);
+
+				case DialogResult.No:
+					doUnlink = true;
+					linkFilePathNewOrConfirmed = null;
+					isCanceled = false;
+					return (false); // = no file path!
+
+				case DialogResult.Cancel:
+				default:
+					doUnlink = false;
+					linkFilePathNewOrConfirmed = null;
+					isCanceled = true;
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected static bool RequestRestrictedOpenCommandPageFromUser(string linkFilePathRestricted, bool canBeCanceled,
+		                                                               Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                               Func<string, FilePathDialogResult> OnOpenCommandPageFileDialogRequest,
+		                                                               out string linkFilePathNewOrConfirmed, out bool doUnlink, out bool isCanceled)
+		{
+			string reason;
+			if      (!File.Exists(linkFilePathRestricted)) // Must be checked first! A non-existent file cannot be readabled!
+				reason = "The file no longer exists.";
+			else if (!FileEx.IsReadable(linkFilePathRestricted))
+				reason = "The file cannot be read.";
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
@@ -2024,29 +2084,30 @@ namespace YAT.Model
 			(
 				message.ToString(),
 				"File Error",
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Exclamation
+				(canBeCanceled ? MessageBoxButtons.YesNoCancel : MessageBoxButtons.YesNo),
+				MessageBoxIcon.Question
 			);
 
 			switch (dr)
 			{
 				case DialogResult.Yes:
 					doUnlink = false;
-					var drFilePath = OnLinkedFilePathFileDialogRequest(linkFilePathRestricted);
-					linkFilePathConfirmed = drFilePath.FilePath;
+					var drFilePath = OnOpenCommandPageFileDialogRequest(linkFilePathRestricted);
+					linkFilePathNewOrConfirmed = drFilePath.FilePath;
 					isCanceled = (drFilePath.Result == DialogResult.Cancel);
 					return (drFilePath.Result == DialogResult.OK);
 
 				case DialogResult.No:
 					doUnlink = true;
-					linkFilePathConfirmed = null;
+					linkFilePathNewOrConfirmed = null;
 					isCanceled = false;
 					return (false); // = no file path!
 
+				case DialogResult.Cancel:
 				default:
 					doUnlink = false;
-					linkFilePathConfirmed = null;
-					isCanceled = false;
+					linkFilePathNewOrConfirmed = null;
+					isCanceled = true;
 					return (false);
 			}
 		}
@@ -2143,7 +2204,7 @@ namespace YAT.Model
 		///  > Changing links or even unlinking must happen prior to saving the terminal itself.
 		///  > Symmetricity with loading, where the terminal itself has to be loaded first.
 		/// </remarks>
-		protected virtual bool TrySaveLinkedSettings(bool userInteractionIsAllowed, bool saveEvenIfNotChanged, out bool isCanceled)
+		protected virtual bool TrySaveLinkedSettings(bool userInteractionIsAllowed, bool canBeCanceled, out bool isCanceled)
 		{
 			// Attention:
 			// Similar code exists in TryLoadLinkedSettings() further below.
@@ -2160,7 +2221,9 @@ namespace YAT.Model
 				DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler;
 
 				// Load linked page:
-				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest , out linkedSettingsHandler, out isCanceled)) {
+				var loadedPage = new PredefinedCommandPage();
+				loadedPage.LinkFilePath = linkedPage.LinkFilePath;
+				if (TryLoadLinkedPredefinedCommandPageConsiderately(loadedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, canBeCanceled, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkedSettingsHandler, out isCanceled)) {
 					// Nothing else to do, successCount++ is only done on successful save.
 				}
 				else {
@@ -2171,8 +2234,8 @@ namespace YAT.Model
 				}
 
 				// Compare pages, save linked page only if needed:
-				var explicitHaveChanged = !linkedSettingsHandler.Settings.Page.EqualsEffectivelyInUse(linkedPage);
-				if (explicitHaveChanged || saveEvenIfNotChanged)
+				var explicitHaveChanged = !loadedPage.EqualsEffectivelyInUse(linkedPage);
+				if (explicitHaveChanged)
 				{
 					if (TrySaveLinkedCommandPageConsiderately(linkedPage, linkedSettingsHandler, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled)) {
 						successCount++;
@@ -2184,14 +2247,18 @@ namespace YAT.Model
 							continue; // with next page.
 					}
 				}
+				else
+				{
+					successCount++;
+				}
 			} // foreach (linkedPage)
 
 			if (successCount == linkedCount)
-				OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " saved.");
+				OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " saved or are still up-to-date.");
 			else if (successCount > 0)
-				OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " partly saved.");
+				OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " partly saved or are still up-to-date.");
 			else
-				OnFixedStatusTextRequest("Linked predefined command " + pageOrPages + " not saved!");
+				OnFixedStatusTextRequest("Linked predefined command " + pageOrPages + " not saved and are not up-to-date!");
 
 			isCanceled = false;
 			return (successCount == linkedCount);
@@ -2217,10 +2284,10 @@ namespace YAT.Model
 			if (!FileEx.IsWritable(linkedSettingsHandler.SettingsFilePath) || !File.Exists(linkedSettingsHandler.SettingsFilePath))
 			{
 				if (userInteractionIsAllowed) {
-					string linkFilePathConfirmed;
+					string linkFilePathNewOrConfirmed;
 					bool doUnlink;
-					if (RequestRestrictedLinkedFilePathFromUser(linkedPage.LinkFilePath, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
-						linkedPage.LinkFilePath = linkFilePathConfirmed;
+					if (RequestRestrictedSaveCommandPageFromUser(linkedPage.LinkFilePath, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkFilePathNewOrConfirmed, out doUnlink, out isCanceled)) {
+						linkedPage.LinkFilePath = linkFilePathNewOrConfirmed;
 					}
 					else if (doUnlink) {
 						linkedPage.Unlink();
@@ -2280,7 +2347,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected static bool TryLoadLinkedPredefinedCommandPageConsiderately(PredefinedCommandPage linkedPage,
 		                                                                      Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
-		                                                                      bool userInteractionIsAllowed,
+		                                                                      bool userInteractionIsAllowed, bool canBeCanceled,
 		                                                                      Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
 		                                                                      Func<string, FilePathDialogResult> OnOpenCommandPageFileDialogRequest,
 		                                                                      out DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
@@ -2304,10 +2371,10 @@ namespace YAT.Model
 					if (!File.Exists(currentFilePath))
 					{
 						if (userInteractionIsAllowed) {
-							string linkFilePathConfirmed;
+							string linkFilePathNewOrConfirmed;
 							bool doUnlink;
-							if (RequestRestrictedLinkedFilePathFromUser(currentFilePath, OnMessageInputRequest, OnOpenCommandPageFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
-								currentFilePath = linkFilePathConfirmed;
+							if (RequestRestrictedOpenCommandPageFromUser(currentFilePath, canBeCanceled, OnMessageInputRequest, OnOpenCommandPageFileDialogRequest, out linkFilePathNewOrConfirmed, out doUnlink, out isCanceled)) {
+								currentFilePath = linkFilePathNewOrConfirmed;
 							}
 							else if (doUnlink) {
 								linkedPage.Unlink();
@@ -2374,7 +2441,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public static bool TryLoadLinkedSettings(TerminalSettingsRoot settings,
 		                                         Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
-		                                         bool userInteractionIsAllowed,
+		                                         bool userInteractionIsAllowed, bool canBeCanceled,
 		                                         Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
 		                                         Func<string, FilePathDialogResult> OnOpenCommandPageFileDialogRequest,
 		                                         out bool isCanceled)
@@ -2396,7 +2463,7 @@ namespace YAT.Model
 				DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler;
 
 				// Load linked page:
-				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnOpenCommandPageFileDialogRequest, out linkedSettingsHandler, out isCanceled)) {
+				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, canBeCanceled, OnMessageInputRequest, OnOpenCommandPageFileDialogRequest, out linkedSettingsHandler, out isCanceled)) {
 					successCount++;
 				}
 				else {
