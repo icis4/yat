@@ -5513,13 +5513,13 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged               += terminal_IOChanged;
-				this.terminal.IOControlChanged        += terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly;  // See further below for reason.
-				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
-				this.terminal.IOError                 += terminal_IOError;
+				this.terminal.IOChanged                          += terminal_IOChanged;
+				this.terminal.IOControlChanged                   += terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged               += terminal_IOConnectTimeChanged;
+			////this.terminal.IOCountChanged_Promptly            += terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly             += terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated            += terminal_IORateChanged_Decimated;
+				this.terminal.IOError                            += terminal_IOError;
 
 				this.terminal.DisplayElementsSent                += terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived            += terminal_DisplayElementsReceived;
@@ -5530,22 +5530,22 @@ namespace YAT.View.Forms
 				this.terminal.DisplayLinesSent                   += terminal_DisplayLinesSent;
 				this.terminal.DisplayLinesReceived               += terminal_DisplayLinesReceived;
 
-				this.terminal.RepositoryCleared        += terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded       += terminal_RepositoryReloaded;
+				this.terminal.RepositoryCleared                  += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded                 += terminal_RepositoryReloaded;
 
-				this.terminal.AutoResponseCountChanged += terminal_AutoResponseCountChanged;
-				this.terminal.AutoActionCountChanged   += terminal_AutoActionCountChanged;
+				this.terminal.AutoResponseCountChanged           += terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionCountChanged             += terminal_AutoActionCountChanged;
 
-				this.terminal.FixedStatusTextRequest   += terminal_FixedStatusTextRequest;
-				this.terminal.TimedStatusTextRequest   += terminal_TimedStatusTextRequest;
-				this.terminal.ResetStatusTextRequest   += terminal_ResetStatusTextRequest;
-				this.terminal.MessageInputRequest      += terminal_MessageInputRequest;
-				this.terminal.SaveAsFileDialogRequest  += terminal_SaveAsFileDialogRequest;
+				this.terminal.FixedStatusTextRequest             += terminal_FixedStatusTextRequest;
+				this.terminal.TimedStatusTextRequest             += terminal_TimedStatusTextRequest;
+				this.terminal.ResetStatusTextRequest             += terminal_ResetStatusTextRequest;
+				this.terminal.MessageInputRequest                += terminal_MessageInputRequest;
+				this.terminal.SaveAsFileDialogRequest            += terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest += terminal_SaveCommandPageAsFileDialogRequest;
-				this.terminal.CursorRequest            += terminal_CursorRequest;
+				this.terminal.CursorRequest                      += terminal_CursorRequest;
 
-				this.terminal.Saved                    += terminal_Saved;
-				this.terminal.Closed                   += terminal_Closed;
+				this.terminal.Saved                              += terminal_Saved;
+				this.terminal.Closed                             += terminal_Closed;
 			}
 		}
 
@@ -5553,13 +5553,13 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged               -= terminal_IOChanged;
-				this.terminal.IOControlChanged        -= terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged    -= terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly -= terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly  -= terminal_IORateChanged_Promptly;  // See further below for reason.
-				this.terminal.IORateChanged_Decimated -= terminal_IORateChanged_Decimated;
-				this.terminal.IOError                 -= terminal_IOError;
+				this.terminal.IOChanged                          -= terminal_IOChanged;
+				this.terminal.IOControlChanged                   -= terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged               -= terminal_IOConnectTimeChanged;
+			////this.terminal.IOCountChanged_Promptly            -= terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly             -= terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated            -= terminal_IORateChanged_Decimated;
+				this.terminal.IOError                            -= terminal_IOError;
 
 				this.terminal.DisplayElementsSent                -= terminal_DisplayElementsSent;
 				this.terminal.DisplayElementsReceived            -= terminal_DisplayElementsReceived;
@@ -5570,22 +5570,22 @@ namespace YAT.View.Forms
 				this.terminal.DisplayLinesSent                   -= terminal_DisplayLinesSent;
 				this.terminal.DisplayLinesReceived               -= terminal_DisplayLinesReceived;
 
-				this.terminal.RepositoryCleared        -= terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded       -= terminal_RepositoryReloaded;
+				this.terminal.RepositoryCleared                  -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded                 -= terminal_RepositoryReloaded;
 
-				this.terminal.AutoResponseCountChanged -= terminal_AutoResponseCountChanged;
-				this.terminal.AutoActionCountChanged   -= terminal_AutoActionCountChanged;
+				this.terminal.AutoResponseCountChanged           -= terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionCountChanged             -= terminal_AutoActionCountChanged;
 
-				this.terminal.FixedStatusTextRequest   -= terminal_FixedStatusTextRequest;
-				this.terminal.TimedStatusTextRequest   -= terminal_TimedStatusTextRequest;
-				this.terminal.ResetStatusTextRequest   -= terminal_ResetStatusTextRequest;
-				this.terminal.MessageInputRequest      -= terminal_MessageInputRequest;
-				this.terminal.SaveAsFileDialogRequest  -= terminal_SaveAsFileDialogRequest;
+				this.terminal.FixedStatusTextRequest             -= terminal_FixedStatusTextRequest;
+				this.terminal.TimedStatusTextRequest             -= terminal_TimedStatusTextRequest;
+				this.terminal.ResetStatusTextRequest             -= terminal_ResetStatusTextRequest;
+				this.terminal.MessageInputRequest                -= terminal_MessageInputRequest;
+				this.terminal.SaveAsFileDialogRequest            -= terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest -= terminal_SaveCommandPageAsFileDialogRequest;
-				this.terminal.CursorRequest            -= terminal_CursorRequest;
+				this.terminal.CursorRequest                      -= terminal_CursorRequest;
 
-				this.terminal.Saved                    -= terminal_Saved;
-				this.terminal.Closed                   -= terminal_Closed;
+				this.terminal.Saved                              -= terminal_Saved;
+				this.terminal.Closed                             -= terminal_Closed;
 			}
 		}
 
