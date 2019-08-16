@@ -1194,7 +1194,8 @@ namespace YAT.Settings.Model.Test
 
 			if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
 			{
-				if (!Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages)) // Not that update of 'Pages' will not set 'HaveChanged'.
+				bool isCanceled;                                        // Note that update of 'Pages' will not set 'HaveChanged'.
+				if (!Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages, null, null, false, null, null, out isCanceled))
 					Assert.Fail("Linked predefined command page(s) could not be loaded for " + sh.SettingsFilePath);
 			}
 

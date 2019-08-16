@@ -47,6 +47,7 @@ using MKY.IO;
 using MKY.Settings;
 using MKY.Text;
 using MKY.Time;
+using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
@@ -1825,6 +1826,10 @@ namespace YAT.Model
 			// Handle write-protected or non-existant file:
 			// -------------------------------------------------------------------------------------
 
+			// Attention:
+			// Similar code exists in TrySaveLinkedPredefinedCommandPageConsiderately() further below.
+			// Changes here may have to be applied there too.
+
 			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
 			{
 				if (this.settingsRoot.ExplicitHaveChanged || saveEvenIfNotChanged)
@@ -1842,31 +1847,14 @@ namespace YAT.Model
 				}
 			}
 
-			if (this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
+			// -------------------------------------------------------------------------------------
+			// Potentially save linked predefined commands:
+			// -------------------------------------------------------------------------------------
+
+			if (HasLinkedPredefinedCommandPages)
 			{
-				foreach (var linkedPage in (this.settingsHandler.Settings.PredefinedCommand.Pages.Where(p => p.IsLinkedToFilePath)))
-				{    // !SettingsFileIsWritable                     || SettingsFileNoLongerExists
-					if (!FileEx.IsWritable(linkedPage.LinkFilePath) || !File.Exists(linkedPage.LinkFilePath))
-					{
-						// Checking whether any linked page has changed would require opening and comparing all pages
-						// already now. While technically possible, decided not to do it and just guess for change:
-						var havePresumablyChanged = this.settingsHandler.Settings.PredefinedCommand.ExplicitHaveChanged;
-						    // this.settingsRoot.ExplicitHaveChanged
-						if (havePresumablyChanged || saveEvenIfNotChanged)
-						{
-							if (userInteractionIsAllowed) {
-								string linkFilePathConfirmed;
-								if (RequestLinkFilePathFromUser(linkedPage.LinkFilePath, out linkFilePathConfirmed, out isCanceled))
-									linkedPage.LinkFilePath = linkFilePathConfirmed;
-								else
-									return (false); // Let save fail if file is restricted and user doesn't fix it.
-							}
-							else {
-								return (false); // Let save fail if file is restricted.
-							}
-						}
-					}
-				}
+				if (!TrySaveLinkedPredefinedCommandPages(userInteractionIsAllowed, saveEvenIfNotChanged, out isCanceled))
+					return (false);
 			}
 
 			// -------------------------------------------------------------------------------------
@@ -2004,12 +1992,14 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual bool RequestLinkFilePathFromUser(string linkFilePathRestricted, out string linkFilePathConfirmed, out bool isCanceled)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected static bool RequestRestrictedLinkFilePathFromUser(string linkFilePathRestricted,
+		                                                            Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                            Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
+		                                                            out string linkFilePathConfirmed, out bool doUnlink, out bool isCanceled)
 		{
-			isCanceled = false;
-
 			string reason;
 			if      (!FileEx.IsWritable(linkFilePathRestricted))
 				reason = "The file is write-protected.";
@@ -2022,27 +2012,38 @@ namespace YAT.Model
 			message.AppendLine("Unable to save file");
 			message.AppendLine(linkFilePathRestricted);
 			message.AppendLine();
-			message.Append(reason + " Select another location or fix the file and then confirm the current location.");
+			message.AppendLine(reason);
+			message.AppendLine();
+			message.Append("Would you like to select another location or fix the file and then confirm the current location [Yes],");
+			message.Append(" or clear the link to the file [No]?");
 
 			var dr = OnMessageInputRequest
 			(
 				message.ToString(),
 				"File Error",
-				MessageBoxButtons.OKCancel,
+				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Exclamation
 			);
 
 			switch (dr)
 			{
-				case DialogResult.OK:
-					var drSaveAs = OnSaveCommandPageAsFileDialogRequest(linkFilePathRestricted, out linkFilePathConfirmed);
-					isCanceled = (drSaveAs == DialogResult.Cancel);
-					return (drSaveAs == DialogResult.OK);
+				case DialogResult.Yes:
+					doUnlink = false;
+					var drSaveAs = OnSaveCommandPageAsFileDialogRequest(linkFilePathRestricted);
+					linkFilePathConfirmed = drSaveAs.FilePath;
+					isCanceled = (drSaveAs.Result == DialogResult.Cancel);
+					return (drSaveAs.Result == DialogResult.OK);
+
+				case DialogResult.No:
+					doUnlink = true;
+					linkFilePathConfirmed = null;
+					isCanceled = false;
+					return (true);
 
 				default:
-					// No need for TextRequest("Canceled!") as parent will handle cancel.
+					doUnlink = false;
 					linkFilePathConfirmed = null;
-					isCanceled = true;
+					isCanceled = false;
 					return (false);
 			}
 		}
@@ -2064,7 +2065,15 @@ namespace YAT.Model
 			// Set the new file path...
 			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
-			// ...and save the terminal:
+			// ...potentially save linked predefined commands...
+			if (HasLinkedPredefinedCommandPages)
+			{
+				bool isCanceled;
+				if (!TrySaveLinkedPredefinedCommandPages(true, true, out isCanceled))
+					return (false);
+			}
+
+			// ...and save the terminal itself:
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
@@ -2088,9 +2097,6 @@ namespace YAT.Model
 				this.settingsHandler.Settings.AutoSaved = isAutoSave;
 				this.settingsHandler.Save();
 				success = true;
-
-				if (this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
-					success = TrySaveLinkedPredefinedCommandPages(this.settingsHandler.Settings.PredefinedCommand.Pages);
 
 				if (!isAutoSave)
 					this.fileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
@@ -2130,141 +2136,292 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual bool TrySaveLinkedPredefinedCommandPages(PredefinedCommandPageCollection pages)
+		protected virtual bool HasLinkedPredefinedCommandPages
+		{
+			get { return (this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0); }
+		}
+
+		/// <remarks>
+		/// Linked predefined commands pages shall be saved before the terminal itself is for two reasons:
+		///  > Changing links or even unlinking must happen prior to saving the terminal itself.
+		///  > Symmetricity with loading, where the terminal itself has to be loaded first.
+		/// </remarks>
+		protected virtual bool TrySaveLinkedPredefinedCommandPages(bool userInteractionIsAllowed, bool saveEvenIfNotChanged, out bool isCanceled)
 		{
 			// Attention:
-			// Similar code exists in TryLoadLinkedPredefinedCommandPages() below.
+			// Similar code exists in TryLoadLinkedPredefinedCommandPages() further below.
 			// Changes here may have to be applied there too.
 
-			bool success = true;
+			int linkedCount = this.settingsHandler.Settings.PredefinedCommand.Pages.LinkedToFilePathCount;
+			int successCount = 0;
 
-			string pageOrPages = ((pages.LinkedToFilePathCount == 1) ? "page" : "pages");
+			string pageOrPages = ((linkedCount == 1) ? "page" : "pages");
 			OnFixedStatusTextRequest("Saving linked predefined command " + pageOrPages + "...");
 
-			foreach (var linkedPage in (pages.Where(p => p.IsLinkedToFilePath)))
+			foreach (var linkedPage in (this.settingsHandler.Settings.PredefinedCommand.Pages.Where(p => p.IsLinkedToFilePath)))
 			{
-				var resultingLinkFilePath = linkedPage.LinkFilePath;
-				var resultingLinkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+				DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler;
 
-				// Retrieve the file which contains the linked command page:
-				try
+				// Load linked page:
+				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest , out linkedSettingsHandler, out isCanceled)) {
+					// Nothing else to do, successCount++ is only done on successful save.
+				}
+				else {
+					if (isCanceled)
+						return (false);
+					else
+						continue; // with next page.
+				}
+
+				// Compare pages, save linked page only if needed:
+				var explicitHaveChanged = !linkedSettingsHandler.Settings.Page.EqualsEffectivelyInUse(linkedPage);
+				if (explicitHaveChanged || saveEvenIfNotChanged)
 				{
-					while (!string.IsNullOrEmpty(resultingLinkFilePath))
-					{
-						resultingLinkedSettingsHandler.SettingsFilePath = resultingLinkFilePath;
-						if (resultingLinkedSettingsHandler.Load())
-							resultingLinkFilePath = resultingLinkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
+					if (TrySaveLinkedPredefinedCommandPageConsiderately(linkedPage, linkedSettingsHandler, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled)) {
+						successCount++;
+					}
+					else {
+						if (isCanceled)
+							return (false);
+						else
+							continue; // with next page.
 					}
 				}
-				catch (Exception ex)
-				{
-					DebugEx.WriteException(GetType(), ex, "Error retrieving linked predefined command page!");
+			} // foreach (linkedPage)
 
-					OnFixedStatusTextRequest("Error retrieving linked predefined command page!");
+			if (successCount == linkedCount)
+				OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " saved.");
+			else if (successCount > 0)
+				OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " partly saved.");
+			else
+				OnFixedStatusTextRequest("Linked predefined command " + pageOrPages + " not saved!");
+
+			isCanceled = false;
+			return (successCount == linkedCount);
+		}
+
+		/// <summary></summary>
+		protected static bool TrySaveLinkedPredefinedCommandPageConsiderately(PredefinedCommandPage linkedPage,
+		                                                                      DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
+		                                                                      Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
+		                                                                      bool userInteractionIsAllowed,
+		                                                                      Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                                      Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
+		                                                                      out bool isCanceled)
+		{
+			// Attention:
+			// Similar code exists in SaveConsiderately() further above.
+			// Changes here may have to be applied there too.
+
+			// Attention:
+			// Similar code exists in TryLoadLinkedPredefinedCommandPageConsiderately() below.
+			// Changes here may have to be applied there too.
+
+			if (!FileEx.IsWritable(linkedSettingsHandler.SettingsFilePath) || !File.Exists(linkedSettingsHandler.SettingsFilePath))
+			{
+				if (userInteractionIsAllowed) {
+					string linkFilePathConfirmed;
+					bool doUnlink;
+					if (RequestRestrictedLinkFilePathFromUser(linkedPage.LinkFilePath, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
+						linkedPage.LinkFilePath = linkFilePathConfirmed;
+					}
+					else if (doUnlink) {
+						linkedPage.Unlink();
+						return (true);
+					}
+					else {
+						return (false); // Let save of explicit change fail if file is restricted and user doesn't fix it.
+					}
+				}
+				else {
+					isCanceled = false;
+					return (false); // Let save of explicit change fail if file is restricted.
+				}
+			}
+
+			// Save is feasible, update settings and then save:
+			linkedSettingsHandler.Settings.Page.UpdateEffectivelyInUse(linkedPage); // Clone is done by the Update...() method.
+
+			try
+			{
+				linkedSettingsHandler.Save();
+
+				isCanceled = false;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(typeof(Terminal), ex, "Error saving linked predefined command page!");
+
+				if (userInteractionIsAllowed && (OnMessageInputRequest != null))
+				{
+					if (OnFixedStatusTextRequest != null)
+						OnFixedStatusTextRequest("Error saving linked predefined command page!");
+
 					var dr = OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", resultingLinkFilePath, ex),
+						ErrorHelper.ComposeMessage("Unable to save linked predefined command page file", linkedSettingsHandler.SettingsFilePath, ex),
 						"Linked File Error",
 						MessageBoxButtons.OKCancel,
 						MessageBoxIcon.Error
 					);
-					OnTimedStatusTextRequest("Linked predefined command page not retrieved!");
 
-					if (dr == DialogResult.Cancel)
-						return (false);
-					else
-						success = false;
-				}
-
-				// Only save if needed:
-				if (!(resultingLinkedSettingsHandler.Settings.Page.EqualsEffectivelyInUse(linkedPage)))
-				{
-					// Update the items effectively in use, i.e. 'Name' and 'Commands':
-					resultingLinkedSettingsHandler.Settings.Page.UpdateEffectivelyInUse(linkedPage); // Clone is done by the Update...() method.
-
-					// Update the file which contains the linked command page:
-					try
-					{
-						resultingLinkedSettingsHandler.Save();
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(GetType(), ex, "Error saving linked predefined command page!");
-
-						OnFixedStatusTextRequest("Error saving linked predefined command page!");
-						var dr = OnMessageInputRequest
-						(
-							ErrorHelper.ComposeMessage("Unable to save linked predefined command page file", resultingLinkFilePath, ex),
-							"Linked File Error",
-							MessageBoxButtons.OKCancel,
-							MessageBoxIcon.Error
-						);
+					if (OnTimedStatusTextRequest != null)
 						OnTimedStatusTextRequest("Linked predefined command page not saved!");
 
-						if (dr == DialogResult.Cancel)
-							return (false);
-						else
-							success = false;
-					}
+					isCanceled = (dr == DialogResult.Cancel);
 				}
-			}
+				else
+				{
+					isCanceled = false;
+				}
 
-			return (success);
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
-		public static bool TryLoadLinkedPredefinedCommandPages(PredefinedCommandPageCollection pages)
+		protected static bool TryLoadLinkedPredefinedCommandPageConsiderately(PredefinedCommandPage linkedPage,
+		                                                                      Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
+		                                                                      bool userInteractionIsAllowed,
+		                                                                      Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                                      Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
+		                                                                      out DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
+		                                                                      out bool isCanceled)
 		{
 			// Attention:
-			// Similar code exists in TrySaveLinkedPredefinedCommandPages() above.
+			// Similar code exists in SaveConsiderately() further above.
 			// Changes here may have to be applied there too.
 
-			bool success = true;
+			// Attention:
+			// Similar code exists in TrySaveLinkedPredefinedCommandPageConsiderately() further above.
+			// Changes here may have to be applied there too.
 
-		////string pageOrPages = ((pages.LinkedToFilePathCount == 1) ? "page" : "pages");        <= No error messaging for this static method (yet).
-		////OnFixedStatusTextRequest("Saving linked predefined command " + pageOrPages + "..."); <= To be re-activated when needed, e.g. using callbacks.
+			var currentFilePath = linkedPage.LinkFilePath;
+			var currentSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+
+			try
+			{
+				while (!string.IsNullOrEmpty(currentFilePath))
+				{
+					if (!File.Exists(currentFilePath))
+					{
+						if (userInteractionIsAllowed) {
+							string linkFilePathConfirmed;
+							bool doUnlink;
+							if (RequestRestrictedLinkFilePathFromUser(linkedPage.LinkFilePath, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
+								linkedPage.LinkFilePath = linkFilePathConfirmed;
+							}
+							else if (doUnlink) {
+								linkedPage.Unlink();
+								linkedSettingsHandler = null;
+								return (true);
+							}
+							else {
+								linkedSettingsHandler = null;
+								return (false); // Let save of explicit change fail if file is restricted and user doesn't fix it.
+							}
+						}
+						else {
+							linkedSettingsHandler = null;
+							isCanceled = false;
+							return (false); // Let save of explicit change fail if file is restricted.
+						}
+					}
+
+					// Load is feasible:
+					currentSettingsHandler.SettingsFilePath = currentFilePath;
+					if (currentSettingsHandler.Load())
+						currentFilePath = currentSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
+				}
+
+				// Update settings:
+				linkedSettingsHandler = currentSettingsHandler;
+				linkedPage.UpdateEffectivelyInUse(linkedSettingsHandler.Settings.Page); // Clone is done by the Update...() method.
+				isCanceled = false;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(typeof(Terminal), ex, "Error retrieving linked predefined command page!");
+
+				linkedSettingsHandler = null;
+
+				if (userInteractionIsAllowed && (OnMessageInputRequest != null))
+				{
+					if (OnFixedStatusTextRequest != null)
+						OnFixedStatusTextRequest("Error retrieving linked predefined command page!");
+
+					var dr = OnMessageInputRequest
+					(
+						ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", currentFilePath, ex),
+						"Linked File Error",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Error
+					);
+
+					if (OnTimedStatusTextRequest != null)
+						OnTimedStatusTextRequest("Linked predefined command page not retrieved!");
+
+					isCanceled = (dr == DialogResult.Cancel);
+				}
+				else
+				{
+					isCanceled = false;
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public static bool TryLoadLinkedPredefinedCommandPages(PredefinedCommandPageCollection pages,
+		                                                       Action<string> OnFixedStatusTextRequest, Action<string> OnTimedStatusTextRequest,
+		                                                       bool userInteractionIsAllowed,
+		                                                       Func<string, string, MessageBoxButtons, MessageBoxIcon, DialogResult> OnMessageInputRequest,
+		                                                       Func<string, FilePathDialogResult> OnSaveCommandPageAsFileDialogRequest,
+		                                                       out bool isCanceled)
+		{
+			// Attention:
+			// Similar code exists in TrySaveLinkedPredefinedCommandPages() further above.
+			// Changes here may have to be applied there too.
+
+			int linkedCount = pages.LinkedToFilePathCount;
+			int successCount = 0;
+
+			string pageOrPages = ((linkedCount == 1) ? "page" : "pages");
+
+			if (OnFixedStatusTextRequest != null)
+				OnFixedStatusTextRequest("Loading linked predefined command " + pageOrPages + "...");
 
 			foreach (var linkedPage in (pages.Where(p => p.IsLinkedToFilePath)))
 			{
-				var resultingLinkFilePath = linkedPage.LinkFilePath;
-				var resultingLinkedSettingsHandler = new DocumentSettingsHandler<CommandPageSettingsRoot>();
+				DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler;
 
-				// Retrieve the file which contains the linked command page:
-				try
-				{
-					while (!string.IsNullOrEmpty(resultingLinkFilePath))
-					{
-						resultingLinkedSettingsHandler.SettingsFilePath = resultingLinkFilePath;
-						if (resultingLinkedSettingsHandler.Load())
-							resultingLinkFilePath = resultingLinkedSettingsHandler.Settings.Page.LinkFilePath; // Either 'null' or valid.
-					}
+				// Load linked page:
+				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, OnFixedStatusTextRequest, OnTimedStatusTextRequest, userInteractionIsAllowed, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out linkedSettingsHandler, out isCanceled)) {
+					successCount++;
 				}
-				catch (Exception ex)
-				{
-				////DebugEx.WriteException(GetType(), ex, "Error retrieving linked predefined command page!");
-					DebugEx.WriteException(typeof(Terminal), ex, "Error retrieving linked predefined command page!");
-
-				////OnFixedStatusTextRequest("Error retrieving linked predefined command page!"); <= No error messaging for this static method (yet).
-				////var dr = OnMessageInputRequest                                                <= To be re-activated when needed, e.g. using callbacks.
-				////(
-				////	ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", resultingLinkFilePath, ex),
-				////	"Linked File Error",
-				////	MessageBoxButtons.OKCancel,
-				////	MessageBoxIcon.Error
-				////);
-				////OnTimedStatusTextRequest("Linked predefined command page not retrieved!");
-
-				////if (dr == DialogResult.Cancel)
-				////	return (false);
-				////else
-						success = false;
+				else {
+					if (isCanceled)
+						return (false);
+					else
+						continue; // with next page.
 				}
+			} // foreach (linkedPage)
 
-				// Update the items effectively in use, i.e. 'Name' and 'Commands':
-				linkedPage.UpdateEffectivelyInUse(resultingLinkedSettingsHandler.Settings.Page); // Clone is done by the Update...() method.
+			if (OnTimedStatusTextRequest != null)
+			{
+				if (successCount == linkedCount)
+					OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " loaded.");
+				else if (successCount > 0)
+					OnTimedStatusTextRequest("Linked predefined command " + pageOrPages + " partly loaded.");
+				else
+					OnFixedStatusTextRequest("Linked predefined command " + pageOrPages + " not loaded!");
 			}
 
-			return (success);
+			isCanceled = false;
+			return (successCount == linkedCount);
 		}
 
 		#endregion
@@ -5734,7 +5891,7 @@ namespace YAT.Model
 		/// Requests to show the 'SaveAs' dialog to let the user chose a file path.
 		/// If confirmed, the file will be saved to that path.
 		/// </summary>
-		protected virtual DialogResult OnSaveCommandPageAsFileDialogRequest(string filePathOld, out string filePathNew)
+		protected virtual FilePathDialogResult OnSaveCommandPageAsFileDialogRequest(string filePathOld)
 		{
 			if (this.startArgs.Interactive)
 			{
@@ -5746,13 +5903,11 @@ namespace YAT.Model
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-				filePathNew = e.FilePathNew;
-				return (e.Result);
+				return (new FilePathDialogResult(e.Result, e.FilePathNew));
 			}
 			else
 			{
-				filePathNew = null;
-				return (DialogResult.None);
+				return (new FilePathDialogResult(DialogResult.None));
 			}
 		}
 

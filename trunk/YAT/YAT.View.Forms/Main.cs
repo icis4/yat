@@ -2922,6 +2922,39 @@ namespace YAT.View.Forms
 			return (dr);
 		}
 
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private DialogResult ShowSaveCommandPageAsFileDialog(string filePathOld, out string filePathNew)
+		{
+			SetFixedStatusText("Saving command page as...");
+
+			var sfd = new SaveFileDialog();
+			sfd.Title       = "Save Command Page As";
+			sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
+			sfd.FileName    = Path.GetFileName(filePathOld);
+
+			var dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+
+				filePathNew = sfd.FileName;
+			}
+			else
+			{
+				ResetStatusText();
+
+				filePathNew = null;
+			}
+
+			return (dr);
+		}
+
 		/// <summary>
 		/// Sets the terminal layout including forwarding the setting to the workspace.
 		/// </summary>
@@ -3073,17 +3106,18 @@ namespace YAT.View.Forms
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.TerminalAdded   += workspace_TerminalAdded;
-				this.workspace.TerminalRemoved += workspace_TerminalRemoved;
+				this.workspace.TerminalAdded                      += workspace_TerminalAdded;
+				this.workspace.TerminalRemoved                    += workspace_TerminalRemoved;
 
-				this.workspace.TimedStatusTextRequest += workspace_TimedStatusTextRequest;
-				this.workspace.FixedStatusTextRequest += workspace_FixedStatusTextRequest;
-				this.workspace.MessageInputRequest    += workspace_MessageInputRequest;
+				this.workspace.TimedStatusTextRequest             += workspace_TimedStatusTextRequest;
+				this.workspace.FixedStatusTextRequest             += workspace_FixedStatusTextRequest;
+				this.workspace.MessageInputRequest                += workspace_MessageInputRequest;
 
-				this.workspace.SaveAsFileDialogRequest += workspace_SaveAsFileDialogRequest;
-				this.workspace.CursorRequest           += workspace_CursorRequest;
+				this.workspace.SaveAsFileDialogRequest            += workspace_SaveAsFileDialogRequest;
+				this.workspace.SaveCommandPageAsFileDialogRequest += workspace_SaveCommandPageAsFileDialogRequest;
+				this.workspace.CursorRequest                      += workspace_CursorRequest;
 
-				this.workspace.Closed += workspace_Closed;
+				this.workspace.Closed                             += workspace_Closed;
 
 				if (this.workspace.SettingsRoot != null)
 					this.workspace.SettingsRoot.Changed += workspaceSettingsRoot_Changed;
@@ -3094,17 +3128,18 @@ namespace YAT.View.Forms
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.TerminalAdded   -= workspace_TerminalAdded;
-				this.workspace.TerminalRemoved -= workspace_TerminalRemoved;
+				this.workspace.TerminalAdded                     -= workspace_TerminalAdded;
+				this.workspace.TerminalRemoved                   -= workspace_TerminalRemoved;
 
-				this.workspace.TimedStatusTextRequest -= workspace_TimedStatusTextRequest;
-				this.workspace.FixedStatusTextRequest -= workspace_FixedStatusTextRequest;
-				this.workspace.MessageInputRequest    -= workspace_MessageInputRequest;
+				this.workspace.TimedStatusTextRequest            -= workspace_TimedStatusTextRequest;
+				this.workspace.FixedStatusTextRequest            -= workspace_FixedStatusTextRequest;
+				this.workspace.MessageInputRequest               -= workspace_MessageInputRequest;
 
-				this.workspace.SaveAsFileDialogRequest -= workspace_SaveAsFileDialogRequest;
-				this.workspace.CursorRequest           -= workspace_CursorRequest;
+				this.workspace.SaveAsFileDialogRequest            -= workspace_SaveAsFileDialogRequest;
+				this.workspace.SaveCommandPageAsFileDialogRequest -= workspace_SaveCommandPageAsFileDialogRequest;
+				this.workspace.CursorRequest                      -= workspace_CursorRequest;
 
-				this.workspace.Closed -= workspace_Closed;
+				this.workspace.Closed                             -= workspace_Closed;
 
 				if (this.workspace.SettingsRoot != null)
 					this.workspace.SettingsRoot.Changed -= workspaceSettingsRoot_Changed;
@@ -3171,6 +3206,14 @@ namespace YAT.View.Forms
 		private void workspace_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			e.Result = ShowSaveWorkspaceAsFileDialog();
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void workspace_SaveCommandPageAsFileDialogRequest(object sender, Model.SaveAsDialogEventArgs e)
+		{
+			string filePathNew;
+			e.Result = ShowSaveCommandPageAsFileDialog(e.FilePathOld, out filePathNew);
+			e.FilePathNew = filePathNew;
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]

@@ -42,6 +42,7 @@ using MKY;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
+using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
@@ -139,6 +140,9 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
+
+		/// <summary></summary>
+		public event EventHandler<SaveAsDialogEventArgs> SaveCommandPageAsFileDialogRequest;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<Cursor>> CursorRequest;
@@ -1781,7 +1785,10 @@ namespace YAT.Model
 					bool success = true;
 
 					if (sh.Settings.PredefinedCommand.Pages.LinkedToFilePathCount > 0)
-						success = Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages); // Not that update of 'Pages' will not set 'HaveChanged'.
+					{
+						bool isCanceled;                                             // Note that update of 'Pages' will not set 'HaveChanged'.
+						success = Terminal.TryLoadLinkedPredefinedCommandPages(sh.Settings.PredefinedCommand.Pages, OnFixedStatusTextRequest, OnTimedStatusTextRequest, true, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled);
+					}
 
 					settingsHandler = sh;
 					exception = null;
@@ -2383,6 +2390,30 @@ namespace YAT.Model
 			else
 			{
 				return (DialogResult.None);
+			}
+		}
+
+		/// <summary>
+		/// Requests to show the 'SaveAs' dialog to let the user chose a file path.
+		/// If confirmed, the file will be saved to that path.
+		/// </summary>
+		protected virtual FilePathDialogResult OnSaveCommandPageAsFileDialogRequest(string filePathOld)
+		{
+			if (this.startArgs.Interactive)
+			{
+				OnCursorReset(); // Just in case...
+
+				var e = new SaveAsDialogEventArgs(filePathOld);
+				this.eventHelper.RaiseSync<SaveAsDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
+
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				return (new FilePathDialogResult(e.Result, e.FilePathNew));
+			}
+			else
+			{
+				return (new FilePathDialogResult(DialogResult.None));
 			}
 		}
 
