@@ -253,7 +253,8 @@ namespace YAT.View.Utilities
 						return (true);
 					}
 
-					default: // incl. Mode.Cancel
+					case (Mode.Cancel):
+					default:
 					{
 						break; // Do nothing.
 					}

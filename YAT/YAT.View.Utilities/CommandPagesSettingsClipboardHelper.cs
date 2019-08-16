@@ -70,7 +70,11 @@ namespace YAT.View.Utilities
 		public static bool TrySet(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId)
 		{
 			var pageCount = settings.Pages.Count;
-			if (pageCount > 1)
+			if (pageCount <= 1) // Copy without asking:
+			{                   // Specifying '1' will copy a single page (not all).
+				return (TrySet(settings.Pages, 1));
+			}
+			else // if (pageCount > 1)
 			{
 				var message = new StringBuilder();
 				message.Append("Would you like to copy all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
@@ -90,10 +94,6 @@ namespace YAT.View.Utilities
 
 					default:               return (false);
 				}
-			}
-			else // If (pageCount <= 1) copy without asking:
-			{                   // Specifying '1' will copy a single page (not all).
-				return (TrySet(settings.Pages, 1));
 			}
 		}
 
@@ -505,7 +505,8 @@ namespace YAT.View.Utilities
 						return (true);
 					}
 
-					default: // incl. Mode.Cancel
+					case (Mode.Cancel):
+					default:
 					{
 						break; // Do nothing.
 					}

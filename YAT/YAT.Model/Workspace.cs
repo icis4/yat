@@ -823,7 +823,8 @@ namespace YAT.Model
 				case DialogResult.OK:
 					return (true);
 
-				default: // incl. Cancel:
+				case DialogResult.Cancel:
+				default:
 					return (false);
 			}
 		}
@@ -832,13 +833,11 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool RequestRestrictedSaveAsFromUser(bool canBeCanceled, out bool isCanceled)
 		{
-			isCanceled = false;
-
 			string reason;
-			if      (!SettingsFileIsWritable)
-				reason = "The file is write-protected.";
-			else if ( SettingsFileNoLongerExists)
+			if      ( SettingsFileNoLongerExists) // Shall be checked first, as that is first thing to verify.
 				reason = "The file no longer exists.";
+			else if (!SettingsFileIsWritable)
+				reason = "The file is write-protected.";
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
@@ -859,12 +858,15 @@ namespace YAT.Model
 			switch (dr)
 			{
 				case DialogResult.Yes:
+					isCanceled = false;
 					return (RequestNormalSaveAsFromUser());
 
 				case DialogResult.No:
 					OnTimedStatusTextRequest("Workspace not saved!");
+					isCanceled = false;
 					return (true);
 
+				case DialogResult.Cancel:
 				default:
 					// No need for TextRequest("Canceled!") as parent will handle cancel.
 					isCanceled = true;
@@ -1789,10 +1791,11 @@ namespace YAT.Model
 
 					if (sh.Settings.HasLinkedSettings)
 					{
-						bool isCanceled;
-						success = Terminal.TryLoadLinkedSettings(sh.Settings, OnFixedStatusTextRequest, OnTimedStatusTextRequest, true, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled);
-					}
-
+						bool isCanceled;            // \remind 2019-08-16 / MKY:
+						if (!Terminal.TryLoadLinkedSettings(sh.Settings, OnFixedStatusTextRequest, OnTimedStatusTextRequest, true, true, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled))
+							success = (isCanceled); // Canceling loading the linked settings shall still open the terminal!
+					}                               // Returning 'false' on an auto-saved terminal would "destroy" it!
+					                              //// Alternatives: a) Implement 'isCancelable' on Open(). b) LoadLinkedSettings() only *after* having opened the terminal.
 					settingsHandler = sh;
 					exception = null;
 					return (success);

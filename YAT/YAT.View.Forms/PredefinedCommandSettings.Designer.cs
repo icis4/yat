@@ -2359,7 +2359,7 @@
 			this.button_LinkToFile.Name = "button_LinkToFile";
 			this.button_LinkToFile.Size = new System.Drawing.Size(120, 23);
 			this.button_LinkToFile.TabIndex = 3;
-			this.button_LinkToFile.Text = "Lin&k to File...";
+			this.button_LinkToFile.Text = "Lin&k Page to File...";
 			this.toolTip.SetToolTip(this.button_LinkToFile, resources.GetString("button_LinkToFile.ToolTip"));
 			this.button_LinkToFile.Click += new System.EventHandler(this.button_LinkToFile_Click);
 			// 

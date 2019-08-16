@@ -69,10 +69,18 @@ namespace YAT.View.Utilities
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId, string indicatedName)
+		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId, string indicatedTerminalName)
 		{
 			var pageCount = settings.Pages.Count;
-			if (pageCount > 1)
+			if (pageCount == 0) // Export without asking, the chosen file extension will select the format:
+			{
+				return (TryExport(owner, settings.Pages, indicatedTerminalName));
+			}
+			else if (pageCount == 1) // Export without asking, the chosen file extension will select the format:
+			{
+				return (TryExport(owner, settings.Pages, settings.Pages[0].Name));
+			}
+			else // if (pageCount > 1)
 			{
 				var message = new StringBuilder();
 				message.Append("Would you like to export all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
@@ -87,15 +95,11 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (TryExportAll(owner, settings,                 indicatedName));
-					case DialogResult.No:  return (TryExportOne(owner, settings, selectedPageId, indicatedName));
+					case DialogResult.Yes: return (TryExportAll(owner, settings, indicatedTerminalName));
+					case DialogResult.No:  return (TryExportOne(owner, settings, selectedPageId));
 
 					default:               return (false);
 				}
-			}
-			else // If (pageCount <= 1) export without asking, the chosen file extension will select the format:
-			{
-				return (TryExport(owner, settings.Pages, indicatedName));
 			}
 		}
 
@@ -104,9 +108,9 @@ namespace YAT.View.Utilities
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TryExportAll(IWin32Window owner, PredefinedCommandSettings settings, string indicatedName)
+		public static bool TryExportAll(IWin32Window owner, PredefinedCommandSettings settings, string indicatedTerminalName)
 		{
-			return (TryExport(owner, settings.Pages, indicatedName));
+			return (TryExport(owner, settings.Pages, indicatedTerminalName));
 		}
 
 		/// <summary>
@@ -114,17 +118,17 @@ namespace YAT.View.Utilities
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TryExportOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId, string indicatedName)
+		public static bool TryExportOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId)
 		{
 			var pages = new PredefinedCommandPageCollection();
 			pages.Add(new PredefinedCommandPage(settings.Pages[pageId - 1])); // Clone to ensure decoupling.
 
-			return (TryExport(owner, pages, indicatedName));
+			return (TryExport(owner, pages, pages[0].Name));
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool TryExport(IWin32Window owner, PredefinedCommandPageCollection pages, string indicatedName)
+		private static bool TryExport(IWin32Window owner, PredefinedCommandPageCollection pages, string initialName)
 		{
 			var sfd = new SaveFileDialog();
 			if (pages.Count == 1)
@@ -143,11 +147,11 @@ namespace YAT.View.Utilities
 			}
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
-			// Check whether the terminal has already been saved as a .yat file:
-			if (StringEx.EndsWithOrdinalIgnoreCase(indicatedName, ExtensionHelper.TerminalFile))
-				sfd.FileName = indicatedName;
-			else
-				sfd.FileName = indicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
+			// Potentially remove .yat from the initial name:
+			if (Path.HasExtension(initialName))
+				initialName = Path.GetFileNameWithoutExtension(initialName);
+
+			sfd.FileName = initialName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
 
 			var dr = sfd.ShowDialog(owner);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
@@ -648,7 +652,8 @@ namespace YAT.View.Utilities
 						return (true);
 					}
 
-					default: // incl. Mode.Cancel
+					case (Mode.Cancel):
+					default:
 					{
 						break; // Do nothing.
 					}

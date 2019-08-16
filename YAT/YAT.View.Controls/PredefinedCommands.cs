@@ -600,14 +600,7 @@ namespace YAT.View.Controls
 
 					int id = 1;
 					foreach (var p in this.pages)
-					{
-						if (!string.IsNullOrEmpty(p.Caption))
-							comboBox_Pages.Items.Add(p.Caption);
-						else
-							comboBox_Pages.Items.Add(PredefinedCommandPage.CaptionFallback(p, id));
-
-						id++;
-					}
+						comboBox_Pages.Items.Add(PredefinedCommandPage.CaptionOrFallback(p, id++));
 
 					var pageIsSelected = (this.selectedPageId != 0);
 					if (pageIsSelected)

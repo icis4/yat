@@ -86,7 +86,7 @@ namespace YAT.View.Forms
 		private Model.Settings.PredefinedCommandSettings settingsInEdit; // = null;
 		private int selectedPageId = 1;
 		private int selectedSubpageId = 1;
-		private string indicatedName;                                    // = null;
+		private string indicatedTerminalName;                                    // = null;
 
 		private Point subpageCheckBoxLocationTopLeft;
 		private Point subpageCheckBoxLocationLeftAbove;
@@ -110,8 +110,8 @@ namespace YAT.View.Forms
 		/// <param name="rootDirectoryForFile">The root path for file commands.</param>
 		/// <param name="requestedPageId">Page 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		/// <param name="requestedCommandId">Command 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
-		/// <param name="indicatedName">The indicated terminal name.</param>
-		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPageId, int requestedCommandId, string indicatedName)
+		/// <param name="indicatedTerminalName">The indicated terminal name.</param>
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPageId, int requestedCommandId, string indicatedTerminalName)
 		{
 			InitializeComponent();
 
@@ -132,7 +132,7 @@ namespace YAT.View.Forms
 			this.startupControl.RequestedCommandId = requestedCommandId;
 
 		////this.selectedPageId will be set by PredefinedCommandSettings_Shown().
-			this.indicatedName = indicatedName;
+			this.indicatedTerminalName = indicatedTerminalName;
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -329,7 +329,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsFileHelper.TryExportOne(this, this.settingsInEdit, this.selectedPageId, this.indicatedName);
+			CommandPagesSettingsFileHelper.TryExportOne(this, this.settingsInEdit, this.selectedPageId);
 		}
 
 		private void button_DeletePage_Click(object sender, EventArgs e)
@@ -361,7 +361,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToFile_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsFileHelper.TryExportAll(this, this.settingsInEdit, this.indicatedName);
+			CommandPagesSettingsFileHelper.TryExportAll(this, this.settingsInEdit, this.indicatedTerminalName);
 		}
 
 		private void button_ImportAllPagesFromFile_Click(object sender, EventArgs e)
@@ -1073,14 +1073,7 @@ namespace YAT.View.Forms
 
 					int id = 1;
 					foreach (var p in this.settingsInEdit.Pages)
-					{
-						if (!string.IsNullOrEmpty(p.Caption))
-							listBox_Pages.Items.Add(p.Caption);
-						else
-							listBox_Pages.Items.Add(PredefinedCommandPage.CaptionFallback(p, id));
-
-						id++;
-					}
+						listBox_Pages.Items.Add(PredefinedCommandPage.CaptionOrFallback(p, id++));
 
 					var pageIsSelected = (this.selectedPageId != 0);
 					if (pageIsSelected)

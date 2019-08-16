@@ -1195,7 +1195,7 @@ namespace YAT.Settings.Model.Test
 			if (sh.Settings.HasLinkedSettings)
 			{
 				bool isCanceled;
-				if (!Terminal.TryLoadLinkedSettings(sh.Settings, null, null, false, null, null, out isCanceled))
+				if (!Terminal.TryLoadLinkedSettings(sh.Settings, null, null, false, false, null, null, out isCanceled))
 					Assert.Fail("Linked settings could not be loaded for " + sh.SettingsFilePath);
 			}
 
