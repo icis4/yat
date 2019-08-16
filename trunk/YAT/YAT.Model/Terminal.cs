@@ -2041,7 +2041,7 @@ namespace YAT.Model
 					doUnlink = true;
 					linkFilePathConfirmed = null;
 					isCanceled = false;
-					return (true);
+					return (false); // = no file path!
 
 				default:
 					doUnlink = false;
@@ -2307,7 +2307,7 @@ namespace YAT.Model
 							string linkFilePathConfirmed;
 							bool doUnlink;
 							if (RequestRestrictedLinkedFilePathFromUser(currentFilePath, OnMessageInputRequest, OnOpenCommandPageFileDialogRequest, out linkFilePathConfirmed, out doUnlink, out isCanceled)) {
-								linkedPage.LinkFilePath = linkFilePathConfirmed;
+								currentFilePath = linkFilePathConfirmed;
 							}
 							else if (doUnlink) {
 								linkedPage.Unlink();
