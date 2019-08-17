@@ -34,9 +34,8 @@
   <Target Name="$(ProjectDir)/YAT.Model.Types/bin/Debug/YAT.Model.Types.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Model/bin/Debug/YAT.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Settings.Application/bin/Debug/YAT.Settings.Application.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Settings.Terminal/bin/Debug/YAT.Settings.Terminal.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Settings.Test/bin/Debug/YAT.Settings.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Settings.Workspace/bin/Debug/YAT.Settings.Workspace.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Settings.Model.Test/bin/Debug/YAT.Settings.Model.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Settings.Model/bin/Debug/YAT.Settings.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Test/bin/Debug/YAT.Test.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.View.Controls/bin/Debug/YAT.View.Controls.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.View.Forms/bin/Debug/YAT.View.Forms.dll" Analyze="True" AnalyzeAllChildren="True" />

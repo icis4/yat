@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -166,6 +167,8 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Spreaded", Justification = "'Spreaded' sounds more natural for a non-English guy like me, and symmetricity with 'Merged' and 'Truncated'.")]
 		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			foreach (var p in collection)
@@ -179,6 +182,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Spreaded", Justification = "'Spreaded' sounds more natural for a non-English guy like me, and symmetricity with 'Merged' and 'Truncated'.")]
 		public void InsertSpreaded(int index, IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{
 			foreach (var p in collection)

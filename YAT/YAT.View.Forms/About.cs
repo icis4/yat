@@ -65,6 +65,7 @@ using MKY.Windows.Forms;
 [module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.About.resources", MessageId = "Pipetting")]
 [module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.About.resources", MessageId = "unidir")]
 [module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.About.resources", MessageId = "Vignoni")]
+
 #endregion
 
 namespace YAT.View.Forms

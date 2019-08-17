@@ -198,7 +198,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public Parser(Endianness endianness, Modes modes)
-			: this(Encoding.Default, modes)
+			: this(Encoding.Default, endianness, modes)
 		{
 		}
 
