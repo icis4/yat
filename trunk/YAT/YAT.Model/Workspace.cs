@@ -1436,6 +1436,11 @@ namespace YAT.Model
 			OnCursorRequest(Cursors.WaitCursor);
 
 			var t = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
+
+			// Attention:
+			// Similar code exists in OpenTerminalFromSettings() further below.
+			// Changes here may have to be applied there too.
+
 			AttachTerminalEventHandlers(t);
 			AddTerminalToWorkspace(t);
 			OnTerminalAdded(t);
@@ -1443,19 +1448,20 @@ namespace YAT.Model
 			OnCursorReset();
 			OnTimedStatusTextRequest("New terminal created.");
 
-			var success = true;
 			if (t.HasLinkedSettings)
 			{
-				bool isCanceled;
-				success = t.TryLoadLinkedSettings(true, false, out isCanceled); // User interaction is done within TryLoadLinkedSettings().
-				if (isCanceled)
-					t.Close();
+			////OnFixedStatusTextRequest("Loading linked settings..."); is done within TryLoadLinkedSettings().
+
+				bool isCanceled;              // Shall not be cancelable, nobody would understand canceling closes the terminal.
+				t.TryLoadLinkedSettings(true, false, out isCanceled); // User interaction is done within TryLoadLinkedSettings().
+				// No need to handle return value, errors are handled within TryLoadLinkedSettings().
+
+			////OnTimedStatusTextRequest("Linked settings loaded."); is done within TryLoadLinkedSettings().
 			}
 
-			if (success)
-				t.Start(); // Errors are handled within Start().
+			t.Start(); // Errors are handled within Start().
 
-			return (success);
+			return (true);
 		}
 
 		/// <summary>
@@ -1709,6 +1715,10 @@ namespace YAT.Model
 				return (false);
 			}
 
+			// Attention:
+			// Similar code exists in CreateNewTerminal() further above.
+			// Changes here may have to be applied there too.
+
 			AttachTerminalEventHandlers(t);
 			AddTerminalToWorkspace(t, fixedId);
 			OnTerminalAdded(t);
@@ -1717,6 +1727,19 @@ namespace YAT.Model
 				SetRecent(settingsHandler.SettingsFilePath);
 
 			OnTimedStatusTextRequest("Terminal opened.");
+
+			if (t.HasLinkedSettings)
+			{
+			////OnFixedStatusTextRequest("Loading linked settings..."); is done within TryLoadLinkedSettings().
+
+				bool isCanceled;              // Shall not be cancelable, nobody would understand canceling closes the terminal.
+				t.TryLoadLinkedSettings(true, false, out isCanceled); // User interaction is done within TryLoadLinkedSettings().
+				// No need to handle return value, errors are handled within TryLoadLinkedSettings().
+
+			////OnTimedStatusTextRequest("Linked settings loaded."); is done within TryLoadLinkedSettings().
+			}
+
+		////t.Start(); is done by StartAllTerminals() below.
 
 			exception = null;
 			return (true);
