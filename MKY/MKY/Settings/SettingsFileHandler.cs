@@ -58,8 +58,6 @@ namespace MKY.Settings
 		private string lastAccessFilePath;
 		private DateTime lastAccessTimeUtc;
 
-		private Type parentType;
-
 		#endregion
 
 		#region Object Lifetime
@@ -69,27 +67,14 @@ namespace MKY.Settings
 
 		/// <summary></summary>
 		public SettingsFileHandler()
-			: this(null, null)
+			: this(null)
 		{
 		}
 
 		/// <summary></summary>
 		public SettingsFileHandler(string filePath)
-			: this(filePath, null)
-		{
-		}
-
-		/// <summary></summary>
-		public SettingsFileHandler(Type parentType)
-			: this(null, parentType)
-		{
-		}
-
-		/// <summary></summary>
-		public SettingsFileHandler(string filePath, Type parentType)
 		{
 			this.filePath = filePath;
-			this.parentType = parentType;
 		}
 
 	#if (DEBUG)

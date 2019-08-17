@@ -82,10 +82,11 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId="3#", Justification = "Symmetricity with other methods.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void SerializeToString(Type type, object obj, ref StringBuilder sb)
+		public static void SerializeToString(Type type, object obj, IFormatProvider formatProvider, ref StringBuilder sb)
 		{
-			using (var sw = new StringWriter(sb))
+			using (var sw = new StringWriter(sb, formatProvider))
 			{
 				SerializeToWriter(type, obj, sw);
 			}
@@ -380,6 +381,7 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static object DeserializeFromReaderInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, TextReader input)
 		{
 			// First, always try standard deserialization:

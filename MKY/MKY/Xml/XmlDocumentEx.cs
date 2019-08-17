@@ -30,7 +30,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -51,6 +50,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Reads XML input stream into a document.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static XmlDocument LoadFromReader(XmlReader reader)
 		{
 			XmlDocument document = new XmlDocument();
@@ -61,6 +61,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Creates and returns an object tree of the given type from a document.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static object SaveToObjectTree(XmlDocument document, Type type)
 		{
 			// Save the resulting document into a string:
@@ -86,6 +87,7 @@ namespace MKY.Xml
 		/// </summary>
 		/// <param name="type">The type to be used.</param>
 		/// <param name="requiredSchema">Schema(s) required in addition to the default schema.</param>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static XmlDocument CreateDefaultDocument(Type type, params XmlSchema[] requiredSchema)
 		{
 			// Create an empty object tree of the type to be able to serialize it afterwards.
@@ -163,6 +165,7 @@ namespace MKY.Xml
 		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void SaveToFile(XmlDocument document, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
 		{
 			SaveToFile(document, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, fileNameWithoutExtension, fileExtension);
@@ -177,6 +180,7 @@ namespace MKY.Xml
 		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void SaveToFile(XmlDocument document, Encoding encoding, string path, string fileNameWithoutExtension, string fileExtension = ".xml")
 		{
 			string filePath = path + fileNameWithoutExtension + (!string.IsNullOrEmpty(fileExtension) ? fileExtension : "");
@@ -189,6 +193,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Writes the given XML document to the given output writer.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void SaveToWriter(XmlDocument document, TextWriter output)
 		{
 			var xws = new XmlWriterSettings();
