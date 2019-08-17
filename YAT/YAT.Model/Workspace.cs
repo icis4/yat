@@ -1443,10 +1443,19 @@ namespace YAT.Model
 			OnCursorReset();
 			OnTimedStatusTextRequest("New terminal created.");
 
-			// Start terminal:
-			t.Start(); // Errors are handled within Start().
+			var success = true;
+			if (t.HasLinkedSettings)
+			{
+				bool isCanceled;
+				success = t.TryLoadLinkedSettings(true, false, out isCanceled); // User interaction is done within TryLoadLinkedSettings().
+				if (isCanceled)
+					t.Close();
+			}
 
-			return (true); // Successfully created.
+			if (success)
+				t.Start(); // Errors are handled within Start().
+
+			return (success);
 		}
 
 		/// <summary>
@@ -1787,18 +1796,9 @@ namespace YAT.Model
 				sh.SettingsFilePath = absoluteFilePath;
 				if (sh.Load())
 				{
-					bool success = true;
-
-					if (sh.Settings.HasLinkedSettings)
-					{
-						bool isCanceled;            // \remind 2019-08-16 / MKY:
-						if (!Terminal.TryLoadLinkedSettings(sh.Settings, OnFixedStatusTextRequest, OnTimedStatusTextRequest, true, true, OnMessageInputRequest, OnSaveCommandPageAsFileDialogRequest, out isCanceled))
-							success = (isCanceled); // Canceling loading the linked settings shall still open the terminal!
-					}                               // Returning 'false' on an auto-saved terminal would "destroy" it!
-					                              //// Alternatives: a) Implement 'isCancelable' on Open(). b) LoadLinkedSettings() only *after* having opened the terminal.
 					settingsHandler = sh;
 					exception = null;
-					return (success);
+					return (true);
 				}
 				else
 				{

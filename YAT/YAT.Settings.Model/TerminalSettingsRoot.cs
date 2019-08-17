@@ -681,6 +681,14 @@ namespace YAT.Settings.Model
 			get { return (this.PredefinedCommand.Pages.LinkedToFilePathCount > 0); }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance's linked settings have changed.
+		/// </summary>
+		public virtual bool LinkedSettingsHaveChanged
+		{
+			get { return (this.PredefinedCommand.HaveChanged); }
+		}
+
 		#endregion
 
 		#endregion

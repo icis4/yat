@@ -1695,12 +1695,6 @@ namespace YAT.Model
 				{
 					bool success = true;
 
-					if (sh.Settings.HasLinkedSettings)
-					{
-						bool isCanceled;                                                                                          // No user interaction when opening command line requested terminal file.
-						success = Terminal.TryLoadLinkedSettings(sh.Settings, OnFixedStatusTextRequest, OnTimedStatusTextRequest, false, false, null, null, out isCanceled);
-					}
-
 					settingsHandler = sh;
 					exception = null;
 					return (success);
