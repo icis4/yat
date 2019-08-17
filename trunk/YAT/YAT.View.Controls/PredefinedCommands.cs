@@ -552,10 +552,6 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				List<Command> commands = null;
-				if ((this.pages != null) && (this.pages.Count > 0))
-					commands = this.pages[SelectedPageIndex].Commands;
-
 				foreach (var set in this.buttonSets)
 				{
 					if (set.Visible)

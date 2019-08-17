@@ -45,6 +45,16 @@ using YAT.View.Utilities;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.PredefinedCommandSettings.resources", MessageId = "yat")]
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.PredefinedCommandSettings.resources", MessageId = "yatc")]
+
+#endregion
+
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
