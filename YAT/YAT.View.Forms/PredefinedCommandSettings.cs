@@ -1691,7 +1691,7 @@ namespace YAT.View.Forms
 				(
 				this,
 				"Clear all commands of page '" + PredefinedCommandPage.CaptionOrFallback(this.settingsInEdit.Pages[SelectedPageIndex], SelectedPageIndex) + "'?",
-				"Clear?",
+				"Clear Page?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2

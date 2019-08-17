@@ -325,7 +325,7 @@ namespace YAT.View.Utilities
 				{
 					message.Append("Would you like to clear the link of all " + linkedCount.ToString(CultureInfo.CurrentUICulture) + " linked pages [Yes],");
 					message.Append(" or just of the currently selected linked page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
-
+					                                                                 // Using page id and not page name since unlink will revert the name.
 					switch (MessageBoxEx.Show
 						(
 							owner,
@@ -342,7 +342,7 @@ namespace YAT.View.Utilities
 					}
 				}
 				else // Just the selected page is linked:
-				{
+				{                                            // Using page id and not page name since unlink will revert the name.
 					message.Append("Clear the link of page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + "?");
 				}
 			}
@@ -361,7 +361,7 @@ namespace YAT.View.Utilities
 					(
 						owner,
 						message.ToString(),
-						"Clear?",
+						"Clear Link?",
 						MessageBoxButtons.YesNoCancel,
 						MessageBoxIcon.Question,
 						MessageBoxDefaultButton.Button2
