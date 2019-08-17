@@ -21,7 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Configuration;
 
 namespace MKY.Configuration
@@ -34,6 +34,9 @@ namespace MKY.Configuration
 		/// <summary>
 		/// Returns an array of strings containing default instructions to generate template and configuration files.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "through", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Nobody will modify this array, don't worry...")]
 		public static readonly string[] DefaultInstructions_1through7 =
 		{
 			@"Proceed as follows to generate template as well as effective configuration files:",

@@ -143,7 +143,7 @@ namespace YAT.View.Utilities
 				root.Page = page;
 
 				var sb = new StringBuilder();
-				XmlSerializerEx.SerializeToString(typeof(CommandPageSettingsRoot), root, ref sb);
+				XmlSerializerEx.SerializeToString(typeof(CommandPageSettingsRoot), root, CultureInfo.CurrentUICulture, ref sb);
 				Clipboard.SetText(sb.ToString());
 
 				return (true);
@@ -173,7 +173,7 @@ namespace YAT.View.Utilities
 				root.Pages = pages;
 
 				var sb = new StringBuilder();
-				XmlSerializerEx.SerializeToString(typeof(CommandPagesSettingsRoot), root, ref sb);
+				XmlSerializerEx.SerializeToString(typeof(CommandPagesSettingsRoot), root, CultureInfo.CurrentUICulture, ref sb);
 				Clipboard.SetText(sb.ToString());
 
 				return (true);

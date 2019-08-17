@@ -79,7 +79,7 @@ namespace MKY.Settings
 
 		private void Initialize(TSettings settings)
 		{
-			this.fileHandler = new SettingsFileHandler(GetType());
+			this.fileHandler = new SettingsFileHandler();
 
 			this.settings = settings;
 

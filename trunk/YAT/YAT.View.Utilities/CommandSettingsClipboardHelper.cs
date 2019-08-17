@@ -29,6 +29,7 @@
 
 using System;
 using System.IO;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -72,7 +73,7 @@ namespace YAT.View.Utilities
 			root.Command = c;
 
 			var sb = new StringBuilder();
-			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, ref sb);
+			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, CultureInfo.CurrentUICulture, ref sb);
 
 			try
 			{

@@ -52,7 +52,7 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Win32.DotNet", Justification = "Name of namespaces is given by the .NET framework.")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Win32.DotNet", Justification = "Name of namespace is given by the .NET framework.")]
 
 //==================================================================================================
 // End of

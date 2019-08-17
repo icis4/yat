@@ -114,9 +114,8 @@ namespace MKY.Settings
 			/// <param name="name">The name of the settings.</param>
 			/// <param name="filePath">The file path to the settings file.</param>
 			/// <param name="desiredFileAccess">The file access of the settings file.</param>
-			/// <param name="parentType">Use for debug/trace output only.</param>
-			public Handler(string name, string filePath, ApplicationSettingsFileAccess desiredFileAccess, Type parentType)
-				: base(filePath, parentType)
+			public Handler(string name, string filePath, ApplicationSettingsFileAccess desiredFileAccess)
+				: base(filePath)
 			{
 				this.name = name;
 				this.settings = new TSettings();
@@ -445,8 +444,7 @@ namespace MKY.Settings
 				(
 					CommonName,
 					Application.CommonAppDataPath + Path.DirectorySeparatorChar + CommonFileName,
-					commonSettingsFileAccess,
-					GetType()
+					commonSettingsFileAccess
 				);
 			}
 
@@ -456,8 +454,7 @@ namespace MKY.Settings
 				(
 					LocalUserName,
 					Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + LocalUserFileName,
-					localUserSettingsFileAccess,
-					GetType()
+					localUserSettingsFileAccess
 				);
 			}
 
@@ -467,8 +464,7 @@ namespace MKY.Settings
 				(
 					RoamingUserName,
 					Application.UserAppDataPath + Path.DirectorySeparatorChar + RoamingUserFileName,
-					roamingUserSettingsFileAccess,
-					GetType()
+					roamingUserSettingsFileAccess
 				);
 			}
 		}

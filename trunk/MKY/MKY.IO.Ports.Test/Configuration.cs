@@ -212,6 +212,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		public virtual bool LoopbackSelfsAreAvailable
 		{
 			get { return (LoopbackSelfs.Count > 0); }
