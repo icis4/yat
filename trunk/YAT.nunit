@@ -23,6 +23,7 @@
     <assembly path="netrtfwriter\RtfWriter\bin\Debug\RtfWriter.dll" />
     <assembly path="NUnit\NUnit\bin\Debug\NUnit.dll" />
     <assembly path="YAT\YAT\bin\Debug\YAT.exe" />
+    <assembly path="YAT\YAT.Application\bin\Debug\YAT.Application.dll" />
     <assembly path="YAT\YAT.Controller\bin\Debug\YAT.Controller.dll" />
     <assembly path="YAT\YAT.Controller.Test\bin\Debug\YAT.Controller.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Debug\YAT.Domain.dll" />
@@ -33,7 +34,6 @@
     <assembly path="YAT\YAT.Model.Settings\bin\Debug\YAT.Model.Settings.dll" />
     <assembly path="YAT\YAT.Model.Test\bin\Debug\YAT.Model.Test.dll" />
     <assembly path="YAT\YAT.Model.Types\bin\Debug\YAT.Model.Types.dll" />
-    <assembly path="YAT\YAT.Application\bin\Debug\YAT.Application.dll" />
     <assembly path="YAT\YAT.Settings.Application\bin\Debug\YAT.Settings.Application.dll" />
     <assembly path="YAT\YAT.Settings.Model\bin\Debug\YAT.Settings.Model.dll" />
     <assembly path="YAT\YAT.Settings.Model.Test\bin\Debug\YAT.Settings.Model.Test.dll" />
@@ -67,6 +67,7 @@
     <assembly path="netrtfwriter\RtfWriter\bin\Release\RtfWriter.dll" />
     <assembly path="NUnit\NUnit\bin\Release\NUnit.dll" />
     <assembly path="YAT\YAT\bin\Release\YAT.exe" />
+    <assembly path="YAT\YAT.Application\bin\Release\YAT.Application.dll" />
     <assembly path="YAT\YAT.Controller\bin\Release\YAT.Controller.dll" />
     <assembly path="YAT\YAT.Controller.Test\bin\Release\YAT.Controller.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Release\YAT.Domain.dll" />
@@ -77,7 +78,6 @@
     <assembly path="YAT\YAT.Model.Settings\bin\Release\YAT.Model.Settings.dll" />
     <assembly path="YAT\YAT.Model.Test\bin\Release\YAT.Model.Test.dll" />
     <assembly path="YAT\YAT.Model.Types\bin\Release\YAT.Model.Types.dll" />
-    <assembly path="YAT\YAT.Application\bin\Release\YAT.Application.dll" />
     <assembly path="YAT\YAT.Settings.Application\bin\Release\YAT.Settings.Application.dll" />
     <assembly path="YAT\YAT.Settings.Model\bin\Release\YAT.Settings.Model.dll" />
     <assembly path="YAT\YAT.Settings.Model.Test\bin\Release\YAT.Settings.Model.Test.dll" />
