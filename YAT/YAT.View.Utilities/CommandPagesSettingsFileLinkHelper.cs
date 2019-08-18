@@ -28,7 +28,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -64,6 +64,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exception)
 		{
@@ -93,6 +94,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static DialogResult ShowSaveAsFileDialog(Control owner, string filePathOld, out string filePathNew)
 		{
@@ -123,6 +125,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static DialogResult ShowOpenFileDialog(Control owner, string filePathOld, out string filePathNew)
 		{
@@ -153,6 +156,8 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out string filePath, out PredefinedCommandPage page)
 		{
@@ -288,7 +293,7 @@ namespace YAT.View.Utilities
 				message.Append(commandCapacityPerPageOld);
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
-				message.Append("Enlarge the current pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page?");
+				message.Append("Enlarge the current pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentCulture) + " commands per page?");
 
 				if (MessageBoxEx.Show
 					(
@@ -323,9 +328,9 @@ namespace YAT.View.Utilities
 			{
 				if (linkedCount > 1)
 				{
-					message.Append("Would you like to clear the link of all " + linkedCount.ToString(CultureInfo.CurrentUICulture) + " linked pages [Yes],");
-					message.Append(" or just of the currently selected linked page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
-					                                                                 // Using page id and not page name since unlink will revert the name.
+					message.Append("Would you like to clear the link of all " + linkedCount.ToString(CultureInfo.CurrentCulture) + " linked pages [Yes],");
+					message.Append(" or just of the currently selected linked page " + selectedPageId.ToString(CultureInfo.CurrentCulture) + " [No]?");
+					                                                               //// Using page id and not page name since unlink will revert the name.
 					switch (MessageBoxEx.Show
 						(
 							owner,
@@ -343,12 +348,12 @@ namespace YAT.View.Utilities
 				}
 				else // Just the selected page is linked:
 				{                                            // Using page id and not page name since unlink will revert the name.
-					message.Append("Clear the link of page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + "?");
+					message.Append("Clear the link of page " + selectedPageId.ToString(CultureInfo.CurrentCulture) + "?");
 				}
 			}
 			else if (linkedCount > 1)
 			{
-				message.Append("Clear the link of all " + linkedCount.ToString(CultureInfo.CurrentUICulture) + " linked pages?");
+				message.Append("Clear the link of all " + linkedCount.ToString(CultureInfo.CurrentCulture) + " linked pages?");
 			}
 			else if (linkedCount == 1)
 			{
@@ -376,7 +381,8 @@ namespace YAT.View.Utilities
 			return (false);
 		}
 
-		/// <remarks>Boolean return for symmericity with other methods.</remarks>
+		/// <remarks>Boolean return for symmetricity with other methods.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private static bool TryClearLinkAll(PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			// Clone settings to preserve pages and other properties...
@@ -387,7 +393,8 @@ namespace YAT.View.Utilities
 			return (true);
 		}
 
-		/// <remarks>Boolean return for symmericity with other methods.</remarks>
+		/// <remarks>Boolean return for symmetricity with other methods.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private static bool TryClearLinkOne(PredefinedCommandSettings settingsOld, int pageId, out PredefinedCommandSettings settingsNew)
 		{
 			// Clone settings to preserve pages and other properties...

@@ -436,6 +436,7 @@ namespace YAT.Controller
 		/// <param name="runWithView">See remarks above.</param>
 		/// <param name="applicationSettingsFileAccess">See remarks above.</param>
 		/// <param name="loadSettingsInWelcomeScreen">See YAT.Controller.Test.TestFixtureSetUp() for background.</param>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1625:ElementDocumentationMustNotBeCopiedAndPasted", Justification = "?!?")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop isn't able to deal with command line terms such as 'cmd' or 'nv'...")]
 		public virtual MainResult Run(bool runFromConsole, bool runWithView, ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
 		{

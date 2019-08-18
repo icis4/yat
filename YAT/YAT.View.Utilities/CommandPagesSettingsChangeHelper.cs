@@ -162,8 +162,8 @@ namespace YAT.View.Utilities
 					message.Append(commandCapacityPerPageRequested);
 					message.AppendLine(" commands per page are requested now.");
 					message.AppendLine();
-					message.Append("Would you like to merge each " + potentialMergeRatio.ToString(CultureInfo.CurrentUICulture));
-					message.Append(" pages to a single page of " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page?");
+					message.Append("Would you like to merge each " + potentialMergeRatio.ToString(CultureInfo.CurrentCulture));
+					message.Append(" pages to a single page of " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentCulture) + " commands per page?");
 
 					switch (MessageBoxEx.Show
 						(
@@ -197,9 +197,9 @@ namespace YAT.View.Utilities
 				message.Append(commandCapacityPerPageRequested);
 				message.AppendLine(" commands per page are requested now.");
 				message.AppendLine();
-				message.Append("Would you like to spread each page to " + potentialSpreadRatio.ToString(CultureInfo.CurrentUICulture));
-				message.Append(" pages of " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or truncate the pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append("Would you like to spread each page to " + potentialSpreadRatio.ToString(CultureInfo.CurrentCulture));
+				message.Append(" pages of " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentCulture) + " commands per page [Yes],");
+				message.Append(" or truncate the pages to " + commandCapacityPerPageRequested.ToString(CultureInfo.CurrentCulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(

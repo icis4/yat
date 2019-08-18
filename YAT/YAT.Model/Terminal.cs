@@ -179,8 +179,8 @@ namespace YAT.Model
 		///             bei YAT.Model.Terminal.totalConnectChrono_TimeSpanChanged(Object sender, TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 4204.
 		/// ]]>
 		///
-		/// The chronos get properly terminated, but apparently there may still be pending
-		/// asynchronuos 'zombie' callback that later throw an exception. No true solution
+		/// The chronometers get properly terminated, but apparently there may still be pending
+		/// asynchronous 'zombie' callback that later throw an exception. No true solution
 		/// has been found.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
@@ -1862,7 +1862,7 @@ namespace YAT.Model
 			// Potentially save linked settings:
 			// -------------------------------------------------------------------------------------
 
-			if (this.settingsRoot.LinkedSettingsHaveChanged) // Not (yet) distiguishing explicit/implicit.
+			if (this.settingsRoot.LinkedSettingsHaveChanged) // Not (yet) distinguishing explicit/implicit.
 			{
 				if (!TrySaveLinkedSettings(userInteractionIsAllowed, canBeCanceled, out isCanceled))
 					return (false);
@@ -2005,6 +2005,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'dr' = DialogResult.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -2040,10 +2044,10 @@ namespace YAT.Model
 			{
 				case DialogResult.Yes:
 					doUnlink = false;
-					var drFilePath = OnSaveCommandPageAsFileDialogRequest(linkFilePathRestricted);
-					linkFilePathNewOrConfirmed = drFilePath.FilePath;
-					isCanceled = (drFilePath.Result == DialogResult.Cancel);
-					return (drFilePath.Result == DialogResult.OK);
+					var drSaveAs = OnSaveCommandPageAsFileDialogRequest(linkFilePathRestricted);
+					linkFilePathNewOrConfirmed = drSaveAs.FilePath;
+					isCanceled = (drSaveAs.Result == DialogResult.Cancel);
+					return (drSaveAs.Result == DialogResult.OK);
 
 				case DialogResult.No:
 					doUnlink = true;
@@ -2061,6 +2065,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'dr' = DialogResult.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -2096,10 +2104,10 @@ namespace YAT.Model
 			{
 				case DialogResult.Yes:
 					doUnlink = false;
-					var drFilePath = OnOpenCommandPageFileDialogRequest(linkFilePathRestricted);
-					linkFilePathNewOrConfirmed = drFilePath.FilePath;
-					isCanceled = (drFilePath.Result == DialogResult.Cancel);
-					return (drFilePath.Result == DialogResult.OK);
+					var drOpen = OnOpenCommandPageFileDialogRequest(linkFilePathRestricted);
+					linkFilePathNewOrConfirmed = drOpen.FilePath;
+					isCanceled = (drOpen.Result == DialogResult.Cancel);
+					return (drOpen.Result == DialogResult.OK);
 
 				case DialogResult.No:
 					doUnlink = true;
@@ -2134,7 +2142,7 @@ namespace YAT.Model
 			this.settingsHandler.SettingsFilePath = absoluteFilePath;
 
 			// ...potentially save linked settings...
-			if (this.settingsHandler.Settings.LinkedSettingsHaveChanged) // Not (yet) distiguishing explicit/implicit.
+			if (this.settingsHandler.Settings.LinkedSettingsHaveChanged) // Not (yet) distinguishing explicit/implicit.
 			{
 				bool isCanceled;
 				if (!TrySaveLinkedSettings(true, true, out isCanceled))
@@ -2208,6 +2216,7 @@ namespace YAT.Model
 		///  > Changing links or even unlinking must happen prior to saving the terminal itself.
 		///  > Symmetricity with loading, where the terminal itself has to be loaded first.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		protected virtual bool TrySaveLinkedSettings(bool userInteractionIsAllowed, bool canBeCanceled, out bool isCanceled)
 		{
 			// Attention:
@@ -2283,6 +2292,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		protected virtual bool TrySaveLinkedCommandPageConsiderately(PredefinedCommandPage linkedPage,
 		                                                             DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
 		                                                             bool userInteractionIsAllowed,
@@ -2359,6 +2374,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to deal with.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		protected virtual bool TryLoadLinkedPredefinedCommandPageConsiderately(PredefinedCommandPage linkedPage, bool doUpdateLinkedPage,
 		                                                                       bool userInteractionIsAllowed, bool canBeCanceled,
 		                                                                       out DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,

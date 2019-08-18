@@ -220,7 +220,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Prepended "Multiple" to clearly distiguish from single command page.
+		/// Prepended "Multiple" to clearly distinguish from single command page.
 		/// </remarks>
 		public static string CommandPagesFilesFilter
 		{

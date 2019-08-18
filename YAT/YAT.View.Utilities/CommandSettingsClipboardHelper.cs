@@ -28,8 +28,9 @@
 //==================================================================================================
 
 using System;
-using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -73,7 +74,7 @@ namespace YAT.View.Utilities
 			root.Command = c;
 
 			var sb = new StringBuilder();
-			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, CultureInfo.CurrentUICulture, ref sb);
+			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, CultureInfo.CurrentCulture, ref sb);
 
 			try
 			{
@@ -96,6 +97,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static bool TryGet(out Command c)
 		{
 			string s;

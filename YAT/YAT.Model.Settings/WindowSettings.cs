@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -34,10 +33,9 @@ namespace YAT.Model.Settings
 	/// \remind (2017-11-19 / MKY), (2019-08-02 / MKY)
 	/// Should be migrated to a separate 'YAT.Application.Settings' project. Not easily possible
 	/// because of dependencies among 'YAT.*' and 'YAT.Application', e.g. 'ExtensionSettings'.
-	/// Requires slight refactoring of project dependecies. Could be done when refactoring the
+	/// Requires slight refactoring of project dependencies. Could be done when refactoring the
 	/// projects on integration with Albatros.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Albatros' is a name.")]
 	public class WindowSettings : MKY.Settings.SettingsItem, IEquatable<WindowSettings>
 	{
 		private FormWindowState state;

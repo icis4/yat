@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -65,9 +66,10 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary>
-		/// Exports to a .yacp or .yacps file, promting the user as required.
+		/// Exports to a .yacp or .yacps file, prompting the user as required.
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'yacp' and 'yacps' are YAT specific file extension.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExport(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId, string indicatedTerminalName)
 		{
@@ -83,8 +85,8 @@ namespace YAT.View.Utilities
 			else // if (pageCount > 1)
 			{
 				var message = new StringBuilder();
-				message.Append("Would you like to export all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
-				message.Append(" or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
+				message.Append("Would you like to export all " + pageCount.ToString(CultureInfo.CurrentCulture) + " pages [Yes],");
+				message.Append(" or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentCulture) + " [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -107,6 +109,7 @@ namespace YAT.View.Utilities
 		/// Prompts the user to export all pages to a .yacps file.
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'yacps' is a YAT specific file extension.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportAll(IWin32Window owner, PredefinedCommandSettings settings, string indicatedTerminalName)
 		{
@@ -117,6 +120,7 @@ namespace YAT.View.Utilities
 		/// Prompts the user to export the given page to a .yacp file.
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'yacp' is a YAT specific file extension.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryExportOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId)
 		{
@@ -190,6 +194,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private static bool TrySave(PredefinedCommandPage page, string filePath, out Exception exception)
 		{
 			try
@@ -212,6 +217,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private static bool TrySave(PredefinedCommandPageCollection pages, string filePath, out Exception exception)
 		{
 			try
@@ -234,6 +240,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exception)
 		{
 			try
@@ -262,6 +269,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private static bool TryLoad(string filePath, out PredefinedCommandPageCollection pages, out Exception exception)
 		{
 			try
@@ -290,6 +298,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private static bool TryLoad(string filePath, out PredefinedCommandSettings settings, out Exception exception)
 		{
 			try
@@ -318,6 +327,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool ShowOpenFileDialogAndTryLoad(IWin32Window owner, out PredefinedCommandPageCollection pages)
 		{
@@ -689,8 +699,8 @@ namespace YAT.View.Utilities
 				message.Append(commandCapacityPerPageOld);
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
-				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the imported pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentCulture) + " commands per page [Yes],");
+				message.Append(" or spread the imported pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentCulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(

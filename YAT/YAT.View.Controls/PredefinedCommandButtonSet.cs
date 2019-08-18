@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
@@ -224,7 +225,7 @@ namespace YAT.View.Controls
 		public virtual int GetCommandIdFromLocation(Point location)
 		{
 			Point pt = PointToClient(location); // Using Control.PointToClient() is OK since buttons are directly placed onto control.
-			// No using GetChildAtPoint() to also support clicking inbetween buttons.
+			//// Not using GetChildAtPoint() to also support clicking inbetween buttons.
 
 			// Ensure that location is within control:
 			if ((pt.X < 0) || (pt.X > Width))  return (0);
@@ -358,8 +359,8 @@ namespace YAT.View.Controls
 		private void SetControls()
 		{
 		////this.isSettingControls.Enter(); is not needed (yet).
-			try
-			{
+		////try
+		////{
 				switch (SubpageId)
 				{
 					case 1:
@@ -378,36 +379,36 @@ namespace YAT.View.Controls
 						break;
 
 					default:
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString() + "' is an ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString(CultureInfo.CurrentCulture) + "' is an ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				SetCommandControls();
-			}
-			finally
-			{
-			////this.isSettingControls.Leave(); is not needed (yet).
-			}
+		////}
+		////finally
+		////{
+		////	this.isSettingControls.Leave(); is not needed (yet).
+		////}
 		}
 
 		private void SetCommandControls()
 		{
 		////this.isSettingControls.Enter(); is not needed (yet).
-			try
-			{
+		////try
+		////{
 				SetCommandTextControls();
 				SetCommandStateControls();
-			}
-			finally
-			{
-			////this.isSettingControls.Leave(); is not needed (yet).
-			}
+		////}
+		////finally
+		////{
+		////	this.isSettingControls.Leave(); is not needed (yet).
+		////}
 		}
 
 		private void SetCommandTextControls()
 		{
 		////this.isSettingControls.Enter(); is not needed (yet).
-			try
-			{
+		////try
+		////{
 				// Attention:
 				// Similar code exists in...
 				// ...SetCommandStateControls() below
@@ -442,18 +443,18 @@ namespace YAT.View.Controls
 						toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 					}
 				}
-			}
-			finally
-			{
-			////this.isSettingControls.Leave(); is not needed (yet).
-			}
+		////}
+		////finally
+		////{
+		////	this.isSettingControls.Leave(); is not needed (yet).
+		////}
 		}
 
 		private void SetCommandStateControls()
 		{
 		////this.isSettingControls.Enter(); is not needed (yet).
-			try
-			{
+		////try
+		////{
 				// Attention:
 				// Similar code exists in...
 				// ...SetCommandTextControls() above
@@ -500,11 +501,11 @@ namespace YAT.View.Controls
 						this.buttons_commands[i].Enabled = true;
 					}
 				}
-			}
-			finally
-			{
-			////this.isSettingControls.Leave(); is not needed (yet).
-			}
+		////}
+		////finally
+		////{
+		////	this.isSettingControls.Leave(); is not needed (yet).
+		////}
 		}
 
 		private void CommandRequest(int relativeCommandId)

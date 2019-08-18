@@ -54,7 +54,7 @@ namespace MKY.Time
 		/// <remarks>
 		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/> to
 		/// prevent the following issue:
-		/// 
+		///
 		/// <![CDATA[
 		/// System.Reflection.TargetInvocationException was unhandled by user code
 		///   Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
@@ -68,7 +68,7 @@ namespace MKY.Time
 		///        bei MKY.Time.Chronometer.OnTimeSpanChanged(TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\MKY\MKY\Time\Chronometer.cs:Zeile 350.
 		///        bei MKY.Time.Chronometer.timer_Elapsed(Object sender, ElapsedEventArgs e) in D:\Workspace\YAT\Trunk\MKY\MKY\Time\Chronometer.cs:Zeile 330.
 		///        bei System.Timers.Timer.MyTimerCallback(Object state)
-		///   InnerException: 
+		///   InnerException:
 		///        Message=Invoke oder BeginInvoke kann für ein Steuerelement erst aufgerufen werden, wenn das Fensterhandle erstellt wurde.
 		///        Source=System.Windows.Forms
 		///        StackTrace:
@@ -80,9 +80,9 @@ namespace MKY.Time
 		///             bei YAT.Model.Terminal.OnIOConnectTimeChanged(TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 5258.
 		///             bei YAT.Model.Terminal.totalConnectChrono_TimeSpanChanged(Object sender, TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 4204.
 		/// ]]>
-		/// 
-		/// The chronos get properly terminated, but apparently there may still be pending
-		/// asynchronuos 'zombie' callback that later throw an exception. No true solution
+		///
+		/// The chronometers get properly terminated, but apparently there may still be pending
+		/// asynchronous 'zombie' callback that later throw an exception. No true solution
 		/// has been found.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
@@ -168,11 +168,11 @@ namespace MKY.Time
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Chronometer()

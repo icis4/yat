@@ -230,6 +230,7 @@ namespace MKY.Settings
 		// Methods > Load
 		//------------------------------------------------------------------------------------------
 
+		/// <typeparam name="T">The settings type.</typeparam>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
@@ -238,6 +239,7 @@ namespace MKY.Settings
 			return (LoadFromFile<T>(null));
 		}
 
+		/// <typeparam name="T">The settings type.</typeparam>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
@@ -251,6 +253,7 @@ namespace MKY.Settings
 		/// this method tries to load the settings using tolerant XML interpretation by making use
 		/// of <see cref="TolerantXmlSerializer"/> or <see cref="AlternateTolerantXmlSerializer"/>.
 		/// </summary>
+		/// <typeparam name="T">The settings type.</typeparam>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
@@ -292,6 +295,7 @@ namespace MKY.Settings
 		// Methods > Save
 		//------------------------------------------------------------------------------------------
 
+		/// <typeparam name="T">The settings type.</typeparam>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
@@ -300,6 +304,7 @@ namespace MKY.Settings
 			SaveToFile(settings, this.filePath);
 		}
 
+		/// <typeparam name="T">The settings type.</typeparam>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>

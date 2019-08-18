@@ -56,12 +56,14 @@ namespace YAT.Controller.Test
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly string[] EmptyArgs = new string[] { };
 
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Orthogonality with underlying test case.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Orthogonality with underlying test case.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Orthogonality with underlying test case.")]
 		private readonly string TerminalFilePath_TestCase03 = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined];
 
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Orthogonality with underlying test case.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Orthogonality with underlying test case.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Orthogonality with underlying test case.")]
 		private readonly string WorkspaceFilePath_TestCase04 = SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias];
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
@@ -74,7 +76,7 @@ namespace YAT.Controller.Test
 		// TestFixture
 		//==========================================================================================
 
-		string tempPath;
+		private string tempPath;
 
 		#endregion
 
@@ -162,7 +164,7 @@ namespace YAT.Controller.Test
 		public virtual void TestTerminalCommandLineArg()
 		{
 			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
-			using (var m = new Main(new string[]{ terminalFilePathForTest }))
+			using (var m = new Main(new string[] { terminalFilePathForTest }))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.Success);
 
@@ -183,7 +185,7 @@ namespace YAT.Controller.Test
 		public virtual void TestWorkspaceCommandLineArg()
 		{
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
-			using (var m = new Main(new string[]{ workspaceFilePathForTest }))
+			using (var m = new Main(new string[] { workspaceFilePathForTest }))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.Success);
 
@@ -241,7 +243,7 @@ namespace YAT.Controller.Test
 		public virtual void TestTerminalCommandLineArgRun()
 		{
 			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
-			using (var m = new Main(new string[]{ terminalFilePathForTest }))
+			using (var m = new Main(new string[] { terminalFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithoutView(m);
 			}
@@ -264,7 +266,7 @@ namespace YAT.Controller.Test
 			AssertWorkspaceCommandLineArgRunPreconditions();
 
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
-			using (var m = new Main(new string[]{ workspaceFilePathForTest }))
+			using (var m = new Main(new string[] { workspaceFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithoutView(m);
 			}
@@ -356,7 +358,7 @@ namespace YAT.Controller.Test
 				Assert.Ignore("Tester has canceled");
 
 			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
-			using (var m = new Main(new string[]{ terminalFilePathForTest }))
+			using (var m = new Main(new string[] { terminalFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithView(m);
 			}
@@ -405,7 +407,7 @@ namespace YAT.Controller.Test
 				Assert.Ignore("Tester has canceled");
 
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
-			using (var m = new Main(new string[]{ workspaceFilePathForTest }))
+			using (var m = new Main(new string[] { workspaceFilePathForTest }))
 			{
 				RunAndVerifyApplicationWithView(m);
 			}

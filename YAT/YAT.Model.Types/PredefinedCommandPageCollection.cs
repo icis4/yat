@@ -94,7 +94,7 @@ namespace YAT.Model.Types
 				Add(new PredefinedCommandPage(pcp));
 		}
 
-		/// <remarks>Explicitly name "Command" to clearly distiguish from list of pages.</remarks>
+		/// <remarks>Explicitly name "Command" to clearly distinguish from list of pages.</remarks>
 		public int MaxDefinedCommandCountPerPage
 		{
 			get
@@ -111,7 +111,7 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <remarks>Explicitly name "Command" to clearly distiguish from list of pages.</remarks>
+		/// <remarks>Explicitly name "Command" to clearly distinguish from list of pages.</remarks>
 		public int TotalDefinedCommandCount
 		{
 			get
@@ -167,7 +167,6 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Spreaded", Justification = "'Spreaded' sounds more natural for a non-English guy like me, and symmetricity with 'Merged' and 'Truncated'.")]
 		public void AddSpreaded(IEnumerable<PredefinedCommandPage> collection, int commandCapacityPerPage)
 		{

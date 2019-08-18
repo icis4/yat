@@ -73,6 +73,7 @@ namespace YAT.Model.Types
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class PredefinedCommandPageLayoutEx : EnumEx
@@ -368,7 +369,6 @@ namespace YAT.Model.Types
 			else if (commandCount <=  48) return (PredefinedCommandPageLayout.TwoByTwo);
 			else if (commandCount <=  72) return (PredefinedCommandPageLayout.TwoByThree);
 			else if (commandCount <= 108) return (PredefinedCommandPageLayout.ThreeByThree);
-
 			else throw (new ArgumentOutOfRangeException("count", commandCount, MessageHelper.InvalidExecutionPreamble + "'" + commandCount.ToString(CultureInfo.InvariantCulture) + "' is a count that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 

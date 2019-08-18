@@ -107,6 +107,7 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void backgroundWorker_LoadSettings_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
 			try

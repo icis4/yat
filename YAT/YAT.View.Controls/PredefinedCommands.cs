@@ -151,7 +151,7 @@ namespace YAT.View.Controls
 
 		/// <remarks>
 		/// For performance reasons, opposed to other control properties, this property does not
-		/// only set the propery if it has changed, but rather sets it always. Reasons:
+		/// only set the properly if it has changed, but rather sets it always. Reasons:
 		/// <list type="bullet">
 		/// <item><description><code>IEnumerableEx.ItemsEqual()</code> takes time.</description></item>
 		/// <item><description>This property is only set by the parent terminal if the commands changed indeed.</description></item>
