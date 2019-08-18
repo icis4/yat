@@ -2104,6 +2104,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int contextMenuStrip_Predefined_SelectedCommandId; // = 0;
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'c' = Command.")]
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
 			this.isSettingControls.Enter();
@@ -2754,7 +2755,7 @@ namespace YAT.View.Forms
 			if (CommandPagesSettingsClipboardHelper.TryGetAndImport(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
-				// settingsRoot_Changed() will update the form.
+				//// settingsRoot_Changed() will update the form.
 				SetTimedStatusText("Pasting from clipboard done");
 			}
 			else
@@ -2785,7 +2786,7 @@ namespace YAT.View.Forms
 			if (CommandPagesSettingsFileHelper.TryLoadAndImport(this, this.settingsRoot.PredefinedCommand, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
-				// settingsRoot_Changed() will update the form.
+				//// settingsRoot_Changed() will update the form.
 				SetTimedStatusText("Importing from file done");
 			}
 			else
@@ -2804,7 +2805,7 @@ namespace YAT.View.Forms
 			if (CommandPagesSettingsFileLinkHelper.TryLoadAndLink(this, this.settingsRoot.PredefinedCommand, predefined.SelectedPageId, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
-				// settingsRoot_Changed() will update the form.
+				//// settingsRoot_Changed() will update the form.
 				SetTimedStatusText("Linking to file done");
 			}
 			else
@@ -5253,7 +5254,7 @@ namespace YAT.View.Forms
 			if (CommandPagesSettingsChangeHelper.TryChange(this, this.settingsRoot.PredefinedCommand, layout, out predefinedCommandNew))
 			{
 				this.settingsRoot.PredefinedCommand = predefinedCommandNew;
-				// settingsRoot_Changed() will update the form.
+				//// settingsRoot_Changed() will update the form.
 			}
 		}
 

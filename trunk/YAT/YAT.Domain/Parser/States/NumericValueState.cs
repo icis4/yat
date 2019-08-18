@@ -35,7 +35,6 @@ using MKY;
 
 #endregion
 
-
 // This code is intentionally placed into the parser base namespace even though the file is located
 // in a "\States" sub-directory. The sub-directory shall only group the implementation but not open
 // another namespace. The state classes already contain "State" in their name.

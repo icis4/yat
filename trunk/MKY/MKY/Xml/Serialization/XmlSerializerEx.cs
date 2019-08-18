@@ -70,7 +70,7 @@ namespace MKY.Xml.Serialization
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void SerializeToFile(Type type, object obj, string filePath,Encoding encoding)
+		public static void SerializeToFile(Type type, object obj, string filePath, Encoding encoding)
 		{
 			using (var sw = new StreamWriter(filePath, false, encoding))
 			{
@@ -82,7 +82,7 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId="3#", Justification = "Symmetricity with other methods.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Symmetricity with other methods.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void SerializeToString(Type type, object obj, IFormatProvider formatProvider, ref StringBuilder sb)
 		{
@@ -132,6 +132,7 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'non-const'?")]
 		public static object DeserializeFromFile(Type type, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks)
 		{
 			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))
@@ -326,6 +327,7 @@ namespace MKY.Xml.Serialization
 		/// Using non-generic generic signature using <see cref="Type"/> and <see cref="object"/>
 		/// same as <see cref="XmlSerializer"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'non-const'?")]
 		public static object DeserializeFromFileInsisting(Type type, IEnumerable<AlternateXmlElement> alternateXmlElements, string filePath, Encoding encoding, bool detectEncodingFromByteOrderMarks)
 		{
 			using (var sr = new StreamReader(filePath, encoding, detectEncodingFromByteOrderMarks))

@@ -21,8 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Diagnostics.CodeAnalysis;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Configuration
 {
@@ -34,6 +34,7 @@ namespace MKY.Configuration
 		/// <summary>
 		/// Returns an array of strings containing default instructions to generate template and configuration files.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "through", Justification = "As always, there are exceptions to the rules...")]
 		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Nobody will modify this array, don't worry...")]

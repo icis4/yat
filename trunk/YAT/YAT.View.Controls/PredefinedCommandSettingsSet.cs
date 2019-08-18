@@ -261,6 +261,8 @@ namespace YAT.View.Controls
 		/// Required to be called "from the outside" because...
 		/// ...if called in the constructor of the control, SetControls() has not yet been called.
 		/// ...if called in the 'Enter' handler of the control, it doesn't work ?!?
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual void PrepareUserInput()
 		{

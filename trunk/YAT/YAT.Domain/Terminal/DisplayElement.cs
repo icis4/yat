@@ -1020,7 +1020,7 @@ namespace YAT.Domain
 			sb.Append(" | ByteCount = ");
 			sb.Append(ByteCount.ToString(CultureInfo.CurrentCulture));
 			sb.Append(" | OriginCount = ");
-			sb.Append((Origin != null) ? Origin.Count.ToString() : "None");
+			sb.Append((Origin != null) ? Origin.Count.ToString(CultureInfo.CurrentCulture) : "None");
 			sb.Append(" | Type = ");
 			sb.Append(GetType().Name);
 			sb.Append(" | Direction = ");

@@ -50,8 +50,8 @@ using YAT.View.Utilities;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.PredefinedCommandSettings.resources", MessageId = "yat")]
-[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.PredefinedCommandSettings.resources", MessageId = "yatc")]
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.PredefinedCommandSettings.resources", MessageId = "yat",  Justification = "This is a YAT specific file extension.")]
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.PredefinedCommandSettings.resources", MessageId = "yacp", Justification = "This is a YAT specific file extension.")]
 
 #endregion
 
@@ -459,6 +459,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int contextMenuStrip_Commands_SelectedCommandId; // = 0;
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'c' = Command.")]
 		private void contextMenuStrip_Commands_Opening(object sender, CancelEventArgs e)
 		{
 			this.isSettingControls.Enter();
@@ -1195,7 +1196,7 @@ namespace YAT.View.Forms
 							this.predefinedCommandSettingsSets[i].Command = null;
 
 						int commandId = (commandIndex + 1);
-						string commandIdValue = commandId.ToString(CultureInfo.CurrentUICulture);
+						string commandIdValue = commandId.ToString(CultureInfo.CurrentCulture);
 						string commandIdText = commandIdValue.Insert((commandIdValue.Length - 1), "&") + ":";
 						this.predefinedCommandSettingsSetLabels[i].Text = commandIdText;
 					}
@@ -1624,7 +1625,7 @@ namespace YAT.View.Forms
 		protected virtual int GetCommandIdFromLocation(Point location)
 		{
 			Point pt = groupBox_Page.PointToClient(location);
-			// No using GetChildAtPoint() to also support clicking inbetween sets.
+			//// Not using GetChildAtPoint() to also support clicking inbetween sets.
 
 			// Ensure that location is within control:
 			if ((pt.X < 0) || (pt.X > Width))  return (0);

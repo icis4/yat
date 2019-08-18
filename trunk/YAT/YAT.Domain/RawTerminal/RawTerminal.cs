@@ -79,7 +79,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/> to
 		/// prevent the following issue:
-		/// 
+		///
 		/// <![CDATA[
 		/// System.Reflection.TargetInvocationException was unhandled by user code
 		///   Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
@@ -91,7 +91,7 @@ namespace YAT.Domain
 		///        bei MKY.EventHelper.Item.InvokeOnCurrentThread(Delegate sink, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 595.
 		///        bei System.Runtime.Remoting.Messaging.StackBuilderSink._PrivateProcessMessage(IntPtr md, Object[] args, Object server, Int32 methodPtr, Boolean fExecuteInContext, Object[]& outArgs)
 		///        bei System.Runtime.Remoting.Messaging.StackBuilderSink.AsyncProcessMessage(IMessage msg, IMessageSink replySink)
-		///   InnerException: 
+		///   InnerException:
 		///        Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
 		///        Source=mscorlib
 		///        StackTrace:
@@ -102,7 +102,7 @@ namespace YAT.Domain
 		///             bei MKY.EventHelper.Item.RaiseSync(Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 370.
 		///             bei YAT.Domain.RawTerminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\RawTerminal\RawTerminal.cs:Zeile 792.
 		///             bei YAT.Domain.RawTerminal.io_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\RawTerminal\RawTerminal.cs:Zeile 689.
-		///        InnerException: 
+		///        InnerException:
 		///             Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
 		///             Source=mscorlib
 		///             StackTrace:
@@ -113,7 +113,7 @@ namespace YAT.Domain
 		///                  bei MKY.EventHelper.Item.RaiseSync(Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 370.
 		///                  bei YAT.Domain.Terminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\Terminal\Terminal.cs:Zeile 3890.
 		///                  bei YAT.Domain.Terminal.rawTerminal_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\Terminal\Terminal.cs:Zeile 3767.
-		///             InnerException: 
+		///             InnerException:
 		///                  Message=Invoke oder BeginInvoke kann für ein Steuerelement erst aufgerufen werden, wenn das Fensterhandle erstellt wurde.
 		///                  Source=System.Windows.Forms
 		///                  StackTrace:
@@ -125,9 +125,9 @@ namespace YAT.Domain
 		///                       bei YAT.Model.Terminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 5246.
 		///                       bei YAT.Model.Terminal.terminal_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 2479.
 		/// ]]>
-		/// 
+		///
 		/// The terminals get properly closed, but apparently there may still be pending
-		/// asynchronuos 'zombie' callback that later throw an exception. No true solution
+		/// asynchronous 'zombie' callback that later throw an exception. No true solution
 		/// has been found.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
@@ -249,11 +249,11 @@ namespace YAT.Domain
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~RawTerminal()

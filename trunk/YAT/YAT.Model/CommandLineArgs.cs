@@ -570,6 +570,7 @@ namespace YAT.Model
 		/// Returns whether a new terminal is implicitly requested, opposed to an explicit request
 		/// using <see cref="NewIsRequested"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public bool NewIsRequestedImplicitly(out Domain.IOType implicitIOType)
 		{
 			bool isRequestedImplicitly = false;

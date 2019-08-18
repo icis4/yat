@@ -43,7 +43,7 @@ namespace MKY.Windows.Forms
 		public DialogResult Result { get; set; }
 
 		/// <summary>
-		/// Gets or sets the file path.
+		/// Gets the file path.
 		/// </summary>
 		/// <value>The file path.</value>
 		[XmlElement("FilePath")]

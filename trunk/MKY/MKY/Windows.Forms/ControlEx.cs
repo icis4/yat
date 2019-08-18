@@ -36,6 +36,7 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class ControlEx
 	{
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field name is given by the Win32 API.")]
 		private const int WM_SETREDRAW = 0x000B;
 
 		/// <summary>

@@ -480,7 +480,7 @@ namespace YAT.Model.Types
 			unchecked
 			{
 				int hashCode = 0;
-				                                // Just comparing the name effectively in use.
+				                               //// Just comparing the name effectively in use.
 				hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
 
 				if (Commands != null)

@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -62,7 +63,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary>
-		/// Copies to the clipboard, promting the user as required.
+		/// Copies to the clipboard, prompting the user as required.
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
@@ -77,8 +78,8 @@ namespace YAT.View.Utilities
 			else // if (pageCount > 1)
 			{
 				var message = new StringBuilder();
-				message.Append("Would you like to copy all " + pageCount.ToString(CultureInfo.CurrentUICulture) + " pages [Yes],");
-				message.Append(" or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentUICulture) + " [No]?");
+				message.Append("Would you like to copy all " + pageCount.ToString(CultureInfo.CurrentCulture) + " pages [Yes],");
+				message.Append(" or just the currently selected page " + selectedPageId.ToString(CultureInfo.CurrentCulture) + " [No]?");
 
 				switch (MessageBoxEx.Show
 					(
@@ -143,7 +144,7 @@ namespace YAT.View.Utilities
 				root.Page = page;
 
 				var sb = new StringBuilder();
-				XmlSerializerEx.SerializeToString(typeof(CommandPageSettingsRoot), root, CultureInfo.CurrentUICulture, ref sb);
+				XmlSerializerEx.SerializeToString(typeof(CommandPageSettingsRoot), root, CultureInfo.CurrentCulture, ref sb);
 				Clipboard.SetText(sb.ToString());
 
 				return (true);
@@ -173,7 +174,7 @@ namespace YAT.View.Utilities
 				root.Pages = pages;
 
 				var sb = new StringBuilder();
-				XmlSerializerEx.SerializeToString(typeof(CommandPagesSettingsRoot), root, CultureInfo.CurrentUICulture, ref sb);
+				XmlSerializerEx.SerializeToString(typeof(CommandPagesSettingsRoot), root, CultureInfo.CurrentCulture, ref sb);
 				Clipboard.SetText(sb.ToString());
 
 				return (true);
@@ -195,6 +196,7 @@ namespace YAT.View.Utilities
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Required for fallback handling.")]
 		private static bool TryGet(out PredefinedCommandPageCollection pages)
 		{
 			string s;
@@ -542,8 +544,8 @@ namespace YAT.View.Utilities
 				message.Append(commandCapacityPerPageOld);
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
-				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentUICulture) + " commands per page [Yes],");
-				message.Append(" or spread the pasted pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentUICulture) + " commands per page [No]?");
+				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentCulture) + " commands per page [Yes],");
+				message.Append(" or spread the pasted pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentCulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(
