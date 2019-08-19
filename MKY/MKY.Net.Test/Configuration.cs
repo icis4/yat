@@ -60,7 +60,7 @@ namespace MKY.Net.Test
 		private ConfigurationProperty ipv4SpecificInterface = new ConfigurationProperty("IPv4SpecificInterface", typeof(string), "TAP-Win32 Adapter");
 		private ConfigurationProperty ipv6SpecificInterface = new ConfigurationProperty("IPv6SpecificInterface", typeof(string), "TAP-Win32 Adapter");
 
-		private ConfigurationProperty mtSicsDeviceTcpPort = new ConfigurationProperty("MTSicsDeviceTcpPort", typeof(string), "44900");
+		private ConfigurationProperty mtSicsDeviceTcpPort = new ConfigurationProperty("MTSicsDeviceTcpPort", typeof(string), "44000");
 
 		#endregion
 
