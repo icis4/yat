@@ -26,6 +26,20 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
+::==================================================================================================
+:: Purpose
+:: ------------------------------------------------------------------------------------------------
+:: This helper batch invokes the MCD Conline USB HUB control in an appropriate sequence.
+::==================================================================================================
+
+::==================================================================================================
+:: HowTo
+:: ------------------------------------------------------------------------------------------------
+:: 1. Install the MCD Conline USB HUB drivers.
+:: 2. Add the installation's "\Tools\CommandLine" subdirectory, typically
+::    "C:\Program Files (x86)\MCD USBHubMonitor\Tools\CommandLine", to the system's PATH.
+::==================================================================================================
+
 SETLOCAL
 
 SET _cmd=USBHubControl.exe
@@ -83,7 +97,7 @@ GOTO :End
 ECHO.
 ECHO The required MCD Conline USB HUB control executable is not available!
 ECHO Make sure that the "MCD Conline USB HUB" drivers are installed, and. . .
-ECHO . . ."<MCD>\Tools\CommandLine" has been added to the system's PATH!
+ECHO . . ."<MCD USBHubMonitor>\Tools\CommandLine" has been added to the system's PATH!
 ECHO.
 PAUSE
 GOTO :End
