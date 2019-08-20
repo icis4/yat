@@ -164,7 +164,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// Test is optional, it can be excluded if either MT-SICS device or USB hub is not available.
 		/// </remarks>
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
@@ -176,7 +176,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		}
 
 		/// <remarks>
-		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// Test is optional, it can be excluded if either MT-SICS device or USB hub is not available.
 		/// </remarks>
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
@@ -189,7 +189,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		}
 
 		/// <remarks>
-		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// Test is optional, it can be excluded if either MT-SICS device or USB hub is not available.
 		/// </remarks>
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.

@@ -60,7 +60,7 @@ namespace MKY.Net.Test
 		private ConfigurationProperty ipv4SpecificInterface = new ConfigurationProperty("IPv4SpecificInterface", typeof(string), "OpenVPN Virtual Ethernet Adapter");
 		private ConfigurationProperty ipv6SpecificInterface = new ConfigurationProperty("IPv6SpecificInterface", typeof(string), "OpenVPN Virtual Ethernet Adapter");
 
-		private ConfigurationProperty mtSicsDeviceTcpPort = new ConfigurationProperty("MTSicsDeviceTcpPort", typeof(string), "44000");
+		private ConfigurationProperty mtSicsDeviceTcpPort = new ConfigurationProperty("MTSicsDeviceTcpPort", typeof(string), "44400");
 
 		#endregion
 

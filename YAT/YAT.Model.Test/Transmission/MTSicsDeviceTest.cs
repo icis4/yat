@@ -214,11 +214,10 @@ namespace YAT.Model.Test.Transmission
 		//==========================================================================================
 
 		/// <remarks>
-		/// Test is optional, it can be excluded if no MT-SICS device is available.
+		/// Test is optional, it automatically adjusts to the available MT-SICS devices.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
-		[MTSicsDeviceAIsAvailableCategory, MTSicsDeviceBIsAvailableCategory]
 		public virtual void Transmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor, string stimulus, string expected, int transmissionCount)
 		{
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
