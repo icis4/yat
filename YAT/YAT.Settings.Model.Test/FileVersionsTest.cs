@@ -96,7 +96,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V2_0_0_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -104,7 +104,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V2_0_0_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -128,7 +128,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V2_0_0_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V2_0_0.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -175,7 +175,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_90_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -183,7 +183,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_90_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -207,7 +207,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_90_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_90.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -254,7 +254,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_80_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -262,7 +262,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_80_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -286,7 +286,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_80_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_80.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -325,7 +325,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_70_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -333,7 +333,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_70_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -357,7 +357,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_70_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_70.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -386,150 +386,6 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Gamma 2'' Version 1.99.52
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Gamma 2'' Version 1.99.52
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_52_TerminalSettingsCase01()
-		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_52_TerminalSettingsCase02()
-		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_52_TerminalSettingsCase03()
-		{
-		////Case03 of V1.99.5x fail (bugs #232 and #246 "Issues with [Alternate]TolerantXmlSerializer").
-		////ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_52_WorkspaceSettingsCase04()
-		{
-			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_52.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_52_TerminalSettingsCase05()
-		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_52_WorkspaceSettingsCase06()
-		{
-			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_52.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_52_TerminalSettingsCase07()
-		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_52.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_52_WorkspaceSettingsCase08()
-		{
-			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_52.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
-		}
-
-		#endregion
-
-		#region Tests > YAT 2.0 Gamma 2' Version 1.99.51
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Gamma 2' Version 1.99.51
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_51_TerminalSettingsCase01()
-		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_51_TerminalSettingsCase02()
-		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_51_TerminalSettingsCase03()
-		{
-		////Case03 of V1.99.5x fail (bugs #232 and #246 "Issues with [Alternate]TolerantXmlSerializer").
-		////ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_51_WorkspaceSettingsCase04()
-		{
-			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_51.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_51_TerminalSettingsCase05()
-		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_51_WorkspaceSettingsCase06()
-		{
-			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_51.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_51_TerminalSettingsCase07()
-		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_51.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_51_WorkspaceSettingsCase08()
-		{
-			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_51.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
-		}
-
-		#endregion
-
 		#region Tests > YAT 2.0 Gamma 2 Version 1.99.50
 		//------------------------------------------------------------------------------------------
 		// Tests > YAT 2.0 Gamma 2 Version 1.99.50
@@ -540,7 +396,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_50_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -548,7 +404,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_50_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -573,7 +429,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_50_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_50.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -612,7 +468,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_34_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -620,7 +476,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_34_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -644,7 +500,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_34_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -673,77 +529,6 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Gamma 1' Version 1.99.33
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Gamma 1' Version 1.99.33
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_33_TerminalSettingsCase01()
-		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_33_TerminalSettingsCase02()
-		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_33_TerminalSettingsCase03()
-		{
-			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_33_WorkspaceSettingsCase04()
-		{
-			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_33.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_33_TerminalSettingsCase05()
-		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_33_WorkspaceSettingsCase06()
-		{
-			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_33.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_33_TerminalSettingsCase07()
-		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_33_WorkspaceSettingsCase08()
-		{
-			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_33.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
-		}
-
-		#endregion
-
 		#region Tests > YAT 2.0 Gamma 1 Version 1.99.32
 		//------------------------------------------------------------------------------------------
 		// Tests > YAT 2.0 Gamma 1 Version 1.99.32
@@ -754,7 +539,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_32_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -762,7 +547,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_32_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -786,7 +571,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_32_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -825,7 +610,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_30_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -833,7 +618,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_30_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -857,7 +642,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_30_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -896,7 +681,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_28_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -904,7 +689,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_28_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -928,7 +713,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_28_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -967,7 +752,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_26_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -975,7 +760,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_26_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -999,7 +784,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -1038,7 +823,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_25_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -1046,7 +831,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_25_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -1070,7 +855,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -1101,7 +886,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_24_TerminalSettingsCase01()
 		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM101_Open_Default]);
 		}
 
 		/// <summary></summary>
@@ -1109,7 +894,7 @@ namespace YAT.Settings.Model.Test
 		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
 		public virtual void Test_V1_99_24_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM102_Open_Binary_115200]);
 		}
 
 		/// <summary></summary>
@@ -1133,46 +918,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_V1_99_24_TerminalSettingsCase05()
 		{
-			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
-		}
-
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortAIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_22_TerminalSettingsCase01()
-		{
-			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test] // Test is mandatory, it shall not be excludable. 'PortBIsAvailable' is probed in test method.
-		public virtual void Test_V1_99_22_TerminalSettingsCase02()
-		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_22_TerminalSettingsCase03()
-		{
-			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test]
-		public virtual void Test_V1_99_22_WorkspaceSettingsCase04()
-		{
-			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_22.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM101_Open_Recent]);
 		}
 
 		#endregion
@@ -1213,9 +959,9 @@ namespace YAT.Settings.Model.Test
 		// Settings Cases
 		//==========================================================================================
 
-		#region Settings Cases > 01 :: Terminal :: COM1 / Open / Default
+		#region Settings Cases > 01 :: Terminal :: COM101 / Open / Default
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 01 :: Terminal :: COM1 / Open / Default
+		// Settings Cases > 01 :: Terminal :: COM101 / Open / Default
 		//------------------------------------------------------------------------------------------
 
 		private void ExecuteSettingsCase01(string filePath)
@@ -1225,7 +971,7 @@ namespace YAT.Settings.Model.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (var t = new Terminal(sh))
 			{
-				// Required if COM1 is not available.
+				// Required if COM101 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
 
 				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
@@ -1236,9 +982,9 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Settings Cases > 02 :: Terminal :: COM2 / Open / Binary / 115200
+		#region Settings Cases > 02 :: Terminal :: COM102 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 02 :: Terminal :: COM2 / Open / Binary / 115200
+		// Settings Cases > 02 :: Terminal :: COM102 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
 
 		private void ExecuteSettingsCase02(string filePath)
@@ -1248,7 +994,7 @@ namespace YAT.Settings.Model.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (var t = new Terminal(sh))
 			{
-				// Required if COM2 is not available.
+				// Required if COM102 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
 
 				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
@@ -1279,9 +1025,9 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Settings Cases > 04 :: Workspace :: 2 Terminals on COM1 / COM2
+		#region Settings Cases > 04 :: Workspace :: 2 Terminals on COM101 / COM102
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 04 :: Workspace :: 2 Terminals on COM1 / COM2
+		// Settings Cases > 04 :: Workspace :: 2 Terminals on COM101 / COM102
 		//------------------------------------------------------------------------------------------
 
 		private static void ExecuteSettingsCase04(string filePath)
@@ -1298,9 +1044,9 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Settings Cases > 05 :: Terminal :: COM1 / Open / Recent
+		#region Settings Cases > 05 :: Terminal :: COM101 / Open / Recent
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 05 :: Terminal :: COM1 / Open / Recent
+		// Settings Cases > 05 :: Terminal :: COM101 / Open / Recent
 		//------------------------------------------------------------------------------------------
 
 		private void ExecuteSettingsCase05(string filePath)
@@ -1310,7 +1056,7 @@ namespace YAT.Settings.Model.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (var t = new Terminal(sh))
 			{
-				// Required if COM1 is not available.
+				// Required if COM101 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
 
 				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
@@ -1417,9 +1163,9 @@ namespace YAT.Settings.Model.Test
 		// Settings Case Verifications
 		//==========================================================================================
 
-		#region Settings Case Verifications > 01 :: Terminal :: COM1 / Open / Default
+		#region Settings Case Verifications > 01 :: Terminal :: COM101 / Open / Default
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 01 :: Terminal :: COM1 / Open / Default
+		// Settings Case Verifications > 01 :: Terminal :: COM101 / Open / Default
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifySettingsCase01(Terminal terminal)
@@ -1427,26 +1173,26 @@ namespace YAT.Settings.Model.Test
 			AssertSettingsCase01Preconditions();
 
 			Assert.That(terminal.SettingsRoot.TerminalType, Is.EqualTo(Domain.TerminalType.Text), "Terminal isn't text!");
-			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(101), "Serial port isn't set to COM101!");
 			Assert.That(terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, Is.EqualTo(9600), "Serial port baud rate isn't set to 9600!");
 			Assert.That(terminal.IsOpen, "Terminal is not open!");
 		}
 
 		private static void AssertSettingsCase01Preconditions()
 		{
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA != "COM1")
-				Assert.Fail("This test case requires that 'PortA' is configured to 'COM1'!");
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA != "COM101")
+				Assert.Fail("This test case requires that 'PortA' is configured to 'COM101'!");
 
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
-				Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine, therefore this test is excluded.");
+				Assert.Ignore("'PortA' is configured to 'COM101' but isn't available on this machine, therefore this test is excluded.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		#endregion
 
-		#region Settings Case Verifications > 02 :: Terminal :: COM2 / Open / Binary / 115200
+		#region Settings Case Verifications > 02 :: Terminal :: COM102 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 02 :: Terminal :: COM2 / Open / Binary / 115200
+		// Settings Case Verifications > 02 :: Terminal :: COM102 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifySettingsCase02(Terminal terminal)
@@ -1454,18 +1200,18 @@ namespace YAT.Settings.Model.Test
 			AssertSettingsCase02Preconditions();
 
 			Assert.That(terminal.SettingsRoot.TerminalType, Is.EqualTo(Domain.TerminalType.Binary), "Terminal isn't binary!");
-			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(2), "Serial port isn't set to COM2!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(102), "Serial port isn't set to COM102!");
 			Assert.That(terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, Is.EqualTo(115200), "Serial port baud rate isn't set to 115200!");
 			Assert.That(terminal.IsOpen, "Terminal is not open!");
 		}
 
 		private static void AssertSettingsCase02Preconditions()
 		{
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB != "COM2")
-				Assert.Fail("This test case requires that 'PortB' is configured to 'COM2'!");
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB != "COM102")
+				Assert.Fail("This test case requires that 'PortB' is configured to 'COM102'!");
 
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
-				Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine, therefore this test is excluded.");
+				Assert.Ignore("'PortB' is configured to 'COM102' but isn't available on this machine, therefore this test is excluded.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
@@ -1521,9 +1267,9 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Settings Case Verifications > 04 :: Workspace :: 2 Terminals on COM1 / COM2
+		#region Settings Case Verifications > 04 :: Workspace :: 2 Terminals on COM101 / COM102
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 04 :: Workspace :: 2 Terminals on COM1 / COM2
+		// Settings Case Verifications > 04 :: Workspace :: 2 Terminals on COM101 / COM102
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifySettingsCase04(Workspace workspace)
@@ -1533,14 +1279,14 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Settings Case Verifications > 05 :: Terminal :: COM1 / Open / Recent
+		#region Settings Case Verifications > 05 :: Terminal :: COM101 / Open / Recent
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 05 :: Terminal :: COM1 / Open / Recent
+		// Settings Case Verifications > 05 :: Terminal :: COM101 / Open / Recent
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifySettingsCase05(Terminal terminal)
 		{
-			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(1), "Serial port isn't set to COM1!");
+			Assert.That((int)terminal.SettingsRoot.IO.SerialPort.PortId, Is.EqualTo(101), "Serial port isn't set to COM101!");
 
 			// \todo:
 			// Add tests that verify that recent contains three commands.

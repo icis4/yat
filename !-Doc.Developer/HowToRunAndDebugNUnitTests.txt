@@ -7,11 +7,12 @@
 		> Install WinPcap
 			> All defaults
 		> Install OpenVPN
-			> Check "TAP Virtual Ethernet Adapter"
+			> Check "TAP-Win32 Virtual Ethernet Adapter"
 			> Uncheck everything else
 		> Setup
 			> System > Network > Connections
-				> Rename connection to "TAP-Win32 Adapter"
+				> Rename connection to "OpenVPN Virtual Ethernet Adapter"
+					(NUnit category names must not contain ',', '!', '+' or '-', thus "TAP-Win32" is not valid!)
 				> Right-click > Properties
 					> "Configure..."
 						> "Configure..." > Advanced
@@ -28,8 +29,8 @@
 
 1.	Configure environment
 	---------------------
-	> Use physical or VSPE ports COM1 and COM2
-		> Alternatively, re-configure environment to other COM ports
+	> Use physical or VSPE ports COM101 and COM102
+		> Execute "\!-Tools\VSPE Runtime Config - COM101 paired with COM102.cmd"
 	> Use WinPcap and OpenVPN TAP adapter
 
 

@@ -50,7 +50,7 @@ namespace MKY.Configuration
 	/// (3) The settings may be overridden again by machine specific configuration files
 	///     'TestProject'.config that can be located anywhere on the local file system. The location
 	///     of each file is resolved via a system variable 'TEST_PROJECT'_CONFIG_FILE.
-	/// 
+	///
 	/// Example:
 	/// 'MKY.IO.Ports.Test.ConfigurationSection' implements settings to select the serial COM ports
 	/// used in the test cases. Each setting is implemented as a <see cref="ConfigurationProperty"/>
@@ -59,17 +59,17 @@ namespace MKY.Configuration
 	/// typical values used for YAT testing (2).
 	/// 'MKY.IO.Ports.Test.config' located at a certain machine defines which serial COM
 	/// ports are available on that machine (3).
-	/// 
+	///
 	/// Whenever the test suite, e.g. NUnit based, loads the test cases, the configurations are read
 	/// and the test cases configured accordingly. The configuration providers may also implement logic
 	/// that verifies whether the configuration really make sense on the current machine.
-	/// 
+	///
 	/// In addition to the mechanism described above, the configuration may contain multiple values
 	/// for each setting. Each set of values is collected in a <see cref="ConfigurationSectionGroup"/>.
 	/// The desired set can be selected using a <see cref="SelectionSection"/>. It is also possible
 	/// that one tier, e.g. (2), defines multiple sets and the next tier selects, e.g. (3), simply
 	/// selects out of the sets defined by (2).
-	/// 
+	///
 	/// Example:
 	/// File 'YAT.Test.config' first announces the selector section:
 	///     sectionGroup name="MKY.IO.Ports.Test.Configuration" type="System.Configuration.ConfigurationSectionGroup"
@@ -78,19 +78,19 @@ namespace MKY.Configuration
 	///     sectionGroup name="MKY.IO.Ports.Test.Configuration.Configurations" type="System.Configuration.ConfigurationSectionGroup"
 	///         section name="NoDevices" type="MKY.IO.Ports.Test.ConfigurationSection, MKY.IO.Ports.Test"
 	///         section name="UsingPhysicalDevices" type="MKY.IO.Ports.Test.ConfigurationSection, MKY.IO.Ports.Test"
-	///         section name="UsingVSPE" type="MKY.IO.Ports.Test.ConfigurationSection, MKY.IO.Ports.Test"
+	///         section name="UsingVirtualDevices" type="MKY.IO.Ports.Test.ConfigurationSection, MKY.IO.Ports.Test"
 	/// Finally, the values for each section:
 	///     MKY.IO.Ports.Test.Configuration
 	///         Selection SelectedConfigurationName="NoDevices"
 	///     MKY.IO.Ports.Test.Configuration.Sections
 	///         NoDevices PortA="" PortB=""
-	///         UsingVSPE PortA="COM1" PortB="COM2"
-	///         UsingPhysicalDevices PortA="COM11" PortB="COM12"
+	///         UsingPhysicalDevices PortA="COM1" PortB="COM2"
+	///         UsingVirtualDevices PortA="COM101" PortB="COM102"
 	/// These solution defaults may then be partly or completely overridden by the machine specific
 	/// configuration file 'MKY.IO.Ports.Test.config':
 	///     MKY.IO.Ports.Test.Configuration
 	///         Selection SelectedConfigurationName="UsingPhysicalDevices"
-	/// 
+	///
 	/// Saying hello to StyleCop ;-.
 	/// </summary>
 	/// <remarks>
