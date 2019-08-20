@@ -12,7 +12,7 @@
   <Workspace>
     <Layout>Automatic</Layout>
     <TerminalSettings>
-      <FilePath>.\04 - COM1 - Open.yat</FilePath>
+      <FilePath>.\04 - COM101 - Open.yat</FilePath>
       <FixedId>1</FixedId>
       <Window>
         <State>Normal</State>
@@ -27,7 +27,7 @@
       </Window>
     </TerminalSettings>
     <TerminalSettings>
-      <FilePath>.\04 - COM2 - Open.yat</FilePath>
+      <FilePath>.\04 - COM102 - Open.yat</FilePath>
       <FixedId>2</FixedId>
       <Window>
         <State>Normal</State>
