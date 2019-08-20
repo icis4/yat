@@ -160,6 +160,10 @@
       <Project>{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}</Project>
       <Name>MKY.Net.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.Test\MKY.Test.csproj">
+      <Project>{644f7c29-cce6-4827-9ef2-8b7d34194101}</Project>
+      <Name>MKY.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>

@@ -27,7 +27,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 
-namespace MKY.IO.Ports.Test
+using MKY.IO;
+
+namespace MKY.Test.Devices
 {
 	#region UsbHubSetting
 	//==============================================================================================

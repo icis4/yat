@@ -106,6 +106,7 @@
     <Compile Include="CommandLine\ArgsHandlerTest.cs" />
     <Compile Include="CommandLine\CommandLineArgs.cs" />
     <Compile Include="CommandLine\InvalidCommandLineArgs.cs" />
+    <Compile Include="Devices\UsbHub.cs" />
     <Compile Include="Equality\Data.cs" />
     <Compile Include="Equality\Configuration.cs" />
     <Compile Include="Equality\Methods\Generic.cs" />

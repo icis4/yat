@@ -103,7 +103,6 @@
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
     <Compile Include="ConfigurationTemplate\Generator.cs" />
-    <Compile Include="UsbHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DriverAnalysis\ReliabilityAnalysis.cs" />
     <Compile Include="SerialPort\ConnectionTest.cs" />
