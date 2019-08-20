@@ -279,7 +279,7 @@ namespace YAT.Model.Test.Transmission
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else {
 						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
@@ -298,7 +298,7 @@ namespace YAT.Model.Test.Transmission
 						{
 							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-								//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+							//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 							}
 							else {
 								Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");

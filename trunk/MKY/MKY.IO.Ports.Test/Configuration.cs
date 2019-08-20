@@ -497,11 +497,11 @@ namespace MKY.IO.Ports.Test
 		{
 			if (!ConfigurationProvider.Configuration.PortAIsAvailable)
 				Assert.Ignore("'PortA' is not available, therefore this test is excluded. Ensure that 'PortA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!ConfigurationProvider.Configuration.PortBIsAvailable)
 				Assert.Ignore("'PortB' is not available, therefore this test is excluded. Ensure that 'PortB' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
@@ -519,11 +519,11 @@ namespace MKY.IO.Ports.Test
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
 				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
 				Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
@@ -541,11 +541,11 @@ namespace MKY.IO.Ports.Test
 		{
 			if (!ConfigurationProvider.Configuration.TILaunchPadDeviceAIsAvailable)
 				Assert.Ignore("'TILaunchPadDeviceA' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 		////if (!ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable) Device B excluded because TI LaunchPad devices don't work concurrently.
 		////	Assert.Ignore("'TILaunchPadDeviceB' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceB' is properly configured and available if passing this test is required.");
-		////	//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//////// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
@@ -562,7 +562,7 @@ namespace MKY.IO.Ports.Test
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
 				Assert.Ignore("No loopback pairs are available, therefore this test is excluded. Ensure that loopback pairs are properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 	}
 

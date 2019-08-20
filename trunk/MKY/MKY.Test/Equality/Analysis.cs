@@ -314,7 +314,7 @@ namespace MKY.Test.Equality
 			Methods.ValueTypeBase.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			//// Operator ==/!= cannot be used on System.ValueType itself.
 			Assert.Ignore("Operator ==/!= cannot be applied to value types without operators, neither to evaluate reference nor value equality.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -331,7 +331,7 @@ namespace MKY.Test.Equality
 			Methods.ValueTypeBase.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			//// Operator ==/!= cannot be used on System.ValueType itself.
 			Assert.Ignore("Operator ==/!= cannot be applied to value types without operators, neither to evaluate reference nor value equality.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		#endregion
@@ -585,7 +585,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeList.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("List<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -603,7 +603,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeIPAddress.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("IPAddress.operators ==/!= don't exist, thanks Microsoft guys...");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -625,7 +625,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeList.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -647,7 +647,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeList.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -665,7 +665,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeNotIEquatableWithoutOperators_Base.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("object.operators ==/!= are called, thus only reference equality is evaluated.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -683,7 +683,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeNotIEquatableWithoutOperators_Derived.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("object.operators ==/!= are called, thus only reference equality is evaluated.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -701,7 +701,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeNotIEquatableWithoutOperators_Base.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("object.operators ==/!= are called, thus only reference equality is evaluated.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -719,7 +719,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeIEquatableWithoutOperators_Base.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("object.operators ==/!= are called, thus only reference equality is evaluated.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -737,7 +737,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeIEquatableWithoutOperators_Derived.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("object.operators ==/!= are called, thus only reference equality is evaluated.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary></summary>
@@ -755,7 +755,7 @@ namespace MKY.Test.Equality
 			//// object.operators ==/!= only evaluate reference equality.
 			Methods.ReferenceTypeIEquatableWithoutOperators_Base.TestOperatorsForReferenceEquality(objToEqualAgainst);
 			Assert.Ignore("object.operators ==/!= are called, thus only reference equality is evaluated.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		#endregion

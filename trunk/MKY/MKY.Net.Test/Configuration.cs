@@ -357,11 +357,11 @@ namespace MKY.Net.Test
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!ConfigurationProvider.Configuration.IPv6LoopbackIsAvailable)
 				Assert.Ignore("No IPv6 loopback is available, therefore this test is excluded. Ensure that IPv6 loopback is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
@@ -378,11 +378,11 @@ namespace MKY.Net.Test
 		{
 			if (!ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				Assert.Ignore("No specific IPv4 interface is available, therefore this test is excluded. Ensure that specific IPv4 interface is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				Assert.Ignore("No specific IPv6 interface is available, therefore this test is excluded. Ensure that specific IPv6 interface is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
@@ -400,7 +400,7 @@ namespace MKY.Net.Test
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable)
 				Assert.Ignore("'MTSicsDevice' is not available, therefore this test is excluded. Ensure that 'MTSicsDevice' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 	}
 
