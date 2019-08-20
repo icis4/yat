@@ -31,6 +31,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading;
 
+using MKY.Test.Devices;
+
 using NUnit;
 using NUnit.Framework;
 
@@ -192,7 +194,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		/// <remarks>
 		/// There is a similar method in 'YAT.Model.Test.ConnectionTest'.
 		/// Changes here may have to be applied there too.
-		/// 
+		///
 		/// Tests implemented below:
 		///  - Disconnect/Reconnect without sending.
 		///  - Disconnect/Reconnect with previous and subsequent sending.

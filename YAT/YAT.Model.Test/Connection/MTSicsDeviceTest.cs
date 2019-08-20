@@ -32,6 +32,7 @@ using System.Threading;
 
 using MKY.IO.Ports.Test;
 using MKY.Settings;
+using MKY.Test.Devices;
 
 using NUnit;
 using NUnit.Framework;
