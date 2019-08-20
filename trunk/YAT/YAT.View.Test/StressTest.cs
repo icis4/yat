@@ -42,6 +42,7 @@ using YAT.Application.Utilities;
 using YAT.Domain;
 using YAT.Model.Settings;
 using YAT.Model.Types;
+using YAT.Settings.Application;
 using YAT.Settings.Model;
 
 #endregion
@@ -62,9 +63,19 @@ namespace YAT.View.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Temporary in-memory application settings are useless when YAT.Controller is used,
-			// as YAT.Controller will retrieve the real application settings, that's its job...
-			// Instead, [ApplicationSettingsFileAccess.None] is specified on Main.Run(...).
+			// Temporary in-memory application settings seem useless for this YAT.Controller based
+			// test, as YAT.Controller will retrieve the application settings, that's its job...
+			// However, this test creates terminal settings *before* calling Main.Run(...), and
+			// some of the settings (e.g. LogSettings.RootPath) rely on the application settings
+			// (e.g. ApplicationSettings.LocalUserSettings.Paths.LogFiles). Thus, without creating
+			// the settings here, an InvalidOperationException would be thrown when instantiating
+			// the terminal settings, as access to the settings is invalid before they got created.
+
+			// Create temporary in-memory application settings for this test run:
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
+			// Prevent auto-save of workspace settings:
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
 		/// <summary></summary>
@@ -72,6 +83,9 @@ namespace YAT.View.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
+			// Close and dispose of temporary in-memory application settings:
+			ApplicationSettings.CloseAndDispose();
+
 			Temp.CleanTempPath(GetType());
 		}
 
