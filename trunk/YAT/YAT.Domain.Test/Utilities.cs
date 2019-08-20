@@ -59,12 +59,11 @@ namespace YAT.Domain.Test
 		public const int WaitIntervalForStateChange = 100;
 
 		/// <remarks>
-		/// Timeout of 200 ms is too short for serial COM port at 9600 baud,
-		/// especially when debugger is connected:
-		///  > SingleLine often takes longer than 200 ms.
-		///  > DoubleLine often takes longer than 400 ms.
-		///  > TripleLine takes around 500 ms (where timeout would be 600 ms).
-		///  > MultiLine takes around 4000..5000 ms (where timeout would be 5200 ms).
+		/// Timeout of 200 ms is too short for serial COM ports at 9600 baud, especially when
+		/// debugger is connected. Measurements:
+		///  > TripleLine (where timeout would be 3 * 200 ms = 600 ms) takes around 500 ms.
+		///  > MultiLine (where timeout would be 26 * 200 ms = 5200 ms) takes around 5000 ms.
+		///     => 300 ms seems defensive enough while still not too long to waste time.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		public const int WaitTimeoutForLineTransmission = 300;
