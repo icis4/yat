@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using MKY.Test.Devices;
+
 using NUnit.Framework;
 
 namespace MKY.IO.Usb.Test
@@ -39,24 +41,42 @@ namespace MKY.IO.Usb.Test
 		// Tests > Connect/Disconnect()
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		[Test] // Test is mandatory, it shall not be excludable. 'DeviceAIsAvailable' is probed below.
+		/// <remarks>
+		/// Test is optional, it can be excluded if neither USB hub not USB Ser/HID device is available.
+		/// </remarks>
+		/// <remarks>
+		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
+		/// </remarks>
+		[Test, DeviceAIsAvailableCategory, MKY.Test.UsbHub1IsAvailableCategory]
 		public virtual void TestConnectDisconnectA()
 		{
 			if (!ConfigurationProvider.Configuration.DeviceAIsAvailable)
 				Assert.Ignore("'USB Ser/HID Device A' is not available, therefore this test is excluded. Ensure that 'USB Ser/HID Device A' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!MKY.Test.ConfigurationProvider.Configuration.UsbHub1IsAvailable)
+				Assert.Ignore(UsbHubControl.ErrorMessage);
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			Assert.Ignore("The USB Ser/HID connect/disconnect test is not yet implemented.");
 		}
 
-		/// <summary></summary>
-		[Test] // Test is mandatory, it shall not be excludable. 'DeviceBIsAvailable' is probed below.
+		/// <remarks>
+		/// Test is optional, it can be excluded if neither USB hub not USB Ser/HID device is available.
+		/// </remarks>
+		/// <remarks>
+		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
+		/// </remarks>
+		[Test, DeviceBIsAvailableCategory, MKY.Test.UsbHub1IsAvailableCategory]
 		public virtual void TestConnectDisconnectB()
 		{
 			if (!ConfigurationProvider.Configuration.DeviceBIsAvailable)
 				Assert.Ignore("'USB Ser/HID Device B' is not available, therefore this test is excluded. Ensure that 'USB Ser/HID Device B' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!MKY.Test.ConfigurationProvider.Configuration.UsbHub1IsAvailable)
+				Assert.Ignore(UsbHubControl.ErrorMessage);
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			Assert.Ignore("The USB Ser/HID connect/disconnect test is not yet implemented.");
 		}
