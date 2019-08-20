@@ -1581,7 +1581,7 @@ namespace YAT.Model
 
 		private void HandleTerminalSettings(SettingsEventArgs e)
 		{
-			// \ToDo: ApplySettings should be called here => FR#309.
+			// \ToDo: ApplySettings should be called here => FR #309.
 
 			if (e.Inner == null)
 			{
@@ -3584,7 +3584,7 @@ namespace YAT.Model
 							if (dr == DialogResult.Yes)
 							{
 								this.settingsRoot.Explicit.Terminal.IO.SerialPort.PortId = portIdAlternate;
-								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							}
 
 							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
@@ -3653,7 +3653,7 @@ namespace YAT.Model
 						if (dr == DialogResult.Yes)
 						{
 							this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
-							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							return (CheckResult.OK);
 						}
 						else
@@ -3665,7 +3665,7 @@ namespace YAT.Model
 					else // Silently switch interface:
 					{
 						this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
-						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 						return (CheckResult.OK);
 					}
 				}
@@ -3677,7 +3677,7 @@ namespace YAT.Model
 						if (dr == DialogResult.Yes)
 						{
 							this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[0];
-							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							return (CheckResult.OK);
 						}
 						else
@@ -3740,7 +3740,7 @@ namespace YAT.Model
 							if (dr == DialogResult.Yes)
 							{
 								this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							}
 
 							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
@@ -3759,7 +3759,7 @@ namespace YAT.Model
 						if (!hadAlreadyBeenChanged)
 							this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.ClearChanged();
 
-						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR#309.
+						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 
 						return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
 					}

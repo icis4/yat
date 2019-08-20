@@ -353,7 +353,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF7, "一二州", new byte[] { 0x2B, 0x54, 0x67, 0x42, 0x4F, 0x6A, 0x46, 0x33, 0x65, 0x2D })); // +TgBOjF3e-
 				                                              //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.UTF7, "︙", new byte[] { 0x2B, 0x2F, 0x68, 0x6B, 0x2D })); // +/hk-
-				                                              //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
+				                                              //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR #329 for more information)
 				yield return (new TestCaseData(Encoding.UTF7, "𝄞", new byte[] { 0x2B, 0x32, 0x44, 0x54, 0x64, 0x48, 0x67, 0x2D })); // +2DTdHg-
 
 				yield return (new TestCaseData(Encoding.UTF7, @"0\0<CR>1\n2", new byte[] { 0x30, 0x2B, 0x41, 0x41, 0x41, 0x2D, 0x0D, 0x31, 0x0A, 0x32 })); // 0+AAA-\r1\n2
@@ -369,7 +369,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF8, "一二州", new byte[] { 0xE4, 0xB8, 0x80, 0xE4, 0xBA, 0x8C, 0xE5, 0xB7, 0x9E }));
 				                                              //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.UTF8, "︙", new byte[] { 0xEF, 0xB8, 0x99 }));
-				                                              //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
+				                                              //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR #329 for more information)
 				yield return (new TestCaseData(Encoding.UTF8, "𝄞", new byte[] { 0xF0, 0x9D, 0x84, 0x9E }));
 
 				yield return (new TestCaseData(Encoding.UTF8, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
@@ -385,7 +385,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.Unicode, "一二州", new byte[] { 0x00, 0x4E, 0x8C, 0x4E, 0xDE, 0x5D }));
 				                                                 //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.Unicode, "︙", new byte[] { 0x19, 0xFE }));
-				                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
+				                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR #329 for more information)
 				yield return (new TestCaseData(Encoding.Unicode, "𝄞", new byte[] { 0x34, 0xD8, 0x1E, 0xDD }));
 				                                                                        //// |           |           |           |           |           |          |
 				yield return (new TestCaseData(Encoding.Unicode, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32, 0x00 }));
@@ -401,7 +401,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "一二州", new byte[] { 0x4E, 0x00, 0x4E, 0x8C, 0x5D, 0xDE }));
 				                                                          //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "︙", new byte[] { 0xFE, 0x19 }));
-				                                                          //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
+				                                                          //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR #329 for more information)
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, "𝄞", new byte[] { 0xD8, 0x34, 0xDD, 0x1E }));
 				                                                                                 //// |           |           |           |           |           |          |
 				yield return (new TestCaseData(Encoding.BigEndianUnicode, @"0\0<CR>1\n2", new byte[] { 0x00, 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32 }));
@@ -417,7 +417,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(Encoding.UTF32, "一二州", new byte[] { 0x00, 0x4E, 0x00, 0x00, 0x8C, 0x4E, 0x00, 0x00, 0xDE, 0x5D, 0x00, 0x00 }));
 				                                               //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(Encoding.UTF32, "︙", new byte[] { 0x19, 0xFE, 0x00, 0x00 }));
-				                                               //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
+				                                               //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR #329 for more information)
 				yield return (new TestCaseData(Encoding.UTF32, "𝄞", new byte[] { 0x1E, 0xD1, 0x01, 0x00 }));
 				                                                                      //// |                       |                       |                       |                       |                       |                      |
 				yield return (new TestCaseData(Encoding.UTF32, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00 }));
@@ -433,7 +433,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "一二州", new byte[] { 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, 0x4E, 0x8C, 0x00, 0x00, 0x5D, 0xDE }));
 				                                                                                  //// 'Vertical Horizontal Ellipsis' is U+FE19
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "︙", new byte[] { 0x00, 0x00, 0xFE, 0x19 }));
-				                                                                                  //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR#329 for more information)
+				                                                                                  //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET 3.5 WinForms (see FR #329 for more information)
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "𝄞", new byte[] { 0x00, 0x01, 0xD1, 0x1E }));
 				                                                                                                         //// |                       |                       |                       |                       |                       |                      |
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), @"0\0<CR>1\n2", new byte[] { 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32 }));
