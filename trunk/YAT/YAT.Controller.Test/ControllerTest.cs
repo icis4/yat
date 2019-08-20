@@ -257,7 +257,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// COM1 and COM2 will be opened in this test case
+		/// COM101 and COM102 will be opened in this test case
 		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).
 		/// </remarks>
 		[Test] // Test is mandatory, it shall not be excludable.
@@ -384,7 +384,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// COM1 and COM2 will be opened in this test case
+		/// COM101 and COM102 will be opened in this test case
 		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).
 		/// </remarks>
 		[Test] // Test is mandatory, it shall not be excludable.
@@ -535,22 +535,22 @@ namespace YAT.Controller.Test
 		}
 
 		/// <summary>
-		/// Asserts that COM1 and COM2 are configured and available.
+		/// Asserts that COM101 and COM102 are configured and available.
 		/// </summary>
 		protected virtual void AssertWorkspaceCommandLineArgRunPreconditions()
 		{
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA != "COM1")
-				Assert.Fail("This test case requires that 'PortA' is configured to 'COM1'!");
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA != "COM101")
+				Assert.Fail("This test case requires that 'PortA' is configured to 'COM101'!");
 
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB != "COM2")
-				Assert.Fail("This test case requires that 'PortB' is configured to 'COM2'!");
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB != "COM102")
+				Assert.Fail("This test case requires that 'PortB' is configured to 'COM102'!");
 
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
-				Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine, therefore this test is excluded.");
+				Assert.Ignore("'PortA' is configured to 'COM101' but isn't available on this machine, therefore this test is excluded.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
-				Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine, therefore this test is excluded.");
+				Assert.Ignore("'PortB' is configured to 'COM102' but isn't available on this machine, therefore this test is excluded.");
 				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 

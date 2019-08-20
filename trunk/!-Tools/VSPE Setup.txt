@@ -1,0 +1,8 @@
+﻿
+Device
+	> Pair
+		> COM101
+		> COM102
+		(Not using COM1/COM2 as those ports may be fixed to an internal serial COM device.)
+			=> COM1..100 assigned as physical ports.
+			=> COM101+ assigned as virtual ports.

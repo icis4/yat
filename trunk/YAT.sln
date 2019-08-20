@@ -175,7 +175,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B0
 		!-Tools\StyleCop Setup.txt = !-Tools\StyleCop Setup.txt
 		!-Tools\SVN Setup.txt = !-Tools\SVN Setup.txt
 		!-Tools\VisualStudio Setup.txt = !-Tools\VisualStudio Setup.txt
-		!-Tools\VSPE Runtime Config - COM1 paired with COM2.cmd = !-Tools\VSPE Runtime Config - COM1 paired with COM2.cmd
+		!-Tools\VSPE Runtime Config - COM101 paired with COM102.cmd = !-Tools\VSPE Runtime Config - COM101 paired with COM102.cmd
+		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt
 	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup.x64", "YAT\YAT.Setup\YAT.Setup.x64.vdproj", "{54F71988-3626-43F1-88C9-6A49EF275417}"
