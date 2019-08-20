@@ -38,6 +38,23 @@ namespace MKY.Test.Devices
 
 	/// <summary>Flags to enable/disable the outputs of the 'RS-232' USB Hub.</summary>
 	[Flags]
+	public enum UsbHubDevice
+	{
+		/// <summary>No device.</summary>
+		None = 0x00,
+
+		/// <summary>Hub 1.</summary>
+		Hub1 = 0x01,
+
+		/// <summary>Hub 2.</summary>
+		Hub2 = 0x02,
+
+		/// <summary>All devices.</summary>
+		All = 0x03
+	}
+
+	/// <summary>Flags to enable/disable the outputs of the 'RS-232' USB Hub.</summary>
+	[Flags]
 	public enum UsbHubSettings
 	{
 		/// <summary>No outputs enabled.</summary>
@@ -105,11 +122,8 @@ namespace MKY.Test.Devices
 		/// <remarks>Requires system path.</remarks>
 		private const string Executable = "USBHubControl.exe";
 
-		/// <remarks>Makes not (yet) sense to put this into the test configuration.</remarks>
-		private const string Serial = "A6YJ5A78";
-
 		/// <remarks>Example: 001100.</remarks>
-		private const int MaxBits = 6;
+		private const int SettingsBitCount = 6;
 
 		/// <summary>Error message for convenience.</summary>
 		public const string ErrorMessage = @"The required """ + Executable + @""" is not available, therefore this test is excluded. Ensure that the ""MCD Conline USB HUB"" drivers are installed, and ""\Tools\CommandLine\USBHubControl.exe"" has been added to the system's PATH.";
@@ -153,21 +167,31 @@ namespace MKY.Test.Devices
 		//==========================================================================================
 
 		/// <summary>
-		/// Probes the USB hub control.
+		/// Determines whether the USB hub control executable is available.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public static bool Probe()
+		public static bool ExecutableIsAvailable
 		{
-			return (FileEx.IsFindable(Executable));
+			get { return (FileEx.IsFindable(Executable)); }
+		}
+
+		/// <summary>
+		/// Determines whether the USB hub with the given serial string is available.
+		/// </summary>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool Probe(string deviceSerial)
+		{
+		////return (TryExecuteControl(deviceSerial));
+			return (false); // PENDING
 		}
 
 		/// <summary>
 		/// Sets all outputs to the given setting.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public static bool Set(UsbHubSettings setting)
+		public static bool Set(UsbHubDevice device, UsbHubSettings setting)
 		{
-			DebugMessage("Setting   " + ToBinaryString(setting) + " mask.");
+			DebugMessage(device, "Setting   " + SettingToBinaryString(setting) + " mask.");
 
 			UsbHubSettings disableMask = ( staticProxy & ~setting);
 			UsbHubSettings enableMask  = (~staticProxy &  setting);
@@ -175,7 +199,7 @@ namespace MKY.Test.Devices
 			if (disableMask != UsbHubSettings.None)
 			{
 				UsbHubSettings accumulated = (staticProxy & ~disableMask);
-				if (!ExecuteControl(accumulated)) // No need to do steps here, disabling only.
+				if (!TryExecuteControl(device, accumulated)) // No need to do steps here, disabling only.
 					return (false);
 
 				staticProxy = accumulated; // Update proxy.
@@ -185,7 +209,7 @@ namespace MKY.Test.Devices
 			if (enableMask != UsbHubSettings.None)
 			{
 				UsbHubSettings accumulated = (staticProxy | enableMask);
-				if (!SetInSteps(accumulated))
+				if (!SetInSteps(device, accumulated))
 					return (false);
 
 				// Updating proxy and waiting for driver is done in SetInSteps().
@@ -194,7 +218,7 @@ namespace MKY.Test.Devices
 			return (true);
 		}
 
-		private static bool SetInSteps(UsbHubSettings setting)
+		private static bool SetInSteps(UsbHubDevice device, UsbHubSettings setting)
 		{
 			UsbHubSettings stepMask;
 
@@ -202,7 +226,7 @@ namespace MKY.Test.Devices
 			if (stepMask != UsbHubSettings.None)
 			{
 				UsbHubSettings accumulated = (staticProxy | stepMask);
-				if (!ExecuteControl(accumulated))
+				if (!TryExecuteControl(device, accumulated))
 					return (false);
 
 				staticProxy = accumulated; // Update proxy.
@@ -213,7 +237,7 @@ namespace MKY.Test.Devices
 			if (stepMask != UsbHubSettings.None)
 			{
 				UsbHubSettings accumulated = (staticProxy | stepMask);
-				if (!ExecuteControl(accumulated))
+				if (!TryExecuteControl(device, accumulated))
 					return (false);
 
 				staticProxy = accumulated; // Update proxy.
@@ -224,7 +248,7 @@ namespace MKY.Test.Devices
 			////if (step != UsbHubSetting.None)
 			////{
 			////	UsbHubSetting accumulated = (staticProxy | step);
-			////	if (!ExecuteControl(accumulated))
+			////	if (!ExecuteControl(device, accumulated))
 			////		return (false);
 			////
 			////	staticProxy = accumulated; // Update proxy.
@@ -238,13 +262,13 @@ namespace MKY.Test.Devices
 		/// Enables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public static bool Enable(UsbHubSettings enableMask)
+		public static bool Enable(UsbHubDevice device, UsbHubSettings enableMask)
 		{
-			DebugMessage("Enabling  " + ToBinaryString(enableMask) + " mask. " +
-			                      "Proxy was " + ToBinaryString(staticProxy) + " mask.");
+			DebugMessage(device, "Enabling  " + SettingToBinaryString(enableMask) + " mask. " +
+			                     "Proxy was " + SettingToBinaryString(staticProxy) + " mask.");
 
 			UsbHubSettings accumulated = (staticProxy | enableMask);
-			if (!SetInSteps(accumulated))
+			if (!SetInSteps(device, accumulated))
 				return (false);
 
 			// Updating proxy and waiting for driver is done in SetInSteps().
@@ -255,13 +279,13 @@ namespace MKY.Test.Devices
 		/// Disables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public static bool Disable(UsbHubSettings disableMask)
+		public static bool Disable(UsbHubDevice device, UsbHubSettings disableMask)
 		{
-			DebugMessage("Disabling " + ToBinaryString(disableMask) + " mask. " +
-			                      "Proxy was " + ToBinaryString(staticProxy) + " mask.");
+			DebugMessage(device, "Disabling " + SettingToBinaryString(disableMask) + " mask. " +
+			                     "Proxy was " + SettingToBinaryString(staticProxy) + " mask.");
 
 			UsbHubSettings accumulated = (staticProxy & ~disableMask);
-			if (!ExecuteControl(accumulated)) // No need to do steps here, disabling only.
+			if (!TryExecuteControl(device, accumulated)) // No need to do steps here, disabling only.
 				return (false);
 
 			staticProxy = accumulated; // Update proxy.
@@ -277,41 +301,56 @@ namespace MKY.Test.Devices
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "That's OK, this method is only used for testing.")]
-		private static bool ExecuteControl(UsbHubSettings setting)
+		private static bool TryExecuteControl(UsbHubDevice device, UsbHubSettings setting)
 		{
-			string mask = ToBinaryString(setting);
-			string args = Serial + " " + mask;
+			string mask = SettingToBinaryString(setting);
+			string serial = DeviceToSerialString(device);
+			string args = serial + " " + mask;
 
-			Process p = new Process();
+			var p = new Process();
 			p.StartInfo.UseShellExecute = false;
 			p.StartInfo.FileName = Executable;
 			p.StartInfo.Arguments = args;
 			p.StartInfo.CreateNoWindow = true;
 			p.Start();
 
-			DebugMessage("Executing " + mask + " mask...");
+			DebugMessage(device, "Executing " + mask + " mask...");
 			p.WaitForExit(); // Execution requires approx 3 seconds.
 			Thread.Sleep(WaitForNextExecution);
 
 			if (p.ExitCode == 0)
 			{
-				DebugMessage("...successfully done.");
+				DebugMessage(device, "...successfully done.");
 				return (true);
 			}
 			else
 			{
-				DebugMessage("...failed!");
+				DebugMessage(device, "...failed!");
 				return (false);
 			}
 		}
 
-		private static string ToBinaryString(UsbHubSettings setting)
+		private static string SettingToBinaryString(UsbHubSettings setting)
 		{
-			return (StringEx.Right(ByteEx.ConvertToBinaryString((byte)setting), MaxBits));
+			return (StringEx.Right(ByteEx.ConvertToBinaryString((byte)setting), SettingsBitCount));
+		}
+
+		private static string DeviceToSerialString(UsbHubDevice device)
+		{
+			switch (device)
+			{
+				case UsbHubDevice.None:
+				case UsbHubDevice.All:  throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires a dedicated device, not '" + device + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "device"));
+
+				case UsbHubDevice.Hub1: return (ConfigurationProvider.Configuration.UsbHub1);
+				case UsbHubDevice.Hub2: return (ConfigurationProvider.Configuration.UsbHub2);
+
+				default: throw (new ArgumentOutOfRangeException("device", device, MessageHelper.InvalidExecutionPreamble + "'" + device + "' identifies a device that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		[Conditional("DEBUG")]
-		private static void DebugMessage(string message)
+		private static void DebugMessage(UsbHubDevice device, string message)
 		{
 			Debug.WriteLine
 			(
@@ -323,7 +362,7 @@ namespace MKY.Test.Devices
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					typeof(UsbHubControl),
 					"",
-					"[" + Serial + "]",
+					"[" + device + "]",
 					message
 				)
 			);

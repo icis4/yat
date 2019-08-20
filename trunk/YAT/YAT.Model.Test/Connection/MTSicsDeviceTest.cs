@@ -30,7 +30,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-using MKY.IO.Ports.Test;
 using MKY.Settings;
 using MKY.Test.Devices;
 
@@ -98,12 +97,12 @@ namespace YAT.Model.Test.Connection
 		/// <remarks>
 		/// Test is optional, it can be excluded if no MT-SICS device is available.
 		/// </remarks>
-		[Test, MTSicsDeviceAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory]
 		public virtual void TestCloseReopen()
 		{
-			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
 				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settings = Utilities.GetStartedSerialPortMTSicsDeviceATextSettings();
 
@@ -116,7 +115,7 @@ namespace YAT.Model.Test.Connection
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)
 					{
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else
 					{
@@ -217,7 +216,10 @@ namespace YAT.Model.Test.Connection
 		/// <remarks>
 		/// Test is optional, it can be excluded if no MT-SICS device is available.
 		/// </remarks>
-		[Test, MTSicsDeviceAIsAvailableCategory, MinuteDurationCategory(1)]
+		/// <remarks>
+		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
+		/// </remarks>
+		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, MinuteDurationCategory(1)]
 		public virtual void TestDisconnectReconnect()
 		{
 			TestDisconnectReconnect(false); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
@@ -226,7 +228,10 @@ namespace YAT.Model.Test.Connection
 		/// <remarks>
 		/// Test is optional, it can be excluded if no MT-SICS device is available.
 		/// </remarks>
-		[Test, MTSicsDeviceAIsAvailableCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
+		/// <remarks>
+		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
+		/// </remarks>
+		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
 		public virtual void TestDisconnectReconnectWithContinuousReceiving()
 		{
 			TestDisconnectReconnect(true); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
@@ -250,13 +255,13 @@ namespace YAT.Model.Test.Connection
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Thesycon' is a brand name.")]
 		private static void TestDisconnectReconnect(bool testWithContinuousReceiving)
 		{
-			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
 				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			if (!UsbHubControl.Probe())
+			if (!MKY.Test.ConfigurationProvider.Configuration.UsbHub2IsAvailable)
 				Assert.Ignore(UsbHubControl.ErrorMessage);
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var portOut = UsbHubSettings.Out4;
 
@@ -273,7 +278,7 @@ namespace YAT.Model.Test.Connection
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)
 					{
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else
 					{
@@ -287,14 +292,14 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Disconnect/Reconnect without sending. ---------------------------------
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.That(UsbHubControl.Set(UsbHubSettings.None), Is.True, "Failed to modify USB hub!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
+				Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSettings.None), Is.True, "Failed to change USB hub configuration!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.That(terminal.IsOpen,        Is.False);
 				Assert.That(terminal.IsReadyToSend, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-				Assert.That(UsbHubControl.Enable(portOut), Is.True, "Failed to modify USB hub!");
+				Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 				Utilities.WaitForOpen(terminal);
 				Assert.That(terminal.IsOpen,        Is.True);
@@ -339,14 +344,14 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
+				Assert.That(UsbHubControl.Disable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.That(terminal.IsOpen,        Is.False);
 				Assert.That(terminal.IsReadyToSend, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-				Assert.That(UsbHubControl.Enable(portOut), Is.True, "Failed to modify USB hub!");
+				Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 				Utilities.WaitForOpen(terminal);
 				Assert.That(terminal.IsOpen,        Is.True);
@@ -400,7 +405,7 @@ namespace YAT.Model.Test.Connection
 					Thread.Sleep(WaitForOperation);
 
 					// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-					Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
+					Assert.That(UsbHubControl.Disable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 					Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 					Utilities.WaitForClose(terminal);
 					Assert.That(terminal.IsOpen,        Is.False);
@@ -411,7 +416,7 @@ namespace YAT.Model.Test.Connection
 					// YAT terminal shall handle this situation without any exceptions!
 
 					// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-					Assert.That(UsbHubControl.Enable(portOut), Is.True, "Failed to modify USB hub!");
+					Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 					Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 					Utilities.WaitForOpen(terminal);
 					Assert.That(terminal.IsOpen,        Is.True);
@@ -425,7 +430,7 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Disconnect, then manually close. --------------------------------------
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.That(UsbHubControl.Disable(portOut), Is.True, "Failed to modify USB hub!");
+				Assert.That(UsbHubControl.Disable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.That(terminal.IsOpen,        Is.False);
@@ -438,7 +443,7 @@ namespace YAT.Model.Test.Connection
 				Assert.That(terminal.IsReadyToSend, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-				Assert.That(UsbHubControl.Enable(portOut), Is.True, "Failed to modify USB hub!");
+				Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.False);
 
 				// Manually open terminal again. Expected: No exceptions, terminal can be opened.
@@ -459,7 +464,7 @@ namespace YAT.Model.Test.Connection
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
 
-			Assert.That(UsbHubControl.Set(UsbHubSettings.All), Is.True, "Failed to set USB hub!");
+			Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSettings.All), Is.True, "Failed to set USB hub!");
 		}
 
 		#endregion

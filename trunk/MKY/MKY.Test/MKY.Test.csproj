@@ -94,6 +94,7 @@
       <HintPath>..\..\NUnit\framework\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -106,6 +107,8 @@
     <Compile Include="CommandLine\ArgsHandlerTest.cs" />
     <Compile Include="CommandLine\CommandLineArgs.cs" />
     <Compile Include="CommandLine\InvalidCommandLineArgs.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationTemplate\Generator.cs" />
     <Compile Include="Devices\UsbHub.cs" />
     <Compile Include="Equality\Data.cs" />
     <Compile Include="Equality\Configuration.cs" />
@@ -185,6 +188,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ConfigurationTemplate\MKY.Test.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
