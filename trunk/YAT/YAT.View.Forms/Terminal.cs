@@ -4765,7 +4765,7 @@ namespace YAT.View.Forms
 
 				if (scs.HaveChanged)
 				{
-					this.terminal.ApplyTerminalSettings(es); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR#309.
+					this.terminal.ApplyTerminalSettings(es); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR #309.
 					SetTimedStatusText("Terminal settings set to " + presetString + ".");
 				}
 				else
@@ -6114,7 +6114,7 @@ namespace YAT.View.Forms
 					SuspendHandlingTerminalSettings();
 					try
 					{
-						this.terminal.ApplyTerminalSettings(fsr); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR#309.
+						this.terminal.ApplyTerminalSettings(fsr); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR #309.
 					}
 					finally
 					{

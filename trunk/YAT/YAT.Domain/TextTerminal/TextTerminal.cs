@@ -600,7 +600,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// \remind (2018-01-17 / MKY / FR#333) there is a limitation in this implementation:
+		/// \remind (2018-01-17 / MKY / FR #333) there is a limitation in this implementation:
 		/// This method will be called slightly after the line content has been forwarded to the raw
 		/// terminal, thus may result in a short delay between content and EOL. With 9600 baud, no
 		/// delay is noticeable. With 115200 baud, delay is still not noticeable most of the times,
@@ -1313,7 +1313,7 @@ namespace YAT.Domain
 						// SVN revision #2052 of this file.
 						//
 						// Nice-to-have refinement of this behavior:
-						// Retained EOL elements shall be shown after a timeout of e.g. 150 ms => FR#364.
+						// Retained EOL elements shall be shown after a timeout of e.g. 150 ms => FR #364.
 					}
 				}
 				else
