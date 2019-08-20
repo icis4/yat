@@ -995,7 +995,7 @@ namespace YAT.Domain.Parser
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("radix", radix, MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
@@ -1026,7 +1026,8 @@ namespace YAT.Domain.Parser
 						case Radix.Dec:     sb.Append("decimal");     break;
 						case Radix.Hex:     sb.Append("hexadecimal"); break;
 						case Radix.Unicode: sb.Append("Unicode");     break;
-						default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+						default: throw (new ArgumentOutOfRangeException("radix", radix, MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					sb.Append(" value.");
