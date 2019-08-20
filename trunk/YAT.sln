@@ -39,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-TestConfig", "!-TestConfi
 		..\!-TestConfig\MKY.IO.Ports.Test.config = ..\!-TestConfig\MKY.IO.Ports.Test.config
 		..\!-TestConfig\MKY.IO.Usb.Test.config = ..\!-TestConfig\MKY.IO.Usb.Test.config
 		..\!-TestConfig\MKY.Net.Test.config = ..\!-TestConfig\MKY.Net.Test.config
+		..\!-TestConfig\MKY.Test.config = ..\!-TestConfig\MKY.Test.config
 		YAT.Test.config = YAT.Test.config
 	EndProjectSection
 EndProject

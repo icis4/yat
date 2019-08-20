@@ -42,7 +42,7 @@ namespace MKY.IO.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Test is optional, it can be excluded if neither USB hub not USB Ser/HID device is available.
+		/// Test is optional, it can be excluded if either USB Ser/HID device or USB hub is not available.
 		/// </remarks>
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
@@ -62,7 +62,7 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <remarks>
-		/// Test is optional, it can be excluded if neither USB hub not USB Ser/HID device is available.
+		/// Test is optional, it can be excluded if either USB Ser/HID device or USB hub is not available.
 		/// </remarks>
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
