@@ -444,11 +444,17 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
-		private const int WaitTimeoutForStateChange  = Domain.Test.Utilities.WaitTimeoutForStateChange;
-		private const int WaitIntervalForStateChange = Domain.Test.Utilities.WaitIntervalForStateChange;
+		                      /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForStateChange"/>.</remarks>
+		public const int WaitTimeoutForStateChange  = Domain.Test.Utilities.WaitTimeoutForStateChange;
 
-		private const int WaitTimeoutForLineTransmission  = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
-		private const int WaitIntervalForLineTransmission = Domain.Test.Utilities.WaitIntervalForLineTransmission;
+		                      /// <remarks><see cref="Domain.Test.Utilities.WaitIntervalForStateChange"/>.</remarks>
+		public const int WaitIntervalForStateChange = Domain.Test.Utilities.WaitIntervalForStateChange;
+
+		                           /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForLineTransmission"/>.</remarks>
+		public const int WaitTimeoutForLineTransmission  = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
+
+		                           /// <remarks><see cref="Domain.Test.Utilities.WaitIntervalForLineTransmission"/>.</remarks>
+		public const int WaitIntervalForLineTransmission = Domain.Test.Utilities.WaitIntervalForLineTransmission;
 
 		#endregion
 

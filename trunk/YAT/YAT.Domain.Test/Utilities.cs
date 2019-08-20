@@ -54,7 +54,7 @@ namespace YAT.Domain.Test
 		public const int WaitTimeoutForStateChange = 3000;
 
 		/// <remarks>
-		/// Shorter interval increases debug output.
+		/// Note that a shorter interval would increase debug output, spoiling the debug console.
 		/// </remarks>
 		public const int WaitIntervalForStateChange = 100;
 
@@ -66,10 +66,10 @@ namespace YAT.Domain.Test
 		///     => 300 ms seems defensive enough while still not too long to waste time.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
-		public const int WaitTimeoutForLineTransmission = 300;
+		public const int WaitTimeoutForLineTransmission = 300; // See remarks above.
 
 		/// <remarks>
-		/// Shorter interval decreases test.
+		/// Note that a longer interval would increase the wait time, thus increasing the test time.
 		/// </remarks>
 		public const int WaitIntervalForLineTransmission = 20;
 
