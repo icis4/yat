@@ -29,7 +29,9 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading;
 
 using MKY.Diagnostics;
@@ -58,7 +60,7 @@ namespace MKY.Time
 
 	#endregion
 
-		/// <summary></summary>
+	/// <summary></summary>
 	public class RateProvider : IDisposable, IDisposableEx
 	{
 		#region Fields
@@ -69,12 +71,16 @@ namespace MKY.Time
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RateProvider).FullName);
+		/// <remarks>
+		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/> to
+		/// prevent the potentially same issue as described in <see cref="Chronometer"/>.
+		/// </remarks>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RateProvider).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
 
 		private Rate rate;
 
 		private int updateInterval;
-		private System.Timers.Timer updateTicker; // Not using 'System.Timers' to prevent conflicts with 'System.Threading'.
+		private System.Timers.Timer updateTicker; // Not "using" 'System.Timers' to prevent conflicts with 'System.Threading'.
 
 		#endregion
 
@@ -143,6 +149,8 @@ namespace MKY.Time
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 				this.eventHelper.DiscardAllEventsAndExceptions();
 
+				DebugMessage("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -156,6 +164,8 @@ namespace MKY.Time
 				// Set state to disposed:
 				this.updateTicker = null;
 				IsDisposed = true;
+
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -164,11 +174,11 @@ namespace MKY.Time
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~RateProvider()
@@ -310,6 +320,32 @@ namespace MKY.Time
 		protected virtual void OnRateChanged(RateEventArgs e)
 		{
 			this.eventHelper.RaiseSync<RateEventArgs>(Changed, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG")]
+		private void DebugMessage(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"",
+					"",
+					message
+				)
+			);
 		}
 
 		#endregion

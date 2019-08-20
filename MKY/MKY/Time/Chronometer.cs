@@ -87,10 +87,9 @@ namespace MKY.Time
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
 
-		private System.Timers.Timer timer;
-
-		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
+		private System.Timers.Timer secondTicker; // Not "using" 'System.Timers' to prevent conflicts with 'System.Threading'.
 		private DateTime startTimeStamp = DateTime.Now;
+		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
 
 		#endregion
 
@@ -114,10 +113,10 @@ namespace MKY.Time
 		/// <summary></summary>
 		public Chronometer()
 		{
-			this.timer = new System.Timers.Timer();
-			this.timer.AutoReset = true;
-			this.timer.Interval = 1000;
-			this.timer.Elapsed += timer_Elapsed;
+			this.secondTicker = new System.Timers.Timer();
+			this.secondTicker.AutoReset = true;
+			this.secondTicker.Interval = 1000;
+			this.secondTicker.Elapsed += secondTicker_Elapsed;
 		}
 
 		#region Disposal
@@ -148,15 +147,15 @@ namespace MKY.Time
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					if (this.timer != null)
+					if (this.secondTicker != null)
 					{
-						this.timer.Dispose();
-						EventHandlerHelper.RemoveAllEventHandlers(this.timer);
+						this.secondTicker.Dispose();
+						EventHandlerHelper.RemoveAllEventHandlers(this.secondTicker);
 					}
 				}
 
 				// Set state to disposed:
-				this.timer = null;
+				this.secondTicker = null;
 				IsDisposed = true;
 
 				DebugMessage("...successfully disposed.");
@@ -202,8 +201,8 @@ namespace MKY.Time
 		/// <summary></summary>
 		public double Interval
 		{
-			get { AssertNotDisposed(); return (this.timer.Interval);        }
-			set { AssertNotDisposed();         this.timer.Interval = value; }
+			get { AssertNotDisposed(); return (this.secondTicker.Interval);        }
+			set { AssertNotDisposed();         this.secondTicker.Interval = value; }
 		}
 
 		/// <summary></summary>
@@ -213,7 +212,7 @@ namespace MKY.Time
 			{
 				AssertNotDisposed();
 
-				if (!this.timer.Enabled)
+				if (!this.secondTicker.Enabled)
 					return (this.accumulatedTimeSpan);
 				else
 					return (CalculateTimeSpan(DateTime.Now));
@@ -246,9 +245,9 @@ namespace MKY.Time
 		{
 			AssertNotDisposed();
 
-			if (!this.timer.Enabled)
+			if (!this.secondTicker.Enabled)
 			{
-				this.timer.Start();
+				this.secondTicker.Start();
 				this.startTimeStamp = now;
 
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
@@ -261,9 +260,9 @@ namespace MKY.Time
 		{
 			AssertNotDisposed();
 
-			if (this.timer.Enabled)
+			if (this.secondTicker.Enabled)
 			{
-				this.timer.Stop();
+				this.secondTicker.Stop();
 				this.accumulatedTimeSpan += (DateTime.Now - this.startTimeStamp);
 
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
@@ -273,7 +272,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		public virtual void StartStop()
 		{
-			if (!this.timer.Enabled)
+			if (!this.secondTicker.Enabled)
 				Start();
 			else
 				Stop();
@@ -346,27 +345,27 @@ namespace MKY.Time
 		//==========================================================================================
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object timer_Elapsed_SyncObj = new object();
+		private object secondTicker_Elapsed_SyncObj = new object();
 
-		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void secondTicker_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
+			if (Monitor.TryEnter(secondTicker_Elapsed_SyncObj))
 			{
 				try
 				{
 					// Ensure not to forward events during closing anymore:
-					if (!IsDisposed && (this.timer != null) && this.timer.Enabled)
+					if (!IsDisposed && (this.secondTicker != null) && this.secondTicker.Enabled)
 					{
 						OnTimeSpanChanged(new TimeSpanEventArgs(CalculateTimeSpan(e.SignalTime)));
 					}
 				}
 				finally
 				{
-					Monitor.Exit(timer_Elapsed_SyncObj);
+					Monitor.Exit(secondTicker_Elapsed_SyncObj);
 				}
 			} // Monitor.TryEnter()
 		}
