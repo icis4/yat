@@ -92,9 +92,8 @@ namespace YAT.Controller.Test
 		{
 			tempPath = Temp.MakeTempPath(GetType());
 
-			// Temporary in-memory application settings are useless when YAT.Controller is used,
-			// as YAT.Controller will retrieve the real application settings, that's its job...
-			// Instead, [ApplicationSettingsFileAccess.None] is specified on Main.Run(...).
+			// Temporary in-memory application settings are useless for this YAT.Controller based
+			// test, as YAT.Controller will retrieve the application settings, that's its job...
 
 			// There is another issue when running YAT.Controller from NUnit:
 			// The first test that invokes YAT, i.e. the first time the welcome screen should get
