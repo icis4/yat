@@ -1185,7 +1185,7 @@ namespace YAT.Settings.Model.Test
 
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
 				Assert.Ignore("'PortA' is configured to 'COM101' but isn't available on this machine, therefore this test is excluded.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		#endregion
@@ -1212,7 +1212,7 @@ namespace YAT.Settings.Model.Test
 
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
 				Assert.Ignore("'PortB' is configured to 'COM102' but isn't available on this machine, therefore this test is excluded.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		#endregion

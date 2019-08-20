@@ -563,7 +563,7 @@ namespace YAT.Model.Test
 				return (GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA));
 
 			Assert.Ignore("'PortA' is not available, therefore this test is excluded. Ensure that 'PortA' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -582,7 +582,7 @@ namespace YAT.Model.Test
 				return (GetStartedSerialPortTextSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB));
 
 			Assert.Ignore("'PortB' is not available, therefore this test is excluded. Ensure that 'PortB' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -604,7 +604,7 @@ namespace YAT.Model.Test
 			}
 
 			Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -625,7 +625,7 @@ namespace YAT.Model.Test
 			}
 
 			Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -690,7 +690,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -707,7 +707,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -753,7 +753,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -770,7 +770,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -816,7 +816,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -833,7 +833,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -857,7 +857,7 @@ namespace YAT.Model.Test
 			}
 
 			Assert.Ignore("'MTSicsDevice' is not available, therefore this test is excluded. Ensure that 'MTSicsDevice' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -903,7 +903,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -920,7 +920,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -966,7 +966,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -983,7 +983,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -1029,7 +1029,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -1046,7 +1046,7 @@ namespace YAT.Model.Test
 				return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -1087,7 +1087,7 @@ namespace YAT.Model.Test
 				return (GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceA));
 
 			Assert.Ignore("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -1106,7 +1106,7 @@ namespace YAT.Model.Test
 				return (GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
 
 			Assert.Ignore("'DeviceB' is not available, therefore this test is excluded. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -1128,7 +1128,7 @@ namespace YAT.Model.Test
 			}
 
 			Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}
@@ -1149,7 +1149,7 @@ namespace YAT.Model.Test
 			}
 
 			Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			return (null);
 		}

@@ -390,11 +390,11 @@ namespace MKY.IO.Usb.Test
 		{
 			if (!ConfigurationProvider.Configuration.DeviceAIsAvailable)
 				Assert.Ignore("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!ConfigurationProvider.Configuration.DeviceBIsAvailable)
 				Assert.Ignore("'DeviceB' is not available, therefore this test is excluded. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
@@ -412,11 +412,11 @@ namespace MKY.IO.Usb.Test
 		{
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
 				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
 				Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
 		/// <summary>
@@ -433,11 +433,11 @@ namespace MKY.IO.Usb.Test
 		{
 			if (!ConfigurationProvider.Configuration.TILaunchPadDeviceAIsAvailable)
 				Assert.Ignore("'TILaunchPadDeviceA' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceA' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			if (!ConfigurationProvider.Configuration.TILaunchPadDeviceBIsAvailable)
 				Assert.Ignore("'TILaunchPadDeviceB' is not available, therefore this test is excluded. Ensure that 'TILaunchPadDeviceB' is properly configured and available if passing this test is required.");
-				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 	}
 
