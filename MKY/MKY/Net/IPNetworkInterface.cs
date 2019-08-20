@@ -363,7 +363,7 @@ namespace MKY.Net
 
 				case AddressFamily.InterNetworkV6: // IPv6
 				{
-					return (IPAddress.IPv6None); // \remind (MKY / 2019-05-12 / FR#372): IPv6 is currently only minimally implemented.
+					return (IPAddress.IPv6None); // \remind (MKY / 2019-05-12 / FR #372): IPv6 is currently only minimally implemented.
 				}
 
 				default:
@@ -418,7 +418,7 @@ namespace MKY.Net
 
 				case AddressFamily.InterNetworkV6: // IPv6
 				{
-					return (IPAddress.IPv6Any); // \remind (MKY / 2019-05-12 / FR#372): IPv6 is currently only minimally implemented.
+					return (IPAddress.IPv6Any); // \remind (MKY / 2019-05-12 / FR #372): IPv6 is currently only minimally implemented.
 				}
 
 				default:
