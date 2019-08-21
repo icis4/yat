@@ -2796,15 +2796,13 @@ namespace YAT.View.Forms
 				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
 				ApplicationSettings.SaveLocalUserSettings();
 
+			////ResetStatusText() is not needed, Main.CreateNewTerminalFromSettings() will continue outputting.
+
 				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
 				this.main.CreateNewTerminalFromSettings(sh);
 			}
 			else
 			{
-				// Still update to keep changed settings for next new terminal:
-				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.SaveLocalUserSettings();
-
 				ResetStatusText();
 			}
 		}
