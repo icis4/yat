@@ -198,7 +198,8 @@ namespace MKY
 			/// </summary>
 			/// <remarks>
 			/// This is the default behavior as such exceptions indicate a design flaw in the close
-			/// or exit procedure, i.e. the user shall explicitly have to change the mode.
+			/// or exit procedure, i.e. the user shall become aware of such issues and explicitly
+			/// have to change the mode to <see cref="Discard"/>.
 			/// </remarks>
 			Invoke = 0,
 
@@ -224,7 +225,12 @@ namespace MKY
 		#endif
 	#endif
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <see cref="DisposedTargetExceptionMode.Invoke"/> is the default behavior as such
+		/// exceptions indicate a design flaw in the close or exit procedure, i.e. the user
+		/// shall become aware of such issues and explicitly have to change the mode to
+		/// <see cref="DisposedTargetExceptionMode.Discard"/>.
+		/// </remarks>
 		public const DisposedTargetExceptionMode DisposedTargetExceptionDefault = DisposedTargetExceptionMode.Invoke;
 
 		#endregion
