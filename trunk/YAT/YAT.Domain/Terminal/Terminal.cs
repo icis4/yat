@@ -242,10 +242,10 @@ namespace YAT.Domain
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		/// <remarks>
-		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/>
-		/// in an attempt to prevent the issue described in <see cref="RawTerminal"/>.
+		/// Explicitly setting <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
+		/// to handle/workaround the issue described in <see cref="RawTerminal"/>.
 		/// </remarks>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 
 		private int instanceId;
 
