@@ -278,6 +278,28 @@ namespace MKY.Time
 
 		#endregion
 
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			if (IsDisposed)
+				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
+
+			return (UpdateInterval.ToString(CultureInfo.CurrentCulture));
+		}
+
+		#endregion
+
 		#region Timer Event Handlers
 		//==========================================================================================
 		// Timer Event Handlers
