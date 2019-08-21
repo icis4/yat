@@ -280,11 +280,11 @@ namespace MKY.IO.Serial.SerialPort
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~SerialPort()
@@ -1942,41 +1942,41 @@ namespace MKY.IO.Serial.SerialPort
 		/// As soon as YAT started to write the maximum chunk size (in Q1/2016 ;-), data got lost
 		/// even for e.g. a local port loopback pair. All seems to work fine as long as small chunks
 		/// of e.g. 48 bytes some now and then are transmitted.
-		/// 
+		///
 		/// For a while, I assumed data loss happens in the receive path. Therefore, I tried to use
 		/// async reading instead of the 'DataReceived' event, as suggested by online resources like
 		/// http://www.sparxeng.com/blog/software/must-use-net-system-io-ports-serialport written by
 		/// Ben Voigt.
-		/// 
+		///
 		/// However, there seems to be no difference whether 'DataReceived' and 'BytesToRead' or
 		/// async reading is used. Both loose the equal amount of data, this fact is also supported
 		/// be the 'DriverAnalysis'. Also, opposed to what Ben Voigt states, async reading actually
 		/// results in smaller chunks, mostly 1 byte reads. Whereas the obvious 'DataReceived' and
 		/// 'BytesToRead' mostly result in 1..4 byte reads, even up to 20..30 bytes. Thus, this
 		/// implementation again uses the 'normal' method.
-		/// 
+		///
 		/// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
 		/// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
 		/// than the baud rate permits forwarding, the converter simply discards superfluous data!
 		/// Of course, what else could it do... Actually, it could propagate the information back to
 		/// <see cref="System.IO.Ports.SerialPort.BytesToWrite"/>. But that obviously isn't done...
-		/// 
-		/// 
+		///
+		///
 		/// Additional information on receiving
 		/// -----------------------------------
 		/// Another improvement suggested by Marco Stroppel on 2011-02-17 doesn't work with YAT.
-		/// 
+		///
 		/// Suggestion: The while(BytesAvailable > 0) raises endless events, because I did not call
 		/// the Receive() method. That was, because I receive only the data when the other port to
 		/// write the data is opened. So the BytesAvailable got never zero. My idea was (not knowing
 		/// if this is good) to do something like:
-		/// 
+		///
 		/// while(BytesAvailable > LastTimeBytesAvailable)
 		/// {
 		///     LastTimeBytesAvailable = BytesAvailable;
 		///     OnDataReceived(EventArgs.Empty);
 		/// }
-		/// 
+		///
 		/// This suggestions doesn't work because YAT shall show every single byte as soon as it
 		/// get's received. If 3 bytes are received while 5 bytes are taken out of the receive
 		/// queue, no more event gets raised. Thus, the 3 bytes do not get shown until new data
@@ -2482,32 +2482,40 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChangedAsync(EventArgs e)
 		{
-			this.eventHelper.RaiseAsync(IOChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseAsync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOControlChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			{
+				this.eventHelper.RaiseSync(IOControlChanged, this, e);
 
-			SetNextControlChangedTickStamp();
+				SetNextControlChangedTickStamp();
+			}
 		}
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
-			this.eventHelper.RaiseAsync(IOControlChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			{
+				this.eventHelper.RaiseAsync(IOControlChanged, this, e);
 
-			SetNextControlChangedTickStamp();
+				SetNextControlChangedTickStamp();
+			}
 		}
 
 		private void SetNextControlChangedTickStamp()
@@ -2525,14 +2533,16 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOErrorAsync(IOErrorEventArgs e)
 		{
-			this.eventHelper.RaiseAsync<IOErrorEventArgs>(IOError, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseAsync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>

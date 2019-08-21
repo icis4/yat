@@ -1328,7 +1328,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(PortChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(PortChanged, this, e);
 		}
 
 		/// <summary>
@@ -1336,7 +1337,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortSettingsChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(PortSettingsChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(PortSettingsChanged, this, e);
 		}
 
 		/// <summary>
@@ -1344,7 +1346,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpening(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(Opening, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(Opening, this, e);
 		}
 
 		/// <summary>
@@ -1352,7 +1355,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(Opened, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(Opened, this, e);
 		}
 
 		/// <summary>
@@ -1360,7 +1364,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosing(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(Closing, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(Closing, this, e);
 		}
 
 		/// <summary>
@@ -1368,7 +1373,8 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(Closed, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(Closed, this, e);
 		}
 
 		/// <summary>

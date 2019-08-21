@@ -1306,28 +1306,32 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOControlChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
-			this.eventHelper.RaiseAsync(IOControlChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseAsync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>

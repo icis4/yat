@@ -63,24 +63,24 @@ namespace MKY.IO.Serial.Socket
 	/// <remarks>
 	/// In case of YAT with the original ALAZ implementation, TCP/IP clients and servers created a
 	/// deadlock on shutdown. The situation:
-	/// 
+	///
 	/// 1. <see cref="Stop()"/> is called from a GUI/main thread.
 	/// 2. 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' blocks.
 	/// 3. The 'OnDisconnected' event is raised.
 	/// 4. FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the GUI/main
 	///    thread and a deadlock happens.
-	/// 
+	///
 	/// Further down the calling chain, 'BaseSocketConnection.Active.get()' was also blocking.
-	/// 
+	///
 	/// These two issues could be solved by modifying 'BaseSocketConnection.Active.get()' to be
 	/// non-blocking, by calling Stop() asynchronously and by suppressing the 'OnDisconnected' and
 	/// 'OnException' events while stopping.
-	/// 
+	///
 	/// These two issues were also reported back to Andre Luis Azevedo. But unfortunately ALAZ seems
 	/// to have come to a dead end. An alternative to ALAZ might need to be found in the future.
-	/// 
+	///
 	/// Note that the very same issue existed in <see cref="TcpServer"/>.
-	/// 
+	///
 	/// Also note that a very similar issue existed when stopping two <see cref="TcpAutoSocket"/>
 	/// that were interconnected with each other. See remarks of this class for details.
 	/// </remarks>
@@ -294,11 +294,11 @@ namespace MKY.IO.Serial.Socket
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~TcpClient()
@@ -616,7 +616,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// Note that ALAZ sockets stop asynchronously, same as starting.
-		/// 
+		///
 		/// Attention:
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
 		/// See remarks of the header of this class for details.
@@ -977,7 +977,7 @@ namespace MKY.IO.Serial.Socket
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
 				// this event handler must not signal any state anymore, nor does it need to try to
 				// reconnect.
-				// 
+				//
 				// Attention:
 				// Similar code is needed in 'OnException' below.
 				// Changes here may have to be applied there too.
@@ -1005,7 +1005,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Attention:
 		/// This event is also raised on reconnect attempts of auto-reconnect!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="e">
@@ -1027,7 +1027,7 @@ namespace MKY.IO.Serial.Socket
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
 				// this event handler must not signal any state anymore, nor does it need to try to
 				// reconnect.
-				// 
+				//
 				// Attention:
 				// Similar code is needed in 'OnDisconnected' above.
 				// Changes here may have to be applied there too.
@@ -1127,7 +1127,8 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed. This may happen on an async System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback.
+				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -1140,7 +1141,8 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed. This may happen on an async System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback.
+				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
