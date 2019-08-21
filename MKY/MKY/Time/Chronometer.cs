@@ -52,8 +52,8 @@ namespace MKY.Time
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		/// <remarks>
-		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/> to
-		/// prevent the following issue:
+		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/>
+		/// in an attempt to prevent the following issue:
 		///
 		/// <![CDATA[
 		/// System.Reflection.TargetInvocationException was unhandled by user code

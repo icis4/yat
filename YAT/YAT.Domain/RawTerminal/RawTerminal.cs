@@ -29,7 +29,9 @@
 
 using System;
 using System.Collections.Generic;
+//// 'System.Diagnostics' are explicitly used for preventing ambiguity between 'MKY.IO.Serial.DataReceivedEventArgs' and 'System.Diagnostics.DataReceivedEventArgs'.
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 using System.Threading;
 
@@ -50,20 +52,12 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawTerminal : IDisposable, IDisposableEx
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string Undefined = "<Undefined>";
-
-		#endregion
-
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields
 		//==========================================================================================
 
+		private static int staticInstanceCounter;
 		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
@@ -77,8 +71,8 @@ namespace YAT.Domain
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		/// <remarks>
-		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/> to
-		/// prevent the following issue:
+		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/>
+		/// in an attempt to prevent the following issue:
 		///
 		/// <![CDATA[
 		/// System.Reflection.TargetInvocationException was unhandled by user code
@@ -91,7 +85,7 @@ namespace YAT.Domain
 		///        bei MKY.EventHelper.Item.InvokeOnCurrentThread(Delegate sink, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 595.
 		///        bei System.Runtime.Remoting.Messaging.StackBuilderSink._PrivateProcessMessage(IntPtr md, Object[] args, Object server, Int32 methodPtr, Boolean fExecuteInContext, Object[]& outArgs)
 		///        bei System.Runtime.Remoting.Messaging.StackBuilderSink.AsyncProcessMessage(IMessage msg, IMessageSink replySink)
-		///   InnerException:
+		///   InnerException 1:
 		///        Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
 		///        Source=mscorlib
 		///        StackTrace:
@@ -102,7 +96,7 @@ namespace YAT.Domain
 		///             bei MKY.EventHelper.Item.RaiseSync(Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 370.
 		///             bei YAT.Domain.RawTerminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\RawTerminal\RawTerminal.cs:Zeile 792.
 		///             bei YAT.Domain.RawTerminal.io_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\RawTerminal\RawTerminal.cs:Zeile 689.
-		///        InnerException:
+		///        InnerException 2:
 		///             Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
 		///             Source=mscorlib
 		///             StackTrace:
@@ -113,7 +107,7 @@ namespace YAT.Domain
 		///                  bei MKY.EventHelper.Item.RaiseSync(Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 370.
 		///                  bei YAT.Domain.Terminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\Terminal\Terminal.cs:Zeile 3890.
 		///                  bei YAT.Domain.Terminal.rawTerminal_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\Terminal\Terminal.cs:Zeile 3767.
-		///             InnerException:
+		///             InnerException 3:
 		///                  Message=Invoke oder BeginInvoke kann für ein Steuerelement erst aufgerufen werden, wenn das Fensterhandle erstellt wurde.
 		///                  Source=System.Windows.Forms
 		///                  StackTrace:
@@ -131,6 +125,8 @@ namespace YAT.Domain
 		/// has been found.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
+
+		private int instanceId;
 
 		private Settings.BufferSettings bufferSettings;
 
@@ -178,6 +174,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings)
 		{
+			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
+
 			this.txRepository    = new RawRepository(bufferSettings.TxBufferSize);
 			this.bidirRepository = new RawRepository(bufferSettings.BidirBufferSize);
 			this.rxRepository    = new RawRepository(bufferSettings.RxBufferSize);
@@ -191,6 +189,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(RawTerminal rhs, Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings)
 		{
+			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
+
 			this.txRepository    = new RawRepository(rhs.txRepository);
 			this.bidirRepository = new RawRepository(rhs.bidirRepository);
 			this.rxRepository    = new RawRepository(rhs.rxRepository);
@@ -224,6 +224,8 @@ namespace YAT.Domain
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 				this.eventHelper.DiscardAllEventsAndExceptions();
 
+				DebugMessage("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -241,6 +243,8 @@ namespace YAT.Domain
 				// Set state to disposed:
 				this.io = null;
 				IsDisposed = true;
+
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -843,19 +847,22 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOControlChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
@@ -875,7 +882,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		#endregion
@@ -945,14 +953,41 @@ namespace YAT.Domain
 		public virtual string ToShortIOString()
 		{
 			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+				return (typeof(IIOProvider).ToString()); // Do not call AssertNotDisposed() on such basic method!
 
 			if      (this.io != null)
 				return (this.io.ToString());
 			else if (this.ioSettings != null)
 				return (this.ioSettings.ToShortIOString());
 			else
-				return (Undefined);
+				return (typeof(IIOProvider).ToString());
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[System.Diagnostics.Conditional("DEBUG")]
+		protected virtual void DebugMessage(string message)
+		{
+			System.Diagnostics.Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"#" + this.instanceId.ToString("D2", CultureInfo.CurrentCulture),
+					"[" + ToShortIOString() + "]",
+					message
+				)
+			);
 		}
 
 		#endregion
