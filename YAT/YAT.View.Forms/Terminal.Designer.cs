@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MKY;
 
 namespace YAT.View.Forms
 {
-	partial class Terminal
+	partial class Terminal : IDisposableEx // Implemented based on Control.IsDisposed :-)
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -4853,11 +4851,6 @@ namespace YAT.View.Forms
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-		}
-
-		private void ToolStripMenuItem_TerminalMenu_Send_TextWithoutEol_Click(object sender, EventArgs e)
-		{
-			throw new NotImplementedException();
 		}
 
 		#endregion

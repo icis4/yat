@@ -71,8 +71,8 @@ namespace YAT.Domain
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		/// <remarks>
-		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/>
-		/// in an attempt to prevent the following issue:
+		/// Explicitly setting <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
+		/// to handle/workaround the following issue:
 		///
 		/// <![CDATA[
 		/// System.Reflection.TargetInvocationException was unhandled by user code
@@ -121,10 +121,18 @@ namespace YAT.Domain
 		/// ]]>
 		///
 		/// The terminals get properly closed, but apparently there may still be pending
-		/// asynchronous 'zombie' callback that later throw an exception. No true solution
-		/// has been found.
+		/// asynchronous 'zombie' callback that later throw an exception. No feasible solution has
+		/// been found, however there is a potential approach to deal with this issue:
+		///
+		/// This raw terminal could dispose of the underlying <see cref="IIOProvider"/> on each
+		/// <see cref="Stop"/>. But of course, the <see cref="IIOProvider"/> would again have to
+		/// be created on each <see cref="Start"/>. Or yet another alternative, the raw terminal's
+		/// owner could invoke <see cref="Close"/> instead of <see cref="Stop"/>. Migrating to
+		/// such alternative approach would require quite some refactoring, thus decided to keep
+		/// the <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/> approach for
+		/// the moment.
 		/// </remarks>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 
 		private int instanceId;
 

@@ -52,8 +52,8 @@ namespace MKY.Time
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
 		/// <remarks>
-		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/>
-		/// in an attempt to prevent the following issue:
+		/// Explicitly setting <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
+		/// to handle/workaround the following issue:
 		///
 		/// <![CDATA[
 		/// System.Reflection.TargetInvocationException was unhandled by user code
@@ -81,11 +81,11 @@ namespace MKY.Time
 		///             bei YAT.Model.Terminal.totalConnectChrono_TimeSpanChanged(Object sender, TimeSpanEventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 4204.
 		/// ]]>
 		///
-		/// The chronometers get properly terminated, but apparently there may still be pending
-		/// asynchronous 'zombie' callback that later throw an exception. No true solution
+		/// The chronometers get properly disposed of, but apparently there may still be pending
+		/// asynchronous 'zombie' callback that later throw an exception. No feasible solution
 		/// has been found.
 		/// </remarks>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 
 		private System.Timers.Timer secondTicker; // Not "using" 'System.Timers' to prevent conflicts with 'System.Threading'.
 		private DateTime startTimeStamp = DateTime.Now;

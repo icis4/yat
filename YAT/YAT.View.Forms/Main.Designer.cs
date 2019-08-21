@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MKY;
 
 namespace YAT.View.Forms
 {
-	partial class Main
+	partial class Main : IDisposableEx // Implemented based on Control.IsDisposed :-)
 	{
 		/// <summary>
 		/// Required designer variable.
