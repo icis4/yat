@@ -221,8 +221,6 @@ namespace YAT.Domain
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 		private const int ClearAndRefreshTimeout = 400;
 
-		private const string Undefined = "<Undefined>";
-
 		#endregion
 
 		#region Static Fields
@@ -243,7 +241,11 @@ namespace YAT.Domain
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName);
+		/// <remarks>
+		/// Explicitly setting <see cref="EventHelper.DisposedTargetExceptionMode.Discard"/>
+		/// in an attempt to prevent the issue described in <see cref="RawTerminal"/>.
+		/// </remarks>
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, disposedTargetException: EventHelper.DisposedTargetExceptionMode.Discard);
 
 		private int instanceId;
 
@@ -413,6 +415,8 @@ namespace YAT.Domain
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 				this.eventHelper.DiscardAllEventsAndExceptions();
 
+				DebugMessage("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -430,6 +434,8 @@ namespace YAT.Domain
 
 				// Set state to disposed:
 				IsDisposed = true;
+
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -930,7 +936,7 @@ namespace YAT.Domain
 				// able to deal with this design!
 				// An alternative approach would be to lock/synchronize here, i.e. wait until the
 				// send thread has indeed stopped. However, this results in dead-locks if Stop()
-				// is called from the same thread where the ..Sent events get invoked (e.g. the UI
+				// is called from the same thread where the ...Sent events get invoked (e.g. the UI
 				// thread).
 
 				DisablePeriodicXOnTimer();
@@ -4240,12 +4246,12 @@ namespace YAT.Domain
 		public virtual string ToShortIOString()
 		{
 			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
+				return (typeof(RawTerminal).ToString()); // Do not call AssertNotDisposed() on such basic method!
 
 			if (this.rawTerminal != null)
 				return (this.rawTerminal.ToShortIOString());
 			else
-				return (Undefined);
+				return (typeof(RawTerminal).ToString());
 		}
 
 		#endregion
