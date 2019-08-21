@@ -64,6 +64,10 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s".
 		/// </summary>
+		/// <remarks>
+		/// Is intended to be eliminated after having upgraded to .NET 4+, using its additional
+		/// <see cref="TimeSpan"/> formatting capabilities instead.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantSeconds(TimeSpan value)
 		{
@@ -73,6 +77,10 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff".
 		/// </summary>
+		/// <remarks>
+		/// Is intended to be eliminated after having upgraded to .NET 4+, using its additional
+		/// <see cref="TimeSpan"/> formatting capabilities instead.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandths(TimeSpan value)
 		{
@@ -82,6 +90,10 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss".
 		/// </summary>
+		/// <remarks>
+		/// Is intended to be eliminated after having upgraded to .NET 4+, using its additional
+		/// <see cref="TimeSpan"/> formatting capabilities instead.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantSecondsEnforceMinutes(TimeSpan value)
 		{
@@ -91,6 +103,10 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff".
 		/// </summary>
+		/// <remarks>
+		/// Is intended to be eliminated after having upgraded to .NET 4+, using its additional
+		/// <see cref="TimeSpan"/> formatting capabilities instead.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value)
 		{
@@ -100,6 +116,10 @@ namespace MKY
 		/// <summary>
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s[.f[f[f]]]".
 		/// </summary>
+		/// <remarks>
+		/// Is intended to be eliminated after having upgraded to .NET 4+, using its additional
+		/// <see cref="TimeSpan"/> formatting capabilities instead.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		private static string FormatInvariant(TimeSpan value, bool enforceMinutes = true, bool addTenths = false, bool addHundredths = false, bool addThousandths = false)
 		{
@@ -107,17 +127,17 @@ namespace MKY
 
 			if (addThousandths)
 			{
-				sb.Insert(0, (Math.Abs(value.Milliseconds) / 1).ToString("D3", CultureInfo.CurrentCulture));
+				sb.Insert(0, (Math.Abs(value.Milliseconds) / 1).ToString("D3", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addHundredths)
 			{
-				sb.Insert(0, (Math.Abs(value.Milliseconds) / 10).ToString("D2", CultureInfo.CurrentCulture));
+				sb.Insert(0, (Math.Abs(value.Milliseconds) / 10).ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addTenths)
 			{
-				sb.Insert(0, (Math.Abs(value.Milliseconds) / 100).ToString("D1", CultureInfo.CurrentCulture));
+				sb.Insert(0, (Math.Abs(value.Milliseconds) / 100).ToString("D1", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 
@@ -130,47 +150,47 @@ namespace MKY
 				var addMinutes = ((Math.Abs(value.TotalMinutes) >= 1.0) || enforceMinutes);
 				if (addMinutes) // There shall at least be "0:00":
 				{
-					sb.Insert(0, Math.Abs(value.Seconds).ToString("D2", CultureInfo.CurrentCulture));
+					sb.Insert(0, Math.Abs(value.Seconds).ToString("D2", CultureInfo.InvariantCulture));
 					sb.Insert(0, ":");
 
 					var addHours = (Math.Abs(value.TotalHours) >= 1.0);
 					if (addHours) // There shall at least be "0:00:00":
 					{
-						sb.Insert(0, Math.Abs(value.Minutes).ToString("D2", CultureInfo.CurrentCulture));
+						sb.Insert(0, Math.Abs(value.Minutes).ToString("D2", CultureInfo.InvariantCulture));
 						sb.Insert(0, ":");
 
 						if (Math.Abs(value.TotalDays) >= 1.0)
 						{
-							sb.Insert(0, Math.Abs(value.Hours).ToString(CultureInfo.CurrentCulture));
+							sb.Insert(0, Math.Abs(value.Hours).ToString(CultureInfo.InvariantCulture));
 
 							if (Math.Abs(value.TotalDays) < 2.0)
 								sb.Insert(0, " day ");
 							else
 								sb.Insert(0, " days ");
 
-							sb.Insert(0, value.Days.ToString(CultureInfo.CurrentCulture));
+							sb.Insert(0, value.Days.ToString(CultureInfo.InvariantCulture));
 						}
 						else
 						{
-							sb.Insert(0, value.Hours.ToString(CultureInfo.CurrentCulture));
+							sb.Insert(0, value.Hours.ToString(CultureInfo.InvariantCulture));
 						}
 					}
 					else
 					{
 						if (enforceMinutes && (Math.Abs(value.Minutes) <= 0.0) && (value.TotalSeconds < 0.0))
 						{
-							sb.Insert(0, value.Minutes.ToString(CultureInfo.CurrentCulture));
+							sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
 							sb.Insert(0, "-");
 						}
 						else
 						{
-							sb.Insert(0, value.Minutes.ToString(CultureInfo.CurrentCulture));
+							sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
 						}
 					}
 				}
 				else
 				{
-					sb.Insert(0, value.Seconds.ToString(CultureInfo.CurrentCulture));
+					sb.Insert(0, value.Seconds.ToString(CultureInfo.InvariantCulture));
 				}
 			}
 
@@ -181,11 +201,15 @@ namespace MKY
 		/// Returns <paramref name="value"/> formatted as "[[[[d days ]h]h:]m]m:ss.fff"
 		/// supporting additional formats "^d.ddd^", "^h.hhh^", "^mm.mmm^", "^sss.sss^", "^ffffff^".
 		/// </summary>
+		/// <remarks>
+		/// Is intended to be eliminated after having upgraded to .NET 4+, using its additional
+		/// <see cref="TimeSpan"/> formatting capabilities instead.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandthsEnforceMinutes(TimeSpan value, string additionalFormat)
 		{
 			string result;
-			if (TryFormatAdditional(value, additionalFormat, out result))
+			if (TryFormatInvariantAdditional(value, additionalFormat, out result))
 				return (result);
 
 			return (FormatInvariant(value, true, true, true, true));
@@ -195,11 +219,15 @@ namespace MKY
 		/// Returns <paramref name="value"/> formatted as "[[[[[[d days ]h]h:]m]m:]s]s.fff"
 		/// supporting additional formats "^d.ddd^", "^h.hhh^", "^mm.mmm^", "^sss.sss^", "^ffffff^".
 		/// </summary>
+		/// <remarks>
+		/// Is intended to be eliminated after having upgraded to .NET 4+, using its additional
+		/// <see cref="TimeSpan"/> formatting capabilities instead.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
 		public static string FormatInvariantThousandths(TimeSpan value, string additionalFormat)
 		{
 			string result;
-			if (TryFormatAdditional(value, additionalFormat, out result))
+			if (TryFormatInvariantAdditional(value, additionalFormat, out result))
 				return (result);
 
 			return (FormatInvariant(value, false, true, true, true));
@@ -220,31 +248,31 @@ namespace MKY
 		/// Output milliseconds for readability, even though last digit only provides limited accuracy.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't like the additional formats...")]
-		private static bool TryFormatAdditional(TimeSpan value, string additionalFormat, out string result)
+		private static bool TryFormatInvariantAdditional(TimeSpan value, string additionalFormat, out string result)
 		{
 			if      (StringEx.EqualsOrdinal(additionalFormat, "^ffffff^"))
 			{
-				result = string.Format(CultureInfo.CurrentCulture, "{0:000000}", value.TotalMilliseconds);
+				result = string.Format(CultureInfo.InvariantCulture, "{0:000000}", value.TotalMilliseconds);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinal(additionalFormat, "^sss.sss^"))
 			{
-				result = string.Format(CultureInfo.CurrentCulture, "{0:000.000}", value.TotalSeconds);
+				result = string.Format(CultureInfo.InvariantCulture, "{0:000.000}", value.TotalSeconds);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinal(additionalFormat, "^mm.mmm^"))
 			{
-				result = string.Format(CultureInfo.CurrentCulture, "{0:00.000}", value.TotalMinutes);
+				result = string.Format(CultureInfo.InvariantCulture, "{0:00.000}", value.TotalMinutes);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinal(additionalFormat, "^h.hhh^"))
 			{
-				result = string.Format(CultureInfo.CurrentCulture, "{0:0.000}", value.TotalHours);
+				result = string.Format(CultureInfo.InvariantCulture, "{0:0.000}", value.TotalHours);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinal(additionalFormat, "^d.ddd^"))
 			{
-				result = string.Format(CultureInfo.CurrentCulture, "{0:0.000}", value.TotalDays);
+				result = string.Format(CultureInfo.InvariantCulture, "{0:0.000}", value.TotalDays);
 				return (true);
 			}
 
