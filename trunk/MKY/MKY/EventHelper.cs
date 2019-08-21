@@ -765,7 +765,7 @@ namespace MKY
 					leadMessage.Append(":");
 				}
 
-				leadMessage.Append(" Exception in ");
+				leadMessage.Append(" Exception in");
 
 				if (wasSyncInvoke)
 					leadMessage.Append(" synchronous");
