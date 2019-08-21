@@ -24,8 +24,6 @@
 using System;
 using System.Threading;
 
-using MKY;
-
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>

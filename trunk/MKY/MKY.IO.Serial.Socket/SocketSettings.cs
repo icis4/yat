@@ -29,8 +29,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Net;
 using System.Xml.Serialization;
 
 using MKY.Net;
