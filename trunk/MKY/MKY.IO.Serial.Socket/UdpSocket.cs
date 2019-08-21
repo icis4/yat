@@ -394,11 +394,11 @@ namespace MKY.IO.Serial.Socket
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~UdpSocket()
@@ -980,7 +980,7 @@ namespace MKY.IO.Serial.Socket
 			////	this.socket.EnableBroadcast = true;
 			////	this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.Broadcast, true);
 			////}
-				
+
 				// Bind the socket:
 				// Socket.Bind() "If you do not care which local port is used, you can create an IPEndPoint using 0 for the port number.
 				//                In this case, the service provider will assign an available port number between 49152 and 65535."
@@ -1507,7 +1507,8 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -1520,7 +1521,8 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>

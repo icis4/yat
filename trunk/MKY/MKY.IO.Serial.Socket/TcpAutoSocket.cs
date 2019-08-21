@@ -50,20 +50,20 @@ namespace MKY.IO.Serial.Socket
 	/// <remarks>
 	/// Initially, YAT AutoSockets with the original ALAZ implementation created a deadlock on
 	/// shutdown when two AutoSockets that were interconnected with each other. The situation:
-	/// 
+	///
 	/// 1. The GUI/main thread requests stopping all terminals:
 	///     => YAT.Model.Workspace.CloseAllTerminals()
 	///         => MKY.IO.Serial.TcpAutoSocket.Stop()
 	///            => ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop()
 	///                => ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get()
-	/// 
+	///
 	/// 2. As a result, the first AutoSocket shuts down, but the second changes from 'Accepted' to
 	///    'Listening' and tries to synchronize from the ALAZ socket event to the GUI/main thread:
 	///     => ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected()
 	///         => MKY.IO.Serial.TcpAutoSocket.OnIOChanged()
 	///             => YAT.Model.Terminal.OnIOChanged()
 	///                 => Deadlock when synchronizing onto GUI/main thread !!!
-	/// 
+	///
 	/// The issue has been solved in <see cref="ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection"/>
 	/// as well as <see cref="TcpClient"/> or <see cref="TcpServer"/> by invoking Stop() and Dispose()
 	/// of socket and connections and thread asynchronously and without firing events. See remarks
@@ -228,11 +228,11 @@ namespace MKY.IO.Serial.Socket
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~TcpAutoSocket()
@@ -1091,7 +1091,8 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(IOChanged, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed. This may happen on an async System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback.
+				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -1104,7 +1105,8 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
+			if (!IsDisposed) // Make sure to propagate event only if not already disposed. This may happen on an async System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback.
+				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
