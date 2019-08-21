@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -129,14 +130,6 @@ namespace MKY.Settings
 				{
 					case ApplicationSettingsFileAccess.ReadSharedWriteIfOwned:
 					{
-						// Create named mutex and try to acquire it. Note that the mutex must be
-						// acquired immediately, and once only, and the success is stored in a
-						// boolean variable. This mechanism ensures that once an instance 'owns'
-						// the settings, it keeps them. And does so until it exits. Then the mutex
-						// is released by the finalizer of this class.
-
-						this.mutex = new Mutex(true, Application.ProductName + "." + this.name, out this.mutexCreatedNew);
-
 						// \remind (2019-08-21 / MKY)
 						// The named mutex does include the name (e.g. "LocalUserSettings"), thus
 						// will not interfere with other settings of the same application. But it
@@ -144,8 +137,32 @@ namespace MKY.Settings
 						// the same application can "block" even though it does not reference the
 						// same settings, since they are located in <Version> subfolders. This
 						// approach takes cases into account, where a newer setting still references
-						// older (sub)settings. This feature is considered more important than the
-						// disadvantage previously described.
+						// older (sub)settings.
+
+					////                            vvv prepared for FR #37 "clone old auto files and upgrade them"
+					////// The name does include the settings name as well as application version
+					////// for neither interfering with other settings of the same application nor
+					////// other versions of the same application. The latter works fine once a
+					////// newer version does have version specific settings, but may cause issues
+					////// at the moment an old version is already running and the new version is
+					////// started for the first time. This case has to be handled by copying old
+					////// (sub)settings to the new version before accessing them.
+
+						var sb = new StringBuilder();
+						sb.Append(Application.ProductName);
+						sb.Append("."); // e.g. "YAT.LocalUserSettings" same as namespaces.
+						sb.Append(this.name);
+					////sb.Append(Path.DirectorySeparatorChar); // e.g. "YAT.LocalUserSettings\2.0.0" same
+					////sb.Append(Application.ProductVersion);  // as e.g. prefix "Local\" (see Mutex).
+					////                            ^^^ prepared for FR #37 "clone old auto files and upgrade them"
+
+						// Create named mutex and try to acquire it. Note that the mutex must be
+						// acquired immediately, and once only, and the success is stored in a
+						// boolean variable. This mechanism ensures that once an instance 'owns'
+						// the settings, it keeps them. And does so until it exits. Then the mutex
+						// is released by the finalizer of this class.
+
+						this.mutex = new Mutex(true, sb.ToString(), out this.mutexCreatedNew);
 
 						if (this.mutexCreatedNew)
 							this.effectiveFileAccess = FileAccessFlags.ReadWrite;
