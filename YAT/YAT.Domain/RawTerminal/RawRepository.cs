@@ -241,7 +241,7 @@ namespace YAT.Domain
 			}
 
 			if (i == 0)
-				sb.AppendLine(indent + "<NONE>");
+				sb.AppendLine(indent + "<None>");
 
 			return (sb.ToString());
 		}
