@@ -1229,9 +1229,6 @@ namespace YAT.Model
 				// 'View.Main' receives the event callback!
 				Dispose();
 
-				// Finally, allow a short moment to let pending asynchronous callbacks be executed:
-				Thread.Sleep(50);
-
 				cancel = false;
 				return (this.result);
 			}
