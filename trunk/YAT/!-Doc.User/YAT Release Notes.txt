@@ -118,6 +118,10 @@ Important changes:
 - UDP/IP now supports sending to and receiving from broadcast addresses (feature request #370).
 - Serial COM port again uses the term RTS (Ready To Send) as that is still most commonly used.
   In addition, notes/hints on terms RTR (Ready To Receive) as well as RFR (Ready For Receiving).
+- Serial COM port and USB Ser/HID terminals by default hide XOn/XOff flow control characters for
+  'Software' and 'Combined' (related to earlier feature request #190, #206, #226 and bug #319).
+  Note that 'Manual Software' and 'Manual Combined' still show the XOn/XOff characters by default
+  but can optionally be hidden (earlier feature request #190).
 - Errors are now indicated in square "[...]" instead of angle "<...>" brackets (rel. to feat. #350).
 - Prevention of potential handling error when copying data to clipboard (feature request #345).
 - Unicode/Non-Unicode multi-byte encoding test coverage improved (related to bugs #427, #428, #429).

@@ -1341,8 +1341,7 @@ namespace YAT.View.Forms
 				this.settingsInEdit.UserName = TerminalExplicitSettings.UserNameDefault;
 
 				// Update dependent settings:
-				this.settingsInEdit.Terminal.UpdateTerminalTypeDependentDefaults();
-				this.settingsInEdit.Terminal.UpdateIOTypeDependentSettings();
+				this.settingsInEdit.Terminal.UpdateAllDependentSettings();
 			}
 			finally
 			{

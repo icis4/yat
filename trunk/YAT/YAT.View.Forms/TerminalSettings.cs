@@ -167,7 +167,9 @@ namespace YAT.View.Forms
 
 			this.settingsInEdit.Terminal.TerminalType = terminalSelection.TerminalType;
 
-			// Changing 'TerminalType' will silently update the 'TerminalType' dependent settings!
+			// Silently update the terminal type dependent settings, user shall not get "annoyed"
+			// to confirm, and the changes are that basic that they need to be changed anyway.
+			this.settingsInEdit.Terminal.UpdateTerminalTypeDependentSettings();
 
 			SetControls();
 		}
@@ -182,58 +184,7 @@ namespace YAT.View.Forms
 			var ioTypeNewIsUdpSocket               =  ((Domain.IOTypeEx)terminalSelection.IOType).IsUdpSocket;
 
 			if (ioTypeNewIsUdpSocket != ioTypeOldWasUdpSocket)
-			{
-				DialogResult dr;
-
-				if (this.settingsInEdit.Terminal.IOTypeDependentSettingsWereDefaults(ioTypeOldWasUdpSocket))
-				{
-					dr = DialogResult.Yes; // Update silently.
-				}
-				else // Update only if confirmed by the user.
-				{
-					if (ioTypeNewIsUdpSocket)
-					{
-						var message = new StringBuilder();
-						message.AppendLine("Port type has changed to UDP/IP. Shall UDP/IP related settings be changed accordingly?");
-						message.AppendLine("");
-						message.AppendLine("Confirming with [Yes] will...");
-						message.AppendLine("...change the 'EOL sequence(s)' to [None].");
-						message.Append    ("...enable 'break lines on each chunk'.");
-
-						dr = MessageBoxEx.Show
-						(
-							this,
-							message.ToString(),
-							"Settings",
-							MessageBoxButtons.YesNo,
-							MessageBoxIcon.Question
-						);
-					}
-					else // ioTypeOldWasUdpSocket
-					{
-						var message = new StringBuilder();
-						message.AppendLine("Port type has changed to other than UDP/IP. Shall UDP/IP related settings be changed accordingly?");
-						message.AppendLine("");
-						message.AppendLine("Confirming with [Yes] will...");
-						message.AppendLine("...change the 'EOL sequence(s)' to the system default.");
-						message.Append    ("...disable 'break lines on each chunk'.");
-
-						dr = MessageBoxEx.Show
-						(
-							this,
-							message.ToString(),
-							"Settings",
-							MessageBoxButtons.YesNo,
-							MessageBoxIcon.Question
-						);
-					}
-				}
-
-				if (dr == DialogResult.Yes)
-				{
-					this.settingsInEdit.Terminal.UpdateIOTypeDependentSettings(ioTypeNewIsUdpSocket);
-				}
-			}
+				PotentiallyUpdateIOTypeDependentSettings(ioTypeOldWasUdpSocket, ioTypeNewIsUdpSocket);
 
 			SetControls();
 		}
@@ -277,7 +228,12 @@ namespace YAT.View.Forms
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
+			var flowControlOldUsedXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
 			this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
+			var flowControlNewUsesXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
+
+			if (flowControlNewUsesXOnXOffAutomatically != flowControlOldUsedXOnXOffAutomatically)
+				PotentiallyUpdateIOSettingsDependentSettings(flowControlOldUsedXOnXOffAutomatically, flowControlNewUsesXOnXOffAutomatically);
 		}
 
 		private void serialPortSettings_AliveMonitorChanged(object sender, EventArgs e)
@@ -388,10 +344,7 @@ namespace YAT.View.Forms
 			{
 				MKY.IO.Usb.SerialHidDeviceSettingsPresetEx preset;
 				if (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
-				{
-					usbSerialHidDeviceSettings.ReportFormat  = preset.ToReportFormat();
-					usbSerialHidDeviceSettings.RxFilterUsage = preset.ToRxFilterUsage();
-				}
+					usbSerialHidDeviceSettings.Preset = preset;
 			}
 
 			// Also try to automatically select the flow control preset:
@@ -399,9 +352,7 @@ namespace YAT.View.Forms
 			{
 				MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx preset;
 				if (MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx.TryParse(deviceInfo, out preset))
-				{
 					usbSerialHidDeviceSettings.FlowControl = preset.ToFlowControl();
-				}
 			}
 		}
 
@@ -422,7 +373,12 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
 		{
+			var flowControlOldUsedXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl = usbSerialHidDeviceSettings.FlowControl;
+			var flowControlNewUsesXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
+
+			if (flowControlNewUsesXOnXOffAutomatically != flowControlOldUsedXOnXOffAutomatically)
+				PotentiallyUpdateIOSettingsDependentSettings(flowControlOldUsedXOnXOffAutomatically, flowControlNewUsesXOnXOffAutomatically);
 		}
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
@@ -777,6 +733,112 @@ namespace YAT.View.Forms
 
 				// User:
 				this.settingsInEdit.UserName = f.SettingsResult.UserName;
+			}
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void PotentiallyUpdateIOTypeDependentSettings(bool ioTypeOldWasUdpSocket, bool ioTypeNewIsUdpSocket)
+		{
+			DialogResult dr;
+
+			if (this.settingsInEdit.Terminal.IOTypeDependentSettingsWereDefaults(ioTypeOldWasUdpSocket))
+			{
+				dr = DialogResult.Yes; // Update silently.
+			}
+			else // Update only if confirmed by the user.
+			{
+				if (ioTypeNewIsUdpSocket)
+				{
+					var message = new StringBuilder();
+					message.AppendLine("Port type has changed to UDP/IP. Shall UDP/IP related settings be changed accordingly?");
+					message.AppendLine("");
+					message.AppendLine("Confirming [Yes] will...");
+					message.AppendLine("...change [EOL sequence] to [None] in [Text Settings...].");
+					message.Append    ("...enable [Break lines on each chunk] in [Advanced Settings...].");
+
+					dr = MessageBoxEx.Show
+					(
+						this,
+						message.ToString(),
+						"Change Related Settings?",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question
+					);
+				}
+				else // ioTypeOldWasUdpSocket
+				{
+					var message = new StringBuilder();
+					message.AppendLine("Port type has changed to other than UDP/IP. Shall UDP/IP related settings be changed accordingly?");
+					message.AppendLine("");
+					message.AppendLine("Confirming [Yes] will...");
+					message.AppendLine("...change [EOL sequence] in [Text Settings...] to the system default.");
+					message.Append    ("...disable [Break lines on each chunk] in [Advanced Settings...].");
+
+					dr = MessageBoxEx.Show
+					(
+						this,
+						message.ToString(),
+						"Change Related Settings?",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question
+					);
+				}
+			}
+
+			if (dr == DialogResult.Yes)
+			{
+				this.settingsInEdit.Terminal.UpdateIOTypeDependentSettings(ioTypeNewIsUdpSocket);
+			}
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void PotentiallyUpdateIOSettingsDependentSettings(bool flowControlOldUsedXOnXOffAutomatically, bool flowControlNewUsesXOnXOffAutomatically)
+		{
+			DialogResult dr;
+
+			if (this.settingsInEdit.Terminal.IOSettingsDependentSettingsWereDefaults(flowControlOldUsedXOnXOffAutomatically))
+			{
+				dr = DialogResult.Yes; // Update silently.
+			}
+			else // Update only if confirmed by the user.
+			{
+				if (flowControlNewUsesXOnXOffAutomatically)
+				{
+					var message = new StringBuilder();
+					message.AppendLine("Flow control has changed to use XOn/XOff automatically. Shall XOn/XOff related settings be changed accordingly?");
+					message.AppendLine("");
+					message.Append    ("Confirming [Yes] will enable [Hide XOn/XOff] in [Advanced Settings...].");
+
+					dr = MessageBoxEx.Show
+					(
+						this,
+						message.ToString(),
+						"Change Related Settings?",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question
+					);
+				}
+				else // flowControlOldUsedXOnXOffAutomatically
+				{
+					var message = new StringBuilder();
+					message.AppendLine("Flow control has changed to no longer use XOn/XOff automatically. Shall XOn/XOff related settings be changed accordingly?");
+					message.AppendLine("");
+					message.Append    ("Confirming [Yes] will disable [Hide XOn/XOff] in [Advanced Settings...].");
+
+					dr = MessageBoxEx.Show
+					(
+						this,
+						message.ToString(),
+						"Change Related Settings?",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Question
+					);
+				}
+			}
+
+			if (dr == DialogResult.Yes)
+			{
+				this.settingsInEdit.Terminal.UpdateIOSettingsDependentSettings(flowControlNewUsesXOnXOffAutomatically);
 			}
 		}
 

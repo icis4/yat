@@ -79,8 +79,7 @@ namespace YAT.Domain.Settings
 			TextTerminal   = new TextTerminalSettings(settingsType);
 			BinaryTerminal = new BinaryTerminalSettings(settingsType);
 
-			UpdateTerminalTypeDependentDefaults(); // Force update *after* all settings
-			UpdateIOTypeDependentSettings();       // objects got created.
+			UpdateAllDependentSettings(); // Force update *after* all settings objects got created.
 
 			ClearChanged();
 		}
@@ -106,8 +105,7 @@ namespace YAT.Domain.Settings
 			TextTerminal   = new TextTerminalSettings(rhs.TextTerminal);
 			BinaryTerminal = new BinaryTerminalSettings(rhs.BinaryTerminal);
 
-		////UpdateTerminalTypeDependentDefaults() must not be invoked, 'rhs' settings
-		////UpdateIOTypeDependentSettings()       would get overridden otherwise!
+		////UpdateAllDependentSettings() must not be invoked, 'rhs' settings would get overridden otherwise!
 
 			ClearChanged();
 		}
@@ -121,8 +119,7 @@ namespace YAT.Domain.Settings
 
 			TerminalType = TerminalTypeDefault;
 
-			UpdateTerminalTypeDependentDefaults(); // Force update in case type already
-			UpdateIOTypeDependentSettings();       // was 'Text' before.
+			UpdateAllDependentSettings(); // Force update *after* all settings got reset to their defaults.
 		}
 
 		#region Properties
@@ -141,7 +138,6 @@ namespace YAT.Domain.Settings
 				{
 					this.terminalType = value;
 
-					UpdateTerminalTypeDependentDefaults();
 					SetMyChanged();
 				}
 			}
@@ -353,19 +349,30 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <remarks>
-		/// \remind (2019-04-27 / MKY)
-		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
+		/// \remind (2019-08-22 / MKY)
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
 		/// </remarks>
-		public virtual void UpdateTerminalTypeDependentDefaults()
+		public virtual void UpdateAllDependentSettings()
 		{
-			UpdateTerminalTypeDependentDefaults(((TerminalTypeEx)TerminalType).IsBinary);
+			UpdateTerminalTypeDependentSettings();
+			UpdateIOTypeDependentSettings();
+			UpdateIOSettingsDependentSettings();
 		}
 
 		/// <remarks>
 		/// \remind (2019-04-27 / MKY)
-		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
 		/// </remarks>
-		public virtual void UpdateTerminalTypeDependentDefaults(bool isBinary)
+		public virtual void UpdateTerminalTypeDependentSettings()
+		{
+			UpdateTerminalTypeDependentSettings(((TerminalTypeEx)TerminalType).IsBinary);
+		}
+
+		/// <remarks>
+		/// \remind (2019-04-27 / MKY)
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
+		/// </remarks>
+		public virtual void UpdateTerminalTypeDependentSettings(bool isBinary)
 		{
 			if (Display != null)
 			{
@@ -383,7 +390,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2018-02-23 / MKY)
-		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
 		/// </remarks>
 		public virtual void UpdateIOTypeDependentSettings()
 		{
@@ -397,14 +404,14 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2018-02-23 / MKY)
-		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
 		/// </remarks>
 		public virtual void UpdateIOTypeDependentSettings(bool isUdpSocket)
 		{
 			// Attention:
 			// When changing code below,...
 			// ...code of property further below has to be adapted accordingly.
-			// ...messages in terminalSelection_IOTypeChanged() of View.Forms.TerminalSettings have to be adapted accordingly.
+			// ...messages in PotentiallyUpdateIOTypeDependentSettings() of View.Forms.TerminalSettings have to be adapted accordingly.
 
 			if (Display != null)
 			{
@@ -423,22 +430,82 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// \remind (2018-02-23 / MKY)
-		/// Not a 'nice' solution, but it works... At least if nobody forgets to call this method...
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
 		/// </remarks>
 		public virtual bool IOTypeDependentSettingsWereDefaults(bool isUdpSocket)
 		{
 			// Attention:
 			// When changing code below,...
 			// ...code of method above has to be adapted accordingly.
-			// ...messages in terminalSelection_IOTypeChanged() of View.Forms.TerminalSettings have to be adapted accordingly.
+			// ...messages in PotentiallyUpdateIOTypeDependentSettings() of View.Forms.TerminalSettings have to be adapted accordingly.
 
 			bool areDefaults = true;
 
-			areDefaults &= (Display.ChunkLineBreakEnabled == isUdpSocket);
+			if (Display != null)
+			{
+				areDefaults &= (Display.ChunkLineBreakEnabled == isUdpSocket);
+			}
 
-			areDefaults &= (TextTerminal.TxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
-			areDefaults &= (TextTerminal.RxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
-			areDefaults &= (TextTerminal.SeparateTxRxEol == false);
+			if (TextTerminal != null)
+			{
+				areDefaults &= (TextTerminal.TxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
+				areDefaults &= (TextTerminal.RxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
+				areDefaults &= (TextTerminal.SeparateTxRxEol == false);
+			}
+
+			return (areDefaults);
+		}
+
+		/// <remarks>
+		/// \remind (2019-08-22 / MKY)
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
+		/// </remarks>
+		public virtual void UpdateIOSettingsDependentSettings()
+		{
+			bool flowControlUsesXOnXOffAutomatically = false;
+
+			if (IO != null)
+				flowControlUsesXOnXOffAutomatically = IO.FlowControlUsesXOnXOffAutomatically;
+
+			UpdateIOSettingsDependentSettings(flowControlUsesXOnXOffAutomatically);
+		}
+
+		/// <remarks>
+		/// \remind (2019-08-22 / MKY)
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
+		/// </remarks>
+		public virtual void UpdateIOSettingsDependentSettings(bool flowControlUsesXOnXOffAutomatically)
+		{
+			// Attention:
+			// When changing code below,...
+			// ...code of property further below has to be adapted accordingly.
+			// ...messages in PotentiallyUpdateIOSettingsDependentSettings() of View.Forms.TerminalSettings have to be adapted accordingly.
+
+			if (CharHide != null)
+			{
+				CharHide.HideXOnXOff = flowControlUsesXOnXOffAutomatically;
+			}
+
+			SetMyChanged();
+		}
+
+		/// <remarks>
+		/// \remind (2019-08-22 / MKY)
+		/// Not a 'nice' solution, but it works... At least as long nobody forgets to call these methods...
+		/// </remarks>
+		public virtual bool IOSettingsDependentSettingsWereDefaults(bool flowControlUsesXOnXOffAutomatically)
+		{
+			// Attention:
+			// When changing code below,...
+			// ...code of method above has to be adapted accordingly.
+			// ...messages in PotentiallyUpdateIOSettingsDependentSettings() of View.Forms.TerminalSettings have to be adapted accordingly.
+
+			bool areDefaults = true;
+
+			if (CharHide != null)
+			{
+				areDefaults &= (CharHide.HideXOnXOff == flowControlUsesXOnXOffAutomatically);
+			}
 
 			return (areDefaults);
 		}
