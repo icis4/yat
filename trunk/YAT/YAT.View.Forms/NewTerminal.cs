@@ -177,41 +177,65 @@ namespace YAT.View.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortId = serialPortSelection.PortId;
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate = serialPortSettings.BaudRate;
 		}
 
 		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits = serialPortSettings.DataBits;
 		}
 
 		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortCommunication.Parity = serialPortSettings.Parity;
 		}
 
 		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits = serialPortSettings.StopBits;
 		}
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl = serialPortSettings.FlowControl;
 		}
 
 		private void serialPortSettings_AliveMonitorChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortAliveMonitor = serialPortSettings.AliveMonitor;
 		}
 
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SerialPortAutoReopen = serialPortSettings.AutoReopen;
 		}
 
@@ -224,6 +248,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var host = socketSelection.RemoteHost;
 			this.newTerminalSettingsInEdit.SocketRemoteHost = host;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(host);
@@ -233,6 +260,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.RemoteTcpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteTcpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -242,6 +272,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteUdpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.RemoteUdpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteUdpPort = socketSelection.RemoteUdpPort;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -251,11 +284,17 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
 
 		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var filter = socketSelection.LocalFilter;
 			this.newTerminalSettingsInEdit.SocketLocalFilter = filter;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.Add(filter);
@@ -265,6 +304,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.LocalTcpPort;
 			this.newTerminalSettingsInEdit.SocketLocalTcpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -274,6 +316,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.LocalUdpPort;
 			this.newTerminalSettingsInEdit.SocketLocalUdpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -283,11 +328,17 @@ namespace YAT.View.Forms
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
 		private void socketSettings_UdpServerSendModeChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.UdpServerSendMode = socketSettings.UdpServerSendMode;
 		}
 
@@ -300,6 +351,9 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// Attention:
 			// Same code exists in in the following location:
 			//  > TerminalSettings.usbSerialHidDeviceSelection_DeviceInfoChanged()
@@ -308,45 +362,47 @@ namespace YAT.View.Forms
 			MKY.IO.Usb.DeviceInfo deviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 			this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo = deviceInfo;
 
-			// Try to automatically select one of the report format presets:
-			if (deviceInfo != null)
-			{
-				MKY.IO.Usb.SerialHidDeviceSettingsPresetEx preset;
-				if (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
-					usbSerialHidDeviceSettings.Preset = preset;
-			}
-
-			// Also try to automatically select the flow control preset:
-			if (deviceInfo != null)
-			{
-				MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx preset;
-				if (MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx.TryParse(deviceInfo, out preset))
-					usbSerialHidDeviceSettings.FlowControl = preset.ToFlowControl();
-			}
+			// Also update settings control (not via SetControls(), that would be an overkill):
+			usbSerialHidDeviceSettings.DeviceInfo = deviceInfo;
 		}
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.UsbSerialHidPreset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.UsbSerialHidReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
 		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.UsbSerialHidFlowControl = usbSerialHidDeviceSettings.FlowControl;
 		}
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
 
@@ -508,7 +564,8 @@ namespace YAT.View.Forms
 
 				usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
 
-				                                       ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the LocalUserSettings.
+				usbSerialHidDeviceSettings.DeviceInfo    = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
+				                                       ////this.newTerminalSettingsInEdit.UsbSerialHidMatchSerial is defined by the 'LocalUserSettings'.
 				usbSerialHidDeviceSettings.Preset        = this.newTerminalSettingsInEdit.UsbSerialHidPreset;
 				usbSerialHidDeviceSettings.ReportFormat  = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
 				usbSerialHidDeviceSettings.RxFilterUsage = this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage;

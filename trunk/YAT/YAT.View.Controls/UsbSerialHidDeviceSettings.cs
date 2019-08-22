@@ -34,6 +34,8 @@ using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.IO.Usb;
+using MKY.IO.Serial.Usb;
 using MKY.Windows.Forms;
 
 #endregion
@@ -50,12 +52,12 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const           MKY.IO.Usb.SerialHidDeviceSettingsPreset PresetDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.PresetDefault;
-		private static readonly MKY.IO.Usb.SerialHidReportFormat   ReportFormatDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
-		private static readonly MKY.IO.Usb.SerialHidRxFilterUsage RxFilterUsageDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxFilterUsageDefault;
+		private const           SerialHidDeviceSettingsPreset PresetDefault = SerialHidDeviceSettings.PresetDefault;
+		private static readonly SerialHidReportFormat   ReportFormatDefault = SerialHidDeviceSettings.ReportFormatDefault;
+		private static readonly SerialHidRxFilterUsage RxFilterUsageDefault = SerialHidDeviceSettings.RxFilterUsageDefault;
 
-		private const MKY.IO.Serial.Usb.SerialHidFlowControl FlowControlDefault = MKY.IO.Serial.Usb.SerialHidFlowControl.None;
-		private const bool AutoOpenDefault                                      = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
+		private const SerialHidFlowControl FlowControlDefault = SerialHidFlowControl.None;
+		private const bool AutoOpenDefault = SerialHidDeviceSettings.AutoOpenDefault;
 
 		private const string AnyIdIndication = "*";
 
@@ -68,12 +70,15 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private MKY.IO.Usb.SerialHidDeviceSettingsPreset preset = PresetDefault;
-		private MKY.IO.Usb.SerialHidReportFormat reportFormat   = ReportFormatDefault;
-		private MKY.IO.Usb.SerialHidRxFilterUsage rxFilterUsage = RxFilterUsageDefault;
+		/// <remarks>Used for subsequently updating <see cref="Preset"/>.</remarks>
+		private DeviceInfo deviceInfo; // = null;
 
-		private MKY.IO.Serial.Usb.SerialHidFlowControl flowControl = FlowControlDefault;
-		private bool autoOpen                                      = AutoOpenDefault;
+		private SerialHidDeviceSettingsPreset preset        = PresetDefault;
+		private SerialHidReportFormat         reportFormat  = ReportFormatDefault;
+		private SerialHidRxFilterUsage        rxFilterUsage = RxFilterUsageDefault;
+
+		private SerialHidFlowControl flowControl = FlowControlDefault;
+		private bool                 autoOpen    = AutoOpenDefault;
 
 		private int lineLabelTopDefault;
 		private int lineLabelTopShifted;
@@ -133,33 +138,77 @@ namespace YAT.View.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <remarks>
+		/// Used for...
+		/// ...initially updating <see cref="Preset"/> and <see cref="FlowControl"/>.
+		/// ...subsequently updating <see cref="Preset"/>.
+		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public DeviceInfo DeviceInfo
+		{
+			set
+			{
+				this.deviceInfo = value;
+
+				// Try to automatically select one of the report format presets:
+				if (this.deviceInfo != null)
+				{
+					SerialHidDeviceSettingsPresetEx preset;
+					if (SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
+						Preset = preset;
+				}
+
+				// Also try to automatically select the flow control preset:
+				if (this.deviceInfo != null)
+				{
+					SerialHidFlowControlPresetEx preset;
+					if (SerialHidFlowControlPresetEx.TryParse(deviceInfo, out preset))
+						FlowControl = preset.ToFlowControl();
+				}
+			}
+		}
+
 		/// <summary></summary>
 		[Category("Data")]
 		[Description("One of the available presets.")]
 		[DefaultValue(PresetDefault)]
-		public MKY.IO.Usb.SerialHidDeviceSettingsPreset Preset
+		public SerialHidDeviceSettingsPreset Preset
 		{
 			get { return (this.preset); }
 			set
 			{
 				if (this.preset != value)
 				{
-					if (value != MKY.IO.Usb.SerialHidDeviceSettingsPreset.None) // Only true presets shall change the other properties.
+					if (value != SerialHidDeviceSettingsPreset.None) // Only true presets shall change the dependent settings.
 					{
 						// Keep preset to be able to restore ambiguous presets:
-						if (value == MKY.IO.Usb.SerialHidDeviceSettingsPreset.YAT)         // But do not keep [YAT] preset as
-							this.preset = MKY.IO.Usb.SerialHidDeviceSettingsPreset.Common; // that shall be redirected to [Common].
+						if (value == SerialHidDeviceSettingsPreset.YAT)         // But do not keep [YAT] preset as
+							this.preset = SerialHidDeviceSettingsPreset.Common; // that shall be redirected to [Common].
 						else
 							this.preset = value;
 
-						this.reportFormat  = ((MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)value).ToReportFormat();
-						this.rxFilterUsage = ((MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)value).ToRxFilterUsage();
-						SetControls(); // Assign field instead of properties to reduce the number of SetControls() invocations.
+						SetControls();
 						OnPresetChanged(EventArgs.Empty);
-						OnReportFormatChanged(EventArgs.Empty);
-						OnRxFilterUsageChanged(EventArgs.Empty);
+
+						// Update dependent settings:
+						ReportFormat  = ((SerialHidDeviceSettingsPresetEx)value).ToReportFormat();
+						RxFilterUsage = ((SerialHidDeviceSettingsPresetEx)value).ToRxFilterUsage();
+
+						// Sequence above may lead to up to three invocations of SetControls().
+						// However, not assigning to the 'ReportFormat' and 'RxFilterUsage'
+						// properties would require to replicate or extract their functionality.
+						// Multiple invocations of SetControls() seems acceptable.
+
+						// Also note that sequence in dependent properties as well as control
+						// event handlers may lead to up to two invocations of SetControls().
+						// However, not assigning to the 'Preset' property would require to
+						// replicate or extract its functionality. Multiple invocations of
+						// SetControls() seems acceptable. Assigning to the 'Preset' property
+						// will not create a circular loop even if the 'Preset' again calls
+						// the other properties, since the resulting value will not differ.
 					}
-					else
+					else // == SerialHidDeviceSettingsPreset.None
 					{
 						this.preset = value;
 						SetControls();
@@ -172,7 +221,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public MKY.IO.Usb.SerialHidReportFormat ReportFormat
+		public SerialHidReportFormat ReportFormat
 		{
 			get { return (this.reportFormat); }
 			set
@@ -181,14 +230,7 @@ namespace YAT.View.Controls
 				{
 					this.reportFormat = value;
 					SetControls();
-					OnReportFormatChanged(EventArgs.Empty);
-				}
-				else
-				{
-					// Set controls even if format did not change. This ensures that the preset
-					// selection is updated with the current format, i.e. "<No preset selected>"
-					// is changed to the preset in use (if applicable).
-					SetControls();
+					OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 				}
 			}
 		}
@@ -196,7 +238,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public MKY.IO.Usb.SerialHidRxFilterUsage RxFilterUsage
+		public SerialHidRxFilterUsage RxFilterUsage
 		{
 			get { return (this.rxFilterUsage); }
 			set
@@ -205,14 +247,7 @@ namespace YAT.View.Controls
 				{
 					this.rxFilterUsage = value;
 					SetControls();
-					OnRxFilterUsageChanged(EventArgs.Empty);
-				}
-				else
-				{
-					// Set controls even if format did not change. This ensures that the preset
-					// selection is updated with the current format, i.e. "<No preset selected>"
-					// is changed to the preset in use (if applicable).
-					SetControls();
+					OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 				}
 			}
 		}
@@ -221,7 +256,7 @@ namespace YAT.View.Controls
 		[Category("Data")]
 		[Description("The flow control type.")]
 		[DefaultValue(FlowControlDefault)]
-		public virtual MKY.IO.Serial.Usb.SerialHidFlowControl FlowControl
+		public virtual SerialHidFlowControl FlowControl
 		{
 			get { return (this.flowControl); }
 			set
@@ -231,6 +266,9 @@ namespace YAT.View.Controls
 					this.flowControl = value;
 					SetControls();
 					OnFlowControlChanged(EventArgs.Empty);
+
+					// So far, flow control is just preset on change of device selection, thus
+					// change of flow control here does not need to be fed back to a preset (yet).
 				}
 			}
 		}
@@ -307,7 +345,7 @@ namespace YAT.View.Controls
 
 			this.reportFormat.UseId = checkBox_UseId.Checked;
 			SetControls();
-			OnReportFormatChanged(EventArgs.Empty);
+			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 		}
 
 		private void textBox_Id_Validating(object sender, CancelEventArgs e)
@@ -320,7 +358,7 @@ namespace YAT.View.Controls
 			{
 				this.reportFormat.Id = id;
 				SetControls();
-				OnReportFormatChanged(EventArgs.Empty);
+				OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 			}
 			else
 			{
@@ -344,7 +382,7 @@ namespace YAT.View.Controls
 
 			this.rxFilterUsage.SeparateRxId = checkBox_SeparateRxId.Checked;
 			SetControls();
-			OnRxFilterUsageChanged(EventArgs.Empty);
+			OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 		}
 
 		private void textBox_RxId_Validating(object sender, CancelEventArgs e)
@@ -358,7 +396,7 @@ namespace YAT.View.Controls
 				this.rxFilterUsage.AnyRxId = true;
 				this.rxFilterUsage.RxId = this.reportFormat.Id;
 				SetControls();
-				OnRxFilterUsageChanged(EventArgs.Empty);
+				OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 			}
 			else
 			{
@@ -368,7 +406,7 @@ namespace YAT.View.Controls
 					this.rxFilterUsage.AnyRxId = false;
 					this.rxFilterUsage.RxId = id;
 					SetControls();
-					OnRxFilterUsageChanged(EventArgs.Empty);
+					OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 				}
 				else
 				{
@@ -393,7 +431,7 @@ namespace YAT.View.Controls
 
 			this.reportFormat.PrependPayloadByteLength = checkBox_PrependPayloadByteLength.Checked;
 			SetControls();
-			OnReportFormatChanged(EventArgs.Empty);
+			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 		}
 
 		private void checkBox_AppendTerminatingZero_CheckedChanged(object sender, EventArgs e)
@@ -403,7 +441,7 @@ namespace YAT.View.Controls
 
 			this.reportFormat.AppendTerminatingZero = checkBox_AppendTerminatingZero.Checked;
 			SetControls();
-			OnReportFormatChanged(EventArgs.Empty);
+			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 		}
 
 		private void checkBox_FillLastReport_CheckedChanged(object sender, EventArgs e)
@@ -429,7 +467,7 @@ namespace YAT.View.Controls
 
 		////this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
 			SetControls();
-		////OnReportFormatChanged(EventArgs.Empty);
+		////OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
 		}
 
 		private void comboBox_Preset_SelectedIndexChanged(object sender, EventArgs e)
@@ -437,7 +475,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			var preset = (comboBox_Preset.SelectedItem as MKY.IO.Usb.SerialHidDeviceSettingsPresetEx);
+			var preset = (comboBox_Preset.SelectedItem as SerialHidDeviceSettingsPresetEx);
 			if (preset != null)
 			{
 				Preset = preset;
@@ -459,7 +497,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			FlowControl = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)comboBox_FlowControl.SelectedItem;
+			FlowControl = (SerialHidFlowControlEx)comboBox_FlowControl.SelectedItem;
 		}
 
 		private void checkBox_AutoOpen_CheckedChanged(object sender, EventArgs e)
@@ -482,8 +520,8 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				comboBox_Preset     .Items.AddRange(MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.GetItems());
-				comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.Usb.SerialHidFlowControlEx.GetItems());
+				comboBox_Preset     .Items.AddRange(SerialHidDeviceSettingsPresetEx.GetItems());
+				comboBox_FlowControl.Items.AddRange(SerialHidFlowControlEx.GetItems());
 
 				this.lineLabelTopDefault = label_Line.Top;
 				this.lineLabelTopShifted = (comboBox_Preset.Bottom + ((comboBox_FlowControl.Top - comboBox_Preset.Bottom) / 2));
@@ -506,7 +544,7 @@ namespace YAT.View.Controls
 					checkBox_UseId.Text        = "Tx &ID:";
 					checkBox_SeparateRxId.Text = "Rx I&D:";
 
-					checkBox_UseId.Checked        =  Enabled;
+					checkBox_UseId.Checked        =  Enabled; // if (this.reportFormat.UseId) is checked above.
 					checkBox_SeparateRxId.Enabled =  Enabled;
 					checkBox_SeparateRxId.Checked = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
 					textBox_Id.Enabled            =  Enabled;
@@ -549,7 +587,7 @@ namespace YAT.View.Controls
 
 				if (Enabled)
 				{
-					comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)this.preset;
+					comboBox_Preset.SelectedItem = (SerialHidDeviceSettingsPresetEx)this.preset;
 
 					// Note that 'DropDownList' requires that an item like "[No preset selected]" is
 					// listed. It is not possible to set the 'SelectedIndex' to 'ControlEx.InvalidIndex'
@@ -562,7 +600,7 @@ namespace YAT.View.Controls
 
 				string linkText;
 				string linkUri;
-				if (((MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)preset).HasInfoLink(out linkText, out linkUri))
+				if (((SerialHidDeviceSettingsPresetEx)preset).HasInfoLink(out linkText, out linkUri))
 				{
 					linkLabel_Info.Links.Clear();
 					linkLabel_Info.Text = linkText;
@@ -580,7 +618,7 @@ namespace YAT.View.Controls
 
 				if (Enabled)
 				{
-					comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)this.flowControl;
+					comboBox_FlowControl.SelectedItem = (SerialHidFlowControlEx)this.flowControl;
 				}
 				else
 				{
@@ -605,18 +643,61 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnPresetChanged(EventArgs e)
 		{
+			// Note that update of dependent 'ReportFormat' and 'RxFilterUsage' is done inside the
+			// 'Preset' property, as those settings shall only be updated if not 'Preset.None'.
+
 			EventHelper.RaiseSync(PresetChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnReportFormatChanged(EventArgs e)
 		{
+			// Update the dependent 'Preset' if needed (done here instead of multiple locations for convenience):
+			if (((SerialHidDeviceSettingsPresetEx)Preset).ToReportFormat() != ReportFormat)
+			{
+				SerialHidDeviceSettingsPresetEx presetFromDeviceInfo = null;
+				if (this.deviceInfo != null)
+					SerialHidDeviceSettingsPresetEx.TryParse(this.deviceInfo, out presetFromDeviceInfo);
+
+				if ((presetFromDeviceInfo != null) &&
+				    (presetFromDeviceInfo.ToReportFormat() == ReportFormat) &&
+				    (presetFromDeviceInfo.ToRxFilterUsage() == RxFilterUsage))
+				{
+					Preset = presetFromDeviceInfo; // Preset matching the device shall have precedence, e.g. 'MT_SerHid' rather than just 'ZeroTerminated'.
+				}
+				else
+				{
+					var presetFromReportFormat = SerialHidDeviceSettingsPresetEx.FromReportFormatAndRxFilterUsage(ReportFormat, RxFilterUsage);
+					Preset = presetFromReportFormat;
+				}
+			}
+
 			EventHelper.RaiseSync(ReportFormatChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRxFilterUsageChanged(EventArgs e)
 		{
+			// Update the dependent 'Preset' if needed (done here instead of multiple locations for convenience):
+			if (((SerialHidDeviceSettingsPresetEx)Preset).ToRxFilterUsage() != RxFilterUsage)
+			{
+				SerialHidDeviceSettingsPresetEx presetFromDeviceInfo = null;
+				if (this.deviceInfo != null)
+					SerialHidDeviceSettingsPresetEx.TryParse(this.deviceInfo, out presetFromDeviceInfo);
+
+				if ((presetFromDeviceInfo != null) &&
+				    (presetFromDeviceInfo.ToReportFormat() == ReportFormat) &&
+				    (presetFromDeviceInfo.ToRxFilterUsage() == RxFilterUsage))
+				{
+					Preset = presetFromDeviceInfo; // Preset matching the device shall have precedence, e.g. 'MT_SerHid' rather than just 'ZeroTerminated'.
+				}
+				else
+				{
+					var presetFromReportFormat = SerialHidDeviceSettingsPresetEx.FromReportFormatAndRxFilterUsage(ReportFormat, RxFilterUsage);
+					Preset = presetFromReportFormat;
+				}
+			}
+
 			EventHelper.RaiseSync(RxFilterUsageChanged, this, e);
 		}
 

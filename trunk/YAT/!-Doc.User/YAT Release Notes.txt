@@ -142,12 +142,13 @@ Important changes:
 
 Fixed bugs:
 - Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
+- 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
 - Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
 - Handling of potential 'ObjectDisposedException' when disconnecting USB/RS-232 converters (USB CDC)
   without closing the serial COM port now also handles potential 'UnauthorizedAccessException'
   (bug #442, related to former bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401).
 - [Remote Host] and [Local Filter] selection again show the common items (rel. to feat. req. #370)).
-- 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
+- USB Ser/HID device list no longer shows weird manufacturer, product or serial strings.
 - Problem with escape sequences in automatic action/response fixed (bug #424).
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).

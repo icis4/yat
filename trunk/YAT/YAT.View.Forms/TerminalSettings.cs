@@ -203,31 +203,49 @@ namespace YAT.View.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.SerialPort.PortId = serialPortSelection.PortId;
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate = serialPortSettings.BaudRate;
 		}
 
 		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits = serialPortSettings.DataBits;
 		}
 
 		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity = serialPortSettings.Parity;
 		}
 
 		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits = serialPortSettings.StopBits;
 		}
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var flowControlOldUsedXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
 			this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
 			var flowControlNewUsesXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
@@ -238,11 +256,17 @@ namespace YAT.View.Forms
 
 		private void serialPortSettings_AliveMonitorChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor = serialPortSettings.AliveMonitor;
 		}
 
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
 		}
 
@@ -255,6 +279,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var host = socketSelection.RemoteHost;
 			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = host;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentRemoteHosts.Add(host);
@@ -264,6 +291,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.RemoteTcpPort;
 			this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -273,6 +303,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteUdpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.RemoteUdpPort;
 			this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -282,11 +315,17 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
 		}
 
 		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var filter = socketSelection.LocalFilter;
 			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = filter;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentLocalFilters.Add(filter);
@@ -296,6 +335,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.LocalTcpPort;
 			this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -305,6 +347,9 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var port = socketSelection.LocalUdpPort;
 			this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort = port;
 			ApplicationSettings.RoamingUserSettings.Socket.RecentPorts.Add(port);
@@ -314,11 +359,17 @@ namespace YAT.View.Forms
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
 		private void socketSettings_UdpServerSendModeChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode = socketSettings.UdpServerSendMode;
 		}
 
@@ -331,6 +382,9 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			// Attention:
 			// Same code exists in in the following location:
 			//  > NewTerminal.usbSerialHidDeviceSelection_DeviceInfoChanged()
@@ -339,40 +393,39 @@ namespace YAT.View.Forms
 			MKY.IO.Usb.DeviceInfo deviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
 
-			// Try to automatically select one of the report format presets:
-			if (deviceInfo != null)
-			{
-				MKY.IO.Usb.SerialHidDeviceSettingsPresetEx preset;
-				if (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
-					usbSerialHidDeviceSettings.Preset = preset;
-			}
-
-			// Also try to automatically select the flow control preset:
-			if (deviceInfo != null)
-			{
-				MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx preset;
-				if (MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx.TryParse(deviceInfo, out preset))
-					usbSerialHidDeviceSettings.FlowControl = preset.ToFlowControl();
-			}
+			// Also update settings control (not via SetControls(), that would be an overkill):
+			usbSerialHidDeviceSettings.DeviceInfo = deviceInfo;
 		}
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.Preset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
 		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			var flowControlOldUsedXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl = usbSerialHidDeviceSettings.FlowControl;
 			var flowControlNewUsesXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
@@ -383,6 +436,9 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.AutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
 
