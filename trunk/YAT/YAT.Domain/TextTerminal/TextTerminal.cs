@@ -1503,17 +1503,22 @@ namespace YAT.Domain
 
 			// Potentially suppress empty lines that only contain hidden pending EOL character(s):
 			bool isEmptyLine = (lineState.Elements.CharCount == 0);
-			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
-			if (isEmptyLine && isPendingEol) // Intended empty lines must be shown!
+			bool isNotHiddenEol = (lineState.EolOfLastLineWasCompleteMatch(ps) && !lineState.EolIsAnyMatch(ps));
+			if (isEmptyLine && isNotHiddenEol) // Intended empty lines must still be shown!
 			{
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Precondition: 'elements' must contain all elements since line start!
-				                                                                  //               This is given by (lineState.Elements.ByteCount == 0), i.e.
-			////clearAlreadyStartedLine = true is not needed, see comment.        //               line has just been started and does not yet contain content.
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                  //            All other elements must be removed as well!
+				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			}
 			else if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
-			#if (DEBUG) // See explanation at Terminal.ProcessAndSignalRawChunk().
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elements' likely doesn't contain all elements since line start!
+			#if (DEBUG)
+				// As described in 'ProcessRawChunk()', the current implementation retains the line until it is
+				// complete, i.e. until the final decision to filter or suppress could be done. As a consequence,
+				// the 'clearAlreadyStartedLine' can never get activated, thus excluding it (YAGNI).
+				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
+
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
 				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			#endif
@@ -1781,10 +1786,8 @@ namespace YAT.Domain
 			if (linesToAdd.Count > 0)
 				OnDisplayLinesAdded(directionToSignal, linesToAdd);
 
-		#if (DEBUG) // See explanation at Terminal.ProcessAndSignalRawChunk().
 			if (clearAlreadyStartedLine)
 				OnCurrentDisplayLineCleared(directionToSignal);
-		#endif
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
@@ -1803,10 +1806,8 @@ namespace YAT.Domain
 			if (linesToAdd.Count > 0)
 				OnDisplayLinesAdded(d, linesToAdd);
 
-		#if (DEBUG) // See explanation at Terminal.ProcessAndSignalRawChunk().
 			if (clearAlreadyStartedLine)
 				OnCurrentDisplayLineCleared(d);
-		#endif
 		}
 
 		#endregion
