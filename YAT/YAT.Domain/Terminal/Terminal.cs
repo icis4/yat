@@ -3119,26 +3119,17 @@ namespace YAT.Domain
 
 			ProcessRawChunk(raw, rawAttribute, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
-			if (elementsToAdd.Count > 0)
-			{
+			if (elementsToAdd.Count > 0) {
 				OnDisplayElementsAdded(raw.Direction, elementsToAdd);
 
-				if (linesToAdd.Count > 0)
-				{
+				if (linesToAdd.Count > 0) {
 					OnDisplayLinesAdded(raw.Direction, linesToAdd);
 				}
 			}
 
-		#if (DEBUG)
-			// As described in 'BinaryTerminal/TextTerminal.ProcessRawChunk()', the current implementation retains
-			// the line until it is complete, i.e. until the final decision to filter or suppress could be done.
-			// As a consequence, the 'clearAlreadyStartedLine' can never get activated, thus excluding it (YAGNI).
-			// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
-			if (clearAlreadyStartedLine)
-			{
+			if (clearAlreadyStartedLine) {
 				OnCurrentDisplayLineCleared(raw.Direction);
 			}
-		#endif
 		}
 
 		#endregion
