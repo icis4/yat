@@ -574,7 +574,7 @@ namespace YAT.Model
 
 			// Prio 7 = Retrieve the requested terminal within the workspace and validate it:
 			Domain.IOType implicitIOType = Domain.IOType.Unknown;
-			bool updateDependentDefaults = false;
+			bool updateDependentSettings = false;
 			if (this.startArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
 			{
 				if (this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
@@ -631,9 +631,9 @@ namespace YAT.Model
 				if (implicitIOType != Domain.IOType.Unknown)
 					this.startArgs.TerminalSettingsHandler.Settings.IOType = implicitIOType;
 
-				updateDependentDefaults = true; // Same as when using the on the 'New Terminal' or 'Terminal Settings' dialog,
-			}                                   // termial or I/O type dependent settings must be updated to their defaults.
-			else                                // But this must happen AFTER having processed the args into the settings!
+				updateDependentSettings = true; // Same as when using the on the 'New Terminal' or 'Terminal Settings'
+			}                                   // dialog, dependent settings must be updated accordingly. But this
+			else                                // must happen AFTER having processed the args into the settings!
 			{
 				this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Disable the operation.
 			}
@@ -644,11 +644,8 @@ namespace YAT.Model
 				if (!ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettingsHandler.Settings.Terminal))
 					return (false);
 
-				if (updateDependentDefaults) // See comments further above.
-				{
-					this.startArgs.TerminalSettingsHandler.Settings.Terminal.UpdateTerminalTypeDependentDefaults();
-					this.startArgs.TerminalSettingsHandler.Settings.Terminal.UpdateIOTypeDependentSettings();
-				}
+				if (updateDependentSettings) // See comments further above.
+					this.startArgs.TerminalSettingsHandler.Settings.Terminal.UpdateAllDependentSettings();
 
 				if (this.commandLineArgs.OptionIsGiven("StartTerminal"))
 					this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted = this.commandLineArgs.StartTerminal;
@@ -723,9 +720,11 @@ namespace YAT.Model
 				Domain.TerminalType terminalType;
 				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
 				{
-					terminalSettings.TerminalType = terminalType;
-
-					// Changing 'TerminalType' will silently update the 'TerminalType' dependent settings!
+					if (terminalSettings.TerminalType != terminalType)
+					{
+						terminalSettings.TerminalType = terminalType;
+						terminalSettings.UpdateTerminalTypeDependentSettings(); // Needed because the parent settings don't notice the 'IOType' change above!
+					}
 				}
 				else
 				{
@@ -797,9 +796,17 @@ namespace YAT.Model
 				{
 					MKY.IO.Serial.SerialPort.SerialFlowControl flowControl;
 					if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
-						terminalSettings.IO.SerialPort.Communication.FlowControl = flowControl;
+					{
+						if (terminalSettings.IO.SerialPort.Communication.FlowControl != flowControl)
+						{
+							terminalSettings.IO.SerialPort.Communication.FlowControl = flowControl;
+							terminalSettings.UpdateIOSettingsDependentSettings(); // Needed because the parent settings don't notice the 'IOType' change above!
+						}
+					}
 					else
+					{
 						return (false);
+					}
 				}
 				if (this.commandLineArgs.OptionIsGiven("SerialPortAliveMonitor"))
 				{
@@ -941,16 +948,27 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("FormatPreset"))
 				{
-					terminalSettings.IO.UsbSerialHidDevice.ReportFormat  = (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)this.commandLineArgs.FormatPreset;
-					terminalSettings.IO.UsbSerialHidDevice.RxFilterUsage = (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx)this.commandLineArgs.FormatPreset;
+					MKY.IO.Usb.SerialHidDeviceSettingsPresetEx preset;
+					if (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.TryParse(this.commandLineArgs.FormatPreset, out preset))
+						terminalSettings.IO.UsbSerialHidDevice.Preset = preset;
+					else
+						return (false);
 				}
 				if (this.commandLineArgs.OptionIsGiven("FlowControl"))
 				{
 					MKY.IO.Serial.Usb.SerialHidFlowControl flowControl;
 					if (MKY.IO.Serial.Usb.SerialHidFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
-						terminalSettings.IO.UsbSerialHidDevice.FlowControl = flowControl;
+					{
+						if (terminalSettings.IO.UsbSerialHidDevice.FlowControl != flowControl)
+						{
+							terminalSettings.IO.UsbSerialHidDevice.FlowControl = flowControl;
+							terminalSettings.UpdateIOSettingsDependentSettings(); // Needed because the parent settings don't notice the 'IOType' change above!
+						}
+					}
 					else
+					{
 						return (false);
+					}
 				}
 				if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
 				{

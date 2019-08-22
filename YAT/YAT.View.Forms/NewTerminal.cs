@@ -313,10 +313,7 @@ namespace YAT.View.Forms
 			{
 				MKY.IO.Usb.SerialHidDeviceSettingsPresetEx preset;
 				if (MKY.IO.Usb.SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
-				{
-					usbSerialHidDeviceSettings.ReportFormat  = preset.ToReportFormat();
-					usbSerialHidDeviceSettings.RxFilterUsage = preset.ToRxFilterUsage();
-				}
+					usbSerialHidDeviceSettings.Preset = preset;
 			}
 
 			// Also try to automatically select the flow control preset:
@@ -324,9 +321,7 @@ namespace YAT.View.Forms
 			{
 				MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx preset;
 				if (MKY.IO.Serial.Usb.SerialHidFlowControlPresetEx.TryParse(deviceInfo, out preset))
-				{
 					usbSerialHidDeviceSettings.FlowControl = preset.ToFlowControl();
-				}
 			}
 		}
 
@@ -371,7 +366,7 @@ namespace YAT.View.Forms
 			this.terminalSettings = new TerminalSettingsRoot();
 
 			this.terminalSettings.Terminal.TerminalType                            = this.newTerminalSettings.TerminalType;
-			this.terminalSettings.Terminal.UpdateTerminalTypeDependentDefaults();
+			this.terminalSettings.Terminal.UpdateTerminalTypeDependentSettings(); // Needed because the parent settings don't notice the 'TerminalType' change above!
 			this.terminalSettings.Terminal.IO.IOType                               = this.newTerminalSettings.IOType;
 			this.terminalSettings.Terminal.UpdateIOTypeDependentSettings(); // Needed because the parent settings don't notice the 'IOType' change above!
 
@@ -401,6 +396,8 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage     = this.newTerminalSettings.UsbSerialHidRxFilterUsage;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
+
+			this.terminalSettings.Terminal.UpdateIOSettingsDependentSettings(); // Needed because the parent settings don't notice the changes above!
 
 			this.terminalSettings.TerminalIsStarted                                = this.newTerminalSettings.StartTerminal;
 		}

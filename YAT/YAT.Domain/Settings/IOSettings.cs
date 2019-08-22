@@ -282,6 +282,13 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool FlowControlUsesXOnXOffAutomatically
+		{
+			get { return (FlowControlUsesXOnXOff && !FlowControlManagesXOnXOffManually); }
+		}
+
 		#endregion
 
 		#region Object Members
