@@ -223,7 +223,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
-			UsbHubSettings portOut = UsbHubSettings.Out4;
+			UsbHubSetting portOut = UsbHubSetting.Out4;
 			const int WaitForOperation = 100;
 
 			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
@@ -237,7 +237,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// --- Test: Disconnect/Reconnect without sending. -------------------------------------
 
 			// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
-			Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSettings.None), Is.True, "Failed to change USB hub configuration!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
+			Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSetting.None), Is.True, "Failed to change USB hub configuration!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
 			Assert.That(!port.IsOpen);
 
 			// Reconnect USB/RS-232 converter. Expected: No exceptions, port can be reopened.
@@ -338,7 +338,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
 
-			Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSettings.All), Is.True, "Failed to set USB hub!");
+			Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSetting.All), Is.True, "Failed to set USB hub!");
 		}
 
 		#endregion
