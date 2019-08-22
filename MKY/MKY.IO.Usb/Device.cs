@@ -133,7 +133,21 @@ namespace MKY.IO.Usb
 			{
 				var device = GetDeviceInfoFromPath(path, retrieveStringsFromDevice);
 				if (device != null)
-					l.Add(device);
+				{
+					var isAlreadyContained = false;
+
+					foreach (var item in l)
+					{
+						if (item.EqualsVidPidManufacturerProductSerial(device))
+						{
+							isAlreadyContained = true;
+							break;
+						}
+					}
+
+					if (!isAlreadyContained) // Prevent duplicates since WMI may contain the same device multiple times on different "cols".
+						l.Add(device);
+				}
 			}
 
 			return (l.ToArray());
@@ -460,7 +474,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		/// <remarks>
 		/// \todo: Don't know the GUID for any USB device class. So only HID devices are detected.
-		/// 
+		///
 		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
@@ -781,11 +795,11 @@ namespace MKY.IO.Usb
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Device()

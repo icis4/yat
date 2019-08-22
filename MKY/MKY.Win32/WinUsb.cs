@@ -109,6 +109,28 @@ namespace MKY.Win32
 
 		#endregion
 
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary>
+		/// Safe buffer length for retrieving string via native Win32 API
+		/// </summary>
+		/// <remarks>
+		/// 2 x <see cref="Usb.Descriptors.MaxStringDescriptorCharLength"/> + 2 x '\0' would
+		/// result in 254. However, a buffer length of 254 will lead to weird results like:
+		///  > HID language IDs string is "WindowsForms10.STATIC.app.0.3ee13a2"
+		///  > HID content string is "SysTabControl32"
+		///  > HID content string is "file"
+		/// Apparently, there is something wrong with string buffers, but with 512 still:
+		///  > HID content string is "C:\Windows\resources\themes\Aero\Aero.msstyles".
+		/// Only 256 works fine.
+		/// </remarks>
+		private const int SafeStringDescriptorBufferLength = 256;
+
+		#endregion
+
 		#region Static Methods
 		//==========================================================================================
 		// Static Methods
@@ -239,11 +261,11 @@ namespace MKY.Win32
 			{
 				if (EnvironmentEx.IsWindowsVistaOrLater)
 				{
-					StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+					var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
 					uint l;
-					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (ushort)languageId, s, (uint)s.Capacity, out l))
+					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (ushort)languageId, sb, (uint)sb.Capacity, out l))
 					{
-						buffer = s.ToString();
+						buffer = sb.ToString();
 						lengthTransferred = (int)l;
 						return (true);
 					}

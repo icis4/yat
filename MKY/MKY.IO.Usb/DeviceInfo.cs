@@ -508,7 +508,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have reference or value equality.
+		/// Determines whether this instance and the specified object have reference or value equality,
+		/// ignoring <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		public override bool Equals(object obj)
 		{
@@ -516,7 +517,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have reference or value equality.
+		/// Determines whether this instance and the specified object have reference or value equality,
+		/// ignoring <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
@@ -534,9 +536,12 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified properties have value equality.
-		/// Note that the serial string is compared case-insensitive, same behavior as Windows.
+		/// Determines whether this instance and the specified properties have value equality,
+		/// ignoring <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
+		/// <remarks>
+		/// The serial string is compared case-insensitive, same behavior as Windows.
+		/// </remarks>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
@@ -549,6 +554,7 @@ namespace MKY.IO.Usb
 
 				VendorId .Equals(vendorId)  &&
 				ProductId.Equals(productId) &&
+
 				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
 			);
 
@@ -557,7 +563,7 @@ namespace MKY.IO.Usb
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality,
-		/// ignoring <see cref="Serial"/>.
+		/// ignoring <see cref="Serial"/>, <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
@@ -575,7 +581,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Determines whether this instance and the specified properties have value equality.
+		/// Determines whether this instance and the specified properties have value equality,
+		/// ignoring <see cref="Serial"/>, <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
@@ -587,6 +594,72 @@ namespace MKY.IO.Usb
 			(
 				VendorId .Equals(vendorId) &&
 				ProductId.Equals(productId)
+			);
+
+			// Do not care about path, the path is likely to be system dependent.
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="VendorId"/>,
+		/// <see cref="ProductId"/> and <see cref="Serial"/> are considered.
+		/// </remarks>
+		public virtual bool EqualsVidPidSerial(DeviceInfo other)
+		{
+			return (Equals(other));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified properties have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="VendorId"/>,
+		/// <see cref="ProductId"/> and <see cref="Serial"/> are considered.
+		/// </remarks>
+		public virtual bool EqualsVidPidSerial(int vendorId, int productId, string serial)
+		{
+			return (Equals(vendorId, productId, serial));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality,
+		/// including <see cref="Manufacturer"/> and <see cref="Product"/>.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public virtual bool EqualsVidPidManufacturerProductSerial(DeviceInfo other)
+		{
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
+
+			return (EqualsVidPidManufacturerProductSerial(other.VendorId, other.ProductId, other.Manufacturer, other.Product, other.Serial));
+
+			// Do not care about path, the path is likely to be system dependent.
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified properties have value equality,
+		/// including <see cref="Manufacturer"/> and <see cref="Product"/>.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public virtual bool EqualsVidPidManufacturerProductSerial(int vendorId, int productId, string manufacturer, string product, string serial)
+		{
+			return
+			(
+				VendorId .Equals(vendorId) &&
+				ProductId.Equals(productId) &&
+
+				StringEx.EqualsOrdinal(Manufacturer, manufacturer) &&
+				StringEx.EqualsOrdinal(Product, product)           &&
+				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
 			);
 
 			// Do not care about path, the path is likely to be system dependent.
