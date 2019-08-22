@@ -58,7 +58,7 @@ ECHO Hub 2: Disabling devices . . .
 :: Time required to unload the drivers is below 6 seconds.
 ::  => 9 seconds timeout:
 TIMEOUT 9
-:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
+:: Note that the timeouts also need to be configured in 'MKY.Test.Devices.UsbHubControl'.
 
 :: Start hub 1 'USB'
 ECHO.
@@ -69,7 +69,7 @@ ECHO Hub 1: Enabling devices . . .
 :: Time required to load the drivers is below 2 seconds.
 ::  => 5 seconds timeout:
 TIMEOUT 5
-:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
+:: Note that the timeouts also need to be configured in 'MKY.Test.Devices.UsbHubControl'.
 
 :: Start hub 2 'RS-232'
 :: Ensure to activate devices subsequently (workaround to limitation of MCT or windows driver ??).
@@ -81,7 +81,7 @@ ECHO Hub 2: Enabling higher pair of devices . . .
 :: Time required to load the drivers is below 6 seconds.
 ::  => 9 seconds timeout:
 TIMEOUT 9
-:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
+:: Note that the timeouts also need to be configured in 'MKY.Test.Devices.UsbHubControl'.
 ECHO.
 ECHO Hub 2: Adding lower pair of devices . . .
 %_cmd% A6YJ5A78 001111
@@ -89,7 +89,7 @@ ECHO Hub 2: Adding lower pair of devices . . .
 :: Time required to load the drivers is below 6 seconds.
 ::  => 9 seconds timeout:
 TIMEOUT 9
-:: Note that the timeouts also need to be configured in 'MKY.IO.Ports.Test.UsbHubControl'.
+:: Note that the timeouts also need to be configured in 'MKY.Test.Devices.UsbHubControl'.
 
 GOTO :End
 
