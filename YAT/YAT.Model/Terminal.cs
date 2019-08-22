@@ -149,12 +149,46 @@ namespace YAT.Model
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		/// <remarks>
+		/// <remarks> \remind (2019-08-22 / MKY)
+		///
 		/// Explicitly setting <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
-		/// to handle/workaround the issue described in <see cref="Chronometer"/> as well as
-		/// to handle/workaround the issue described in <see cref="Domain.RawTerminal"/>.
+		/// to handle/workaround a) the issue described in <see cref="Chronometer"/> as well as
+		/// to handle/workaround b) the issue described in <see cref="Domain.RawTerminal"/>.
+		///
+		/// Issue a)
+		/// --------
+		/// Note that <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/> only
+		/// is a must here, <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
+		/// in <see cref="Chronometer"/> as well as <see cref="RateProvider"/> do not
+		/// handle/workaround the issue, since the disposed target is encountered here. Still,
+		/// since all three objects are involved, decided to keep the handling/workaround in all
+		/// three locations.
+		///
+		/// Issue b)
+		/// --------
+		/// Note that <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/> only
+		/// is a must here, <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
+		/// in <see cref="Domain.Terminal"/> as well as <see cref="Domain.RawTerminal"/> do not
+		/// handle/workaround the issue, since the disposed target is encountered here. Still,
+		/// since all three objects are involved, decided to keep the handling/workaround in all
+		/// three locations.
+		///
+		/// Thus, to reproduce the issue, simply disable the handling/workaround by replacing the
+		/// line further below. Then:
+		///  1. Start a new terminal as <see cref="Domain.IOType.TcpServer"/>.
+		///  2. Start a new terminal as <see cref="Domain.IOType.TcpClient"/>.
+		///  3. [File > Close All Terminals]
+		/// With handling/workaround, debug output will show the issue, but execution will not get
+		/// halted by the debugger. Without handling/workaround, the exeception will get handled by
+		/// the debugger.
+		///
+		/// Note that the issue only happens in case both server and client are in the same instance
+		/// of YAT! Also note that the issue will not happen on [File > Exit]! The latter does have
+		/// a slightly different calling sequence, e.g. workspace is saved before terminals are
+		/// closed, but the root cause that makes this differences is not (yet) understood!
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
+	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
 
 		private TerminalStartArgs startArgs;
 		private Guid guid;

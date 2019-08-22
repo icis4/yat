@@ -71,11 +71,13 @@ namespace MKY.Time
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		/// <remarks>
+		/// <remarks> \remind (2019-08-22 / MKY)
+		///
 		/// Explicitly setting <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
 		/// to handle/workaround a similar issue as described in <see cref="Chronometer"/>.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RateProvider).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
+	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
 
 		private Rate rate;
 
