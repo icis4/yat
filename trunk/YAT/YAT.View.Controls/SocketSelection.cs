@@ -758,8 +758,8 @@ namespace YAT.View.Controls
 				comboBox_RemoteHost.Items.Clear();
 				if (RecentRemoteHosts != null) {                                                   // Make sure to only list the item, in its type.
 					comboBox_RemoteHost.Items.AddRange(RecentRemoteHosts.ConvertAll(x => (object)x.Item).ToArray());
-				}                                                                             // Recent items shall be listed first.
-				foreach (var item in IPHostEx.GetItems(SocketType == SocketType.UdpClient)) { // Predefined items shall be listed after.
+				}                                                                                       // Recent items shall be listed first.
+				foreach (var item in IPHostEx.GetItems(((SocketTypeEx)SocketType).SupportsBroadcast)) { // Predefined items shall be listed after.
 					var casted = (string)item; // Make sure to compare (and list) identical types!
 					if (!comboBox_RemoteHost.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
 						comboBox_RemoteHost.Items.Add(item); // Make sure to list the item in its type! "IPv4 localhost (127.0.0.1)" would
@@ -793,7 +793,7 @@ namespace YAT.View.Controls
 		/// Without precaution, and in case of no interfaces, the message box may appear twice due to
 		/// the recursion described above (out of doc tag due to words not recognized by StyleCop).
 		/// This issue is fixed by setting 'localInterfaceListIsBeingSetOrIsAlreadySet' upon entering this method.
-		/// 
+		///
 		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
 		/// </remarks>
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
