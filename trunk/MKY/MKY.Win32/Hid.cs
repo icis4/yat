@@ -403,6 +403,21 @@ namespace MKY.Win32
 			private const string HID_DLL = "hid.dll";
 
 			/// <summary>
+			/// Safe buffer length for retrieving string via native Win32 API
+			/// </summary>
+			/// <remarks>
+			/// 2 x <see cref="Usb.Descriptors.MaxStringDescriptorCharLength"/> + 2 x '\0' would
+			/// result in 254. However, a buffer length of 254 will lead to weird results like:
+			///  > HID language IDs string is "WindowsForms10.STATIC.app.0.3ee13a2"
+			///  > HID content string is "SysTabControl32"
+			///  > HID content string is "file"
+			/// Apparently, there is something wrong with string buffers, but with 512 still:
+			///  > HID content string is "C:\Windows\resources\themes\Aero\Aero.msstyles".
+			/// Only 256 works fine.
+			/// </remarks>
+			private const int SafeStringDescriptorBufferLength = 256;
+
+			/// <summary>
 			/// Removes any Input reports waiting in the buffer.
 			/// </summary>
 			/// <remarks>
@@ -466,7 +481,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
-				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
 				if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, sb, (UInt32)sb.Capacity))
 				{
 					IndexedString = sb.ToString();
@@ -506,7 +521,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
-				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
 				if (HidD_GetManufacturerString(HidDeviceObject, sb, (UInt32)sb.Capacity))
 				{
 					Manufacturer = sb.ToString();
@@ -571,7 +586,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
-				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
 				if (HidD_GetProductString(HidDeviceObject, sb, (UInt32)sb.Capacity))
 				{
 					Product = sb.ToString();
@@ -595,7 +610,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string Serial)
 			{
-				var sb = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
+				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
 				if (HidD_GetSerialNumberString(HidDeviceObject, sb, (UInt32)sb.Capacity))
 				{
 					Serial = sb.ToString();
@@ -913,21 +928,28 @@ namespace MKY.Win32
 				string languageString;
 				if (NativeMethods.HidD_GetIndexedString(deviceHandle, (int)StringDescriptorIndex.LanguageIds, out languageString))
 				{
+					DebugStringAccess(@"HID language IDs string is """ + languageString + @"""."); // Typically "Љ" or "".
+
+					// \remind (2019-08-22 / MKY) bug #465
+					// Retrieving USB HID string only properly works on "Љ".
+					// Don't know yet how to retrieve other language strings.
+
 					// Retrieve content string:
 					string contentString;
 					if (method(deviceHandle, out contentString)) // GetManufacturerString() or GetProductString() or GetSerialString().
 					{
-						if (!string.IsNullOrEmpty(contentString) &&
-							(contentString != languageString)) // Looks like a proper invariant string.
+						DebugStringAccess(@"HID content string is """ + contentString + @""".");
+
+						if (!string.IsNullOrEmpty(contentString) && (contentString != languageString)) // Looks like a proper invariant string.
 						{
-							DebugStringAccess(@"USB device string """ + contentString + @""" successfully retrieved.");
+							DebugStringAccess(@"HID content string successfully retrieved.");
 
 							hidString = contentString;
 							return (true);
 						}
-						else // contentString == languageString means that content isn't available and index 0 has be retrieved.
+						else // contentString == languageString means that content isn't available and index 0 has been retrieved.
 						{
-							DebugStringAccess(@"USB device string is not available on this device.");
+							DebugStringAccess(@"HID content string could be retrieved but is invalid.");
 
 							hidString = "";
 							return (true);
@@ -936,7 +958,7 @@ namespace MKY.Win32
 				}
 			}
 
-			DebugStringAccess(@"USB device string could not be retrieved!");
+			DebugStringAccess(@"HID content string could not be retrieved!");
 
 			hidString = "";
 			return (false);
