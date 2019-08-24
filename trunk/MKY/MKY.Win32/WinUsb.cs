@@ -75,11 +75,6 @@ namespace MKY.Win32
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern Boolean WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
-
-			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "4", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
-			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern Boolean WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 		}
 
 		#endregion
@@ -106,28 +101,6 @@ namespace MKY.Win32
 		}
 
 		#pragma warning restore 1591
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		/// <summary>
-		/// Safe buffer length for retrieving string via native Win32 API
-		/// </summary>
-		/// <remarks>
-		/// 2 x <see cref="Usb.Descriptors.MaxStringDescriptorCharLength"/> + 2 x '\0' would
-		/// result in 254. However, a buffer length of 254 will lead to weird results like:
-		///  > HID language IDs string is "WindowsForms10.STATIC.app.0.3ee13a2"
-		///  > HID content string is "SysTabControl32"
-		///  > HID content string is "file"
-		/// Apparently, there is something wrong with string buffers, but with 512 still:
-		///  > HID content string is "C:\Windows\resources\themes\Aero\Aero.msstyles".
-		/// Only 256 works fine.
-		/// </remarks>
-		private const int SafeStringDescriptorBufferLength = 256;
 
 		#endregion
 
@@ -255,22 +228,23 @@ namespace MKY.Win32
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
-		public static bool GetStringDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, out string buffer, out int lengthTransferred)
+		public static bool GetStringDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, out string s, out int lengthTransferred)
 		{
 			try
 			{
 				if (EnvironmentEx.IsWindowsVistaOrLater)
 				{
-					var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
+					byte[] buffer = new byte[256]; // = seems fixed for WinUsb string descriptor reads.
 					uint l;
-					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (ushort)languageId, sb, (uint)sb.Capacity, out l))
+					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (ushort)languageId, buffer, (uint)buffer.Length, out l))
 					{
-						buffer = sb.ToString();
+						s = Encoding.Default.GetString(Encoding.Convert(Encoding.Unicode, Encoding.Default, buffer));
+						s = s.Remove(s.IndexOf('\0'));
 						lengthTransferred = (int)l;
 						return (true);
 					}
 				}
-				buffer = "";
+				s = "";
 				lengthTransferred = 0;
 				return (false); // Not supported before Windows Vista.
 			}

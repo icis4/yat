@@ -134,7 +134,7 @@ namespace MKY.Win32
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method implemented but then not needed, kept for potential future use.")]
-			[DllImport(ADVANCED_DLL, SetLastError = true)]
+			[DllImport(ADVANCED_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern Boolean ImpersonateSelf([In] NativeTypes.SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
 		}
