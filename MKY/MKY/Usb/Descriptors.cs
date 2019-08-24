@@ -50,11 +50,6 @@ namespace MKY.Usb
 		/// </summary>
 		public const int MaxStringDescriptorCharLength = 126;
 
-		/// <summary>
-		/// 2 x 126 characters + 2 x '\0' results in 254.
-		/// </summary>
-		public const int MaxStringDescriptorByteLength = 254;
-
 		#endregion
 
 		#region Static Methods
