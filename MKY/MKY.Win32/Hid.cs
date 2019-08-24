@@ -403,19 +403,25 @@ namespace MKY.Win32
 			private const string HID_DLL = "hid.dll";
 
 			/// <summary>
-			/// Safe buffer length for retrieving string via native Win32 API
+			/// Safe buffer length for retrieving descriptor string via native Win32 API.
 			/// </summary>
 			/// <remarks>
 			/// 2 x <see cref="Usb.Descriptors.MaxStringDescriptorCharLength"/> + 2 x '\0' would
-			/// result in 254. However, a buffer length of 254 will lead to weird results like:
+			/// result in 254;
+			/// 2 x <see cref="Usb.Descriptors.MaxStringDescriptorCharLength"/> + 1 x '\0' would
+			/// result in 253.
+			/// However, a buffer length of 254 or 253 may lead to weird results like:
 			///  > HID language IDs string is "WindowsForms10.STATIC.app.0.3ee13a2"
 			///  > HID content string is "SysTabControl32"
 			///  > HID content string is "file"
-			/// Apparently, there is something wrong with string buffers, but with 512 still:
-			///  > HID content string is "C:\Windows\resources\themes\Aero\Aero.msstyles".
-			/// Only 256 works fine.
+			/// And in case of wireless Microsoft keyboards, such buffer lengths will result in "".
+			/// https://www.pinvoke.net/default.aspx/hid.HidD_GetManufacturerString as well as
+			/// https://www.pinvoke.net/default.aspx/hid.HidD_GetSerialNumberString propose a buffer
+			/// of 128 bytes. While this conflicts with the USB specification (the maximum string
+			/// length is 126 wide characters (not including the terminating NULL character)) only
+			/// that value properly works!
 			/// </remarks>
-			private const int SafeStringDescriptorBufferLength = 256;
+			private const int SafeStringDescriptorBufferLength = 128;
 
 			/// <summary>
 			/// Removes any Input reports waiting in the buffer.
@@ -426,7 +432,6 @@ namespace MKY.Win32
 			/// <param name="HidDeviceObject">A handle to the device.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern Boolean HidD_FlushQueue([In] SafeFileHandle HidDeviceObject);
@@ -437,7 +442,6 @@ namespace MKY.Win32
 			/// <param name="PreparsedData">A pointer to the pre-parsed data structure returned by <see cref="HidD_GetPreparsedData"/>.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern Boolean HidD_FreePreparsedData([In] IntPtr PreparsedData);
@@ -445,7 +449,6 @@ namespace MKY.Win32
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
@@ -464,7 +467,6 @@ namespace MKY.Win32
 				return (HidD_GetFeature(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
 			}
 
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern Boolean HidD_GetFeature([In] SafeFileHandle HidDeviceObject, [Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
@@ -481,21 +483,20 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
-				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
-				if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, sb, (UInt32)sb.Capacity))
+				byte[] buffer = new byte[SafeStringDescriptorBufferLength]; // See remarks at constant!];
+				if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, buffer, (UInt32)buffer.Length))
 				{
-					IndexedString = sb.ToString();
+					var s = Encoding.Default.GetString(Encoding.Convert(Encoding.Unicode, Encoding.Default, buffer));
+					IndexedString = s.Remove(s.IndexOf('\0'));
 					return (true);
 				}
 				IndexedString = "";
 				return (false);
 			}
 
-			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "2", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern Boolean HidD_GetIndexedString([In] SafeFileHandle HidDeviceObject, [In] UInt32 StringIndex, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+			private static extern Boolean HidD_GetIndexedString([In] SafeFileHandle HidDeviceObject, [In] UInt32 StringIndex, [Out] byte[] Buffer, [In] UInt32 BufferLength);
 
 			/// <summary>
 			/// Attempts to read an Input report from the device using a control transfer.
@@ -512,7 +513,6 @@ namespace MKY.Win32
 				return (HidD_GetInputReport(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
 			}
 
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern Boolean HidD_GetInputReport([In] SafeFileHandle HidDeviceObject, [In, Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
@@ -521,21 +521,20 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
-				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
-				if (HidD_GetManufacturerString(HidDeviceObject, sb, (UInt32)sb.Capacity))
+				byte[] buffer = new byte[SafeStringDescriptorBufferLength]; // See remarks at constant!];
+				if (HidD_GetManufacturerString(HidDeviceObject, buffer, (UInt32)buffer.Length))
 				{
-					Manufacturer = sb.ToString();
+					var s = Encoding.Default.GetString(Encoding.Convert(Encoding.Unicode, Encoding.Default, buffer));
+					Manufacturer = s.Remove(s.IndexOf('\0'));
 					return (true);
 				}
 				Manufacturer = "";
 				return (false);
 			}
 
-			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "1", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern Boolean HidD_GetManufacturerString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+			private static extern Boolean HidD_GetManufacturerString([In] SafeFileHandle HidDeviceObject, [Out] byte[] Buffer, [In] UInt32 BufferLength);
 
 			// HidD_GetMsGenreDescriptor() is reserved for internal system use
 
@@ -551,7 +550,6 @@ namespace MKY.Win32
 			/// <param name="NumberBuffers"><c>true</c> on success, <c>false</c> on failure.</param>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
@@ -563,7 +561,6 @@ namespace MKY.Win32
 				return (HidD_GetPhysicalDescriptor(HidDeviceObject, Buffer, (UInt32)Buffer.Length));
 			}
 
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern Boolean HidD_GetPhysicalDescriptor([In] SafeFileHandle HidDeviceObject, [Out] byte[] Buffer, [In] UInt32 BufferLength);
@@ -577,7 +574,6 @@ namespace MKY.Win32
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern Boolean HidD_GetPreparsedData([In] SafeFileHandle HidDeviceObject, [Out] out IntPtr PreparsedData);
@@ -586,21 +582,20 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
-				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
-				if (HidD_GetProductString(HidDeviceObject, sb, (UInt32)sb.Capacity))
+				byte[] buffer = new byte[SafeStringDescriptorBufferLength]; // See remarks at constant!];
+				if (HidD_GetProductString(HidDeviceObject, buffer, (UInt32)buffer.Length))
 				{
-					Product = sb.ToString();
+					var s = Encoding.Default.GetString(Encoding.Convert(Encoding.Unicode, Encoding.Default, buffer));
+					Product = s.Remove(s.IndexOf('\0'));
 					return (true);
 				}
 				Product = "";
 				return (false);
 			}
 
-			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "1", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern Boolean HidD_GetProductString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+			private static extern Boolean HidD_GetProductString([In] SafeFileHandle HidDeviceObject, [Out] byte[] Buffer, [In] UInt32 BufferLength);
 
 			/// <remarks>
 			/// USB specifies that serial is a string, not limited to a number!
@@ -610,21 +605,20 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string Serial)
 			{
-				var sb = new StringBuilder(SafeStringDescriptorBufferLength); // Safe = 256 is fixed for native API, other value will result in weird strings!
-				if (HidD_GetSerialNumberString(HidDeviceObject, sb, (UInt32)sb.Capacity))
+				byte[] buffer = new byte[SafeStringDescriptorBufferLength]; // See remarks at constant!];
+				if (HidD_GetSerialNumberString(HidDeviceObject, buffer, (UInt32)buffer.Length))
 				{
-					Serial = sb.ToString();
+					var s = Encoding.Default.GetString(Encoding.Convert(Encoding.Unicode, Encoding.Default, buffer));
+					Serial = s.Remove(s.IndexOf('\0'));
 					return (true);
 				}
 				Serial = "";
 				return (false);
 			}
 
-			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "1", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern Boolean HidD_GetSerialNumberString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+			private static extern Boolean HidD_GetSerialNumberString([In] SafeFileHandle HidDeviceObject, [Out] byte[] Buffer, [In] UInt32 BufferLength);
 
 			// HidD_SetConfiguration() is reserved for internal system use
 
@@ -639,7 +633,6 @@ namespace MKY.Win32
 				return (HidD_SetFeature(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
 			}
 
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern Boolean HidD_SetFeature([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
@@ -655,7 +648,6 @@ namespace MKY.Win32
 			/// <param name="NumberBuffers">An integer to hold the number of buffers.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
@@ -676,7 +668,6 @@ namespace MKY.Win32
 				return (HidD_SetOutputReport(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
 			}
 
-			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern Boolean HidD_SetOutputReport([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
