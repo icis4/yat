@@ -122,6 +122,8 @@ Important changes:
   'Software' and 'Combined' (related to earlier feature request #190, #206, #226 and bug #319).
   Note that 'Manual Software' and 'Manual Combined' still show the XOn/XOff characters by default
   but can optionally be hidden (earlier feature request #190).
+- USB Ser/HID device list no longer potentially shows weird manufacturer, product or serial strings.
+  Neither does it show duplicated devices nor useless "(VID:0001) (PID:0001)" anymore.
 - Errors are now indicated in square "[...]" instead of angle "<...>" brackets (rel. to feat. #350).
 - Prevention of potential handling error when copying data to clipboard (feature request #345).
 - Unicode/Non-Unicode multi-byte encoding test coverage improved (related to bugs #427, #428, #429).
@@ -148,7 +150,6 @@ Fixed bugs:
   without closing the serial COM port now also handles potential 'UnauthorizedAccessException'
   (bug #442, related to former bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401).
 - [Remote Host] and [Local Filter] selection again show the common items (rel. to feat. req. #370)).
-- USB Ser/HID device list no longer shows weird manufacturer, product or serial strings.
 - Problem with escape sequences in automatic action/response fixed (bug #424).
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).

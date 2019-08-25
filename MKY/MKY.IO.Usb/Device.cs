@@ -122,9 +122,11 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		/// <param name="classGuid">GUID of a class of devices.</param>
 		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
+		/// <param name="ignoreDuplicates">Ignore duplicated entries in WMI.</param>
+		/// <param name="ignoreVid0001Pid0001">Ignore useless entry "(VID:0001) (PID:0001)".</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
-		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true)
+		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true, bool ignoreDuplicates = true, bool ignoreVid0001Pid0001 = true)
 		{
 			var paths = Win32.DeviceManagement.GetDevicesFromGuid(classGuid);
 			var l = new List<DeviceInfo>(paths.Length); // Preset the required capacity to improve memory management.
@@ -134,19 +136,29 @@ namespace MKY.IO.Usb
 				var device = GetDeviceInfoFromPath(path, retrieveStringsFromDevice);
 				if (device != null)
 				{
-					var isAlreadyContained = false;
+					if (ignoreVid0001Pid0001 && device.EqualsVidPid(1, 1))
+						continue;
 
-					foreach (var item in l)
+					if (ignoreDuplicates)
 					{
-						if (item.EqualsVidPidManufacturerProductSerial(device))
-						{
-							isAlreadyContained = true;
-							break;
-						}
-					}
+						var isAlreadyContained = false;
 
-					if (!isAlreadyContained) // Prevent duplicates since WMI may contain the same device multiple times on different "cols".
+						foreach (var item in l)
+						{
+							if (item.EqualsVidPidManufacturerProductSerial(device))
+							{
+								isAlreadyContained = true;
+								break;
+							}
+						}
+
+						if (!isAlreadyContained) // Prevent duplicates since WMI may contain the same device multiple times on different "cols".
+							l.Add(device);
+					}
+					else
+					{
 						l.Add(device);
+					}
 				}
 			}
 
