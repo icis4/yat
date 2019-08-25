@@ -34,6 +34,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
@@ -252,7 +253,7 @@ namespace YAT.View.Utilities
 					case (Mode.Neutral):
 					case (Mode.Enlarge):
 					{
-						// ...link:
+						// ...link:       // No need to assert/check, since given argument will correspond to an existing page or the above added default page.
 						settingsNew.Pages[selectedPageId - 1].Link(filePathToLink, pageToLink.Name, pageToLink.Commands); // No clone needed as just loaded.
 
 						return (true);
@@ -275,15 +276,17 @@ namespace YAT.View.Utilities
 		private static bool ConfirmLink(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, PredefinedCommandPage pageToLink, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var pageLayoutOld = settingsOld.PageLayout;
-			var selectedPageOld = settingsOld.Pages[selectedPageId - 1];
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
+			var selectedPageOldDefinedCommandCount = 0;
+			if (Int32Ex.IsWithin(selectedPageId, PredefinedCommandPageCollection.FirstPageId, settingsOld.Pages.Count))
+				selectedPageOldDefinedCommandCount = settingsOld.Pages[selectedPageId - 1].DefinedCommandCount;
 
 			// 1st confirmation "current commands will be hidden":
-			if (selectedPageOld.DefinedCommandCount > 0)
+			if (selectedPageOldDefinedCommandCount > 0)
 			{
 				var message = new StringBuilder();
 				message.Append("Currently ");
-				message.Append(selectedPageOld.DefinedCommandCount);
+				message.Append(selectedPageOldDefinedCommandCount);
 				message.Append(" commands are defined on the page. These commands will be hidden when linking but may later be restored by clearing the link.");
 
 				if (MessageBoxEx.Show
@@ -350,7 +353,10 @@ namespace YAT.View.Utilities
 			var message = new StringBuilder();
 			var linkedCount = settingsOld.Pages.LinkedToFilePathCount;
 
-			var selectedIsLinked = settingsOld.Pages[selectedPageId - 1].IsLinkedToFilePath;
+			var selectedIsLinked = false;
+			if (Int32Ex.IsWithin(selectedPageId, PredefinedCommandPageCollection.FirstPageId, settingsOld.Pages.Count))
+				selectedIsLinked = settingsOld.Pages[selectedPageId - 1].IsLinkedToFilePath;
+
 			if (selectedIsLinked)
 			{
 				if (linkedCount > 1)
