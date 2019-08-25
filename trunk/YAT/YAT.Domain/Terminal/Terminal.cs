@@ -32,6 +32,9 @@
 	// Enable debugging of thread state:
 ////#define DEBUG_THREAD_STATE
 
+	// Enable debugging of thread state:
+////#define DEBUG_DATA_EVENTS
+
 #endif // DEBUG
 
 #endregion
@@ -3910,14 +3913,20 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsAlwaysSequentialIncluding = "OnRawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
 		{
+			DebugDataEvents("OnRawChunkSent " + e.Value.ToDiagnosticsString());
+
 			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsAlwaysSequentialIncluding = "OnRawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
 		{
+			DebugDataEvents("OnRawChunkReceived " + e.Value.ToDiagnosticsString());
+
 			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkReceived, this, e);
 		}
 
@@ -3978,6 +3987,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
+			DebugDataEvents("OnDisplayElementsSent " + e.Elements.ElementsToDiagnosticsString());
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
@@ -3985,6 +3996,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
+			DebugDataEvents("OnDisplayElementsReceived " + e.Elements.ElementsToDiagnosticsString());
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
@@ -4038,6 +4051,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineSentReplaced(DisplayElementsEventArgs e)
 		{
+			DebugDataEvents("OnCurrentDisplayLineSentReplaced " + e.Elements.ElementsToDiagnosticsString());
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineSentReplaced, this, e);
 		}
@@ -4045,6 +4060,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineReceivedReplaced(DisplayElementsEventArgs e)
 		{
+			DebugDataEvents("OnCurrentDisplayLineReceivedReplaced " + e.Elements.ElementsToDiagnosticsString());
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineReceivedReplaced, this, e);
 		}
@@ -4098,6 +4115,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineSentCleared(EventArgs e)
 		{
+			DebugDataEvents("OnCurrentDisplayLineSentCleared");
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync(CurrentDisplayLineSentCleared, this, e);
 		}
@@ -4105,6 +4124,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineReceivedCleared(EventArgs e)
 		{
+			DebugDataEvents("OnCurrentDisplayLineReceivedCleared");
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync(CurrentDisplayLineReceivedCleared, this, e);
 		}
@@ -4133,6 +4154,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
+			DebugDataEvents("OnDisplayLinesSent " + e.Lines.Count);
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
@@ -4140,6 +4163,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
+			DebugDataEvents("OnDisplayLinesReceived " + e.Lines.Count);
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
@@ -4147,6 +4172,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
+			DebugDataEvents("OnRepositoryCleared");
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
@@ -4154,6 +4181,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
 		{
+			DebugDataEvents("OnRepositoryReloaded");
+
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
@@ -4280,6 +4309,12 @@ namespace YAT.Domain
 
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void DebugThreadState(string message)
+		{
+			DebugMessage(message);
+		}
+
+		[Conditional("DEBUG_DATA_EVENTS")]
+		private void DebugDataEvents(string message)
 		{
 			DebugMessage(message);
 		}

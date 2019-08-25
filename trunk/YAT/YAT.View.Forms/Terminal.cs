@@ -32,6 +32,9 @@
 	// Enable debugging of MDI related state changes:
 ////#define DEBUG_MDI
 
+	// Enable debugging of monitor content:
+////#define DEBUG_MONITOR_DATA
+
 #endif // DEBUG
 
 #endregion
@@ -5784,8 +5787,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
+				DebugMonitorData("Adding sent " + e.Elements.ToDiagnosticsString() + "...");
+
 				monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				DebugMonitorData("...done");
 
 				SetSentDataCountAndRateStatus();
 			}
@@ -5800,8 +5807,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
+				DebugMonitorData("Adding received " + e.Elements.ToDiagnosticsString() + "...");
+
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				DebugMonitorData("...done");
 
 				SetReceivedDataCountAndRateStatus();
 			}
@@ -5816,8 +5827,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
+				DebugMonitorData("Replacing current line by sent " + e.Elements.ToDiagnosticsString() + "...");
+
 				monitor_Tx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				DebugMonitorData("...done");
 			}
 		}
 
@@ -5830,8 +5845,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
+				DebugMonitorData("Replacing current line by received " + e.Elements.ToDiagnosticsString() + "...");
+
 				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				DebugMonitorData("...done");
 			}
 		}
 
@@ -5844,8 +5863,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
+				DebugMonitorData("Clearing current line sent");
+
 				monitor_Tx   .ClearCurrentLine();
 				monitor_Bidir.ClearCurrentLine();
+
+				DebugMonitorData("...done");
 			}
 		}
 
@@ -5858,8 +5881,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
+				DebugMonitorData("Clearing current line received");
+
 				monitor_Bidir.ClearCurrentLine();
 				monitor_Rx   .ClearCurrentLine();
+
+				DebugMonitorData("...done");
 			}
 		}
 
@@ -6821,6 +6848,12 @@ namespace YAT.View.Forms
 
 		[Conditional("DEBUG_MDI")]
 		private void DebugMdi(string message)
+		{
+			DebugMessage(message);
+		}
+
+		[Conditional("DEBUG_MONITOR_DATA")]
+		private void DebugMonitorData(string message)
 		{
 			DebugMessage(message);
 		}
