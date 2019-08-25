@@ -88,11 +88,15 @@ namespace YAT.Domain
 		[Flags]
 		public enum ElementAttributes
 		{
-			None      =  0,
-			Content   =  1,
-			Inline    =  2,
-			Info      =  4,
-			Auxiliary =  8
+			None           =  0,
+			Content        =  1,
+			Data           =  2,
+			DataContent    = (Data | Content),
+			Control        =  4,
+			ControlContent = (Control | Content),
+			Inline         =  8,
+			Info           = 16,
+			Auxiliary      = 32
 		}
 
 		#pragma warning restore 1591
@@ -115,21 +119,21 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxData()
-				: base(Direction.Tx, ElementAttributes.Content)
+				: base(Direction.Tx, ElementAttributes.DataContent)
 			{
 			}
 
 			/// <summary></summary>
 			public TxData(byte origin, string text)
-				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Tx, origin, text, 1, ElementAttributes.DataContent)
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
 			public TxData(byte[] origin, string text)
-				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Tx, origin, text, 1, ElementAttributes.DataContent) // Elements are always created corresponding to a single shown character.
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -138,21 +142,21 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxControl()
-				: base(Direction.Tx, ElementAttributes.Content)
+				: base(Direction.Tx, ElementAttributes.ControlContent)
 			{
 			}
 
 			/// <summary></summary>
 			public TxControl(byte origin, string text)
-				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Tx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
 			public TxControl(byte[] origin, string text)
-				: base(Direction.Tx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Tx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -161,21 +165,21 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxData()
-				: base(Direction.Rx, ElementAttributes.Content)
+				: base(Direction.Rx, ElementAttributes.DataContent)
 			{
 			}
 
 			/// <summary></summary>
 			public RxData(byte origin, string text)
-				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Rx, origin, text, 1, ElementAttributes.DataContent)
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
 			public RxData(byte[] origin, string text)
-				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Rx, origin, text, 1, ElementAttributes.DataContent)
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -184,21 +188,21 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxControl()
-				: base(Direction.Rx, ElementAttributes.Content)
+				: base(Direction.Rx, ElementAttributes.ControlContent)
 			{
 			}
 
 			/// <summary></summary>
 			public RxControl(byte origin, string text)
-				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Rx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
 			public RxControl(byte[] origin, string text)
-				: base(Direction.Rx, origin, text, 1) // Elements are always created corresponding to a single shown character.
-			{                                         // ASCII mnemonics (e.g. <CR>) are considered a single shown character.
-			}
+				: base(Direction.Rx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                   // ^ Elements are always created corresponding to a single shown character.
+			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -634,17 +638,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, byte origin, string text, int charCount)
-			: this(direction, new byte[] { origin }, text, charCount)
+		private DisplayElement(Direction direction, byte origin, string text, int charCount, ElementAttributes attributes)
+			: this(direction, new byte[] { origin }, text, charCount, attributes)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, byte[] origin, string text, int charCount)
+		private DisplayElement(Direction direction, byte[] origin, string text, int charCount, ElementAttributes attributes)
 		{                                                                   // Makes sense since elements of the same type will be appended.
 			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, charCount, origin.Length, ElementAttributes.Content);
+			Initialize(direction, l, text, charCount, origin.Length, attributes);
 		}
 
 		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int charCount, int byteCount, ElementAttributes attributes)
@@ -730,6 +734,20 @@ namespace YAT.Domain
 		public virtual bool IsContent
 		{
 			get { return ((this.attributes & ElementAttributes.Content) != 0); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsDataContent
+		{
+			get { return (IsContent && (this.attributes & ElementAttributes.Data) != 0); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsControlContent
+		{
+			get { return (IsContent && (this.attributes & ElementAttributes.Control) != 0); }
 		}
 
 		/// <summary></summary>
