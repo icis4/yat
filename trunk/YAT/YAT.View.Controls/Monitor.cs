@@ -1761,9 +1761,10 @@ namespace YAT.View.Controls
 		private void ResetCurrentLineInListBoxes()
 		{
 		////var lblin = fastListBox_LineNumbers => Nothing to do (yet).
-
 			var lbmon = fastListBox_Monitor;
-			lbmon.Items[lbmon.Items.Count - 1] = new Domain.DisplayLine(); // Empty line.
+
+			if ((lbmon.Items != null) && (lbmon.Items.Count > 0))
+				lbmon.Items[lbmon.Items.Count - 1] = new Domain.DisplayLine(); // Empty line.
 		}
 
 		private void ClearCurrentLineInListBoxes()
@@ -1780,7 +1781,7 @@ namespace YAT.View.Controls
 					DebugVerticalAutoScroll("Clearing current line...");
 					lblin.Items.RemoveAt(lblin.Items.Count - 1); // Remove/RemoveAt() resets 'TopIndex' to 0!
 					lbmon.Items.RemoveAt(lbmon.Items.Count - 1); // \remind (2017-11-05 / MKY) check if still needed after upgrade to .NET 4.0 or higher (FR #229)
-					DebugVerticalAutoScroll("..restoring 'TopIndex'..");
+					DebugVerticalAutoScroll("..restoring 'TopIndex'.."); // Aligned with output above and below.
 					lblin.TopIndex = adjustedTopIndex;
 					lbmon.TopIndex = adjustedTopIndex;
 					DebugVerticalAutoScroll("....................done");
