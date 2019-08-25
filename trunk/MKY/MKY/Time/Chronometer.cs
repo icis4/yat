@@ -85,6 +85,9 @@ namespace MKY.Time
 		/// The chronometers get properly disposed of, but apparently there may still be pending
 		/// asynchronous 'zombie' callback that later throw an exception. No feasible solution
 		/// has been found.
+		///
+		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
+		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!

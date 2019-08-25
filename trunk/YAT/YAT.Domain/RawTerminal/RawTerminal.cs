@@ -132,6 +132,9 @@ namespace YAT.Domain
 		/// such alternative approach would require quite some refactoring, thus decided to keep
 		/// the <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/> approach for
 		/// the moment.
+		///
+		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
+		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
