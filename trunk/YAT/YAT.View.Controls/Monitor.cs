@@ -614,24 +614,83 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void ReplaceCurrentLine(Domain.DisplayElementCollection elements)
 		{
-			bool hasCompleted;
-			ClearCurrentLineInPendingElementsAndLines(out hasCompleted);
+			// Attention:
+			// Similar code exists in ClearCurrentLine() below.
+			// Changes here may have to be applied there too.
 
-			if (!hasCompleted)
-				ResetCurrentLineInListBoxes();
+			var result = ClearCurrentLineInPendingElementsAndLines();
 
-			AddElementsOrLines(elements);
+			bool clearCurrentLineInListBoxesIsNeeded;
+			switch (result)
+			{
+				case ClearResult.NoElementOrLinePending:    // Nothing was pending, but a line may already have started earlier.
+				case ClearResult.HasClearedButIsIncomplete: // Elements were pending, and the line has for sure already started earlier.
+					clearCurrentLineInListBoxesIsNeeded = true;
+					break;
+
+				case ClearResult.HasClearedAndCompleted:
+				case ClearResult.NoLineOngoing:
+					clearCurrentLineInListBoxesIsNeeded = false;
+					break;
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a result that has not been implemented here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			bool hadElementsToClear = false;
+			if (clearCurrentLineInListBoxesIsNeeded)
+				ClearCurrentLineInListBoxes(out hadElementsToClear); // Remember that "current line" only applies to a started but not yet completed line.
+
+			bool addElementsOrLinesIsNeeded = hadElementsToClear;
+			switch (result)
+			{
+				case ClearResult.HasClearedButIsIncomplete: // Elements were pending, and the line has for sure already started earlier.
+				case ClearResult.HasClearedAndCompleted:    // Elements were pending, and the line has for sure already started earlier.
+					addElementsOrLinesIsNeeded = true;
+					break;
+
+				case ClearResult.NoElementOrLinePending:    // Nothing was pending, cannot tell for sure that adding is needed.
+				case ClearResult.NoLineOngoing:
+					// Nothing more to do, value of 'hadElementsToClear' has already determined whether adding is needed.
+					break;
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a result that has not been implemented here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			if (addElementsOrLinesIsNeeded)
+				AddElementsOrLines(elements);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void ClearCurrentLine()
 		{
-			bool hasCompleted;
-			ClearCurrentLineInPendingElementsAndLines(out hasCompleted);
+			// Attention:
+			// Similar code exists in ReplaceCurrentLine() above.
+			// Changes here may have to be applied there too.
 
-			if (!hasCompleted)
-				RemoveCurrentLineFromListBoxes();
+			var result = ClearCurrentLineInPendingElementsAndLines();
+
+			bool removeCurrentLineFromListBoxesIsNeeded;
+			switch (result)
+			{
+				case ClearResult.NoElementOrLinePending:    // Nothing was pending, but a line may already have started earlier.
+				case ClearResult.HasClearedButIsIncomplete: // Elements were pending, and the line has for sure already started earlier.
+					removeCurrentLineFromListBoxesIsNeeded = true;
+					break;
+
+				case ClearResult.HasClearedAndCompleted:
+				case ClearResult.NoLineOngoing:
+					removeCurrentLineFromListBoxesIsNeeded = false;
+					break;
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a result that has not been implemented here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			if (removeCurrentLineFromListBoxesIsNeeded)
+				RemoveCurrentLineFromListBoxes(); // Remember that "current line" only applies to a started but not yet completed line.
 		}
 
 		/// <summary></summary>
@@ -1657,26 +1716,6 @@ namespace YAT.View.Controls
 			return ((element as Domain.DisplayElement.LineStart) != null);
 		}
 
-		private void ClearCurrentLineInPendingElementsAndLines(out bool hasCompleted)
-		{
-			var result = ClearCurrentLineInPendingElementsAndLines();
-			switch (result)
-			{
-				case ClearResult.NoElementOrLinePending:
-				case ClearResult.HasClearedButIsIncomplete:
-					hasCompleted = false;
-					break;
-
-				case ClearResult.HasClearedAndCompleted:
-				case ClearResult.NoLineOngoing:
-					hasCompleted = true;
-					break;
-
-				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a result that has not been implemented here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
 		private ClearResult ClearCurrentLineInPendingElementsAndLines()
 		{
 			bool hasCleared = false;
@@ -1760,8 +1799,10 @@ namespace YAT.View.Controls
 				return (ClearResult.NoElementOrLinePending);
 		}
 
-		private void ResetCurrentLineInListBoxes()
+		private void ClearCurrentLineInListBoxes(out bool hadElementsToClear)
 		{
+			hadElementsToClear = false;
+
 		////var lblin = fastListBox_LineNumbers => Nothing to do (yet).
 			var lbmon = fastListBox_Monitor;
 
@@ -1771,13 +1812,18 @@ namespace YAT.View.Controls
 				if ((dl != null) && (dl.Count > 0) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
 				{
 					dl.Clear();
-					lbmon.Refresh();
+					lbmon.Invalidate();
+
+					hadElementsToClear = true;
 				}
 			}
 		}
 
 		private void RemoveCurrentLineFromListBoxes()
+	////private void RemoveCurrentLineFromListBoxes(out bool hadElementsToRemove) <= Prepared for symmetricity with ClearCurrentLineInListBoxes() above.
 		{
+		////hadElementsToRemove = false;
+
 			var lblin = fastListBox_LineNumbers;
 			var lbmon = fastListBox_Monitor;
 
@@ -1794,6 +1840,8 @@ namespace YAT.View.Controls
 					lblin.TopIndex = adjustedTopIndex;
 					lbmon.TopIndex = adjustedTopIndex;
 					DebugVerticalAutoScroll("....................done");
+
+				////hadElementsToRemove = true;
 				}
 			}
 		}

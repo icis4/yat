@@ -1361,11 +1361,19 @@ namespace YAT.Domain
 
 				if (isBackspace)
 				{
-					// Remove the preceeding character:
+					// If the current line does contain a preceeding character...
 					if (lineState.Elements.CharCount > 0)
 					{
+						// ...remove it in the current line...
 						lineState.Elements.RemoveLastDataContentChar();
 						RemoveSpaceIfNecessary(d, lineState.Elements);
+
+						if (elementsToAdd.CharCount > 0)
+						{
+							// ..as well as in the pending elements:
+							elementsToAdd.RemoveLastDataContentChar();
+							RemoveSpaceIfNecessary(d, elementsToAdd);
+						}
 
 						replaceAlreadyStartedLine = true;
 					}

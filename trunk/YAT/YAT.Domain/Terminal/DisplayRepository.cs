@@ -174,8 +174,8 @@ namespace YAT.Domain
 			// Check whether a line break is needed:
 			if (item is DisplayElement.LineBreak)
 			{
-				// Excess must be manually dequeued:
-				if (Count >= Capacity)
+				// Excess must be manually dequeued, typically just one element has to:
+				while (Count >= Capacity)
 					Dequeue();
 
 				// Enqueue new line and reset current line:
@@ -218,16 +218,22 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public void ReplaceCurrentLine(DisplayElementCollection currentLineElements)
 		{
-			ClearCurrentLine();
-			Enqueue(currentLineElements);
+			if (this.currentLine.Count > 0) // Only something to do if there is something in current line indeed.
+			{
+				ClearCurrentLine();
+				Enqueue(currentLineElements);
+			}
 		}
 
 		/// <summary></summary>
 		public void ClearCurrentLine()
 		{
-			this.byteCount -= this.currentLine.ByteCount;
+			if (this.currentLine.Count > 0) // Only something to do if there is something in current line indeed.
+			{
+				this.byteCount -= this.currentLine.ByteCount;
 
-			this.currentLine.Clear();
+				this.currentLine.Clear();
+			}
 		}
 
 		/// <summary></summary>
