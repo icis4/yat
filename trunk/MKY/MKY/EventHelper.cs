@@ -37,6 +37,12 @@
 	                                     //  > Exceptions will either be discarded or rethrown, depending on the option below.
 ////#define RETHROW_UNHANDLED_EXCEPTIONS // Disabled for 'Debug' => see above.
 
+////#define BREAK_ON_EXCEPTION           // Disabled for 'Debug' => debugger shall not break.
+	                                     // Rationale: Debugger shall behave in the standard way.
+	                                     // Temporarily enabling the option can be useful to analyze the root cause of exceptions.
+	                                     //  > Target and event details will be output to the debug console.
+	                                     //  > Debugger will break.
+
 ////#define BREAK_ON_RETHROW             // Disabled for 'Debug' => debugger shall not break.
 	                                     // Rationale: Debugger shall output exception details to the debug console but then continue.
 	                                     // Temporarily enabling the option can be useful to analyze the root cause of exceptions.
@@ -750,6 +756,10 @@ namespace MKY
 					Debug.Unindent();
 				}
 				Debug.Unindent();
+
+			#if (BREAK_ON_EXCEPTION)
+				Debugger.Break();
+			#endif
 			}
 
 			[Conditional("DEBUG")]
@@ -804,6 +814,10 @@ namespace MKY
 					Debug.Unindent();
 				}
 				Debug.Unindent();
+
+			#if (BREAK_ON_EXCEPTION)
+				Debugger.Break();
+			#endif
 			}
 
 			#endregion
