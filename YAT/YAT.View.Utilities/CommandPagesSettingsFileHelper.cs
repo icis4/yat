@@ -605,7 +605,7 @@ namespace YAT.View.Utilities
 		{
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmImport(owner, pagesImported, settingsOld.PageLayout, out mode, out pageLayoutNew))
+			if (ConfirmImport(owner, settingsOld.PageLayout, pagesImported, out mode, out pageLayoutNew))
 			{
 				// Clone...
 				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve properties.
@@ -626,7 +626,7 @@ namespace YAT.View.Utilities
 		{
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmImport(owner, pagesImported, settingsOld.PageLayout, out mode, out pageLayoutNew))
+			if (ConfirmImport(owner, settingsOld.PageLayout, pagesImported, out mode, out pageLayoutNew))
 			{
 				// Clone settings to preserve pages and other properties...
 				settingsNew = new PredefinedCommandSettings(settingsOld);
@@ -676,7 +676,7 @@ namespace YAT.View.Utilities
 
 		/// <summary></summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandPageCollection pagesImported, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
+		private static bool ConfirmImport(IWin32Window owner, PredefinedCommandPageLayout pageLayoutOld, PredefinedCommandPageCollection pagesImported, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
 			if (pagesImported.MaxDefinedCommandCountPerPage <= commandCapacityPerPageOld)

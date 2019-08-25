@@ -234,7 +234,7 @@ namespace YAT.View.Utilities
 		{
 			Mode mode;
 			PredefinedCommandPageLayout pageLayoutNew;
-			if (ConfirmLink(owner, pageToLink, settingsOld.PageLayout, out mode, out pageLayoutNew))
+			if (ConfirmLink(owner, settingsOld, selectedPageId, pageToLink, out mode, out pageLayoutNew))
 			{
 				// Clone settings to preserve pages and other properties...
 				settingsNew = new PredefinedCommandSettings(settingsOld);
@@ -272,16 +272,43 @@ namespace YAT.View.Utilities
 
 		/// <summary></summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool ConfirmLink(IWin32Window owner, PredefinedCommandPage pageToLink, PredefinedCommandPageLayout pageLayoutOld, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
+		private static bool ConfirmLink(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, PredefinedCommandPage pageToLink, out Mode mode, out PredefinedCommandPageLayout pageLayoutNew)
 		{
+			var pageLayoutOld = settingsOld.PageLayout;
+			var selectedPageOld = settingsOld.Pages[selectedPageId - 1];
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
+
+			// 1st confirmation "current commands will be hidden":
+			if (selectedPageOld.DefinedCommandCount > 0)
+			{
+				var message = new StringBuilder();
+				message.Append("Currently ");
+				message.Append(selectedPageOld.DefinedCommandCount);
+				message.Append(" commands are defined on the page. These commands will be hidden when linking but may later be restored by clearing the link.");
+
+				if (MessageBoxEx.Show
+					(
+						owner,
+						message.ToString(),
+						"Confirm Link",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Information
+					) != DialogResult.OK)
+				{
+					mode = Mode.Cancel;
+					pageLayoutNew = pageLayoutOld;
+					return (false);
+				}
+			}
+
+			// 2nd confirmation "change in layout":
 			if (pageToLink.DefinedCommandCount <= commandCapacityPerPageOld)
 			{
 				mode = Mode.Neutral;
 				pageLayoutNew = pageLayoutOld;
 				return (true);
 			}
-			else // The pages to link do not fit the currently configured page layout:
+			else // The page to link does not fit the currently configured page layout:
 			{
 				var nextPageLayout = PredefinedCommandPageLayoutEx.GetMatchingItem(pageToLink.DefinedCommandCount);
 				var nextCommandCapacityPerPage = nextPageLayout.CommandCapacityPerPage;
