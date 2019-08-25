@@ -35,7 +35,7 @@ namespace MKY
 	/// VS2015 as its designer cannot cope with generic event args! Findings:
 	///  > Designer cannot display the 'SendCommandRequest' of 'SendText' as well as 'Send'.
 	///  > It crashes again and again! But is this indeed the root cause?
-	/// 
+	///
 	/// \todo
 	/// Check again with VS2017+. If OK, revert 'YAT.View.Controls.SendTextOptionEventArgs'.
 	/// </remarks>

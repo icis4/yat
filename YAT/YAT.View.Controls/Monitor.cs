@@ -1661,7 +1661,7 @@ namespace YAT.View.Controls
 			else
 			{
 				// Get current line:
-				var current = (lbmon.LastItem as Domain.DisplayLine);
+				var current = (lbmon.LastItem as Domain.DisplayLine); // 'LastItem' is defined for sure after having 'Items.Count' above.
 
 				// If first element, add element to line:
 				if (current.Count <= 0)
