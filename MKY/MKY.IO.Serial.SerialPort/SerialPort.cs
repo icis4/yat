@@ -1676,11 +1676,13 @@ namespace MKY.IO.Serial.SerialPort
 				DebugEx.WriteException(GetType(), ex, "SendThread() has detected shutdown of port.");
 				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
-			catch (Exception ex)
+		#if (!DEBUG)
+			catch (Exception ex) // This best-effort approach shall only be done for RELEASE, in order to better detect and analyze the issue during DEBUG.
 			{
 				DebugEx.WriteException(GetType(), ex, "SendThread() has caught an unexpected exception! Restarting the port to try fixing the issue...");
 				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
+		#endif
 
 			DebugThreadState("SendThread() has terminated.");
 		}
@@ -2064,11 +2066,13 @@ namespace MKY.IO.Serial.SerialPort
 				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port as it is no longer accessible.");
 				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
-			catch (Exception ex)
+		#if (!DEBUG)
+			catch (Exception ex) // This best-effort approach shall only be done for RELEASE, in order to better detect and analyze the issue during DEBUG.
 			{
 				DebugEx.WriteException(GetType(), ex, "DataReceived() has has caught an unexpected exception! Restarting the port to try fixing the issue...");
 				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
+		#endif
 		}
 
 		/// <remarks>
@@ -2216,11 +2220,13 @@ namespace MKY.IO.Serial.SerialPort
 				DebugEx.WriteException(GetType(), ex, "PinChanged() has detected shutdown of port as it is no longer accessible.");
 				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
-			catch (Exception ex)
+		#if (!DEBUG)
+			catch (Exception ex) // This best-effort approach shall only be done for RELEASE, in order to better detect and analyze the issue during DEBUG.
 			{
 				DebugEx.WriteException(GetType(), ex, "PinChanged() has caught an unexpected exception! Restarting the port to try fixing the issue...");
 				RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 			}
+		#endif
 		}
 
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback.")]
