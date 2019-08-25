@@ -2850,9 +2850,10 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToAsciiString(byte b)
 		{
-		////if       ((b == '\a') && !TerminalSettings.CharReplace.ReplaceBell) does not exist, CharAction.BeepOnBell exists instead and is handled elsewhere.
+		////if      ((b == '\a') && !TerminalSettings.CharReplace.ReplaceBell) does not exist, CharAction.BeepOnBell exists instead and is handled elsewhere.
 		////	return ("\a");
-			if       ((b == '\b') && !TerminalSettings.CharReplace.ReplaceBackspace)
+		////else if ((b == '\b') && !TerminalSettings.CharReplace.ReplaceBackspace)
+			if      ((b == '\b') && !TerminalSettings.CharReplace.ReplaceBackspace)
 				return ("\b");
 			else if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
 				return ("\t");
