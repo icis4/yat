@@ -186,6 +186,9 @@ namespace YAT.Model
 		/// of YAT! Also note that the issue will not happen on [File > Exit]! The latter does have
 		/// a slightly different calling sequence, e.g. workspace is saved before terminals are
 		/// closed, but the root cause that makes this differences is not (yet) understood!
+		///
+		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
+		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!

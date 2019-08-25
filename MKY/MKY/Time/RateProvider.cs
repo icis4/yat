@@ -75,6 +75,9 @@ namespace MKY.Time
 		///
 		/// Explicitly setting <see cref="EventHelper.ExceptionHandlingMode.DiscardDisposedTarget"/>
 		/// to handle/workaround a similar issue as described in <see cref="Chronometer"/>.
+		///
+		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
+		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RateProvider).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
