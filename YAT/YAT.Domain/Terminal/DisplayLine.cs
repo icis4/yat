@@ -261,15 +261,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Removes the last character from the <see cref="DisplayElementCollection"/>.
+		/// Removes the last "true" character from the <see cref="DisplayElementCollection"/>.
 		/// </summary>
 		/// <remarks>
-		/// Needed to handle backspace.
+		/// Needed to handle backspace, thus applies to data content only.
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">
 		/// The collection is empty.
 		/// </exception>
-		public virtual void RemoveLastContentChar()
+		public virtual void RemoveLastDataContentChar()
 		{
 			if (Count == 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -280,8 +280,8 @@ namespace YAT.Domain
 			for (int index = (Count - 1); index >= 0; index--)
 			{
 				var current = this[index];
-				if (current.IsContent)
-				{
+				if (current.IsDataContent) // Data content only, e.g. <BS> must not be applied to a <BEL>,
+				{                          // but has to be applied to a <TAB> if that is executed.
 					if (current.CharCount < 1)
 					{
 						RemoveAt(index); // A preceeding whitespace content has to be removed,
