@@ -1364,7 +1364,7 @@ namespace YAT.Domain
 					// Remove the preceeding character:
 					if (lineState.Elements.CharCount > 0)
 					{
-						lineState.Elements.RemoveLastContentChar();
+						lineState.Elements.RemoveLastDataContentChar();
 						RemoveSpaceIfNecessary(d, lineState.Elements);
 
 						replaceAlreadyStartedLine = true;
@@ -1408,7 +1408,7 @@ namespace YAT.Domain
 
 			switch (b)
 			{
-				case 0x07: // <BEL>
+				case 0x07: // <BEL> (bell/beep)
 				{
 					if (TerminalSettings.CharAction.BeepOnBell)
 					{
@@ -1422,7 +1422,7 @@ namespace YAT.Domain
 					break;
 				}
 
-				case 0x08: // <BS>
+				case 0x08: // <BS> (backspace)
 				{
 					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBackspace))
 					{
@@ -1435,7 +1435,7 @@ namespace YAT.Domain
 					break;
 				}
 
-				case 0x09: // <TAB>
+				case 0x09: // <TAB> (tabulator)
 				{
 					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceTab))
 					{
