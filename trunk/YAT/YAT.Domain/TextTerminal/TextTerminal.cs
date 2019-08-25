@@ -1504,13 +1504,13 @@ namespace YAT.Domain
 			bool isEmptyLine = (lineState.Elements.CharCount == 0);
 			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
 			bool isNotHiddenEol = (lineState.EolOfLastLineWasCompleteMatch(ps) && !lineState.EolIsAnyMatch(ps));
-			if (isEmptyLine && isPendingEol) // While intended empty lines must still be shown, potentially suppress
+			if (isEmptyLine && isPendingEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden pending EOL character(s):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
 				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			}
-			else if (isEmptyLine && isNotHiddenEol) // While intended empty lines must still be shown, potentially suppress
+			else if (isEmptyLine && isNotHiddenEol) // While intended empty lines must be shown, potentially suppress
 			{                                       // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
