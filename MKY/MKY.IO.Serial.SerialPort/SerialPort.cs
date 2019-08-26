@@ -1548,7 +1548,7 @@ namespace MKY.IO.Serial.SerialPort
 									//
 									// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
 									// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
-									// than the baud rate permits forwarding, the converter simply discards superfluous data!
+									// than the baud rate permits forwarding, the converter simply discards supernumerous data!
 									// Of course, what else could it do... Actually, it could propagate the information back to
 									// 'System.IO.Ports.SerialPort.BytesToWrite'. But that obviously isn't done...
 									//
@@ -1575,29 +1575,37 @@ namespace MKY.IO.Serial.SerialPort
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, maxChunkSizeSetting); // 'Setting' is always above 0.
 									}
 
-									List<byte> effectiveChunkData;
-									bool signalIOControlChanged;
-									if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
+									int effectiveChunkDataCount = 0;
+									if (maxChunkSize > 0)
 									{
-										DebugSendRequest("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
-										OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
-										DebugSendRequest("...signaling done");
+										List<byte> effectiveChunkData;
+										bool signalIOControlChanged;
+										if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
+										{
+											DebugSendRequest("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
+											OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
+											DebugSendRequest("...signaling done");
 
-										// Update the send rates with the effective chunk size:
+											effectiveChunkDataCount = effectiveChunkData.Count;
+										}
 
-										if (this.settings.BufferMaxBaudRate)
-											maxBaudRatePerInterval.Update(effectiveChunkData.Count);
-
-										if (this.settings.MaxSendRate.Enabled)
-											maxSendRate.Update(effectiveChunkData.Count);
-
-										// Note the Thread.Sleep(TimeSpan.Zero) further above.
+										if (signalIOControlChanged)
+										{
+											OnIOControlChanged(EventArgs.Empty);
+										}
 									}
 
-									if (signalIOControlChanged)
-									{
-										OnIOControlChanged(EventArgs.Empty);
-									}
+									// Update the send rates with the effective chunk size of the current interval.
+									// This must be done no matter whether writing to port has succeeded or not!
+									// Otherwise, on overload, a rate value may "get stuck" at the limit!
+
+									if (this.settings.BufferMaxBaudRate)
+										maxBaudRatePerInterval.Update(effectiveChunkDataCount);
+
+									if (this.settings.MaxSendRate.Enabled)
+										maxSendRate.Update(effectiveChunkDataCount);
+
+									// Note the Thread.Sleep(TimeSpan.Zero) further above.
 								}
 								finally
 								{
@@ -1959,7 +1967,7 @@ namespace MKY.IO.Serial.SerialPort
 		///
 		/// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
 		/// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
-		/// than the baud rate permits forwarding, the converter simply discards superfluous data!
+		/// than the baud rate permits forwarding, the converter simply discards supernumerous data!
 		/// Of course, what else could it do... Actually, it could propagate the information back to
 		/// <see cref="System.IO.Ports.SerialPort.BytesToWrite"/>. But that obviously isn't done...
 		///
