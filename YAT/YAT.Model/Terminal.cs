@@ -4631,11 +4631,11 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository as string.
 		/// </summary>
-		public virtual string RepositoryToDiagnosticsString(Domain.RepositoryType repositoryType)
+		public virtual string RepositoryToExtendedDiagnosticsString(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			return (this.terminal.RepositoryToDiagnosticsString(repositoryType));
+			return (this.terminal.RepositoryToExtendedDiagnosticsString(repositoryType));
 		}
 
 		#endregion
@@ -4961,21 +4961,21 @@ namespace YAT.Model
 		/// <remarks>
 		/// The value corresponds to the byte count of the formatted terminal repository.
 		/// </remarks>
-		public virtual int GetRepositoryByteCount(Domain.RepositoryType repository)
+		public virtual int GetRepositoryByteCount(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			return (this.terminal.GetRepositoryByteCount(repository));
+			return (this.terminal.GetRepositoryByteCount(repositoryType));
 		}
 
 		/// <remarks>
 		/// The value corresponds to the line count of the formatted terminal repository.
 		/// </remarks>
-		public virtual int GetRepositoryLineCount(Domain.RepositoryType repository)
+		public virtual int GetRepositoryLineCount(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			return (this.terminal.GetRepositoryLineCount(repository));
+			return (this.terminal.GetRepositoryLineCount(repositoryType));
 		}
 
 		#endregion

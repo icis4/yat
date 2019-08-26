@@ -1026,12 +1026,12 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Ensure that states are completely reset.</remarks>
-		protected override void ClearMyRepository(RepositoryType repository)
+		protected override void ClearMyRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			InitializeStates();
-			base.ClearMyRepository(repository);
+			base.ClearMyRepository(repositoryType);
 		}
 
 		#endregion
@@ -1048,7 +1048,7 @@ namespace YAT.Domain
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
 
-			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
+			return (ToExtendedDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
 		/// <summary>
@@ -1057,11 +1057,11 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public override string ToDiagnosticsString(string indent)
+		public override string ToExtendedDiagnosticsString(string indent)
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
 
-			return (indent + "> Type: BinaryTerminal" + Environment.NewLine + base.ToDiagnosticsString(indent));
+			return (indent + "> Type: BinaryTerminal" + Environment.NewLine + base.ToExtendedDiagnosticsString(indent));
 		}
 
 		#endregion

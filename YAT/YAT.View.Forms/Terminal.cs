@@ -5787,7 +5787,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Adding sent " + e.Elements.ToDiagnosticsString() + "...");
+				DebugMonitorData("Adding sent " + e.Elements.ToString() + "...");
 
 				monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
@@ -5807,7 +5807,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Adding received " + e.Elements.ToDiagnosticsString() + "...");
+				DebugMonitorData("Adding received " + e.Elements.ToString() + "...");
 
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
@@ -5827,7 +5827,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Replacing current line by sent " + e.Elements.ToDiagnosticsString() + "...");
+				DebugMonitorData("Replacing current line by sent " + e.Elements.ToString() + "...");
 
 				monitor_Tx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
@@ -5845,7 +5845,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Replacing current line by received " + e.Elements.ToDiagnosticsString() + "...");
+				DebugMonitorData("Replacing current line by received " + e.Elements.ToString() + "...");
 
 				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.

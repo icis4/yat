@@ -300,7 +300,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
+			return (ToExtendedDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
 		/// <summary>
@@ -309,9 +309,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
+		public virtual string ToExtendedDiagnosticsString()
 		{
-			return (ToDiagnosticsString(""));
+			return (ToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -320,12 +320,12 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		public virtual string ToExtendedDiagnosticsString(string indent)
 		{
 			return (indent + "> LineCapacity: " +    Capacity.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> LineCount: " +          Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
-					indent + "> Lines: " + Environment.NewLine + LinesToDiagnosticsString(indent + "   "));
+					indent + "> Lines: " + Environment.NewLine + LinesToExtendedDiagnosticsString(indent + "   "));
 		}
 
 		/// <summary>
@@ -334,9 +334,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string LinesToDiagnosticsString()
+		public virtual string LinesToExtendedDiagnosticsString()
 		{
-			return (LinesToDiagnosticsString(""));
+			return (LinesToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -345,7 +345,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string LinesToDiagnosticsString(string indent)
+		public virtual string LinesToExtendedDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 
@@ -353,7 +353,7 @@ namespace YAT.Domain
 			foreach (var dl in ToLines())
 			{
 				sb.Append(indent + "> DisplayLine#" + (i++) + ":" + Environment.NewLine);
-				sb.Append(dl.ToDiagnosticsString(indent + "   "));
+				sb.Append(dl.ToExtendedDiagnosticsString(indent + "   "));
 			}
 
 			if (i == 0)

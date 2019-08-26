@@ -417,9 +417,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
+		public virtual string ToExtendedDiagnosticsString()
 		{
-			return (ToDiagnosticsString(""));
+			return (ToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -428,12 +428,12 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		public virtual string ToExtendedDiagnosticsString(string indent)
 		{
 			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> CharCount: " + this.charCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
-					indent + "> Elements: " + Environment.NewLine + ElementsToDiagnosticsString(indent + "   "));
+					indent + "> Elements: " + Environment.NewLine + ElementsToExtendedDiagnosticsString(indent + "   "));
 		}
 
 		/// <summary>
@@ -442,9 +442,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ElementsToDiagnosticsString()
+		public virtual string ElementsToExtendedDiagnosticsString()
 		{
-			return (ElementsToDiagnosticsString(""));
+			return (ElementsToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -453,7 +453,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ElementsToDiagnosticsString(string indent)
+		public virtual string ElementsToExtendedDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 

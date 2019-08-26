@@ -758,6 +758,9 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
+		/// </remarks>
 		public virtual string ToDiagnosticsString()
 		{
 			return (ToDiagnosticsString(""));
@@ -770,7 +773,7 @@ namespace YAT.Model.Types
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
 		/// <remarks>
-		/// Limited to a single line to keep debug output compact.
+		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
 		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{

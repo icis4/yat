@@ -3287,7 +3287,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
-		public virtual bool ClearRepository(RepositoryType repository)
+		public virtual bool ClearRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
@@ -3295,7 +3295,7 @@ namespace YAT.Domain
 			{                                     // Only try for some time, otherwise ignore.
 				try                               // Prevents deadlocks among main thread (view)
 				{                                 //   and large amounts of incoming data.
-					this.rawTerminal.ClearRepository(repository);
+					this.rawTerminal.ClearRepository(repositoryType);
 				}
 				finally
 				{
@@ -3335,7 +3335,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
-		public virtual bool RefreshRepository(RepositoryType repository)
+		public virtual bool RefreshRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
@@ -3344,17 +3344,17 @@ namespace YAT.Domain
 				try                               // Prevents deadlocks among main thread (view)
 				{                                 //   and large amounts of incoming data.
 					// Clear repository:
-					ClearMyRepository(repository);
-					OnRepositoryCleared(new EventArgs<RepositoryType>(repository));
+					ClearMyRepository(repositoryType);
+					OnRepositoryCleared(new EventArgs<RepositoryType>(repositoryType));
 
 					// Reload repository:
 					this.isReloading = true;
-					foreach (var raw in this.rawTerminal.RepositoryToChunks(repository))
+					foreach (var raw in this.rawTerminal.RepositoryToChunks(repositoryType))
 					{
 						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
-					OnRepositoryReloaded(new EventArgs<RepositoryType>(repository));
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(repositoryType));
 				}
 				finally
 				{
@@ -3420,21 +3420,21 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ClearMyRepository(RepositoryType repository)
+		protected virtual void ClearMyRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
-					case RepositoryType.None:    /* Nothing to do. */        break;
+					case RepositoryType.None:      /* Nothing to do. */      break;
 
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -3444,13 +3444,13 @@ namespace YAT.Domain
 		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
 		/// total byte count of a sent or received sequence, a hidden EOL is e.g. not reflected.
 		/// </remarks>
-		public virtual int GetRepositoryByteCount(RepositoryType repository)
+		public virtual int GetRepositoryByteCount(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
 					case RepositoryType.None:  return (0);
 
@@ -3458,19 +3458,19 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ByteCount);
 					case RepositoryType.Rx:    return (this.rxRepository   .ByteCount);
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual int GetRepositoryLineCount(RepositoryType repository)
+		public virtual int GetRepositoryLineCount(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
 					case RepositoryType.None:  return (0);
 
@@ -3478,19 +3478,19 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.Count);
 					case RepositoryType.Rx:    return (this.rxRepository   .Count);
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual DisplayElementCollection RepositoryToDisplayElements(RepositoryType repository)
+		public virtual DisplayElementCollection RepositoryToDisplayElements(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
 					case RepositoryType.None:  return (null);
 
@@ -3498,19 +3498,19 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual DisplayLineCollection RepositoryToDisplayLines(RepositoryType repository)
+		public virtual DisplayLineCollection RepositoryToDisplayLines(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
 					case RepositoryType.None:  return (null);
 
@@ -3518,19 +3518,19 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual DisplayLine LastDisplayLineAuxiliary(RepositoryType repository)
+		public virtual DisplayLine LastDisplayLineAuxiliary(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
 					case RepositoryType.None:  return (null);
 
@@ -3538,19 +3538,19 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
 					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void ClearLastDisplayLineAuxiliary(RepositoryType repository)
+		public virtual void ClearLastDisplayLineAuxiliary(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
 					case RepositoryType.None:    /* Nothing to do. */                         break;
 
@@ -3558,43 +3558,43 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
 					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual string RepositoryToDiagnosticsString(RepositoryType repository)
+		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType)
 		{
-			return (RepositoryToDiagnosticsString(repository, ""));
+			return (RepositoryToExtendedDiagnosticsString(repositoryType, ""));
 		}
 
 		/// <summary></summary>
-		public virtual string RepositoryToDiagnosticsString(RepositoryType repository, string indent)
+		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType, string indent)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repository)
+				switch (repositoryType)
 				{
 					case RepositoryType.None:  return (null);
 
-					case RepositoryType.Tx:    return (this.txRepository   .ToDiagnosticsString(indent));
-					case RepositoryType.Bidir: return (this.bidirRepository.ToDiagnosticsString(indent));
-					case RepositoryType.Rx:    return (this.rxRepository   .ToDiagnosticsString(indent));
+					case RepositoryType.Tx:    return (this.txRepository   .ToExtendedDiagnosticsString(indent));
+					case RepositoryType.Bidir: return (this.bidirRepository.ToExtendedDiagnosticsString(indent));
+					case RepositoryType.Rx:    return (this.rxRepository   .ToExtendedDiagnosticsString(indent));
 
-					default: throw (new ArgumentOutOfRangeException("repository", repository, MessageHelper.InvalidExecutionPreamble + "'" + repository + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual List<RawChunk> RepositoryToRawChunks(RepositoryType repository)
+		public virtual List<RawChunk> RepositoryToRawChunks(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			return (this.rawTerminal.RepositoryToChunks(repository));
+			return (this.rawTerminal.RepositoryToChunks(repositoryType));
 		}
 
 		private void DisposeRepositories()
@@ -3916,7 +3916,7 @@ namespace YAT.Domain
 		[CallingContract(IsAlwaysSequentialIncluding = "OnRawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
 		{
-			DebugDataEvents("OnRawChunkSent " + e.Value.ToDiagnosticsString());
+			DebugDataEvents("OnRawChunkSent " + e.Value.ToString());
 
 			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkSent, this, e);
 		}
@@ -3925,7 +3925,7 @@ namespace YAT.Domain
 		[CallingContract(IsAlwaysSequentialIncluding = "OnRawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
 		{
-			DebugDataEvents("OnRawChunkReceived " + e.Value.ToDiagnosticsString());
+			DebugDataEvents("OnRawChunkReceived " + e.Value.ToString());
 
 			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkReceived, this, e);
 		}
@@ -3987,7 +3987,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
-			DebugDataEvents("OnDisplayElementsSent " + e.Elements.ElementsToDiagnosticsString());
+			DebugDataEvents("OnDisplayElementsSent " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
@@ -3996,7 +3996,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
-			DebugDataEvents("OnDisplayElementsReceived " + e.Elements.ElementsToDiagnosticsString());
+			DebugDataEvents("OnDisplayElementsReceived " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
@@ -4051,7 +4051,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineSentReplaced(DisplayElementsEventArgs e)
 		{
-			DebugDataEvents("OnCurrentDisplayLineSentReplaced " + e.Elements.ElementsToDiagnosticsString());
+			DebugDataEvents("OnCurrentDisplayLineSentReplaced " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineSentReplaced, this, e);
@@ -4060,7 +4060,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineReceivedReplaced(DisplayElementsEventArgs e)
 		{
-			DebugDataEvents("OnCurrentDisplayLineReceivedReplaced " + e.Elements.ElementsToDiagnosticsString());
+			DebugDataEvents("OnCurrentDisplayLineReceivedReplaced " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineReceivedReplaced, this, e);
@@ -4201,7 +4201,7 @@ namespace YAT.Domain
 		{
 			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
+			return (ToExtendedDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
 		/// <summary>
@@ -4210,11 +4210,11 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
+		public virtual string ToExtendedDiagnosticsString()
 		{
 			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToDiagnosticsString(""));
+			return (ToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -4223,7 +4223,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		public virtual string ToExtendedDiagnosticsString(string indent)
 		{
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
@@ -4239,25 +4239,25 @@ namespace YAT.Domain
 				if (this.rawTerminal != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> RawTerminal: ");
-					sb.AppendLine(this.rawTerminal.ToDiagnosticsString(indent + "   "));
+					sb.AppendLine(this.rawTerminal.ToExtendedDiagnosticsString(indent + "   "));
 				}
 
 				if (this.txRepository != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> TxRepository: ");
-					sb.Append    (this.txRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
+					sb.Append    (this.txRepository.ToExtendedDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 				}
 
 				if (this.bidirRepository != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> BidirRepository: ");
-					sb.Append    (this.bidirRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
+					sb.Append    (this.bidirRepository.ToExtendedDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 				}
 
 				if (this.bidirRepository != null) // Possible during disposing.
 				{
 					sb.AppendLine(indent + "> RxRepository: ");
-					sb.Append    (this.rxRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
+					sb.Append    (this.rxRepository.ToExtendedDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 				}
 			}
 			return (sb.ToString());

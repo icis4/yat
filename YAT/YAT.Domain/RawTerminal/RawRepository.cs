@@ -179,13 +179,12 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual string QueueToString()
 		{
-			using (var sw = new StringWriter(CultureInfo.InvariantCulture))
-			{
-				foreach (var re in ToChunks())
-					sw.Write(re.ToString());
+			var sb = new StringBuilder();
 
-				return (sw.ToString());
-			}
+			foreach (var re in ToChunks())
+				sb.Append(re.ToString());
+
+			return (sb.ToString());
 		}
 
 		/// <summary>
@@ -194,9 +193,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
+		public virtual string ToExtendedDiagnosticsString()
 		{
-			return (ToDiagnosticsString(""));
+			return (ToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -205,11 +204,11 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		public virtual string ToExtendedDiagnosticsString(string indent)
 		{
 			return (indent + "> Capacity: " + this.capacity + Environment.NewLine +
 					indent + "> Queue: " + Environment.NewLine +
-					QueueToDiagnosticsString(indent + "   "));
+					QueueToExtendedDiagnosticsString(indent + "   "));
 		}
 
 		/// <summary>
@@ -218,9 +217,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="QueueToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string QueueToDiagnosticsString()
+		public virtual string QueueToExtendedDiagnosticsString()
 		{
-			return (QueueToDiagnosticsString(""));
+			return (QueueToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -229,7 +228,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="QueueToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string QueueToDiagnosticsString(string indent)
+		public virtual string QueueToExtendedDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 
@@ -237,7 +236,7 @@ namespace YAT.Domain
 			foreach (var re in ToChunks())
 			{
 				sb.AppendLine(indent + "> RawChunk#" + (i++) + ":");
-				sb.Append(re.ToDiagnosticsString(indent + "   "));
+				sb.Append(re.ToExtendedDiagnosticsString(indent + "   "));
 			}
 
 			if (i == 0)
