@@ -130,9 +130,9 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected string ContentAsPrintableString
+		public virtual string ContentToString()
 		{
-			get { return (Utilities.ByteHelper.FormatHexString(Content)); }
+			return (Utilities.ByteHelper.FormatHexString(Content));
 		}
 
 		#endregion
@@ -147,7 +147,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ContentAsPrintableString);
+			return (ContentToString());
 		}
 
 		/// <summary>
@@ -156,9 +156,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
+		public virtual string ToExtendedDiagnosticsString()
 		{
-			return (ToDiagnosticsString(""));
+			return (ToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -167,11 +167,11 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		public virtual string ToExtendedDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
 
-			sb.AppendLine(indent + "> Content:   " + ContentAsPrintableString);
+			sb.AppendLine(indent + "> Content:   " + ContentToString());
 			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.CurrentCulture), 2));
 			sb.AppendLine(indent + "> PortStamp: " + PortStamp);
 			sb.AppendLine(indent + "> Direction: " + Direction);

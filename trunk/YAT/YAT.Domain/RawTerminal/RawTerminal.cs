@@ -584,25 +584,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual string RepositoryToDiagnosticsString(RepositoryType repositoryType, string indent)
+		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType, string indent)
 		{
 			AssertNotDisposed();
 
-			string s = null;
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.None:        /* Nothing to do. */                            break;
+					case RepositoryType.None:  return (null);
 
-					case RepositoryType.Tx:    s = this.txRepository   .ToDiagnosticsString(indent); break;
-					case RepositoryType.Bidir: s = this.bidirRepository.ToDiagnosticsString(indent); break;
-					case RepositoryType.Rx:    s = this.rxRepository   .ToDiagnosticsString(indent); break;
+					case RepositoryType.Tx:    return (this.txRepository   .ToExtendedDiagnosticsString(indent));
+					case RepositoryType.Bidir: return (this.bidirRepository.ToExtendedDiagnosticsString(indent));
+					case RepositoryType.Rx:    return (this.rxRepository   .ToExtendedDiagnosticsString(indent));
 
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
-			return (s);
 		}
 
 		private void DisposeRepositories()
@@ -913,7 +911,7 @@ namespace YAT.Domain
 		{
 			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToDiagnosticsString()); // No 'real' ToString() method required yet.
+			return (ToExtendedDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
 
 		/// <summary>
@@ -922,11 +920,11 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
+		public virtual string ToExtendedDiagnosticsString()
 		{
 			// See below why AssertNotDisposed() is not called on such basic method!
 
-			return (ToDiagnosticsString(""));
+			return (ToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -935,7 +933,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		public virtual string ToExtendedDiagnosticsString(string indent)
 		{
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
@@ -944,13 +942,13 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				sb.AppendLine(indent + "> TxRepository: ");
-				sb.Append(this.txRepository.ToDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
+				sb.Append(this.txRepository.ToExtendedDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
 
 				sb.AppendLine(indent + "> BidirRepository: ");
-				sb.Append(this.bidirRepository.ToDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
+				sb.Append(this.bidirRepository.ToExtendedDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 
 				sb.AppendLine(indent + "> RxRepository: ");
-				sb.Append(this.rxRepository.ToDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
+				sb.Append(this.rxRepository.ToExtendedDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
 
 				sb.Append(indent + "> I/O: " + this.io.ToString());
 			}

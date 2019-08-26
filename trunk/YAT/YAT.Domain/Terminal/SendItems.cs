@@ -68,9 +68,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="object.ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
+		public virtual string ToExtendedDiagnosticsString()
 		{
-			return (ToDiagnosticsString(""));
+			return (ToExtendedDiagnosticsString(""));
 		}
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="object.ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public abstract string ToDiagnosticsString(string indent);
+		public abstract string ToExtendedDiagnosticsString(string indent);
 
 		#endregion
 	}
@@ -124,7 +124,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public override string ToDiagnosticsString(string indent)
+		public override string ToExtendedDiagnosticsString(string indent)
 		{
 			return (indent + "> Data: " + DataAsPrintableString + Environment.NewLine);
 		}
@@ -184,7 +184,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public override string ToDiagnosticsString(string indent)
+		public override string ToExtendedDiagnosticsString(string indent)
 		{
 			return (indent + "> Data         : " + DataAsPrintableString + Environment.NewLine +
 			        indent + "> DefaultRadix : " + DefaultRadix          + Environment.NewLine +
@@ -233,7 +233,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		public virtual string ToExtendedDiagnosticsString(string indent)
 		{
 			return (indent + "> FilePath     : " + FilePath     + Environment.NewLine +
 			        indent + "> DefaultRadix : " + DefaultRadix + Environment.NewLine);
