@@ -160,6 +160,25 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
+		/// The number of characters of the data content elements contained in the collection.
+		/// </summary>
+		public virtual int DataContentCharCount
+		{
+			get
+			{
+				int count = 0;
+
+				foreach (var de in this)
+				{
+					if (de.IsDataContent)
+						count += de.CharCount;
+				}
+
+				return (count);
+			}
+		}
+
+		/// <summary>
 		/// The number of raw bytes of the elements contained in the collection.
 		/// </summary>
 		/// <remarks>
@@ -269,7 +288,7 @@ namespace YAT.Domain
 		/// <exception cref="InvalidOperationException">
 		/// The collection is empty.
 		/// </exception>
-		public virtual bool TryRemoveLastDataContentChar()
+		public virtual void RemoveLastDataContentChar()
 		{
 			if (Count == 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -290,17 +309,15 @@ namespace YAT.Domain
 					else if (current.CharCount == 1)
 					{
 						RemoveAt(index); // A single element can be removed,
-						return (true);   // done.
+						break;           // done.
 					}
 					else if (current.CharCount > 1)
 					{
 						current.RemoveLastChar(); // A single element can be removed,
-						return (true);            // done.
+						break;           // done.
 					}
 				}
 			}
-
-			return (false);
 		}
 
 		/// <remarks>
