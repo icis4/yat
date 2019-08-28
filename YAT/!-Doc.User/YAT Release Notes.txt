@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.1.0 :: 2019-0?-??
+YAT 2.1.0 :: 2019-1?-??
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -154,8 +154,8 @@ Fixed bugs:
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
-  #422, #423, #432, #434, #435, #441, #443, #444, #450, #452, #453, #456, #461, #467) which further
-  refines the fix to former bugs #408 and #409.
+  #422, #423, #432, #434, #435, #441, #443, #444, #450, #452, #453, #456, #461, #467, #468) which
+  further refines the fix to former bugs #408 and #409.
 - Attempted to fix rare 'TargetInvocationException' caused by 'IndexOutOfRangeException' (bug #446).
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449, #458).
@@ -1516,16 +1516,17 @@ XTerm232 1.0.0 :: 2003-10-14
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0
+YAT 2
 ----------------------------------------------------------------------------------------------------
-YAT 2.0 is now in maintenance mode, i.e. focus on bug fixes and minor changes, while work for
-YAT 4.0 is already ongoing.
+YAT 2 is in maintenance mode now, i.e. focus on bug fixes and minor changes, while work for YAT 4
+is already ongoing. Still, YAT 2.4 is intended to upgrade to the .NET 4.0 runtime and framework,
+versions 2.2 and 2.3 will be skipped in favor of the digit 4.
 
-(YAT 3.0 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became public
-around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
+(Major version 3 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became
+public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4.0 with Scripting :: Expected in late 2019 or 2020
+YAT 4 with Scripting :: Expected in 2020
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
