@@ -1365,17 +1365,32 @@ namespace YAT.Domain
 					if (lineState.Elements.CharCount > 0)
 					{
 						// ...remove it in the current line...
-						lineState.Elements.RemoveLastDataContentChar();
-						RemoveSpaceIfNecessary(d, lineState.Elements);
+						if (lineState.Elements.TryRemoveLastDataContentChar())
+							RemoveSpaceIfNecessary(d, lineState.Elements);
 
 						if (elementsToAdd.CharCount > 0)
 						{
 							// ..as well as in the pending elements:
-							elementsToAdd.RemoveLastDataContentChar();
-							RemoveSpaceIfNecessary(d, elementsToAdd);
+							if (elementsToAdd.TryRemoveLastDataContentChar())
+								RemoveSpaceIfNecessary(d, elementsToAdd);
+							else
+								replaceAlreadyStartedLine = true;
+						}
+						else
+						{
+							replaceAlreadyStartedLine = true;
 						}
 
-						replaceAlreadyStartedLine = true;
+						// Attention:
+						// If 'elementsToAdd' contains a character to remove, it must be removed
+						// there and the current line must not be replaced. Only if 'elementsToAdd'
+						// doesn't contain a character to remove 'replaceAlreadyStartedLine' may
+						// be set to 'true';
+						//
+						// Background:
+						// Setting 'replaceAlreadyStartedLine' to 'true' will instruct the caller to
+						// call OnCurrentDisplayLineReplaced(). However, that method will be called
+						// *before* 'elementsToAdd' will get added by OnDisplayElement[s]Added() !!
 					}
 				}
 			}

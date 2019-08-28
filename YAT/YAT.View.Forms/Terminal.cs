@@ -33,7 +33,7 @@
 ////#define DEBUG_MDI
 
 	// Enable debugging of monitor content:
-////#define DEBUG_MONITOR_DATA
+////#define DEBUG_MONITOR_CONTENT
 
 #endif // DEBUG
 
@@ -858,7 +858,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
+					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
 					{
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
@@ -905,7 +905,7 @@ namespace YAT.View.Forms
 				var responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.AllEscapes))
+					if (!ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.AllEscapes))
 					{
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.ControlText;
@@ -1013,7 +1013,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
+					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
 					{
 						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
@@ -5213,7 +5213,7 @@ namespace YAT.View.Forms
 		{
 			SetFixedStatusText("Printing data...");
 
-			using (var printer = new Utilities.RtfPrinter(settings))
+			using (var printer = new RtfPrinter(settings))
 			{
 				try
 				{
@@ -5787,12 +5787,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Adding sent " + e.Elements.ToString() + "...");
+				DebugMonitorContent("Adding sent " + e.Elements.ToString() + "...");
 
 				monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				DebugMonitorData("...done");
+				DebugMonitorContent("...done");
 
 				SetSentDataCountAndRateStatus();
 			}
@@ -5807,12 +5807,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Adding received " + e.Elements.ToString() + "...");
+				DebugMonitorContent("Adding received " + e.Elements.ToString() + "...");
 
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				DebugMonitorData("...done");
+				DebugMonitorContent("...done");
 
 				SetReceivedDataCountAndRateStatus();
 			}
@@ -5827,12 +5827,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Replacing current line by sent " + e.Elements.ToString() + "...");
+				DebugMonitorContent("Replacing current line by sent " + e.Elements.ToString() + "...");
 
 				monitor_Tx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				DebugMonitorData("...done");
+				DebugMonitorContent("...done");
 			}
 		}
 
@@ -5845,12 +5845,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Replacing current line by received " + e.Elements.ToString() + "...");
+				DebugMonitorContent("Replacing current line by received " + e.Elements.ToString() + "...");
 
 				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Rx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				DebugMonitorData("...done");
+				DebugMonitorContent("...done");
 			}
 		}
 
@@ -5863,12 +5863,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Clearing current line sent");
+				DebugMonitorContent("Clearing current line sent");
 
 				monitor_Tx   .ClearCurrentLine();
 				monitor_Bidir.ClearCurrentLine();
 
-				DebugMonitorData("...done");
+				DebugMonitorContent("...done");
 			}
 		}
 
@@ -5881,12 +5881,12 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				DebugMonitorData("Clearing current line received");
+				DebugMonitorContent("Clearing current line received");
 
 				monitor_Bidir.ClearCurrentLine();
 				monitor_Rx   .ClearCurrentLine();
 
-				DebugMonitorData("...done");
+				DebugMonitorContent("...done");
 			}
 		}
 
@@ -6852,8 +6852,8 @@ namespace YAT.View.Forms
 			DebugMessage(message);
 		}
 
-		[Conditional("DEBUG_MONITOR_DATA")]
-		private void DebugMonitorData(string message)
+		[Conditional("DEBUG_MONITOR_CONTENT")]
+		private void DebugMonitorContent(string message)
 		{
 			DebugMessage(message);
 		}

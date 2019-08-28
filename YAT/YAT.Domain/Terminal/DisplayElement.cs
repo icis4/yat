@@ -907,7 +907,7 @@ namespace YAT.Domain
 		/// Needed to handle backspace; consequence of <see cref="Append(DisplayElement)"/> above.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		public virtual void RemoveLastContentChar()
+		public virtual void RemoveLastChar()
 		{
 			if (!IsContent)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The element is no content!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
