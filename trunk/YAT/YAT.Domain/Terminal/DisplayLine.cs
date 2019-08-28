@@ -261,7 +261,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Removes the last "true" character from the <see cref="DisplayElementCollection"/>.
+		/// Tries to remove the last "true" character from the <see cref="DisplayElementCollection"/>.
 		/// </summary>
 		/// <remarks>
 		/// Needed to handle backspace, thus applies to data content only.
@@ -269,7 +269,7 @@ namespace YAT.Domain
 		/// <exception cref="InvalidOperationException">
 		/// The collection is empty.
 		/// </exception>
-		public virtual void RemoveLastDataContentChar()
+		public virtual bool TryRemoveLastDataContentChar()
 		{
 			if (Count == 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -290,15 +290,17 @@ namespace YAT.Domain
 					else if (current.CharCount == 1)
 					{
 						RemoveAt(index); // A single element can be removed,
-						break;           // done.
+						return (true);   // done.
 					}
 					else if (current.CharCount > 1)
 					{
-						current.RemoveLastContentChar(); // A single element can be removed,
-						break;                           // done.
+						current.RemoveLastChar(); // A single element can be removed,
+						return (true);            // done.
 					}
 				}
 			}
+
+			return (false);
 		}
 
 		/// <remarks>
