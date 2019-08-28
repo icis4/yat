@@ -637,29 +637,10 @@ namespace YAT.View.Controls
 					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a result that has not been implemented here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			bool hadElementsToClear = false;
 			if (clearCurrentLineInListBoxesIsNeeded)
-				ClearCurrentLineInListBoxes(out hadElementsToClear); // Remember that "current line" only applies to a started but not yet completed line.
+				ClearCurrentLineInListBoxes(); // Remember that "current line" only applies to a started but not yet completed line.
 
-			bool addElementsOrLinesIsNeeded = hadElementsToClear;
-			switch (result)
-			{
-				case ClearResult.HasClearedButIsIncomplete: // Elements were pending, and the line has for sure already started earlier.
-				case ClearResult.HasClearedAndCompleted:    // Elements were pending, and the line has for sure already started earlier.
-					addElementsOrLinesIsNeeded = true;
-					break;
-
-				case ClearResult.NoElementOrLinePending:    // Nothing was pending, cannot tell for sure that adding is needed.
-				case ClearResult.NoLineOngoing:
-					// Nothing more to do, value of 'hadElementsToClear' has already determined whether adding is needed.
-					break;
-
-				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a result that has not been implemented here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-
-			if (addElementsOrLinesIsNeeded)
-				AddElementsOrLines(elements);
+			AddElementsOrLines(elements);
 		}
 
 		/// <summary></summary>
@@ -1799,10 +1780,8 @@ namespace YAT.View.Controls
 				return (ClearResult.NoElementOrLinePending);
 		}
 
-		private void ClearCurrentLineInListBoxes(out bool hadElementsToClear)
+		private void ClearCurrentLineInListBoxes()
 		{
-			hadElementsToClear = false;
-
 		////var lblin = fastListBox_LineNumbers => Nothing to do (yet).
 			var lbmon = fastListBox_Monitor;
 
@@ -1813,17 +1792,12 @@ namespace YAT.View.Controls
 				{
 					dl.Clear();
 					lbmon.Invalidate();
-
-					hadElementsToClear = true;
 				}
 			}
 		}
 
 		private void RemoveCurrentLineFromListBoxes()
-	////private void RemoveCurrentLineFromListBoxes(out bool hadElementsToRemove) <= Prepared for symmetricity with ClearCurrentLineInListBoxes() above.
 		{
-		////hadElementsToRemove = false;
-
 			var lblin = fastListBox_LineNumbers;
 			var lbmon = fastListBox_Monitor;
 
@@ -1840,8 +1814,6 @@ namespace YAT.View.Controls
 					lblin.TopIndex = adjustedTopIndex;
 					lbmon.TopIndex = adjustedTopIndex;
 					DebugVerticalAutoScroll("....................done");
-
-				////hadElementsToRemove = true;
 				}
 			}
 		}

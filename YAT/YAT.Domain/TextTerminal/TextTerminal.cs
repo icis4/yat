@@ -1222,8 +1222,6 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteContent(Settings.TextDisplaySettings displaySettings, LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
 		{
-			replaceAlreadyStartedLine = false;
-
 			// Convert content:
 			DisplayElement de;
 			bool isBackspace;
@@ -1331,6 +1329,8 @@ namespace YAT.Domain
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
+			replaceAlreadyStartedLine = false;
+
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
 				if (isBackspace)
@@ -1361,36 +1361,33 @@ namespace YAT.Domain
 
 				if (isBackspace)
 				{
-					// If the current line does contain a preceeding character...
-					if (lineState.Elements.CharCount > 0)
+					// If the current line does contain a preceeding "true" character...
+					if (lineState.Elements.DataContentCharCount > 0)
 					{
 						// ...remove it in the current line...
-						if (lineState.Elements.TryRemoveLastDataContentChar())
-							RemoveSpaceIfNecessary(d, lineState.Elements);
+						lineState.Elements.RemoveLastDataContentChar();
+						RemoveSpaceIfNecessary(d, lineState.Elements);
 
-						if (elementsToAdd.CharCount > 0)
+						if (elementsToAdd.DataContentCharCount > 0)
 						{
 							// ..as well as in the pending elements:
-							if (elementsToAdd.TryRemoveLastDataContentChar())
-								RemoveSpaceIfNecessary(d, elementsToAdd);
-							else
-								replaceAlreadyStartedLine = true;
+							elementsToAdd.RemoveLastDataContentChar();
+							RemoveSpaceIfNecessary(d, elementsToAdd);
 						}
 						else
 						{
+							elementsToAdd.Clear();
 							replaceAlreadyStartedLine = true;
 						}
 
 						// Attention:
-						// If 'elementsToAdd' contains a character to remove, it must be removed
-						// there and the current line must not be replaced. Only if 'elementsToAdd'
-						// doesn't contain a character to remove 'replaceAlreadyStartedLine' may
-						// be set to 'true';
 						//
-						// Background:
 						// Setting 'replaceAlreadyStartedLine' to 'true' will instruct the caller to
 						// call OnCurrentDisplayLineReplaced(). However, that method will be called
 						// *before* 'elementsToAdd' will get added by OnDisplayElement[s]Added() !!
+						//
+						// So, if 'elementsToAdd' contains a character to remove, it can be removed
+						// there and the current line does not need to be replaced.
 					}
 				}
 			}
