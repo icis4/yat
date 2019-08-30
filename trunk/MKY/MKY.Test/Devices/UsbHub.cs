@@ -133,11 +133,6 @@ namespace MKY.Test.Devices
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
 		private const int ExecutionTimeout = 3000;
 
-	/////// <summary>Hub seems to also require some delay between two executions, otherwise execution will fail.</summary>
-	/////// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.cmd".</remarks>
-	////[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
-	////private const int NextExecutionWaitTime = 3000; PENDING
-
 		/// <summary>Delay until driver has been loaded, otherwise subsequent calls will fail.</summary>
 		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.cmd".</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
@@ -163,8 +158,6 @@ namespace MKY.Test.Devices
 		/// Assume that all used outputs are enabled at first.
 		/// </remarks>
 		private static UsbHubSetting staticSettingProxy = UsbHubSetting.All;
-
-	////private static DateTime staticLastExectionTimeStamp = DateTime.MinValue; PENDING
 
 		#endregion
 
@@ -369,16 +362,11 @@ namespace MKY.Test.Devices
 		/// Intentionally using command line instead of MCD USB .NET component to avoid dependency
 		/// to the MCD USB assembly (which would have to be installed on each computer testing YAT).
 		///
-		/// Execution requires approx 3 seconds.
+		/// Execution requires less than <see cref="ExecutionTimeout"/>.
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		private static bool TryExecute(string arguments, out string outputAndErrorResult)
 		{
-		////var nextExecutionTimeStamp = (staticLastExectionTimeStamp + TimeSpan.FromMilliseconds(NextExecutionWaitTime));
-		////var nextExecutionWaitDelta = (nextExecutionTimeStamp - DateTime.Now);
-		////if (nextExecutionWaitDelta.TotalMilliseconds > 0)
-		////	Thread.Sleep((int)Math.Ceiling(nextExecutionWaitDelta.TotalMilliseconds)); PENDING
-
 			var p = new Process();
 			p.StartInfo.FileName = Executable;
 			p.StartInfo.Arguments = arguments;
@@ -389,7 +377,6 @@ namespace MKY.Test.Devices
 			p.Start();
 
 			p.WaitForExit(ExecutionTimeout);
-		////staticLastExectionTimeStamp = DateTime.Now; PENDING
 			if (p.ExitCode == 0)
 			{
 				// Retrieve result:
