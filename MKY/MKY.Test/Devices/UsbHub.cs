@@ -395,14 +395,14 @@ namespace MKY.Test.Devices
 				// Retrieve result:
 				var sb = new StringBuilder();
 
-				while (!p.StandardOutput.EndOfStream)
-					sb.AppendLine(p.StandardOutput.ReadLine());
-
-				while (!p.StandardError.EndOfStream)
-					sb.AppendLine(p.StandardOutput.ReadLine());
-
-				outputAndErrorResult = sb.ToString();
-				return (true);
+				while (!p.StandardOutput.EndOfStream)       // Just Append(), not AppendLine(), result will just be e.g....
+					sb.Append(p.StandardOutput.ReadLine()); // 10111
+				                                            // ...or...
+				while (!p.StandardError.EndOfStream)        // FTDI open error: FT_DEVICE_NOT_FOUND
+					sb.Append(p.StandardOutput.ReadLine()); // ...and anything else indicates an unexpected result.
+				                                            //
+				outputAndErrorResult = sb.ToString();       // AppendLine() would result in e.g. "10111\r\n", i.e. the EOL would
+				return (true);                              // have to be trimmed before forwarding to TryParseSettingFromBinaryString().
 			}
 			else
 			{
