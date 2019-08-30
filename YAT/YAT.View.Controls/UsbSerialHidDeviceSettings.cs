@@ -34,8 +34,8 @@ using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.IO.Usb;
 using MKY.IO.Serial.Usb;
+using MKY.IO.Usb;
 using MKY.Windows.Forms;
 
 #endregion
