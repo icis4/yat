@@ -420,6 +420,8 @@ namespace MKY.Win32
 			/// of 128 bytes. While this conflicts with the USB specification (the maximum string
 			/// length is 126 wide characters (not including the terminating NULL character)) only
 			/// that value properly works!
+			///
+			/// Saying hello to StyleCop ;-.
 			/// </remarks>
 			private const int SafeStringDescriptorBufferLength = 128;
 

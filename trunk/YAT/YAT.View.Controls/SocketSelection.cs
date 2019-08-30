@@ -32,6 +32,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
@@ -602,15 +603,17 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				string message =
-					"Remote port is invalid, valid values are numbers from " +
-					IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-					IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
+				var sb = new StringBuilder();
+				sb.Append("Remote port is invalid, valid values are numbers from ");
+				sb.Append(IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture));
+				sb.Append(" to ");                            // 'InvariantCulture' for TCP and UDP ports!
+				sb.Append(IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture));
+				sb.Append(".");
 
 				MessageBoxEx.Show
 				(
 					this,
-					message,
+					sb.ToString(),
 					"Invalid Input",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -689,15 +692,17 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				string message =
-					"Local port is invalid, valid values are numbers from " +
-					IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-					IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
+				var sb = new StringBuilder();
+				sb.Append("Local port is invalid, valid values are numbers from ");
+				sb.Append(IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture));
+				sb.Append(" to ");                            // 'InvariantCulture' for TCP and UDP ports!
+				sb.Append(IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture));
+				sb.Append(".");
 
 				MessageBoxEx.Show
 				(
 					this,
-					message,
+					sb.ToString(),
 					"Invalid Input",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

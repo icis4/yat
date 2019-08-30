@@ -5104,7 +5104,6 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
@@ -5168,14 +5167,17 @@ namespace YAT.View.Forms
 			{
 				SetFixedStatusText("Selected lines not saved!");
 
-				string message =
-					"Unable to save selected lines to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"System error message:"                 + Environment.NewLine + e.Message;
+				var sb = new StringBuilder();
+				sb.AppendLine("Unable to save selected lines to file");
+				sb.AppendLine(filePath);
+				sb.AppendLine();
+				sb.AppendLine("System error message:");
+				sb.Append    (e.Message);
 
 				MessageBoxEx.Show
 				(
 					this,
-					message,
+					sb.ToString(),
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -5208,7 +5210,6 @@ namespace YAT.View.Forms
 			}
 		}
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void PrintMonitor(Controls.Monitor monitor, System.Drawing.Printing.PrinterSettings settings)
 		{
 			SetFixedStatusText("Printing data...");
@@ -5224,14 +5225,16 @@ namespace YAT.View.Forms
 				{
 					SetFixedStatusText("Data not printed!");
 
-					string message =
-						"Unable to print data!" + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine + ex.Message;
+					var sb = new StringBuilder();
+					sb.AppendLine("Unable to print data!");
+					sb.AppendLine();
+					sb.AppendLine("System error message:");
+					sb.Append    (ex.Message);
 
 					MessageBoxEx.Show
 					(
 						this,
-						message,
+						sb.ToString(),
 						"Print Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

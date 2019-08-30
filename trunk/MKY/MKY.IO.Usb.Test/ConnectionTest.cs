@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using MKY.Test.Devices;
 
 using NUnit.Framework;
@@ -47,6 +49,7 @@ namespace MKY.IO.Usb.Test
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Ser/HID' just happens to contain 'Ser'...")]
 		[Test, DeviceAIsAvailableCategory, MKY.Test.UsbHub1IsAvailableCategory]
 		public virtual void TestConnectDisconnectA()
 		{
@@ -67,6 +70,7 @@ namespace MKY.IO.Usb.Test
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Ser/HID' just happens to contain 'Ser'...")]
 		[Test, DeviceBIsAvailableCategory, MKY.Test.UsbHub1IsAvailableCategory]
 		public virtual void TestConnectDisconnectB()
 		{

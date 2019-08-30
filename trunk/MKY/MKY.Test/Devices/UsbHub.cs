@@ -268,6 +268,9 @@ namespace MKY.Test.Devices
 		/// Enables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Just a debug message.")]
 		public static bool Enable(UsbHubDevice device, UsbHubSetting enableMask)
 		{
 			DebugMessage(device, "Enabling  " + SettingToBinaryString(enableMask) + " mask. " +
@@ -285,6 +288,9 @@ namespace MKY.Test.Devices
 		/// Disables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Just a debug message.")]
 		public static bool Disable(UsbHubDevice device, UsbHubSetting disableMask)
 		{
 			DebugMessage(device, "Disabling " + SettingToBinaryString(disableMask) + " mask. " +

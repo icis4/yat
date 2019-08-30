@@ -472,7 +472,6 @@ namespace YAT.View.Forms
 			// Do nothing.
 		}
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
@@ -485,15 +484,16 @@ namespace YAT.View.Forms
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsInEdit.Terminal.TerminalType + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			string message =
-				"Reset all settings to default values?" + Environment.NewLine +
-				type + " and advanced settings will also be reset!";
-				//// Actually text and binary are reset. But only one of both is in use anyway...
+			var sb = new StringBuilder();
+			sb.AppendLine("Reset all settings to default values?");
+			sb.Append    (type);
+			sb.Append       (" and advanced settings will also be reset!");
+			//// Actually text and binary are reset. But only one of both is in use anyway...
 
 			if (MessageBoxEx.Show
 				(
 				this,
-				message,
+				sb.ToString(),
 				"Defaults?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,

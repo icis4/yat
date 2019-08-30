@@ -704,7 +704,6 @@ namespace YAT.View.Forms
 		// Validation
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool ValidateFileNamePart(string fileNamePart, string title)
 		{
@@ -759,24 +758,23 @@ namespace YAT.View.Forms
 			);
 		}
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool InhibitNamingConflicts()
 		{
 			if ((this.settingsInEdit.SameDirection) && (this.settingsInEdit.SameExtension) &&
 			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
-				string message =
-					"To avoid naming conflicts, files must either be named by type or separated into folders (Port/Raw/Neat) or have different extensions." +
-					Environment.NewLine + Environment.NewLine +
-					"Do you want to name the files by type [Yes] or separate them into folders [No]?" +
-					Environment.NewLine + Environment.NewLine +
-					"You may also cancel and set different extensions, or manually change the settings.";
+				var sb = new StringBuilder();
+				sb.AppendLine("To avoid naming conflicts, files must either be named by type or separated into folders (Port/Raw/Neat) or have different extensions.");
+				sb.AppendLine();
+				sb.AppendLine("Do you want to name the files by type [Yes] or separate them into folders [No]?");
+				sb.AppendLine();
+				sb.Append    ("You may also cancel and set different extensions, or manually change the settings.");
 
 				switch (MessageBoxEx.Show
 					(
 						this,
-						message,
+						sb.ToString(),
 						"Naming Conflict",
 						MessageBoxButtons.YesNoCancel,
 						MessageBoxIcon.Question

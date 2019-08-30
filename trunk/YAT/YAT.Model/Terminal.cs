@@ -179,7 +179,7 @@ namespace YAT.Model
 		///  2. Start a new terminal as <see cref="Domain.IOType.TcpClient"/>.
 		///  3. [File > Close All Terminals]
 		/// With handling/workaround, debug output will show the issue, but execution will not get
-		/// halted by the debugger. Without handling/workaround, the exeception will get handled by
+		/// halted by the debugger. Without handling/workaround, the exception will get handled by
 		/// the debugger.
 		///
 		/// Note that the issue only happens in case both server and client are in the same instance
