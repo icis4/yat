@@ -4272,7 +4272,16 @@ namespace YAT.Model
 			}
 			else // This indicates an invalid operation, since a command must have been validated before calling this method!
 			{
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a valid text command!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
+			////throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a valid text command!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
+
+				// Temporary workaround until bug #469 has been resolved:
+				OnMessageInputRequest
+				(
+					"Command '" + c + "' does not specify a valid text command!",
+					"Invalid Text Command",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning
+				);
 			}
 		}
 
@@ -5217,7 +5226,7 @@ namespace YAT.Model
 					ErrorHelper.ComposeMessage("Unable to switch log on!", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
+					MessageBoxIcon.Error
 				);
 
 				return (false);
@@ -5264,12 +5273,15 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
+				string yatLead, yatText;
+				ErrorHelper.MakeLogHint(this.log, out yatLead, out yatText);
+
 				OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to clear log!", ex),
+					ErrorHelper.ComposeMessage("Unable to switch log off!", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
+					MessageBoxIcon.Error
 				);
 
 				return (false);
@@ -5379,7 +5391,7 @@ namespace YAT.Model
 							message,
 							"Folder Error",
 							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
+							MessageBoxIcon.Error
 						);
 
 						return (false);
