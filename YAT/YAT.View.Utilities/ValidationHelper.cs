@@ -69,23 +69,29 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateRadix(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
+		public static bool ValidateRadix(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, Domain.Radix radix)
 		{
-			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, modes, defaultRadix))
+			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, modes, radix))
 			{
 				return (true);
 			}
 			else
 			{
-				var sb = new StringBuilder();
-				sb.Append("The ");
-				sb.Append(     description);
-				sb.Append(              @" is not valid with """);
-				sb.Append(                                     textToValidate);
-				sb.Append(                                                 @""". Clear or change the command text before changing the ");
-				sb.Append(                                                                                                            description);
-				sb.Append(                                                                                                                      ".");
+				var radixName = ((Domain.RadixEx)radix).ToString();
+
+				var sb = new StringBuilder();           // The below error text must cover the following cases:
+				sb.Append("The ");                      //  > User changes the explicit default radix.
+				sb.Append(     description);            //  > User activates or deactivates the explicit default radix.
+				sb.Append(               " [");         //  > User changes the parse mode, e.g. re-enables escapes.
+				sb.Append(                  radixName); // The error text must suit all these cases.
+				sb.Append(                         @"] is not valid with """);
+				sb.Append(                                            textToValidate);
+				sb.Append(                                                        @""". ");
+				sb.Append("Clear or change the command text to fit a ");
+				sb.Append(                                           description);
+				sb.Append(                                                     " of [");
+				sb.Append(                                                           radixName);
+				sb.Append(                                                                   "].");
 
 				var errorMessage = sb.ToString();
 				var errorCaption = "Invalid " + description;
