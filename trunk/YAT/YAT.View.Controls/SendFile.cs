@@ -242,7 +242,7 @@ namespace YAT.View.Controls
 				{
 					this.useExplicitDefaultRadix = value;
 
-					if (value) // Explicit => Refresh the command controls.
+					if (value) // Explicit => Refresh the dependent controls.
 						SetRecentAndCommandControls();
 
 					SetExplicitDefaultRadixControls();

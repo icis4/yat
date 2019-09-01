@@ -151,6 +151,10 @@ namespace YAT.View.Controls
 			get { return (this.command); }
 			set
 			{
+				// Attention:
+				// Similar code exists in SendText.Command.set{}.
+				// Changes here may have to be applied there too.
+
 				if (this.command != value)
 				{
 					if (value != null)
@@ -195,20 +199,24 @@ namespace YAT.View.Controls
 			get { return (this.useExplicitDefaultRadix); }
 			set
 			{
+				// Attention:
+				// Similar code exists in SendText.UseExplicitDefaultRadix.set{}.
+				// Changes here may have to be applied there too.
+
 				if (this.useExplicitDefaultRadix != value)
 				{
 					this.useExplicitDefaultRadix = value;
 
-					if (value) // Explicit => Refresh the command controls.
+					if (value) // Explicit => Simply refresh the command (the radix hasn't changed (yet)).
 						SetControls();
 
 					SetExplicitDefaultRadixControls();
 
 					if (!value) // Implicit => Reset default radix.
-						ValidateAndConfirmRadix(Command.DefaultRadixDefault);
-				}
-			}
-		}
+						ValidateAndConfirmDefaultRadix(Command.DefaultRadixDefault); // \remind (2019-09-01 / MKY / bug #469)
+				}                                                                    // Better set 'isValidated' to 'false'
+			}                                                                        // and validate later. But that requires
+		}                                                                            // some work and re-testing => future.
 
 		/// <summary></summary>
 		[Browsable(false)]
@@ -218,10 +226,19 @@ namespace YAT.View.Controls
 			get { return (this.parseModeForText); }
 			set
 			{
+				// Attention:
+				// Similar code exists in SendText.ParseMode.set{}.
+				// Changes here may have to be applied there too.
+
 				if (this.parseModeForText != value)
 				{
 					this.parseModeForText = value;
 					SetControls();
+
+					// \remind (2019-09-01 / MKY / bug #469)
+					// Re-validation would be needed because change could enable or disable escapes.
+					// But neither ValidateChildren() nor setting 'isValidated' to 'false' and
+					// validate later is sufficient. Fix requires some work and re-testing => future.
 				}
 			}
 		}
@@ -333,7 +350,7 @@ namespace YAT.View.Controls
 			// \remind (2019-08-08 / MKY)
 			// There is a not-so-nice behavior in case [Default Radix] is active:
 			//  > Upon entering the dialog, the text field gets selected, OK.
-			//  > When using a Alt+<0..9> shortcut, the [Default Radix] get selected.
+			//  > When using an Alt+<0..9> shortcut, the [Default Radix] gets selected.
 			// No solution found, but considered acceptable since most won't use [Default Radix].
 		}
 
@@ -359,12 +376,12 @@ namespace YAT.View.Controls
 			// Similar code exists in SendText.comboBox_ExplicitDefaultRadix_Validating().
 			// Changes here may have to be applied there too.
 
-			Domain.Radix radix = this.command.DefaultRadix;
+			Domain.Radix defaultRadix = this.command.DefaultRadix;
 			Domain.RadixEx selectedItem = comboBox_ExplicitDefaultRadix.SelectedItem as Domain.RadixEx;
 			if (selectedItem != null) // Can be 'null' when validating all controls before an item got selected.
-				radix = selectedItem;
+				defaultRadix = selectedItem;
 
-			if (!ValidateAndConfirmRadix(radix))
+			if (!ValidateAndConfirmDefaultRadix(defaultRadix))
 			{
 				e.Cancel = true;
 
@@ -374,7 +391,7 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private bool ValidateAndConfirmRadix(Domain.Radix radix)
+		private bool ValidateAndConfirmDefaultRadix(Domain.Radix defaultRadix)
 		{
 			// Attention:
 			// Similar code exists in SendText.ValidateAndConfirmRadix().
@@ -383,9 +400,9 @@ namespace YAT.View.Controls
 			if (this.command.IsSingleLineText)
 			{
 				var text = this.command.SingleLineText;
-				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, radix))
+				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, defaultRadix))
 				{
-					this.command.DefaultRadix = radix;
+					this.command.DefaultRadix = defaultRadix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
 				////ConfirmSingleLineText() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
 					return (true);
@@ -397,13 +414,13 @@ namespace YAT.View.Controls
 
 				foreach (var text in this.command.MultiLineText)
 				{
-					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, radix))
+					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, defaultRadix))
 						isValid = false;
 				}
 
 				if (isValid)
 				{
-					this.command.DefaultRadix = radix;
+					this.command.DefaultRadix = defaultRadix;
 				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
 				////ConfirmSingleLineText() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
 					return (true);
@@ -411,7 +428,7 @@ namespace YAT.View.Controls
 			}
 			else // Neither single- nor multi-line, simply set the radix.
 			{
-				this.command.DefaultRadix = radix;
+				this.command.DefaultRadix = defaultRadix;
 				return (true);
 			}
 
