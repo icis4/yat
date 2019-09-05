@@ -159,6 +159,7 @@
 			this.buttonSet_3C.Size = new System.Drawing.Size(136, 59);
 			this.buttonSet_3C.SubpageId = 9;
 			this.buttonSet_3C.TabIndex = 8;
+			this.buttonSet_3C.Visible = false;
 			this.buttonSet_3C.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_3C.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
@@ -171,6 +172,7 @@
 			this.buttonSet_3B.Size = new System.Drawing.Size(136, 59);
 			this.buttonSet_3B.SubpageId = 6;
 			this.buttonSet_3B.TabIndex = 5;
+			this.buttonSet_3B.Visible = false;
 			this.buttonSet_3B.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_3B.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
@@ -183,6 +185,7 @@
 			this.buttonSet_3A.Size = new System.Drawing.Size(136, 59);
 			this.buttonSet_3A.SubpageId = 3;
 			this.buttonSet_3A.TabIndex = 2;
+			this.buttonSet_3A.Visible = false;
 			this.buttonSet_3A.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_3A.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
@@ -195,6 +198,7 @@
 			this.buttonSet_2C.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_2C.SubpageId = 8;
 			this.buttonSet_2C.TabIndex = 7;
+			this.buttonSet_2C.Visible = false;
 			this.buttonSet_2C.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_2C.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
@@ -207,6 +211,7 @@
 			this.buttonSet_2B.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_2B.SubpageId = 5;
 			this.buttonSet_2B.TabIndex = 4;
+			this.buttonSet_2B.Visible = false;
 			this.buttonSet_2B.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_2B.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
@@ -219,6 +224,7 @@
 			this.buttonSet_2A.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_2A.SubpageId = 2;
 			this.buttonSet_2A.TabIndex = 1;
+			this.buttonSet_2A.Visible = false;
 			this.buttonSet_2A.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_2A.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
@@ -231,6 +237,7 @@
 			this.buttonSet_1C.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_1C.SubpageId = 7;
 			this.buttonSet_1C.TabIndex = 6;
+			this.buttonSet_1C.Visible = false;
 			this.buttonSet_1C.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_1C.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
@@ -243,6 +250,7 @@
 			this.buttonSet_1B.Size = new System.Drawing.Size(136, 292);
 			this.buttonSet_1B.SubpageId = 4;
 			this.buttonSet_1B.TabIndex = 3;
+			this.buttonSet_1B.Visible = false;
 			this.buttonSet_1B.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_SendCommandRequest);
 			this.buttonSet_1B.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.buttonSet_I_DefineCommandRequest);
 			// 
