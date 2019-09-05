@@ -2521,12 +2521,16 @@ namespace YAT.View.Forms
 			if (sc != null)
 			{
 				this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
-
-				sc = new Command(sc); // Clone to ensure decoupling.              // Replace target by selected:
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
-				this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
-
-				this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
+				try
+				{
+					sc = new Command(sc); // Clone to ensure decoupling.              // Replace target by selected:
+					this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
+					this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
+				}
+				finally
+				{
+					this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
+				}
 			}
 			else
 			{                                                                         // Clear target:
@@ -2545,20 +2549,24 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
-
-			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsRoot.PredefinedCommand.PageLayout).CommandCapacityPerPage;
-			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
-			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-			for (int i = 0; i < n; i++)
+			try
 			{
-				Up(selectedCommandId, lastCommandIdPerPage);
+				int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsRoot.PredefinedCommand.PageLayout).CommandCapacityPerPage;
+				int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
+				int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+				for (int i = 0; i < n; i++)
+				{
+					Up(selectedCommandId, lastCommandIdPerPage);
 
-				selectedCommandId--;
-				if (selectedCommandId < PredefinedCommandPage.FirstCommandIdPerPage)
-					selectedCommandId =                       lastCommandIdPerPage;
+					selectedCommandId--;
+					if (selectedCommandId < PredefinedCommandPage.FirstCommandIdPerPage)
+						selectedCommandId =                       lastCommandIdPerPage;
+				}
 			}
-
-			this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
+			finally
+			{
+				this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
+			}
 		}
 
 		private void Up(int selectedCommandId, int lastCommandIdPerPage)
@@ -2599,20 +2607,24 @@ namespace YAT.View.Forms
 			// Changes here may have to be applied there too.
 
 			this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
-
-			int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsRoot.PredefinedCommand.PageLayout).CommandCapacityPerPage;
-			int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
-			int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
-			for (int i = 0; i < n; i++)
+			try
 			{
-				Down(selectedCommandId, lastCommandIdPerPage);
+				int lastCommandIdPerPage = ((PredefinedCommandPageLayoutEx)this.settingsRoot.PredefinedCommand.PageLayout).CommandCapacityPerPage;
+				int selectedCommandId = contextMenuStrip_Predefined_SelectedCommandId;
+				int n = ToolStripMenuItemEx.TagToInt32(sender); // Attention, 'ToolStripMenuItem' is no 'Control'!
+				for (int i = 0; i < n; i++)
+				{
+					Down(selectedCommandId, lastCommandIdPerPage);
 
-				selectedCommandId++;
-				if (selectedCommandId >                       lastCommandIdPerPage)
-					selectedCommandId = PredefinedCommandPage.FirstCommandIdPerPage;
+					selectedCommandId++;
+					if (selectedCommandId >                       lastCommandIdPerPage)
+						selectedCommandId = PredefinedCommandPage.FirstCommandIdPerPage;
+				}
 			}
-
-			this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
+			finally
+			{
+				this.settingsRoot.PredefinedCommand.ResumeChangeEvent();
+			}
 		}
 
 		private void Down(int selectedCommandId, int lastCommandIdPerPage)
@@ -2848,7 +2860,12 @@ namespace YAT.View.Forms
 		/// Must be called each time the corresponding context state changes, because shortcuts
 		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
-		private void contextMenuStrip_Command_SetMenuItems()
+		/// <remarks>
+		/// In cases where only <see cref="Control.Visible"/> and/or <see cref="Control.Enabled"/>
+		/// need to be updated, this method shall be called with <paramref name="updateAppearance"/>
+		/// set to <c>false</c>, resulting in significantly improved performance.
+		/// </remarks>
+		private void contextMenuStrip_Command_SetMenuItems(bool updateAppearance = true)
 		{
 			this.isSettingControls.Enter();
 			try
@@ -2886,26 +2903,33 @@ namespace YAT.View.Forms
 
 					if (isDefined)
 					{
+						if (updateAppearance)
+						{
+							if (this.menuItems_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+								this.menuItems_Commands[i].ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+							                                                   //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+							if (this.menuItems_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+								this.menuItems_Commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+
+							this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
+						}
+
 						bool isValid = (this.terminal.IsReadyToSend && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath));
-
-						if (this.menuItems_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-							this.menuItems_Commands[i].ForeColor = SystemColors.ControlText;
-
-						if (this.menuItems_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-							this.menuItems_Commands[i].Font = SystemFonts.DefaultFont;
-
-						this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
 						this.menuItems_Commands[i].Enabled = isValid;
 					}
 					else
 					{
-						if (this.menuItems_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-							this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;
+						if (updateAppearance)
+						{
+							if (this.menuItems_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+								this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+							                                                 //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+							if (this.menuItems_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+								this.menuItems_Commands[i].Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
-						if (this.menuItems_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-							this.menuItems_Commands[i].Font = DrawingEx.DefaultFontItalic;
+							this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
+						}
 
-						this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
 						this.menuItems_Commands[i].Enabled = true;
 					}
 				}
@@ -2918,7 +2942,7 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Command_Opening(object sender, CancelEventArgs e)
 		{
-			contextMenuStrip_Command_SetMenuItems(); // Ensure that shortcuts are activated.
+			contextMenuStrip_Command_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_I_Click(object sender, EventArgs e)
@@ -4572,22 +4596,20 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void SetPredefinedControls()
 		{
-			contextMenuStrip_Command_SetMenuItems(); // Ensure that shortcuts are activated.
+			contextMenuStrip_Command_SetMenuItems(false); // Ensure that shortcuts are activated.
 			contextMenuStrip_Page_SetMenuItems();    // Ensure that shortcuts are activated.
 
 			this.isSettingControls.Enter();
+			predefined.SuspendCommandStateUpdate();
 			try
 			{
-				predefined.SuspendCommandStateUpdate();
-
 				predefined.ParseModeForText      = this.settingsRoot.Send.Text.ToParseMode();
 				predefined.RootDirectoryForFile  = Path.GetDirectoryName(this.terminal.SettingsFilePath);
 				predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
-
-				predefined.ResumeCommandStateUpdate();
 			}
 			finally
 			{
+				predefined.ResumeCommandStateUpdate();
 				this.isSettingControls.Leave();
 			}
 		}

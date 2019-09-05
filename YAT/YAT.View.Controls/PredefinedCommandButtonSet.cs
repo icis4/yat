@@ -78,7 +78,7 @@ namespace YAT.View.Controls
 		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
-		private int commandStateUpdatedSuspendedCount; // = 0;
+		private int commandStateUpdateSuspendedCount; // = 0;
 
 		#endregion
 
@@ -258,18 +258,24 @@ namespace YAT.View.Controls
 		/// <remarks>Useful to improve performance.</remarks>
 		public virtual void SuspendCommandStateUpdate()
 		{
-			this.commandStateUpdatedSuspendedCount++;
+			this.commandStateUpdateSuspendedCount++;
 		}
 
 		/// <remarks>Useful to improve performance.</remarks>
 		public virtual void ResumeCommandStateUpdate()
 		{
-			this.commandStateUpdatedSuspendedCount--;
-			if (this.commandStateUpdatedSuspendedCount <= 0)
-			{
-				this.commandStateUpdatedSuspendedCount = 0; // Prevent misuse.
+			this.commandStateUpdateSuspendedCount--;
+			if (this.commandStateUpdateSuspendedCount == 0)
 				SetCommandStateControls();
-			}
+
+			if (this.commandStateUpdateSuspendedCount < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The " + this.GetType() + " command state update suspend counter has become less than 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <remarks>Useful to improve performance.</remarks>
+		public virtual bool CommandStateUpdateIsSuspended
+		{
+			get { return (this.commandStateUpdateSuspendedCount > 0); }
 		}
 
 		#endregion
@@ -450,8 +456,15 @@ namespace YAT.View.Controls
 		////}
 		}
 
+	////private int SetCommandStateControls_updateCounter; // Also exists in several other locations. Can temporarily be used for debugging the command state update (performance relevant).
+
 		private void SetCommandStateControls()
 		{
+			if (CommandStateUpdateIsSuspended)
+				return;
+
+		////System.Diagnostics.Debug.WriteLine("BS @ " + SetCommandStateControls_updateCounter++); // Also exists in several other locations. Can temporarily be used for debugging the command state update (performance relevant).
+
 		////this.isSettingControls.Enter(); is not needed (yet).
 		////try
 		////{
@@ -480,23 +493,22 @@ namespace YAT.View.Controls
 
 					if (isDefined)
 					{
-						bool isValid = (this.terminalIsReadyToSend && this.commands[commandIndex].IsValid(this.parseModeForText, this.rootDirectoryForFile));
-
 						if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-							this.buttons_commands[i].ForeColor = SystemColors.ControlText;
-
+							this.buttons_commands[i].ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+						                                                 //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
 						if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-							this.buttons_commands[i].Font = SystemFonts.DefaultFont;
+							this.buttons_commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
+						bool isValid = (this.terminalIsReadyToSend && this.commands[commandIndex].IsValid(this.parseModeForText, this.rootDirectoryForFile));
 						this.buttons_commands[i].Enabled = isValid;
 					}
 					else
 					{
 						if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-							this.buttons_commands[i].ForeColor = SystemColors.GrayText;
-
+							this.buttons_commands[i].ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+						                                               //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
 						if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-							this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;
+							this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 						this.buttons_commands[i].Enabled = true;
 					}

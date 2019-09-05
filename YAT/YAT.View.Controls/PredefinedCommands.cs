@@ -79,7 +79,7 @@ namespace YAT.View.Controls
 		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
-		private int commandStateUpdatedSuspendedCount; // = 0;
+		private int commandStateUpdateSuspendedCount; // = 0;
 
 		#endregion
 
@@ -331,23 +331,24 @@ namespace YAT.View.Controls
 		/// <remarks>Useful to improve performance.</remarks>
 		public virtual void SuspendCommandStateUpdate()
 		{
-			foreach (var set in this.buttonSets)
-				set.SuspendCommandStateUpdate();
-
-			this.commandStateUpdatedSuspendedCount++;
+			this.commandStateUpdateSuspendedCount++;
 		}
 
 		/// <remarks>Useful to improve performance.</remarks>
 		public virtual void ResumeCommandStateUpdate()
 		{
-			this.commandStateUpdatedSuspendedCount--;
-			if (this.commandStateUpdatedSuspendedCount <= 0)
-			{
-				this.commandStateUpdatedSuspendedCount = 0; // Prevent misuse.
+			this.commandStateUpdateSuspendedCount--;
+			if (this.commandStateUpdateSuspendedCount == 0)
+				SetCommandStateControls();
 
-				foreach (var set in this.buttonSets)
-					set.ResumeCommandStateUpdate();
-			}
+			if (this.commandStateUpdateSuspendedCount < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The " + this.GetType() + " command state update suspend counter has become less than 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <remarks>Useful to improve performance.</remarks>
+		public virtual bool CommandStateUpdateIsSuspended
+		{
+			get { return (this.commandStateUpdateSuspendedCount > 0); }
 		}
 
 		#endregion
@@ -549,6 +550,9 @@ namespace YAT.View.Controls
 
 		private void SetCommandStateControls()
 		{
+			if (CommandStateUpdateIsSuspended)
+				return;
+
 			this.isSettingControls.Enter();
 			try
 			{
@@ -556,9 +560,17 @@ namespace YAT.View.Controls
 				{
 					if (set.Visible)
 					{
-						set.ParseModeForText      = this.parseModeForText;
-						set.RootDirectoryForFile  = this.rootDirectoryForFile;
-						set.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+						set.SuspendCommandStateUpdate();
+						try
+						{
+							set.ParseModeForText      = this.parseModeForText;
+							set.RootDirectoryForFile  = this.rootDirectoryForFile;
+							set.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+						}
+						finally
+						{
+							set.ResumeCommandStateUpdate();
+						}
 					}
 					else
 					{
@@ -627,145 +639,235 @@ namespace YAT.View.Controls
 			try
 			{
 				// Reset layout...
-				this.tableLayoutPanel_Subpages.ColumnStyles.Clear();
-				this.tableLayoutPanel_Subpages.RowStyles.Clear();
-				this.tableLayoutPanel_Subpages.Controls.Clear();
+				tableLayoutPanel_Subpages.ColumnStyles.Clear();
+				tableLayoutPanel_Subpages.RowStyles.Clear();
+				tableLayoutPanel_Subpages.Controls.Clear();
 
 				// ...then recreate:
 				switch (layout)
 				{
 					case PredefinedCommandPageLayout.OneByOne:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 1;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.RowCount = 1;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = false;
+						buttonSet_1C.Visible = false;
+						buttonSet_2A.Visible = false;
+						buttonSet_2B.Visible = false;
+						buttonSet_2C.Visible = false;
+						buttonSet_3A.Visible = false;
+						buttonSet_3B.Visible = false;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 1;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.RowCount = 1;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.TwoByOne:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 1;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.RowCount = 2;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = false;
+						buttonSet_1C.Visible = false;
+						buttonSet_2A.Visible = true;
+						buttonSet_2B.Visible = false;
+						buttonSet_2C.Visible = false;
+						buttonSet_3A.Visible = false;
+						buttonSet_3B.Visible = false;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 1;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.RowCount = 2;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2A, 0, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.ThreeByOne:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 1;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.RowCount = 3;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = false;
+						buttonSet_1C.Visible = false;
+						buttonSet_2A.Visible = true;
+						buttonSet_2B.Visible = false;
+						buttonSet_2C.Visible = false;
+						buttonSet_3A.Visible = true;
+						buttonSet_3B.Visible = false;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 1;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.RowCount = 3;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_3A, 0, 2);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2A, 0, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.OneByTwo:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 2;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-						this.tableLayoutPanel_Subpages.RowCount = 1;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = true;
+						buttonSet_1C.Visible = false;
+						buttonSet_2A.Visible = false;
+						buttonSet_2B.Visible = false;
+						buttonSet_2C.Visible = false;
+						buttonSet_3A.Visible = false;
+						buttonSet_3B.Visible = false;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 2;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						tableLayoutPanel_Subpages.RowCount = 1;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1B, 1, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.TwoByTwo:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 2;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-						this.tableLayoutPanel_Subpages.RowCount = 2;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = true;
+						buttonSet_1C.Visible = false;
+						buttonSet_2A.Visible = true;
+						buttonSet_2B.Visible = true;
+						buttonSet_2C.Visible = false;
+						buttonSet_3A.Visible = false;
+						buttonSet_3B.Visible = false;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 2;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						tableLayoutPanel_Subpages.RowCount = 2;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2B, 1, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2A, 0, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1B, 1, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.ThreeByTwo:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 2;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-						this.tableLayoutPanel_Subpages.RowCount = 2;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3B, 1, 2);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = true;
+						buttonSet_1C.Visible = false;
+						buttonSet_2A.Visible = true;
+						buttonSet_2B.Visible = true;
+						buttonSet_2C.Visible = false;
+						buttonSet_3A.Visible = true;
+						buttonSet_3B.Visible = true;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 2;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+						tableLayoutPanel_Subpages.RowCount = 2;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_3B, 1, 2);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_3A, 0, 2);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2B, 1, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2A, 0, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1B, 1, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.OneByThree:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 3;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.RowCount = 1;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = true;
+						buttonSet_1C.Visible = true;
+						buttonSet_2A.Visible = false;
+						buttonSet_2B.Visible = false;
+						buttonSet_2C.Visible = false;
+						buttonSet_3A.Visible = false;
+						buttonSet_3B.Visible = false;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 3;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.RowCount = 1;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1C, 2, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1B, 1, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.TwoByThree:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 3;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.RowCount = 2;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2C, 2, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = true;
+						buttonSet_1C.Visible = true;
+						buttonSet_2A.Visible = true;
+						buttonSet_2B.Visible = true;
+						buttonSet_2C.Visible = true;
+						buttonSet_3A.Visible = false;
+						buttonSet_3B.Visible = false;
+						buttonSet_3C.Visible = false;
+
+						tableLayoutPanel_Subpages.ColumnCount = 3;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.RowCount = 2;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2C, 2, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2B, 1, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2A, 0, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1C, 2, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1B, 1, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
 					case PredefinedCommandPageLayout.ThreeByThree:
 					{
-						this.tableLayoutPanel_Subpages.ColumnCount = 3;
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-						this.tableLayoutPanel_Subpages.RowCount = 3;
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, this.buttonSetHeight));
-						this.tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3C, 2, 2);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3B, 1, 2);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_3A, 0, 2);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2C, 2, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2B, 1, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_2A, 0, 1);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1C, 2, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1B, 1, 0);
-						this.tableLayoutPanel_Subpages.Controls.Add(this.buttonSet_1A, 0, 0);
+					////buttonSet_1A.Visible = true never changes.
+						buttonSet_1B.Visible = true;
+						buttonSet_1C.Visible = true;
+						buttonSet_2A.Visible = true;
+						buttonSet_2B.Visible = true;
+						buttonSet_2C.Visible = true;
+						buttonSet_3A.Visible = true;
+						buttonSet_3B.Visible = true;
+						buttonSet_3C.Visible = true;
+
+						tableLayoutPanel_Subpages.ColumnCount = 3;
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
+						tableLayoutPanel_Subpages.RowCount = 3;
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Absolute, buttonSetHeight));
+						tableLayoutPanel_Subpages.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_3C, 2, 2);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_3B, 1, 2);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_3A, 0, 2);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2C, 2, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2B, 1, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_2A, 0, 1);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1C, 2, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1B, 1, 0);
+						tableLayoutPanel_Subpages.Controls.Add(buttonSet_1A, 0, 0);
 						break;
 					}
 
