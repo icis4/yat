@@ -2291,9 +2291,15 @@ namespace YAT.View.Forms
 				if (contextMenuStrip.SourceControl == null)
 				{
 					contextMenuStrip_FileRecent.SuspendLayout();
-					contextMenuStrip_FileRecent.Top = toolStripMenuItem_MainMenu_File_Recent.Bounds.Top;
-					contextMenuStrip_FileRecent.Left = toolStripMenuItem_MainMenu_File_Recent.Bounds.Left + toolStripMenuItem_MainMenu_File_Recent.Bounds.Width;
-					contextMenuStrip_FileRecent.ResumeLayout();
+					try
+					{
+						contextMenuStrip_FileRecent.Top = toolStripMenuItem_MainMenu_File_Recent.Bounds.Top;
+						contextMenuStrip_FileRecent.Left = toolStripMenuItem_MainMenu_File_Recent.Bounds.Left + toolStripMenuItem_MainMenu_File_Recent.Bounds.Width;
+					}
+					finally
+					{
+						contextMenuStrip_FileRecent.ResumeLayout();
+					}
 				}
 			}
 		}
