@@ -466,8 +466,12 @@ namespace YAT.View.Controls
 			}
 		}
 
+	////private int SetRecentAndCommandControls_updateCounter; // Also exists in several other locations. Can temporarily be used for debugging the command state update (performance relevant).
+
 		private void SetRecentAndCommandControls()
 		{
+		////Debug.WriteLine("SF @ " + SetRecentAndCommandControls_updateCounter++); // Also exists in several other locations. Can temporarily be used for debugging the command state update (performance relevant).
+
 			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 			try
@@ -569,10 +573,10 @@ namespace YAT.View.Controls
 				if (selectedIndex != ControlEx.InvalidIndex)
 				{
 					if (pathComboBox_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.ForeColor = SystemColors.ControlText;
-
+						pathComboBox_FilePath.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+					                                              //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
 					if (pathComboBox_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.Font = SystemFonts.DefaultFont;
+						pathComboBox_FilePath.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 					if (pathComboBox_FilePath.SelectedIndex != selectedIndex) // Improve performance by only assigning if different.
 						pathComboBox_FilePath.SelectedIndex = selectedIndex;
@@ -580,13 +584,13 @@ namespace YAT.View.Controls
 				else
 				{
 					if (pathComboBox_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.ForeColor = SystemColors.GrayText;
-
+						pathComboBox_FilePath.ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+					                                            //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
 					if (pathComboBox_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.Font = DrawingEx.DefaultFontItalic;
+						pathComboBox_FilePath.Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 					if (pathComboBox_FilePath.SelectedIndex != 0) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
+						pathComboBox_FilePath.SelectedIndex = 0; // Results in 'Command.UndefinedFilePathText'.
 				}
 
 				SetSendControls();

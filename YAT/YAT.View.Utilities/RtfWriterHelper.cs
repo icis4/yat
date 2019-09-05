@@ -28,11 +28,11 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Drawing;
 
 using YAT.Domain;
 using YAT.Format.Settings;
@@ -49,20 +49,20 @@ namespace YAT.View.Utilities
 		/// <remarks>
 		/// For performance reasons, cache fonts.
 		/// </remarks>
-		private static Font txDataFont;
-		private static Font txControlFont;
-		private static Font rxDataFont;
-		private static Font rxControlFont;
-		private static Font timeStampFont;
-		private static Font timeSpanFont;
-		private static Font timeDeltaFont;
-		private static Font timeDurationFont;
-		private static Font portFont;
-		private static Font directionFont;
-		private static Font lengthFont;
-		private static Font whiteSpacesFont;
-		private static Font ioControlFont;
-		private static Font errorFont;
+		private static Font staticTxDataFontCache;
+		private static Font staticTxControlFontCache;
+		private static Font staticRxDataFontCache;
+		private static Font staticRxControlFontCache;
+		private static Font staticTimeStampFontCache;
+		private static Font staticTimeSpanFontCache;
+		private static Font staticTimeDeltaFontCache;
+		private static Font staticTimeDurationFontCache;
+		private static Font staticPortFontCache;
+		private static Font staticDirectionFontCache;
+		private static Font staticLengthFontCache;
+		private static Font staticWhiteSpacesFontCache;
+		private static Font staticIOControlFontCache;
+		private static Font staticErrorFontCache;
 
 		/// <remarks>
 		/// Pragmatic implementation of copying RTF to the clipboard. 'netrtfwriter' is only used for stream-based logging.
@@ -136,67 +136,67 @@ namespace YAT.View.Utilities
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				color     = settings.TxDataFormat.Color;
-				font      = CacheAndAssignIfChanged(ref txDataFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTxDataFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				color     = settings.TxControlFormat.Color;
-				font      = CacheAndAssignIfChanged(ref txControlFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTxControlFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				color     = settings.RxDataFormat.Color;
-				font      = CacheAndAssignIfChanged(ref rxDataFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticRxDataFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				color     = settings.RxControlFormat.Color;
-				font      = CacheAndAssignIfChanged(ref rxControlFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticRxControlFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.TimeStampInfo)
 			{
 				fontStyle = settings.TimeStampFormat.FontStyle;
 				color     = settings.TimeStampFormat.Color;
-				font      = CacheAndAssignIfChanged(ref timeStampFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTimeStampFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.TimeSpanInfo)
 			{
 				fontStyle = settings.TimeSpanFormat.FontStyle;
 				color     = settings.TimeSpanFormat.Color;
-				font      = CacheAndAssignIfChanged(ref timeSpanFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTimeSpanFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.TimeDeltaInfo)
 			{
 				fontStyle = settings.TimeDeltaFormat.FontStyle;
 				color     = settings.TimeDeltaFormat.Color;
-				font      = CacheAndAssignIfChanged(ref timeDeltaFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTimeDeltaFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.TimeDurationInfo)
 			{
 				fontStyle = settings.TimeDurationFormat.FontStyle;
 				color     = settings.TimeDurationFormat.Color;
-				font      = CacheAndAssignIfChanged(ref timeDurationFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTimeDurationFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.PortInfo)
 			{
 				fontStyle = settings.PortFormat.FontStyle;
 				color     = settings.PortFormat.Color;
-				font      = CacheAndAssignIfChanged(ref portFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticPortFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.DirectionInfo)
 			{
 				fontStyle = settings.DirectionFormat.FontStyle;
 				color     = settings.DirectionFormat.Color;
-				font      = CacheAndAssignIfChanged(ref directionFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticDirectionFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.DataLength)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				color     = settings.LengthFormat.Color;
-				font      = CacheAndAssignIfChanged(ref lengthFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticLengthFontCache, fontName, fontSize, fontStyle);
 			}
 			else if ((element is DisplayElement.Nonentity) ||
 			         (element is DisplayElement.DataSpace) ||
@@ -206,43 +206,24 @@ namespace YAT.View.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				color     = settings.WhiteSpacesFormat.Color;
-				font      = CacheAndAssignIfChanged(ref whiteSpacesFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpacesFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.IOControl)
 			{
 				fontStyle = settings.IOControlFormat.FontStyle;
 				color     = settings.IOControlFormat.Color;
-				font      = CacheAndAssignIfChanged(ref ioControlFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticIOControlFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.ErrorInfo)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				color     = settings.ErrorFormat.Color;
-				font      = CacheAndAssignIfChanged(ref errorFont, fontName, fontSize, fontStyle);
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticErrorFontCache, fontName, fontSize, fontStyle);
 			}
 			else
 			{
 				throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + element.GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-		}
-
-		private static Font CacheAndAssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
-		{
-			// Create the font:
-			if (cachedFont == null)
-			{
-				cachedFont = new Font(fontName, fontSize, fontStyle);
-			}
-			else if ((cachedFont.Name != fontName) ||
-			         (cachedFont.Size != fontSize) ||
-			         (cachedFont.Style != fontStyle))
-			{
-				// The font has changed, dispose of the cached font and create a new one:
-				cachedFont.Dispose();
-				cachedFont = new Font(fontName, fontSize, fontStyle);
-			}
-
-			return (cachedFont);
 		}
 	}
 }
