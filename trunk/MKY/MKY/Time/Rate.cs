@@ -183,35 +183,38 @@ namespace MKY.Time
 			}
 			else
 			{
-				// Count number of items within each interval:
-				int numberOfIntervals = (this.window / this.interval);
-				int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance(numberOfIntervals, 0);
-				DateTime now = DateTime.Now;
-
-				TimeStampItem<int>[] qa;
-				lock (this.queue) // Lock is required because Queue<T> is not synchronized and whole queue is accessed via ToArray().
-					qa = this.queue.ToArray();
-
-				foreach (TimeStampItem<int> tsi in qa)
+				unchecked
 				{
-					TimeSpan ts = (now - tsi.TimeStamp);
-					int i = Int32Ex.Limit((int)(ts.TotalMilliseconds / this.interval), 0, Math.Max((numberOfIntervals - 1), 0)); // 'max' must be 0 or above.
-					valuePerInterval[i] += tsi.Item;
-				}
+					// Count number of items within each interval:
+					int numberOfIntervals = (this.window / this.interval);
+					int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance(numberOfIntervals, 0);
+					DateTime now = DateTime.Now;
 
-				// Weigh and sum up the intervals:
-				int weight = numberOfIntervals;
-				int weighedSum = 0;
-				int sumOfWeights = 0;
-				foreach (int valueOfInterval in valuePerInterval)
-				{
-					weighedSum += (valueOfInterval * weight);
-					sumOfWeights += weight;
-					weight--;
-				}
+					TimeStampItem<int>[] qa;
+					lock (this.queue) // Lock is required because Queue<T> is not synchronized and whole queue is accessed via ToArray().
+						qa = this.queue.ToArray();
 
-				// Evaluate the rate:
-				newValue = (int)Math.Round((double)weighedSum / sumOfWeights);
+					foreach (TimeStampItem<int> tsi in qa)
+					{
+						TimeSpan ts = (now - tsi.TimeStamp);
+						int i = Int32Ex.Limit((int)(ts.TotalMilliseconds / this.interval), 0, Math.Max((numberOfIntervals - 1), 0)); // 'max' must be 0 or above.
+						valuePerInterval[i] += tsi.Item;
+					}
+
+					// Weigh and sum up the intervals:
+					int weight = numberOfIntervals;
+					int weighedSum = 0;
+					int sumOfWeights = 0;
+					foreach (int valueOfInterval in valuePerInterval)
+					{
+						weighedSum += (valueOfInterval * weight);
+						sumOfWeights += weight;
+						weight--;
+					}
+
+					// Evaluate the rate:
+					newValue = (int)Math.Round((double)weighedSum / sumOfWeights);
+				}
 			}
 
 			if (newValue != oldValue)
