@@ -721,9 +721,13 @@ namespace YAT.View.Controls
 					this.isSettingControls.Enter();
 					try
 					{
-						comboBox_SingleLineText.Text      = "";
-						comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-						comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+						comboBox_SingleLineText.Text = "";
+
+						if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+						                                                //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 					}
 					finally
 					{
@@ -971,11 +975,15 @@ namespace YAT.View.Controls
 			DebugUserInputLeave();
 		}
 
+	////private int SetCommandControls_updateCounter; // Also exists in several other locations. Can temporarily be used for debugging the command state update (performance relevant).
+
 		/// <remarks>
 		/// Separate function as it is not needed to set this text on any change.
 		/// </remarks>
 		private void SetCommandControls()
 		{
+		////Debug.WriteLine("ST @ " + SetCommandControls_updateCounter++); // Also exists in several other locations. Can temporarily be used for debugging the command state update (performance relevant).
+
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 			{
 				this.isSettingControls.Enter();
@@ -991,20 +999,20 @@ namespace YAT.View.Controls
 						if (this.command.IsText)
 						{
 							if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-
+								comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+							                                                //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
 							if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
+								comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 							ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
 						}
 						else
 						{
 							if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
-
+								comboBox_SingleLineText.ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+							                                              //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
 							if (comboBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
+								comboBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 							comboBox_SingleLineText.Text = Command.EnterTextText;
 						}
@@ -1012,10 +1020,10 @@ namespace YAT.View.Controls
 					else
 					{
 						if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-
+							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+						                                                //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
 						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
+							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 						if (this.command.IsText && !this.command.IsPartialText)
 						{
@@ -1153,9 +1161,9 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				comboBox_SingleLineText.Text      = Command.MultiLineTextText;
-				comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-				comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+				comboBox_SingleLineText.Text      = Command.MultiLineTextText; // No need to improve performance on
+				comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // accessing 'SystemColors' and 'SystemFonts'
+				comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;   // as Show() is a slow operation anyway.
 			}
 			finally
 			{
