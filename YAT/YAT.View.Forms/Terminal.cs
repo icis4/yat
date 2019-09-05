@@ -2985,7 +2985,12 @@ namespace YAT.View.Forms
 		/// Must be called each time the corresponding context state changes, because shortcuts
 		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
-		private void contextMenuStrip_Page_SetMenuItems()
+		/// <remarks>
+		/// In cases where only <see cref="Control.Visible"/> and/or <see cref="Control.Enabled"/>
+		/// need to be updated, this method shall be called with <paramref name="updateAppearance"/>
+		/// set to <c>false</c>, resulting in significantly improved performance.
+		/// </remarks>
+		private void contextMenuStrip_Page_SetMenuItems(bool updateAppearance = true)
 		{
 			this.isSettingControls.Enter();
 			try
@@ -3015,16 +3020,20 @@ namespace YAT.View.Forms
 
 				for (int i = 0; i < Math.Min(pageCount, menuItems_Page_MaxPagesWithMenuItem); i++)
 				{
-					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, PredefinedCommandPage.CaptionOrFallback(pages[i], (i + 1)));
-					this.menuItems_Pages[i].Visible =  true;
+					if (updateAppearance)
+						this.menuItems_Pages[i].Text = MenuEx.PrependIndex(i + 1, PredefinedCommandPage.CaptionOrFallback(pages[i], (i + 1)));
+
+					this.menuItems_Pages[i].Visible = true;
 					this.menuItems_Pages[i].Enabled = (pageCount > 1); // No need to navigate a single page.
 				}
 
 				for (int i = pageCount; i < menuItems_Page_MaxPagesWithMenuItem; i++)
 				{
-					this.menuItems_Pages[i].Text    =  MenuEx.PrependIndex(i + 1, "<Undefined>");
-					this.menuItems_Pages[i].Visible =  false;
-					this.menuItems_Pages[i].Enabled =  false;
+					if (updateAppearance)
+						this.menuItems_Pages[i].Text = MenuEx.PrependIndex(i + 1, "<Undefined>");
+
+					this.menuItems_Pages[i].Visible = false;
+					this.menuItems_Pages[i].Enabled = false;
 				}
 			}
 			finally
@@ -3035,7 +3044,7 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_Page_Opening(object sender, CancelEventArgs e)
 		{
-			contextMenuStrip_Page_SetMenuItems(); // Ensure that shortcuts are activated.
+			contextMenuStrip_Page_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_PageContextMenu_Next_Click(object sender, EventArgs e)
@@ -4597,7 +4606,7 @@ namespace YAT.View.Forms
 		private void SetPredefinedControls()
 		{
 			contextMenuStrip_Command_SetMenuItems(false); // Ensure that shortcuts are activated.
-			contextMenuStrip_Page_SetMenuItems();    // Ensure that shortcuts are activated.
+			contextMenuStrip_Page_SetMenuItems(false);    // Ensure that shortcuts are activated.
 
 			this.isSettingControls.Enter();
 			predefined.SuspendCommandStateUpdate();
