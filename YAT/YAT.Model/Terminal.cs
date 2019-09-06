@@ -5715,7 +5715,7 @@ namespace YAT.Model
 		protected virtual void RequestAutoActionMessage(byte[] triggerSequence, DateTime ts)
 		{
 			var sb = new StringBuilder();
-			sb.Append(@"Automatic message has been triggered by """);
+			sb.Append(@"Message has been triggered by """);
 			sb.Append(this.terminal.Format(triggerSequence, Domain.IODirection.Rx));
 			sb.Append(@""" the ");
 			sb.Append(this.autoActionCount);
@@ -5727,7 +5727,7 @@ namespace YAT.Model
 			OnMessageInputRequest
 			(
 				sb.ToString(),
-				IndicatedName,
+				IndicatedName + " Automatic Action",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);

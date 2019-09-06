@@ -88,9 +88,9 @@ YAT 2.1.0 :: 2019-1?-??
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Predefined commands can now be reordered (feature request #376), cut/copy/pasted via clipboard,
-  exported/imported to a single page .yacp or complete set of pages .yacps file (feature requests
-  #28, #257), and even linked to one or multiple single page .yacp file(s) (feature request #29).
+- Predefined commands can now be reordered (feature requests #376 and #379), cut/copy/pasted via
+  clipboard, exported/imported to a single page .yacp or complete set of pages .yacps file (feature
+  reqs. #28, #257, #365), and even linked to one or multiple single page .yacp file(s) (feat. #29).
 - Option to show more predefined commands (24, 36, 48, 72, 108) (feature requests #256, #344).
 - Additional keyword \!(PortSettings()) that allows re-configuring the port settings before or after
   sending data; and dedicated keywords \!(Baud()), \!(DataBits()), \!(Parity()), \!(StopBits()) and
