@@ -469,7 +469,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Creates an event object for the overlapped structure used with ReadFile.
 			/// </summary>
-			/// <param name="SecurityAttributes">A security attributes structure or IntPtr.Zero.</param>
+			/// <param name="SecurityAttributes">A security attributes structure or <see cref="IntPtr.Zero"/>.</param>
 			/// <param name="bManualReset">Manual Reset = False (The system automatically resets the
 			/// state to non-signaled after a waiting thread has been released.).</param>
 			/// <param name="bInitialState">Initial state = False (Not signaled.).</param>

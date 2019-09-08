@@ -78,6 +78,7 @@ namespace MKY.Drawing
 		/// Solving issue by reducing the number of accesses to <see cref="SystemFonts.DefaultFont"/>
 		/// and <see cref="DefaultFontItalic"/>, which is the better approach anyway.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		public static Font DefaultFontItalic
 		{
 			get
@@ -187,7 +188,8 @@ namespace MKY.Drawing
 		/// <param name="fontName">Name of the font.</param>
 		/// <param name="fontSize">Size of the font.</param>
 		/// <param name="fontStyle">The font style.</param>
-		/// <returns>The cached font.</returns>
+		/// <returns>The reference to the cached font.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Font is required to be received, modified and returned.")]
 		public static Font UpdateCacheIfAnyHasChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
 		{
 			if (cachedFont == null)
@@ -214,7 +216,8 @@ namespace MKY.Drawing
 		/// <param name="cachedFont">The cached font.</param>
 		/// <param name="fontNameAndSizeToEvaluate">The font to retrieve name and size from for evaluation of change.</param>
 		/// <param name="fontStyleToApply">The font style to apply to the cached font.</param>
-		/// <returns>The cached font.</returns>
+		/// <returns>The reference to the cached font.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Font is required to be received, modified and returned.")]
 		public static Font UpdateCacheIfNameOrSizeHasChanged(ref Font cachedFont, Font fontNameAndSizeToEvaluate, FontStyle fontStyleToApply)
 		{
 			return (UpdateCacheIfNameOrSizeHasChanged(ref cachedFont, fontNameAndSizeToEvaluate.Name, fontNameAndSizeToEvaluate.Size, fontStyleToApply));
@@ -228,7 +231,8 @@ namespace MKY.Drawing
 		/// <param name="fontNameToEvaluate">Name of the font for evaluation of change.</param>
 		/// <param name="fontSizeToEvaluate">Size of the font for evaluation of change.</param>
 		/// <param name="fontStyleToApply">The font style to apply to the cached font.</param>
-		/// <returns>The cached font.</returns>
+		/// <returns>The reference to the cached font.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Font is required to be received, modified and returned.")]
 		public static Font UpdateCacheIfNameOrSizeHasChanged(ref Font cachedFont, string fontNameToEvaluate, float fontSizeToEvaluate, FontStyle fontStyleToApply)
 		{
 			if (cachedFont == null)

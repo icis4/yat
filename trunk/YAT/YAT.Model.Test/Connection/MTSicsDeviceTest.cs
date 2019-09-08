@@ -263,7 +263,7 @@ namespace YAT.Model.Test.Connection
 				Assert.Ignore(UsbHubControl.ErrorMessage);
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var portOut = UsbHubSetting.Out4;
+			var portOut = UsbHubSettings.Out4;
 
 			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
 
@@ -292,14 +292,14 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Disconnect/Reconnect without sending. ---------------------------------
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSetting.None), Is.True, "Failed to change USB hub configuration!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
+				Assert.That(UsbHubControl.Set(UsbHubDevices.Hub2, UsbHubSettings.None), Is.True, "Failed to change USB hub configuration!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.That(terminal.IsOpen,        Is.False);
 				Assert.That(terminal.IsReadyToSend, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-				Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
+				Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 				Utilities.WaitForOpen(terminal);
 				Assert.That(terminal.IsOpen,        Is.True);
@@ -344,14 +344,14 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.That(UsbHubControl.Disable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
+				Assert.That(UsbHubControl.Disable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.That(terminal.IsOpen,        Is.False);
 				Assert.That(terminal.IsReadyToSend, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-				Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
+				Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 				Utilities.WaitForOpen(terminal);
 				Assert.That(terminal.IsOpen,        Is.True);
@@ -405,7 +405,7 @@ namespace YAT.Model.Test.Connection
 					Thread.Sleep(WaitForOperation);
 
 					// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-					Assert.That(UsbHubControl.Disable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
+					Assert.That(UsbHubControl.Disable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 					Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 					Utilities.WaitForClose(terminal);
 					Assert.That(terminal.IsOpen,        Is.False);
@@ -416,7 +416,7 @@ namespace YAT.Model.Test.Connection
 					// YAT terminal shall handle this situation without any exceptions!
 
 					// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-					Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
+					Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 					Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 					Utilities.WaitForOpen(terminal);
 					Assert.That(terminal.IsOpen,        Is.True);
@@ -430,7 +430,7 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Disconnect, then manually close. --------------------------------------
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
-				Assert.That(UsbHubControl.Disable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
+				Assert.That(UsbHubControl.Disable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
 				Assert.That(terminal.IsOpen,        Is.False);
@@ -443,7 +443,7 @@ namespace YAT.Model.Test.Connection
 				Assert.That(terminal.IsReadyToSend, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
-				Assert.That(UsbHubControl.Enable(UsbHubDevice.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
+				Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.False);
 
 				// Manually open terminal again. Expected: No exceptions, terminal can be opened.
@@ -464,7 +464,7 @@ namespace YAT.Model.Test.Connection
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
 
-			Assert.That(UsbHubControl.Set(UsbHubDevice.Hub2, UsbHubSetting.All), Is.True, "Failed to set USB hub!");
+			Assert.That(UsbHubControl.Set(UsbHubDevices.Hub2, UsbHubSettings.All), Is.True, "Failed to set USB hub!");
 		}
 
 		#endregion
