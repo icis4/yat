@@ -369,7 +369,7 @@ namespace YAT.Domain
 
 			var parseMode = TerminalSettings.Send.File.ToParseMode();
 
-			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
+			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>

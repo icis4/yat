@@ -540,7 +540,7 @@ namespace YAT.Domain
 
 			var parseMode = TerminalSettings.Send.File.ToParseMode();
 
-			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
+			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true));
 		}
 
 		/// <remarks>
@@ -561,7 +561,7 @@ namespace YAT.Domain
 					if (m.Success)
 						textToParse = textToParse.Remove(m.Index, m.Length);
 
-					if (TerminalSettings.Send.File.SkipEmptyLines && string.IsNullOrEmpty(textToParse))
+					if (string.IsNullOrEmpty(textToParse) && (item.SendMode == SendMode.File) && TerminalSettings.Send.File.SkipEmptyLines)
 						return;
 				}
 			}
