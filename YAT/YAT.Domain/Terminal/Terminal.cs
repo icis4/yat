@@ -1017,7 +1017,7 @@ namespace YAT.Domain
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode();
 
-			DoSendData(new TextDataSendItem(data, defaultRadix, parseMode, false));
+			DoSendData(new TextDataSendItem(data, defaultRadix, parseMode, SendMode.Text, false));
 		}
 
 		/// <summary></summary>
@@ -1028,7 +1028,7 @@ namespace YAT.Domain
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode();
 
-			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
+			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true));
 		}
 
 		/// <remarks>
@@ -1048,7 +1048,7 @@ namespace YAT.Domain
 
 			var l = new List<TextDataSendItem>(dataLines.Length); // Preset the required capacity to improve memory management.
 			foreach (string dataLine in dataLines)
-				l.Add(new TextDataSendItem(dataLine, defaultRadix, parseMode, true));
+				l.Add(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true));
 
 			DoSendData(l.ToArray());
 		}

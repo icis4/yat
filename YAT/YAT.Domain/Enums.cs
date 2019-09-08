@@ -27,16 +27,13 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public enum IOErrorSeverity
+	public enum SendMode
 	{
 		/// <summary></summary>
-		Acceptable = MKY.IO.Serial.ErrorSeverity.Acceptable,
+		Text,
 
 		/// <summary></summary>
-		Severe = MKY.IO.Serial.ErrorSeverity.Severe,
-
-		/// <summary></summary>
-		Fatal = MKY.IO.Serial.ErrorSeverity.Fatal
+		File
 	}
 
 	/// <summary></summary>
@@ -55,6 +52,19 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		Bidir = 3
+	}
+
+	/// <summary></summary>
+	public enum IOErrorSeverity
+	{
+		/// <summary></summary>
+		Acceptable = MKY.IO.Serial.ErrorSeverity.Acceptable,
+
+		/// <summary></summary>
+		Severe = MKY.IO.Serial.ErrorSeverity.Severe,
+
+		/// <summary></summary>
+		Fatal = MKY.IO.Serial.ErrorSeverity.Fatal
 	}
 
 	/// <remarks>

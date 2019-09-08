@@ -148,14 +148,18 @@ namespace YAT.Domain
 		public Parser.Modes ParseMode { get; }
 
 		/// <summary></summary>
+		public SendMode SendMode { get; }
+
+		/// <summary></summary>
 		public bool IsLine { get; }
 
 		/// <summary></summary>
-		public TextDataSendItem(string data, Radix defaultRadix, Parser.Modes parseMode, bool isLine)
+		public TextDataSendItem(string data, Radix defaultRadix, Parser.Modes parseMode, SendMode sendMode, bool isLine)
 		{
 			Data         = data;
 			DefaultRadix = defaultRadix;
 			ParseMode    = parseMode;
+			SendMode     = sendMode;
 			IsLine       = isLine;
 		}
 
@@ -189,6 +193,7 @@ namespace YAT.Domain
 			return (indent + "> Data         : " + DataAsPrintableString + Environment.NewLine +
 			        indent + "> DefaultRadix : " + DefaultRadix          + Environment.NewLine +
 			        indent + "> ParseMode    : " + ParseMode             + Environment.NewLine +
+			        indent + "> SendMode     : " + SendMode              + Environment.NewLine +
 			        indent + "> IsLine       : " + IsLine                + Environment.NewLine);
 		}
 
