@@ -726,7 +726,7 @@ namespace YAT.View.Forms
 			//
 			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
-			// ...otherwise associated main shortcuts won't work!
+			// ...associated main shortcuts would otherwise be routed to the first rather than the active MDI child!
 			//
 			//
 			//
@@ -1283,7 +1283,7 @@ namespace YAT.View.Forms
 			//
 			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Command.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommands;
-			// ...otherwise associated main shortcuts won't work!
+			// ...associated main shortcuts would otherwise be routed to the first rather than the active MDI child!
 			//
 			//
 			//
@@ -2847,7 +2847,7 @@ namespace YAT.View.Forms
 			//
 			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Page.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage;
-			// ...otherwise associated main shortcuts won't work!
+			// ...associated main shortcuts would otherwise be routed to the first rather than the active MDI child!
 			//
 			//
 			//
@@ -3484,7 +3484,7 @@ namespace YAT.View.Forms
 			//
 			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Preset.OwnerItem = this.toolStripMenuItem_TerminalMenu_Terminal_Presets;
-			// ...otherwise associated main shortcuts won't work!
+			// ...associated main shortcuts would otherwise be routed to the first rather than the active MDI child!
 			//
 			//
 			//
