@@ -332,14 +332,24 @@ namespace YAT.View.Controls
 		public virtual void SuspendCommandStateUpdate()
 		{
 			this.commandStateUpdateSuspendedCount++;
+
+			foreach (var set in this.buttonSets)
+				set.SuspendCommandStateUpdate();
 		}
 
 		/// <remarks>Useful to improve performance.</remarks>
-		public virtual void ResumeCommandStateUpdate()
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void ResumeCommandStateUpdate(bool performUpdate = true)
 		{
+			foreach (var set in this.buttonSets)
+				set.ResumeCommandStateUpdate(!performUpdate); // Otherwise, update will be done by SetCommandStateControls() below.
+
 			this.commandStateUpdateSuspendedCount--;
 			if (this.commandStateUpdateSuspendedCount == 0)
-				SetCommandStateControls();
+			{
+				if (performUpdate)
+					SetCommandStateControls();
+			}
 
 			if (this.commandStateUpdateSuspendedCount < 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The " + this.GetType() + " command state update suspend counter has become less than 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
