@@ -1364,11 +1364,13 @@
 			// 
 			// label_TextSettingsRemark
 			// 
+			this.label_TextSettingsRemark.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_TextSettingsRemark.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_TextSettingsRemark.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_TextSettingsRemark.Location = new System.Drawing.Point(544, 207);
+			this.label_TextSettingsRemark.Location = new System.Drawing.Point(544, 131);
 			this.label_TextSettingsRemark.Name = "label_TextSettingsRemark";
-			this.label_TextSettingsRemark.Size = new System.Drawing.Size(103, 193);
+			this.label_TextSettingsRemark.Size = new System.Drawing.Size(103, 619);
 			this.label_TextSettingsRemark.TabIndex = 7;
 			this.label_TextSettingsRemark.Text = "Also see\r\n[Text Settings...]";
 			this.label_TextSettingsRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
