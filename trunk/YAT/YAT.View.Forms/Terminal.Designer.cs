@@ -715,9 +715,27 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			// BEGIN OF ATTENTION, the 'OwnerItem' must be set to the main menu, otherwise associated main shortcuts don't work!
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
-			// END OF ATTENTION
+			// ...otherwise associated main shortcuts won't work!
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(152, 248);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -1254,9 +1272,27 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_CommandContextMenu_11,
             this.toolStripMenuItem_CommandContextMenu_12});
 			this.contextMenuStrip_Command.Name = "contextMenuStrip_Command";
-			// BEGIN OF ATTENTION, the 'OwnerItem' must be set to the main menu, otherwise associated main shortcuts don't work!
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Command.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommands;
-			// END OF ATTENTION
+			// ...otherwise associated main shortcuts won't work!
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
 			this.contextMenuStrip_Command.Size = new System.Drawing.Size(221, 268);
 			this.contextMenuStrip_Command.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Command_Opening);
 			// 
@@ -2800,9 +2836,27 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PageContextMenu_8,
             this.toolStripMenuItem_PageContextMenu_9});
 			this.contextMenuStrip_Page.Name = "contextMenuStrip_Page";
-			// BEGIN OF ATTENTION, the 'OwnerItem' must be set to the main menu, otherwise associated main shortcuts don't work!
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Page.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage;
-			// END OF ATTENTION
+			// ...otherwise associated main shortcuts won't work!
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
 			this.contextMenuStrip_Page.Size = new System.Drawing.Size(198, 252);
 			this.contextMenuStrip_Page.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Page_Opening);
 			// 
@@ -3419,9 +3473,27 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PresetContextMenu_Preset_7,
             this.toolStripMenuItem_PresetContextMenu_Preset_8});
 			this.contextMenuStrip_Preset.Name = "contextMenuStrip_Preset";
-			// BEGIN OF ATTENTION, the 'OwnerItem' must be set to the main menu, otherwise associated main shortcuts don't work!
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// A context strip's 'OwnerItem' must be set to the main menu,...
 			this.contextMenuStrip_Preset.OwnerItem = this.toolStripMenuItem_TerminalMenu_Terminal_Presets;
-			// END OF ATTENTION
+			// ...otherwise associated main shortcuts won't work!
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
 			this.contextMenuStrip_Preset.Size = new System.Drawing.Size(234, 180);
 			this.contextMenuStrip_Preset.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Preset_Opening);
 			// 
