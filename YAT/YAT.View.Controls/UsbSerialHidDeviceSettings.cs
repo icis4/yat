@@ -143,6 +143,7 @@ namespace YAT.View.Controls
 		/// ...initially updating <see cref="Preset"/> and <see cref="FlowControl"/>.
 		/// ...subsequently updating <see cref="Preset"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public DeviceInfo DeviceInfo
@@ -656,10 +657,13 @@ namespace YAT.View.Controls
 			if (((SerialHidDeviceSettingsPresetEx)Preset).ToReportFormat() != ReportFormat)
 			{
 				SerialHidDeviceSettingsPresetEx presetFromDeviceInfo = null;
-				if (this.deviceInfo != null)
-					SerialHidDeviceSettingsPresetEx.TryParse(this.deviceInfo, out presetFromDeviceInfo);
+				bool parseHasSucceeded = false;
 
-				if ((presetFromDeviceInfo != null) &&
+				if (this.deviceInfo != null)
+					parseHasSucceeded = SerialHidDeviceSettingsPresetEx.TryParse(this.deviceInfo, out presetFromDeviceInfo);
+
+				if ((parseHasSucceeded) &&
+				    (presetFromDeviceInfo != null) &&
 				    (presetFromDeviceInfo.ToReportFormat() == ReportFormat) &&
 				    (presetFromDeviceInfo.ToRxFilterUsage() == RxFilterUsage))
 				{
@@ -682,10 +686,13 @@ namespace YAT.View.Controls
 			if (((SerialHidDeviceSettingsPresetEx)Preset).ToRxFilterUsage() != RxFilterUsage)
 			{
 				SerialHidDeviceSettingsPresetEx presetFromDeviceInfo = null;
-				if (this.deviceInfo != null)
-					SerialHidDeviceSettingsPresetEx.TryParse(this.deviceInfo, out presetFromDeviceInfo);
+				bool parseHasSucceeded = false;
 
-				if ((presetFromDeviceInfo != null) &&
+				if (this.deviceInfo != null)
+					parseHasSucceeded = SerialHidDeviceSettingsPresetEx.TryParse(this.deviceInfo, out presetFromDeviceInfo);
+
+				if ((parseHasSucceeded) &&
+				    (presetFromDeviceInfo != null) &&
 				    (presetFromDeviceInfo.ToReportFormat() == ReportFormat) &&
 				    (presetFromDeviceInfo.ToRxFilterUsage() == RxFilterUsage))
 				{

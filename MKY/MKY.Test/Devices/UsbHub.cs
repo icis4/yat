@@ -21,14 +21,22 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 
 using MKY.IO;
+
+#endregion
 
 namespace MKY.Test.Devices
 {
@@ -38,8 +46,9 @@ namespace MKY.Test.Devices
 	//==============================================================================================
 
 	/// <summary>Flags to enable/disable the outputs of the 'RS-232' USB Hub.</summary>
+	/// <remarks>Plural name is an FxCop requirement for <see cref="FlagsAttribute"/>.</remarks>
 	[Flags]
-	public enum UsbHubDevice
+	public enum UsbHubDevices
 	{
 		/// <summary>No device.</summary>
 		None = 0x00,
@@ -55,8 +64,9 @@ namespace MKY.Test.Devices
 	}
 
 	/// <summary>Flags to enable/disable the outputs of the 'RS-232' USB Hub.</summary>
+	/// <remarks>Plural name is an FxCop requirement for <see cref="FlagsAttribute"/>.</remarks>
 	[Flags]
-	public enum UsbHubSetting
+	public enum UsbHubSettings
 	{
 		/// <summary>No outputs enabled.</summary>
 		None = 0x00,
@@ -157,7 +167,7 @@ namespace MKY.Test.Devices
 		/// <remarks>
 		/// Assume that all used outputs are enabled at first.
 		/// </remarks>
-		private static UsbHubSetting staticSettingProxy = UsbHubSetting.All;
+		private static UsbHubSettings staticSettingProxy = UsbHubSettings.All;
 
 		#endregion
 
@@ -188,16 +198,16 @@ namespace MKY.Test.Devices
 		/// Sets all outputs to the given setting.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public static bool Set(UsbHubDevice device, UsbHubSetting setting)
+		public static bool Set(UsbHubDevices device, UsbHubSettings setting)
 		{
 			DebugMessage(device, "Setting   " + SettingToBinaryString(setting) + " mask.");
 
-			UsbHubSetting disableMask = ( staticSettingProxy & ~setting);
-			UsbHubSetting enableMask  = (~staticSettingProxy &  setting);
+			UsbHubSettings disableMask = ( staticSettingProxy & ~setting);
+			UsbHubSettings enableMask  = (~staticSettingProxy &  setting);
 
-			if (disableMask != UsbHubSetting.None)
+			if (disableMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticSettingProxy & ~disableMask);
+				UsbHubSettings accumulated = (staticSettingProxy & ~disableMask);
 				if (!TryConfigure(device, accumulated)) // No need to do steps here, disabling only.
 					return (false);
 
@@ -205,9 +215,9 @@ namespace MKY.Test.Devices
 				Thread.Sleep(DriverUnloadingWaitTime);
 			}
 
-			if (enableMask != UsbHubSetting.None)
+			if (enableMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticSettingProxy | enableMask);
+				UsbHubSettings accumulated = (staticSettingProxy | enableMask);
 				if (!SetInSteps(device, accumulated))
 					return (false);
 
@@ -217,14 +227,14 @@ namespace MKY.Test.Devices
 			return (true);
 		}
 
-		private static bool SetInSteps(UsbHubDevice device, UsbHubSetting setting)
+		private static bool SetInSteps(UsbHubDevices device, UsbHubSettings setting)
 		{
-			UsbHubSetting stepMask;
+			UsbHubSettings stepMask;
 
-			stepMask = setting & UsbHubSetting.Step1;
-			if (stepMask != UsbHubSetting.None)
+			stepMask = setting & UsbHubSettings.Step1;
+			if (stepMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticSettingProxy | stepMask);
+				UsbHubSettings accumulated = (staticSettingProxy | stepMask);
 				if (!TryConfigure(device, accumulated))
 					return (false);
 
@@ -232,10 +242,10 @@ namespace MKY.Test.Devices
 				Thread.Sleep(DriverLoadingWaitTime);
 			}
 
-			stepMask = setting & UsbHubSetting.Step2;
-			if (stepMask != UsbHubSetting.None)
+			stepMask = setting & UsbHubSettings.Step2;
+			if (stepMask != UsbHubSettings.None)
 			{
-				UsbHubSetting accumulated = (staticSettingProxy | stepMask);
+				UsbHubSettings accumulated = (staticSettingProxy | stepMask);
 				if (!TryConfigure(device, accumulated))
 					return (false);
 
@@ -264,12 +274,12 @@ namespace MKY.Test.Devices
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Just a debug message.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Just a debug message.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Just a debug message.")]
-		public static bool Enable(UsbHubDevice device, UsbHubSetting enableMask)
+		public static bool Enable(UsbHubDevices device, UsbHubSettings enableMask)
 		{
 			DebugMessage(device, "Enabling  " + SettingToBinaryString(enableMask) + " mask. " +
 			                     "Proxy was " + SettingToBinaryString(staticSettingProxy) + " mask.");
 
-			UsbHubSetting accumulated = (staticSettingProxy | enableMask);
+			UsbHubSettings accumulated = (staticSettingProxy | enableMask);
 			if (!SetInSteps(device, accumulated))
 				return (false);
 
@@ -284,12 +294,12 @@ namespace MKY.Test.Devices
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Just a debug message.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Just a debug message.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Just a debug message.")]
-		public static bool Disable(UsbHubDevice device, UsbHubSetting disableMask)
+		public static bool Disable(UsbHubDevices device, UsbHubSettings disableMask)
 		{
 			DebugMessage(device, "Disabling " + SettingToBinaryString(disableMask) + " mask. " +
 			                     "Proxy was " + SettingToBinaryString(staticSettingProxy) + " mask.");
 
-			UsbHubSetting accumulated = (staticSettingProxy & ~disableMask);
+			UsbHubSettings accumulated = (staticSettingProxy & ~disableMask);
 			if (!TryConfigure(device, accumulated)) // No need to do steps here, disabling only.
 				return (false);
 
@@ -328,7 +338,7 @@ namespace MKY.Test.Devices
 		}
 
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		private static bool TryConfigure(UsbHubDevice device, UsbHubSetting setting)
+		private static bool TryConfigure(UsbHubDevices device, UsbHubSettings setting)
 		{
 			string mask = SettingToBinaryString(setting);
 			string deviceSerial = DeviceToSerialString(device);
@@ -365,6 +375,7 @@ namespace MKY.Test.Devices
 		/// Execution requires less than <see cref="ExecutionTimeout"/>.
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		private static bool TryExecute(string arguments, out string outputAndErrorResult)
 		{
 			var p = new Process();
@@ -387,9 +398,9 @@ namespace MKY.Test.Devices
 				                                            // ...or...
 				while (!p.StandardError.EndOfStream)        // FTDI open error: FT_DEVICE_NOT_FOUND
 					sb.Append(p.StandardOutput.ReadLine()); // ...and anything else indicates an unexpected result.
-				                                            //
-				outputAndErrorResult = sb.ToString();       // AppendLine() would result in e.g. "10111\r\n", i.e. the EOL would
-				return (true);                              // have to be trimmed before forwarding to TryParseSettingFromBinaryString().
+				                                            // AppendLine() would result in e.g. "10111\r\n", i.e. the EOL would
+				outputAndErrorResult = sb.ToString();       // have to be trimmed before forwarding to TryParseSettingFromBinaryString().
+				return (true);
 			}
 			else
 			{
@@ -398,24 +409,24 @@ namespace MKY.Test.Devices
 			}
 		}
 
-		private static string SettingToBinaryString(UsbHubSetting setting)
+		private static string SettingToBinaryString(UsbHubSettings setting)
 		{
 			return (StringEx.Right(ByteEx.ConvertToBinaryString((byte)setting), SettingBitCount));
 		}
 
 		private static bool TryParseSettingFromBinaryString(string s)
 		{
-			UsbHubSetting dummy;
+			UsbHubSettings dummy;
 			return (TryParseSettingFromBinaryString(s, out dummy));
 		}
 
-		private static bool TryParseSettingFromBinaryString(string s, out UsbHubSetting result)
+		private static bool TryParseSettingFromBinaryString(string s, out UsbHubSettings result)
 		{
 			ulong ulongResult;
 			if (UInt64Ex.TryParseBinary(s, out ulongResult))
 			{
 				var byteResult = (byte)ulongResult;
-				result = (UsbHubSetting)byteResult;
+				result = (UsbHubSettings)byteResult;
 				return (true);
 			}
 			else
@@ -425,22 +436,22 @@ namespace MKY.Test.Devices
 			}
 		}
 
-		private static string DeviceToSerialString(UsbHubDevice device)
+		private static string DeviceToSerialString(UsbHubDevices device)
 		{
 			switch (device)
 			{
-				case UsbHubDevice.None:
-				case UsbHubDevice.All:  throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires a dedicated device, not '" + device + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "device"));
+				case UsbHubDevices.None:
+				case UsbHubDevices.All:  throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires a dedicated device, not '" + device + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "device"));
 
-				case UsbHubDevice.Hub1: return (ConfigurationProvider.Configuration.UsbHub1);
-				case UsbHubDevice.Hub2: return (ConfigurationProvider.Configuration.UsbHub2);
+				case UsbHubDevices.Hub1: return (ConfigurationProvider.Configuration.UsbHub1);
+				case UsbHubDevices.Hub2: return (ConfigurationProvider.Configuration.UsbHub2);
 
 				default: throw (new ArgumentOutOfRangeException("device", device, MessageHelper.InvalidExecutionPreamble + "'" + device + "' identifies a device that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		[Conditional("DEBUG")]
-		private static void DebugMessage(UsbHubDevice device, string message)
+		private static void DebugMessage(UsbHubDevices device, string message)
 		{
 			DebugMessage(device.ToString(), message);
 		}
