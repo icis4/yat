@@ -561,6 +561,7 @@ namespace YAT.Domain
 					if (m.Success)
 						textToParse = textToParse.Remove(m.Index, m.Length);
 
+					// Reevaluate whether to skip the line on [Send File], it may have been non-empty when enqueuing, but now empty:
 					if (string.IsNullOrEmpty(textToParse) && (item.SendMode == SendMode.File) && TerminalSettings.Send.File.SkipEmptyLines)
 						return;
 				}
