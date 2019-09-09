@@ -150,6 +150,7 @@ Fixed bugs:
   without closing the serial COM port now also handles potential 'UnauthorizedAccessException'
   (bug #442, related to former bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401).
 - [Remote Host] and [Local Filter] selection again show the common items (rel. to feat. req. #370)).
+- [Send > Skip Empty Line on [Send File]] no longer accidentally restricts [Send Text].
 - Problem with escape sequences in automatic action/response fixed (bug #424).
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
