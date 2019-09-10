@@ -977,7 +977,6 @@ namespace YAT.View.Forms
 			this.comboBox_InfoEnclosure.Size = new System.Drawing.Size(175, 21);
 			this.comboBox_InfoEnclosure.TabIndex = 3;
 			this.toolTip.SetToolTip(this.comboBox_InfoEnclosure, "The enclosure of informational elements.");
-			this.comboBox_InfoEnclosure.SelectedIndexChanged += new System.EventHandler(this.comboBox_InfoEnclosure_SelectedIndexChanged);
 			this.comboBox_InfoEnclosure.TextChanged += new System.EventHandler(this.comboBox_InfoEnclosure_TextChanged);
 			this.comboBox_InfoEnclosure.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_InfoEnclosure_Validating);
 			// 
@@ -989,7 +988,6 @@ namespace YAT.View.Forms
 			this.comboBox_InfoSeparator.Size = new System.Drawing.Size(175, 21);
 			this.comboBox_InfoSeparator.TabIndex = 1;
 			this.toolTip.SetToolTip(this.comboBox_InfoSeparator, "The separator between adjacent informational elements.");
-			this.comboBox_InfoSeparator.SelectedIndexChanged += new System.EventHandler(this.comboBox_InfoSeparator_SelectedIndexChanged);
 			this.comboBox_InfoSeparator.TextChanged += new System.EventHandler(this.comboBox_InfoSeparator_TextChanged);
 			this.comboBox_InfoSeparator.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_InfoSeparator_Validating);
 			// 

@@ -457,6 +457,24 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void comboBox_Options_NameSeparator_TextChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			Log.FileNameSeparatorEx separator;
+			if (Log.FileNameSeparatorEx.TryParse(comboBox_Options_NameSeparator.Text, out separator))
+			{
+				this.settingsInEdit.NameSeparator = separator;
+			}
+			else
+			{
+				if (ValidateFileNamePart(comboBox_Options_NameSeparator.Text, "Separator"))
+					this.settingsInEdit.NameSeparator = comboBox_Options_NameSeparator.Text;
+			}
+		}
+
 		private void checkBox_Options_FolderType_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
