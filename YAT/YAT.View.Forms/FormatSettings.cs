@@ -243,17 +243,8 @@ namespace YAT.View.Forms
 			ShowBackgroundColorDialog();
 		}
 
-		private void comboBox_InfoSeparator_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			var separator = (comboBox_InfoSeparator.SelectedItem as Domain.InfoSeparatorEx);
-			if (separator != null)
-				this.infoSeparator = separator;
-
-			SetControls();
-		}
+	////private void comboBox_InfoSeparator_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since       "      _Validating() below gets called anyway.
 
 		private void comboBox_InfoSeparator_TextChanged(object sender, EventArgs e)
 		{
@@ -296,17 +287,8 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void comboBox_InfoEnclosure_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			var enclosure = (comboBox_InfoEnclosure.SelectedItem as Domain.InfoEnclosureEx);
-			if (enclosure != null)
-				this.infoEnclosure = enclosure;
-
-			SetControls();
-		}
+	////private void comboBox_InfoEnclosure_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since       "      _Validating() below gets called anyway.
 
 		private void comboBox_InfoEnclosure_TextChanged(object sender, EventArgs e)
 		{
@@ -340,10 +322,10 @@ namespace YAT.View.Forms
 				MessageBoxEx.Show
 				(
 					this,
-					"Enclosure string must be an even number of characters (e.g. 2 or 4 characters)!",
+					"Enclosure string must be an even number of characters (e.g. 2 or 4 characters).",
 					"Invalid Input",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
+					MessageBoxIcon.Warning // Just a warning since _TextChanged() on editing likely ends here.
 				);
 
 				return (false);

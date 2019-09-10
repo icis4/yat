@@ -330,6 +330,7 @@ namespace YAT.View.Forms
 			this.toolTip.SetToolTip(this.comboBox_Options_NameSeparator, "Either select a preset from the list, or fill in any valid sequence of characters" +
         ".\r\n\\ / : * ? \" < > | are invalid characters.\r\n\r\nContact YAT via \"Help > Request " +
         "Feature\" to request additional presets.");
+			this.comboBox_Options_NameSeparator.TextChanged += new System.EventHandler(this.comboBox_Options_NameSeparator_TextChanged);
 			this.comboBox_Options_NameSeparator.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Options_NameSeparator_Validating);
 			// 
 			// checkBox_Options_NameDirection
