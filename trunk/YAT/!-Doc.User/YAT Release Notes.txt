@@ -97,7 +97,7 @@ New:
   \!(FlowControl()) to change a dedicated port setting on-the-fly (feature request #71, partly
   related to former request #321 implemented since YAT 1.99.80). Useful for e.g. sending commands
   that let a connected device change its baud rate. See [Help > Contents...] for example usage.
-- Additional automatic actions [Filter] and [Suppress] added (feature request #347).
+- Additional automatic actions [Filter] and [Suppress] added (feature requests #347 and #382).
   Useful to exclusively display a pattern in the monitor, or suppress a pattern.
 - Additional automatic action [Clear Monitor on Subsequent Receiving] added (feature request #357).
   Useful for screen/page synchronization on terminal-emulation-like behavior.
@@ -155,8 +155,8 @@ Fixed bugs:
 - Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
 - 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
 - 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
-  #422, #423, #432, #434, #435, #441, #443, #444, #450, #452, #453, #456, #461, #467, #468) which
-  further refines the fix to former bugs #408 and #409.
+  #422, #423, #432, #434, #435, #441, #443, #444, #450, #452, #453, #456, #461, #467, #468, #474,
+  #475) which further refines the fix to former bugs #408 and #409.
 - Attempted to fix rare 'TargetInvocationException' caused by 'IndexOutOfRangeException' (bug #446).
 - [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449, #458).
