@@ -289,9 +289,9 @@ namespace YAT.View.Forms
 			if (this.contextMenuStripShortcutTargetWorkaround.ProcessCmdKey(keyData))
 				return (true);
 
-			// In addition to predefined shortcuts in the menus, the shortcut [Alt+Shift+F1..F12]
+			// In addition to predefined shortcuts in the menus, the shortcut [Ctrl+Shift+F1..F12]
 			// shall copy the according 'Predefined Command' to 'Send Text':
-			if ((keyData & Keys.Modifiers) == (Keys.Alt | Keys.Shift))
+			if ((keyData & Keys.Modifiers) == (Keys.Control | Keys.Shift))
 			{
 				int functionKey;
 				if (KeysEx.TryConvertFunctionKey(keyData, out functionKey))
@@ -4258,11 +4258,13 @@ namespace YAT.View.Forms
 
 		private void FixContextMenus()
 		{
-			var strips = new List<ContextMenuStrip>(6); // Preset the required capacity to improve memory management.
-			strips.Add(contextMenuStrip_Preset);
+			var strips = new List<ContextMenuStrip>(8); // Preset the required capacity to improve memory management.
+			strips.Add(contextMenuStrip_Command);
 			strips.Add(contextMenuStrip_Monitor);
-			strips.Add(contextMenuStrip_Radix);
+			strips.Add(contextMenuStrip_Page);
 			strips.Add(contextMenuStrip_Predefined);
+			strips.Add(contextMenuStrip_Preset);
+			strips.Add(contextMenuStrip_Radix);
 			strips.Add(contextMenuStrip_Send);
 			strips.Add(contextMenuStrip_Status);
 
@@ -4290,11 +4292,14 @@ namespace YAT.View.Forms
 		{
 			toolStripMenuItem_TerminalMenu_View_Initialize();
 
-			contextMenuStrip_Preset_Initialize();
-			contextMenuStrip_Predefined_Initialize();
 			contextMenuStrip_Command_Initialize();
-			contextMenuStrip_Page_Initialize();
 			contextMenuStrip_Monitor_Initialize();
+			contextMenuStrip_Page_Initialize();
+			contextMenuStrip_Predefined_Initialize();
+			contextMenuStrip_Preset_Initialize();
+		////contextMenuStrip_Radix_Initialize()  is not implemented/needed (yet).
+		////contextMenuStrip_Send_Initialize()   is not implemented/needed (yet).
+		////contextMenuStrip_Status_Initialize() is not implemented/needed (yet).
 
 			toolStripStatusLabel_TerminalStatus_Initialize();
 		}

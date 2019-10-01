@@ -162,6 +162,7 @@ Fixed bugs:
 - [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449, #458).
 - [Advanced Settings > Disable escapes on [Send Text]] no longer leads to an 'ArgumentException'
   in some cases (bug #454).
+- Shortcuts [Ctrl+Shift+F1..F12] 'Copy to Send Text' fixed.
 - Option to set default radix for predefined commands fixed.
 - Command line option [TransmitText] again allows keywords (related to bug #454).
 - Optional user name of terminal is again taken into account (bug #415).
