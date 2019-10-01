@@ -660,8 +660,6 @@ namespace YAT.View.Controls
 			var success = ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)));
 			if (success)
 			{
-				Refresh();
-
 				switch (this.terminalType)
 				{
 					case Domain.TerminalType.Binary:
@@ -682,6 +680,7 @@ namespace YAT.View.Controls
 				ApplicationSettings.SaveLocalUserSettings();
 				ApplicationSettings.SaveRoamingUserSettings();
 
+				Refresh(); // Ensure that control has been refreshed before continuing.
 				ConfirmCommand(ofd.FileName);
 			}
 			else

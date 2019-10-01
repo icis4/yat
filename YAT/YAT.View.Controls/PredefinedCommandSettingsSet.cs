@@ -860,8 +860,6 @@ namespace YAT.View.Controls
 			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseModeForText);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
-
 				this.command = f.CommandResult;
 				this.isValidated = true; // Command has been validated by multi-line box.
 
@@ -918,8 +916,6 @@ namespace YAT.View.Controls
 
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				Refresh();
-
 				switch (this.terminalType)
 				{
 					case Domain.TerminalType.Binary:

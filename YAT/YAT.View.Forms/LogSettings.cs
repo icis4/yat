@@ -749,8 +749,6 @@ namespace YAT.View.Forms
 			ofd.CheckFileExists = false;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				Refresh();
-
 				ApplicationSettings.LocalUserSettings.Paths.LogFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
