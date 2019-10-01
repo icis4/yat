@@ -315,7 +315,7 @@ namespace YAT.View.Controls
 						// Set property instead of member to ensure that changed event is raised.
 						DeviceInfo = null;
 
-						ShowNoDevicesMessage();
+						ShowNoneAvailableMessage();
 					}
 				}
 				finally
@@ -333,7 +333,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Showing this as on dialog message instead of <see cref="MessageBox"/> to reduce the number of potentially annoying popups.
 		/// </remarks>
-		private void ShowNoDevicesMessage()
+		private void ShowNoneAvailableMessage()
 		{
 			label_OnDialogMessage.Text = "No HID capable USB devices currently available";
 		}

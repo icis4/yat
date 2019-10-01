@@ -484,7 +484,7 @@ namespace YAT.View.Controls
 								// Set property instead of member to ensure that changed event is raised.
 								PortId = portIdAlternate;
 
-								ShowNotAvailableSwitchMessage(portIdNotAvailable, portIdAlternate);
+								ShowNotAvailableSwitchedMessage(portIdNotAvailable, portIdAlternate);
 							}
 							else
 							{
@@ -506,7 +506,7 @@ namespace YAT.View.Controls
 						PortId = null;
 
 						if (scanSuccess)
-							ShowNoPortsMessage();
+							ShowNoneAvailableMessage();
 						else
 							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
 					}
@@ -561,12 +561,12 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Showing this as on dialog message instead of <see cref="MessageBox"/> to reduce the number of potentially annoying popups.
 		/// </remarks>
-		private void ShowNoPortsMessage()
+		private void ShowNoneAvailableMessage()
 		{
 			label_OnDialogMessage.Text = "No serial COM ports currently available";
 		}
 
-		private void ShowNotAvailableSwitchMessage(string portIdNotAvailable, string portIdAlternate)
+		private void ShowNotAvailableSwitchedMessage(string portIdNotAvailable, string portIdAlternate)
 		{
 			string message =
 				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
