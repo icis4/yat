@@ -59,10 +59,10 @@ namespace YAT.View.Forms
 
 		private Log.Settings.LogSettings settings;
 		private Log.Settings.LogSettings settingsInEdit;
-		bool isOn; // = false;
+		private bool isOn; // = false;
 
-		bool requestSwitchOn; // = false;
-		bool requestSwitchOff; // = false;
+		private bool requestSwitchOn; // = false;
+		private bool requestSwitchOff; // = false;
 
 		#endregion
 

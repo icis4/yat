@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using NUnit.Framework;
 
 namespace NUnit
@@ -30,8 +32,9 @@ namespace NUnit
 	public class ContextDetectorTest
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TestIs", Justification = "FxCop...")]
 		[Test]
-		public void TestIsInNUnit()
+		public virtual void TestIsRunningInNUnit()
 		{
 			Assert.IsTrue(ContextDetector.IsRunningInNUnit);
 		}

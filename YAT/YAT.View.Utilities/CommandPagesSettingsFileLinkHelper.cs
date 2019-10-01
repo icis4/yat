@@ -97,7 +97,7 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static DialogResult ShowSaveAsFileDialog(Control owner, string filePathOld, out string filePathNew)
+		public static DialogResult ShowSaveAsFileDialog(IWin32Window owner, string filePathOld, out string filePathNew)
 		{
 			var sfd = new SaveFileDialog();
 			sfd.Title       = "Link Command Page";
@@ -126,7 +126,7 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static DialogResult ShowOpenFileDialog(Control owner, string filePathOld, out string filePathNew)
+		public static DialogResult ShowOpenFileDialog(IWin32Window owner, string filePathOld, out string filePathNew)
 		{
 			var ofd = new OpenFileDialog();
 			ofd.Title       = "Link Command Page";

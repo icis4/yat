@@ -309,6 +309,7 @@ namespace MKY.Test.Devices
 		}
 
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "Solely used for testing purposes.")]
 		private static bool TryProbe(string deviceSerial)
 		{
 			string arguments = deviceSerial + " ?";
@@ -338,6 +339,7 @@ namespace MKY.Test.Devices
 		}
 
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Justification = "Solely used for testing purposes.")]
 		private static bool TryConfigure(UsbHubDevices device, UsbHubSettings setting)
 		{
 			string mask = SettingToBinaryString(setting);
