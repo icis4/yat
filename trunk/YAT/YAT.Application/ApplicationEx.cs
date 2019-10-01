@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.0.1 Development
+// YAT Version 2.1.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -65,8 +65,8 @@ namespace YAT
 		public static readonly string ProductVersion = System.Windows.Forms.Application.ProductVersion;
 
 		/// <summary>The version designation.</summary>
-	////public const string ProductVersionStabilityIndication = "";
-		public const string ProductVersionStabilityIndication = " Development";
+		public const string ProductVersionStabilityIndication = "";
+	////public const string ProductVersionStabilityIndication = " Development";
 	////public const string ProductVersionStabilityIndication = " Preliminary";
 
 		/// <summary>The product version that combines product version and version stability indication.</summary>

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// MKY Version 1.0.26 Development
+// MKY Version 1.0.27
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -152,7 +152,7 @@ namespace MKY.Settings
 						sb.Append(Application.ProductName);
 						sb.Append("."); // e.g. "YAT.LocalUserSettings" same as namespaces.
 						sb.Append(this.name);
-					////sb.Append(Path.DirectorySeparatorChar); // e.g. "YAT.LocalUserSettings\2.0.0" same
+					////sb.Append(Path.DirectorySeparatorChar); // e.g. "YAT.LocalUserSettings\x.y.z" same
 					////sb.Append(Application.ProductVersion);  // as e.g. prefix "Local\" (see Mutex).
 					////                            ^^^ prepared for FR #37 "clone old auto files and upgrade them"
 
