@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace NUnit
@@ -35,11 +36,12 @@ namespace NUnit
 	/// </remarks>
 	public static class ContextDetector
 	{
+		[SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Normalizing towards effective file/assembly name.")]
 		static ContextDetector()
 		{
 			IsRunningInNUnit = AppDomain.CurrentDomain.GetAssemblies().Any
 			(
-				a => a.FullName.ToLowerInvariant().StartsWith("nunit.framework")
+				a => a.FullName.ToLowerInvariant().StartsWith("nunit.framework", StringComparison.OrdinalIgnoreCase)
 			);
 		}
 
