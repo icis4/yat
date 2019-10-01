@@ -59,6 +59,10 @@ namespace YAT.View.Forms
 
 		private Log.Settings.LogSettings settings;
 		private Log.Settings.LogSettings settingsInEdit;
+		bool isOn; // = false;
+
+		bool requestSwitchOn; // = false;
+		bool requestSwitchOff; // = false;
 
 		#endregion
 
@@ -68,9 +72,12 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public LogSettings(Log.Settings.LogSettings settings)
+		public LogSettings(Log.Settings.LogSettings settings, bool isOn)
 		{
 			InitializeComponent();
+
+			this.isOn = isOn;
+			this.requestSwitchOn = !isOn; // If not already on, default is to switch on (convenience).
 
 			KeepAndCloneAndAttachSettings(settings);
 			InitializeControls();
@@ -88,6 +95,18 @@ namespace YAT.View.Forms
 		public Log.Settings.LogSettings SettingsResult
 		{
 			get { return (this.settings); }
+		}
+
+		/// <summary></summary>
+		public bool RequestSwitchOn
+		{
+			get { return (this.requestSwitchOn); }
+		}
+
+		/// <summary></summary>
+		public bool RequestSwitchOff
+		{
+			get { return (this.requestSwitchOff); }
 		}
 
 		#endregion
@@ -575,9 +594,26 @@ namespace YAT.View.Forms
 				ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles = ExtensionSettings.NeatLogFilesDefault;
 
 				this.settingsInEdit.SetDefaults();
-
-				// Note that SetDefaults() will trigger SetControls().
+			////SetControls() is not needed, SetDefaults() above will trigger is via the 'Changed' event.
 			}
+		}
+
+		private void checkBox_RequestSwitchOn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.requestSwitchOn = checkBox_RequestSwitchOn.Checked;
+		////SetControls() is not needed.
+		}
+
+		private void checkBox_IsOn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.requestSwitchOff = !checkBox_IsOn.Checked;
+		////SetControls() is not needed.
 		}
 
 		#endregion
@@ -684,6 +720,11 @@ namespace YAT.View.Forms
 					checkBox_Options_EmitEncodingPreamble.Checked    = true; // Show default, XML is UTF-8 too, RTF don't care.
 					checkBox_Options_EmitEncodingPreamble.Text       = "with BOM";
 				}
+
+				checkBox_RequestSwitchOn.Visible = (!this.isOn);
+				checkBox_RequestSwitchOn.Checked = (!this.isOn && this.requestSwitchOn);
+				checkBox_IsOn           .Visible = ( this.isOn);
+				checkBox_IsOn           .Checked = ( this.isOn && !this.requestSwitchOff);
 			}
 			finally
 			{

@@ -82,6 +82,8 @@ namespace YAT.View.Forms
 			this.checkBox_Neat_Tx = new System.Windows.Forms.CheckBox();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.checkBox_RequestSwitchOn = new System.Windows.Forms.CheckBox();
+			this.checkBox_IsOn = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_Port.SuspendLayout();
 			this.groupBox_Options_TextEncoding.SuspendLayout();
@@ -308,7 +310,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Name.Size = new System.Drawing.Size(495, 76);
 			this.groupBox_Options_Name.TabIndex = 7;
 			this.groupBox_Options_Name.TabStop = false;
-			this.groupBox_Options_Name.Text = "&File Naming";
+			this.groupBox_Options_Name.Text = "File N&aming";
 			// 
 			// checkBox_Options_NameType
 			// 
@@ -546,7 +548,7 @@ namespace YAT.View.Forms
 			this.groupBox_Neat.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Neat.TabIndex = 6;
 			this.groupBox_Neat.TabStop = false;
-			this.groupBox_Neat.Text = "&Neat Format";
+			this.groupBox_Neat.Text = "Neat &Format";
 			this.toolTip.SetToolTip(this.groupBox_Neat, "Time stamp, radix, length,... formatted as in monitor view");
 			// 
 			// pathLabel_Neat_Rx
@@ -643,6 +645,34 @@ namespace YAT.View.Forms
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
+			// checkBox_RequestSwitchOn
+			// 
+			this.checkBox_RequestSwitchOn.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.checkBox_RequestSwitchOn.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_document_16x16;
+			this.checkBox_RequestSwitchOn.Location = new System.Drawing.Point(525, 207);
+			this.checkBox_RequestSwitchOn.Name = "checkBox_RequestSwitchOn";
+			this.checkBox_RequestSwitchOn.Size = new System.Drawing.Size(103, 42);
+			this.checkBox_RequestSwitchOn.TabIndex = 4;
+			this.checkBox_RequestSwitchOn.Text = "Switch log o&n";
+			this.checkBox_RequestSwitchOn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBox_RequestSwitchOn.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.checkBox_RequestSwitchOn.UseVisualStyleBackColor = true;
+			this.checkBox_RequestSwitchOn.CheckedChanged += new System.EventHandler(this.checkBox_RequestSwitchOn_CheckedChanged);
+			// 
+			// checkBox_IsOn
+			// 
+			this.checkBox_IsOn.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.checkBox_IsOn.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_document_16x16;
+			this.checkBox_IsOn.Location = new System.Drawing.Point(525, 207);
+			this.checkBox_IsOn.Name = "checkBox_IsOn";
+			this.checkBox_IsOn.Size = new System.Drawing.Size(103, 42);
+			this.checkBox_IsOn.TabIndex = 5;
+			this.checkBox_IsOn.Text = "Log is o&n";
+			this.checkBox_IsOn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBox_IsOn.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.checkBox_IsOn.UseVisualStyleBackColor = true;
+			this.checkBox_IsOn.CheckedChanged += new System.EventHandler(this.checkBox_IsOn_CheckedChanged);
+			// 
 			// LogSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -654,6 +684,8 @@ namespace YAT.View.Forms
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
+			this.Controls.Add(this.checkBox_RequestSwitchOn);
+			this.Controls.Add(this.checkBox_IsOn);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -733,5 +765,7 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.PathLabel pathLabel_Port;
 		private System.Windows.Forms.CheckBox checkBox_Port;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_Port_Extension;
+		private System.Windows.Forms.CheckBox checkBox_RequestSwitchOn;
+		private System.Windows.Forms.CheckBox checkBox_IsOn;
 	}
 }
