@@ -249,7 +249,7 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>&lt;äöü not supported&gt</Description>
+          <Description>&lt;äöü not supported&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>false</IsFilePath>
@@ -257,7 +257,7 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>&lt;ÄÖÜ not supported&gt</Description>
+          <Description>&lt;ÄÖÜ not supported&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>false</IsFilePath>
