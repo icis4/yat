@@ -5059,7 +5059,6 @@ namespace YAT.View.Forms
 			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure, this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.TimeDurationFormat);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
 
 				if (!ArrayEx.ValuesEqual(customColors, f.CustomColors))
@@ -5125,13 +5124,12 @@ namespace YAT.View.Forms
 			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
-				Refresh();
-
 				ApplicationSettings.RoamingUserSettings.Extensions.MonitorFiles = Path.GetExtension(sfd.FileName);
 				ApplicationSettings.LocalUserSettings.Paths.MonitorFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 				ApplicationSettings.SaveRoamingUserSettings();
 
+				Refresh(); // Ensure that form has been refreshed before continuing.
 				SaveMonitor(monitor, sfd.FileName);
 			}
 			else
@@ -5237,7 +5235,7 @@ namespace YAT.View.Forms
 
 			if (pd.ShowDialog(this) == DialogResult.OK)
 			{
-				Refresh();
+				Refresh(); // Ensure that form has been refreshed before continuing.
 				PrintMonitor(monitor, pd.PrinterSettings);
 			}
 			else
@@ -5349,7 +5347,6 @@ namespace YAT.View.Forms
 
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
 				this.settingsRoot.PredefinedCommand = f.SettingsResult;
 				this.settingsRoot.Predefined.SelectedPageId = f.SelectedPageId;
 			}
@@ -6039,6 +6036,7 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			Refresh(); // Ensure that form has been refreshed before showing the message box.
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
@@ -6138,11 +6136,10 @@ namespace YAT.View.Forms
 			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
-				Refresh();
-
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
+				Refresh(); // Ensure that form has been refreshed before continuing.
 				this.terminal.SaveAs(sfd.FileName);
 			}
 			else
@@ -6172,8 +6169,6 @@ namespace YAT.View.Forms
 
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
-
 				var fsr = f.SettingsResult;
 				if (fsr.HaveChanged)
 				{
@@ -6756,8 +6751,6 @@ namespace YAT.View.Forms
 			var f = new LogSettings(this.settingsRoot.Log, this.settingsRoot.LogIsOn);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
-
 				if ( this.settingsRoot.LogIsOn && f.RequestSwitchOff)
 					RequestSwitchLogOff(); // Switch off before changing settings, an empty log may otherwise result.
 

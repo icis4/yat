@@ -953,8 +953,6 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					Refresh();
-
 					// Check chosen font:
 					try
 					{
@@ -995,9 +993,9 @@ namespace YAT.View.Forms
 			colorDialog.Color        = this.formatSettingsInEdit.BackColor;
 			if (colorDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				Refresh();
 				this.formatSettingsInEdit.BackColor = colorDialog.Color;
 				this.customColors                   = colorDialog.CustomColors;
+
 				SetControls();
 			}
 		}

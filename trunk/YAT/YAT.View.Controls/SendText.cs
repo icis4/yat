@@ -1180,11 +1180,10 @@ namespace YAT.View.Controls
 			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
-
 				this.command = f.CommandResult;
 				this.isValidated = true; // Command has been validated by multi-line box.
 
+				Refresh(); // Ensure that control has been refreshed before continuing.
 				ConfirmCommand();
 
 				// Select the whole line for ComboBox' standard behavior when scrolling through item list:

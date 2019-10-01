@@ -324,7 +324,6 @@ namespace YAT.View.Controls
 			colorDialog.Color        = FormatColor;
 			if (colorDialog.ShowDialog(this) == DialogResult.OK)
 			{
-				Refresh();
 				FormatColor  = colorDialog.Color;
 				CustomColors = colorDialog.CustomColors;
 			}

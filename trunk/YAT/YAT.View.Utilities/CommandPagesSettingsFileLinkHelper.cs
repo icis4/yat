@@ -110,8 +110,6 @@ namespace YAT.View.Utilities
 			var dr = sfd.ShowDialog(owner);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
-				owner.Refresh();
-
 				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
@@ -141,8 +139,6 @@ namespace YAT.View.Utilities
 			var dr = ofd.ShowDialog(owner);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				owner.Refresh();
-
 				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 

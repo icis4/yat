@@ -2499,8 +2499,6 @@ namespace YAT.View.Forms
 			var f = new Preferences(ApplicationSettings.LocalUserSettings);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
-
 				ApplicationSettings.LocalUserSettings.MainWindow = f.SettingsResult.MainWindow;
 				ApplicationSettings.LocalUserSettings.General    = f.SettingsResult.General;
 				ApplicationSettings.SaveLocalUserSettings();
@@ -2797,13 +2795,12 @@ namespace YAT.View.Forms
 			var f = new NewTerminal(newTerminalSettings);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
-
 				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
 				ApplicationSettings.SaveLocalUserSettings();
 
 			////ResetStatusText() is not needed, Main.CreateNewTerminalFromSettings() will continue outputting.
 
+				Refresh(); // Ensure that form has been refreshed before continuing.
 				var sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
 				this.main.CreateNewTerminalFromSettings(sh);
 			}
@@ -2833,11 +2830,10 @@ namespace YAT.View.Forms
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				Refresh();
-
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
+				Refresh(); // Ensure that form has been refreshed before continuing.
 				this.main.OpenFromFile(ofd.FileName);
 			}
 			else
@@ -2881,11 +2877,10 @@ namespace YAT.View.Forms
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				Refresh();
-
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
+				Refresh(); // Ensure that form has been refreshed before continuing.
 				this.main.OpenFromFile(ofd.FileName);
 			}
 			else
@@ -2912,11 +2907,10 @@ namespace YAT.View.Forms
 			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
-				Refresh();
-
 				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
+				Refresh(); // Ensure that form has been refreshed before continuing.
 				this.workspace.SaveAs(sfd.FileName);
 			}
 			else
@@ -3173,6 +3167,7 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
+			Refresh(); // Ensure that form has been refreshed before showing the message box.
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
