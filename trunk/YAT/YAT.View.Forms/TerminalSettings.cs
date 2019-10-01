@@ -179,9 +179,9 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var ioTypeOldWasUdpSocket = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUdpSocket;
-			this.settingsInEdit.Terminal.IO.IOType =                    terminalSelection.IOType;
-			var ioTypeNewIsUdpSocket               =  ((Domain.IOTypeEx)terminalSelection.IOType).IsUdpSocket;
+			var ioTypeOldWasUdpSocket              = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUdpSocket;
+			this.settingsInEdit.Terminal.IO.IOType =                                 terminalSelection.IOType;
+			var ioTypeNewIsUdpSocket               = ((Domain.IOTypeEx)              terminalSelection.IOType).IsUdpSocket;
 
 			if (ioTypeNewIsUdpSocket != ioTypeOldWasUdpSocket)
 				PotentiallyUpdateIOTypeDependentSettings(ioTypeOldWasUdpSocket, ioTypeNewIsUdpSocket);
@@ -203,8 +203,8 @@ namespace YAT.View.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically switch the port if not or no longer available.
 
 			this.settingsInEdit.Terminal.IO.SerialPort.PortId = serialPortSelection.PortId;
 		}
@@ -315,8 +315,8 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically switch the interface if not or no longer available.
 
 			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
 		}
@@ -382,8 +382,8 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically switch the device if not or no longer available.
 
 			// Attention:
 			// Same code exists in in the following location:
@@ -672,10 +672,8 @@ namespace YAT.View.Forms
 				{
 					var f = new TextTerminalSettings(this.settingsInEdit.Terminal.TextTerminal);
 					if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
-					{
-						Refresh();
 						this.settingsInEdit.Terminal.TextTerminal = f.SettingsResult;
-					}
+
 					break;
 				}
 
@@ -683,10 +681,8 @@ namespace YAT.View.Forms
 				{
 					var f = new BinaryTerminalSettings(this.settingsInEdit.Terminal.BinaryTerminal);
 					if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
-					{
-						Refresh();
 						this.settingsInEdit.Terminal.BinaryTerminal = f.SettingsResult;
-					}
+
 					break;
 				}
 
@@ -707,8 +703,6 @@ namespace YAT.View.Forms
 			var f = new AdvancedTerminalSettings(this.settingsInEdit);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				Refresh();
-
 				// Status:
 				this.settingsInEdit.Terminal.Status.ShowConnectTime  = f.SettingsResult.Terminal.Status.ShowConnectTime;
 				this.settingsInEdit.Terminal.Status.ShowCountAndRate = f.SettingsResult.Terminal.Status.ShowCountAndRate;

@@ -177,8 +177,8 @@ namespace YAT.View.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically switch the port if not or no longer available.
 
 			this.newTerminalSettingsInEdit.SerialPortId = serialPortSelection.PortId;
 		}
@@ -284,8 +284,8 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically switch the interface if not or no longer available.
 
 			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
@@ -351,8 +351,8 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically switch the device if not or no longer available.
 
 			// Attention:
 			// Same code exists in in the following location:
