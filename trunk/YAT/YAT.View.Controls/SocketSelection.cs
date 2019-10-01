@@ -865,7 +865,7 @@ namespace YAT.View.Controls
 						// Set property instead of member to ensure that changed event is raised.
 						LocalInterface = null;
 
-						ShowNoLocalInterfacesMessage();
+						ShowNoneAvailableMessage();
 					}
 				}
 				finally
@@ -883,7 +883,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Showing this as on dialog message instead of <see cref="MessageBox"/> to reduce the number of potentially annoying popups.
 		/// </remarks>
-		private void ShowNoLocalInterfacesMessage()
+		private void ShowNoneAvailableMessage()
 		{
 			label_OnDialogMessage.Text = "No local network interfaces currently available";
 		}
