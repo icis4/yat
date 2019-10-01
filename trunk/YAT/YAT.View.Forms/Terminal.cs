@@ -6753,11 +6753,18 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowLogSettings()
 		{
-			var f = new LogSettings(this.settingsRoot.Log);
+			var f = new LogSettings(this.settingsRoot.Log, this.settingsRoot.LogIsOn);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				Refresh();
+
+				if ( this.settingsRoot.LogIsOn && f.RequestSwitchOff)
+					RequestSwitchLogOff(); // Switch off before changing settings, an empty log may otherwise result.
+
 				this.settingsRoot.Log = f.SettingsResult;
+
+				if (!this.settingsRoot.LogIsOn && f.RequestSwitchOn)
+					RequestSwitchLogOn();
 			}
 		}
 
