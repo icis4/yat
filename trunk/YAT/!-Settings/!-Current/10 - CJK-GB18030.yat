@@ -297,7 +297,7 @@
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>&lt;U+10000 and above not supported by .NET WinForms&gt;</Description>
+          <Description>&lt;'Notenschlüssel' not supported&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
           <CommandLines />
           <IsFilePath>false</IsFilePath>

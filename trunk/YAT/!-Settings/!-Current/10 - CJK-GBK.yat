@@ -291,7 +291,7 @@
           <IsDefined>true</IsDefined>
           <Description>&lt;︙ not supported&gt;</Description>
           <DefaultRadix>String</DefaultRadix>
-          <CommandLines>︙</CommandLines>
+          <CommandLines />
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
