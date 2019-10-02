@@ -67,8 +67,8 @@ namespace YAT.Controller.Test
 		private readonly string WorkspaceFilePath_TestCase04 = SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias];
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private readonly string[] SerialPortArgs = new string[] { "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" };
-
+		private readonly string[] SerialPortArgs = new string[] { "--TerminalType=Binary", "--SerialPort=101", "--DataBits=7", "--Parity=E", "--FlowControl=Software" };
+		                                                                                                 // \remind (2019-10-02 / MKY) could be migrated to use configured port A instead.
 		#endregion
 
 		#region Fields
