@@ -650,7 +650,7 @@ namespace MKY
 				{
 					DebugWriteExceptionAndEventToDebugOutput(ex, sink, wasSyncInvoke, isMainThread, false);
 				#if (BREAK_ON_RETHROW)
-					Debugger.Break();
+					Debugger.Break(); // OK as conditional and disabled by default.
 				#endif
 					return (true);
 				}
@@ -663,7 +663,7 @@ namespace MKY
 					{
 						DebugWriteDisposedTargetAndEventToDebugOutput(sink);
 					#if (BREAK_ON_DISPOSED_TARGET)
-						Debugger.Break();
+						Debugger.Break(); // OK as conditional and disabled by default.
 					#endif
 						return (false);
 					}
@@ -758,7 +758,7 @@ namespace MKY
 				Debug.Unindent();
 
 			#if (BREAK_ON_EXCEPTION)
-				Debugger.Break();
+				Debugger.Break(); // OK as conditional and disabled by default.
 			#endif
 			}
 
@@ -816,7 +816,7 @@ namespace MKY
 				Debug.Unindent();
 
 			#if (BREAK_ON_EXCEPTION)
-				Debugger.Break();
+				Debugger.Break(); // OK as conditional and disabled by default.
 			#endif
 			}
 
