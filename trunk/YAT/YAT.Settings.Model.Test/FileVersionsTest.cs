@@ -26,20 +26,18 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Settings;
-using MKY.Windows.Forms;
 
 using NUnit.Framework;
 
 using YAT.Model;
 using YAT.Model.Types;
 using YAT.Settings.Application;
-using YAT.Settings.Model;
 
 #endregion
 
@@ -168,7 +166,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_2_1_0_WorkspaceSettingsCase10()
 		{
-			ExecuteSettingsCase09(SettingsFilesProvider.FilePaths_2_1_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_10_Matthias]);
+			ExecuteSettingsCase10(SettingsFilesProvider.FilePaths_2_1_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_10_Matthias]);
 		}
 
 		#endregion
@@ -247,7 +245,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_2_0_0_WorkspaceSettingsCase09()
 		{
-			ExecuteSettingsCase09(SettingsFilesProvider.FilePaths_2_0_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias]);
+			ExecuteSettingsCase09(SettingsFilesProvider.FilePaths_2_0_0.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias], 6); // Only 6 terminals at 2.0.0!
 		}
 
 		#endregion
@@ -326,7 +324,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void Test_1_99_90_WorkspaceSettingsCase09()
 		{
-			ExecuteSettingsCase09(SettingsFilesProvider.FilePaths_1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias]);
+			ExecuteSettingsCase09(SettingsFilesProvider.FilePaths_1_99_90.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_09_Matthias], 6); // Only 6 terminals at 2.0.0!
 		}
 
 		#endregion
@@ -1212,12 +1210,12 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Settings Cases > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		#region Settings Cases > 09 :: Workspace :: 7 TCP/IP AutoSocket Terminals / Unicode Encodings
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		// Settings Cases > 09 :: Workspace :: 7 TCP/IP AutoSocket Terminals / Unicode Encodings
 		//------------------------------------------------------------------------------------------
 
-		private static void ExecuteSettingsCase09(string filePath)
+		private static void ExecuteSettingsCase09(string filePath, int expectedTerminalCount = 7)
 		{
 			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
@@ -1225,7 +1223,26 @@ namespace YAT.Settings.Model.Test
 			using (var w = new Workspace(sh))
 			{
 				w.OpenTerminals();
-				VerifySettingsCase09(w);
+				VerifySettingsCases09And10(w, expectedTerminalCount);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 10 :: Workspace :: 7 TCP/IP AutoSocket Terminals / MBCS Encodings
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 10 :: Workspace :: 7 TCP/IP AutoSocket Terminals / MBCS Encodings
+		//------------------------------------------------------------------------------------------
+
+		private static void ExecuteSettingsCase10(string filePath)
+		{
+			var sh = SetupWorkspaceSettingsFromFilePath(filePath);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (var w = new Workspace(sh))
+			{
+				w.OpenTerminals();
+				VerifySettingsCases09And10(w);
 			}
 		}
 
@@ -1462,14 +1479,14 @@ namespace YAT.Settings.Model.Test
 
 		#endregion
 
-		#region Settings Case Verifications > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		#region Settings Case Verifications > 09/10 :: Workspace :: 7 TCP/IP AutoSocket Terminals / Encodings
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 09 :: Workspace :: 6 TCP/IP AutoSocket Terminals / Encodings
+		// Settings Case Verifications > 09/10 :: Workspace :: 7 TCP/IP AutoSocket Terminals / Encodings
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase09(Workspace workspace)
+		private static void VerifySettingsCases09And10(Workspace workspace, int expectedTerminalCount = 7)
 		{
-			Assert.That(workspace.TerminalCount, Is.EqualTo(6), "Workspace doesn't contain 6 terminals!");
+			Assert.That(workspace.TerminalCount, Is.EqualTo(expectedTerminalCount), string.Format(CultureInfo.InvariantCulture, "Workspace doesn't contain {0} terminals!", expectedTerminalCount));
 
 			foreach (var t in workspace.Terminals)
 			{

@@ -68,7 +68,7 @@ namespace YAT.Controller.Test
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly string[] SerialPortArgs = new string[] { "--TerminalType=Binary", "--SerialPort=101", "--DataBits=7", "--Parity=E", "--FlowControl=Software" };
-		                                                                                                 // \remind (2019-10-02 / MKY) could be migrated to use configured port A instead.
+		                                                                                                //// \remind (2019-10-02 / MKY) could be migrated to use configured port A instead.
 		#endregion
 
 		#region Fields
