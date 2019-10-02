@@ -151,7 +151,7 @@ namespace MKY.Test.Devices
 		/// <summary>Unloading seems to also require some delay, otherwise subsequent calls will fail.</summary>
 		/// <remarks>Same delay as in "MCD Conline USB HUB 6-Port Runtime Config.cmd".</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
-		private const int DriverUnloadingWaitTime = 2000;
+		private const int DriverUnloadingWaitTime = 6000;
 
 		#endregion
 
@@ -253,16 +253,16 @@ namespace MKY.Test.Devices
 				Thread.Sleep(DriverLoadingWaitTime);
 			}
 
-			////step = setting & UsbHubSetting.Step3; \If1To6
-			////if (step != UsbHubSetting.None)
-			////{
-			////	UsbHubSetting accumulated = (staticProxy | step);
-			////	if (!ExecuteControl(device, accumulated))
-			////		return (false);
-			////
-			////	staticProxy = accumulated; // Update proxy.
-			////	Thread.Sleep(WaitForDriverLoading);
-			////}
+		////step = setting & UsbHubSetting.Step3; \If1To6
+		////if (step != UsbHubSetting.None)
+		////{
+		////	UsbHubSetting accumulated = (staticProxy | step);
+		////	if (!ExecuteControl(device, accumulated))
+		////		return (false);
+		////
+		////	staticProxy = accumulated; // Update proxy.
+		////	Thread.Sleep(WaitForDriverLoading);
+		////}
 
 			return (true);
 		}

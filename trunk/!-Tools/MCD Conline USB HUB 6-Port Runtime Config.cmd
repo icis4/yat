@@ -66,9 +66,9 @@ ECHO Hub 1: Enabling devices . . .
 %_cmd% A6YJ5BDF 010111
 :: !!! "Out 6" is disabled (010111 instead of 110111) because TI LauchPad composite devices don't work concurrently !!!
 :: Time required for execution is below 3 seconds.
-:: Time required to load the drivers is below 2 seconds.
-::  => 5 seconds timeout:
-TIMEOUT 5
+:: Time required to load the drivers is below 6 seconds.
+::  => 9 seconds timeout:
+TIMEOUT 9
 :: Note that the timeouts also need to be configured in 'MKY.Test.Devices.UsbHubControl'.
 
 :: Start hub 2 'RS-232'
