@@ -84,6 +84,137 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.1.0 :: 2019-10-04
+----------------------------------------------------------------------------------------------------
+
+New:
+- Predefined commands can now be reordered (feature requests #376 and #379), cut/copy/pasted via
+  clipboard, exported/imported to a single page .yacp or complete set of pages .yacps file (feature
+  reqs. #28, #257, #365), and even linked to one or multiple single page .yacp file(s) (feat. #29).
+- Option to show more predefined commands (24, 36, 48, 72, 108) (feature requests #256, #344).
+- Additional keyword \!(PortSettings()) that allows re-configuring the port settings before or after
+  sending data; and dedicated keywords \!(Baud()), \!(DataBits()), \!(Parity()), \!(StopBits()) and
+  \!(FlowControl()) to change a dedicated port setting on-the-fly (feature request #71, partly
+  related to former request #321 implemented since YAT 1.99.80). Useful for e.g. sending commands
+  that let a connected device change its baud rate. See [Help > Contents...] for example usage.
+- Additional automatic actions [Filter] and [Suppress] added (feature requests #347 and #382).
+  Useful to exclusively display a pattern in the monitor, or suppress a pattern.
+- Additional automatic action [Clear Monitor on Subsequent Receiving] added (feature request #357).
+  Useful for screen/page synchronization on terminal-emulation-like behavior.
+- Additional option [View > Show Duration (Line)] (feature request #348).
+- Additional terminal option [Include Port Control Events] (feature request #350).
+- Additional log channel [Log Port Control] (related to feature request #350).
+- Text terminals: Additional options to control line break:
+   > Length line break (feature request #224).
+     Useful to limit the number of characters displayed per line, i.e. "word wrap".
+     Useful to communicate with devices that do use text messages but no EOL sequence.
+   > Timed line break (feature request #340).
+     Also useful to communicate with devices that do use text messages but no EOL sequence.
+- Text terminals: Additional option to let bell (0x07) beep (related to feature request #308).
+- Text terminals: Backspaces (0x08) are treated as backspaces by default (feature request #308).
+                  Note that tabs have already been treated as tabs by default since YAT 1.99.22.
+
+Important changes:
+- UDP/IP now supports sending to and receiving from broadcast addresses (feature request #370).
+- Serial COM port again uses the term RTS (Ready To Send) as that is still most commonly used.
+  In addition, notes/hints on terms RTR (Ready To Receive) as well as RFR (Ready For Receiving).
+- Serial COM port and USB Ser/HID terminals by default hide XOn/XOff flow control characters for
+  'Software' and 'Combined' (related to earlier feature request #190, #206, #226 and bug #319).
+  Note that 'Manual Software' and 'Manual Combined' still show the XOn/XOff characters by default
+  but can optionally be hidden (earlier feature request #190).
+- USB Ser/HID device list no longer potentially shows weird manufacturer, product or serial strings;
+  neither does it show duplicated devices anymore.
+- Errors are now indicated in square "[...]" instead of angle "<...>" brackets (rel. to feat. #350).
+- Prevention of potential handling error when copying data to clipboard (feature request #345).
+- Unicode/Non-Unicode multi-byte encoding test coverage improved (related to bugs #427, #428, #429).
+- No longer using [Ctrl+Alt+<CharOrDigit>] shortcuts to avoid conflicts with [Alt Gr] modifier as
+  [Ctrl+Alt] results in [Alt Gr] on Windows (feature request #359). As a consequence:
+   > Shortcuts to activate predefined command page changed from [Ctrl+Alt+1..9] to [Ctrl+1..9].
+   > Shortcuts to change window layout changed from [Ctrl+Alt+...] to [Alt+Shift+...].
+   > Shortcuts to [Find Next] changed from [Ctrl+Alt+F] to [Alt+Shift+N].
+          and [Find Previous] changed from [Alt+Shift+F] to [Alt+Shift+P].
+- Shortcuts to select panels no longer conflict with those to select menus (feature request #355).
+   > Shortcut of [Send Text] changed to [Alt+E] to distinguish from shortcut of [Terminal] menu.
+   > Shortcut of [Send File] changed to [Alt+I] to distinguish from shortcut of [File] menu.
+   > Shortcut to [Monitor] added as [Alt+M].
+- Text terminals: Refactoring and refinement of EOL handling (related to feature requests #224,
+  #340 and #347). Any sequence and mix of received and sent characters (even quite exotic ones)
+  should now be correctly handled and displayed. Corresponding test coverage enlarged.
+- Text terminals: Option to show length as number of characters (related to feature request #224).
+
+Fixed bugs:
+- Non-Unicode multi-byte encodings (e.g. GBK, GB18030, Shift-JIS,...) fixed (bugs #427, #428, #429).
+- 'OverflowException' in case of missing closing parentheses in [Send Text] fixed (bug #426).
+- Exception when trying to open terminal on non-standard port (e.g. "COM", "ABC") fixed (bug #416).
+- Handling of potential 'ObjectDisposedException' when disconnecting USB/RS-232 converters (USB CDC)
+  without closing the serial COM port now also handles potential 'UnauthorizedAccessException'
+  (bug #442, related to former bugs #224, #254, #293, #316, #317, #345, #382, #385, #387, #401).
+- [Remote Host] and [Local Filter] selection again show the common items (rel. to feat. req. #370)).
+- [Send > Skip Empty Line on [Send File]] no longer accidentally restricts [Send Text].
+- Problem with escape sequences in automatic action/response fixed (bug #424).
+- Tool bar items no more flicker on automatic action/response trigger (related to bug #424).
+- 'ArgumentOutOfRangeException' when deleting a sole predefined command page fixed (bug #440).
+- 'SplitterDistance' value related 'ArgumentException' fixed (bugs #414, #418, #419, #420, #421,
+  #422, #423, #432, #434, #435, #441, #443, #444, #450, #452, #453, #456, #461, #467, #468, #474,
+  #475) which further refines the fix to former bugs #408 and #409.
+- Attempted to fix rare 'TargetInvocationException' caused by 'IndexOutOfRangeException' (bug #446).
+- [View > Show Time Span] is no longer reset when changing terminal settings (bug #436).
+- [View > Show Time Span/Delta] are no longer swapped (bugs #431, #449, #458).
+- [Advanced Settings > Disable escapes on [Send Text]] no longer leads to an 'ArgumentException'
+  in some cases (bug #454).
+- Shortcuts [Ctrl+Shift+F1..F12] 'Copy to Send Text' fixed.
+- Option to set default radix for predefined commands fixed.
+- Command line option [TransmitText] again allows keywords (related to bug #454).
+- Optional user name of terminal is again taken into account (bug #415).
+- [Help > Release Notes] fixed for YATConsole.exe (bug #413).
+- Binary terminals: Synchronization on timed line break added (related to feature request #340).
+
+Limitations and known issues:
+- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
+- General imitations of .NET Windows.Forms:
+   > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
+     before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
+     The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
+   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
+   > Combo box cannot restore some corner-case cursor positions (bug #403).
+   > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
+     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+   > When [Send Text] or [Send File] is hidden, resizing the panel doesn't properly work (bug #412).
+   > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
+   > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
+   > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
+     selected may lead to a severe drop of the overall performance (related to bug #383).
+   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
+- MDI limitations of .NET Windows.Forms:
+   > Issues with frame (bugs #29 and #30).
+   > Issue with window list (bug #31).
+   > Issue with layouting when closing an MDI child (bug #399).
+- Serial COM port limitations of .NET:
+   > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
+     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+     a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
+     applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
+     #345, #382, #385, #387, #401, #442). To prevent this issue, refrain from disconnecting a
+     device while its port is open. Or, manually close the port after the device got disconnected.
+- The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
+- Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature request #119).
+- Line content and EOL may be sent in two separate chunks, because the parts are handled slightly
+  after each other. Delay could be eliminated but requires some refactoring (feature request #333).
+- Automatic responses and actions work fine as long as the received chunks do not contain more than
+  one trigger and do not spread across multiple lines. Limitation could be eliminated but requires
+  some refactoring (feature request #366).
+- Automatic actions 'Filter' and 'Suppress' do not get reapplied on refresh (feature request #367).
+- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Direct send text mode does not yet support special formats and commands (feature request #10).
+- Running YAT for a long period, or creating many terminals, results in memory leaks, which result
+  in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+
+
 YAT 2.0 Final Version 2.0.0 :: 2018-04-13
 ----------------------------------------------------------------------------------------------------
 
@@ -97,8 +228,8 @@ Important changes:
   automatically changed when the port type gets changed. This automatism is only applied if the
   settings are at their defaults, i.e. have not been changed by the user; otherwise, the user is
   asked whether the settings shall be changed (related to feature request #335).
-- Simple find/search function now allows to explicitly enable/disable the regex option (related
-  feature requests #11 and #79 implemented in previous release).
+- Simple find/search function now allows to explicitly enable/disable the regex option (feature
+  request #332, related to feature requests #11 and #79 implemented in previous release).
 - Option to enable/disable <...> and \... escape sequences has been separated for [Send Text] and
   [Send File]. By default, escapes are enabled for [Send Text] and disabled for [Send File].
 - [Send File] now also sends (formatted) text files for binary terminals, including support for
@@ -678,114 +809,6 @@ Limitations and known issues:
 
 
 YAT 2.0 Beta 4 Candidate 2 Version 1.99.30 :: 2013-02-02
-----------------------------------------------------------------------------------------------------
-
-New:
-- Line numbers can optionally be displayed in monitors (feature request #3442828>#167)
-- Keywords \!(Delay) and \!(LineDelay) implemented, time span in milliseconds can be configured in
-  advanced settings (related to feature requests #3105414>#138, #3105478>#139 and #3538899>#179)
-- Optional support for array options added to MKY.CommandLine (feature request #3571456>#182)
-- Additional executable 'YATConsole.exe' added to ensure proper command line operation in case of
-  'cmd' as well as 'PowerShell' (bug #3482103>#222)
-
-Important changes:
-- Update to DejaVu fonts 2.33
-- [File > Open] now also allows to select workspace files (feature request #1917388>#41)
-- Monitors automatically start vertical scrolling again if the last item gets selected
-- Massive refactoring of the send data/event path, implementation is now fully asynchronous
-   > Fixes several display and performance issues (bugs #3072919>#157, #3137968>#175, #3292415>#198)
-   > Received data is no longer displayed with delay when sending multi-line commands or files
-   > Allows to implement asynchronuous send features such as keywords \!(Delay) and \!(LineDelay)
-     and upcoming features #1808500>#13, #2455838>#71, #3105414>#138, #3105478>#139, #3406521>#162,
-     #3488645>#176 and #3538899>#179
-- Massive refactoring of the display data/event path, implementation is now fully asynchronous
-   > Prevents race conditions while processing fast and large amounts of data
-   > Fixes several display and log issues with mixed up data, and improves performance
-   > Fixes bugs #2005758>#83, #2455804>#93, #2868735>#126, #2981794>#148, #3176813>#184,
-     #3284550>#194 and #3480565>#221
-- Serial COM port, USB as well as TCP/IP and UDP/IP socket functionality of MKY.IO.Serial has been
-  split into separate assemblies to allow dedicated use of one of the new assemblies without
-  unnecessary dependencies to the other parts (feature request #3388950>#156)
-- Serial COM port break counts added (feature request #187)
-- Serial COM port flow control counts added in case of manual flow control (feature request #187)
-- Serial COM port uses the official term RFR (Ready For Receiving) instead of RTS (Ready To Send)
-- Additional help content on serial port errors added (feature requests #2213647>#66, #3440986>#166)
-- Error message in case a serial port cannot be opened has been improved (bug #3565648>#239)
-- Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323>#218)
-   > Implemented by use of a named mutex as suggested in the respective comments
-   > Also fixes use of same setting file by concurrent YAT instances (bug #3540438>#236)
-- Proper handling if a .yaw or .yat was located on a storage that has been removed
-   > Fixes bugs #2455825>#96 and #3595185>#249
-   > Fixed including a refactoring of the save/close/exit procedure
-- Schemas and defaults of all former settings filed and versioned, version of settings added to all
-  three types of settings (related to bugs #3450553>#208 and #3535709>#231)
-- .NET XML serialization infrastructure extended by schema for GUID items (bug #3535709>#231)
-- BoolEx renamed to BooleanEx for consistency with the .NET type Boolean (bug #3533831>#229)
-- The ALAZ socket library was considered to be replaced by a different library, but then decided to
-  be kept and instead partially reverted to 2.0, see "\MKY\MKY.IO.Serial.Socket\!-Doc" for details
-- Code re-use of the USB Ser/HID infrastructure somewhat documented (feature request #3577235>#185)
-- All projects explicitly set to warning level 4, already used to be level 4 but implicitly
-- Code analysis and improvements using StyleCop finalized (feature request #2970222>#115)
-- Code analysis and improvements using FxCop mostly finalized (feature request #2970221>#114)
-- x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
-  x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248>#175)
-- YAT on SourceForge has been upgraded to the new SourceForge 'Allura' platform
-   > All feature requests and bug reports have been renumbered
-
-Fixed bugs:
-- 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543>#212)
-- Issues with USB Ser/HID reports that were exactly or larger than the maximum report size fixed
-  (bugs #3463404>#216, #3464116>#217 and #3584852>#247)
-- Empty lines are no longer skipped when not showing EOL (bug #2898163>#136)
-- Edit shortcuts such as Ctrl-A and Ctrl-C reenabled in 'Send Command' box (bug #3459888>#215)
-- Recent 'Send Command' items are again properly loaded from saved settings (bug #3450553>#208)
-- Optional replacement of space by open box character again works (bug #3451736>#209)
-- Log file separator 'Underline' fixed
-- Default EOL comment indicators can now also be removed (bug #3581368>#244)
-   > This fix required a change in the settings schema, custom indicators have to be entered again
-- Binary length line break fixed, again works correctly
-- Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809>#219)
-- Printer dialog also gets shown on 64-bit systems
-- 'SaveAs' dialog no longer shows .yat.yat in case of already saved files (bug #3532391>#227)
-- Handling of 'FileNotFoundException' in YAT.Gui.Forms.WelcomeScreen (bug #3576101>#241)
-- Handling of 'UnauthorizedAccessException' in YAT.Model.Terminal/Workspace (bug #3533201>#228)
-- Handling of 'InvalidOperationException' in ALAZ.SystemEx.BaseSocketConHost (bug #3528765>#226)
-- 'NullReferenceException' in YAT.Log.Logs fixed (bug #3534799>#230)
-- 'IndexOutOfRangeException' in YAT.Domain.RawRepository fixed (bug #3483085>#223)
-- 'ArgumentException' and 'OverflowException' in MKY.Time.Rate fixed (bug #3479634>#220)
-- Cancel during port scan should no longer result in an exception (bug #1804920>#23)
-- Improvement of modal behavior in case of console and non-view execution (bug #3516441>#225)
-- Proper startup when YAT is started minimized or without view (bug #3542973>#237)
-
-Limitations and known issues:
-- General imitations of .NET Windows.Forms
-   > If YAT is not the active application, two clicks are required to execute an action. Reason:
-     In .NET Windows.Forms the first click only activates the application but doesn't execute
-     anything (bug #3454532>#210)
-   > System errors are output in local language, even though YAT is all-English (bug #1927786>#66)
-- MDI limitations of .NET Windows.Forms
-   > Issues with frame (bugs #1808492>#29 and #1808493>#30)
-   > Issues with window list (bugs #1808494>#31, #2846917>#119, #3160095>#180 and #3454550>#213)
-   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684>#152)
-- Long monitor content is not displayed properly when horizontally scrolling (bug #2865562>#125)
-- Support for serial ports which are named other than "COM..." isn't supported by .NET
-  (feature request #2848228>#101)
-- Serial COM port RFR/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
-  on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097>#203)
-- Serial COM port manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may
-  not be supported on Win7/64 on certain hardware, e.g. certain USB/RS-232 converters (bug #254)
-- Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
-  'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205>#214)
-- Handling of serial COM port break states (feature #2932691>#109) may not be supported on certain
-  hardware, e.g. USB/RS-232 converters
-- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
-  implementation and test environment would be needed to run it on unixoids (feature req. #2982052>#119)
-- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478>#139)
-- Wait for answer line (text terminals) not yet implemented (feature request #1808509>#19)
-- Direct send text mode does not yet support special formats and commands (feature request #1808496>#10)
-- XML logging not yet implemented, definition of schema pending (bugs #1849227>#26 and #1849228>#27)
-
-
 YAT 2.0 Beta 4 Candidate 1 Version 1.99.28 :: 2011-12-05
 YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25
 YAT 2.0 Beta 3 Candidate 3 Version 1.99.25 :: 2010-11-28
@@ -802,7 +825,7 @@ YAT 2.0 Alpha 2 Version 1.99.3 :: 2007-02-07
 YAT 2.0 Alpha 1 Version 1.99.0 :: 2007-01-23
 
 Content of the above Alpha and Beta versions has been removed in order to compact this file such it
-fits the SourceForge limitation of ~900 lines for the online release notes.
+fits the SourceForge limitation of 64 KB for the online release notes.
 
 
 
@@ -814,24 +837,25 @@ XTerm232 1.0.2 :: 2003-10-31
 XTerm232 1.0.1 :: 2003-10-30
 XTerm232 1.0.0 :: 2003-10-14
 
-Content of the above historical versions has been removed in order to compact this file such it
-fits the SourceForge limitation of ~900 lines for the online release notes.
+Content of the above Alpha and Beta versions has been removed in order to compact this file such it
+fits the SourceForge limitation of 64 KB for the online release notes.
 
 
 ====================================================================================================
 5. Roadmap
 ====================================================================================================
 
-YAT 2.0
+YAT 2
 ----------------------------------------------------------------------------------------------------
-YAT 2.0 is now in maintenance mode, i.e. focus on bug fixes and minor changes, while work for
-YAT 4.0 is already ongoing.
+YAT 2 is in maintenance mode now, i.e. focus on bug fixes and minor changes, while work for YAT 4
+is already ongoing. Still, YAT 2.4 is intended to upgrade to the .NET 4.0 runtime and framework,
+versions 2.2 and 2.3 will be skipped in favor of the digit 4.
 
-(YAT 3.0 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became public
-around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
+(Major version 3 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became
+public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4.0 with Scripting :: Expected in late 2019 or 2020
+YAT 4 with Scripting :: Expected in 2020
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
