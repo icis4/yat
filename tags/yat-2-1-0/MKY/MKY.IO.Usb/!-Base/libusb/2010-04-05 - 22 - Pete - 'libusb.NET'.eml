@@ -1,0 +1,300 @@
+Return-path: <pbatard@gmail.com>
+Received: from MailExchange.mymail.ch (MailExchange.mymail.ch [194.230.79.126]) by mail.mymail.ch
+ (Rockliffe SMTPRA 9.2.0) with ESMTP id <B0144300622@mail.mymail.ch> for <matthias.klaey@my-mail.ch>;
+ Mon, 5 Apr 2010 22:31:27 +0200
+X-MailShell-Summary:
+X-MailShell-Blacklists: none
+X-MailShell-Phishing: no
+X-MailShell-Countries: ch,us,us,us,ie
+X-MailShell-Charsets: iso-8859-15
+X-MailShell-Score: 1
+Received: from mx.sourceforge.net (MailDefense.xmc.ch [193.33.142.180]) by MailExchange.mymail.ch
+ (Rockliffe SMTPRA 9.2.0) with ESMTP id <B0065059163@MailExchange.mymail.ch> for <matthias.klaey@my-mail.ch>;
+ Mon, 5 Apr 2010 22:29:34 +0200
+Received: from mx.sourceforge.net (mx.sourceforge.net [216.34.181.68])
+	by MailDefense.xmc.ch with SpamAssassin 3.3.1;
+	Mon, 05 Apr 2010 22:29:34 +0200
+Received-SPF: pass (sfi-mx-1.v28.ch3.sourceforge.com: domain of gmail.com designates 74.125.82.51 as permitted sender) client-ip=74.125.82.51; envelope-from=pbatard@gmail.com; helo=mail-ww0-f51.google.com;
+Received: from mail-ww0-f51.google.com ([74.125.82.51])
+	by sfi-mx-1.v28.ch3.sourceforge.com with esmtp 
+	(Exim 4.69)
+	id 1NysvL-00088w-FL
+	for maettu_this@users.sourceforge.net; Mon, 05 Apr 2010 20:29:32 +0000
+Received: by wwb34 with SMTP id 34so2593827wwb.24
+        for <maettu_this@users.sourceforge.net>; Mon, 05 Apr 2010 13:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:received:received:message-id:date:from
+         :user-agent:mime-version:to:cc:subject:references:in-reply-to
+         :content-type:content-transfer-encoding;
+        bh=4BAchsdGvTAO8na3KHFUp2ogRDp8ypZXfGUfMdekEGY=;
+        b=q56FCdreMbdc+slWk0Dbw72PSheQqYQ3Hpd8hYUNi/kz8lIV27wLTnadTCiUQg4KKp
+         4hHhK4dZr6SuQytgS3Azk4fOC/f3gX0aWE3V4+rXHJBcBNNQMsZj+efEokZhNTS2CfGC
+         5t8/YplGRGP/B2PZ4b5b2PnLsmZdktRnbBJHg=
+DomainKey-Signature: a=rsa-sha1; c=nofws;
+        d=gmail.com; s=gamma;
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-type:content-transfer-encoding;
+        b=Zxoty6rNXWknbq2wDIGVClmOUDhojcRDnVX9U5Kwe/R+eH/abrZNDukEDd+Gil9KPf
+         citCS8ilUvdptcpx8WXceA4UR0XPKaSLKLzqhK2+amnv57a+aa0F+s/6h5rjEyJNWW92
+         Sw2lxscIB2btN/EL+agqJKQgygYmudvqSw64E=
+Received: by 10.216.155.196 with SMTP id j46mr3519987wek.1.1270499365115;
+        Mon, 05 Apr 2010 13:29:25 -0700 (PDT)
+Received: from [192.150.23.102] (84-203-49-208.mysmart.ie [84.203.49.208])
+        by mx.google.com with ESMTPS id q9sm25959346gve.14.2010.04.05.13.29.23
+        (version=SSLv3 cipher=RC4-MD5);
+        Mon, 05 Apr 2010 13:29:24 -0700 (PDT)
+Message-ID: <4BBA4823.6070503@gmail.com>
+Date: Mon, 05 Apr 2010 21:29:23 +0100
+From: Pete Batard <pbatard@gmail.com>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.1.9) Gecko/20100317 Thunderbird/3.0.4
+MIME-Version: 1.0
+To: maettu_this <maettu_this@users.sourceforge.net>
+CC: libusb-devel@lists.sourceforge.net
+Subject: Re: libusb.NET
+References: <4BB84EC0.7000104@users.sourceforge.net> <4BB9008C.80503@gmail.com> <4BB9CC07.3070309@users.sourceforge.net>
+In-Reply-To: <4BB9CC07.3070309@users.sourceforge.net>
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.5 (-)
+X-Spam-Report: Spam Filtering performed by mx.sourceforge.net.
+	See http://spamassassin.org/tag/ for more details.
+	-1.5 SPF_CHECK_PASS         SPF reports sender host as permitted sender for
+	sender-domain
+	-0.0 SPF_PASS               SPF: sender matches SPF record
+	-0.0 DKIM_VERIFIED          Domain Keys Identified Mail: signature passes
+	verification
+	0.0 DKIM_SIGNED            Domain Keys Identified Mail: message has a signature
+	-0.0 AWL                    AWL: From: address is in the auto white-list
+X-Headers-End: 1NysvL-00088w-FL
+
+(moving this to the devel list - see initial e-mails below to find out 
+more about the origins of this conversation)
+
+On 2010.04.05 12:39, maettu_this wrote:
+> Hi Pete,
+>
+> This is it! An indeed nice piece of work what Travis did, looks like he
+> really understands what he's doing. And way more complete than what I've
+> seen before.
+> Knowing of the existence of 'LibUsbDotNet' there is no more need for the
+> 'libusb.NET' I began with. I am wondering, why neither...
+>  > http://www.libusb.org/
+>  > http://www.libusb.org/wiki/windows_backend
+>  > http://libusb-win32.sourceforge.net/
+>  > http://sourceforge.net/projects/libusb-win32/
+> ...mentions 'LibUsbDotNet'? I spent quite some time searching the web
+> for such library but apparently never came across 'LibUsbDotNet'. I
+> strongly recommend that either http://www.libusb.org/ or a subsite
+> prominently refers to 'LibUsbDotNet'.
+
+Good point. I should have mentioned it some time ago on the Windows 
+Backend page, and this is now a done deal. Apologies to Travis for not 
+doing that sooner either.
+
+> In respect to your questions below:
+>
+>  > Platform dependence for Win32/x86 and Win64/x64
+> Myself, I haven't tried the Win32 DLL on x64. I refer to the Win32 and
+> x64 project and solution configurations in the original libusb
+> VS2005/VS2008 files. A platform independent solution might need to also
+> have a Win32 and x64 solution configuration.
+
+I'm not so convinced about that. Unlike what is the case for DLL vs 
+static lib, in recent versions of Visual Studio, Microsoft provides a 
+very prominent way to switch between 32 and 64 bit, adn this is what 
+you've been using.
+Because this is done in the exact same fashion as switching between 
+Debug/Release, I think if we wanted to be consistent, then we would need 
+to add Debug and Release solution configuration, which looks to me like 
+an overkill, and an unnecessary multiplication of project files.
+
+I think Microsoft's default switching between 32 and 64 bit is actually 
+very well done, and allows the handling of 32 and 64 bit without the 
+need for separate solutions, which is quite smart. Or are there 
+limitations in doing so that I'm not aware of?
+
+> But of course you are right
+> that Win32 should work on both Win32 and Win64. Emphasizing 'should', as
+> many other applications that 'should' work on Win64...
+
+Agreed. But it's the responsibility of the application developer to 
+check that the 32 bit application works on 64 bit, and report bugs if it 
+doesn't. As I'm doing most of the development on a 64 bit Windows 
+platform, I have tested the Win32 sample applications quite a few time 
+(although these were usually the statically linked versions), and don't 
+recall seeing any issue. This is why I'm pretty confident the win32 
+version of the library should work fine on 64 bit as well.
+
+But of course, any issue reported from using the 32 bit library on 64 
+bit platform will be investigated when we receive one.
+
+> Also, I suggest that the libusb solution contains an example project
+> showing how a .NET based project can directly reference the libusb DLL
+> project, i.e., how the DLL is automatically built and published and
+> included in an application.
+
+I think that .NET solution and examples should stay with the .NET 
+library wrapper. Else, Java. Perl and other people might also ask us to 
+include references in the C source, and I think it is important that we 
+maintain each language in a separate library (even if there isn't that 
+much of a jump between C and C#/.NET)
+
+On the other hand, I don't see an objection linking to such a sample on 
+the backend page, in the .NET section. I'm not familiar with .NET 
+however, so I'll have to rely on someone to provide that sample package.
+
+> By the way, Travis, why does "LibUsbDotNet.sln" contain separate Win32
+> configurations? I haven't found any reason for those since
+> 'LibUsbDotNet' seems completely platform independent.
+>
+>  > HID support
+> For 'YAT', I do not need a complete set of HID features but rather some
+> very particular functionality that features virtual serial communication
+> over HID. Something that people call generic HID, serial HID or Ser/HID.
+> I am capable to implement well tested full HID support within the next
+> months.
+> If somebody else adds HID support to 'libusb', I recommend to take a
+> close look at 'MKY.IO.Usb' within 'YAT' for hints on how to implement
+> Ser/HID.
+
+OK. HID is probably quite a long way down the road, as we have plenty to 
+keep us busy right now, but we'll try to remember it when we get there. 
+I added the link to MKY.IO.Usb to my development links so that I can 
+find it when needed.
+
+>  > Hot plug-in/out
+> Hot plug-out is crucial to properly detect when a device is disconnected
+> and the serial communication port needs to be closed. Hot plug-in is a
+> nice-to-have to get the serial communication port automatically reopen
+> as soon as the device is again connected.
+> Both especially come into play when a device is rebooted to whatever
+> reason, e.g. after a firmware update or configuration parameter loading.
+
+Agreed. Speaking for the Windows backend only, hotplug is likely to be 
+the first feature we add once we've dealt with the current priorities. 
+But since Travis' LibUsbDotNet implements a device notifier, you should 
+be able to have that by switching to LibUsbDotNet.
+
+Regards,
+
+/Pete
+
+> For the moment, I keep on using the Ser/HID focussed 'MKY.IO.Usb'
+> implementation that directly uses the Win32 "hid.dll". I do have some
+> higher priority tasks to fix some crucial issues within other parts of
+> 'YAT' and plan to provide a new version of 'YAT' to my users within the
+> next 2 months. In case of issues with the current Ser/HID
+> implementation, or in case of a request to run 'YAT' and Ser/HID on
+> Unixoids, I may replace the "hid.dll" based implementation in
+> 'MKY.IO.Usb' by 'LibUsbDotNet' for a future version of 'YAT'.
+>
+> Best regards,
+> Matthias
+>
+> Am 04.04.2010 23:11, schrieb Pete Batard:
+>> Hi Matthias,
+>>
+>> Nice work.
+>>
+>> But can you tell us if this is a separate project from Travis
+>> Robinson's "LibUsbDotNet":
+>> http://sourceforge.net/projects/libusbdotnet/
+>>
+>> If not, you might want to check with Travis, as having multiple .NET
+>> versions of libusb would be a bit confusing.
+>>
+>> Also,
+>>
+>> On 2010.04.04 09:33, maettu_this wrote:
+>>> - 'libusb' is implemented platform dependent and must be separately
+>>> built for Win32/x86 and Win64/x64
+>>
+>> Have you tried running the 32 bit DLL on 64 bit? I would have thought
+>> WOW64 emulation would work there, as I don't remember using any
+>> specific ifdefs in the Windows code for 64 vs 32 bit.
+>>
+>> I'll try to run a test later on, but in case you did, can you report
+>> what kind of problems you saw, as we can then try looking into them.
+>>
+>>> - 'libusb' only provides the basic USB functions but no HID specifics
+>>
+>> Would you consider producing a patch to add HID specifics to libusb. I
+>> too feel that it would be nice to have better HID support, either
+>> directly into libusb, or possibly in a separate libhid that would rely
+>> on libusb.
+>>
+>>> - 'libusb windows_backend' doesn't yet support detection of hot
+>>> plug-in/out
+>>
+>> This is planned for a future release. If it is really critical to your
+>> application, I'll see what I can do to make it happen sooner rather
+>> than later, as I've already implemented that feature elsewhere (and it
+>> shouldn't be that difficult to add).
+>>
+>> Regards,
+>>
+>> /Pete
+>
+> -----Original Message-----
+> From: maettu_this [mailto:maettu_this@users.sourceforge.net]
+> Sent: Sunday, April 04, 2010 3:33 AM
+> To:dsd@gentoo.org;hjelmn@users.sourceforge.net;
+> michael.plante@gmail.com;pbatard@gmail.com
+> Subject: libusb.NET
+>
+>
+> Dear libusb implementers,
+>
+> I created a .NET adaption layer for 'libusb' which I called
+> 'libusb.NET'. The layer is in alpha state, rather clean implemented but
+> not fully operating yet. Is there a good spot on libusb.org to place
+> 'libusb.NET'? Probably others are interested in such library and could
+> further develop it.
+>
+> How did I start with 'libusb.NET'? For another SourceForge hosted
+> project I was searching the web for an USB HID implementation. Of course
+> I came across 'libusb' and 'windows_backend' and evaluted whether I
+> could make use of it.
+> The project I am working on is called 'YAT- Yet Another Terminal' and
+> features a terminal to operate and debug serial communications. 'YAT'
+> supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket,
+> UDP. Currently I am adding support for USB Ser/HID. You can find 'YAT'
+> onhttp://sourceforge.net/projects/y-a-terminal/.
+> 'YAT' is implemented in C#.NET. Therefore, I searched for a .NET
+> adaption layer for 'libusb' and found 'SharpUSBLib' by Mike Krüger
+> onhttp://www.icsharpcode.net/OpenSource/SharpUSBLib/default.aspx.
+> Unfortunately that project seems no more active and doesn't provide all
+> the features I needed for 'YAT'. Therefore, I created 'libusb.NET' which
+> is based on 'SharpUSBLib' but uses the March revision of 'windows_backend'.
+>
+> In parallel to this 'libusb' based approach I tried a pure C#.NET based
+> approch and created a MKY.IO.Usb library based on two other libraries.
+> Comparing the two approaches has shown that the second approach is much
+> more promising for what I require for 'YAT':
+> - The API of 'libusb' isn't a good match for a C#.NET based project
+> - 'libusb' doesn't easily fit into a managed .NET solution
+> - 'libusb' is implemented platform dependent and must be separately
+> built for Win32/x86 and Win64/x64
+> - 'libusb' only provides the basic USB functions but no HID specifics
+> - 'libusb windows_backend' doesn't yet support detection of hot plug-in/out
+> - 'libusb-win32' seems to have serious portability issues on Vista,
+> Win7, x64
+> - 'libusb-win32' is based on libusb-0.1.12 but libusb-1.0 has been
+> available since 2008-12
+> See
+> https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/_Doc/MKY.IO.Usb.txt
+>
+> for more details.
+>
+> Still, 'libusb' provides a much broader support for any kind of USB
+> operation, not only Ser/HID like MKY.IO.Usb. Therefore I suggest to put
+> 'libusb.NET' onto libusb.org and make it available to others. In case
+> you have no interest in doing so I will create a separate project on
+> SourceForge.
+>
+> Best regards,
+> Matthias
+>
+
+

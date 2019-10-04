@@ -1,0 +1,3 @@
+﻿
+When running this project from within Visual Studio, the COM port can be configured in...
+..."Project > Properties > Debug > Start Options > Command line arguments"

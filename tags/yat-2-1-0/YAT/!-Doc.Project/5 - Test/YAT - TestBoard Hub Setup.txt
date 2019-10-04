@@ -1,0 +1,46 @@
+﻿
+HubMonitor (UI)
+===============
+
+ + UI
+ - Settings not persistant
+ - All COM ports acquired !!!
+
+
+Hub 1 'USB'
+-----------
+
+A6YJ5BDF | B.445.011.112 Hub Control
+
+Port 0 = MT #8
+Port 1 = MT #9
+Port 2 = MT #17
+Port 3 = -
+Port 4 = TI #1
+Port 5 = TI #2
+
+
+Hub 2 'RS-232'
+--------------
+
+A6YJ5A78 | B.445.011.112 Hub Control
+
+Port 0 = MCT COM11
+Port 1 = MCT COM12
+Port 2 = MCT COM13
+Port 3 = MCT COM14
+Port 4 = -
+Port 5 = -
+
+
+
+HubControl (CmdLine)
+====================
+
+Add "C:\Program Files (x86)\MCD\Tools\CommandLine" to system path
+
+Hub 1 = USB
+ > "USBHubControl.exe A6YJ5BDF 110111"
+
+Hub 2 = RS-232
+ > "USBHubControl.exe A6YJ5A78 001111"

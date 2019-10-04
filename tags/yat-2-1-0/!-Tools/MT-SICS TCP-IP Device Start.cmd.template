@@ -1,0 +1,55 @@
+@ECHO OFF
+
+::==================================================================================================
+:: YAT - Yet Another Terminal.
+:: Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
+:: Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+:: ------------------------------------------------------------------------------------------------
+:: $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Runtime%20Config.cmd $
+:: $Revision: 2043 $
+:: $Date: 2019-03-07 09:45:24 +0100 (Do., 07 MÃ¤r 2019) $
+:: $Author: maettu_this $
+:: ------------------------------------------------------------------------------------------------
+:: See release notes for product version details.
+:: See SVN change log for file revision details.
+::
+::     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::     Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+::     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::
+:: Author(s): Matthias Klaey
+:: ------------------------------------------------------------------------------------------------
+:: Copyright © 2003-2019 Matthias Kläy.
+:: All rights reserved.
+:: ------------------------------------------------------------------------------------------------
+:: This source code is licensed under the GNU LGPL.
+:: See http://www.gnu.org/licenses/lgpl.html for license details.
+::==================================================================================================
+
+::==================================================================================================
+:: Purpose
+:: ------------------------------------------------------------------------------------------------
+:: This helper batch redirects from generic calling script to machine dependent executable.
+::==================================================================================================
+
+::==================================================================================================
+:: HowTo
+:: ------------------------------------------------------------------------------------------------
+:: 1. Copy this helper batch template into the directory where the test executable resides.
+:: 2. Remove the ".template" suffix from the file name.
+:: 3. Adapt the below line to the desired executable.
+:: 4. Add the directory to the system's PATH.
+::==================================================================================================
+
+SETLOCAL
+
+SET MT_SICS_EXE=ExampleBalance_RB_Evalboard_LPC1769.exe
+
+%MT_SICS_EXE%
+
+ENDLOCAL
+
+::==================================================================================================
+:: End of
+:: $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Runtime%20Config.cmd $
+::==================================================================================================

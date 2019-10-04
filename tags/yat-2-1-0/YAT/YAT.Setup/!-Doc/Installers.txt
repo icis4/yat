@@ -1,0 +1,75 @@
+﻿
+Update of evaluation related to bugs #318 and #323 (2015-11-21)
+---------------------------------------------------------------
+
+Issues (bugs #318 and #323)
+ - Some users have difficulties installing directly from within 7-Zip or similar
+    (unknown whether they started setup.exe or the .msi)
+
+Therefore searching for alternatives to the current VSI + ZIP based distribution:
+
+Microsoft ClickOnce <https://msdn.microsoft.com/en-us/library/142dbbz4%28v=vs.90%29.aspx>
+ + Easy, simple
+ + Support for automatic update
+ - Not supporting fonts and other shared resources => KILLER
+ - Not supporting installation for multiple users => KILLER
+
+Keep as-is but a little bit better (suggestion (BSc))
+ > Distribute compact package directly as .msi (instead of .zip)
+ > Distribute full package still as .zip, but add additional notes (!-UnzipBeforeInstalling-And-ReadMe.txt)
+
+
+
+
+Evaluation Mk.II (2015-03..04)
+------------------------------
+
+YAT initially used the VS2003..2008 integrated installer functionality (VSI). But VS2013 no longer contained this. Therefore, alternatives were evaluated to pre-releasing YAT 1.99.31 for RZi.
+
+InstallShield Limited Edition
+ + Prepared by VS2013 as the official replacement of the VSI
+ - Registration and download didn't work at first
+ - Boasts to contain more features than VSI
+ - Doesn't allow to choose 'All Users' !!! => KILLER
+
+InstallAware
+ + Congenial ideas and management
+ - Too limited in free version => KILLER
+
+WiX
+ + Likely to be very powerful
+ - Steep learning curve, XML, XML, XML...
+
+WiX Edit
+ + Looks promising at first
+ - Not supporting latest WiX
+ - Not supporting file types, fonts,... => KILLER
+
+InstallForge
+ + Looks promising at first
+ - Not supporting file types, fonts,... => KILLER
+
+VS2008 VSI again
+ + Works
+ - Maybe not up to date regarding Win8,...
+ - Not possible to integrate into YAT.sln => NAJA
+
+Orca
+ + Possible to view (and edit) the VS2008 VSI generated .msi
+ - Not possible to trick the InstallShield Limited Edition generated .exe
+
+So ?!?
+
+Then, browsing the web once more (to complain at Microsoft regarding the limitations of the InstallShield Limited Edition), finally, finally:
+ > "Microsoft Visual Studio Installer Projects"
+ > "This official Microsoft extension provides support for Visual Studio Installer Projects in Visual Studio 2013"
+ => https://visualstudiogallery.msdn.microsoft.com/9abe329c-9bba-44a1-be59-0fbf6151054d
+
+ :-))
+
+
+
+Initial (2003..15)
+------------------
+
+Use of VS2003..2008 integrated installer functionality (VSI).

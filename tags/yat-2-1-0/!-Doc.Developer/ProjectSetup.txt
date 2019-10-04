@@ -1,0 +1,51 @@
+﻿
+Most projects within YAT contain 'Any CPU', x86 as well as x64 configurations.
+See below for details on 'Any CPU' as well as x86 and x64.
+
+
+Project > Build > General
+	@ Debug (all platforms)
+		CODE_ANALYSIS
+		(@ Test projects = CODE_ANALYSIS;TEST (no space!))
+		Define DEBUG
+		Define TRACE
+	@ Release (all platforms)
+		(@ Test projects = TEST)
+		Define TRACE
+		Optimize code
+
+Project > Build > Output
+	@ Any CPU
+		bin\<Debug|Release>\
+		Generate XML documentation file
+	@ x86
+		bin\x86\<Debug|Release>\
+		No XML documentation
+	@ x64
+		bin\x64\<Debug|Release>\
+		No XML documentation
+
+
+x86 and x64
+-----------
+There are use cases where YAT sub-projects/assemblies are used in conjunction with non-managed C++
+assemblies, e.g. in case of automatized software testing of embedded C++ code. In these cases, the
+C++ code cannot be built into managed assemblies as it would no longer 1:1 relate to the C++ code
+that is excuted on the embedded system. To support such use cases, YAT...
+...projects contain x86 (and x64) configurations.
+...a YAT assembly based solution can build and release x86 (and x64) configurations.
+
+(Still, 'AnyCPU' configurations are kept for those users who directly use YAT projects/code.)
+
+To provide this support to the end user, YAT must be built with x86 and x64 respectively, And, it
+must also be distributed as such.
+
+Rules:
+> x86 EXEs/DLLs must be combined with x86 DLLs
+> x64 EXEs/DLLs must be combined with x64 DLLs
+> 'Any CPU' EXEs/DLLs must be combined with 'Any CPU' DLLs
+
+Optimization:
+> 'Any CPU' enables the .NET CLR to perform target-dependent optimizations
+> There are different opinions on the real benefits of such optimizations, you find pro's and con's
+> Nevertheless, the optimizations could at least result in better speed

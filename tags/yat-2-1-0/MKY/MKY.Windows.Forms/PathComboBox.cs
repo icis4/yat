@@ -1,0 +1,77 @@
+﻿//==================================================================================================
+// YAT - Yet Another Terminal.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
+// Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+// ------------------------------------------------------------------------------------------------
+// $URL$
+// $Revision$
+// $Date$
+// $Author$
+// ------------------------------------------------------------------------------------------------
+// MKY Version 1.0.27
+// ------------------------------------------------------------------------------------------------
+// See release notes for product version details.
+// See SVN change log for file revision details.
+// Author(s): Matthias Klaey
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2019 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// This source code is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace MKY.Windows.Forms
+{
+	/// <summary>
+	/// Provides a label that displays path strings with ellipsis.
+	/// </summary>
+	public class PathComboBox : ComboBox
+	{
+		/// <summary>
+		/// Draws string with ellipsis.
+		/// </summary>
+		/// <remarks>
+		/// Actually doesn't work at all. See #308 "Minor issues with commands".
+		/// </remarks>
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			// Try to fit file path with path ellipsis:
+			TextFormatFlags pathEllipsisFlags = TextFormatFlags.Default;
+
+			if (RightToLeft == RightToLeft.Yes)
+				pathEllipsisFlags |= TextFormatFlags.RightToLeft;
+
+			pathEllipsisFlags |= TextFormatFlags.SingleLine;
+			pathEllipsisFlags |= TextFormatFlags.PathEllipsis;
+
+			Size measuredSize = TextRenderer.MeasureText(e.Graphics, Text, Font, ClientRectangle.Size, pathEllipsisFlags);
+			if (measuredSize.Width <= e.ClipRectangle.Width)
+			{
+				TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, ForeColor, BackColor, pathEllipsisFlags);
+			}
+			else
+			{
+				// Path ellipsis, don't fit, draw text with end ellipsis:
+				TextFormatFlags endEllipsisFlags = TextFormatFlags.Default;
+
+				if (RightToLeft == RightToLeft.Yes)
+					endEllipsisFlags |= TextFormatFlags.RightToLeft;
+
+				endEllipsisFlags |= TextFormatFlags.SingleLine;
+				endEllipsisFlags |= TextFormatFlags.EndEllipsis;
+
+				TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, ForeColor, BackColor, endEllipsisFlags);
+			}
+		}
+	}
+}
+
+//==================================================================================================
+// End of
+// $URL$
+//==================================================================================================

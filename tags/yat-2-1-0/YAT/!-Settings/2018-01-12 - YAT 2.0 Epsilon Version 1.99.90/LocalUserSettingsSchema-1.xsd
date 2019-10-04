@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LocalUserSettings" nillable="true" type="LocalUserSettingsRoot" />
+  <xs:complexType name="LocalUserSettingsRoot">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="FileType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SettingsVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Saved" type="SaveInfo" />
+          <xs:element minOccurs="0" maxOccurs="1" name="General" type="GeneralSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Paths" type="PathSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Extensions" type="ExtensionSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AutoWorkspace" type="AutoWorkspaceSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MainWindow" type="MainWindowSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NewTerminal" type="NewTerminalSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RecentFiles" type="RecentFileSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SettingsItem" abstract="true" />
+  <xs:complexType name="RecentFileSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="FilePaths" type="RecentItemOfString" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FilePathsCapacity" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RecentItemOfString">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Item" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SerialCommunicationSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="BaudRate" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DataBits" type="DataBits" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Parity" type="Parity" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StopBits" type="StopBits" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FlowControl" type="SerialFlowControl" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RfrPin" type="SerialControlPinState" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DtrPin" type="SerialControlPinState" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="DataBits">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Five" />
+      <xs:enumeration value="Six" />
+      <xs:enumeration value="Seven" />
+      <xs:enumeration value="Eight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Parity">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Odd" />
+      <xs:enumeration value="Even" />
+      <xs:enumeration value="Mark" />
+      <xs:enumeration value="Space" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="StopBits">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="One" />
+      <xs:enumeration value="Two" />
+      <xs:enumeration value="OnePointFive" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SerialFlowControl">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Hardware" />
+      <xs:enumeration value="Software" />
+      <xs:enumeration value="Combined" />
+      <xs:enumeration value="ManualHardware" />
+      <xs:enumeration value="ManualSoftware" />
+      <xs:enumeration value="ManualCombined" />
+      <xs:enumeration value="RS485" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SerialControlPinState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Automatic" />
+      <xs:enumeration value="Disabled" />
+      <xs:enumeration value="Enabled" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="NewTerminalSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TerminalType" type="TerminalType" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IOType" type="IOType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SerialPortId" type="SerialPortId" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SerialPortCommunication" type="SerialCommunicationSettings" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SerialPortAliveMonitor" type="AutoInterval" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SerialPortAutoReopen" type="AutoInterval" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SocketRemoteHost" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SocketRemoteTcpPort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SocketRemoteUdpPort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SocketLocalInterface" type="IPNetworkInterfaceDescriptorPair" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SocketLocalFilter" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SocketLocalTcpPort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SocketLocalUdpPort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TcpClientAutoReconnect" type="AutoInterval" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UdpServerSendMode" type="UdpServerSendMode" />
+          <xs:element minOccurs="0" maxOccurs="1" name="UsbSerialHidDeviceInfo" type="DeviceInfo" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidMatchSerial" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidReportFormat" type="SerialHidReportFormat" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidRxFilterUsage" type="SerialHidRxFilterUsage" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidFlowControl" type="SerialHidFlowControl" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UsbSerialHidAutoOpen" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StartTerminal" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="TerminalType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Text" />
+      <xs:enumeration value="Binary" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="IOType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="SerialPort" />
+      <xs:enumeration value="TcpClient" />
+      <xs:enumeration value="TcpServer" />
+      <xs:enumeration value="TcpAutoSocket" />
+      <xs:enumeration value="UdpClient" />
+      <xs:enumeration value="UdpServer" />
+      <xs:enumeration value="UdpPairSocket" />
+      <xs:enumeration value="UsbSerialHid" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SerialPortId">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AutoInterval">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Interval" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="IPNetworkInterfaceDescriptorPair">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Address" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="UdpServerSendMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="First" />
+      <xs:enumeration value="MostRecent" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="DeviceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="VendorId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ProductId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SerialNumber" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SerialHidReportFormat">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="UseId" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Id" type="xs:unsignedByte" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PrependPayloadByteLength" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AppendTerminatingZero" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FillLastReport" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SerialHidRxFilterUsage">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="SeparateRxId" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AnyRxId" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RxId" type="xs:unsignedByte" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="SerialHidFlowControl">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Software" />
+      <xs:enumeration value="ManualSoftware" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="MainWindowSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="StartPosition" type="FormStartPosition" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WindowState" type="FormWindowState" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Location" type="Point" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Size" type="Size" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AlwaysOnTop" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowTerminalInfo" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowTime" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowChrono" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="FormStartPosition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Manual" />
+      <xs:enumeration value="CenterScreen" />
+      <xs:enumeration value="WindowsDefaultLocation" />
+      <xs:enumeration value="WindowsDefaultBounds" />
+      <xs:enumeration value="CenterParent" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="FormWindowState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="Minimized" />
+      <xs:enumeration value="Maximized" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Point">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="X" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Y" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Size">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Width" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Height" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AutoWorkspaceSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="FilePath" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoSaved" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ExtensionSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="TextSendFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BinarySendFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RawLogFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NeatLogFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MonitorFiles" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PathSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MainFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SendFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LogFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MonitorFiles" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GeneralSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoOpenWorkspace" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoSaveWorkspace" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="UseRelativePaths" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NotifyNonAvailableIO" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RetrieveSerialPortCaptions" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DetectSerialPortsInUse" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AskForAlternateSerialPort" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AskForAlternateNetworkInterface" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="MatchUsbSerial" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AskForAlternateUsbDevice" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SaveInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

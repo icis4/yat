@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="9.75" />
+  <Class Name="MKY.IO.Ports.SerialPortId">
+    <Position X="9.75" Y="2" Width="2.75" />
+    <TypeIdentifier>
+      <FileName>SerialPort\SerialPortId.cs</FileName>
+      <HashCode>AAAgAAABAQAAAgQEgECAAgQAAAAgIIAQAABgAABAByA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Field Name="this.number" Hidden="true" />
+    </Members>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MKY.IO.Ports.SerialPortIdConverter" Collapsed="true">
+    <Position X="12.75" Y="2" Width="2" />
+    <TypeIdentifier>
+      <FileName>SerialPort\SerialPortId.cs</FileName>
+      <HashCode>AAIAgAAAAAABAAAAAAgAACAAAAAAACAAAAIAAAAAAAE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MKY.IO.Ports.SerialPortList">
+    <Position X="17.75" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>SerialPort\SerialPortList.cs</FileName>
+      <HashCode>AAAACAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MKY.IO.Ports.SerialPortSettings">
+    <Position X="9.75" Y="8" Width="2.75" />
+    <TypeIdentifier>
+      <FileName>SerialPort\SerialPortSettings.cs</FileName>
+      <HashCode>AAAgAAAAQCAAAjAEoABAAAgAAAQCAIEAAgAMAAAUAiA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="MKY.IO.Ports.SerialPortSettingsConverter" Collapsed="true">
+    <Position X="12.75" Y="8" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>SerialPort\SerialPortSettings.cs</FileName>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAACAAAAIAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Collections.Generic.List&lt;T&gt;" Collapsed="true">
+    <Position X="15.5" Y="2" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MKY.IO.Ports.SerialPortDotNet">
+    <Position X="6.25" Y="2" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>SerialPort\SerialPortDotNet.cs</FileName>
+      <HashCode>BIAAACSgsCCEMREEEIDAgBiKFQAIhhAAAAAeAACcAAA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PortId" />
+      <Property Name="PortSettings" />
+    </ShowAsAssociation>
+    <Members>
+      <Field Name="this.isDisposed" Hidden="true" />
+      <Method Name="AssertNotDisposed" Hidden="true" />
+      <Method Name="base_DataReceived" Hidden="true" />
+      <Method Name="base_ErrorReceived" Hidden="true" />
+      <Method Name="base_PinChanged" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.IO.Ports.SerialPort">
+    <Position X="3" Y="2" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="System.ComponentModel.Component" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="MKY.IO.Ports.ISerialPort" Collapsed="true">
+    <Position X="6.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>SerialPort\ISerialPort.cs</FileName>
+      <HashCode>AAAAAAAAkAAEEAEAAAAAAAAIFAAAgAAAAAAIAACIAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MKY.IO.Ports.ISerialPortDotNet" Collapsed="true">
+    <Position X="3" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <FileName>SerialPort\ISerialPortDotNet.cs</FileName>
+      <HashCode>YIrAACCIIAAAYZAKEQAAAAiogAQYCkAAAAAGAAGUAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="System.ComponentModel.IComponent" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+</ClassDiagram>

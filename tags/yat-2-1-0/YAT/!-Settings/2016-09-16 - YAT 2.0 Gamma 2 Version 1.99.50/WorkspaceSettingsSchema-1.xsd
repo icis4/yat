@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Settings" nillable="true" type="WorkspaceSettingsRoot" />
+  <xs:complexType name="WorkspaceSettingsRoot">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="FileType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SettingsVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Saved" type="SaveInfo" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoSaved" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Workspace" type="WorkspaceSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SettingsItem" abstract="true" />
+  <xs:complexType name="WindowSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="State" type="FormWindowState" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Location" type="Point" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Size" type="Size" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="FormWindowState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="Minimized" />
+      <xs:enumeration value="Maximized" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Point">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="X" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Y" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Size">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Width" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Height" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TerminalSettingsItem">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="FilePath" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FixedIndex" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Window" type="WindowSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WorkspaceSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="AlwaysOnTop" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Layout" type="WorkspaceLayout" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TerminalSettings" type="TerminalSettingsItem" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="WorkspaceLayout">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Automatic" />
+      <xs:enumeration value="Cascade" />
+      <xs:enumeration value="TileHorizontal" />
+      <xs:enumeration value="TileVertical" />
+      <xs:enumeration value="Manual" />
+      <xs:enumeration value="Minimize" />
+      <xs:enumeration value="Maximize" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SaveInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
