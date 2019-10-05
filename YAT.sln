@@ -171,12 +171,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B0
 		!-Tools\!-ToolsAndVersions.txt = !-Tools\!-ToolsAndVersions.txt
 		!-Tools\FxCop Setup.txt = !-Tools\FxCop Setup.txt
 		!-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd = !-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd
-		!-Tools\MT-SICS TCP-IP Device Runtime Config.cmd = !-Tools\MT-SICS TCP-IP Device Runtime Config.cmd
+		!-Tools\MT-SICS TCP-IP Device Start.cmd = !-Tools\MT-SICS TCP-IP Device Start.cmd
+		!-Tools\MT-SICS TCP-IP Device Start.cmd.template = !-Tools\MT-SICS TCP-IP Device Start.cmd.template
 		!-Tools\NUnit Setup.txt = !-Tools\NUnit Setup.txt
 		!-Tools\StyleCop Setup.txt = !-Tools\StyleCop Setup.txt
 		!-Tools\SVN Setup.txt = !-Tools\SVN Setup.txt
 		!-Tools\VisualStudio Setup.txt = !-Tools\VisualStudio Setup.txt
-		!-Tools\VSPE Runtime Config - COM101 paired with COM102.cmd = !-Tools\VSPE Runtime Config - COM101 paired with COM102.cmd
+		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt
+		!-Tools\VSPE Start - COM101 paired with COM102.cmd = !-Tools\VSPE Start - COM101 paired with COM102.cmd
 		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt
 	EndProjectSection
 EndProject
