@@ -38,7 +38,7 @@ Versatile monitoring and logging of sent and received data.
 Formatting options for excellent readability.
 Support for numerous single- and multi-byte character encodings (SBCS/DBCS/MBCS).
 Unicode value representation.
-Search/Find functionality.
+Search/Find functionality, incl. regex.
 Advanced options for text and binary communication.
 Advanced options for in-depth RS-232/422/423/485 debugging of flow control, break and buffering.
 Workspace supporting multiple terminals.
