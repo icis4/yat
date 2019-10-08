@@ -84,6 +84,64 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.4.0 :: 2020-xx-xx
+----------------------------------------------------------------------------------------------------
+
+New:
+- ...
+
+Important changes:
+- ...
+
+Fixed bugs:
+- ...
+
+Limitations and known issues:
+- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
+- General imitations of .NET Windows.Forms:
+   > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
+     before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
+     The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
+   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
+   > Combo box cannot restore some corner-case cursor positions (bug #403).
+   > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
+     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+   > When [Send Text] or [Send File] is hidden, resizing the panel doesn't properly work (bug #412).
+   > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
+   > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
+   > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
+     selected may lead to a severe drop of the overall performance (related to bug #383).
+   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
+- MDI limitations of .NET Windows.Forms:
+   > Issues with frame (bugs #29 and #30).
+   > Issue with window list (bug #31).
+   > Issue with layouting when closing an MDI child (bug #399).
+- Serial COM port limitations of .NET:
+   > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
+     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+     a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
+     applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
+     #345, #382, #385, #387, #401, #442). To prevent this issue, refrain from disconnecting a
+     device while its port is open. Or, manually close the port after the device got disconnected.
+- The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
+- Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
+- USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
+  implementation and test environment would be needed to run it on unixoids (feature request #119).
+- Line content and EOL may be sent in two separate chunks, because the parts are handled slightly
+  after each other. Delay could be eliminated but requires some refactoring (feature request #333).
+- Automatic responses and actions work fine as long as the received chunks do not contain more than
+  one trigger and do not spread across multiple lines. Limitation could be eliminated but requires
+  some refactoring (feature request #366).
+- Automatic actions 'Filter' and 'Suppress' do not get reapplied on refresh (feature request #367).
+- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Direct send text mode does not yet support special formats and commands (feature request #10).
+- Running YAT for a long period, or creating many terminals, results in memory leaks, which result
+  in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
+  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+
+
 YAT 2.1.0 :: 2019-10-04
 ----------------------------------------------------------------------------------------------------
 
@@ -1521,8 +1579,8 @@ XTerm232 1.0.0 :: 2003-10-14
 YAT 2
 ----------------------------------------------------------------------------------------------------
 YAT 2 is in maintenance mode now, i.e. focus on bug fixes and minor changes, while work for YAT 4
-is already ongoing. Still, YAT 2.4 is intended to upgrade to the .NET 4.0 runtime and framework,
-versions 2.2 and 2.3 will be skipped in favor of the digit 4.
+is already ongoing.
+
 
 (Major version 3 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became
 public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
