@@ -393,13 +393,7 @@ namespace YAT.Domain
 			var l = new List<byte>(this.ByteCount); // Preset the required capacity to improve memory management.
 
 			foreach (var de in this)
-			{
-				if (de.Origin != null) // Foreach element where origin exists.
-				{
-					foreach (Pair<byte[], string> p in de.Origin)
-						l.AddRange(p.Value1);
-				}
-			}
+				l.AddRange(de.ToOrigin());
 
 			return (l.ToArray());
 		}
@@ -436,18 +430,8 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToExtendedDiagnosticsString()
-		{
-			return (ToExtendedDiagnosticsString(""));
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
-		/// </remarks>
-		public virtual string ToExtendedDiagnosticsString(string indent)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToExtendedDiagnosticsString(string indent = "")
 		{
 			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> CharCount: " + this.charCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
@@ -461,18 +445,8 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ElementsToExtendedDiagnosticsString()
-		{
-			return (ElementsToExtendedDiagnosticsString(""));
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
-		/// </remarks>
-		public virtual string ElementsToExtendedDiagnosticsString(string indent)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ElementsToExtendedDiagnosticsString(string indent = "")
 		{
 			var sb = new StringBuilder();
 

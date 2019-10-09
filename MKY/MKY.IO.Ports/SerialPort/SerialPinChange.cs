@@ -52,33 +52,33 @@ namespace MKY.IO.Ports
 		/// This signal is used to indicate whether data can be sent over the serial port.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
-		Cts = System.IO.Ports.SerialPinChange.CtsChanged,
+		Cts = System.IO.Ports.SerialPinChange.CtsChanged, // = 8
 
 		/// <summary>
 		/// The DTR (Data Terminal Ready) signal changed state.
 		/// This signal is used to indicate whether this serial port host is ready to operate.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
-		Dtr = 4,
+		Dtr = 4, // Value is inbetween RTS and CTS, but logical position is inbetween CTS and DSR.
 
 		/// <summary>
 		/// The DSR (Data Set Ready) signal changed state.
 		/// This signal is used to indicate whether the device on the serial port is ready to operate.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "'DSR' is a common term for serial ports.")]
-		Dsr = System.IO.Ports.SerialPinChange.DsrChanged,
+		Dsr = System.IO.Ports.SerialPinChange.DsrChanged, // = 16
 
 		/// <summary>
 		/// The DCD (Data Carrier Detect) signal changed state.
 		/// This signal is used to indicate whether a modem is connected to a working phone line and a data carrier signal is detected.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dcd", Justification = "'DCD' is a common term for serial ports.")]
-		Dcd = System.IO.Ports.SerialPinChange.CDChanged,
+		Dcd = System.IO.Ports.SerialPinChange.CDChanged, // = 32
 
 		/// <summary>
 		/// A break was detected on input.
 		/// </summary>
-		InputBreak = System.IO.Ports.SerialPinChange.Break,
+		InputBreak = System.IO.Ports.SerialPinChange.Break, // = 64
 
 		/// <summary>
 		/// A break was set on output.
@@ -88,7 +88,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// A ring indicator was detected.
 		/// </summary>
-		Ring = System.IO.Ports.SerialPinChange.Ring,
+		Ring = System.IO.Ports.SerialPinChange.Ring, // = 256
 	}
 }
 

@@ -63,9 +63,9 @@ namespace MKY.Collections
 		/// Items that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>
-		/// String containing all items.
+		/// String containing values of all items.
 		/// </returns>
-		public static string ItemsToString(IEnumerable collection)
+		public static string ItemsToString(IEnumerable collection, string enclosure = null)
 		{
 			// Attention:
 			// Similar code exists in ArrayEx.ValuesToString().
@@ -81,13 +81,35 @@ namespace MKY.Collections
 				else
 					sb.Append(", ");
 
+				if (!string.IsNullOrEmpty(enclosure))
+					sb.Append(enclosure);
+
 				if (item != null)
 					sb.Append(item.ToString());
 				else
 					sb.Append("[null]");
+
+				if (!string.IsNullOrEmpty(enclosure))
+					sb.Append(enclosure);
 			}
 
 			return (sb.ToString());
+		}
+
+		/// <summary>
+		/// Appends all items of an enumerable object to a string and returns the string.
+		/// Items that are <c>null</c> are returned as "[null]".
+		/// </summary>
+		/// <returns>
+		/// String containing values of all items.
+		/// </returns>
+		public static string ItemsToString(IEnumerable collection, char enclosure)
+		{
+			// Attention:
+			// Similar code exists in ArrayEx.ValuesToString().
+			// Changes here may have to be applied there too.
+
+			return (ItemsToString(collection, enclosure.ToString()));
 		}
 
 		/// <summary>

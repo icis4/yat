@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 
 namespace MKY.IO.Serial
@@ -56,24 +57,39 @@ namespace MKY.IO.Serial
 			TimeStamp = timeStamp;
 		}
 
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		public override string ToString()
+		/// <summary></summary>
+		protected string DataAsPrintableString
 		{
-			return (ToString(""));
+			get { return (ArrayEx.ValuesToString(Data)); }
 		}
 
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
-		public virtual string ToString(string indent)
+		public override string ToString()
+		{
+			return (DataAsPrintableString);
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
+		/// </remarks>
+		public virtual string ToDiagnosticsString(string indent)
 		{
 			var sb = new StringBuilder();
-			foreach (byte b in Data)
-				sb.Append(Convert.ToChar(b));
 
-			return (indent + sb.ToString());
+			sb.Append(indent);
+			sb.Append(DataAsPrintableString);
+			sb.Append(" | TimeStamp = ");
+			sb.Append(TimeStamp.ToString(CultureInfo.CurrentCulture));
+
+			return (sb.ToString());
 		}
 	}
 

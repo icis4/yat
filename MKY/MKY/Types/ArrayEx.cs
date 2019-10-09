@@ -39,6 +39,11 @@ namespace MKY
 	public static class ArrayEx
 	{
 		/// <summary>
+		/// The invalid index.
+		/// </summary>
+		public const int InvalidIndex = -1;
+
+		/// <summary>
 		/// Indicates whether the specified array is <c>null</c> or empty.
 		/// </summary>
 		/// <param name="value">The array to test.</param>
@@ -94,9 +99,9 @@ namespace MKY
 		/// Values that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>
-		/// String containing all values.
+		/// String containing values of all items.
 		/// </returns>
-		public static string ValuesToString(Array array)
+		public static string ValuesToString(Array array, string enclosure = null)
 		{
 			// Attention:
 			// Similar code exists in IEnumerableEx.ItemsToString().
@@ -112,13 +117,35 @@ namespace MKY
 				else
 					sb.Append(", ");
 
+				if (!string.IsNullOrEmpty(enclosure))
+					sb.Append(enclosure);
+
 				if (value != null)
 					sb.Append(value.ToString());
 				else
 					sb.Append("[null]");
+
+				if (!string.IsNullOrEmpty(enclosure))
+					sb.Append(enclosure);
 			}
 
 			return (sb.ToString());
+		}
+
+		/// <summary>
+		/// Appends all values of an array to a string and returns the string.
+		/// Values that are <c>null</c> are returned as "[null]".
+		/// </summary>
+		/// <returns>
+		/// String containing values of all items.
+		/// </returns>
+		public static string ValuesToString(Array array, char enclosure)
+		{
+			// Attention:
+			// Similar code exists in IEnumerableEx.ItemsToString().
+			// Changes here may have to be applied there too.
+
+			return (ValuesToString(array, enclosure.ToString()));
 		}
 
 		/// <summary>

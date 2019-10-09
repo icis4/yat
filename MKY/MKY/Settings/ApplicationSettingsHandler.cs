@@ -83,10 +83,11 @@ namespace MKY.Settings
 		[Flags]
 		private enum FileAccessFlags
 		{
-			None = 0,
-			Read = 1,
+			None =  0,
+			Read =  1,
 			Write = 2,
-			ReadWrite = Read | Write,
+
+			ReadWrite = (Read | Write)
 		}
 
 		private class Handler<TSettings> : SettingsFileHandler, IDisposable, IDisposableEx
