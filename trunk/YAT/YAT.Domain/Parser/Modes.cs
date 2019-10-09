@@ -45,7 +45,7 @@ namespace YAT.Domain.Parser
 		AsciiEscapes = 2,
 
 		/// <summary></summary>
-		RadixAndAsciiEscapes = RadixEscapes | AsciiEscapes,
+		RadixAndAsciiEscapes = (RadixEscapes | AsciiEscapes),
 
 		/// <summary></summary>
 		AllEscapesExceptKeywords = RadixAndAsciiEscapes,
@@ -54,10 +54,10 @@ namespace YAT.Domain.Parser
 		KeywordEscapes = 128,
 
 		/// <summary></summary>
-		AllEscapes = RadixAndAsciiEscapes | KeywordEscapes,
+		AllEscapes = (RadixAndAsciiEscapes | KeywordEscapes),
 
 		/// <summary></summary>
-		Default = AllEscapes,
+		Default = AllEscapes
 	}
 }
 

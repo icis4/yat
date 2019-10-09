@@ -106,7 +106,7 @@ namespace MKY.Win32
 			public enum Options : uint
 			{
 				DUPLICATE_CLOSE_SOURCE = 0x00000001,
-				DUPLICATE_SAME_ACCESS  = 0x00000002,
+				DUPLICATE_SAME_ACCESS  = 0x00000002
 			}
 
 			#pragma warning restore 1591

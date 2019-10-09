@@ -957,6 +957,25 @@ namespace YAT.Domain
 		////this.Highlight can be kept.
 		}
 
+		/// <summary></summary>
+		public virtual byte[] ToOrigin()
+		{
+			if (Origin != null)
+			{
+				List<byte> l = new List<byte>();
+
+				foreach (var item in Origin)
+					l.AddRange(item.Value1);
+
+				return (l.ToArray());
+			}
+			else
+			{
+				return (null);
+			}
+
+		}
+
 		#endregion
 
 		#region Non-Public Methods
@@ -1013,21 +1032,8 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
 		/// </remarks>
-		public virtual string ToDiagnosticsString()
-		{
-			return (ToDiagnosticsString(""));
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
-		/// </remarks>
-		/// <remarks>
-		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
-		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToDiagnosticsString(string indent = "")
 		{
 			var sb = new StringBuilder();
 

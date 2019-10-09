@@ -1885,7 +1885,8 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public override string ToExtendedDiagnosticsString(string indent)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public override string ToExtendedDiagnosticsString(string indent = "")
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
 

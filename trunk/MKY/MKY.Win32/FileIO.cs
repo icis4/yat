@@ -330,7 +330,7 @@ namespace MKY.Win32
 
 				GENERIC_READ_WRITE = 0xC0000000,
 
-				QUERY_ONLY         = 0x00000000,
+				QUERY_ONLY         = 0x00000000
 			}
 
 			/// <summary>
@@ -350,7 +350,7 @@ namespace MKY.Win32
 				SHARE_DELETE     = 0x00000004,
 
 				SHARE_READ_WRITE = 0x00000003,
-				SHARE_ALL        = 0x00000007,
+				SHARE_ALL        = 0x00000007
 			}
 
 			/// <summary>
@@ -365,7 +365,7 @@ namespace MKY.Win32
 				OPEN_EXISTING     = System.IO.FileMode.Open,
 				OPEN_ALWAYS       = System.IO.FileMode.OpenOrCreate,
 				TRUNCATE_EXISTING = System.IO.FileMode.Truncate,
-				APPEND            = System.IO.FileMode.Append,
+				APPEND            = System.IO.FileMode.Append
 			}
 
 			/// <summary>
@@ -406,7 +406,7 @@ namespace MKY.Win32
 				FLAG_POSIX_SEMANTICS          = 0x01000000,
 				FLAG_OPEN_REPARSE_POINT       = 0x00200000,
 				FLAG_OPEN_NO_RECALL           = 0x00100000,
-				FLAG_FIRST_PIPE_INSTANCE      = 0x00080000,
+				FLAG_FIRST_PIPE_INSTANCE      = 0x00080000
 			}
 
 			/// <summary></summary>

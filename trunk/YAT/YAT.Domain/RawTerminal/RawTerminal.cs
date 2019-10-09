@@ -920,20 +920,8 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
-		public virtual string ToExtendedDiagnosticsString()
-		{
-			// See below why AssertNotDisposed() is not called on such basic method!
-
-			return (ToExtendedDiagnosticsString(""));
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		/// <remarks>
-		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
-		/// </remarks>
-		public virtual string ToExtendedDiagnosticsString(string indent)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToExtendedDiagnosticsString(string indent = "")
 		{
 			if (IsDisposed)
 				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!

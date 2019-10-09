@@ -28,7 +28,6 @@
 #pragma warning disable 1591
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -70,7 +69,7 @@ namespace MKY.IO.Usb
 		ApplicationSpecific = 0xFE,
 		VendorSpecific      = 0xFF,
 
-		Any                 = 0x00,
+		Any                 = 0x00
 	}
 
 	/// <summary>
@@ -88,7 +87,7 @@ namespace MKY.IO.Usb
 		Hid       = 0x21,
 		Report    = 0x22,
 		Physical  = 0x23,
-		Hub       = 0x29,
+		Hub       = 0x29
 	}
 
 	/// <summary>
@@ -104,7 +103,7 @@ namespace MKY.IO.Usb
 		EndPoint      = 7,
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Item names are given by USB.")]
 		EndPointAudio = 9, // Audio extension
-		HubNonVar     = 7,
+		HubNonVar     = 7
 	}
 
 	/// <summary>
@@ -118,7 +117,7 @@ namespace MKY.IO.Usb
 		LanguageIds  = 0,
 		Manufacturer = 1,
 		Product      = 2,
-		Serial       = 3,
+		Serial       = 3
 	}
 
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by USB.")]
@@ -128,7 +127,7 @@ namespace MKY.IO.Usb
 	public enum EndPointDirection
 	{
 		In  = 0x80,
-		Out = 0x00,
+		Out = 0x00
 	}
 
 	public enum TransferType
@@ -136,7 +135,7 @@ namespace MKY.IO.Usb
 		Control     = 0,
 		Isochronous = 1,
 		Bulk        = 2,
-		Interrupt   = 3,
+		Interrupt   = 3
 	}
 
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by USB.")]
@@ -148,7 +147,7 @@ namespace MKY.IO.Usb
 		Class    = (0x01 << 5),
 		Vendor   = (0x02 << 5),
 		[SuppressMessage("Microsoft.Naming", "CA1700:DoNotNameEnumValuesReserved", Justification = "Item name is given by USB.")]
-		Reserved = (0x03 << 5),
+		Reserved = (0x03 << 5)
 	}
 
 	public enum StandardRequest
@@ -165,7 +164,7 @@ namespace MKY.IO.Usb
 		SetConfiguration = 0x09,
 		GetInterface     = 0x0A,
 		SetInterface     = 0x0B,
-		SynchFrame       = 0x0C,
+		SynchFrame       = 0x0C
 	}
 
 	public enum RequestRecipient
@@ -174,7 +173,7 @@ namespace MKY.IO.Usb
 		Interface = 0x01,
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Item names are given by USB.")]
 		EndPoint  = 0x02,
-		Other     = 0x03,
+		Other     = 0x03
 	}
 
 	public enum IsoSyncType
@@ -182,14 +181,14 @@ namespace MKY.IO.Usb
 		None     = 0,
 		Async    = 1,
 		Adaptive = 2,
-		Sync     = 3,
+		Sync     = 3
 	}
 
 	public enum IsoUsageType
 	{
 		Data     = 0,
 		Feedback = 1,
-		Implicit = 2,
+		Implicit = 2
 	}
 
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by USB.")]
@@ -197,16 +196,16 @@ namespace MKY.IO.Usb
 	[Flags]
 	public enum TransferFlags
 	{
-		ShortNotOk   = 1 << 0,
-		FreeBuffer   = 1 << 1,
-		FreeTransfer = 1 << 2,
+		ShortNotOk   = (1 << 0),
+		FreeBuffer   = (1 << 1),
+		FreeTransfer = (1 << 2)
 	}
 
 	public enum DeviceEvent
 	{
 		None,
 		Connected,
-		Disconnected,
+		Disconnected
 	}
 
 	/// <summary>
@@ -266,7 +265,7 @@ namespace MKY.IO.Usb
 		MagneticStripeReadingDevices = 0x8E,
 		PointOfSale                  = 0x8F,
 		CameraControl                = 0x90,
-		Arcade                       = 0x91,
+		Arcade                       = 0x91
 		////                           0x92..0xFEFF are reserved
 		////                         0xFF00..0xFFFF are vendor-defined
 	}
@@ -427,7 +426,7 @@ namespace MKY.IO.Usb
 	[CLSCompliant(false)]
 	public enum HidUsageId : ushort // 16 bits!
 	{
-		Undefined                    = 0x00,
+		Undefined                    = 0x00
 		////                           0x01..0xFEFF are defined per usage page
 		////                         0xFF00..0xFFFF are vendor-defined
 	}

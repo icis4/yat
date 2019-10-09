@@ -271,7 +271,7 @@ namespace MKY.Win32
 				PRESENT         = 0x00000002,
 				ALLCLASSES      = 0x00000004,
 				PROFILE         = 0x00000008,
-				DEVICEINTERFACE = 0x00000010,
+				DEVICEINTERFACE = 0x00000010
 			}
 
 			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
@@ -282,7 +282,7 @@ namespace MKY.Win32
 			public enum DBT : uint
 			{
 				DEVICEARRIVAL        = 0x00008000,
-				DEVICEREMOVECOMPLETE = 0x00008004,
+				DEVICEREMOVECOMPLETE = 0x00008004
 			}
 
 			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
@@ -293,7 +293,7 @@ namespace MKY.Win32
 			public enum DBT_DEVTYP : uint
 			{
 				DEVICEINTERFACE = 0x00000005,
-				HANDLE          = 0x00000006,
+				HANDLE          = 0x00000006
 			}
 
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by the Win32 API.")]
@@ -306,7 +306,7 @@ namespace MKY.Win32
 			{
 				WINDOW_HANDLE         = 0x00000000,
 				SERVICE_HANDLE        = 0x00000001,
-				ALL_INTERFACE_CLASSES = 0x00000004,
+				ALL_INTERFACE_CLASSES = 0x00000004
 			}
 
 			/// <summary>
