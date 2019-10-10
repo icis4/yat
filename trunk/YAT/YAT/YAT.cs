@@ -52,7 +52,7 @@ namespace YAT
 		/// </returns>
 		/// <remarks>
 		/// There must be separate Windows.Forms application and console application projects to
-		/// properly support running YAT from console as well as with view.
+		/// properly support running the application from console as well as with view.
 		///
 		/// Windows.Forms application:
 		/// In case of a Windows.Forms application, console output is not routed back to the
@@ -60,9 +60,10 @@ namespace YAT
 		///
 		/// Windows.Forms application with MKY.Win32.Console.Attach/Detach();
 		/// Calling Console.Attach/Detach() solves the issue stated above, but only in case of
-		/// directly calling YAT from the command line. It does not solve the issue when calling
-		/// YAT from PowerShell. In case of PowerShell, an exception is thrown! Also, when
-		/// requesting the command line help, it is output after another command line prompt.
+		/// directly calling the application from the command line. It does not solve the issue when
+		/// calling the application from PowerShell. In case of PowerShell, an exception is thrown!
+		/// Also, when requesting the command line help, it is output after another command line
+		/// prompt.
 		///
 		/// Console application:
 		/// In case of a console application, console output is properly handled but a console
@@ -73,8 +74,6 @@ namespace YAT
 		/// None of the three approaches above is good enough for YAT. And no other approaches
 		/// have been found, even after investing quite some time into online research and
 		/// asking other .NET developers.
-		///
-		/// Note that this remark can also be found at YAT.YAT.Main().
 		/// </remarks>
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
