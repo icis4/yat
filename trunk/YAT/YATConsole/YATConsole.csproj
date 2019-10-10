@@ -6,7 +6,7 @@
     <ProjectGuid>{189787C4-AE83-4A89-BC74-8F34EF1DBE57}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YATConsole</RootNamespace>
+    <RootNamespace>YAT</RootNamespace>
     <AssemblyName>YATConsole</AssemblyName>
     <StartupObject>YAT.YATConsole</StartupObject>
     <ApplicationIcon>..\YAT\Resources\YAT\Icon_YAT.ico</ApplicationIcon>
