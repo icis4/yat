@@ -3,6 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!!-SolutionItems", "!!-SolutionItems", "{CB08BBFC-24C9-4F66-A715-7E2C75F9F397}"
+	ProjectSection(SolutionItems) = preProject
+		Settings.SourceAnalysis = Settings.SourceAnalysis
+		YAT.nunit = YAT.nunit
+		YAT.Test.config = YAT.Test.config
+	EndProjectSection
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.Developer", "{E3E1764C-1358-495F-839F-721D4D307DF8}"
 	ProjectSection(SolutionItems) = preProject
 		!-Doc.Developer\HowToAddProject.txt = !-Doc.Developer\HowToAddProject.txt
@@ -17,6 +24,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.De
 		!-Doc.Developer\Template.cs = !-Doc.Developer\Template.cs
 		!-Doc.Developer\Template.ps1 = !-Doc.Developer\Template.ps1
 		!-Doc.Developer\TipsAndTricks.txt = !-Doc.Developer\TipsAndTricks.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Guidelines", "Guidelines", "{ACF6882A-643D-4E4F-9D46-44C1A9552AEC}"
+	ProjectSection(SolutionItems) = preProject
+		!-Doc.Developer\Guidelines\General.txt = !-Doc.Developer\Guidelines\General.txt
+		!-Doc.Developer\Guidelines\Test.txt = !-Doc.Developer\Guidelines\Test.txt
+		!-Doc.Developer\Guidelines\Windows.Forms.txt = !-Doc.Developer\Guidelines\Windows.Forms.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Scripts", "!-Scripts", "{08FEFDFE-B7C8-4D17-9C8F-3B3108242FB4}"
@@ -43,27 +57,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-TestConfig", "!-TestConfi
 		YAT.Test.config = YAT.Test.config
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ALAZ", "ALAZ", "{1AFE4E73-E215-4331-9E03-F33F61E3F442}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B01A8E-BCFE-4A8F-BA2B-3B15AC1BB2A3}"
 	ProjectSection(SolutionItems) = preProject
-		ALAZ\Source\ALAZ.Version.cs = ALAZ\Source\ALAZ.Version.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-8299-493A-9A21-B9A1B5C5BA5C}"
-	ProjectSection(SolutionItems) = preProject
-		MKY\CustomDictionary.xml = MKY\CustomDictionary.xml
-		MKY\MKY.Version.cs = MKY\MKY.Version.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
-	ProjectSection(SolutionItems) = preProject
-		NUnit\CustomDictionary.xml = NUnit\CustomDictionary.xml
-		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"
-	ProjectSection(SolutionItems) = preProject
-		YAT\CustomDictionary.xml = YAT\CustomDictionary.xml
-		YAT\YAT.Version.cs = YAT\YAT.Version.cs
+		!-Tools\!-ToolsAndVersions.txt = !-Tools\!-ToolsAndVersions.txt
+		!-Tools\FxCop Setup.txt = !-Tools\FxCop Setup.txt
+		!-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd = !-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd
+		!-Tools\MT-SICS TCP-IP Device Start.cmd = !-Tools\MT-SICS TCP-IP Device Start.cmd
+		!-Tools\MT-SICS TCP-IP Device Start.cmd.template = !-Tools\MT-SICS TCP-IP Device Start.cmd.template
+		!-Tools\NUnit Setup.txt = !-Tools\NUnit Setup.txt
+		!-Tools\StyleCop Setup.txt = !-Tools\StyleCop Setup.txt
+		!-Tools\SVN Setup.txt = !-Tools\SVN Setup.txt
+		!-Tools\VisualStudio Setup.txt = !-Tools\VisualStudio Setup.txt
+		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt
+		!-Tools\VSPE Start - COM101 paired with COM102.cmd = !-Tools\VSPE Start - COM101 paired with COM102.cmd
+		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.SourceForge", "!-Doc.SourceForge", "{E8A8F664-6F72-4139-A7B1-BB950EEC20AC}"
@@ -80,13 +87,46 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.User", "!-Doc.User", 
 		YAT\!-Doc.User\YAT Release Notes.txt = YAT\!-Doc.User\YAT Release Notes.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Graphics", "!-Graphics", "{1D52882C-E6C1-4305-842B-1C750EBF6D6D}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Graphics\!-ReadMe-HowToCreateIconResource.txt = YAT\!-Graphics\!-ReadMe-HowToCreateIconResource.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FatCow_Free", "FatCow_Free", "{E588846F-76EC-4EEF-A79D-B6CD628F5ACE}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Graphics\FatCow_Free\!-UpdateFiles.cmd = YAT\!-Graphics\FatCow_Free\!-UpdateFiles.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ALAZ", "ALAZ", "{1AFE4E73-E215-4331-9E03-F33F61E3F442}"
+	ProjectSection(SolutionItems) = preProject
+		ALAZ\Source\ALAZ.Version.cs = ALAZ\Source\ALAZ.Version.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-8299-493A-9A21-B9A1B5C5BA5C}"
+	ProjectSection(SolutionItems) = preProject
+		MKY\CustomDictionary.xml = MKY\CustomDictionary.xml
+		MKY\MKY.Version.cs = MKY\MKY.Version.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netrtfwriter", "netrtfwriter", "{5DE02EAE-E609-4D95-9498-DC45AB2271FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
+	ProjectSection(SolutionItems) = preProject
+		NUnit\CustomDictionary.xml = NUnit\CustomDictionary.xml
+		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\CustomDictionary.xml = YAT\CustomDictionary.xml
+		YAT\YAT.Version.cs = YAT\YAT.Version.cs
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx", "ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj", "{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx.NetEx", "ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj", "{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY", "MKY\MKY\MKY.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Test", "MKY\MKY.Test\MKY.Test.csproj", "{644F7C29-CCE6-4827-9EF2-8B7D34194101}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Ports", "MKY\MKY.IO.Ports\MKY.IO.Ports.csproj", "{D8940035-D30A-48A3-AC28-E8A4B8910CB9}"
 EndProject
@@ -114,6 +154,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Usb.Test", "MKY\MKY.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Net.Test", "MKY\MKY.Net.Test\MKY.Net.Test.csproj", "{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Test", "MKY\MKY.Test\MKY.Test.csproj", "{644F7C29-CCE6-4827-9EF2-8B7D34194101}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Win32", "MKY\MKY.Win32\MKY.Win32.csproj", "{877BAA28-C2A6-41EC-BEDE-27B396FA8E20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Win32.Test", "MKY\MKY.Win32.Test\MKY.Win32.Test.csproj", "{B5F4667B-5154-45C0-A0DE-411BBC292049}"
@@ -121,6 +163,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms", "MKY\MKY.Windows.Forms\MKY.Windows.Forms.csproj", "{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "MKY\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj", "{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtfWriter", "netrtfwriter\RtfWriter\RtfWriter.csproj", "{591BCEB5-6B6F-4368-BE6C-F89F668F7DCB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit\NUnit.csproj", "{F7BFF679-5389-434C-81E4-7EE8530DF954}"
 EndProject
@@ -136,6 +180,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain", "YAT\YAT.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain.Test", "YAT\YAT.Domain.Test\YAT.Domain.Test.csproj", "{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Format", "YAT\YAT.Format\YAT.Format.csproj", "{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Log", "YAT\YAT.Log\YAT.Log.csproj", "{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model", "YAT\YAT.Model\YAT.Model.csproj", "{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}"
@@ -145,8 +191,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Test", "YAT\YAT.Model.Test\YAT.Model.Test.csproj", "{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Types", "YAT\YAT.Model.Types\YAT.Model.Types.csproj", "{651BA67D-9B00-4245-9C99-481F20273A62}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Format", "YAT\YAT.Format\YAT.Format.csproj", "{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Application", "YAT\YAT.Settings.Application\YAT.Settings.Application.csproj", "{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}"
 EndProject
@@ -166,53 +210,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.View.Utilities", "YAT\Y
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YATConsole", "YAT\YATConsole\YATConsole.csproj", "{189787C4-AE83-4A89-BC74-8F34EF1DBE57}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B01A8E-BCFE-4A8F-BA2B-3B15AC1BB2A3}"
-	ProjectSection(SolutionItems) = preProject
-		!-Tools\!-ToolsAndVersions.txt = !-Tools\!-ToolsAndVersions.txt
-		!-Tools\FxCop Setup.txt = !-Tools\FxCop Setup.txt
-		!-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd = !-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd
-		!-Tools\MT-SICS TCP-IP Device Start.cmd = !-Tools\MT-SICS TCP-IP Device Start.cmd
-		!-Tools\MT-SICS TCP-IP Device Start.cmd.template = !-Tools\MT-SICS TCP-IP Device Start.cmd.template
-		!-Tools\NUnit Setup.txt = !-Tools\NUnit Setup.txt
-		!-Tools\StyleCop Setup.txt = !-Tools\StyleCop Setup.txt
-		!-Tools\SVN Setup.txt = !-Tools\SVN Setup.txt
-		!-Tools\VisualStudio Setup.txt = !-Tools\VisualStudio Setup.txt
-		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt
-		!-Tools\VSPE Start - COM101 paired with COM102.cmd = !-Tools\VSPE Start - COM101 paired with COM102.cmd
-		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt
-	EndProjectSection
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup.x64", "YAT\YAT.Setup\YAT.Setup.x64.vdproj", "{54F71988-3626-43F1-88C9-6A49EF275417}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup.x86", "YAT\YAT.Setup\YAT.Setup.x86.vdproj", "{D33931A1-0F8B-4524-A5D1-3891B88C21E5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netrtfwriter", "netrtfwriter", "{5DE02EAE-E609-4D95-9498-DC45AB2271FE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtfWriter", "netrtfwriter\RtfWriter\RtfWriter.csproj", "{591BCEB5-6B6F-4368-BE6C-F89F668F7DCB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!!-SolutionItems", "!!-SolutionItems", "{CB08BBFC-24C9-4F66-A715-7E2C75F9F397}"
-	ProjectSection(SolutionItems) = preProject
-		Settings.SourceAnalysis = Settings.SourceAnalysis
-		YAT.nunit = YAT.nunit
-		YAT.Test.config = YAT.Test.config
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Guidelines", "Guidelines", "{ACF6882A-643D-4E4F-9D46-44C1A9552AEC}"
-	ProjectSection(SolutionItems) = preProject
-		!-Doc.Developer\Guidelines\General.txt = !-Doc.Developer\Guidelines\General.txt
-		!-Doc.Developer\Guidelines\Test.txt = !-Doc.Developer\Guidelines\Test.txt
-		!-Doc.Developer\Guidelines\Windows.Forms.txt = !-Doc.Developer\Guidelines\Windows.Forms.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Graphics", "!-Graphics", "{1D52882C-E6C1-4305-842B-1C750EBF6D6D}"
-	ProjectSection(SolutionItems) = preProject
-		YAT\!-Graphics\!-ReadMe-HowToCreateIconResource.txt = YAT\!-Graphics\!-ReadMe-HowToCreateIconResource.txt
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FatCow_Free", "FatCow_Free", "{E588846F-76EC-4EEF-A79D-B6CD628F5ACE}"
-	ProjectSection(SolutionItems) = preProject
-		YAT\!-Graphics\FatCow_Free\!-UpdateFiles.cmd = YAT\!-Graphics\FatCow_Free\!-UpdateFiles.cmd
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
