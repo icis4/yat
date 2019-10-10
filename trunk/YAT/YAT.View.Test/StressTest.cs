@@ -102,7 +102,7 @@ namespace YAT.View.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Starts an instance of YAT including GUI and verifies that contents are properly displayed.
+		/// Starts an instance of YAT with view and verifies that contents are properly displayed.
 		/// </summary>
 		[Test]
 		[StressCategory]

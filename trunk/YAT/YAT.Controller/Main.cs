@@ -392,29 +392,29 @@ namespace YAT.Controller
 		/// There are the following use cases to run YAT. This Run() method supports all these
 		/// use cases as shown below:
 		///
-		/// 1. 'Normal' GUI operation
+		/// 1. 'Normal' operation with view
 		///    > Start YAT from the Windows start menu
 		///    > Equal to start YAT.exe directly
 		///    ==> Run(false, true);
 		///
-		/// 2. 'File' triggered GUI operation
+		/// 2. 'File' triggered operation with view
 		///    > Start YAT by executing a .yaw or .yat file
 		///    > Uses file type relationship as defined by YAT.Setup
 		///    ==> Run(false, true);
 		///
-		/// 3. 'cmd console' operation with GUI
+		/// 3. 'cmd console' operation with view
 		///    > Must use 'YATConsole' to ensure that output is properly routed back to console
 		///    ==> Run(true, true);
 		///
-		/// 4. 'PowerShell' operation with GUI
+		/// 4. 'PowerShell' operation with view
 		///    > Must use 'YATConsole' to ensure that output is properly routed back to PowerShell
 		///    ==> Run(true, true);
 		///
-		/// 5. 'cmd console' operation with console only, no GUI at all
+		/// 5. 'cmd console' operation with console only, no view at all
 		///    > Must use 'YATConsole' with the -NoView/-nv option
 		///    ==> Run(true, false);
 		///
-		/// 6. 'PowerShell' operation with console only, no GUI at all
+		/// 6. 'PowerShell' operation with console only, no view at all
 		///    > Must use 'YATConsole' with the -NoView/-nv option
 		///    ==> Run(true, false);
 		///

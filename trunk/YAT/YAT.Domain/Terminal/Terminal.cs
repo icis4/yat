@@ -560,7 +560,7 @@ namespace YAT.Domain
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
 								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.sendFileThread.Abort(); // This is only the fall-back in case joining fails for too long.
@@ -622,7 +622,7 @@ namespace YAT.Domain
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
 								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.sendDataThread.Abort(); // This is only the fall-back in case joining fails for too long.

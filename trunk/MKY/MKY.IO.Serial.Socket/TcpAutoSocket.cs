@@ -51,18 +51,18 @@ namespace MKY.IO.Serial.Socket
 	/// Initially, YAT AutoSockets with the original ALAZ implementation created a deadlock on
 	/// shutdown when two AutoSockets that were interconnected with each other. The situation:
 	///
-	/// 1. The GUI/main thread requests stopping all terminals:
+	/// 1. The main thread requests stopping all terminals:
 	///     => YAT.Model.Workspace.CloseAllTerminals()
 	///         => MKY.IO.Serial.TcpAutoSocket.Stop()
 	///            => ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop()
 	///                => ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get()
 	///
 	/// 2. As a result, the first AutoSocket shuts down, but the second changes from 'Accepted' to
-	///    'Listening' and tries to synchronize from the ALAZ socket event to the GUI/main thread:
+	///    'Listening' and tries to synchronize from the ALAZ socket event to the main thread:
 	///     => ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected()
 	///         => MKY.IO.Serial.TcpAutoSocket.OnIOChanged()
 	///             => YAT.Model.Terminal.OnIOChanged()
-	///                 => Deadlock when synchronizing onto GUI/main thread !!!
+	///                 => Deadlock when synchronizing onto main thread !!!
 	///
 	/// The issue has been solved in <see cref="ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection"/>
 	/// as well as <see cref="TcpClient"/> or <see cref="TcpServer"/> by invoking Stop() and Dispose()

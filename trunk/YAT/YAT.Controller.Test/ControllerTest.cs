@@ -107,7 +107,7 @@ namespace YAT.Controller.Test
 			// YAT.Controller.Main          : ...failed with [Cancel]!
 			//
 			// The returned value is [Cancel] instead of [OK]! The root cause to this issue has
-			// not been found (yet). It could be related to the fact that the NUnit GUI "owns" the
+			// not been found (yet). It could be related to the fact that the NUnit-GUI "owns" the
 			// main thread, and the YAT's welcome screen is shown without that form as parent.
 			// This could also be related to the following note in .NET WinForms:
 			// "If a Form is displayed as a modeless window, the value returned by the DialogResult
