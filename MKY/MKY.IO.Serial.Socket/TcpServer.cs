@@ -68,10 +68,10 @@ namespace MKY.IO.Serial.Socket
 	/// In case of YAT with the original ALAZ implementation, TCP/IP clients and servers created a
 	/// deadlock on shutdown. The situation:
 	///
-	/// 1. <see cref="Stop()"/> is called from a GUI/main thread.
+	/// 1. <see cref="Stop()"/> is called from a main thread.
 	/// 2. 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' blocks.
 	/// 3. The 'OnDisconnected' event is raised.
-	/// 4. FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the GUI/main
+	/// 4. FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the main
 	///    thread and a deadlock happens.
 	///
 	/// Further down the calling chain, 'BaseSocketConnection.Active.get()' was also blocking.
@@ -571,7 +571,7 @@ namespace MKY.IO.Serial.Socket
 		/// Note that ALAZ sockets stop asynchronously, same as starting.
 		///
 		/// Attention:
-		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
+		/// The Stop() method of the ALAZ socket must not be called on the main thread.
 		/// See remarks of the header of this class for details.
 		/// </remarks>
 		private void StopAndDisposeSocketAndConnectionsAndThreadAsync()
@@ -696,7 +696,7 @@ namespace MKY.IO.Serial.Socket
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
 								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;           // Thread.Abort() must not be used whenever possible!
 								this.dataSentThread.Abort(); // This is only the fall-back in case joining fails for too long.
