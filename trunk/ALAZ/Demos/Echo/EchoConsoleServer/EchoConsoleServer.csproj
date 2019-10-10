@@ -50,7 +50,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
