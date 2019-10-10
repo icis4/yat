@@ -9,6 +9,7 @@
     <RootNamespace>YATConsole</RootNamespace>
     <AssemblyName>YATConsole</AssemblyName>
     <StartupObject>YAT.YATConsole</StartupObject>
+    <ApplicationIcon>..\YAT\Resources\YAT\Icon_YAT.ico</ApplicationIcon>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -103,6 +104,32 @@
     <EmbeddedResource Include="..\YAT\Properties\Resources.resx">
       <Link>Properties\Resources.resx</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\YAT\Resources\YAT\Icon_YAT.ico">
+      <Link>Resources\YAT\Icon_YAT.ico</Link>
+    </Content>
+    <Content Include="..\YAT\Resources\YAT\Icon_YAT_TerminalSettings.ico">
+      <Link>Resources\YAT\Icon_YAT_TerminalSettings.ico</Link>
+    </Content>
+    <Content Include="..\YAT\Resources\YAT\Icon_YAT_UserSettings.ico">
+      <Link>Resources\YAT\Icon_YAT_UserSettings.ico</Link>
+    </Content>
+    <Content Include="..\YAT\Resources\YAT\Icon_YAT_WorkspaceSettings.ico">
+      <Link>Resources\YAT\Icon_YAT_WorkspaceSettings.ico</Link>
+    </Content>
+    <Content Include="..\YAT\Resources\YAT\Image_YAT_64x64.png">
+      <Link>Resources\YAT\Image_YAT_64x64.png</Link>
+    </Content>
+    <Content Include="..\YAT\Resources\YAT\Image_YAT_TerminalSettings_64x64.png">
+      <Link>Resources\YAT\Image_YAT_TerminalSettings_64x64.png</Link>
+    </Content>
+    <Content Include="..\YAT\Resources\YAT\Image_YAT_UserSettings_64x64.png">
+      <Link>Resources\YAT\Image_YAT_UserSettings_64x64.png</Link>
+    </Content>
+    <Content Include="..\YAT\Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png">
+      <Link>Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

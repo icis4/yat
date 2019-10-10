@@ -9,6 +9,7 @@
     <RootNamespace>YAT</RootNamespace>
     <AssemblyName>YAT</AssemblyName>
     <StartupObject>YAT.YAT</StartupObject>
+    <ApplicationIcon>Resources\YAT\Icon_YAT.ico</ApplicationIcon>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
