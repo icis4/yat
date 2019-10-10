@@ -1,14 +1,8 @@
-@@ -1,4 +1,5 @@
+@@ -1 +1,2 @@
 -﻿using System.Reflection;
 +﻿using System;
 +using System.Reflection;
- using System.Runtime.CompilerServices;
- using System.Runtime.InteropServices;
- 
-@@ -22,14 +23,7 @@ using System.Runtime.InteropServices;
- // The following GUID is for the ID of the typelib if this project is exposed to COM
- [assembly: Guid("deded30c-5c5f-497d-bea6-e6e52d93bbfb")]
- 
+@@ -25,11 +26,4 @@ using System.Runtime.InteropServices;
 -// Version information for an assembly consists of the following four values:
 -//
 -//      Major Version
@@ -22,5 +16,5 @@
 -[assembly: AssemblyFileVersion("3.5.0.0")]
 +// Assembly versions are defined by linked-in ALAZ.Version.cs.
 +
-+// CLS compliance
++// CLS compliance.
 +[assembly: CLSCompliant(true)]
