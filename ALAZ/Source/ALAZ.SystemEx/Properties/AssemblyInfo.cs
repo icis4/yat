@@ -25,5 +25,5 @@ using System.Runtime.InteropServices;
 
 // Assembly versions are defined by linked-in ALAZ.Version.cs.
 
-// CLS compliance
+// CLS compliance.
 [assembly: CLSCompliant(true)]
