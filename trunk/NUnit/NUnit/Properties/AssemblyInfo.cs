@@ -31,9 +31,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NUnit")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("NUnit extension and integration components")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("NUnit")]
 [assembly: AssemblyCopyright("Copyright © 2010-2019 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
