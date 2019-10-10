@@ -82,11 +82,11 @@ namespace YAT
 			{
 				result = main.RunFromConsole();
 			}
-#if (DEBUG)
+		#if (DEBUG)
 			GC.Collect(); // Force garbage collection to allow detecting memory leaks upon exit.
 			Controller.Diagnostics.DebugFinalization.DebugNotifyAllowedStaticObjects();
 		////MKY.Diagnostics.DebugFinalization.FinalizationShouldHaveCompleted = true; has been disabled until fix of bugs #243, #263 and #336 continues.
-#endif
+		#endif
 			return ((int)result);
 		}
 	}
