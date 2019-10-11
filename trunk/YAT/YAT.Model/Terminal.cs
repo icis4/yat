@@ -5372,6 +5372,10 @@ namespace YAT.Model
 		{
 			if (this.log != null)
 			{
+				// Attention:
+				// Similar code exists in View.Forms.Main.OpenDefaultLogDirectory().
+				// Changes here may have to be applied there too.
+
 				string rootPath = this.log.Settings.RootPath;
 
 				// Create directory if not existing yet:
