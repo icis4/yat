@@ -66,6 +66,7 @@ using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
 using YAT.Model.Types;
+using YAT.Model.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 using YAT.View.Controls;
@@ -969,33 +970,33 @@ namespace YAT.View.Forms
 					}
 				}
 
-				toolStripButton_MainTool_File_Save.Enabled         = childIsReady && !terminalFileIsReadOnly;
+				toolStripButton_MainTool_File_Save.Enabled = (childIsReady && !terminalFileIsReadOnly);
 
-				toolStripButton_MainTool_Terminal_Start.Enabled    = childIsReady && terminalIsStopped;
-				toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
-				toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_Start   .Enabled = (childIsReady && terminalIsStopped);
+				toolStripButton_MainTool_Terminal_Stop    .Enabled = (childIsReady && terminalIsStarted);
+				toolStripButton_MainTool_Terminal_Settings.Enabled =  childIsReady;
 
-				toolStripButton_MainTool_Radix_String.Enabled  = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Radix_Char.Enabled    = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Radix_Bin.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Radix_Oct.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Radix_Dec.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Radix_Hex.Enabled     = childIsReady && radixIsReady;
-				toolStripButton_MainTool_Radix_Unicode.Enabled = childIsReady && radixIsReady;
+				toolStripButton_MainTool_Radix_String .Enabled = (childIsReady && radixIsReady);
+				toolStripButton_MainTool_Radix_Char   .Enabled = (childIsReady && radixIsReady);
+				toolStripButton_MainTool_Radix_Bin    .Enabled = (childIsReady && radixIsReady);
+				toolStripButton_MainTool_Radix_Oct    .Enabled = (childIsReady && radixIsReady);
+				toolStripButton_MainTool_Radix_Dec    .Enabled = (childIsReady && radixIsReady);
+				toolStripButton_MainTool_Radix_Hex    .Enabled = (childIsReady && radixIsReady);
+				toolStripButton_MainTool_Radix_Unicode.Enabled = (childIsReady && radixIsReady);
 
-				toolStripButton_MainTool_Radix_String.Checked  = (radix == Domain.Radix.String);
-				toolStripButton_MainTool_Radix_Char.Checked    = (radix == Domain.Radix.Char);
-				toolStripButton_MainTool_Radix_Bin.Checked     = (radix == Domain.Radix.Bin);
-				toolStripButton_MainTool_Radix_Oct.Checked     = (radix == Domain.Radix.Oct);
-				toolStripButton_MainTool_Radix_Dec.Checked     = (radix == Domain.Radix.Dec);
-				toolStripButton_MainTool_Radix_Hex.Checked     = (radix == Domain.Radix.Hex);
+				toolStripButton_MainTool_Radix_String .Checked = (radix == Domain.Radix.String);
+				toolStripButton_MainTool_Radix_Char   .Checked = (radix == Domain.Radix.Char);
+				toolStripButton_MainTool_Radix_Bin    .Checked = (radix == Domain.Radix.Bin);
+				toolStripButton_MainTool_Radix_Oct    .Checked = (radix == Domain.Radix.Oct);
+				toolStripButton_MainTool_Radix_Dec    .Checked = (radix == Domain.Radix.Dec);
+				toolStripButton_MainTool_Radix_Hex    .Checked = (radix == Domain.Radix.Hex);
 				toolStripButton_MainTool_Radix_Unicode.Checked = (radix == Domain.Radix.Unicode);
 
-				toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
-				toolStripButton_MainTool_Terminal_Refresh.Enabled         = childIsReady;
+				toolStripButton_MainTool_Terminal_Clear          .Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_Refresh        .Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled = childIsReady;
-				toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
-				toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
+				toolStripButton_MainTool_Terminal_SaveToFile     .Enabled = childIsReady;
+				toolStripButton_MainTool_Terminal_Print          .Enabled = childIsReady;
 
 				toolStripButton_MainTool_SetFindControls(); // See remarks of that method.
 
@@ -1007,11 +1008,11 @@ namespace YAT.View.Forms
 				if (childIsReady)
 					logFileExists = ((Terminal)ActiveMdiChild).LogFileExists;
 
-				toolStripButton_MainTool_Log_Settings.Enabled      =  childIsReady;
-				toolStripButton_MainTool_Log_On.Enabled            = (childIsReady && !logIsOn);
-				toolStripButton_MainTool_Log_Off.Enabled           = (childIsReady &&  logIsOn);
-				toolStripButton_MainTool_Log_OpenFile.Enabled      = (childIsReady &&  logFileExists);
-				toolStripButton_MainTool_Log_OpenDirectory.Enabled =  childIsReady;
+				toolStripButton_MainTool_Log_Settings     .Enabled =  childIsReady;
+				toolStripButton_MainTool_Log_On           .Enabled = (childIsReady && !logIsOn);
+				toolStripButton_MainTool_Log_Off          .Enabled = (childIsReady &&  logIsOn);
+				toolStripButton_MainTool_Log_OpenFile     .Enabled = (childIsReady &&  logFileExists);
+			////toolStripButton_MainTool_Log_OpenDirectory.Enabled shall always be active, default folder can be opened even if child is inactive.
 
 				// AutoAction:
 
@@ -1947,6 +1948,54 @@ namespace YAT.View.Forms
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestOpenLogDirectory();
+			else
+				OpenDefaultLogDirectory();
+		}
+
+		private void OpenDefaultLogDirectory()
+		{
+			// Attention:
+			// Similar code exists in Model.Terminal.OpenLogDirectory().
+			// Changes here may have to be applied there too.
+
+			string rootPath = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
+
+			// Create directory if not existing yet:
+			if (!Directory.Exists(Path.GetDirectoryName(rootPath)))
+			{
+				try
+				{
+					Directory.CreateDirectory(Path.GetDirectoryName(rootPath));
+				}
+				catch (Exception exCreate)
+				{
+					string message = "Unable to create folder." + Environment.NewLine + Environment.NewLine +
+					                    "System error message:" + Environment.NewLine + exCreate.Message;
+
+					MessageBoxEx.Show
+					(
+						this,
+						message,
+						"Folder Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+				}
+			}
+
+			// Open directory:
+			Exception exBrowse;
+			if (!DirectoryEx.TryBrowse(rootPath, out exBrowse))
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					ErrorHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
+					"Log Folder Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+			}
 		}
 
 		private void toolStripButton_MainTool_AutoAction_ShowHide_Click(object sender, EventArgs e)
