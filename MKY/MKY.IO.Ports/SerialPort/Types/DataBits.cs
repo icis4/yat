@@ -45,7 +45,7 @@ namespace MKY.IO.Ports
 		Five  = 5,
 		Six   = 6,
 		Seven = 7,
-		Eight = 8,
+		Eight = 8
 	}
 
 	#pragma warning restore 1591

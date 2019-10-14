@@ -70,7 +70,7 @@ namespace MKY.Win32
 			{
 				STD_INPUT_HANDLE  = 0xFFFFFFF6,
 				STD_OUTPUT_HANDLE = 0xFFFFFFF5,
-				STD_ERROR_HANDLE  = 0xFFFFFFF4,
+				STD_ERROR_HANDLE  = 0xFFFFFFF4
 			}
 
 			#pragma warning restore 1591

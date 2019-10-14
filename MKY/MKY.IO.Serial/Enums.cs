@@ -34,7 +34,7 @@ namespace MKY.IO.Serial
 	{
 		Acceptable,
 		Severe,
-		Fatal,
+		Fatal
 	}
 
 	/// <summary></summary>
@@ -42,7 +42,7 @@ namespace MKY.IO.Serial
 	{
 		None,
 		Input,
-		Output,
+		Output
 	}
 }
 

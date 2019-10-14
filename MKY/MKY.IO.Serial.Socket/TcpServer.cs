@@ -107,7 +107,7 @@ namespace MKY.IO.Serial.Socket
 			Listening,
 			Accepted,
 			Stopping,
-			Error,
+			Error
 		}
 
 		#endregion

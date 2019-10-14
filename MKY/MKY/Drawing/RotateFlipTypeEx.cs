@@ -43,7 +43,7 @@ namespace MKY.Drawing
 		RotateNone = RotateFlipType.RotateNoneFlipNone,
 		Rotate90   = RotateFlipType.Rotate90FlipNone,
 		Rotate180  = RotateFlipType.Rotate180FlipNone,
-		Rotate270  = RotateFlipType.Rotate270FlipNone,
+		Rotate270  = RotateFlipType.Rotate270FlipNone
 	}
 
 	/// <summary>
@@ -154,7 +154,7 @@ namespace MKY.Drawing
 		FlipNone = RotateFlipType.RotateNoneFlipNone,
 		FlipX    = RotateFlipType.RotateNoneFlipX,
 		FlipXY   = RotateFlipType.RotateNoneFlipXY,
-		FlipY    = RotateFlipType.RotateNoneFlipY,
+		FlipY    = RotateFlipType.RotateNoneFlipY
 	}
 
 	/// <summary>

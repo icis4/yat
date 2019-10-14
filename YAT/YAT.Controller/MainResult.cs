@@ -44,7 +44,7 @@ namespace YAT.Controller
 		ApplicationStartError    = -3,
 		ApplicationRunError      = -4,
 		ApplicationExitError     = -5,
-		UnhandledException       = -6,
+		UnhandledException       = -6
 	}
 
 	#pragma warning restore 1591

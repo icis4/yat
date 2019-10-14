@@ -34,7 +34,7 @@ namespace YAT.View.Controls
 		Active,
 
 		/// <summary></summary>
-		Pending,
+		Pending
 	}
 }
 

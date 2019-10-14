@@ -41,7 +41,7 @@ namespace MKY.IO.Serial.Socket
 		Unknown,
 		Client,
 		Server,
-		PairSocket,
+		PairSocket
 	}
 
 #pragma warning restore 1591

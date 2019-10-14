@@ -61,7 +61,7 @@ namespace MKY.Test.Settings
 			Level1,
 
 			/// <summary></summary>
-			Level2,
+			Level2
 		}
 
 		/// <summary></summary>

@@ -43,7 +43,7 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "Short and simple.")]
-		D,
+		D
 	}
 
 	/// <remarks>Similar to <see cref="Equality.Types.ReferenceTypeIEquatableWithOperators_Base"/>.</remarks>

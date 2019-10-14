@@ -327,7 +327,7 @@ namespace MKY.Win32
 			{
 				HidP_Input   = 0,
 				HidP_Output  = 1,
-				HidP_Feature = 2,
+				HidP_Feature = 2
 			}
 
 			/// <summary>
@@ -340,7 +340,7 @@ namespace MKY.Win32
 			public enum HIDP_STATUS : uint
 			{
 				HidP_Success              = 0x00110000,
-				HidP_InvalidPreparsedData = 0xC0110001,
+				HidP_InvalidPreparsedData = 0xC0110001
 			}
 
 			/// <summary>
@@ -749,7 +749,7 @@ namespace MKY.Win32
 			LanguageIds  = 0,
 			Manufacturer = 1,
 			Product      = 2,
-			Serial       = 3,
+			Serial       = 3
 		}
 
 		#pragma warning restore 1591

@@ -44,7 +44,7 @@ namespace MKY.IO.Serial.Socket
 		TcpAutoSocket,
 		UdpClient,
 		UdpServer,
-		UdpPairSocket,
+		UdpPairSocket
 	}
 
 	#pragma warning restore 1591

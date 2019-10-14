@@ -50,7 +50,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ccc", Justification = "Who cares, it's OK for testing.")]
-		Ccc,
+		Ccc
 	}
 
 	/// <summary></summary>

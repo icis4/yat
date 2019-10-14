@@ -56,7 +56,7 @@ namespace MKY.Settings
 		ReadShared = 1,
 
 		/// <summary>Default, read and write the settings.</summary>
-		ReadSharedWriteIfOwned = 3,
+		ReadSharedWriteIfOwned = 3
 	}
 
 	/// <summary>

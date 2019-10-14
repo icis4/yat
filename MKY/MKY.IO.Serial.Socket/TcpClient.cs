@@ -106,7 +106,7 @@ namespace MKY.IO.Serial.Socket
 			Disconnected,
 			WaitingForReconnect,
 			Stopping,
-			Error,
+			Error
 		}
 
 		#endregion

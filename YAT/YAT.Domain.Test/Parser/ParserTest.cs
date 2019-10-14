@@ -182,9 +182,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\b(00000001 00000000)",			new byte[] { 0x01, 0x00 } ).SetName("Bin 00000001 00000000"));
 				yield return (new TestCaseData(@"\b(1111111111111111)",				new byte[] { 0xFF, 0xFF } ).SetName("Bin 1111111111111111"));
 				yield return (new TestCaseData(@"\b(11111111 11111111)",			new byte[] { 0xFF, 0xFF } ).SetName("Bin 11111111 11111111"));
-				yield return (new TestCaseData(@"\b(00100011 01011101 00100100)",	new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Bin sequence 1"));
-				yield return (new TestCaseData(@"\b(001000110101110100100100)",		new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Bin sequence 2"));
-				yield return (new TestCaseData(@"\b(0010001101011101001001)",		new byte[] { 0x23, 0x5D, 0x09, } ).SetName("Bin sequence 3"));
+				yield return (new TestCaseData(@"\b(00100011 01011101 00100100)",	new byte[] { 0x23, 0x5D, 0x24 } ).SetName("Bin sequence 1"));
+				yield return (new TestCaseData(@"\b(001000110101110100100100)",		new byte[] { 0x23, 0x5D, 0x24 } ).SetName("Bin sequence 2"));
+				yield return (new TestCaseData(@"\b(0010001101011101001001)",		new byte[] { 0x23, 0x5D, 0x09 } ).SetName("Bin sequence 3"));
 				yield return (new TestCaseData(@"\b( 01)",							new byte[] { 0x01 } ).SetName("Bin 01 leading space"));
 				yield return (new TestCaseData(@"\b(01 )",							new byte[] { 0x01 } ).SetName("Bin 01 trailing space"));
 				yield return (new TestCaseData(@"\b(   01   )",						new byte[] { 0x01 } ).SetName("Bin 01 leading and trailing space"));
@@ -206,9 +206,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\o(001 000)",						new byte[] { 0x01, 0x00 } ).SetName("Oct 001 000"));
 				yield return (new TestCaseData(@"\o(377377)",						new byte[] { 0xFF, 0xFF } ).SetName("Oct 377377"));
 				yield return (new TestCaseData(@"\o(377 377)",						new byte[] { 0xFF, 0xFF } ).SetName("Oct 377 377"));
-				yield return (new TestCaseData(@"\o(43 135 44)",					new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Oct sequence 1"));
-				yield return (new TestCaseData(@"\o(4313544)",						new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Oct sequence 2"));
-				yield return (new TestCaseData(@"\o(4313511)",						new byte[] { 0x23, 0x5D, 0x09, } ).SetName("Oct sequence 3"));
+				yield return (new TestCaseData(@"\o(43 135 44)",					new byte[] { 0x23, 0x5D, 0x24 } ).SetName("Oct sequence 1"));
+				yield return (new TestCaseData(@"\o(4313544)",						new byte[] { 0x23, 0x5D, 0x24 } ).SetName("Oct sequence 2"));
+				yield return (new TestCaseData(@"\o(4313511)",						new byte[] { 0x23, 0x5D, 0x09 } ).SetName("Oct sequence 3"));
 				yield return (new TestCaseData(@"\o( 01)",							new byte[] { 0x01 } ).SetName("Oct 01 leading space"));
 				yield return (new TestCaseData(@"\o( 01",							new byte[] { 0x01 } ).SetName("Oct 01 leading space without closing parentheses"));
 				yield return (new TestCaseData(@"\o(01 )",							new byte[] { 0x01 } ).SetName("Oct 01 trailing space"));
@@ -231,9 +231,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\d(001 000)",						new byte[] { 0x01, 0x00 } ).SetName("Dec 001 000"));
 				yield return (new TestCaseData(@"\d(255255)",						new byte[] { 0xFF, 0xFF } ).SetName("Dec 255255"));
 				yield return (new TestCaseData(@"\d(255 255)",						new byte[] { 0xFF, 0xFF } ).SetName("Dec 255 255"));
-				yield return (new TestCaseData(@"\d(35 93 36)",						new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Dec sequence 1"));
-				yield return (new TestCaseData(@"\d(359336)",						new byte[] { 0x23, 0x5D, 0x24, } ).SetName("Dec sequence 2"));
-				yield return (new TestCaseData(@"\d(35939)",						new byte[] { 0x23, 0x5D, 0x09, } ).SetName("Dec sequence 3"));
+				yield return (new TestCaseData(@"\d(35 93 36)",						new byte[] { 0x23, 0x5D, 0x24 } ).SetName("Dec sequence 1"));
+				yield return (new TestCaseData(@"\d(359336)",						new byte[] { 0x23, 0x5D, 0x24 } ).SetName("Dec sequence 2"));
+				yield return (new TestCaseData(@"\d(35939)",						new byte[] { 0x23, 0x5D, 0x09 } ).SetName("Dec sequence 3"));
 				yield return (new TestCaseData(@"\d( 01)",							new byte[] { 0x01 } ).SetName("Dec 01 leading space"));
 				yield return (new TestCaseData(@"\d(01 )",							new byte[] { 0x01 } ).SetName("Dec 01 trailing space"));
 				yield return (new TestCaseData(@"\d(   01   )",						new byte[] { 0x01 } ).SetName("Dec 01 leading and trailing space"));

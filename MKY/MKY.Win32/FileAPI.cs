@@ -121,7 +121,7 @@ namespace MKY.Win32
 				FILE_TYPE_PIPE    = 0x0003,
 				FILE_TYPE_REMOTE  = 0x8000,
 
-				FILE_TYPE_UNKNOWN = 0x0000,
+				FILE_TYPE_UNKNOWN = 0x0000
 			}
 
 			#pragma warning restore 1591

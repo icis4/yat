@@ -97,7 +97,7 @@ namespace MKY.Win32
 		{
 			Device        = 1,
 			Configuration = 2,
-			String        = 3,
+			String        = 3
 		}
 
 		#pragma warning restore 1591
