@@ -249,7 +249,7 @@ namespace MKY.Test.Xml.Serialization
 			var ma = new string[,]
 			{
 				{ "A", "AA" },
-				{ "B", "BB" },
+				{ "B", "BB" }
 			};
 			TestSerialization(typeof(string[,]), ma, filePath);
 		#endif
@@ -257,7 +257,7 @@ namespace MKY.Test.Xml.Serialization
 			var aai = new string[][]
 				{
 					new string[] { "A", "AA" },
-					new string[] { "B", "BB" },
+					new string[] { "B", "BB" }
 				};
 			TestSerializationChain(typeof(string[][]), aai, filePath);
 
@@ -351,7 +351,7 @@ namespace MKY.Test.Xml.Serialization
 			var aa = new string[2][]
 			{
 				new string[2],
-				new string[2],
+				new string[2]
 			};
 			i = 0;
 			foreach (string key in l.Keys)

@@ -47,7 +47,7 @@ namespace MKY.Test.Types
 		{
 			new int[] { 0, 1, 2 },
 			new int[] { 0, 1, 2 },
-			new int[] { 1, 2, 3 },
+			new int[] { 1, 2, 3 }
 		};
 
 		/// <summary></summary>
@@ -55,7 +55,7 @@ namespace MKY.Test.Types
 		{
 			new EnumType[] { EnumType.A, EnumType.B, EnumType.C },
 			new EnumType[] { EnumType.A, EnumType.B, EnumType.C },
-			new EnumType[] { EnumType.B, EnumType.C, EnumType.D },
+			new EnumType[] { EnumType.B, EnumType.C, EnumType.D }
 		};
 
 		/// <summary></summary>
@@ -63,7 +63,7 @@ namespace MKY.Test.Types
 		{
 			new EquatableReferenceType[] { new EquatableReferenceType(0, 1.0), new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2) },
 			new EquatableReferenceType[] { new EquatableReferenceType(0, 1.0), new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2) },
-			new EquatableReferenceType[] { new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2), new EquatableReferenceType(3, 1.3) },
+			new EquatableReferenceType[] { new EquatableReferenceType(1, 1.1), new EquatableReferenceType(2, 1.2), new EquatableReferenceType(3, 1.3) }
 		};
 
 		/// <summary></summary>
@@ -71,7 +71,7 @@ namespace MKY.Test.Types
 		{
 			new string[] { "AAA", "BBB", "CCC" },
 			new string[] { "AAA", "BBB", "CCC" },
-			new string[] { "BBB", "CCC", "DDD" },
+			new string[] { "BBB", "CCC", "DDD" }
 		};
 
 		/// <summary></summary>
@@ -81,7 +81,7 @@ namespace MKY.Test.Types
 			new string[] { "AAA", null },
 			new string[] { "AAA", null },
 			new string[] { null, null },
-			new string[] { null, null },
+			new string[] { null, null }
 		};
 
 		/// <summary></summary>
@@ -89,7 +89,7 @@ namespace MKY.Test.Types
 		{
 			new string[] { "AAA" },
 			new string[] { "AAA", "BBB" },
-			new string[] { "AAA", "BBB", "CCC" },
+			new string[] { "AAA", "BBB", "CCC" }
 		};
 
 		#endregion

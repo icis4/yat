@@ -104,7 +104,7 @@ namespace YAT.Controller
 			"  -3      Application start error",
 			"  -4      Application run error",
 			"  -5      Application exit error",
-			"  -6      Unhandled exception",
+			"  -6      Unhandled exception"
 		};
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)

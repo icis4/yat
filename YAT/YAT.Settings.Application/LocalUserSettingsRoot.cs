@@ -267,7 +267,7 @@ namespace YAT.Settings.Application
 			new AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "LogFiles",            new string[] { "LogFilesPath" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MonitorFiles",        new string[] { "MonitorFilesPath" } ),
 		/*	new AlternateXmlElement(new string[] { "#document", "Settings", "MainWindow"  }, "AlwaysOnTop",         formerly located in workspace settings */
-			new AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),
+			new AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } )
 		};
 
 		/// <summary></summary>
