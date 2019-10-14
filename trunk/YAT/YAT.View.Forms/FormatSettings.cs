@@ -694,7 +694,7 @@ namespace YAT.View.Forms
 					monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta, monitor_TimeDuration,
 					monitor_Port, monitor_Direction, monitor_Length,
 					monitor_IOControl,
-					monitor_Error,
+					monitor_Error
 				};
 
 				this.textFormats = new Controls.TextFormat[]
@@ -703,7 +703,7 @@ namespace YAT.View.Forms
 					textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta, textFormat_TimeDuration,
 					textFormat_Port, textFormat_Direction, textFormat_Length,
 					textFormat_IOControl,
-					textFormat_Error,
+					textFormat_Error
 				};
 
 				comboBox_InfoSeparator.Items.Clear();

@@ -76,7 +76,7 @@ namespace YAT.Model.Test.Transmission
 			"1w2w3w4w5w6w7w8w9w0w1w2w3w4w5w6w7w8w9w0w1w2w3w4w5w6w7w8w9w0w1w2w3w4w5w6w7w8w9w0w",
 			"1x2x3x4x5x6x7x8x9x0x1x2x3x4x5x6x7x8x9x0x1x2x3x4x5x6x7x8x9x0x1x2x3x4x5x6x7x8x9x0x",
 			"1y2y3y4y5y6y7y8y9y0y1y2y3y4y5y6y7y8y9y0y1y2y3y4y5y6y7y8y9y0y1y2y3y4y5y6y7y8y9y0y",
-			"1z2z3z4z5z6z7z8z9z0z1z2z3z4z5z6z7z8z9z0z1z2z3z4z5z6z7z8z9z0z1z2z3z4z5z6z7z8z9z0z",
+			"1z2z3z4z5z6z7z8z9z0z1z2z3z4z5z6z7z8z9z0z1z2z3z4z5z6z7z8z9z0z1z2z3z4z5z6z7z8z9z0z"
 		};
 
 		private static readonly Utilities.TestSet SingleLine;
