@@ -762,40 +762,40 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		protected override void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			lock (this.processSyncObj) // Synchronize processing (raw chunk => port|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
 			{
 				if (linesToAdd.Count <= 0) // Properly initialize the time delta:
-					this.bidirLineState.LastLineTimeStamp = raw.TimeStamp;
+					this.bidirLineState.LastLineTimeStamp = chunk.TimeStamp;
 
 				Settings.BinaryDisplaySettings displaySettings;
-				switch (raw.Direction)
+				switch (chunk.Direction)
 				{
 					case IODirection.Tx: displaySettings = BinaryTerminalSettings.TxDisplay; break;
 					case IODirection.Rx: displaySettings = BinaryTerminalSettings.RxDisplay; break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + chunk.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				LineState lineState;
-				switch (raw.Direction)
+				switch (chunk.Direction)
 				{
 					case IODirection.Tx: lineState = this.txLineState; break;
 					case IODirection.Rx: lineState = this.rxLineState; break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + raw.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + chunk.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				// Activate flags as needed, leave unchanged otherwise.
 				// Note that each chunk will either have none or only have a single attribute activated.
 				// But the line state has to deal with multiple chunks, thus multiples attribute may get activated.
 				// Also note the limitations described in feature request #366 "Automatic response and action shall be...".
-				if (rawAttribute == LineChunkAttribute.Highlight)                       {                                                                                     lineState.Highlight                        = true;                                                                }
-				if (rawAttribute == LineChunkAttribute.Filter)                          { if (!lineState.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.FilterDetectedInFirstChunkOfLine = true; } else { lineState.FilterDetectedInSubsequentChunk = true; } } }
-				if (rawAttribute == LineChunkAttribute.SuppressIfNotFiltered)           { if (!lineState.AnyFilterDetected) {                                                 lineState.SuppressIfNotFiltered            = true;                                                              } }
-				if (rawAttribute == LineChunkAttribute.SuppressIfSubsequentlyTriggered) {                                                                                     lineState.SuppressIfSubsequentlyTriggered  = true;                                                                }
-				if (rawAttribute == LineChunkAttribute.Suppress)                        {                                                                                     lineState.SuppressForSure                  = true;                                                                }
+				if (attribute == LineChunkAttribute.Highlight)                       {                                                                                     lineState.Highlight                        = true;                                                                }
+				if (attribute == LineChunkAttribute.Filter)                          { if (!lineState.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.FilterDetectedInFirstChunkOfLine = true; } else { lineState.FilterDetectedInSubsequentChunk = true; } } }
+				if (attribute == LineChunkAttribute.SuppressIfNotFiltered)           { if (!lineState.AnyFilterDetected) {                                                 lineState.SuppressIfNotFiltered            = true;                                                              } }
+				if (attribute == LineChunkAttribute.SuppressIfSubsequentlyTriggered) {                                                                                     lineState.SuppressIfSubsequentlyTriggered  = true;                                                                }
+				if (attribute == LineChunkAttribute.Suppress)                        {                                                                                     lineState.SuppressForSure                  = true;                                                                }
 
 				// In both cases, filtering and suppression, the current implementation retains the line until it is
 				// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs
@@ -817,16 +817,16 @@ namespace YAT.Domain
 				// triggered by the 'DisplayLinesSent/Received' events and thus not affected by the more tricky to handle
 				// 'CurrentDisplayLineSent/ReceivedReplaced' and 'CurrentDisplayLineSent/ReceivedCleared' events.
 
-				foreach (byte b in raw.Content)
+				foreach (byte b in chunk.Content)
 				{
 					// In case of reload, timed line breaks are executed here:
 					if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-						ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+						ExecuteTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 					// Line begin and time stamp:
 					if (lineState.Position == LinePosition.Begin)
 					{
-						ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsToAdd);
+						ExecuteLineBegin(lineState, chunk.TimeStamp, chunk.PortStamp, chunk.Direction, elementsToAdd);
 
 						if (displaySettings.TimedLineBreak.Enabled)
 							lineState.BreakTimeout.Start();
@@ -841,7 +841,7 @@ namespace YAT.Domain
 					DisplayElementCollection elementsForNextLine = null;
 					if (lineState.Position == LinePosition.Content)
 					{
-						ExecuteContent(displaySettings, lineState, raw.Direction, b, elementsToAdd, out elementsForNextLine);
+						ExecuteContent(displaySettings, lineState, chunk.Direction, b, elementsToAdd, out elementsForNextLine);
 					}
 
 					// Line end and length:
@@ -850,12 +850,12 @@ namespace YAT.Domain
 						if (displaySettings.TimedLineBreak.Enabled)
 							lineState.BreakTimeout.Stop();
 
-						ExecuteLineEnd(lineState, raw.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+						ExecuteLineEnd(lineState, chunk.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 						// In case of a pending element immediately insert the sequence into a new line:
 						if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 						{
-							ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elementsToAdd);
+							ExecuteLineBegin(lineState, chunk.TimeStamp, chunk.PortStamp, chunk.Direction, elementsToAdd);
 
 							foreach (var de in elementsForNextLine)
 							{
@@ -866,7 +866,7 @@ namespace YAT.Domain
 										foreach (var originByte in origin.Value1)
 										{
 											DisplayElementCollection elementsForNextLineDummy;
-											ExecuteContent(displaySettings, lineState, raw.Direction, originByte, elementsToAdd, out elementsForNextLineDummy);
+											ExecuteContent(displaySettings, lineState, chunk.Direction, originByte, elementsToAdd, out elementsForNextLineDummy);
 
 											// Note that 're.Direction' above is OK, this function is processing all in the same direction.
 										}
@@ -955,17 +955,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
+		protected override void ProcessAndSignalRawChunk(RawChunk chunk, LineChunkAttribute attribute)
 		{
 			// Check whether port or direction has changed:
-			ProcessAndSignalPortOrDirectionLineBreak(raw.TimeStamp, raw.PortStamp, raw.Direction);
+			ProcessAndSignalPortOrDirectionLineBreak(chunk.TimeStamp, chunk.PortStamp, chunk.Direction);
 
 			// Process the raw chunk:
-			base.ProcessAndSignalRawChunk(raw, rawAttribute);
+			base.ProcessAndSignalRawChunk(chunk, attribute);
 
 			// Enforce line break if requested:
 			if (TerminalSettings.Display.ChunkLineBreakEnabled)
-				ProcessAndSignalChunkOrTimedLineBreak(raw.TimeStamp, raw.Direction);
+				ProcessAndSignalChunkOrTimedLineBreak(chunk.TimeStamp, chunk.Direction);
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]

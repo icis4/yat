@@ -118,8 +118,8 @@ namespace YAT.Domain
 		/// The <see cref="Attribute"/> is intended to be set by the event sink,
 		/// therefore not part of the constructor parameters.
 		/// </remarks>
-		public RawChunkEventArgs(RawChunk value)
-			: base(value)
+		public RawChunkEventArgs(RawChunk chunk)
+			: base(chunk)
 		{
 		}
 	}

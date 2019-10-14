@@ -142,8 +142,8 @@ namespace YAT.Domain
 			lock (this.queue)
 			{
 				to = new List<byte>(this.queue.Count);
-				foreach (RawChunk re in this.queue.ToArray())
-					to.AddRange(re.Content);
+				foreach (RawChunk chunk in this.queue.ToArray())
+					to.AddRange(chunk.Content);
 			}
 			return (to.ToArray());
 		}
