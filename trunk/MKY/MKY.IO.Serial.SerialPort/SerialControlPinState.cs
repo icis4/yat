@@ -41,7 +41,7 @@ namespace MKY.IO.Serial.SerialPort
 	{
 		Automatic = -1,
 		Disabled = 0,
-		Enabled = 1,
+		Enabled = 1
 	}
 
 	#pragma warning restore 1591

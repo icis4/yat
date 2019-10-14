@@ -93,7 +93,7 @@ namespace MKY.IO.Serial.SerialPort
 			Closed,
 			Opened,
 			WaitingForReopen,
-			Error,
+			Error
 		}
 
 		#endregion

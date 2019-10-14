@@ -53,13 +53,13 @@ namespace YAT.Settings.Model.Test
 	/// <summary></summary>
 	public enum RoamingUserSettingsTestCase
 	{
-		Dummy,
+		Dummy
 	}
 
 	/// <summary></summary>
 	public enum LocalUserSettingsTestCase
 	{
-		Dummy,
+		Dummy
 	}
 
 	/// <summary></summary>
@@ -97,7 +97,7 @@ namespace YAT.Settings.Model.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "HID", Justification = "As always, there are exceptions to the rules...")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "VID", Justification = "As always, there are exceptions to the rules...")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "PID", Justification = "As always, there are exceptions to the rules...")]
-		T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed,
+		T_07_USB_SerHID_VID0EB8_PID2303_YAT8_Closed
 	}
 
 	/// <summary></summary>

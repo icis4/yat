@@ -43,7 +43,7 @@ namespace MKY.Windows.Forms
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonUser", Justification = "What's the problem...")]
 		InCaseOfNonUserError,
 
-		OnlyInCaseOfUserInteraction,
+		OnlyInCaseOfUserInteraction
 	}
 
 	#pragma warning restore 1591

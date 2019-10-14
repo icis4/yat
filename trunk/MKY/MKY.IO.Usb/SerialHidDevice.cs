@@ -79,7 +79,7 @@ namespace MKY.IO.Usb
 			ConnectedAndOpened,
 			DisconnectedAndWaitingForReopen,
 			DisconnectedAndClosed,
-			Error,
+			Error
 		}
 
 		#endregion

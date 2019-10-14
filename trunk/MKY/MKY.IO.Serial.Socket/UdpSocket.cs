@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.Socket
 			Opened,
 			Closing,
 			Closed,
-			Error,
+			Error
 		}
 
 		private class AsyncReceiveState

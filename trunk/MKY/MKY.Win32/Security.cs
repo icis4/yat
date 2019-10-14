@@ -114,7 +114,7 @@ namespace MKY.Win32
 				/// <remarks>
 				/// Windows NT:  This impersonation level is not supported.
 				/// </remarks>
-				SecurityDelegation = 3,
+				SecurityDelegation = 3
 			}
 		}
 

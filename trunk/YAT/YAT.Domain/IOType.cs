@@ -49,7 +49,7 @@ namespace YAT.Domain
 		UdpClient,
 		UdpServer,
 		UdpPairSocket,
-		UsbSerialHid,
+		UsbSerialHid
 	}
 
 	#pragma warning restore 1591

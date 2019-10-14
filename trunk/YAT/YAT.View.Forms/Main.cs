@@ -105,7 +105,7 @@ namespace YAT.View.Forms
 			IsClosingFromForm,
 
 			/// <summary>Closing has been initiated by a model event.</summary>
-			IsClosingFromModel,
+			IsClosingFromModel
 		}
 
 		#endregion
@@ -3476,7 +3476,7 @@ namespace YAT.View.Forms
 		////ChildChanged is no longer used, in order to reduce the amount of status information. Used to display "childText + " changed"" but that resulted in messages each time a command was sent (due to the 'IsReadyToSend' changes). In order to get this again, 'IsReadyToSend' changes would have to be separated from the 'IOChanged' event.
 			ChildSaved,
 			ChildClosed,
-			Default,
+			Default
 		}
 
 		private string GetStatusText(Status status)

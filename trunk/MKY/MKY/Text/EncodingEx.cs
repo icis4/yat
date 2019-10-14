@@ -683,7 +683,7 @@ namespace MKY.Text
 		X_ISCII_GU = 57010,
 
 		/// <summary>ISCII Punjabi.</summary>
-		X_ISCII_PA = 57011,
+		X_ISCII_PA = 57011
 	}
 
 	#endregion

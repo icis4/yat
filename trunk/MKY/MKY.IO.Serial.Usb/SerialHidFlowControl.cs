@@ -53,7 +53,7 @@ namespace MKY.IO.Serial.Usb
 		/// provide XOn/XOff for USB Ser/HID, e.g. MT Ser/HID devices.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Ser/HID' is just called 'Ser'...")]
-		ManualSoftware,
+		ManualSoftware
 	}
 
 	/// <summary>

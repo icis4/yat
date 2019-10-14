@@ -40,7 +40,7 @@ namespace MKY.IO.Serial.Socket
 	{
 		None  = 0,
 		First = 1,
-		MostRecent,
+		MostRecent
 	}
 
 	#pragma warning restore 1591

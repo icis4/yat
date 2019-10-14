@@ -90,7 +90,7 @@ namespace MKY.IO.Serial.Socket
 			Accepted,
 		////Restarting,
 			Stopping,
-			Error,
+			Error
 		}
 
 		#endregion
