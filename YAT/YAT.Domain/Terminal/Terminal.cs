@@ -3109,10 +3109,10 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Setting is required to be received, modified and returned.")]
-		protected abstract void ProcessRawChunk(RawChunk raw, LineChunkAttribute rawAttribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine);
+		protected abstract void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine);
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalRawChunk(RawChunk raw, LineChunkAttribute rawAttribute)
+		protected virtual void ProcessAndSignalRawChunk(RawChunk chunk, LineChunkAttribute attribute)
 		{
 			// Collection of elements resulting from this chunk, typically a partial line,
 			// but may also be a complete line or even span across multiple lines.
@@ -3124,18 +3124,18 @@ namespace YAT.Domain
 
 			bool clearAlreadyStartedLine = false;
 
-			ProcessRawChunk(raw, rawAttribute, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			ProcessRawChunk(chunk, attribute, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 			if (elementsToAdd.Count > 0) {
-				OnDisplayElementsAdded(raw.Direction, elementsToAdd);
+				OnDisplayElementsAdded(chunk.Direction, elementsToAdd);
 
 				if (linesToAdd.Count > 0) {
-					OnDisplayLinesAdded(raw.Direction, linesToAdd);
+					OnDisplayLinesAdded(chunk.Direction, linesToAdd);
 				}
 			}
 
 			if (clearAlreadyStartedLine) {
-				OnCurrentDisplayLineCleared(raw.Direction);
+				OnCurrentDisplayLineCleared(chunk.Direction);
 			}
 		}
 
