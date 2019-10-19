@@ -206,7 +206,7 @@ namespace MKY.Text
 	#region Enum SupportedEncoding
 
 	/// <summary>
-	/// Encodings that are supported by .NET.
+	/// Encodings that are supported by .NET, currently 140 encodings.
 	/// </summary>
 	/// <remarks>
 	/// Enum value corresponds to code page.

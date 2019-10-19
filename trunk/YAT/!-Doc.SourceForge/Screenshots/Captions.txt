@@ -1,7 +1,7 @@
 ﻿
 Welcome to YAT
 Terminal Monitor
-Terminal Settings - Serial Port
-Terminal Settings - TCP, UDP and USB
-Terminal Settings - Text or Binary
-Terminal Settings - Advanced
+Predefined Commands
+Port Settings
+Terminal Settings
+Other Settings
