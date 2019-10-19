@@ -235,7 +235,7 @@ namespace YAT.View.Forms
 			this.label_Remark3.Name = "label_Remark3";
 			this.label_Remark3.Size = new System.Drawing.Size(96, 26);
 			this.label_Remark3.TabIndex = 41;
-			this.label_Remark3.Text = "Background\r\nfor all formats.";
+			this.label_Remark3.Text = "Background\r\nfor all elements.";
 			this.label_Remark3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// checkBox_EnableFormatting
@@ -293,7 +293,7 @@ namespace YAT.View.Forms
 			this.label_Remark2.Name = "label_Remark2";
 			this.label_Remark2.Size = new System.Drawing.Size(96, 162);
 			this.label_Remark2.TabIndex = 42;
-			this.label_Remark2.Text = "Style and color\r\nper format.";
+			this.label_Remark2.Text = "Style and color\r\nper element type.";
 			this.label_Remark2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label_Remark1
@@ -305,7 +305,7 @@ namespace YAT.View.Forms
 			this.label_Remark1.Name = "label_Remark1";
 			this.label_Remark1.Size = new System.Drawing.Size(96, 26);
 			this.label_Remark1.TabIndex = 43;
-			this.label_Remark1.Text = "Font and size\r\nfor all formats.";
+			this.label_Remark1.Text = "Font and size\r\nfor all elements.";
 			this.label_Remark1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// button_Background
