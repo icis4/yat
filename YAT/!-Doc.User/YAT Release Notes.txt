@@ -655,7 +655,7 @@ Important changes:
 - 'Send Command' renamed to [Send Text] (related to feature request #252).
 - Active terminal is highlighted/emphasized (feature request #247).
 - Automatic terminal layout added. Use [Window > ...] for dedicated layout (feature request #247).
-- If YAT is not the active app, a single click is now sufficient to execute an action (bug #210).
+- If YAT is not the active app, a single click is now sufficient to trigger an action (bug #210).
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
