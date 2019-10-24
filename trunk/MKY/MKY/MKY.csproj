@@ -140,6 +140,7 @@
     <Compile Include="IO\StreamEx.cs" />
     <Compile Include="IO\Temp.cs" />
     <Compile Include="IO\TextEx.cs" />
+    <Compile Include="MarshalByRefWrapper.cs" />
     <Compile Include="Media\SystemSoundsEx.cs" />
     <Compile Include="Net\Browser.cs" />
     <Compile Include="Net\IPAddressEx.cs" />
