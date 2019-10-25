@@ -91,7 +91,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MonitorContextMenu_ShowPort = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ShowDevice = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
@@ -458,7 +458,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_ShowPort = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ShowDevice = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowDirection = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
@@ -573,7 +573,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp,
             this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan,
             this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta,
-            this.toolStripMenuItem_MonitorContextMenu_ShowPort,
+            this.toolStripMenuItem_MonitorContextMenu_ShowDevice,
             this.toolStripMenuItem_MonitorContextMenu_ShowDirection,
             this.toolStripMenuItem_MonitorContextMenu_ShowEol,
             this.toolStripMenuItem_MonitorContextMenu_ShowLength,
@@ -1014,12 +1014,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.ToolTipText = "Format can be configured in [View > Format...].";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta_Click);
 			// 
-			// toolStripMenuItem_MonitorContextMenu_ShowPort
+			// toolStripMenuItem_MonitorContextMenu_ShowDevice
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Name = "toolStripMenuItem_MonitorContextMenu_ShowPort";
-			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Size = new System.Drawing.Size(266, 22);
-			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Text = "Show Port";
-			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowPort_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Name = "toolStripMenuItem_MonitorContextMenu_ShowDevice";
+			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Size = new System.Drawing.Size(266, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Text = "Show I/O Device";
+			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDevice_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDirection
 			// 
@@ -3981,7 +3981,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp,
             this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan,
             this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta,
-            this.toolStripMenuItem_TerminalMenu_View_ShowPort,
+            this.toolStripMenuItem_TerminalMenu_View_ShowDevice,
             this.toolStripMenuItem_TerminalMenu_View_ShowDirection,
             this.toolStripMenuItem_TerminalMenu_View_ShowEol,
             this.toolStripMenuItem_TerminalMenu_View_ShowLength,
@@ -4208,12 +4208,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.ToolTipText = "Format can be configured in [Format...] further below.";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_ShowPort
+			// toolStripMenuItem_TerminalMenu_View_ShowDevice
 			// 
-			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Name = "toolStripMenuItem_TerminalMenu_View_ShowPort";
-			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Size = new System.Drawing.Size(266, 22);
-			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Text = "Show P&ort";
-			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowPort_Click);
+			this.toolStripMenuItem_TerminalMenu_View_ShowDevice.Name = "toolStripMenuItem_TerminalMenu_View_ShowDevice";
+			this.toolStripMenuItem_TerminalMenu_View_ShowDevice.Size = new System.Drawing.Size(266, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowDevice.Text = "Show I/O De&vice";
+			this.toolStripMenuItem_TerminalMenu_View_ShowDevice.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDevice_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowDirection
 			// 
@@ -4427,7 +4427,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.Size = new System.Drawing.Size(75, 20);
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.Text = "<I/O Status>";
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolStripStatusLabel_TerminalStatus_IOStatus.ToolTipText = "Port Status and Settings";
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.ToolTipText = "I/O Status and Settings";
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_IOStatus_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_IOStatusIndicator
@@ -4441,7 +4441,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Name = "toolStripStatusLabel_TerminalStatus_IOStatusIndicator";
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Size = new System.Drawing.Size(16, 20);
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.ToolTipText = "Port Status";
+			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.ToolTipText = "I/O Status";
 			// 
 			// toolStripStatusLabel_TerminalStatus_Separator1
 			// 
@@ -5160,7 +5160,7 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Send_AutoResponse_Response;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowPort;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowDevice;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Send_Separator_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix;
@@ -5190,7 +5190,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowTimeStamp;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowTimeSpan;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowTimeDelta;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowPort;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowDevice;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowDirection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowEol;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowLength;

@@ -96,11 +96,11 @@ namespace YAT.Domain
 			public LinePosition             Position  { get; set; }
 			public DisplayElementCollection Elements  { get; set; }
 			public DateTime                 TimeStamp { get; set; }
-			public string                   PortStamp { get; set; }
+			public string                   Device    { get; set; }
 
-			public Dictionary<string, SequenceQueue> EolOfGivenPort                           { get; set; }
-			public DisplayElementCollection          RetainedUnconfirmedHiddenEolElements     { get; set; }
-			public Dictionary<string, bool>          EolOfLastLineOfGivenPortWasCompleteMatch { get; set; }
+			public Dictionary<string, SequenceQueue> EolOfGivenDevice                           { get; set; }
+			public DisplayElementCollection          RetainedUnconfirmedHiddenEolElements       { get; set; }
+			public Dictionary<string, bool>          EolOfLastLineOfGivenDeviceWasCompleteMatch { get; set; }
 
 			public bool Highlight                        { get; set; }
 			public bool FilterDetectedInFirstChunkOfLine { get; set; } // Line shall continuously get shown if filter is active from the first chunk.
@@ -118,11 +118,11 @@ namespace YAT.Domain
 				Position  = LinePosition.Begin;
 				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				TimeStamp = DateTime.Now;
-				PortStamp = null;
+				Device    = null;
 
-				EolOfGivenPort                           = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
-				RetainedUnconfirmedHiddenEolElements     = new DisplayElementCollection();          // No preset needed, the default initial capacity is good enough.
-				EolOfLastLineOfGivenPortWasCompleteMatch = new Dictionary<string, bool>();          // No preset needed, the default initial capacity is good enough.
+				EolOfGivenDevice                           = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
+				RetainedUnconfirmedHiddenEolElements       = new DisplayElementCollection();          // No preset needed, the default initial capacity is good enough.
+				EolOfLastLineOfGivenDeviceWasCompleteMatch = new Dictionary<string, bool>();          // No preset needed, the default initial capacity is good enough.
 
 				Highlight                        = false;
 				FilterDetectedInFirstChunkOfLine = false;
@@ -203,35 +203,35 @@ namespace YAT.Domain
 
 			#endregion
 
-			public virtual void Reset(string formerPortStamp, bool eolWasCompleteMatch)
+			public virtual void Reset(string formerDevice, bool eolWasCompleteMatch)
 			{
 				AssertNotDisposed();
 
 				Position  = LinePosition.Begin;
 				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				TimeStamp = DateTime.Now;
-				PortStamp = null;
+				Device    = null;
 
-				if (EolOfGivenPort.ContainsKey(formerPortStamp))
+				if (EolOfGivenDevice.ContainsKey(formerDevice))
 				{
-					if (EolOfGivenPort[formerPortStamp].IsCompleteMatch)
-						EolOfGivenPort[formerPortStamp].Reset();
+					if (EolOfGivenDevice[formerDevice].IsCompleteMatch)
+						EolOfGivenDevice[formerDevice].Reset();
 
 					// Keep EOL state when incomplete. Subsequent lines
 					// need this to handle broken/pending EOL characters.
 				}
-				else                                                        // It is OK to only access or add to the collection,
-				{                                                           // this will not lead to excessive use of memory,
-					EolOfGivenPort.Add(formerPortStamp, new SequenceQueue(EolSequence)); // since there is only a given number of ports.
-				}                                                           // Applies to TCP and UDP terminals only.
+				else                                                                    // It is OK to only access or add to the collection,
+				{                                                                       // this will not lead to excessive use of memory,
+					EolOfGivenDevice.Add(formerDevice, new SequenceQueue(EolSequence)); // since there is only a given number of devices.
+				}                                                                       // Applies to TCP and UDP terminals only.
 
 				if (eolWasCompleteMatch) // Keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
 					RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
-				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(formerPortStamp))
-					EolOfLastLineOfGivenPortWasCompleteMatch[formerPortStamp] = eolWasCompleteMatch;
+				if (EolOfLastLineOfGivenDeviceWasCompleteMatch.ContainsKey(formerDevice))
+					EolOfLastLineOfGivenDeviceWasCompleteMatch[formerDevice] = eolWasCompleteMatch;
 				else
-					EolOfLastLineOfGivenPortWasCompleteMatch.Add(formerPortStamp, eolWasCompleteMatch); // Same as above, it is OK to only access or add to the collection.
+					EolOfLastLineOfGivenDeviceWasCompleteMatch.Add(formerDevice, eolWasCompleteMatch); // Same as above, it is OK to only access or add to the collection.
 
 				Highlight                        = false;
 				FilterDetectedInFirstChunkOfLine = false;
@@ -246,26 +246,26 @@ namespace YAT.Domain
 				get { return (FilterDetectedInFirstChunkOfLine || FilterDetectedInSubsequentChunk); }
 			}
 
-			public virtual bool EolOfLastLineWasCompleteMatch(string ps)
+			public virtual bool EolOfLastLineWasCompleteMatch(string dev)
 			{
-				if (EolOfLastLineOfGivenPortWasCompleteMatch.ContainsKey(ps))
-					return (EolOfLastLineOfGivenPortWasCompleteMatch[ps]);
+				if (EolOfLastLineOfGivenDeviceWasCompleteMatch.ContainsKey(dev))
+					return (EolOfLastLineOfGivenDeviceWasCompleteMatch[dev]);
 				else
 					return (true); // Cleared monitors mean that last line was complete!
 			}
 
-			public virtual bool EolIsAnyMatch(string ps)
+			public virtual bool EolIsAnyMatch(string dev)
 			{
-				if (EolOfGivenPort.ContainsKey(ps))
-					return (EolOfGivenPort[ps].IsAnyMatch);
+				if (EolOfGivenDevice.ContainsKey(dev))
+					return (EolOfGivenDevice[dev].IsAnyMatch);
 				else
 					return (false);
 			}
 
-			public virtual bool EolIsCompleteMatch(string ps)
+			public virtual bool EolIsCompleteMatch(string dev)
 			{
-				if (EolOfGivenPort.ContainsKey(ps))
-					return (EolOfGivenPort[ps].IsCompleteMatch);
+				if (EolOfGivenDevice.ContainsKey(dev))
+					return (EolOfGivenDevice[dev].IsCompleteMatch);
 				else
 					return (false);
 			}
@@ -275,7 +275,7 @@ namespace YAT.Domain
 		{
 			public bool IsFirstChunk          { get; set; }
 			public bool IsFirstLine           { get; set; }
-			public string PortStamp           { get; set; }
+			public string Device              { get; set; }
 			public IODirection Direction      { get; set; }
 			public DateTime LastLineTimeStamp { get; set; }
 
@@ -283,7 +283,7 @@ namespace YAT.Domain
 			{
 				IsFirstChunk      = true;
 				IsFirstLine       = true;
-				PortStamp         = null;
+				Device            = null;
 				Direction         = IODirection.None;
 				LastLineTimeStamp = DateTime.Now;
 			}
@@ -292,11 +292,34 @@ namespace YAT.Domain
 			{
 				IsFirstChunk      = rhs.IsFirstChunk;
 				IsFirstLine       = rhs.IsFirstLine;
-				PortStamp         = rhs.PortStamp;
+				Device            = rhs.Device;
 				Direction         = rhs.Direction;
 				LastLineTimeStamp = rhs.LastLineTimeStamp;
 			}
 		}
+
+	#if (WITH_SCRIPTING)
+
+		private class ScriptMessageState
+		{
+			public byte[] EolSequence { get; }
+			public SequenceQueue Eol  { get; }
+			public List<byte>    Data { get; set; }
+
+			public ScriptMessageState(byte[] eolSequence)
+			{
+				EolSequence = eolSequence;
+				Eol = new SequenceQueue(EolSequence);
+				Data = new List<byte>(128); // Preset the capacity to improve memory management. 128 is an arbitrary value.
+			}
+
+			public virtual void Reset()
+			{
+				Data = new List<byte>(128); // Preset the capacity to improve memory management. 128 is an arbitrary value.
+			}
+		}
+
+	#endif // WITH_SCRIPTING
 
 		#endregion
 
@@ -338,6 +361,9 @@ namespace YAT.Domain
 
 		private LineState txLineState;
 		private LineState rxLineState;
+	#if (WITH_SCRIPTING)
+		private ScriptMessageState rxScriptMessageState;
+	#endif
 
 		private BidirLineState bidirLineState;
 		private LineSendDelayState lineSendDelayState;
@@ -588,7 +614,7 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Eol:
 				{
-					ForwardDataToRawTerminal(this.txLineState.EolSequence); // In-line.
+					AppendToPendingPacketAndForwardToRawTerminal(this.txLineState.EolSequence); // In-line.
 					break;
 				}
 
@@ -615,7 +641,9 @@ namespace YAT.Domain
 		protected override void ProcessLineEnd(bool sendEol)
 		{
 			if (sendEol)
-				ForwardDataToRawTerminal(this.txLineState.EolSequence); // EOL.
+				AppendToPendingPacketAndForwardToRawTerminal(this.txLineState.EolSequence); // EOL.
+			else
+				ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
 		}
 
 		/// <summary></summary>
@@ -650,7 +678,9 @@ namespace YAT.Domain
 		// Methods > Send File
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected override void ProcessSendFileItem(FileSendItem item)
 		{
@@ -746,11 +776,13 @@ namespace YAT.Domain
 				this.rxLineState.Dispose();
 
 			this.rxLineState = new LineState(rxEol, t);
+		#if (WITH_SCRIPTING)
+			this.rxScriptMessageState = new ScriptMessageState(rxEol);
+		#endif
 
 			// Bidir:
 
 			this.bidirLineState = new BidirLineState();
-
 			this.lineSendDelayState = new LineSendDelayState();
 		}
 
@@ -963,7 +995,7 @@ namespace YAT.Domain
 											case IODirection.Tx: return (new DisplayElement.TxData(origin.ToArray(), text));
 											case IODirection.Rx: return (new DisplayElement.RxData(origin.ToArray(), text));
 
-											default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 										}
 									}
 									else // Decoder has failed:
@@ -1049,7 +1081,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is a radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -1181,7 +1213,7 @@ namespace YAT.Domain
 		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
 		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
 		/// </remarks>
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elementsToAdd)
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd)
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
@@ -1191,11 +1223,11 @@ namespace YAT.Domain
 			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
 
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
-			    TerminalSettings.Display.ShowPort      ||
+			    TerminalSettings.Display.ShowDevice    ||
 			    TerminalSettings.Display.ShowDirection)
 			{
 				DisplayElementCollection info;
-				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), ps, d, out info);
+				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), dev, dir, out info);
 				lp.AddRange(info);
 			}
 
@@ -1210,44 +1242,43 @@ namespace YAT.Domain
 				elementsToAdd.AddRange(lp);
 			}
 
-			lineState.Position = LinePosition.Content;
+			lineState.Position  = LinePosition.Content;
 			lineState.TimeStamp = ts;
-			lineState.PortStamp = ps;
+			lineState.Device    = dev;
 		}
 
 		/// <remarks>
 		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
 		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(Settings.TextDisplaySettings displaySettings, LineState lineState, string ps, IODirection d, byte b, DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
+		private void ExecuteContent(Settings.TextDisplaySettings displaySettings, LineState lineState, string dev, IODirection dir, byte b, DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
 		{
 			// Convert content:
 			DisplayElement de;
 			bool isBackspace;
-			if (!ControlCharacterHasBeenExecuted(b, d, out de, out isBackspace))
-				de = ByteToElement(b, d); // Default conversion to value or ASCII mnemonic.
+			if (!ControlCharacterHasBeenExecuted(b, dir, out de, out isBackspace))
+				de = ByteToElement(b, dir); // Default conversion to value or ASCII mnemonic.
 
 			de.Highlight = lineState.Highlight;
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			// Prepare EOL:
-			if (!lineState.EolOfGivenPort.ContainsKey(ps))                                  // It is OK to only access or add to the collection,
-				lineState.EolOfGivenPort.Add(ps, new SequenceQueue(lineState.EolSequence)); // this will not lead to excessive use of memory,
-			                                                                                // since there is only a given number of ports.
-			// Add byte to EOL:                                                             // Applies to TCP and UDP terminals only.
-			lineState.EolOfGivenPort[ps].Enqueue(b);
+			if (!lineState.EolOfGivenDevice.ContainsKey(dev))                                  // It is OK to only access or add to the collection,
+				lineState.EolOfGivenDevice.Add(dev, new SequenceQueue(lineState.EolSequence)); // this will not lead to excessive use of memory,
+			                                                                                   // since there is only a given number of devices.
+			// Add byte to EOL:                                                                // Applies to TCP and UDP terminals only.
+			lineState.EolOfGivenDevice[dev].Enqueue(b);
 
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
-			if (lineState.EolOfGivenPort[ps].IsCompleteMatch)
+			if (lineState.EolOfGivenDevice[dev].IsCompleteMatch)
 			{
 				if (de.IsContent)
 				{
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddSpaceIfNecessary(lineState, d, lp, de);
+						AddSpaceIfNecessary(lineState, dir, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
@@ -1263,14 +1294,14 @@ namespace YAT.Domain
 				{
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
-			}                                                             // Note the inverted implementation sequence:
-			else if (lineState.EolOfGivenPort[ps].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
-			{                                                             //  2. PartlyMatchContinued (intermediate, here)
-				if (de.IsContent)                                         //  3. PartlyMatchBeginning (first trigger, below)
-				{                                                         //  4. Unrelatd to EOL      (any time, further below)
+			}                                                                // Note the inverted implementation sequence:
+			else if (lineState.EolOfGivenDevice[dev].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
+			{                                                                //  2. PartlyMatchContinued (intermediate, here)
+				if (de.IsContent)                                            //  3. PartlyMatchBeginning (first trigger, below)
+				{                                                            //  4. Unrelatd to EOL      (any time, further below)
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddSpaceIfNecessary(lineState, d, lp, de);
+						AddSpaceIfNecessary(lineState, dir, lp, de);
 						lp.Add(de.Clone()); // No clone needed as element is no more used below.
 					}
 					else
@@ -1283,7 +1314,7 @@ namespace YAT.Domain
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
 			}
-			else if (lineState.EolOfGivenPort[ps].IsPartlyMatchBeginning)
+			else if (lineState.EolOfGivenDevice[dev].IsPartlyMatchBeginning)
 			{
 				// Previous was no match, retained potential EOL elements can be treated as non-EOL:
 				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, lp);
@@ -1292,7 +1323,7 @@ namespace YAT.Domain
 				{
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddSpaceIfNecessary(lineState, d, lp, de);
+						AddSpaceIfNecessary(lineState, dir, lp, de);
 						lp.Add(de.Clone()); // No clone needed as element is no more used below.
 					}
 					else
@@ -1326,7 +1357,7 @@ namespace YAT.Domain
 				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, lp);
 
 				// Add the current element, which for sure is not related to EOL:
-				AddSpaceIfNecessary(lineState, d, lp, de);
+				AddSpaceIfNecessary(lineState, dir, lp, de);
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
@@ -1345,7 +1376,7 @@ namespace YAT.Domain
 					if ((count > 0) && (lp[count - 1] is DisplayElement.Nonentity))
 					{
 						lp.RemoveLast();
-						RemoveSpaceIfNecessary(d, lp);
+						RemoveSpaceIfNecessary(dir, lp);
 					}
 				}
 
@@ -1367,13 +1398,13 @@ namespace YAT.Domain
 					{
 						// ...remove it in the current line...
 						lineState.Elements.RemoveLastDataContentChar();
-						RemoveSpaceIfNecessary(d, lineState.Elements);
+						RemoveSpaceIfNecessary(dir, lineState.Elements);
 
 						if (elementsToAdd.DataContentCharCount > 0)
 						{
 							// ..as well as in the pending elements:
 							elementsToAdd.RemoveLastDataContentChar();
-							RemoveSpaceIfNecessary(d, elementsToAdd);
+							RemoveSpaceIfNecessary(dir, elementsToAdd);
 						}
 						else
 						{
@@ -1412,8 +1443,8 @@ namespace YAT.Domain
 					lineState.Position = LinePosition.ContentExceeded;
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					var message = "Maximal number of bytes per line exceeded! Check the EOL (end-of-line) settings or increase the limit in the advanced terminal settings.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)d, message, true));
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo((Direction)d, message, true));
+					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)dir, message, true));
+					elementsToAdd.Add(     new DisplayElement.ErrorInfo((Direction)dir, message, true));
 				}
 			}
 		}
@@ -1422,8 +1453,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual bool ControlCharacterHasBeenExecuted(byte b, IODirection d, out DisplayElement de, out bool isBackspace)
+		protected virtual bool ControlCharacterHasBeenExecuted(byte b, IODirection dir, out DisplayElement de, out bool isBackspace)
 		{
 			isBackspace = false;
 
@@ -1466,7 +1496,7 @@ namespace YAT.Domain
 						// tabs would only get aligned within the respective control element,
 						// thus resulting in misaligned tab stops.
 
-						de = CreateDataElement(b, d, "\t");
+						de = CreateDataElement(b, dir, "\t");
 						return (true);
 					}
 
@@ -1478,18 +1508,18 @@ namespace YAT.Domain
 			return (false);
 		}
 
-		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
+		private void AddSpaceIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
+			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
 					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
 
-		private void RemoveSpaceIfNecessary(IODirection d, DisplayElementCollection lp)
+		private void RemoveSpaceIfNecessary(IODirection dir, DisplayElementCollection lp)
 		{
-			if (ElementsAreSeparate(d))
+			if (ElementsAreSeparate(dir))
 			{
 				int count = lp.Count;
 				if ((count > 0) && (lp[count - 1] is DisplayElement.DataSpace))
@@ -1518,13 +1548,13 @@ namespace YAT.Domain
 		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
 		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
 		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, string ps, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		private void ExecuteLineEnd(LineState lineState, DateTime ts, string dev, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
 
-			bool isEmptyLine = (lineState.Elements.CharCount == 0);
-			bool isPendingEol = (!lineState.EolOfLastLineWasCompleteMatch(ps) && lineState.EolIsAnyMatch(ps));
-			bool isNotHiddenEol = (lineState.EolOfLastLineWasCompleteMatch(ps) && !lineState.EolIsAnyMatch(ps));
+			bool isEmptyLine    = ( lineState.Elements.CharCount == 0);
+			bool isPendingEol   = (!lineState.EolOfLastLineWasCompleteMatch(dev) &&  lineState.EolIsAnyMatch(dev));
+			bool isNotHiddenEol = ( lineState.EolOfLastLineWasCompleteMatch(dev) && !lineState.EolIsAnyMatch(dev));
 			if (isEmptyLine && isPendingEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden pending EOL character(s):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
@@ -1588,7 +1618,7 @@ namespace YAT.Domain
 			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
 
 			// Reset line state:
-			lineState.Reset(ps, lineState.EolIsCompleteMatch(ps));
+			lineState.Reset(dev, lineState.EolIsCompleteMatch(dev));
 		}
 
 		/// <remarks>
@@ -1598,14 +1628,14 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
-		private void ExecuteTimedLineBreakOnReload(Settings.TextDisplaySettings displaySettings, LineState lineState, DateTime ts, string ps,
+		private void ExecuteTimedLineBreakOnReload(Settings.TextDisplaySettings displaySettings, LineState lineState, DateTime ts, string dev,
 		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			if (lineState.Elements.Count > 0)
 			{
 				var span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout)
-					ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+					ExecuteLineEnd(lineState, ts, dev, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 			}
 
 			lineState.TimeStamp = ts;
@@ -1614,7 +1644,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => port|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
+			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
 			{
 				Settings.TextDisplaySettings displaySettings;
 				switch (chunk.Direction)
@@ -1668,12 +1698,12 @@ namespace YAT.Domain
 				{
 					// In case of reload, timed line breaks are executed here:
 					if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-						ExecuteTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, chunk.PortStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+						ExecuteTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 					// Line begin and time stamp:
 					if (lineState.Position == LinePosition.Begin)
 					{
-						ExecuteLineBegin(lineState, chunk.TimeStamp, chunk.PortStamp, chunk.Direction, elementsToAdd);
+						ExecuteLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
 
 						if (displaySettings.TimedLineBreak.Enabled)
 							lineState.BreakTimeout.Start();
@@ -1689,7 +1719,7 @@ namespace YAT.Domain
 					{
 						bool replaceAlreadyStartedLine;
 
-						ExecuteContent(displaySettings, lineState, chunk.PortStamp, chunk.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
+						ExecuteContent(displaySettings, lineState, chunk.Device, chunk.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
 
 						if (replaceAlreadyStartedLine)
 							OnCurrentDisplayLineReplaced(chunk.Direction, lineState.Elements.Clone()); // Clone the ensure decoupling.
@@ -1701,17 +1731,16 @@ namespace YAT.Domain
 						if (displaySettings.TimedLineBreak.Enabled)
 							lineState.BreakTimeout.Stop();
 
-						ExecuteLineEnd(lineState, chunk.TimeStamp, chunk.PortStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+						ExecuteLineEnd(lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 					}
 				} // foreach (byte)
 			} // lock (processSyncObj)
 		}
 
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessPortOrDirectionLineBreak(DateTime ts, string ps, IODirection d, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		private void ProcessDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => port|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
+			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
 			{
 				if (this.bidirLineState.IsFirstChunk)
 				{
@@ -1719,65 +1748,64 @@ namespace YAT.Domain
 				}
 				else // = 'IsSubsequentChunk'.
 				{
-					if (TerminalSettings.Display.PortLineBreakEnabled ||
+					if (TerminalSettings.Display.DeviceLineBreakEnabled ||
 						TerminalSettings.Display.DirectionLineBreakEnabled)
 					{
-						if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) || (d != this.bidirLineState.Direction))
+						if (!StringEx.EqualsOrdinalIgnoreCase(dev, this.bidirLineState.Device) || (dir != this.bidirLineState.Direction))
 						{
 							LineState lineState;
 
-							if (d == this.bidirLineState.Direction)
+							if (dir == this.bidirLineState.Direction)
 							{
-								switch (d)
+								switch (dir)
 								{
 									case IODirection.Tx: lineState = this.txLineState; break;
 									case IODirection.Rx: lineState = this.rxLineState; break;
 
-									default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 								}
 							}
 							else // Attention: Direction changed => Use other state.
 							{
-								switch (d)
+								switch (dir)
 								{
 									case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 									case IODirection.Rx: lineState = this.txLineState; break; // Reversed!
 
-									default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 								}
 							}
 
 							if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 							{
-								ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+								ExecuteLineEnd(lineState, ts, dev, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 							}
 						} // a line break has been detected
 					} // a line break is active
 				} // is subsequent chunk
 
-				this.bidirLineState.PortStamp = ps;
-				this.bidirLineState.Direction = d;
+				this.bidirLineState.Device = dev;
+				this.bidirLineState.Direction = dir;
 
 			} // lock (processSyncObj)
 		}
 
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessChunkOrTimedLineBreak(DateTime ts, string ps, IODirection d, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		private void ProcessChunkOrTimedLineBreak(DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			lock (this.processSyncObj) // Synchronize processing (raw chunk => port|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
 			{
 				LineState lineState;
-				switch (d)
+				switch (dir)
 				{
 					case IODirection.Tx: lineState = this.txLineState; break;
 					case IODirection.Rx: lineState = this.rxLineState; break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				if (lineState.Elements.Count > 0)
 				{
-					ExecuteLineEnd(lineState, ts, ps, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+					ExecuteLineEnd(lineState, ts, dev, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 				}
 			}
 		}
@@ -1785,19 +1813,18 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawChunk(RawChunk chunk, LineChunkAttribute attribute)
 		{
-			// Check whether port or direction has changed:
-			ProcessAndSignalPortOrDirectionLineBreak(chunk.TimeStamp, chunk.PortStamp, chunk.Direction);
+			// Check whether device or direction has changed:
+			ProcessAndSignalDeviceOrDirectionLineBreak(chunk.TimeStamp, chunk.Device, chunk.Direction);
 
 			// Process the raw chunk:
 			base.ProcessAndSignalRawChunk(chunk, attribute);
 
 			// Enforce line break if requested:
 			if (TerminalSettings.Display.ChunkLineBreakEnabled)
-				ProcessAndSignalChunkOrTimedLineBreak(chunk.TimeStamp, chunk.PortStamp, chunk.Direction);
+				ProcessAndSignalChunkOrTimedLineBreak(chunk.TimeStamp, chunk.Device, chunk.Direction);
 		}
 
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalPortOrDirectionLineBreak(DateTime ts, string ps, IODirection d)
+		private void ProcessAndSignalDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir)
 		{
 			var directionToSignal = this.bidirLineState.Direction;
 			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
@@ -1805,7 +1832,7 @@ namespace YAT.Domain
 
 			bool clearAlreadyStartedLine = false;
 
-			ProcessPortOrDirectionLineBreak(ts, ps, d, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			ProcessDeviceOrDirectionLineBreak(ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 			if (elementsToAdd.Count > 0)
 				OnDisplayElementsAdded(directionToSignal, elementsToAdd);
@@ -1817,25 +1844,81 @@ namespace YAT.Domain
 				OnCurrentDisplayLineCleared(directionToSignal);
 		}
 
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalChunkOrTimedLineBreak(DateTime ts, string ps, IODirection d)
+		private void ProcessAndSignalChunkOrTimedLineBreak(DateTime ts, string dev, IODirection dir)
 		{
 			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
 
 			bool clearAlreadyStartedLine = false;
 
-			ProcessChunkOrTimedLineBreak(ts, ps, d, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			ProcessChunkOrTimedLineBreak(ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 			if (elementsToAdd.Count > 0)
-				OnDisplayElementsAdded(d, elementsToAdd);
+				OnDisplayElementsAdded(dir, elementsToAdd);
 
 			if (linesToAdd.Count > 0)
-				OnDisplayLinesAdded(d, linesToAdd);
+				OnDisplayLinesAdded(dir, linesToAdd);
 
 			if (clearAlreadyStartedLine)
-				OnCurrentDisplayLineCleared(d);
+				OnCurrentDisplayLineCleared(dir);
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <remarks>
+		/// Processing for scripting differs from "normal" processing for displaying because...
+		/// ...received messages must not be impacted by 'DirectionLineBreak'.
+		/// ...received data must not be processed individually, only as packets/messages.
+		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
+		/// </remarks>
+		protected override void ProcessAndSignalRawChunkForScripting(RawChunk chunk)
+		{
+			if (chunk.Direction == IODirection.Rx)
+			{
+				bool hideXOnXOff = (TerminalSettings.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually &&
+				                    TerminalSettings.CharHide.HideXOnXOff);
+
+				foreach (byte b in chunk.Content)
+				{
+					var isXOnXOffChar = ((b == 0x11) || (b == 0x13));
+					if (isXOnXOffChar && hideXOnXOff)
+						continue; // Do nothing, ignore the character.
+
+					this.rxScriptMessageState.Data.Add(b);
+					this.rxScriptMessageState.Eol.Enqueue(b);
+
+					if (this.rxScriptMessageState.Eol.IsCompleteMatch) // Processing and signalling
+						ProcessAndSignalMessageForScripting();       // in case EOL != <nothing>.
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalMessageForScripting()
+		{
+			// Compose packet data:
+			var data = this.rxScriptMessageState.Data.ToArray();
+
+			// Remove EOL from data, as a script message shall not contain the EOL:
+			int eolLength = (this.rxScriptMessageState.EolSequence.Length);
+			int eolIndex  = (this.rxScriptMessageState.Data.Count - eolLength);
+			this.rxScriptMessageState.Data.RemoveRange(eolIndex, eolLength);
+
+			// Compose formatted message. Message format for scripting is fixed:
+			// "For text terminals, received messages are decoded strings, using the configured encoding."
+			var message = Format(this.rxScriptMessageState.Data.ToArray(), IODirection.Rx, Radix.String);
+
+			// Notify:
+			EnqueueReceivedMessageForScripting(message); // Enqueue before invoking event to
+			                                             // have message ready for event.
+			OnScriptPacketReceived(new PacketEventArgs(data));
+			OnScriptMessageReceived(new MessageEventArgs(message));
+
+			// Reset:
+			this.rxScriptMessageState.Reset();
+		}
+
+	#endif // WITH_SCRIPTING
 
 		#endregion
 
@@ -1941,12 +2024,12 @@ namespace YAT.Domain
 
 		private void txTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.txLineState.PortStamp, IODirection.Tx);
+			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.txLineState.Device, IODirection.Tx);
 		}
 
 		private void rxTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.rxLineState.PortStamp, IODirection.Rx);
+			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.rxLineState.Device, IODirection.Rx);
 		}
 
 		#endregion

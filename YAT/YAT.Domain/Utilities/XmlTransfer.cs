@@ -42,7 +42,7 @@ namespace YAT.Domain.Utilities
 	public abstract class XmlTransferLine
 	{
 		private DateTime  timeStamp;
-		private string    port;
+		private string    device;
 		private Direction direction;
 
 		/// <summary></summary>
@@ -51,10 +51,10 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <summary></summary>
-		protected XmlTransferLine(DateTime timeStamp, string port, Direction direction)
+		protected XmlTransferLine(DateTime timeStamp, string device, Direction direction)
 		{
 			this.timeStamp = timeStamp;
-			this.port      = port;
+			this.device    = device;
 			this.direction = direction;
 		}
 
@@ -67,11 +67,11 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <summary></summary>
-		[XmlAttribute("Port")]
-		public virtual string Port
+		[XmlAttribute("Device")]
+		public virtual string Device
 		{
-			get { return (this.port); }
-			set { this.port = value;  }
+			get { return (this.device); }
+			set { this.device = value;  }
 		}
 
 		/// <summary></summary>
@@ -97,8 +97,8 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferRawLine(DateTime timeStamp, string port, Direction direction, byte[] content)
-			: base(timeStamp, port, direction)
+		public XmlTransferRawLine(DateTime timeStamp, string device, Direction direction, byte[] content)
+			: base(timeStamp, device, direction)
 		{
 			this.content = content;
 		}
@@ -137,8 +137,8 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferTextLine(DateTime timeStamp, string port, Direction direction, string text, string errorText, int length)
-			: base(timeStamp, port, direction)
+		public XmlTransferTextLine(DateTime timeStamp, string device, Direction direction, string text, string errorText, int length)
+			: base(timeStamp, device, direction)
 		{
 			this.text      = text;
 			this.errorText = errorText;

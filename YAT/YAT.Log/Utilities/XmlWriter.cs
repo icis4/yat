@@ -126,11 +126,11 @@ namespace YAT.Log.Utilities
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~XmlWriter()
@@ -373,7 +373,7 @@ namespace YAT.Log.Utilities
 		{
 			byte[] copyOfContent = new byte[chunk.Content.Count]; // Copy instead of forwarding 'ReadOnlyCollection' because
 			chunk.Content.CopyTo(copyOfContent, 0);               // 'XmlTransferRawLine' requires an array for serialization.
-			WriteLine(new XmlTransferRawLine(chunk.TimeStamp, chunk.PortStamp, (Direction)chunk.Direction, copyOfContent));
+			WriteLine(new XmlTransferRawLine(chunk.TimeStamp, chunk.Device, (Direction)chunk.Direction, copyOfContent));
 		}
 
 		private void WriteLine(XmlTransferRawLine transferLine)
@@ -381,7 +381,7 @@ namespace YAT.Log.Utilities
 			// AssertNotDisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
-			// <XmlTransferRawLine TimeStamp="2001-12-23T12:34:56.789-01:00" Port="COM1" Direction="Tx" DataAsBase64="QUJDRA==" />
+			// <XmlTransferRawLine TimeStamp="2001-12-23T12:34:56.789-01:00" Device="COM1" Direction="Tx" DataAsBase64="QUJDRA==" />
 
 			// Neither outputting time span nor time delta since that can be calculated from time stamp.
 
@@ -397,8 +397,8 @@ namespace YAT.Log.Utilities
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 			sb.Append(@"T"); // Note that time stamp format is fixed to standard XML format.
 			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fffzzz", CultureInfo.InvariantCulture));
-			sb.Append(@""" Port=""");
-			sb.Append(transferLine.Port);
+			sb.Append(@""" Device=""");
+			sb.Append(transferLine.Device);
 			sb.Append(@""" Direction=""");
 			sb.Append(transferLine.Direction.ToString()); // Default is "G".
 			sb.Append(@""" DataAsBase64=""");
@@ -475,7 +475,7 @@ namespace YAT.Log.Utilities
 			// AssertNotDisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
-			// <XmlTransferTextLine TimeStamp="2001-12-23T12:34:56.789-01:00" Port="COM1" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />
+			// <XmlTransferTextLine TimeStamp="2001-12-23T12:34:56.789-01:00" Device="COM1" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />
 
 			// Neither outputting time span nor time delta since that can be calculated from time stamp.
 
@@ -490,8 +490,8 @@ namespace YAT.Log.Utilities
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 			sb.Append(@"T"); // Note that time stamp format is fixed to standard XML format.
 			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fffzzz", CultureInfo.InvariantCulture));
-			sb.Append(@""" Port=""");
-			sb.Append(transferLine.Port);
+			sb.Append(@""" Device=""");
+			sb.Append(transferLine.Device);
 			sb.Append(@""" Direction=""");
 			sb.Append(transferLine.Direction.ToString()); // Default is "G".
 			sb.Append(@""" Text=""");

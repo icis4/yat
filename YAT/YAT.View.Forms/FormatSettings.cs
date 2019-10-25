@@ -692,7 +692,7 @@ namespace YAT.View.Forms
 				{
 					monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
 					monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta, monitor_TimeDuration,
-					monitor_Port, monitor_Direction, monitor_Length,
+					monitor_Device, monitor_Direction, monitor_Length,
 					monitor_IOControl,
 					monitor_Error
 				};
@@ -701,7 +701,7 @@ namespace YAT.View.Forms
 				{
 					textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
 					textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta, textFormat_TimeDuration,
-					textFormat_Port, textFormat_Direction, textFormat_Length,
+					textFormat_Device, textFormat_Direction, textFormat_Length,
 					textFormat_IOControl,
 					textFormat_Error
 				};
@@ -754,7 +754,7 @@ namespace YAT.View.Forms
 				case  5: return (this.formatSettingsInEdit.TimeSpanFormat);
 				case  6: return (this.formatSettingsInEdit.TimeDeltaFormat);
 				case  7: return (this.formatSettingsInEdit.TimeDurationFormat);
-				case  8: return (this.formatSettingsInEdit.PortFormat);
+				case  8: return (this.formatSettingsInEdit.DeviceFormat);
 				case  9: return (this.formatSettingsInEdit.DirectionFormat);
 				case 10: return (this.formatSettingsInEdit.LengthFormat);
 				case 11: return (this.formatSettingsInEdit.IOControlFormat);
@@ -867,7 +867,7 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDurationInfo(duration, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DeviceInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOControl("RTS=on")));
@@ -885,7 +885,7 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(diff, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)); // Also diff since opening!
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DeviceInfo(Domain.Direction.Tx, "COM1", infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
@@ -905,7 +905,7 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1", infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DeviceInfo(Domain.Direction.Rx, "COM1", infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));

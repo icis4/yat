@@ -57,7 +57,7 @@ namespace YAT.View.Utilities
 		private static Font staticTimeSpanFontCache;
 		private static Font staticTimeDeltaFontCache;
 		private static Font staticTimeDurationFontCache;
-		private static Font staticPortFontCache;
+		private static Font staticDeviceFontCache;
 		private static Font staticDirectionFontCache;
 		private static Font staticLengthFontCache;
 		private static Font staticWhiteSpacesFontCache;
@@ -180,11 +180,11 @@ namespace YAT.View.Utilities
 				color     = settings.TimeDurationFormat.Color;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTimeDurationFontCache, fontName, fontSize, fontStyle);
 			}
-			else if (element is DisplayElement.PortInfo)
+			else if (element is DisplayElement.DeviceInfo)
 			{
-				fontStyle = settings.PortFormat.FontStyle;
-				color     = settings.PortFormat.Color;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticPortFontCache, fontName, fontSize, fontStyle);
+				fontStyle = settings.DeviceFormat.FontStyle;
+				color     = settings.DeviceFormat.Color;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticDeviceFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.DirectionInfo)
 			{

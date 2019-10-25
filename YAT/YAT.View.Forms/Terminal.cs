@@ -215,9 +215,7 @@ namespace YAT.View.Forms
 			DebugMessage("Creating...");
 
 			InitializeComponent();
-
 			FixContextMenus();
-
 			InitializeControls();
 
 			// Link and attach to terminal model:
@@ -1203,7 +1201,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
 				toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Checked    = this.settingsRoot.Display.ShowTimeSpan;
 				toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Checked   = this.settingsRoot.Display.ShowTimeDelta;
-				toolStripMenuItem_TerminalMenu_View_ShowPort.Checked        = this.settingsRoot.Display.ShowPort;
+				toolStripMenuItem_TerminalMenu_View_ShowDevice.Checked      = this.settingsRoot.Display.ShowDevice;
 				toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
 				toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
@@ -1354,9 +1352,9 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTimeDelta = !this.settingsRoot.Display.ShowTimeDelta;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowPort_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ShowDevice_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowPort = !this.settingsRoot.Display.ShowPort;
+			this.settingsRoot.Display.ShowDevice = !this.settingsRoot.Display.ShowDevice;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowDirection_Click(object sender, EventArgs e)
@@ -1534,7 +1532,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
 				toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Checked    = this.settingsRoot.Display.ShowTimeSpan;
 				toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Checked   = this.settingsRoot.Display.ShowTimeDelta;
-				toolStripMenuItem_MonitorContextMenu_ShowPort.Checked        = this.settingsRoot.Display.ShowPort;
+				toolStripMenuItem_MonitorContextMenu_ShowDevice.Checked      = this.settingsRoot.Display.ShowDevice;
 				toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
 				bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
@@ -1696,12 +1694,12 @@ namespace YAT.View.Forms
 			this.settingsRoot.Display.ShowTimeDelta = !this.settingsRoot.Display.ShowTimeDelta;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowPort_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowDevice_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.settingsRoot.Display.ShowPort = !this.settingsRoot.Display.ShowPort;
+			this.settingsRoot.Display.ShowDevice = !this.settingsRoot.Display.ShowDevice;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowDirection_Click(object sender, EventArgs e)
@@ -4875,7 +4873,7 @@ namespace YAT.View.Forms
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -6124,11 +6122,11 @@ namespace YAT.View.Forms
 			sfd.Title       = "Save " + IndicatedName + " As";
 			sfd.Filter      = ExtensionHelper.TerminalFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.TerminalFilesFilterDefault;
-			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalExtension);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
 			// Check whether the terminal has already been saved as a .yat file:
-			if (StringEx.EndsWithOrdinalIgnoreCase(IndicatedName, ExtensionHelper.TerminalFile))
+			if (StringEx.EndsWithOrdinalIgnoreCase(IndicatedName, ExtensionHelper.TerminalExtension))
 				sfd.FileName = IndicatedName;
 			else
 				sfd.FileName = IndicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".

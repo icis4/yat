@@ -42,7 +42,7 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// RawRepository is a fixed-sized Queue holding RawElements.
+	/// The repository is a fixed-sized <see cref="Queue{T}"/> holding <see cref="RawChunk"/> items.
 	/// </summary>
 	public class RawRepository
 	{

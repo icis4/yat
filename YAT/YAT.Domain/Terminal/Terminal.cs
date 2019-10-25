@@ -35,6 +35,9 @@
 	// Enable debugging of thread state:
 ////#define DEBUG_CONTENT_EVENTS
 
+// Enable debug output line handling for scripting:
+////#define DEBUG_SCRIPTING
+
 #endif // DEBUG
 
 #endregion
@@ -45,6 +48,9 @@
 //==================================================================================================
 
 using System;
+#if (WITH_SCRIPTING)
+using System.Collections;
+#endif
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -263,6 +269,7 @@ namespace YAT.Domain
 		private DateTime initialTimeStamp;
 
 		private Queue<DataSendItem> sendDataQueue = new Queue<DataSendItem>();
+		private Queue<byte> conflateDataQueue = new Queue<byte>();
 		private bool sendDataThreadRunFlag;
 		private AutoResetEvent sendDataThreadEvent;
 		private Thread sendDataThread;
@@ -288,6 +295,16 @@ namespace YAT.Domain
 		private DisplayRepository rxRepository;
 		private object repositorySyncObj = new object();
 
+	#if (WITH_SCRIPTING)
+
+		private Queue<string> availableReceivedMessagesForScripting = new Queue<string>();
+		private string lastEnqueuedReceivedMessageForScripting; // = null;
+		private object lastEnqueuedReceivedMessageForScriptingSyncObj = new object();
+		private string lastDequeuedReceivedMessageForScripting; // = null;
+		private object lastDequeuedReceivedMessageForScriptingSyncObj = new object();
+
+	#endif
+
 		private object clearAndRefreshSyncObj = new object();
 		private bool isReloading;
 
@@ -308,6 +325,25 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
+
+	#if (WITH_SCRIPTING)
+
+		// Note that e.g. a 'SendingText' or 'SendingMessage' event doesn't make sense, as it would
+		// contain parsable text that may even include a keyword to be processed.
+
+		/// <summary>
+		/// Occurs when a packet is being sent in the host application. The event args contain the
+		/// binary raw data that is being sent, including control characters, EOL,...
+		/// </summary>
+		/// <remarks>
+		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and
+		/// can be modified using the <see cref="ModifiablePacketEventArgs.Data"/> property or
+		/// even canceled using the <see cref="ModifiablePacketEventArgs.Cancel"/> property.
+		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
+		/// </remarks>
+		public event EventHandler<ModifiablePacketEventArgs> SendingPacket;
+
+	#endif
 
 		/// <summary></summary>
 		public event EventHandler<RawChunkEventArgs> RawChunkSent;
@@ -352,6 +388,28 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Occurs when a packet has been received by the host application. The event args contain
+		/// the binary raw data that has been received, including control characters, EOL,...
+		/// In contrast, the <see cref="ScriptMessageReceived"/> event args contain the message in
+		/// formatted text representation.
+		/// </summary>
+		public event EventHandler<PacketEventArgs> ScriptPacketReceived;
+
+		/// <summary>
+		/// Occurs when a message has been received by the host application. The event args contain
+		/// the message in formatted text representation. For text terminals, the text is composed
+		/// of the decoded characters, excluding control characters. For binary terminals, the text
+		/// represents the received data in hexadecimal notation.
+		/// In contrast, the <see cref="ScriptPacketReceived"/> event args contain the binary raw
+		/// data that has been received.
+		/// </summary>
+		public event EventHandler<MessageEventArgs> ScriptMessageReceived;
+
+	#endif
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<RepositoryType>> RepositoryCleared;
@@ -850,6 +908,43 @@ namespace YAT.Domain
 			}
 		}
 
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Gets a value indicating whether the terminal has received a message that is available for scripting.
+		/// </summary>
+		public virtual bool HasAvailableReceivedMessageForScripting
+		{
+			get
+			{
+				// AssertNotDisposed() is called by 'ReceivedLineCount' below.
+
+				return (AvailableReceivedMessageCountForScripting > 0);
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating the number of received messages that are available for scripting.
+		/// </summary>
+		public virtual int AvailableReceivedMessageCountForScripting
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				lock (this.availableReceivedMessagesForScripting)
+				{
+					var count = this.availableReceivedMessagesForScripting.Count;
+
+					DebugScriptingQueueCount(count);
+
+					return (count);
+				}
+			}
+		}
+
+	#endif // WITH_SCRIPTING
+
 		/// <summary></summary>
 		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
@@ -1229,7 +1324,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessRawDataSendItem(RawDataSendItem item)
 		{
-			ForwardDataToRawTerminal(item.Data); // Nothing for further processing, simply forward.
+			ForwardPacketToRawTerminal(item.Data); // Nothing for further processing, simply forward.
 		}
 
 		/// <summary></summary>
@@ -1279,7 +1374,8 @@ namespace YAT.Domain
 						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(byteResult.Bytes.Length))
 							OnIOChanged(EventArgs.Empty);
 
-						ForwardDataToRawTerminal(byteResult.Bytes);
+						// For performance reasons, collect as many chunks as possible into a larger chunk:
+						AppendToPendingPacketWithoutForwardingToRawTerminalYet(byteResult.Bytes);
 					}
 					else // if keyword result (will not occur if keywords are disabled while parsing)
 					{
@@ -1390,6 +1486,8 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Clear:
 				{
+					ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 					// Wait some time to allow previous data being transmitted.
 					// Wait quite long as the 'DataSent' event will take time.
 					// This even has the advantage that data is quickly shown.
@@ -1401,6 +1499,8 @@ namespace YAT.Domain
 
 				case Parser.Keyword.Delay:
 				{
+					ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 					int delay = TerminalSettings.Send.DefaultDelay;
 					if (!ArrayEx.IsNullOrEmpty(result.Args))
 						delay = result.Args[0];
@@ -1413,7 +1513,7 @@ namespace YAT.Domain
 					break;
 				}
 
-				case Parser.Keyword.PortSettings:
+				case Parser.Keyword.IOSettings:
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
@@ -1460,14 +1560,16 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
+							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing port settings has failed! " + ex.Message));
+								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing serial COM port settings has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Changing port settings is yet limited to serial COM ports (limitation #71).", true));
+						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Changing I/O settings is yet limited to serial COM ports (limitation #71).", true));
 					}
 					break;
 				}
@@ -1488,6 +1590,8 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
+							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
 								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing baud rate has failed! " + ex.Message));
@@ -1516,6 +1620,8 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
+							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
 								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing stop bits has failed! " + ex.Message));
@@ -1544,6 +1650,8 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
+							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
 								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing data bits has failed! " + ex.Message));
@@ -1572,6 +1680,8 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
+							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
 								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing parity has failed! " + ex.Message));
@@ -1600,6 +1710,8 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
+							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
 								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing flow control has failed! " + ex.Message));
@@ -1616,6 +1728,8 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
+						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = false;
 					}
@@ -1630,6 +1744,8 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
+						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = true;
 					}
@@ -1644,6 +1760,8 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
+						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = TerminalSettings.IO.SerialPort.IgnoreFramingErrors;
 					}
@@ -1658,6 +1776,8 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
+						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = true;
 					}
@@ -1672,6 +1792,8 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
+						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = false;
 					}
@@ -1686,6 +1808,8 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
+						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.ToggleOutputBreak();
 					}
@@ -1700,6 +1824,8 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.UsbSerialHid)
 					{
+						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+
 						byte reportId = TerminalSettings.IO.UsbSerialHidDevice.ReportFormat.Id;
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 							reportId = (byte)result.Args[0];
@@ -1729,7 +1855,9 @@ namespace YAT.Domain
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketEnd'.</remarks>
 		protected virtual void ProcessLineEnd(bool sendEol)
 		{
-			// Nothing to do (yet).
+			UnusedArg.PreventAnalysisWarning(sendEol); // Doesn't need to be handled for the 'neutral' terminal base.
+
+			ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketDelayOrInterval'.</remarks>
@@ -1794,13 +1922,86 @@ namespace YAT.Domain
 			return (sb.ToString());
 		}
 
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// </remarks>
+		protected void AppendToPendingPacketWithoutForwardingToRawTerminalYet(byte[] data)
+		{
+			AssertNotDisposed();
+
+			lock (this.conflateDataQueue)
+			{
+				foreach (byte b in data)
+					this.conflateDataQueue.Enqueue(b);
+			}
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// </remarks>
+		protected void AppendToPendingPacketAndForwardToRawTerminal(ReadOnlyCollection<byte> data)
+		{
+			// AssertNotDisposed() is called by 'AppendToPendingPacketAndForwardToRawTerminal()' below.
+
+			byte[] a = new byte[data.Count];
+			data.CopyTo(a, 0);
+
+			AppendToPendingPacketAndForwardToRawTerminal(a);
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// </remarks>
+		protected void AppendToPendingPacketAndForwardToRawTerminal(byte[] data)
+		{
+			// AssertNotDisposed() is called by 'ForwardPendingPacketToRawTerminal()' below.
+
+			lock (this.conflateDataQueue)
+			{
+				foreach (byte b in data)
+					this.conflateDataQueue.Enqueue(b);
+			}
+
+			ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+		}
+
+		/// <remarks>
+		/// Not the best approach to require to call this method at so many locations...
+		/// </remarks>
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// </remarks>
+		protected void ForwardPendingPacketToRawTerminal()
+		{
+			// AssertNotDisposed() is called by 'ForwardPacketToRawTerminal()' below.
+
+			// Retrieve pending data:
+			byte[] data;
+			lock (this.conflateDataQueue)
+			{
+				data = this.conflateDataQueue.ToArray();
+				this.conflateDataQueue.Clear();
+			}
+
+			ForwardPacketToRawTerminal(data);
+		}
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected virtual void ForwardDataToRawTerminal(byte[] data)
+		protected virtual void ForwardPacketToRawTerminal(byte[] data)
 		{
+		#if (WITH_SCRIPTING)
+			// Invoke plug-in interface which potentially modifies the data or even cancels the packet:
+			var e = new ModifiablePacketEventArgs(data);
+			OnSendingPacket(e);
+			if (e.Cancel)
+				return;
+		#endif
+
+			// Forward packet to underlying terminal:
 			try
 			{
-				this.rawTerminal.Send(data);
+				this.rawTerminal.Send(data); // Forwards the potentially modified data.
 			}
 			catch (ThreadAbortException ex)
 			{
@@ -1873,7 +2074,9 @@ namespace YAT.Domain
 		// Methods > Send File
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendFile(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
@@ -1888,6 +2091,9 @@ namespace YAT.Domain
 		/// </remarks>
 		/// <remarks>
 		/// Separate "Do...()" method for symmetricity with <see cref="DoSendData(IEnumerable{DataSendItem})"/>.
+		/// </remarks>
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
 		/// </remarks>
 		protected void DoSendFile(string filePath, Radix defaultRadix)
 		{
@@ -1912,6 +2118,9 @@ namespace YAT.Domain
 		/// infrastructure is required (SendFile => SendData). The considered \!(SendFile("..."))
 		/// keyword doesn't help either since the file may again contain keywords, thus again some
 		/// kind of a two-level infrastructure is required.
+		/// </remarks>
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendFileThread()
@@ -2006,16 +2215,22 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// </remarks>
 		protected abstract void ProcessSendFileItem(FileSendItem item);
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// </remarks>
 		protected virtual void ProcessSendTextFileItem(FileSendItem item)
 		{
 			ProcessSendTextFileItem(item, Encoding.Default);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// </remarks>
 		protected virtual void ProcessSendTextFileItem(FileSendItem item, Encoding encodingFallback)
 		{
 			using (var sr = new StreamReader(item.FilePath, encodingFallback, true))
@@ -2717,7 +2932,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (ByteToElement(b, d, TerminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ByteToElement(b, d, TerminalSettings.Display.RxRadix));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2837,7 +3052,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is a radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -2878,6 +3093,7 @@ namespace YAT.Domain
 					else
 						return (ByteEx.ConvertToBinaryString(b));
 				}
+
 				case Radix.Oct:
 				{
 					if (TerminalSettings.Display.ShowRadix)
@@ -2885,6 +3101,7 @@ namespace YAT.Domain
 					else
 						return (ByteEx.ConvertToOctalString(b));
 				}
+
 				case Radix.Dec:
 				{
 					if (TerminalSettings.Display.ShowRadix)
@@ -2892,6 +3109,7 @@ namespace YAT.Domain
 					else
 						return (b.ToString("D3", CultureInfo.InvariantCulture));
 				}
+
 				case Radix.Hex:
 				{
 					if (TerminalSettings.Display.ShowRadix)
@@ -2899,10 +3117,12 @@ namespace YAT.Domain
 					else
 						return (b.ToString("X2", CultureInfo.InvariantCulture));
 				}
+
 				case Radix.Unicode:
 				{
 					return (UnicodeValueToNumericString(b));
 				}
+
 				default:
 				{
 					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is a numeric radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -2956,7 +3176,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (new DisplayElement.TxData(origin, text));
 				case IODirection.Rx: return (new DisplayElement.RxData(origin, text));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2969,7 +3189,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (new DisplayElement.TxData(origin, text));
 				case IODirection.Rx: return (new DisplayElement.RxData(origin, text));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2982,7 +3202,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (new DisplayElement.TxControl(origin, text));
 				case IODirection.Rx: return (new DisplayElement.RxControl(origin, text));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2995,7 +3215,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (ElementsAreSeparate(TerminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -3014,18 +3234,17 @@ namespace YAT.Domain
 				case Radix.Hex:     return (true);
 
 				case Radix.Unicode: return (true);
+
+				default: throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is a radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' radix is missing here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "ps", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string ps, IODirection d, out DisplayElementCollection lp)
+		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string dev, IODirection dir, out DisplayElementCollection lp)
 		{
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
-			    TerminalSettings.Display.ShowPort      ||
+			    TerminalSettings.Display.ShowDevice    ||
 			    TerminalSettings.Display.ShowDirection)
 			{
 				lp = new DisplayElementCollection(10); // Preset the required capacity to improve memory management.
@@ -3054,9 +3273,9 @@ namespace YAT.Domain
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 				}
 
-				if (TerminalSettings.Display.ShowPort)
+				if (TerminalSettings.Display.ShowDevice)
 				{
-					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+					lp.Add(new DisplayElement.DeviceInfo(dev, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
@@ -3064,7 +3283,7 @@ namespace YAT.Domain
 
 				if (TerminalSettings.Display.ShowDirection)
 				{
-					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
+					lp.Add(new DisplayElement.DirectionInfo((Direction)dir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
@@ -3139,6 +3358,32 @@ namespace YAT.Domain
 			}
 		}
 
+	#if (WITH_SCRIPTING)
+
+		/// <remarks>
+		/// Processing for scripting differs from "normal" processing for displaying because...
+		/// ...received messages must not be impacted by 'DirectionLineBreak'.
+		/// ...received data must not be processed individually, only as packets/messages.
+		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
+		/// </remarks>
+		protected virtual void ProcessAndSignalRawChunkForScripting(RawChunk chunk)
+		{
+			if (chunk.Direction == IODirection.Rx)
+			{
+				var data = new byte[chunk.Content.Count];
+				chunk.Content.CopyTo(data, 0);
+
+				var message = Format(data, IODirection.Rx);
+
+				EnqueueReceivedMessageForScripting(message.ToString()); // Enqueue before invoking event to
+				                                                        // have message ready for event.
+				OnScriptPacketReceived(new PacketEventArgs(data));
+				OnScriptMessageReceived(new MessageEventArgs(message.ToString()));
+			}
+		}
+
+	#endif // WITH_SCRIPTING
+
 		#endregion
 
 		#region Methods > Special ;-)
@@ -3187,7 +3432,7 @@ namespace YAT.Domain
 				case IODirection.Tx: return (Format(data, d, TerminalSettings.Display.TxRadix));
 				case IODirection.Rx: return (Format(data, d, TerminalSettings.Display.RxRadix));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -3215,7 +3460,11 @@ namespace YAT.Domain
 			return (lp.ElementsToString());
 		}
 
-		private void AddSpaceIfNecessary(IODirection d, DisplayElementCollection lp, DisplayElement de)
+		/// <summary>
+		/// Add a space to the given line part, depending on the give state.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		protected virtual void AddSpaceIfNecessary(IODirection d, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
@@ -3278,6 +3527,168 @@ namespace YAT.Domain
 
 			return (sb.ToString());
 		}
+
+		#endregion
+
+		#region Methods > Scripting
+		//------------------------------------------------------------------------------------------
+		// Methods > Scripting
+		//------------------------------------------------------------------------------------------
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Enqueues a received message to make it available for scripting.
+		/// </summary>
+		/// <remarks>
+		/// Implemented here instead of 'Model.ScriptConnection' as a separate queue for each
+		/// terminal is required, whereas the 'Model.ScriptConnection' is a singleton.
+		/// </remarks>
+		protected virtual void EnqueueReceivedMessageForScripting(string value)
+		{
+			lock (this.lastEnqueuedReceivedMessageForScriptingSyncObj) // Access to both must be synchronized!
+			{                                                          // Otherwise, e.g. 'LastEnqueued' could
+				lock (this.availableReceivedMessagesForScripting)      // yet be emtpy while the queue already
+				{                                                      // contains an item!
+					this.availableReceivedMessagesForScripting.Enqueue(value);
+					this.lastEnqueuedReceivedMessageForScripting = value;
+
+					DebugScriptingPostfixedQuoted(value, "enqueued for scripting."); // Same reason as above, acceptable
+				}                                                                         // to do inside lock since debug only.
+			}
+		}
+
+		/// <summary>
+		/// Returns the message that has last been enqueued into the receive queue that is available for scripting.
+		/// </summary>
+		public virtual void GetLastEnqueuedReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			lock (this.lastEnqueuedReceivedMessageForScriptingSyncObj)
+			{
+				value = this.lastEnqueuedReceivedMessageForScripting;
+
+				DebugScriptingPostfixedQuoted(value, "retrieved as last enqueued received message for scripting.");
+			}
+		}
+
+		/// <summary>
+		/// Clears the last enqueued message that is available for scripting.
+		/// </summary>
+		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out string cleared)
+		{
+			AssertNotDisposed();
+
+			lock (this.lastEnqueuedReceivedMessageForScriptingSyncObj)
+			{
+				DebugScriptingPostfixedQuoted(this.lastEnqueuedReceivedMessageForScripting, "cleared as last enqueued received message for scripting.");
+
+				cleared = this.lastEnqueuedReceivedMessageForScripting;
+
+				this.lastEnqueuedReceivedMessageForScripting = null;
+			}
+		}
+
+		/// <summary>
+		/// Gets the next received message that is available for scripting and removes it from the queue.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">
+		/// The underlying <see cref="Queue{T}"/> is empty.
+		/// </exception>
+		public virtual void DequeueNextAvailableReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			lock (this.lastDequeuedReceivedMessageForScriptingSyncObj) // Access to both must be synchronized!
+			{                                                          // Otherwise, e.g. 'NextAvailable' could
+				lock (this.availableReceivedMessagesForScripting)      // yet be emtpy while the queue already
+				{                                                      // contains an item!
+					value = this.availableReceivedMessagesForScripting.Dequeue();
+					this.lastDequeuedReceivedMessageForScripting = value;
+
+					DebugScriptingPostfixedQuoted(value, "dequeued for scripting."); // Same reason as above, acceptable
+				}                                                                         // to do inside lock since debug only.
+			}
+		}
+
+		/// <summary>
+		/// Returns the received message that has last been dequeued from the receive queue for scripting.
+		/// </summary>
+		public virtual void GetLastDequeuedReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			lock (this.lastDequeuedReceivedMessageForScriptingSyncObj)
+			{
+				value = this.lastDequeuedReceivedMessageForScripting;
+
+				DebugScriptingPostfixedQuoted(value, "retrieved as last dequeued received message for scripting.");
+			}
+		}
+
+		/// <summary>
+		/// Clears the last dequeued message that is available for scripting.
+		/// </summary>
+		public virtual void ClearLastDequeuedReceivedMessageForScripting(out string cleared)
+		{
+			AssertNotDisposed();
+
+			lock (this.lastDequeuedReceivedMessageForScriptingSyncObj)
+			{
+				DebugScriptingPostfixedQuoted(this.lastDequeuedReceivedMessageForScripting, "cleared as last dequeued received message for scripting.");
+
+				cleared = this.lastDequeuedReceivedMessageForScripting;
+
+				this.lastDequeuedReceivedMessageForScripting = null;
+			}
+		}
+
+		/// <remarks>
+		/// \remind (2018-03-27 / MKY)
+		/// 'LastAvailable' only works properly for a terminating number of received messages, but
+		/// not for consecutive receiving. This method shall be eliminated as soon as the obsolete
+		/// GetLastReceived(), CheckLastReceived() and WaitFor() have been removed.
+		/// </remarks>
+		public virtual void GetLastAvailableReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			lock (this.availableReceivedMessagesForScripting)
+			{
+				if (this.availableReceivedMessagesForScripting.Count > 0)
+				{
+					var messages = this.availableReceivedMessagesForScripting.ToArray();
+					value = messages[messages.Length - 1];
+
+					DebugScriptingPostfixedQuoted(value, "retrieved as last available received message for scripting.");
+				}
+				else
+				{
+					value = null;
+
+					DebugScripting("[nothing] retrieved as last available received message for scripting.");
+				}
+			}
+		}
+
+		/// <summary>
+		/// Cleares all available messages in the receive queue for scripting.
+		/// </summary>
+		public void ClearAvailableReceivedMessagesForScripting(out string[] clearedMessages)
+		{
+			AssertNotDisposed();
+
+			lock (this.availableReceivedMessagesForScripting)
+			{
+				clearedMessages = this.availableReceivedMessagesForScripting.ToArray();
+				this.availableReceivedMessagesForScripting.Clear();
+
+				DebugScriptingQueueCleared(clearedMessages);
+			}
+		}
+
+	#endif // WITH_SCRIPTING
 
 		#endregion
 
@@ -3782,7 +4193,7 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalSettings.Display.IncludePortControl)
+			if (TerminalSettings.Display.IncludeIOControl)
 			{
 				var texts = IOControlChangeTexts();
 				                                                 //// Forsee capacity for separators.
@@ -3872,6 +4283,9 @@ namespace YAT.Domain
 				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
 				OnRawChunkReceived(args);
 				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' object is immutable, subsequent use is OK.
+			#if (WITH_SCRIPTING)
+				ProcessAndSignalRawChunkForScripting(e.Value);     // See method's remarks for background information.
+			#endif // WITH_SCRIPTING
 			}
 		}
 
@@ -3911,6 +4325,22 @@ namespace YAT.Domain
 		{
 			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <remarks>
+		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and
+		/// can be modified using the <see cref="ModifiablePacketEventArgs.Data"/> property or
+		/// even canceled using the <see cref="ModifiablePacketEventArgs.Cancel"/> property.
+		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
+		/// </remarks>
+		protected virtual void OnSendingPacket(ModifiablePacketEventArgs e)
+		{
+			if (!this.isReloading) // This plug-in event must only be raised once.
+				this.eventHelper.RaiseSync<ModifiablePacketEventArgs>(SendingPacket, this, e);
+		}
+
+	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
 		[CallingContract(IsAlwaysSequentialIncluding = "OnRawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
@@ -3974,12 +4404,12 @@ namespace YAT.Domain
 				case IODirection.Bidir:
 				case IODirection.None:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -4038,12 +4468,12 @@ namespace YAT.Domain
 				case IODirection.Bidir:
 				case IODirection.None:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -4102,12 +4532,12 @@ namespace YAT.Domain
 				case IODirection.Bidir:
 				case IODirection.None:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -4131,22 +4561,21 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void OnDisplayLinesAdded(IODirection d, DisplayLineCollection lines)
+		protected virtual void OnDisplayLinesAdded(IODirection direction, DisplayLineCollection lines)
 		{
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 			{
-				switch (d)
+				switch (direction)
 				{
 					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
 					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
 
 					case IODirection.Bidir:
 					case IODirection.None:
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 					default:
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -4168,6 +4597,24 @@ namespace YAT.Domain
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		protected virtual void OnScriptPacketReceived(PacketEventArgs e)
+		{
+			if (!this.isReloading) // This plug-in event must only be raised once.
+				this.eventHelper.RaiseSync<PacketEventArgs>(ScriptPacketReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnScriptMessageReceived(MessageEventArgs e)
+		{
+			if (!this.isReloading) // This plug-in event must only be raised once.
+				this.eventHelper.RaiseSync<PacketEventArgs>(ScriptMessageReceived, this, e);
+		}
+
+	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
@@ -4306,6 +4753,49 @@ namespace YAT.Domain
 		{
 			DebugMessage(message);
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		[Conditional("DEBUG_SCRIPTING")]
+		protected virtual void DebugScripting(string message)
+		{
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + message);
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_SCRIPTING")]
+		protected virtual void DebugScriptingPrefixedQuoted(string prefix, string quoted)
+		{
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + prefix + @" """ + quoted + @""".");
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_SCRIPTING")]
+		protected virtual void DebugScriptingPostfixedQuoted(string quoted, string postfix)
+		{
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + @"': """ + quoted + @""" " + postfix);
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_SCRIPTING")]
+		protected virtual void DebugScriptingQueueCount(int count)
+		{
+			if (count > 0) // Otherwise, debug output gets spoilt...
+				DebugScripting(string.Format("{0} received messages available for scripting.", count));
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_SCRIPTING")]
+		protected virtual void DebugScriptingQueueCleared(string[] cleared)
+		{
+			if (ArrayEx.IsNullOrEmpty(cleared))
+				DebugScripting("Message queue for scripting cleared, contained [nothing].");
+			else
+				DebugScripting("Message queue for scripting cleared, contained { " + ArrayEx.ValuesToString(cleared, '"') + " }.");
+		}
+
+	#endif // WITH_SCRIPTING
 
 		#endregion
 	}

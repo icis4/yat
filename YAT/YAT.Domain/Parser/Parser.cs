@@ -117,8 +117,8 @@ namespace YAT.Domain.Parser
 			@"To prevent, use the keyword combined with a delay or interval keyword, e.g. ""\!(" + (KeywordEx)Keyword.LineRepeat + @")\!(" + (KeywordEx)Keyword.LineInterval + @")""." + Environment.NewLine +
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
-			@"Change port settings to the specified values ""\!(" + (KeywordEx)Keyword.PortSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
-			@"Changing port settings is yet limited to serial COM ports." +                                      // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
+			@"Change I/O settings to the specified values ""\!(" + (KeywordEx)Keyword.IOSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
+			@"Changing I/O settings is yet limited to serial COM ports." +                                    // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
 			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
 			@"Change data bits to the specified value ""\!(" + (KeywordEx)Keyword.DataBits + @"(7))""." + Environment.NewLine +
 			@"Change parity to the specified value ""\!(" + (KeywordEx)Keyword.Parity + @"(2))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
