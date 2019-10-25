@@ -37,10 +37,10 @@ namespace YAT.View.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
-			this.groupBox_Port = new System.Windows.Forms.GroupBox();
-			this.comboBox_Port_Extension = new MKY.Windows.Forms.ComboBoxEx();
-			this.pathLabel_Port = new MKY.Windows.Forms.PathLabel();
-			this.checkBox_Port = new System.Windows.Forms.CheckBox();
+			this.groupBox_Control = new System.Windows.Forms.GroupBox();
+			this.comboBox_Control_Extension = new MKY.Windows.Forms.ComboBoxEx();
+			this.pathLabel_Control = new MKY.Windows.Forms.PathLabel();
+			this.checkBox_Control = new System.Windows.Forms.CheckBox();
 			this.groupBox_Options_TextEncoding = new System.Windows.Forms.GroupBox();
 			this.checkBox_Options_EmitEncodingPreamble = new System.Windows.Forms.CheckBox();
 			this.radioButton_Options_TextEncodingTerminal = new System.Windows.Forms.RadioButton();
@@ -85,7 +85,7 @@ namespace YAT.View.Forms
 			this.checkBox_RequestSwitchOn = new System.Windows.Forms.CheckBox();
 			this.checkBox_IsOn = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
-			this.groupBox_Port.SuspendLayout();
+			this.groupBox_Control.SuspendLayout();
 			this.groupBox_Options_TextEncoding.SuspendLayout();
 			this.groupBox_Options_Folders.SuspendLayout();
 			this.groupBox_Options_Name.SuspendLayout();
@@ -121,7 +121,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Settings.Controls.Add(this.groupBox_Port);
+			this.groupBox_Settings.Controls.Add(this.groupBox_Control);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_TextEncoding);
 			this.groupBox_Settings.Controls.Add(this.button_RootOpen);
 			this.groupBox_Settings.Controls.Add(this.pathLabel_Root);
@@ -138,53 +138,53 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
-			// groupBox_Port
+			// groupBox_Control
 			// 
-			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Control.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Port.Controls.Add(this.comboBox_Port_Extension);
-			this.groupBox_Port.Controls.Add(this.pathLabel_Port);
-			this.groupBox_Port.Controls.Add(this.checkBox_Port);
-			this.groupBox_Port.Location = new System.Drawing.Point(6, 55);
-			this.groupBox_Port.Name = "groupBox_Port";
-			this.groupBox_Port.Size = new System.Drawing.Size(495, 55);
-			this.groupBox_Port.TabIndex = 4;
-			this.groupBox_Port.TabStop = false;
-			this.groupBox_Port.Text = "&Port Control";
+			this.groupBox_Control.Controls.Add(this.comboBox_Control_Extension);
+			this.groupBox_Control.Controls.Add(this.pathLabel_Control);
+			this.groupBox_Control.Controls.Add(this.checkBox_Control);
+			this.groupBox_Control.Location = new System.Drawing.Point(6, 55);
+			this.groupBox_Control.Name = "groupBox_Control";
+			this.groupBox_Control.Size = new System.Drawing.Size(495, 55);
+			this.groupBox_Control.TabIndex = 4;
+			this.groupBox_Control.TabStop = false;
+			this.groupBox_Control.Text = "I/O &Control";
 			// 
-			// comboBox_Port_Extension
+			// comboBox_Control_Extension
 			// 
-			this.comboBox_Port_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Port_Extension.Location = new System.Drawing.Point(411, 19);
-			this.comboBox_Port_Extension.Name = "comboBox_Port_Extension";
-			this.comboBox_Port_Extension.Size = new System.Drawing.Size(72, 21);
-			this.comboBox_Port_Extension.TabIndex = 2;
-			this.toolTip.SetToolTip(this.comboBox_Port_Extension, resources.GetString("comboBox_Port_Extension.ToolTip"));
-			this.comboBox_Port_Extension.TextChanged += new System.EventHandler(this.comboBox_Port_Extension_TextChanged);
-			this.comboBox_Port_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Port_Extension_Validating);
+			this.comboBox_Control_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Control_Extension.Location = new System.Drawing.Point(411, 19);
+			this.comboBox_Control_Extension.Name = "comboBox_Control_Extension";
+			this.comboBox_Control_Extension.Size = new System.Drawing.Size(72, 21);
+			this.comboBox_Control_Extension.TabIndex = 2;
+			this.toolTip.SetToolTip(this.comboBox_Control_Extension, resources.GetString("comboBox_Control_Extension.ToolTip"));
+			this.comboBox_Control_Extension.TextChanged += new System.EventHandler(this.comboBox_Control_Extension_TextChanged);
+			this.comboBox_Control_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Control_Extension_Validating);
 			// 
-			// pathLabel_Port
+			// pathLabel_Control
 			// 
-			this.pathLabel_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.pathLabel_Port.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Port.Location = new System.Drawing.Point(179, 19);
-			this.pathLabel_Port.Name = "pathLabel_Port";
-			this.pathLabel_Port.Size = new System.Drawing.Size(220, 21);
-			this.pathLabel_Port.TabIndex = 1;
-			this.pathLabel_Port.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.pathLabel_Port.Click += new System.EventHandler(this.pathLabel_Port_Click);
+			this.pathLabel_Control.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pathLabel_Control.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pathLabel_Control.Location = new System.Drawing.Point(179, 19);
+			this.pathLabel_Control.Name = "pathLabel_Control";
+			this.pathLabel_Control.Size = new System.Drawing.Size(220, 21);
+			this.pathLabel_Control.TabIndex = 1;
+			this.pathLabel_Control.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.pathLabel_Control.Click += new System.EventHandler(this.pathLabel_Control_Click);
 			// 
-			// checkBox_Port
+			// checkBox_Control
 			// 
-			this.checkBox_Port.AutoSize = true;
-			this.checkBox_Port.Location = new System.Drawing.Point(12, 22);
-			this.checkBox_Port.Name = "checkBox_Port";
-			this.checkBox_Port.Size = new System.Drawing.Size(100, 17);
-			this.checkBox_Port.TabIndex = 0;
-			this.checkBox_Port.Text = "Log port control";
-			this.toolTip.SetToolTip(this.checkBox_Port, resources.GetString("checkBox_Port.ToolTip"));
-			this.checkBox_Port.UseVisualStyleBackColor = true;
-			this.checkBox_Port.CheckedChanged += new System.EventHandler(this.checkBox_Port_CheckedChanged);
+			this.checkBox_Control.AutoSize = true;
+			this.checkBox_Control.Location = new System.Drawing.Point(12, 22);
+			this.checkBox_Control.Name = "checkBox_Control";
+			this.checkBox_Control.Size = new System.Drawing.Size(133, 17);
+			this.checkBox_Control.TabIndex = 0;
+			this.checkBox_Control.Text = "Log I/O control events";
+			this.toolTip.SetToolTip(this.checkBox_Control, resources.GetString("checkBox_Control.ToolTip"));
+			this.checkBox_Control.UseVisualStyleBackColor = true;
+			this.checkBox_Control.CheckedChanged += new System.EventHandler(this.checkBox_Control_CheckedChanged);
 			// 
 			// groupBox_Options_TextEncoding
 			// 
@@ -273,7 +273,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Folders.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Folders.TabIndex = 8;
 			this.groupBox_Options_Folders.TabStop = false;
-			this.groupBox_Options_Folders.Text = "&Create Folders";
+			this.groupBox_Options_Folders.Text = "Create F&olders";
 			// 
 			// checkBox_Options_FolderType
 			// 
@@ -415,7 +415,7 @@ namespace YAT.View.Forms
 			this.label_Root.Name = "label_Root";
 			this.label_Root.Size = new System.Drawing.Size(33, 13);
 			this.label_Root.TabIndex = 0;
-			this.label_Root.Text = "R&oot:";
+			this.label_Root.Text = "&Root:";
 			// 
 			// button_Root
 			// 
@@ -444,7 +444,7 @@ namespace YAT.View.Forms
 			this.groupBox_Raw.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Raw.TabIndex = 5;
 			this.groupBox_Raw.TabStop = false;
-			this.groupBox_Raw.Text = "&Raw Data";
+			this.groupBox_Raw.Text = "Raw &Data";
 			this.toolTip.SetToolTip(this.groupBox_Raw, "Bytes as transmitted over serial interface");
 			// 
 			// pathLabel_Raw_Rx
@@ -697,8 +697,8 @@ namespace YAT.View.Forms
 			this.Shown += new System.EventHandler(this.LogSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
-			this.groupBox_Port.ResumeLayout(false);
-			this.groupBox_Port.PerformLayout();
+			this.groupBox_Control.ResumeLayout(false);
+			this.groupBox_Control.PerformLayout();
 			this.groupBox_Options_TextEncoding.ResumeLayout(false);
 			this.groupBox_Options_TextEncoding.PerformLayout();
 			this.groupBox_Options_Folders.ResumeLayout(false);
@@ -761,10 +761,10 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingTerminal;
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingUTF8;
 		private System.Windows.Forms.CheckBox checkBox_Options_EmitEncodingPreamble;
-		private System.Windows.Forms.GroupBox groupBox_Port;
-		private MKY.Windows.Forms.PathLabel pathLabel_Port;
-		private System.Windows.Forms.CheckBox checkBox_Port;
-		private MKY.Windows.Forms.ComboBoxEx comboBox_Port_Extension;
+		private System.Windows.Forms.GroupBox groupBox_Control;
+		private MKY.Windows.Forms.PathLabel pathLabel_Control;
+		private System.Windows.Forms.CheckBox checkBox_Control;
+		private MKY.Windows.Forms.ComboBoxEx comboBox_Control_Extension;
 		private System.Windows.Forms.CheckBox checkBox_RequestSwitchOn;
 		private System.Windows.Forms.CheckBox checkBox_IsOn;
 	}

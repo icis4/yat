@@ -55,7 +55,7 @@ namespace YAT.Log
 
 		private List<Log> logs;
 
-		private TextLog portLog;
+		private TextLog controlLog;
 
 		private List<Log> rawLogs;
 		private RawLog rawTxLog;
@@ -85,7 +85,7 @@ namespace YAT.Log
 
 			var logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
-			this.portLog                        = new TextLog(this.settings.PortLog,      new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
+			this.controlLog                     = new TextLog(this.settings.ControlLog,   new Func<string>(this.settings.MakeControlFilePath),   this.settings.WriteMode, logEncoding, this.neatFormat);
 
 			this.rawLogs  = new List<Log>(3); // Preset the required capacity to improve memory management.
 			this.rawLogs.Add(this.rawTxLog      = new RawLog( this.settings.RawLogTx,     new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode, logEncoding));
@@ -98,9 +98,9 @@ namespace YAT.Log
 			this.neatLogs.Add(this.neatRxLog    = new TextLog(this.settings.NeatLogRx,    new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
 
 			this.logs = new List<Log>(7); // Preset the required capacity to improve memory management.
-			this.logs.Add     (this.portLog);  // Attention: The sequence must correspond to the 'LogChannel' values!
-			this.logs.AddRange(this.rawLogs);  // Attention: The sequence must correspond to the 'LogChannel' values!
-			this.logs.AddRange(this.neatLogs); // Attention: The sequence must correspond to the 'LogChannel' values!
+			this.logs.Add     (this.controlLog); // Attention: The sequence must correspond to the 'LogChannel' values!
+			this.logs.AddRange(this.rawLogs);    // Attention: The sequence must correspond to the 'LogChannel' values!
+			this.logs.AddRange(this.neatLogs);   // Attention: The sequence must correspond to the 'LogChannel' values!
 		}
 
 		#region Disposal
@@ -145,11 +145,11 @@ namespace YAT.Log
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~Provider()
@@ -226,7 +226,7 @@ namespace YAT.Log
 
 					var logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
-					this.portLog     .ApplySettings(this.settings.PortLog,      this.isOn, new Func<string>(this.settings.MakePortFilePath),      this.settings.WriteMode, logEncoding, this.neatFormat);
+					this.controlLog  .ApplySettings(this.settings.ControlLog,   this.isOn, new Func<string>(this.settings.MakeControlFilePath),   this.settings.WriteMode, logEncoding, this.neatFormat);
 
 					this.rawTxLog    .ApplySettings(this.settings.RawLogTx,     this.isOn, new Func<string>(this.settings.MakeRawTxFilePath),     this.settings.WriteMode, logEncoding);
 					this.rawBidirLog .ApplySettings(this.settings.RawLogBidir,  this.isOn, new Func<string>(this.settings.MakeRawBidirFilePath),  this.settings.WriteMode, logEncoding);
@@ -281,13 +281,13 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual bool AnyPortIsOn
+		public virtual bool AnyControlIsOn
 		{
 			get
 			{
-				if (this.portLog.IsOn)
+				if (this.controlLog.IsOn)
 				{
-					Debug.Assert(this.isOn, "Provider state must be 'on' if any port is 'on'!");
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any control is 'on'!");
 					return (true);
 				}
 

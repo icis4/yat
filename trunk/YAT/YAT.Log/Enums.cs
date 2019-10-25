@@ -30,7 +30,7 @@ namespace YAT.Log
 	public enum LogType
 	{
 		/// <summary></summary>
-		Port,
+		Control,
 
 		/// <summary></summary>
 		Raw,
@@ -59,7 +59,7 @@ namespace YAT.Log
 	public enum LogChannel
 	{
 		/// <summary></summary>
-		Port = 0,
+		Control = 0,
 
 		/// <summary></summary>
 		RawTx = 1,

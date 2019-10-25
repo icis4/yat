@@ -120,19 +120,19 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="comboBox_Port_Extension.ToolTip" xml:space="preserve">
+  <data name="comboBox_Control_Extension.ToolTip" xml:space="preserve">
     <value>Either select a preset from the list, or fill in any valid extension.
 \ / : * ? " &lt; &gt; | are invalid characters.
 
 Use "File &gt; Preferences" to reset this setting to the default of ".log".
 Contact YAT via "Help &gt; Request Feature" to request additional presets.</value>
   </data>
-  <data name="checkBox_Port.ToolTip" xml:space="preserve">
-    <value>Logs port state changes (open, close, change of settings) and port errors.
+  <data name="checkBox_Control.ToolTip" xml:space="preserve">
+    <value>Logs I/O state changes (open, close, change of settings) and errors.
 
 In addition,...
 ...for serial COM ports: Flow control (hardware, software), break state.
-...for USB Ser/HID ports: Flow control (software).</value>
+...for USB Ser/HID devices: Flow control (software).</value>
   </data>
   <data name="comboBox_Raw_Extension.ToolTip" xml:space="preserve">
     <value>Either select a preset from the list, or fill in any valid extension.
