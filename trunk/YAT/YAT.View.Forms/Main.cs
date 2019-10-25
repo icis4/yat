@@ -52,6 +52,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Security.Permissions;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -63,6 +64,10 @@ using MKY.Contracts;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
+
+#if (WITH_SCRIPTING)
+using MT.Albatros.Core;
+#endif
 
 using YAT.Application.Utilities;
 using YAT.Model.Types;
@@ -133,6 +138,9 @@ namespace YAT.View.Forms
 		private ClosingState closingState = ClosingState.None;
 		private Model.MainResult result = Model.MainResult.Success;
 
+		// MDI:
+		private ContextMenuStripShortcutTargetWorkaround contextMenuStripShortcutTargetWorkaround;
+
 		// Model:
 		private Model.Main main;
 		private Model.Workspace workspace;
@@ -142,6 +150,11 @@ namespace YAT.View.Forms
 		private FindResult findResult;       // = FindResult.Reset;
 		private bool findNextIsFeasible;     // = false
 		private bool findPreviousIsFeasible; // = false
+
+	#if (WITH_SCRIPTING)
+		// Scripting:
+		private bool scriptDialogIsOpen = false;
+	#endif
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
@@ -178,7 +191,7 @@ namespace YAT.View.Forms
 			DebugMessage("Creating...");
 
 			InitializeComponent();
-
+			FixContextMenus();
 			InitializeControls();
 
 			// Register this form as the main form:
@@ -187,7 +200,6 @@ namespace YAT.View.Forms
 			// Link and attach to main model:
 			this.main = main;
 			AttachMainEventHandlers();
-
 			Text = this.main.IndicatedName;
 
 			// Link and attach to user settings:
@@ -219,6 +231,35 @@ namespace YAT.View.Forms
 		public Model.MainResult Result
 		{
 			get { return (this.result); }
+		}
+
+		#endregion
+
+		#region Form Special Keys
+		//==========================================================================================
+		// Form Special Keys
+		//==========================================================================================
+
+		/// <remarks>
+		/// In case of pressing a modifier key (e.g. [Shift]), this method is invoked twice! Both
+		/// invocations will state msg=0x100 (WM_KEYDOWN)! See:
+		/// https://msdn.microsoft.com/en-us/library/system.windows.forms.control.processcmdkey.aspx:
+		/// The ProcessCmdKey method first determines whether the control has a ContextMenu, and if
+		/// so, enables the ContextMenu to process the command key. If the command key is not a menu
+		/// shortcut and the control has a parent, the key is passed to the parent's ProcessCmdKey
+		/// method. The net effect is that command keys are "bubbled" up the control hierarchy. In
+		/// addition to the key the user pressed, the key data also indicates which, if any, modifier
+		/// keys were pressed at the same time as the key. Modifier keys include the SHIFT, CTRL, and
+		/// ALT keys.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if (this.contextMenuStripShortcutTargetWorkaround.ProcessCmdKey(keyData))
+				return (true);
+
+			return (base.ProcessCmdKey(ref msg, keyData));
 		}
 
 		#endregion
@@ -747,6 +788,11 @@ namespace YAT.View.Forms
 			try
 			{
 				toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Checked = ApplicationSettings.LocalUserSettings.MainWindow.AlwaysOnTop;
+
+			#if (WITH_SCRIPTING)
+			////toolStripMenuItem_MainMenu_Script_Panel.Checked = ApplicationSettings.RoamingUserSettings.View.ScriptPanelIsVisible;
+				toolStripMenuItem_MainMenu_Script_Panel.Checked = this.scriptDialogIsOpen;
+			#endif
 			}
 			finally
 			{
@@ -864,6 +910,22 @@ namespace YAT.View.Forms
 
 		#endregion
 
+	#if (WITH_SCRIPTING)
+
+		#region Controls Event Handlers > Main Menu > Script
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Main Menu > Script
+		//------------------------------------------------------------------------------------------
+
+		private void toolStripMenuItem_MainMenu_Script_Panel_Click(object sender, EventArgs e)
+		{
+			ToggleScriptDialog();
+		}
+
+		#endregion
+
+	#endif // WITH_SCRIPTING
+
 		#region Controls Event Handlers > Main Menu > Help
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Main Menu > Help
@@ -877,6 +939,8 @@ namespace YAT.View.Forms
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
+
+	#if !(WITH_SCRIPTING)
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
@@ -914,12 +978,21 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void toolStripMenuItem_MainMenu_Help_Update_Click(object sender, EventArgs e)
+		{
+			var link = "https://sourceforge.net/p/y-a-terminal/files/";
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(this, link);
+		}
+
 		[ModalBehaviorContract(ModalBehavior.Never)]
 		private void toolStripMenuItem_MainMenu_Help_Donate_Click(object sender, EventArgs e)
 		{
 			var link = "https://sourceforge.net/p/y-a-terminal/donate/";
 			LinkHelper.TryBrowseUriAndShowErrorIfItFails(this, link);
 		}
+
+	#endif // WITH_SCRIPTING
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_About_Click(object sender, EventArgs e)
@@ -1042,7 +1115,7 @@ namespace YAT.View.Forms
 
 				toolStripButton_MainTool_AutoAction_ShowHide.Checked = aaIsActive;
 
-				if (ApplicationSettings.RoamingUserSettings.View.AutoActionVisible)
+				if (ApplicationSettings.RoamingUserSettings.View.AutoActionIsVisible)
 				{
 					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Hide Automatic Action";
 
@@ -1121,7 +1194,7 @@ namespace YAT.View.Forms
 
 				toolStripButton_MainTool_AutoResponse_ShowHide.Checked = arIsActive;
 
-				if (ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible)
+				if (ApplicationSettings.RoamingUserSettings.View.AutoResponseIsVisible)
 				{
 					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Hide Automatic Response";
 
@@ -1172,7 +1245,23 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = false;
 				}
 
-				toolStripButton_MainTool_Terminal_Format.Enabled =  childIsReady;
+			#if (WITH_SCRIPTING)
+
+			////if (ApplicationSettings.RoamingUserSettings.View.ScriptPanelIsVisible)
+				if (this.scriptDialogIsOpen)
+				{
+					toolStripButton_MainTool_Script_ShowHide.Checked = true;
+					toolStripButton_MainTool_Script_ShowHide.Text = "Hide Script Panel";
+				}
+				else
+				{
+					toolStripButton_MainTool_Script_ShowHide.Checked = false;
+					toolStripButton_MainTool_Script_ShowHide.Text = "Show Script Panel";
+				}
+
+			#endif // WITH_SCRIPTING
+
+				toolStripButton_MainTool_Terminal_Format.Enabled = childIsReady;
 			}
 			finally
 			{
@@ -1193,7 +1282,7 @@ namespace YAT.View.Forms
 
 				DebugFindEnter(MethodBase.GetCurrentMethod().Name);
 				{
-					var findVisible = ApplicationSettings.RoamingUserSettings.View.FindVisible;
+					var findVisible = ApplicationSettings.RoamingUserSettings.View.FindIsVisible;
 					if (findVisible)
 					{
 						toolStripButton_MainTool_Find_ShowHide.Checked = true;
@@ -1404,10 +1493,10 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Find_ShowHide_Click(object sender, EventArgs e)
 		{
-			ApplicationSettings.RoamingUserSettings.View.FindVisible = !ApplicationSettings.RoamingUserSettings.View.FindVisible;
+			ApplicationSettings.RoamingUserSettings.View.FindIsVisible = !ApplicationSettings.RoamingUserSettings.View.FindIsVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 
-			if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
+			if (ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
 			{
 			////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();    doesn't work, 'ToolStrip'
 				toolStripComboBox_MainTool_Find_Pattern.Focus(); // seems to require calling Focus().
@@ -1789,7 +1878,7 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				if (ApplicationSettings.RoamingUserSettings.View.FindVisible)
+				if (ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
 					return (!this.toolStripComboBox_MainTool_Find_Pattern.Focused);
 				else
 					return (false);
@@ -2000,7 +2089,7 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoAction_ShowHide_Click(object sender, EventArgs e)
 		{
-			ApplicationSettings.RoamingUserSettings.View.AutoActionVisible = !ApplicationSettings.RoamingUserSettings.View.AutoActionVisible;
+			ApplicationSettings.RoamingUserSettings.View.AutoActionIsVisible = !ApplicationSettings.RoamingUserSettings.View.AutoActionIsVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -2077,7 +2166,7 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoResponse_ShowHide_Click(object sender, EventArgs e)
 		{
-			ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible = !ApplicationSettings.RoamingUserSettings.View.AutoResponseVisible;
+			ApplicationSettings.RoamingUserSettings.View.AutoResponseIsVisible = !ApplicationSettings.RoamingUserSettings.View.AutoResponseIsVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -2188,6 +2277,15 @@ namespace YAT.View.Forms
 			if (t != null)
 				t.RequestAutoResponseDeactivate();
 		}
+
+	#if (WITH_SCRIPTING)
+
+		private void toolStripButton_MainTool_Script_ShowHide_Click(object sender, EventArgs e)
+		{
+			ToggleScriptDialog();
+		}
+
+	#endif // WITH_SCRIPTING
 
 		private void toolStripButton_MainTool_Terminal_Format_Click(object sender, EventArgs e)
 		{
@@ -2628,6 +2726,9 @@ namespace YAT.View.Forms
 		{
 			if (this.main != null)
 			{
+			#if (WITH_SCRIPTING)
+				this.main.Started += main_Started;
+			#endif
 				this.main.WorkspaceOpened += main_WorkspaceOpened;
 				this.main.WorkspaceClosed += main_WorkspaceClosed;
 
@@ -2644,6 +2745,9 @@ namespace YAT.View.Forms
 		{
 			if (this.main != null)
 			{
+			#if (WITH_SCRIPTING)
+				this.main.Started -= main_Started;
+			#endif
 				this.main.WorkspaceOpened -= main_WorkspaceOpened;
 				this.main.WorkspaceClosed -= main_WorkspaceClosed;
 
@@ -2662,6 +2766,15 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 		// Main > Event Handlers
 		//------------------------------------------------------------------------------------------
+
+	#if (WITH_SCRIPTING)
+		private void main_Started(object sender, EventArgs e)
+		{
+			this.main.ScriptBridge.notifyScriptDialogOpened += new ScriptBridge.ScriptDialogOpenedDelegate(NotifyScriptDialogOpened);
+			this.main.ScriptBridge.notifyScriptDialogClosed += new ScriptBridge.ScriptDialogClosedDelegate(NotifyScriptDialogClosed);
+			this.main.ScriptBridge.notifyScriptEnded        += new ScriptBridge.ScriptEndedDelegate(       NotitfyScriptEnded);
+		}
+	#endif
 
 		private void main_WorkspaceOpened(object sender, EventArgs<Model.Workspace> e)
 		{
@@ -2708,6 +2821,12 @@ namespace YAT.View.Forms
 			if (this.result == Model.MainResult.Success) // Otherwise, keep the previous result, e.g. 'ApplicationStartError'.
 				this.result = e.Value;
 
+		#if (WITH_SCRIPTING)
+			this.main.ScriptBridge.notifyScriptDialogOpened -= new ScriptBridge.ScriptDialogOpenedDelegate(NotifyScriptDialogOpened);
+			this.main.ScriptBridge.notifyScriptDialogClosed -= new ScriptBridge.ScriptDialogClosedDelegate(NotifyScriptDialogClosed);
+			this.main.ScriptBridge.notifyScriptEnded        -= new ScriptBridge.ScriptEndedDelegate(       NotitfyScriptEnded);
+		#endif
+
 			DetachMainEventHandlers();
 			this.main = null;
 
@@ -2745,6 +2864,33 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 		// Main > Methods
 		//------------------------------------------------------------------------------------------
+
+		private void FixContextMenus()
+		{
+			var strips = new List<ContextMenuStrip>(3); // Preset the required capacity to improve memory management.
+			strips.Add(contextMenuStrip_FileRecent);
+			strips.Add(contextMenuStrip_Main);
+			strips.Add(contextMenuStrip_Status);
+
+			// Makes sure that context menus are at the right position upon first drop down. This is
+			// a fix, it should be that way by default. However, due to some reasons, they sometimes
+			// appear somewhere at the top-left corner of the screen if this fix isn't done.
+			SuspendLayout();
+
+			foreach (ContextMenuStrip strip in strips)
+				strip.OwnerItem = null;
+
+			ResumeLayout();
+
+			// Also fix the issue with shortcuts defined in context menus:
+			int itemCount = 0;
+			foreach (ContextMenuStrip strip in strips)
+				itemCount += strip.Items.Count;
+
+			this.contextMenuStripShortcutTargetWorkaround = new ContextMenuStripShortcutTargetWorkaround(itemCount); // Preset the required capacity to improve memory management.
+			foreach (ContextMenuStrip strip in strips)
+				this.contextMenuStripShortcutTargetWorkaround.Add(strip);
+		}
 
 		private void InitializeControls()
 		{
@@ -2875,7 +3021,7 @@ namespace YAT.View.Forms
 			ofd.Title       = "Open Terminal or Workspace";
 			ofd.Filter      = ExtensionHelper.TerminalOrWorkspaceFilesFilter;
 			ofd.FilterIndex = ExtensionHelper.TerminalOrWorkspaceFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
@@ -2922,7 +3068,7 @@ namespace YAT.View.Forms
 			ofd.Title       = "Open Workspace";
 			ofd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
 			ofd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceFile);
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
@@ -2947,7 +3093,7 @@ namespace YAT.View.Forms
 			sfd.Title       = "Save Workspace As";
 			sfd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
-			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceFile);
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceExtension);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
 			// Other than for terminals, workspace 'Save As' always suggests '<UserName>.yaw':
@@ -3144,12 +3290,12 @@ namespace YAT.View.Forms
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.TerminalAdded                     -= workspace_TerminalAdded;
-				this.workspace.TerminalRemoved                   -= workspace_TerminalRemoved;
+				this.workspace.TerminalAdded                      -= workspace_TerminalAdded;
+				this.workspace.TerminalRemoved                    -= workspace_TerminalRemoved;
 
-				this.workspace.TimedStatusTextRequest            -= workspace_TimedStatusTextRequest;
-				this.workspace.FixedStatusTextRequest            -= workspace_FixedStatusTextRequest;
-				this.workspace.MessageInputRequest               -= workspace_MessageInputRequest;
+				this.workspace.TimedStatusTextRequest             -= workspace_TimedStatusTextRequest;
+				this.workspace.FixedStatusTextRequest             -= workspace_FixedStatusTextRequest;
+				this.workspace.MessageInputRequest                -= workspace_MessageInputRequest;
 
 				this.workspace.SaveAsFileDialogRequest            -= workspace_SaveAsFileDialogRequest;
 				this.workspace.SaveCommandPageAsFileDialogRequest -= workspace_SaveCommandPageAsFileDialogRequest;
@@ -3174,11 +3320,11 @@ namespace YAT.View.Forms
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void workspace_TerminalAdded(object sender, EventArgs<Model.Terminal> e)
+		private void workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
 		{
 			// Create terminal form and immediately show it:
 
-			var mdiChild = new Terminal(e.Value);
+			var mdiChild = new Terminal(e.Terminal);
 			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
 
 			this.isLayoutingMdi = true;
@@ -3195,7 +3341,7 @@ namespace YAT.View.Forms
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void workspace_TerminalRemoved(object sender, EventArgs<Model.Terminal> e)
+		private void workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
 		{
 			// Nothing to do, see remarks above.
 		}
@@ -3412,9 +3558,9 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestFind()
 		{
-			if (!ApplicationSettings.RoamingUserSettings.View.FindVisible)
+			if (!ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
 			{
-				ApplicationSettings.RoamingUserSettings.View.FindVisible = true;
+				ApplicationSettings.RoamingUserSettings.View.FindIsVisible = true;
 				ApplicationSettings.SaveRoamingUserSettings();
 			}
 
@@ -3463,6 +3609,66 @@ namespace YAT.View.Forms
 		}
 
 		#endregion
+
+	#if (WITH_SCRIPTING)
+
+		#region Scripting
+		//==========================================================================================
+		// Scripting
+		//==========================================================================================
+
+		private void ToggleScriptDialog()
+		{
+			if (this.scriptDialogIsOpen)
+				CloseScriptDialog();
+			else
+				OpenScriptDialog();
+		}
+
+		private void OpenScriptDialog()
+		{
+		////ApplicationSettings.RoamingUserSettings.View.ScriptPanelIsVisible = true;
+		////ApplicationSettings.SaveRoamingUserSettings();
+
+			this.main.ScriptBridge.ProcessCommand("Script:OpenDialog");
+		}
+
+		private void CloseScriptDialog()
+		{
+		////ApplicationSettings.RoamingUserSettings.View.ScriptPanelIsVisible = false;
+		////ApplicationSettings.SaveRoamingUserSettings();
+
+			this.main.ScriptBridge.ProcessCommand("Script:CloseDialog");
+		}
+
+		private void NotifyScriptDialogOpened()
+		{
+			this.scriptDialogIsOpen = true;
+
+			toolStripMenuItem_MainMenu_Script_Panel.Checked = true;
+
+			toolStripButton_MainTool_Script_ShowHide.Checked = true;
+			toolStripButton_MainTool_Script_ShowHide.Text = "Hide Script Panel";
+		}
+
+		private void NotifyScriptDialogClosed()
+		{
+			this.scriptDialogIsOpen = false;
+
+			toolStripMenuItem_MainMenu_Script_Panel.Checked = false;
+
+			toolStripButton_MainTool_Script_ShowHide.Checked = false;
+			toolStripButton_MainTool_Script_ShowHide.Text = "Show Script Panel";
+		}
+
+		private void NotitfyScriptEnded(int result)
+		{
+			this.main.Result = (Model.MainResult)result;
+		}
+
+		#endregion
+
+	#endif // WITH_SCRIPTING
 
 		#region Status
 		//==========================================================================================
