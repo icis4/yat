@@ -226,7 +226,7 @@ namespace MKY.IO.Usb
 			// host. In case of data that is sent from host to device this doesn't apply, due to the
 			// asymmetrical nature of USB.
 
-			// Return the reports, or <c>null</c> if there are no reports at all:
+			// Return the reports; or <c>null</c> if there are no reports at all:
 			this.reports = reports.AsReadOnly();
 		}
 	}
