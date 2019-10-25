@@ -253,7 +253,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given path,
+		/// Returns the information of the device with the given path;
 		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
@@ -357,13 +357,13 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID,
+		/// Returns the information of the device with the given VID and PID;
 		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
 		/// <remarks>
 		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
 		/// </remarks>
-		/// <returns>Retrieved device info, or <c>null</c> if no appropriate device was found.</returns>
+		/// <returns>Retrieved device info; or <c>null</c> if no appropriate device was found.</returns>
 		public static DeviceInfo GetDeviceInfoFromVidAndPid(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serial;
@@ -414,10 +414,10 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID and serial string.
+		/// Returns the information of the device with the given VID and PID and serial string;
 		/// or <c>null</c> if no device could be found on the give path.
 		/// </summary>
-		/// <returns>Retrieved device info, or <c>null</c> if no appropriate device was found.</returns>
+		/// <returns>Retrieved device info; or <c>null</c> if no appropriate device was found.</returns>
 		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serial)
 		{
 			string path, manufacturer, product;
