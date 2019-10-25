@@ -31,9 +31,6 @@
 	// Enable debugging of thread state:
 ////#define DEBUG_THREAD_STATE
 
-	// Enable debugging of thread state:
-////#define DEBUG_RECEIVE
-
 #endif // DEBUG
 
 #endregion
@@ -60,8 +57,10 @@ using MKY.Net;
 
 namespace MKY.IO.Serial.Socket
 {
-	/// <summary></summary>
-	public class UdpSocket : IIOProvider, IDisposable, IDisposableEx
+	/// <remarks>
+	/// This class is implemented using partial classes separating sending/receiving functionality.
+	/// </remarks>
+	public partial class UdpSocket : IIOProvider, IDisposable, IDisposableEx
 	{
 		#region Types
 		//==========================================================================================
@@ -747,161 +746,6 @@ namespace MKY.IO.Serial.Socket
 			SetStateSynchronizedAndNotify(SocketState.Closed);
 		}
 
-		/// <summary></summary>
-		public virtual bool Send(byte[] data)
-		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
-
-			if (IsTransmissive)
-			{
-				foreach (byte b in data)
-				{
-					// Wait until there is space in the send queue:
-					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
-					{
-						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
-							return (false);
-
-						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to allow dequeuing.
-					}
-
-					// There is space for at least one byte:
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-					{
-						this.sendQueue.Enqueue(b);
-					}
-				}
-
-				// Signal thread:
-				SignalSendThreadSafely();
-
-				return (true);
-			}
-			else
-			{
-				return (false);
-			}
-		}
-
-		/// <summary>
-		/// Asynchronously manage outgoing send requests to ensure that send events are not
-		/// invoked on the same thread that triggered the send operation.
-		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of sent data would generate many events in
-		/// <see cref="Send(byte[])"/>. However, since <see cref="OnDataSent"/> synchronously
-		/// invokes the event, it will take some time until the send queue is checked again.
-		/// During this time, no more new events are invoked, instead, outgoing data is buffered.
-		/// </summary>
-		/// <remarks>
-		/// Will be signaled by <see cref="Send(byte[])"/> method above.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
-		private void SendThread()
-		{
-			DebugThreadState("SendThread() has started.");
-
-			try
-			{
-				// Outer loop, processes data after a signal was received:
-				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
-				{
-					try
-					{
-						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
-						if (!this.sendThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
-							continue;
-					}
-					catch (AbandonedMutexException ex)
-					{
-						// The mutex should never be abandoned, but in case it nevertheless happens,
-						// at least output a debug message and gracefully exit the thread.
-						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
-						break;
-					}
-
-					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
-					{                                                              // No lock required, just checking for empty.
-						// Initially, yield to other threads before starting to read the queue, since it is very
-						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero);
-
-						// Synchronize the send/receive events to prevent mix-ups at the event
-						// sinks, i.e. the send/receive operations shall be synchronized with
-						// signaling of them.
-						// But attention, do not simply lock() the sync obj. Instead, just try
-						// to get the lock or try again later. The thread = direction that get's
-						// the lock first, shall also be the one to signal first:
-
-						if (Monitor.TryEnter(this.dataEventSyncObj, 10)) // Allow a short time to enter, as receiving
-						{                                                // could be busy mostly locking the object.
-							try
-							{
-								byte[] data;
-								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-								{
-									data = this.sendQueue.ToArray();
-									this.sendQueue.Clear();
-								}
-
-								System.Net.IPEndPoint remoteEndPoint;
-								lock (this.socketSyncObj)
-									remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
-
-								this.socket.Send(data, data.Length, remoteEndPoint);
-
-								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
-							}
-							finally
-							{
-								Monitor.Exit(this.dataEventSyncObj);
-							}
-						} // Monitor.TryEnter()
-
-						// Note the Thread.Sleep(TimeSpan.Zero) above.
-
-						if (this.socketType == UdpSocketType.Client)
-						{
-							// Get the currently used local port:
-
-							bool hasChanged = false;
-
-							lock (this.socketSyncObj)
-							{
-								var localEndPoint = (System.Net.IPEndPoint)this.socket.Client.LocalEndPoint;
-								if (this.localPort != localEndPoint.Port) {
-									this.localPort = localEndPoint.Port;
-									hasChanged = true;
-								}
-							}
-
-							if (hasChanged)
-								OnIOChanged(EventArgs.Empty);
-						} // Client
-					} // Inner loop
-				} // Outer loop
-			}
-			catch (ThreadAbortException ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
-
-				// Should only happen when failing to 'friendly' join the thread on stopping!
-				// Don't try to set and notify a state change, or even restart the socket!
-
-				// But reset the abort request, as 'ThreadAbortException' is a special exception
-				// that would be rethrown at the end of the catch block otherwise!
-
-				Thread.ResetAbort();
-			}
-
-			DebugThreadState("SendThread() has terminated.");
-		}
-
 		#endregion
 
 		#region State Methods
@@ -921,17 +765,20 @@ namespace MKY.IO.Serial.Socket
 
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
-#if (DEBUG)
+		#if (DEBUG)
 			SocketState oldState = this.state;
-#endif
+		#endif
+
 			lock (this.stateSyncObj)
 				this.state = state;
-#if (DEBUG)
+
+		#if (DEBUG)
 			if (this.state != oldState)
 				DebugMessage("State has changed from " + oldState + " to " + state + ".");
 			else
 				DebugMessage("State is already " + oldState + ".");
-#endif
+		#endif
+
 			OnIOChanged(EventArgs.Empty);
 		}
 
@@ -1032,44 +879,6 @@ namespace MKY.IO.Serial.Socket
 					this.sendThread.Start();
 				}
 			}
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalSendThreadSafely()
-		{
-			try
-			{
-				if (this.sendThreadEvent != null)
-					this.sendThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalReceiveThreadSafely()
-		{
-			try
-			{
-				if (this.receiveThreadEvent != null)
-					this.receiveThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
 		}
 
 		private void DisposeSocketAndThreads()
@@ -1212,276 +1021,6 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		#endregion
-
-		#region Async Receive
-		//==========================================================================================
-		// Async Receive
-		//==========================================================================================
-
-		private void BeginReceiveIfEnabled()
-		{
-			lock (this.socketSyncObj)
-			{
-				// Ensure that async receive is no longer initiated after close/dispose:
-				if (!IsDisposed && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
-				{
-				////var state = new AsyncReceiveState(this.socket, this.localPort, this.localFilter, this.localFilter.IPv4MaskBytes); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
-					var state = new AsyncReceiveState(this.socket, this.localFilter.IPv4MaskBytes);
-					DebugReceive(string.Format("Beginning receive on local port {0} filtered for {1}...", this.localPort, this.localFilter));
-					this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
-				}
-			}
-		}
-
-		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
-		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Partially same code for multiple exceptions.")]
-		private void ReceiveCallback(IAsyncResult ar)
-		{
-			DebugReceive("Receive callback...");
-
-			var asyncState = (AsyncReceiveState)(ar.AsyncState);
-
-			// Ensure that async receive is discarded after close/dispose:
-			if (!IsDisposed && (asyncState.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
-			{
-				var remoteEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.None, System.Net.IPEndPoint.MinPort);
-				byte[] data;                // EndReceive() will populate the object with address and port of the sender.
-				bool discard = false;
-				try
-				{
-					// Note:
-					// Using async state to forward information from main to callback
-					// for not having to lock the [socketSyncObj] on accessing members.
-
-				////DebugReceive(string.Format("...ending receive on local port {0}...", asyncState.LocalPort)); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
-					DebugReceive(string.Format("...ending receive on local port {0}...",       this.LocalPort)); // Consequently, using members for debug output.
-					data = asyncState.Socket.EndReceive(ar, ref remoteEndPoint);
-					DebugReceive(string.Format("...{0} bytes received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint));
-
-					if (IPFilterEx.IsIPv4Refused(asyncState.LocalFilterIPv4MaskBytes, remoteEndPoint.Address))
-					{
-					////DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.", asyncState.LocalFilter)); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
-						DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.",       this.LocalFilter)); // Consequently, using members for debug output.
-						discard = true;
-					}
-				}
-				catch (Exception ex)
-				{
-					var socketException = ex as System.Net.Sockets.SocketException;
-					if (socketException != null)
-					{
-						if (socketException.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionReset)
-						{
-							SocketReset(); // Required after this exception!
-							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, Direction.Input, ex.Message));
-						}
-						else
-						{
-							SocketError();
-							OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
-						}
-					}
-					else if ((ex is ObjectDisposedException) ||
-					         (ex is NullReferenceException))
-					{
-						if (ex is ObjectDisposedException)
-							DebugEx.WriteException(this.GetType(), ex, "The underlying UDP/IP socket has been disposed in the meantime.");
-
-						if (ex is NullReferenceException)
-							DebugEx.WriteException(this.GetType(), ex, "The underlying UDP/IP socket no longer exists in the meantime.");
-
-						SocketError();
-					////signalErrorArgs is not required as Stop() or Dispose() must have been invoked intentionally.
-					}
-					else
-					{
-						throw; // Rethrow!
-					}
-
-					// Reset state for further processing:
-					data = null;
-					remoteEndPoint.Address = System.Net.IPAddress.None;
-					remoteEndPoint.Port    = System.Net.IPEndPoint.MinPort;
-					discard = true;
-				}
-
-				// Handle data:
-				if ((data != null) && (!discard))
-				{
-					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
-					{
-						DebugReceive(string.Format("Enqueuing {0} bytes...", data.Length));
-
-						foreach (byte b in data)
-							this.receiveQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, remoteEndPoint));
-
-						// Note that individual bytes are enqueued, not array of bytes. Analysis has
-						// shown that this is faster than enqueuing arrays, since this callback will
-						// mostly be called with rather low numbers of bytes.
-					}
-
-					SignalReceiveThreadSafely();
-				}
-
-				// Handle server connection:
-				if ((this.socketType == UdpSocketType.Server) && (!discard))
-				{
-					// Set the remote end point to the sender of the first or most recently received data, depending on send mode:
-
-					bool hasChanged = false;
-
-					lock (this.socketSyncObj)
-					{
-						bool updateRemoteEndPoint = false;
-
-						switch (this.serverSendMode)
-						{
-							case UdpServerSendMode.None:                                                                   /* Do nothing. */     break;
-							case UdpServerSendMode.First:      if (IPAddressEx.EqualsNone(this.remoteHost.Address)) updateRemoteEndPoint = true; break;
-							case UdpServerSendMode.MostRecent:                                                      updateRemoteEndPoint = true; break;
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.serverSendMode.ToString() + "' is a UDP/IP server send mode that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
-
-						if (updateRemoteEndPoint)
-						{                        // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-							if (!this.remoteHost.Equals(remoteEndPoint.Address)) {
-								this.remoteHost = remoteEndPoint.Address;
-								hasChanged = true;
-							}
-
-							if (this.remotePort != remoteEndPoint.Port) {
-								this.remotePort = remoteEndPoint.Port;
-								hasChanged = true;
-							}
-						}
-					}
-
-					if (hasChanged) {
-						OnIOChanged(EventArgs.Empty);
-					}
-				} // if (IsServer)
-
-				BeginReceiveIfEnabled(); // Continue receiving in case the socket is still ready or ready again.
-
-			} // if (!IsDisposed && ...)
-			else
-			{
-				DebugReceive("...discarded.");
-			}
-		}
-
-		/// <summary>
-		/// Asynchronously manage incoming events to prevent potential deadlocks if close/dispose
-		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
-		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of received data will generate many events
-		/// handled by <see cref="ReceiveCallback"/>. However, since <see cref="OnDataReceived"/>
-		/// synchronously invokes the event, it will take some time until the send queue is checked
-		/// again. During this time, no more new events are invoked, instead, incoming data is
-		/// buffered.
-		/// </summary>
-		/// <remarks>
-		/// Will be signaled by <see cref="ReceiveCallback"/> event above.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
-		private void ReceiveThread()
-		{
-			DebugThreadState("ReceiveThread() has started.");
-
-			try
-			{
-				// Outer loop, processes data after a signal was received:
-				while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
-				{
-					try
-					{
-						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
-						if (!this.receiveThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
-							continue;
-					}
-					catch (AbandonedMutexException ex)
-					{
-						// The mutex should never be abandoned, but in case it nevertheless happens,
-						// at least output a debug message and gracefully exit the thread.
-						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
-						break;
-					}
-
-					// Inner loop, runs as long as there is data in the receive queue.
-					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
-					{                                               // No lock required, just checking for empty.
-						// Initially, yield to other threads before starting to read the queue, since it is very
-						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero);
-
-						if (Monitor.TryEnter(this.dataEventSyncObj, 10)) // Allow a short time to enter, as sending
-						{                                                // could be busy mostly locking the object.
-							try
-							{
-								System.Net.IPEndPoint remoteEndPoint = null;
-								List<byte> data;
-
-								lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
-								{
-									data = new List<byte>(this.receiveQueue.Count); // Preset the required capacity to improve memory management.
-
-									while (this.receiveQueue.Count > 0)
-									{
-										Pair<byte, System.Net.IPEndPoint> item;
-
-										// First, peek to check what end point the data refers to:
-										item = this.receiveQueue.Peek();
-
-										if (remoteEndPoint == null) {
-											remoteEndPoint = item.Value2;
-										}
-										else if (remoteEndPoint != item.Value2) {
-											break; // Break as soon as data of a different end point is available.
-										}          // Receiving from different end point will continue immediately.
-
-										// If still the same end point, dequeue the item to acknowledge it's gone:
-										item = this.receiveQueue.Dequeue();
-										data.Add(item.Value1);
-									}
-								}
-
-								DebugReceive(string.Format("...{0} bytes from {1} dequeued", data.Count, remoteEndPoint));
-								OnDataReceived(new SocketDataReceivedEventArgs(data.ToArray(), remoteEndPoint));
-							}
-							finally
-							{
-								Monitor.Exit(this.dataEventSyncObj);
-							}
-						} // Monitor.TryEnter()
-
-						// Note the Thread.Sleep(TimeSpan.Zero) above.
-
-						// Saying hello to StyleCop ;-.
-					} // Inner loop
-				} // Outer loop
-			}
-			catch (ThreadAbortException ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "ReceiveThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
-
-				// Should only happen when failing to 'friendly' join the thread on stopping!
-				// Don't try to set and notify a state change, or even restart the socket!
-
-				// But reset the abort request, as 'ThreadAbortException' is a special exception
-				// that would be rethrown at the end of the catch block otherwise!
-
-				Thread.ResetAbort();
-			}
-
-			DebugThreadState("ReceiveThread() has terminated.");
-		}
-
 		private void SocketReset()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Closing);
@@ -1610,12 +1149,6 @@ namespace MKY.IO.Serial.Socket
 
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void DebugThreadState(string message)
-		{
-			DebugMessage(message);
-		}
-
-		[Conditional("DEBUG_RECEIVE")]
-		private void DebugReceive(string message)
 		{
 			DebugMessage(message);
 		}
