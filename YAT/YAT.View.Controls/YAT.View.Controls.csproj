@@ -349,13 +349,9 @@
       <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
       <Name>YAT.Format</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
+    <ProjectReference Include="..\YAT.Model.Base\YAT.Model.Base.csproj">
       <Project>{e9ff1d5e-84e0-4adb-94ec-662903931295}</Project>
-      <Name>YAT.Model.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
-      <Project>{651ba67d-9b00-4245-9c99-481f20273a62}</Project>
-      <Name>YAT.Model.Types</Name>
+      <Name>YAT.Model.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
       <Project>{93a4ca8c-a158-4994-ab07-9577bdae6f9b}</Project>

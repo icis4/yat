@@ -45,7 +45,7 @@ namespace YAT.Settings.Application
 	///  > Easier to load, and they can be loaded before any application 'Main' is created.
 	///  > Easier for those test cases where the settings have to be changed before the test is run.
 	/// Con:
-	///  > Static shall be avoided whenever possible, especially if the class hold data.
+	///  > Static shall be avoided whenever possible, especially if a class holds data.
 	///  > Hardly possible to automatically test concurrent applications by NUnit test cases:
 	///    > The easy way would simply be to create two 'Main' objects and run them in parallel but
 	///      then both objects share the same static application settings object which isn't the
