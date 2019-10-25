@@ -76,7 +76,7 @@
 			this.label_IOType.Name = "label_IOType";
 			this.label_IOType.Size = new System.Drawing.Size(56, 13);
 			this.label_IOType.TabIndex = 2;
-			this.label_IOType.Text = "&Port Type:";
+			this.label_IOType.Text = "&I/O Type:";
 			// 
 			// TerminalSelection
 			// 

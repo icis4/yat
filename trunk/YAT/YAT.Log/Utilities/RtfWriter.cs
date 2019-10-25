@@ -79,7 +79,7 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor timeSpanFormat;
 		private FormatDescriptor timeDeltaFormat;
 		private FormatDescriptor timeDurationFormat;
-		private FormatDescriptor portFormat;
+		private FormatDescriptor deviceFormat;
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
 		private FormatDescriptor whiteSpacesFormat;
@@ -124,7 +124,7 @@ namespace YAT.Log.Utilities
 			this.timeSpanFormat     = new FormatDescriptor(settings.TimeSpanFormat.FontStyle,     this.document.createColor(settings.TimeSpanFormat.Color),     this.document.createColor(settings.BackColor));
 			this.timeDeltaFormat    = new FormatDescriptor(settings.TimeDeltaFormat.FontStyle,    this.document.createColor(settings.TimeDeltaFormat.Color),    this.document.createColor(settings.BackColor));
 			this.timeDurationFormat = new FormatDescriptor(settings.TimeDurationFormat.FontStyle, this.document.createColor(settings.TimeDurationFormat.Color), this.document.createColor(settings.BackColor));
-			this.portFormat         = new FormatDescriptor(settings.PortFormat.FontStyle,         this.document.createColor(settings.PortFormat.Color),         this.document.createColor(settings.BackColor));
+			this.deviceFormat       = new FormatDescriptor(settings.DeviceFormat.FontStyle,       this.document.createColor(settings.DeviceFormat.Color),       this.document.createColor(settings.BackColor));
 			this.directionFormat    = new FormatDescriptor(settings.DirectionFormat.FontStyle,    this.document.createColor(settings.DirectionFormat.Color),    this.document.createColor(settings.BackColor));
 			this.lengthFormat       = new FormatDescriptor(settings.LengthFormat.FontStyle,       this.document.createColor(settings.LengthFormat.Color),       this.document.createColor(settings.BackColor));
 			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle,  this.document.createColor(settings.WhiteSpacesFormat.Color),  this.document.createColor(settings.BackColor));
@@ -161,7 +161,7 @@ namespace YAT.Log.Utilities
 			else if ( element is DisplayElement.TimeSpanInfo)     { format = this.timeSpanFormat;     }
 			else if ( element is DisplayElement.TimeDeltaInfo)    { format = this.timeDeltaFormat;    }
 			else if ( element is DisplayElement.TimeDurationInfo) { format = this.timeDurationFormat; }
-			else if ( element is DisplayElement.PortInfo)         { format = this.portFormat;         }
+			else if ( element is DisplayElement.DeviceInfo)       { format = this.deviceFormat;       }
 			else if ( element is DisplayElement.DirectionInfo)    { format = this.directionFormat;    }
 			else if ( element is DisplayElement.DataLength)       { format = this.lengthFormat;       }
 			else if ((element is DisplayElement.Nonentity) ||

@@ -99,7 +99,7 @@ namespace YAT.Log.Utilities
 			var content = new List<byte>(displayLine.ByteCount); // Preset the required capacity to improve memory management.
 
 			DateTime timeStamp = DateTime.MinValue;
-			string portStr = "";
+			string deviceStr = "";
 
 			bool containsTx = false;
 			bool containsRx = false;
@@ -162,10 +162,10 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.PortInfo);
+					var casted = (de as DisplayElement.DeviceInfo);
 					if (casted != null)
 					{
-						portStr = casted.Text;
+						deviceStr = casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
@@ -189,7 +189,7 @@ namespace YAT.Log.Utilities
 			else
 				direction = Direction.None;
 
-			transferLine = new XmlTransferRawLine(timeStamp, portStr, direction, content.ToArray());
+			transferLine = new XmlTransferRawLine(timeStamp, deviceStr, direction, content.ToArray());
 
 			return (success);
 		}

@@ -227,17 +227,17 @@ namespace YAT.View.Forms
 
 			this.settingsInEdit.Terminal.Display.ShowTimeDelta = checkBox_ShowTimeDelta.Checked;
 		}
-		private void checkBox_ShowPort_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_ShowDevice_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			if (checkBox_ShowPort.Checked && !this.settingsInEdit.Terminal.Display.PortLineBreakEnabled)
+			if (checkBox_ShowDevice.Checked && !this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled)
 			{
 				var dr = MessageBoxEx.Show
 				(
 					this,
-					"To enable this setting, lines must be broken when port changes.",
+					"To enable this setting, lines must be broken when I/O device changes.",
 					"Incompatible Setting",
 					MessageBoxButtons.OKCancel,
 					MessageBoxIcon.Information
@@ -245,13 +245,13 @@ namespace YAT.View.Forms
 
 				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = true;
-					this.settingsInEdit.Terminal.Display.ShowPort = true;
+					this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = true;
+					this.settingsInEdit.Terminal.Display.ShowDevice             = true;
 				}
 			}
 			else
 			{
-				this.settingsInEdit.Terminal.Display.ShowPort = checkBox_ShowPort.Checked;
+				this.settingsInEdit.Terminal.Display.ShowDevice = checkBox_ShowDevice.Checked;
 			}
 		}
 
@@ -307,25 +307,25 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.ShowDuration = checkBox_ShowDuration.Checked;
 		}
 
-		private void checkBox_IncludePortControl_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_IncludeIOControl_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Display.IncludePortControl = checkBox_IncludePortControl.Checked;
+			this.settingsInEdit.Terminal.Display.IncludeIOControl = checkBox_IncludeIOControl.Checked;
 		}
 
-		private void checkBox_PortLineBreak_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_DeviceLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			if (!checkBox_PortLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowPort)
+			if (!checkBox_DeviceLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDevice)
 			{
 				var dr = MessageBoxEx.Show
 				(
 					this,
-					"To disable this setting, port can no longer be shown.",
+					"To disable this setting, I/O device can no longer be shown.",
 					"Incompatible Setting",
 					MessageBoxButtons.OKCancel,
 					MessageBoxIcon.Information
@@ -333,13 +333,13 @@ namespace YAT.View.Forms
 
 				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.ShowPort = false;
-					this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = false;
+					this.settingsInEdit.Terminal.Display.ShowDevice             = false;
+					this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = false;
 				}
 			}
 			else
 			{
-				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = checkBox_PortLineBreak.Checked;
+				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = checkBox_DeviceLineBreak.Checked;
 			}
 		}
 
@@ -1127,7 +1127,7 @@ namespace YAT.View.Forms
 				checkBox_ShowTimeStamp.Checked      = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
 				checkBox_ShowTimeSpan.Checked       = this.settingsInEdit.Terminal.Display.ShowTimeSpan;
 				checkBox_ShowTimeDelta.Checked      = this.settingsInEdit.Terminal.Display.ShowTimeDelta;
-				checkBox_ShowPort.Checked           = this.settingsInEdit.Terminal.Display.ShowPort;
+				checkBox_ShowDevice.Checked         = this.settingsInEdit.Terminal.Display.ShowDevice;
 				checkBox_ShowDirection.Checked      = this.settingsInEdit.Terminal.Display.ShowDirection;
 				checkBox_ShowLength.Checked         = this.settingsInEdit.Terminal.Display.ShowLength;
 
@@ -1140,11 +1140,11 @@ namespace YAT.View.Forms
 					comboBox_LengthSelection.Enabled = false;
 				}
 
-				checkBox_ShowDuration.Checked       = this.settingsInEdit.Terminal.Display.ShowDuration;
-				checkBox_IncludePortControl.Enabled = (isSerialPort || isUsbSerialHid);
-				checkBox_IncludePortControl.Checked = this.settingsInEdit.Terminal.Display.IncludePortControl;
+				checkBox_ShowDuration.Checked     = this.settingsInEdit.Terminal.Display.ShowDuration;
+				checkBox_IncludeIOControl.Enabled = (isSerialPort || isUsbSerialHid);
+				checkBox_IncludeIOControl.Checked = this.settingsInEdit.Terminal.Display.IncludeIOControl;
 
-				checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
+				checkBox_DeviceLineBreak.Checked    = this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled;
 				checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
 				checkBox_ChunkLineBreak.Checked     = this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled;
 				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
@@ -1278,14 +1278,14 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowTimeStamp       = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
 				this.settingsInEdit.Terminal.Display.ShowTimeSpan        = Domain.Settings.DisplaySettings.ShowTimeSpanDefault;
 				this.settingsInEdit.Terminal.Display.ShowTimeDelta       = Domain.Settings.DisplaySettings.ShowTimeDeltaDefault;
-				this.settingsInEdit.Terminal.Display.ShowPort            = Domain.Settings.DisplaySettings.ShowPortDefault;
+				this.settingsInEdit.Terminal.Display.ShowDevice          = Domain.Settings.DisplaySettings.ShowDeviceDefault;
 				this.settingsInEdit.Terminal.Display.ShowDirection       = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowLength          = Domain.Settings.DisplaySettings.ShowLengthDefault;
 				this.settingsInEdit.Terminal.Display.LengthSelection     = Domain.Settings.DisplaySettings.LengthSelectionDefault;
 				this.settingsInEdit.Terminal.Display.ShowDuration        = Domain.Settings.DisplaySettings.ShowDurationDefault;
-				this.settingsInEdit.Terminal.Display.IncludePortControl  = Domain.Settings.DisplaySettings.IncludePortControlDefault;
+				this.settingsInEdit.Terminal.Display.IncludeIOControl    = Domain.Settings.DisplaySettings.IncludeIOControlDefault;
 
-				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
+				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = Domain.Settings.DisplaySettings.DeviceLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = Domain.Settings.DisplaySettings.ChunkLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;

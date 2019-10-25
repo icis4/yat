@@ -39,7 +39,7 @@ namespace YAT.View.Forms
 			this.button_AdvancedSettings = new System.Windows.Forms.Button();
 			this.button_TextOrBinarySettings = new System.Windows.Forms.Button();
 			this.terminalSelection = new YAT.View.Controls.TerminalSelection();
-			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
+			this.groupBox_IOSettings = new System.Windows.Forms.GroupBox();
 			this.serialPortSettings = new YAT.View.Controls.SerialPortSettings();
 			this.serialPortSelection = new YAT.View.Controls.SerialPortSelection();
 			this.socketSelection = new YAT.View.Controls.SocketSelection();
@@ -50,7 +50,7 @@ namespace YAT.View.Forms
 			this.button_Help = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
-			this.groupBox_PortSettings.SuspendLayout();
+			this.groupBox_IOSettings.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_OK
@@ -83,7 +83,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Controls.Add(this.button_AdvancedSettings);
 			this.groupBox_Settings.Controls.Add(this.button_TextOrBinarySettings);
 			this.groupBox_Settings.Controls.Add(this.terminalSelection);
-			this.groupBox_Settings.Controls.Add(this.groupBox_PortSettings);
+			this.groupBox_Settings.Controls.Add(this.groupBox_IOSettings);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
 			this.groupBox_Settings.Size = new System.Drawing.Size(450, 414);
@@ -123,23 +123,23 @@ namespace YAT.View.Forms
 			this.terminalSelection.TerminalTypeChanged += new System.EventHandler(this.terminalSelection_TerminalTypeChanged);
 			this.terminalSelection.IOTypeChanged += new System.EventHandler(this.terminalSelection_IOTypeChanged);
 			// 
-			// groupBox_PortSettings
+			// groupBox_IOSettings
 			// 
-			this.groupBox_PortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.groupBox_IOSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_PortSettings.Controls.Add(this.serialPortSettings);
-			this.groupBox_PortSettings.Controls.Add(this.serialPortSelection);
-			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
-			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
-			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
-			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSettings);
-			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
-			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
-			this.groupBox_PortSettings.Size = new System.Drawing.Size(297, 329);
-			this.groupBox_PortSettings.TabIndex = 1;
-			this.groupBox_PortSettings.TabStop = false;
-			this.groupBox_PortSettings.Text = "Port &Settings";
+			this.groupBox_IOSettings.Controls.Add(this.serialPortSettings);
+			this.groupBox_IOSettings.Controls.Add(this.serialPortSelection);
+			this.groupBox_IOSettings.Controls.Add(this.socketSelection);
+			this.groupBox_IOSettings.Controls.Add(this.usbSerialHidDeviceSelection);
+			this.groupBox_IOSettings.Controls.Add(this.socketSettings);
+			this.groupBox_IOSettings.Controls.Add(this.usbSerialHidDeviceSettings);
+			this.groupBox_IOSettings.Location = new System.Drawing.Point(6, 79);
+			this.groupBox_IOSettings.Name = "groupBox_IOSettings";
+			this.groupBox_IOSettings.Size = new System.Drawing.Size(297, 329);
+			this.groupBox_IOSettings.TabIndex = 1;
+			this.groupBox_IOSettings.TabStop = false;
+			this.groupBox_IOSettings.Text = "I/O Settings";
 			// 
 			// serialPortSettings
 			// 
@@ -267,7 +267,7 @@ namespace YAT.View.Forms
 			this.Deactivate += new System.EventHandler(this.TerminalSettings_Deactivate);
 			this.Shown += new System.EventHandler(this.TerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
-			this.groupBox_PortSettings.ResumeLayout(false);
+			this.groupBox_IOSettings.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -277,7 +277,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_Defaults;
-		private System.Windows.Forms.GroupBox groupBox_PortSettings;
+		private System.Windows.Forms.GroupBox groupBox_IOSettings;
 		private System.Windows.Forms.GroupBox groupBox_Settings;
 		private YAT.View.Controls.TerminalSelection terminalSelection;
 		private YAT.View.Controls.SerialPortSettings serialPortSettings;

@@ -41,9 +41,9 @@ namespace YAT.View.Forms
 			this.textFormat_IOControl = new YAT.View.Controls.TextFormat();
 			this.label_Remark3 = new System.Windows.Forms.Label();
 			this.checkBox_EnableFormatting = new System.Windows.Forms.CheckBox();
-			this.textFormat_Port = new YAT.View.Controls.TextFormat();
-			this.monitor_Port = new YAT.View.Controls.Monitor();
-			this.label_Port = new System.Windows.Forms.Label();
+			this.textFormat_Device = new YAT.View.Controls.TextFormat();
+			this.monitor_Device = new YAT.View.Controls.Monitor();
+			this.label_Device = new System.Windows.Forms.Label();
 			this.label_Remark2 = new System.Windows.Forms.Label();
 			this.label_Remark1 = new System.Windows.Forms.Label();
 			this.button_Background = new System.Windows.Forms.Button();
@@ -144,9 +144,9 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.Controls.Add(this.textFormat_IOControl);
 			this.groupBox_Elements.Controls.Add(this.label_Remark3);
 			this.groupBox_Elements.Controls.Add(this.checkBox_EnableFormatting);
-			this.groupBox_Elements.Controls.Add(this.textFormat_Port);
-			this.groupBox_Elements.Controls.Add(this.monitor_Port);
-			this.groupBox_Elements.Controls.Add(this.label_Port);
+			this.groupBox_Elements.Controls.Add(this.textFormat_Device);
+			this.groupBox_Elements.Controls.Add(this.monitor_Device);
+			this.groupBox_Elements.Controls.Add(this.label_Device);
 			this.groupBox_Elements.Controls.Add(this.label_Remark2);
 			this.groupBox_Elements.Controls.Add(this.label_Remark1);
 			this.groupBox_Elements.Controls.Add(this.button_Background);
@@ -249,40 +249,40 @@ namespace YAT.View.Forms
 			this.checkBox_EnableFormatting.UseVisualStyleBackColor = true;
 			this.checkBox_EnableFormatting.CheckedChanged += new System.EventHandler(this.checkBox_EnableFormatting_CheckedChanged);
 			// 
-			// textFormat_Port
+			// textFormat_Device
 			// 
-			this.textFormat_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textFormat_Port.FormatColor = System.Drawing.Color.Black;
-			this.textFormat_Port.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Port.Location = new System.Drawing.Point(373, 278);
-			this.textFormat_Port.Name = "textFormat_Port";
-			this.textFormat_Port.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Port.TabIndex = 27;
-			this.textFormat_Port.Tag = "8";
-			this.textFormat_Port.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
-			this.textFormat_Port.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
+			this.textFormat_Device.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Device.FormatColor = System.Drawing.Color.Black;
+			this.textFormat_Device.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
+			this.textFormat_Device.Location = new System.Drawing.Point(373, 278);
+			this.textFormat_Device.Name = "textFormat_Device";
+			this.textFormat_Device.Size = new System.Drawing.Size(232, 23);
+			this.textFormat_Device.TabIndex = 27;
+			this.textFormat_Device.Tag = "8";
+			this.textFormat_Device.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Device.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
-			// monitor_Port
+			// monitor_Device
 			// 
-			this.monitor_Port.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.monitor_Device.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Device.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Port.Location = new System.Drawing.Point(88, 278);
-			this.monitor_Port.Name = "monitor_Port";
-			this.monitor_Port.ShowStatusPanel = false;
-			this.monitor_Port.Size = new System.Drawing.Size(275, 23);
-			this.monitor_Port.TabIndex = 26;
-			this.monitor_Port.TabStop = false;
-			this.monitor_Port.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Device.Location = new System.Drawing.Point(88, 278);
+			this.monitor_Device.Name = "monitor_Device";
+			this.monitor_Device.ShowStatusPanel = false;
+			this.monitor_Device.Size = new System.Drawing.Size(275, 23);
+			this.monitor_Device.TabIndex = 26;
+			this.monitor_Device.TabStop = false;
+			this.monitor_Device.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
-			// label_Port
+			// label_Device
 			// 
-			this.label_Port.AutoSize = true;
-			this.label_Port.Location = new System.Drawing.Point(12, 283);
-			this.label_Port.Name = "label_Port";
-			this.label_Port.Size = new System.Drawing.Size(29, 13);
-			this.label_Port.TabIndex = 25;
-			this.label_Port.Text = "&Port:";
+			this.label_Device.AutoSize = true;
+			this.label_Device.Location = new System.Drawing.Point(12, 283);
+			this.label_Device.Name = "label_Device";
+			this.label_Device.Size = new System.Drawing.Size(63, 13);
+			this.label_Device.TabIndex = 25;
+			this.label_Device.Text = "I/O De&vice:";
 			// 
 			// label_Remark2
 			// 
@@ -1081,9 +1081,9 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Button button_Background;
 		private System.Windows.Forms.Label label_Remark2;
 		private System.Windows.Forms.Label label_Remark1;
-		private Controls.TextFormat textFormat_Port;
-		private Controls.Monitor monitor_Port;
-		private System.Windows.Forms.Label label_Port;
+		private Controls.TextFormat textFormat_Device;
+		private Controls.Monitor monitor_Device;
+		private System.Windows.Forms.Label label_Device;
 		private System.Windows.Forms.GroupBox groupBox_Options;
 		private System.Windows.Forms.Label label_InfoEnclosure;
 		private System.Windows.Forms.Label label_InfoSeparator;

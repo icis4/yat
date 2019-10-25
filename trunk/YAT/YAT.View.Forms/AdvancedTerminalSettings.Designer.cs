@@ -88,7 +88,7 @@
 			this.groupBox_Display = new System.Windows.Forms.GroupBox();
 			this.comboBox_LengthSelection = new System.Windows.Forms.ComboBox();
 			this.comboBox_LineNumberSelection = new System.Windows.Forms.ComboBox();
-			this.checkBox_IncludePortControl = new System.Windows.Forms.CheckBox();
+			this.checkBox_IncludeIOControl = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowDuration = new System.Windows.Forms.CheckBox();
 			this.checkBox_ChunkLineBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
@@ -97,8 +97,8 @@
 			this.textBox_MaxLineLength = new MKY.Windows.Forms.TextBoxEx();
 			this.label_MaxLineLengthUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineLength = new System.Windows.Forms.Label();
-			this.checkBox_PortLineBreak = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowPort = new System.Windows.Forms.CheckBox();
+			this.checkBox_DeviceLineBreak = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowDevice = new System.Windows.Forms.CheckBox();
 			this.textBox_MaxLineCount = new MKY.Windows.Forms.TextBoxEx();
 			this.groupBox_Display_Special = new System.Windows.Forms.GroupBox();
 			this.checkBox_Hide0xFF = new System.Windows.Forms.CheckBox();
@@ -787,7 +787,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_Display.Controls.Add(this.comboBox_LengthSelection);
 			this.groupBox_Display.Controls.Add(this.comboBox_LineNumberSelection);
-			this.groupBox_Display.Controls.Add(this.checkBox_IncludePortControl);
+			this.groupBox_Display.Controls.Add(this.checkBox_IncludeIOControl);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowDuration);
 			this.groupBox_Display.Controls.Add(this.checkBox_ChunkLineBreak);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowCopyOfActiveLine);
@@ -795,8 +795,8 @@
 			this.groupBox_Display.Controls.Add(this.textBox_MaxLineLength);
 			this.groupBox_Display.Controls.Add(this.label_MaxLineLengthUnit);
 			this.groupBox_Display.Controls.Add(this.label_MaxLineLength);
-			this.groupBox_Display.Controls.Add(this.checkBox_PortLineBreak);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowPort);
+			this.groupBox_Display.Controls.Add(this.checkBox_DeviceLineBreak);
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowDevice);
 			this.groupBox_Display.Controls.Add(this.textBox_MaxLineCount);
 			this.groupBox_Display.Controls.Add(this.groupBox_Display_Special);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowDirection);
@@ -850,19 +850,19 @@
 			this.comboBox_LineNumberSelection.TabIndex = 9;
 			this.comboBox_LineNumberSelection.SelectedIndexChanged += new System.EventHandler(this.comboBox_LineNumberSelection_SelectedIndexChanged);
 			// 
-			// checkBox_IncludePortControl
+			// checkBox_IncludeIOControl
 			// 
-			this.checkBox_IncludePortControl.AutoSize = true;
-			this.checkBox_IncludePortControl.Location = new System.Drawing.Point(12, 346);
-			this.checkBox_IncludePortControl.Name = "checkBox_IncludePortControl";
-			this.checkBox_IncludePortControl.Size = new System.Drawing.Size(152, 17);
-			this.checkBox_IncludePortControl.TabIndex = 22;
-			this.checkBox_IncludePortControl.Text = "Include port control events";
-			this.toolTip.SetToolTip(this.checkBox_IncludePortControl, "Include port control events in monitor view, i.e...\r\n...for serial COM ports: Flo" +
-        "w control (hardware, software), break state.\r\n...for USB Ser/HID ports: Flow con" +
-        "trol (software).");
-			this.checkBox_IncludePortControl.UseVisualStyleBackColor = true;
-			this.checkBox_IncludePortControl.CheckedChanged += new System.EventHandler(this.checkBox_IncludePortControl_CheckedChanged);
+			this.checkBox_IncludeIOControl.AutoSize = true;
+			this.checkBox_IncludeIOControl.Location = new System.Drawing.Point(12, 346);
+			this.checkBox_IncludeIOControl.Name = "checkBox_IncludeIOControl";
+			this.checkBox_IncludeIOControl.Size = new System.Drawing.Size(150, 17);
+			this.checkBox_IncludeIOControl.TabIndex = 22;
+			this.checkBox_IncludeIOControl.Text = "Include I/O control events";
+			this.toolTip.SetToolTip(this.checkBox_IncludeIOControl, "Include I/O control events in monitor view, i.e...\r\n...for serial COM ports: Flow" +
+        " control (hardware, software), break state.\r\n...for USB Ser/HID ports: Flow cont" +
+        "rol (software).");
+			this.checkBox_IncludeIOControl.UseVisualStyleBackColor = true;
+			this.checkBox_IncludeIOControl.CheckedChanged += new System.EventHandler(this.checkBox_IncludeIOControl_CheckedChanged);
 			// 
 			// checkBox_ShowDuration
 			// 
@@ -951,26 +951,26 @@
 			this.label_MaxLineLength.TabIndex = 26;
 			this.label_MaxLineLength.Text = "Display maximal";
 			// 
-			// checkBox_PortLineBreak
+			// checkBox_DeviceLineBreak
 			// 
-			this.checkBox_PortLineBreak.AutoSize = true;
-			this.checkBox_PortLineBreak.Location = new System.Drawing.Point(12, 277);
-			this.checkBox_PortLineBreak.Name = "checkBox_PortLineBreak";
-			this.checkBox_PortLineBreak.Size = new System.Drawing.Size(172, 17);
-			this.checkBox_PortLineBreak.TabIndex = 18;
-			this.checkBox_PortLineBreak.Text = "&Break lines when port changes";
-			this.checkBox_PortLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_PortLineBreak_CheckedChanged);
+			this.checkBox_DeviceLineBreak.AutoSize = true;
+			this.checkBox_DeviceLineBreak.Location = new System.Drawing.Point(12, 277);
+			this.checkBox_DeviceLineBreak.Name = "checkBox_DeviceLineBreak";
+			this.checkBox_DeviceLineBreak.Size = new System.Drawing.Size(205, 17);
+			this.checkBox_DeviceLineBreak.TabIndex = 18;
+			this.checkBox_DeviceLineBreak.Text = "&Break lines when I/O device changes";
+			this.checkBox_DeviceLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DeviceLineBreak_CheckedChanged);
 			// 
-			// checkBox_ShowPort
+			// checkBox_ShowDevice
 			// 
-			this.checkBox_ShowPort.AutoSize = true;
-			this.checkBox_ShowPort.Location = new System.Drawing.Point(131, 175);
-			this.checkBox_ShowPort.Name = "checkBox_ShowPort";
-			this.checkBox_ShowPort.Size = new System.Drawing.Size(74, 17);
-			this.checkBox_ShowPort.TabIndex = 13;
-			this.checkBox_ShowPort.Text = "Show &port";
-			this.checkBox_ShowPort.UseVisualStyleBackColor = true;
-			this.checkBox_ShowPort.CheckedChanged += new System.EventHandler(this.checkBox_ShowPort_CheckedChanged);
+			this.checkBox_ShowDevice.AutoSize = true;
+			this.checkBox_ShowDevice.Location = new System.Drawing.Point(131, 175);
+			this.checkBox_ShowDevice.Name = "checkBox_ShowDevice";
+			this.checkBox_ShowDevice.Size = new System.Drawing.Size(107, 17);
+			this.checkBox_ShowDevice.TabIndex = 13;
+			this.checkBox_ShowDevice.Text = "Show I/O de&vice";
+			this.checkBox_ShowDevice.UseVisualStyleBackColor = true;
+			this.checkBox_ShowDevice.CheckedChanged += new System.EventHandler(this.checkBox_ShowDevice_CheckedChanged);
 			// 
 			// textBox_MaxLineCount
 			// 
@@ -1509,8 +1509,8 @@
 		private System.Windows.Forms.Label label_DefaultLineIntervalUnit;
 		private MKY.Windows.Forms.TextBoxEx textBox_DefaultLineInterval;
 		private System.Windows.Forms.Label label_DefaultLineInterval;
-		private System.Windows.Forms.CheckBox checkBox_ShowPort;
-		private System.Windows.Forms.CheckBox checkBox_PortLineBreak;
+		private System.Windows.Forms.CheckBox checkBox_ShowDevice;
+		private System.Windows.Forms.CheckBox checkBox_DeviceLineBreak;
 		private MKY.Windows.Forms.TextBoxEx textBox_MaxLineLength;
 		private System.Windows.Forms.Label label_MaxLineLengthUnit;
 		private System.Windows.Forms.Label label_MaxLineLength;
@@ -1525,7 +1525,7 @@
 		private System.Windows.Forms.CheckBox checkBox_SkipEmptyLines;
 		private System.Windows.Forms.CheckBox checkBox_ShowDuration;
 		private System.Windows.Forms.ComboBox comboBox_LineNumberSelection;
-		private System.Windows.Forms.CheckBox checkBox_IncludePortControl;
+		private System.Windows.Forms.CheckBox checkBox_IncludeIOControl;
 		private System.Windows.Forms.ComboBox comboBox_LengthSelection;
 		private System.Windows.Forms.CheckBox checkBox_ReplaceBackspace;
 		private System.Windows.Forms.Label label_ReplaceBackspace;

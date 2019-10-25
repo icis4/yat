@@ -78,7 +78,7 @@ namespace YAT.Domain.Settings
 		public const string TimeDeltaFormatDefault = TimeDeltaFormatPresetEx.DefaultFormat;
 
 		/// <summary></summary>
-		public const bool ShowPortDefault = false;
+		public const bool ShowDeviceDefault = false;
 
 		/// <summary></summary>
 		public const bool ShowDirectionDefault = false;
@@ -101,8 +101,10 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const string TimeDurationFormatDefault = TimeDeltaFormatPresetEx.DefaultFormat;
 
-		/// <summary></summary>
-		public const bool IncludePortControlDefault = false;
+		/// <remarks>
+		/// Prepended "IO" for distiction with ASCII "Control" characters.
+		/// </remarks>
+		public const bool IncludeIOControlDefault = false;
 
 		/// <summary></summary>
 		public const int MaxLineCountDefault = 1000;
@@ -114,7 +116,7 @@ namespace YAT.Domain.Settings
 		public const bool ShowCopyOfActiveLineDefault = false;
 
 		/// <summary></summary>
-		public const bool PortLineBreakEnabledDefault = true;
+		public const bool DeviceLineBreakEnabledDefault = true;
 
 		/// <summary></summary>
 		public const bool DirectionLineBreakEnabledDefault = true;
@@ -141,15 +143,15 @@ namespace YAT.Domain.Settings
 		private string timeSpanFormat;
 		private bool   showTimeDelta;
 		private string timeDeltaFormat;
-		private bool   showPort;
+		private bool   showDevice;
 		private bool   showDirection;
 		private bool   showLength;
 		private LengthSelection lengthSelection;
 		private bool   showDuration;
 		private string timeDurationFormat;
-		private bool   includePortControl;
+		private bool   includeIOControl;
 
-		private bool portLineBreakEnabled;
+		private bool deviceLineBreakEnabled;
 		private bool directionLineBreakEnabled;
 		private bool chunkLineBreakEnabled;
 
@@ -185,28 +187,28 @@ namespace YAT.Domain.Settings
 		public DisplaySettings(DisplaySettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxRadix    = rhs.SeparateTxRxRadix;
-			TxRadix              = rhs.TxRadix;
-			RxRadix              = rhs.RxRadix;
-			ShowRadix            = rhs.ShowRadix;
-			ShowLineNumbers      = rhs.ShowLineNumbers;
-			LineNumberSelection  = rhs.LineNumberSelection;
-			ShowTimeStamp        = rhs.ShowTimeStamp;
-			TimeStampFormat      = rhs.TimeStampFormat;
-			TimeStampUseUtc      = rhs.TimeStampUseUtc;
-			ShowTimeSpan         = rhs.ShowTimeSpan;
-			TimeSpanFormat       = rhs.TimeSpanFormat;
-			ShowTimeDelta        = rhs.ShowTimeDelta;
-			TimeDeltaFormat      = rhs.TimeDeltaFormat;
-			ShowPort             = rhs.ShowPort;
-			ShowDirection        = rhs.ShowDirection;
-			ShowLength           = rhs.ShowLength;
-			LengthSelection      = rhs.LengthSelection;
-			ShowDuration         = rhs.ShowDuration;
-			TimeDurationFormat   = rhs.TimeDurationFormat;
-			IncludePortControl   = rhs.IncludePortControl;
+			SeparateTxRxRadix   = rhs.SeparateTxRxRadix;
+			TxRadix             = rhs.TxRadix;
+			RxRadix             = rhs.RxRadix;
+			ShowRadix           = rhs.ShowRadix;
+			ShowLineNumbers     = rhs.ShowLineNumbers;
+			LineNumberSelection = rhs.LineNumberSelection;
+			ShowTimeStamp       = rhs.ShowTimeStamp;
+			TimeStampFormat     = rhs.TimeStampFormat;
+			TimeStampUseUtc     = rhs.TimeStampUseUtc;
+			ShowTimeSpan        = rhs.ShowTimeSpan;
+			TimeSpanFormat      = rhs.TimeSpanFormat;
+			ShowTimeDelta       = rhs.ShowTimeDelta;
+			TimeDeltaFormat     = rhs.TimeDeltaFormat;
+			ShowDevice          = rhs.ShowDevice;
+			ShowDirection       = rhs.ShowDirection;
+			ShowLength          = rhs.ShowLength;
+			LengthSelection     = rhs.LengthSelection;
+			ShowDuration        = rhs.ShowDuration;
+			TimeDurationFormat  = rhs.TimeDurationFormat;
+			IncludeIOControl    = rhs.IncludeIOControl;
 
-			PortLineBreakEnabled      = rhs.PortLineBreakEnabled;
+			DeviceLineBreakEnabled    = rhs.DeviceLineBreakEnabled;
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 			ChunkLineBreakEnabled     = rhs.ChunkLineBreakEnabled;
 
@@ -227,28 +229,28 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxRadix    = SeparateTxRxRadixDefault;
-			TxRadix              = RadixDefault;
-			RxRadix              = RadixDefault;
-			ShowRadix            = ShowRadixDefault;
-			ShowLineNumbers      = ShowLineNumbersDefault;
-			LineNumberSelection  = LineNumberSelectionDefault;
-			ShowTimeStamp        = ShowTimeStampDefault;
-			TimeStampFormat      = TimeStampFormatDefault;
-			TimeStampUseUtc      = TimeStampUseUtcDefault;
-			ShowTimeSpan         = ShowTimeSpanDefault;
-			TimeSpanFormat       = TimeSpanFormatDefault;
-			ShowTimeDelta        = ShowTimeDeltaDefault;
-			TimeDeltaFormat      = TimeDeltaFormatDefault;
-			ShowPort             = ShowPortDefault;
-			ShowDirection        = ShowDirectionDefault;
-			LengthSelection      = LengthSelectionDefault;
-			ShowLength           = ShowLengthDefault;
-			ShowDuration         = ShowDurationDefault;
-			TimeDurationFormat   = TimeDurationFormatDefault;
-			IncludePortControl   = IncludePortControlDefault;
+			SeparateTxRxRadix   = SeparateTxRxRadixDefault;
+			TxRadix             = RadixDefault;
+			RxRadix             = RadixDefault;
+			ShowRadix           = ShowRadixDefault;
+			ShowLineNumbers     = ShowLineNumbersDefault;
+			LineNumberSelection = LineNumberSelectionDefault;
+			ShowTimeStamp       = ShowTimeStampDefault;
+			TimeStampFormat     = TimeStampFormatDefault;
+			TimeStampUseUtc     = TimeStampUseUtcDefault;
+			ShowTimeSpan        = ShowTimeSpanDefault;
+			TimeSpanFormat      = TimeSpanFormatDefault;
+			ShowTimeDelta       = ShowTimeDeltaDefault;
+			TimeDeltaFormat     = TimeDeltaFormatDefault;
+			ShowDevice          = ShowDeviceDefault;
+			ShowDirection       = ShowDirectionDefault;
+			LengthSelection     = LengthSelectionDefault;
+			ShowLength          = ShowLengthDefault;
+			ShowDuration        = ShowDurationDefault;
+			TimeDurationFormat  = TimeDurationFormatDefault;
+			IncludeIOControl    = IncludeIOControlDefault;
 
-			PortLineBreakEnabled      = PortLineBreakEnabledDefault;
+			DeviceLineBreakEnabled    = DeviceLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 			ChunkLineBreakEnabled     = ChunkLineBreakEnabledDefault;
 
@@ -506,15 +508,15 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("ShowPort")]
-		public virtual bool ShowPort
+		[XmlElement("ShowDevice")]
+		public virtual bool ShowDevice
 		{
-			get { return (this.showPort); }
+			get { return (this.showDevice); }
 			set
 			{
-				if (this.showPort != value)
+				if (this.showDevice != value)
 				{
-					this.showPort = value;
+					this.showDevice = value;
 					SetMyChanged();
 				}
 			}
@@ -595,31 +597,33 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("IncludePortControl")]
-		public virtual bool IncludePortControl
+		/// <remarks>
+		/// Prepended "IO" for distiction with ASCII "Control" characters.
+		/// </remarks>
+		[XmlElement("IncludeIOControl")]
+		public virtual bool IncludeIOControl
 		{
-			get { return (this.includePortControl); }
+			get { return (this.includeIOControl); }
 			set
 			{
-				if (this.includePortControl != value)
+				if (this.includeIOControl != value)
 				{
-					this.includePortControl = value;
+					this.includeIOControl = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("PortLineBreakEnabled")]
-		public virtual bool PortLineBreakEnabled
+		[XmlElement("DeviceLineBreakEnabled")]
+		public virtual bool DeviceLineBreakEnabled
 		{
-			get { return (this.portLineBreakEnabled); }
+			get { return (this.deviceLineBreakEnabled); }
 			set
 			{
-				if (this.portLineBreakEnabled != value)
+				if (this.deviceLineBreakEnabled != value)
 				{
-					this.portLineBreakEnabled = value;
+					this.deviceLineBreakEnabled = value;
 					SetMyChanged();
 				}
 			}
@@ -831,18 +835,18 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ (TimeStampFormat    != null ? TimeStampFormat.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  TimeStampUseUtc    .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowTimeSpan       .GetHashCode();
-				hashCode = (hashCode * 397) ^ (TimeSpanFormat     != null ? TimeSpanFormat.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (TimeSpanFormat     != null ? TimeSpanFormat .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  ShowTimeDelta      .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TimeDeltaFormat    != null ? TimeDeltaFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  ShowPort           .GetHashCode();
+				hashCode = (hashCode * 397) ^  ShowDevice         .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowDirection      .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowLength         .GetHashCode();
 				hashCode = (hashCode * 397) ^  LengthSelection    .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowDuration       .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  IncludePortControl .GetHashCode();
+				hashCode = (hashCode * 397) ^  IncludeIOControl   .GetHashCode();
 
-				hashCode = (hashCode * 397) ^  PortLineBreakEnabled     .GetHashCode();
+				hashCode = (hashCode * 397) ^  DeviceLineBreakEnabled   .GetHashCode();
 				hashCode = (hashCode * 397) ^  DirectionLineBreakEnabled.GetHashCode();
 				hashCode = (hashCode * 397) ^  ChunkLineBreakEnabled    .GetHashCode();
 
@@ -895,15 +899,15 @@ namespace YAT.Domain.Settings
 				StringEx.EqualsOrdinal(TimeSpanFormat,     other.TimeSpanFormat)      &&
 				ShowTimeDelta                      .Equals(other.ShowTimeDelta)       &&
 				StringEx.EqualsOrdinal(TimeDeltaFormat,    other.TimeDeltaFormat)     &&
-				ShowPort                           .Equals(other.ShowPort)            &&
+				ShowDevice                         .Equals(other.ShowDevice)          &&
 				ShowDirection                      .Equals(other.ShowDirection)       &&
 				ShowLength                         .Equals(other.ShowLength)          &&
 				LengthSelection                    .Equals(other.LengthSelection)     &&
 				ShowDuration                       .Equals(other.ShowDuration)        &&
 				StringEx.EqualsOrdinal(TimeDurationFormat, other.TimeDurationFormat)  &&
-				IncludePortControl                 .Equals(other.IncludePortControl)  &&
+				IncludeIOControl                   .Equals(other.IncludeIOControl)    &&
 
-				PortLineBreakEnabled     .Equals(other.PortLineBreakEnabled)      &&
+				DeviceLineBreakEnabled   .Equals(other.DeviceLineBreakEnabled)    &&
 				DirectionLineBreakEnabled.Equals(other.DirectionLineBreakEnabled) &&
 				ChunkLineBreakEnabled    .Equals(other.ChunkLineBreakEnabled)     &&
 

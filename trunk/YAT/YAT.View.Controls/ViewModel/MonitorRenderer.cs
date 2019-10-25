@@ -253,10 +253,10 @@ namespace YAT.View.Controls
 				fontStyle = settings.TimeDurationFormat.FontStyle;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTimeDurationFontCache, fontName, fontSize, fontStyle);
 			}
-			else if (element is Domain.DisplayElement.PortInfo)
+			else if (element is Domain.DisplayElement.DeviceInfo)
 			{
-				foreColor = settings.PortFormat.Color;
-				fontStyle = settings.PortFormat.FontStyle;
+				foreColor = settings.DeviceFormat.Color;
+				fontStyle = settings.DeviceFormat.FontStyle;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticPortFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)

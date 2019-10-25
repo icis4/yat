@@ -719,14 +719,14 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowTimeStamp        = f.SettingsResult.Terminal.Display.ShowTimeStamp;
 				this.settingsInEdit.Terminal.Display.ShowTimeSpan         = f.SettingsResult.Terminal.Display.ShowTimeSpan;
 				this.settingsInEdit.Terminal.Display.ShowTimeDelta        = f.SettingsResult.Terminal.Display.ShowTimeDelta;
-				this.settingsInEdit.Terminal.Display.ShowPort             = f.SettingsResult.Terminal.Display.ShowPort;
+				this.settingsInEdit.Terminal.Display.ShowDevice           = f.SettingsResult.Terminal.Display.ShowDevice;
 				this.settingsInEdit.Terminal.Display.ShowDirection        = f.SettingsResult.Terminal.Display.ShowDirection;
 				this.settingsInEdit.Terminal.Display.ShowLength           = f.SettingsResult.Terminal.Display.ShowLength;
 				this.settingsInEdit.Terminal.Display.LengthSelection      = f.SettingsResult.Terminal.Display.LengthSelection;
 				this.settingsInEdit.Terminal.Display.ShowDuration         = f.SettingsResult.Terminal.Display.ShowDuration;
-				this.settingsInEdit.Terminal.Display.IncludePortControl   = f.SettingsResult.Terminal.Display.IncludePortControl;
+				this.settingsInEdit.Terminal.Display.IncludeIOControl     = f.SettingsResult.Terminal.Display.IncludeIOControl;
 
-				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = f.SettingsResult.Terminal.Display.PortLineBreakEnabled;
+				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = f.SettingsResult.Terminal.Display.DeviceLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = f.SettingsResult.Terminal.Display.ChunkLineBreakEnabled;
 

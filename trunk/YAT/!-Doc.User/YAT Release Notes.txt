@@ -84,14 +84,17 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.4.0 :: 2020-xx-xx
+YAT 2.1.1 :: 2019-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
 - ...
 
 Important changes:
-- ...
+- Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
+  with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
+  As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
+  renamed to \!(IOSettings()) (related to feature request #71).
 
 Fixed bugs:
 - ...
@@ -125,7 +128,7 @@ Limitations and known issues:
      applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
      #345, #382, #385, #387, #401, #442). To prevent this issue, refrain from disconnecting a
      device while its port is open. Or, manually close the port after the device got disconnected.
-- The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
+- The \!(IOSettings()) keyword is yet limited to serial COM ports (feature request #71).
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
@@ -655,7 +658,7 @@ Important changes:
 - 'Send Command' renamed to [Send Text] (related to feature request #252).
 - Active terminal is highlighted/emphasized (feature request #247).
 - Automatic terminal layout added. Use [Window > ...] for dedicated layout (feature request #247).
-- If YAT is not the active app, a single click is now sufficient to trigger an action (bug #210).
+- If YAT is not the active app, a single click is now sufficient to execute an action (bug #210).
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).

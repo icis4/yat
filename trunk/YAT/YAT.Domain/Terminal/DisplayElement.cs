@@ -60,7 +60,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(TimeSpanInfo))]
 	[XmlInclude(typeof(TimeDeltaInfo))]
 	[XmlInclude(typeof(TimeDurationInfo))]
-	[XmlInclude(typeof(PortInfo))]
+	[XmlInclude(typeof(DeviceInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
 	[XmlInclude(typeof(FormatElement))]
@@ -363,22 +363,22 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class PortInfo : InfoElement
+		public class DeviceInfo : InfoElement
 		{
 			/// <summary></summary>
-			public PortInfo()
+			public DeviceInfo()
 				: this(Direction.None, null, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public PortInfo(string infoText, string enclosureLeft, string enclosureRight)
+			public DeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
 				: this(Direction.None, infoText, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public PortInfo(Direction direction, string infoText, string enclosureLeft, string enclosureRight)
+			public DeviceInfo(Direction direction, string infoText, string enclosureLeft, string enclosureRight)
 				: base(direction, enclosureLeft + infoText + enclosureRight)
 			{
 			}
@@ -795,7 +795,7 @@ namespace YAT.Domain
 			else if (this is TimeSpanInfo)     clone = new TimeSpanInfo((TimeSpanInfo)this);
 			else if (this is TimeDeltaInfo)    clone = new TimeDeltaInfo((TimeDeltaInfo)this);
 			else if (this is TimeDurationInfo) clone = new TimeDurationInfo((TimeDurationInfo)this);
-			else if (this is PortInfo)         clone = new PortInfo();
+			else if (this is DeviceInfo)       clone = new DeviceInfo();
 			else if (this is DirectionInfo)    clone = new DirectionInfo();
 			else if (this is DataLength)       clone = new DataLength((DataLength)this);
 			else if (this is DataSpace)        clone = new DataSpace();

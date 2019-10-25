@@ -99,7 +99,7 @@ namespace YAT.Log.Utilities
 			string errorStr = "";
 
 			DateTime timeStamp = DateTime.MinValue;
-			string portStr = "";
+			string deviceStr = "";
 			int length = 0;
 
 			bool containsTx = false;
@@ -171,10 +171,10 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.PortInfo);
+					var casted = (de as DisplayElement.DeviceInfo);
 					if (casted != null)
 					{
-						portStr = casted.Text;
+						deviceStr = casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
@@ -204,7 +204,7 @@ namespace YAT.Log.Utilities
 			else
 				direction = Direction.None;
 
-			transferLine = new XmlTransferTextLine(timeStamp, portStr, direction, textStr, errorStr, length);
+			transferLine = new XmlTransferTextLine(timeStamp, deviceStr, direction, textStr, errorStr, length);
 
 			return (success);
 		}

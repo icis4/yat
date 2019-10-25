@@ -547,12 +547,12 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(Eol())",					Domain.Parser.Keyword.Eol,                  null));
 				yield return (new TestCaseData(@"\!(NoEol)",					Domain.Parser.Keyword.NoEol,                null));
 				yield return (new TestCaseData(@"\!(NoEol())",					Domain.Parser.Keyword.NoEol,                null));
-				yield return (new TestCaseData(@"\!(PortSettings)",				Domain.Parser.Keyword.PortSettings,         null));
-				yield return (new TestCaseData(@"\!(PortSettings())",			Domain.Parser.Keyword.PortSettings,         null));
-				yield return (new TestCaseData(@"\!(PortSettings(9600))",		Domain.Parser.Keyword.PortSettings,         new int[] { 9600 }));
-				yield return (new TestCaseData(@"\!(PortSettings(9600,8))",		Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8 }));
-				yield return (new TestCaseData(@"\!(PortSettings(9600;8;0))",	Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(PortSettings(9600|8|0))",	Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(IOSettings)",				Domain.Parser.Keyword.IOSettings,           null));
+				yield return (new TestCaseData(@"\!(IOSettings())",				Domain.Parser.Keyword.IOSettings,           null));
+				yield return (new TestCaseData(@"\!(IOSettings(9600))",			Domain.Parser.Keyword.IOSettings,           new int[] { 9600 }));
+				yield return (new TestCaseData(@"\!(IOSettings(9600,8))",		Domain.Parser.Keyword.IOSettings,           new int[] { 9600, 8 }));
+				yield return (new TestCaseData(@"\!(IOSettings(9600;8;0))",		Domain.Parser.Keyword.IOSettings,           new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
+				yield return (new TestCaseData(@"\!(IOSettings(9600|8|0))",		Domain.Parser.Keyword.IOSettings,           new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
 				yield return (new TestCaseData(@"\!(Baud)",						Domain.Parser.Keyword.Baud,                 null));
 				yield return (new TestCaseData(@"\!(Baud())",					Domain.Parser.Keyword.Baud,                 null));
 				yield return (new TestCaseData(@"\!(Baud(9600))",				Domain.Parser.Keyword.Baud,                 new int[] { 9600 }));

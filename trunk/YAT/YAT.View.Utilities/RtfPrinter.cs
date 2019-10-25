@@ -110,11 +110,11 @@ namespace YAT.View.Utilities
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~RtfPrinter()
@@ -137,28 +137,28 @@ namespace YAT.View.Utilities
 		#endregion
 
 		/// <remarks>
-		/// Pragmatic implementation of printing RTF. 'netrtfwriter' is only used for stream-based logging.
+		/// Pragmatic implementation of printing RTF. Yet limited to printing in 'Device' format.
 		/// </remarks>
 		/// <exception cref="InvalidPrinterException">
 		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.
 		/// </exception>
 		public virtual void Print(DisplayLineCollection lines, FormatSettings formatSettings)
 		{
-			if (this.foreColorBrushColor != formatSettings.PortFormat.Color)
+			if (this.foreColorBrushColor != formatSettings.DeviceFormat.Color)
 			{
-				this.foreColorBrushColor = formatSettings.PortFormat.Color;
+				this.foreColorBrushColor = formatSettings.DeviceFormat.Color;
 
 				if (this.foreColorBrush != null)
 					this.foreColorBrush.Dispose();
 
-				this.foreColorBrush = new SolidBrush(formatSettings.PortFormat.Color);
+				this.foreColorBrush = new SolidBrush(formatSettings.DeviceFormat.Color);
 			}
 
 			Print(RtfWriterHelper.CopyLinesToRichTextBox(lines, formatSettings));
 		}
 
 		/// <remarks>
-		/// Pragmatic implementation of printing RTF. 'netrtfwriter' is only used for stream-based logging.
+		/// Pragmatic implementation of printing RTF. Yet limited to printing in 'Device' format.
 		/// </remarks>
 		/// <exception cref="InvalidPrinterException">
 		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.

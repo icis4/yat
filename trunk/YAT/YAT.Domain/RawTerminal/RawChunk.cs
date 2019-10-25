@@ -76,7 +76,7 @@ namespace YAT.Domain
 		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
-		public string PortStamp { get; }
+		public string Device { get; }
 
 		/// <summary></summary>
 		public IODirection Direction { get; }
@@ -95,17 +95,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public RawChunk(byte[] content, string portStamp, IODirection direction)
-			: this(content, DateTime.Now, portStamp, direction)
+		public RawChunk(byte[] content, string device, IODirection direction)
+			: this(content, DateTime.Now, device, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawChunk(byte[] content, DateTime timeStamp, string portStamp, IODirection direction)
+		public RawChunk(byte[] content, DateTime timeStamp, string device, IODirection direction)
 		{
 			Content   = new ReadOnlyCollection<byte>((byte[])content.Clone());
 			TimeStamp = timeStamp;
-			PortStamp = portStamp;
+			Device    = device;
 			Direction = direction;
 		}
 
@@ -163,7 +163,7 @@ namespace YAT.Domain
 
 			sb.AppendLine(indent + "> Content:   " + ContentToString());
 			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.CurrentCulture), 2));
-			sb.AppendLine(indent + "> PortStamp: " + PortStamp);
+			sb.AppendLine(indent + "> Device:    " + Device);
 			sb.AppendLine(indent + "> Direction: " + Direction);
 
 			return (sb.ToString());
