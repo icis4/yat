@@ -88,6 +88,8 @@
     <Compile Include="SerialCommunicationSettings.cs" />
     <Compile Include="SerialControlPinState.cs" />
     <Compile Include="SerialFlowControl.cs" />
+    <Compile Include="SerialPort.Receive.cs" />
+    <Compile Include="SerialPort.Send.cs" />
     <Compile Include="SerialPort.cs" />
     <Compile Include="SerialPortSettings.cs" />
     <Compile Include="Structs.cs" />

@@ -56,7 +56,7 @@ using MKY.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <remarks>
-	/// This partial class implements the receiving part of <see cref="UdpSocket"/>.
+	/// This partial class implements the receive part of <see cref="UdpSocket"/>.
 	/// </remarks>
 	public partial class UdpSocket
 	{
@@ -215,25 +215,6 @@ namespace MKY.IO.Serial.Socket
 			{
 				DebugReceive("...discarded.");
 			}
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalReceiveThreadSafely()
-		{
-			try
-			{
-				if (this.receiveThreadEvent != null)
-					this.receiveThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
 		}
 
 		/// <summary>

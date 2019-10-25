@@ -41,7 +41,7 @@ using MKY.Diagnostics;
 namespace MKY.IO.Serial.Socket
 {
 	/// <remarks>
-	/// This partial class implements the sending part of <see cref="TcpServer"/>.
+	/// This partial class implements the send part of <see cref="TcpServer"/>.
 	/// </remarks>
 	public partial class TcpServer
 	{

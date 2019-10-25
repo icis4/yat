@@ -14,7 +14,8 @@
 // See SVN change log for file revision details.
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2007-2019 Matthias Kläy.
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2019 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -28,24 +29,31 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-//// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
 using System.Threading;
 
 using MKY.Diagnostics;
 
 #endregion
 
-namespace MKY.IO.Serial.Socket
+namespace MKY.IO.Serial.Usb
 {
 	/// <remarks>
-	/// This partial class implements the send part of <see cref="UdpSocket"/>.
+	/// This partial class implements the send part of <see cref="SerialHidDevice"/>.
 	/// </remarks>
-	public partial class UdpSocket
+	public partial class SerialHidDevice
 	{
 		#region Public Methods
 		//==========================================================================================
 		// Public Methods
 		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual bool Send(byte data)
+		{
+			// AssertNotDisposed() is called by 'Send()' below.
+
+			return (Send(new byte[] { data }));
+		}
 
 		/// <summary></summary>
 		public virtual bool Send(byte[] data)
@@ -83,6 +91,63 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+		// Changes here must most likely be applied there too.
+
+		/// <summary></summary>
+		protected virtual void AssumeOutputXOn()
+		{
+			this.iXOnXOffHelper.OutputIsXOn = true;
+
+			OnIOControlChanged(EventArgs.Empty);
+		}
+
+		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOn state.
+		/// </summary>
+		public virtual void SignalInputXOn()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOnByte);
+		}
+
+		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOff state.
+		/// </summary>
+		public virtual void SignalInputXOff()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOffByte);
+		}
+
+		/// <summary>
+		/// Toggles the input XOn/XOff state.
+		/// </summary>
+		public virtual void ToggleInputXOnXOff()
+		{
+			// AssertNotDisposed() and FlowControlUsesXOnXOff { get; } are called by the
+			// 'InputIsXOn' property.
+
+			if (InputIsXOn)
+				SignalInputXOff();
+			else
+				SignalInputXOn();
+		}
+
+		/// <summary>
+		/// Resets the XOn/XOff signaling count.
+		/// </summary>
+		public virtual void ResetXOnXOffCount()
+		{
+			AssertNotDisposed();
+
+			this.iXOnXOffHelper.ResetCounts();
+
+			OnIOControlChanged(EventArgs.Empty);
+		}
+
 		#endregion
 
 		#region Non-Public Methods
@@ -105,6 +170,8 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
+			bool isXOffStateOldAndErrorHasBeenSignaled = false;
+
 			DebugThreadState("SendThread() has started.");
 
 			try
@@ -118,7 +185,7 @@ namespace MKY.IO.Serial.Socket
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
 						// Therefore, only wait for a certain period and then poll the run flag again.
 						// The period can be quite long, as an event trigger will immediately resume.
-						if (!this.sendThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
+						if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 							continue;
 					}
 					catch (AbandonedMutexException ex)
@@ -138,6 +205,53 @@ namespace MKY.IO.Serial.Socket
 						// Subsequently, yield to other threads to allow processing the data.
 						Thread.Sleep(TimeSpan.Zero);
 
+						// Handle XOff state:
+						if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
+						{
+							// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+							// Changes here must most likely be applied there too.
+
+							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
+							if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
+							{
+								SendXOnOrXOffAndNotify(XOnXOff.XOnByte);
+
+								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								{
+									if (this.sendQueue.Peek() == XOnXOff.XOnByte) // If XOn is upfront...
+										this.sendQueue.Dequeue();                 // ...acknowlege it's gone.
+								}
+
+								break; // Let other threads do their job and wait until signaled again.
+							}
+							else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
+							{
+								SendXOnOrXOffAndNotify(XOnXOff.XOffByte);
+
+								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								{
+									if (this.sendQueue.Peek() == XOnXOff.XOffByte) // If XOff is upfront...
+										this.sendQueue.Dequeue();                  // ...acknowlege it's gone.
+								}
+
+								break; // Let other threads do their job and wait until signaled again.
+							}
+							else
+							{
+								if (!isXOffStateOldAndErrorHasBeenSignaled)
+								{
+									InvokeXOffErrorEvent();
+									isXOffStateOldAndErrorHasBeenSignaled = true;
+								}
+
+								break; // Let other threads do their job and wait until signaled again.
+							}
+
+							// Control bytes must be sent even in case of XOff!
+						}
+
+						// --- No XOff state, ready to send: ---
+
 						// Synchronize the send/receive events to prevent mix-ups at the event
 						// sinks, i.e. the send/receive operations shall be synchronized with
 						// signaling of them.
@@ -156,40 +270,18 @@ namespace MKY.IO.Serial.Socket
 									this.sendQueue.Clear();
 								}
 
-								System.Net.IPEndPoint remoteEndPoint;
-								lock (this.socketSyncObj)
-									remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
+								this.device.Send(data);
 
-								this.socket.Send(data, data.Length, remoteEndPoint);
+								if (this.settings.FlowControlUsesXOnXOff)
+									HandleXOnOrXOffAndNotify(data);
 
-								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
+								// Note the Thread.Sleep(TimeSpan.Zero) above.
 							}
 							finally
 							{
 								Monitor.Exit(this.dataEventSyncObj);
 							}
 						} // Monitor.TryEnter()
-
-						// Note the Thread.Sleep(TimeSpan.Zero) above.
-
-						if (this.socketType == UdpSocketType.Client)
-						{
-							// Get the currently used local port:
-
-							bool hasChanged = false;
-
-							lock (this.socketSyncObj)
-							{
-								var localEndPoint = (System.Net.IPEndPoint)this.socket.Client.LocalEndPoint;
-								if (this.localPort != localEndPoint.Port) {
-									this.localPort = localEndPoint.Port;
-									hasChanged = true;
-								}
-							}
-
-							if (hasChanged)
-								OnIOChanged(EventArgs.Empty);
-						} // Client
 					} // Inner loop
 				} // Outer loop
 			}
@@ -198,7 +290,7 @@ namespace MKY.IO.Serial.Socket
 				DebugEx.WriteException(GetType(), ex, "SendThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
 
 				// Should only happen when failing to 'friendly' join the thread on stopping!
-				// Don't try to set and notify a state change, or even restart the socket!
+				// Don't try to set and notify a state change, or even restart the device!
 
 				// But reset the abort request, as 'ThreadAbortException' is a special exception
 				// that would be rethrown at the end of the catch block otherwise!
@@ -207,6 +299,47 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			DebugThreadState("SendThread() has terminated.");
+		}
+
+		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+		// Changes here must most likely be applied there too.
+
+		private void HandleXOnOrXOffAndNotify(byte[] data)
+		{
+			bool signalIOControlChanged = false;
+
+			foreach (byte b in data)
+			{
+				if (XOnXOff.IsXOnOrXOffByte(b))
+				{
+					this.iXOnXOffHelper.XOnOrXOffSent(b);
+					signalIOControlChanged = true; // XOn/XOff count has changed.
+				}
+			}
+
+			if (signalIOControlChanged)
+				OnIOControlChanged(EventArgs.Empty);
+		}
+
+		private void SendXOnOrXOffAndNotify(byte b)
+		{
+			this.device.Send(b);
+
+			if (this.iXOnXOffHelper.XOnOrXOffSent(b))
+				OnIOControlChanged(EventArgs.Empty);
+		}
+
+		private void InvokeXOffErrorEvent()
+		{
+			OnIOError
+			(
+				new IOErrorEventArgs
+				(
+					ErrorSeverity.Acceptable,
+					Direction.Output,
+					"XOff state, retaining data..."
+				)
+			);
 		}
 
 		#endregion
