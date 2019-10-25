@@ -85,6 +85,8 @@
     </Compile>
     <Compile Include="EventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialHidDevice.Receive.cs" />
+    <Compile Include="SerialHidDevice.Send.cs" />
     <Compile Include="SerialHidFlowControl.cs" />
     <Compile Include="SerialHidDevice.cs" />
     <Compile Include="SerialHidDeviceSettings.cs" />

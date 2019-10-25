@@ -1230,17 +1230,19 @@ namespace MKY.IO.Usb
 
 		private void SetStateSynchronized(State state)
 		{
-#if (DEBUG)
+		#if (DEBUG)
 			State oldState = this.state;
-#endif
+		#endif
+
 			lock (this.stateSyncObj)
 				this.state = state;
-#if (DEBUG)
+
+		#if (DEBUG)
 			if (this.state != oldState)
 				DebugMessage("State has changed from " + oldState + " to " + this.state + ".");
 			else
 				DebugMessage("State is already " + oldState + ".");
-#endif
+		#endif
 		}
 
 		#endregion
