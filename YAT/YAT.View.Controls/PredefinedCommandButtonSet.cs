@@ -69,6 +69,11 @@ namespace YAT.View.Controls
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<Button> buttons_commands;
 
+		/// <summary>Array of flags indicating the previous state of each button.</summary>
+		/// <remarks>Used for improving performance because <see cref="SystemFonts.DefaultFont"/> and <see cref="DrawingEx.DefaultFontItalic"/> are quite slow.</remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool[] buttons_commands_wasDefined;
+
 	////private SettingControlsHelper isSettingControls; is not needed (yet).
 
 		private int subpageId = SubpageIdDefault;
@@ -364,6 +369,10 @@ namespace YAT.View.Controls
 			this.buttons_commands.Add(button_Command_10);
 			this.buttons_commands.Add(button_Command_11);
 			this.buttons_commands.Add(button_Command_12);
+
+			this.buttons_commands_wasDefined = new bool[PredefinedCommandPage.CommandCapacityPerSubpage];
+			for (var i = 0; i < PredefinedCommandPage.CommandCapacityPerSubpage; i++)
+				this.buttons_commands_wasDefined[i] = false;
 		}
 
 		private void SetControls()
@@ -497,25 +506,33 @@ namespace YAT.View.Controls
 
 					if (isDefined)
 					{
-						if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-							this.buttons_commands[i].ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                                 //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
-						if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-							this.buttons_commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						if (!this.buttons_commands_wasDefined[i]) // Improve performance by only accessing 'SystemFonts.DefaultFont' when really needed!
+						{
+							if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+								this.buttons_commands[i].ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+								                                             //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+							if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+								this.buttons_commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						}
 
 						bool isValid = (this.terminalIsReadyToSend && this.commands[commandIndex].IsValid(this.parseModeForText, this.rootDirectoryForFile));
 						this.buttons_commands[i].Enabled = isValid;
 					}
 					else
 					{
-						if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-							this.buttons_commands[i].ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                               //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
-						if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-							this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						if (this.buttons_commands_wasDefined[i]) // Improve performance by only accessing 'DrawingEx.DefaultFontItalic' when really needed!
+						{
+							if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+								this.buttons_commands[i].ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
+							                                               //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+							if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+								this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						}
 
 						this.buttons_commands[i].Enabled = true;
 					}
+
+					this.buttons_commands_wasDefined[i] = isDefined;
 				}
 		////}
 		////finally
