@@ -140,14 +140,14 @@ namespace YAT.View.Utilities
 				sfd.Title       = "Save Command Page As";
 				sfd.Filter      = ExtensionHelper.CommandPageOrPagesFilesFilter;
 				sfd.FilterIndex = ExtensionHelper.CommandPageOrPagesFilesFilterDefault;
-				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageExtension);
 			}
 			else
 			{
 				sfd.Title       = "Save Command Pages As";
 				sfd.Filter      = ExtensionHelper.CommandPagesFilesFilter;
 				sfd.FilterIndex = ExtensionHelper.CommandPagesFilesFilterDefault;
-				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesFile);
+				sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPagesExtension);
 			}
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
@@ -335,7 +335,7 @@ namespace YAT.View.Utilities
 			ofd.Title       = "Open Command Page(s)";
 			ofd.Filter      = ExtensionHelper.CommandPageOrPagesOrTerminalFilesFilter;
 			ofd.FilterIndex = ExtensionHelper.CommandPageOrPagesOrTerminalFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
 			var dr = ofd.ShowDialog(owner);
