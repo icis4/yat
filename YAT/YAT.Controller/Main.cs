@@ -104,7 +104,18 @@ namespace YAT.Controller
 			"  -3      Application start error",
 			"  -4      Application run error",
 			"  -5      Application exit error",
-			"  -6      Unhandled exception"
+			"  -6      Unhandled exception",
+		#if (WITH_SCRIPTING)
+			"-100      Script invalid content",
+			"-101      Script stop on error",
+			"-102      Script exit",
+			"-103      Script user break",
+			"-104      Script unhandled exception",
+			"-105      Script invalid return value (legacy)",
+			"-106      Script thread abort",
+			"-107      Script remoting exception",
+			"-108      Script invalid operation"
+		#endif
 		};
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)

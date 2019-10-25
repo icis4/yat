@@ -96,10 +96,17 @@ namespace YAT.View.Forms
 
 			// Copyright:
 			linkLabel_Copyright.Text = "";
+		#if !(WITH_SCRIPTING)
 			textBefore = "Copyright © 2003-2004 ";
 			textLink   =                       "HSR Hochschule für Technik Rapperswil";
 			textAfter  =                                                            "." + Environment.NewLine +
 			             "Copyright © 2003-2019 Matthias Kläy.";
+		#else
+			textBefore = "YAT copyright © 2003-2004 ";
+			textLink   =                           "HSR Hochschule für Technik Rapperswil";
+			textAfter  =                                                                " and 2003-2019 Matthias Kläy." + Environment.NewLine +
+			             "Albatros copyright © 2008-2019 Mettler-Toledo.";
+		#endif
 			linkLabel_Copyright.Text += textBefore;
 			linkStart = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
@@ -227,11 +234,11 @@ namespace YAT.View.Forms
 			linkLabel_TerminalEmulator.Text += textAfter;
 
 			// Environment:
-			linkLabel_Environment.Text = "YAT is developed with..." + Environment.NewLine;
+			linkLabel_Environment.Text = ApplicationEx.CommonName + " is developed with..." + Environment.NewLine;
 
 			textBefore = "...Microsoft ";
-			textLink   =              "Visual Studio Community Edition";
-			textAfter  =                                             "...";
+			textLink   =              "Visual Studio Community";
+			textAfter  =                                     "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
@@ -240,22 +247,18 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += Environment.NewLine;
 
 			textBefore = "...";
-			textLink   =    "NUnit";
-			textAfter  =         "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.nunit.org/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
-
-			textBefore = "...";
 			textLink   =    "AnkhSVN";
-			textAfter  =           "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://ankhsvn.open.collab.net/");
+			textBefore =           " and ";
+			textLink   =                "TortoiseSVN";
+			textAfter  =                           "...";
+			linkLabel_Environment.Text += textBefore;
+			linkStart = linkLabel_Environment.Text.Length;
+			linkLabel_Environment.Text += textLink;
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://tortoisesvn.net/");
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
@@ -266,6 +269,16 @@ namespace YAT.View.Forms
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://submain.com/products/ghostdoc.aspx");
+			linkLabel_Environment.Text += textAfter;
+			linkLabel_Environment.Text += Environment.NewLine;
+
+			textBefore = "...";
+			textLink   =    "NUnit";
+			textAfter  =         "...";
+			linkLabel_Environment.Text += textBefore;
+			linkStart = linkLabel_Environment.Text.Length;
+			linkLabel_Environment.Text += textLink;
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.nunit.org/");
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
@@ -303,6 +316,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
+		#if !(WITH_SCRIPTING)
 			textBefore = "...YAT icons based on ";
 			textLink   =                       "Nuvola";
 			textAfter  =                             " by David Vignoni";
@@ -320,6 +334,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.gimp.org/");
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
+		#endif // WITH_SCRIPTING
 
 			textBefore = "...";
 			textLink   =    "FatCow";
@@ -351,6 +366,7 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
+		#if !(WITH_SCRIPTING)
 			textBefore = "...hosting and change management on ";
 			textLink   =                                     "SourceForge.net";
 			textAfter  =                                                    "...";
@@ -369,9 +385,11 @@ namespace YAT.View.Forms
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.documentfoundation.org/");
 			linkLabel_Environment.Text += textAfter;
+		#endif // WITH_SCRIPTING
 
 			// Home:
 			linkLabel_Home.Text = "";
+		#if !(WITH_SCRIPTING)
 			textBefore = "Visit YAT at ";
 			textLink   =              "SourceForge.net";
 			linkLabel_Home.Text += textBefore;
@@ -386,10 +404,27 @@ namespace YAT.View.Forms
 			linkLabel_Home.Text += textLink;
 			linkLabel_Home.Links.Add(linkStart, textLink.Length, "mailto:y-a-terminal@users.sourceforge.net");
 			linkLabel_Home.Text += textAfter;
+		#else // WITH_SCRIPTING
+			textBefore = "Albatros is managed in ";
+			textLink   =                        "Quality Center";
+			linkLabel_Home.Text += textBefore;
+			linkStart = linkLabel_Home.Text.Length;
+			linkLabel_Home.Text += textLink;
+			linkLabel_Home.Links.Add(linkStart, textLink.Length, "http://alm.mt.com/qcbin/start_a.jsp");
+			textBefore =                                      ", or contact ";
+			textLink   =                                                   "matthias.klaey@mt.com";
+			textAfter  =                                                                        ". Feedback is welcome.";
+			linkLabel_Home.Text += textBefore;
+			linkStart = linkLabel_Home.Text.Length;
+			linkLabel_Home.Text += textLink;
+			linkLabel_Home.Links.Add(linkStart, textLink.Length, "mailto:matthias.klaey@mt.com");
+			linkLabel_Home.Text += textAfter;
+		#endif // WITH_SCRIPTING
 
 			// Author:
 			linkLabel_Author.Text = "2019, Matthias Kläy";
 
+		#if !(WITH_SCRIPTING)
 			// License:
 			linkLabel_License.Text = "";
 			textBefore = "YAT is licensed under the ";
@@ -400,6 +435,7 @@ namespace YAT.View.Forms
 			linkLabel_License.Text += textLink;
 			linkLabel_License.Links.Add(linkStart, textLink.Length, "http://www.gnu.org/licenses/lgpl.html");
 			linkLabel_License.Text += textAfter;
+		#endif // WITH_SCRIPTING
 		}
 
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

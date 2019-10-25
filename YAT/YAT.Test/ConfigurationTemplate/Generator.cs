@@ -53,6 +53,9 @@ namespace YAT.Test.ConfigurationTemplate
 			////MKY.Test
 			////MKY.Win32.Test
 			////MKY.Windows.Forms.Test
+		#if (WITH_SCRIPTING)
+			////MT.Albatros.Core.Test
+		#endif
 			////YAT.Controller.Test
 			////YAT.Domain.Test
 			////YAT.View.Test
@@ -73,6 +76,9 @@ namespace YAT.Test.ConfigurationTemplate
 			////MKY.Test
 			////MKY.Win32.Test
 			////MKY.Windows.Forms.Test
+		#if (WITH_SCRIPTING)
+			////MT.Albatros.Core.Test
+		#endif
 			////YAT.Controller.Test
 			////YAT.Domain.Test
 			////YAT.View.Test

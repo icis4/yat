@@ -201,6 +201,30 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		public int ExitDelay;
 
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public string RequestedScriptFilePath;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public string RequestedScriptLogFilePath;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool AppendTimeStampToScriptLogFileName;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public string[] RequestedScriptArgs;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool ScriptRunIsRequested;
+
+	#endif // WITH_SCRIPTING
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		public bool ShowNewTerminalDialog;

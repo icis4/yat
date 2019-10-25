@@ -44,7 +44,18 @@ namespace YAT.Controller
 		ApplicationStartError    = -3,
 		ApplicationRunError      = -4,
 		ApplicationExitError     = -5,
-		UnhandledException       = -6
+		UnhandledException       = -6,
+	#if (WITH_SCRIPTING)
+		ScriptInvalidContent     = MT.Albatros.Core.RunResult.ScriptInvalidContent,
+		ScriptStopOnError        = MT.Albatros.Core.RunResult.ScriptStopOnError,
+		ScriptExit               = MT.Albatros.Core.RunResult.ScriptExit,
+		ScriptUserBreak          = MT.Albatros.Core.RunResult.ScriptUserBreak,
+		ScriptUnhandledException = MT.Albatros.Core.RunResult.ScriptUnhandledException,
+	////ScriptInvalidReturnValue = MT.Albatros.Core.RunResult.ScriptInvalidReturnValue, \fixme (2017-02-14 / MKY) legacy...
+		ScriptThreadAbort        = MT.Albatros.Core.RunResult.ThreadAbort,
+		ScriptRemotingException  = MT.Albatros.Core.RunResult.RemotingException,
+		ScriptInvalidOperation   = MT.Albatros.Core.RunResult.InvalidOperation
+	#endif
 	}
 
 	#pragma warning restore 1591

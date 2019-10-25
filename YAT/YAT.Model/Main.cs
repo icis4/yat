@@ -42,6 +42,10 @@ using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
 
+#if (WITH_SCRIPTING)
+using MT.Albatros.Core;
+#endif
+
 using YAT.Application.Utilities;
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -71,7 +75,10 @@ namespace YAT.Model
 		private MainStartArgs startArgs;
 		private Guid guid;
 
-		private Workspace workspace;
+		private Workspace workspace; // = null;
+	#if (WITH_SCRIPTING)
+		private ScriptBridge scriptBridge; // = null;
+	#endif
 
 		private MainResult result = MainResult.Success;
 
@@ -267,7 +274,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns workspace within main or <c>null</c> if no workspace is active.
+		/// Returns workspace within main; or <c>null</c> if no workspace is active.
 		/// </summary>
 		public virtual Workspace Workspace
 		{
@@ -279,10 +286,31 @@ namespace YAT.Model
 			}
 		}
 
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Returns interface between main and script engine; or <c>null</c> if script engine is not ready yet.
+		/// </summary>
+		public virtual ScriptBridge ScriptBridge
+		{
+			get
+			{
+			////AssertNotDisposed(); \todo !!! (2017-11-14 / MKY) accessed after call to Exit() !!!
+
+				return (this.scriptBridge);
+			}
+		}
+
+	#endif // WITH_SCRIPTING
+
 		/// <summary></summary>
 		public MainResult Result
 		{
 			get { return (this.result); }
+
+		#if (WITH_SCRIPTING)
+			set { this.result = value; }
+		#endif
 		}
 
 		#endregion
@@ -328,10 +356,13 @@ namespace YAT.Model
 					return (MainResult.ApplicationStartError);
 			}
 
-			// YAT will fully start, hence initialize required resources:
+			// Application will start, hence initialize required resources:
 			ProcessorLoad.Initialize();
+		#if (WITH_SCRIPTING)
+			this.scriptBridge = new ScriptBridge(this, this.startArgs.ScriptRunIsRequested);
+		#endif
 
-			// Start YAT according to the start requests:
+			// Start according to the start requests:
 			bool success = false;
 
 			bool workspaceIsRequested = (this.startArgs.WorkspaceSettingsHandler != null);
@@ -682,12 +713,43 @@ namespace YAT.Model
 				}
 			}
 
-			// Prio 11 = Set behavior:
+		#if (WITH_SCRIPTING)
+			// Prio 11 = Run script:
+			if (this.commandLineArgs.OptionIsGiven("Script"))
+			{
+				this.startArgs.RequestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
+
+				if (this.commandLineArgs.OptionIsGiven("ScriptLog"))
+				{
+					if (PathEx.IsValid(this.commandLineArgs.RequestedScriptLogFilePath))
+						this.startArgs.RequestedScriptLogFilePath = this.commandLineArgs.RequestedScriptLogFilePath;
+					else
+						return (false);
+				}
+
+				if (this.commandLineArgs.OptionIsGiven("ScriptLogTimeStamp"))
+					this.startArgs.AppendTimeStampToScriptLogFileName = true;
+
+				if (this.commandLineArgs.OptionIsGiven("ScriptArgs"))
+					this.startArgs.RequestedScriptArgs = this.commandLineArgs.RequestedScriptArgs;
+
+				this.startArgs.ScriptRunIsRequested = true;
+			}
+		#endif
+
+			// Prio 12 = Set behavior:
 			if (this.startArgs.PerformOperationOnRequestedTerminal)
 			{
 				this.startArgs.OperationDelay = this.commandLineArgs.OperationDelay;
 				this.startArgs.ExitDelay      = this.commandLineArgs.ExitDelay;
+			}
 
+		#if !(WITH_SCRIPTING)
+			if (this.startArgs.PerformOperationOnRequestedTerminal)
+		#else
+			if (this.startArgs.PerformOperationOnRequestedTerminal || this.startArgs.ScriptRunIsRequested)
+		#endif
+			{
 				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
 				this.startArgs.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
 			}
@@ -697,7 +759,7 @@ namespace YAT.Model
 				this.startArgs.KeepOpenOnError = true;
 			}
 
-			// Prio 12 = Tile:
+			// Prio 13 = Set layout:
 			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
 			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
 
@@ -1221,13 +1283,46 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
 		public virtual MainResult Exit(out bool cancel)
 		{
+		#if (WITH_SCRIPTING)
+
+			bool scriptSuccess = true;
+			if (this.scriptBridge.ScriptRunIsOngoing)
+			{
+				var text = new StringBuilder();
+
+				var scriptFileName = this.scriptBridge.ScriptFileName;
+				if (string.IsNullOrEmpty(scriptFileName))
+					text.AppendFormat(@"A script is still running.");
+				else
+					text.AppendFormat(@"Script ""{0}"" is still running.", scriptFileName);
+
+				text.AppendLine();
+				text.AppendLine();
+				text.AppendFormat(@"Confirm to break the script and exit {0}; or cancel.", ApplicationEx.ProductName);
+
+				var dr = OnMessageInputRequest(text.ToString(), "Exiting...", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
+				if (dr == DialogResult.OK)
+					this.scriptBridge.BreakScript();
+				else
+					scriptSuccess = false;
+			}
+
+			if (scriptSuccess)
+				this.scriptBridge.ProcessCommand("Script:CloseDialog");
+
+		#endif // WITH_SCRIPTING
+
 			bool workspaceSuccess;
 			if (this.workspace != null)
 				workspaceSuccess = this.workspace.CloseConsiderately(true);
 			else
 				workspaceSuccess = true;
 
+		#if !(WITH_SCRIPTING)
 			if (workspaceSuccess)
+		#else
+			if (scriptSuccess && workspaceSuccess)
+		#endif
 			{
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "..."); // "YAT" or "YATConsole", as indicated in main title bar.
 
@@ -2034,7 +2129,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			if (this.startArgs.Interactive)
 			{
@@ -2042,7 +2137,7 @@ namespace YAT.Model
 
 				OnCursorReset(); // Just in case...
 
-				var e = new MessageInputEventArgs(text, caption, buttons, icon);
+				var e = new MessageInputEventArgs(text, caption, buttons, icon, defaultButton);
 				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!

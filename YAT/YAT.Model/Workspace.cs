@@ -124,10 +124,10 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>Event raised when a new terminal was added to the workspace.</summary>
-		public event EventHandler<EventArgs<Terminal>> TerminalAdded;
+		public event EventHandler<TerminalEventArgs> TerminalAdded;
 
 		/// <summary>Event raised when a terminal was removed from the workspace.</summary>
-		public event EventHandler<EventArgs<Terminal>> TerminalRemoved;
+		public event EventHandler<TerminalEventArgs> TerminalRemoved;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<string>> FixedStatusTextRequest;
@@ -440,7 +440,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns an array of all terminals within workspace or <c>null</c> if there are no terminals.
+		/// Returns an array of all terminals within workspace; or <c>null</c> if there are no terminals.
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Required for testing only.")]
 		public virtual Terminal[] Terminals
@@ -457,7 +457,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns active terminal within workspace or <c>null</c> if no terminal is active.
+		/// Returns active terminal within workspace; or <c>null</c> if no terminal is active.
 		/// </summary>
 		public virtual Terminal ActiveTerminal
 		{
@@ -531,13 +531,24 @@ namespace YAT.Model
 
 				if (ActiveTerminal != null)
 				{
-					var sb = new StringBuilder(ActiveTerminal.SequentialName);
-					sb.Append("/Seq#");
+					// Attention:
+					// Similar "[IndicatedName] - Info - Info - Info" as in Terminal.Caption{get}.
+					// Changes here may have to be applied there too.
+
+					var sb = new StringBuilder();
+
+					sb.Append("[");
+					sb.Append(ActiveTerminal.IndicatedName);
+					sb.Append("] - Seq#");
 					sb.Append(ActiveTerminalSequentialId);
-					sb.Append("/Dyn#");
+					sb.Append(" - Dyn#");
 					sb.Append(ActiveTerminalDynamicId);
-					sb.Append("/Fix#");
+					sb.Append(" - Fix#");
 					sb.Append(ActiveTerminalFixedId);
+				#if (WITH_SCRIPTING)
+					sb.Append(" (Connection.TerminalId)");
+				#endif
+
 					return (sb.ToString());
 				}
 				else
@@ -810,7 +821,7 @@ namespace YAT.Model
 			sb.Append(Path.DirectorySeparatorChar);
 			sb.Append(Application.Settings.GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
 			sb.Append(Guid.ToString());
-			sb.Append(ExtensionHelper.WorkspaceFile);
+			sb.Append(ExtensionHelper.WorkspaceExtension);
 
 			return (sb.ToString());
 		}
@@ -1377,9 +1388,14 @@ namespace YAT.Model
 		{
 			var t = (Terminal)sender;
 
+			// Retrieve event args before removing the terminal:
+			var sequentialId = t.SequentialId;
+			var dynamicId    = GetDynamicIdByTerminal(t);
+			var fixedId      = GetFixedIdByTerminal(t);
+
 			DetachTerminalEventHandlers(t);
 			RemoveTerminalFromWorkspace(t, !e.IsParentClose); // Simply remove the terminal from the workspace, it disposes of itself.
-			OnTerminalRemoved(t);
+			OnTerminalRemoved(new TerminalEventArgs(t, sequentialId, dynamicId, fixedId));
 		}
 
 		private void terminal_ExitRequest(object sender, EventArgs e)
@@ -1443,7 +1459,7 @@ namespace YAT.Model
 
 			AttachTerminalEventHandlers(t);
 			AddTerminalToWorkspace(t);
-			OnTerminalAdded(t);
+			OnTerminalAdded(new TerminalEventArgs(t, t.SequentialId, GetDynamicIdByTerminal(t), GetFixedIdByTerminal(t)));
 
 			OnCursorReset();
 			OnTimedStatusTextRequest("New terminal created.");
@@ -1721,7 +1737,7 @@ namespace YAT.Model
 
 			AttachTerminalEventHandlers(t);
 			AddTerminalToWorkspace(t, fixedId);
-			OnTerminalAdded(t);
+			OnTerminalAdded(new TerminalEventArgs(t, t.SequentialId, GetDynamicIdByTerminal(t), GetFixedIdByTerminal(t)));
 
 			if (!settingsHandler.Settings.AutoSaved)
 				SetRecent(settingsHandler.SettingsFilePath);
@@ -2349,16 +2365,16 @@ namespace YAT.Model
 		// Event Raising
 		//==========================================================================================
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
-		protected virtual void OnTerminalAdded(Terminal terminal)
+		/// <summary></summary>
+		protected virtual void OnTerminalAdded(TerminalEventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<Terminal>>(TerminalAdded, this, new EventArgs<Terminal>(terminal));
+			this.eventHelper.RaiseSync<TerminalEventArgs>(TerminalAdded, this, e);
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
-		protected virtual void OnTerminalRemoved(Terminal terminal)
+		/// <summary></summary>
+		protected virtual void OnTerminalRemoved(TerminalEventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<Terminal>>(TerminalRemoved, this, new EventArgs<Terminal>(terminal));
+			this.eventHelper.RaiseSync<TerminalEventArgs>(TerminalRemoved, this, e);
 		}
 
 		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>

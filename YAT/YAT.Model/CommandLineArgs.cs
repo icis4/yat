@@ -55,8 +55,13 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+	#if !(WITH_SCRIPTING)
 		[ValueArg(Description = "Open the given workspace (.yaw) or terminal (.yat).")]
 		[OptionArg(Name = "Open", ShortName = "o", Description = "Open the given workspace (.yaw) or terminal (.yat).")]
+	#else
+		[ValueArg(Description = "Open the given workspace (.albaw) or terminal (.albat).")]
+		[OptionArg(Name = "Open", ShortName = "o", Description = "Open the given workspace (.albaw) or terminal (.albat).")]
+	#endif
 		public string RequestedFilePath;
 
 		/// <summary></summary>
@@ -75,7 +80,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]                                                          // Attention, "tt" = "TransmitText"!
+		[CLSCompliant(false)] // Arrays as attribute arguments is not CLS-compliant.      Attention, "tt" = "TransmitText"!
 		[OptionArg(Names = new string[] { "Type", "TerminalType" }, ShortNames = new string[] { "t", "ty" }, Description =
 			"The desired terminal type. Valid values are 'Text', 'T' or 'Binary', 'B'. The default value is 'Text'.")]
 		public string TerminalType;
@@ -102,7 +107,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "Baud", "BaudRate" }, ShortName = "br", Description =
 			"The desired baud rate. Must be a positive integral value that is supported by the selected serial COM port on the current machine. " +
 			"Typical values are 2400, 4800, 9600, 19200, 38400, 57600 and 115200. The default value is 9600." + EnvironmentEx.NewLineConstWorkaround +
@@ -265,8 +270,8 @@ namespace YAT.Model
 		public string ProductId;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "SerialString", "SerialNumber" }, ShortName = "SNR", Description =
 			"The desired USB device serial string -aka- serial number (SNR). The default value is the SNR of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
@@ -291,13 +296,13 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "OpenTerminal", "StartTerminal" }, ShortNames = new string[] { "ot", "st" }, Description = "Open/start the terminal.")]
 		public bool StartTerminal;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "KeepTerminalClosed", "KeepTerminalStopped" }, ShortNames = new string[] { "ktc", "kts" }, Description =
 			"Keep terminal(s) closed/stopped, even if settings request to open/start." + EnvironmentEx.NewLineConstWorkaround +
 			"This option overrides the 'OpenTerminal/StartTerminal' option if both options are given.")]
@@ -305,7 +310,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "Log", "LogOn" }, ShortName = "ln", Description = "Switch logging on.")]
 		public bool LogOn;
 
@@ -318,19 +323,19 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "Horizontal", "TileHorizontal" }, ShortName = "th", Description = "Tile the terminals horizontally after having openend a workspace.")]
 		public bool TileHorizontal;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "Vertical", "TileVertical" }, ShortName = "tv", Description = "Tile the terminals vertically after having openend a workspace.")]
 		public bool TileVertical;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "DynamicId", "DynamicTerminalId" }, ShortNames = new string[] { "di", "dti" }, Description =
 			"Perform any requested operation on the terminal with the given dynamic ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1, 2, 3,... up to the number of open terminals. " +
@@ -343,13 +348,38 @@ namespace YAT.Model
 
 		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "TransmitText", ShortName = "tt", Description = "Automatically transmit the given text using the terminal specified.")]
+		[OptionArg(Name = "TransmitText", ShortName = "tt", Description = "Transmit the given text using the terminal specified.")]
 		public string RequestedTransmitText;
 
 		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "TransmitFile", ShortName = "tf", Description = "Automatically transmit the given file using the terminal specified.")]
+		[OptionArg(Name = "TransmitFile", ShortName = "tf", Description = "Transmit the given file using the terminal specified.")]
 		public string RequestedTransmitFilePath;
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "Script", ShortName = "s", Description = "Run the given script.")]
+		public string RequestedScriptFilePath;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "ScriptLog", ShortName = "sl", Description = "The desired script log file.")]
+		public string RequestedScriptLogFilePath;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "ScriptLogTimeStamp", ShortName = "slt", Description = "Append the time stamp to the script log file name.")]
+		public bool AppendTimeStampToScriptLogFileName;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[CLSCompliant(false)]                                  // Arrays as attribute arguments is not CLS-compliant.
+		[OptionArg(Name = "ScriptArgs", ShortNames = new string[] { "sa", "sca" }, Description = "The input arguments for the script.")]
+		public string[] RequestedScriptArgs;                               // Backward compatibility "script command line args".
+
+	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -398,7 +428,11 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public CommandLineArgs(string[] args)
+	#if (WITH_SCRIPTING)
+			: base(args, true, true, true)
+	#else
 			: base(args, true, true, false)
+	#endif
 		{
 		}
 
@@ -519,12 +553,16 @@ namespace YAT.Model
 		/// </summary>
 		public override string GetHelpText(int maxWidth)
 		{
-			var anyWorkspace = "<Workspace>" + ExtensionHelper.WorkspaceFile;
-			var anyTerminal  = "<Terminal>"  + ExtensionHelper.TerminalFile;
-
-			var myWorkspace = "MyWorkspace" + ExtensionHelper.WorkspaceFile;
-			var myTerminal  = "MyTerminal"  + ExtensionHelper.TerminalFile;
-
+			var anyWorkspace = "<Workspace>" + ExtensionHelper.WorkspaceExtension;
+			var anyTerminal  = "<Terminal>"  + ExtensionHelper.TerminalExtension;
+		#if (WITH_SCRIPTING)
+			var anyScript    = "<Script>"    + ExtensionHelper.ScriptExtension;
+		#endif
+			var myWorkspace = "MyWorkspace" + ExtensionHelper.WorkspaceExtension;
+			var myTerminal  = "MyTerminal"  + ExtensionHelper.TerminalExtension;
+		#if (WITH_SCRIPTING)
+			var myScript    = "MyScript"    + ExtensionHelper.ScriptExtension;
+		#endif
 			var name = ApplicationEx.ExecutableNameWithoutExtension; // The executable name shall be used as *the* name, as
 			var helpText = new StringBuilder();                      // only that is relevant to the user of the command line.
 
@@ -540,6 +578,14 @@ namespace YAT.Model
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " and open the given terminal."));
+		#if (WITH_SCRIPTING)
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myScript));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " and run the given script."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myScript + @" /sca abc ""d e f"" 12 34.56"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + @" and run the given script with the give four input parameters ""abc"", ""d e f"", ""12"" and ""34.56""."));
+		#endif
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal + " /b=19200"));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + name + " with the given terminal, but change the baud rate to 19200 baud."));

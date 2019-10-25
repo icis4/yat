@@ -50,6 +50,32 @@ namespace YAT.Model
 	}
 
 	/// <summary></summary>
+	public class TerminalEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public Terminal Terminal { get; }
+
+		/// <summary></summary>
+		public int SequentialId { get; }
+
+		/// <summary></summary>
+		public int DynamicId { get; }
+
+		/// <summary></summary>
+		public int FixedId { get; }
+
+		/// <summary></summary>
+		public TerminalEventArgs(Terminal terminal, int sequentialId, int dynamicId, int fixedId)
+		{
+			Terminal     = terminal;
+
+			SequentialId = sequentialId;
+			DynamicId    = dynamicId;
+			FixedId      = fixedId;
+		}
+	}
+
+	/// <summary></summary>
 	public class ClosedEventArgs : EventArgs
 	{
 		/// <summary></summary>

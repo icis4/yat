@@ -34,18 +34,31 @@ namespace YAT
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public static class ApplicationEx
 	{
+	#if !(WITH_SCRIPTING)
 		/// <summary>The common name, always "YAT", i.e. not "YAT" *or* "YATConsole".</summary>
 		public const string CommonName = "YAT";
+	#else
+		/// <summary>The common name, always "Albatros", i.e. not "Albatros" *or* "AlbatrosConsole".</summary>
+		public const string CommonName = "Albatros"; // Note that making name 'Albatros' publicly visible doesn't matter anymore, several SourceForge tickets created by UFi contain "Albatros" anyway.
+	#endif
 
 		/// <summary>The long variant of the common name.</summary>
+	#if !(WITH_SCRIPTING)
 		public const string CommonNameLong = CommonName + " - Yet Another Terminal";
+	#else
+		public const string CommonNameLong = CommonName + " - YAT with Scripting";
+	#endif
 
 		/// <summary>
 		/// Constant string to expand the application's product name in places where neither
 		/// <see cref="ProductName"/> nor <see cref="System.Windows.Forms.Application.ProductName"/>
 		/// can be used, e.g. in case of attribute arguments.
 		/// </summary>
+	#if !(WITH_SCRIPTING)
 		public const string ProductNameConstWorkaround = "YAT"; // Should be "YAT" or "YATConsole", but fixed for simplicity.
+	#else                       // Note that making name 'Albatros' publicly visible is doesn't matter anymore, several SourceForge tickets created by UFi contain "Albatros" anyway.
+		public const string ProductNameConstWorkaround = "Albatros"; // Should be "Albatros" or "AlbatrosConsole", but fixed for simplicity.
+	#endif
 
 		/// <summary>The product name.</summary>
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
@@ -96,23 +109,40 @@ namespace YAT
 			"...TCP/IP Client/Server/AutoSocket,...",
 			"...UDP/IP Client/Server/PairSocket and...",
 			"...USB Ser/HID.",
+	#if (WITH_SCRIPTING)
+			"Integrated C# scripting functionality.",
+	#endif
 			"",
 			"Visit YAT at https://sourceforge.net/projects/y-a-terminal.",
+	#if !(WITH_SCRIPTING)
 			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
+	#else
+			"Contact Albatros by mailto:matthias.klaey@mt.com.",
+	#endif
 			"",
+	#if !(WITH_SCRIPTING)
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
 			"Copyright © 2003-2019 Matthias Kläy.",
+	#else
+			"Copyright © 2008-2019 Mettler-Toledo.",
+	#endif
 			"All rights reserved.",
+	#if !(WITH_SCRIPTING)
 			"",
 			"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.
 			"See http://www.gnu.org/licenses/lgpl.html for license details."
+	#endif
 		};
 
 		/// <summary>The executable name.</summary>
 		public static readonly string ExecutableNameWithoutExtension = Path.GetFileNameWithoutExtension(System.Windows.Forms.Application.ExecutablePath);
 
 		/// <summary>The .NET Framework prerequisite.</summary>
+	#if !(WITH_SCRIPTING)
 		public static readonly string PrerequisiteFramework = ".NET Framework 3.5 Service Pack 1";
+	#else
+		public static readonly string PrerequisiteFramework = ".NET Framework 4.0";
+	#endif
 
 		/// <summary>The Windows operating system prerequisite.</summary>
 		public static readonly string PrerequisiteWindowsOS = "Windows 2000 or later";
