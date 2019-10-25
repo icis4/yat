@@ -5,10 +5,10 @@
 :: Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 :: Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 :: ------------------------------------------------------------------------------------------------
-:: $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Runtime%20Config.cmd $
-:: $Revision: 2043 $
-:: $Date: 2019-03-07 09:45:24 +0100 (Do., 07 MÃ¤r 2019) $
-:: $Author: maettu_this $
+:: $URL$
+:: $Revision$
+:: $Date$
+:: $Author$
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
@@ -51,5 +51,5 @@ ENDLOCAL
 
 ::==================================================================================================
 :: End of
-:: $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Runtime%20Config.cmd $
+:: $URL$
 ::==================================================================================================
