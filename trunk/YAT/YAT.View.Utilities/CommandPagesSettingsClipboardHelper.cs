@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.3.90 Development
+// YAT Version 2.1.1 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
