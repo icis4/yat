@@ -27,15 +27,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-namespace YAT.Model.Settings
+namespace YAT.Application.Settings
 {
-	/// <remarks>
-	/// \remind (2017-11-19 / MKY), (2019-08-02 / MKY)
-	/// Should be migrated to a separate 'YAT.Application.Settings' project. Not easily possible
-	/// because of dependencies among 'YAT.*' and 'YAT.Application', e.g. 'ExtensionSettings'.
-	/// Requires slight refactoring of project dependencies. Could be done when refactoring the
-	/// projects on integration with Albatros.
-	/// </remarks>
+	/// <summary></summary>
 	public class MainWindowSettings : MKY.Settings.SettingsItem, IEquatable<MainWindowSettings>
 	{
 		private FormStartPosition startPosition;

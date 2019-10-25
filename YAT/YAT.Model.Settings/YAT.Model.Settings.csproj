@@ -87,20 +87,15 @@
     </Compile>
     <Compile Include="AutoActionSettings.cs" />
     <Compile Include="AutoResponseSettings.cs" />
-    <Compile Include="FindSettings.cs" />
     <Compile Include="LayoutSettings.cs" />
-    <Compile Include="MainWindowSettings.cs" />
     <Compile Include="NewTerminalSettings.cs" />
     <Compile Include="PredefinedCommandSettings.cs" />
     <Compile Include="PredefinedSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecentFileSettings.cs" />
     <Compile Include="SendFileSettings.cs" />
     <Compile Include="SendTextSettings.cs" />
-    <Compile Include="SocketSettings.cs" />
     <Compile Include="TerminalSettingsItem.cs" />
     <Compile Include="ViewSettings.cs" />
-    <Compile Include="WindowSettings.cs" />
     <Compile Include="WorkspaceSettings.cs" />
   </ItemGroup>
   <ItemGroup>

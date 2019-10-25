@@ -416,7 +416,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Model.Settings.WindowSettings Window
+		public virtual YAT.Application.Settings.WindowSettings Window
 		{
 			get { return (this.implicit_.Window); }
 			set { this.implicit_.Window = value;  }

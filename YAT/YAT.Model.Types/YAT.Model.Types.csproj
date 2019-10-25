@@ -89,7 +89,6 @@
     <Compile Include="AutoTrigger.cs" />
     <Compile Include="AutoResponse.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="FindOptions.cs" />
     <Compile Include="PredefinedCommandPageLayout.cs" />
     <Compile Include="WorkspaceLayout.cs" />
     <Compile Include="EventArgs.cs" />

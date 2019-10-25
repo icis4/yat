@@ -44,6 +44,7 @@ using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
+using YAT.Application.Settings;
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;

@@ -22,48 +22,28 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
-using MKY;
-using MKY.Collections;
-using MKY.Collections.Specialized;
-
-using YAT.Model.Types;
-
-#endregion
-
-namespace YAT.Model.Settings
+namespace YAT.Application.Settings
 {
-	/// <remarks>
-	/// \remind (2017-11-19 / MKY), (2019-08-02 / MKY)
-	/// Should be migrated to a separate 'YAT.Application.Settings' project. Not easily possible
-	/// because of dependencies among 'YAT.*' and 'YAT.Application', e.g. 'ExtensionSettings'.
-	/// Requires slight refactoring of project dependencies. Could be done when refactoring the
-	/// projects on integration with Albatros.
-	/// </remarks>
-	public class FindSettings : MKY.Settings.SettingsItem, IEquatable<FindSettings>
+	/// <summary></summary>
+	public class WindowSettings : MKY.Settings.SettingsItem, IEquatable<WindowSettings>
 	{
-		private const int MaxRecentPatterns = 12;
-
-		private string activePattern;
-		private RecentItemCollection<string> recentPatterns;
-		private FindOptions options;
+		private FormWindowState state;
+		private Point location;
+		private Size size;
 
 		/// <summary></summary>
-		public FindSettings()
+		public WindowSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public FindSettings(MKY.Settings.SettingsType settingsType)
+		public WindowSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -74,12 +54,12 @@ namespace YAT.Model.Settings
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public FindSettings(FindSettings rhs)
+		public WindowSettings(WindowSettings rhs)
 			: base(rhs)
 		{
-			ActivePattern  = rhs.ActivePattern;
-			RecentPatterns = new RecentItemCollection<string>(rhs.RecentPatterns);
-			Options        = rhs.Options;
+			State    = rhs.State;
+			Location = rhs.Location;
+			Size     = rhs.Size;
 
 			ClearChanged();
 		}
@@ -91,63 +71,59 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			ActivePattern  = null;
-			RecentPatterns = new RecentItemCollection<string>(MaxRecentPatterns);
-			Options        = new FindOptions(true, false, false);
-		}
+			State    = FormWindowState.Maximized;
+			Location = new Point(0, 0);
+			Size     = new Size(900, 675); // Relates to 'Size' of the 'YAT.View.Main' form as
+		}                                  // well as the 'YAT.Model.Settings.MainWindowSettings'.
 
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
 
-		/// <remarks>
-		/// Using "Pattern" instead of "TextOrPattern" for simplicity.
-		/// </remarks>
-		[XmlElement("ActivePattern")]
-		public string ActivePattern
+		/// <summary></summary>
+		[XmlElement("State")]
+		public FormWindowState State
 		{
-			get { return (this.activePattern); }
+			get { return (this.state); }
 			set
 			{
-				if (this.activePattern != value)
+				if (this.state != value)
 				{
-					this.activePattern = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <remarks>
-		/// Using "Pattern" instead of "TextOrPattern" for simplicity.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
-		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
-		[XmlElement("RecentPatterns")]
-		public RecentItemCollection<string> RecentPatterns
-		{
-			get { return (this.recentPatterns); }
-			set
-			{
-				if (this.recentPatterns != value)
-				{
-					this.recentPatterns = value;
+					this.state = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Options")]
-		public FindOptions Options
+		[XmlElement("Location")]
+		public Point Location
 		{
-			get { return (this.options); }
+			get { return (this.location); }
 			set
 			{
-				if (this.options != value)
+				if (this.location != value)
 				{
-					this.options = value;
-					SetMyChanged();
+					this.location = value;
+					if (this.state == FormWindowState.Normal)
+						SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Size")]
+		public Size Size
+		{
+			get { return (this.size); }
+			set
+			{
+				if (this.size != value)
+				{
+					this.size = value;
+					if (this.state == FormWindowState.Normal)
+						SetMyChanged();
 				}
 			}
 		}
@@ -172,9 +148,7 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ (ActivePattern  != null ? ActivePattern .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RecentPatterns != null ? RecentPatterns.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  Options                                .GetHashCode();
+				hashCode = (hashCode * 397) ^ State.GetHashCode();
 
 				return (hashCode);
 			}
@@ -185,7 +159,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as FindSettings));
+			return (Equals(obj as WindowSettings));
 		}
 
 		/// <summary>
@@ -195,26 +169,38 @@ namespace YAT.Model.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(FindSettings other)
+		public bool Equals(WindowSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			return
-			(
-				base.Equals(other) && // Compare all settings nodes.
+			if (this.state == FormWindowState.Normal)
+			{   // Normal
+				return
+				(
+					base.Equals(other) && // Compare all settings nodes.
 
-				StringEx          .EqualsOrdinal(ActivePattern, other.ActivePattern)  &&
-				IEnumerableEx.ItemsEqual(       RecentPatterns, other.RecentPatterns) &&
-				Options           .Equals(                      other.Options)
-			);
+					State   .Equals(other.State)    &&
+					Location.Equals(other.Location) &&
+					Size    .Equals(other.Size)
+				);
+			}
+			else
+			{   // Maximized or Minimized
+				return
+				(
+					base.Equals(other) && // Compare all settings nodes.
+
+					State.Equals(other.State)
+				);
+			}
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(FindSettings lhs, FindSettings rhs)
+		public static bool operator ==(WindowSettings lhs, WindowSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -227,7 +213,7 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(FindSettings lhs, FindSettings rhs)
+		public static bool operator !=(WindowSettings lhs, WindowSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}
