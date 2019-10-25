@@ -87,7 +87,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketBase.cs" />
     <Compile Include="SocketDefaults.cs" />
+    <Compile Include="TcpAutoSocket.Server.cs" />
+    <Compile Include="TcpAutoSocket.Client.cs" />
+    <Compile Include="TcpClient.Send.cs" />
+    <Compile Include="TcpServer.Send.cs" />
     <Compile Include="UdpServerSendMode.cs" />
+    <Compile Include="UdpSocket.Receive.cs" />
+    <Compile Include="UdpSocket.Send.cs" />
     <Compile Include="UdpSocketType.cs" />
     <Compile Include="SocketType.cs" />
     <Compile Include="SocketSettings.cs" />

@@ -69,8 +69,11 @@ namespace MKY.IO.Serial.Socket
 	/// of socket and connections and thread asynchronously and without firing events. See remarks
 	/// of these classes for additional information.
 	/// </remarks>
+	/// <remarks>
+	/// This class is implemented using partial classes separating client/server functionality.
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
-	public class TcpAutoSocket : IIOProvider, IDisposable, IDisposableEx
+	public partial class TcpAutoSocket : IIOProvider, IDisposable, IDisposableEx
 	{
 		#region Types
 		//==========================================================================================
@@ -557,12 +560,14 @@ namespace MKY.IO.Serial.Socket
 
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
-#if (DEBUG)
+		#if (DEBUG)
 			SocketState oldState = this.state;
-#endif
+		#endif
+
 			lock (this.stateSyncObj)
 				this.state = state;
-#if (DEBUG)
+
+		#if (DEBUG)
 			string isClientOrServerString;
 			if      (IsClient && IsConnected) // 'Doppel-moppel', but keep it as a check during development and debugging
 				isClientOrServerString = "is connected as client";
@@ -577,7 +582,8 @@ namespace MKY.IO.Serial.Socket
 				DebugMessage("State has changed from " + oldState + " to " + state + ", " + isClientOrServerString + ".");
 			else
 				DebugMessage("State is already " + oldState + ".");
-#endif
+		#endif
+
 			OnIOChanged(EventArgs.Empty);
 		}
 
@@ -784,302 +790,6 @@ namespace MKY.IO.Serial.Socket
 			SetStateSynchronizedAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(severity, message));
 		}
-
-		#endregion
-
-		#region Client
-		//==========================================================================================
-		// Client
-		//==========================================================================================
-
-		#region Client > Lifetime
-		//------------------------------------------------------------------------------------------
-		// Client > Lifetime
-		//------------------------------------------------------------------------------------------
-
-		private void CreateClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
-		{
-			DisposeClient();
-
-			lock (this.socketSyncObj)
-			{
-				this.client = new TcpClient(this.instanceId, remoteHost, remotePort, localInterface);
-
-				this.client.IOChanged    += client_IOChanged;
-				this.client.IOError      += client_IOError;
-				this.client.DataReceived += client_DataReceived;
-				this.client.DataSent     += client_DataSent;
-			}
-		}
-
-		private void DisposeClient()
-		{
-			lock (this.socketSyncObj)
-			{
-				if (this.client != null)
-				{
-					this.client.IOChanged    -= client_IOChanged;
-					this.client.IOError      -= client_IOError;
-					this.client.DataReceived -= client_DataReceived;
-					this.client.DataSent     -= client_DataSent;
-
-					this.client.Dispose();
-					this.client = null;
-				}
-			}
-		}
-
-		#endregion
-
-		#region Client > Events
-		//------------------------------------------------------------------------------------------
-		// Client > Events
-		//------------------------------------------------------------------------------------------
-
-		private void client_IOChanged(object sender, EventArgs e)
-		{
-			switch (GetStateSynchronized())
-			{
-				case SocketState.Connecting:
-				{
-					bool isConnected = false;
-					lock (this.socketSyncObj)
-					{
-						if (this.client != null)
-							isConnected = this.client.IsConnected;
-					}
-
-					if (isConnected)                  // If I/O changed during startup,
-					{                                 //   check for connected and change state.
-						SetStateSynchronizedAndNotify(SocketState.Connected);
-					}
-
-					break;
-				}
-				case SocketState.Connected:
-				{
-					bool isConnected = false;
-					lock (this.socketSyncObj)
-					{
-						if (this.client != null)
-							isConnected = this.client.IsConnected;
-					}
-
-					if (isConnected)                  // If I/O changed during client operation
-					{                                 //   and client is connected to a server,
-						OnIOChanged(e);               //   simply forward the event.
-					}
-					else
-					{
-						DisposeClient();              // If client lost connection to server,
-						StartListening();             //   change to server operation.
-					}
-
-					break;
-				}
-			}
-		}
-
-		private void client_IOError(object sender, IOErrorEventArgs e)
-		{
-			switch (GetStateSynchronized())
-			{
-				case SocketState.Connecting:
-				case SocketState.ConnectingFailed:
-				{
-					DisposeClient();                // In case of error during startup,
-					StartListening();               //   try to start as server.
-					break;
-				}
-
-				case SocketState.Connected:
-				{
-					if (e.Severity == ErrorSeverity.Acceptable)
-					{
-						DisposeClient();            // In case of error during client operation,
-						StartConnecting();          //   restart AutoSocket.
-					}
-					else
-					{
-						OnIOError(e);
-					}
-					break;
-				}
-
-				default:
-				{
-					OnIOError(e);
-					break;
-				}
-			}
-		}
-
-		private void client_DataReceived(object sender, DataReceivedEventArgs e)
-		{
-			if (!IsDisposed && IsClient) // Check 'IsDisposed' first!
-				OnDataReceived(e);
-		}
-
-		private void client_DataSent(object sender, DataSentEventArgs e)
-		{
-			if (!IsDisposed && IsClient) // Check 'IsDisposed' first!
-				OnDataSent(e);
-		}
-
-		#endregion
-
-		#endregion
-
-		#region Server
-		//==========================================================================================
-		// Server
-		//==========================================================================================
-
-		#region Server > Lifetime
-		//------------------------------------------------------------------------------------------
-		// Server > Lifetime
-		//------------------------------------------------------------------------------------------
-
-		private void CreateServer(IPNetworkInterfaceEx localInterface, int localPort)
-		{
-			DisposeServer();
-
-			lock (this.socketSyncObj)
-			{
-				this.server = new TcpServer(this.instanceId, localInterface, localPort);
-
-				this.server.IOChanged    += server_IOChanged;
-				this.server.IOError      += server_IOError;
-				this.server.DataReceived += server_DataReceived;
-				this.server.DataSent     += server_DataSent;
-			}
-		}
-
-		private void DisposeServer()
-		{
-			lock (this.socketSyncObj)
-			{
-				if (this.server != null)
-				{
-					this.server.IOChanged    -= server_IOChanged;
-					this.server.IOError      -= server_IOError;
-					this.server.DataReceived -= server_DataReceived;
-					this.server.DataSent     -= server_DataSent;
-
-					this.server.Dispose();
-					this.server = null;
-				}
-			}
-		}
-
-		#endregion
-
-		#region Server > Events
-		//------------------------------------------------------------------------------------------
-		// Server > Events
-		//------------------------------------------------------------------------------------------
-
-		private void server_IOChanged(object sender, EventArgs e)
-		{
-			switch (GetStateSynchronized())
-			{
-				case SocketState.StartingListening:
-				{
-					bool isStarted = false;
-					lock (this.socketSyncObj)
-					{
-						if (this.server != null)
-							isStarted = this.server.IsStarted;
-					}
-
-					if (isStarted)                    // If I/O changed during startup,
-					{                                 //   check for start and change state.
-						SetStateSynchronizedAndNotify(SocketState.Listening);
-					}
-
-					break;
-				}
-				case SocketState.Listening:
-				{
-					int connectedClientCount = 0;
-					lock (this.socketSyncObj)
-					{
-						if (this.server != null)
-							connectedClientCount = this.server.ConnectedClientCount;
-					}
-
-					if (connectedClientCount > 0)     // If I/O changed during listening, change state
-					{                                 //   to accepted if clients are connected.
-						SetStateSynchronizedAndNotify(SocketState.Accepted);
-					}
-
-					break;
-				}
-				case SocketState.Accepted:
-				{
-					int connectedClientCount = 0;
-					lock (this.socketSyncObj)
-					{
-						if (this.server != null)
-							connectedClientCount = this.server.ConnectedClientCount;
-					}
-
-					if (connectedClientCount <= 0)    // If I/O changed during accepted, change state
-					{                                 //   to listening if no clients are connected.
-						SetStateSynchronizedAndNotify(SocketState.Listening);
-					}
-
-					break;
-				}
-			}
-		}
-
-		private void server_IOError(object sender, IOErrorEventArgs e)
-		{
-			switch (GetStateSynchronized())
-			{
-				case SocketState.StartingListening: // In case of error during startup,
-				{                                   //   increment start cycles and
-					RequestTryAgain();              //   continue depending on count
-					break;
-				}
-
-				case SocketState.Listening:
-				case SocketState.Accepted:
-				{
-					if (e.Severity == ErrorSeverity.Acceptable)
-					{
-						DisposeServer();            // In case of error during server operation,
-						StartConnecting();          //   restart AutoSocket
-					}
-					else
-					{
-						OnIOError(e);
-					}
-					break;
-				}
-
-				default:
-				{
-					OnIOError(e);
-					break;
-				}
-			}
-		}
-
-		private void server_DataReceived(object sender, DataReceivedEventArgs e)
-		{
-			if (!IsDisposed && IsServer) // Check 'IsDisposed' first!
-				OnDataReceived(e);
-		}
-
-		private void server_DataSent(object sender, DataSentEventArgs e)
-		{
-			if (!IsDisposed && IsServer) // Check 'IsDisposed' first!
-				OnDataSent(e);
-		}
-
-		#endregion
 
 		#endregion
 
