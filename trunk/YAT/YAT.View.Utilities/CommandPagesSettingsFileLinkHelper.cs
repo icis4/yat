@@ -103,7 +103,7 @@ namespace YAT.View.Utilities
 			sfd.Title       = "Link Command Page";
 			sfd.Filter      = ExtensionHelper.CommandPageFilesFilter;
 			sfd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
-			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageExtension);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 			sfd.FileName    = Path.GetFileName(filePathOld);
 
@@ -132,7 +132,7 @@ namespace YAT.View.Utilities
 			ofd.Title       = "Link Command Page";
 			ofd.Filter      = ExtensionHelper.CommandPageFilesFilter;
 			ofd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 			ofd.FileName    = Path.GetFileName(filePathOld);
 
@@ -162,7 +162,7 @@ namespace YAT.View.Utilities
 			ofd.Title       = "Link Command Page";
 			ofd.Filter      = ExtensionHelper.CommandPageFilesFilter;
 			ofd.FilterIndex = ExtensionHelper.CommandPageFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageFile);
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.CommandPageExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.CommandFiles;
 
 			var dr = ofd.ShowDialog(owner);

@@ -48,31 +48,42 @@ namespace YAT.Application.Utilities
 		// Terminal/Workspace
 		//------------------------------------------------------------------------------------------
 
-		private static string terminalFile  = ".yat";
-		private static string workspaceFile = ".yaw";
+		private static string terminalExtension  = ".yat";
+		private static string workspaceExtension = ".yaw";
 
 		/// <summary>
 		/// Allows to alter the file extension used for terminal files,
 		/// e.g. ".ab1" instead of ".yat".
 		/// </summary>
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsTerminalFile(string)"/>.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
-		public static string TerminalFile
+		public static string TerminalExtension
 		{
-			get { return (terminalFile); }
-			set { terminalFile = value;  }
+			get { return (terminalExtension); }
+			set { terminalExtension = value;  }
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsTerminalFile(string)"/>.
+		/// </remarks>
+		public static bool IsTerminalExtension(string extension)
+		{
+			return (PathEx.Equals(extension, TerminalExtension));
 		}
 
 		/// <summary></summary>
 		public static bool IsTerminalFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (PathEx.Equals(extension, TerminalFile));
+			return (IsTerminalExtension(extension));
 		}
 
 		/// <summary></summary>
 		public static string TerminalFilesFilter
 		{
-			get { return (ApplicationEx.CommonName + " Terminal Files (*" + TerminalFile + ")|*" + TerminalFile); }
+			get { return (ApplicationEx.CommonName + " Terminal Files (*" + TerminalExtension + ")|*" + TerminalExtension); }
 		}
 
 		/// <summary></summary>
@@ -85,24 +96,35 @@ namespace YAT.Application.Utilities
 		/// Allows to alter the file extension used for workspace files,
 		/// e.g. ".ab2" instead of ".yaw".
 		/// </summary>
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsWorkspaceFile(string)"/>.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
-		public static string WorkspaceFile
+		public static string WorkspaceExtension
 		{
-			get { return (workspaceFile); }
-			set { workspaceFile = value;  }
+			get { return (workspaceExtension); }
+			set { workspaceExtension = value;  }
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsWorkspaceFile(string)"/>.
+		/// </remarks>
+		public static bool IsWorkspaceExtension(string extension)
+		{
+			return (PathEx.Equals(extension, WorkspaceExtension));
 		}
 
 		/// <summary></summary>
 		public static bool IsWorkspaceFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (PathEx.Equals(extension, WorkspaceFile));
+			return (IsWorkspaceExtension(extension));
 		}
 
 		/// <summary></summary>
 		public static string WorkspaceFilesFilter
 		{
-			get { return (ApplicationEx.CommonName + " Workspace Files (*" + WorkspaceFile + ")|*" + WorkspaceFile); }
+			get { return (ApplicationEx.CommonName + " Workspace Files (*" + WorkspaceExtension + ")|*" + WorkspaceExtension); }
 		}
 
 		/// <summary></summary>
@@ -120,7 +142,7 @@ namespace YAT.Application.Utilities
 						"|" +
 						WorkspaceFilesFilter +
 						"|" +
-						"All " + ApplicationEx.CommonName + " Files (*" + TerminalFile + ";*" + WorkspaceFile + ")|*" + TerminalFile + ";*" + WorkspaceFile);
+						"All " + ApplicationEx.CommonName + " Files (*" + TerminalExtension + ";*" + WorkspaceExtension + ")|*" + TerminalExtension + ";*" + WorkspaceExtension);
 			}
 		}
 
@@ -132,37 +154,96 @@ namespace YAT.Application.Utilities
 
 		#endregion
 
+		#region Scripting
+		//------------------------------------------------------------------------------------------
+		// Scripting
+		//------------------------------------------------------------------------------------------
+
+	#if (WITH_SCRIPTING)
+
+		private static string scriptExtension = ".cs";
+
+		/// <summary>
+		/// Allows to alter the file extension used for script files,
+		/// e.g. ".xy" instead of ".cs".
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
+		public static string ScriptExtension
+		{
+			get { return (scriptExtension); }
+			set { scriptExtension = value;  }
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsScriptFile(string)"/>.
+		/// </remarks>
+		public static bool IsScriptExtension(string extension)
+		{
+			return (PathEx.Equals(extension, ScriptExtension));
+		}
+
+		/// <summary></summary>
+		public static bool IsScriptFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsScriptExtension(extension));
+		}
+
+		/// <summary></summary>
+		public static string ScriptFilesFilter
+		{
+			get { return ("C# Files (*" + ScriptExtension + ")|*" + ScriptExtension); }
+		}
+
+		/// <summary></summary>
+		public static int ScriptFilesFilterDefault
+		{
+			get { return (1); }
+		}
+
+	#endif // WITH_SCRIPTING
+
+		#endregion
+
 		#region Command/CommandPages
 		//------------------------------------------------------------------------------------------
 		// Command/CommandPages
 		//------------------------------------------------------------------------------------------
 
-		private static string commandFile  = ".yac";
-		private static string commandPageFile = ".yacp";
-		private static string commandPagesFile = ".yacps";
+		private static string commandExtension      = ".yac";
+		private static string commandPageExtension  = ".yacp";
+		private static string commandPagesExtension = ".yacps";
 
 		/// <summary>
 		/// Allows to alter the file extension used for command files,
 		/// e.g. ".ab3" instead of ".yac".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
-		public static string CommandFile
+		public static string CommandExtension
 		{
-			get { return (commandFile); }
-			set { commandFile = value;  }
+			get { return (commandExtension); }
+			set { commandExtension = value;  }
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsCommandFile(string)"/>.
+		/// </remarks>
+		public static bool IsCommandExtension(string extension)
+		{
+			return (PathEx.Equals(extension, CommandExtension));
 		}
 
 		/// <summary></summary>
 		public static bool IsCommandFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (PathEx.Equals(extension, CommandFile));
+			return (IsCommandExtension(extension));
 		}
 
 		/// <summary></summary>
 		public static string CommandFilesFilter
 		{
-			get { return (ApplicationEx.CommonName + " Command Files (*" + CommandFile + ")|*" + CommandFile); }
+			get { return (ApplicationEx.CommonName + " Command Files (*" + CommandExtension + ")|*" + CommandExtension); }
 		}
 
 		/// <summary></summary>
@@ -176,23 +257,31 @@ namespace YAT.Application.Utilities
 		/// e.g. ".ab4" instead of ".yacp".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
-		public static string CommandPageFile
+		public static string CommandPageExtension
 		{
-			get { return (commandPageFile); }
-			set { commandPageFile = value;  }
+			get { return (commandPageExtension); }
+			set { commandPageExtension = value;  }
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsCommandPageFile(string)"/>.
+		/// </remarks>
+		public static bool IsCommandPageFileExtension(string extension)
+		{
+			return (PathEx.Equals(extension, CommandPageExtension));
 		}
 
 		/// <summary></summary>
 		public static bool IsCommandPageFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (PathEx.Equals(extension, CommandPageFile));
+			return (IsCommandPageFileExtension(extension));
 		}
 
 		/// <summary></summary>
 		public static string CommandPageFilesFilter
 		{
-			get { return (ApplicationEx.CommonName + " Command Page Files (*" + CommandPageFile + ")|*" + CommandPageFile); }
+			get { return (ApplicationEx.CommonName + " Command Page Files (*" + CommandPageExtension + ")|*" + CommandPageExtension); }
 		}
 
 		/// <summary></summary>
@@ -206,17 +295,25 @@ namespace YAT.Application.Utilities
 		/// e.g. ".ab5" instead of ".yacps".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
-		public static string CommandPagesFile
+		public static string CommandPagesExtension
 		{
-			get { return (commandPagesFile); }
-			set { commandPagesFile = value;  }
+			get { return (commandPagesExtension); }
+			set { commandPagesExtension = value;  }
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsCommandPagesFile(string)"/>.
+		/// </remarks>
+		public static bool IsCommandPagesExtension(string extension)
+		{
+			return (PathEx.Equals(extension, CommandPagesExtension));
 		}
 
 		/// <summary></summary>
 		public static bool IsCommandPagesFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (PathEx.Equals(extension, CommandPagesFile));
+			return (IsCommandPagesExtension(extension));
 		}
 
 		/// <remarks>
@@ -224,7 +321,7 @@ namespace YAT.Application.Utilities
 		/// </remarks>
 		public static string CommandPagesFilesFilter
 		{
-			get { return (ApplicationEx.CommonName + " Multiple Command Pages Files (*" + CommandPagesFile + ")|*" + CommandPagesFile); }
+			get { return (ApplicationEx.CommonName + " Multiple Command Pages Files (*" + CommandPagesExtension + ")|*" + CommandPagesExtension); }
 		}
 
 		/// <summary></summary>
@@ -242,7 +339,7 @@ namespace YAT.Application.Utilities
 						"|" +
 						CommandPagesFilesFilter +
 						"|" +
-						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile);
+						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageExtension + ";*" + CommandPagesExtension + ")|*" + CommandPageExtension + ";*" + CommandPagesExtension);
 			}
 		}
 
@@ -261,11 +358,11 @@ namespace YAT.Application.Utilities
 						"|" +
 						CommandPagesFilesFilter +
 						"|" +
-						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageFile + ";*" + CommandPagesFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile +
+						"All " + ApplicationEx.CommonName + " Command Page(s) Files (*" + CommandPageExtension + ";*" + CommandPagesExtension + ")|*" + CommandPageExtension + ";*" + CommandPagesExtension +
 						"|" +
 						TerminalFilesFilter +
 						"|" +
-						"All " + ApplicationEx.CommonName + " Command Page(s) Sources (*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile + ")|*" + CommandPageFile + ";*" + CommandPagesFile + ";*" + TerminalFile);
+						"All " + ApplicationEx.CommonName + " Command Page(s) Sources (*" + CommandPageExtension + ";*" + CommandPagesExtension + ";*" + TerminalExtension + ")|*" + CommandPageExtension + ";*" + CommandPagesExtension + ";*" + TerminalExtension);
 			}
 		}
 
@@ -282,7 +379,9 @@ namespace YAT.Application.Utilities
 		// Text/Binary/Send/Log/Monitor
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsTextFile(string)"/>.
+		/// </remarks>
 		public static bool IsTextExtension(string extension)
 		{
 			if (PathEx.Equals(extension, ".txt"))
@@ -304,7 +403,9 @@ namespace YAT.Application.Utilities
 			return (IsTextExtension(extension));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsBinaryFile(string)"/>.
+		/// </remarks>
 		public static bool IsBinaryExtension(string extension)
 		{
 			if (PathEx.Equals(extension, ".dat"))
@@ -326,7 +427,9 @@ namespace YAT.Application.Utilities
 			return (IsBinaryExtension(extension));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsRtfFile(string)"/>.
+		/// </remarks>
 		public static bool IsRtfExtension(string extension)
 		{
 			return (PathEx.Equals(extension, ".rtf"));
@@ -339,7 +442,9 @@ namespace YAT.Application.Utilities
 			return (IsRtfExtension(extension));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsXmlFile(string)"/>.
+		/// </remarks>
 		public static bool IsXmlExtension(string extension)
 		{
 			return (PathEx.Equals(extension, ".xml"));
@@ -389,13 +494,13 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static string TextSendFilesDefault
+		public static string TextSendExtensionDefault
 		{
 			get { return (".txt"); }
 		}
 
 		/// <summary></summary>
-		public static ReadOnlyCollection<string> PortLogFileExtensionsWithDot
+		public static ReadOnlyCollection<string> ControlLogExtensions
 		{
 			get
 			{                            // See comment below!
@@ -410,13 +515,13 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static string PortLogFilesDefault
+		public static string ControlLogExtensionDefault
 		{
-			get { return (".log"); } // = NeatLogFilesDefault
+			get { return (".log"); } // = NeatLogExtensionDefault
 		}
 
 		/// <summary></summary>
-		public static ReadOnlyCollection<string> NeatLogFileExtensionsWithDot
+		public static ReadOnlyCollection<string> NeatLogExtensions
 		{
 			get
 			{
@@ -431,9 +536,9 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static string NeatLogFilesDefault
+		public static string NeatLogExtensionDefault
 		{
-			get { return (".log"); } // = PortLogFilesDefault
+			get { return (".log"); } // = ControlLogExtensionDefault
 		}
 
 		/// <remarks>
@@ -469,15 +574,15 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static string BinarySendFilesDefault
+		public static string BinarySendExtensionDefault
 		{
-			get { return (".dat"); } // = RawLogFilesDefault
+			get { return (".dat"); } // = RawLogExtensionDefault
 		}
 
 		/// <remarks>
 		/// Only applies to log files, i.e. does not contain text file extensions (which are also sendable by binary terminals).
 		/// </remarks>
-		public static ReadOnlyCollection<string> RawLogFileExtensionsWithDot
+		public static ReadOnlyCollection<string> RawLogExtensions
 		{
 			get
 			{
@@ -491,13 +596,13 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
-		public static string RawLogFilesDefault
+		public static string RawLogExtensionDefault
 		{
-			get { return (".dat"); } // = BinarySendFilesDefault
+			get { return (".dat"); } // = BinarySendExtensionDefault
 		}
 
 		/// <summary></summary>
-		public static string MonitorFilesDefault
+		public static string MonitorExtensionDefault
 		{
 			get { return (".rtf"); }
 		}
@@ -509,7 +614,9 @@ namespace YAT.Application.Utilities
 		// Executable
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsExecutableFile(string)"/>.
+		/// </remarks>
 		public static bool IsExecutableExtension(string extension)
 		{
 			return (PathEx.Equals(extension, ".exe"));

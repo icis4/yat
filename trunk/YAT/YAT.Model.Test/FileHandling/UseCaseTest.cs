@@ -53,10 +53,10 @@ namespace YAT.Model.Test.FileHandling
 		// Constants
 		//==========================================================================================
 
-		private readonly string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalWorkspace", ExtensionHelper.WorkspaceFile);
-		private readonly string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal1", ExtensionHelper.TerminalFile);
-		private readonly string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal2", ExtensionHelper.TerminalFile);
-		private readonly string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal3", ExtensionHelper.TerminalFile);
+		private readonly string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalWorkspace", ExtensionHelper.WorkspaceExtension);
+		private readonly string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal1", ExtensionHelper.TerminalExtension);
+		private readonly string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal2", ExtensionHelper.TerminalExtension);
+		private readonly string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(UseCaseTest), "NormalTerminal3", ExtensionHelper.TerminalExtension);
 
 		#endregion
 
