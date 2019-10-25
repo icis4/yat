@@ -217,10 +217,14 @@ namespace YAT.Settings.Application
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
 		private static readonly AlternateXmlElement[] StaticAlternateXmlElements =
-		{                                        // XML path:                  local name of XML element:     alternate local name(s), i.e. former name(s) of XML element:
-		/*	new AlternateXmlElement(new string[] { "#document"             }, "Settings",     new string[] { "RoamingUserSettings" } ), => Accidentally named the root explicitly. Should be renamed, but doesn't work because root is not properly handled by the alternate tolerant deserialization. To be solved using XML transformation. */
-			new AlternateXmlElement(new string[] { "#document", "Settings" }, "SettingsName", new string[] { "FileType" } ),
-			new AlternateXmlElement(new string[] { "#document", "Settings" }, "Mark",         new string[] { "Saved" } )
+		{                                        // XML path:                                local name of XML element:              alternate local name(s), i.e. former name(s) of XML element:
+		/*	new AlternateXmlElement(new string[] { "#document"             },               "Settings",              new string[] { "RoamingUserSettings" } ), => Accidentally named the root explicitly. Should be renamed, but doesn't work because root is not properly handled by the alternate tolerant deserialization. To be solved using XML transformation. */
+			new AlternateXmlElement(new string[] { "#document", "Settings" },               "SettingsName",          new string[] { "FileType" } ),
+			new AlternateXmlElement(new string[] { "#document", "Settings" },               "Mark",                  new string[] { "Saved" } ),
+			new AlternateXmlElement(new string[] { "#document", "Settings", "View" },       "FindIsVisible",         new string[] { "FindVisible" } ),
+			new AlternateXmlElement(new string[] { "#document", "Settings", "View" },       "AutoActionIsVisible",   new string[] { "AutoActionVisible" } ),
+			new AlternateXmlElement(new string[] { "#document", "Settings", "View" },       "AutoResponseIsVisible", new string[] { "AutoResponseVisible" } ),
+			new AlternateXmlElement(new string[] { "#document", "Settings", "Extensions" }, "ControlLogFiles",       new string[] { "PortLogFiles" } )
 		};
 
 		/// <summary></summary>

@@ -45,9 +45,12 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const int MaxCustomColors = 16;
 
-		private bool findVisible;
-		private bool autoActionVisible;
-		private bool autoResponseVisible;
+		private bool findIsVisible;
+		private bool autoActionIsVisible;
+		private bool autoResponseIsVisible;
+	#if (WITH_SCRIPTING)
+		private bool scriptPanelIsVisible;
+	#endif
 
 		private RecentItemCollection<string> customColors;
 
@@ -72,9 +75,12 @@ namespace YAT.Model.Settings
 		public ViewSettings(ViewSettings rhs)
 			: base(rhs)
 		{
-			FindVisible         = rhs.FindVisible;
-			AutoActionVisible   = rhs.AutoActionVisible;
-			AutoResponseVisible = rhs.AutoResponseVisible;
+			FindIsVisible         = rhs.FindIsVisible;
+			AutoActionIsVisible   = rhs.AutoActionIsVisible;
+			AutoResponseIsVisible = rhs.AutoResponseIsVisible;
+		#if (WITH_SCRIPTING)
+			ScriptPanelIsVisible  = rhs.ScriptPanelIsVisible;
+		#endif
 
 			CustomColors = new RecentItemCollection<string>(rhs.CustomColors);
 
@@ -88,9 +94,12 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			FindVisible         = false;
-			AutoActionVisible   = false;
-			AutoResponseVisible = false;
+			FindIsVisible         = false;
+			AutoActionIsVisible   = false;
+			AutoResponseIsVisible = false;
+		#if (WITH_SCRIPTING)
+			ScriptPanelIsVisible  = false;
+		#endif
 
 			CustomColors = new RecentItemCollection<string>(MaxCustomColors);
 		}
@@ -101,49 +110,68 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("FindVisible")]
-		public bool FindVisible
+		[XmlElement("FindIsVisible")]
+		public bool FindIsVisible
 		{
-			get { return (this.findVisible); }
+			get { return (this.findIsVisible); }
 			set
 			{
-				if (this.findVisible != value)
+				if (this.findIsVisible != value)
 				{
-					this.findVisible = value;
+					this.findIsVisible = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("AutoActionVisible")]
-		public bool AutoActionVisible
+		[XmlElement("AutoActionIsVisible")]
+		public bool AutoActionIsVisible
 		{
-			get { return (this.autoActionVisible); }
+			get { return (this.autoActionIsVisible); }
 			set
 			{
-				if (this.autoActionVisible != value)
+				if (this.autoActionIsVisible != value)
 				{
-					this.autoActionVisible = value;
+					this.autoActionIsVisible = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("AutoResponseVisible")]
-		public bool AutoResponseVisible
+		[XmlElement("AutoResponseIsVisible")]
+		public bool AutoResponseIsVisible
 		{
-			get { return (this.autoResponseVisible); }
+			get { return (this.autoResponseIsVisible); }
 			set
 			{
-				if (this.autoResponseVisible != value)
+				if (this.autoResponseIsVisible != value)
 				{
-					this.autoResponseVisible = value;
+					this.autoResponseIsVisible = value;
 					SetMyChanged();
 				}
 			}
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		[XmlElement("ScriptPanelIsVisible")]
+		public bool ScriptPanelIsVisible
+		{
+			get { return (this.scriptPanelIsVisible); }
+			set
+			{
+				if (this.scriptPanelIsVisible != value)
+				{
+					this.scriptPanelIsVisible = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+	#endif // WITH_SCRIPTING
 
 		/// <remarks>
 		/// Using string because...
@@ -224,9 +252,12 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ FindVisible        .GetHashCode();
-				hashCode = (hashCode * 397) ^ AutoActionVisible  .GetHashCode();
-				hashCode = (hashCode * 397) ^ AutoResponseVisible.GetHashCode();
+				hashCode = (hashCode * 397) ^ FindIsVisible        .GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoActionIsVisible  .GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoResponseIsVisible.GetHashCode();
+			#if (WITH_SCRIPTING)
+				hashCode = (hashCode * 397) ^ ScriptPanelIsVisible .GetHashCode();
+			#endif
 
 				hashCode = (hashCode * 397) ^ (CustomColors != null ? CustomColors.GetHashCode() : 0);
 
@@ -259,9 +290,12 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				FindVisible        .Equals(other.FindVisible)         &&
-				AutoActionVisible  .Equals(other.AutoActionVisible)   &&
-				AutoResponseVisible.Equals(other.AutoResponseVisible) &&
+				FindIsVisible        .Equals(other.FindIsVisible)         &&
+				AutoActionIsVisible  .Equals(other.AutoActionIsVisible)   &&
+				AutoResponseIsVisible.Equals(other.AutoResponseIsVisible) &&
+			#if (WITH_SCRIPTING)
+				ScriptPanelIsVisible .Equals(other.ScriptPanelIsVisible)  &&
+			#endif
 
 				IEnumerableEx.ItemsEqual(CustomColors, other.CustomColors)
 			);
