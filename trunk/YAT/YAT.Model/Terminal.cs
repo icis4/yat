@@ -49,6 +49,10 @@ using MKY.Text;
 using MKY.Time;
 using MKY.Windows.Forms;
 
+#if (WITH_SCRIPTING)
+using MT.Albatros.Core;
+#endif
+
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;
@@ -239,6 +243,17 @@ namespace YAT.Model
 		// Partial commands:
 		private string partialCommandLine;
 
+	#if (WITH_SCRIPTING)
+
+		// Scripting:
+		private string lastSentMessage; // = null;
+		private bool isAutoSocket;      // = false;
+		private int receivedXOnOffsetForScripting;  // = 0;
+		private int receivedXOffOffsetForScripting; // = 0;
+		private object receivedXOnXOffForScriptingSyncObj = new object();
+
+	#endif
+
 		#endregion
 
 		#region Events
@@ -270,6 +285,31 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler<Domain.IOErrorEventArgs> IOError;
 
+	#if (WITH_SCRIPTING)
+
+		// Note that e.g. a 'SendingText' or 'SendingMessage' event doesn't make sense, as it would
+		// contain parsable text that may even include keyword to be processed.
+
+		/// <summary>
+		/// Occurs when a packet is being sent in the host application. The event args contain the
+		/// binary raw data that is being sent, including control characters, EOL,...
+		/// </summary>
+		/// <remarks>
+		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and can
+		/// be modified using the <see cref="Domain.ModifiablePacketEventArgs.Data"/> property or
+		/// even canceled using the <see cref="Domain.ModifiablePacketEventArgs.Cancel"/> property.
+		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
+		/// </remarks>
+		public event EventHandler<Domain.ModifiablePacketEventArgs> SendingPacket;
+
+		/// <summary></summary>
+		public event EventHandler<Domain.RawChunkEventArgs> RawElementSent;
+
+		/// <summary></summary>
+		public event EventHandler<Domain.RawChunkEventArgs> RawElementReceived;
+
+	#endif // WITH_SCRIPTING
+
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsSent;
 
@@ -293,6 +333,28 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesReceived;
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Occurs when a packet has been received by the host application. The event args contain
+		/// the binary raw data that has been received, including control characters, EOL,...
+		/// In contrast, the <see cref="ScriptMessageReceived"/> event args contain the message in
+		/// formatted text representation.
+		/// </summary>
+		public event EventHandler<Domain.PacketEventArgs> ScriptPacketReceived;
+
+		/// <summary>
+		/// Occurs when a message has been received by the host application. The event args contain
+		/// the message in formatted text representation. For text terminals, the text is composed
+		/// of the decoded characters, excluding control characters. For binary terminals, the text
+		/// represents the received data in hexadecimal notation.
+		/// In contrast, the <see cref="ScriptPacketReceived"/> event args contain the binary raw
+		/// data that has been received.
+		/// </summary>
+		public event EventHandler<Domain.MessageEventArgs> ScriptMessageReceived;
+
+	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<Domain.RepositoryType>> RepositoryCleared;
@@ -776,6 +838,17 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual string ShortIOString
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.terminal.ToShortIOString());
+			}
+		}
+
+		/// <summary></summary>
 		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
@@ -803,6 +876,10 @@ namespace YAT.Model
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
+
+				// Attention:
+				// Similar "[IndicatedName] - Info - Info - Info" as in Workspace.ActiveTerminalInfoText{get}.
+				// Changes here may have to be applied there too.
 
 				var sb = new StringBuilder();
 
@@ -1363,6 +1440,178 @@ namespace YAT.Model
 			}
 		}
 
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Gets the last sent message.
+		/// </summary>
+		/// <remarks>
+		/// Located here in the underlying terminal (and not in the overlying
+		/// <see cref="ScriptBridge"/>) to keep the line for each terminal.
+		/// </remarks>
+		public virtual void SetLastSentMessage(string value)
+		{
+			AssertNotDisposed();
+
+			this.lastSentMessage = value;
+		}
+
+		/// <summary>
+		/// Gets the last sent message.
+		/// </summary>
+		/// <remarks>
+		/// Located here in the underlying terminal (and not in the overlying
+		/// <see cref="ScriptBridge"/>) to keep the line for each terminal.
+		/// </remarks>
+		public virtual void GetLastSentMessage(out string value)
+		{
+			AssertNotDisposed();
+
+			value = this.lastSentMessage;
+		}
+
+		/// <summary>
+		/// Clears the last sent message.
+		/// </summary>
+		/// <remarks>
+		/// Located here in the underlying terminal (and not in the overlying
+		/// <see cref="ScriptBridge"/>) to keep the line for each terminal.
+		/// </remarks>
+		public virtual void ClearLastSentMessage(out string cleared)
+		{
+			AssertNotDisposed();
+
+			cleared = this.lastSentMessage;
+
+			this.lastSentMessage = null;
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the terminal has received a line that is available for scripting.
+		/// </summary>
+		public virtual bool HasAvailableReceivedMessageForScripting
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.terminal.HasAvailableReceivedMessageForScripting);
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating the number of received lines that are available for scripting.
+		/// </summary>
+		public int AvailableReceivedMessageCountForScripting
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.terminal.AvailableReceivedMessageCountForScripting);
+			}
+		}
+
+		/// <summary>
+		/// Returns the line that has last been enqueued into the receive queue that is available for scripting.
+		/// </summary>
+		public virtual void GetLastEnqueuedReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			this.terminal.GetLastEnqueuedReceivedMessageForScripting(out value);
+		}
+
+		/// <summary>
+		/// Clears the last enqueued line that is available for scripting.
+		/// </summary>
+		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out string cleared)
+		{
+			AssertNotDisposed();
+
+			this.terminal.ClearLastEnqueuedReceivedMessageForScripting(out cleared);
+		}
+
+		/// <summary>
+		/// Gets the next received line that is available for scripting and removes it from the queue.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">
+		/// The underlying <see cref="Queue{T}"/> is empty.
+		/// </exception>
+		public virtual void DequeueNextAvailableReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			this.terminal.DequeueNextAvailableReceivedMessageForScripting(out value);
+		}
+
+		/// <summary>
+		/// Returns the received line that has last been dequeued from the receive queue for scripting.
+		/// </summary>
+		public virtual void GetLastDequeuedReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			this.terminal.GetLastDequeuedReceivedMessageForScripting(out value);
+		}
+
+		/// <summary>
+		/// Clears the last dequeued line that is available for scripting.
+		/// </summary>
+		public virtual void ClearLastDequeuedReceivedMessageForScripting(out string cleared)
+		{
+			AssertNotDisposed();
+
+			this.terminal.ClearLastDequeuedReceivedMessageForScripting(out cleared);
+		}
+
+		/// <remarks>
+		/// \remind (2018-03-27 / MKY)
+		/// 'LastAvailable' only works properly for a terminating number of received messages, but
+		/// not for consecutive receiving. This method shall be eliminated as soon as the obsolete
+		/// GetLastReceived(), CheckLastReceived() and WaitFor() have been removed.
+		/// </remarks>
+		public virtual void GetLastAvailableReceivedMessageForScripting(out string value)
+		{
+			AssertNotDisposed();
+
+			this.terminal.GetLastAvailableReceivedMessageForScripting(out value);
+		}
+
+		/// <summary>
+		/// Cleares all available lines in the receive queue for scripting.
+		/// </summary>
+		public void ClearAvailableReceivedMessagesForScripting(out string[] clearedLines)
+		{
+			AssertNotDisposed();
+
+			this.terminal.ClearAvailableReceivedMessagesForScripting(out clearedLines);
+		}
+
+		/// <summary>
+		/// Determins whether this terminal is using an auto socket.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2019-10-18 / MKY) really needed?
+		/// </remarks>
+		public virtual bool IsAutoSocket
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.isAutoSocket);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.isAutoSocket = value;
+			}
+		}
+
+	#endif // WITH_SCRIPTING
+
 		#endregion
 
 		#region General Methods
@@ -1401,83 +1650,6 @@ namespace YAT.Model
 			}
 
 			return (true);
-		}
-
-		/// <summary>
-		/// Applies new terminal settings.
-		/// </summary>
-		/// <remarks>
-		/// Using <see cref="TerminalExplicitSettings"/> instead of simply using
-		/// <see cref="Domain.Settings.TerminalSettings"/> for two reasons:
-		/// <list type="bullet">
-		/// <item><description>Handling of <see cref="TerminalExplicitSettings.UserName"/>.</description></item>
-		/// <item><description>Prepared for future migration to tree view dialog containing all settings.</description></item>
-		/// </list>
-		/// </remarks>
-		public virtual void ApplyTerminalSettings(TerminalExplicitSettings settings)
-		{
-			AssertNotDisposed();
-
-			// Attention:
-			// Similar code exists in Domain.Terminal.ApplySettings() but without changing the terminal settings (.yat file).
-			// Changes here may have to be applied there too.
-
-			if (this.terminal.IsStarted) // Terminal is started, stop and restart it with the new settings:
-			{
-				// Note that the whole terminal will be recreated. Thus, it must also be recreated if non-IO settings have changed.
-
-				if (StopIO(false))
-				{
-					this.settingsRoot.SuspendChangeEvent();
-					try
-					{
-						this.settingsRoot.Explicit = settings;
-
-						DetachTerminalEventHandlers();
-						using (var oldTerminal = this.terminal)
-						{
-							this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-						}
-						AttachTerminalEventHandlers();
-					}
-					finally
-					{
-						this.settingsRoot.ResumeChangeEvent();
-					}
-					this.terminal.RefreshRepositories();
-
-					if (StartIO(false))
-						OnTimedStatusTextRequest("Terminal settings applied.");
-					else
-						OnFixedStatusTextRequest("Terminal settings applied but terminal could not be started anymore.");
-				}
-				else
-				{
-					OnTimedStatusTextRequest("Terminal settings not applied!");
-				}
-			}
-			else // Terminal is stopped, simply set the new settings:
-			{
-				this.settingsRoot.SuspendChangeEvent();
-				try
-				{
-					this.settingsRoot.Explicit = settings;
-
-					DetachTerminalEventHandlers();
-					using (var oldTerminal = this.terminal)
-					{
-						this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
-					}
-					AttachTerminalEventHandlers();
-				}
-				finally
-				{
-					this.settingsRoot.ResumeChangeEvent();
-				}
-				this.terminal.RefreshRepositories();
-
-				OnTimedStatusTextRequest("Terminal settings applied.");
-			}
 		}
 
 		#endregion
@@ -1758,6 +1930,101 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Settings > Methods
+		//------------------------------------------------------------------------------------------
+		// Settings > Methods
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Applies new terminal settings.
+		/// </summary>
+		/// <remarks>
+		/// Using <see cref="TerminalExplicitSettings"/> instead of simply using
+		/// <see cref="Domain.Settings.TerminalSettings"/> for two reasons:
+		/// <list type="bullet">
+		/// <item><description>Handling of <see cref="TerminalExplicitSettings.UserName"/>.</description></item>
+		/// <item><description>Prepared for future migration to tree view dialog containing all settings.</description></item>
+		/// </list>
+		/// </remarks>
+		public virtual void ApplyTerminalSettings(TerminalExplicitSettings settings)
+		{
+			AssertNotDisposed();
+
+			// Attention:
+			// Similar code exists in Domain.Terminal.ApplySettings() but without changing the terminal settings (.yat file).
+			// Changes here may have to be applied there too.
+
+			if (this.terminal.IsStarted) // Terminal is started, stop and restart it with the new settings:
+			{
+				// Note that the whole terminal will be recreated. Thus, it must also be recreated if non-IO settings have changed.
+
+				if (StopIO(false))
+				{
+					this.settingsRoot.SuspendChangeEvent();
+					try
+					{
+						this.settingsRoot.Explicit = settings;
+
+						DetachTerminalEventHandlers();
+						using (var oldTerminal = this.terminal)
+						{
+							this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+						}
+						AttachTerminalEventHandlers();
+					}
+					finally
+					{
+						this.settingsRoot.ResumeChangeEvent();
+					}
+					this.terminal.RefreshRepositories();
+
+					if (StartIO(false))
+						OnTimedStatusTextRequest("Terminal settings applied.");
+					else
+						OnFixedStatusTextRequest("Terminal settings applied but terminal could not be started anymore.");
+				}
+				else
+				{
+					OnTimedStatusTextRequest("Terminal settings not applied!");
+				}
+			}
+			else // Terminal is stopped, simply set the new settings:
+			{
+				this.settingsRoot.SuspendChangeEvent();
+				try
+				{
+					this.settingsRoot.Explicit = settings;
+
+					DetachTerminalEventHandlers();
+					using (var oldTerminal = this.terminal)
+					{
+						this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+					}
+					AttachTerminalEventHandlers();
+				}
+				finally
+				{
+					this.settingsRoot.ResumeChangeEvent();
+				}
+				this.terminal.RefreshRepositories();
+
+				OnTimedStatusTextRequest("Terminal settings applied.");
+			}
+		}
+
+		/// <summary>
+		/// Applies new log settings.
+		/// </summary>
+		public virtual void ApplyLogSettings(Log.Settings.LogSettings settings)
+		{
+			AssertNotDisposed();
+
+			this.settingsRoot.Log = settings;
+			this.log.Settings = this.settingsRoot.Log;
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Save
@@ -1916,7 +2183,7 @@ namespace YAT.Model
 			sb.Append(Path.DirectorySeparatorChar);
 			sb.Append(Application.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
 			sb.Append(Guid.ToString());
-			sb.Append(ExtensionHelper.TerminalFile);
+			sb.Append(ExtensionHelper.TerminalExtension);
 
 			return (sb.ToString());
 		}
@@ -2826,7 +3093,9 @@ namespace YAT.Model
 				this.terminal.IOChanged        += terminal_IOChanged;
 				this.terminal.IOControlChanged += terminal_IOControlChanged;
 				this.terminal.IOError          += terminal_IOError;
-
+			#if (WITH_SCRIPTING)
+				this.terminal.SendingPacket += terminal_SendingPacket;
+			#endif
 				this.terminal.RawChunkSent            += terminal_RawChunkSent;
 				this.terminal.RawChunkReceived        += terminal_RawChunkReceived;
 				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
@@ -2839,8 +3108,12 @@ namespace YAT.Model
 
 				this.terminal.DisplayLinesSent     += terminal_DisplayLinesSent;
 				this.terminal.DisplayLinesReceived += terminal_DisplayLinesReceived;
-				this.terminal.RepositoryCleared    += terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded   += terminal_RepositoryReloaded;
+			#if (WITH_SCRIPTING)
+				this.terminal.ScriptPacketReceived  += terminal_ScriptPacketReceived;
+				this.terminal.ScriptMessageReceived += terminal_ScriptMessageReceived;
+			#endif
+				this.terminal.RepositoryCleared  += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded += terminal_RepositoryReloaded;
 			}
 		}
 
@@ -2851,7 +3124,9 @@ namespace YAT.Model
 				this.terminal.IOChanged        -= terminal_IOChanged;
 				this.terminal.IOControlChanged -= terminal_IOControlChanged;
 				this.terminal.IOError          -= terminal_IOError;
-
+			#if (WITH_SCRIPTING)
+				this.terminal.SendingPacket -= terminal_SendingPacket;
+			#endif
 				this.terminal.RawChunkSent            -= terminal_RawChunkSent;
 				this.terminal.RawChunkReceived        -= terminal_RawChunkReceived;
 				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
@@ -2864,8 +3139,12 @@ namespace YAT.Model
 
 				this.terminal.DisplayLinesSent     -= terminal_DisplayLinesSent;
 				this.terminal.DisplayLinesReceived -= terminal_DisplayLinesReceived;
-				this.terminal.RepositoryCleared    -= terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded   -= terminal_RepositoryReloaded;
+			#if (WITH_SCRIPTING)
+				this.terminal.ScriptPacketReceived  -= terminal_ScriptPacketReceived;
+				this.terminal.ScriptMessageReceived -= terminal_ScriptMessageReceived;
+			#endif
+				this.terminal.RepositoryCleared  -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded -= terminal_RepositoryReloaded;
 			}
 		}
 
@@ -2902,7 +3181,7 @@ namespace YAT.Model
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
-			virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, left, right));
+			virtualLine.Add(new Domain.DisplayElement.DeviceInfo(Domain.Direction.None, IOStatusText, left, right));
 			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
 			return (virtualLine);
@@ -2926,7 +3205,7 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(Domain.Direction.None, IOStatusText, left, right));
 
 				if (e.Texts.Count > 0)
 					virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
@@ -2965,7 +3244,7 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.PortInfo(Domain.Direction.None, IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(Domain.Direction.None, IOStatusText, left, right));
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
@@ -2995,8 +3274,8 @@ namespace YAT.Model
 				return;
 
 			// Log:
-			if (this.log.AnyPortIsOn)
-				this.log.WriteLine(IOStatusToDisplayLine(DateTime.Now), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+			if (this.log.AnyControlIsOn)
+				this.log.WriteLine(IOStatusToDisplayLine(DateTime.Now), Log.LogChannel.Control);
 
 			// Forward:
 			OnIOChanged(e);
@@ -3020,7 +3299,7 @@ namespace YAT.Model
 					if (this.settingsRoot.Display.ShowTimeSpan) // will be based on the active connect
 						this.terminal.RefreshRepositories();    // time, not the total connect time.
 				}
-				else if (!isConnectedNow &&  hasBeenConnected)
+				else if (!isConnectedNow && hasBeenConnected)
 				{
 					this.activeConnectChrono.Stop();
 					this.totalConnectChrono.Stop();
@@ -3038,8 +3317,8 @@ namespace YAT.Model
 			// Log:
 			if ((e.Texts != null) && (e.Texts.Count > 0))
 			{
-				if (this.log.AnyPortIsOn)                                     // Status text is always included (so far).
-					this.log.WriteLine(IOControlToDisplayLine(e.TimeStamp, e, true), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+				if (this.log.AnyControlIsOn)                                   // Status text is always included (so far).
+					this.log.WriteLine(IOControlToDisplayLine(e.TimeStamp, e, true), Log.LogChannel.Control);
 
 				if (this.log.AnyNeatIsOn) // Workaround to bug #447 "Acceptable errors (e.g. <RX PARITY ERROR>) and I/O control events (e.g. <RTS=on>) are not contained in neat logs."
 				{
@@ -3060,8 +3339,8 @@ namespace YAT.Model
 				return;
 
 			// Log:
-			if (this.log.AnyPortIsOn)                                   // Status text is always included (so far).
-				this.log.WriteLine(IOErrorToDisplayLine(e.TimeStamp, e, true), Log.LogChannel.Port); // Terminology is user = "port" and code = "IO".
+			if (this.log.AnyControlIsOn)                                 // Status text is always included (so far).
+				this.log.WriteLine(IOErrorToDisplayLine(e.TimeStamp, e, true), Log.LogChannel.Control);
 
 			if (this.log.AnyNeatIsOn) // Workaround to bug #447 "Acceptable errors (e.g. <RX PARITY ERROR>) and I/O control events (e.g. <RTS=on>) are not contained in neat logs."
 			{
@@ -3074,6 +3353,13 @@ namespace YAT.Model
 			// Forward:
 			OnIOError(e);
 		}
+
+	#if (WITH_SCRIPTING)
+		private void terminal_SendingPacket(object sender, Domain.ModifiablePacketEventArgs e)
+		{
+			OnSendingPacket(e);
+		}
+	#endif
 
 		/// <remarks>
 		/// Interval can be quite long, because...
@@ -3137,6 +3423,10 @@ namespace YAT.Model
 				this.log.Write(e.Value, Log.LogChannel.RawTx);
 				this.log.Write(e.Value, Log.LogChannel.RawBidir);
 			}
+
+		#if (WITH_SCRIPTING)
+			OnRawElementSent(e);
+		#endif
 		}
 
 		/// <remarks>
@@ -3306,6 +3596,10 @@ namespace YAT.Model
 					}
 				}
 			}
+
+		#if (WITH_SCRIPTING)
+			OnRawElementReceived(e);
+		#endif
 		}
 
 		private void terminal_RawChunkReceived_SendAutoResponseAsync(byte[] triggerSequence)
@@ -3491,6 +3785,20 @@ namespace YAT.Model
 			return (l.ToArray());
 		}
 
+	#if (WITH_SCRIPTING)
+
+		private void terminal_ScriptPacketReceived(object sender, Domain.PacketEventArgs e)
+		{
+			OnScriptPacketReceived(e);
+		}
+
+		private void terminal_ScriptMessageReceived(object sender, Domain.MessageEventArgs e)
+		{
+			OnScriptMessageReceived(e);
+		}
+
+	#endif // WITH_SCRIPTING
+
 		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
@@ -3566,7 +3874,7 @@ namespace YAT.Model
 
 		private CheckResult CheckSerialPortAvailability(MKY.IO.Ports.SerialPortId portId)
 		{
-			OnFixedStatusTextRequest("Checking availability of " + portId +  "...");
+			OnFixedStatusTextRequest("Checking availability of " + portId + "...");
 
 			var ports = new MKY.IO.Ports.SerialPortCollection();
 			ports.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
@@ -4011,15 +4319,39 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool StartIO()
 		{
-			return (StartIO(true));
+			string errorMessage;
+			return (StartIO(out errorMessage));
 		}
 
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
+		/// <param name="errorMessage">Message used for scripting.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		public virtual bool StartIO(out string errorMessage)
+		{
+			return (StartIO(true, out errorMessage));
+		}
+
+		/// <summary>
+		/// Starts the terminal's I/O instance.
+		/// </summary>
+		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		private bool StartIO(bool saveStatus)
+		{
+			string errorMessage;
+			return (StartIO(saveStatus, out errorMessage));
+		}
+
+		/// <summary>
+		/// Starts the terminal's I/O instance.
+		/// </summary>
+		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
+		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool StartIO(bool saveStatus)
+		private bool StartIO(bool saveStatus, out string errorMessage)
 		{
 			bool success = false;
 
@@ -4032,11 +4364,13 @@ namespace YAT.Model
 						this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
 					OnTimedStatusTextRequest("Terminal successfully started.");
+					errorMessage = null;
 					success = true;
 				}
 				else
 				{
-					OnFixedStatusTextRequest("Terminal could not be started!");
+					errorMessage = string.Format("Terminal on '{0}' could not be started!", this.terminal.ToShortIOString());
+					OnFixedStatusTextRequest(errorMessage);
 
 					if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 					{
@@ -4045,7 +4379,7 @@ namespace YAT.Model
 
 						OnMessageInputRequest
 						(
-							ErrorHelper.ComposeMessage("Terminal could not be started!", string.Empty, yatLead, yatText),
+							ErrorHelper.ComposeMessage(errorMessage, string.Empty, yatLead, yatText),
 							"Terminal Warning",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
@@ -4055,16 +4389,18 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
-				OnFixedStatusTextRequest("Error starting terminal!");
+				errorMessage = "Error on starting terminal!";
+				OnFixedStatusTextRequest(errorMessage);
 
 				if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 				{
 					string yatLead, yatText;
 					ErrorHelper.MakeExceptionHint(this.settingsRoot.IOType, out yatLead, out yatText);
 
+					errorMessage = ErrorHelper.ComposeMessage(errorMessage, ex, yatLead, yatText);
 					OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to start terminal!", ex, yatLead, yatText),
+						errorMessage,
 						"Terminal Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -4081,15 +4417,39 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool StopIO()
 		{
-			return (StopIO(true));
+			string errorMessage;
+			return (StopIO(out errorMessage));
 		}
 
 		/// <summary>
 		/// Stops the terminal's I/O instance.
 		/// </summary>
+		/// <param name="errorMessage">Message used for scripting.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		public virtual bool StopIO(out string errorMessage)
+		{
+			return (StopIO(true, out errorMessage));
+		}
+
+		/// <summary>
+		/// Stops the terminal's I/O instance.
+		/// </summary>
+		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		private bool StopIO(bool saveStatus)
+		{
+			string errorMessage;
+			return (StopIO(saveStatus, out errorMessage));
+		}
+
+		/// <summary>
+		/// Stops the terminal's I/O instance.
+		/// </summary>
+		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
+		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool StopIO(bool saveStatus)
+		private bool StopIO(bool saveStatus, out string errorMessage)
 		{
 			bool success = false;
 
@@ -4102,14 +4462,17 @@ namespace YAT.Model
 					this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
 				OnTimedStatusTextRequest("Terminal stopped.");
+				errorMessage = null;
 				success = true;
 			}
 			catch (Exception ex)
 			{
-				OnTimedStatusTextRequest("Error stopping terminal!");
+				errorMessage = "Error on stopping terminal!";
+				OnTimedStatusTextRequest(errorMessage);
+				errorMessage = "Error on stopping terminal:" + Environment.NewLine + Environment.NewLine + ex.Message;
 				OnMessageInputRequest
 				(
-					"Unable to stop terminal:" + Environment.NewLine + Environment.NewLine + ex.Message,
+					errorMessage,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -4143,6 +4506,86 @@ namespace YAT.Model
 		}
 
 		#endregion
+
+	#if (WITH_SCRIPTING)
+
+		#region Terminal > Send Raw
+		//------------------------------------------------------------------------------------------
+		// Terminal > Send Raw
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Sends the specified raw data.
+		/// </summary>
+		public virtual void SendRaw(byte[] data)
+		{
+			OnFixedStatusTextRequest("Sending " + data.Length + " bytes...");
+			try
+			{
+				this.terminal.Send(data);
+			}
+			catch (IOException ex)
+			{
+				OnFixedStatusTextRequest("Error sending " + data.Length + " bytes!");
+
+				string text;
+				string title;
+				ComposeSendRawErrorMessage(out text, out title);
+				OnMessageInputRequest
+				(
+					text + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine +
+					ex.Message,
+					title,
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				OnTimedStatusTextRequest("Data not sent!");
+			}
+		}
+
+		private void ComposeSendRawErrorMessage(out string text, out string title)
+		{
+			StringBuilder textBuilder = new StringBuilder();
+			StringBuilder titleBuilder = new StringBuilder();
+
+			textBuilder.Append("Unable to write to ");
+			switch (this.settingsRoot.IOType)
+			{
+				case Domain.IOType.SerialPort:
+					textBuilder.Append("port");
+					titleBuilder.Append("Serial Port");
+					break;
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				case Domain.IOType.UdpClient:
+				case Domain.IOType.UdpServer:
+				case Domain.IOType.UdpPairSocket:
+					textBuilder.Append("socket");
+					titleBuilder.Append("Socket");
+					break;
+
+				case Domain.IOType.UsbSerialHid:
+					textBuilder.Append("device");
+					titleBuilder.Append("Device");
+					break;
+
+				default:
+					throw (new NotImplementedException("I/O type " + this.settingsRoot.IOType + "misses implementation"));
+			}
+			textBuilder.Append(":");
+			titleBuilder.Append(" Error!");
+
+			text = textBuilder.ToString();
+			title = titleBuilder.ToString();
+		}
+
+		#endregion
+
+	#endif // WITH_SCRIPTING
 
 		#region Terminal > Send Text
 		//------------------------------------------------------------------------------------------
@@ -4649,6 +5092,31 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Terminal > Format
+		//------------------------------------------------------------------------------------------
+		// Terminal > Format
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Formats the given data into a string, same as done by the monitor view.
+		/// </summary>
+		public virtual string Format(byte[] data, Domain.IODirection direction)
+		{
+			AssertNotDisposed();
+			return (this.terminal.Format(data, direction));
+		}
+
+		/// <summary>
+		/// Formats the given data into a string, same as done by the monitor view.
+		/// </summary>
+		public virtual string Format(byte[] data, Domain.IODirection direction, Domain.Radix radix)
+		{
+			AssertNotDisposed();
+			return (this.terminal.Format(data, direction, radix));
+		}
+
+		#endregion
+
 		#region Terminal > Time Status
 		//------------------------------------------------------------------------------------------
 		// Terminal > Time Status
@@ -5049,7 +5517,12 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
+			#if !(WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOnCount);
+			#else
+				lock (this.receivedXOnXOffForScriptingSyncObj)
+					return (this.terminal.ReceivedXOnCount - this.receivedXOnOffsetForScripting);
+			#endif
 			}
 		}
 
@@ -5060,16 +5533,65 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
+			#if !(WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOffCount);
+			#else
+				lock (this.receivedXOnXOffForScriptingSyncObj)
+					return (this.terminal.ReceivedXOffCount - this.receivedXOffOffsetForScripting);
+			#endif
 			}
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		public virtual void ResetReceivedXOnCountForScripting()
+		{
+			lock (this.receivedXOnXOffForScriptingSyncObj)
+			{
+				var totalCount = (this.receivedXOnOffsetForScripting + ReceivedXOnCount);
+				this.receivedXOnOffsetForScripting = totalCount;
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ResetReceivedXOffCountForScripting()
+		{
+			lock (this.receivedXOnXOffForScriptingSyncObj)
+			{
+				var totalCount = (this.receivedXOnOffsetForScripting + ReceivedXOffCount);
+				this.receivedXOffOffsetForScripting = totalCount;
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ResetReceivedXOnXOffCountForScripting()
+		{
+			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for both counts.
+			{
+				ResetReceivedXOnCountForScripting();
+				ResetReceivedXOffCountForScripting();
+			}
+		}
+
+	#endif
 
 		/// <summary></summary>
 		public virtual void ResetFlowControlCount()
 		{
 			AssertNotDisposed();
 
+		#if !(WITH_SCRIPTING)
 			this.terminal.ResetFlowControlCount();
+		#else
+			lock (this.receivedXOnXOffForScriptingSyncObj)
+			{
+				this.terminal.ResetFlowControlCount();
+
+				this.receivedXOnOffsetForScripting = 0;
+				this.receivedXOffOffsetForScripting = 0;
+			}
+		#endif
 		}
 
 		/// <summary></summary>
@@ -5872,6 +6394,33 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync<Domain.IOErrorEventArgs>(IOError, this, e);
 		}
 
+	#if (WITH_SCRIPTING)
+
+		/// <remarks>
+		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and can
+		/// be modified using the <see cref="Domain.ModifiablePacketEventArgs.Data"/> property or
+		/// even canceled using the <see cref="Domain.ModifiablePacketEventArgs.Cancel"/> property.
+		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
+		/// </remarks>
+		protected virtual void OnSendingPacket(Domain.ModifiablePacketEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.ModifiablePacketEventArgs>(SendingPacket, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRawElementSent(EventArgs<Domain.RawChunk> e)
+		{
+			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawElementSent, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRawElementReceived(EventArgs<Domain.RawChunk> e)
+		{
+			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawElementReceived, this, e);
+		}
+
+	#endif // WITH_SCRIPTING
+
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(Domain.DisplayElementsEventArgs e)
 		{
@@ -5919,6 +6468,22 @@ namespace YAT.Model
 		{
 			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		protected virtual void OnScriptPacketReceived(Domain.PacketEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.PacketEventArgs>(ScriptPacketReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnScriptMessageReceived(Domain.MessageEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.PacketEventArgs>(ScriptMessageReceived, this, e);
+		}
+
+	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<Domain.RepositoryType> e)

@@ -35,6 +35,7 @@ namespace YAT.Model
 	/// </summary>
 	public enum MainResult
 	{
+	#if !(WITH_SCRIPTING)
 		Success,
 		CommandLineError,
 		ApplicationStartError,
@@ -42,6 +43,25 @@ namespace YAT.Model
 		ApplicationRunError,
 		ApplicationExitError,
 		UnhandledException
+	#else
+		// Positive values are reserved for the script result!
+		Success                  =  0,
+		CommandLineError         = -1,
+		ApplicationStartError    = -2,
+		ApplicationStartCancel   = -3,
+		ApplicationRunError      = -4,
+		ApplicationExitError     = -5,
+		UnhandledException       = -6,
+		ScriptInvalidContent     = MT.Albatros.Core.RunResult.ScriptInvalidContent,
+		ScriptStopOnError        = MT.Albatros.Core.RunResult.ScriptStopOnError,
+		ScriptExit               = MT.Albatros.Core.RunResult.ScriptExit,
+		ScriptUserBreak          = MT.Albatros.Core.RunResult.ScriptUserBreak,
+		ScriptUnhandledException = MT.Albatros.Core.RunResult.ScriptUnhandledException,
+	////ScriptInvalidReturnValue = MT.Albatros.Core.RunResult.ScriptInvalidReturnValue, \fixme (2017-02-14 / MKY) legacy...
+		ScriptThreadAbort        = MT.Albatros.Core.RunResult.ThreadAbort,
+		ScriptRemotingException  = MT.Albatros.Core.RunResult.RemotingException,
+		ScriptInvalidOperation   = MT.Albatros.Core.RunResult.InvalidOperation
+	#endif
 	}
 
 	#pragma warning restore 1591

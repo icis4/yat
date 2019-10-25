@@ -24,11 +24,62 @@
 
 using System;
 using System.Collections.ObjectModel;
+#if (WITH_SCRIPTING)
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 using MKY;
 
 namespace YAT.Domain
 {
+#if (WITH_SCRIPTING)
+	/// <summary></summary>
+	public class PacketEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public byte[] Data { get; protected set; }
+
+		/// <summary></summary>
+		public PacketEventArgs(byte[] data)
+		{
+			Data = data;
+		}
+	}
+
+	/// <remarks>
+	/// Not inheriting from <see cref="PacketEventArgs"/> since <see cref="Data"/> must be modifiable.
+	/// </remarks>
+	public class ModifiablePacketEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public byte[] Data { get; set; }
+
+		/// <summary></summary>
+		public bool Cancel { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
+		public ModifiablePacketEventArgs(byte[] data, bool cancel = false)
+		{
+			Data = data;
+			Cancel = cancel;
+		}
+	}
+
+	/// <summary></summary>
+	public class MessageEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public string Message { get; protected set; }
+
+		/// <summary></summary>
+		public MessageEventArgs(string message)
+		{
+			Message = message;
+		}
+	}
+#endif // WITH_SCRIPTING
+
 	/// <summary></summary>
 	public class IOControlEventArgs : EventArgs
 	{
