@@ -3,10 +3,10 @@
 // Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/MessageHelper.cs $
-// $Revision: 2559 $
-// $Date: 2019-10-08 15:47:03 +0200 (Di., 08 Okt 2019) $
-// $Author: maettu_this $
+// $URL$
+// $Revision$
+// $Date$
+// $Author$
 // ------------------------------------------------------------------------------------------------
 // MKY Version 1.0.28 Development
 // ------------------------------------------------------------------------------------------------
@@ -68,5 +68,5 @@ namespace MKY
 
 //==================================================================================================
 // End of
-// $URL: https://ch02ssvn.eu.mt.mtnet:8443/svn/LabTec/Applications/Albatros/02-Product/Trunk/05-Source/Albatros/MKY/MKY/MarshalByRefWrapper.cs $
+// $URL$
 //==================================================================================================
