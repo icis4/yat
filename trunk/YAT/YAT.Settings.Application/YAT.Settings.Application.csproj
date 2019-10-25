@@ -97,9 +97,9 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
+    <ProjectReference Include="..\YAT.Model.Base\YAT.Model.Base.csproj">
       <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>
-      <Name>YAT.Model.Settings</Name>
+      <Name>YAT.Model.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
