@@ -67,8 +67,8 @@ using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
+using YAT.Application.Types;
 using YAT.Format.Settings;
-using YAT.Model.Types;
 
 #endregion
 

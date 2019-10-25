@@ -34,6 +34,7 @@ using MKY.Settings;
 
 using NUnit.Framework;
 
+using YAT.Application.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Model.Test;
 
@@ -91,7 +92,7 @@ namespace YAT.Model.Test
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 
 			// Ensure that recent files are contained:
-			ApplicationSettings.LocalUserSettings.RecentFiles = new Model.Settings.RecentFileSettings();
+			ApplicationSettings.LocalUserSettings.RecentFiles = new RecentFileSettings();
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(TerminalFilePath);
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(WorkspaceFilePath);
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.

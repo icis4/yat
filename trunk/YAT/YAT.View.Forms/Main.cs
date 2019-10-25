@@ -69,6 +69,7 @@ using MKY.Windows.Forms;
 using MT.Albatros.Core;
 #endif
 
+using YAT.Application.Settings;
 using YAT.Application.Utilities;
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -2368,7 +2369,7 @@ namespace YAT.View.Forms
 
 		private void contextMenuStrip_FileRecent_InitializeControls()
 		{
-			this.menuItems_recent = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths); // Preset the required capacity to improve memory management.
+			this.menuItems_recent = new List<ToolStripMenuItem>(RecentFileSettings.MaxFilePaths); // Preset the required capacity to improve memory management.
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_1);
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_2);
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_3);
@@ -2389,7 +2390,7 @@ namespace YAT.View.Forms
 			try
 			{
 				// Hide all:
-				for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
+				for (int i = 0; i < RecentFileSettings.MaxFilePaths; i++)
 				{
 					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // 'InvariantCulture' for prefix!
 					this.menuItems_recent[i].Text = "&" + prefix;

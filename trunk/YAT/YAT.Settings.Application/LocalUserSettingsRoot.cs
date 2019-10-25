@@ -60,9 +60,9 @@ namespace YAT.Settings.Application
 		private GeneralSettings general;
 		private PathSettings paths;
 		private AutoWorkspaceSettings autoAutoWorkspace;
-		private Model.Settings.MainWindowSettings mainWindow;
+		private MainWindowSettings mainWindow;
 		private Model.Settings.NewTerminalSettings newTerminal;
-		private Model.Settings.RecentFileSettings recentFiles;
+		private RecentFileSettings recentFiles;
 
 		/// <remarks>
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
@@ -74,9 +74,9 @@ namespace YAT.Settings.Application
 			General       = new GeneralSettings(MKY.Settings.SettingsType.Explicit);
 			Paths         = new PathSettings(MKY.Settings.SettingsType.Explicit);
 			AutoWorkspace = new AutoWorkspaceSettings(MKY.Settings.SettingsType.Explicit);
-			MainWindow    = new Model.Settings.MainWindowSettings(MKY.Settings.SettingsType.Explicit);
+			MainWindow    = new MainWindowSettings(MKY.Settings.SettingsType.Explicit);
 			NewTerminal   = new Model.Settings.NewTerminalSettings(MKY.Settings.SettingsType.Explicit);
-			RecentFiles   = new Model.Settings.RecentFileSettings(MKY.Settings.SettingsType.Explicit);
+			RecentFiles   = new RecentFileSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
 		}
@@ -91,9 +91,9 @@ namespace YAT.Settings.Application
 			General       = new GeneralSettings(rhs.General);
 			Paths         = new PathSettings(rhs.Paths);
 			AutoWorkspace = new AutoWorkspaceSettings(rhs.AutoWorkspace);
-			MainWindow    = new Model.Settings.MainWindowSettings(rhs.MainWindow);
+			MainWindow    = new MainWindowSettings(rhs.MainWindow);
 			NewTerminal   = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
-			RecentFiles   = new Model.Settings.RecentFileSettings(rhs.RecentFiles);
+			RecentFiles   = new RecentFileSettings(rhs.RecentFiles);
 
 			ClearChanged();
 		}
@@ -196,7 +196,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("MainWindow")]
-		public virtual Model.Settings.MainWindowSettings MainWindow
+		public virtual MainWindowSettings MainWindow
 		{
 			get { return (this.mainWindow); }
 			set
@@ -230,7 +230,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("RecentFiles")]
-		public virtual Model.Settings.RecentFileSettings RecentFiles
+		public virtual RecentFileSettings RecentFiles
 		{
 			get { return (this.recentFiles); }
 			set

@@ -32,11 +32,8 @@ using MKY.Net;
 namespace YAT.Model.Settings
 {
 	/// <remarks>
-	/// \remind (2017-11-19 / MKY), (2019-08-02 / MKY)
-	/// Should be migrated to a separate 'YAT.Application.Settings' project. Not easily possible
-	/// because of dependencies among 'YAT.*' and 'YAT.Application', e.g. 'ExtensionSettings'.
-	/// Requires slight refactoring of project dependencies. Could be done when refactoring the
-	/// projects on integration with Albatros.
+	/// Located in 'Model.Settings' since a new terminal is something handled by the model. From a
+	/// technical/dependency perspective, these settings could also be located in 'Domain.Settings'.
 	/// </remarks>
 	public class NewTerminalSettings : MKY.Settings.SettingsItem, IEquatable<NewTerminalSettings>
 	{

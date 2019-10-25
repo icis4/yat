@@ -24,7 +24,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace YAT.Model.Types
+namespace YAT.Application.Types
 {
 	/// <summary></summary>
 	[Serializable]

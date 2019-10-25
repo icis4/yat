@@ -29,6 +29,8 @@ using System.Xml.Serialization;
 using MKY;
 using MKY.IO;
 
+using YAT.Application.Settings;
+
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>

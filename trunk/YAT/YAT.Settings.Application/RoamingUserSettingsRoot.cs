@@ -57,9 +57,9 @@ namespace YAT.Settings.Application
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
 
-		private Model.Settings.SocketSettings socket;
-		private Model.Settings.FindSettings find;
-		private Model.Settings.ViewSettings view;
+		private SocketSettings socket;
+		private FindSettings find;
+		private ViewSettings view;
 		private ExtensionSettings extensions;
 
 		/// <remarks>
@@ -69,9 +69,9 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			Socket     = new Model.Settings.SocketSettings(MKY.Settings.SettingsType.Explicit);
-			Find       = new Model.Settings.FindSettings(MKY.Settings.SettingsType.Explicit);
-			View       = new Model.Settings.ViewSettings(MKY.Settings.SettingsType.Explicit);
+			Socket     = new SocketSettings(MKY.Settings.SettingsType.Explicit);
+			Find       = new FindSettings(MKY.Settings.SettingsType.Explicit);
+			View       = new ViewSettings(MKY.Settings.SettingsType.Explicit);
 			Extensions = new ExtensionSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
@@ -84,9 +84,9 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot(RoamingUserSettingsRoot rhs)
 			: base(rhs)
 		{
-			Socket     = new Model.Settings.SocketSettings(rhs.Socket);
-			Find       = new Model.Settings.FindSettings(rhs.Find);
-			View       = new Model.Settings.ViewSettings(rhs.View);
+			Socket     = new SocketSettings(rhs.Socket);
+			Find       = new FindSettings(rhs.Find);
+			View       = new ViewSettings(rhs.View);
 			Extensions = new ExtensionSettings(rhs.Extensions);
 
 			ClearChanged();
@@ -139,7 +139,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("Socket")]
-		public virtual Model.Settings.SocketSettings Socket
+		public virtual SocketSettings Socket
 		{
 			get { return (this.socket); }
 			set
@@ -156,7 +156,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("Find")]
-		public virtual Model.Settings.FindSettings Find
+		public virtual FindSettings Find
 		{
 			get { return (this.find); }
 			set
@@ -173,7 +173,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("View")]
-		public virtual Model.Settings.ViewSettings View
+		public virtual ViewSettings View
 		{
 			get { return (this.view); }
 			set

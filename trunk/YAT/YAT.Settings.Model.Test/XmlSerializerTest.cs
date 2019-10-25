@@ -35,6 +35,7 @@ using MKY.Settings;
 
 using NUnit.Framework;
 
+using YAT.Application.Settings;
 using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Settings.Application;
