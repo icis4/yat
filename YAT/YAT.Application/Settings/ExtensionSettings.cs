@@ -35,27 +35,27 @@ namespace YAT.Application.Settings
 	public class ExtensionSettings : MKY.Settings.SettingsItem, IEquatable<ExtensionSettings>
 	{
 		/// <summary></summary>
-		public static readonly string TextSendFilesDefault = ExtensionHelper.TextSendFilesDefault;
+		public static readonly string TextSendFilesDefault = ExtensionHelper.TextSendExtensionDefault;
 
 		/// <summary></summary>
-		public static readonly string BinarySendFilesDefault = ExtensionHelper.BinarySendFilesDefault;
+		public static readonly string BinarySendFilesDefault = ExtensionHelper.BinarySendExtensionDefault;
 
 		/// <summary></summary>
-		public static readonly string PortLogFilesDefault = ExtensionHelper.PortLogFilesDefault;
+		public static readonly string ControlLogFilesDefault = ExtensionHelper.ControlLogExtensionDefault;
 
 		/// <summary></summary>
-		public static readonly string RawLogFilesDefault = ExtensionHelper.RawLogFilesDefault;
+		public static readonly string RawLogFilesDefault = ExtensionHelper.RawLogExtensionDefault;
 
 		/// <summary></summary>
-		public static readonly string NeatLogFilesDefault = ExtensionHelper.NeatLogFilesDefault;
+		public static readonly string NeatLogFilesDefault = ExtensionHelper.NeatLogExtensionDefault;
 
 		/// <summary></summary>
-		public static readonly string MonitorFilesDefault = ExtensionHelper.MonitorFilesDefault;
+		public static readonly string MonitorFilesDefault = ExtensionHelper.MonitorExtensionDefault;
 
 		private string textSendFiles;
 		private string binarySendFiles;
 
-		private string portLogFiles;
+		private string controlLogFiles;
 		private string rawLogFiles;
 		private string neatLogFiles;
 
@@ -85,7 +85,7 @@ namespace YAT.Application.Settings
 			TextSendFiles   = rhs.TextSendFiles;
 			BinarySendFiles = rhs.BinarySendFiles;
 
-			PortLogFiles    = rhs.PortLogFiles;
+			ControlLogFiles = rhs.ControlLogFiles;
 			RawLogFiles     = rhs.RawLogFiles;
 			NeatLogFiles    = rhs.NeatLogFiles;
 
@@ -104,7 +104,7 @@ namespace YAT.Application.Settings
 			TextSendFiles   = TextSendFilesDefault;
 			BinarySendFiles = BinarySendFilesDefault;
 
-			PortLogFiles    = PortLogFilesDefault;
+			ControlLogFiles = ControlLogFilesDefault;
 			RawLogFiles     = RawLogFilesDefault;
 			NeatLogFiles    = NeatLogFilesDefault;
 
@@ -147,15 +147,15 @@ namespace YAT.Application.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("PortLogFiles")]
-		public virtual string PortLogFiles
+		[XmlElement("ControlLogFiles")]
+		public virtual string ControlLogFiles
 		{
-			get { return (this.portLogFiles); }
+			get { return (this.controlLogFiles); }
 			set
 			{
-				if (this.portLogFiles != value)
+				if (this.controlLogFiles != value)
 				{
-					this.portLogFiles = value;
+					this.controlLogFiles = value;
 					SetMyChanged();
 				}
 			}
@@ -229,7 +229,7 @@ namespace YAT.Application.Settings
 				hashCode = (hashCode * 397) ^ (TextSendFiles   != null ? TextSendFiles  .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (BinarySendFiles != null ? BinarySendFiles.GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^ (PortLogFiles    != null ? PortLogFiles   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (ControlLogFiles != null ? ControlLogFiles.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RawLogFiles     != null ? RawLogFiles    .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (NeatLogFiles    != null ? NeatLogFiles   .GetHashCode() : 0);
 
@@ -267,7 +267,7 @@ namespace YAT.Application.Settings
 				StringEx.EqualsOrdinalIgnoreCase(TextSendFiles,   other.TextSendFiles)   &&
 				StringEx.EqualsOrdinalIgnoreCase(BinarySendFiles, other.BinarySendFiles) &&
 
-				StringEx.EqualsOrdinalIgnoreCase(PortLogFiles,    other.PortLogFiles)    &&
+				StringEx.EqualsOrdinalIgnoreCase(ControlLogFiles, other.ControlLogFiles) &&
 				StringEx.EqualsOrdinalIgnoreCase(RawLogFiles,     other.RawLogFiles)     &&
 				StringEx.EqualsOrdinalIgnoreCase(NeatLogFiles,    other.NeatLogFiles)    &&
 

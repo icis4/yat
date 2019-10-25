@@ -130,9 +130,9 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Changed -= settings_Form_Changed;
 			this.settings = this.settingsInEdit;
 
-			ApplicationSettings.RoamingUserSettings.Extensions.PortLogFiles = this.settings.PortExtension;
-			ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles  = this.settings.RawExtension;
-			ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles = this.settings.NeatExtension;
+			ApplicationSettings.RoamingUserSettings.Extensions.ControlLogFiles = this.settings.ControlExtension;
+			ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles     = this.settings.RawExtension;
+			ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles    = this.settings.NeatExtension;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
@@ -237,32 +237,32 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void checkBox_Port_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Control_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.PortLog = checkBox_Port.Checked;
+			this.settingsInEdit.ControlLog = checkBox_Control.Checked;
 		}
 
-		private void pathLabel_Port_Click(object sender, EventArgs e)
+		private void pathLabel_Control_Click(object sender, EventArgs e)
 		{
-			this.settingsInEdit.PortLog = !this.settingsInEdit.PortLog;
+			this.settingsInEdit.ControlLog = !this.settingsInEdit.ControlLog;
 		}
 
-	////private void comboBox_Port_Extension_SelectedIndexChanged(object sender, EventArgs e)
-	////is not required since        "      _Validating() below gets called anyway.
+	////private void comboBox_Control_Extension_SelectedIndexChanged(object sender, EventArgs e)
+	////is not required since           "      _Validating() below gets called anyway.
 
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void comboBox_Port_Extension_Validating(object sender, CancelEventArgs e)
+		private void comboBox_Control_Extension_Validating(object sender, CancelEventArgs e)
 		{
-			if (!ValidateFileNamePart(comboBox_Port_Extension.Text, "Extension"))
+			if (!ValidateFileNamePart(comboBox_Control_Extension.Text, "Extension"))
 			{
 				e.Cancel = true;
 				return;
 			}
 
-			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Port_Extension.Text, this.settingsInEdit.RawExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Port_Extension.Text, this.settingsInEdit.NeatExtension))) &&
+			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Control_Extension.Text, this.settingsInEdit.RawExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Control_Extension.Text, this.settingsInEdit.NeatExtension))) &&
 			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
 				ExtensionConflictMessage();
@@ -273,12 +273,12 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
-		private void comboBox_Port_Extension_TextChanged(object sender, EventArgs e)
+		private void comboBox_Control_Extension_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.PortExtension = comboBox_Port_Extension.Text;
+			this.settingsInEdit.ControlExtension = comboBox_Control_Extension.Text;
 		}
 
 		private void checkBox_Raw_Tx_CheckedChanged(object sender, EventArgs e)
@@ -332,7 +332,7 @@ namespace YAT.View.Forms
 				return;
 			}
 
-			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Raw_Extension.Text, this.settingsInEdit.PortExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Raw_Extension.Text, this.settingsInEdit.NeatExtension))) &&
+			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Raw_Extension.Text, this.settingsInEdit.ControlExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Raw_Extension.Text, this.settingsInEdit.NeatExtension))) &&
 			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
 				ExtensionConflictMessage();
@@ -402,7 +402,7 @@ namespace YAT.View.Forms
 				return;
 			}
 
-			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Neat_Extension.Text, this.settingsInEdit.PortExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Neat_Extension.Text, this.settingsInEdit.RawExtension))) &&
+			if ((this.settingsInEdit.Multiple && (StringEx.EqualsOrdinalIgnoreCase(comboBox_Neat_Extension.Text, this.settingsInEdit.ControlExtension) || StringEx.EqualsOrdinalIgnoreCase(comboBox_Neat_Extension.Text, this.settingsInEdit.RawExtension))) &&
 			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
 				ExtensionConflictMessage();
@@ -589,7 +589,7 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.Yes)
 			{
-				ApplicationSettings.RoamingUserSettings.Extensions.PortLogFiles = ExtensionSettings.PortLogFilesDefault;
+				ApplicationSettings.RoamingUserSettings.Extensions.ControlLogFiles = ExtensionSettings.ControlLogFilesDefault;
 				ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles  = ExtensionSettings.RawLogFilesDefault;
 				ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles = ExtensionSettings.NeatLogFilesDefault;
 
@@ -628,14 +628,14 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				comboBox_Port_Extension.Items.Clear();
-				comboBox_Port_Extension.Items.AddRange(ExtensionHelper.PortLogFileExtensionsWithDot.ToArray());
+				comboBox_Control_Extension.Items.Clear();
+				comboBox_Control_Extension.Items.AddRange(ExtensionHelper.ControlLogExtensions.ToArray());
 
 				comboBox_Raw_Extension.Items.Clear();
-				comboBox_Raw_Extension.Items.AddRange(ExtensionHelper.RawLogFileExtensionsWithDot.ToArray());
+				comboBox_Raw_Extension.Items.AddRange(ExtensionHelper.RawLogExtensions.ToArray());
 
 				comboBox_Neat_Extension.Items.Clear();
-				comboBox_Neat_Extension.Items.AddRange(ExtensionHelper.NeatLogFileExtensionsWithDot.ToArray());
+				comboBox_Neat_Extension.Items.AddRange(ExtensionHelper.NeatLogExtensions.ToArray());
 
 				comboBox_Options_NameSeparator.Items.Clear();
 				comboBox_Options_NameSeparator.Items.AddRange(Log.FileNameSeparatorEx.GetItems());
@@ -656,15 +656,15 @@ namespace YAT.View.Forms
 				else
 					pathLabel_Root.Text = "<Set a root file...>";
 
-				checkBox_Port.Checked = this.settingsInEdit.PortLog;
-				checkBox_Port.Checked = this.settingsInEdit.PortLog;
-				checkBox_Port.Checked = this.settingsInEdit.PortLog;
+				checkBox_Control.Checked = this.settingsInEdit.ControlLog;
+				checkBox_Control.Checked = this.settingsInEdit.ControlLog;
+				checkBox_Control.Checked = this.settingsInEdit.ControlLog;
 
-				pathLabel_Port.Text = this.settingsInEdit.PortRootRelativeFilePath;
-				pathLabel_Port.Text = this.settingsInEdit.PortRootRelativeFilePath;
-				pathLabel_Port.Text = this.settingsInEdit.PortRootRelativeFilePath;
+				pathLabel_Control.Text = this.settingsInEdit.ControlRootRelativeFilePath;
+				pathLabel_Control.Text = this.settingsInEdit.ControlRootRelativeFilePath;
+				pathLabel_Control.Text = this.settingsInEdit.ControlRootRelativeFilePath;
 
-				comboBox_Port_Extension.Text = this.settingsInEdit.PortExtension;
+				comboBox_Control_Extension.Text = this.settingsInEdit.ControlExtension;
 
 				checkBox_Raw_Tx.Checked    = this.settingsInEdit.RawLogTx;
 				checkBox_Raw_Bidir.Checked = this.settingsInEdit.RawLogBidir;
@@ -822,7 +822,7 @@ namespace YAT.View.Forms
 			    (!(this.settingsInEdit.FolderType || this.settingsInEdit.NameType)))
 			{
 				var sb = new StringBuilder();
-				sb.AppendLine("To avoid naming conflicts, files must either be named by type or separated into folders (Port/Raw/Neat) or have different extensions.");
+				sb.AppendLine("To avoid naming conflicts, files must either be named by type or separated into folders (Control/Raw/Neat) or have different extensions.");
 				sb.AppendLine();
 				sb.AppendLine("Do you want to name the files by type [Yes] or separate them into folders [No]?");
 				sb.AppendLine();
@@ -868,12 +868,12 @@ namespace YAT.View.Forms
 				}
 			}
 
-			if ((this.settingsInEdit.AnyPort) && (this.settingsInEdit.AnyRaw || this.settingsInEdit.AnyNeat) && (this.settingsInEdit.SameExtension) &&
+			if ((this.settingsInEdit.AnyControl) && (this.settingsInEdit.AnyRaw || this.settingsInEdit.AnyNeat) && (this.settingsInEdit.SameExtension) &&
 			    (!(this.settingsInEdit.FolderType      || this.settingsInEdit.NameType)) &&
-			    (!(this.settingsInEdit.FolderDirection || this.settingsInEdit.NameDirection))) // Special tricky case since port is 'any' direction.
+			    (!(this.settingsInEdit.FolderDirection || this.settingsInEdit.NameDirection))) // Special tricky case since control is 'any' direction.
 			{
 				string message =
-					"To avoid naming conflicts, files must either be named by type or separated into folders (Port/Raw/Neat) or have different extensions." +
+					"To avoid naming conflicts, files must either be named by type or separated into folders (Control/Raw/Neat) or have different extensions." +
 					Environment.NewLine + Environment.NewLine +
 					"Do you want to name the files by type [Yes] or separate them into folders [No]?" +
 					Environment.NewLine + Environment.NewLine +
