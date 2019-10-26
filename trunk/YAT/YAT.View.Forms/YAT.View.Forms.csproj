@@ -316,9 +316,9 @@
       <Project>{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}</Project>
       <Name>MKY.Windows.Forms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
+    <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
-      <Name>YAT.Application</Name>
+      <Name>YAT.Application.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>

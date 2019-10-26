@@ -24,8 +24,8 @@
     <assembly path="NUnit\NUnit\bin\Debug\NUnit.dll" />
     <assembly path="YAT\YAT\bin\Debug\YAT.exe" />
     <assembly path="YAT\YAT.Application\bin\Debug\YAT.Application.dll" />
-    <assembly path="YAT\YAT.Controller\bin\Debug\YAT.Controller.dll" />
-    <assembly path="YAT\YAT.Controller.Test\bin\Debug\YAT.Controller.Test.dll" />
+    <assembly path="YAT\YAT.Application.Base\bin\Debug\YAT.Application.Base.dll" />
+    <assembly path="YAT\YAT.Application.Test\bin\Debug\YAT.Application.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Debug\YAT.Domain.dll" />
     <assembly path="YAT\YAT.Domain.Test\bin\Debug\YAT.Domain.Test.dll" />
     <assembly path="YAT\YAT.Format\bin\Debug\YAT.Format.dll" />
@@ -67,8 +67,8 @@
     <assembly path="NUnit\NUnit\bin\Release\NUnit.dll" />
     <assembly path="YAT\YAT\bin\Release\YAT.exe" />
     <assembly path="YAT\YAT.Application\bin\Release\YAT.Application.dll" />
-    <assembly path="YAT\YAT.Controller\bin\Release\YAT.Controller.dll" />
-    <assembly path="YAT\YAT.Controller.Test\bin\Release\YAT.Controller.Test.dll" />
+    <assembly path="YAT\YAT.Application.Base\bin\Release\YAT.Application.Base.dll" />
+    <assembly path="YAT\YAT.Application.Test\bin\Release\YAT.Application.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Release\YAT.Domain.dll" />
     <assembly path="YAT\YAT.Domain.Test\bin\Release\YAT.Domain.Test.dll" />
     <assembly path="YAT\YAT.Format\bin\Release\YAT.Format.dll" />
