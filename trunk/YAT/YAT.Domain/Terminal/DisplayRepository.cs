@@ -41,7 +41,7 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// DisplayRepository is a pseudo fixed-sized Queue holding DisplayElements.
+	/// This class wraps a size limited <see cref="Queue{T}"/> holding <see cref="DisplayLine"/> items.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "The repository is intentionally named without any indication of the underlying implementation.")]
 	public class DisplayRepository : Queue<DisplayLine>

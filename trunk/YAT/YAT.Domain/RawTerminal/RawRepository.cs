@@ -42,7 +42,7 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// The repository is a fixed-sized <see cref="Queue{T}"/> holding <see cref="RawChunk"/> items.
+	/// This class wraps a size limited <see cref="Queue{T}"/> holding <see cref="RawChunk"/> items.
 	/// </summary>
 	public class RawRepository
 	{
