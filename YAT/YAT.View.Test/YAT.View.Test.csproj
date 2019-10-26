@@ -95,9 +95,9 @@
       <Project>{F7BFF679-5389-434C-81E4-7EE8530DF954}</Project>
       <Name>NUnit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
+    <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
-      <Name>YAT.Application</Name>
+      <Name>YAT.Application.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>

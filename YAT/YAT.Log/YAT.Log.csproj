@@ -118,9 +118,9 @@
       <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
       <Name>YAT.Format</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
+    <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
-      <Name>YAT.Application</Name>
+      <Name>YAT.Application.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
       <Project>{69a8cbb4-7d00-4a3d-9cf7-220dd02c2eb7}</Project>

@@ -169,11 +169,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit\NUnit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT", "YAT\YAT\YAT.csproj", "{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Application", "YAT\YAT.Application\YAT.Application.csproj", "{A3E80010-9146-47EF-87B0-138A60406A9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Application", "YAT\YAT.Application\YAT.Application.csproj", "{D639409C-0B93-494B-9A01-4FE79686FAD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Controller", "YAT\YAT.Controller\YAT.Controller.csproj", "{D639409C-0B93-494B-9A01-4FE79686FAD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Application.Base", "YAT\YAT.Application.Base\YAT.Application.Base.csproj", "{A3E80010-9146-47EF-87B0-138A60406A9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Controller.Test", "YAT\YAT.Controller.Test\YAT.Controller.Test.csproj", "{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Application.Test", "YAT\YAT.Application.Test\YAT.Application.Test.csproj", "{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain", "YAT\YAT.Domain\YAT.Domain.csproj", "{1C44A8C0-7805-4172-8746-2DB750803FFF}"
 EndProject

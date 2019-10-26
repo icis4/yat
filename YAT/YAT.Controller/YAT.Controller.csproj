@@ -113,9 +113,9 @@
       <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>
       <Name>YAT.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
+    <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
-      <Name>YAT.Application</Name>
+      <Name>YAT.Application.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
