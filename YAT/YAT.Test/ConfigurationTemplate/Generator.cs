@@ -56,7 +56,7 @@ namespace YAT.Test.ConfigurationTemplate
 		#if (WITH_SCRIPTING)
 			////MT.Albatros.Core.Test
 		#endif
-			////YAT.Controller.Test
+			////YAT.Application.Test
 			////YAT.Domain.Test
 			////YAT.View.Test
 			////YAT.Model.Test
@@ -79,7 +79,7 @@ namespace YAT.Test.ConfigurationTemplate
 		#if (WITH_SCRIPTING)
 			////MT.Albatros.Core.Test
 		#endif
-			////YAT.Controller.Test
+			////YAT.Application.Test
 			////YAT.Domain.Test
 			////YAT.View.Test
 			////YAT.Model.Test

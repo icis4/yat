@@ -42,11 +42,11 @@ using YAT.Settings.Model.Test;
 
 #endregion
 
-namespace YAT.Controller.Test
+namespace YAT.Application.Test
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class ControllerTest
+	public class ApplicationTest
 	{
 		#region Constants
 		//==========================================================================================
@@ -92,18 +92,18 @@ namespace YAT.Controller.Test
 		{
 			tempPath = Temp.MakeTempPath(GetType());
 
-			// Temporary in-memory application settings are useless for this YAT.Controller based
-			// test, as YAT.Controller will retrieve the application settings, that's its job...
+			// Temporary in-memory application settings are useless for this YAT.Application based
+			// test, as YAT.Application will retrieve the application settings, that's its job...
 
 			// There is another issue when running YAT.Controller from NUnit:
 			// The first test that invokes YAT, i.e. the first time the welcome screen should get
 			// shown, leads to an invalid [DialogResult] value of the welcome screen:
 			//
 			// YAT.View.Forms.WelcomeScreen : Invoking LoadApplicationSettingsAsync()...
-			// YAT.Controller.Main          : ...showing...
+			// YAT.Application.Main         : ...showing...
 			// YAT.View.Forms.WelcomeScreen : ...loading application settings...
 			// YAT.View.Forms.WelcomeScreen : ...successfully done.
-			// YAT.View.Forms.WelcomeScreen : Closing dialog, result is [OK].
+			// YAT.Application.Forms.WelcomeScreen : Closing dialog, result is [OK].
 			// YAT.Controller.Main          : ...failed with [Cancel]!
 			//
 			// The returned value is [Cancel] instead of [OK]! The root cause to this issue has

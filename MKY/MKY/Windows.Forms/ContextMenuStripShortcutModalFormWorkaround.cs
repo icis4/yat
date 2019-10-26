@@ -46,10 +46,10 @@ namespace MKY.Windows.Forms
 	// YAT.View.Forms.Terminal.ShowPredefinedCommandSettings()
 	// YAT.View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Define_Click() => Dialog is opened 'normally' => OK
 	// [External Code]
-	// YAT.Controller.Main.RunFullyWithView()
-	// YAT.Controller.Main.Run()
-	// YAT.Controller.Main.Run()
-	// YAT.Controller.Main.Run()
+	// YAT.Application.Main.RunFullyWithView()
+	// YAT.Application.Main.Run()
+	// YAT.Application.Main.Run()
+	// YAT.Application.Main.Run()
 	// YAT.YAT.Main()
 
 	/// <summary>

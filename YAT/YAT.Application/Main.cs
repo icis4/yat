@@ -71,14 +71,14 @@ using MKY.Threading;
 using MKY.Windows.Forms; // Note that several locations explicitly use 'MKY.Windows.Forms' to prevent naming conflicts with 'System.Windows.Forms' and 'YAT.Application'.
 
 using YAT.Settings.Application;
-//// 'YAT.View.Forms' is explicitly used to prevent naming conflicts with same-named 'YAT.Controller' classes like 'Main'.
+//// 'YAT.View.Forms' is explicitly used to prevent naming conflicts with same-named 'YAT.Application' classes like 'Main'.
 
 #endregion
 
-namespace YAT.Controller
+namespace YAT.Application
 {
 	/// <summary>
-	/// Application controller main class of YAT.
+	/// Application main class of YAT.
 	/// </summary>
 	/// <remarks>
 	/// This class is separated into its own project for those who want to use YAT components within
@@ -431,7 +431,7 @@ namespace YAT.Controller
 		///
 		/// 7. YAT testing
 		///    ==> Run(false, true) or Run(true, true) to test the view (e.g. view stress test)
-		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. controller test)
+		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. application test)
 		///
 		/// Handling of the application settings is also related to these use cases.
 		/// <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> means that the
@@ -446,7 +446,7 @@ namespace YAT.Controller
 		/// <param name="runFromConsole">See remarks above.</param>
 		/// <param name="runWithView">See remarks above.</param>
 		/// <param name="applicationSettingsFileAccess">See remarks above.</param>
-		/// <param name="loadSettingsInWelcomeScreen">See YAT.Controller.Test.TestFixtureSetUp() for background.</param>
+		/// <param name="loadSettingsInWelcomeScreen">See YAT.Application.Test.TestFixtureSetUp() for background.</param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1625:ElementDocumentationMustNotBeCopiedAndPasted", Justification = "?!?")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop isn't able to deal with command line terms such as 'cmd' or 'nv'...")]
 		public virtual MainResult Run(bool runFromConsole, bool runWithView, ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
@@ -550,7 +550,7 @@ namespace YAT.Controller
 							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
 						}
 					}
-					else // See YAT.Controller.Test.TestFixtureSetUp() for background.
+					else // See YAT.Application.Test.TestFixtureSetUp() for background.
 					{
 						// Application settings are loaded synchronously here (solely used for testing purposes):
 						ApplicationSettings.Load();
@@ -780,7 +780,7 @@ namespace YAT.Controller
 							DebugWelcomeScreenShow(string.Format(CultureInfo.InvariantCulture, "...done with [{0}].", dr));
 						}
 					}
-					else // See YAT.Controller.Test.TestFixtureSetUp() for background.
+					else // See YAT.Application.Test.TestFixtureSetUp() for background.
 					{
 						// Application settings are loaded synchronously here (solely used for testing purposes):
 						ApplicationSettings.Load();

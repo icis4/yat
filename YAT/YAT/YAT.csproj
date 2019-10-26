@@ -104,9 +104,9 @@
       <Project>{f489b948-95cf-49fe-b9aa-a51654f5688b}</Project>
       <Name>MKY</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
+    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>
-      <Name>YAT.Controller</Name>
+      <Name>YAT.Application</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.View.Forms\YAT.View.Forms.csproj">
       <Project>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</Project>

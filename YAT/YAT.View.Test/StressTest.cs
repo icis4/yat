@@ -63,8 +63,8 @@ namespace YAT.View.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Temporary in-memory application settings seem useless for this YAT.Controller based
-			// test, as YAT.Controller will retrieve the application settings, that's its job...
+			// Temporary in-memory application settings seem useless for this YAT.Application based
+			// test, as YAT.Application will retrieve the application settings, that's its job...
 			// However, this test creates terminal settings *before* calling Main.Run(...), and
 			// some of the settings (e.g. LogSettings.RootPath) rely on the application settings
 			// (e.g. ApplicationSettings.LocalUserSettings.Paths.LogFiles). Thus, without creating
@@ -216,10 +216,10 @@ namespace YAT.View.Test
 				@"-ke"    // KeepOpenOnError
 			};
 
-			using (var m = new Controller.Main(args))
+			using (var m = new Application.Main(args))
 			{
-				var result = m.Run(false, true, ApplicationSettingsFileAccess.None, false); // <= see YAT.Controller.Test.TestFixtureSetUp() for background why without welcome screen.
-				Assert.That(result, Is.EqualTo(Controller.MainResult.Success));
+				var result = m.Run(false, true, ApplicationSettingsFileAccess.None, false); // <= see YAT.Application.Test.TestFixtureSetUp() for background why without welcome screen.
+				Assert.That(result, Is.EqualTo(Application.MainResult.Success));
 			}
 		}
 
