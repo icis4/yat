@@ -34,17 +34,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 #if (WITH_SCRIPTING)
 using System.Globalization;
-#endif
-using System.IO;
-#if (WITH_SCRIPTING)
 using System.Text;
 #endif
-using System.Threading;
 
 using MKY;
 using MKY.Diagnostics;
-
-using YAT.Application.Utilities;
 
 #endregion
 
@@ -56,7 +50,16 @@ namespace YAT.Domain
 	/// <summary>
 	/// <see cref="Terminal"/> implementation with binary semantics.
 	/// </summary>
-	public class BinaryTerminal : Terminal
+	/// <remarks>
+	/// This class is implemented using partial classes separating sending/processing functionality.
+	/// Using partial classes rather than aggregated sender, processor,... so far for these reasons:
+	/// <list type="bullet">
+	/// <item><description>Simpler for implementing text/binary specialization.</description></item>
+	/// <item><description>Simpler for implementing synchronization among Tx and Rx.</description></item>
+	/// <item><description>Less "Durchlauferhitzer", e.g. directly raising events.</description></item>
+	/// </list>
+	/// </remarks>
+	public partial class BinaryTerminal : Terminal
 	{
 		#region Types
 		//==========================================================================================
@@ -363,108 +366,6 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
-
-		#region Methods > Send Data
-		//------------------------------------------------------------------------------------------
-		// Methods > Send Data
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public override void SendFileLine(string dataLine, Radix defaultRadix)
-		{
-			// AssertNotDisposed() is called by DoSendData().
-
-			var parseMode = TerminalSettings.Send.File.ToParseMode();
-
-			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true));
-		}
-
-		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
-		{
-			switch (result.Keyword)
-			{
-				case Parser.Keyword.Eol:
-				case Parser.Keyword.NoEol:
-				{
-					// Add space if necessary:
-					if (ElementsAreSeparate(IODirection.Tx))
-					{
-						if (this.txLineState.Elements.ByteCount > 0)
-							OnDisplayElementAdded(IODirection.Tx, new DisplayElement.DataSpace());
-					}
-
-					string info = ((Parser.KeywordEx)(result.Keyword)) + " keyword is not supported for binary terminals";
-					OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, info));
-					break;
-				}
-
-				default:
-				{
-					base.ProcessInLineKeywords(result);
-					break;
-				}
-			}
-		}
-
-		#endregion
-
-		#region Methods > Send File
-		//------------------------------------------------------------------------------------------
-		// Methods > Send File
-		//------------------------------------------------------------------------------------------
-
-		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected override void ProcessSendFileItem(FileSendItem item)
-		{
-			try
-			{
-				if (ExtensionHelper.IsXmlFile(item.FilePath))
-				{
-					ProcessSendXmlFileItem(item);
-				}
-				else if (ExtensionHelper.IsTextFile(item.FilePath))
-				{
-					ProcessSendTextFileItem(item);
-				}
-				else // By default treat as binary file:
-				{
-					using (FileStream fs = File.OpenRead(item.FilePath))
-					{
-						long remaining = fs.Length;
-						while (remaining > 0)
-						{
-							byte[] a = new byte[1024]; // 1 KB chunks.
-							int n = fs.Read(a, 0, a.Length);
-							Array.Resize<byte>(ref a, n);
-							Send(a);
-							remaining -= n;
-
-							if (BreakSendFile)
-							{
-								OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
-								break;
-							}
-
-							Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-						}
-					}
-
-					// Note that 'item.DefaultRadix' is not used for sending binary files.
-					// This fact is considered in 'View.Controls.SendFile.SetRecentAndCommandControls()'.
-					// Changes in behavior above will have to be adapted in that control method as well.
-				}
-			}
-			catch (Exception ex)
-			{
-				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
-			}
-		}
-
-		#endregion
 
 		#region Methods > Element Processing
 		//------------------------------------------------------------------------------------------
