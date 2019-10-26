@@ -427,9 +427,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Public Methods
+		#region Methods
 		//==========================================================================================
-		// Public Methods
+		// Methods
 		//==========================================================================================
 
 		//------------------------------------------------------------------------------------------
@@ -548,9 +548,9 @@ namespace YAT.Domain
 			////	default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			////}
 
-				this.txRepository.Clear();
+				this.txRepository   .Clear();
 				this.bidirRepository.Clear();
-				this.rxRepository.Clear();
+				this.rxRepository   .Clear();
 			}
 
 			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
@@ -573,9 +573,9 @@ namespace YAT.Domain
 
 			lock (this.repositorySyncObj)
 			{
-				this.txRepository.Clear();
+				this.txRepository   .Clear();
 				this.bidirRepository.Clear();
-				this.rxRepository.Clear();
+				this.rxRepository   .Clear();
 			}
 
 			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
@@ -629,9 +629,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Settings Methods
+		#region Settings
 		//==========================================================================================
-		// Settings Methods
+		// Settings
 		//==========================================================================================
 
 		private void AttachBufferSettings(Settings.BufferSettings bufferSettings)
@@ -711,9 +711,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region I/O Methods
+		#region I/O
 		//==========================================================================================
-		// I/O Methods
+		// I/O
 		//==========================================================================================
 
 		private void AttachIO(IIOProvider io)

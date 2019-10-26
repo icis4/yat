@@ -170,9 +170,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Repository Access
+		#region Repository Access
 		//------------------------------------------------------------------------------------------
-		// Methods > Repository Access
+		// Repository Access
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Ensure that states are completely reset.</remarks>

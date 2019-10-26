@@ -254,9 +254,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Process Elements
+		#region Process Elements
 		//------------------------------------------------------------------------------------------
-		// Methods > Process Elements
+		// Process Elements
 		//------------------------------------------------------------------------------------------
 
 		private void InitializeStates()

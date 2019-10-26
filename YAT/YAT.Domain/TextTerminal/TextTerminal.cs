@@ -224,9 +224,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Open
+		#region Open
 		//------------------------------------------------------------------------------------------
-		// Methods > Open
+		// Open
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -242,9 +242,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Parse
+		#region Parse
 		//------------------------------------------------------------------------------------------
-		// Methods > Parse
+		// Parse
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -259,9 +259,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Repository Access
+		#region Repository Access
 		//------------------------------------------------------------------------------------------
-		// Methods > Repository Access
+		// Repository Access
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Ensure that states are completely reset.</remarks>
