@@ -48,7 +48,7 @@ namespace YAT
 		/// </summary>
 		/// <param name="commandLineArgs">An array containing the command line arguments.</param>
 		/// <returns>
-		/// The application's exit code according to <see cref="Controller.MainResult"/>.
+		/// The application's exit code according to <see cref="Application.MainResult"/>.
 		/// </returns>
 		/// <remarks>
 		/// There must be separate Windows.Forms application and console application projects to
@@ -78,15 +78,15 @@ namespace YAT
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
-			Controller.MainResult result;
+			Application.MainResult result;
 
-			using (Controller.Main main = new Controller.Main(commandLineArgs))
+			using (Application.Main main = new Application.Main(commandLineArgs))
 			{
 				result = main.Run();
 			}
 		#if (DEBUG)
 			GC.Collect(); // Force garbage collection to allow detecting memory leaks upon exit.
-			Controller.Diagnostics.DebugFinalization.DebugNotifyAllowedStaticObjects();
+			Application.Diagnostics.DebugFinalization.DebugNotifyAllowedStaticObjects();
 		////MKY.Diagnostics.DebugFinalization.FinalizationShouldHaveCompleted = true; has been disabled until fix of bugs #243, #263 and #336 continues.
 		#endif
 			return ((int)result);

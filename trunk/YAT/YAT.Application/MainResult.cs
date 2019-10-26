@@ -24,7 +24,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace YAT.Controller
+namespace YAT.Application
 {
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense

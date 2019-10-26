@@ -6,8 +6,8 @@
     <ProjectGuid>{D639409C-0B93-494B-9A01-4FE79686FAD6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YAT.Controller</RootNamespace>
-    <AssemblyName>YAT.Controller</AssemblyName>
+    <RootNamespace>YAT.Application</RootNamespace>
+    <AssemblyName>YAT.Application</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -18,7 +18,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Debug\YAT.Controller.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\YAT.Application.xml</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
@@ -29,7 +29,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Release\YAT.Controller.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\YAT.Application.xml</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>

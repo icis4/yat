@@ -133,9 +133,9 @@
       <Project>{f7bff679-5389-434c-81e4-7ee8530df954}</Project>
       <Name>NUnit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Controller.Test\YAT.Controller.Test.csproj">
+    <ProjectReference Include="..\YAT.Application.Test\YAT.Application.Test.csproj">
       <Project>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</Project>
-      <Name>YAT.Controller.Test</Name>
+      <Name>YAT.Application.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain.Test\YAT.Domain.Test.csproj">
       <Project>{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}</Project>

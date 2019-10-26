@@ -34,7 +34,7 @@ using MKY.CommandLine;
 
 #endregion
 
-namespace YAT.Controller
+namespace YAT.Application
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]

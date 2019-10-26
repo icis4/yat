@@ -22,28 +22,34 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Diagnostics;
+using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-namespace YAT.Controller.Diagnostics
-{
-	/// <summary>
-	/// Provides static methods to help with finalization.
-	/// </summary>
-	public static class DebugFinalization
-	{
-		/// <summary></summary>
-		[Conditional("DEBUG")]
-		public static void DebugNotifyAllowedStaticObjects()
-		{
-		////Debug.WriteLine("Late finalizer calls are allowed for the following static objects:");
-		////Debug.Indent();
-		////Debug.WriteLine("<TBD>");
-		////Debug.Unindent();
+// General Information about an assembly is controlled through the following
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("YAT.Application")]
+[assembly: AssemblyDescription("YAT application")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("YAT")]
+[assembly: AssemblyProduct("YAT")]
+[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2019 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-			Debug.WriteLine("Detection of late finalizer calls has been disabled until fix of bugs #243, #263 and #336 continues.");
-		}
-	}
-}
+// Setting ComVisible to false makes the types in this assembly not visible
+// to COM components. If you need to access a type in this assembly from
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM.
+[assembly: Guid("d98847bb-7eb6-4035-9e93-14b9fd530666")]
+
+// Assembly versions are defined by linked-in YAT.Version.cs.
+
+// CLS compliance.
+[assembly: CLSCompliant(true)]
 
 //==================================================================================================
 // End of

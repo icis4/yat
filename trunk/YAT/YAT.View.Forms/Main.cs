@@ -283,7 +283,7 @@ namespace YAT.View.Forms
 		/// child controls has been raised before this 'Shown' event.
 		/// Note that this main form is only created when YAT is run WITH a view. If YAT is run
 		/// WITHOUT a view, <see cref="Model.Main.Start"/> is called by either
-		/// YAT.Controller.Main.RunFullyFromConsole() or YAT.Controller.Main.RunInvisible().
+		/// YAT.Application.Main.RunFullyFromConsole() or YAT.Application.Main.RunInvisible().
 		/// </remarks>
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void Main_Shown(object sender, EventArgs e)

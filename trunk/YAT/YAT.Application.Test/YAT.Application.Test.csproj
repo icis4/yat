@@ -6,8 +6,8 @@
     <ProjectGuid>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YAT.Controller.Test</RootNamespace>
-    <AssemblyName>YAT.Controller.Test</AssemblyName>
+    <RootNamespace>YAT.Application.Test</RootNamespace>
+    <AssemblyName>YAT.Application.Test</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -17,7 +17,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\YAT.Controller.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\YAT.Application.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -28,7 +28,7 @@
     <DefineConstants>TRACE;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\YAT.Controller.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\YAT.Application.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
@@ -84,7 +84,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
-    <Compile Include="ControllerTest.cs" />
+    <Compile Include="ApplicationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -104,9 +104,9 @@
       <Project>{F7BFF679-5389-434C-81E4-7EE8530DF954}</Project>
       <Name>NUnit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
+    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>
-      <Name>YAT.Controller</Name>
+      <Name>YAT.Application</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
       <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>

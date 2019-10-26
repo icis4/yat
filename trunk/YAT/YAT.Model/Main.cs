@@ -491,7 +491,7 @@ namespace YAT.Model
 			// processed and validated for a second time AFTER the application settings have been
 			// created/loaded. They have already been processed and validated for a first time
 			// BEFORE the application settings were created/loaded. This first processing happens
-			// in YAT.Controller.Main.Run().
+			// in YAT.Application.Main.Run().
 			//
 			// In case of automated testing, the command line arguments may also be processed and
 			// validated here for the first time.
@@ -508,7 +508,7 @@ namespace YAT.Model
 
 					return (true);
 				}
-				// In case of "YATConsole.exe" the controller will set the 'NonInteractive' option,
+				// In case of "YATConsole.exe" the application will set the 'NonInteractive' option,
 				// i.e. 'Interactive' will be cleared, and no 'New Terminal' dialog shall get shown:
 				else
 				{

@@ -99,9 +99,9 @@
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
       <Name>YAT.Application.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
+    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>
-      <Name>YAT.Controller</Name>
+      <Name>YAT.Application</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
