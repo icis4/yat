@@ -95,6 +95,7 @@ Important changes:
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
   renamed to \!(IOSettings()) (related to feature request #71).
+- Project/Assembly structure slightly refined (preparing feature request #74).
 
 Fixed bugs:
 - ...
