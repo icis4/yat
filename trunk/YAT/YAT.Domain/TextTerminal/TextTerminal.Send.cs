@@ -47,7 +47,7 @@ namespace YAT.Domain
 	/// <remarks>
 	/// This partial class implements the send part of <see cref="TextTerminal"/>.
 	/// </remarks>
-	public partial class TextTerminal : Terminal
+	public partial class TextTerminal
 	{
 		#region Methods
 		//==========================================================================================
