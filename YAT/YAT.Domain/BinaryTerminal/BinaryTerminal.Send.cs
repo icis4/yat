@@ -44,7 +44,7 @@ namespace YAT.Domain
 	/// <remarks>
 	/// This partial class implements the send part of <see cref="BinaryTerminal"/>.
 	/// </remarks>
-	public partial class BinaryTerminal : Terminal
+	public partial class BinaryTerminal
 	{
 		#region Methods
 		//==========================================================================================

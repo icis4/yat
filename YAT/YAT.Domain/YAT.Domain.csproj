@@ -84,6 +84,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="BinaryTerminal\BinaryTerminal.Process.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.Send.cs" />
     <Compile Include="LineBreakTimeout.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\InfoEnclosure.cs" />
+    <Compile Include="Terminal\Terminal.Process.cs" />
     <Compile Include="Terminal\Terminal.Send.cs" />
     <Compile Include="Terminal\TimeDeltaFormatPreset.cs" />
     <Compile Include="Terminal\TimeSpanFormatPreset.cs" />
@@ -149,9 +151,11 @@
     <Compile Include="Terminal\Terminal.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Terminal\RepositoryType.cs" />
+    <Compile Include="TextTerminal\TextTerminal.Process.cs" />
     <Compile Include="TextTerminal\TextTerminal.Send.cs" />
     <Compile Include="TextTerminal\TextTerminal.cs" />
     <Compile Include="TextTerminal\ControlCharRadix.cs" />
+    <Compile Include="Utilities\IOChangedEventHelper.cs" />
     <Compile Include="Utilities\ByteHelper.cs" />
     <Compile Include="Utilities\LengthSelection.cs" />
     <Compile Include="Utilities\LineNumberSelection.cs" />
