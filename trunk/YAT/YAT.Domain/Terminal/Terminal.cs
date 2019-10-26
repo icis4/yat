@@ -278,9 +278,6 @@ namespace YAT.Domain
 
 		private IOChangedEventHelper ioChangedEventHelper;
 
-		private bool breakState;
-		private object breakStateSyncObj = new object();
-
 		private IOControlState ioControlStateCache;
 		private object ioControlStateCacheSyncObj = new object();
 
@@ -856,43 +853,6 @@ namespace YAT.Domain
 		{
 			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, TerminalSettings.Send.Text.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
-		}
-
-		#endregion
-
-		#region Methods > Break/Resume
-		//------------------------------------------------------------------------------------------
-		// Methods > Break/Resume
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Breaks all currently ongoing operations in the terminal.
-		/// </summary>
-		public virtual void Break()
-		{
-			lock (this.breakStateSyncObj)
-				this.breakState = true;
-		}
-
-		/// <summary>
-		/// Resumes all currently suspended operations in the terminal.
-		/// </summary>
-		public virtual void ResumeBreak()
-		{
-			lock (this.breakStateSyncObj)
-				this.breakState = false;
-		}
-
-		/// <summary>
-		/// Returns the current break state.
-		/// </summary>
-		public virtual bool BreakState
-		{
-			get
-			{
-				lock (this.breakStateSyncObj)
-					return (this.breakState);
-			}
 		}
 
 		#endregion
@@ -2618,10 +2578,15 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Non-Public Methods
+		//==========================================================================================
+		// Non-Public Methods
+		//==========================================================================================
+
 		#region Settings
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 		// Settings
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 
 		private void AttachTerminalSettings(Settings.TerminalSettings terminalSettings)
 		{
@@ -2681,9 +2646,9 @@ namespace YAT.Domain
 		#endregion
 
 		#region Settings Events
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 		// Settings Events
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 
 		private void terminalSettings_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
@@ -2720,9 +2685,9 @@ namespace YAT.Domain
 		#endregion
 
 		#region Raw Terminal
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 		// Raw Terminal
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 
 		private void AttachRawTerminal(RawTerminal rawTerminal)
 		{
@@ -2758,9 +2723,9 @@ namespace YAT.Domain
 		#endregion
 
 		#region Raw Terminal Events
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 		// Raw Terminal Events
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 
 		private void rawTerminal_IOChanged(object sender, EventArgs e)
 		{
@@ -2886,9 +2851,9 @@ namespace YAT.Domain
 		#endregion
 
 		#region Event Raising
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 		// Event Raising
-		//==========================================================================================
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
@@ -3215,6 +3180,8 @@ namespace YAT.Domain
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
+
+		#endregion
 
 		#endregion
 

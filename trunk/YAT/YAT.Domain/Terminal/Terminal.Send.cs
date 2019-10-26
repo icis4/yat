@@ -28,9 +28,6 @@
 //==================================================================================================
 
 using System;
-#if (WITH_SCRIPTING)
-using System.Collections;
-#endif
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -41,9 +38,7 @@ using System.Text;
 using System.Threading;
 
 using MKY;
-using MKY.Contracts;
 using MKY.Diagnostics;
-using MKY.Text;
 
 using YAT.Domain.Utilities;
 
@@ -88,230 +83,36 @@ namespace YAT.Domain
 
 		private bool sendingIsOngoing;
 
+		private bool breakState;
+		private object breakStateSyncObj = new object();
+
 		private System.Timers.Timer periodicXOnTimer;
 
 		#endregion
 
-		#region Send Threads
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		#region Properties > Break/Resume
 		//------------------------------------------------------------------------------------------
-		// Send Threads
+		// Properties > Break/Resume
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAndStartSendThreads()
+		/// <summary>
+		/// Returns the current break state.
+		/// </summary>
+		public virtual bool BreakState
 		{
-			lock (this.sendDataThreadSyncObj)
+			get
 			{
-				DebugThreadState("SendDataThread() gets created...");
-
-				if (this.sendDataThread == null)
-				{
-					this.sendDataThreadRunFlag = true;
-					this.sendDataThreadEvent = new AutoResetEvent(false);
-					this.sendDataThread = new Thread(new ThreadStart(SendDataThread));
-					this.sendDataThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Data Thread";
-					this.sendDataThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
-
-					DebugThreadState("...successfully created.");
-				}
-			#if (DEBUG)
-				else
-				{
-					DebugThreadState("...failed as it already exists.");
-				}
-			#endif
-			}
-
-			lock (this.sendFileThreadSyncObj)
-			{
-				DebugThreadState("SendFileThread() gets created...");
-
-				if (this.sendFileThread == null)
-				{
-					this.sendFileThreadRunFlag = true;
-					this.sendFileThreadEvent = new AutoResetEvent(false);
-					this.sendFileThread = new Thread(new ThreadStart(SendFileThread));
-					this.sendFileThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send File Thread";
-					this.sendFileThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
-
-					DebugThreadState("...successfully created.");
-				}
-			#if (DEBUG)
-				else
-				{
-					DebugThreadState("...failed as it already exists.");
-				}
-			#endif
+				lock (this.breakStateSyncObj)
+					return (this.breakState);
 			}
 		}
 
-		/// <remarks>
-		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
-		/// to join first, then abort if not successfully joined.
-		/// </remarks>
-		private void StopSendThreads()
-		{
-			lock (this.sendFileThreadSyncObj)
-			{
-				if (this.sendFileThread != null)
-				{
-					DebugThreadState("SendFileThread() gets stopped...");
-
-					this.sendFileThreadRunFlag = false;
-
-					// Ensure that send thread has stopped after the stop request:
-					try
-					{
-						Debug.Assert(this.sendFileThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
-
-						bool isAborting = false;
-						int accumulatedTimeout = 0;
-						int interval = 0; // Use a relatively short random interval to trigger the thread:
-						while (!this.sendFileThread.Join(interval = staticRandom.Next(5, 20)))
-						{
-							SignalSendFileThreadSafely();
-
-							accumulatedTimeout += interval;
-							if (accumulatedTimeout >= ThreadWaitTimeout)
-							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
-
-								isAborting = true;       // Thread.Abort() must not be used whenever possible!
-								this.sendFileThread.Abort(); // This is only the fall-back in case joining fails for too long.
-								break;
-							}
-
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
-						}
-
-						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
-					}
-					catch (ThreadStateException)
-					{
-						// Ignore thread state exceptions such as "Thread has not been started" and
-						// "Thread cannot be aborted" as it just needs to be ensured that the thread
-						// has or will be terminated for sure.
-
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
-					}
-
-					this.sendFileThread = null;
-				}
-			#if (DEBUG)
-				else // (this.sendFileThread == null)
-				{
-					DebugThreadState("...not necessary as it doesn't exist anymore.");
-				}
-			#endif
-
-				if (this.sendFileThreadEvent != null)
-				{
-					try     { this.sendFileThreadEvent.Close(); }
-					finally { this.sendFileThreadEvent = null; }
-				}
-			} // lock (sendFileThreadSyncObj)
-
-			lock (this.sendDataThreadSyncObj)
-			{
-				if (this.sendDataThread != null)
-				{
-					DebugThreadState("SendDataThread() gets stopped...");
-
-					this.sendDataThreadRunFlag = false;
-
-					// Ensure that send thread has stopped after the stop request:
-					try
-					{
-						Debug.Assert(this.sendDataThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
-
-						bool isAborting = false;
-						int accumulatedTimeout = 0;
-						int interval = 0; // Use a relatively short random interval to trigger the thread:
-						while (!this.sendDataThread.Join(interval = staticRandom.Next(5, 20)))
-						{
-							SignalSendDataThreadSafely();
-
-							accumulatedTimeout += interval;
-							if (accumulatedTimeout >= ThreadWaitTimeout)
-							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
-
-								isAborting = true;       // Thread.Abort() must not be used whenever possible!
-								this.sendDataThread.Abort(); // This is only the fall-back in case joining fails for too long.
-								break;
-							}
-
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
-						}
-
-						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
-					}
-					catch (ThreadStateException)
-					{
-						// Ignore thread state exceptions such as "Thread has not been started" and
-						// "Thread cannot be aborted" as it just needs to be ensured that the thread
-						// has or will be terminated for sure.
-
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
-					}
-
-					this.sendDataThread = null;
-				}
-			#if (DEBUG)
-				else // (this.sendDataThread == null)
-				{
-					DebugThreadState("...not necessary as it doesn't exist anymore.");
-				}
-			#endif
-
-				if (this.sendDataThreadEvent != null)
-				{
-					try     { this.sendDataThreadEvent.Close(); }
-					finally { this.sendDataThreadEvent = null; }
-				}
-			} // lock (sendDataThreadSyncObj)
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalSendDataThreadSafely()
-		{
-			try
-			{
-				if (this.sendDataThreadEvent != null)
-					this.sendDataThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalSendFileThreadSafely()
-		{
-			try
-			{
-				if (this.sendFileThreadEvent != null)
-					this.sendFileThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
-		}
+		#endregion
 
 		#endregion
 
@@ -1503,6 +1304,261 @@ namespace YAT.Domain
 
 				Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 			}
+		}
+
+		#endregion
+
+		#region Methods > Break/Resume
+		//------------------------------------------------------------------------------------------
+		// Methods > Break/Resume
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Breaks all currently ongoing operations in the terminal.
+		/// </summary>
+		public virtual void Break()
+		{
+			lock (this.breakStateSyncObj)
+				this.breakState = true;
+		}
+
+		/// <summary>
+		/// Resumes all currently suspended operations in the terminal.
+		/// </summary>
+		public virtual void ResumeBreak()
+		{
+			lock (this.breakStateSyncObj)
+				this.breakState = false;
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Non-Public Methods
+		//==========================================================================================
+		// Non-Public Methods
+		//==========================================================================================
+
+		#region Non-Public Methods > Send Threads
+		//------------------------------------------------------------------------------------------
+		// Non-Public Methods > Send Threads
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAndStartSendThreads()
+		{
+			lock (this.sendDataThreadSyncObj)
+			{
+				DebugThreadState("SendDataThread() gets created...");
+
+				if (this.sendDataThread == null)
+				{
+					this.sendDataThreadRunFlag = true;
+					this.sendDataThreadEvent = new AutoResetEvent(false);
+					this.sendDataThread = new Thread(new ThreadStart(SendDataThread));
+					this.sendDataThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Data Thread";
+					this.sendDataThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
+
+					DebugThreadState("...successfully created.");
+				}
+			#if (DEBUG)
+				else
+				{
+					DebugThreadState("...failed as it already exists.");
+				}
+			#endif
+			}
+
+			lock (this.sendFileThreadSyncObj)
+			{
+				DebugThreadState("SendFileThread() gets created...");
+
+				if (this.sendFileThread == null)
+				{
+					this.sendFileThreadRunFlag = true;
+					this.sendFileThreadEvent = new AutoResetEvent(false);
+					this.sendFileThread = new Thread(new ThreadStart(SendFileThread));
+					this.sendFileThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send File Thread";
+					this.sendFileThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
+
+					DebugThreadState("...successfully created.");
+				}
+			#if (DEBUG)
+				else
+				{
+					DebugThreadState("...failed as it already exists.");
+				}
+			#endif
+			}
+		}
+
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
+		private void StopSendThreads()
+		{
+			lock (this.sendFileThreadSyncObj)
+			{
+				if (this.sendFileThread != null)
+				{
+					DebugThreadState("SendFileThread() gets stopped...");
+
+					this.sendFileThreadRunFlag = false;
+
+					// Ensure that send thread has stopped after the stop request:
+					try
+					{
+						Debug.Assert(this.sendFileThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+						bool isAborting = false;
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.sendFileThread.Join(interval = staticRandom.Next(5, 20)))
+						{
+							SignalSendFileThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.sendFileThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								break;
+							}
+
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+
+						if (!isAborting)
+							DebugThreadState("...successfully stopped.");
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+
+					this.sendFileThread = null;
+				}
+			#if (DEBUG)
+				else // (this.sendFileThread == null)
+				{
+					DebugThreadState("...not necessary as it doesn't exist anymore.");
+				}
+			#endif
+
+				if (this.sendFileThreadEvent != null)
+				{
+					try     { this.sendFileThreadEvent.Close(); }
+					finally { this.sendFileThreadEvent = null; }
+				}
+			} // lock (sendFileThreadSyncObj)
+
+			lock (this.sendDataThreadSyncObj)
+			{
+				if (this.sendDataThread != null)
+				{
+					DebugThreadState("SendDataThread() gets stopped...");
+
+					this.sendDataThreadRunFlag = false;
+
+					// Ensure that send thread has stopped after the stop request:
+					try
+					{
+						Debug.Assert(this.sendDataThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+						bool isAborting = false;
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.sendDataThread.Join(interval = staticRandom.Next(5, 20)))
+						{
+							SignalSendDataThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.sendDataThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								break;
+							}
+
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+
+						if (!isAborting)
+							DebugThreadState("...successfully stopped.");
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+
+					this.sendDataThread = null;
+				}
+			#if (DEBUG)
+				else // (this.sendDataThread == null)
+				{
+					DebugThreadState("...not necessary as it doesn't exist anymore.");
+				}
+			#endif
+
+				if (this.sendDataThreadEvent != null)
+				{
+					try     { this.sendDataThreadEvent.Close(); }
+					finally { this.sendDataThreadEvent = null; }
+				}
+			} // lock (sendDataThreadSyncObj)
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendDataThreadSafely()
+		{
+			try
+			{
+				if (this.sendDataThreadEvent != null)
+					this.sendDataThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendFileThreadSafely()
+		{
+			try
+			{
+				if (this.sendFileThreadEvent != null)
+					this.sendFileThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
 		}
 
 		#endregion
