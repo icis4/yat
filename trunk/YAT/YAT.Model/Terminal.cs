@@ -303,10 +303,10 @@ namespace YAT.Model
 		public event EventHandler<Domain.ModifiablePacketEventArgs> SendingPacket;
 
 		/// <summary></summary>
-		public event EventHandler<Domain.RawChunkEventArgs> RawElementSent;
+		public event EventHandler<Domain.RawChunkEventArgs> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<Domain.RawChunkEventArgs> RawElementReceived;
+		public event EventHandler<Domain.RawChunkEventArgs> RawChunkReceived;
 
 	#endif // WITH_SCRIPTING
 
@@ -3392,6 +3392,10 @@ namespace YAT.Model
 		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
 		///    notified on updates after transmission.
 		/// </remarks>
+		/// <remarks>
+		/// This event is raised when a chunk is sent by the <see cref="UnderlyingIOProvider"/>.
+		/// The event is not raised on reloading, reloading is done by the <see cref="Domain.Terminal"/>.
+		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, Domain.RawChunkEventArgs e)
 		{
@@ -3425,7 +3429,7 @@ namespace YAT.Model
 			}
 
 		#if (WITH_SCRIPTING)
-			OnRawElementSent(e);
+			OnRawChunkSent(e);
 		#endif
 		}
 
@@ -3453,7 +3457,11 @@ namespace YAT.Model
 		///  > If the trigger is spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
 		///  > If there is more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger is detected.
 		/// To make this change happen, trigger detection will have to be moved from here to one of the underlying methods of
-		/// <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, i.e. where chunks are being processed onto lines.
+		/// <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, i.e. where chunks are being processed into lines.
+		/// </remarks>
+		/// <remarks>
+		/// This event is raised when a chunk is received by the <see cref="UnderlyingIOProvider"/>.
+		/// The event is not raised on reloading, reloading is done by the <see cref="Domain.Terminal"/>.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, Domain.RawChunkEventArgs e)
@@ -3598,7 +3606,7 @@ namespace YAT.Model
 			}
 
 		#if (WITH_SCRIPTING)
-			OnRawElementReceived(e);
+			OnRawChunkReceived(e);
 		#endif
 		}
 
@@ -6408,15 +6416,15 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawElementSent(EventArgs<Domain.RawChunk> e)
+		protected virtual void OnRawChunkSent(EventArgs<Domain.RawChunk> e)
 		{
-			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawElementSent, this, e);
+			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawElementReceived(EventArgs<Domain.RawChunk> e)
+		protected virtual void OnRawChunkReceived(EventArgs<Domain.RawChunk> e)
 		{
-			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawElementReceived, this, e);
+			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawChunkReceived, this, e);
 		}
 
 	#endif // WITH_SCRIPTING

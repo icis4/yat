@@ -652,9 +652,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Start/Stop/Close
+		#region Start/Stop/Close
 		//------------------------------------------------------------------------------------------
-		// Methods > Start/Stop/Close
+		// Start/Stop/Close
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -734,9 +734,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Parse
+		#region Parse
 		//------------------------------------------------------------------------------------------
-		// Methods > Parse
+		// Parse
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -752,9 +752,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > I/O Control
+		#region I/O Control
 		//------------------------------------------------------------------------------------------
-		// Methods > I/O Control
+		// I/O Control
 		//------------------------------------------------------------------------------------------
 
 		private bool IsUsbSerialHid
@@ -1354,9 +1354,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Special ;-)
+		#region Special ;-)
 		//------------------------------------------------------------------------------------------
-		// Methods > Special ;-)
+		// Special ;-)
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1369,9 +1369,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Format
+		#region Format
 		//------------------------------------------------------------------------------------------
-		// Methods > Format
+		// Format
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1443,9 +1443,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Convert
+		#region Convert
 		//------------------------------------------------------------------------------------------
-		// Methods > Convert
+		// Convert
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1498,9 +1498,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Scripting
+		#region Scripting
 		//------------------------------------------------------------------------------------------
-		// Methods > Scripting
+		// Scripting
 		//------------------------------------------------------------------------------------------
 
 	#if (WITH_SCRIPTING)
@@ -1660,9 +1660,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Repository Access
+		#region Repository Access
 		//------------------------------------------------------------------------------------------
-		// Methods > Repository Access
+		// Repository Access
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
@@ -2231,6 +2231,10 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// This event is raised when a chunk is sent by the <see cref="UnderlyingIOProvider"/>.
+		/// The event is not raised on reloading, reloading is done by the 'Refresh...()' methods.
+		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkSent(object sender, EventArgs<RawChunk> e)
 		{
@@ -2245,6 +2249,10 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// This event is raised when a chunk is received by the <see cref="UnderlyingIOProvider"/>.
+		/// The event is not raised on reloading, reloading is done by the 'Refresh...()' methods.
+		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawChunkReceived(object sender, EventArgs<RawChunk> e)
 		{

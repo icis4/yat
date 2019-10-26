@@ -358,9 +358,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Process Elements
+		#region Process Elements
 		//------------------------------------------------------------------------------------------
-		// Methods > Process Elements
+		// Process Elements
 		//------------------------------------------------------------------------------------------
 
 		private void InitializeStates()
@@ -1523,7 +1523,7 @@ namespace YAT.Domain
 					this.rxScriptMessageState.Eol.Enqueue(b);
 
 					if (this.rxScriptMessageState.Eol.IsCompleteMatch) // Processing and signalling
-						ProcessAndSignalMessageForScripting();       // in case EOL != <nothing>.
+						ProcessAndSignalMessageForScripting();         // in case EOL != <nothing>.
 				}
 			}
 		}
