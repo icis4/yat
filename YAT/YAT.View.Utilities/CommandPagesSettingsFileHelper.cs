@@ -607,14 +607,43 @@ namespace YAT.View.Utilities
 			PredefinedCommandPageLayout pageLayoutNew;
 			if (ConfirmImport(owner, settingsOld.PageLayout, pagesImported, out mode, out pageLayoutNew))
 			{
-				// Clone...
-				settingsNew = new PredefinedCommandSettings(settingsOld); // Clone settings to preserve properties.
+				// Clone settings to preserve pages and other properties...
+				settingsNew = new PredefinedCommandSettings(settingsOld);
 
-				// ...and replace the pages:
-				settingsNew.Pages.Clear();
-				settingsNew.Pages = pagesImported;
-				return (true);
-			}
+				// ...potentially adjust layout...
+				settingsNew.PageLayout = pageLayoutNew;
+
+				// ...and then...
+				switch (mode)
+				{
+					case (Mode.Neutral):
+					case (Mode.Enlarge):
+					{
+						// ...replace:
+						settingsNew.Pages.Clear();
+						settingsNew.Pages.AddRange(pagesImported); // No clone needed as just loaded.
+
+						return (true);
+					}
+
+					case (Mode.Spread):
+					{
+						var commandCapacityPerPageNew = ((PredefinedCommandPageLayoutEx)pageLayoutNew).CommandCapacityPerPage;
+
+						// ...replace spreaded:
+						settingsNew.Pages.Clear();
+						settingsNew.Pages.AddSpreaded(pagesImported, commandCapacityPerPageNew); // No clone needed as just loaded.
+
+						return (true);
+					}
+
+					case (Mode.Cancel):
+					default:
+					{
+						break; // Do nothing.
+					}
+				}
+			} // ConfirmImport()
 
 			settingsNew = null;
 			return (false);
@@ -668,7 +697,7 @@ namespace YAT.View.Utilities
 						break; // Do nothing.
 					}
 				}
-			}
+			} // ConfirmImport()
 
 			settingsNew = null;
 			return (false);
@@ -692,16 +721,25 @@ namespace YAT.View.Utilities
 
 				var message = new StringBuilder();
 				message.Append("The file contains ");
-				message.Append(pagesImported.Count);
-				message.Append(pagesImported.Count == 1 ? " page" : " pages");
-				message.Append(pagesImported.Count == 1 ? " with " : " with up to ");
-				message.Append(pagesImported.MaxDefinedCommandCountPerPage);
-				message.Append(" commands per page, but currently ");
+				if (pagesImported.Count <= 1)
+				{
+					message.Append("1 page with ");
+					message.Append(pagesImported.MaxDefinedCommandCountPerPage);
+					message.Append(" commands,");
+				}
+				else
+				{
+					message.Append(pagesImported.Count);
+					message.Append(" pages with up to ");
+					message.Append(pagesImported.MaxDefinedCommandCountPerPage);
+					message.Append(" commands per page,");
+				}
+				message.Append(" but currently ");
 				message.Append(commandCapacityPerPageOld);
 				message.AppendLine(" commands per page are configured.");
 				message.AppendLine();
 				message.Append("Would you like to enlarge the pages to " + nextCommandCapacityPerPage.ToString(CultureInfo.CurrentCulture) + " commands per page [Yes],");
-				message.Append(" or spread the imported pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentCulture) + " commands per page [No]?");
+				message.Append(       " or spread the imported pages to " + commandCapacityPerPageOld.ToString(CultureInfo.CurrentCulture) + " commands per page [No]?");
 
 				switch (MessageBoxEx.Show
 					(
