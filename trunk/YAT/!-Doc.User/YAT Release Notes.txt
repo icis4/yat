@@ -98,7 +98,8 @@ Important changes:
 - Project/Assembly structure slightly refined (preparing feature request #74).
 
 Fixed bugs:
-- ...
+- Import/Paste of a .yacp command page file that contains more predefined commands than currently
+  configured fixed (bug #479, related to previous feature requests #28, #257, #365).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
