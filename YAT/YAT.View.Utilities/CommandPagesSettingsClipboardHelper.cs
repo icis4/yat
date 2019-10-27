@@ -537,6 +537,7 @@ namespace YAT.View.Utilities
 
 				var message = new StringBuilder();
 				message.Append("The clipboard contains ");
+				message.Append(pagesImported.Count);
 				message.Append(pagesImported.Count == 1 ? " page" : " pages");
 				message.Append(" with up to ");
 				message.Append(pagesImported.MaxDefinedCommandCountPerPage);
