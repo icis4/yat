@@ -156,7 +156,8 @@ namespace YAT.View.Utilities
 				    (potentialMergeRatio > 1))       // Ratio is OK for merge, e.g. 24:12 or 48:24, but not 36:24.
 				{
 					var message = new StringBuilder();
-					message.Append("The currently configured predefined commands contain up to ");
+					message.Append("The currently configured predefined commands ");
+					message.Append(settingsOld.Pages.Count == 1 ? "contain " : "contain up to ");
 					message.Append(settingsOld.Pages.MaxDefinedCommandCountPerPage);
 					message.Append(" commands per page, and ");
 					message.Append(commandCapacityPerPageRequested);
@@ -191,7 +192,8 @@ namespace YAT.View.Utilities
 				int potentialSpreadRatio = (int)(Math.Ceiling(((double)(commandCapacityPerPageOld)) / (double)(commandCapacityPerPageRequested)));
 
 				var message = new StringBuilder();
-				message.Append("The currently configured predefined commands contain up to ");
+				message.Append("The currently configured predefined commands");
+				message.Append(settingsOld.Pages.Count == 1 ? "contain " : "contain up to ");
 				message.Append(settingsOld.Pages.MaxDefinedCommandCountPerPage);
 				message.Append(" commands per page, but only ");
 				message.Append(commandCapacityPerPageRequested);
