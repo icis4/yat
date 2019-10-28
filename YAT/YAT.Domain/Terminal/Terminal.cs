@@ -235,12 +235,16 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
 
-		/// <summary></summary>
-		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayElementsEventArgs> DisplayElementsTxAdded;
 
-		/// <summary></summary>
-		public event EventHandler<DisplayElementsEventArgs> DisplayElementsReceived;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayElementsEventArgs> DisplayElementsBidirAdded;
 
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayElementsEventArgs> DisplayElementsRxAdded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
 		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
 		/// elements would likely be more error prone since...
@@ -249,8 +253,9 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineSentReplaced;
+		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineTxReplaced;
 
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
 		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
 		/// elements would likely be more error prone since...
@@ -259,19 +264,39 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineReceivedReplaced;
+		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineBidirReplaced;
 
-		/// <remarks><see cref="CurrentDisplayLineSentReplaced"/> above.</remarks>
-		public event EventHandler CurrentDisplayLineSentCleared;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>
+		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
+		/// elements would likely be more error prone since...
+		/// ...exact sequence of adding and removing elements has to exactly match.
+		/// ...an already added element would likely have to be unfolded to remove parts of it!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineRxReplaced;
 
-		/// <remarks><see cref="CurrentDisplayLineReceivedReplaced"/> above.</remarks>
-		public event EventHandler CurrentDisplayLineReceivedCleared;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="CurrentDisplayLineTxReplaced"/> above.</remarks>
+		public event EventHandler CurrentDisplayLineTxCleared;
 
-		/// <summary></summary>
-		public event EventHandler<DisplayLinesEventArgs> DisplayLinesSent;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="CurrentDisplayLineBidirReplaced"/> above.</remarks>
+		public event EventHandler CurrentDisplayLineBidirCleared;
 
-		/// <summary></summary>
-		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="CurrentDisplayLineRxReplaced"/> above.</remarks>
+		public event EventHandler CurrentDisplayLineRxCleared;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayLinesEventArgs> DisplayLinesTxAdded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayLinesEventArgs> DisplayLinesBidirAdded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayLinesEventArgs> DisplayLinesRxAdded;
 
 	#if (WITH_SCRIPTING)
 
@@ -295,11 +320,23 @@ namespace YAT.Domain
 
 	#endif
 
-		/// <summary></summary>
-		public event EventHandler<EventArgs<RepositoryType>> RepositoryCleared;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryTxCleared;
 
-		/// <summary></summary>
-		public event EventHandler<EventArgs<RepositoryType>> RepositoryReloaded;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryBidirCleared;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryRxCleared;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryTxReloaded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryBidirReloaded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryRxReloaded;
 
 		#endregion
 
@@ -1724,7 +1761,7 @@ namespace YAT.Domain
 				{                                 //   and large amounts of incoming data.
 					// Clear repository:
 					ClearMyRepository(repositoryType);
-					OnRepositoryCleared(new EventArgs<RepositoryType>(repositoryType));
+					OnRepositoryCleared(repositoryType);
 
 					// Reload repository:
 					this.isReloading = true;
@@ -1733,7 +1770,7 @@ namespace YAT.Domain
 						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
-					OnRepositoryReloaded(new EventArgs<RepositoryType>(repositoryType));
+					OnRepositoryReloaded(repositoryType);
 				}
 				finally
 				{
@@ -1770,9 +1807,9 @@ namespace YAT.Domain
 					ClearMyRepository(RepositoryType.Tx);
 					ClearMyRepository(RepositoryType.Bidir);
 					ClearMyRepository(RepositoryType.Rx);
-					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
-					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
-					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
+					OnRepositoryCleared(RepositoryType.Tx);
+					OnRepositoryCleared(RepositoryType.Bidir);
+					OnRepositoryCleared(RepositoryType.Rx);
 
 					// Reload repositories:
 					this.isReloading = true;
@@ -1781,9 +1818,9 @@ namespace YAT.Domain
 						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
-					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Tx));
-					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Bidir));
-					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Rx));
+					OnRepositoryReloaded(RepositoryType.Tx);
+					OnRepositoryReloaded(RepositoryType.Bidir);
+					OnRepositoryReloaded(RepositoryType.Rx);
 				}
 				finally
 				{
@@ -2278,7 +2315,7 @@ namespace YAT.Domain
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
 				ClearMyRepository(e.Value);
-				OnRepositoryCleared(e);
+				OnRepositoryCleared(e.Value);
 			}
 		}
 
@@ -2363,7 +2400,7 @@ namespace YAT.Domain
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
+						OnDisplayElementsTxAdded(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
 
 					break;
 				}
@@ -2377,7 +2414,7 @@ namespace YAT.Domain
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
+						OnDisplayElementsRxAdded(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
 
 					break;
 				}
@@ -2396,21 +2433,30 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementsTxAdded(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnDisplayElementsSent " + e.Elements.ToString());
+			DebugContentEvents("OnDisplayElementsTxAdded " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsTxAdded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementsBidirAdded(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnDisplayElementsReceived " + e.Elements.ToString());
+			DebugContentEvents("OnDisplayElementsBidirAdded " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsBidirAdded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayElementsRxAdded(DisplayElementsEventArgs e)
+		{
+			DebugContentEvents("OnDisplayElementsRxAdded " + e.Elements.ToString());
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsRxAdded, this, e);
 		}
 
 		/// <summary></summary>
@@ -2427,7 +2473,7 @@ namespace YAT.Domain
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnCurrentDisplayLineSentReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
+						OnCurrentDisplayLineTxReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
 
 					break;
 				}
@@ -2441,7 +2487,7 @@ namespace YAT.Domain
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnCurrentDisplayLineReceivedReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
+						OnCurrentDisplayLineRxReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
 
 					break;
 				}
@@ -2460,21 +2506,30 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineSentReplaced(DisplayElementsEventArgs e)
+		protected virtual void OnCurrentDisplayLineTxReplaced(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineSentReplaced " + e.Elements.ToString());
+			DebugContentEvents("OnCurrentDisplayLineTxReplaced " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineSentReplaced, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineTxReplaced, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineReceivedReplaced(DisplayElementsEventArgs e)
+		protected virtual void OnCurrentDisplayLineBidirReplaced(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineReceivedReplaced " + e.Elements.ToString());
+			DebugContentEvents("OnCurrentDisplayLineBidirReplaced " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineReceivedReplaced, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineBidirReplaced, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineRxReplaced(DisplayElementsEventArgs e)
+		{
+			DebugContentEvents("OnCurrentDisplayLineRxReplaced " + e.Elements.ToString());
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineRxReplaced, this, e);
 		}
 
 		/// <summary></summary>
@@ -2491,7 +2546,7 @@ namespace YAT.Domain
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnCurrentDisplayLineSentCleared(new EventArgs());
+						OnCurrentDisplayLineTxCleared(new EventArgs());
 
 					break;
 				}
@@ -2505,7 +2560,7 @@ namespace YAT.Domain
 					}
 
 					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-						OnCurrentDisplayLineReceivedCleared(new EventArgs());
+						OnCurrentDisplayLineRxCleared(new EventArgs());
 
 					break;
 				}
@@ -2524,21 +2579,30 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineSentCleared(EventArgs e)
+		protected virtual void OnCurrentDisplayLineTxCleared(EventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineSentCleared");
+			DebugContentEvents("OnCurrentDisplayLineTxCleared");
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineSentCleared, this, e);
+				this.eventHelper.RaiseSync(CurrentDisplayLineTxCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineReceivedCleared(EventArgs e)
+		protected virtual void OnCurrentDisplayLineBidirCleared(EventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineReceivedCleared");
+			DebugContentEvents("OnCurrentDisplayLineBidirCleared");
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineReceivedCleared, this, e);
+				this.eventHelper.RaiseSync(CurrentDisplayLineBidirCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineRxCleared(EventArgs e)
+		{
+			DebugContentEvents("OnCurrentDisplayLineRxCleared");
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(CurrentDisplayLineRxCleared, this, e);
 		}
 
 		/// <summary></summary>
@@ -2548,8 +2612,8 @@ namespace YAT.Domain
 			{
 				switch (direction)
 				{
-					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
-					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
+					case IODirection.Tx: OnDisplayLinesTxAdded    (new DisplayLinesEventArgs(lines)); break;
+					case IODirection.Rx: OnDisplayLinesRxAdded(new DisplayLinesEventArgs(lines)); break;
 
 					case IODirection.Bidir:
 					case IODirection.None:
@@ -2562,21 +2626,30 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
+		protected virtual void OnDisplayLinesTxAdded(DisplayLinesEventArgs e)
 		{
-			DebugContentEvents("OnDisplayLinesSent " + e.Lines.Count);
+			DebugContentEvents("OnDisplayLinesTxAdded " + e.Lines.Count);
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesTxAdded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
+		protected virtual void OnDisplayLinesBidirAdded(DisplayLinesEventArgs e)
 		{
-			DebugContentEvents("OnDisplayLinesReceived " + e.Lines.Count);
+			DebugContentEvents("OnDisplayLinesBidirAdded " + e.Lines.Count);
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesBidirAdded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayLinesRxAdded(DisplayLinesEventArgs e)
+		{
+			DebugContentEvents("OnDisplayLinesRxAdded " + e.Lines.Count);
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesRxAdded, this, e);
 		}
 
 	#if (WITH_SCRIPTING)
@@ -2598,21 +2671,87 @@ namespace YAT.Domain
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
+		protected virtual void OnRepositoryCleared(RepositoryType repositoryType)
 		{
-			DebugContentEvents("OnRepositoryCleared");
+			switch (repositoryType)
+			{
+				case RepositoryType.None:            /* Nothing to do. */             break;
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
+				case RepositoryType.Tx:    OnRepositoryTxCleared   (new EventArgs()); break;
+				case RepositoryType.Bidir: OnRepositoryBidirCleared(new EventArgs()); break;
+				case RepositoryType.Rx:    OnRepositoryRxCleared   (new EventArgs()); break;
+
+				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
+		protected virtual void OnRepositoryTxCleared(EventArgs e)
 		{
-			DebugContentEvents("OnRepositoryReloaded");
+			DebugContentEvents("OnRepositoryTxCleared");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryTxReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(RepositoryTxCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryBidirCleared(EventArgs e)
+		{
+			DebugContentEvents("OnRepositoryBidirCleared");
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryBidirReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(RepositoryBidirCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryRxCleared(EventArgs e)
+		{
+			DebugContentEvents("OnRepositoryRxCleared");
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryRxReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(RepositoryRxCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryReloaded(RepositoryType repositoryType)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.None:             /* Nothing to do. */             break;
+
+				case RepositoryType.Tx:    OnRepositoryTxReloaded   (new EventArgs()); break;
+				case RepositoryType.Bidir: OnRepositoryBidirReloaded(new EventArgs()); break;
+				case RepositoryType.Rx:    OnRepositoryRxReloaded   (new EventArgs()); break;
+
+				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryTxReloaded(EventArgs e)
+		{
+			DebugContentEvents("OnRepositoryTxReloaded");
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryTxReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(RepositoryTxReloaded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryBidirReloaded(EventArgs e)
+		{
+			DebugContentEvents("OnRepositoryBidirReloaded");
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryBidirReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(RepositoryBidirReloaded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryRxReloaded(EventArgs e)
+		{
+			DebugContentEvents("OnRepositoryRxReloaded");
+
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryRxReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync(RepositoryRxReloaded, this, e);
 		}
 
 		#endregion

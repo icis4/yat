@@ -231,13 +231,17 @@ namespace YAT.Model
 		// Count status:
 		private int txByteCount;
 		private int rxByteCount;
+
 		private int txLineCount;
+	////private int bidirLineCount would technically be possible, but doesn't make much sense.
 		private int rxLineCount;
 
 		// Rate status:
 		private RateProvider txByteRate;
 		private RateProvider rxByteRate;
+
 		private RateProvider txLineRate;
+	////private RateProvider bidirLineRate would technically be possible, but doesn't make much sense.
 		private RateProvider rxLineRate;
 
 		// Partial commands:
@@ -310,29 +314,47 @@ namespace YAT.Model
 
 	#endif // WITH_SCRIPTING
 
-		/// <summary></summary>
-		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsSent;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsTxAdded;
 
-		/// <summary></summary>
-		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsReceived;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsBidirAdded;
 
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineSentReplaced"/></remarks>
-		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineSentReplaced;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsRxAdded;
 
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineReceivedReplaced"/></remarks>
-		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineReceivedReplaced;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineTxReplaced"/></remarks>
+		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineTxReplaced;
 
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineSentCleared"/></remarks>
-		public event EventHandler CurrentDisplayLineSentCleared;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineBidirReplaced"/></remarks>
+		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineBidirReplaced;
 
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineReceivedCleared"/></remarks>
-		public event EventHandler CurrentDisplayLineReceivedCleared;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineRxReplaced"/></remarks>
+		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineRxReplaced;
 
-		/// <summary></summary>
-		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesSent;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineTxCleared"/></remarks>
+		public event EventHandler CurrentDisplayLineTxCleared;
 
-		/// <summary></summary>
-		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesReceived;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineBidirCleared"/></remarks>
+		public event EventHandler CurrentDisplayLineBidirCleared;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineRxCleared"/></remarks>
+		public event EventHandler CurrentDisplayLineRxCleared;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesTxAdded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesBidirAdded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesRxAdded;
 
 	#if (WITH_SCRIPTING)
 
@@ -356,11 +378,23 @@ namespace YAT.Model
 
 	#endif // WITH_SCRIPTING
 
-		/// <summary></summary>
-		public event EventHandler<EventArgs<Domain.RepositoryType>> RepositoryCleared;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryTxCleared;
 
-		/// <summary></summary>
-		public event EventHandler<EventArgs<Domain.RepositoryType>> RepositoryReloaded;
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryBidirCleared;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryRxCleared;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryTxReloaded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryBidirReloaded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler RepositoryRxReloaded;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
@@ -399,7 +433,7 @@ namespace YAT.Model
 		public event EventHandler<ClosedEventArgs> Closed;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs> ExitRequest;
+		public event EventHandler ExitRequest;
 
 		#endregion
 
@@ -3094,26 +3128,33 @@ namespace YAT.Model
 				this.terminal.IOControlChanged += terminal_IOControlChanged;
 				this.terminal.IOError          += terminal_IOError;
 			#if (WITH_SCRIPTING)
-				this.terminal.SendingPacket += terminal_SendingPacket;
+				this.terminal.SendingPacket    += terminal_SendingPacket;
 			#endif
-				this.terminal.RawChunkSent            += terminal_RawChunkSent;
-				this.terminal.RawChunkReceived        += terminal_RawChunkReceived;
-				this.terminal.DisplayElementsSent     += terminal_DisplayElementsSent;
-				this.terminal.DisplayElementsReceived += terminal_DisplayElementsReceived;
+				this.terminal.RawChunkSent     += terminal_RawChunkSent;
+				this.terminal.RawChunkReceived += terminal_RawChunkReceived;
 
-				this.terminal.CurrentDisplayLineSentReplaced     += terminal_CurrentDisplayLineSentReplaced;
-				this.terminal.CurrentDisplayLineReceivedReplaced += terminal_CurrentDisplayLineReceivedReplaced;
-				this.terminal.CurrentDisplayLineSentCleared      += terminal_CurrentDisplayLineSentCleared;
-				this.terminal.CurrentDisplayLineReceivedCleared  += terminal_CurrentDisplayLineReceivedCleared;
-
-				this.terminal.DisplayLinesSent     += terminal_DisplayLinesSent;
-				this.terminal.DisplayLinesReceived += terminal_DisplayLinesReceived;
+				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
+				this.terminal.DisplayElementsBidirAdded       += terminal_DisplayElementsBidirAdded;
+				this.terminal.DisplayElementsRxAdded          += terminal_DisplayElementsRxAdded;
+				this.terminal.CurrentDisplayLineTxReplaced    += terminal_CurrentDisplayLineTxReplaced;
+				this.terminal.CurrentDisplayLineBidirReplaced += terminal_CurrentDisplayLineBidirReplaced;
+				this.terminal.CurrentDisplayLineRxReplaced    += terminal_CurrentDisplayLineRxReplaced;
+				this.terminal.CurrentDisplayLineTxCleared     += terminal_CurrentDisplayLineTxCleared;
+				this.terminal.CurrentDisplayLineBidirCleared  += terminal_CurrentDisplayLineBidirCleared;
+				this.terminal.CurrentDisplayLineRxCleared     += terminal_CurrentDisplayLineRxCleared;
+				this.terminal.DisplayLinesTxAdded             += terminal_DisplayLinesTxAdded;
+				this.terminal.DisplayLinesBidirAdded          += terminal_DisplayLinesBidirAdded;
+				this.terminal.DisplayLinesRxAdded             += terminal_DisplayLinesRxAdded;
 			#if (WITH_SCRIPTING)
-				this.terminal.ScriptPacketReceived  += terminal_ScriptPacketReceived;
-				this.terminal.ScriptMessageReceived += terminal_ScriptMessageReceived;
+				this.terminal.ScriptPacketReceived    += terminal_ScriptPacketReceived;
+				this.terminal.ScriptMessageReceived   += terminal_ScriptMessageReceived;
 			#endif
-				this.terminal.RepositoryCleared  += terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded += terminal_RepositoryReloaded;
+				this.terminal.RepositoryTxCleared     += terminal_RepositoryTxCleared;
+				this.terminal.RepositoryBidirCleared  += terminal_RepositoryBidirCleared;
+				this.terminal.RepositoryRxCleared     += terminal_RepositoryRxCleared;
+				this.terminal.RepositoryTxReloaded    += terminal_RepositoryTxReloaded;
+				this.terminal.RepositoryBidirReloaded += terminal_RepositoryBidirReloaded;
+				this.terminal.RepositoryRxReloaded    += terminal_RepositoryRxReloaded;
 			}
 		}
 
@@ -3125,26 +3166,33 @@ namespace YAT.Model
 				this.terminal.IOControlChanged -= terminal_IOControlChanged;
 				this.terminal.IOError          -= terminal_IOError;
 			#if (WITH_SCRIPTING)
-				this.terminal.SendingPacket -= terminal_SendingPacket;
+				this.terminal.SendingPacket    -= terminal_SendingPacket;
 			#endif
-				this.terminal.RawChunkSent            -= terminal_RawChunkSent;
-				this.terminal.RawChunkReceived        -= terminal_RawChunkReceived;
-				this.terminal.DisplayElementsSent     -= terminal_DisplayElementsSent;
-				this.terminal.DisplayElementsReceived -= terminal_DisplayElementsReceived;
+				this.terminal.RawChunkSent     -= terminal_RawChunkSent;
+				this.terminal.RawChunkReceived -= terminal_RawChunkReceived;
 
-				this.terminal.CurrentDisplayLineSentReplaced     -= terminal_CurrentDisplayLineSentReplaced;
-				this.terminal.CurrentDisplayLineReceivedReplaced -= terminal_CurrentDisplayLineReceivedReplaced;
-				this.terminal.CurrentDisplayLineSentCleared      -= terminal_CurrentDisplayLineSentCleared;
-				this.terminal.CurrentDisplayLineReceivedCleared  -= terminal_CurrentDisplayLineReceivedCleared;
-
-				this.terminal.DisplayLinesSent     -= terminal_DisplayLinesSent;
-				this.terminal.DisplayLinesReceived -= terminal_DisplayLinesReceived;
+				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
+				this.terminal.DisplayElementsBidirAdded       -= terminal_DisplayElementsBidirAdded;
+				this.terminal.DisplayElementsRxAdded          -= terminal_DisplayElementsRxAdded;
+				this.terminal.CurrentDisplayLineTxReplaced    -= terminal_CurrentDisplayLineTxReplaced;
+				this.terminal.CurrentDisplayLineBidirReplaced -= terminal_CurrentDisplayLineBidirReplaced;
+				this.terminal.CurrentDisplayLineRxReplaced    -= terminal_CurrentDisplayLineRxReplaced;
+				this.terminal.CurrentDisplayLineTxCleared     -= terminal_CurrentDisplayLineTxCleared;
+				this.terminal.CurrentDisplayLineBidirCleared  -= terminal_CurrentDisplayLineBidirCleared;
+				this.terminal.CurrentDisplayLineRxCleared     -= terminal_CurrentDisplayLineRxCleared;
+				this.terminal.DisplayLinesTxAdded             -= terminal_DisplayLinesTxAdded;
+				this.terminal.DisplayLinesBidirAdded          -= terminal_DisplayLinesBidirAdded;
+				this.terminal.DisplayLinesRxAdded             -= terminal_DisplayLinesRxAdded;
 			#if (WITH_SCRIPTING)
-				this.terminal.ScriptPacketReceived  -= terminal_ScriptPacketReceived;
-				this.terminal.ScriptMessageReceived -= terminal_ScriptMessageReceived;
+				this.terminal.ScriptPacketReceived    -= terminal_ScriptPacketReceived;
+				this.terminal.ScriptMessageReceived   -= terminal_ScriptMessageReceived;
 			#endif
-				this.terminal.RepositoryCleared  -= terminal_RepositoryCleared;
-				this.terminal.RepositoryReloaded -= terminal_RepositoryReloaded;
+				this.terminal.RepositoryTxCleared     -= terminal_RepositoryTxCleared;
+				this.terminal.RepositoryBidirCleared  -= terminal_RepositoryBidirCleared;
+				this.terminal.RepositoryRxCleared     -= terminal_RepositoryRxCleared;
+				this.terminal.RepositoryTxReloaded    -= terminal_RepositoryTxReloaded;
+				this.terminal.RepositoryBidirReloaded -= terminal_RepositoryBidirReloaded;
+				this.terminal.RepositoryRxReloaded    -= terminal_RepositoryRxReloaded;
 			}
 		}
 
@@ -3385,10 +3433,10 @@ namespace YAT.Model
 		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
 		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
 		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
-		///    when processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
-		///    <see cref="CurrentDisplayLineSentReplaced"/>, <see cref="CurrentDisplayLineReceivedReplaced"/>,
-		///    <see cref="CurrentDisplayLineSentCleared"/>, <see cref="CurrentDisplayLineReceivedCleared"/>,
-		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
+		///    when processing <see cref="DisplayElementsTxAdded"/>, <see cref="DisplayElementsRxAdded"/>,
+		///    <see cref="CurrentDisplayLineTxReplaced"/>, <see cref="CurrentDisplayLineRxReplaced"/>,
+		///    <see cref="CurrentDisplayLineTxCleared"/>, <see cref="CurrentDisplayLineRxCleared"/>,
+		///    <see cref="DisplayLinesTxAdded"/> and <see cref="DisplayLinesRxAdded"/> events.
 		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
 		///    notified on updates after transmission.
 		/// </remarks>
@@ -3443,10 +3491,10 @@ namespace YAT.Model
 		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
 		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
 		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
-		///    when processing <see cref="DisplayElementsSent"/>, <see cref="DisplayElementsReceived"/>,
-		///    <see cref="CurrentDisplayLineSentReplaced"/>, <see cref="CurrentDisplayLineReceivedReplaced"/>,
-		///    <see cref="CurrentDisplayLineSentCleared"/>, <see cref="CurrentDisplayLineReceivedCleared"/>,
-		///    <see cref="DisplayLinesSent"/> and <see cref="DisplayLinesReceived"/> events.
+		///    when processing <see cref="DisplayElementsTxAdded"/>, <see cref="DisplayElementsRxAdded"/>,
+		///    <see cref="CurrentDisplayLineTxReplaced"/>, <see cref="CurrentDisplayLineRxReplaced"/>,
+		///    <see cref="CurrentDisplayLineTxCleared"/>, <see cref="CurrentDisplayLineRxCleared"/>,
+		///    <see cref="DisplayLinesTxAdded"/> and <see cref="DisplayLinesRxAdded"/> events.
 		///    In addition, the <see cref="IORateChanged_Decimated"/> event is used to get
 		///    notified on updates after transmission.
 		/// </remarks>
@@ -3620,74 +3668,117 @@ namespace YAT.Model
 			InvokeAutoAction(action, triggerSequence, ts);
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnDisplayElementsSent(e);
+			OnDisplayElementsTxAdded(e);
 
-			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnDisplayElementsReceived(e);
+			OnDisplayElementsBidirAdded(e);
 
-			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_CurrentDisplayLineSentReplaced(object sender, Domain.DisplayElementsEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnCurrentDisplayLineSentReplaced(e);
+			OnDisplayElementsRxAdded(e);
 
-			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_CurrentDisplayLineReceivedReplaced(object sender, Domain.DisplayElementsEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_CurrentDisplayLineTxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnCurrentDisplayLineReceivedReplaced(e);
+			OnCurrentDisplayLineTxReplaced(e);
 
-			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_CurrentDisplayLineSentCleared(object sender, EventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_CurrentDisplayLineBidirReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnCurrentDisplayLineSentCleared(e);
+			OnCurrentDisplayLineBidirReplaced(e);
 
-			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_CurrentDisplayLineReceivedCleared(object sender, EventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_CurrentDisplayLineRxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnCurrentDisplayLineReceivedCleared(e);
+			OnCurrentDisplayLineRxReplaced(e);
 
-			// Logging is only triggered by the 'DisplayLinesSent/Received' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_CurrentDisplayLineTxCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnCurrentDisplayLineTxCleared(e);
+
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_CurrentDisplayLineBidirCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnCurrentDisplayLineBidirCleared(e);
+
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_CurrentDisplayLineRxCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnCurrentDisplayLineRxCleared(e);
+
+			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
@@ -3701,21 +3792,45 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Display:
-			OnDisplayLinesSent(e);
+			OnDisplayLinesTxAdded(e);
 
 			// Log:
-			if (this.log.AnyNeatIsOn)
+			if (this.log.NeatTxIsOn)
 			{
 				foreach (var dl in e.Lines)
-				{
 					this.log.WriteLine(dl, Log.LogChannel.NeatTx);
-					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
-				}
 			}
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+		////// Count:
+		////this.bidirLineCount += e.Lines.Count would technically be possible, but doesn't make much sense.
+		////OnIOCountChanged_Promptly(EventArgs.Empty);
+
+		////// Rate:
+		////if (this.bidirLineRate.Update(e.Lines.Count)) would technically be possible, but doesn't make much sense.
+		////	OnIORateChanged_Promptly(EventArgs.Empty);
+
+			// Display:
+			OnDisplayLinesBidirAdded(e);
+
+			// Log:
+			if (this.log.NeatBidirIsOn)
+			{
+				foreach (var dl in e.Lines)
+					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
+			}
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
@@ -3729,16 +3844,13 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Display:
-			OnDisplayLinesReceived(e);
+			OnDisplayLinesRxAdded(e);
 
 			// Log:
-			if (this.log.AnyNeatIsOn)
+			if (this.log.NeatRxIsOn)
 			{
 				foreach (var dl in e.Lines)
-				{
-					this.log.WriteLine(dl, Log.LogChannel.NeatBidir);
 					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
-				}
 			}
 
 			// AutoResponse:
@@ -3807,20 +3919,64 @@ namespace YAT.Model
 
 	#endif // WITH_SCRIPTING
 
-		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_RepositoryTxCleared(object sender, EventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnRepositoryCleared(e);
+			OnRepositoryTxCleared(e);
 		}
 
-		private void terminal_RepositoryReloaded(object sender, EventArgs<Domain.RepositoryType> e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_RepositoryBidirCleared(object sender, EventArgs e)
 		{
 			if (IsDisposed) // Ensure not to handle events during closing anymore.
 				return;
 
-			OnRepositoryReloaded(e);
+			OnRepositoryBidirCleared(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_RepositoryRxCleared(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnRepositoryRxCleared(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_RepositoryTxReloaded(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnRepositoryTxReloaded(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_RepositoryBidirReloaded(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnRepositoryBidirReloaded(e);
+		}
+
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_RepositoryRxReloaded(object sender, EventArgs e)
+		{
+			if (IsDisposed) // Ensure not to handle events during closing anymore.
+				return;
+
+			OnRepositoryRxReloaded(e);
 		}
 
 		#endregion
@@ -5235,20 +5391,6 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the completed line count of the formatted terminal repository.
-		/// <see cref="GetRepositoryLineCount"/> may be used to include incomplete line count.
-		/// </remarks>
-		public virtual int TxLineCount
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.txLineCount);
-			}
-		}
-
-		/// <remarks>
 		/// The value corresponds to the byte count of the raw terminal repository. The count of the
 		/// formatted terminal repository slightly lags behind. <see cref="GetRepositoryByteCount"/>
 		/// may be used to retrieve the formatted terminal byte count.
@@ -5262,6 +5404,34 @@ namespace YAT.Model
 				return (this.rxByteCount);
 			}
 		}
+
+		/// <remarks>
+		/// The value corresponds to the completed line count of the formatted terminal repository.
+		/// <see cref="GetRepositoryLineCount"/> may be used to include incomplete line count.
+		/// </remarks>
+		public virtual int TxLineCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.txLineCount);
+			}
+		}
+
+	/////// <remarks>
+	/////// The value corresponds to the completed line count of the formatted terminal repository.
+	/////// <see cref="GetRepositoryLineCount"/> may be used to include incomplete line count.
+	/////// </remarks>
+	////public virtual int BidirLineCount
+	////{
+	////	get
+	////	{
+	////		AssertNotDisposed();
+	////
+	////		return (this.bidirLineCount) would technically be possible, but doesn't make much sense.
+	////	}
+	////}
 
 		/// <remarks>
 		/// The value corresponds to the completed line count of the formatted terminal repository.
@@ -5292,19 +5462,6 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// The value corresponds to the completed line count of the formatted terminal repository.
-		/// </remarks>
-		public virtual int TxLineRate
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.txLineRate.RateValue);
-			}
-		}
-
-		/// <remarks>
 		/// The value corresponds to the rate of the raw terminal repository.
 		/// The rate of the formatted terminal repository slightly lags behind.
 		/// </remarks>
@@ -5321,6 +5478,32 @@ namespace YAT.Model
 		/// <remarks>
 		/// The value corresponds to the completed line count of the formatted terminal repository.
 		/// </remarks>
+		public virtual int TxLineRate
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.txLineRate.RateValue);
+			}
+		}
+
+	/////// <remarks>
+	/////// The value corresponds to the completed line count of the formatted terminal repository.
+	/////// </remarks>
+	////public virtual int BidirLineRate
+	////{
+	////	get
+	////	{
+	////		AssertNotDisposed();
+	////
+	////		return (this.bidirLineRate.RateValue) would technically be possible, but doesn't make much sense.
+	////	}
+	////}
+
+		/// <remarks>
+		/// The value corresponds to the completed line count of the formatted terminal repository.
+		/// </remarks>
 		public virtual int RxLineRate
 		{
 			get
@@ -5332,7 +5515,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="TxByteCount"/>, <see cref="TxLineCount"/>, <see cref="RxByteCount"/>, <see cref="RxLineCount"/>.
+		/// See remarks of <see cref="TxByteCount"/> and <see cref="TxLineCount"/>, <see cref="RxByteCount"/> and <see cref="RxLineCount"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -5344,12 +5527,13 @@ namespace YAT.Model
 
 			txByteCount = this.txByteCount;
 			txLineCount = this.txLineCount;
+
 			rxByteCount = this.rxByteCount;
 			rxLineCount = this.rxLineCount;
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="TxByteRate"/>, <see cref="TxLineRate"/>, <see cref="RxByteRate"/>, <see cref="RxLineRate"/>.
+		/// See remarks of <see cref="TxByteRate"/> and <see cref="TxLineRate"/>, <see cref="RxByteRate"/> and <see cref="RxLineRate"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -5361,6 +5545,7 @@ namespace YAT.Model
 
 			txByteRate = this.txByteRate.RateValue;
 			txLineRate = this.txLineRate.RateValue;
+
 			rxByteRate = this.rxByteRate.RateValue;
 			rxLineRate = this.rxLineRate.RateValue;
 		}
@@ -5370,17 +5555,21 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			this.txByteCount = 0;
-			this.txLineCount = 0;
-			this.rxByteCount = 0;
-			this.rxLineCount = 0;
+			this.txByteCount    = 0;
+			this.rxByteCount    = 0;
+
+			this.txLineCount    = 0;
+		////this.bidirLineCount = 0 would technically be possible, but doesn't make much sense.
+			this.rxLineCount    = 0;
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
-			this.txByteRate.Reset();
-			this.txLineRate.Reset();
-			this.rxByteRate.Reset();
-			this.rxLineRate.Reset();
+			this.txByteRate   .Reset();
+			this.rxByteRate   .Reset();
+
+			this.txLineRate   .Reset();
+		////this.bidirLineRate.Reset() would technically be possible, but doesn't make much sense.
+			this.rxLineRate   .Reset();
 
 			OnIORateChanged_Promptly(EventArgs.Empty);
 			OnIORateChanged_Decimated(EventArgs.Empty);
@@ -5392,15 +5581,19 @@ namespace YAT.Model
 			int rateWindow     = 5000;
 			int updateInterval =  250;
 
-			this.txByteRate = new RateProvider(rateInterval, rateWindow, updateInterval);
-			this.txLineRate = new RateProvider(rateInterval, rateWindow, updateInterval);
-			this.rxByteRate = new RateProvider(rateInterval, rateWindow, updateInterval);
-			this.rxLineRate = new RateProvider(rateInterval, rateWindow, updateInterval);
+			this.txByteRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
+			this.rxByteRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
 
-			this.txByteRate.Changed += rate_Changed;
-			this.txLineRate.Changed += rate_Changed;
-			this.rxByteRate.Changed += rate_Changed;
-			this.rxLineRate.Changed += rate_Changed;
+			this.txLineRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
+		////this.bidirLineRate = new RateProvider(rateInterval, rateWindow, updateInterval) would technically be possible, but doesn't make much sense.
+			this.rxLineRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
+
+			this.txByteRate   .Changed += rate_Changed;
+			this.rxByteRate   .Changed += rate_Changed;
+
+			this.txLineRate   .Changed += rate_Changed;
+		////this.bidirLineRate.Changed += rate_Changed would technically be possible, but doesn't make much sense.
+			this.rxLineRate   .Changed += rate_Changed;
 		}
 
 		private void DisposeRates()
@@ -5412,6 +5605,13 @@ namespace YAT.Model
 				this.txByteRate = null;
 			}
 
+			if (this.rxByteRate != null)
+			{
+				this.rxByteRate.Changed -= rate_Changed;
+				this.rxByteRate.Dispose();
+				this.rxByteRate = null;
+			}
+
 			if (this.txLineRate != null)
 			{
 				this.txLineRate.Changed -= rate_Changed;
@@ -5419,12 +5619,12 @@ namespace YAT.Model
 				this.txLineRate = null;
 			}
 
-			if (this.rxByteRate != null)
-			{
-				this.rxByteRate.Changed -= rate_Changed;
-				this.rxByteRate.Dispose();
-				this.rxByteRate = null;
-			}
+		////if (this.bidirLineRate != null) would technically be possible, but doesn't make much sense.
+		////{
+		////	this.bidirLineRate.Changed -= rate_Changed;
+		////	this.bidirLineRate.Dispose();
+		////	this.bidirLineRate = null;
+		////}
 
 			if (this.rxLineRate != null)
 			{
@@ -6430,51 +6630,75 @@ namespace YAT.Model
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsSent(Domain.DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementsTxAdded(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsTxAdded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsReceived(Domain.DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementsBidirAdded(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsBidirAdded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineSentReplaced(Domain.DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementsRxAdded(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(CurrentDisplayLineSentReplaced, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(DisplayElementsRxAdded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineReceivedReplaced(Domain.DisplayElementsEventArgs e)
+		protected virtual void OnCurrentDisplayLineTxReplaced(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(CurrentDisplayLineReceivedReplaced, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(CurrentDisplayLineTxReplaced, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineSentCleared(EventArgs e)
+		protected virtual void OnCurrentDisplayLineBidirReplaced(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.RaiseSync(CurrentDisplayLineSentCleared, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(CurrentDisplayLineBidirReplaced, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineReceivedCleared(EventArgs e)
+		protected virtual void OnCurrentDisplayLineRxReplaced(Domain.DisplayElementsEventArgs e)
 		{
-			this.eventHelper.RaiseSync(CurrentDisplayLineReceivedCleared, this, e);
+			this.eventHelper.RaiseSync<Domain.DisplayElementsEventArgs>(CurrentDisplayLineRxReplaced, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesSent(Domain.DisplayLinesEventArgs e)
+		protected virtual void OnCurrentDisplayLineTxCleared(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+			this.eventHelper.RaiseSync(CurrentDisplayLineTxCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesReceived(Domain.DisplayLinesEventArgs e)
+		protected virtual void OnCurrentDisplayLineBidirCleared(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+			this.eventHelper.RaiseSync(CurrentDisplayLineBidirCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineRxCleared(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(CurrentDisplayLineRxCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayLinesTxAdded(Domain.DisplayLinesEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesTxAdded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayLinesBidirAdded(Domain.DisplayLinesEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesBidirAdded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayLinesRxAdded(Domain.DisplayLinesEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.DisplayLinesEventArgs>(DisplayLinesRxAdded, this, e);
 		}
 
 	#if (WITH_SCRIPTING)
@@ -6494,15 +6718,39 @@ namespace YAT.Model
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryCleared(EventArgs<Domain.RepositoryType> e)
+		protected virtual void OnRepositoryTxCleared(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<Domain.RepositoryType>>(RepositoryCleared, this, e);
+			this.eventHelper.RaiseSync(RepositoryTxCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryReloaded(EventArgs<Domain.RepositoryType> e)
+		protected virtual void OnRepositoryBidirCleared(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<Domain.RepositoryType>>(RepositoryReloaded, this, e);
+			this.eventHelper.RaiseSync(RepositoryBidirCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryRxCleared(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(RepositoryRxCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryTxReloaded(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(RepositoryTxReloaded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryBidirReloaded(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(RepositoryBidirReloaded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryRxReloaded(EventArgs e)
+		{
+			this.eventHelper.RaiseSync(RepositoryRxReloaded, this, e);
 		}
 
 		/// <summary></summary>
@@ -6665,7 +6913,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnExitRequest(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs>(ExitRequest, this, e);
+			this.eventHelper.RaiseSync(ExitRequest, this, e);
 		}
 
 		#endregion

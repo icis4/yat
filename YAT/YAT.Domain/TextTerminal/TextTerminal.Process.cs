@@ -1326,8 +1326,8 @@ namespace YAT.Domain
 				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 				//
 				// Note that logging works fine even when filtering or suppression is active, since logging is only
-				// triggered by the 'DisplayLinesSent/Received' events and thus not affected by the more tricky to handle
-				// 'CurrentDisplayLineSent/ReceivedReplaced' and 'CurrentDisplayLineSent/ReceivedCleared' events.
+				// triggered by the 'DisplayLinesTx/RxAdded' events and thus not affected by the more tricky to handle
+				// 'CurrentDisplayLineTx/RxReplaced' and 'CurrentDisplayLineTx/RxCleared' events.
 
 				foreach (byte b in chunk.Content)
 				{
