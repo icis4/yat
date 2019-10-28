@@ -281,13 +281,64 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual bool AnyControlIsOn
+		public virtual bool ControlIsOn
 		{
 			get
 			{
 				if (this.controlLog.IsOn)
 				{
-					Debug.Assert(this.isOn, "Provider state must be 'on' if any control is 'on'!");
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+					return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool AnyControlIsOn
+		{
+			get { return (ControlIsOn); } // Just a single control channel.
+		}
+
+		/// <summary></summary>
+		public virtual bool RawTxIsOn
+		{
+			get
+			{
+				if (this.rawTxLog.IsOn)
+				{
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+					return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool RawBidirIsOn
+		{
+			get
+			{
+				if (this.rawBidirLog.IsOn)
+				{
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+					return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool RawRxIsOn
+		{
+			get
+			{
+				if (this.rawRxLog.IsOn)
+				{
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
 					return (true);
 				}
 
@@ -304,9 +355,54 @@ namespace YAT.Log
 				{
 					if (l.IsOn)
 					{
-						Debug.Assert(this.isOn, "Provider state must be 'on' if any raw is 'on'!");
+						Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
 						return (true);
 					}
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool NeatTxIsOn
+		{
+			get
+			{
+				if (this.neatTxLog.IsOn)
+				{
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+					return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool NeatBidirIsOn
+		{
+			get
+			{
+				if (this.neatBidirLog.IsOn)
+				{
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+					return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool NeatRxIsOn
+		{
+			get
+			{
+				if (this.neatRxLog.IsOn)
+				{
+					Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
+					return (true);
 				}
 
 				return (false);
@@ -322,7 +418,7 @@ namespace YAT.Log
 				{
 					if (l.IsOn)
 					{
-						Debug.Assert(this.isOn, "Provider state must be 'on' if any neat is 'on'!");
+						Debug.Assert(this.isOn, "Provider state must be 'on' if any is 'on'!");
 						return (true);
 					}
 				}
