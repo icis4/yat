@@ -364,7 +364,7 @@ namespace YAT.Model.Types
 		public static PredefinedCommandPageLayoutEx GetMatchingItem(int commandCount)
 		{
 			if      (commandCount <=  12) return (PredefinedCommandPageLayout.OneByOne);
-			else if (commandCount <=  24) return (PredefinedCommandPageLayout.OneByTwo);
+			else if (commandCount <=  24) return (PredefinedCommandPageLayout.TwoByOne); // rather than OneByTwo since 24 buttons likely fit on screen vertically.
 			else if (commandCount <=  36) return (PredefinedCommandPageLayout.OneByThree);
 			else if (commandCount <=  48) return (PredefinedCommandPageLayout.TwoByTwo);
 			else if (commandCount <=  72) return (PredefinedCommandPageLayout.TwoByThree);
