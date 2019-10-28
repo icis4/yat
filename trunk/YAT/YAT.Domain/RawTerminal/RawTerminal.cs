@@ -512,7 +512,7 @@ namespace YAT.Domain
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.None:      /* Nothing to do. */             break;
+					case RepositoryType.None:          /* Nothing to do. */         break;
 
 					case RepositoryType.Tx:    l = this.txRepository   .ToChunks(); break;
 					case RepositoryType.Bidir: l = this.bidirRepository.ToChunks(); break;
@@ -524,54 +524,34 @@ namespace YAT.Domain
 			return (l);
 		}
 
-		/// <remarks>
-		/// \todo:
-		/// Currently, all repositories are cleared in any case. That is because repositories are
-		/// always reloaded from bidir. Without clearing all, contents reappear after a change to
-		/// the settings, e.g. switching radix.
-		/// </remarks>
+		/// <summary></summary>
 		public virtual void ClearRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-			////\todo:
-			////switch (repositoryType)
-			////{
-			////	case RepositoryType.None:      /* Nothing to do. */      break;
-			////
-			////	case RepositoryType.Tx:    this.txRepository   .Clear(); break;
-			////	case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
-			////	case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-			////
-			////	default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			////}
+				switch (repositoryType)
+				{
+					case RepositoryType.None:      /* Nothing to do. */      break;
 
-				this.txRepository   .Clear();
-				this.bidirRepository.Clear();
-				this.rxRepository   .Clear();
+					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
+					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
+					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
+
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(repositoryType));
 		}
 
-		/// <remarks>
-		/// \todo: See <see cref="ClearRepository"/> above.
-		/// </remarks>
+		/// <summary></summary>
 		public virtual void ClearRepositories()
 		{
 			AssertNotDisposed();
 
-			/* \todo:
-			call ClearRepository(RepositoryType.Tx)
-			call ClearRepository(RepositoryType.Bidir)
-			call ClearRepository(RepositoryType.Rx)
-			*/
-
-			lock (this.repositorySyncObj)
+			lock (this.repositorySyncObj) // Lock throughout whole transaction, but not for raising the event!
 			{
 				this.txRepository   .Clear();
 				this.bidirRepository.Clear();
