@@ -550,6 +550,17 @@ namespace YAT.View.Forms
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  monitorIsDefined;
+
+					if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
+					{
+						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear";   // Indicating "All" for a single
+						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   panel would be confusing.
+					}
+					else
+					{
+						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear All";
+						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh All";
+					}
 				}
 				else
 				{
@@ -558,6 +569,9 @@ namespace YAT.View.Forms
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
+
+					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear";   // Same as in designer generated code,
+					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   by default only bidir is visible.
 				}
 
 				toolStripMenuItem_TerminalMenu_Terminal_SelectAll .Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+A]
@@ -4952,23 +4966,110 @@ namespace YAT.View.Forms
 			monitor_Rx   .ShowDataStatus = showCountAndRate;
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private void ReloadMonitors()
+		private void ClearMonitor(Domain.RepositoryType repositoryType)
 		{
 			try
 			{
-				SetFixedStatusText("Reloading...");
+				SetFixedStatusText("Clearing...");
+				Cursor = Cursors.WaitCursor;
+
+				switch (repositoryType)
+				{
+					case Domain.RepositoryType.None:
+						// Nothing to do.
+						break;
+
+					case Domain.RepositoryType.Tx:
+					case Domain.RepositoryType.Bidir:
+					case Domain.RepositoryType.Rx:
+						this.terminal.ClearRepository(repositoryType);
+						break;
+
+					default:
+						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Clearing done");
+			}
+			catch
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Clearing failed!");
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		private void ClearMonitors()
+		{
+			try
+			{
+				SetFixedStatusText("Clearing...");
+				Cursor = Cursors.WaitCursor;
+
+				this.terminal.ClearRepositories();
+
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Clearing done");
+			}
+			catch
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Clearing failed!");
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		private void RefreshMonitor(Domain.RepositoryType repositoryType)
+		{
+			try
+			{
+				SetFixedStatusText("Refreshing...");
+				Cursor = Cursors.WaitCursor;
+
+				switch (repositoryType)
+				{
+					case Domain.RepositoryType.None:
+						// Nothing to do.
+						break;
+
+					case Domain.RepositoryType.Tx:
+					case Domain.RepositoryType.Bidir:
+					case Domain.RepositoryType.Rx:
+						this.terminal.RefreshRepository(repositoryType);
+						break;
+
+					default:
+						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Refreshing done");
+			}
+			catch
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Refreshing failed!");
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		private void RefreshMonitors()
+		{
+			try
+			{
+				SetFixedStatusText("Refreshing...");
 				Cursor = Cursors.WaitCursor;
 
 				this.terminal.RefreshRepositories();
 
 				Cursor = Cursors.Default;
-				SetTimedStatusText("Reloading done");
+				SetTimedStatusText("Refreshing done");
 			}
 			catch
 			{
 				Cursor = Cursors.Default;
-				SetFixedStatusText("Reloading failed!");
+				SetFixedStatusText("Refreshing failed!");
 			}
 		}
 
@@ -4979,8 +5080,7 @@ namespace YAT.View.Forms
 			{
 				SetFixedStatusText("Reformatting...");
 				Cursor = Cursors.WaitCursor;
-
-				                             // Clone settings to ensure decoupling:
+				                            //// Clone settings to ensure decoupling:
 				monitor_Tx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
 				monitor_Bidir.FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
 				monitor_Rx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
@@ -4993,54 +5093,6 @@ namespace YAT.View.Forms
 				Cursor = Cursors.Default;
 				SetFixedStatusText("Reformatting failed!");
 			}
-		}
-
-		private void ClearMonitor(Domain.RepositoryType repositoryType)
-		{
-			switch (repositoryType)
-			{
-				case Domain.RepositoryType.None:
-					// Nothing to do.
-					break;
-
-				case Domain.RepositoryType.Tx:
-				case Domain.RepositoryType.Bidir:
-				case Domain.RepositoryType.Rx:
-					this.terminal.ClearRepository(repositoryType);
-					break;
-
-				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		private void RefreshMonitor(Domain.RepositoryType repositoryType)
-		{
-			switch (repositoryType)
-			{
-				case Domain.RepositoryType.None:
-					// Nothing to do.
-					break;
-
-				case Domain.RepositoryType.Tx:
-				case Domain.RepositoryType.Bidir:
-				case Domain.RepositoryType.Rx:
-					this.terminal.RefreshRepository(repositoryType);
-					break;
-
-				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		private void ClearMonitors()
-		{
-			this.terminal.ClearRepositories();
-		}
-
-		private void RefreshMonitors()
-		{
-			this.terminal.RefreshRepositories();
 		}
 
 		#endregion
