@@ -49,16 +49,16 @@ namespace MKY.Settings
 	/// The YAT feature request #158 "Consider replacing 'Settings' by 'DataItem'" deals with
 	/// this issue, it will therefore not be forgotten. Until this feature request is implemented,
 	/// changes to this class also have to be applied to <see cref="Data.DataItem"/>.
-	/// 
+	///
 	/// Note the additional YAT feature request #159 "Consider replacing SettingsItem/​DataItem
 	/// with attributes" and feature request #286 "Consider upgrade from XML serialization to
 	/// .NET 3.0 DataContract serialization" to switch to that serialization, the preferred way
 	/// to handle persistence since the .NET 3.0 framework version.
-	/// 
+	///
 	/// Also note that this class intentionally doesn't implement <see cref="IDisposable"/>. That
 	/// would unnecessarily complicate the handling of settings item, e.g. in a settings dialog,
 	/// as code analysis requires that <see cref="IDisposable"/> are indeed disposed of.
-	/// 
+	///
 	/// Finally note that the 'Serializable' attribute is required to allow reflection using e.g.
 	/// <see cref="System.Runtime.Serialization.FormatterServices.GetSerializableMembers(Type)"/>.
 	/// </remarks>
@@ -449,9 +449,7 @@ namespace MKY.Settings
 			bool doRaise = false;
 
 			lock (this.changeEventSuspendedCountSyncObj)
-			{
 				doRaise = (this.changeEventSuspendedCount == 0);
-			}
 
 			if (doRaise)
 				EventHelper.RaiseSync<SettingsEventArgs>(Changed, this, e);
