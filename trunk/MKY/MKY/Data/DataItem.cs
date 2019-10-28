@@ -386,9 +386,7 @@ namespace MKY.Data
 			bool doRaise = false;
 
 			lock (this.changeEventSuspendedCountSyncObj)
-			{
 				doRaise = (this.changeEventSuspendedCount == 0);
-			}
 
 			if (doRaise)
 				EventHelper.RaiseSync<DataEventArgs>(Changed, this, e);
