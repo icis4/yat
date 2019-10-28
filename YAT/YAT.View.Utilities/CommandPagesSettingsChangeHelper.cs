@@ -130,9 +130,12 @@ namespace YAT.View.Utilities
 						}
 					}
 				}
-				else // ...add default page since empty:
+				else
 				{
+					// ...add default page since empty:
 					settingsNew.Pages.Add(PredefinedCommandPageCollection.DefaultPage);
+
+					return (true);
 				}
 			}
 
@@ -182,7 +185,7 @@ namespace YAT.View.Utilities
 					}
 				}
 
-				// The page layout is be kept:
+				// The page layout can be kept:
 				mode = Mode.Neutral;
 				pageLayoutNew = pageLayoutRequested;
 				return (true);
