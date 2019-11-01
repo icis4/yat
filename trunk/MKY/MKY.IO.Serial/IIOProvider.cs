@@ -73,7 +73,7 @@ namespace MKY.IO.Serial
 		///  > Events with data are easier to use.
 		///  > Events with data ensure that multiple recipients, i.e. event sinks, can use it.
 		///  > Events with data can implemented in a way to prevent race conditions on handling.
-		/// 
+		///
 		/// Receive related code is located before send related code since I/O is a common term
 		/// where I comes before O.
 		/// </remarks>

@@ -301,9 +301,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region General Properties
+		#region General
 		//==========================================================================================
-		// General Properties
+		// General
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -532,11 +532,11 @@ namespace YAT.Model
 
 				if (ActiveTerminal != null)
 				{
+					var sb = new StringBuilder();
+
 					// Attention:
 					// Similar "[IndicatedName] - Info - Info - Info" as in Terminal.Caption{get}.
 					// Changes here may have to be applied there too.
-
-					var sb = new StringBuilder();
 
 					sb.Append("[");
 					sb.Append(ActiveTerminal.IndicatedName);
