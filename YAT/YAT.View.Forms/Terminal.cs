@@ -1332,11 +1332,11 @@ namespace YAT.View.Forms
 		{
 			this.terminal.ResetIOCountAndRate();
 
-			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
+			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
 			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-			// Instead, the update is done by the 'terminal_DisplayElementsTx/RxAdded' and
-			// 'terminal_DisplayLinesTx/RxAdded' handlers further below. As a consequence,
-			// the update must manually be triggered:
+			// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
+			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
+			// manually be triggered here:
 
 			SetDataCountAndRateStatus();
 		}
@@ -1659,11 +1659,11 @@ namespace YAT.View.Forms
 
 			this.terminal.ResetIOCountAndRate();
 
-			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
+			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
 			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-			// Instead, the update is done by the 'terminal_DisplayElementsTx/RxAdded' and
-			// 'terminal_DisplayLinesTx/RxAdded' handlers further below. As a consequence,
-			// the update must manually be triggered:
+			// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
+			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
+			// manually be triggered here:
 
 			SetDataCountAndRateStatus();
 		}
@@ -5749,10 +5749,10 @@ namespace YAT.View.Forms
 			}
 		}
 
-		// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons described
-		// in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'. Instead, the update
-		// is done by the 'terminal_DisplayElementsTx/RxAdded' and 'terminal_DisplayLinesTx/RxAdded'
-		// handlers further below.
+		// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
+		// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
+		// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
+		// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers.
 		//
 		// 'terminal_IORateChanged_Decimated' is fine.
 
@@ -5895,7 +5895,7 @@ namespace YAT.View.Forms
 			{
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				SetRxDataCountAndRateStatus();
+				SetBidirDataCountAndRateStatus();
 			}
 		}
 
