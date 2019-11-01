@@ -249,9 +249,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		#region Process Elements
@@ -660,8 +660,8 @@ namespace YAT.Domain
 				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 				//
 				// Note that logging works fine even when filtering or suppression is active, since logging is only
-				// triggered by the 'DisplayLinesTx/RxAdded' events and thus not affected by the more tricky to handle
-				// 'CurrentDisplayLineTx/RxReplaced' and 'CurrentDisplayLineTx/RxCleared' events.
+				// triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus not affected by the more tricky to
+				// handle 'CurrentDisplayLine[Tx|Bidir|Rx]Replaced' and 'CurrentDisplayLine[Tx|Bidir|Rx]Cleared' events.
 
 				foreach (byte b in chunk.Content)
 				{
@@ -737,7 +737,7 @@ namespace YAT.Domain
 				else // = 'IsSubsequentChunk'.
 				{
 					if (TerminalSettings.Display.DeviceLineBreakEnabled ||
-						TerminalSettings.Display.DirectionLineBreakEnabled)
+					    TerminalSettings.Display.DirectionLineBreakEnabled)
 					{
 						if (!StringEx.EqualsOrdinalIgnoreCase(dev, this.bidirLineState.Device) || (dir != this.bidirLineState.Direction))
 						{
@@ -798,20 +798,6 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		protected override void ProcessAndSignalRawChunk(RawChunk chunk, LineChunkAttribute attribute)
-		{
-			// Check whether device or direction has changed:
-			ProcessAndSignalDeviceOrDirectionLineBreak(chunk.TimeStamp, chunk.Device, chunk.Direction);
-
-			// Process the raw chunk:
-			base.ProcessAndSignalRawChunk(chunk, attribute);
-
-			// Enforce line break if requested:
-			if (TerminalSettings.Display.ChunkLineBreakEnabled)
-				ProcessAndSignalChunkOrTimedLineBreak(chunk.TimeStamp, chunk.Direction);
-		}
-
 		private void ProcessAndSignalDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir)
 		{
 			var directionToSignal = this.bidirLineState.Direction;
@@ -868,13 +854,6 @@ namespace YAT.Domain
 
 		#endregion
 
-		#endregion
-
-		#region Non-Public Methods
-		//==========================================================================================
-		// Non-Public Methods
-		//==========================================================================================
-
 		#region Timer Events
 		//------------------------------------------------------------------------------------------
 		// Timer Events
@@ -883,12 +862,12 @@ namespace YAT.Domain
 		private void txTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
 			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, IODirection.Tx);
-		}
+		}   // Underlying ProcessChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
 
 		private void rxTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
 			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, IODirection.Rx);
-		}
+		}   // Underlying ProcessChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
 
 		#endregion
 
