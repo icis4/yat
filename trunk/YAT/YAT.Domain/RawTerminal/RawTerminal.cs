@@ -36,6 +36,7 @@ using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.IO.Serial;
 
@@ -169,10 +170,10 @@ namespace YAT.Domain
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
+		public event EventHandler<EventArgs<RawChunk>> ChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
+		public event EventHandler<EventArgs<RawChunk>> ChunkReceived;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<RepositoryType>> RepositoryCleared;
@@ -759,10 +760,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Note that this I/O event has a calling contract of:
-		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		/// Therefore, no additional synchronization to prevent race condition is required here.
+		/// Synchronization to prevent a race condition is required here, see contract.
 		/// </remarks>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Contract is given by the 'IIOProvider' event.")]
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
 			// Synchronize the underlying Tx and Rx callbacks to prevent mix-ups. But attention,
@@ -778,10 +778,10 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
-							this.rxRepository   .Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
-							this.bidirRepository.Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
+							this.rxRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
 						}
-						OnRawChunkReceived(new EventArgs<RawChunk>(re)); // 'RawChunk' object is immutable, subsequent use is OK.
+						OnChunkReceived(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
 					}
 					finally
 					{
@@ -794,10 +794,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Note that this I/O event has a calling contract of:
-		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		/// Therefore, no additional synchronization to prevent race condition is required here.
+		/// Synchronization to prevent a race condition is required here, see contract.
 		/// </remarks>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Contract is given by the 'IIOProvider' event.")]
 		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
 			// Synchronize the underlying Tx and Rx callbacks to prevent mix-ups. But attention,
@@ -813,10 +812,10 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
-							this.txRepository   .Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
-							this.bidirRepository.Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
+							this.txRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
 						}
-						OnRawChunkSent(new EventArgs<RawChunk>(re)); // 'RawChunk' object is immutable, subsequent use is OK.
+						OnChunkSent(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
 					}
 					finally
 					{
@@ -857,17 +856,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
+		protected virtual void OnChunkSent(EventArgs<RawChunk> e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
+				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(ChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
+		protected virtual void OnChunkReceived(EventArgs<RawChunk> e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
+				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(ChunkReceived, this, e);
 		}
 
 		/// <summary></summary>

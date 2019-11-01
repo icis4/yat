@@ -644,6 +644,17 @@ namespace YAT.Domain
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
+		protected virtual bool IsReloading
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.isReloading);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
@@ -668,17 +679,6 @@ namespace YAT.Domain
 					return (this.rawTerminal.UnderlyingIOInstance);
 				else
 					return (null);
-			}
-		}
-
-		/// <summary></summary>
-		protected virtual bool IsReloading
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (this.isReloading);
 			}
 		}
 
@@ -1706,11 +1706,13 @@ namespace YAT.Domain
 		public virtual bool ClearRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
-
+			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
-			{                                     // Only try for some time, otherwise ignore.
-				try                               // Prevents deadlocks among main thread (view)
-				{                                 //   and large amounts of incoming data.
+			{
+				ResetProcessStates(repositoryType);
+
+				try
+				{
 					this.rawTerminal.ClearRepository(repositoryType);
 				}
 				finally
@@ -1730,11 +1732,13 @@ namespace YAT.Domain
 		public virtual bool ClearRepositories()
 		{
 			AssertNotDisposed();
-
+			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
-			{                                     // Only try for some time, otherwise ignore.
-				try                               // Prevents deadlocks among main thread (view)
-				{                                 //   and large amounts of incoming data.
+			{
+				ResetProcessStates();
+
+				try
+				{
 					this.rawTerminal.ClearRepositories();
 				}
 				finally
@@ -1754,11 +1758,13 @@ namespace YAT.Domain
 		public virtual bool RefreshRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
-
+			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
-			{                                     // Only try for some time, otherwise ignore.
-				try                               // Prevents deadlocks among main thread (view)
-				{                                 //   and large amounts of incoming data.
+			{
+				ResetProcessStates(repositoryType);
+
+				try
+				{
 					// Clear repository:
 					ClearMyRepository(repositoryType);
 					OnRepositoryCleared(repositoryType);
@@ -1798,11 +1804,13 @@ namespace YAT.Domain
 		public virtual bool RefreshRepositories()
 		{
 			AssertNotDisposed();
-
+			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
-			{                                     // Only try for some time, otherwise ignore.
-				try                               // Prevents deadlocks among main thread (view)
-				{                                 //   and large amounts of incoming data.
+			{
+				ResetProcessStates();
+
+				try
+				{
 					// Clear repositories:
 					ClearMyRepository(RepositoryType.Tx);
 					ClearMyRepository(RepositoryType.Bidir);
@@ -2160,8 +2168,8 @@ namespace YAT.Domain
 				this.rawTerminal.IOControlChanged  += rawTerminal_IOControlChanged;
 				this.rawTerminal.IOError           += rawTerminal_IOError;
 
-				this.rawTerminal.RawChunkSent      += rawTerminal_RawChunkSent;
-				this.rawTerminal.RawChunkReceived  += rawTerminal_RawChunkReceived;
+				this.rawTerminal.ChunkSent         += rawTerminal_ChunkSent;
+				this.rawTerminal.ChunkReceived     += rawTerminal_ChunkReceived;
 				this.rawTerminal.RepositoryCleared += rawTerminal_RepositoryCleared;
 			}
 		}
@@ -2174,8 +2182,8 @@ namespace YAT.Domain
 				this.rawTerminal.IOControlChanged  -= rawTerminal_IOControlChanged;
 				this.rawTerminal.IOError           -= rawTerminal_IOError;
 
-				this.rawTerminal.RawChunkSent      -= rawTerminal_RawChunkSent;
-				this.rawTerminal.RawChunkReceived  -= rawTerminal_RawChunkReceived;
+				this.rawTerminal.ChunkSent         -= rawTerminal_ChunkSent;
+				this.rawTerminal.ChunkReceived     -= rawTerminal_ChunkReceived;
 				this.rawTerminal.RepositoryCleared -= rawTerminal_RepositoryCleared;
 
 				this.rawTerminal.Dispose();
@@ -2208,12 +2216,12 @@ namespace YAT.Domain
 				var texts = IOControlChangeTexts();
 				                                                 //// Forsee capacity for separators.
 				var c = new DisplayElementCollection(texts.Count * 2); // Preset the required capacity to improve memory management.
-				foreach (var t in texts)
+				foreach (var text in texts)
 				{
 					if (c.Count > 0)
 						c.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 
-					c.Add(new DisplayElement.IOControl(Direction.Bidir, t));
+					c.Add(new DisplayElement.IOControl(Direction.Bidir, text));
 				}
 
 				// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
@@ -2272,17 +2280,17 @@ namespace YAT.Domain
 		/// This event is raised when a chunk is sent by the <see cref="UnderlyingIOProvider"/>.
 		/// The event is not raised on reloading, reloading is done by the 'Refresh...()' methods.
 		/// </remarks>
-		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_RawChunkSent(object sender, EventArgs<RawChunk> e)
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.ChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void rawTerminal_ChunkSent(object sender, EventArgs<RawChunk> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
+				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 				OnRawChunkSent(args);
-				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' object is immutable, subsequent use is OK.
+				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
 			}
 		}
 
@@ -2290,17 +2298,17 @@ namespace YAT.Domain
 		/// This event is raised when a chunk is received by the <see cref="UnderlyingIOProvider"/>.
 		/// The event is not raised on reloading, reloading is done by the 'Refresh...()' methods.
 		/// </remarks>
-		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_RawChunkReceived(object sender, EventArgs<RawChunk> e)
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.ChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void rawTerminal_ChunkReceived(object sender, EventArgs<RawChunk> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
+				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 				OnRawChunkReceived(args);
-				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' object is immutable, subsequent use is OK.
+				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
 			#if (WITH_SCRIPTING)
 				ProcessAndSignalRawChunkForScripting(e.Value);     // See method's remarks for background information.
 			#endif // WITH_SCRIPTING
@@ -2312,7 +2320,7 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
 				ClearMyRepository(e.Value);
 				OnRepositoryCleared(e.Value);
