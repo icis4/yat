@@ -611,9 +611,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region General Properties
+		#region General
 		//==========================================================================================
-		// General Properties
+		// General
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -911,251 +911,7 @@ namespace YAT.Model
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				// Attention:
-				// Similar "[IndicatedName] - Info - Info - Info" as in Workspace.ActiveTerminalInfoText{get}.
-				// Changes here may have to be applied there too.
-
-				var sb = new StringBuilder();
-
-				if ((this.settingsHandler == null) || (this.settingsRoot == null))
-				{
-					sb.Append("[");
-					sb.Append(IndicatedName);
-					sb.Append("]");
-				}
-				else
-				{
-					sb.Append("[");
-					{
-						if (this.settingsHandler.SettingsFileIsReadOnly)
-							sb.Append("#");
-
-						sb.Append(IndicatedName);
-
-						if (this.settingsHandler.SettingsFileIsReadOnly)
-							sb.Append("#");
-
-						if (this.settingsRoot.ExplicitHaveChanged)
-							sb.Append(" *");
-					}
-					sb.Append("]");
-
-					switch (this.settingsRoot.IOType)
-					{
-						case Domain.IOType.SerialPort:
-						{
-							string portNameAndCaption;
-							bool autoReopenEnabled;
-
-							var port = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null) // Effective settings from port object:
-							{
-								var s = port.Settings;
-								portNameAndCaption = s.PortId.ToNameAndCaptionString();
-								autoReopenEnabled  = s.AutoReopen.Enabled;
-							}
-							else // Fallback to settings object tree:
-							{
-								var s = this.settingsRoot.IO.SerialPort;
-								portNameAndCaption = s.PortId.ToNameAndCaptionString();
-								autoReopenEnabled  = s.AutoReopen.Enabled;
-							}
-
-							sb.Append(" - ");
-							sb.Append(portNameAndCaption);
-							sb.Append(" - ");
-
-							if (IsStarted)
-							{
-								if (IsOpen)
-								{
-									sb.Append("Open");
-									sb.Append(" - ");
-									sb.Append(IsConnected ? "Connected" : "Disconnected"); // Break?
-								}
-								else if (autoReopenEnabled)
-								{
-									sb.Append("Closed - Waiting for reconnect");
-								}
-								else
-								{
-									sb.Append("Closed");
-								}
-							}
-							else
-							{
-								sb.Append("Closed");
-							}
-
-							break;
-						}
-
-						case Domain.IOType.TcpClient:
-						{
-							var s = this.settingsRoot.IO.Socket;
-
-							sb.Append(" - ");
-							sb.Append(s.RemoteEndPointString);
-							sb.Append(" - ");
-
-							if (IsConnected)
-								sb.Append("Connected");
-							else if (IsStarted && s.TcpClientAutoReconnect.Enabled)
-								sb.Append("Disconnected - Waiting for reconnect");
-							else
-								sb.Append("Disconnected");
-
-							break;
-						}
-
-						case Domain.IOType.TcpServer:
-						{
-							var s = this.settingsRoot.IO.Socket;
-
-							sb.Append(" - ");
-							sb.Append("Server:");
-							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-							sb.Append(" - ");
-
-							if (IsStarted)
-								sb.Append(IsConnected ? "Connected" : "Listening");
-							else
-								sb.Append("Closed");
-
-							break;
-						}
-
-						case Domain.IOType.TcpAutoSocket:
-						{
-							var s = this.settingsRoot.IO.Socket;
-							if (IsStarted)
-							{
-								bool isClient = false;
-								bool isServer = false;
-
-								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket);
-								if (socket != null)
-								{
-									isClient = socket.IsClient;
-									isServer = socket.IsServer;
-								}
-
-								if (isClient)
-								{
-									sb.Append(" - ");
-									sb.Append(s.RemoteEndPointString);
-									sb.Append(" - ");
-									sb.Append(IsConnected ? "Connected" : "Disconnected");
-								}
-								else if (isServer)
-								{
-									sb.Append(" - ");
-									sb.Append("Server:");
-									sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-									sb.Append(" - ");
-									sb.Append(IsConnected ? "Connected" : "Listening");
-								}
-								else
-								{
-									sb.Append(" - ");
-									sb.Append("Starting on port ");
-									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-								}
-							}
-							else
-							{
-								sb.Append(" - ");
-								sb.Append("AutoSocket:");
-								sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-								sb.Append(" - ");
-								sb.Append("Disconnected");
-							}
-
-							break;
-						}
-
-						case Domain.IOType.UdpClient:
-						{
-							var s = this.settingsRoot.IO.Socket;
-							sb.Append(" - ");
-							sb.Append(s.RemoteEndPointString);
-							sb.Append(" - ");
-							sb.Append(IsOpen ? "Open" : "Closed");
-							break;
-						}
-
-						case Domain.IOType.UdpServer:
-						{
-							var s = this.settingsRoot.IO.Socket;
-							sb.Append(" - ");
-							sb.Append("Receive:");
-							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-							sb.Append(" - ");
-							sb.Append(IsOpen ? "Open" : "Closed");
-							break;
-						}
-
-						case Domain.IOType.UdpPairSocket:
-						{
-							var s = this.settingsRoot.IO.Socket;
-							sb.Append(" - ");
-							sb.Append(s.RemoteEndPointString);
-							sb.Append(" - ");
-							sb.Append("Receive:");
-							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-							sb.Append(" - ");
-							sb.Append(IsOpen ? "Open" : "Closed");
-							break;
-						}
-
-						case Domain.IOType.UsbSerialHid:
-						{
-							var s = this.settingsRoot.IO.UsbSerialHidDevice;
-							sb.Append(" - ");
-							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
-							if (device != null)
-								sb.Append(device.DeviceInfoString);
-							else
-								s.DeviceInfo.ToString(true, false);
-
-							sb.Append(" - ");
-
-							if (IsStarted)
-							{
-								if (IsConnected)
-								{
-									if (IsOpen)
-										sb.Append("Connected - Open");
-									else if (device.Settings.AutoOpen)
-										sb.Append("Connected - Waiting for reopen");
-									else
-										sb.Append("Connected - Closed");
-								}
-								else if (device.Settings.AutoOpen)
-								{
-									sb.Append("Disconnected - Waiting for reconnect");
-								}
-								else
-								{
-									sb.Append("Disconnected - Closed");
-								}
-							}
-							else
-							{
-								sb.Append("Closed");
-							}
-
-							break;
-						}
-
-						default:
-						{
-							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsRoot.IOType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
-					} // switch (I/O type)
-				} // if (settings available)
-
-				return (sb.ToString());
+				return (CaptionHelper.Compose(this.settingsHandler, this.settingsRoot, this.terminal, IndicatedName, IsStarted, IsOpen, IsConnected));
 			}
 		}
 
@@ -1166,291 +922,7 @@ namespace YAT.Model
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				var sb = new StringBuilder();
-
-				if (this.settingsRoot != null)
-				{
-					switch (this.settingsRoot.IOType)
-					{
-						case Domain.IOType.SerialPort:
-						{
-							string portNameAndCaption;
-							string communication;
-							bool autoReopenEnabled;
-
-							var port = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null) // Effective settings from port object:
-							{
-								var s = port.Settings;
-								portNameAndCaption = s.PortId.ToNameAndCaptionString();
-								communication      = s.Communication.ToString();
-								autoReopenEnabled  = s.AutoReopen.Enabled;
-							}
-							else // Fallback to settings object tree;
-							{
-								var s = this.settingsRoot.IO.SerialPort;
-								portNameAndCaption = s.PortId.ToNameAndCaptionString();
-								communication      = s.Communication.ToString();
-								autoReopenEnabled  = s.AutoReopen.Enabled;
-							}
-
-							sb.Append("Serial port "); // Not adding "COM" as the port name will already state that.
-							sb.Append(portNameAndCaption);
-							sb.Append(" (" + communication + ")");
-
-							if (IsStarted)
-							{
-								if (IsOpen)
-								{
-									sb.Append(" is open and ");
-									sb.Append(IsConnected ? "connected" : "disconnected");
-								}
-								else if (autoReopenEnabled)
-								{
-									sb.Append(" is closed and waiting for reconnect");
-								}
-								else
-								{
-									sb.Append(" is closed");
-								}
-							}
-							else
-							{
-								sb.Append(" is closed");
-							}
-
-							break;
-						}
-
-						case Domain.IOType.TcpClient:
-						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP/IP client");
-
-							if (IsConnected)
-								sb.Append(" is connected to ");
-							else if (IsStarted && s.TcpClientAutoReconnect.Enabled)
-								sb.Append(" is disconnected and waiting for reconnect to ");
-							else
-								sb.Append(" is disconnected from ");
-
-							sb.Append(s.RemoteEndPointString);
-							break;
-						}
-
-						case Domain.IOType.TcpServer:
-						{
-							var s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP/IP server");
-							if (IsStarted)
-							{
-								if (IsConnected)
-								{
-									int count = 0;
-
-									var server = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpServer);
-									if (server != null)
-										count = server.ConnectedClientCount;
-
-									sb.Append(" is connected");
-									if (count == 1)
-									{
-										sb.Append(" to a client");
-									}
-									else
-									{
-										sb.Append(" to ");
-										sb.Append(count.ToString(CultureInfo.CurrentCulture));
-										sb.Append(" clients");
-									}
-								}
-								else
-								{
-									sb.Append(" is listening");
-								}
-							}
-							else
-							{
-								sb.Append(" is closed");
-							}
-
-							sb.Append(" on local port ");
-							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-							break;
-						}
-
-						case Domain.IOType.TcpAutoSocket:
-						{
-							var s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP/IP AutoSocket");
-							if (IsStarted)
-							{
-								bool isClient = false;
-								bool isServer = false;
-
-								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket);
-								if (socket != null)
-								{
-									isClient = socket.IsClient;
-									isServer = socket.IsServer;
-								}
-
-								if (isClient)
-								{
-									sb.Append(" is connected to ");
-									sb.Append(s.RemoteEndPointString);
-								}
-								else if (isServer)
-								{
-									sb.Append(IsConnected ? " is connected" : " is listening");
-									sb.Append(" on local port ");
-									sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-								}
-								else
-								{
-									sb.Append(" is starting to connect to ");
-									sb.Append(s.RemoteEndPointString);
-								}
-							}
-							else
-							{
-								sb.Append(" is disconnected from ");
-								sb.Append(s.RemoteEndPointString);
-							}
-
-							break;
-						}
-
-						case Domain.IOType.UdpClient:
-						{
-							sb.Append("UDP/IP client");
-							if (IsOpen)
-							{
-								sb.Append(" is open");
-								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.UdpSocket);
-								if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.Client))
-								{
-									sb.Append(" for sending to ");
-									sb.Append(socket.RemoteEndPoint.ToString());
-
-									int localPort = socket.LocalPort;
-									if (localPort != 0)
-									{
-										sb.Append(" and receiving on local port ");
-										sb.Append(localPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-									}
-								}
-							}
-							else
-							{
-								sb.Append(" is closed");
-							}
-
-							break;
-						}
-
-						case Domain.IOType.UdpServer:
-						{
-							sb.Append("UDP/IP server is ");
-							if (IsOpen)
-							{
-								sb.Append(" is open");
-								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.UdpSocket);
-								if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.Server))
-								{
-									sb.Append(" for receiving on local port ");
-									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-
-									System.Net.IPEndPoint remoteEndPoint = socket.RemoteEndPoint;
-									if ((remoteEndPoint != null) && (MKY.Net.IPAddressEx.NotEqualsNone(remoteEndPoint.Address)))
-									{
-										sb.Append(" and sending to ");
-										sb.Append(socket.RemoteEndPoint.ToString());
-									}
-								}
-							}
-							else
-							{
-								sb.Append(" is closed");
-							}
-
-							break;
-						}
-
-						case Domain.IOType.UdpPairSocket:
-						{
-							sb.Append("UDP/IP PairSocket");
-							if (IsOpen)
-							{
-								sb.Append(" is open");
-
-								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.UdpSocket);
-								if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.PairSocket))
-								{
-									sb.Append(" for sending to ");
-									sb.Append(socket.RemoteEndPoint.ToString());
-									sb.Append(" and receiving on local port ");
-									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-								}
-							}
-							else
-							{
-								sb.Append(" is closed");
-							}
-
-							break;
-						}
-
-						case Domain.IOType.UsbSerialHid:
-						{
-							var s = this.settingsRoot.IO.UsbSerialHidDevice;
-							sb.Append("USB HID device '");
-
-							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
-							if (device != null)
-								sb.Append(device.DeviceInfoString);
-							else
-								s.DeviceInfo.ToString(true, false);
-
-							sb.Append("'");
-
-							if (IsStarted)
-							{
-								if (IsConnected)
-								{
-									if (IsOpen)
-										sb.Append(" is connected and open");
-									else if (device.Settings.AutoOpen)
-										sb.Append(" is connected but waiting for reopen");
-									else
-										sb.Append(" is connected but closed");
-								}
-								else if (device.Settings.AutoOpen)
-								{
-									sb.Append(" is disconnected and waiting for reconnect");
-								}
-								else
-								{
-									sb.Append(" is disconnected and closed");
-								}
-							}
-							else
-							{
-								sb.Append(" is closed");
-							}
-
-							break;
-						}
-
-						default:
-						{
-							// Do nothing.
-							break;
-						}
-					}
-				}
-
-				return (sb.ToString());
+				return (IOStatusHelper.Compose(this.settingsRoot, this.terminal, IsStarted, IsOpen, IsConnected));
 			}
 		}
 
@@ -1648,9 +1120,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region General Methods
+		#region Start
 		//==========================================================================================
-		// General Methods
+		// Start
 		//==========================================================================================
 
 		/// <summary>
@@ -3677,7 +3149,7 @@ namespace YAT.Model
 
 			OnDisplayElementsTxAdded(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3689,7 +3161,7 @@ namespace YAT.Model
 
 			OnDisplayElementsBidirAdded(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3701,7 +3173,7 @@ namespace YAT.Model
 
 			OnDisplayElementsRxAdded(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3713,7 +3185,7 @@ namespace YAT.Model
 
 			OnCurrentDisplayLineTxReplaced(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3725,7 +3197,7 @@ namespace YAT.Model
 
 			OnCurrentDisplayLineBidirReplaced(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3737,7 +3209,7 @@ namespace YAT.Model
 
 			OnCurrentDisplayLineRxReplaced(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3749,7 +3221,7 @@ namespace YAT.Model
 
 			OnCurrentDisplayLineTxCleared(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3761,7 +3233,7 @@ namespace YAT.Model
 
 			OnCurrentDisplayLineBidirCleared(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3773,7 +3245,7 @@ namespace YAT.Model
 
 			OnCurrentDisplayLineRxCleared(e);
 
-			// Logging is only triggered by the 'DisplayLinesTx/RxAdded' events and thus does not need to be handled here.
+			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
