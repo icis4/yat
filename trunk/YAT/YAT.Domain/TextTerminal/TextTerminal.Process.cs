@@ -353,9 +353,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		#region Process Elements
@@ -1326,8 +1326,8 @@ namespace YAT.Domain
 				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 				//
 				// Note that logging works fine even when filtering or suppression is active, since logging is only
-				// triggered by the 'DisplayLinesTx/RxAdded' events and thus not affected by the more tricky to handle
-				// 'CurrentDisplayLineTx/RxReplaced' and 'CurrentDisplayLineTx/RxCleared' events.
+				// triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus not affected by the more tricky to
+				// handle 'CurrentDisplayLine[Tx|Bidir|Rx]Replaced' and 'CurrentDisplayLine[Tx|Bidir|Rx]Cleared' events.
 
 				foreach (byte b in chunk.Content)
 				{
@@ -1370,132 +1370,6 @@ namespace YAT.Domain
 					}
 				} // foreach (byte)
 			} // lock (processSyncObj)
-		}
-
-		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
-		private void ProcessDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
-			{
-				if (this.bidirLineState.IsFirstChunk)
-				{
-					this.bidirLineState.IsFirstChunk = false;
-				}
-				else // = 'IsSubsequentChunk'.
-				{
-					if (TerminalSettings.Display.DeviceLineBreakEnabled ||
-						TerminalSettings.Display.DirectionLineBreakEnabled)
-					{
-						if (!StringEx.EqualsOrdinalIgnoreCase(dev, this.bidirLineState.Device) || (dir != this.bidirLineState.Direction))
-						{
-							LineState lineState;
-
-							if (dir == this.bidirLineState.Direction)
-							{
-								switch (dir)
-								{
-									case IODirection.Tx: lineState = this.txLineState; break;
-									case IODirection.Rx: lineState = this.rxLineState; break;
-
-									default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-								}
-							}
-							else // Attention: Direction changed => Use other state.
-							{
-								switch (dir)
-								{
-									case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
-									case IODirection.Rx: lineState = this.txLineState; break; // Reversed!
-
-									default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-								}
-							}
-
-							if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
-							{
-								ExecuteLineEnd(lineState, ts, dev, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-							}
-						} // a line break has been detected
-					} // a line break is active
-				} // is subsequent chunk
-
-				this.bidirLineState.Device = dev;
-				this.bidirLineState.Direction = dir;
-
-			} // lock (processSyncObj)
-		}
-
-		private void ProcessChunkOrTimedLineBreak(DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => port|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
-			{
-				LineState lineState;
-				switch (dir)
-				{
-					case IODirection.Tx: lineState = this.txLineState; break;
-					case IODirection.Rx: lineState = this.rxLineState; break;
-
-					default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				if (lineState.Elements.Count > 0)
-				{
-					ExecuteLineEnd(lineState, ts, dev, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		protected override void ProcessAndSignalRawChunk(RawChunk chunk, LineChunkAttribute attribute)
-		{
-			// Check whether device or direction has changed:
-			ProcessAndSignalDeviceOrDirectionLineBreak(chunk.TimeStamp, chunk.Device, chunk.Direction);
-
-			// Process the raw chunk:
-			base.ProcessAndSignalRawChunk(chunk, attribute);
-
-			// Enforce line break if requested:
-			if (TerminalSettings.Display.ChunkLineBreakEnabled)
-				ProcessAndSignalChunkOrTimedLineBreak(chunk.TimeStamp, chunk.Device, chunk.Direction);
-		}
-
-		private void ProcessAndSignalDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir)
-		{
-			var directionToSignal = this.bidirLineState.Direction;
-			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-
-			bool clearAlreadyStartedLine = false;
-
-			ProcessDeviceOrDirectionLineBreak(ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-			if (elementsToAdd.Count > 0)
-				OnDisplayElementsAdded(directionToSignal, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				OnDisplayLinesAdded(directionToSignal, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				OnCurrentDisplayLineCleared(directionToSignal);
-		}
-
-		private void ProcessAndSignalChunkOrTimedLineBreak(DateTime ts, string dev, IODirection dir)
-		{
-			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-
-			bool clearAlreadyStartedLine = false;
-
-			ProcessChunkOrTimedLineBreak(ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-			if (elementsToAdd.Count > 0)
-				OnDisplayElementsAdded(dir, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				OnDisplayLinesAdded(dir, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				OnCurrentDisplayLineCleared(dir);
 		}
 
 	#if (WITH_SCRIPTING)
@@ -1554,30 +1428,6 @@ namespace YAT.Domain
 		}
 
 	#endif // WITH_SCRIPTING
-
-		#endregion
-
-		#endregion
-
-		#region Non-Public Methods
-		//==========================================================================================
-		// Non-Public Methods
-		//==========================================================================================
-
-		#region Timer Events
-		//------------------------------------------------------------------------------------------
-		// Timer Events
-		//------------------------------------------------------------------------------------------
-
-		private void txTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.txLineState.Device, IODirection.Tx);
-		}
-
-		private void rxTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.rxLineState.Device, IODirection.Rx);
-		}
 
 		#endregion
 
