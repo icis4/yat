@@ -48,10 +48,7 @@ namespace YAT.Domain
 
 		/// <remarks>YAT uses term 'Rx' instead of 'Input'.</remarks>
 		/// <remarks>YAT sorts 'Rx' after 'Tx'.</remarks>
-		Rx = MKY.IO.Serial.Direction.Input,
-
-		/// <summary></summary>
-		Bidir = 3
+		Rx = MKY.IO.Serial.Direction.Input
 	}
 
 	/// <summary></summary>

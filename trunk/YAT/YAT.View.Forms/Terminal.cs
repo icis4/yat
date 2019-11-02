@@ -4532,7 +4532,7 @@ namespace YAT.View.Forms
 							break;
 						}
 
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.lastMonitorSelection + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.lastMonitorSelection + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
@@ -4986,7 +4986,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				Cursor = Cursors.Default;
@@ -5040,7 +5040,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				Cursor = Cursors.Default;
