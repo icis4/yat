@@ -46,14 +46,30 @@ namespace YAT.Domain
 	/// </remarks>
 	public abstract partial class Terminal
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private DeviceOrDirectionState txDeviceOrDirectionLineState;
+		private DeviceOrDirectionState bidirDeviceOrDirectionLineState;
+		private DeviceOrDirectionState rxDeviceOrDirectionLineState;
+
+		/// <summary>
+		/// Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
+		/// </summary>
+		protected object ProcessSyncObj { get; }  = new object();
+
+		#endregion
+
 		#region Methods
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
 
-		#region Process Elements
+		#region ByteTo.../UnicodeValueTo.../...Element
 		//------------------------------------------------------------------------------------------
-		// Process Elements
+		// ByteTo.../UnicodeValueTo.../...Element
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -372,6 +388,35 @@ namespace YAT.Domain
 			}
 		}
 
+		#endregion
+
+		#region Process Elements
+		//------------------------------------------------------------------------------------------
+		// Process Elements
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected virtual void InitializeProcessStates()
+		{
+			this.txDeviceOrDirectionLineState    = new DeviceOrDirectionState();
+			this.bidirDeviceOrDirectionLineState = new DeviceOrDirectionState();
+			this.rxDeviceOrDirectionLineState    = new DeviceOrDirectionState();
+		}
+
+		/// <summary></summary>
+		protected virtual void ResetProcessStates(RepositoryType repositoryType)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    this.txDeviceOrDirectionLineState   .Reset(); break;
+				case RepositoryType.Bidir: this.bidirDeviceOrDirectionLineState.Reset(); break;
+				case RepositoryType.Rx:    this.rxDeviceOrDirectionLineState   .Reset(); break;
+
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string dev, IODirection dir, out DisplayElementCollection lp)
@@ -460,30 +505,28 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Setting is required to be received, modified and returned.")]
-		protected abstract void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine);
+		protected abstract void ProcessRawByte(byte b, LineChunkAttribute attribute);
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawChunk(RawChunk chunk, LineChunkAttribute attribute)
 		{
-			var a = new RepositoryType[] { RepositoryType.Tx, RepositoryType.Bidir, RepositoryType.Rx };
-
 			// Check whether device or direction has changed, a chunk is always tied to device and direction:
-			foreach (var r in a)
-				ProcessAndSignalDeviceOrDirectionLineBreak(r, chunk.TimeStamp, chunk.Device, chunk.Direction);
+			ProcessAndSignalDeviceOrDirectionLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+			ProcessAndSignalDeviceOrDirectionLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
+			ProcessAndSignalDeviceOrDirectionLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
 
 			// Process chunk:
 			foreach (byte b in chunk.Content)
 			{
-				foreach (var r in a)
-					ProcessRawChunk(r, b, attribute, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				ProcessRawByte(b, attribute);
 			}
 
 			// Enforce line break if requested:
 			if (TerminalSettings.Display.ChunkLineBreakEnabled)
 			{
-				foreach (var r in a)
-					ProcessAndSignalChunkOrTimedLineBreak(r, chunk.TimeStamp, chunk.Device, chunk.Direction);
+				ProcessAndSignalChunkOrTimedLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+				ProcessAndSignalChunkOrTimedLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
+				ProcessAndSignalChunkOrTimedLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
 			}
 
 			// Note that timed line breaks are processed asynchronously, always. Alternatively, the chunk
@@ -517,72 +560,83 @@ namespace YAT.Domain
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		protected virtual ProcessAndSignalDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir)
+		protected virtual void ProcessAndSignalDeviceOrDirectionLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
 			DisplayElementCollection elementsToAdd;
-			DisplayLine lineToAdd;
+			DisplayLineCollection linesToAdd;
 			bool clearAlreadyStartedLine;
-			IODirection directionToSignal;
 
-			ProcessDeviceOrDirectionLineBreak(ts, dev, dir, out elementsToAdd, out lineToAdd, out clearAlreadyStartedLine, out directionToSignal);
+			DoDeviceOrDirectionLineBreak(repositoryType, ts, dev, dir, out elementsToAdd, out linesToAdd, out clearAlreadyStartedLine);
 
 			if (elementsToAdd.Count > 0)
-				OnDisplayElementsAdded(directionToSignal, elementsToAdd);
+				AddDisplayElements(repositoryType, elementsToAdd);
 
-			if (lineToAdd.Count > 0)
-				OnDisplayLineAdded(directionToSignal, lineToAdd);
+			if (linesToAdd.Count > 0)
+				AddDisplayLines(repositoryType, linesToAdd);
 
 			if (clearAlreadyStartedLine)
-				OnCurrentDisplayLineCleared(directionToSignal);
+				ClearCurrentDisplayLine(repositoryType);
 		}
 
 		/// <summary></summary>
-		protected virtual ProcessAndSignalChunkOrTimedLineBreak(DateTime ts, string dev, IODirection dir)
+		protected virtual void ProcessAndSignalChunkOrTimedLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
+			DisplayElementCollection elementsToAdd;
+			DisplayLineCollection linesToAdd;
+			bool clearAlreadyStartedLine;
 
-			bool clearAlreadyStartedLine = false;
-
-			ProcessChunkOrTimedLineBreak(ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			DoChunkOrTimedLineBreak(repositoryType, ts, dev, dir, out elementsToAdd, out linesToAdd, out clearAlreadyStartedLine);
 
 			if (elementsToAdd.Count > 0)
-				OnDisplayElementsAdded(dir, elementsToAdd);
+				AddDisplayElements(repositoryType, elementsToAdd);
 
 			if (linesToAdd.Count > 0)
-				OnDisplayLinesAdded(dir, linesToAdd);
+				AddDisplayLines(repositoryType, linesToAdd);
 
 			if (clearAlreadyStartedLine)
-				OnCurrentDisplayLineCleared(dir);
+				ClearCurrentDisplayLine(repositoryType);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
-		protected virtual void ProcessDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLine lineToAdd, ref bool clearAlreadyStartedLine)
+		protected virtual void DoDeviceOrDirectionLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir, out DisplayElementCollection elementsToAdd, out DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine)
 		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
+			lock (ProcessSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
 			{
-				if (this.bidirLineState.IsFirstChunk)
+				DeviceOrDirectionState deviceOrDirectionlineState;
+
+				switch (repositoryType)
 				{
-					this.bidirLineState.IsFirstChunk = false;
+					case RepositoryType.Tx:    deviceOrDirectionlineState = this.txDeviceOrDirectionLineState;    break;
+					case RepositoryType.Bidir: deviceOrDirectionlineState = this.bidirDeviceOrDirectionLineState; break;
+					case RepositoryType.Rx:    deviceOrDirectionlineState = this.rxDeviceOrDirectionLineState;    break;
+
+					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				if (deviceOrDirectionlineState.IsFirstChunk)
+				{
+					deviceOrDirectionlineState.IsFirstChunk = false;
 				}
 				else // = 'IsSubsequentChunk'.
 				{
 					if (TerminalSettings.Display.DeviceLineBreakEnabled ||
 					    TerminalSettings.Display.DirectionLineBreakEnabled)
 					{
-						if (!StringEx.EqualsOrdinalIgnoreCase(dev, this.bidirLineState.Device) || (dir != this.bidirLineState.Direction))
+						if (!StringEx.EqualsOrdinalIgnoreCase(dev, deviceOrDirectionlineState.Device) || (dir != deviceOrDirectionlineState.Direction))
 						{
 							LineState lineState;
 
-							if (dir == this.bidirLineState.Direction)
+							if (dir == deviceOrDirectionlineState.Direction)
 							{
 								switch (dir)
 								{
-									case IODirection.Tx: lineState = this.txLineState; break;
-									case IODirection.Rx: lineState = this.rxLineState; break;
+									case IODirection.Tx:   lineState = this.txLineState; break;
+									case IODirection.Rx:   lineState = this.rxLineState; break;
 
-									default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									case IODirection.None: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									default:               throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 								}
 							}
 							else // Attention: Direction changed => Use other state.
@@ -592,42 +646,32 @@ namespace YAT.Domain
 									case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 									case IODirection.Rx: lineState = this.txLineState; break; // Reversed!
 
-									default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									case IODirection.None: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									default:               throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 								}
 							}
 
 							if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
 							{
-								ExecuteLineEnd(lineState, ts, dev, elementsToAdd, lineToAdd, ref clearAlreadyStartedLine);
+								ExecuteLineEnd(lineState, ts, dev, out elementsToAdd, out linesToAdd, out clearAlreadyStartedLine);
 							}
 						} // a line break has been detected
 					} // a line break is active
 				} // is subsequent chunk
 
-				this.bidirLineState.Device = dev;
-				this.bidirLineState.Direction = dir;
+				deviceOrDirectionlineState.Device = dev;
+				deviceOrDirectionlineState.Direction = dir;
 
 			} // lock (processSyncObj)
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessChunkOrTimedLineBreak(DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		protected virtual void DoChunkOrTimedLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir, out DisplayElementCollection elementsToAdd, out DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine)
 		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
+			lock (ProcessSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
 			{
-				LineState lineState;
-				switch (dir)
-				{
-					case IODirection.Tx: lineState = this.txLineState; break;
-					case IODirection.Rx: lineState = this.rxLineState; break;
-
-					default: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
 				if (lineState.Elements.Count > 0)
-				{
 					ExecuteLineEnd(lineState, ts, dev, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-				}
 			}
 		}
 
@@ -640,13 +684,15 @@ namespace YAT.Domain
 
 		private void txTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.txLineState.Device, IODirection.Tx);
-		}   // Underlying ProcessChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
+			ProcessAndSignalChunkOrTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
+			ProcessAndSignalChunkOrTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
+		}   // Underlying DoChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
 
 		private void rxTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, this.rxLineState.Device, IODirection.Rx);
-		}   // Underlying ProcessChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
+			ProcessAndSignalChunkOrTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
+			ProcessAndSignalChunkOrTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
+		}   // Underlying DoChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
 
 		#endregion
 
