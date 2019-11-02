@@ -116,11 +116,13 @@
     <Compile Include="Settings\StatusSettings.cs" />
     <Compile Include="Settings\IOSettings.cs" />
     <Compile Include="Settings\Structs.cs" />
-    <Compile Include="Structs.cs" />
+    <Compile Include="IOControlState.cs" />
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\InfoEnclosure.cs" />
+    <Compile Include="Terminal\States.cs" />
     <Compile Include="Terminal\Terminal.Process.cs" />
+    <Compile Include="Terminal\Terminal.Repositories.cs" />
     <Compile Include="Terminal\Terminal.Send.cs" />
     <Compile Include="Terminal\TimeDeltaFormatPreset.cs" />
     <Compile Include="Terminal\TimeSpanFormatPreset.cs" />
