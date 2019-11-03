@@ -21,22 +21,58 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
+
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
+// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public class DeviceOrDirectionState
+	public class LineState
 	{
 		/// <summary></summary>
-		public bool IsFirstChunk     { get; set; }
+		public LinePosition             Position  { get; set; }
 
 		/// <summary></summary>
-		public string Device         { get; set; }
+		public DisplayElementCollection Elements  { get; set; }
 
 		/// <summary></summary>
-		public IODirection Direction { get; set; }
+		public DateTime                 TimeStamp { get; set; }
 
 		/// <summary></summary>
-		public DeviceOrDirectionState()
+		public string                   Device    { get; set; }
+
+		/// <summary></summary>
+		public LineState()
+		{
+			Reset();
+		}
+
+		/// <summary></summary>
+		public virtual void Reset()
+		{
+			Position  = LinePosition.Begin;
+			Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			TimeStamp = DateTime.Now;
+			Device    = null;
+		}
+	}
+
+	/// <summary></summary>
+	public class DeviceAndDirectionLineState
+	{
+		/// <summary></summary>
+		public bool        IsFirstChunk { get; set; }
+
+		/// <summary></summary>
+		public string      Device       { get; set; }
+
+		/// <summary></summary>
+		public IODirection Direction    { get; set; }
+
+		/// <summary></summary>
+		public DeviceAndDirectionLineState()
 		{
 			Reset();
 		}

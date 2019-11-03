@@ -22,37 +22,32 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-namespace YAT.Domain
+namespace YAT.Model.Types
 {
-	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
-	// warnings for each undocumented member below. Documenting each member makes little sense
-	// since they pretty much tell their purpose and documentation tags between the members
-	// makes the code less readable.
-	#pragma warning disable 1591
-
-	/// <summary></summary>
-	public enum IODirection
+	/// <summary>
+	/// Specifies the mode how the terminal monitors are updated.
+	/// </summary>
+	public enum MonitorUpdateMode
 	{
-		None = MKY.IO.Serial.Direction.None,
+		/// <summary>
+		/// Monitors are updated on each added element, i.e. providing immediate feedback.
+		/// </summary>
+		/// <remarks>
+		/// This mode is the default mode.
+		/// </remarks>
+		Element,
 
-		/// <remarks>YAT uses term 'Tx' instead of 'Output'.</remarks>
-		/// <remarks>YAT sorts 'Tx' before 'Rx'.</remarks>
-		Tx = MKY.IO.Serial.Direction.Output,
-
-		/// <remarks>YAT uses term 'Rx' instead of 'Input'.</remarks>
-		/// <remarks>YAT sorts 'Rx' after 'Tx'.</remarks>
-		Rx = MKY.IO.Serial.Direction.Input
+		/// <summary>
+		/// Monitors are updated on completed lines, i.e. retaining elements until a line is completed.
+		/// </summary>
+		/// <remarks>
+		/// This mode is chosen when filtering or supression is active, as filtering or supression
+		/// can only be evaluated on complete lines. (With the exception for cases where the trigger
+		/// is already contained in the first chunk of a line. However, it is considered good enough
+		/// to always behave the same, i.e. don't optimize for such cases.
+		/// </remarks>
+		Line
 	}
-
-	/// <summary></summary>
-	public enum IOErrorSeverity
-	{
-		Acceptable = MKY.IO.Serial.ErrorSeverity.Acceptable,
-		Severe     = MKY.IO.Serial.ErrorSeverity.Severe,
-		Fatal      = MKY.IO.Serial.ErrorSeverity.Fatal
-	}
-
-	#pragma warning restore 1591
 }
 
 //==================================================================================================
