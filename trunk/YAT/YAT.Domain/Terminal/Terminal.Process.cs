@@ -51,9 +51,13 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private DeviceOrDirectionState txDeviceOrDirectionLineState;
-		private DeviceOrDirectionState bidirDeviceOrDirectionLineState;
-		private DeviceOrDirectionState rxDeviceOrDirectionLineState;
+		private LineState txLineState;
+		private LineState bidirLineState;
+		private LineState rxLineState;
+
+		private DeviceAndDirectionLineState txDeviceAndDirectionLineState;
+		private DeviceAndDirectionLineState bidirDeviceAndDirectionLineState;
+		private DeviceAndDirectionLineState rxDeviceAndDirectionLineState;
 
 		/// <summary>
 		/// Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
@@ -398,9 +402,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void InitializeProcessStates()
 		{
-			this.txDeviceOrDirectionLineState    = new DeviceOrDirectionState();
-			this.bidirDeviceOrDirectionLineState = new DeviceOrDirectionState();
-			this.rxDeviceOrDirectionLineState    = new DeviceOrDirectionState();
+			this.txLineState    = new LineState();
+			this.bidirLineState = new LineState();
+			this.rxLineState    = new LineState();
+
+			this.txDeviceAndDirectionLineState    = new DeviceAndDirectionLineState();
+			this.bidirDeviceAndDirectionLineState = new DeviceAndDirectionLineState();
+			this.rxDeviceAndDirectionLineState    = new DeviceAndDirectionLineState();
 		}
 
 		/// <summary></summary>
@@ -408,9 +416,9 @@ namespace YAT.Domain
 		{
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    this.txDeviceOrDirectionLineState   .Reset(); break;
-				case RepositoryType.Bidir: this.bidirDeviceOrDirectionLineState.Reset(); break;
-				case RepositoryType.Rx:    this.rxDeviceOrDirectionLineState   .Reset(); break;
+				case RepositoryType.Tx:    this.txDeviceAndDirectionLineState   .Reset(); break;
+				case RepositoryType.Bidir: this.bidirDeviceAndDirectionLineState.Reset(); break;
+				case RepositoryType.Rx:    this.rxDeviceAndDirectionLineState   .Reset(); break;
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -603,13 +611,13 @@ namespace YAT.Domain
 		{
 			lock (ProcessSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
 			{
-				DeviceOrDirectionState deviceOrDirectionlineState;
+				DeviceAndDirectionLineState deviceOrDirectionlineState;
 
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    deviceOrDirectionlineState = this.txDeviceOrDirectionLineState;    break;
-					case RepositoryType.Bidir: deviceOrDirectionlineState = this.bidirDeviceOrDirectionLineState; break;
-					case RepositoryType.Rx:    deviceOrDirectionlineState = this.rxDeviceOrDirectionLineState;    break;
+					case RepositoryType.Tx:    deviceOrDirectionlineState = this.txDeviceAndDirectionLineState;    break;
+					case RepositoryType.Bidir: deviceOrDirectionlineState = this.bidirDeviceAndDirectionLineState; break;
+					case RepositoryType.Rx:    deviceOrDirectionlineState = this.rxDeviceAndDirectionLineState;    break;
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

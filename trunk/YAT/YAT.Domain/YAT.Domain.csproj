@@ -120,7 +120,7 @@
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\InfoEnclosure.cs" />
-    <Compile Include="Terminal\States.cs" />
+    <Compile Include="Terminal\LineStates.cs" />
     <Compile Include="Terminal\Terminal.Process.cs" />
     <Compile Include="Terminal\Terminal.Repositories.cs" />
     <Compile Include="Terminal\Terminal.Send.cs" />
@@ -152,7 +152,7 @@
     <Compile Include="TextTerminal\SubstitutionParser.cs" />
     <Compile Include="Terminal\Terminal.cs" />
     <Compile Include="EventArgs.cs" />
-    <Compile Include="Terminal\RepositoryType.cs" />
+    <Compile Include="Terminal\Enums.cs" />
     <Compile Include="TextTerminal\TextTerminal.Process.cs" />
     <Compile Include="TextTerminal\TextTerminal.Send.cs" />
     <Compile Include="TextTerminal\TextTerminal.cs" />

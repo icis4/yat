@@ -22,6 +22,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
 // YAT.Domain\Terminal for better separation of the implementation files.
@@ -41,6 +43,47 @@ namespace YAT.Domain
 		Tx,
 		Bidir,
 		Rx
+	}
+
+	/// <summary></summary>
+	public enum SendMode
+	{
+		Text,
+		File
+	}
+
+	/// <summary></summary>
+	public enum LinePosition
+	{
+		Begin,
+		Content,
+		ContentExceeded,
+		End
+	}
+
+
+	/// <remarks>
+	/// So far there can only be one attribute, thus named "Attribute" and not marked [Flags].
+	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Enum actually implements an attribute, an attribute related to display elements.")]
+	public enum LineChunkAttribute
+	{
+		None = 0,
+
+		/// <summary>Resulting line shall be highlighted.</summary>
+		Highlight,
+
+		/// <summary>Filtering is active; resulting line shall be included.</summary>
+		Filter,
+
+		/// <summary>Filtering is active; resulting line may be excluded.</summary>
+		SuppressIfNotFiltered,
+
+		/// <summary>Suppressing is active; resulting line may be excluded.</summary>
+		SuppressIfSubsequentlyTriggered,
+
+		/// <summary>Suppressing is active; resulting line shall be excluded.</summary>
+		Suppress
 	}
 
 	#pragma warning restore 1591
