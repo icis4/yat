@@ -127,8 +127,8 @@ namespace YAT.Domain
 			{
 				try
 				{
-					// Reset states:
-					ResetProcessStates(repositoryType);
+					// Reset processing:
+					ResetProcessing(repositoryType);
 
 					// Clear repository:
 					ClearMyRepository(repositoryType);
@@ -137,7 +137,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(repositoryType))
 					{
-						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
+						ProcessRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
 					ReloadMyRepository(repositoryType);
@@ -173,10 +173,10 @@ namespace YAT.Domain
 			{
 				try
 				{
-					// Reset states:
-					ResetProcessStates(RepositoryType.Tx);
-					ResetProcessStates(RepositoryType.Bidir);
-					ResetProcessStates(RepositoryType.Rx);
+					// Reset processing:
+					ResetProcessing(RepositoryType.Tx);
+					ResetProcessing(RepositoryType.Bidir);
+					ResetProcessing(RepositoryType.Rx);
 
 					// Clear repositories:
 					ClearMyRepository(RepositoryType.Tx);
@@ -187,7 +187,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
 					{
-						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
+						ProcessRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
 					}
 					this.isReloading = false;
 					ReloadMyRepository(RepositoryType.Tx);

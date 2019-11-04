@@ -1277,6 +1277,47 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		protected virtual void ProcessRawByte(RawChunk chunk, LineChunkAttribute attribute)
+		{
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
+			{
+				// In case of reload, timed line breaks are executed here:
+				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
+					EvaluateTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+
+				// Line begin and time stamp:
+				if (lineState.Position == LinePosition.Begin)
+				{
+					DoLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
+
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.BreakTimeout.Start();
+				}
+				else
+				{
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.BreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
+				}
+
+				// Content:
+				if (lineState.Position == LinePosition.Content)
+				{
+					DoContent(displaySettings, lineState, chunk.Device, chunk.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
+				}
+
+				// Line end and length:
+				if (lineState.Position == LinePosition.End)
+				{
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.BreakTimeout.Stop();
+
+					DoLineEnd(lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				}
+			}
+		}
+
+
+		/// <summary></summary>
 		protected override void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!

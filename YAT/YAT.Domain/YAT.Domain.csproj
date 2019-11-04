@@ -120,7 +120,7 @@
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\InfoEnclosure.cs" />
-    <Compile Include="Terminal\LineStates.cs" />
+    <Compile Include="Terminal\LineState.cs" />
     <Compile Include="Terminal\Terminal.Process.cs" />
     <Compile Include="Terminal\Terminal.Repositories.cs" />
     <Compile Include="Terminal\Terminal.Send.cs" />
