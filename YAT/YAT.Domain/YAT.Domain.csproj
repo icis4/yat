@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="BinaryTerminal\BinaryTerminal.Process.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.Send.cs" />
+    <Compile Include="BinaryTerminal\BinaryLineState.cs" />
     <Compile Include="LineBreakTimeout.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
     <Compile Include="BinarySettings\BinaryDisplaySettings.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="Terminal\InfoEnclosure.cs" />
     <Compile Include="Terminal\LineState.cs" />
     <Compile Include="Terminal\Terminal.Process.cs" />
-    <Compile Include="Terminal\Terminal.Repositories.cs" />
+    <Compile Include="Terminal\Terminal.Repository.cs" />
     <Compile Include="Terminal\Terminal.Send.cs" />
     <Compile Include="Terminal\TimeDeltaFormatPreset.cs" />
     <Compile Include="Terminal\TimeSpanFormatPreset.cs" />

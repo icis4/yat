@@ -52,200 +52,27 @@ namespace YAT.Domain
 	/// </remarks>
 	public partial class BinaryTerminal
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		#region Types > Line State
-		//------------------------------------------------------------------------------------------
-		// Types > Line State
-		//------------------------------------------------------------------------------------------
-
-		private enum LinePosition
-		{
-			Begin,
-			Content,
-			ContentExceeded,
-			End
-		}
-
-		private class LineState : IDisposable, IDisposableEx
-		{
-			public LinePosition             Position  { get; set; }
-			public DisplayElementCollection Elements  { get; set; }
-			public DateTime                 TimeStamp { get; set; }
-
-			public SequenceQueue            SequenceAfter                                   { get; set; }
-			public SequenceQueue            SequenceBefore                                  { get; set; }
-			public DisplayElementCollection RetainedUnconfirmedHiddenSequenceBeforeElements { get; set; }
-
-			public bool Highlight                        { get; set; }
-			public bool FilterDetectedInFirstChunkOfLine { get; set; } // Line shall continuously get shown if filter is active from the first chunk.
-			public bool FilterDetectedInSubsequentChunk  { get; set; } // Line shall be retained and delay-shown if filter is detected subsequently.
-			public bool SuppressIfNotFiltered            { get; set; }
-			public bool SuppressIfSubsequentlyTriggered  { get; set; }
-			public bool SuppressForSure                  { get; set; }
-
-			public LineBreakTimeout BreakTimeout { get; set; }
-
-			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, LineBreakTimeout breakTimeout)
-			{
-				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-				TimeStamp = DateTime.Now;
-
-				SequenceAfter                                   = sequenceAfter;
-				SequenceBefore                                  = sequenceBefore;
-				RetainedUnconfirmedHiddenSequenceBeforeElements = new DisplayElementCollection();
-
-				Highlight                        = false;
-				FilterDetectedInFirstChunkOfLine = false;
-				FilterDetectedInSubsequentChunk  = false;
-				SuppressIfNotFiltered            = false;
-				SuppressIfSubsequentlyTriggered  = false;
-				SuppressForSure                  = false;
-
-				BreakTimeout = breakTimeout;
-			}
-
-			#region Disposal
-			//--------------------------------------------------------------------------------------
-			// Disposal
-			//--------------------------------------------------------------------------------------
-
-			/// <summary></summary>
-			public bool IsDisposed { get; protected set; }
-
-			/// <summary></summary>
-			public void Dispose()
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			/// <summary></summary>
-			protected virtual void Dispose(bool disposing)
-			{
-				if (!IsDisposed)
-				{
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
-						if (BreakTimeout != null)
-						{
-							BreakTimeout.Dispose();
-							EventHandlerHelper.RemoveAllEventHandlers(BreakTimeout);
-
-							// \remind (2016-09-08 / MKY)
-							// Whole timer handling should be encapsulated into the 'LineState' class.
-						}
-					}
-
-					// Set state to disposed:
-					BreakTimeout = null;
-					IsDisposed = true;
-				}
-			}
-
-		#if (DEBUG)
-			/// <remarks>
-			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-			/// "Types that declare disposable members should also implement IDisposable. If the type
-			///  does not own any unmanaged resources, do not implement a finalizer on it."
-			///
-			/// Well, true for best performance on finalizing. However, it's not easy to find missing
-			/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-			/// is kept for DEBUG, indicating missing calls.
-			///
-			/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-			/// </remarks>
-			~LineState()
-			{
-				Dispose(false);
-
-				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-			}
-		#endif // DEBUG
-
-			/// <summary></summary>
-			protected void AssertNotDisposed()
-			{
-				if (IsDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-			}
-
-			#endregion
-
-			public virtual void Reset()
-			{
-				AssertNotDisposed();
-
-				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-				TimeStamp = DateTime.Now;
-
-				SequenceAfter                                    .Reset();
-				SequenceBefore                                   .Reset();
-				RetainedUnconfirmedHiddenSequenceBeforeElements = new DisplayElementCollection();
-
-				Highlight                        = false;
-				FilterDetectedInFirstChunkOfLine = false;
-				FilterDetectedInSubsequentChunk  = false;
-				SuppressIfNotFiltered            = false;
-				SuppressIfSubsequentlyTriggered  = false;
-				SuppressForSure                  = false;
-			}
-
-			public virtual bool AnyFilterDetected
-			{
-				get { return (FilterDetectedInFirstChunkOfLine || FilterDetectedInSubsequentChunk); }
-			}
-		}
-
-		private class BidirLineState
-		{
-			public bool IsFirstChunk          { get; set; }
-			public bool IsFirstLine           { get; set; }
-			public string Device              { get; set; }
-			public IODirection Direction      { get; set; }
-			public DateTime LastLineTimeStamp { get; set; }
-
-			public BidirLineState()
-			{
-				IsFirstChunk      = true;
-				IsFirstLine       = true;
-				Device            = null;
-				Direction         = IODirection.None;
-				LastLineTimeStamp = DateTime.Now;
-			}
-
-			public BidirLineState(BidirLineState rhs)
-			{
-				IsFirstChunk      = rhs.IsFirstChunk;
-				IsFirstLine       = rhs.IsFirstLine;
-				Device            = rhs.Device;
-				Direction         = rhs.Direction;
-				LastLineTimeStamp = rhs.LastLineTimeStamp;
-			}
-		}
-
-		#endregion
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		private LineState txLineState;
-		private LineState rxLineState;
+		private BinaryLineState txUnidirBinaryLineState;
+		private BinaryLineState txBidirBinaryLineState;
+		private BinaryLineState rxBidirBinaryLineState;
+		private BinaryLineState rxUnidirBinaryLineState;
 
-		private BidirLineState bidirLineState;
+		/// <remarks>
+		/// Timed line breaks are <see cref="BinaryTerminal"/> specific because settings are
+		/// defined in <see cref="BinaryTerminalSettings"/>.
+		/// </remarks>
+		private LineBreakTimeout txLineBreakTimeout;
 
-		private object processSyncObj = new object();
+		/// <remarks>
+		/// Timed line breaks are <see cref="BinaryTerminal"/> specific because settings are
+		/// defined in <see cref="BinaryTerminalSettings"/>.
+		/// </remarks>
+		private LineBreakTimeout rxLineBreakTimeout;
 
 		#endregion
 
@@ -259,59 +86,54 @@ namespace YAT.Domain
 		// Process Elements
 		//------------------------------------------------------------------------------------------
 
-		private void InitializeStates()
+		/// <summary></summary>
+		protected override void InitializeProcess()
 		{
 			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, Parser.Modes.RadixAndAsciiEscapes))
 			{
-				LineBreakTimeout t;
-
 				// Tx:
+				{
+					byte[] txSequenceBreakAfter;
+					if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Sequence, out txSequenceBreakAfter))
+						txSequenceBreakAfter = null;
 
-				byte[] txSequenceBreakAfter;
-				if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Sequence, out txSequenceBreakAfter))
-					txSequenceBreakAfter = null;
+					byte[] txSequenceBreakBefore;
+					if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Sequence, out txSequenceBreakBefore))
+						txSequenceBreakBefore = null;
 
-				byte[] txSequenceBreakBefore;
-				if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Sequence, out txSequenceBreakBefore))
-					txSequenceBreakBefore = null;
+					this.txUnidirBinaryLineState = new BinaryLineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore));
+					this.txBidirBinaryLineState  = new BinaryLineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore));
 
-				t = new LineBreakTimeout(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				t.Elapsed += txTimedLineBreakTimeout_Elapsed;
+					if (this.txLineBreakTimeout != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+						this.txLineBreakTimeout.Elapsed -= txLineBreakTimeout_Elapsed;
 
-				if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-					this.txLineState.Dispose();
-
-				this.txLineState = new LineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), t);
+					this.txLineBreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+					this.txLineBreakTimeout.Elapsed += txLineBreakTimeout_Elapsed;
+				}
 
 				// Rx:
+				{
+					byte[] rxSequenceBreakAfter;
+					if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakAfter.Sequence, out rxSequenceBreakAfter))
+						rxSequenceBreakAfter = null;
 
-				byte[] rxSequenceBreakAfter;
-				if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakAfter.Sequence, out rxSequenceBreakAfter))
-					rxSequenceBreakAfter = null;
+					byte[] rxSequenceBreakBefore;
+					if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakBefore.Sequence, out rxSequenceBreakBefore))
+						rxSequenceBreakBefore = null;
 
-				byte[] rxSequenceBreakBefore;
-				if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakBefore.Sequence, out rxSequenceBreakBefore))
-					rxSequenceBreakBefore = null;
+					this.rxUnidirBinaryLineState = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
+					this.rxBidirBinaryLineState = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
 
-				t = new LineBreakTimeout(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				t.Elapsed += rxTimedLineBreakTimeout_Elapsed;
+					if (this.rxLineBreakTimeout != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+						this.rxLineBreakTimeout.Elapsed -= rxLineBreakTimeout_Elapsed;
 
-				if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-					this.rxLineState.Dispose();
-
-				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), t);
+					this.rxLineBreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+					this.rxLineBreakTimeout.Elapsed += rxLineBreakTimeout_Elapsed;
+				}
 			}
-
-			// Bidir:
-
-			this.bidirLineState = new BidirLineState();
 		}
 
-		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
-		/// </remarks>
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd)
+		private void DoLineBegin(LineState lineState, DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd)
 		{
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
@@ -344,12 +166,8 @@ namespace YAT.Domain
 			lineState.TimeStamp = ts;
 		}
 
-		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
-		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection dir, byte b, DisplayElementCollection elementsToAdd, out DisplayElementCollection elementsForNextLine)
+		private void DoContent(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection dir, byte b, DisplayElementCollection elementsToAdd, out DisplayElementCollection elementsForNextLine)
 		{
 			elementsForNextLine = null;
 
@@ -480,11 +298,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
-		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		private void DoLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
 
@@ -587,14 +401,10 @@ namespace YAT.Domain
 			lineState.Reset();
 		}
 
-		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
-		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
-		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts,
+		private void DoTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts,
 		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			if (lineState.Elements.Count > 0)
@@ -607,239 +417,6 @@ namespace YAT.Domain
 			lineState.TimeStamp = ts;
 		}
 
-		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
-			{
-				if (linesToAdd.Count <= 0) // Properly initialize the time delta:
-					this.bidirLineState.LastLineTimeStamp = chunk.TimeStamp;
-
-				Settings.BinaryDisplaySettings displaySettings;
-				switch (chunk.Direction)
-				{
-					case IODirection.Tx: displaySettings = BinaryTerminalSettings.TxDisplay; break;
-					case IODirection.Rx: displaySettings = BinaryTerminalSettings.RxDisplay; break;
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + chunk.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				LineState lineState;
-				switch (chunk.Direction)
-				{
-					case IODirection.Tx: lineState = this.txLineState; break;
-					case IODirection.Rx: lineState = this.rxLineState; break;
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + chunk.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				// Activate flags as needed, leave unchanged otherwise.
-				// Note that each chunk will either have none or only have a single attribute activated.
-				// But the line state has to deal with multiple chunks, thus multiples attribute may get activated.
-				// Also note the limitations described in feature request #366 "Automatic response and action shall be...".
-				if (attribute == LineChunkAttribute.Highlight)                       {                                                                                     lineState.Highlight                        = true;                                                                }
-				if (attribute == LineChunkAttribute.Filter)                          { if (!lineState.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.FilterDetectedInFirstChunkOfLine = true; } else { lineState.FilterDetectedInSubsequentChunk = true; } } }
-				if (attribute == LineChunkAttribute.SuppressIfNotFiltered)           { if (!lineState.AnyFilterDetected) {                                                 lineState.SuppressIfNotFiltered            = true;                                                              } }
-				if (attribute == LineChunkAttribute.SuppressIfSubsequentlyTriggered) {                                                                                     lineState.SuppressIfSubsequentlyTriggered  = true;                                                                }
-				if (attribute == LineChunkAttribute.Suppress)                        {                                                                                     lineState.SuppressForSure                  = true;                                                                }
-
-				// In both cases, filtering and suppression, the current implementation retains the line until it is
-				// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs
-				// from the standard behavior which continuously shows data as it is coming in.
-				//
-				// Why this retaining approach? It would be possible to immediately display but then remove the line if it
-				// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach. At the
-				// price that there is no longer immediate feedback on single character transmission in case filtering or
-				// suppression is active, except in case of filtering when the first chunk of a line already contains the
-				// trigger, then the line is continuously shown ('FilterDetectedInFirstChunkOfLine').
-				//
-				// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
-				//
-				// To change from retaining to continuous approach, the #if (DEBUG) around 'clearAlreadyStartedLine' will
-				// have to be removed again. As a consequence, the flag can never get activated, thus excluding it (YAGNI).
-				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
-				//
-				// Note that logging works fine even when filtering or suppression is active, since logging is only
-				// triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus not affected by the more tricky to
-				// handle 'CurrentDisplayLine[Tx|Bidir|Rx]Replaced' and 'CurrentDisplayLine[Tx|Bidir|Rx]Cleared' events.
-
-				foreach (byte b in chunk.Content)
-				{
-					// In case of reload, timed line breaks are executed here:
-					if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-						ExecuteTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-					// Line begin and time stamp:
-					if (lineState.Position == LinePosition.Begin)
-					{
-						ExecuteLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
-
-						if (displaySettings.TimedLineBreak.Enabled)
-							lineState.BreakTimeout.Start();
-					}
-					else
-					{
-						if (displaySettings.TimedLineBreak.Enabled)
-							lineState.BreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
-					}
-
-					// Content:
-					DisplayElementCollection elementsForNextLine = null;
-					if (lineState.Position == LinePosition.Content)
-					{
-						ExecuteContent(displaySettings, lineState, chunk.Direction, b, elementsToAdd, out elementsForNextLine);
-					}
-
-					// Line end and length:
-					if (lineState.Position == LinePosition.End)
-					{
-						if (displaySettings.TimedLineBreak.Enabled)
-							lineState.BreakTimeout.Stop();
-
-						ExecuteLineEnd(lineState, chunk.TimeStamp, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-						// In case of a pending element immediately insert the sequence into a new line:
-						if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
-						{
-							ExecuteLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
-
-							foreach (var de in elementsForNextLine)
-							{
-								if (de.Origin != null) // Foreach element where origin exists.
-								{
-									foreach (var origin in de.Origin)
-									{
-										foreach (var originByte in origin.Value1)
-										{
-											DisplayElementCollection elementsForNextLineDummy;
-											ExecuteContent(displaySettings, lineState, chunk.Direction, originByte, elementsToAdd, out elementsForNextLineDummy);
-
-											// Note that 're.Direction' above is OK, this function is processing all in the same direction.
-										}
-									}
-								}
-							} // foreach (elementForNextLine)
-						} // if (has elementsForNextLine)
-					} // if (LinePosition.End)
-				} // foreach (byte)
-			} // lock (processSyncObj)
-		}
-
-		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
-		private void ProcessDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
-			{
-				if (this.bidirLineState.IsFirstChunk)
-				{
-					this.bidirLineState.IsFirstChunk = false;
-				}
-				else // = 'IsSubsequentChunk'.
-				{
-					if (TerminalSettings.Display.DeviceLineBreakEnabled ||
-					    TerminalSettings.Display.DirectionLineBreakEnabled)
-					{
-						if (!StringEx.EqualsOrdinalIgnoreCase(dev, this.bidirLineState.Device) || (dir != this.bidirLineState.Direction))
-						{
-							LineState lineState;
-
-							if (dir == this.bidirLineState.Direction)
-							{
-								switch (dir)
-								{
-									case IODirection.Tx: lineState = this.txLineState; break;
-									case IODirection.Rx: lineState = this.rxLineState; break;
-
-									case IODirection.None: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-									default:               throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-								}
-							}
-							else // Attention: Direction changed => Use other state.
-							{
-								switch (dir)
-								{
-									case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
-									case IODirection.Rx: lineState = this.txLineState; break; // Reversed!
-
-									case IODirection.None: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-									default:               throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-								}
-							}
-
-							if ((lineState.Elements != null) && (lineState.Elements.Count > 0))
-							{
-								ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-							}
-						} // a line break has been detected
-					} // a line break is active
-				} // is subsequent chunk
-
-				this.bidirLineState.Device = dev;
-				this.bidirLineState.Direction = dir;
-
-			} // lock (processSyncObj)
-		}
-
-		private void ProcessChunkOrTimedLineBreak(DateTime ts, IODirection dir, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
-			{
-				LineState lineState;
-				switch (dir)
-				{
-					case IODirection.Tx: lineState = this.txLineState; break;
-					case IODirection.Rx: lineState = this.rxLineState; break;
-
-					case IODirection.None: throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					default:               throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				if (lineState.Elements.Count > 0)
-				{
-					ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-				}
-			}
-		}
-
-		private void ProcessAndSignalDeviceOrDirectionLineBreak(DateTime ts, string dev, IODirection dir)
-		{
-			var directionToSignal = this.bidirLineState.Direction;
-			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-
-			bool clearAlreadyStartedLine = false;
-
-			ProcessDeviceOrDirectionLineBreak(ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-			if (elementsToAdd.Count > 0)
-				OnDisplayElementsAdded(directionToSignal, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				OnDisplayLinesAdded(directionToSignal, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				OnCurrentDisplayLineCleared(directionToSignal);
-		}
-
-		private void ProcessAndSignalChunkOrTimedLineBreak(DateTime ts, IODirection dir)
-		{
-			var elementsToAdd = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-
-			bool clearAlreadyStartedLine = false;
-
-			ProcessChunkOrTimedLineBreak(ts, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-			if (elementsToAdd.Count > 0)
-				OnDisplayElementsAdded(dir, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				OnDisplayLinesAdded(dir, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				OnCurrentDisplayLineCleared(dir);
-		}
-
 	#if (WITH_SCRIPTING)
 		/// <remarks>
 		/// Processing for scripting differs from "normal" processing for displaying because...
@@ -847,7 +424,7 @@ namespace YAT.Domain
 		/// ...received data must not be processed individually, only as packets/messages.
 		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
 		/// </remarks>
-		protected override void ProcessAndSignalRawChunkForScripting(RawChunk chunk)
+		protected override void ProcessRawChunkForScripting(RawChunk chunk)
 		{
 			// Do nothing, as EnqueueReceivedMessageForScripting(), OnScriptPacketReceived() and
 			// OnScriptMessageReceived() is invoked in ExecuteLineEnd() further above. See comment
@@ -862,15 +439,29 @@ namespace YAT.Domain
 		// Timer Events
 		//------------------------------------------------------------------------------------------
 
-		private void txTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
+		/// </remarks>
+		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, IODirection.Tx);
-		}   // Underlying ProcessChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
+			}
+		}
 
-		private void rxTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
+		/// </remarks>
+		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
-			ProcessAndSignalChunkOrTimedLineBreak(DateTime.Now, IODirection.Rx);
-		}   // Underlying ProcessChunkOrTimedLineBreak() will synchronize among this asyc callback and sync processing.
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
+			}
+		}
 
 		#endregion
 

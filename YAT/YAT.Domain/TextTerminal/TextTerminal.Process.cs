@@ -52,304 +52,35 @@ namespace YAT.Domain
 	/// </remarks>
 	public partial class TextTerminal
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		#region Types > Line State
-		//------------------------------------------------------------------------------------------
-		// Types > Line State
-		//------------------------------------------------------------------------------------------
-
-		private enum LinePosition
-		{
-			Begin,
-			Content,
-			ContentExceeded,
-			End
-		}
-
-		private class LineState : IDisposable, IDisposableEx
-		{
-			public byte[] EolSequence { get; }
-
-			public LinePosition             Position  { get; set; }
-			public DisplayElementCollection Elements  { get; set; }
-			public DateTime                 TimeStamp { get; set; }
-			public string                   Device    { get; set; }
-
-			public Dictionary<string, SequenceQueue> EolOfGivenDevice                           { get; set; }
-			public DisplayElementCollection          RetainedUnconfirmedHiddenEolElements       { get; set; }
-			public Dictionary<string, bool>          EolOfLastLineOfGivenDeviceWasCompleteMatch { get; set; }
-
-			public bool Highlight                        { get; set; }
-			public bool FilterDetectedInFirstChunkOfLine { get; set; } // Line shall continuously get shown if filter is active from the first chunk.
-			public bool FilterDetectedInSubsequentChunk  { get; set; } // Line shall be retained and delay-shown if filter is detected subsequently.
-			public bool SuppressIfNotFiltered            { get; set; }
-			public bool SuppressIfSubsequentlyTriggered  { get; set; }
-			public bool SuppressForSure                  { get; set; }
-
-			public LineBreakTimeout BreakTimeout { get; set; }
-
-			public LineState(byte[] eolSequence, LineBreakTimeout breakTimeout)
-			{
-				EolSequence = eolSequence;
-
-				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-				TimeStamp = DateTime.Now;
-				Device    = null;
-
-				EolOfGivenDevice                           = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
-				RetainedUnconfirmedHiddenEolElements       = new DisplayElementCollection();          // No preset needed, the default initial capacity is good enough.
-				EolOfLastLineOfGivenDeviceWasCompleteMatch = new Dictionary<string, bool>();          // No preset needed, the default initial capacity is good enough.
-
-				Highlight                        = false;
-				FilterDetectedInFirstChunkOfLine = false;
-				FilterDetectedInSubsequentChunk  = false;
-				SuppressIfNotFiltered            = false;
-				SuppressIfSubsequentlyTriggered  = false;
-				SuppressForSure                  = false;
-
-				BreakTimeout = breakTimeout;
-			}
-
-			#region Disposal
-			//--------------------------------------------------------------------------------------
-			// Disposal
-			//--------------------------------------------------------------------------------------
-
-			/// <summary></summary>
-			public bool IsDisposed { get; protected set; }
-
-			/// <summary></summary>
-			public void Dispose()
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			/// <summary></summary>
-			protected virtual void Dispose(bool disposing)
-			{
-				if (!IsDisposed)
-				{
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
-						if (BreakTimeout != null)
-						{
-							BreakTimeout.Dispose();
-							EventHandlerHelper.RemoveAllEventHandlers(BreakTimeout);
-
-							// \remind (2016-09-08 / MKY)
-							// Whole timer handling should be encapsulated into the 'LineState' class.
-						}
-					}
-
-					// Set state to disposed:
-					BreakTimeout = null;
-					IsDisposed = true;
-				}
-			}
-
-		#if (DEBUG)
-			/// <remarks>
-			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-			/// "Types that declare disposable members should also implement IDisposable. If the type
-			///  does not own any unmanaged resources, do not implement a finalizer on it."
-			///
-			/// Well, true for best performance on finalizing. However, it's not easy to find missing
-			/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-			/// is kept for DEBUG, indicating missing calls.
-			///
-			/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-			/// </remarks>
-			~LineState()
-			{
-				Dispose(false);
-
-				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-			}
-		#endif // DEBUG
-
-			/// <summary></summary>
-			protected void AssertNotDisposed()
-			{
-				if (IsDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-			}
-
-			#endregion
-
-			public virtual void Reset(string formerDevice, bool eolWasCompleteMatch)
-			{
-				AssertNotDisposed();
-
-				Position  = LinePosition.Begin;
-				Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-				TimeStamp = DateTime.Now;
-				Device    = null;
-
-				if (EolOfGivenDevice.ContainsKey(formerDevice))
-				{
-					if (EolOfGivenDevice[formerDevice].IsCompleteMatch)
-						EolOfGivenDevice[formerDevice].Reset();
-
-					// Keep EOL state when incomplete. Subsequent lines
-					// need this to handle broken/pending EOL characters.
-				}
-				else                                                                    // It is OK to only access or add to the collection,
-				{                                                                       // this will not lead to excessive use of memory,
-					EolOfGivenDevice.Add(formerDevice, new SequenceQueue(EolSequence)); // since there is only a given number of devices.
-				}                                                                       // Applies to TCP and UDP terminals only.
-
-				if (eolWasCompleteMatch) // Keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
-					RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-
-				if (EolOfLastLineOfGivenDeviceWasCompleteMatch.ContainsKey(formerDevice))
-					EolOfLastLineOfGivenDeviceWasCompleteMatch[formerDevice] = eolWasCompleteMatch;
-				else
-					EolOfLastLineOfGivenDeviceWasCompleteMatch.Add(formerDevice, eolWasCompleteMatch); // Same as above, it is OK to only access or add to the collection.
-
-				Highlight                        = false;
-				FilterDetectedInFirstChunkOfLine = false;
-				FilterDetectedInSubsequentChunk  = false;
-				SuppressIfNotFiltered            = false;
-				SuppressIfSubsequentlyTriggered  = false;
-				SuppressForSure                  = false;
-			}
-
-			public virtual bool AnyFilterDetected
-			{
-				get { return (FilterDetectedInFirstChunkOfLine || FilterDetectedInSubsequentChunk); }
-			}
-
-			public virtual bool EolOfLastLineWasCompleteMatch(string dev)
-			{
-				if (EolOfLastLineOfGivenDeviceWasCompleteMatch.ContainsKey(dev))
-					return (EolOfLastLineOfGivenDeviceWasCompleteMatch[dev]);
-				else
-					return (true); // Cleared monitors mean that last line was complete!
-			}
-
-			public virtual bool EolIsAnyMatch(string dev)
-			{
-				if (EolOfGivenDevice.ContainsKey(dev))
-					return (EolOfGivenDevice[dev].IsAnyMatch);
-				else
-					return (false);
-			}
-
-			public virtual bool EolIsCompleteMatch(string dev)
-			{
-				if (EolOfGivenDevice.ContainsKey(dev))
-					return (EolOfGivenDevice[dev].IsCompleteMatch);
-				else
-					return (false);
-			}
-		}
-
-		private class BidirLineState
-		{
-			public bool IsFirstChunk          { get; set; }
-			public bool IsFirstLine           { get; set; }
-			public string Device              { get; set; }
-			public IODirection Direction      { get; set; }
-			public DateTime LastLineTimeStamp { get; set; }
-
-			public BidirLineState()
-			{
-				IsFirstChunk      = true;
-				IsFirstLine       = true;
-				Device            = null;
-				Direction         = IODirection.None;
-				LastLineTimeStamp = DateTime.Now;
-			}
-
-			public BidirLineState(BidirLineState rhs)
-			{
-				IsFirstChunk      = rhs.IsFirstChunk;
-				IsFirstLine       = rhs.IsFirstLine;
-				Device            = rhs.Device;
-				Direction         = rhs.Direction;
-				LastLineTimeStamp = rhs.LastLineTimeStamp;
-			}
-		}
-
-	#if (WITH_SCRIPTING)
-
-		private class ScriptMessageState
-		{
-			public byte[] EolSequence { get; }
-			public SequenceQueue Eol  { get; }
-			public List<byte>    Data { get; set; }
-
-			public ScriptMessageState(byte[] eolSequence)
-			{
-				EolSequence = eolSequence;
-				Eol = new SequenceQueue(EolSequence);
-				Data = new List<byte>(128); // Preset the capacity to improve memory management. 128 is an arbitrary value.
-			}
-
-			public virtual void Reset()
-			{
-				Data = new List<byte>(128); // Preset the capacity to improve memory management. 128 is an arbitrary value.
-			}
-		}
-
-	#endif // WITH_SCRIPTING
-
-		#endregion
-
-		#region Types > Line Send Delay
-		//------------------------------------------------------------------------------------------
-		// Types > Line Send Delay
-		//------------------------------------------------------------------------------------------
-
-		private class LineSendDelayState
-		{
-			public int LineCount { get; set; }
-
-			public LineSendDelayState()
-			{
-				LineCount = 0;
-			}
-
-			public LineSendDelayState(LineSendDelayState rhs)
-			{
-				LineCount = rhs.LineCount;
-			}
-
-			public virtual void Reset()
-			{
-				LineCount = 0;
-			}
-		}
-
-		#endregion
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		private List<byte> rxMultiByteDecodingStream;
+		private TextLineState txUnidirBinaryLineState;
+		private TextLineState txBidirBinaryLineState;
+		private TextLineState rxBidirBinaryLineState;
+		private TextLineState rxUnidirBinaryLineState;
 
-		private LineState txLineState;
-		private LineState rxLineState;
+		private List<byte> rxBidirMultiByteDecodingStream;
+		private List<byte> rxUnidirMultiByteDecodingStream;
+
 	#if (WITH_SCRIPTING)
 		private ScriptMessageState rxScriptMessageState;
 	#endif
 
-		private BidirLineState bidirLineState;
-		private LineSendDelayState lineSendDelayState;
+		/// <remarks>
+		/// Timed line breaks are <see cref="TextTerminal"/> specific because settings are
+		/// defined in <see cref="TextTerminalSettings"/>.
+		/// </remarks>
+		private LineBreakTimeout txLineBreakTimeout;
 
-		private object processSyncObj = new object();
+		/// <remarks>
+		/// Timed line breaks are <see cref="TextTerminal"/> specific because settings are
+		/// defined in <see cref="TextTerminalSettings"/>.
+		/// </remarks>
+		private LineBreakTimeout rxLineBreakTimeout;
+
 
 		#endregion
 
@@ -1421,7 +1152,7 @@ namespace YAT.Domain
 		/// ...received data must not be processed individually, only as packets/messages.
 		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
 		/// </remarks>
-		protected override void ProcessAndSignalRawChunkForScripting(RawChunk chunk)
+		protected override void ProcessRawChunkForScripting(RawChunk chunk)
 		{
 			if (chunk.Direction == IODirection.Rx)
 			{
@@ -1469,6 +1200,37 @@ namespace YAT.Domain
 		}
 
 	#endif // WITH_SCRIPTING
+
+		#endregion
+
+		#region Timer Events
+		//------------------------------------------------------------------------------------------
+		// Timer Events
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
+		/// </remarks>
+		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		{
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
+			}
+		}
+
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
+		/// </remarks>
+		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		{
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
+			}
+		}
 
 		#endregion
 
