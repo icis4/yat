@@ -2977,7 +2977,7 @@ namespace YAT.Model
 		///  > If the trigger is spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
 		///  > If there is more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger is detected.
 		/// To make this change happen, trigger detection will have to be moved from here to one of the underlying methods of
-		/// <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, i.e. where chunks are being processed into lines.
+		/// <see cref="Domain.Terminal.ProcessRawChunk"/>, i.e. where chunks are being processed into lines.
 		/// </remarks>
 		/// <remarks>
 		/// This event is raised when a chunk is received by the <see cref="UnderlyingIOProvider"/>.

@@ -347,7 +347,7 @@ namespace YAT.Domain
 
 			AttachTerminalSettings(settings);
 			CreateRepositories(settings);
-			InitializeProcessStates();
+			InitializeProcessing();
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 		////this.isReloading has been initialized to false.
@@ -362,7 +362,7 @@ namespace YAT.Domain
 
 			AttachTerminalSettings(settings);
 			CreateRepositories(terminal);
-			InitializeProcessStates();
+			InitializeProcessing();
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 			this.isReloading = terminal.isReloading;
@@ -1931,7 +1931,7 @@ namespace YAT.Domain
 			{
 				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 				OnRawChunkSent(args);
-				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
 			}
 		}
 
@@ -1949,9 +1949,9 @@ namespace YAT.Domain
 			{
 				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 				OnRawChunkReceived(args);
-				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
 			#if (WITH_SCRIPTING)
-				ProcessAndSignalRawChunkForScripting(e.Value);     // See method's remarks for background information.
+				ProcessRawChunkForScripting(e.Value);     // See method's remarks for background information.
 			#endif // WITH_SCRIPTING
 			}
 		}
@@ -1963,8 +1963,8 @@ namespace YAT.Domain
 
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				// Reset states:
-				ResetProcessStates(e.Value);
+				// Reset processing:
+				ResetProcessing(e.Value);
 
 				// Clear repository:
 				ClearMyRepository(e.Value);

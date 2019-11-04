@@ -31,17 +31,33 @@ namespace YAT.Domain
 	/// <summary></summary>
 	public class LineState
 	{
-		/// <summary></summary>
-		public LinePosition             Position  { get; set; }
+		// Overall:
 
 		/// <summary></summary>
-		public DisplayElementCollection Elements  { get; set; }
+		public bool     IsFirstLine           { get; set; }
+
+		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line" of the previous line.</remarks>
+		public DateTime PreviousLineTimeStamp { get; set; }
+
+		// Line itself:
 
 		/// <summary></summary>
-		public DateTime                 TimeStamp { get; set; }
+		public LinePosition             Position       { get; set; }
 
 		/// <summary></summary>
-		public string                   Device    { get; set; }
+		public bool                     IsFirstChunk   { get; set; }
+
+		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line".</remarks>
+		public DateTime                 TimeStamp      { get; set; }
+
+		/// <summary></summary>
+		public string                   Device         { get; set; }
+
+		/// <summary></summary>
+		public IODirection              Direction      { get; set; }
+
+		/// <summary></summary>
+		public DisplayElementCollection Elements       { get; set; }
 
 		/// <summary></summary>
 		public LineState()
@@ -52,37 +68,17 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Reset()
 		{
-			Position  = LinePosition.Begin;
-			Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			TimeStamp = DateTime.Now;
-			Device    = null;
-		}
-	}
+			// Line
+			IsFirstChunk          = true;
+			PreviousLineTimeStamp = DateTime.MinValue;
 
-	/// <summary></summary>
-	public class DeviceAndDirectionLineState
-	{
-		/// <summary></summary>
-		public bool        IsFirstChunk { get; set; }
-
-		/// <summary></summary>
-		public string      Device       { get; set; }
-
-		/// <summary></summary>
-		public IODirection Direction    { get; set; }
-
-		/// <summary></summary>
-		public DeviceAndDirectionLineState()
-		{
-			Reset();
-		}
-
-		/// <summary></summary>
-		public void Reset()
-		{
+			// Line itself:
+			Position     = LinePosition.Begin;
 			IsFirstChunk = true;
+			TimeStamp    = DateTime.Now;
 			Device       = null;
 			Direction    = IODirection.None;
+			Elements     = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 		}
 	}
 }
