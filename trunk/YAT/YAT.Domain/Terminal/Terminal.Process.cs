@@ -62,9 +62,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Methods
+		// Non-Public Methods
 		//==========================================================================================
 
 		#region ByteTo.../UnicodeValueTo.../...Element
@@ -396,7 +396,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected virtual void InitializeProcessing()
+		protected virtual void InitializeProcess()
 		{
 			this.txLineState    = new LineState();
 			this.bidirLineState = new LineState();
@@ -404,7 +404,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ResetProcessing(RepositoryType repositoryType)
+		protected virtual void DisposeProcess()
+		{
+			this.txLineState    = new LineState();
+			this.bidirLineState = new LineState();
+			this.rxLineState    = new LineState();
+		}
+
+		/// <summary></summary>
+		protected virtual void ResetProcess(RepositoryType repositoryType)
 		{
 			switch (repositoryType)
 			{
@@ -691,37 +699,6 @@ namespace YAT.Domain
 
 		/// <remarks>Must be abstract/virtual because settings differ among text and binary.</remarks>
 		protected abstract void DoLineEnd(RepositoryType repositoryType, DateTime ts, string dev, out DisplayElementCollection elementsToAdd, out DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine);
-
-		#endregion
-
-		#region Timer Events
-		//------------------------------------------------------------------------------------------
-		// Timer Events
-		//------------------------------------------------------------------------------------------
-
-		/// <remarks>
-		/// This event handler must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
-		/// </remarks>
-		private void txTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
-			{
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
-			}
-		}
-
-		/// <remarks>
-		/// This event handler must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
-		/// </remarks>
-		private void rxTimedLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
-			{
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
-			}
-		}
 
 		#endregion
 

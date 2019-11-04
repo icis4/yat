@@ -347,7 +347,7 @@ namespace YAT.Domain
 
 			AttachTerminalSettings(settings);
 			CreateRepositories(settings);
-			InitializeProcessing();
+			InitializeProcess();
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 		////this.isReloading has been initialized to false.
@@ -362,7 +362,7 @@ namespace YAT.Domain
 
 			AttachTerminalSettings(settings);
 			CreateRepositories(terminal);
-			InitializeProcessing();
+			InitializeProcess();
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 			this.isReloading = terminal.isReloading;
@@ -398,7 +398,8 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the timer will already have been stopped in Stop()...
+					// In the 'normal' case, the related timers will already have been stopped in Stop()...
+					DisposeProcess();
 					DisposePeriodicXOnTimer();
 
 					// ...and the send thread will already have been stopped in Close()...
@@ -1964,7 +1965,7 @@ namespace YAT.Domain
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
 				// Reset processing:
-				ResetProcessing(e.Value);
+				ResetProcess(e.Value);
 
 				// Clear repository:
 				ClearMyRepository(e.Value);

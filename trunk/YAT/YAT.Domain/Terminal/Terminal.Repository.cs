@@ -128,7 +128,7 @@ namespace YAT.Domain
 				try
 				{
 					// Reset processing:
-					ResetProcessing(repositoryType);
+					ResetProcess(repositoryType);
 
 					// Clear repository:
 					ClearMyRepository(repositoryType);
@@ -174,9 +174,9 @@ namespace YAT.Domain
 				try
 				{
 					// Reset processing:
-					ResetProcessing(RepositoryType.Tx);
-					ResetProcessing(RepositoryType.Bidir);
-					ResetProcessing(RepositoryType.Rx);
+					ResetProcess(RepositoryType.Tx);
+					ResetProcess(RepositoryType.Bidir);
+					ResetProcess(RepositoryType.Rx);
 
 					// Clear repositories:
 					ClearMyRepository(RepositoryType.Tx);
