@@ -953,7 +953,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
 		/// </remarks>
 		protected void AppendToPendingPacketWithoutForwardingToRawTerminalYet(byte[] data)
 		{
@@ -967,7 +967,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
 		/// </remarks>
 		protected void AppendToPendingPacketAndForwardToRawTerminal(ReadOnlyCollection<byte> data)
 		{
@@ -980,7 +980,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
 		/// </remarks>
 		protected void AppendToPendingPacketAndForwardToRawTerminal(byte[] data)
 		{
@@ -999,7 +999,7 @@ namespace YAT.Domain
 		/// Not the best approach to require to call this method at so many locations...
 		/// </remarks>
 		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'collectDataQueue'.
+		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
 		/// </remarks>
 		protected void ForwardPendingPacketToRawTerminal()
 		{

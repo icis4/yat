@@ -148,6 +148,7 @@
     <Compile Include="Settings\TerminalSettings.cs" />
     <Compile Include="Settings\DisplaySettings.cs" />
     <Compile Include="Settings\SendSettings.cs" />
+    <Compile Include="TextTerminal\TextLineState.cs" />
     <Compile Include="TextTerminal\CharSubstitution.cs" />
     <Compile Include="TextSettings\TextTerminalSettings.cs" />
     <Compile Include="TextTerminal\SubstitutionParser.cs" />

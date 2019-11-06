@@ -81,7 +81,6 @@ namespace YAT.Domain
 		/// </remarks>
 		private LineBreakTimeout rxLineBreakTimeout;
 
-
 		#endregion
 
 		#region Non-Public Methods
@@ -89,68 +88,10 @@ namespace YAT.Domain
 		// Non-Public Methods
 		//==========================================================================================
 
-		#region Process Elements
+		#region ByteTo.../...Element
 		//------------------------------------------------------------------------------------------
-		// Process Elements
+		// ByteTo.../...Element
 		//------------------------------------------------------------------------------------------
-
-		private void InitializeStates()
-		{
-			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
-
-			byte[] txEol;
-			byte[] rxEol;
-			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Modes.RadixAndAsciiEscapes))
-			{
-				if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
-				{
-					// In case of an invalid EOL sequence, default it. This should never happen,
-					// YAT verifies the EOL sequence when the user enters it. However, the user might
-					// manually edit the EOL sequence in a settings file.
-					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.EolDefault;
-					txEol = p.Parse(TextTerminalSettings.TxEol);
-				}
-
-				if (!p.TryParse(TextTerminalSettings.RxEol, out rxEol))
-				{
-					// In case of an invalid EOL sequence, default it. This should never happen,
-					// YAT verifies the EOL sequence when the user enters it. However, the user might
-					// manually edit the EOL sequence in a settings file.
-					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.EolDefault;
-					rxEol = p.Parse(TextTerminalSettings.RxEol);
-				}
-			}
-
-			LineBreakTimeout t;
-
-			// Tx:
-
-			t = new LineBreakTimeout(TextTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-			t.Elapsed += txTimedLineBreakTimeout_Elapsed;
-
-			if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-				this.txLineState.Dispose();
-
-			this.txLineState = new LineState(txEol, t);
-
-			// Rx:
-
-			t = new LineBreakTimeout(TextTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-			t.Elapsed += rxTimedLineBreakTimeout_Elapsed;
-
-			if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-				this.rxLineState.Dispose();
-
-			this.rxLineState = new LineState(rxEol, t);
-		#if (WITH_SCRIPTING)
-			this.rxScriptMessageState = new ScriptMessageState(rxEol);
-		#endif
-
-			// Bidir:
-
-			this.bidirLineState = new BidirLineState();
-			this.lineSendDelayState = new LineSendDelayState();
-		}
 
 		/// <summary></summary>
 		protected override DisplayElement ByteToElement(byte b, IODirection d, Radix r)
@@ -573,6 +514,71 @@ namespace YAT.Domain
 			sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
 
 			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+		}
+
+		#endregion
+
+		#region Process Elements
+		//------------------------------------------------------------------------------------------
+		// Process Elements
+		//------------------------------------------------------------------------------------------
+
+		private void InitializeStates()
+		{
+			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
+
+			byte[] txEol;
+			byte[] rxEol;
+			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Modes.RadixAndAsciiEscapes))
+			{
+				if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
+				{
+					// In case of an invalid EOL sequence, default it. This should never happen,
+					// YAT verifies the EOL sequence when the user enters it. However, the user might
+					// manually edit the EOL sequence in a settings file.
+					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.EolDefault;
+					txEol = p.Parse(TextTerminalSettings.TxEol);
+				}
+
+				if (!p.TryParse(TextTerminalSettings.RxEol, out rxEol))
+				{
+					// In case of an invalid EOL sequence, default it. This should never happen,
+					// YAT verifies the EOL sequence when the user enters it. However, the user might
+					// manually edit the EOL sequence in a settings file.
+					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.EolDefault;
+					rxEol = p.Parse(TextTerminalSettings.RxEol);
+				}
+			}
+
+			LineBreakTimeout t;
+
+			// Tx:
+
+			t = new LineBreakTimeout(TextTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+			t.Elapsed += txTimedLineBreakTimeout_Elapsed;
+
+			if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+				this.txLineState.Dispose();
+
+			this.txLineState = new LineState(txEol, t);
+
+			// Rx:
+
+			t = new LineBreakTimeout(TextTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+			t.Elapsed += rxTimedLineBreakTimeout_Elapsed;
+
+			if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
+				this.rxLineState.Dispose();
+
+			this.rxLineState = new LineState(rxEol, t);
+		#if (WITH_SCRIPTING)
+			this.rxScriptMessageState = new ScriptMessageState(rxEol);
+		#endif
+
+			// Bidir:
+
+			this.bidirLineState = new BidirLineState();
+			this.lineSendDelayState = new LineSendDelayState();
 		}
 
 		/// <remarks>
@@ -1006,47 +1012,6 @@ namespace YAT.Domain
 
 			lineState.TimeStamp = ts;
 		}
-
-		/// <summary></summary>
-		protected virtual void ProcessRawByte(RawChunk chunk, LineChunkAttribute attribute)
-		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
-			{
-				// In case of reload, timed line breaks are executed here:
-				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					EvaluateTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-				// Line begin and time stamp:
-				if (lineState.Position == LinePosition.Begin)
-				{
-					DoLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
-
-					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.BreakTimeout.Start();
-				}
-				else
-				{
-					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.BreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
-				}
-
-				// Content:
-				if (lineState.Position == LinePosition.Content)
-				{
-					DoContent(displaySettings, lineState, chunk.Device, chunk.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
-				}
-
-				// Line end and length:
-				if (lineState.Position == LinePosition.End)
-				{
-					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.BreakTimeout.Stop();
-
-					DoLineEnd(lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-				}
-			}
-		}
-
 
 		/// <summary></summary>
 		protected override void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)

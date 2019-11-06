@@ -60,6 +60,9 @@ namespace YAT.Domain
 		/// </summary>
 		protected object ChunkVsTimeoutSyncObj { get; } = new object();
 
+		private LineBreakTimeout txLineBreakTimeout;
+		private LineBreakTimeout rxLineBreakTimeout;
+
 		#endregion
 
 		#region Non-Public Methods
@@ -67,9 +70,9 @@ namespace YAT.Domain
 		// Non-Public Methods
 		//==========================================================================================
 
-		#region ByteTo.../UnicodeValueTo.../...Element
+		#region ByteTo.../...Element
 		//------------------------------------------------------------------------------------------
-		// ByteTo.../UnicodeValueTo.../...Element
+		// ByteTo.../...Element
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -401,14 +404,46 @@ namespace YAT.Domain
 			this.txLineState    = new LineState();
 			this.bidirLineState = new LineState();
 			this.rxLineState    = new LineState();
+
+			if (this.txLineBreakTimeout != null)
+			{	// Ensure to free referenced resources such as the 'Elapsed' event handler.
+				this.txLineBreakTimeout.Elapsed -= txLineBreakTimeout_Elapsed;
+				this.txLineBreakTimeout.Dispose();
+			}
+
+			this.txLineBreakTimeout = new LineBreakTimeout(TerminalSettings.TxDisplayTimedLineBreak.Timeout);
+			this.txLineBreakTimeout.Elapsed += txLineBreakTimeout_Elapsed;
+
+			if (this.rxLineBreakTimeout != null)
+			{	// Ensure to free referenced resources such as the 'Elapsed' event handler.
+				this.rxLineBreakTimeout.Elapsed -= rxLineBreakTimeout_Elapsed;
+				this.rxLineBreakTimeout.Dispose();
+			}
+
+			this.rxLineBreakTimeout = new LineBreakTimeout(TerminalSettings.RxDisplayTimedLineBreak.Timeout);
+			this.rxLineBreakTimeout.Elapsed += rxLineBreakTimeout_Elapsed;
 		}
 
 		/// <summary></summary>
 		protected virtual void DisposeProcess()
 		{
-			this.txLineState    = new LineState();
-			this.bidirLineState = new LineState();
-			this.rxLineState    = new LineState();
+			// In the 'normal' case, timers are stopped in ExecuteLineEnd().
+
+			if (this.txLineBreakTimeout != null)
+			{	// Ensure to free referenced resources such as event handlers.
+				EventHandlerHelper.RemoveAllEventHandlers(this.txLineBreakTimeout);
+				this.txLineBreakTimeout.Dispose();
+			}
+
+			this.txLineBreakTimeout = null;
+
+			if (this.rxLineBreakTimeout != null)
+			{	// Ensure to free referenced resources such as event handlers.
+				EventHandlerHelper.RemoveAllEventHandlers(this.rxLineBreakTimeout);
+				this.rxLineBreakTimeout.Dispose();
+			}
+
+			this.rxLineBreakTimeout = null;
 		}
 
 		/// <summary></summary>
@@ -425,8 +460,11 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		private LineState GetLineState(RepositoryType repositoryType)
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private members
+		/// <see cref="txLineState"/>, <see cref="bidirLineState"/> and <see cref="rxLineState"/>.
+		/// </remarks>
+		protected LineState GetLineState(RepositoryType repositoryType)
 		{
 			switch (repositoryType)
 			{
@@ -439,93 +477,6 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string dev, IODirection dir, out DisplayElementCollection lp)
-		{
-			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
-			    TerminalSettings.Display.ShowDevice    ||
-			    TerminalSettings.Display.ShowDirection)
-			{
-				lp = new DisplayElementCollection(10); // Preset the required capacity to improve memory management.
-
-				if (TerminalSettings.Display.ShowTimeStamp)
-				{
-					lp.Add(new DisplayElement.TimeStampInfo(ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-				}
-
-				if (TerminalSettings.Display.ShowTimeSpan)
-				{
-					lp.Add(new DisplayElement.TimeSpanInfo(diff, TerminalSettings.Display.TimeSpanFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-				}
-
-				if (TerminalSettings.Display.ShowTimeDelta)
-				{
-					lp.Add(new DisplayElement.TimeDeltaInfo(delta, TerminalSettings.Display.TimeDeltaFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-				}
-
-				if (TerminalSettings.Display.ShowDevice)
-				{
-					lp.Add(new DisplayElement.DeviceInfo(dev, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-				}
-
-				if (TerminalSettings.Display.ShowDirection)
-				{
-					lp.Add(new DisplayElement.DirectionInfo((Direction)dir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-				}
-			}
-			else
-			{
-				lp = null;
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		protected virtual void PrepareLineEndInfo(int length, TimeSpan duration, out DisplayElementCollection lp)
-		{
-			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count"/"char count" and "line duration".
-			{
-				lp = new DisplayElementCollection(4); // Preset the required capacity to improve memory management.
-
-				if (TerminalSettings.Display.ShowLength)
-				{
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-
-					lp.Add(new DisplayElement.DataLength(length, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
-				}
-
-				if (TerminalSettings.Display.ShowDuration)
-				{
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-
-					lp.Add(new DisplayElement.TimeDurationInfo(duration, TerminalSettings.Display.TimeDurationFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
-				}
-			}
-			else
-			{
-				lp = null;
-			}
-		}
-
 		/// <remarks>
 		/// This method must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
 		/// </remarks>
@@ -533,23 +484,76 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
+				LineBreakTimeout lbt = null;
+				switch (chunk.Direction)
+				{
+					case IODirection.Tx: lbt = txLineBreakTimeout; break;
+					case IODirection.Rx: lbt = rxLineBreakTimeout; break;
+					default: throw ( // A chunk must ever be tied to Tx or Rx.
+				}
+
 				// Check whether device or direction has changed, a chunk is always tied to device and direction:
-				EvaluateAndSignalLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
-				EvaluateAndSignalLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
-				EvaluateAndSignalLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+				{
+					if (chunk.Direction == IODirection.Tx)
+						EvaluateAndSignalLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+
+					if ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx))
+						EvaluateAndSignalLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
+
+					if (chunk.Direction == IODirection.Rx)
+						EvaluateAndSignalLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+				}
 
 				// Process chunk:
 				foreach (byte b in chunk.Content)
 				{
-					ProcessRawByte(b, attribute);
+					// Handle start/restart of timed line breaks:
+					if (displaySettings.TimedLineBreak.Enabled)
+					{
+						if (!IsReloading)
+						{
+							if (lineState.Position == LinePosition.Begin)
+								lbt.Start();
+							else
+								lbt.Restart(); // Restart as timeout refers to time after last received byte.
+						}
+						else // In case of reloading, timed line breaks are synchronously evaluated here:
+						{
+							EvaluateTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+						}
+					}
+
+					if (chunk.Direction == IODirection.Tx)
+						ProcessRawByte(RepositoryType.Tx,    b, attribute);
+
+					if ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx))
+						ProcessRawByte(RepositoryType.Bidir, b, attribute);
+
+					if (chunk.Direction == IODirection.Rx)
+						ProcessRawByte(RepositoryType.Rx,    b, attribute);
+
+					// Handle stop of timed line breaks:
+					if (displaySettings.TimedLineBreak.Enabled)
+					{
+						if (!IsReloading)
+						{
+							if (lineState.Position == LinePosition.End)
+								lbt.Stop();
+						}
+					}
 				}
 
 				// Enforce line break if requested:
 				if (TerminalSettings.Display.ChunkLineBreakEnabled)
 				{
-					EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
-					EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
-					EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+					if (chunk.Direction == IODirection.Tx)
+						EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+
+					if ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx))
+						EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
+
+					if (chunk.Direction == IODirection.Rx)
+						EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
 				}
 
 				// Note that timed line breaks are processed asynchronously, always. Alternatively, the chunk
@@ -557,7 +561,44 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>Must be abstract/virtual because settings differ among text and binary.</remarks>
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private members
+		/// <see cref="txLineBreakTimeout"/> and <see cref="rxLineBreakTimeout"/>.
+		/// </remarks>
+		protected void ProcessRawByte(RepositoryType repositoryType, byte b, LineChunkAttribute attribute)
+		{
+			// Handle start/restart of timed line breaks:
+			if (displaySettings.TimedLineBreak.Enabled)
+			{
+				if (!IsReloading)
+				{
+					if (lineState.Position == LinePosition.Begin)
+						lineState.BreakTimeout.Start();
+					else
+						lineState.BreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
+				}
+				else // In case of reloading, timed line breaks are synchronously evaluated here:
+				{
+					EvaluateTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				}
+			}
+
+			ProcessRawByte(b, attribute);
+
+			// Handle stop of timed line breaks:
+			if (displaySettings.TimedLineBreak.Enabled)
+			{
+				if (!IsReloading)
+				{
+					if (lineState.Position == LinePosition.End)
+						lineState.BreakTimeout.Stop();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Must be abstract/virtual because settings differ among text and binary.
+		/// </remarks>
 		protected abstract void ProcessRawByte(byte b, LineChunkAttribute attribute);
 
 	#if (WITH_SCRIPTING)
@@ -699,6 +740,124 @@ namespace YAT.Domain
 
 		/// <remarks>Must be abstract/virtual because settings differ among text and binary.</remarks>
 		protected abstract void DoLineEnd(RepositoryType repositoryType, DateTime ts, string dev, out DisplayElementCollection elementsToAdd, out DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine);
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string dev, IODirection dir, out DisplayElementCollection lp)
+		{
+			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
+			    TerminalSettings.Display.ShowDevice    ||
+			    TerminalSettings.Display.ShowDirection)
+			{
+				lp = new DisplayElementCollection(10); // Preset the required capacity to improve memory management.
+
+				if (TerminalSettings.Display.ShowTimeStamp)
+				{
+					lp.Add(new DisplayElement.TimeStampInfo(ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+				}
+
+				if (TerminalSettings.Display.ShowTimeSpan)
+				{
+					lp.Add(new DisplayElement.TimeSpanInfo(diff, TerminalSettings.Display.TimeSpanFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+				}
+
+				if (TerminalSettings.Display.ShowTimeDelta)
+				{
+					lp.Add(new DisplayElement.TimeDeltaInfo(delta, TerminalSettings.Display.TimeDeltaFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+				}
+
+				if (TerminalSettings.Display.ShowDevice)
+				{
+					lp.Add(new DisplayElement.DeviceInfo(dev, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+				}
+
+				if (TerminalSettings.Display.ShowDirection)
+				{
+					lp.Add(new DisplayElement.DirectionInfo((Direction)dir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+				}
+			}
+			else
+			{
+				lp = null;
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
+		protected virtual void PrepareLineEndInfo(int length, TimeSpan duration, out DisplayElementCollection lp)
+		{
+			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count"/"char count" and "line duration".
+			{
+				lp = new DisplayElementCollection(4); // Preset the required capacity to improve memory management.
+
+				if (TerminalSettings.Display.ShowLength)
+				{
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+
+					lp.Add(new DisplayElement.DataLength(length, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
+				}
+
+				if (TerminalSettings.Display.ShowDuration)
+				{
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+
+					lp.Add(new DisplayElement.TimeDurationInfo(duration, TerminalSettings.Display.TimeDurationFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may be both!
+				}
+			}
+			else
+			{
+				lp = null;
+			}
+		}
+
+		#endregion
+
+		#region Timer Events
+		//------------------------------------------------------------------------------------------
+		// Timer Events
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
+		/// </remarks>
+		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		{
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
+			}
+		}
+
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
+		/// </remarks>
+		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		{
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
+				EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
+			}
+		}
 
 		#endregion
 
