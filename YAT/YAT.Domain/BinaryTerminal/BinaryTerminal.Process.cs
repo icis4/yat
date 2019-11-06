@@ -62,18 +62,6 @@ namespace YAT.Domain
 		private BinaryLineState rxBidirBinaryLineState;
 		private BinaryLineState rxUnidirBinaryLineState;
 
-		/// <remarks>
-		/// Timed line breaks are <see cref="BinaryTerminal"/> specific because settings are
-		/// defined in <see cref="BinaryTerminalSettings"/>.
-		/// </remarks>
-		private LineBreakTimeout txLineBreakTimeout;
-
-		/// <remarks>
-		/// Timed line breaks are <see cref="BinaryTerminal"/> specific because settings are
-		/// defined in <see cref="BinaryTerminalSettings"/>.
-		/// </remarks>
-		private LineBreakTimeout rxLineBreakTimeout;
-
 		#endregion
 
 		#region Non-Public Methods
@@ -103,12 +91,6 @@ namespace YAT.Domain
 
 					this.txUnidirBinaryLineState = new BinaryLineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore));
 					this.txBidirBinaryLineState  = new BinaryLineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore));
-
-					if (this.txLineBreakTimeout != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-						this.txLineBreakTimeout.Elapsed -= txLineBreakTimeout_Elapsed;
-
-					this.txLineBreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-					this.txLineBreakTimeout.Elapsed += txLineBreakTimeout_Elapsed;
 				}
 
 				// Rx:
@@ -123,18 +105,29 @@ namespace YAT.Domain
 
 					this.rxUnidirBinaryLineState = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
 					this.rxBidirBinaryLineState = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
-
-					if (this.rxLineBreakTimeout != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-						this.rxLineBreakTimeout.Elapsed -= rxLineBreakTimeout_Elapsed;
-
-					this.rxLineBreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-					this.rxLineBreakTimeout.Elapsed += rxLineBreakTimeout_Elapsed;
 				}
 			}
 		}
 
+		/// <summary></summary>
+		protected override void ProcessRawByte(byte b, LineChunkAttribute attribute)
+		{
+			// Line begin and time stamp:
+			if (lineState.Position == LinePosition.Begin)
+				DoLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
+
+			// Content:
+			if (lineState.Position == LinePosition.Content)
+				DoContent(displaySettings, lineState, chunk.Device, chunk.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
+
+			// Line end and length:
+			if (lineState.Position == LinePosition.End)
+				DoLineEnd(lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+		}
+
 		private void DoLineBegin(LineState lineState, DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd)
 		{
+			var lineState = GetLineState(repositoryType);
 			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
 				this.bidirLineState.LastLineTimeStamp = ts;
 
@@ -431,37 +424,6 @@ namespace YAT.Domain
 			// regarding defect #129 "true support for binary terminals" for more information.
 		}
 	#endif // WITH_SCRIPTING
-
-		#endregion
-
-		#region Timer Events
-		//------------------------------------------------------------------------------------------
-		// Timer Events
-		//------------------------------------------------------------------------------------------
-
-		/// <remarks>
-		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
-		/// </remarks>
-		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
-			{
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
-			}
-		}
-
-		/// <remarks>
-		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
-		/// </remarks>
-		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
-			{
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
-			}
-		}
 
 		#endregion
 
