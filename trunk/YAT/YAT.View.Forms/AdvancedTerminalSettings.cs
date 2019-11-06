@@ -1093,8 +1093,8 @@ namespace YAT.View.Forms
 			bool isText   = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text);
 			bool isBinary = (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Binary);
 
-			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsUsbSerialHid;
+			bool isSerialPort   = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.SerialPort);
+			bool isUsbSerialHid = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.UsbSerialHid);
 
 			this.isSettingControls.Enter();
 			try
