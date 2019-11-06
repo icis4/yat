@@ -621,8 +621,8 @@ namespace YAT.View.Controls
 				else
 					SetTextFocusState(TextFocusState.IsLeavingParent);
 
-				SetSendControls(); // Required to restore "Send Text (F3)"
-			}                      // after "Send Text w/o EOL (Ctrl+F3)".
+				SetSendControls(); // Required to restore "Send Text [F3]"
+			}                      // after "Send Text w/o EOL [Ctrl+F3]".
 			DebugUserInputLeave();
 		}
 
@@ -1060,15 +1060,15 @@ namespace YAT.View.Controls
 				// ...YAT.View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 				// Changes here may have to be applied there too.
 
-				var text = "Send Text (F3)";
+				var text = "Send Text [F3]";
 				if (WithoutEolIsRequestedAndAllowed)
-					text = "Send Text w/o EOL (Ctrl+F3)";
+					text = "Send Text w/o EOL [Ctrl+F3]";
 
 				bool enabled = this.terminalIsReadyToSend;
 				if (this.sendImmediately)
 				{
 					if (isTextTerminal)
-						text = "Send EOL (F3)";
+						text = "Send EOL [F3]";
 					else
 						enabled = false;
 				}
