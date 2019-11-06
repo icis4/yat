@@ -161,8 +161,8 @@ namespace MKY.Time
 				{
 					if (this.updateTicker != null)
 					{
-						this.updateTicker.Dispose();
 						EventHandlerHelper.RemoveAllEventHandlers(this.updateTicker);
+						this.updateTicker.Dispose();
 					}
 				}
 
