@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -484,38 +485,40 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
-				LineBreakTimeout lbt = null;
+				bool txIsAffected    =  (chunk.Direction == IODirection.Tx);
+				bool bidirIsAffected = ((chunk.Direction == IODirection.Tx) ||(chunk.Direction == IODirection.Rx));
+				bool rxIsAffected    =                                        (chunk.Direction == IODirection.Rx);
+
+				LineState lineState;
+				TimeoutSettingTuple timedLineBreak;
+				LineBreakTimeout lineBreakTimeout;
 				switch (chunk.Direction)
 				{
-					case IODirection.Tx: lbt = txLineBreakTimeout; break;
-					case IODirection.Rx: lbt = rxLineBreakTimeout; break;
-					default: throw ( // A chunk must ever be tied to Tx or Rx.
+					case IODirection.Tx: lineState = txLineState; timedLineBreak = TerminalSettings.TxDisplayTimedLineBreak; lineBreakTimeout = txLineBreakTimeout; break;
+					case IODirection.Rx: lineState = rxLineState; timedLineBreak = TerminalSettings.RxDisplayTimedLineBreak; lineBreakTimeout = rxLineBreakTimeout; break;
+
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				// Check whether device or direction has changed, a chunk is always tied to device and direction:
 				{
-					if (chunk.Direction == IODirection.Tx)
-						EvaluateAndSignalLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
-
-					if ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx))
-						EvaluateAndSignalLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
-
-					if (chunk.Direction == IODirection.Rx)
-						EvaluateAndSignalLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+					if (txIsAffected)    { EvaluateAndSignalLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+					if (bidirIsAffected) { EvaluateAndSignalLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+					if (rxIsAffected)    { EvaluateAndSignalLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
 				}
 
 				// Process chunk:
 				foreach (byte b in chunk.Content)
 				{
 					// Handle start/restart of timed line breaks:
-					if (displaySettings.TimedLineBreak.Enabled)
+					if (timedLineBreak.Enabled)
 					{
 						if (!IsReloading)
 						{
-							if (lineState.Position == LinePosition.Begin)
-								lbt.Start();
+							if (lineState.Position == LinePosition.Begin) // Just checking for Tx or Rx is sufficient.
+								lineBreakTimeout.Start();
 							else
-								lbt.Restart(); // Restart as timeout refers to time after last received byte.
+								lineBreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
 						}
 						else // In case of reloading, timed line breaks are synchronously evaluated here:
 						{
@@ -523,22 +526,17 @@ namespace YAT.Domain
 						}
 					}
 
-					if (chunk.Direction == IODirection.Tx)
-						ProcessRawByte(RepositoryType.Tx,    b, attribute);
-
-					if ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx))
-						ProcessRawByte(RepositoryType.Bidir, b, attribute);
-
-					if (chunk.Direction == IODirection.Rx)
-						ProcessRawByte(RepositoryType.Rx,    b, attribute);
+					if (txIsAffected)    { ProcessRawByte(RepositoryType.Tx,    b, attribute); }
+					if (bidirIsAffected) { ProcessRawByte(RepositoryType.Bidir, b, attribute); }
+					if (rxIsAffected)    { ProcessRawByte(RepositoryType.Rx,    b, attribute); }
 
 					// Handle stop of timed line breaks:
-					if (displaySettings.TimedLineBreak.Enabled)
+					if (timedLineBreak.Enabled)
 					{
 						if (!IsReloading)
 						{
-							if (lineState.Position == LinePosition.End)
-								lbt.Stop();
+							if (lineState.Position == LinePosition.End) // Just checking for Tx or Rx is sufficient.
+								lineBreakTimeout.Stop();
 						}
 					}
 				}
@@ -546,18 +544,17 @@ namespace YAT.Domain
 				// Enforce line break if requested:
 				if (TerminalSettings.Display.ChunkLineBreakEnabled)
 				{
-					if (chunk.Direction == IODirection.Tx)
-						EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
-
-					if ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx))
-						EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction);
-
-					if (chunk.Direction == IODirection.Rx)
-						EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction);
+					if (txIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+					if (bidirIsAffected) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+					if (rxIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
 				}
 
-				// Note that timed line breaks are processed asynchronously, always. Alternatively, the chunk
-				// loop above could check for timeout on each byte. However, this is considered too inefficient.
+				// Note that processing is done sequentially for all monitors, in order to get more
+				// or less synchronized update for Tx/Bidir and Bidir/Rx.
+				//
+				// Also note that timed line breaks are processed asynchronously, except on reload.
+				// Alternatively, the chunk loop above could check for timeout on each byte.
+				// However, this is considered too inefficient.
 			}
 		}
 
