@@ -839,6 +839,9 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
+				if (IsDisposed)
+					return; // Ensure not to handle async timer callbacks during closing anymore.
+
 				EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
 				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
 			}
@@ -851,6 +854,9 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
+				if (IsDisposed)
+					return; // Ensure not to handle async timer callbacks during closing anymore.
+
 				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
 				EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
 			}
