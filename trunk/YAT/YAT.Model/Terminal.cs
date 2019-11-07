@@ -2790,8 +2790,8 @@ namespace YAT.Model
 
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			// Log:
 			if (this.log.AnyControlIsOn)
@@ -2831,8 +2831,8 @@ namespace YAT.Model
 
 		private void terminal_IOControlChanged(object sender, Domain.IOControlEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			// Log:
 			if ((e.Texts != null) && (e.Texts.Count > 0))
@@ -2855,8 +2855,8 @@ namespace YAT.Model
 
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			// Log:
 			if (this.log.AnyControlIsOn)                                 // Status text is always included (so far).
@@ -2919,8 +2919,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, Domain.RawChunkEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			var currentTickStamp = Stopwatch.GetTimestamp();
 			if (currentTickStamp >= this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp)
@@ -2986,8 +2986,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, Domain.RawChunkEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			var currentTickStamp = Stopwatch.GetTimestamp();
 			if (currentTickStamp >= this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp)
@@ -3144,8 +3144,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnDisplayElementsTxAdded(e);
 
@@ -3156,8 +3156,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnDisplayElementsBidirAdded(e);
 
@@ -3168,8 +3168,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnDisplayElementsRxAdded(e);
 
@@ -3180,8 +3180,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnCurrentDisplayLineTxReplaced(e);
 
@@ -3192,8 +3192,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnCurrentDisplayLineBidirReplaced(e);
 
@@ -3204,8 +3204,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnCurrentDisplayLineRxReplaced(e);
 
@@ -3216,8 +3216,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnCurrentDisplayLineTxCleared(e);
 
@@ -3228,8 +3228,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnCurrentDisplayLineBidirCleared(e);
 
@@ -3240,8 +3240,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnCurrentDisplayLineRxCleared(e);
 
@@ -3252,8 +3252,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			// Count:
 			this.txLineCount += e.Lines.Count;
@@ -3278,8 +3278,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 		////// Count:
 		////this.bidirLineCount += e.Lines.Count would technically be possible, but doesn't make much sense.
@@ -3304,8 +3304,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			// Count:
 			this.rxLineCount += e.Lines.Count;
@@ -3395,8 +3395,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnRepositoryTxCleared(e);
 		}
@@ -3405,8 +3405,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnRepositoryBidirCleared(e);
 		}
@@ -3415,8 +3415,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnRepositoryRxCleared(e);
 		}
@@ -3425,8 +3425,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxReloaded(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnRepositoryTxReloaded(e);
 		}
@@ -3435,8 +3435,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirReloaded(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnRepositoryBidirReloaded(e);
 		}
@@ -3445,8 +3445,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxReloaded(object sender, EventArgs e)
 		{
-			if (IsDisposed) // Ensure not to handle events during closing anymore.
-				return;
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
 
 			OnRepositoryRxReloaded(e);
 		}
