@@ -286,7 +286,7 @@ namespace YAT.View.Controls
 					case Domain.RepositoryType.Bidir: AppendTxStatus(sb); sb.Append(Environment.NewLine); AppendRxStatus(sb); break;
 					case Domain.RepositoryType.Rx:                                                        AppendRxStatus(sb); break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + RepositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + RepositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 				this.statusText = sb.ToString();
 

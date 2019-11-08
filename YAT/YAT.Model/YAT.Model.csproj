@@ -94,8 +94,6 @@
     <Compile Include="Terminal.cs" />
     <Compile Include="TerminalIds.cs" />
     <Compile Include="Utilities\AutoTriggerHelper.cs" />
-    <Compile Include="Utilities\IOStatusHelper.cs" />
-    <Compile Include="Utilities\CaptionHelper.cs" />
     <Compile Include="Utilities\ErrorHelper.cs" />
     <Compile Include="Workspace.cs" />
   </ItemGroup>

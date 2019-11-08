@@ -105,7 +105,6 @@
     <Compile Include="Types\PredefinedCommandPage.cs" />
     <Compile Include="Types\PredefinedCommandPageCollection.cs" />
     <Compile Include="Types\PredefinedCommandPageLayout.cs" />
-    <Compile Include="Types\Enums.cs" />
     <Compile Include="Types\WorkspaceLayout.cs" />
   </ItemGroup>
   <ItemGroup>

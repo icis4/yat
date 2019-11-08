@@ -98,8 +98,6 @@ Important changes:
 - Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
   break lines at the same location as the bidirectional monitor panel (bug #477).
 - Element processing refactored (preparing feature reqs. #19, #74 and fix of bugs #176, #477, #478).
-- [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
-  [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
 - Project/Assembly structure slightly refined (preparing feature request #74).
 
 Fixed bugs:

@@ -86,7 +86,6 @@
     </Compile>
     <Compile Include="BinaryTerminal\BinaryTerminal.Process.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.Send.cs" />
-    <Compile Include="BinaryTerminal\BinaryLineState.cs" />
     <Compile Include="LineBreakTimeout.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
     <Compile Include="BinarySettings\BinaryDisplaySettings.cs" />
@@ -117,13 +116,11 @@
     <Compile Include="Settings\StatusSettings.cs" />
     <Compile Include="Settings\IOSettings.cs" />
     <Compile Include="Settings\Structs.cs" />
-    <Compile Include="IOControlState.cs" />
+    <Compile Include="Structs.cs" />
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\InfoEnclosure.cs" />
-    <Compile Include="Terminal\LineState.cs" />
     <Compile Include="Terminal\Terminal.Process.cs" />
-    <Compile Include="Terminal\Terminal.Repository.cs" />
     <Compile Include="Terminal\Terminal.Send.cs" />
     <Compile Include="Terminal\TimeDeltaFormatPreset.cs" />
     <Compile Include="Terminal\TimeSpanFormatPreset.cs" />
@@ -148,13 +145,12 @@
     <Compile Include="Settings\TerminalSettings.cs" />
     <Compile Include="Settings\DisplaySettings.cs" />
     <Compile Include="Settings\SendSettings.cs" />
-    <Compile Include="TextTerminal\TextLineState.cs" />
     <Compile Include="TextTerminal\CharSubstitution.cs" />
     <Compile Include="TextSettings\TextTerminalSettings.cs" />
     <Compile Include="TextTerminal\SubstitutionParser.cs" />
     <Compile Include="Terminal\Terminal.cs" />
     <Compile Include="EventArgs.cs" />
-    <Compile Include="Terminal\Enums.cs" />
+    <Compile Include="Terminal\RepositoryType.cs" />
     <Compile Include="TextTerminal\TextTerminal.Process.cs" />
     <Compile Include="TextTerminal\TextTerminal.Send.cs" />
     <Compile Include="TextTerminal\TextTerminal.cs" />

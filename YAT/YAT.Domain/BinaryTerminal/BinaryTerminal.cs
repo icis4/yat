@@ -165,6 +165,38 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		#region Repository Access
+		//------------------------------------------------------------------------------------------
+		// Repository Access
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>Ensure that states are completely reset.</remarks>
+		public override bool RefreshRepositories()
+		{
+			AssertNotDisposed();
+
+			InitializeStates();
+			return (base.RefreshRepositories());
+		}
+
+		/// <remarks>Ensure that states are completely reset.</remarks>
+		protected override void ClearMyRepository(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			InitializeStates();
+			base.ClearMyRepository(repositoryType);
+		}
+
+		#endregion
+
+		#endregion
+
 		#region Non-Public Methods
 		//==========================================================================================
 		// Non-Public Methods

@@ -1203,7 +1203,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Clear.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
 			this.toolStripButton_MainTool_Terminal_Clear.Name = "toolStripButton_MainTool_Terminal_Clear";
 			this.toolStripButton_MainTool_Terminal_Clear.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Clear.Text = "Clear Terminal Monitor";
+			this.toolStripButton_MainTool_Terminal_Clear.Text = "Clear Terminal Monitor(s)";
 			this.toolStripButton_MainTool_Terminal_Clear.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Clear_Click);
 			// 
 			// toolStripButton_MainTool_Terminal_Refresh
@@ -1212,7 +1212,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Terminal_Refresh.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_refresh_16x16;
 			this.toolStripButton_MainTool_Terminal_Refresh.Name = "toolStripButton_MainTool_Terminal_Refresh";
 			this.toolStripButton_MainTool_Terminal_Refresh.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Refresh.Text = "Refresh Terminal Monitor";
+			this.toolStripButton_MainTool_Terminal_Refresh.Text = "Refresh Terminal Monitor(s)";
 			this.toolStripButton_MainTool_Terminal_Refresh.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Refresh_Click);
 			// 
 			// toolStripButton_MainTool_Terminal_CopyToClipboard

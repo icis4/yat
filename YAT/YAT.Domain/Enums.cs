@@ -22,17 +22,24 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace YAT.Domain
 {
-	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
-	// warnings for each undocumented member below. Documenting each member makes little sense
-	// since they pretty much tell their purpose and documentation tags between the members
-	// makes the code less readable.
-	#pragma warning disable 1591
+	/// <summary></summary>
+	public enum SendMode
+	{
+		/// <summary></summary>
+		Text,
+
+		/// <summary></summary>
+		File
+	}
 
 	/// <summary></summary>
 	public enum IODirection
 	{
+		/// <summary></summary>
 		None = MKY.IO.Serial.Direction.None,
 
 		/// <remarks>YAT uses term 'Tx' instead of 'Output'.</remarks>
@@ -41,18 +48,49 @@ namespace YAT.Domain
 
 		/// <remarks>YAT uses term 'Rx' instead of 'Input'.</remarks>
 		/// <remarks>YAT sorts 'Rx' after 'Tx'.</remarks>
-		Rx = MKY.IO.Serial.Direction.Input
+		Rx = MKY.IO.Serial.Direction.Input,
+
+		/// <summary></summary>
+		Bidir = 3
 	}
 
 	/// <summary></summary>
 	public enum IOErrorSeverity
 	{
+		/// <summary></summary>
 		Acceptable = MKY.IO.Serial.ErrorSeverity.Acceptable,
-		Severe     = MKY.IO.Serial.ErrorSeverity.Severe,
-		Fatal      = MKY.IO.Serial.ErrorSeverity.Fatal
+
+		/// <summary></summary>
+		Severe = MKY.IO.Serial.ErrorSeverity.Severe,
+
+		/// <summary></summary>
+		Fatal = MKY.IO.Serial.ErrorSeverity.Fatal
 	}
 
-	#pragma warning restore 1591
+	/// <remarks>
+	/// So far there can only be one attribute, thus named "Attribute" and not marked [Flags].
+	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Enum actually implements an attribute, an attribute related to display elements.")]
+	public enum LineChunkAttribute
+	{
+		/// <summary></summary>
+		None =  0,
+
+		/// <summary>Resulting line shall be highlighted.</summary>
+		Highlight,
+
+		/// <summary>Filtering is active; resulting line shall be included.</summary>
+		Filter,
+
+		/// <summary>Filtering is active; resulting line may be excluded.</summary>
+		SuppressIfNotFiltered,
+
+		/// <summary>Suppressing is active; resulting line may be excluded.</summary>
+		SuppressIfSubsequentlyTriggered,
+
+		/// <summary>Suppressing is active; resulting line shall be excluded.</summary>
+		Suppress
+	}
 }
 
 //==================================================================================================

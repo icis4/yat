@@ -550,17 +550,6 @@ namespace YAT.View.Forms
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  monitorIsDefined;
-
-					if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
-					{
-						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear";   // Indicating "All" for a single
-						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   panel would be confusing.
-					}
-					else
-					{
-						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear All";
-						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh All";
-					}
 				}
 				else
 				{
@@ -569,9 +558,6 @@ namespace YAT.View.Forms
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
-
-					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear";   // Same as in designer generated code,
-					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   by default only bidir is visible.
 				}
 
 				toolStripMenuItem_TerminalMenu_Terminal_SelectAll .Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+A]
@@ -1171,8 +1157,8 @@ namespace YAT.View.Forms
 
 				if (this.settingsRoot != null)
 				{
-					isText       = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
-					isSerialPort = (this.settingsRoot.IOType       == Domain.IOType.SerialPort);
+					isText = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
+					isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 				}
 
 				// Layout, disable monitor item if the other monitors are hidden:
@@ -1332,11 +1318,11 @@ namespace YAT.View.Forms
 		{
 			this.terminal.ResetIOCountAndRate();
 
-			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
+			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
 			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-			// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
-			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
-			// manually be triggered here:
+			// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and
+			// 'terminal_DisplayLinesSent/Received' handlers further below. As a consequence,
+			// the update must manually be triggered:
 
 			SetDataCountAndRateStatus();
 		}
@@ -1462,7 +1448,7 @@ namespace YAT.View.Forms
 			{
 				bool isSerialPort = true;
 				if (this.settingsRoot != null)
-					isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
+					isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
 				foreach (ToolStripMenuItem item in this.menuItems_preset)
 					item.Enabled = isSerialPort;
@@ -1549,7 +1535,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_ShowDevice.Checked      = this.settingsRoot.Display.ShowDevice;
 				toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
-				bool isText = (terminalType == Domain.TerminalType.Text);
+				bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
 				toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = (isText);
 				toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
 
@@ -1659,11 +1645,11 @@ namespace YAT.View.Forms
 
 			this.terminal.ResetIOCountAndRate();
 
-			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
+			// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons
 			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-			// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
-			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
-			// manually be triggered here:
+			// Instead, the update is done by the 'terminal_DisplayElementsSent/Received' and
+			// 'terminal_DisplayLinesSent/Received' handlers further below. As a consequence,
+			// the update must manually be triggered:
 
 			SetDataCountAndRateStatus();
 		}
@@ -3282,7 +3268,7 @@ namespace YAT.View.Forms
 			{
 				bool isSerialPort = true;
 				if (this.settingsRoot != null)
-					isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
+					isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
 				// Flow control count:
 				bool showFlowControlOptions = this.settingsRoot.Terminal.IO.FlowControlIsInUse;
@@ -4532,7 +4518,7 @@ namespace YAT.View.Forms
 							break;
 						}
 
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.lastMonitorSelection + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.lastMonitorSelection + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
@@ -4947,7 +4933,6 @@ namespace YAT.View.Forms
 						activityState = MonitorActivityState.Pending;
 				}
 			}
-
 			monitor_Tx   .ActivityState = activityState;
 			monitor_Bidir.ActivityState = activityState;
 			monitor_Rx   .ActivityState = activityState;
@@ -4966,110 +4951,23 @@ namespace YAT.View.Forms
 			monitor_Rx   .ShowDataStatus = showCountAndRate;
 		}
 
-		private void ClearMonitor(Domain.RepositoryType repositoryType)
-		{
-			try
-			{
-				SetFixedStatusText("Clearing...");
-				Cursor = Cursors.WaitCursor;
-
-				switch (repositoryType)
-				{
-					case Domain.RepositoryType.None:
-						// Nothing to do.
-						break;
-
-					case Domain.RepositoryType.Tx:
-					case Domain.RepositoryType.Bidir:
-					case Domain.RepositoryType.Rx:
-						this.terminal.ClearRepository(repositoryType);
-						break;
-
-					default:
-						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				Cursor = Cursors.Default;
-				SetTimedStatusText("Clearing done");
-			}
-			catch
-			{
-				Cursor = Cursors.Default;
-				SetFixedStatusText("Clearing failed!");
-			}
-		}
-
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private void ClearMonitors()
+		private void ReloadMonitors()
 		{
 			try
 			{
-				SetFixedStatusText("Clearing...");
-				Cursor = Cursors.WaitCursor;
-
-				this.terminal.ClearRepositories();
-
-				Cursor = Cursors.Default;
-				SetTimedStatusText("Clearing done");
-			}
-			catch
-			{
-				Cursor = Cursors.Default;
-				SetFixedStatusText("Clearing failed!");
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private void RefreshMonitor(Domain.RepositoryType repositoryType)
-		{
-			try
-			{
-				SetFixedStatusText("Refreshing...");
-				Cursor = Cursors.WaitCursor;
-
-				switch (repositoryType)
-				{
-					case Domain.RepositoryType.None:
-						// Nothing to do.
-						break;
-
-					case Domain.RepositoryType.Tx:
-					case Domain.RepositoryType.Bidir:
-					case Domain.RepositoryType.Rx:
-						this.terminal.RefreshRepository(repositoryType);
-						break;
-
-					default:
-						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				Cursor = Cursors.Default;
-				SetTimedStatusText("Refreshing done");
-			}
-			catch
-			{
-				Cursor = Cursors.Default;
-				SetFixedStatusText("Refreshing failed!");
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private void RefreshMonitors()
-		{
-			try
-			{
-				SetFixedStatusText("Refreshing...");
+				SetFixedStatusText("Reloading...");
 				Cursor = Cursors.WaitCursor;
 
 				this.terminal.RefreshRepositories();
 
 				Cursor = Cursors.Default;
-				SetTimedStatusText("Refreshing done");
+				SetTimedStatusText("Reloading done");
 			}
 			catch
 			{
 				Cursor = Cursors.Default;
-				SetFixedStatusText("Refreshing failed!");
+				SetFixedStatusText("Reloading failed!");
 			}
 		}
 
@@ -5080,7 +4978,8 @@ namespace YAT.View.Forms
 			{
 				SetFixedStatusText("Reformatting...");
 				Cursor = Cursors.WaitCursor;
-				                            //// Clone settings to ensure decoupling:
+
+				                             // Clone settings to ensure decoupling:
 				monitor_Tx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
 				monitor_Bidir.FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
 				monitor_Rx   .FormatSettings = new Format.Settings.FormatSettings(this.settingsRoot.Format);
@@ -5093,6 +4992,54 @@ namespace YAT.View.Forms
 				Cursor = Cursors.Default;
 				SetFixedStatusText("Reformatting failed!");
 			}
+		}
+
+		private void ClearMonitor(Domain.RepositoryType repositoryType)
+		{
+			switch (repositoryType)
+			{
+				case Domain.RepositoryType.None:
+					// Nothing to do.
+					break;
+
+				case Domain.RepositoryType.Tx:
+				case Domain.RepositoryType.Bidir:
+				case Domain.RepositoryType.Rx:
+					this.terminal.ClearRepository(repositoryType);
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		private void RefreshMonitor(Domain.RepositoryType repositoryType)
+		{
+			switch (repositoryType)
+			{
+				case Domain.RepositoryType.None:
+					// Nothing to do.
+					break;
+
+				case Domain.RepositoryType.Tx:
+				case Domain.RepositoryType.Bidir:
+				case Domain.RepositoryType.Rx:
+					this.terminal.RefreshRepository(repositoryType);
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		private void ClearMonitors()
+		{
+			this.terminal.ClearRepositories();
+		}
+
+		private void RefreshMonitors()
+		{
+			this.terminal.RefreshRepositories();
 		}
 
 		#endregion
@@ -5471,10 +5418,10 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Enter();
 				try
-				{              // Layout must be changed first! Otherwise pages may not be complete!
-					predefined.PageLayout = this.settingsRoot.PredefinedCommand.PageLayout;
+				{              // See remarks!
 					predefined.Pages      = this.settingsRoot.PredefinedCommand.Pages;
-				}              // See remarks of this property!
+					predefined.PageLayout = this.settingsRoot.PredefinedCommand.PageLayout;
+				}
 				finally
 				{
 					this.isSettingControls.Leave();
@@ -5604,36 +5551,28 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged               += terminal_IOChanged;
-				this.terminal.IOControlChanged        += terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly;  // See further below for reason.
-				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
-				this.terminal.IOError                 += terminal_IOError;
+				this.terminal.IOChanged                          += terminal_IOChanged;
+				this.terminal.IOControlChanged                   += terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged               += terminal_IOConnectTimeChanged;
+			////this.terminal.IOCountChanged_Promptly            += terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly             += terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated            += terminal_IORateChanged_Decimated;
+				this.terminal.IOError                            += terminal_IOError;
 
-				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
-				this.terminal.DisplayElementsBidirAdded       += terminal_DisplayElementsBidirAdded;
-				this.terminal.DisplayElementsRxAdded          += terminal_DisplayElementsRxAdded;
-				this.terminal.CurrentDisplayLineTxReplaced    += terminal_CurrentDisplayLineTxReplaced;
-				this.terminal.CurrentDisplayLineBidirReplaced += terminal_CurrentDisplayLineBidirReplaced;
-				this.terminal.CurrentDisplayLineRxReplaced    += terminal_CurrentDisplayLineRxReplaced;
-				this.terminal.CurrentDisplayLineTxCleared     += terminal_CurrentDisplayLineTxCleared;
-				this.terminal.CurrentDisplayLineBidirCleared  += terminal_CurrentDisplayLineBidirCleared;
-				this.terminal.CurrentDisplayLineRxCleared     += terminal_CurrentDisplayLineRxCleared;
-				this.terminal.DisplayLinesTxAdded             += terminal_DisplayLinesTxAdded;
-				this.terminal.DisplayLinesBidirAdded          += terminal_DisplayLinesBidirAdded;
-				this.terminal.DisplayLinesRxAdded             += terminal_DisplayLinesRxAdded;
+				this.terminal.DisplayElementsSent                += terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived            += terminal_DisplayElementsReceived;
+				this.terminal.CurrentDisplayLineSentReplaced     += terminal_CurrentDisplayLineSentReplaced;
+				this.terminal.CurrentDisplayLineReceivedReplaced += terminal_CurrentDisplayLineReceivedReplaced;
+				this.terminal.CurrentDisplayLineSentCleared      += terminal_CurrentDisplayLineSentCleared;
+				this.terminal.CurrentDisplayLineReceivedCleared  += terminal_CurrentDisplayLineReceivedCleared;
+				this.terminal.DisplayLinesSent                   += terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived               += terminal_DisplayLinesReceived;
 
-				this.terminal.RepositoryTxCleared             += terminal_RepositoryTxCleared;
-				this.terminal.RepositoryBidirCleared          += terminal_RepositoryBidirCleared;
-				this.terminal.RepositoryRxCleared             += terminal_RepositoryRxCleared;
-				this.terminal.RepositoryTxReloaded            += terminal_RepositoryTxReloaded;
-				this.terminal.RepositoryBidirReloaded         += terminal_RepositoryBidirReloaded;
-				this.terminal.RepositoryRxReloaded            += terminal_RepositoryRxReloaded;
+				this.terminal.RepositoryCleared                  += terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded                 += terminal_RepositoryReloaded;
 
-				this.terminal.AutoResponseCountChanged        += terminal_AutoResponseCountChanged;
-				this.terminal.AutoActionCountChanged          += terminal_AutoActionCountChanged;
+				this.terminal.AutoResponseCountChanged           += terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionCountChanged             += terminal_AutoActionCountChanged;
 
 				this.terminal.FixedStatusTextRequest             += terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             += terminal_TimedStatusTextRequest;
@@ -5653,36 +5592,28 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged               -= terminal_IOChanged;
-				this.terminal.IOControlChanged        -= terminal_IOControlChanged;
-				this.terminal.IOConnectTimeChanged    -= terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly -= terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly  -= terminal_IORateChanged_Promptly;  // See further below for reason.
-				this.terminal.IORateChanged_Decimated -= terminal_IORateChanged_Decimated;
-				this.terminal.IOError                 -= terminal_IOError;
+				this.terminal.IOChanged                          -= terminal_IOChanged;
+				this.terminal.IOControlChanged                   -= terminal_IOControlChanged;
+				this.terminal.IOConnectTimeChanged               -= terminal_IOConnectTimeChanged;
+			////this.terminal.IOCountChanged_Promptly            -= terminal_IOCountChanged_Promptly; // See further below for reason.
+			////this.terminal.IORateChanged_Promptly             -= terminal_IORateChanged_Promptly;  // See further below for reason.
+				this.terminal.IORateChanged_Decimated            -= terminal_IORateChanged_Decimated;
+				this.terminal.IOError                            -= terminal_IOError;
 
-				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
-				this.terminal.DisplayElementsBidirAdded       -= terminal_DisplayElementsBidirAdded;
-				this.terminal.DisplayElementsRxAdded          -= terminal_DisplayElementsRxAdded;
-				this.terminal.CurrentDisplayLineTxReplaced    -= terminal_CurrentDisplayLineTxReplaced;
-				this.terminal.CurrentDisplayLineBidirReplaced -= terminal_CurrentDisplayLineBidirReplaced;
-				this.terminal.CurrentDisplayLineRxReplaced    -= terminal_CurrentDisplayLineRxReplaced;
-				this.terminal.CurrentDisplayLineTxCleared     -= terminal_CurrentDisplayLineTxCleared;
-				this.terminal.CurrentDisplayLineBidirCleared  -= terminal_CurrentDisplayLineBidirCleared;
-				this.terminal.CurrentDisplayLineRxCleared     -= terminal_CurrentDisplayLineRxCleared;
-				this.terminal.DisplayLinesTxAdded             -= terminal_DisplayLinesTxAdded;
-				this.terminal.DisplayLinesBidirAdded          -= terminal_DisplayLinesBidirAdded;
-				this.terminal.DisplayLinesRxAdded             -= terminal_DisplayLinesRxAdded;
+				this.terminal.DisplayElementsSent                -= terminal_DisplayElementsSent;
+				this.terminal.DisplayElementsReceived            -= terminal_DisplayElementsReceived;
+				this.terminal.CurrentDisplayLineSentReplaced     -= terminal_CurrentDisplayLineSentReplaced;
+				this.terminal.CurrentDisplayLineReceivedReplaced -= terminal_CurrentDisplayLineReceivedReplaced;
+				this.terminal.CurrentDisplayLineSentCleared      -= terminal_CurrentDisplayLineSentCleared;
+				this.terminal.CurrentDisplayLineReceivedCleared  -= terminal_CurrentDisplayLineReceivedCleared;
+				this.terminal.DisplayLinesSent                   -= terminal_DisplayLinesSent;
+				this.terminal.DisplayLinesReceived               -= terminal_DisplayLinesReceived;
 
-				this.terminal.RepositoryTxCleared             -= terminal_RepositoryTxCleared;
-				this.terminal.RepositoryBidirCleared          -= terminal_RepositoryBidirCleared;
-				this.terminal.RepositoryRxCleared             -= terminal_RepositoryRxCleared;
-				this.terminal.RepositoryTxReloaded            -= terminal_RepositoryTxReloaded;
-				this.terminal.RepositoryBidirReloaded         -= terminal_RepositoryBidirReloaded;
-				this.terminal.RepositoryRxReloaded            -= terminal_RepositoryRxReloaded;
+				this.terminal.RepositoryCleared                  -= terminal_RepositoryCleared;
+				this.terminal.RepositoryReloaded                 -= terminal_RepositoryReloaded;
 
-				this.terminal.AutoResponseCountChanged        -= terminal_AutoResponseCountChanged;
-				this.terminal.AutoActionCountChanged          -= terminal_AutoActionCountChanged;
+				this.terminal.AutoResponseCountChanged           -= terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionCountChanged             -= terminal_AutoActionCountChanged;
 
 				this.terminal.FixedStatusTextRequest             -= terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             -= terminal_TimedStatusTextRequest;
@@ -5749,10 +5680,10 @@ namespace YAT.View.Forms
 			}
 		}
 
-		// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
-		// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-		// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
-		// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers.
+		// 'terminal_IOCount/RateChanged_Promptly' are is not used because of the reasons described
+		// in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'. Instead, the update
+		// is done by the 'terminal_DisplayElementsSent/Received' and 'terminal_DisplayLinesSent/Received'
+		// handlers further below.
 		//
 		// 'terminal_IORateChanged_Decimated' is fine.
 
@@ -5764,7 +5695,10 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				int txByteRate, txLineRate, rxByteRate, rxLineRate = 0;
+				int txByteRate = 0;
+				int txLineRate = 0;
+				int rxByteRate = 0;
+				int rxLineRate = 0;
 
 				this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
 
@@ -5824,275 +5758,228 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetTxDataCountAndRateStatus()
+		private void SetSentDataCountAndRateStatus()
 		{
-			int txByte, txLine, rxByte, rxLine = 0;
+			int txByteCount = 0;
+			int txLineCount = 0;
+			int rxByteCount = 0;
+			int rxLineCount = 0;
 
-			this.terminal.GetDataCount(out txByte, out txLine, out rxByte, out rxLine);
-			monitor_Tx.SetDataCountStatus(txByte, txLine, rxByte, rxLine);
+			this.terminal.GetDataCount(out txByteCount, out txLineCount, out rxByteCount, out rxLineCount);
 
-			this.terminal.GetDataRate(out txByte, out txLine, out rxByte, out rxLine);
-			monitor_Tx.SetDataRateStatus(txByte, txLine, rxByte, rxLine);
+			monitor_Tx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+			monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+
+			int txByteRate = 0;
+			int txLineRate = 0;
+			int rxByteRate = 0;
+			int rxLineRate = 0;
+
+			this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
+
+			monitor_Tx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+			monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetBidirDataCountAndRateStatus()
+		private void SetReceivedDataCountAndRateStatus()
 		{
-			int txByte, txLine, rxByte, rxLine = 0;
+			int txByteCount = 0;
+			int txLineCount = 0;
+			int rxByteCount = 0;
+			int rxLineCount = 0;
 
-			this.terminal.GetDataCount(out txByte, out txLine, out rxByte, out rxLine);
-			monitor_Bidir.SetDataCountStatus(txByte, txLine, rxByte, rxLine);
+			this.terminal.GetDataCount(out txByteCount, out txLineCount, out rxByteCount, out rxLineCount);
 
-			this.terminal.GetDataRate(out txByte, out txLine, out rxByte, out rxLine);
-			monitor_Bidir.SetDataRateStatus(txByte, txLine, rxByte, rxLine);
-		}
+			monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+			monitor_Rx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetRxDataCountAndRateStatus()
-		{
-			int txByte, txLine, rxByte, rxLine = 0;
+			int txByteRate = 0;
+			int txLineRate = 0;
+			int rxByteRate = 0;
+			int rxLineRate = 0;
 
-			this.terminal.GetDataCount(out txByte, out txLine, out rxByte, out rxLine);
-			monitor_Rx.SetDataCountStatus(txByte, txLine, rxByte, rxLine);
+			this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
 
-			this.terminal.GetDataRate(out txByte, out txLine, out rxByte, out rxLine);
-			monitor_Rx.SetDataRateStatus(txByte, txLine, rxByte, rxLine);
+			monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+			monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
 		private void SetDataCountAndRateStatus()
 		{
-			SetTxDataCountAndRateStatus();
-			SetBidirDataCountAndRateStatus();
-			SetRxDataCountAndRateStatus();
+			SetSentDataCountAndRateStatus();
+			SetReceivedDataCountAndRateStatus();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
+			if (TerminalIsAvailable)
 			{
-				monitor_Tx.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				DebugMonitorContent("Adding sent " + e.Elements.ToString() + "...");
 
-				SetTxDataCountAndRateStatus();
-			}
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
-			{
+				monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 
-				SetBidirDataCountAndRateStatus();
+				DebugMonitorContent("...done");
+
+				SetSentDataCountAndRateStatus();
 			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
+			if (TerminalIsAvailable)
 			{
-				monitor_Rx.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				DebugMonitorContent("Adding received " + e.Elements.ToString() + "...");
 
-				SetRxDataCountAndRateStatus();
+				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				DebugMonitorContent("...done");
+
+				SetReceivedDataCountAndRateStatus();
 			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_CurrentDisplayLineTxReplaced(object sender, Domain.DisplayElementsEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineSentReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable)
-				monitor_Tx.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
-		}
+			{
+				DebugMonitorContent("Replacing current line by sent " + e.Elements.ToString() + "...");
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_CurrentDisplayLineBidirReplaced(object sender, Domain.DisplayElementsEventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			if (TerminalIsAvailable)
+				monitor_Tx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				DebugMonitorContent("...done");
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_CurrentDisplayLineRxReplaced(object sender, Domain.DisplayElementsEventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_CurrentDisplayLineTxCleared(object sender, EventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentReplaced", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineReceivedReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable)
-				monitor_Tx.ClearCurrentLine();
+			{
+				DebugMonitorContent("Replacing current line by received " + e.Elements.ToString() + "...");
+
+				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Rx   .ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+
+				DebugMonitorContent("...done");
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_CurrentDisplayLineBidirCleared(object sender, EventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineReceivedCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineSentCleared(object sender, EventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable)
+			{
+				DebugMonitorContent("Clearing current line sent");
+
+				monitor_Tx   .ClearCurrentLine();
 				monitor_Bidir.ClearCurrentLine();
+
+				DebugMonitorContent("...done");
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_CurrentDisplayLineRxCleared(object sender, EventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.ClearCurrentLine();
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineSentCleared", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_CurrentDisplayLineReceivedCleared(object sender, EventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable)
-				SetTxDataCountAndRateStatus();
+			{
+				DebugMonitorContent("Clearing current line received");
+
+				monitor_Bidir.ClearCurrentLine();
+				monitor_Rx   .ClearCurrentLine();
+
+				DebugMonitorContent("...done");
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable)
-				SetBidirDataCountAndRateStatus();
+				SetSentDataCountAndRateStatus();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				SetRxDataCountAndRateStatus();
+			if (TerminalIsAvailable)
+				SetReceivedDataCountAndRateStatus();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryTxCleared(object sender, EventArgs e)
+		private void terminal_RepositoryCleared(object sender, EventArgs<Domain.RepositoryType> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
-				monitor_Tx.Clear();
+			switch (e.Value)
+			{
+				case Domain.RepositoryType.None:  /* Nothing to do. */   break;
+
+				case Domain.RepositoryType.Tx:    monitor_Tx   .Clear(); break;
+				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
+				case Domain.RepositoryType.Rx:    monitor_Rx   .Clear(); break;
+
+				default: throw (new ArgumentOutOfRangeException("e", e.Value, MessageHelper.InvalidExecutionPreamble + "'" + e.Value + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryBidirCleared(object sender, EventArgs e)
+		private void terminal_RepositoryReloaded(object sender, EventArgs<Domain.RepositoryType> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
-				monitor_Bidir.Clear();
-		}
+			switch (e.Value)
+			{
+				case Domain.RepositoryType.None:  /* Nothing to do. */                                                                         break;
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryRxCleared(object sender, EventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+				case Domain.RepositoryType.Tx:    monitor_Tx   .AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
+				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
+				case Domain.RepositoryType.Rx:    monitor_Rx   .AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
 
-			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.Clear();
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryTxReloaded(object sender, EventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
-				monitor_Tx.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryBidirReloaded(object sender, EventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
-				monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir));
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryRxReloaded(object sender, EventArgs e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));
+				default: throw (new ArgumentOutOfRangeException("e", e.Value, MessageHelper.InvalidExecutionPreamble + "'" + e.Value + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6453,8 +6340,8 @@ namespace YAT.View.Forms
 
 				if (this.settingsRoot != null)
 				{
-					isSerialPort   = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
-					isUsbSerialHid = (this.settingsRoot.IOType == Domain.IOType.UsbSerialHid);
+					isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+					isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
 				}
 
 				if (isSerialPort)
@@ -6998,6 +6885,12 @@ namespace YAT.View.Forms
 
 		[Conditional("DEBUG_MDI")]
 		private void DebugMdi(string message)
+		{
+			DebugMessage(message);
+		}
+
+		[Conditional("DEBUG_MONITOR_CONTENT")]
+		private void DebugMonitorContent(string message)
 		{
 			DebugMessage(message);
 		}

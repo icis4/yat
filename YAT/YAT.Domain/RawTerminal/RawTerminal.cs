@@ -36,7 +36,6 @@ using System.Text;
 using System.Threading;
 
 using MKY;
-using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.IO.Serial;
 
@@ -170,10 +169,10 @@ namespace YAT.Domain
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<RawChunk>> ChunkSent;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<RawChunk>> ChunkReceived;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<RepositoryType>> RepositoryCleared;
@@ -513,44 +512,66 @@ namespace YAT.Domain
 			{
 				switch (repositoryType)
 				{
+					case RepositoryType.None:      /* Nothing to do. */             break;
+
 					case RepositoryType.Tx:    l = this.txRepository   .ToChunks(); break;
 					case RepositoryType.Bidir: l = this.bidirRepository.ToChunks(); break;
 					case RepositoryType.Rx:    l = this.rxRepository   .ToChunks(); break;
 
-					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			return (l);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \todo:
+		/// Currently, all repositories are cleared in any case. That is because repositories are
+		/// always reloaded from bidir. Without clearing all, contents reappear after a change to
+		/// the settings, e.g. switching radix.
+		/// </remarks>
 		public virtual void ClearRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
-				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
-					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
-					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
+			////\todo:
+			////switch (repositoryType)
+			////{
+			////	case RepositoryType.None:      /* Nothing to do. */      break;
+			////
+			////	case RepositoryType.Tx:    this.txRepository   .Clear(); break;
+			////	case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
+			////	case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
+			////
+			////	default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			////}
 
-					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
+				this.txRepository   .Clear();
+				this.bidirRepository.Clear();
+				this.rxRepository   .Clear();
 			}
 
-			OnRepositoryCleared(new EventArgs<RepositoryType>(repositoryType));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \todo: See <see cref="ClearRepository"/> above.
+		/// </remarks>
 		public virtual void ClearRepositories()
 		{
 			AssertNotDisposed();
 
-			lock (this.repositorySyncObj) // Lock throughout whole transaction, but not for raising the event!
+			/* \todo:
+			call ClearRepository(RepositoryType.Tx)
+			call ClearRepository(RepositoryType.Bidir)
+			call ClearRepository(RepositoryType.Rx)
+			*/
+
+			lock (this.repositorySyncObj)
 			{
 				this.txRepository   .Clear();
 				this.bidirRepository.Clear();
@@ -571,12 +592,13 @@ namespace YAT.Domain
 			{
 				switch (repositoryType)
 				{
+					case RepositoryType.None:  return (null);
+
 					case RepositoryType.Tx:    return (this.txRepository   .ToExtendedDiagnosticsString(indent));
 					case RepositoryType.Bidir: return (this.bidirRepository.ToExtendedDiagnosticsString(indent));
 					case RepositoryType.Rx:    return (this.rxRepository   .ToExtendedDiagnosticsString(indent));
 
-					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -757,9 +779,10 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Synchronization to prevent a race condition is required here, see contract.
+		/// Note that this I/O event has a calling contract of:
+		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		/// Therefore, no additional synchronization to prevent race condition is required here.
 		/// </remarks>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Contract is given by the 'IIOProvider' event.")]
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
 			// Synchronize the underlying Tx and Rx callbacks to prevent mix-ups. But attention,
@@ -775,10 +798,10 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
-							this.rxRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
-							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
+							this.rxRepository   .Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
 						}
-						OnChunkReceived(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
+						OnRawChunkReceived(new EventArgs<RawChunk>(re)); // 'RawChunk' object is immutable, subsequent use is OK.
 					}
 					finally
 					{
@@ -791,9 +814,10 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Synchronization to prevent a race condition is required here, see contract.
+		/// Note that this I/O event has a calling contract of:
+		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		/// Therefore, no additional synchronization to prevent race condition is required here.
 		/// </remarks>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Contract is given by the 'IIOProvider' event.")]
 		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
 			// Synchronize the underlying Tx and Rx callbacks to prevent mix-ups. But attention,
@@ -809,10 +833,10 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
-							this.txRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
-							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
+							this.txRepository   .Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // 'RawChunk' object is immutable, subsequent use is OK.
 						}
-						OnChunkSent(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
+						OnRawChunkSent(new EventArgs<RawChunk>(re)); // 'RawChunk' object is immutable, subsequent use is OK.
 					}
 					finally
 					{
@@ -853,17 +877,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnChunkSent(EventArgs<RawChunk> e)
+		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(ChunkSent, this, e);
+				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnChunkReceived(EventArgs<RawChunk> e)
+		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
 			if (IsOpen) // Make sure to propagate event only if active.
-				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(ChunkReceived, this, e);
+				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>

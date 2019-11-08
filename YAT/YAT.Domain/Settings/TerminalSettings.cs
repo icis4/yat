@@ -315,81 +315,6 @@ namespace YAT.Domain.Settings
 
 		#endregion
 
-		#region Property Redirects
-		//------------------------------------------------------------------------------------------
-		// Property Redirects
-		//------------------------------------------------------------------------------------------
-
-	/*	/// <remarks>
-		/// Supported for text and binary terminals, but settings are separated to allow setting and
-		/// keeping them separate, as e.g. chunk and timed line breaks make more sense on a binary
-		/// than a text terminal.
-		/// </remarks>
-		[XmlIgnore]
-		public TimeoutSettingTuple TxDisplayChunkLineBreak
-		{
-			get
-			{
-				if (TerminalType == TerminalType.Text)
-					return (TextTerminal.TxDisplay.ChunkLineBreak);
-				else
-					return (BinaryTerminal.TxDisplay.ChunkLineBreak);
-			}
-		} !!! PENDING !!!
-
-		/// <remarks>
-		/// Supported for text and binary terminals, but settings are separated to allow setting and
-		/// keeping them separate, as e.g. chunk and timed line breaks make more sense on a binary
-		/// than a text terminal.
-		/// </remarks>
-		[XmlIgnore]
-		public TimeoutSettingTuple RxDisplayChunkLineBreak
-		{
-			get
-			{
-				if (TerminalType == TerminalType.Text)
-					return (TextTerminal.RxDisplay.ChunkLineBreak);
-				else
-					return (BinaryTerminal.RxDisplay.ChunkLineBreak);
-			}
-		}	*/
-
-		/// <remarks>
-		/// Supported for text and binary terminals, but settings are separated to allow setting and
-		/// keeping them separate, as e.g. chunk and timed line breaks make more sense on a binary
-		/// than a text terminal.
-		/// </remarks>
-		[XmlIgnore]
-		public TimeoutSettingTuple TxDisplayTimedLineBreak
-		{
-			get
-			{
-				if (TerminalType == TerminalType.Text)
-					return (TextTerminal.TxDisplay.TimedLineBreak);
-				else
-					return (BinaryTerminal.TxDisplay.TimedLineBreak);
-			}
-		}
-
-		/// <remarks>
-		/// Supported for text and binary terminals, but settings are separated to allow setting and
-		/// keeping them separate, as e.g. chunk and timed line breaks make more sense on a binary
-		/// than a text terminal.
-		/// </remarks>
-		[XmlIgnore]
-		public TimeoutSettingTuple RxDisplayTimedLineBreak
-		{
-			get
-			{
-				if (TerminalType == TerminalType.Text)
-					return (TextTerminal.RxDisplay.TimedLineBreak);
-				else
-					return (BinaryTerminal.RxDisplay.TimedLineBreak);
-			}
-		}
-
-		#endregion
-
 		#region Property Combinations
 		//------------------------------------------------------------------------------------------
 		// Property Combinations
@@ -404,7 +329,7 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				if (TerminalType == TerminalType.Text)
+				if (((TerminalTypeEx)TerminalType).IsText)
 				{
 					Encoding e = (EncodingEx)TextTerminal.Encoding;
 					return (e.IsSingleByte);

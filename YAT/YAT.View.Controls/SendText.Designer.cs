@@ -72,7 +72,7 @@
 			this.button_Send.Name = "button_Send";
 			this.button_Send.Size = new System.Drawing.Size(177, 21);
 			this.button_Send.TabIndex = 0;
-			this.button_Send.Text = "Send Text [F3]";
+			this.button_Send.Text = "Send Text (F3)";
 			this.toolTip.SetToolTip(this.button_Send, "Send text");
 			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 

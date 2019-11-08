@@ -84,26 +84,30 @@ namespace YAT.Domain
 	public class IOControlEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		public IODirection Direction { get; }
+
+		/// <summary></summary>
 		public ReadOnlyCollection<string> Texts { get; }
 
 		/// <summary></summary>
 		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
-		public IOControlEventArgs()
-			: this(null)
+		public IOControlEventArgs(IODirection direction)
+			: this(direction, null)
 		{
 		}
 
 		/// <summary></summary>
-		public IOControlEventArgs(ReadOnlyCollection<string> texts)
-			: this(texts, DateTime.Now)
+		public IOControlEventArgs(IODirection direction, ReadOnlyCollection<string> texts)
+			: this(direction, texts, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public IOControlEventArgs(ReadOnlyCollection<string> texts, DateTime timeStamp)
+		public IOControlEventArgs(IODirection direction, ReadOnlyCollection<string> texts, DateTime timeStamp)
 		{
+			Direction = direction;
 			Texts     = texts;
 			TimeStamp = timeStamp;
 		}
@@ -180,19 +184,6 @@ namespace YAT.Domain
 		public DisplayElementsEventArgs(DisplayElementCollection elements)
 		{
 			Elements = elements;
-		}
-	}
-
-	/// <summary></summary>
-	public class DisplayLineEventArgs : EventArgs
-	{
-		/// <summary></summary>
-		public DisplayLine Line { get; }
-
-		/// <summary></summary>
-		public DisplayLineEventArgs(DisplayLine line)
-		{
-			Line = line;
 		}
 	}
 

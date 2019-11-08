@@ -155,22 +155,6 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual int VisibleMonitorPanelCount
-		{
-			get
-			{
-				int count = 0;
-
-				if (TxMonitorPanelIsVisible)    count++;
-				if (BidirMonitorPanelIsVisible) count++;
-				if (RxMonitorPanelIsVisible)    count++;
-
-				return (count);
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("MonitorOrientation")]
 		public virtual Orientation MonitorOrientation
 		{

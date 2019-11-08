@@ -158,7 +158,7 @@ namespace YAT.Model
 		public event EventHandler<ClosedEventArgs> Closed;
 
 		/// <summary></summary>
-		public event EventHandler ExitRequest;
+		public event EventHandler<EventArgs> ExitRequest;
 
 		#endregion
 
@@ -301,9 +301,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region General
+		#region General Properties
 		//==========================================================================================
-		// General
+		// General Properties
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -532,11 +532,11 @@ namespace YAT.Model
 
 				if (ActiveTerminal != null)
 				{
-					var sb = new StringBuilder();
-
 					// Attention:
 					// Similar "[IndicatedName] - Info - Info - Info" as in Terminal.Caption{get}.
 					// Changes here may have to be applied there too.
+
+					var sb = new StringBuilder();
 
 					sb.Append("[");
 					sb.Append(ActiveTerminal.IndicatedName);
@@ -2514,7 +2514,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnExitRequest(EventArgs e)
 		{
-			this.eventHelper.RaiseSync(ExitRequest, this, e);
+			this.eventHelper.RaiseSync<EventArgs>(ExitRequest, this, e);
 		}
 
 		#endregion

@@ -1121,7 +1121,7 @@ namespace YAT.Model.Test.FileHandling
 			// - Create new terminal
 			// - Save terminal as
 			// - Save workspace as
-			//   => Workspace must contain 1 terminal with fixed ID 1
+			//   => Workspace must contain 1 terminal with fixed index 1
 			Terminal.ResetSequentialIdCounter();
 			using (var m = new Main())
 			{
@@ -1151,7 +1151,7 @@ namespace YAT.Model.Test.FileHandling
 
 			#region Step 2
 			// - Subsequent start
-			//   => Workspace must contain 1 terminal with fixed ID 1
+			//   => Workspace must contain 1 terminal with fixed index 1
 			// - Create 2 additional terminals
 			// - Save terminals as
 			// - Save workspace
@@ -1167,9 +1167,9 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w,               Is.Not.Null,   step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
 
-				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(TerminalIds.FirstFixedId),   step + "Fixed ID of terminal 1 isn't "   + TerminalIds.FirstFixedId + "!");
-				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(TerminalIds.FirstDynamicId), step + "Dynamic ID of terminal 1 isn't " + TerminalIds.FirstDynamicId + "!");
-				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(1),                         step + "Sequential ID of terminal 1 isn't 1!");
+				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(TerminalIds.FirstFixedId),   step + "Fixed index of terminal 1 isn't "   + TerminalIds.FirstFixedId + "!");
+				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(TerminalIds.FirstDynamicId), step + "Dynamic index of terminal 1 isn't " + TerminalIds.FirstDynamicId + "!");
+				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(1),                         step + "Sequential index of terminal 1 isn't 1!");
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True,     step + "Terminal 2 could not be created!");
@@ -1217,9 +1217,9 @@ namespace YAT.Model.Test.FileHandling
 				for (int id = first; id <= last; id++)
 				{
 					w.ActivateTerminalBySequentialId(id);
-					Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(id), step + "Fixed ID of terminal "      + id + " isn't " + id + "!");
-					Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(id), step + "Dynamic ID of terminal "    + id + " isn't " + id + "!");
-					Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(id), step + "Sequential ID of terminal " + id + " isn't " + id + "!");
+					Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(id), step + "Fixed index of terminal "      + id + " isn't " + id + "!");
+					Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(id), step + "Dynamic index of terminal "    + id + " isn't " + id + "!");
+					Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(id), step + "Sequential index of terminal " + id + " isn't " + id + "!");
 				}
 
 				w.ActivateTerminalBySequentialId(2);
@@ -1249,14 +1249,14 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
 				w.ActivateTerminalBySequentialId(1);
-				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(TerminalIds.FirstFixedId),   step + "Fixed ID of terminal 1 isn't "   + TerminalIds.FirstFixedId + "!");
-				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(TerminalIds.FirstDynamicId), step + "Dynamic ID of terminal 1 isn't " + TerminalIds.FirstDynamicId + "!");
-				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(1),                         step + "Sequential ID of terminal 1 isn't 1!");
+				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(TerminalIds.FirstFixedId),   step + "Fixed index of terminal 1 isn't "   + TerminalIds.FirstFixedId + "!");
+				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(TerminalIds.FirstDynamicId), step + "Dynamic index of terminal 1 isn't " + TerminalIds.FirstDynamicId + "!");
+				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(1),                         step + "Sequential index of terminal 1 isn't 1!");
 
 				w.ActivateTerminalBySequentialId(2);
-				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(3), step + "Fixed ID of terminal 3 isn't 3!");
-				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(2), step + "Dynamic ID of terminal 3 isn't 2!");
-				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(2), step + "Sequential ID of terminal 3 isn't 2!");
+				Assert.That(w.ActiveTerminalFixedId,      Is.EqualTo(3), step + "Fixed index of terminal 3 isn't 3!");
+				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(2), step + "Dynamic index of terminal 3 isn't 2!");
+				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(2), step + "Sequential index of terminal 3 isn't 2!");
 
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");

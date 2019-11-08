@@ -48,11 +48,15 @@
 //==================================================================================================
 
 using System;
+#if (WITH_SCRIPTING)
+using System.Collections;
+#endif
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Threading;
 
@@ -79,9 +83,8 @@ namespace YAT.Domain
 	/// its specializations add additional functionality.
 	/// </remarks>
 	/// <remarks>
-	/// This class is implemented using partial classes separating sending/repositories/processing
-	/// functionality. Using partial classes rather than aggregated sender, repositories, processor,...
-	/// so far for these reasons:
+	/// This class is implemented using partial classes separating sending/processing functionality.
+	/// Using partial classes rather than aggregated sender, processor,... so far for these reasons:
 	/// <list type="bullet">
 	/// <item><description>Simpler for implementing text/binary specialization</description></item>
 	/// <item><description>Simpler for implementing synchronization among Tx and Rx.</description></item>
@@ -173,6 +176,11 @@ namespace YAT.Domain
 		private IOControlState ioControlStateCache;
 		private object ioControlStateCacheSyncObj = new object();
 
+		private DisplayRepository txRepository;
+		private DisplayRepository bidirRepository;
+		private DisplayRepository rxRepository;
+		private object repositorySyncObj = new object();
+
 	#if (WITH_SCRIPTING)
 
 		private Queue<string> availableReceivedMessagesForScripting = new Queue<string>();
@@ -227,16 +235,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayElementsEventArgs> DisplayElementsTxAdded;
+		/// <summary></summary>
+		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayElementsEventArgs> DisplayElementsBidirAdded;
+		/// <summary></summary>
+		public event EventHandler<DisplayElementsEventArgs> DisplayElementsReceived;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayElementsEventArgs> DisplayElementsRxAdded;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
 		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
 		/// elements would likely be more error prone since...
@@ -245,9 +249,8 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineTxReplaced;
+		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineSentReplaced;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
 		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
 		/// elements would likely be more error prone since...
@@ -256,42 +259,19 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineBidirReplaced;
+		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineReceivedReplaced;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks>
-		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
-		/// elements would likely be more error prone since...
-		/// ...exact sequence of adding and removing elements has to exactly match.
-		/// ...an already added element would likely have to be unfolded to remove parts of it!
-		///
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineRxReplaced;
+		/// <remarks><see cref="CurrentDisplayLineSentReplaced"/> above.</remarks>
+		public event EventHandler CurrentDisplayLineSentCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="CurrentDisplayLineTxReplaced"/> above.</remarks>
-		public event EventHandler CurrentDisplayLineTxCleared;
+		/// <remarks><see cref="CurrentDisplayLineReceivedReplaced"/> above.</remarks>
+		public event EventHandler CurrentDisplayLineReceivedCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="CurrentDisplayLineBidirReplaced"/> above.</remarks>
-		public event EventHandler CurrentDisplayLineBidirCleared;
+		/// <summary></summary>
+		public event EventHandler<DisplayLinesEventArgs> DisplayLinesSent;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="CurrentDisplayLineRxReplaced"/> above.</remarks>
-		public event EventHandler CurrentDisplayLineRxCleared;
-
-		/// <remarks>Intentionally no additional 'Line' event: Covered by 'Lines', ease of use.</remarks>
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLinesEventArgs> DisplayLinesTxAdded;
-
-		/// <remarks>Intentionally no additional 'Line' event: Covered by 'Lines', ease of use.</remarks>
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLinesEventArgs> DisplayLinesBidirAdded;
-
-		/// <remarks>Intentionally no additional 'Line' event: Covered by 'Lines', ease of use.</remarks>
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLinesEventArgs> DisplayLinesRxAdded;
+		/// <summary></summary>
+		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
 
 	#if (WITH_SCRIPTING)
 
@@ -315,23 +295,11 @@ namespace YAT.Domain
 
 	#endif
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryTxCleared;
+		/// <summary></summary>
+		public event EventHandler<EventArgs<RepositoryType>> RepositoryCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryBidirCleared;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryRxCleared;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryTxReloaded;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryBidirReloaded;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryRxReloaded;
+		/// <summary></summary>
+		public event EventHandler<EventArgs<RepositoryType>> RepositoryReloaded;
 
 		#endregion
 
@@ -345,9 +313,11 @@ namespace YAT.Domain
 		{
 			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
 
+			this.txRepository    = new DisplayRepository(settings.Display.MaxLineCount);
+			this.bidirRepository = new DisplayRepository(settings.Display.MaxLineCount);
+			this.rxRepository    = new DisplayRepository(settings.Display.MaxLineCount);
+
 			AttachTerminalSettings(settings);
-			CreateRepositories(settings);
-			InitializeProcess();
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 		////this.isReloading has been initialized to false.
@@ -360,9 +330,11 @@ namespace YAT.Domain
 		{
 			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
 
+			this.txRepository    = new DisplayRepository(terminal.txRepository);
+			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
+			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
+
 			AttachTerminalSettings(settings);
-			CreateRepositories(terminal);
-			InitializeProcess();
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 			this.isReloading = terminal.isReloading;
@@ -398,8 +370,7 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the related timers will already have been stopped in Stop()...
-					DisposeProcess();
+					// In the 'normal' case, the timer will already have been stopped in Stop()...
 					DisposePeriodicXOnTimer();
 
 					// ...and the send thread will already have been stopped in Close()...
@@ -636,17 +607,6 @@ namespace YAT.Domain
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		protected virtual bool IsReloading
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (this.isReloading);
-			}
-		}
-
-		/// <summary></summary>
 		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
@@ -674,11 +634,22 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
+		protected virtual bool IsReloading
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.isReloading);
+			}
+		}
+
 		#endregion
 
-		#region Public Methods
+		#region Methods
 		//==========================================================================================
-		// Public Methods
+		// Methods
 		//==========================================================================================
 
 		#region Start/Stop/Close
@@ -1393,7 +1364,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void EnqueueEasterEggMessage()
 		{
-			AddDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
+			OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
 		}
 
 		#endregion
@@ -1689,6 +1660,348 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Repository Access
+		//------------------------------------------------------------------------------------------
+		// Repository Access
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
+		public virtual bool ClearRepository(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
+					this.rawTerminal.ClearRepository(repositoryType);
+				}
+				finally
+				{
+					Monitor.Exit(this.clearAndRefreshSyncObj);
+				}
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
+		public virtual bool ClearRepositories()
+		{
+			AssertNotDisposed();
+
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
+					this.rawTerminal.ClearRepositories();
+				}
+				finally
+				{
+					Monitor.Exit(this.clearAndRefreshSyncObj);
+				}
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
+		public virtual bool RefreshRepository(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
+					// Clear repository:
+					ClearMyRepository(repositoryType);
+					OnRepositoryCleared(new EventArgs<RepositoryType>(repositoryType));
+
+					// Reload repository:
+					this.isReloading = true;
+					foreach (var raw in this.rawTerminal.RepositoryToChunks(repositoryType))
+					{
+						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
+					}
+					this.isReloading = false;
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(repositoryType));
+				}
+				finally
+				{
+					Monitor.Exit(this.clearAndRefreshSyncObj);
+				}
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Alternatively, clear/refresh operations could be implemented asynchronously.
+		/// Advantages:
+		///  > No deadlock possible below.
+		/// Disadvantages:
+		///  > User does not get immediate feedback that a time consuming operation is taking place.
+		///  > User actually cannot trigger any other operation.
+		///  > Other synchronization issues?
+		/// Therefore, decided to keep the implementation synchronous until new issues pop up.
+		/// </remarks>
+		public virtual bool RefreshRepositories()
+		{
+			AssertNotDisposed();
+
+			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			{                                     // Only try for some time, otherwise ignore.
+				try                               // Prevents deadlocks among main thread (view)
+				{                                 //   and large amounts of incoming data.
+					// Clear repositories:
+					ClearMyRepository(RepositoryType.Tx);
+					ClearMyRepository(RepositoryType.Bidir);
+					ClearMyRepository(RepositoryType.Rx);
+					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
+					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+					OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
+
+					// Reload repositories:
+					this.isReloading = true;
+					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
+					{
+						ProcessAndSignalRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
+					}
+					this.isReloading = false;
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Tx));
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Bidir));
+					OnRepositoryReloaded(new EventArgs<RepositoryType>(RepositoryType.Rx));
+				}
+				finally
+				{
+					Monitor.Exit(this.clearAndRefreshSyncObj);
+				}
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ClearMyRepository(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:      /* Nothing to do. */      break;
+
+					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
+					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
+					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Note that value reflects the byte count of the elements contained in the repository,
+		/// i.e. the byte count of the elements shown. The value thus not necessarily reflects the
+		/// total byte count of a sent or received sequence, a hidden EOL is e.g. not reflected.
+		/// </remarks>
+		public virtual int GetRepositoryByteCount(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:  return (0);
+
+					case RepositoryType.Tx:    return (this.txRepository   .ByteCount);
+					case RepositoryType.Bidir: return (this.bidirRepository.ByteCount);
+					case RepositoryType.Rx:    return (this.rxRepository   .ByteCount);
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int GetRepositoryLineCount(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:  return (0);
+
+					case RepositoryType.Tx:    return (this.txRepository   .Count);
+					case RepositoryType.Bidir: return (this.bidirRepository.Count);
+					case RepositoryType.Rx:    return (this.rxRepository   .Count);
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual DisplayElementCollection RepositoryToDisplayElements(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:  return (null);
+
+					case RepositoryType.Tx:    return (this.txRepository   .ToElements());
+					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
+					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual DisplayLineCollection RepositoryToDisplayLines(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:  return (null);
+
+					case RepositoryType.Tx:    return (this.txRepository.   ToLines());
+					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
+					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual DisplayLine LastDisplayLineAuxiliary(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:  return (null);
+
+					case RepositoryType.Tx:    return (this.txRepository.   LastLineAuxiliary());
+					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
+					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ClearLastDisplayLineAuxiliary(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:    /* Nothing to do. */                         break;
+
+					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
+					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
+					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType)
+		{
+			return (RepositoryToExtendedDiagnosticsString(repositoryType, ""));
+		}
+
+		/// <summary></summary>
+		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType, string indent)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.None:  return (null);
+
+					case RepositoryType.Tx:    return (this.txRepository   .ToExtendedDiagnosticsString(indent));
+					case RepositoryType.Bidir: return (this.bidirRepository.ToExtendedDiagnosticsString(indent));
+					case RepositoryType.Rx:    return (this.rxRepository   .ToExtendedDiagnosticsString(indent));
+
+					default: throw (new ArgumentOutOfRangeException("repository", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual List<RawChunk> RepositoryToRawChunks(RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+
+			return (this.rawTerminal.RepositoryToChunks(repositoryType));
+		}
+
+		private void DisposeRepositories()
+		{
+			lock (this.repositorySyncObj)
+			{
+				if (this.txRepository != null)
+				{
+					this.txRepository.Clear();
+					this.txRepository = null;
+				}
+
+				if (this.bidirRepository != null)
+				{
+					this.bidirRepository.Clear();
+					this.bidirRepository = null;
+				}
+
+				if (this.rxRepository != null)
+				{
+					this.rxRepository.Clear();
+					this.rxRepository = null;
+				}
+			}
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Non-Public Methods
@@ -1810,8 +2123,8 @@ namespace YAT.Domain
 				this.rawTerminal.IOControlChanged  += rawTerminal_IOControlChanged;
 				this.rawTerminal.IOError           += rawTerminal_IOError;
 
-				this.rawTerminal.ChunkSent         += rawTerminal_ChunkSent;
-				this.rawTerminal.ChunkReceived     += rawTerminal_ChunkReceived;
+				this.rawTerminal.RawChunkSent      += rawTerminal_RawChunkSent;
+				this.rawTerminal.RawChunkReceived  += rawTerminal_RawChunkReceived;
 				this.rawTerminal.RepositoryCleared += rawTerminal_RepositoryCleared;
 			}
 		}
@@ -1824,8 +2137,8 @@ namespace YAT.Domain
 				this.rawTerminal.IOControlChanged  -= rawTerminal_IOControlChanged;
 				this.rawTerminal.IOError           -= rawTerminal_IOError;
 
-				this.rawTerminal.ChunkSent         -= rawTerminal_ChunkSent;
-				this.rawTerminal.ChunkReceived     -= rawTerminal_ChunkReceived;
+				this.rawTerminal.RawChunkSent      -= rawTerminal_RawChunkSent;
+				this.rawTerminal.RawChunkReceived  -= rawTerminal_RawChunkReceived;
 				this.rawTerminal.RepositoryCleared -= rawTerminal_RepositoryCleared;
 
 				this.rawTerminal.Dispose();
@@ -1858,26 +2171,26 @@ namespace YAT.Domain
 				var texts = IOControlChangeTexts();
 				                                                 //// Forsee capacity for separators.
 				var c = new DisplayElementCollection(texts.Count * 2); // Preset the required capacity to improve memory management.
-				foreach (var text in texts)
+				foreach (var t in texts)
 				{
 					if (c.Count > 0)
 						c.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 
-					c.Add(new DisplayElement.IOControl(Direction.Bidir, text));
+					c.Add(new DisplayElement.IOControl(Direction.Bidir, t));
 				}
 
 				// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
 				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
 					foreach (var de in c)
-						AddDisplayElement((IODirection)de.Direction, de);
+						OnDisplayElementAdded((IODirection)de.Direction, de);
 				}
 
-				OnIOControlChanged(new IOControlEventArgs(texts));
+				OnIOControlChanged(new IOControlEventArgs(IODirection.Bidir, texts));
 			}
 			else
 			{
-				OnIOControlChanged(new IOControlEventArgs());
+				OnIOControlChanged(new IOControlEventArgs(IODirection.Bidir));
 			}
 		}
 
@@ -1894,22 +2207,22 @@ namespace YAT.Domain
 				{
 					// Handle serial port errors whenever possible:
 					switch (spe.SerialPortError)
-					{                                                                            // Same as 'spe.Direction'.
-						case System.IO.Ports.SerialError.Frame:    AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
-						case System.IO.Ports.SerialError.Overrun:  AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
-						case System.IO.Ports.SerialError.RXOver:   AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
-						case System.IO.Ports.SerialError.RXParity: AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
-						case System.IO.Ports.SerialError.TXFull:   AddDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
+					{                                                                                // Same as 'spe.Direction'.
+						case System.IO.Ports.SerialError.Frame:    OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
+						case System.IO.Ports.SerialError.Overrun:  OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
+						case System.IO.Ports.SerialError.RXOver:   OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
+						case System.IO.Ports.SerialError.RXParity: OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
+						case System.IO.Ports.SerialError.TXFull:   OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
 						default:                                   OnIOError(e);                                                                                                   break;
 					}
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
 				{
-					AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
+					OnDisplayElementAdded(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
 				{
-					AddDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
+					OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
 				}
 				else
 				{
@@ -1922,17 +2235,17 @@ namespace YAT.Domain
 		/// This event is raised when a chunk is sent by the <see cref="UnderlyingIOProvider"/>.
 		/// The event is not raised on reloading, reloading is done by the 'Refresh...()' methods.
 		/// </remarks>
-		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.ChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_ChunkSent(object sender, EventArgs<RawChunk> e)
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void rawTerminal_RawChunkSent(object sender, EventArgs<RawChunk> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
+				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
 				OnRawChunkSent(args);
-				ProcessRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' object is immutable, subsequent use is OK.
 			}
 		}
 
@@ -1940,19 +2253,19 @@ namespace YAT.Domain
 		/// This event is raised when a chunk is received by the <see cref="UnderlyingIOProvider"/>.
 		/// The event is not raised on reloading, reloading is done by the 'Refresh...()' methods.
 		/// </remarks>
-		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.ChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_ChunkReceived(object sender, EventArgs<RawChunk> e)
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void rawTerminal_RawChunkReceived(object sender, EventArgs<RawChunk> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
+				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' object is immutable, subsequent use is OK.
 				OnRawChunkReceived(args);
-				ProcessRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessAndSignalRawChunk(e.Value, args.Attribute); // 'RawChunk' object is immutable, subsequent use is OK.
 			#if (WITH_SCRIPTING)
-				ProcessRawChunkForScripting(e.Value);     // See method's remarks for background information.
+				ProcessAndSignalRawChunkForScripting(e.Value);     // See method's remarks for background information.
 			#endif // WITH_SCRIPTING
 			}
 		}
@@ -1962,13 +2275,10 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
+			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until reloading has completed.
 			{
-				// Reset processing:
-				ResetProcess(e.Value);
-
-				// Clear repository:
 				ClearMyRepository(e.Value);
+				OnRepositoryCleared(e);
 			}
 		}
 
@@ -2032,167 +2342,241 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsAdded(RepositoryType repositoryType, DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementAdded(IODirection direction, DisplayElement element)
 		{
-			switch (repositoryType)
-			{
-				case RepositoryType.Tx:    OnDisplayElementsTxAdded   (e); break;
-				case RepositoryType.Bidir: OnDisplayElementsBidirAdded(e); break;
-				case RepositoryType.Rx:    OnDisplayElementsRxAdded   (e); break;
+			var elements = new DisplayElementCollection(1); // Preset the required capacity to improve memory management.
+			elements.Add(element); // No clone needed as the element must be created when calling this event method.
+			OnDisplayElementsAdded(direction, elements);
+		}
 
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		/// <summary></summary>
+		protected virtual void OnDisplayElementsAdded(IODirection direction, DisplayElementCollection elements)
+		{
+			switch (direction)
+			{
+				case IODirection.Tx:
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.txRepository   .Enqueue(elements.Clone()); // Clone elements as they are needed again below.
+						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements as they are needed again below.
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
+
+					break;
+				}
+
+				case IODirection.Rx:
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements as they are needed again below.
+						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements as they are needed again below.
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as elements are not needed again.
+
+					break;
+				}
+
+				case IODirection.Bidir:
+				case IODirection.None:
+				{
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsTxAdded(DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnDisplayElementsTxAdded " + e.Elements.ToString());
+			DebugContentEvents("OnDisplayElementsSent " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsTxAdded, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsBidirAdded(DisplayElementsEventArgs e)
+		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnDisplayElementsBidirAdded " + e.Elements.ToString());
+			DebugContentEvents("OnDisplayElementsReceived " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsBidirAdded, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsRxAdded(DisplayElementsEventArgs e)
+		protected virtual void OnCurrentDisplayLineReplaced(IODirection direction, DisplayElementCollection currentLineElements)
 		{
-			DebugContentEvents("OnDisplayElementsRxAdded " + e.Elements.ToString());
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsRxAdded, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineReplaced(RepositoryType repositoryType, DisplayElementsEventArgs e)
-		{
-			switch (repositoryType)
+			switch (direction)
 			{
-				case RepositoryType.Tx:    OnCurrentDisplayLineTxReplaced   (e); break;
-				case RepositoryType.Bidir: OnCurrentDisplayLineBidirReplaced(e); break;
-				case RepositoryType.Rx:    OnCurrentDisplayLineRxReplaced   (e); break;
+				case IODirection.Tx:
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.txRepository   .ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+						this.bidirRepository.ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+					}
 
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineSentReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
+
+					break;
+				}
+
+				case IODirection.Rx:
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.bidirRepository.ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+						this.rxRepository   .ReplaceCurrentLine(currentLineElements.Clone()); // Clone elements as they are needed again below.
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineReceivedReplaced(new DisplayElementsEventArgs(currentLineElements)); // No clone needed as elements are not needed again.
+
+					break;
+				}
+
+				case IODirection.Bidir:
+				case IODirection.None:
+				{
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineTxReplaced(DisplayElementsEventArgs e)
+		protected virtual void OnCurrentDisplayLineSentReplaced(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineTxReplaced " + e.Elements.ToString());
+			DebugContentEvents("OnCurrentDisplayLineSentReplaced " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineTxReplaced, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineSentReplaced, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineBidirReplaced(DisplayElementsEventArgs e)
+		protected virtual void OnCurrentDisplayLineReceivedReplaced(DisplayElementsEventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineBidirReplaced " + e.Elements.ToString());
+			DebugContentEvents("OnCurrentDisplayLineReceivedReplaced " + e.Elements.ToString());
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineBidirReplaced, this, e);
+				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineReceivedReplaced, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineRxReplaced(DisplayElementsEventArgs e)
+		protected virtual void OnCurrentDisplayLineCleared(IODirection direction)
 		{
-			DebugContentEvents("OnCurrentDisplayLineRxReplaced " + e.Elements.ToString());
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineRxReplaced, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineCleared(RepositoryType repositoryType, EventArgs e)
-		{
-			switch (repositoryType)
+			switch (direction)
 			{
-				case RepositoryType.Tx:    OnCurrentDisplayLineTxCleared   (e); break;
-				case RepositoryType.Bidir: OnCurrentDisplayLineBidirCleared(e); break;
-				case RepositoryType.Rx:    OnCurrentDisplayLineRxCleared   (e); break;
+				case IODirection.Tx:
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.txRepository   .ClearCurrentLine();
+						this.bidirRepository.ClearCurrentLine();
+					}
 
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineSentCleared(new EventArgs());
+
+					break;
+				}
+
+				case IODirection.Rx:
+				{
+					lock (this.repositorySyncObj)
+					{
+						this.bidirRepository.ClearCurrentLine();
+						this.rxRepository   .ClearCurrentLine();
+					}
+
+					if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+						OnCurrentDisplayLineReceivedCleared(new EventArgs());
+
+					break;
+				}
+
+				case IODirection.Bidir:
+				case IODirection.None:
+				{
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineTxCleared(EventArgs e)
+		protected virtual void OnCurrentDisplayLineSentCleared(EventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineTxCleared");
+			DebugContentEvents("OnCurrentDisplayLineSentCleared");
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineTxCleared, this, e);
+				this.eventHelper.RaiseSync(CurrentDisplayLineSentCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineBidirCleared(EventArgs e)
+		protected virtual void OnCurrentDisplayLineReceivedCleared(EventArgs e)
 		{
-			DebugContentEvents("OnCurrentDisplayLineBidirCleared");
+			DebugContentEvents("OnCurrentDisplayLineReceivedCleared");
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineBidirCleared, this, e);
+				this.eventHelper.RaiseSync(CurrentDisplayLineReceivedCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineRxCleared(EventArgs e)
+		protected virtual void OnDisplayLinesAdded(IODirection direction, DisplayLineCollection lines)
 		{
-			DebugContentEvents("OnCurrentDisplayLineRxCleared");
-
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineRxCleared, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDisplayLinesAdded(RepositoryType repositoryType, DisplayLinesEventArgs e)
-		{
-			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    OnDisplayLinesTxAdded   (e); break;
-				case RepositoryType.Bidir: OnDisplayLinesBidirAdded(e); break;
-				case RepositoryType.Rx:    OnDisplayLinesRxAdded   (e); break;
+				switch (direction)
+				{
+					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
+					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
 
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					case IODirection.Bidir:
+					case IODirection.None:
+						throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+					default:
+						throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesTxAdded(DisplayLinesEventArgs e)
+		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
-			DebugContentEvents("OnDisplayLinesTxAdded " + e.Lines.Count);
+			DebugContentEvents("OnDisplayLinesSent " + e.Lines.Count);
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesTxAdded, this, e);
+				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesBidirAdded(DisplayLinesEventArgs e)
+		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
-			DebugContentEvents("OnDisplayLinesBidirAdded " + e.Lines.Count);
+			DebugContentEvents("OnDisplayLinesReceived " + e.Lines.Count);
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesBidirAdded, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDisplayLinesRxAdded(DisplayLinesEventArgs e)
-		{
-			DebugContentEvents("OnDisplayLinesRxAdded " + e.Lines.Count);
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesRxAdded, this, e);
+				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 	#if (WITH_SCRIPTING)
@@ -2214,85 +2598,21 @@ namespace YAT.Domain
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryCleared(RepositoryType repositoryType, EventArgs e)
+		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			switch (repositoryType)
-			{
-				case RepositoryType.Tx:    OnRepositoryTxCleared   (e); break;
-				case RepositoryType.Bidir: OnRepositoryBidirCleared(e); break;
-				case RepositoryType.Rx:    OnRepositoryRxCleared   (e); break;
+			DebugContentEvents("OnRepositoryCleared");
 
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryTxCleared(EventArgs e)
+		protected virtual void OnRepositoryReloaded(EventArgs<RepositoryType> e)
 		{
-			DebugContentEvents("OnRepositoryTxCleared");
+			DebugContentEvents("OnRepositoryReloaded");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryTxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryTxCleared, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnRepositoryBidirCleared(EventArgs e)
-		{
-			DebugContentEvents("OnRepositoryBidirCleared");
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryBidirReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryBidirCleared, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnRepositoryRxCleared(EventArgs e)
-		{
-			DebugContentEvents("OnRepositoryRxCleared");
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryRxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryRxCleared, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnRepositoryReloaded(RepositoryType repositoryType, EventArgs e)
-		{
-			switch (repositoryType)
-			{
-				case RepositoryType.Tx:    OnRepositoryTxReloaded   (e); break;
-				case RepositoryType.Bidir: OnRepositoryBidirReloaded(e); break;
-				case RepositoryType.Rx:    OnRepositoryRxReloaded   (e); break;
-
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		/// <summary></summary>
-		protected virtual void OnRepositoryTxReloaded(EventArgs e)
-		{
-			DebugContentEvents("OnRepositoryTxReloaded");
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryTxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryTxReloaded, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnRepositoryBidirReloaded(EventArgs e)
-		{
-			DebugContentEvents("OnRepositoryBidirReloaded");
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryBidirReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryBidirReloaded, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnRepositoryRxReloaded(EventArgs e)
-		{
-			DebugContentEvents("OnRepositoryRxReloaded");
-
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryRxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryRxReloaded, this, e);
+			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryReloaded, this, e);
 		}
 
 		#endregion
