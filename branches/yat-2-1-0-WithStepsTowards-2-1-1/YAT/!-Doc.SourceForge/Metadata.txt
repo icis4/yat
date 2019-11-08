@@ -1,0 +1,55 @@
+﻿
+Name:
+YAT
+
+Unixname:
+y-a-terminal
+
+Homepage:
+https://y-a-terminal.sourceforge.io
+
+Video:
+N/A
+
+Short Summary:
+Yet Another Terminal :: Serial Communication
+
+Full Description:
+Engineering, testing and debugging of serial communication :: Supports RS-232/422/423/485 as well as TCP/IP Client/Server/AutoSocket, UDP/IP Client/Server/PairSocket and USB Ser/HID :: Optimized for simple command sets of e.g. embedded systems
+
+Features:
+Serial terminal (connection endpoint) for engineering, testing and debugging purposes.
+The perfect replacement for HyperTerminal or good ol' fashioned Windows 3.x Terminal.
+Configurable input mode.
+Single-line text commands.
+Multi-line text commands.
+Sending files; including option to exclude comments or empty lines.
+History of recent commands.
+Unlimited number of predefined commands.
+Reorder, cut/copy/paste, export/import and even link predefined commands.
+Escapes for bin/oct/dec/hex like "\h(4F 4B)" as well as C-style "0x4F" and "0b01001111".
+Escapes for ASCII controls like "<CR><LF>" as well as C-style "\r\n".
+Special commands like "\!(EOL)", "\!(NoEOL)", "\!(Delay(100))", "\!(LineDelay(500))", "\!(LineInterval(500))", "\!(LineRepeat(10))".
+On-the-fly change of communication settings using e.g. "\!(Baud(115200))".
+Option to automatically trigger an action.
+Option to automatically trigger a response.
+Filtering or suppressing lines of a given pattern.
+Versatile monitoring and logging of sent and received data.
+Formatting options for excellent readability.
+Support for numerous single- and multi-byte character encodings (SBCS/DBCS/MBCS).
+Unicode value representation.
+Search/Find functionality, incl. regex.
+Advanced options for text and binary communication.
+Advanced options for in-depth RS-232/422/423/485 debugging of flow control, break and buffering.
+Workspace supporting multiple terminals.
+Fully keyboard operable.
+Versatile shell/PowerShell command line including head-less operation.
+
+Preferred Support Page (for users of your project):
+Discussion
+
+Twitter Handle:
+N/A
+
+Facebook page:
+N/A

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SettingsName>YAT Command Pages Definition</SettingsName>
+  <SettingsVersion>1.0.2</SettingsVersion>
+  <ProductVersion>2.1.0</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
+  <Mark>
+    <TimeStamp>2019-09-08T20:16:33.1585524+02:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Mark>
+  <Pages>
+    <PageName>Page 1</PageName>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>Single-Line Cmd</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>UVW</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>UVW</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>Multi-Line Cmd</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>D</CommandLines>
+      <CommandLines>DE</CommandLines>
+      <CommandLines>DEF</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>&lt;3 lines...&gt; [X] [XY] [XYZ]</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>X</CommandLines>
+      <CommandLines>XY</CommandLines>
+      <CommandLines>XYZ</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+  </Pages>
+  <Pages>
+    <PageName>Page 2</PageName>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>123</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>123</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+  </Pages>
+</Settings>

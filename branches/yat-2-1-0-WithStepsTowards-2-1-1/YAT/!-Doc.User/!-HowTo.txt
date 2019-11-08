@@ -1,0 +1,30 @@
+﻿
+Preliminary Binaries (Dropbox)
+==============================
+
+Email Request (!! GMX email address shall not become globally visible !!)
+-------------
+
+Hi <>,
+
+<> is implemented now and YAT <x.y.z> is about to be released << soon | within a month or two | ... >>.
+
+If you'd like a preliminary version, let me know you true email address (either via the SourceForge mail feature or by sending an email to << y-a-terminal@users.sourceforge.net | GMX >>) and I will provide you with YAT preliminary binaries via dropbox.
+
+Note that you can sign up for the YAT release notification at https://sourceforge.net/p/y-a-terminal/mailman/. As visible in the mail archive at https://sourceforge.net/p/y-a-terminal/mailman/y-a-terminal-users/, no spam, just one notification email per release, unless you keep the SourceForge newsletters activated.
+
+Best regards,
+Matthias
+
+
+Dropbox Access
+--------------
+
+Hi <>,
+
+I have just given you access to the YAT preliminary binaries at dropbox. Either, extract the binaries to a temporary location, or replace the files in "C:\Program Files\YAT".
+
+Let me know <whatever>.
+
+Best regards,
+Matthias

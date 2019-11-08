@@ -1,0 +1,17 @@
+﻿
+Memory Leaks
+------------
+
+http://www.codeproject.com/Articles/19490/Memory-Leak-Detection-in-NET
+ > Stack
+ > Unmanaged Heap
+ > Managed Heap
+
+
+Windows.Forms
+-------------
+
+Line (horizontal or vertical)
+ => 3D: Use 'Label' with '3D' border and height/width = 2
+ => grey: Use 'Label' with '3D' border and height/width = 1
+ => black: Use 'Label' with 'Single' border and height/width = 1

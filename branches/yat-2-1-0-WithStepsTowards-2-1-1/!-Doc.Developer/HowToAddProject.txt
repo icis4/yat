@@ -1,0 +1,23 @@
+﻿
+1.	Solution > Add > New Project...
+
+2.	Visual C# > Windows > Class Library
+
+3.	Remove "Class1"
+
+4.	Project > Properties
+	Select all configurations
+	Enable Build > XML documentation file
+	Tick Build > Advanced > Check for under/overflow
+	Sign the assembly
+
+5.	Open "AssemblyInfo"
+	Update according to "AssemblyInfo" of existing test projects
+
+6.	Remove unnecessary references, typically
+	"System.Core"
+	"System.Data"
+	"System.Data.DataSetExtensions"
+	"System.Xml.Linq"
+
+7.	Update and check the solution and project configurations

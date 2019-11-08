@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalUserSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FileType>YAT local user settings</FileType>
+  <SettingsVersion>1.3.1</SettingsVersion>
+  <ProductVersion>1.99.30</ProductVersion>
+  <Warning>Modifying this file may cause undefined behavior!</Warning>
+  <Saved>
+    <TimeStamp>2013-02-01T07:00:43.0032305+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Saved>
+  <General>
+    <AutoOpenWorkspace>true</AutoOpenWorkspace>
+    <AutoSaveWorkspace>true</AutoSaveWorkspace>
+    <UseRelativePaths>true</UseRelativePaths>
+    <DetectSerialPortsInUse>true</DetectSerialPortsInUse>
+  </General>
+  <Paths>
+    <TerminalFilesPath>C:\Users\Matthias\Documents</TerminalFilesPath>
+    <WorkspaceFilesPath>C:\Users\Matthias\Documents</WorkspaceFilesPath>
+    <SendFilesPath>C:\Users\Matthias\Documents</SendFilesPath>
+    <LogFilesPath>C:\Users\Matthias\Documents</LogFilesPath>
+    <MonitorFilesPath>C:\Users\Matthias\Documents</MonitorFilesPath>
+  </Paths>
+  <AutoWorkspace>
+    <FilePath />
+  </AutoWorkspace>
+  <MainWindow>
+    <StartPosition>WindowsDefaultLocation</StartPosition>
+    <WindowState>Normal</WindowState>
+    <Location>
+      <X>0</X>
+      <Y>0</Y>
+    </Location>
+    <Size>
+      <Width>800</Width>
+      <Height>600</Height>
+    </Size>
+    <ShowTerminalInfo>false</ShowTerminalInfo>
+    <ShowChrono>true</ShowChrono>
+  </MainWindow>
+  <NewTerminal>
+    <TerminalType>Text</TerminalType>
+    <IOType>SerialPort</IOType>
+    <SerialPortId>
+      <Name>COM1</Name>
+    </SerialPortId>
+    <SerialPortCommunication>
+      <BaudRate>9600</BaudRate>
+      <DataBits>Eight</DataBits>
+      <Parity>None</Parity>
+      <StopBits>One</StopBits>
+      <FlowControl>None</FlowControl>
+    </SerialPortCommunication>
+    <SerialPortAutoReopen>
+      <Enabled>true</Enabled>
+      <Interval>2000</Interval>
+    </SerialPortAutoReopen>
+    <SocketRemoteHost />
+    <SocketRemoteTcpPort>10000</SocketRemoteTcpPort>
+    <SocketRemoteUdpPort>10000</SocketRemoteUdpPort>
+    <SocketLocalInterface />
+    <SocketLocalTcpPort>10000</SocketLocalTcpPort>
+    <SocketLocalUdpPort>10001</SocketLocalUdpPort>
+    <TcpClientAutoReconnect>
+      <Enabled>false</Enabled>
+      <Interval>500</Interval>
+    </TcpClientAutoReconnect>
+    <UsbSerialHidAutoOpen>true</UsbSerialHidAutoOpen>
+    <StartTerminal>true</StartTerminal>
+  </NewTerminal>
+  <RecentFiles>
+    <FilePathsCapacity>8</FilePathsCapacity>
+  </RecentFiles>
+</LocalUserSettings>

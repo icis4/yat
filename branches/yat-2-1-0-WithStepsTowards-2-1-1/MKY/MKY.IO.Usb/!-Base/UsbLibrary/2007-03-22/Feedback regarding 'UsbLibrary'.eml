@@ -1,0 +1,112 @@
+X-Mozilla-Status: 0000
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+FCC: mailbox://maettu_this@pop.users.sourceforge.net/Sent
+X-Identity-Key: id7
+Message-ID: <4BBBA6B1.1040007@users.sourceforge.net>
+Date: Tue, 06 Apr 2010 23:25:05 +0200
+From: maettu_this <maettu_this@users.sourceforge.net>
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.1.9) Gecko/20100317 Thunderbird/3.0.4
+MIME-Version: 1.0
+Subject: Feedback regarding 'UsbLibrary'
+Content-Type: text/html; charset=ISO-8859-15
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-15">
+  <title>Feedback regarding 'UsbLibrary'</title>
+</head>
+<body bgcolor="#ffffff" text="#000000">
+Hi &lt;???&gt;,
+<br>
+<br>
+I have created a 'MKY.IO.Usb' library merging ideas from your
+'UsbLibrary' and two other libraries for a SourceForge hosted project
+where I needed a USB HID based serial communcation implementation. The
+project is called 'YAT - Yet Another Terminal' and features a terminal
+to operate and debug serial communications. 'YAT' supports
+RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket and UDP.
+Currently I am adding support for USB Ser/HID. You can find 'YAT' on <a
+ class="moz-txt-link-freetext"
+ href="http://sourceforge.net/projects/y-a-terminal/">http://sourceforge.net/projects/y-a-terminal/</a>.
+<br>
+<br>
+In the meantime 'MKY.IO.Usb' partly works and I wanted to give you some
+feedback regarding 'UsbLibrary' that I have collected while working on
+'MKY.IO.Usb':
+<br>
+<br>
+<u>Overall</u><br>
+- There should be a method to retrieve user readable device information
+such as the manufacturer and product name<br>
+<br>
+<u>UsbLibrary.UsbLibrary.csproj</u><br>
+- UsbLibrary should be signed with an .snk file<br>
+- Build &gt; Advanced &gt; Check for arithmetic overflow/underflow<br>
+- Build &gt; Output &gt; Disable XML documentation<br>
+  - OR BETTER -<br>
+  Completely document classes and members<br>
+<br>
+<u>UsbLibrary.UsbHidPort.cs</u><br>
+- OnDataRecieved has a spelling mistake and should be OnDataReceived<br>
+- In proper English, OnDataSend should be OnDataSent<br>
+- DeviceArrived and SpecifiedDeviceArrived seem suboptimal names in my
+opinion<br>
+   &gt; What about DeviceConnected and SpecifiedDeviceConnected?<br>
+- I question the implementation of RegisterHandle(). See 'MKY.IO.Usb'
+for a better way to register the USB event<br>
+- Variable usb_event_handle isn't used at all<br>
+- I also question ParseMessages(). See 'MKY.IO.Usb' for a way to
+register for the Windows events without requiring the application to
+forward all messages<br>
+- CheckDevicePresent() attaches to DataReceived and DataSent events but
+nobody ever detaches these handlers<br>
+<br>
+<u>UsbLibrary.SpecifiedDevice.cs</u><br>
+- Warning    The variable 'ex' is declared but never used   
+UsbLibrary\SpecifiedDevice.cs#66<br>
+- DataRecievedEventArgs also has a spelling mistake<br>
+- DataRecievedEventArgs.data should be DataRecievedEventArgs.Data since
+it's public<br>
+- DataSendEventArgs.data should be DataSendEventArgs.Data since it's
+public<br>
+- DataRecievedEventArgs and DataSendEventArgs should be placed into a
+separate file<br>
+<br>
+<u>UsbLibrary.HIDDevice</u><br>
+- Warning    The variable 'ex' is declared but never used   
+UsbLibrary\HIDDevice.cs#109<br>
+- Warning    The variable 'ex' is declared but never used   
+UsbLibrary\HIDDevice.cs#161<br>
+- Warning    The variable 'ex' is declared but never used   
+UsbLibrary\HIDDevice.cs#181<br>
+- HIDDevice should be written HidDevice for consistency with other
+identifiers<br>
+- Initialise should be Initialize like in many .NET classes<br>
+- HIDDevice should contain members/properties that tell vendor and
+product ID<br>
+- HIDDevice should contain members/properties that tell whether it is
+currently in use<br>
+- FindDevice() should return oNewDevice at the end of the method to
+clarify that SetupDiDestroyDeviceInfoList() is always called<br>
+- In addition to FindDevice(), there should also be a FindDevices()
+method returning a collection of available HID devices<br>
+<br>
+Details about the reasons to merge the three libraries and more
+detailed information on 'MKY.IO.Usb' can be found in the YAT SVN
+repository under <a class="moz-txt-link-freetext"
+ href="https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/_Doc/MKY.IO.Usb.txt">https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/_Doc/MKY.IO.Usb.txt</a>.
+<br>
+<br>
+I am happy to share thoughts and suggestions.
+<br>
+<br>
+Best regards,
+<br>
+Matthias<br>
+</body>
+</html>

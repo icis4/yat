@@ -1,0 +1,62 @@
+﻿
+Dear Andre Luis,
+
+I came across another issue when shutting down a pair of an ALAZ client connected to an ALAZ server within the same application. I ran into a deadlock while shutting down the open connection. It happens in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get(). Is there a need to lock the field when reading its status? The situation is as follows:
+Thread A) at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP trying to call connection.BeginDisconnect()
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnException(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection =
+          {ALAZ.SystemEx.NetEx.SocketsEx.ClientSocketConnection}, System.Exception ex = {Cannot evaluate expression because the current thread is in a sleep, wait, or join}) Line 551
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnect(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection =
+          {ALAZ.SystemEx.NetEx.SocketsEx.ClientSocketConnection}) Line 1453
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.BeginDisconnect() Line 558
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP(object state = {System.Net.Sockets.SocketAsyncEventArgs}) Line 1161
+Thread B) at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP trying to get the connection state
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP(object state = {System.Net.Sockets.SocketAsyncEventArgs}) Line 1146
+The Main Thread at ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop()
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnect(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection =
+          {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 1435
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.BeginDisconnect() Line 558
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections() Line 340
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop() Line 207
+
+
+Also, there seems to be a null reference issue in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopCreators() on line 311 (FWaitCreatorsDisposing.WaitOne). I added a try-catch around the statement.
+
+
+Another issue I found in SocketListener.BeginAcceptCallback on line #229 AcceptAsync(e2):
+
+An unhandled System.ObjectDisposedException was thrown while executing this test : The SafeHandle has been closed.
+
+at System.Net.Sockets.Socket.AcceptAsync(SocketAsyncEventArgs e)
+at ALAZ.SystemEx.NetEx.SocketsEx.SocketListener.BeginAcceptCallback(Object state) in D:\Sandboxes\YAT\_Trunk\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\SocketListener.cs:Zeile 229.
+at System.Threading._ThreadPoolWaitCallback.WaitCallback_Context(Object state)
+at System.Threading.ExecutionContext.runTryCode(Object userData)
+at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
+at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+at System.Threading._ThreadPoolWaitCallback.PerformWaitCallbackInternal(_ThreadPoolWaitCallback tpWaitCallBack)
+at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback(Object state)
+
+This issue occured while performing endurance tests using YAT AutoSockets.
+
+
+And the last issue for today, found in BaseSocketConnection.Active:
+
+I get another deadlock because I have to synchronize events onto my main/GUI thread. In case of having an application with two sockets connected to each other I get a deadlock upon shut down. Thus I have removed the lock in the get{} property of BaseSocketConnection.Active.
+
+
+UDP
+
+I have removed all UDP stuff and use System.Net.Sockets.UdpClient directly
+
+
+By the way, are you still developing ALAZ? Or has this project, as so many others, come to a dead-end?
+
+
+Best regards,
+Matthias
+
+maettu_this@users.sourceforge.net
+matthias.klaey@gmx.ch
