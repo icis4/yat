@@ -62,7 +62,7 @@ namespace YAT.Model.Settings
 		private MKY.IO.Usb.SerialHidRxFilterUsage usbSerialHidRxFilterUsage;
 		private MKY.IO.Serial.Usb.SerialHidFlowControl usbSerialHidFlowControl;
 		private bool usbSerialHidAutoOpen;
-		private bool usbSerialHidIncludeNonPayloadData;
+	////private bool usbSerialHidIncludeNonPayloadData; is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
 		private bool startTerminal;
 
@@ -93,34 +93,34 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			TerminalType                      = rhs.TerminalType;
-			IOType                            = rhs.IOType;
+			TerminalType              = rhs.TerminalType;
+			IOType                    = rhs.IOType;
 
-			SerialPortId                      = rhs.SerialPortId;
-			SerialPortCommunication           = rhs.SerialPortCommunication;
-			SerialPortAliveMonitor            = rhs.SerialPortAliveMonitor;
-			SerialPortAutoReopen              = rhs.SerialPortAutoReopen;
+			SerialPortId              = rhs.SerialPortId;
+			SerialPortCommunication   = rhs.SerialPortCommunication;
+			SerialPortAliveMonitor    = rhs.SerialPortAliveMonitor;
+			SerialPortAutoReopen      = rhs.SerialPortAutoReopen;
 
-			SocketRemoteHost                  = rhs.SocketRemoteHost;
-			SocketRemoteTcpPort               = rhs.SocketRemoteTcpPort;
-			SocketRemoteUdpPort               = rhs.SocketRemoteUdpPort;
-			SocketLocalInterface              = rhs.SocketLocalInterface;
-			SocketLocalFilter                 = rhs.SocketLocalFilter;
-			SocketLocalTcpPort                = rhs.SocketLocalTcpPort;
-			SocketLocalUdpPort                = rhs.SocketLocalUdpPort;
-			TcpClientAutoReconnect            = rhs.TcpClientAutoReconnect;
-			UdpServerSendMode                 = rhs.UdpServerSendMode;
+			SocketRemoteHost          = rhs.SocketRemoteHost;
+			SocketRemoteTcpPort       = rhs.SocketRemoteTcpPort;
+			SocketRemoteUdpPort       = rhs.SocketRemoteUdpPort;
+			SocketLocalInterface      = rhs.SocketLocalInterface;
+			SocketLocalFilter         = rhs.SocketLocalFilter;
+			SocketLocalTcpPort        = rhs.SocketLocalTcpPort;
+			SocketLocalUdpPort        = rhs.SocketLocalUdpPort;
+			TcpClientAutoReconnect    = rhs.TcpClientAutoReconnect;
+			UdpServerSendMode         = rhs.UdpServerSendMode;
 
-			UsbSerialHidDeviceInfo            = rhs.UsbSerialHidDeviceInfo;
-		////UsbSerialHidMatchSerial           = rhs.UsbSerialHidMatchSerial; is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
-			UsbSerialHidPreset                = rhs.UsbSerialHidPreset;
-			UsbSerialHidReportFormat          = rhs.UsbSerialHidReportFormat;
-			UsbSerialHidRxFilterUsage         = rhs.UsbSerialHidRxFilterUsage;
-			UsbSerialHidFlowControl           = rhs.UsbSerialHidFlowControl;
-			UsbSerialHidAutoOpen              = rhs.UsbSerialHidAutoOpen;
-			UsbSerialHidIncludeNonPayloadData = rhs.UsbSerialHidIncludeNonPayloadData;
+			UsbSerialHidDeviceInfo    = rhs.UsbSerialHidDeviceInfo;
+		////UsbSerialHidMatchSerial is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
+			UsbSerialHidPreset        = rhs.UsbSerialHidPreset;
+			UsbSerialHidReportFormat  = rhs.UsbSerialHidReportFormat;
+			UsbSerialHidRxFilterUsage = rhs.UsbSerialHidRxFilterUsage;
+			UsbSerialHidFlowControl   = rhs.UsbSerialHidFlowControl;
+			UsbSerialHidAutoOpen      = rhs.UsbSerialHidAutoOpen;
+		////UsbSerialHidIncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
-			StartTerminal                     = rhs.StartTerminal;
+			StartTerminal             = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -137,34 +137,34 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			TerminalType                      = Domain.Settings.TerminalSettings.TerminalTypeDefault;
-			IOType                            = Domain.IOType.SerialPort;
+			TerminalType              = Domain.Settings.TerminalSettings.TerminalTypeDefault;
+			IOType                    = Domain.IOType.SerialPort;
 
-			SerialPortId                      = MKY.IO.Ports.SerialPortId.FirstStandardPort;
+			SerialPortId              = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 		////SerialPortCommunication is attached as settings object.
-			SerialPortAliveMonitor            = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
-			SerialPortAutoReopen              = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
+			SerialPortAliveMonitor    = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
+			SerialPortAutoReopen      = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
-			SocketRemoteHost                  = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
-			SocketRemoteTcpPort               = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
-			SocketRemoteUdpPort               = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
-			SocketLocalInterface              = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
-			SocketLocalFilter                 = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
-			SocketLocalTcpPort                = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
-			SocketLocalUdpPort                = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
-			TcpClientAutoReconnect            = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
-			UdpServerSendMode                 = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
+			SocketRemoteHost          = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
+			SocketRemoteTcpPort       = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
+			SocketRemoteUdpPort       = MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
+			SocketLocalInterface      = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
+			SocketLocalFilter         = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
+			SocketLocalTcpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
+			SocketLocalUdpPort        = MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault;
+			TcpClientAutoReconnect    = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+			UdpServerSendMode         = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
 
-			UsbSerialHidDeviceInfo            = null;
-		////UsbSerialHidMatchSerial           = MKY.IO.Serial.Usb.SerialHidDeviceSettings.MatchSerialDefault; is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
-			UsbSerialHidPreset                = MKY.IO.Serial.Usb.SerialHidDeviceSettings.PresetDefault;
-			UsbSerialHidReportFormat          = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
-			UsbSerialHidRxFilterUsage         = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxFilterUsageDefault;
-			UsbSerialHidFlowControl           = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
-			UsbSerialHidAutoOpen              = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
-			UsbSerialHidIncludeNonPayloadData = MKY.IO.Serial.Usb.SerialHidDeviceSettings.IncludeNonPayloadDataDefault;
+			UsbSerialHidDeviceInfo    = null;
+		////UsbSerialHidMatchSerial is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
+			UsbSerialHidPreset        = MKY.IO.Serial.Usb.SerialHidDeviceSettings.PresetDefault;
+			UsbSerialHidReportFormat  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.ReportFormatDefault;
+			UsbSerialHidRxFilterUsage = MKY.IO.Serial.Usb.SerialHidDeviceSettings.RxFilterUsageDefault;
+			UsbSerialHidFlowControl   = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
+			UsbSerialHidAutoOpen      = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
+		////UsbSerialHidIncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
-			StartTerminal                     = true;
+			StartTerminal             = true;
 		}
 
 		#region Properties
@@ -582,20 +582,20 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("UsbSerialHidIncludeNonPayloadData")]
-		public virtual bool UsbSerialHidIncludeNonPayloadData
-		{
-			get { return (this.usbSerialHidIncludeNonPayloadData); }
-			set
-			{
-				if (this.usbSerialHidIncludeNonPayloadData != value)
-				{
-					this.usbSerialHidIncludeNonPayloadData = value;
-					SetMyChanged();
-				}
-			}
-		}
+	/////// <summary></summary>
+	////[XmlElement("UsbSerialHidIncludeNonPayloadData")]
+	////public virtual bool UsbSerialHidIncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
+	////{
+	////	get { return (this.usbSerialHidIncludeNonPayloadData); }
+	////	set
+	////	{
+	////		if (this.usbSerialHidIncludeNonPayloadData != value)
+	////		{
+	////			this.usbSerialHidIncludeNonPayloadData = value;
+	////			SetMyChanged();
+	////		}
+	////	}
+	////}
 
 		/// <summary></summary>
 		[XmlElement("StartTerminal")]
@@ -651,13 +651,13 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^  UdpServerSendMode                                                              .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo             != null ? UsbSerialHidDeviceInfo            .GetHashCode() : 0); // May be 'null' if no devices are available!
-			////hashCode = (hashCode * 397) ^  UsbSerialHidMatchSerial                                                        .GetHashCode(); is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
+			////hashCode = (hashCode * 397) ^  UsbSerialHidMatchSerial is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 				hashCode = (hashCode * 397) ^  UsbSerialHidPreset                                                             .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                                                       .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidRxFilterUsage                                                      .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                                        .GetHashCode();
 				hashCode = (hashCode * 397) ^  UsbSerialHidAutoOpen                                                           .GetHashCode();
-				hashCode = (hashCode * 397) ^  UsbSerialHidIncludeNonPayloadData                                              .GetHashCode();
+			////hashCode = (hashCode * 397) ^  UsbSerialHidIncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
 				hashCode = (hashCode * 397) ^  StartTerminal                                                                  .GetHashCode();
 
@@ -690,32 +690,32 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				TerminalType                     .Equals(other.TerminalType)                      &&
-				IOType                           .Equals(other.IOType)                            &&
+				TerminalType              .Equals(other.TerminalType)                 &&
+				IOType                    .Equals(other.IOType)                       &&
 
-				ObjectEx.Equals(SerialPortId,            other.SerialPortId)                      &&
-				SerialPortCommunication          .Equals(other.SerialPortCommunication)           &&
-				SerialPortAliveMonitor           .Equals(other.SerialPortAliveMonitor)            &&
-				SerialPortAutoReopen             .Equals(other.SerialPortAutoReopen)              &&
+				ObjectEx.Equals(SerialPortId, other.SerialPortId)                     &&
+				SerialPortCommunication   .Equals(other.SerialPortCommunication)      &&
+				SerialPortAliveMonitor    .Equals(other.SerialPortAliveMonitor)       &&
+				SerialPortAutoReopen      .Equals(other.SerialPortAutoReopen)         &&
 
 				StringEx.EqualsOrdinalIgnoreCase(SocketRemoteHost_ForSerialization, other.SocketRemoteHost_ForSerialization) &&
-				SocketRemoteTcpPort              .Equals(other.SocketRemoteTcpPort)               &&
-				SocketRemoteUdpPort              .Equals(other.SocketRemoteUdpPort)               &&
-				SocketLocalInterface             .Equals(other.SocketLocalInterface)              &&
+				SocketRemoteTcpPort       .Equals(other.SocketRemoteTcpPort)          &&
+				SocketRemoteUdpPort       .Equals(other.SocketRemoteUdpPort)          &&
+				SocketLocalInterface      .Equals(other.SocketLocalInterface)         &&
 				StringEx.EqualsOrdinalIgnoreCase(SocketLocalFilter_ForSerialization, other.SocketLocalFilter_ForSerialization) &&
-				SocketLocalTcpPort               .Equals(other.SocketLocalTcpPort)                &&
-				SocketLocalUdpPort               .Equals(other.SocketLocalUdpPort)                &&
-				TcpClientAutoReconnect           .Equals(other.TcpClientAutoReconnect)            &&
-				UdpServerSendMode                .Equals(other.UdpServerSendMode)                 &&
+				SocketLocalTcpPort       .Equals(other.SocketLocalTcpPort)            &&
+				SocketLocalUdpPort       .Equals(other.SocketLocalUdpPort)            &&
+				TcpClientAutoReconnect   .Equals(other.TcpClientAutoReconnect)        &&
+				UdpServerSendMode        .Equals(other.UdpServerSendMode)             &&
 
-				ObjectEx.Equals(UsbSerialHidDeviceInfo,  other.UsbSerialHidDeviceInfo)            &&
-			////UsbSerialHidMatchSerial          .Equals(other.UsbSerialHidMatchSerial)           && is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
-				UsbSerialHidPreset               .Equals(other.UsbSerialHidPreset)                &&
-				UsbSerialHidReportFormat         .Equals(other.UsbSerialHidReportFormat)          &&
-				UsbSerialHidRxFilterUsage        .Equals(other.UsbSerialHidRxFilterUsage)         &&
-				UsbSerialHidFlowControl          .Equals(other.UsbSerialHidFlowControl)           &&
-				UsbSerialHidAutoOpen             .Equals(other.UsbSerialHidAutoOpen)              &&
-				UsbSerialHidIncludeNonPayloadData.Equals(other.UsbSerialHidIncludeNonPayloadData) &&
+				ObjectEx.Equals(UsbSerialHidDeviceInfo, other.UsbSerialHidDeviceInfo) &&
+			////UsbSerialHidMatchSerial is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
+				UsbSerialHidPreset       .Equals(other.UsbSerialHidPreset)            &&
+				UsbSerialHidReportFormat .Equals(other.UsbSerialHidReportFormat)      &&
+				UsbSerialHidRxFilterUsage.Equals(other.UsbSerialHidRxFilterUsage)     &&
+				UsbSerialHidFlowControl  .Equals(other.UsbSerialHidFlowControl)       &&
+				UsbSerialHidAutoOpen     .Equals(other.UsbSerialHidAutoOpen)          &&
+			////UsbSerialHidIncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
 				StartTerminal.Equals(other.StartTerminal)
 			);
