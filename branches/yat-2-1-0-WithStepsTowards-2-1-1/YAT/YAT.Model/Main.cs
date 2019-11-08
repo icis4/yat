@@ -995,12 +995,12 @@ namespace YAT.Model
 						if (!this.commandLineArgs.OptionIsGiven("SerialString"))
 						{
 							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
-							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false;
+							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 						}
 						else
 						{
 							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId, this.commandLineArgs.SerialString);
-							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = true;
+							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = true; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 						}
 					}
 					else
@@ -1059,59 +1059,61 @@ namespace YAT.Model
 			// cloned below. They can simply be assigned and will then later be assigned back.
 			var temp = new Domain.Settings.TerminalSettings();
 
-			temp.TerminalType                        = newTerminalSettings.TerminalType;
-			temp.IO.IOType                           = newTerminalSettings.IOType;
+			temp.TerminalType                                = newTerminalSettings.TerminalType;
+			temp.IO.IOType                                   = newTerminalSettings.IOType;
 
-			temp.IO.SerialPort.PortId                = newTerminalSettings.SerialPortId;
-			temp.IO.SerialPort.Communication         = newTerminalSettings.SerialPortCommunication;
-			temp.IO.SerialPort.AliveMonitor          = newTerminalSettings.SerialPortAliveMonitor;
-			temp.IO.SerialPort.AutoReopen            = newTerminalSettings.SerialPortAutoReopen;
+			temp.IO.SerialPort.PortId                        = newTerminalSettings.SerialPortId;
+			temp.IO.SerialPort.Communication                 = newTerminalSettings.SerialPortCommunication;
+			temp.IO.SerialPort.AliveMonitor                  = newTerminalSettings.SerialPortAliveMonitor;
+			temp.IO.SerialPort.AutoReopen                    = newTerminalSettings.SerialPortAutoReopen;
 
-			temp.IO.Socket.RemoteHost                = newTerminalSettings.SocketRemoteHost;
-			temp.IO.Socket.RemoteTcpPort             = newTerminalSettings.SocketRemoteTcpPort;
-			temp.IO.Socket.RemoteUdpPort             = newTerminalSettings.SocketRemoteUdpPort;
-			temp.IO.Socket.LocalInterface            = newTerminalSettings.SocketLocalInterface;
-			temp.IO.Socket.LocalFilter               = newTerminalSettings.SocketLocalFilter;
-			temp.IO.Socket.LocalTcpPort              = newTerminalSettings.SocketLocalTcpPort;
-			temp.IO.Socket.LocalUdpPort              = newTerminalSettings.SocketLocalUdpPort;
-			temp.IO.Socket.TcpClientAutoReconnect    = newTerminalSettings.TcpClientAutoReconnect;
-			temp.IO.Socket.UdpServerSendMode         = newTerminalSettings.UdpServerSendMode;
+			temp.IO.Socket.RemoteHost                        = newTerminalSettings.SocketRemoteHost;
+			temp.IO.Socket.RemoteTcpPort                     = newTerminalSettings.SocketRemoteTcpPort;
+			temp.IO.Socket.RemoteUdpPort                     = newTerminalSettings.SocketRemoteUdpPort;
+			temp.IO.Socket.LocalInterface                    = newTerminalSettings.SocketLocalInterface;
+			temp.IO.Socket.LocalFilter                       = newTerminalSettings.SocketLocalFilter;
+			temp.IO.Socket.LocalTcpPort                      = newTerminalSettings.SocketLocalTcpPort;
+			temp.IO.Socket.LocalUdpPort                      = newTerminalSettings.SocketLocalUdpPort;
+			temp.IO.Socket.TcpClientAutoReconnect            = newTerminalSettings.TcpClientAutoReconnect;
+			temp.IO.Socket.UdpServerSendMode                 = newTerminalSettings.UdpServerSendMode;
 
-			temp.IO.UsbSerialHidDevice.DeviceInfo    = newTerminalSettings.UsbSerialHidDeviceInfo;
-			temp.IO.UsbSerialHidDevice.MatchSerial   = newTerminalSettings.UsbSerialHidMatchSerial;
-			temp.IO.UsbSerialHidDevice.Preset        = newTerminalSettings.UsbSerialHidPreset;
-			temp.IO.UsbSerialHidDevice.ReportFormat  = newTerminalSettings.UsbSerialHidReportFormat;
-			temp.IO.UsbSerialHidDevice.RxFilterUsage = newTerminalSettings.UsbSerialHidRxFilterUsage;
-			temp.IO.UsbSerialHidDevice.FlowControl   = newTerminalSettings.UsbSerialHidFlowControl;
-			temp.IO.UsbSerialHidDevice.AutoOpen      = newTerminalSettings.UsbSerialHidAutoOpen;
+			temp.IO.UsbSerialHidDevice.DeviceInfo            = newTerminalSettings.UsbSerialHidDeviceInfo;
+		////temp.IO.UsbSerialHidDevice.MatchSerial           = newTerminalSettings.UsbSerialHidMatchSerial; is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
+			temp.IO.UsbSerialHidDevice.Preset                = newTerminalSettings.UsbSerialHidPreset;
+			temp.IO.UsbSerialHidDevice.ReportFormat          = newTerminalSettings.UsbSerialHidReportFormat;
+			temp.IO.UsbSerialHidDevice.RxFilterUsage         = newTerminalSettings.UsbSerialHidRxFilterUsage;
+			temp.IO.UsbSerialHidDevice.FlowControl           = newTerminalSettings.UsbSerialHidFlowControl;
+			temp.IO.UsbSerialHidDevice.AutoOpen              = newTerminalSettings.UsbSerialHidAutoOpen;
+			temp.IO.UsbSerialHidDevice.IncludeNonPayloadData = newTerminalSettings.UsbSerialHidIncludeNonPayloadData;
 
 			if (ProcessCommandLineArgsIntoExistingTerminalSettings(temp))
 			{
-				newTerminalSettings.TerminalType              = temp.TerminalType;
-				newTerminalSettings.IOType                    = temp.IO.IOType;
+				newTerminalSettings.TerminalType                      = temp.TerminalType;
+				newTerminalSettings.IOType                            = temp.IO.IOType;
 
-				newTerminalSettings.SerialPortId              = temp.IO.SerialPort.PortId;
-				newTerminalSettings.SerialPortCommunication   = temp.IO.SerialPort.Communication;
-				newTerminalSettings.SerialPortAliveMonitor    = temp.IO.SerialPort.AliveMonitor;
-				newTerminalSettings.SerialPortAutoReopen      = temp.IO.SerialPort.AutoReopen;
+				newTerminalSettings.SerialPortId                      = temp.IO.SerialPort.PortId;
+				newTerminalSettings.SerialPortCommunication           = temp.IO.SerialPort.Communication;
+				newTerminalSettings.SerialPortAliveMonitor            = temp.IO.SerialPort.AliveMonitor;
+				newTerminalSettings.SerialPortAutoReopen              = temp.IO.SerialPort.AutoReopen;
 
-				newTerminalSettings.SocketRemoteHost          = temp.IO.Socket.RemoteHost;
-				newTerminalSettings.SocketRemoteTcpPort       = temp.IO.Socket.RemoteTcpPort;
-				newTerminalSettings.SocketRemoteUdpPort       = temp.IO.Socket.RemoteUdpPort;
-				newTerminalSettings.SocketLocalInterface      = temp.IO.Socket.LocalInterface;
-				newTerminalSettings.SocketLocalFilter         = temp.IO.Socket.LocalFilter;
-				newTerminalSettings.SocketLocalTcpPort        = temp.IO.Socket.LocalTcpPort;
-				newTerminalSettings.SocketLocalUdpPort        = temp.IO.Socket.LocalUdpPort;
-				newTerminalSettings.TcpClientAutoReconnect    = temp.IO.Socket.TcpClientAutoReconnect;
-				newTerminalSettings.UdpServerSendMode         = temp.IO.Socket.UdpServerSendMode;
+				newTerminalSettings.SocketRemoteHost                  = temp.IO.Socket.RemoteHost;
+				newTerminalSettings.SocketRemoteTcpPort               = temp.IO.Socket.RemoteTcpPort;
+				newTerminalSettings.SocketRemoteUdpPort               = temp.IO.Socket.RemoteUdpPort;
+				newTerminalSettings.SocketLocalInterface              = temp.IO.Socket.LocalInterface;
+				newTerminalSettings.SocketLocalFilter                 = temp.IO.Socket.LocalFilter;
+				newTerminalSettings.SocketLocalTcpPort                = temp.IO.Socket.LocalTcpPort;
+				newTerminalSettings.SocketLocalUdpPort                = temp.IO.Socket.LocalUdpPort;
+				newTerminalSettings.TcpClientAutoReconnect            = temp.IO.Socket.TcpClientAutoReconnect;
+				newTerminalSettings.UdpServerSendMode                 = temp.IO.Socket.UdpServerSendMode;
 
-				newTerminalSettings.UsbSerialHidDeviceInfo    = temp.IO.UsbSerialHidDevice.DeviceInfo;
-				newTerminalSettings.UsbSerialHidMatchSerial   = temp.IO.UsbSerialHidDevice.MatchSerial;
-				newTerminalSettings.UsbSerialHidPreset        = temp.IO.UsbSerialHidDevice.Preset;
-				newTerminalSettings.UsbSerialHidReportFormat  = temp.IO.UsbSerialHidDevice.ReportFormat;
-				newTerminalSettings.UsbSerialHidRxFilterUsage = temp.IO.UsbSerialHidDevice.RxFilterUsage;
-				newTerminalSettings.UsbSerialHidFlowControl   = temp.IO.UsbSerialHidDevice.FlowControl;
-				newTerminalSettings.UsbSerialHidAutoOpen      = temp.IO.UsbSerialHidDevice.AutoOpen;
+				newTerminalSettings.UsbSerialHidDeviceInfo            = temp.IO.UsbSerialHidDevice.DeviceInfo;
+			////newTerminalSettings.UsbSerialHidMatchSerial           = temp.IO.UsbSerialHidDevice.MatchSerial; is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
+				newTerminalSettings.UsbSerialHidPreset                = temp.IO.UsbSerialHidDevice.Preset;
+				newTerminalSettings.UsbSerialHidReportFormat          = temp.IO.UsbSerialHidDevice.ReportFormat;
+				newTerminalSettings.UsbSerialHidRxFilterUsage         = temp.IO.UsbSerialHidDevice.RxFilterUsage;
+				newTerminalSettings.UsbSerialHidFlowControl           = temp.IO.UsbSerialHidDevice.FlowControl;
+				newTerminalSettings.UsbSerialHidAutoOpen              = temp.IO.UsbSerialHidDevice.AutoOpen;
+				newTerminalSettings.UsbSerialHidIncludeNonPayloadData = temp.IO.UsbSerialHidDevice.IncludeNonPayloadData;
 
 				return (true);
 			}
