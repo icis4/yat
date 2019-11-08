@@ -357,7 +357,6 @@ namespace MKY.IO.Usb
 			GetDeviceCapabilities();
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void GetDeviceCapabilities()
 		{
 			SafeFileHandle deviceHandle;
@@ -396,10 +395,11 @@ namespace MKY.IO.Usb
 							string name = Enum.GetName(typeof(HidUsagePage), this.usagePage);
 							if (!string.IsNullOrEmpty(name))
 								usagePageName = name;
-							else if (this.usagePage.GetHashCode() >= 0xFF00) // Vendor-defined usage page.
+							else if ((this.usagePage >= HidUsagePage.VendorDefined_First) &&
+								     (this.usagePage <= HidUsagePage.VendorDefined_Last))
 								usagePageName = "VendorDefined";
 						}
-						catch (Exception ex)
+						catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
 						{
 							DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage page!");
 						}
@@ -410,16 +410,20 @@ namespace MKY.IO.Usb
 							string name = Enum.GetName(typeof(HidUsageId), this.usageId);
 							if (!string.IsNullOrEmpty(name))
 								usageIdName = name;
-							else if (this.usagePage.GetHashCode() >= 0xFF00) // Vendor-defined usage page also
-								usageIdName = "VendorDefined";               //   results in vendor-defined usage.
+							else if ((this.usageId >= HidUsageId.PageDefined_First) &&
+								     (this.usageId <= HidUsageId.PageDefined_Last))
+								usageIdName = "PageDefined";
+							else if ((this.usageId >= HidUsageId.VendorDefined_First) &&
+								     (this.usageId <= HidUsageId.VendorDefined_Last))
+								usageIdName = "VendorDefined";
 						}
-						catch (Exception ex)
+						catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
 						{
 							DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage ID!");
 						}
 
 						Debug.WriteLine("USB HID device usage information:");
-						Debug.Indent();
+						Debug.Indent(); // Terms "Usage page" and "Usage ID" are given by https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf section 3.1 [HID Usage Table Conventions].
 						Debug.WriteLine("Usage page " + usagePageValue + " corresponds to '" + usagePageName + "'");
 						Debug.WriteLine("Usage ID   " + usageIdValue   + " corresponds to '" + usageIdName   + "'");
 						Debug.Unindent();
