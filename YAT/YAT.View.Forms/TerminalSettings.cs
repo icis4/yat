@@ -463,8 +463,8 @@ namespace YAT.View.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.settings = this.settingsInEdit;
-			this.settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
+			this.settings = this.settingsInEdit;         // Note this setting is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
+			this.settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)

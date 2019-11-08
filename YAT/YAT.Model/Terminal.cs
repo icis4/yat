@@ -447,11 +447,12 @@ namespace YAT.Model
 				else
 					this.guid = Guid.NewGuid();
 
-				// Link and attach to settings:
+				// Link, override and attach to settings:
 				this.settingsHandler = settingsHandler;
-				this.settingsRoot = this.settingsHandler.Settings;
-				this.settingsRoot.ClearChanged();
-				AttachSettingsEventHandlers();
+				this.settingsRoot = this.settingsHandler.Settings; // Note this setting is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
+				this.settingsRoot.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
+				this.settingsRoot.ClearChanged();                  // Overriding such setting shall not be reflected in the settings,
+				AttachSettingsEventHandlers();                     // i.e. neither be indicated by a '*' nor lead to a file write.
 
 				// Set ID and name(s):
 				this.sequentialId = ++staticSequentialIdCounter;

@@ -421,41 +421,42 @@ namespace YAT.View.Forms
 			// Create document settings and fill it with new terminal settings:
 			this.terminalSettings = new TerminalSettingsRoot();
 
-			this.terminalSettings.Terminal.TerminalType                            = this.newTerminalSettings.TerminalType;
+			this.terminalSettings.Terminal.TerminalType                                = this.newTerminalSettings.TerminalType;
 			this.terminalSettings.Terminal.UpdateTerminalTypeDependentSettings(); // Needed because the parent settings don't notice the 'TerminalType' change above!
-			this.terminalSettings.Terminal.IO.IOType                               = this.newTerminalSettings.IOType;
+			this.terminalSettings.Terminal.IO.IOType                                   = this.newTerminalSettings.IOType;
 			this.terminalSettings.Terminal.UpdateIOTypeDependentSettings(); // Needed because the parent settings don't notice the 'IOType' change above!
 
-			this.terminalSettings.Terminal.IO.SerialPort.PortId                    = this.newTerminalSettings.SerialPortId;
-			this.terminalSettings.Terminal.IO.SerialPort.Communication.BaudRate    = this.newTerminalSettings.SerialPortCommunication.BaudRate;
-			this.terminalSettings.Terminal.IO.SerialPort.Communication.DataBits    = this.newTerminalSettings.SerialPortCommunication.DataBits;
-			this.terminalSettings.Terminal.IO.SerialPort.Communication.Parity      = this.newTerminalSettings.SerialPortCommunication.Parity;
-			this.terminalSettings.Terminal.IO.SerialPort.Communication.StopBits    = this.newTerminalSettings.SerialPortCommunication.StopBits;
-			this.terminalSettings.Terminal.IO.SerialPort.Communication.FlowControl = this.newTerminalSettings.SerialPortCommunication.FlowControl;
-			this.terminalSettings.Terminal.IO.SerialPort.AliveMonitor              = this.newTerminalSettings.SerialPortAliveMonitor;
-			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen                = this.newTerminalSettings.SerialPortAutoReopen;
+			this.terminalSettings.Terminal.IO.SerialPort.PortId                        = this.newTerminalSettings.SerialPortId;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.BaudRate        = this.newTerminalSettings.SerialPortCommunication.BaudRate;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.DataBits        = this.newTerminalSettings.SerialPortCommunication.DataBits;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.Parity          = this.newTerminalSettings.SerialPortCommunication.Parity;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.StopBits        = this.newTerminalSettings.SerialPortCommunication.StopBits;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.FlowControl     = this.newTerminalSettings.SerialPortCommunication.FlowControl;
+			this.terminalSettings.Terminal.IO.SerialPort.AliveMonitor                  = this.newTerminalSettings.SerialPortAliveMonitor;
+			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen                    = this.newTerminalSettings.SerialPortAutoReopen;
 
-			this.terminalSettings.Terminal.IO.Socket.RemoteHost                    = this.newTerminalSettings.SocketRemoteHost;
-			this.terminalSettings.Terminal.IO.Socket.RemoteTcpPort                 = this.newTerminalSettings.SocketRemoteTcpPort;
-			this.terminalSettings.Terminal.IO.Socket.RemoteUdpPort                 = this.newTerminalSettings.SocketRemoteUdpPort;
-			this.terminalSettings.Terminal.IO.Socket.LocalInterface                = this.newTerminalSettings.SocketLocalInterface;
-			this.terminalSettings.Terminal.IO.Socket.LocalFilter                   = this.newTerminalSettings.SocketLocalFilter;
-			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort                  = this.newTerminalSettings.SocketLocalTcpPort;
-			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort                  = this.newTerminalSettings.SocketLocalUdpPort;
-			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect        = this.newTerminalSettings.TcpClientAutoReconnect;
-			this.terminalSettings.Terminal.IO.Socket.UdpServerSendMode             = this.newTerminalSettings.UdpServerSendMode;
+			this.terminalSettings.Terminal.IO.Socket.RemoteHost                        = this.newTerminalSettings.SocketRemoteHost;
+			this.terminalSettings.Terminal.IO.Socket.RemoteTcpPort                     = this.newTerminalSettings.SocketRemoteTcpPort;
+			this.terminalSettings.Terminal.IO.Socket.RemoteUdpPort                     = this.newTerminalSettings.SocketRemoteUdpPort;
+			this.terminalSettings.Terminal.IO.Socket.LocalInterface                    = this.newTerminalSettings.SocketLocalInterface;
+			this.terminalSettings.Terminal.IO.Socket.LocalFilter                       = this.newTerminalSettings.SocketLocalFilter;
+			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort                      = this.newTerminalSettings.SocketLocalTcpPort;
+			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort                      = this.newTerminalSettings.SocketLocalUdpPort;
+			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect            = this.newTerminalSettings.TcpClientAutoReconnect;
+			this.terminalSettings.Terminal.IO.Socket.UdpServerSendMode                 = this.newTerminalSettings.UdpServerSendMode;
 
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial       = this.newTerminalSettings.UsbSerialHidMatchSerial;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.Preset            = this.newTerminalSettings.UsbSerialHidPreset;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage     = this.newTerminalSettings.UsbSerialHidRxFilterUsage;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo            = this.newTerminalSettings.UsbSerialHidDeviceInfo; // Note this setting is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial           = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.Preset                = this.newTerminalSettings.UsbSerialHidPreset;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat          = this.newTerminalSettings.UsbSerialHidReportFormat;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage         = this.newTerminalSettings.UsbSerialHidRxFilterUsage;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl           = this.newTerminalSettings.UsbSerialHidFlowControl;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen              = this.newTerminalSettings.UsbSerialHidAutoOpen;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = this.newTerminalSettings.UsbSerialHidIncludeNonPayloadData;
 
 			this.terminalSettings.Terminal.UpdateIOSettingsDependentSettings(); // Needed because the parent settings don't notice the changes above!
 
-			this.terminalSettings.TerminalIsStarted                                = this.newTerminalSettings.StartTerminal;
+			this.terminalSettings.TerminalIsStarted                                    = this.newTerminalSettings.StartTerminal;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -467,7 +468,6 @@ namespace YAT.View.Forms
 		private void UpdateNewTerminalSettings()
 		{
 			this.newTerminalSettings = this.newTerminalSettingsInEdit;
-			this.newTerminalSettings.UsbSerialHidMatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
 		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

@@ -84,20 +84,16 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.1.1 :: 2019-xx-xx
+YAT 2.1.1 Preliminary :: 2019-xx-xx
 ----------------------------------------------------------------------------------------------------
-
-New:
-- ...    <=  WAIT FOR ... (feature request #74, bug #176).
 
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
   renamed to \!(IOSettings()) (related to feature request #71).
-- Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
-  break lines at the same location as the bidirectional monitor panel (bug #477).
-- Element processing refactored (preparing feature reqs. #19, #74 and fix of bugs #176, #477, #478).
+- USB Ser/HID now takes the HID usage into account, allowing working with devices that implement
+  multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Project/Assembly structure slightly refined (preparing feature request #74).
 
 Fixed bugs:
@@ -105,8 +101,7 @@ Fixed bugs:
   commands yet (related to previous feature requests #28, #257, #365).
 - Import/Paste of a .yacp command page file that contains more predefined commands than currently
   configured now behaves correctly (bug #479, related to previous feature requests #28, #257, #365).
-- Automatic actions 'Filter' and 'Suppress' now also work for continuous data (bug #478) and on
-  refresh (feature request #367).
+- Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
@@ -145,6 +140,7 @@ Limitations and known issues:
 - Automatic responses and actions work fine as long as the received chunks do not contain more than
   one trigger and do not spread across multiple lines. Limitation could be eliminated but requires
   some refactoring (feature request #366).
+- Automatic actions 'Filter' and 'Suppress' do not get reapplied on refresh (feature request #367).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet

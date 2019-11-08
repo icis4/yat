@@ -79,8 +79,8 @@ namespace YAT
 
 		/// <summary>The version designation.</summary>
 	////public const string ProductVersionStabilityIndication = "";
-	////public const string ProductVersionStabilityIndication = " Preliminary";
-		public const string ProductVersionStabilityIndication = " Development";
+		public const string ProductVersionStabilityIndication = " Preliminary";
+	////public const string ProductVersionStabilityIndication = " Development";
 
 		/// <summary>The product version that combines product version and version stability indication.</summary>
 		public static readonly string ProductVersionWithStabilityIndication = ProductVersion + ProductVersionStabilityIndication;
