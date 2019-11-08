@@ -1,0 +1,4 @@
+﻿
+More insight in ".NET SerialPort Woes" by Zach Saw at
+http://zachsaw.blogspot.ch/2010/07/net-serialport-woes.html and
+http://zachsaw.blogspot.ch/2010/07/serialport-ioexception-workaround-in-c.html.

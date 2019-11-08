@@ -1,0 +1,89 @@
+﻿
+1.99.75 = patches including "EventRunnerLoopShutdown via Reflection" are applied
+================================================================================
+
+
+#	Stimuli											Microsoft driver 5.1.2600.5512							Thesycon driver 2.15								ToriLogic driver 1.24.0								
+													<RB>\USB\tools\SerCDC-Driver\Microsoft					<RB>\USB\tools\SerCDC-Driver\Thesycon\.._signed		<RB>\USB\tools\SerCDC-Driver\ToriLogic\generic_..	
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1.	1. Connect a USB CDC device						OK														OK													OK													
+	2. Physically disconnect device					OK = Windows device manager detects disconnect			OK													OK													
+													 > COM port disappears from Windows device manager																												
+	3. Reconnect device								OK = Windows device manager detects reconnect			OK													OK													
+													 > COM port reappears in Windows device manager																													
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2.	1. Open terminal on COM port of the device		OK														OK													OK													
+	2. Send something								OK														OK													OK													
+	3. Close port									OK														OK													OK													
+	4. Open port again								OK														OK													OK													
+	5. Send something								OK														OK													OK													
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3.	1. Disconnect device							~~ = YAT doesn't notice anything						OK = YAT detects disconnect							OK = YAT detects disconnect							
+													 > Terminal pretends to still be open					 > Terminal gets closed, waiting for reconnect		 > Terminal gets closed, waiting for reconnect		
+	2. Close port									OK														N/A (not needed, already closed)					N/A (not needed, already closed)					
+	3. Reconnect device								OK														OK = YAT detects that port is available again		OK = YAT detects that port is available again		
+																											 > Terminal gets reopened							 > Terminal gets reopened							
+	4. Reopen port									OK														N/A (not needed, already opened)					N/A (not needed, already opened)					
+	5. Send something								OK														OK													OK													
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4.	1. Disconnect device							~~ = YAT doesn't notice anything						this #4. is N/A (same proper behaviour as #3.)		this #4. is N/A (same proper behaviour as #3.)		
+													 > Terminal pretends to still be open																															
+	2. Reconnect device								~~ = YAT doesn't notice anything																																
+													 > Terminal pretends to still be open																															
+	3. Close port									OK																																								
+	4. Reopen port									~~ = YAT cannot reopen the port (IOException)																													
+													 > Terminal gets closed, waiting for reconnect																													
+	5. Disconnect and reconnect device again		OK																																								
+	6. Reopen port									OK																																								
+	7. Send something								OK																																								
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5.	1. Disconnect device							~~ = YAT doesn't notice anything						this #5. is N/A (same proper behaviour as #3.)		this #5. is N/A (same proper behaviour as #3.)		
+													 > Terminal pretends to still be open																															
+	2. Reconnect device								~~ = YAT doesn't notice anything																																
+													 > Terminal pretends to still be open																															
+	3. Send something								OK = YAT detects that port is no longer valid																													
+													 > Terminal gets closed, waiting for reconnect																													
+	4. Disconnect and reconnect device				OK = YAT detects that port is available again																													
+													 > Terminal gets reopened																																		
+	5. Send something								OK																																								
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+6.	1. Disconnect device							~~ = YAT doesn't notice anything						this #6. is N/A (same proper behaviour as #3.)		this #6. is N/A (same proper behaviour as #3.)		
+													 > Terminal pretends to still be open																															
+	2. Send something								OK = YAT detects that port is no longer valid																													
+													 > Terminal gets closed, waiting for reconnect																													
+	3. Reconnect device								OK = YAT detects that port is available again																													
+													 > Terminal gets reopened																																		
+	4. Send something								OK																																								
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+7.	1. Continuously send something					OK														OK													OK													
+	2. Disconnect device							OK = YAT detects that port is no longer valid			OK													OK													
+													 > Terminal gets closed, waiting for reconnect																													
+	3. Reconnect device								OK = YAT detects that port is available again			OK													OK													
+													 > Terminal gets reopened																																		
+	4. Send something								OK														OK													OK													
+
+
+Conclusion for YAT
+==================
+ +  Microsoft driver is properly handled
+ +  Thesycon driver is properly handled
++++ ToriLogic driver is properly handled even though it didn't with 1.99.70 => "EventRunnerLoopShutdown via Reflection" patch works
+
+
+Conclusion for driver
+=====================
+Microsoft driver  -
+Thesycon driver   +
+ToriLogic driver +/- (OK only if "EventRunnerLoopShutdown via Reflection" patch is applied)
+
+
+History of Changes
+==================
+2017-07-07 / MKY / Created

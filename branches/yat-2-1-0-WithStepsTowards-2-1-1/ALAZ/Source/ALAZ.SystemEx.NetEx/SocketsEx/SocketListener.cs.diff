@@ -1,0 +1,71 @@
+@@ -37,6 +37,15 @@
+  * OF THE POSSIBILITY OF SUCH DAMAGE. 
+  */
+ 
++#if (DEBUG)
++
++	// Enable debugging of exceptions:
++////#define DEBUG_EXCEPTIONS
++
++#endif
++
++using System.Diagnostics;
++
+ using System;
+ using System.Net;
+ using System.Net.Sockets;
+@@ -126,7 +135,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+             if (!Disposed)
+             {
+ 
+-                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
++                FSocket = new Socket(LocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                 FSocket.Bind(LocalEndPoint);
+                 FSocket.Listen(FBackLog * FAcceptThreads);
+ 
+@@ -226,11 +235,24 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+                 e2.UserToken = listener;
+                 e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
+ 
+-                if (!listener.Socket.AcceptAsync(e2))
++                // ----- \remind BEGIN -----
++                // 2010-05-14 / Matthias Klaey
++                // Handling exceptions.
++
++                try
+                 {
+-                    BeginAcceptCallbackAsync(this, e2);
++                    if (!listener.Socket.AcceptAsync(e2))
++                    {
++                        BeginAcceptCallbackAsync(this, e2);
++                    }
+                 }
++                catch (ObjectDisposedException ex)
++                {
++                    DebugException(ex);
++                }
+ 
++                // ----- \remind  END  -----
++
+             }
+ 
+             e.UserToken = null;
+@@ -278,6 +300,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+ 
+         #endregion
+ 
++		#region Debug
++		//==========================================================================================
++		// Debug
++		//==========================================================================================
++
++		[Conditional("DEBUG_EXCEPTIONS")]
++		private void DebugException(Exception ex)
++		{
++			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
++		}
++
++		#endregion
+     }
+ 
+ }

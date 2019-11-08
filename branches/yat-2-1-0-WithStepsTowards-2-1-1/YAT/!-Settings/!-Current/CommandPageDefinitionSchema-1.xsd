@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Settings" nillable="true" type="CommandPageSettingsRoot" />
+  <xs:complexType name="CommandPageSettingsRoot">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="SettingsName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SettingsVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Mark" type="UserTimeStamp" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Page" type="PredefinedCommandPage" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SettingsItem" abstract="true" />
+  <xs:complexType name="UserTimeStamp">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PredefinedCommandPage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="PageName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Commands" type="Command" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LinkFilePath" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Command">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsDefined" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DefaultRadix" type="Radix" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CommandLines" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsFilePath" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FilePath" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="Radix">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="String" />
+      <xs:enumeration value="Char" />
+      <xs:enumeration value="Bin" />
+      <xs:enumeration value="Oct" />
+      <xs:enumeration value="Dec" />
+      <xs:enumeration value="Hex" />
+      <xs:enumeration value="Unicode" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

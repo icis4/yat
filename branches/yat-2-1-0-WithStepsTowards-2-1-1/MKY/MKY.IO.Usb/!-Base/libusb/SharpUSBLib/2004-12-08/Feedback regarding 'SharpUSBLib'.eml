@@ -1,0 +1,60 @@
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00800000
+X-Mozilla-Keys:                                                                                 
+Message-ID: <4BBB88F5.1090103@users.sourceforge.net>
+Date: Tue, 06 Apr 2010 21:18:13 +0200
+From: maettu_this <maettu_this@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.1.9) Gecko/20100317 Thunderbird/3.0.4
+MIME-Version: 1.0
+To: mike@icsharpcode.net
+Subject: Feedback regarding 'SharpUSBLib'
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi Mike,
+
+I started to create a .NET adaption layer for 'libusb' which I called 
+'libusb.NET' based on your 'SharpUSBLib'. I did so for a SourceForge 
+hosted project where I needed a USB HID implementation.
+The project I am working on is called 'YAT- Yet Another Terminal' and 
+features a terminal to operate and debug serial communications. 'YAT' 
+supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, 
+UDP. Currently I am adding support for USB Ser/HID. You can find 'YAT' 
+on http://sourceforge.net/projects/y-a-terminal/.
+'YAT' is implemented in C#.NET. Therefore, I searched the web for a .NET 
+adaption layer for 'libusb' and found your 'SharpUSBLib'. Unfortunately 
+your project seems no more active and doesn't provide all the features I 
+needed for 'YAT'. Therefore, I created 'libusb.NET' which is based on 
+'SharpUSBLib' but uses the March revision of 'windows_backend'.
+After a while I ran into some serious issues and contacted the 'libusb' 
+guys. They mentioned 'LibUsbDotNet' on 
+http://sourceforge.net/projects/libusbdotnet/. Do you know about that 
+project? Looks very well implemented and promising but unfortunately 
+doesn't provide Ser/HID yet.
+In the meantime I have created a 'MKY.IO.Usb' library that directly 
+makes use of the Win32 "hid.dll" and implemented Ser/HID. Being aware 
+that this approach isn't platform independent. But it is straight 
+forward and it already partly works.
+
+Anyway, I have collected some feedback regarding 'SharpUSBLib'. Just in 
+case you still care about that project:
+
+ > Created a Visual Studio 2008 project
+ > Internal\NativeCode.cs Line #473
+     #if WIN32 doesn't work by default with Visual Studio
+     WIN32 is a suboptimal identifier anyway since lines #474/475 also 
+apply to Win64/x64
+ > BusCollection.cs
+     Not necessary anymore, use List<Bus> instead
+ > DescriptorCollection.cs
+     Not necessary anymore, use List<Bus> instead
+
+In case you don't consider to keep on working on 'SharpUSBLib' anymore, 
+I suggest you place a remark onto your site saying that people should 
+make use 'LibUsbDotNet' instead. And if you like you can also reference 
+my Ser/HID implementation in 'MKY.IO.Usb' in the 'YAT' SVN repository 
+under 
+https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb.
+
+Best regards,
+Matthias

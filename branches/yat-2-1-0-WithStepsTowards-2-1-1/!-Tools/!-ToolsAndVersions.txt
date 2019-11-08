@@ -1,0 +1,31 @@
+﻿
+Tools & Versions
+----------------
+
+Resources
+  > DejaVu fonts   2.37
+
+Repo
+  > SourceForge    Allura
+  > TortoiseSVN    1.9.7.27907
+  > AnkhSVN        2.6.12735                                [2.7.12815 already installed for VS2017]
+
+Development
+  > Microsoft Visual Studio 2015 Community Edition                          [2017 already installed]
+    (https://go.microsoft.com/fwlink/?LinkId=532606&clcid=0x409 for web installer)
+    (https://go.microsoft.com/fwlink/?LinkId=615448&clcid=0x409 for ISO image)
+  > VSI            1.0.0.1                                      [0.8.4 already installed for VS2017]
+  > NUnit          2.64
+  > FxCop          10
+  > GhostDoc       2018.2.19060
+
+Testing
+  > VSPE           0.938.4.846
+    (Alternative: com0com + hub4com)
+  > YAT TestBoard  1.0.0
+
+Documentation
+  > Libre Office   6.1.5.2
+
+----------------
+2019-06-08 / MKY

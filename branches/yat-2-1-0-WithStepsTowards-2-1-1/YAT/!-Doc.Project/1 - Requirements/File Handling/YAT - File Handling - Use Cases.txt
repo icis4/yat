@@ -1,0 +1,56 @@
+﻿
+Use Cases UFI 2007-08-13
+------------------------
+
+User öffnet YAT zum ersten Mal -- User öffnet Terminal -- User schliesst YAT
+--> Workspace wird in DefaulAppConfig gespeichert
+--> Terminal wird in DefaultTermConfig01 gespeichert
+
+User öffnet YAT mit Default Einstellung -- User speichert Teminal --> UserTermConfigXY -- User schliesst YAT
+--> Workspace wird in DefaulAppConfig gespeichert
+--> Terminal ist bereits gespeichert
+
+User öffnet YAT mit Default Einstellung -- User öffnet zusätzliches Terminal -- User schliesst YAT
+--> Workspace wird in DefaulAppConfig gespeichert
+--> Terminal1 ist bereits gespeichert
+--> Terminal2 wird in DefaultTermConfig01 gespeichert
+
+User öffnet YAT mit Default Einstellung -- User speichert Workspace
+--> UserAppConfigXY
+--> dadurch müssen alle Default-Terminal auch gespeichert werden: UserTermConfigXY (oder es wird ein Defaultnamen abgeleitet vom Workspace z.B. UserAppConfigXYTermXY verwendet)
+
+User schliesst YAT
+--> Workspace (UserAppConfigXY) wird in DefaulAppConfig gespeichert
+--> Terminals sind bereits gespeichert
+
+User öffnet YAT mit UserAppConfigXY -- User öffnet zusätzliches Terminal -- User schliesst YAT
+--> User muss Terminal speichern UserTermConfigXY (oder ...)
+--> UserAppConfigXY wird angepasst
+--> DefaulAppConfig wird mit UserAppConfigXY überschrieben
+
+User öffnet YAT mit UserTermConfigXY -- User schliesst YAT
+--> Workspace wird in DefaulAppConfig gespeichert
+
+User öffnet YAT mit UserTermConfigXY -- User öffnet zusätzliches Terminal -- User schliesst YAT
+--> Workspace wird in DefaulAppConfig gespeichert
+--> Terminal wird in DefaultTermConfig01 gespeichert
+
+
+Offene Fragen:
+
+> Werden nicht mehr benötigte DefaultTermConfigXY Dateien gelöscht?
+> Wenn eine bestehende UserAppConfig mit mindestens einer UserTermConfig unter einem anderen Namen gespeichert wird, werden die Terminaldatei auch kopiert oder greifen dann zwei UserAppConfigs auf die gleichen UserTermConfigs zu?
+
+
+Additional use cases 2007-08-27
+-------------------------------
+
+- Same user starts multiple instances of YAT
+  > Application settings are the same for all instances
+  > Default workspace is different for each instance (\LocalUser\..\Workspace-GUID.yaw)
+
+
+Additional use cases 2013-05-29
+-------------------------------
+
+- Write protected .yat and/or .yaw files

@@ -1,0 +1,12 @@
+﻿
+RTS vs RFR
+----------
+
+RTS
+> http://en.wikipedia.org/wiki/RS-232
+> http://de.wikipedia.org/wiki/RS-232
+> http://www.uni-protokolle.de/Lexikon/RS232.html
+
+RFR
+> http://www.rdc.cz/prilohy/hardware/56_Multiplexer%20protocol.pdf?PHPSESSID=onwykdqjng
+  => ETSI TS 127 010 V4.2.0 (2002-03)

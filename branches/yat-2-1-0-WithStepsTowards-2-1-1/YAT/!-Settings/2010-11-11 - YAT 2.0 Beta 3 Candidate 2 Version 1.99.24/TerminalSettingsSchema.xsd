@@ -1,0 +1,568 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Settings" nillable="true" type="TerminalSettingsRoot" />
+  <xs:complexType name="TerminalSettingsRoot">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="FileType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Saved" type="SaveInfo" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoSaved" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Explicit" type="ExplicitSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Implicit" type="ImplicitSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Settings" abstract="true" />
+  <xs:complexType name="LayoutSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TxMonitorPanelIsVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="BidirMonitorPanelIsVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RxMonitorPanelIsVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="MonitorOrientation" type="Orientation" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TxMonitorSplitterRatio" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RxMonitorSplitterRatio" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PredefinedPanelIsVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PredefinedSplitterRatio" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SendCommandPanelIsVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SendFilePanelIsVisible" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="Orientation">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Horizontal" />
+      <xs:enumeration value="Vertical" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="WindowSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="State" type="FormWindowState" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Location" type="Point" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Size" type="Size" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="FormWindowState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Normal" />
+      <xs:enumeration value="Minimized" />
+      <xs:enumeration value="Maximized" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Point">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="X" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Y" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Size">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Width" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Height" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PredefinedSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="SelectedPage" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SendFileSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Command" type="Command" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentCommands" type="RecentItemOfCommand" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Command">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsDefined" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CommandLines" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DefaultRadix" type="Radix" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsPartialText" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsPartialEolText" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsFilePath" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FilePath" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="Radix">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Bin" />
+      <xs:enumeration value="Oct" />
+      <xs:enumeration value="Dec" />
+      <xs:enumeration value="Hex" />
+      <xs:enumeration value="Char" />
+      <xs:enumeration value="String" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="RecentItemOfCommand">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Item" type="Command" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SendCommandSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Command" type="Command" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentCommands" type="RecentItemOfCommand" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ImplicitSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TerminalIsStarted" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LogIsStarted" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SendCommand" type="SendCommandSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SendFile" type="SendFileSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Predefined" type="PredefinedSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Window" type="WindowSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Layout" type="LayoutSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LogSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="RootPath" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RootFileName" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RawLogTx" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RawLogBidir" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RawLogRx" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RawExtension" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NeatLogTx" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NeatLogBidir" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NeatLogRx" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NeatExtension" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WriteMode" type="LogFileWriteMode" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SubdirectoriesFormat" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SubdirectoriesChannel" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NameFormat" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NameChannel" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NameDate" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NameTime" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NameSeparator" type="FileNameSeparator" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="LogFileWriteMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Create" />
+      <xs:enumeration value="Append" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="FileNameSeparator" />
+  <xs:complexType name="FormatSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Font" type="FontFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TxDataFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TxControlFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RxDataFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RxControlFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TimeStampFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LengthFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="WhiteSpacesFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ErrorFormat" type="TextFormat" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FontFormat">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Size" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Style" type="FontStyle" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="FontStyle">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Regular" />
+          <xs:enumeration value="Bold" />
+          <xs:enumeration value="Italic" />
+          <xs:enumeration value="Underline" />
+          <xs:enumeration value="Strikeout" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+  <xs:complexType name="TextFormat">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Color" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FontStyle" type="FontStyle" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PredefinedCommandSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Pages" type="PredefinedCommandPage" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PredefinedCommandPage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="PageName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Commands" type="Command" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BinaryDisplaySettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="LengthLineBreak" type="BinaryLengthLineBreak" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SequenceLineBreak" type="BinarySequenceLineBreak" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TimedLineBreak" type="BinaryTimedLineBreak" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BinaryLengthLineBreak">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LineLength" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BinarySequenceLineBreak">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Sequence" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BinaryTimedLineBreak">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Timeout" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BinaryTerminalSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="SeparateTxRxDisplay" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TxDisplay" type="BinaryDisplaySettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RxDisplay" type="BinaryDisplaySettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TextTerminalSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="SeparateTxRxEol" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TxEol" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RxEol" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Encoding" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowEol" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LineSendDelay" type="TextLineSendDelay" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WaitForResponse" type="WaitForResponse" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CharSubstitution" type="CharSubstitution" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TextLineSendDelay">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Delay" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LineInterval" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="WaitForResponse">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Timeout" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CharSubstitution">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="ToUpper" />
+      <xs:enumeration value="ToLower" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SendSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="KeepCommand" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CopyPredefined" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SendImmediately" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CharReplaceSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ReplaceControlChars" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ControlCharRadix" type="ControlCharRadix" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ReplaceTab" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ReplaceSpace" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="ControlCharRadix">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Bin" />
+      <xs:enumeration value="Oct" />
+      <xs:enumeration value="Dec" />
+      <xs:enumeration value="Hex" />
+      <xs:enumeration value="Chr" />
+      <xs:enumeration value="Str" />
+      <xs:enumeration value="AsciiMnemonic" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="DisplaySettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="SeparateTxRxRadix" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TxRadix" type="Radix" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RxRadix" type="Radix" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowRadix" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowTimeStamp" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowLength" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowConnectTime" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowCounters" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TxMaxLineCount" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RxMaxLineCount" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DirectionLineBreakEnabled" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BufferSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TxBufferSize" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RxBufferSize" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="UsbSerialHidDeviceSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="DeviceInfo" type="DeviceInfo" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoReopen" type="AutoRetry" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DeviceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="VendorId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ProductId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SerialNumber" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AutoRetry">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Interval" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SocketSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="HostType" type="SocketHostType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RemoteHost" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RemotePort" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LocalInterface" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LocalTcpPort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LocalUdpPort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TcpClientAutoReconnect" type="AutoRetry" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="SocketHostType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="TcpClient" />
+      <xs:enumeration value="TcpServer" />
+      <xs:enumeration value="TcpAutoSocket" />
+      <xs:enumeration value="Udp" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SerialCommunicationSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="BaudRate" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DataBits" type="DataBits" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Parity" type="Parity" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StopBits" type="StopBits" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FlowControl" type="SerialFlowControl" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="DataBits">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Four" />
+      <xs:enumeration value="Five" />
+      <xs:enumeration value="Six" />
+      <xs:enumeration value="Seven" />
+      <xs:enumeration value="Eight" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Parity">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Odd" />
+      <xs:enumeration value="Even" />
+      <xs:enumeration value="Mark" />
+      <xs:enumeration value="Space" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="StopBits">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="One" />
+      <xs:enumeration value="Two" />
+      <xs:enumeration value="OnePointFive" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SerialFlowControl">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="RequestToSend" />
+      <xs:enumeration value="XOnXOff" />
+      <xs:enumeration value="RequestToSendXOnXOff" />
+      <xs:enumeration value="Manual" />
+      <xs:enumeration value="RS485" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SerialPortSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="PortId" type="SerialPortId" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Communication" type="SerialCommunicationSettings" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoReopen" type="AutoRetry" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ReplaceParityErrors" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ParityErrorReplacement" type="xs:unsignedByte" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RtsEnabled" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DtrEnabled" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NoSendOnOutputBreak" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NoSendOnInputBreak" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SerialPortId">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="IOSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="IOType" type="IOType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SerialPort" type="SerialPortSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SerialParityErrorReplacement" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Socket" type="SocketSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="UsbSerialHidDevice" type="UsbSerialHidDeviceSettings" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Endianess" type="Endianess" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="IOType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="SerialPort" />
+      <xs:enumeration value="TcpClient" />
+      <xs:enumeration value="TcpServer" />
+      <xs:enumeration value="TcpAutoSocket" />
+      <xs:enumeration value="Udp" />
+      <xs:enumeration value="UsbSerialHid" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Endianess">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BigEndian" />
+      <xs:enumeration value="LittleEndian" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="TerminalSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TerminalType" type="TerminalType" />
+          <xs:element minOccurs="0" maxOccurs="1" name="IO" type="IOSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Buffer" type="BufferSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Display" type="DisplaySettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CharReplace" type="CharReplaceSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Send" type="SendSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TextTerminal" type="TextTerminalSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BinaryTerminal" type="BinaryTerminalSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="TerminalType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Text" />
+      <xs:enumeration value="Binary" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ExplicitSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="Settings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Terminal" type="TerminalSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PredefinedCommand" type="PredefinedCommandSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Format" type="FormatSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Log" type="LogSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SaveInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

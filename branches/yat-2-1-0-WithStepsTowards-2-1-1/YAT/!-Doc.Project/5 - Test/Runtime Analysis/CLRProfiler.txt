@@ -1,0 +1,6 @@
+﻿
+2011-04-24 / mky
+
+YAT - serial port - loop back - large data.log
+> 1.7 GB
+> Can be found at YAT offline repository
