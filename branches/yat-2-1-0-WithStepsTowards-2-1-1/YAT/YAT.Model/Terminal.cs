@@ -449,10 +449,9 @@ namespace YAT.Model
 
 				// Link, override and attach to settings:
 				this.settingsHandler = settingsHandler;
-				this.settingsRoot = this.settingsHandler.Settings; // Note this setting is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
-				this.settingsRoot.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
-				this.settingsRoot.ClearChanged();                  // Overriding such setting shall not be reflected in the settings,
-				AttachSettingsEventHandlers();                     // i.e. neither be indicated by a '*' nor lead to a file write.
+				this.settingsRoot = this.settingsHandler.Settings;
+				this.settingsRoot.ClearChanged();
+				AttachSettingsEventHandlers();
 
 				// Set ID and name(s):
 				this.sequentialId = ++staticSequentialIdCounter;
@@ -1081,9 +1080,9 @@ namespace YAT.Model
 							sb.Append(" - ");
 							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 							if (device != null)
-								sb.Append(device.DeviceInfoString);
+								sb.Append(device.InfoString);
 							else
-								s.DeviceInfo.ToString(true, false);
+								s.DeviceInfo.ToString();
 
 							sb.Append(" - ");
 
@@ -1375,9 +1374,9 @@ namespace YAT.Model
 
 							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 							if (device != null)
-								sb.Append(device.DeviceInfoString);
+								sb.Append(device.InfoString);
 							else
-								s.DeviceInfo.ToString(true, false);
+								s.DeviceInfo.ToString();
 
 							sb.Append("'");
 
@@ -4034,7 +4033,7 @@ namespace YAT.Model
 			}
 		}
 
-		private CheckResult CheckUsbDeviceAvailability(MKY.IO.Usb.DeviceInfo deviceInfo)
+		private CheckResult CheckUsbDeviceAvailability(MKY.IO.Usb.HidDeviceInfo deviceInfo)
 		{
 			OnFixedStatusTextRequest("Checking availability of '" + deviceInfo + "'...");
 

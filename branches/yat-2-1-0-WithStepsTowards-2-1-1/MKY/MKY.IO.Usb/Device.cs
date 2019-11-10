@@ -173,14 +173,14 @@ namespace MKY.IO.Usb
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetVidAndPidFromPath(string path, out int vendorId, out int productId)
+		public static bool GetVidPidFromPath(string path, out int vendorId, out int productId)
 		{
 			SafeFileHandle deviceHandle;
 			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					if (GetVidAndPidFromHandle(deviceHandle, out vendorId, out productId))
+					if (GetVidPidFromHandle(deviceHandle, out vendorId, out productId))
 						return (true);
 				}
 				finally
@@ -195,7 +195,7 @@ namespace MKY.IO.Usb
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		private static bool GetVidAndPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
+		private static bool GetVidPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
 		{
 			// Set the size property of attributes to the number of bytes in the structure.
 			Win32.Hid.NativeTypes.HIDD_ATTRIBUTES attributes = new Win32.Hid.NativeTypes.HIDD_ATTRIBUTES();
@@ -326,7 +326,7 @@ namespace MKY.IO.Usb
 			{
 				try
 				{
-					if (GetVidAndPidFromHandle(deviceHandle, out vendorId, out productId))
+					if (GetVidPidFromHandle(deviceHandle, out vendorId, out productId))
 					{
 						if (retrieveStringsFromDevice)
 						{
@@ -364,11 +364,11 @@ namespace MKY.IO.Usb
 		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
 		/// </remarks>
 		/// <returns>Retrieved device info; or <c>null</c> if no appropriate device was found.</returns>
-		public static DeviceInfo GetDeviceInfoFromVidAndPid(int vendorId, int productId)
+		public static DeviceInfo GetDeviceInfoFromVidPid(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serial;
 
-			if (GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serial))
+			if (GetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
 				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
 			else
 				return (null);
@@ -390,7 +390,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serial)
+		public static bool GetDeviceInfoFromVidPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serial)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
@@ -418,11 +418,11 @@ namespace MKY.IO.Usb
 		/// or <c>null</c> if no device could be found on the give path.
 		/// </summary>
 		/// <returns>Retrieved device info; or <c>null</c> if no appropriate device was found.</returns>
-		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serial)
+		public static DeviceInfo GetDeviceInfoFromVidPidSerial(int vendorId, int productId, string serial)
 		{
 			string path, manufacturer, product;
 
-			if (GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serial, out path, out manufacturer, out product))
+			if (GetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
 				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
 			else
 				return (null);
@@ -440,11 +440,11 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serial, out string path, out string manufacturer, out string product)
+		public static bool GetDeviceInfoFromVidPidSerial(int vendorId, int productId, string serial, out string path, out string manufacturer, out string product)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
-				if (di.Equals(vendorId, productId, serial))
+				if (di.EqualsVidPidSerial(vendorId, productId, serial))
 				{
 					path         = di.Path;
 					manufacturer = di.Manufacturer;
@@ -834,26 +834,16 @@ namespace MKY.IO.Usb
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		protected virtual string Path
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (this.deviceInfo.Path);
-			}
-		}
-
-		#region Properties > IDeviceInfo
-		//------------------------------------------------------------------------------------------
-		// Properties > IDeviceInfo
-		//------------------------------------------------------------------------------------------
-
 		/// <summary>
 		/// Returns the complete device info. To read a specific device property, use the property
 		/// members below.
 		/// </summary>
+		/// <remarks>
+		/// \remind (2019-11-10 / MKY)
+		/// According to the class description, a <see cref="DeviceInfo"/> shall be treated as an
+		/// an immutable object. While not ideal, it is considered acceptable to return such object.
+		/// Split into mutable settings tuple and immutable runtime container should be done.
+		/// </remarks>
 		public virtual DeviceInfo Info
 		{
 			get
@@ -864,19 +854,21 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		/// <summary>
-		/// Returns the complete device info. To read a specific device property, use the property
-		/// members below.
-		/// </summary>
-		public virtual string InfoString
+		/// <summary></summary>
+		protected virtual string Path
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.ToString());
+				return (Info.Path);
 			}
 		}
+
+		#region Properties > IDeviceInfo
+		//------------------------------------------------------------------------------------------
+		// Properties > IDeviceInfo
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public virtual int VendorId
@@ -885,7 +877,7 @@ namespace MKY.IO.Usb
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.VendorId);
+				return (Info.VendorId);
 			}
 		}
 
@@ -896,7 +888,7 @@ namespace MKY.IO.Usb
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.VendorIdString);
+				return (Info.VendorIdString);
 			}
 		}
 
@@ -907,7 +899,7 @@ namespace MKY.IO.Usb
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.ProductId);
+				return (Info.ProductId);
 			}
 		}
 
@@ -918,7 +910,7 @@ namespace MKY.IO.Usb
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.ProductIdString);
+				return (Info.ProductIdString);
 			}
 		}
 
@@ -929,7 +921,7 @@ namespace MKY.IO.Usb
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.Manufacturer);
+				return (Info.Manufacturer);
 			}
 		}
 
@@ -940,7 +932,7 @@ namespace MKY.IO.Usb
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.Product);
+				return (Info.Product);
 			}
 		}
 
@@ -951,7 +943,7 @@ namespace MKY.IO.Usb
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.deviceInfo.Serial);
+				return (Info.Serial);
 			}
 		}
 
@@ -1017,7 +1009,9 @@ namespace MKY.IO.Usb
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
+			{
 				OnDisconnected(EventArgs.Empty);
+			}
 		}
 
 		#endregion
@@ -1062,7 +1056,18 @@ namespace MKY.IO.Usb
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
-			return (this.deviceInfo.ToString());
+			return (Info.ToString());
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation,
+		/// which is a string describing the USB device as accurately as possible.
+		/// </summary>
+		public virtual string ToString(bool insertIds)
+		{
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+
+			return (Info.ToString(insertIds));
 		}
 
 		/// <summary>
@@ -1072,7 +1077,17 @@ namespace MKY.IO.Usb
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
-			return (this.deviceInfo.ToShortString());
+			return (Info.ToShortString());
+		}
+
+		/// <summary>
+		/// Returns a string describing the USB device in a long form.
+		/// </summary>
+		public virtual string ToLongString()
+		{
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+
+			return (Info.ToLongString());
 		}
 
 		#endregion

@@ -53,7 +53,8 @@ namespace MKY.IO.Usb
 	/// List containing USB device information.
 	/// </summary>
 	[Serializable]
-	public class DeviceCollection : List<DeviceInfo>
+	public class DeviceCollection<T> : List<T>
+		where T : DeviceInfo
 	{
 		private DeviceClass deviceClass = DeviceClass.Any;
 		private Guid        classGuid   = Guid.Empty;
@@ -71,10 +72,10 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public DeviceCollection(IEnumerable<DeviceInfo> rhs)
+		public DeviceCollection(IEnumerable<T> rhs)
 			: base(rhs)
 		{
-			var casted = (rhs as DeviceCollection);
+			var casted = (rhs as DeviceCollection<T>);
 			if (casted != null)
 			{
 				this.deviceClass = casted.deviceClass;
@@ -93,7 +94,7 @@ namespace MKY.IO.Usb
 				Clear();
 
 				DebugVerboseIndent("Retrieving connected USB devices...");
-				foreach (var di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
+				foreach (T di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
 				{
 					DebugVerboseIndent(di);
 					Add(di);
@@ -114,7 +115,7 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
 		/// </returns>
-		public virtual bool ContainsVidPid(DeviceInfo item)
+		public virtual bool ContainsVidPid(T item)
 		{
 			lock (this)
 			{
@@ -138,11 +139,11 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
-		public virtual DeviceInfo FindVidPid(DeviceInfo item)
+		public virtual T FindVidPid(T item)
 		{
 			lock (this)
 			{
-				EqualsVidPid predicate = new EqualsVidPid(item);
+				EqualsVidPid<T> predicate = new EqualsVidPid<T>(item);
 				return (Find(predicate.Match));
 			}
 		}
@@ -158,11 +159,11 @@ namespace MKY.IO.Usb
 		/// The zero-based index of the first occurrence of an element that matches the
 		/// <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
-		public virtual int FindIndexVidPid(DeviceInfo item)
+		public virtual int FindIndexVidPid(T item)
 		{
 			lock (this)
 			{
-				EqualsVidPid predicate = new EqualsVidPid(item);
+				EqualsVidPid<T> predicate = new EqualsVidPid<T>(item);
 				return (FindIndex(predicate.Match));
 			}
 		}

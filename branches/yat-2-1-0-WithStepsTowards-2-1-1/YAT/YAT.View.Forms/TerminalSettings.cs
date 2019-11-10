@@ -390,11 +390,11 @@ namespace YAT.View.Forms
 			//  > NewTerminal.usbSerialHidDeviceSelection_DeviceInfoChanged()
 			// Changes here must be applied there too.
 
-			MKY.IO.Usb.DeviceInfo deviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
-			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
+			var di = usbSerialHidDeviceSelection.DeviceInfo;
+			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = di;
 
 			// Also update settings control (not via SetControls(), that would be an overkill):
-			usbSerialHidDeviceSettings.DeviceInfo = deviceInfo;
+			usbSerialHidDeviceSettings.DeviceInfo = di;
 		}
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)

@@ -107,7 +107,7 @@ namespace MKY.IO.Serial.Usb
 									this.receiveQueue.Clear();
 								}
 
-								OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo, this.device.ReportFormat.UseId, this.device.ActiveReportId));
+								OnDataReceived(new SerialDataReceivedEventArgs(data, Info, this.device.ReportFormat.UseId, this.device.ActiveReportId));
 
 								// Note the Thread.Sleep(TimeSpan.Zero) above.
 							}

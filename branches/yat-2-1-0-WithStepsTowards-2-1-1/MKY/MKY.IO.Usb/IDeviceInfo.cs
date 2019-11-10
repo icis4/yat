@@ -24,16 +24,10 @@
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// Information that every USB device provides.
+	/// Information about a USB device.
 	/// </summary>
 	public interface IDeviceInfo
 	{
-		/// <summary>
-		/// Returns the complete device info. To read a specific device property, use the property
-		/// members below.
-		/// </summary>
-		DeviceInfo Info { get; }
-
 		/// <summary></summary>
 		int VendorId { get; }
 
@@ -59,7 +53,13 @@ namespace MKY.IO.Usb
 		string ToString();
 
 		/// <summary></summary>
+		string ToString(bool insertIds);
+
+		/// <summary></summary>
 		string ToShortString();
+
+		/// <summary></summary>
+		string ToLongString();
 	}
 }
 

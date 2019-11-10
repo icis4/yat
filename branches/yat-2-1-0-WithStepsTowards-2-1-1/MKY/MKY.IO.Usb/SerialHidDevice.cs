@@ -176,7 +176,7 @@ namespace MKY.IO.Usb
 		/// Returns an array of all USB HID devices currently available on the system.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static new DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
+		public static new HidDeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
 			// \remind (MKY 2013-06-08)
 			// It is not possible to limit this list/array to true Ser/HID devices, as there is no
@@ -416,7 +416,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public SerialHidDevice(DeviceInfo deviceInfo)
+		public SerialHidDevice(HidDeviceInfo deviceInfo)
 			: base(deviceInfo)
 		{
 			Initialize();
@@ -1308,7 +1308,9 @@ namespace MKY.IO.Usb
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
+			{
 				OnDisconnected(EventArgs.Empty); // Includes Close().
+			}
 		}
 
 		#endregion

@@ -58,7 +58,7 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private DeviceInfo deviceInfo; // = null;
+		private HidDeviceInfo deviceInfo; // = null;
 
 		#endregion
 
@@ -96,8 +96,8 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Device")]
-		[Description("USB device info.")]
-		public DeviceInfo DeviceInfo
+		[Description("USB HID device info.")]
+		public HidDeviceInfo DeviceInfo
 		{
 			get { return (this.deviceInfo); }
 			set
@@ -195,7 +195,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			DeviceInfo = (comboBox_Device.SelectedItem as DeviceInfo);
+			DeviceInfo = (comboBox_Device.SelectedItem as HidDeviceInfo);
 		}
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)

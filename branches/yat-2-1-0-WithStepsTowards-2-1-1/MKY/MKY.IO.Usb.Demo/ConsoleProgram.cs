@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 
 namespace MKY.IO.Usb.Demo
 {
@@ -32,7 +33,7 @@ namespace MKY.IO.Usb.Demo
 		[STAThread]
 		public static void Main()
 		{
-			var devices = new DeviceCollection(DeviceClass.Hid);
+			var devices = new HidDeviceCollection();
 			devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
 			Console.Out.WriteLine();
@@ -43,6 +44,12 @@ namespace MKY.IO.Usb.Demo
 				Console.Out.WriteLine(device.ToString());
 				Console.Out.Write("   ");
 				Console.Out.WriteLine(device.Path);
+
+				using (var listener = new ConsoleTraceListener())
+				{
+					Debug.Listeners.Add(listener);
+					HidDevice.DebugWriteDeviceCapabilities(device.Path);
+				}
 			}
 			Console.Out.WriteLine();
 

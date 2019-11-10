@@ -21,33 +21,39 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-
 namespace MKY.IO.Usb
 {
-	/// <summary></summary>
-	public class EqualsVidPid<T>
-		where T : DeviceInfo
+	/// <summary>
+	/// Information about a USB HID device.
+	/// </summary>
+	public interface IHidDeviceInfo
 	{
 		/// <summary></summary>
-		public T DeviceInfo { get; set; }
+		int UsagePage { get; }
 
 		/// <summary></summary>
-		public EqualsVidPid(T deviceInfo)
-		{
-			DeviceInfo = deviceInfo;
-		}
+		string UsagePageString { get; }
 
 		/// <summary></summary>
-		public Predicate<T> Match
-		{
-			get { return (IsMatch); }
-		}
+		int UsageId { get; }
 
-		private bool IsMatch(T other)
-		{
-			return (DeviceInfo.EqualsVidPid(other));
-		}
+		/// <summary></summary>
+		string UsageIdString { get; }
+
+		/// <summary></summary>
+		string ToString();
+
+		/// <summary></summary>
+		string ToString(bool insertVidPid);
+
+		/// <summary></summary>
+		string ToString(bool insertVidPid, bool appendUsage);
+
+		/// <summary></summary>
+		string ToShortString();
+
+		/// <summary></summary>
+		string ToLongString();
 	}
 }
 

@@ -55,7 +55,7 @@ namespace YAT.Model.Settings
 		private MKY.IO.Serial.AutoInterval tcpClientAutoReconnect;
 		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode;
 
-		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
+		private MKY.IO.Usb.HidDeviceInfo usbSerialHidDeviceInfo;
 	////private bool usbSerialHidMatchSerial; is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 		private MKY.IO.Usb.SerialHidDeviceSettingsPreset usbSerialHidPreset;
 		private MKY.IO.Usb.SerialHidReportFormat usbSerialHidReportFormat;
@@ -479,7 +479,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("UsbSerialHidDeviceInfo")]
-		public virtual MKY.IO.Usb.DeviceInfo UsbSerialHidDeviceInfo
+		public virtual MKY.IO.Usb.HidDeviceInfo UsbSerialHidDeviceInfo
 		{
 			get { return (this.usbSerialHidDeviceInfo); }
 			set
