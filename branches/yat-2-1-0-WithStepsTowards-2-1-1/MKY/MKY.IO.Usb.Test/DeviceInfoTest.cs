@@ -50,6 +50,10 @@ namespace MKY.IO.Usb.Test
 		{
 			get
 			{
+				// Attention:
+				// Similar test data exists in HidDeviceInfoTestData.TestCases{get}.
+				// Changes here may have to be applied there too.
+
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, new string[] { "VID:0ABC PID:1234", "vid:0ABC pid:1234"} ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, new string[] { "VID_0ABC PID_1234", "vid_0ABC pid_1234"} ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, new string[] { "VID 0ABC PID 1234", "vid 0ABC pid 1234"} ));
@@ -133,6 +137,10 @@ namespace MKY.IO.Usb.Test
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
 		public virtual void TestConstructorAndParse(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{
+			// Attention:
+			// Similar code exists in HidDeviceInfoTest.TestConstructorAndParse().
+			// Changes here may have to be applied there too.
+
 			if (isValid)
 			{
 				DeviceInfo info;
@@ -145,12 +153,12 @@ namespace MKY.IO.Usb.Test
 
 					foreach (string descriptor in descriptors)
 					{
-						info = DeviceInfo.ParseFromVidAndPid(descriptor);
+						info = DeviceInfo.Parse(descriptor);
 						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 						Assert.That(info.ProductId, Is.EqualTo(productId));
 					}
 				}
-				else
+				else // matchSerial
 				{
 					info = new DeviceInfo(vendorId, productId, serial);
 					Assert.That(info.VendorId,  Is.EqualTo(vendorId));
@@ -159,7 +167,7 @@ namespace MKY.IO.Usb.Test
 
 					foreach (string descriptor in descriptors)
 					{
-						info = DeviceInfo.ParseFromVidAndPidAndSerial(descriptor);
+						info = DeviceInfo.ParseRequiringSerial(descriptor);
 						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 						Assert.That(info.ProductId, Is.EqualTo(productId));
 						Assert.That(info.Serial,    Is.EqualTo(serial));
@@ -175,7 +183,7 @@ namespace MKY.IO.Usb.Test
 				s = info.ToLongString();
 				Assert.That(s, Is.Not.Null.And.Not.Empty, "ToLongString() resulted in invalid string!");
 			}
-			else
+			else // !isValid
 			{
 				try
 				{
@@ -189,9 +197,9 @@ namespace MKY.IO.Usb.Test
 					UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
 
 					if (!matchSerial)
-						Assert.Fail("Invalid pair " + vendorId + "/" + productId + " wasn't properly handled!");
+						Assert.Fail("Invalid pair " + vendorId + " " + productId + " wasn't properly handled!");
 					else
-						Assert.Fail("Invalid triple " + vendorId + "/" + productId + "/" + serial + " wasn't properly handled!");
+						Assert.Fail("Invalid triple " + vendorId + " " + productId + " " + serial + " wasn't properly handled!");
 				}
 				catch
 				{
@@ -205,9 +213,9 @@ namespace MKY.IO.Usb.Test
 						DeviceInfo dummyInfoToForceException;
 
 						if (!matchSerial)
-							dummyInfoToForceException = DeviceInfo.ParseFromVidAndPid(descriptor);
+							dummyInfoToForceException = DeviceInfo.Parse(descriptor);
 						else
-							dummyInfoToForceException = DeviceInfo.ParseFromVidAndPidAndSerial(descriptor);
+							dummyInfoToForceException = DeviceInfo.ParseRequiringSerial(descriptor);
 
 						UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
 
@@ -232,6 +240,10 @@ namespace MKY.IO.Usb.Test
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
 		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{
+			// Attention:
+			// Similar code exists in HidDeviceInfoTest.TestSerialization().
+			// Changes here may have to be applied there too.
+
 			if (isValid)
 			{
 				string filePath = Temp.MakeTempFilePath(GetType(), ".xml");
@@ -249,20 +261,21 @@ namespace MKY.IO.Usb.Test
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestDeserializeFromFile(typeof(DeviceInfo), filePath);
 				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
 				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
-				if (matchSerial)
+				if (matchSerial) {
 					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
-
+				}
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestTolerantDeserializeFromFile(typeof(DeviceInfo), filePath);
 				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
 				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
-				if (matchSerial)
+				if (matchSerial) {
 					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
-
+				}
 				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(typeof(DeviceInfo), filePath);
 				Assert.That(infoDeserialized.VendorId,  Is.EqualTo(vendorId));
 				Assert.That(infoDeserialized.ProductId, Is.EqualTo(productId));
-				if (matchSerial)
+				if (matchSerial) {
 					Assert.That(infoDeserialized.Serial, Is.EqualTo(serial));
+				}
 			}
 		}
 

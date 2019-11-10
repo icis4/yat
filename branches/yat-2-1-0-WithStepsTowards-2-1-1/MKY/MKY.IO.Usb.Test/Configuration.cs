@@ -216,23 +216,23 @@ namespace MKY.IO.Usb.Test
 				SerialHidDeviceCollection availableDevices = new SerialHidDeviceCollection();
 				availableDevices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
-				DeviceInfo di;
-				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.DeviceA, out di))
+				HidDeviceInfo di;
+				if (HidDeviceInfo.TryParseRequiringSerial(configuration.DeviceA, out di))
 					configuration.DeviceAIsAvailable = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.DeviceB, out di))
+				if (HidDeviceInfo.TryParseRequiringSerial(configuration.DeviceB, out di))
 					configuration.DeviceBIsAvailable = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceA, out di))
+				if (HidDeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceA, out di))
 					configuration.MTSicsDeviceAIsAvailable = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceB, out di))
+				if (HidDeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceB, out di))
 					configuration.MTSicsDeviceBIsAvailable = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.TILaunchPadDeviceA, out di))
+				if (HidDeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceA, out di))
 					configuration.TILaunchPadDeviceAIsAvailable = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.TILaunchPadDeviceB, out di))
+				if (HidDeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceB, out di))
 					configuration.TILaunchPadDeviceBIsAvailable = availableDevices.Contains(di);
 
 				// Activate the effective configuration:

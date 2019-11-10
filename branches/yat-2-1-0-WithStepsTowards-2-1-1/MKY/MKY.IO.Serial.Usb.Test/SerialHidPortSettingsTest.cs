@@ -69,7 +69,7 @@ namespace MKY.IO.Serial.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(HidDeviceInfoTestData), "TestCases")]
 		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, bool matchUsage, int usagePage, int usageId, string[] descriptors)
 		{
 			if (isValid)
@@ -84,7 +84,7 @@ namespace MKY.IO.Serial.Usb.Test
 					else
 						settings.DeviceInfo = new HidDeviceInfo(vendorId, productId, usagePage, usageId);
 				}
-				else
+				else // matchSerial
 				{
 					if (!matchUsage)
 						settings.DeviceInfo = new HidDeviceInfo(vendorId, productId, serial);
