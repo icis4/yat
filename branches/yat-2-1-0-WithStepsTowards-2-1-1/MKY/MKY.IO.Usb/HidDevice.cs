@@ -466,16 +466,18 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public HidDevice(int vendorId, int productId)
+		public HidDevice(int vendorId, int productId, int usagePage, int usageId)
 			: base(HidGuid, vendorId, productId)
 		{
+		////Initialize(usagePage, usageId);
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public HidDevice(int vendorId, int productId, string serial)
+		public HidDevice(int vendorId, int productId, string serial, int usagePage, int usageId)
 			: base(HidGuid, vendorId, productId, serial)
 		{
+		////Initialize(usagePage, usageId);
 			Initialize();
 		}
 
@@ -483,6 +485,7 @@ namespace MKY.IO.Usb
 		public HidDevice(HidDeviceInfo deviceInfo)
 			: base(HidGuid, (DeviceInfo)deviceInfo)
 		{
+		////Initialize(deviceInfo.UsagePage, deviceInfo.UsageId);
 			Initialize();
 		}
 

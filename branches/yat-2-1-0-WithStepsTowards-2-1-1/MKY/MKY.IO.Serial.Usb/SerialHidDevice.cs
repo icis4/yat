@@ -541,8 +541,8 @@ namespace MKY.IO.Serial.Usb
 
 				lock (this.deviceSyncObj)
 				{
-					// Ensure to create device info from VID/PID/SNR since system path is not saved.
-					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.Serial);
+					// Ensure to create device info from VID/PID/SNR/USAGE since system path is not saved.
+					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.Serial, di.UsagePage, di.UsageId);
 					this.device.MatchSerial           = this.settings.MatchSerial;
 				////                                    this.settings.Preset does not to be considered when creating a device.
 					this.device.ReportFormat          = this.settings.ReportFormat;

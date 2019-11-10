@@ -402,15 +402,15 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public SerialHidDevice(int vendorId, int productId)
-			: base(vendorId, productId)
+		public SerialHidDevice(int vendorId, int productId, int usagePage, int usageId)
+			: base(vendorId, productId, usagePage, usageId)
 		{
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public SerialHidDevice(int vendorId, int productId, string serial)
-			: base(vendorId, productId, serial)
+		public SerialHidDevice(int vendorId, int productId, string serial, int usagePage, int usageId)
+			: base(vendorId, productId, serial, usagePage, usageId)
 		{
 			Initialize();
 		}
