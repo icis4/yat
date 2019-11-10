@@ -260,7 +260,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		public virtual IO.Usb.DeviceInfo DeviceInfo
+		public virtual IO.Usb.HidDeviceInfo Info
 		{
 			get
 			{
@@ -276,11 +276,13 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		public virtual string DeviceInfoString
+		public virtual string InfoString
 		{
 			get
 			{
-				var di = DeviceInfo;
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				var di = Info;
 				if (di != null)
 					return (di.ToString());
 				else
@@ -293,6 +295,8 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (!IsStarted);
 			}
 		}
@@ -917,7 +921,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses asynchronous 'Write' to invoke this event.")]
 		private void Device_DataSent(object sender, IO.Usb.DataEventArgs e)
 		{
-			OnDataSent(new SerialDataSentEventArgs(e.Data, e.TimeStamp, DeviceInfo, this.device.ReportFormat.UseId, this.device.ActiveReportId));
+			OnDataSent(new SerialDataSentEventArgs(e.Data, e.TimeStamp, Info, this.device.ReportFormat.UseId, this.device.ActiveReportId));
 		}
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)
@@ -1010,7 +1014,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
-			var di = DeviceInfo;
+			var di = Info;
 			if (di != null)
 				return (di.ToString());
 			else
@@ -1022,7 +1026,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
-			var di = DeviceInfo;
+			var di = Info;
 			if (di != null)
 				return (di.ToShortString());
 			else

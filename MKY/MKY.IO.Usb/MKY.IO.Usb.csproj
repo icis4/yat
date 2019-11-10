@@ -84,6 +84,8 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="HidDeviceInfo.cs" />
+    <Compile Include="IHidDeviceInfo.cs" />
     <Compile Include="Predicates.cs" />
     <Compile Include="SerialHidRxFilterUsage.cs" />
     <Compile Include="SerialHidDeviceSettingsPreset.cs" />

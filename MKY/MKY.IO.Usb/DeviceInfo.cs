@@ -27,17 +27,32 @@
 //==================================================================================================
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
+using MKY.Contracts;
+
 #endregion
 
 namespace MKY.IO.Usb
 {
-	/// <summary></summary>
+	/// <summary>
+	/// This container class holds information about a USB device.
+	/// </summary>
+	/// <remarks>
+	/// The information contained is limited to pieces that are needed to lookup a device.
+	/// </remarks>
+	/// <remarks>
+	/// \remind (2019-11-10 / MKY)
+	/// Instances of this container class shall be treated as immutable objects. However, it is not
+	/// possible to assign <see cref="ImmutableObjectAttribute"/>/<see cref="ImmutableContractAttribute"/>
+	/// because XML default serialization requires public setters. Split into mutable settings tuple
+	/// and immutable runtime container should be done.
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	[Serializable]
 	public class DeviceInfo : IEquatable<DeviceInfo>, IComparable
@@ -71,11 +86,11 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static readonly string LastProductIdString  = LastProductId .ToString("X4", CultureInfo.InvariantCulture);
 
-		/// <summary></summary>
-		public const int DefaultVendorId = FirstVendorId;
+		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
+		public const int VendorIdDefault = FirstVendorId;
 
-		/// <summary></summary>
-		public const int DefaultProductId = FirstProductId;
+		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
+		public const int ProductIdDefault = FirstProductId;
 
 		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
 
@@ -102,10 +117,10 @@ namespace MKY.IO.Usb
 		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
 		public static readonly Regex SerialRegexRemainder = new Regex(@"PID[^0-9a-fA-F][0-9a-fA-F]+.\s?(?<serial>.+)", Options); // Everything following the PID pattern.
 
-		/// <summary></summary>
-		public const string DefaultSerial = "";
+		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
+		public const string SerialDefault = "";
 
-		/// <summary></summary>
+		/// <remarks>Not named 'Item'Default since there is not (yet) a 'Separator' item.</remarks>
 		public const string DefaultSeparator = " - ";
 
 		#endregion
@@ -117,12 +132,12 @@ namespace MKY.IO.Usb
 
 		private string path;
 
-		private int vendorId  = DefaultVendorId;
-		private int productId = DefaultProductId;
+		private int vendorId  = VendorIdDefault;
+		private int productId = ProductIdDefault;
 
 		private string manufacturer;
 		private string product;
-		private string serial = DefaultSerial; // Required for XML serialization.
+		private string serial = SerialDefault; // Required for XML serialization.
 
 		#endregion
 
@@ -131,10 +146,14 @@ namespace MKY.IO.Usb
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \remind (2019-11-10 / MKY)
+		/// Parameter-less constructor is required for XML default serialization. Could be removed
+		/// after having split into mutable settings tuple and immutable runtime container.
+		/// </remarks>
 		public DeviceInfo()
 		{
-			Initialize("");
+			Initialize(); // Initialize this info based on defaults only.
 		}
 
 		/// <summary></summary>
@@ -148,58 +167,66 @@ namespace MKY.IO.Usb
 				Initialize(path); // Initialize this info based on the available information only.
 		}
 
-		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		public DeviceInfo(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serial;
-			if (Device.GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serial))
+			if (Device.GetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
 				Initialize(path, vendorId, productId, manufacturer, product, serial);
 			else
 				Initialize(vendorId, productId); // Initialize this info based on the available information only.
 		}
 
-		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		public DeviceInfo(int vendorId, int productId, string serial)
 		{
 			string path, manufacturer, product;
-			if (Device.GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serial, out path, out manufacturer, out product))
+			if (Device.GetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
 				Initialize(path, vendorId, productId, manufacturer, product, serial);
 			else
 				Initialize(vendorId, productId, serial); // Initialize this info based on the available information only.
 		}
 
-		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		public DeviceInfo(string path, int vendorId, int productId)
 		{
 			Initialize(path, vendorId, productId, "", "", "");
 		}
 
-		/// <summary></summary>
-		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			Initialize(path, vendorId, productId, manufacturer, product, serial);
 		}
 
-		private void Initialize(string path)
+		/// <remarks>Initialize this info based on defaults only.</remarks>
+		protected virtual void Initialize()
 		{
-			Initialize(path, DefaultVendorId, DefaultProductId, "", "", "");
+			Initialize("");
 		}
 
-		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
-		private void Initialize(int vendorId, int productId)
+		/// <remarks>Initialize this info based on the available information only.</remarks>
+		protected virtual void Initialize(string path)
+		{
+			Initialize(path, VendorIdDefault, ProductIdDefault, "", "", "");
+		}
+
+		/// <remarks>Initialize this info based on the available information only.</remarks>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
+		protected virtual void Initialize(int vendorId, int productId)
 		{
 			Initialize(vendorId, productId, "");
 		}
 
-		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
-		private void Initialize(int vendorId, int productId, string serial)
+		/// <remarks>Initialize this info based on the available information only.</remarks>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
+		protected virtual void Initialize(int vendorId, int productId, string serial)
 		{
 			Initialize("", vendorId, productId, "", "", serial);
 		}
 
-		/// <exception cref="ArgumentOutOfRangeException"> if either vendor ID or product ID is an invalid value.</exception>
-		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
+		protected virtual void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			if (!IsValidVendorId(vendorId))
 				throw (new ArgumentOutOfRangeException("vendorId", vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
@@ -207,10 +234,10 @@ namespace MKY.IO.Usb
 			if (!IsValidProductId(productId))
 				throw (new ArgumentOutOfRangeException("productId", productId, "'" + productId + "' is an invalid product ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
-			this.path = path;
+			this.path         = path;
 
-			this.vendorId  = vendorId;
-			this.productId = productId;
+			this.vendorId     = vendorId;
+			this.productId    = productId;
 
 			this.manufacturer = manufacturer;
 			this.product      = product;
@@ -220,10 +247,10 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public DeviceInfo(DeviceInfo rhs)
 		{
-			this.path = rhs.path;
+			this.path         = rhs.path;
 
-			this.vendorId  = rhs.vendorId;
-			this.productId = rhs.productId;
+			this.vendorId     = rhs.vendorId;
+			this.productId    = rhs.productId;
 
 			this.manufacturer = rhs.manufacturer;
 			this.product      = rhs.product;
@@ -357,9 +384,9 @@ namespace MKY.IO.Usb
 			else if ((this.vendorId != 0) && (this.productId != 0))
 			{
 				if (!string.IsNullOrEmpty(this.serial))
-					return (Device.GetDeviceInfoFromVidAndPidAndSerial(this.vendorId, this.productId, this.serial, out this.path, out this.manufacturer, out this.product));
+					return (Device.GetDeviceInfoFromVidPidSerial(this.vendorId, this.productId, this.serial, out this.path, out this.manufacturer, out this.product));
 				else
-					return (Device.GetDeviceInfoFromVidAndPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serial));
+					return (Device.GetDeviceInfoFromVidPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serial));
 			}
 			else
 			{
@@ -379,7 +406,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToString()
 		{
-			return (ToString(true, true));
+			return (ToString(true));
 		}
 
 		#region Object Members > ToString Extensions
@@ -394,7 +421,7 @@ namespace MKY.IO.Usb
 		/// Use properties instead of fields. This ensures that 'intelligent' properties,
 		/// i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual string ToString(bool appendIds, bool appendInUseText)
+		public virtual string ToString(bool insertIds)
 		{
 			var sb = new StringBuilder();
 
@@ -403,7 +430,7 @@ namespace MKY.IO.Usb
 				sb.Append(Manufacturer);         // "Company"
 			}
 
-			if (appendIds)
+			if (insertIds)
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company "
@@ -421,7 +448,7 @@ namespace MKY.IO.Usb
 				sb.Append(Product);              // "Company (VID:0ABC) Product"
 			}
 
-			if (appendIds)
+			if (insertIds)
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company (VID:0ABC) Product "
@@ -566,8 +593,8 @@ namespace MKY.IO.Usb
 		/// ignoring <see cref="Serial"/>, <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
+		/// Comprehensibility method, i.e. making obvious that only
+		/// <see cref="VendorId"/> and <see cref="ProductId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPid(DeviceInfo other)
 		{
@@ -585,8 +612,8 @@ namespace MKY.IO.Usb
 		/// ignoring <see cref="Serial"/>, <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
+		/// Comprehensibility method, i.e. making obvious that only
+		/// <see cref="VendorId"/> and <see cref="ProductId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPid(int vendorId, int productId)
 		{
@@ -608,7 +635,11 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool EqualsVidPidSerial(DeviceInfo other)
 		{
-			return (Equals(other));
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
+
+			return (Equals(other)); // Same behavior as 'standard' Equals().
 		}
 
 		/// <summary>
@@ -620,7 +651,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool EqualsVidPidSerial(int vendorId, int productId, string serial)
 		{
-			return (Equals(vendorId, productId, serial));
+			return (Equals(vendorId, productId, serial)); // Same behavior as 'standard' Equals().
 		}
 
 		/// <summary>
@@ -699,10 +730,10 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static DeviceInfo ParseFromVidAndPid(string s)
+		public static DeviceInfo Parse(string s)
 		{
 			DeviceInfo result;
-			if (TryParseFromVidAndPid(s, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
@@ -714,10 +745,10 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static DeviceInfo ParseFromVidAndPidAndSerial(string s)
+		public static DeviceInfo ParseRequiringSerial(string s)
 		{
 			DeviceInfo result;
-			if (TryParseFromVidAndPidAndSerial(s, out result))
+			if (TryParseRequiringSerial(s, out result))
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
@@ -729,7 +760,7 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParseFromVidAndPid(string s, out DeviceInfo result)
+		public static bool TryParse(string s, out DeviceInfo result)
 		{
 			return (TryParse(s, false, out result));
 		}
@@ -740,12 +771,13 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParseFromVidAndPidAndSerial(string s, out DeviceInfo result)
+		public static bool TryParseRequiringSerial(string s, out DeviceInfo result)
 		{
 			return (TryParse(s, true, out result));
 		}
 
-		private static bool TryParse(string s, bool expectSerial, out DeviceInfo result)
+		/// <summary></summary>
+		protected static bool TryParse(string s, bool requireSerial, out DeviceInfo result)
 		{
 			if (s != null)
 				s = s.Trim();
@@ -769,7 +801,7 @@ namespace MKY.IO.Usb
 						int productId;   // m.Value is e.g. "PID:1234" thus [1] is "1234".
 						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
 						{
-							if (expectSerial)
+							if (requireSerial)
 							{
 								m = SerialRegexTag.Match(s); // Try to match against "SNR" tag.
 								if (m.Success)
@@ -822,7 +854,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'UsbDeviceId'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a '" + typeof(DeviceInfo).Name + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
 			}
 		}
 
@@ -881,10 +913,10 @@ namespace MKY.IO.Usb
 		public static implicit operator DeviceInfo(string s)
 		{
 			DeviceInfo result;
-			if (TryParseFromVidAndPidAndSerial(s, out result))
+			if (TryParseRequiringSerial(s, out result))
 				return (result);
 			else
-				return (ParseFromVidAndPid(s));
+				return (Parse(s));
 		}
 
 		#endregion

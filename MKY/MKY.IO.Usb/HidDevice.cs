@@ -45,7 +45,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extends a USB device with HID capabilities.
 	/// </summary>
-	public class HidDevice : Device
+	public class HidDevice : Device, IHidDeviceInfo
 	{
 		#region Static Constants
 		//==========================================================================================
@@ -87,12 +87,12 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns an array of all USB HID devices currently available on the system.
+		/// Returns an array of the USB HID devices currently available on the system.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static new DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
+		public static new HidDeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
-			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Hid), retrieveStringsFromDevice));
+			return (GetDevices(HidDeviceCollection.AnyUsagePage, retrieveStringsFromDevice));
 		}
 
 		/// <summary>
@@ -101,21 +101,9 @@ namespace MKY.IO.Usb
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[CLSCompliant(false)]
-		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, bool retrieveStringsFromDevice = true)
+		public static HidDeviceInfo[] GetDevices(int usagePage = HidDeviceCollection.AnyUsagePage, bool retrieveStringsFromDevice = true)
 		{
-			var dis = GetDevices(retrieveStringsFromDevice);
-			var l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
-
-			foreach (var di in dis)
-			{
-				using (var device = new HidDevice(di))
-				{
-					if (device.UsagePage == usagePage)
-						l.Add(di);
-				}
-			}
-
-			return (l.ToArray());
+			return (GetDevices(usagePage, HidDeviceCollection.AnyUsageId, retrieveStringsFromDevice));
 		}
 
 		/// <summary>
@@ -123,23 +111,187 @@ namespace MKY.IO.Usb
 		/// available on the system.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[CLSCompliant(false)]
-		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId, bool retrieveStringsFromDevice = true)
+		public static HidDeviceInfo[] GetDevices(int usagePage = HidDeviceCollection.AnyUsagePage, int usageId = HidDeviceCollection.AnyUsageId, bool retrieveStringsFromDevice = true)
 		{
-			var dis = GetDevices(retrieveStringsFromDevice);
-			var l = new List<DeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
+			var dis = GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Hid), retrieveStringsFromDevice);
+			var l = new List<HidDeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
 
 			foreach (var di in dis)
 			{
-				using (var device = new HidDevice(di))
+				if (usagePage != HidDeviceCollection.AnyUsagePage)
 				{
-					if (device.UsagePage == usagePage)
-						if (device.UsageId == usageId)
-							l.Add(di);
+					if (di.UsagePage != usagePage)
+						continue; // Filter devices with non-matching usage pages.
+				}
+
+				if (usageId != HidDeviceCollection.AnyUsageId)
+				{
+					if (di.UsageId != usageId)
+						continue; // Filter devices with non-matching usage pages.
+				}
+
+				l.Add(di);
+			}
+
+			return (l.ToArray());
+		}
+
+		/// <summary>
+		/// Returns an array of all USB devices of the given class currently available on the system.
+		/// </summary>
+		/// <remarks>
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// </remarks>
+		/// <param name="deviceClass">USB device class.</param>
+		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public static new HidDeviceInfo[] GetDevicesFromClass(DeviceClass deviceClass, bool retrieveStringsFromDevice = true)
+		{
+			return (GetDevicesFromGuid(GetGuidFromDeviceClass(deviceClass), retrieveStringsFromDevice));
+		}
+
+		/// <summary>
+		/// Returns an array of all USB devices of the given class currently available on the system.
+		/// </summary>
+		/// <remarks>
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// </remarks>
+		/// <param name="classGuid">GUID of a class of devices.</param>
+		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
+		/// <param name="ignoreDuplicates">Ignore duplicated entries in WMI.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
+		public static new HidDeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true, bool ignoreDuplicates = true)
+		{
+			var dis = Device.GetDevicesFromGuid(classGuid, retrieveStringsFromDevice, ignoreDuplicates);
+			var l = new List<HidDeviceInfo>(dis.Length); // Preset the required capacity to improve memory management.
+
+			foreach (var di in dis)
+			{
+				Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
+				if (GetDeviceCapabilities(di.Path, out capabilities))
+				{                        // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
+					l.Add(new HidDeviceInfo(di, capabilities.UsagePage, capabilities.Usage));
 				}
 			}
 
 			return (l.ToArray());
+		}
+
+		#endregion
+
+		#region Static Methods > Device Info
+		//------------------------------------------------------------------------------------------
+		// Static Methods > Device Info
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Returns the information of the device with the given VID and PID;
+		/// or <c>null</c> if no device could be found on the given path.
+		/// </summary>
+		/// <remarks>
+		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
+		/// </remarks>
+		/// <returns>Retrieved device info; or <c>null</c> if no appropriate device was found.</returns>
+		public static HidDeviceInfo GetDeviceInfoFromVidPidUsage(int vendorId, int productId, int usagePage, int usageId)
+		{
+			string path, manufacturer, product, serial;
+
+			if (GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
+				return (new HidDeviceInfo(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId));
+			else
+				return (null);
+		}
+
+		/// <summary>
+		/// Returns the information of the device with the given VID and PID.
+		/// </summary>
+		/// <remarks>
+		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
+		/// </remarks>
+		/// <param name="vendorId">Given VID.</param>
+		/// <param name="productId">Given PID.</param>
+		/// <param name="usagePage">Given usage page.</param>
+		/// <param name="usageId">Given usgae ID.</param>
+		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
+		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
+		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
+		/// <param name="serial">Retrieved serial string, or "" if no appropriate device was found.</param>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public static bool GetDeviceInfoFromVidPidUsage(int vendorId, int productId, int usagePage, int usageId, out string path, out string manufacturer, out string product, out string serial)
+		{
+			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
+			{
+				if (di.EqualsVidPidUsage(vendorId, productId, usagePage, usageId))
+				{
+					path         = di.Path;
+					manufacturer = di.Manufacturer;
+					product      = di.Product;
+					serial       = di.Serial;
+
+					return (true);
+				}
+			}
+
+			path         = "";
+			manufacturer = "";
+			product      = "";
+			serial       = "";
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Returns the information of the device with the given VID and PID and serial string;
+		/// or <c>null</c> if no device could be found on the give path.
+		/// </summary>
+		/// <returns>Retrieved device info; or <c>null</c> if no appropriate device was found.</returns>
+		public static HidDeviceInfo GetDeviceInfoFromVidPidSerialUsage(int vendorId, int productId, string serial, int usagePage, int usageId)
+		{
+			string path, manufacturer, product;
+
+			if (GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
+				return (new HidDeviceInfo(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId));
+			else
+				return (null);
+		}
+
+		/// <summary>
+		/// Returns the information of the device with the given VID and PID and serial string.
+		/// </summary>
+		/// <param name="vendorId">Given VID.</param>
+		/// <param name="productId">Given PID.</param>
+		/// <param name="serial">Given serial string.</param>
+		/// <param name="usagePage">Given usage page.</param>
+		/// <param name="usageId">Given usgae ID.</param>
+		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
+		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
+		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public static bool GetDeviceInfoFromVidPidSerialUsage(int vendorId, int productId, string serial, int usagePage, int usageId, out string path, out string manufacturer, out string product)
+		{
+			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
+			{
+				if (di.EqualsVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId))
+				{
+					path         = di.Path;
+					manufacturer = di.Manufacturer;
+					product      = di.Product;
+
+					return (true);
+				}
+			}
+
+			path         = "";
+			manufacturer = "";
+			product      = "";
+
+			return (false);
 		}
 
 		#endregion
@@ -282,8 +434,7 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
-		private HidUsagePage usagePage;
-		private HidUsageId   usageId;
+		private HidDeviceInfo hidDeviceInfo;
 
 		private int inputReportByteLength;
 		private int outputReportByteLength;
@@ -329,8 +480,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public HidDevice(DeviceInfo deviceInfo)
-			: base(HidGuid, deviceInfo)
+		public HidDevice(HidDeviceInfo deviceInfo)
+			: base(HidGuid, (DeviceInfo)deviceInfo)
 		{
 			Initialize();
 		}
@@ -357,83 +508,109 @@ namespace MKY.IO.Usb
 			GetDeviceCapabilities();
 		}
 
+		/// <remarks>
+		/// This method shall not be overridden as it accesses private members.
+		/// </remarks>
 		private void GetDeviceCapabilities()
 		{
+			Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
+			if (GetDeviceCapabilities(Path, out capabilities))
+			{                                              // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
+				this.hidDeviceInfo = new HidDeviceInfo(base.Info, capabilities.UsagePage, capabilities.Usage);
+
+				this.inputReportByteLength   = capabilities.InputReportByteLength;
+				this.outputReportByteLength  = capabilities.OutputReportByteLength;
+				this.featureReportByteLength = capabilities.FeatureReportByteLength;
+
+				this.linkCollectionNodes = capabilities.NumberLinkCollectionNodes;
+				this.inputButtonCaps     = capabilities.NumberInputButtonCaps;
+				this.inputValueCaps      = capabilities.NumberInputValueCaps;
+				this.inputDataIndices    = capabilities.NumberInputDataIndices;
+				this.outputButtonCaps    = capabilities.NumberOutputButtonCaps;
+				this.outputValueCaps     = capabilities.NumberOutputValueCaps;
+				this.outputDataIndices   = capabilities.NumberOutputDataIndices;
+				this.featureButtonCaps   = capabilities.NumberFeatureButtonCaps;
+				this.featureValueCaps    = capabilities.NumberFeatureValueCaps;
+				this.featureDataIndices  = capabilities.NumberFeatureDataIndices;
+
+				// Output user-friendly usage information:
+				string usagePageValue = "0x" + Info.UsagePage.ToString("X4", CultureInfo.InvariantCulture);
+				string usageIdValue   = "0x" + Info.UsageId  .ToString("X4", CultureInfo.InvariantCulture);
+
+				string usagePageName = "<Unknown>";
+				try
+				{
+					HidUsagePage page = (HidUsagePageEx)(Info.UsagePage);
+					string name = Enum.GetName(typeof(HidUsagePage), page);
+					if (!string.IsNullOrEmpty(name))
+						usagePageName = name;
+					else if ((Info.UsagePage >= (int)(HidUsagePage.VendorDefined_First)) &&
+						     (Info.UsagePage <= (int)(HidUsagePage.VendorDefined_Last)))
+						usagePageName = "VendorDefined";
+				}
+				catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
+				{
+					DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage page!");
+				}
+
+				string usageIdName = "<Unknown>";
+				try
+				{
+					HidUsageId id = (HidUsageIdEx)(Info.UsageId);
+					string name = Enum.GetName(typeof(HidUsageId), id);
+					if (!string.IsNullOrEmpty(name))
+						usageIdName = name;
+					else if ((Info.UsageId >= (int)(HidUsageId.PageDefined_First)) &&
+						     (Info.UsageId <= (int)(HidUsageId.PageDefined_Last)))
+						usageIdName = "PageDefined";
+					else if ((Info.UsageId >= (int)(HidUsageId.VendorDefined_First)) &&
+						     (Info.UsageId <= (int)(HidUsageId.VendorDefined_Last)))
+						usageIdName = "VendorDefined";
+				}
+				catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
+				{
+					DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage ID!");
+				}
+
+				Debug.WriteLine("USB HID device usage information:");
+				Debug.Indent(); // Terms "Usage page" and "Usage ID" are given by https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf section 3.1 [HID Usage Table Conventions].
+				Debug.WriteLine("Usage page " + usagePageValue + " corresponds to '" + usagePageName + "'");
+				Debug.WriteLine("Usage ID   " + usageIdValue   + " corresponds to '" + usageIdName   + "'");
+				Debug.Unindent();
+			}
+		}
+
+		/// <remarks>
+		/// Private for not having to expose native Win32 types.
+		/// </remarks>
+		private static bool GetDeviceCapabilities(string path, out Win32.Hid.NativeTypes.HIDP_CAPS capabilities)
+		{
 			SafeFileHandle deviceHandle;
-			if (!string.IsNullOrEmpty(Path) && Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
+			if (!string.IsNullOrEmpty(path) && Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					Win32.Hid.NativeTypes.HIDP_CAPS capabilities = new Win32.Hid.NativeTypes.HIDP_CAPS();
-					if (Win32.Hid.GetDeviceCapabilities(deviceHandle, ref capabilities))
-					{
-						this.usagePage = (HidUsagePageEx)capabilities.UsagePage;
-						this.usageId   = (HidUsageIdEx)  capabilities.Usage; // The Win32 HIDP_CAPS structure is named 'Usage', not 'UsageId'.
-
-						this.inputReportByteLength   = capabilities.InputReportByteLength;
-						this.outputReportByteLength  = capabilities.OutputReportByteLength;
-						this.featureReportByteLength = capabilities.FeatureReportByteLength;
-
-						this.linkCollectionNodes = capabilities.NumberLinkCollectionNodes;
-						this.inputButtonCaps     = capabilities.NumberInputButtonCaps;
-						this.inputValueCaps      = capabilities.NumberInputValueCaps;
-						this.inputDataIndices    = capabilities.NumberInputDataIndices;
-						this.outputButtonCaps    = capabilities.NumberOutputButtonCaps;
-						this.outputValueCaps     = capabilities.NumberOutputValueCaps;
-						this.outputDataIndices   = capabilities.NumberOutputDataIndices;
-						this.featureButtonCaps   = capabilities.NumberFeatureButtonCaps;
-						this.featureValueCaps    = capabilities.NumberFeatureValueCaps;
-						this.featureDataIndices  = capabilities.NumberFeatureDataIndices;
-
-						// Output user-friendly usage information:
-						string usagePageValue = "0x" + this.usagePage.GetHashCode().ToString("X4", CultureInfo.InvariantCulture);
-						string usageIdValue   = "0x" + this.usageId  .GetHashCode().ToString("X4", CultureInfo.InvariantCulture);
-
-						string usagePageName = "<Unknown>";
-						try
-						{
-							string name = Enum.GetName(typeof(HidUsagePage), this.usagePage);
-							if (!string.IsNullOrEmpty(name))
-								usagePageName = name;
-							else if ((this.usagePage >= HidUsagePage.VendorDefined_First) &&
-								     (this.usagePage <= HidUsagePage.VendorDefined_Last))
-								usagePageName = "VendorDefined";
-						}
-						catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
-						{
-							DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage page!");
-						}
-
-						string usageIdName = "<Unknown>";
-						try
-						{
-							string name = Enum.GetName(typeof(HidUsageId), this.usageId);
-							if (!string.IsNullOrEmpty(name))
-								usageIdName = name;
-							else if ((this.usageId >= HidUsageId.PageDefined_First) &&
-								     (this.usageId <= HidUsageId.PageDefined_Last))
-								usageIdName = "PageDefined";
-							else if ((this.usageId >= HidUsageId.VendorDefined_First) &&
-								     (this.usageId <= HidUsageId.VendorDefined_Last))
-								usageIdName = "VendorDefined";
-						}
-						catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
-						{
-							DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage ID!");
-						}
-
-						Debug.WriteLine("USB HID device usage information:");
-						Debug.Indent(); // Terms "Usage page" and "Usage ID" are given by https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf section 3.1 [HID Usage Table Conventions].
-						Debug.WriteLine("Usage page " + usagePageValue + " corresponds to '" + usagePageName + "'");
-						Debug.WriteLine("Usage ID   " + usageIdValue   + " corresponds to '" + usageIdName   + "'");
-						Debug.Unindent();
-					}
+					capabilities = new Win32.Hid.NativeTypes.HIDP_CAPS();
+					return (Win32.Hid.GetDeviceCapabilities(deviceHandle, ref capabilities));
 				}
 				finally
 				{
 					deviceHandle.Close();
 				}
 			}
+
+			capabilities = new Win32.Hid.NativeTypes.HIDP_CAPS();
+			return (false);
+		}
+
+		/// <summary>
+		/// Gets the device capabilities for diagnostics/debug purposes.
+		/// </summary>
+		[Conditional("DEBUG")]
+		public static void DebugWriteDeviceCapabilities(string path)
+		{
+			Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
+			GetDeviceCapabilities(path, out capabilities);
 		}
 
 		private void AttachAndRegisterStaticDeviceEventHandlers()
@@ -482,29 +659,76 @@ namespace MKY.IO.Usb
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		[CLSCompliant(false)]
-		public virtual HidUsagePage UsagePage
+		/// <summary>
+		/// Returns the complete device info. To read a specific device property, use the property
+		/// members below.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2019-11-10 / MKY)
+		/// According to the class description, an <see cref="HidDeviceInfo"/> shall be treated as
+		/// an immutable object. While not ideal, it is considered acceptable to return such object.
+		/// Split into mutable settings tuple and immutable runtime container should be done.
+		/// </remarks>
+		public new HidDeviceInfo Info
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.usagePage);
+				return (this.hidDeviceInfo);
 			}
 		}
 
+		#region Properties > IHidDeviceInfo
+		//------------------------------------------------------------------------------------------
+		// Properties > IHidDeviceInfo
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
-		[CLSCompliant(false)]
-		public virtual HidUsageId UsageId
+		public virtual int UsagePage
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.usageId);
+				return (Info.UsagePage);
 			}
 		}
+
+		/// <summary></summary>
+		public virtual string UsagePageString
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (Info.UsagePageString);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int UsageId
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (Info.UsageId);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual string UsageIdString
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (Info.UsageIdString);
+			}
+		}
+
+		#endregion
 
 		/// <summary></summary>
 		public virtual int InputReportByteLength
@@ -683,7 +907,69 @@ namespace MKY.IO.Usb
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
+			{
 				OnDisconnected(EventArgs.Empty);
+			}
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation,
+		/// which is a string describing the USB device as accurately as possible.
+		/// </summary>
+		public override string ToString()
+		{
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+
+			return (Info.ToString());
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation,
+		/// which is a string describing the USB device as accurately as possible.
+		/// </summary>
+		public override string ToString(bool insertVidPid)
+		{
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+
+			return (Info.ToString(insertVidPid));
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation,
+		/// which is a string describing the USB device as accurately as possible.
+		/// </summary>
+		public virtual string ToString(bool insertVidPid, bool appendUsage)
+		{
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+
+			return (Info.ToString(insertVidPid, appendUsage));
+		}
+
+		/// <summary>
+		/// Returns a string describing the USB device in a short form.
+		/// </summary>
+		public override string ToShortString()
+		{
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+
+			return (Info.ToShortString());
+		}
+
+		/// <summary>
+		/// Returns a string describing the USB device in a long form.
+		/// </summary>
+		public override string ToLongString()
+		{
+			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+
+			return (Info.ToLongString());
 		}
 
 		#endregion

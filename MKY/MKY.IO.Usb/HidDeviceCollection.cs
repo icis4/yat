@@ -53,28 +53,20 @@ namespace MKY.IO.Usb
 	/// List containing USB HID device information.
 	/// </summary>
 	[Serializable]
-	public class HidDeviceCollection : DeviceCollection
+	public class HidDeviceCollection : DeviceCollection<HidDeviceInfo>
 	{
-		private HidUsagePage usagePage = HidUsagePage.Undefined;
-		private HidUsageId   usageId   = HidUsageId.Undefined;
+		/// <summary></summary>
+		public const int AnyUsagePage = -1;
 
 		/// <summary></summary>
-		public HidDeviceCollection()
-			: base(DeviceClass.Hid)
-		{
-		}
+		public const int AnyUsageId = -1;
+
+		private int usagePage = AnyUsagePage;
+		private int usageId   = AnyUsageId;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
-		public HidDeviceCollection(HidUsagePage usagePage)
-			: base(DeviceClass.Hid)
-		{
-			this.usagePage = usagePage;
-		}
-
-		/// <summary></summary>
-		[CLSCompliant(false)]
-		public HidDeviceCollection(HidUsagePage usagePage, HidUsageId usageId)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public HidDeviceCollection(int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 			: base(DeviceClass.Hid)
 		{
 			this.usagePage = usagePage;
@@ -82,7 +74,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public HidDeviceCollection(IEnumerable<DeviceInfo> rhs)
+		public HidDeviceCollection(IEnumerable<HidDeviceInfo> rhs)
 			: base(rhs)
 		{
 			var casted = (rhs as HidDeviceCollection);

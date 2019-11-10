@@ -77,7 +77,7 @@ namespace MKY.IO.Serial.Usb
 
 		private const string Undefined = "<Undefined>";
 
-		private DeviceInfo deviceInfo;
+		private HidDeviceInfo deviceInfo;
 		private bool matchSerial;
 
 		private SerialHidDeviceSettingsPreset preset;
@@ -119,7 +119,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			// Attention: USB device info can be null (if no USB devices are available on system).
 			if (rhs.DeviceInfo != null)
-				DeviceInfo = new DeviceInfo(rhs.DeviceInfo);
+				DeviceInfo = new HidDeviceInfo(rhs.DeviceInfo);
 			else
 				DeviceInfo = null;
 
@@ -144,7 +144,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			base.SetMyDefaults();
 
-			DeviceInfo  = new DeviceInfo(); // Required for XML serialization.
+			DeviceInfo  = new HidDeviceInfo(); // Required for XML serialization.
 			MatchSerial = MatchSerialDefault;
 
 			Preset        = PresetDefault;
@@ -166,7 +166,7 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		[XmlElement("DeviceInfo")]
-		public virtual DeviceInfo DeviceInfo
+		public virtual HidDeviceInfo DeviceInfo
 		{
 			get { return (this.deviceInfo); }
 			set

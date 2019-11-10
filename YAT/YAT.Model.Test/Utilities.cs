@@ -1074,10 +1074,10 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUsbSerialHidTextSettings(string deviceInfo)
 		{
-			return (GetStartedUsbSerialHidTextSettings((MKY.IO.Usb.DeviceInfo)deviceInfo));
+			return (GetStartedUsbSerialHidTextSettings((MKY.IO.Usb.HidDeviceInfo)deviceInfo));
 		}
 
-		internal static TerminalSettingsRoot GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.DeviceInfo deviceInfo)
+		internal static TerminalSettingsRoot GetStartedUsbSerialHidTextSettings(MKY.IO.Usb.HidDeviceInfo deviceInfo)
 		{
 			var settings = GetTextSettings();
 			settings.Terminal.IO.IOType = Domain.IOType.UsbSerialHid;

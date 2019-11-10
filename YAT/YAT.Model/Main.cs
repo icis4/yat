@@ -991,15 +991,30 @@ namespace YAT.Model
 						if (!MKY.IO.Usb.DeviceInfo.IsValidProductId(productId))
 							return (false);
 
+						int usagePage;
+						int usageId;
+
+						if (!int.TryParse(this.commandLineArgs.UsagePage, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
+							return (false);
+
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePage(usagePage))
+							return (false);
+
+						if (!int.TryParse(this.commandLineArgs.UsageId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
+							return (false);
+
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageId(usageId))
+							return (false);
+
 						// The SNR is optional:
 						if (!this.commandLineArgs.OptionIsGiven("SerialString"))
 						{
-							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
+							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.HidDeviceInfo(vendorId, productId, usagePage, usageId);
 							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 						}
 						else
 						{
-							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId, this.commandLineArgs.SerialString);
+							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.HidDeviceInfo(vendorId, productId, this.commandLineArgs.SerialString, usagePage, usageId);
 							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = true; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 						}
 					}
@@ -1805,11 +1820,14 @@ namespace YAT.Model
 				sh.SettingsFilePath = absoluteTerminalFilePath;
 				if (sh.Load())
 				{
-					bool success = true;
-
+					// The 'MatchSerial' setting is given by the 'LocalUserSettings' and always overridden.
+					// Still, it is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file.
+					sh.Settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial;
+					sh.Settings.ClearChanged(); // Overriding such setting shall not be reflected in the settings,
+					                          //// i.e. neither be indicated by a '*' nor lead to a file write.
 					settingsHandler = sh;
 					exception = null;
-					return (success);
+					return (true);
 				}
 				else
 				{

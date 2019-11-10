@@ -62,7 +62,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public SerialHidDeviceCollection(IEnumerable<DeviceInfo> rhs)
+		public SerialHidDeviceCollection(IEnumerable<HidDeviceInfo> rhs)
 			: base(rhs)
 		{
 		}

@@ -42,7 +42,10 @@ using YAT.Settings.Application;
 
 namespace YAT.Model
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// Values in descriptions of the arguments must be given as string instead of referencing their
+	/// respective code items because attribute arguments must be constant.
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class CommandLineArgs : ArgsHandler
 	{
@@ -53,7 +56,10 @@ namespace YAT.Model
 		// Public Fields = Command Line Arguments
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="ExtensionHelper.WorkspaceExtension"/>
+		/// and <see cref="ExtensionHelper.TerminalExtension"/>
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 	#if !(WITH_SCRIPTING)
 		[ValueArg(Description = "Open the given workspace (.yaw) or terminal (.yat).")]
@@ -98,14 +104,19 @@ namespace YAT.Model
 			"The default value is 'COM'.")]
 		public string IOType;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPortNumber"/>
+		/// and <see cref="MKY.IO.Ports.SerialPortId.MaxStandardPortNumber"/>
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "SerialPort", ShortName = "p", Description =
 			"The desired serial COM port. Valid values are 1 through 65536, given the port exists on the current machine. The default value is 1." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public int SerialPort;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Ports.BaudRateEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "Baud", "BaudRate" }, ShortName = "br", Description =
@@ -114,28 +125,36 @@ namespace YAT.Model
 			"Only applies to serial COM ports.")]
 		public int BaudRate;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Ports.DataBitsEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "DataBits", ShortName = "db", Description =
 			"The desired number of data bits. Valid values are 4, 5, 6, 7 or 8. The default value is 8." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public int DataBits;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Ports.ParityEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "Parity", ShortName = "pa", Description =
 			"The desired parity setting. Valid values are 'None', 'Odd', 'Even', 'Mark' and 'Space'. The default value is 'None'." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public string Parity;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Ports.StopBitsEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "StopBits", ShortName = "sb", Description =
 			"The desired number of stop bits. Valid values are 0, 1, 1.5 or 2. The default value is 1." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public double StopBits;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Serial.SerialPort.SerialFlowControlEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "FlowControl", ShortName = "fc", Description =
 			"The desired method of flow control." + EnvironmentEx.NewLineConstWorkaround +
@@ -145,7 +164,9 @@ namespace YAT.Model
 			"Does not apply to TCP/IP and UDP/IP.")]
 		public string FlowControl;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "SerialPortAliveMonitor", ShortName = "spam", Description =
 			"When device is connected, e.g. a USB/COM converter, monitor the port every given milliseconds. " +
@@ -155,7 +176,9 @@ namespace YAT.Model
 			"Only applies to serial COM ports.")]
 		public int SerialPortAliveMonitor;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "SerialPortAutoReopen", ShortName = "spar", Description =
 			"When device is no longer available, e.g. a USB/COM converter, try to reopen the port every given milliseconds. " +
@@ -165,7 +188,9 @@ namespace YAT.Model
 			"Only applies to serial COM ports.")]
 		public int SerialPortAutoReopen;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.Net.IPHostEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "RemoteHost", ShortName = "rh", Description =
 			"The desired remote IP host. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
@@ -176,9 +201,8 @@ namespace YAT.Model
 		public string RemoteHost;
 
 		/// <remarks>
-		/// The values in the description must be provided directly instead of referencing their respective code items
-		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault"/>
-		/// because attribute arguments must be constant.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault"/>,
+		/// <see cref="System.Net.IPEndPoint.MinPort"/> and <see cref="System.Net.IPEndPoint.MaxPort"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "RemotePort", ShortName = "rp", Description =
@@ -186,7 +210,9 @@ namespace YAT.Model
 			"Only applies to TCP/IP clients, TCP/IP AutoSockets, UDP/IP clients and UDP/IP PairSockets.")]
 		public int RemotePort;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.Net.IPNetworkInterfaceEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "LocalInterface", ShortName = "li", Description =
 			"The desired local IP interface. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
@@ -198,7 +224,9 @@ namespace YAT.Model
 			"Only applies to TCP/IP.")]
 		public string LocalInterface;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.Net.IPFilterEx.GetItems"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "LocalFilter", ShortName = "lf", Description =
 			"The desired local IP address filter. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
@@ -211,9 +239,8 @@ namespace YAT.Model
 		public string LocalFilter;
 
 		/// <remarks>
-		/// The values in the description must be provided directly instead of referencing their respective code items
-		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault"/>
-		/// because attribute arguments must be constant.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault"/>,
+		/// <see cref="System.Net.IPEndPoint.MinPort"/> and <see cref="System.Net.IPEndPoint.MaxPort"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "LocalPort", ShortName = "lp", Description =
@@ -222,7 +249,7 @@ namespace YAT.Model
 		public int LocalPort;
 
 		/// <remarks>
-		/// Name is intentionally written 'TCP' instead of 'Tcp' for better readability.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault"/>.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -234,7 +261,8 @@ namespace YAT.Model
 		public int TcpAutoReconnect;
 
 		/// <remarks>
-		/// Name is intentionally written 'UDP' instead of 'Udp' for better readability.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Serial.Socket.UdpServerSendModeEx.GetItems"/>
+		/// and <see cref="MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault"/>.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Udp' like this...")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -248,24 +276,22 @@ namespace YAT.Model
 		public int UdpServerSendMode = 2;
 
 		/// <remarks>
-		/// The values in the description must be provided directly instead of referencing their respective code items
-		/// <see cref="MKY.IO.Usb.DeviceInfo.FirstVendorIdString"/> and <see cref="MKY.IO.Usb.DeviceInfo.LastVendorIdString"/>
-		/// because attribute arguments must be constant.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.DeviceInfo.FirstVendorIdString"/>
+		/// and <see cref="MKY.IO.Usb.DeviceInfo.LastVendorIdString"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "VendorID", ShortName = "VID", Description =
-			"The desired USB device vendor ID (VID). Must be a hexadecimal value from 0000 to FFFF. The default value is the VID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired USB device vendor ID (VID). Must be a hexadecimal value within 0000 and FFFF. The default value is the VID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string VendorId;
 
 		/// <remarks>
-		/// The values in the description must be provided directly instead of referencing their respective code items
-		/// <see cref="MKY.IO.Usb.DeviceInfo.FirstProductIdString"/> and <see cref="MKY.IO.Usb.DeviceInfo.LastProductIdString"/>
-		/// because attribute arguments must be constant.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.DeviceInfo.FirstProductIdString"/>
+		/// and <see cref="MKY.IO.Usb.DeviceInfo.LastProductIdString"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "ProductID", ShortName = "PID", Description =
-			"The desired USB device product ID (PID). Must be a hexadecimal value from 0000 to FFFF. The default value is the PID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired USB device product ID (PID). Must be a hexadecimal value within 0000 and FFFF. The default value is the PID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string ProductId;
 
@@ -276,6 +302,26 @@ namespace YAT.Model
 			"The desired USB device serial string -aka- serial number (SNR). The default value is the SNR of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string SerialString;
+
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.HidDeviceInfo.FirstUsagePageString"/>
+		/// and <see cref="MKY.IO.Usb.HidDeviceInfo.LastUsagePageString"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "UsagePage", ShortName = "huPG", Description =
+			"The desired USB HID usage page. Must be a hexadecimal value within 0000 and FFFF. The default value is 0x0000 (Undefined)." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to USB Ser/HID.")]
+		public string UsagePage;
+
+		/// <remarks>
+		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.HidDeviceInfo.FirstUsageIdString"/>
+		/// and <see cref="MKY.IO.Usb.HidDeviceInfo.LastUsageIdString"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "UsageID", ShortName = "huID", Description =
+			"The desired USB HID usage ID. Must be a hexadecimal value within 0000 and FFFF. The default value is 0x0000 (Undefined)." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to USB Ser/HID.")]
+		public string UsageId;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
