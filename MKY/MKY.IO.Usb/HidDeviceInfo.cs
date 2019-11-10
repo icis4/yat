@@ -145,7 +145,7 @@ namespace MKY.IO.Usb
 			if (HidDevice.GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
 				Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 			else
-				Initialize(vendorId, productId, UsagePageDefault, UsageIdDefault); // Initialize this info based on the available information only.
+				Initialize(vendorId, productId, usagePage, usageId); // Initialize this info based on the available information only.
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
@@ -156,7 +156,7 @@ namespace MKY.IO.Usb
 			if (HidDevice.GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
 				Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 			else
-				Initialize(vendorId, productId, serial, UsagePageDefault, UsageIdDefault); // Initialize this info based on the available information only.
+				Initialize(vendorId, productId, serial, usagePage, usageId); // Initialize this info based on the available information only.
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
@@ -203,8 +203,8 @@ namespace MKY.IO.Usb
 
 			Initialize(vendorId, productId);
 
-			this.usagePage = UsagePageDefault;
-			this.usageId   = UsageIdDefault;
+			this.usagePage = usagePage;
+			this.usageId   = usageId;
 		}
 
 		/// <remarks>Initialize this info based on the available information only.</remarks>
@@ -219,8 +219,8 @@ namespace MKY.IO.Usb
 
 			Initialize(vendorId, productId, serial);
 
-			this.usagePage = UsagePageDefault;
-			this.usageId   = UsageIdDefault;
+			this.usagePage = usagePage;
+			this.usageId   = usageId;
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
@@ -598,7 +598,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for VID / PID and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -609,11 +609,11 @@ namespace MKY.IO.Usb
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
+				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for VID / PID / SNR and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -624,38 +624,90 @@ namespace MKY.IO.Usb
 			if (TryParseRequiringSerial(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
+				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
 		}
 
 		/// <summary>
-		/// Tries to parse <paramref name="s"/> for VID / PID and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static HidDeviceInfo ParseRequiringSerialAndUsage(string s)
+		{
+			HidDeviceInfo result;
+			if (TryParseRequiringSerialAndUsage(s, out result))
+				return (result);
+			else
+				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
+		}
+
+		/// <summary>
+		/// Parses <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static HidDeviceInfo ParseRequiringUsage(string s)
+		{
+			HidDeviceInfo result;
+			if (TryParseRequiringUsage(s, out result))
+				return (result);
+			else
+				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out HidDeviceInfo result)
 		{
-			return (TryParse(s, false, out result));
+			return (TryParse(s, false, false, out result));
 		}
 
 		/// <summary>
-		/// Tries to parse <paramref name="s"/> for VID / PID / SNR and returns a corresponding device ID object.
+		/// Tries to parse <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParseRequiringSerial(string s, out HidDeviceInfo result)
 		{
-			return (TryParse(s, true, out result));
+			return (TryParse(s, true, false, out result));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParseRequiringSerialAndUsage(string s, out HidDeviceInfo result)
+		{
+			return (TryParse(s, true, true, out result));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParseRequiringUsage(string s, out HidDeviceInfo result)
+		{
+			return (TryParse(s, false, true, out result));
 		}
 
 		/// <summary></summary>
-		protected static bool TryParse(string s, bool requireSerial, out HidDeviceInfo result)
+		protected static bool TryParse(string s, bool requireSerial, bool requireUsage, out HidDeviceInfo result)
 		{
 			DeviceInfo di;
 			if (TryParse(s, requireSerial, out di))
 			{
-				// e.g. "VID:0ABC / PID:1234 / SNR:XYZ / USAGE:00FF/0001" or "vid_0ABC & pid_1234 & snr_xyz & usage_00FF_0001"
+				// e.g. "VID:0ABC PID:1234 SNR:XYZ USAGE:00FF/0001" or "vid_0ABC&pid_1234&snr_xyz&usage_00FF_0001"
 				var m = UsageRegex.Match(s);
 				if (m.Success)
 				{
@@ -669,6 +721,12 @@ namespace MKY.IO.Usb
 							return (true);
 						}
 					}
+				}
+
+				if (!requireUsage)
+				{
+					result = new HidDeviceInfo(di);
+					return (true);
 				}
 			}
 

@@ -725,7 +725,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for VID / PID and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -740,7 +740,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for VID / PID / SNR and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -755,7 +755,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Tries to parse <paramref name="s"/> for VID / PID and returns a corresponding device ID object.
+		/// Tries to parse <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -766,7 +766,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Tries to parse <paramref name="s"/> for VID / PID / SNR and returns a corresponding device ID object.
+		/// Tries to parse <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -788,7 +788,7 @@ namespace MKY.IO.Usb
 				return (false);
 			}
 
-			// e.g. "VID:0ABC / PID:1234 / SNR:XYZ" or "vid_0ABC & pid_1234 & snr_xyz"
+			// e.g. "VID:0ABC PID:1234 SNR:XYZ" or "vid_0ABC&pid_1234&snr_xyz"
 			var m = VendorIdRegex.Match(s);
 			if (m.Success)
 			{
@@ -801,24 +801,23 @@ namespace MKY.IO.Usb
 						int productId;   // m.Value is e.g. "PID:1234" thus [1] is "1234".
 						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
 						{
-							if (requireSerial)
-							{
-								m = SerialRegexTag.Match(s); // Try to match against "SNR" tag.
-								if (m.Success)
-								{                   // m.Value is e.g. "SNR:XYZ" thus [1] is "XYZ".
-									string serial = m.Groups[1].Value;
-									result = new DeviceInfo(vendorId, productId, serial);
-									return (true);
-								}
-								m = SerialRegexRemainder.Match(s); // Try to match against remainder string.
-								if (m.Success)
-								{                   // m.Value is e.g. "PID:1234 XYZ" thus [1] is "XYZ".
-									string serial = m.Groups[1].Value;
-									result = new DeviceInfo(vendorId, productId, serial);
-									return (true);
-								}
+							m = SerialRegexTag.Match(s); // Try to match against "SNR" tag.
+							if (m.Success)
+							{                   // m.Value is e.g. "SNR:XYZ" thus [1] is "XYZ".
+								string serial = m.Groups[1].Value;
+								result = new DeviceInfo(vendorId, productId, serial);
+								return (true);
 							}
-							else
+
+							m = SerialRegexRemainder.Match(s); // Try to match against remainder string.
+							if (m.Success)
+							{                   // m.Value is e.g. "PID:1234 XYZ" thus [1] is "XYZ".
+								string serial = m.Groups[1].Value;
+								result = new DeviceInfo(vendorId, productId, serial);
+								return (true);
+							}
+
+							if (!requireSerial) // Accept without serial.
 							{
 								result = new DeviceInfo(vendorId, productId);
 								return (true);
