@@ -110,6 +110,12 @@
 <node CREATED="1518817191398" ID="ID_525811036" MODIFIED="1518817202536" TEXT="Check FxCop / StyleCop"/>
 </node>
 </node>
+<node CREATED="1573373936155" ID="ID_715376160" MODIFIED="1573373941666" TEXT="Code Quality">
+<node CREATED="1573373943131" ID="ID_1035103194" MODIFIED="1573373952501" TEXT="immutable">
+<node CREATED="1573373954578" ID="ID_220950248" MODIFIED="1573378812393" TEXT="SerialPortId, DeviceInfo, HidDeviceInfo technically are, but XML serialization needs public setters"/>
+<node CREATED="1573378815173" ID="ID_1353718208" MODIFIED="1573378872951" TEXT="Split into plain settings tuple and &apos;intelligent&apos; runtime container should be done."/>
+</node>
+</node>
 <node CREATED="1293640779452" ID="Freemind_Link_1922966782" MODIFIED="1355655169501" TEXT="Scripting">
 <node CREATED="1293640779453" ID="ID_1409649874" MODIFIED="1293640779453" TEXT="Use case 1: TAT"/>
 <node CREATED="1293640779453" ID="ID_759598749" MODIFIED="1355655165947" TEXT="Use case 2: YAT scripting">
