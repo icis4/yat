@@ -50,10 +50,10 @@ using System.Diagnostics.CodeAnalysis;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB device information.
+	/// Base of list for containing USB device information.
 	/// </summary>
 	[Serializable]
-	public class DeviceCollection<T> : List<T>
+	public abstract class DeviceCollection<T> : List<T>
 		where T : DeviceInfo
 	{
 		private DeviceClass deviceClass = DeviceClass.Any;
@@ -130,6 +130,29 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
+		/// Determines whether an element is in the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool ContainsVidPidSerial(T item)
+		{
+			lock (this)
+			{
+				foreach (var di in this)
+				{
+					if (di.EqualsVidPidSerial(item))
+						return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary>
 		/// Searches for an element that matches the <paramref name="item"/>, and returns the
 		/// first occurrence within the entire collection.
 		/// </summary>
@@ -150,6 +173,25 @@ namespace MKY.IO.Usb
 
 		/// <summary>
 		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// first occurrence within the entire collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		public virtual T FindVidPidSerial(T item)
+		{
+			lock (this)
+			{
+				EqualsVidPidSerial<T> predicate = new EqualsVidPidSerial<T>(item);
+				return (Find(predicate.Match));
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
 		/// zero-based index of the first occurrence within the collection.
 		/// </summary>
 		/// <param name="item">
@@ -164,6 +206,26 @@ namespace MKY.IO.Usb
 			lock (this)
 			{
 				EqualsVidPid<T> predicate = new EqualsVidPid<T>(item);
+				return (FindIndex(predicate.Match));
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// zero-based index of the first occurrence within the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The zero-based index of the first occurrence of an element that matches the
+		/// <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		public virtual int FindIndexVidPidSerial(T item)
+		{
+			lock (this)
+			{
+				EqualsVidPidSerial<T> predicate = new EqualsVidPidSerial<T>(item);
 				return (FindIndex(predicate.Match));
 			}
 		}
@@ -192,6 +254,30 @@ namespace MKY.IO.Usb
 		}
 
 		#endregion
+	}
+
+	/// <summary>
+	/// List containing USB device information.
+	/// </summary>
+	[Serializable]
+	public class DeviceCollection : DeviceCollection<DeviceInfo>
+	{
+		/// <summary></summary>
+		public DeviceCollection()
+		{
+		}
+
+		/// <summary></summary>
+		public DeviceCollection(DeviceClass deviceClass)
+			: base(deviceClass)
+		{
+		}
+
+		/// <summary></summary>
+		public DeviceCollection(IEnumerable<DeviceInfo> rhs)
+			: base(rhs)
+		{
+		}
 	}
 }
 

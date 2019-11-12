@@ -49,6 +49,31 @@ namespace MKY.IO.Usb
 			return (DeviceInfo.EqualsVidPid(other));
 		}
 	}
+
+	/// <summary></summary>
+	public class EqualsVidPidSerial<T>
+		where T : DeviceInfo
+	{
+		/// <summary></summary>
+		public T DeviceInfo { get; set; }
+
+		/// <summary></summary>
+		public EqualsVidPidSerial(T deviceInfo)
+		{
+			DeviceInfo = deviceInfo;
+		}
+
+		/// <summary></summary>
+		public Predicate<T> Match
+		{
+			get { return (IsMatch); }
+		}
+
+		private bool IsMatch(T other)
+		{
+			return (DeviceInfo.EqualsVidPidSerial(other));
+		}
+	}
 }
 
 //==================================================================================================

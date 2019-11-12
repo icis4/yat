@@ -4050,6 +4050,10 @@ namespace YAT.Model
 				{
 					return (CheckResult.OK);
 				}
+				else if (devices.ContainsVidPidSerial(deviceInfo))
+				{
+					return (CheckResult.OK); // Silently accept mismatch in usage only.
+				}
 				else if (devices.ContainsVidPid(deviceInfo))
 				{
 					// A device with same VID/PID is available, use that:
