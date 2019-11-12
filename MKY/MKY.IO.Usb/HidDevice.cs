@@ -186,6 +186,34 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Returns the information of the device with the given path.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "7#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serial, out int usagePage, out int usageId)
+		{
+			if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+			{
+				Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
+				if (GetDeviceCapabilities(path, out capabilities))
+				{
+					usagePage = capabilities.UsagePage;
+					usageId   = capabilities.Usage; // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
+					return (true);
+				}
+			}
+
+			usagePage = HidDeviceInfo.UsagePageDefault;
+			usageId   = HidDeviceInfo.UsageIdDefault;
+			return (false);
+		}
+
+		/// <summary>
 		/// Returns the information of the device with the given VID and PID;
 		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
@@ -396,7 +424,7 @@ namespace MKY.IO.Usb
 					{
 						case DeviceEvent.Connected:
 						{
-							var e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
+							var e = new DeviceEventArgs(DeviceClass.Hid, new HidDeviceInfo(devicePath));
 
 							Debug.WriteLine("USB HID device connected:");
 							Debug.Indent();
@@ -410,7 +438,7 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
-							var e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
+							var e = new DeviceEventArgs(DeviceClass.Hid, new HidDeviceInfo(devicePath));
 
 							Debug.WriteLine("USB HID device disconnected:");
 							Debug.Indent();
@@ -460,33 +488,42 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public HidDevice(string path)
-			: base(HidGuid, path)
+			: base(HidGuid, path) // Path already is correct in respect to usage.
 		{
 			Initialize();
 		}
 
 		/// <summary></summary>
 		public HidDevice(int vendorId, int productId, int usagePage, int usageId)
-			: base(HidGuid, vendorId, productId)
+			: base(HidGuid, GetUsageAwarePath(vendorId, productId, usagePage, usageId))
 		{
-		////Initialize(usagePage, usageId);
 			Initialize();
 		}
 
 		/// <summary></summary>
 		public HidDevice(int vendorId, int productId, string serial, int usagePage, int usageId)
-			: base(HidGuid, vendorId, productId, serial)
+			: base(HidGuid, GetUsageAwarePath(vendorId, productId, serial, usagePage, usageId))
 		{
-		////Initialize(usagePage, usageId);
 			Initialize();
 		}
 
 		/// <summary></summary>
 		public HidDevice(HidDeviceInfo deviceInfo)
-			: base(HidGuid, (DeviceInfo)deviceInfo)
+			: base(HidGuid, (DeviceInfo)deviceInfo) // Path already is correct in respect to usage.
 		{
-		////Initialize(deviceInfo.UsagePage, deviceInfo.UsageId);
 			Initialize();
+		}
+
+		private static string GetUsageAwarePath(int vendorId, int productId, int usagePage, int usageId)
+		{
+			var di = new HidDeviceInfo(vendorId, productId, usagePage, usageId);
+			return (di.Path);
+		}
+
+		private static string GetUsageAwarePath(int vendorId, int productId, string serial, int usagePage, int usageId)
+		{
+			var di = new HidDeviceInfo(vendorId, productId, serial, usagePage, usageId);
+			return (di.Path);
 		}
 
 		/// <remarks>
@@ -508,6 +545,7 @@ namespace MKY.IO.Usb
 		protected override void Reinitialize()
 		{
 			base.Reinitialize();
+
 			GetDeviceCapabilities();
 		}
 

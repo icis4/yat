@@ -564,7 +564,7 @@ namespace MKY.IO.Usb
 
 			return (Equals(other.VendorId, other.ProductId, other.Serial));
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -590,7 +590,7 @@ namespace MKY.IO.Usb
 				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
 			);
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -609,7 +609,7 @@ namespace MKY.IO.Usb
 
 			return (EqualsVidPid(other.VendorId, other.ProductId));
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -628,7 +628,7 @@ namespace MKY.IO.Usb
 				ProductId.Equals(productId)
 			);
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -675,7 +675,7 @@ namespace MKY.IO.Usb
 
 			return (EqualsVidPidManufacturerProductSerial(other.VendorId, other.ProductId, other.Manufacturer, other.Product, other.Serial));
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -698,7 +698,7 @@ namespace MKY.IO.Usb
 				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
 			);
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>

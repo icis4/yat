@@ -54,6 +54,14 @@ namespace MKY.IO.Usb.Test
 				// Similar test data exists in DeviceInfoTestData.TestCases{get}.
 				// Changes here may have to be applied there too.
 
+				// \remind (2019-11-12 / MKY) there might be a way to create these
+				// test cases based on 'DeviceInfoTestData.TestCases', someting like:
+				//     foreach (var tcd in DeviceInfoTestData.TestCases)
+				//     {
+				//         yield return (new TestCaseData(tcd.Arg0, tcd.Arg1, ..., false, 0, 0, tcd.Arg5))
+				//     }
+				// But haven't found a way right now, accepting duplication for the moment.
+
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, false, 0, 0, new string[] { "VID:0ABC PID:1234", "vid:0ABC pid:1234"} ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, false, 0, 0, new string[] { "VID_0ABC PID_1234", "vid_0ABC pid_1234"} ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, false, 0, 0, new string[] { "VID 0ABC PID 1234", "vid 0ABC pid 1234"} ));

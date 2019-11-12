@@ -126,7 +126,7 @@ namespace MKY.IO.Usb
 			Initialize(); // Initialize this info based on defaults only.
 		}
 
-	/*	/// <summary></summary>
+		/// <summary></summary>
 		public HidDeviceInfo(string path)
 		{
 			int vendorId, productId;
@@ -135,7 +135,7 @@ namespace MKY.IO.Usb
 				Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 			else
 				Initialize(path); // Initialize this info based on the available information only.
-		}*/
+		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
@@ -467,21 +467,15 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			return
-			(
-				base.Equals(other) &&
+			return (Equals(other.VendorId, other.ProductId, other.Serial, other.UsagePage, other.UsageId));
 
-				Equals(other.UsagePage, other.UsageId)
-			);
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified properties have value equality,
 		/// ignoring <see cref="DeviceInfo.Manufacturer"/> and <see cref="DeviceInfo.Product"/>.
 		/// </summary>
-		/// <remarks>
-		/// The serial string is compared case-insensitive, same behavior as Windows.
-		/// </remarks>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
@@ -496,7 +490,7 @@ namespace MKY.IO.Usb
 				UsageId  .Equals(usageId)
 			);
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -517,7 +511,7 @@ namespace MKY.IO.Usb
 
 			return (EqualsVidPidUsage(other.VendorId, other.ProductId, other.UsagePage, other.UsageId));
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -540,7 +534,7 @@ namespace MKY.IO.Usb
 				UsageId  .Equals(usageId)
 			);
 
-			// Do not care about path, the path is likely to be system dependent.
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
