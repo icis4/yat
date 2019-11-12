@@ -859,6 +859,8 @@ namespace MKY.IO.Usb
 		/// <![CDATA[
 		/// "\\\\?\\hid#vid_0eb8&pid_2303#8&26d7e5e6&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
 		/// ]]>
+		///
+		/// Only VID/PID is contained as string, not the serial.
 		/// </remarks>
 		protected virtual string Path
 		{

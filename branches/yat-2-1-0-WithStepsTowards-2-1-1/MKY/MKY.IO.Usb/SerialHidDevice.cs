@@ -288,7 +288,7 @@ namespace MKY.IO.Usb
 					{
 						case DeviceEvent.Connected:
 						{
-							var e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
+							var e = new DeviceEventArgs(DeviceClass.Hid, new HidDeviceInfo(devicePath));
 
 							Debug.WriteLine("USB Ser/HID device connected:");
 							Debug.Indent();
@@ -302,7 +302,7 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
-							var e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
+							var e = new DeviceEventArgs(DeviceClass.Hid, new HidDeviceInfo(devicePath));
 
 							Debug.WriteLine("USB Ser/HID device disconnected:");
 							Debug.Indent();
