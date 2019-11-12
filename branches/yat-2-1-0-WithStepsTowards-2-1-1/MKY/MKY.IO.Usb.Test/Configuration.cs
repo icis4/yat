@@ -31,6 +31,7 @@ using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.Configuration;
+using MKY.IO.Usb;
 
 using NUnit.Framework;
 
@@ -212,27 +213,33 @@ namespace MKY.IO.Usb.Test
 			ConfigurationSection configuration;
 			if (Provider.TryOpenAndMergeConfigurations(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
-				// Set which physical items are available on the current machine:
-				SerialHidDeviceCollection availableDevices = new SerialHidDeviceCollection();
+				// Attention:
+				// DeviceCollection(DeviceClass.Hid) and DeviceInfo, i.e. the HID usage unaware implemementation
+				// is used for not running into usage mismatches (configuration doesn't contain usage)! Using
+				// HidDeviceCollection or SerialHidDeviceCollection would require configuration including usage!
+
+				DeviceCollection availableDevices = new DeviceCollection(DeviceClass.Hid);
 				availableDevices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
-				HidDeviceInfo di;
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.DeviceA, out di))
+				// Set which physical items are available on the current machine:
+
+				DeviceInfo di;
+				if (DeviceInfo.TryParseRequiringSerial(configuration.DeviceA, out di))
 					configuration.DeviceAIsAvailable = availableDevices.Contains(di);
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.DeviceB, out di))
+				if (DeviceInfo.TryParseRequiringSerial(configuration.DeviceB, out di))
 					configuration.DeviceBIsAvailable = availableDevices.Contains(di);
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceA, out di))
+				if (DeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceA, out di))
 					configuration.MTSicsDeviceAIsAvailable = availableDevices.Contains(di);
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceB, out di))
+				if (DeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceB, out di))
 					configuration.MTSicsDeviceBIsAvailable = availableDevices.Contains(di);
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceA, out di))
+				if (DeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceA, out di))
 					configuration.TILaunchPadDeviceAIsAvailable = availableDevices.Contains(di);
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceB, out di))
+				if (DeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceB, out di))
 					configuration.TILaunchPadDeviceBIsAvailable = availableDevices.Contains(di);
 
 				// Activate the effective configuration:

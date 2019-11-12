@@ -1177,10 +1177,13 @@ namespace YAT.Model.Test
 		{
 			// MT-SICS devices use XOn/XOff by default:
 			settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
-			settings.Terminal.IO.UsbSerialHidDevice.FlowControl = SerialHidFlowControl.Software;
+			settings.Terminal.IO.UsbSerialHidDevice      .FlowControl = SerialHidFlowControl.Software;
 
-			// Set required USB Ser/HID format:
-			settings.Terminal.IO.UsbSerialHidDevice.Preset = MKY.IO.Usb.SerialHidDeviceSettingsPreset.MT_SerHid;
+			// Set required USB Ser/HID format incl. dependent settings:
+			var presetEx = new MKY.IO.Usb.SerialHidDeviceSettingsPresetEx(MKY.IO.Usb.SerialHidDeviceSettingsPreset.MT_SerHid);
+			settings.Terminal.IO.UsbSerialHidDevice.Preset        = presetEx;
+			settings.Terminal.IO.UsbSerialHidDevice.ReportFormat  = presetEx.ToReportFormat();
+			settings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage = presetEx.ToRxFilterUsage();
 		}
 
 		#endregion

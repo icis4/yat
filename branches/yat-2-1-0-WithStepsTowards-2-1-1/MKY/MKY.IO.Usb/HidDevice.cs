@@ -495,14 +495,14 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public HidDevice(int vendorId, int productId, int usagePage, int usageId)
-			: base(HidGuid, GetUsageAwarePath(vendorId, productId, usagePage, usageId))
+			: base(HidGuid, GetPathUsageAware(vendorId, productId, usagePage, usageId))
 		{
 			Initialize();
 		}
 
 		/// <summary></summary>
 		public HidDevice(int vendorId, int productId, string serial, int usagePage, int usageId)
-			: base(HidGuid, GetUsageAwarePath(vendorId, productId, serial, usagePage, usageId))
+			: base(HidGuid, GetPathUsageAware(vendorId, productId, serial, usagePage, usageId))
 		{
 			Initialize();
 		}
@@ -514,16 +514,30 @@ namespace MKY.IO.Usb
 			Initialize();
 		}
 
-		private static string GetUsageAwarePath(int vendorId, int productId, int usagePage, int usageId)
+		private static string GetPathUsageAware(int vendorId, int productId, int usagePage, int usageId)
 		{
-			var di = new HidDeviceInfo(vendorId, productId, usagePage, usageId);
-			return (di.Path);
+			string path, manufacturer, product, serial;
+
+			if (GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
+				return (path); // Matching usage found.
+
+			if (GetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
+				return (path); // Fallback to non-matching usage.
+
+			return (null);
 		}
 
-		private static string GetUsageAwarePath(int vendorId, int productId, string serial, int usagePage, int usageId)
+		private static string GetPathUsageAware(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
-			var di = new HidDeviceInfo(vendorId, productId, serial, usagePage, usageId);
-			return (di.Path);
+			string path, manufacturer, product;
+
+			if (GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
+				return (path); // Matching usage found.
+
+			if (GetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
+				return (path); // Fallback to non-matching usage.
+
+			return (null);
 		}
 
 		/// <remarks>
