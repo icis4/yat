@@ -753,7 +753,7 @@ namespace YAT.Domain.Parser
 			// \remind (2017-12-09 / MKY / bug #400)
 			// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
 			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
-			// UTF-8 is independent on endianness. The endianness would only have to be applied single
+			// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
 			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
@@ -790,7 +790,7 @@ namespace YAT.Domain.Parser
 			// \remind (2017-12-09 / MKY / bug #400)
 			// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
 			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
-			// UTF-8 is independent on endianness. The endianness would only have to be applied single
+			// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
 			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
@@ -972,7 +972,7 @@ namespace YAT.Domain.Parser
 									// \remind (2017-12-09 / MKY / bug #400)
 									// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
 									// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
-									// UTF-8 is independent on endianness. The endianness would only have to be applied single
+									// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 									// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
 									// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 									// not. Thus, it was decided to again remove the character encoding endianness awareness.
