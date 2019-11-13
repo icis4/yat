@@ -48,18 +48,37 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public BinaryLineState(BinaryLineState rhs)
+		{
+			SequenceAfter  = rhs.SequenceAfter;
+			SequenceBefore = rhs.SequenceBefore;
+
+			Initialize();
+		}
+
+		/// <summary></summary>
 		protected virtual void Initialize()
 		{
 			RetainedUnconfirmedHiddenSequenceBeforeElements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Resets the state, i.e. restarts processing with empty repository.
+		/// </summary>
 		public virtual void Reset()
 		{
 			SequenceAfter .Reset();
 			SequenceBefore.Reset();
 
 			Initialize();
+		}
+
+		/// <summary>
+		/// Notify the end of a line, i.e. continues processing with the next line.
+		/// </summary>
+		public virtual void NotifyLineEnd()
+		{
+			// Nothing to do, all items must be preserved across lines!
 		}
 	}
 }

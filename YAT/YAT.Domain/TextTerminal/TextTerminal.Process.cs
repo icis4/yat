@@ -35,7 +35,6 @@ using System.Media;
 using System.Text;
 
 using MKY;
-using MKY.Diagnostics;
 using MKY.Text;
 
 using YAT.Domain.Utilities;
@@ -57,29 +56,13 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private TextLineState txUnidirBinaryLineState;
-		private TextLineState txBidirBinaryLineState;
-		private TextLineState rxBidirBinaryLineState;
-		private TextLineState rxUnidirBinaryLineState;
+		private List<byte> txPendingMultiBytesToDecode;
+		private List<byte> rxPendingMultiBytesToDecode;
 
-		private List<byte> rxBidirMultiByteDecodingStream;
-		private List<byte> rxUnidirMultiByteDecodingStream;
-
-	#if (WITH_SCRIPTING)
-		private ScriptMessageState rxScriptMessageState;
-	#endif
-
-		/// <remarks>
-		/// Timed line breaks are <see cref="TextTerminal"/> specific because settings are
-		/// defined in <see cref="TextTerminalSettings"/>.
-		/// </remarks>
-		private LineBreakTimeout txLineBreakTimeout;
-
-		/// <remarks>
-		/// Timed line breaks are <see cref="TextTerminal"/> specific because settings are
-		/// defined in <see cref="TextTerminalSettings"/>.
-		/// </remarks>
-		private LineBreakTimeout rxLineBreakTimeout;
+		private TextLineState txUnidirTextLineState;
+		private TextLineState txBidirTextLineState;
+		private TextLineState rxBidirTextLineState;
+		private TextLineState rxUnidirTextLineState;
 
 		#endregion
 
@@ -138,25 +121,36 @@ namespace YAT.Domain
 						// \remind (2017-12-09 / MKY / bug #400)
 						// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
 						// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
-						// UTF-8 is independent on endianness. The endianness would only have to be applied single
+						// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 						// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
 						// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 						// not. Thus, it was decided to again remove the character encoding endianness awareness.
+
+						List<byte> pendingMultiBytesToDecode;
+						switch (d)
+						{
+							case IODirection.Tx:    pendingMultiBytesToDecode = this.txPendingMultiBytesToDecode; break;
+							case IODirection.Rx:    pendingMultiBytesToDecode = this.rxPendingMultiBytesToDecode; break;
+
+							case IODirection.Bidir:
+							case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
 
 						if (((EncodingEx)e).IsUnicode)
 						{
 							// Note that the following code is similar as above and below but with subtle differences
 							// such as no treatment of a lead byte, no treatment of 0xFF, treatment of 0xFFFD, comment,...
 
-							this.rxMultiByteDecodingStream.Add(b);
+							pendingMultiBytesToDecode.Add(b);
 
-							int remainingBytesInFragment = (this.rxMultiByteDecodingStream.Count % ((EncodingEx)e).UnicodeFragmentByteCount);
+							int remainingBytesInFragment = (pendingMultiBytesToDecode.Count % ((EncodingEx)e).UnicodeFragmentByteCount);
 							if (remainingBytesInFragment > 0)
 							{
 								return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 							}
 
-							byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+							byte[] decodingArray = pendingMultiBytesToDecode.ToArray();
 							int expectedCharCount = e.GetCharCount(decodingArray);
 							char[] chars = new char[expectedCharCount];
 							int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
@@ -165,7 +159,7 @@ namespace YAT.Domain
 								int code = chars[0];
 								if (code != 0xFFFD) // Ensure that 'unknown' character 0xFFFD is not decoded yet.
 								{
-									this.rxMultiByteDecodingStream.Clear();
+									pendingMultiBytesToDecode.Clear();
 
 									if      ((code < 0x20) || (code == 0x7F))        // ASCII control characters.
 									{
@@ -193,14 +187,14 @@ namespace YAT.Domain
 								}
 								else
 								{
-									this.rxMultiByteDecodingStream.Clear();          // Reset decoding stream.
+									pendingMultiBytesToDecode.Clear();          // Reset decoding stream.
 
 									return (CreateInvalidBytesWarning(decodingArray, d, e));
 								}
 							}
 							else // (effectiveCharCount > 1) => Code doesn't fit into a single u16 value, thus more than one character will be returned.
 							{
-								this.rxMultiByteDecodingStream.Clear();              // Reset decoding stream.
+								pendingMultiBytesToDecode.Clear();              // Reset decoding stream.
 
 								return (CreateOutsideUnicodePlane0Warning(decodingArray, d, e));
 							}
@@ -210,7 +204,7 @@ namespace YAT.Domain
 							// Note that the following code is similar as above and below but with subtle differences
 							// such as treatment of Base64 bytes, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
-							if (this.rxMultiByteDecodingStream.Count == 0)       // A first 'MultiByte' is either direct or lead byte.
+							if (pendingMultiBytesToDecode.Count == 0)       // A first 'MultiByte' is either direct or lead byte.
 							{
 								if      ((b < 0x20) || (b == 0x7F))               // ASCII control characters.
 								{
@@ -226,8 +220,8 @@ namespace YAT.Domain
 								}
 								else if (b == (byte)'+')                         // UTF-7 lead byte.
 								{
-									this.rxMultiByteDecodingStream.Clear();
-									this.rxMultiByteDecodingStream.Add(b);
+									pendingMultiBytesToDecode.Clear();
+									pendingMultiBytesToDecode.Add(b);
 
 									return (new DisplayElement.Nonentity());     // Nothing to decode (yet).
 								}
@@ -240,9 +234,9 @@ namespace YAT.Domain
 							{
 								if (b == (byte)'-')                              // UTF-7 terminating byte.
 								{
-									this.rxMultiByteDecodingStream.Add(b);
-									byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
-									this.rxMultiByteDecodingStream.Clear();
+									pendingMultiBytesToDecode.Add(b);
+									byte[] decodingArray = pendingMultiBytesToDecode.ToArray();
+									pendingMultiBytesToDecode.Clear();
 
 									int expectedCharCount = e.GetCharCount(decodingArray);
 									char[] chars = new char[expectedCharCount];
@@ -258,8 +252,8 @@ namespace YAT.Domain
 								}
 								else if (!CharEx.IsValidForBase64((char)b))      // Non-Base64 characters also terminates!
 								{
-									byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
-									this.rxMultiByteDecodingStream.Clear();
+									byte[] decodingArray = pendingMultiBytesToDecode.ToArray();
+									pendingMultiBytesToDecode.Clear();
 
 									int expectedCharCount = e.GetCharCount(decodingArray);
 									char[] chars = new char[expectedCharCount];
@@ -299,10 +293,12 @@ namespace YAT.Domain
 
 										switch (d)
 										{
-											case IODirection.Tx: return (new DisplayElement.TxData(origin.ToArray(), text));
-											case IODirection.Rx: return (new DisplayElement.RxData(origin.ToArray(), text));
+											case IODirection.Tx:    return (new DisplayElement.TxData(origin.ToArray(), text));
+											case IODirection.Rx:    return (new DisplayElement.RxData(origin.ToArray(), text));
 
-											default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											case IODirection.Bidir:
+											case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 										}
 									}
 									else // Decoder has failed:
@@ -312,7 +308,7 @@ namespace YAT.Domain
 								}
 								else if (CharEx.IsValidForUTF7((char)b))     // UTF-7 trailing byte.
 								{
-									this.rxMultiByteDecodingStream.Add(b);
+									pendingMultiBytesToDecode.Add(b);
 
 									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 								}
@@ -327,11 +323,11 @@ namespace YAT.Domain
 							// Note that the following code is similar as several times above but with subtle differences
 							// such as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
-							if (this.rxMultiByteDecodingStream.Count == 0)       // A first 'MultiByte' is either ASCII or lead byte.
+							if (pendingMultiBytesToDecode.Count == 0)       // A first 'MultiByte' is either ASCII or lead byte.
 							{
 								if      (b >= 0x80)                              // DBCS/MBCS lead byte.
 								{
-									this.rxMultiByteDecodingStream.Add(b);
+									pendingMultiBytesToDecode.Add(b);
 
 									return (new DisplayElement.Nonentity());     // Nothing to decode (yet).
 								}
@@ -350,15 +346,15 @@ namespace YAT.Domain
 							}
 							else // (rxMultiByteDecodingStream.Count > 0) => Neither ASCII nor lead byte.
 							{
-								this.rxMultiByteDecodingStream.Add(b);
+								pendingMultiBytesToDecode.Add(b);
 
-								byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+								byte[] decodingArray = pendingMultiBytesToDecode.ToArray();
 								int expectedCharCount = e.GetCharCount(decodingArray);
 								char[] chars = new char[expectedCharCount];
 								int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 								if (effectiveCharCount == 1)
 								{
-									this.rxMultiByteDecodingStream.Clear();
+									pendingMultiBytesToDecode.Clear();
 									                                                    //// 'effectiveCharCount' is 1 for sure.
 									return (CreateDataElement(decodingArray, d, r, chars[0]));
 								}
@@ -370,14 +366,14 @@ namespace YAT.Domain
 									}
 									else
 									{
-										this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+										pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
 										return (CreateInvalidBytesWarning(decodingArray, d, e));
 									}
 								}
 								else // (effectiveCharCount > 1)
 								{
-									this.rxMultiByteDecodingStream.Clear(); // Reset decoding stream.
+									pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
 									return (CreateInvalidBytesWarning(decodingArray, d, e));
 								}
@@ -516,6 +512,17 @@ namespace YAT.Domain
 			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
 		}
 
+		/// <remarks>This text specific implementation is based on <see cref="DisplayElementCollection.CharCount"/>.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		protected override void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
+		{
+			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
+			{
+				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
+					lp.Add(new DisplayElement.ContentSpace((Direction)d));
+			}
+		}
+
 		#endregion
 
 		#region Process Elements
@@ -523,72 +530,164 @@ namespace YAT.Domain
 		// Process Elements
 		//------------------------------------------------------------------------------------------
 
-		private void InitializeStates()
+		/// <summary>
+		/// Initializes the processing state.
+		/// </summary>
+		protected override void InitializeProcess()
 		{
-			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
+			// Text unspecifics:
+			base.InitializeProcess();
 
-			byte[] txEol;
-			byte[] rxEol;
+			// Text specifics:
+			txPendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
+			rxPendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
+
 			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Modes.RadixAndAsciiEscapes))
 			{
-				if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
+				// Tx:
 				{
-					// In case of an invalid EOL sequence, default it. This should never happen,
-					// YAT verifies the EOL sequence when the user enters it. However, the user might
-					// manually edit the EOL sequence in a settings file.
-					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.EolDefault;
-					txEol = p.Parse(TextTerminalSettings.TxEol);
+					byte[] txEol;
+					if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
+					{
+						// In case of an invalid EOL sequence, default it. This should never happen,
+						// YAT verifies the EOL sequence when the user enters it. However, the user might
+						// manually edit the EOL sequence in a settings file.
+						TextTerminalSettings.TxEol = Settings.TextTerminalSettings.EolDefault;
+						txEol = p.Parse(TextTerminalSettings.TxEol);
+					}
+
+					this.txUnidirTextLineState = new TextLineState(txEol);
+					this.txBidirTextLineState  = new TextLineState(txEol);
 				}
 
-				if (!p.TryParse(TextTerminalSettings.RxEol, out rxEol))
+				// Rx:
 				{
-					// In case of an invalid EOL sequence, default it. This should never happen,
-					// YAT verifies the EOL sequence when the user enters it. However, the user might
-					// manually edit the EOL sequence in a settings file.
-					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.EolDefault;
-					rxEol = p.Parse(TextTerminalSettings.RxEol);
+					byte[] rxEol;
+					if (!p.TryParse(TextTerminalSettings.RxEol, out rxEol))
+					{
+						// In case of an invalid EOL sequence, default it. This should never happen,
+						// YAT verifies the EOL sequence when the user enters it. However, the user might
+						// manually edit the EOL sequence in a settings file.
+						TextTerminalSettings.RxEol = Settings.TextTerminalSettings.EolDefault;
+						rxEol = p.Parse(TextTerminalSettings.RxEol);
+					}
+
+					this.rxUnidirTextLineState = new TextLineState(rxEol);
+					this.rxBidirTextLineState  = new TextLineState(rxEol);
 				}
 			}
+		}
 
-			LineBreakTimeout t;
+		/// <summary>
+		/// Resets the processing state for the given <paramref name="repositoryType"/>.
+		/// </summary>
+		protected override void ResetProcess(RepositoryType repositoryType)
+		{
+			// Text unspecifics:
+			base.ResetProcess(repositoryType);
 
-			// Tx:
+			// Text specifics:
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    this.txUnidirTextLineState.Reset();                                     break;
+				case RepositoryType.Bidir: this.txBidirTextLineState .Reset(); this.rxBidirTextLineState .Reset(); break;
+				case RepositoryType.Rx:                                        this.rxUnidirTextLineState.Reset(); break;
 
-			t = new LineBreakTimeout(TextTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-			t.Elapsed += txTimedLineBreakTimeout_Elapsed;
-
-			if (this.txLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-				this.txLineState.Dispose();
-
-			this.txLineState = new LineState(txEol, t);
-
-			// Rx:
-
-			t = new LineBreakTimeout(TextTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-			t.Elapsed += rxTimedLineBreakTimeout_Elapsed;
-
-			if (this.rxLineState != null) // Ensure to free referenced resources such as the 'Elapsed' event handler of the timer.
-				this.rxLineState.Dispose();
-
-			this.rxLineState = new LineState(rxEol, t);
-		#if (WITH_SCRIPTING)
-			this.rxScriptMessageState = new ScriptMessageState(rxEol);
-		#endif
-
-			// Bidir:
-
-			this.bidirLineState = new BidirLineState();
-			this.lineSendDelayState = new LineSendDelayState();
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
+		/// This method shall not be overridden as it accesses the quasi-private member
+		/// <see cref="TextTerminalSettings"/>.
 		/// </remarks>
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd)
+		protected Settings.TextDisplaySettings GetTextDisplaySettings(IODirection dir)
 		{
-			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
-				this.bidirLineState.LastLineTimeStamp = ts;
+			switch (dir)
+			{
+				case IODirection.Tx:    return (TextTerminalSettings.TxDisplay);
+				case IODirection.Rx:    return (TextTerminalSettings.RxDisplay);
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private members
+		/// <see cref="txUnidirTextLineState"/>, <see cref="rxUnidirTextLineState"/>,
+		/// <see cref="txBidirTextLineState"/>, <see cref="rxBidirTextLineState"/>.
+		/// </remarks>
+		protected TextLineState GetTextLineState(RepositoryType repositoryType, IODirection dir)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    return (this.txUnidirTextLineState);
+				case RepositoryType.Rx:    return (this.rxUnidirTextLineState);
+
+				case RepositoryType.Bidir: if (dir == IODirection.Tx) { return (this.txBidirTextLineState); }
+				                           else                       { return (this.rxBidirTextLineState); }
+				                           //// Invalid directions are asserted elsewhere.
+
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir, LineState lineState)
+		{
+			Settings.TextDisplaySettings textDisplaySettings = GetTextDisplaySettings(dir);
+			TextLineState textLineState = GetTextLineState(repositoryType, dir);
+
+			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+
+			if (lineState.Position == LinePosition.Begin)
+			{
+				DoLineBegin(ts, dev, dir, lineState, elementsToAdd);
+			}
+
+			if (lineState.Position == LinePosition.Content)
+			{
+				bool replaceAlreadyStartedLine;
+
+				DoLineContent(b, dev, dir, lineState, textDisplaySettings, textLineState, elementsToAdd, out replaceAlreadyStartedLine);
+
+				if (replaceAlreadyStartedLine)
+					ReplaceCurrentDisplayLine(repositoryType, lineState.Elements);
+			}
+
+			if (lineState.Position != LinePosition.End)
+			{
+				if (elementsToAdd.Count > 0)
+					AddDisplayElements(repositoryType, elementsToAdd);
+			}
+			else // (lineState.Position == LinePosition.End)
+			{
+				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
+				bool clearAlreadyStartedLine;
+
+				DoLineEnd(repositoryType, ts, dev, dir, lineState, elementsToAdd, linesToAdd, out clearAlreadyStartedLine);
+
+				if (elementsToAdd.Count > 0)
+					AddDisplayElements(repositoryType, elementsToAdd);
+
+				if (linesToAdd.Count > 0)
+					AddDisplayLines(repositoryType, linesToAdd);
+
+				if (clearAlreadyStartedLine)
+					ClearCurrentDisplayLine(repositoryType);
+			}
+		}
+
+		private void DoLineBegin(DateTime ts, string dev, IODirection dir, LineState lineState,
+		                         DisplayElementCollection elementsToAdd)
+		{
+			if (lineState.IsFirstLine) // Properly initialize the time delta:
+				lineState.PreviousLineTimeStamp = ts;
 
 			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 
@@ -599,16 +698,16 @@ namespace YAT.Domain
 			    TerminalSettings.Display.ShowDirection)
 			{
 				DisplayElementCollection info;
-				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), dev, dir, out info);
+				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - lineState.PreviousLineTimeStamp), dev, dir, out info);
 				lp.AddRange(info);
 			}
 
-			if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
+	/*		if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
 			{
 				lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 			////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
 			}
-			else
+			else !!!PENDING !!! */
 			{
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elementsToAdd.AddRange(lp);
@@ -617,34 +716,33 @@ namespace YAT.Domain
 			lineState.Position  = LinePosition.Content;
 			lineState.TimeStamp = ts;
 			lineState.Device    = dev;
+			lineState.Direction = dir;
 		}
 
-		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
-		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteContent(Settings.TextDisplaySettings displaySettings, LineState lineState, string dev, IODirection dir, byte b, DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
+		private void DoLineContent(byte b, string dev, IODirection dir, LineState lineState,
+		                           Settings.TextDisplaySettings textDisplaySettings, TextLineState textLineState,
+		                           DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
 		{
 			// Convert content:
 			DisplayElement de;
 			bool isBackspace;
-			if (!ControlCharacterHasBeenExecuted(b, dir, out de, out isBackspace))
+			if (!ControlCharacterHasBeenProcessed(b, dir, out de, out isBackspace))
 				de = ByteToElement(b, dir); // Default conversion to value or ASCII mnemonic.
 
-			de.Highlight = lineState.Highlight;
+	//		de.Highlight = lineState.Highlight; !!!PENDING !!!
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			// Prepare EOL:
-			if (!lineState.EolOfGivenDevice.ContainsKey(dev))                                  // It is OK to only access or add to the collection,
-				lineState.EolOfGivenDevice.Add(dev, new SequenceQueue(lineState.EolSequence)); // this will not lead to excessive use of memory,
-			                                                                                   // since there is only a given number of devices.
-			// Add byte to EOL:                                                                // Applies to TCP and UDP terminals only.
-			lineState.EolOfGivenDevice[dev].Enqueue(b);
+			if (!textLineState.EolOfGivenDevice.ContainsKey(dev))                                      // It is OK to only access or add to the collection,
+				textLineState.EolOfGivenDevice.Add(dev, new SequenceQueue(textLineState.EolSequence)); // this will not lead to excessive use of memory,
+			                                                                                           // since there is only a given number of devices.
+			// Add byte to EOL:                                                                        // Applies to TCP and UDP terminals only.
+			textLineState.EolOfGivenDevice[dev].Enqueue(b);
 
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
-			if (lineState.EolOfGivenDevice[dev].IsCompleteMatch)
+			if (textLineState.EolOfGivenDevice[dev].IsCompleteMatch)
 			{
 				if (de.IsContent)
 				{
@@ -657,7 +755,7 @@ namespace YAT.Domain
 					{
 					////lineState.RetainedPotentialEolElements.Add(de); // Adding is useless, Confirm...() below will clear the elements anyway.
 
-						ConfirmRetainedUnconfirmedHiddenEolElements(lineState);
+						ConfirmRetainedUnconfirmedHiddenEolElements(textLineState);
 					}
 
 					lineState.Position = LinePosition.End;
@@ -667,7 +765,7 @@ namespace YAT.Domain
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
 			}                                                                // Note the inverted implementation sequence:
-			else if (lineState.EolOfGivenDevice[dev].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
+			else if (textLineState.EolOfGivenDevice[dev].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
 			{                                                                //  2. PartlyMatchContinued (intermediate, here)
 				if (de.IsContent)                                            //  3. PartlyMatchBeginning (first trigger, below)
 				{                                                            //  4. Unrelatd to EOL      (any time, further below)
@@ -678,7 +776,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						lineState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
+						textLineState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
 					}
 				}
 				else
@@ -686,10 +784,10 @@ namespace YAT.Domain
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
 			}
-			else if (lineState.EolOfGivenDevice[dev].IsPartlyMatchBeginning)
+			else if (textLineState.EolOfGivenDevice[dev].IsPartlyMatchBeginning)
 			{
 				// Previous was no match, retained potential EOL elements can be treated as non-EOL:
-				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(textLineState, lp);
 
 				if (de.IsContent)
 				{
@@ -700,7 +798,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						lineState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
+						textLineState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
 
 						// Potential but not yet confirmed EOL elements shall be retained until EOL
 						// is either confirmed or dismissed, in order to...
@@ -726,7 +824,7 @@ namespace YAT.Domain
 			else
 			{
 				// No match at all, retained potential EOL elements can be treated as non-EOL:
-				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(textLineState, lp);
 
 				// Add the current element, which for sure is not related to EOL:
 				AddSpaceIfNecessary(lineState, dir, lp, de);
@@ -752,12 +850,12 @@ namespace YAT.Domain
 					}
 				}
 
-				if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
+	/*			if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
 				{
 					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 				////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
 				}
-				else
+				else !!!PENDING !!! */
 				{
 					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 					elementsToAdd.AddRange(lp);
@@ -780,7 +878,7 @@ namespace YAT.Domain
 						}
 						else
 						{
-							elementsToAdd.Clear();
+							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
 							replaceAlreadyStartedLine = true;
 						}
 
@@ -789,18 +887,15 @@ namespace YAT.Domain
 						// Setting 'replaceAlreadyStartedLine' to 'true' will instruct the caller to
 						// call OnCurrentDisplayLineReplaced(). However, that method will be called
 						// *before* 'elementsToAdd' will get added by OnDisplayElement[s]Added() !!
-						//
-						// So, if 'elementsToAdd' contains a character to remove, it can be removed
-						// there and the current line does not need to be replaced.
 					}
 				}
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
-			if ((displaySettings.LengthLineBreak.Enabled) &&
+			if ((textDisplaySettings.LengthLineBreak.Enabled) &&
 				(lineState.Position != LinePosition.End))
 			{
-				if (lineState.Elements.CharCount >= displaySettings.LengthLineBreak.Length)
+				if (lineState.Elements.CharCount >= textDisplaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
 
 				// Note that length line break shall be applied even when EOL has just started or is already ongoing,
@@ -825,7 +920,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected virtual bool ControlCharacterHasBeenExecuted(byte b, IODirection dir, out DisplayElement de, out bool isBackspace)
+		protected virtual bool ControlCharacterHasBeenProcessed(byte b, IODirection dir, out DisplayElement de, out bool isBackspace)
 		{
 			isBackspace = false;
 
@@ -880,53 +975,36 @@ namespace YAT.Domain
 			return (false);
 		}
 
-		private void AddSpaceIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
+		private static void ConfirmRetainedUnconfirmedHiddenEolElements(TextLineState textLineState)
 		{
-			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
+			if (textLineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
-				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
-					lp.Add(new DisplayElement.DataSpace());
+				textLineState.RetainedUnconfirmedHiddenEolElements.Clear();
 			}
 		}
 
-		private void RemoveSpaceIfNecessary(IODirection dir, DisplayElementCollection lp)
+		private static void ReleaseRetainedUnconfirmedHiddenEolElements(TextLineState textLineState, DisplayElementCollection lp)
 		{
-			if (ElementsAreSeparate(dir))
+			if (textLineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
-				int count = lp.Count;
-				if ((count > 0) && (lp[count - 1] is DisplayElement.DataSpace))
-					lp.RemoveLast();
+				lp.AddRange(textLineState.RetainedUnconfirmedHiddenEolElements); // No clone needed as collection is cleared below.
+				textLineState.RetainedUnconfirmedHiddenEolElements.Clear();
 			}
 		}
 
-		private static void ConfirmRetainedUnconfirmedHiddenEolElements(LineState lineState)
+		/// <summary></summary>
+		protected override void DoLineEnd(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir, LineState lineState,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine)
 		{
-			if (lineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
-			{
-				lineState.RetainedUnconfirmedHiddenEolElements.Clear();
-			}
-		}
+			// Note: Code sequence the same as DoLineEnd() of BinaryTerminal for better comparability.
 
-		private static void ReleaseRetainedUnconfirmedHiddenEolElements(LineState lineState, DisplayElementCollection lp)
-		{
-			if (lineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
-			{
-				lp.AddRange(lineState.RetainedUnconfirmedHiddenEolElements); // No clone needed as collection is cleared below.
-				lineState.RetainedUnconfirmedHiddenEolElements.Clear();
-			}
-		}
+			clearAlreadyStartedLine = false;
 
-		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
-		/// </remarks>
-		private void ExecuteLineEnd(LineState lineState, DateTime ts, string dev, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			// Note: Code sequence the same as ExecuteLineEnd() of BinaryTerminal for better comparability.
+			TextLineState textLineState = GetTextLineState(repositoryType, dir);
 
 			bool isEmptyLine    = ( lineState.Elements.CharCount == 0);
-			bool isPendingEol   = (!lineState.EolOfLastLineWasCompleteMatch(dev) &&  lineState.EolIsAnyMatch(dev));
-			bool isNotHiddenEol = ( lineState.EolOfLastLineWasCompleteMatch(dev) && !lineState.EolIsAnyMatch(dev));
+			bool isPendingEol   = (!textLineState.EolOfLastLineWasCompleteMatch(dev) &&  textLineState.EolIsAnyMatch(dev));
+			bool isNotHiddenEol = ( textLineState.EolOfLastLineWasCompleteMatch(dev) && !textLineState.EolIsAnyMatch(dev));
 			if (isEmptyLine && isPendingEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden pending EOL character(s):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
@@ -939,7 +1017,7 @@ namespace YAT.Domain
 				                                                                  //            All other elements must be removed as well!
 				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			}
-			else if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
+	/*		else if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
 			#if (DEBUG)
 				// As described in 'ProcessRawChunk()', the current implementation retains the line until it is
@@ -951,7 +1029,7 @@ namespace YAT.Domain
 				                                                                  //            All other elements must be removed as well!
 				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			#endif
-			}
+			} !!!PENDING !!! */
 			else
 			{
 				// Process line length:
@@ -970,12 +1048,12 @@ namespace YAT.Domain
 				}
 				lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
-				// Finalize elements:
+	/*			// Finalize elements:
 				if ((lineState.SuppressIfSubsequentlyTriggered && !lineState.SuppressForSure) ||    // Don't suppress line!
 				    (lineState.SuppressIfNotFiltered && lineState.FilterDetectedInSubsequentChunk)) // Filter line!
 				{                                                                                   // Both cases mean to delay-show the elements of the line.
 					elementsToAdd.AddRange(lineState.Elements.Clone()); // Clone elements because they are needed again further below.
-				}
+				} !!!PENDING !!! */
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
@@ -986,215 +1064,9 @@ namespace YAT.Domain
 				linesToAdd.Add(l);
 			}
 
-			this.bidirLineState.IsFirstLine = false;
-			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
-
 			// Reset line state:
-			lineState.Reset(dev, lineState.EolIsCompleteMatch(dev));
-		}
-
-		/// <remarks>
-		/// Named "Execute" instead of "Process" to better distinguish this local method from the overall "Process" methods.
-		/// Also, the overall "Process" methods synchronize against <see cref="processSyncObj"/> whereas "Execute" don't.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
-		private void ExecuteTimedLineBreakOnReload(Settings.TextDisplaySettings displaySettings, LineState lineState, DateTime ts, string dev,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			if (lineState.Elements.Count > 0)
-			{
-				var span = ts - lineState.TimeStamp;
-				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout)
-					ExecuteLineEnd(lineState, ts, dev, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-			}
-
-			lineState.TimeStamp = ts;
-		}
-
-		/// <summary></summary>
-		protected override void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			lock (this.processSyncObj) // Synchronize processing (raw chunk => device|direction / raw chunk => bytes / raw chunk => chunk / timeout => line break)!
-			{
-				Settings.TextDisplaySettings displaySettings;
-				switch (chunk.Direction)
-				{
-					case IODirection.Tx: displaySettings = TextTerminalSettings.TxDisplay; break;
-					case IODirection.Rx: displaySettings = TextTerminalSettings.RxDisplay; break;
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + chunk.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				LineState lineState;
-				switch (chunk.Direction)
-				{
-					case IODirection.Tx: lineState = this.txLineState; break;
-					case IODirection.Rx: lineState = this.rxLineState; break;
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + chunk.Direction + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				// Activate flags as needed, leave unchanged otherwise.
-				// Note that each chunk will either have none or only have a single attribute activated.
-				// But the line state has to deal with multiple chunks, thus multiples attribute may get activated.
-				// Also note the limitations described in feature request #366 "Automatic response and action shall be...".
-				if (attribute == LineChunkAttribute.Highlight)                       {                                                                                     lineState.Highlight                        = true;                                                                }
-				if (attribute == LineChunkAttribute.Filter)                          { if (!lineState.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.FilterDetectedInFirstChunkOfLine = true; } else { lineState.FilterDetectedInSubsequentChunk = true; } } }
-				if (attribute == LineChunkAttribute.SuppressIfNotFiltered)           { if (!lineState.AnyFilterDetected) {                                                 lineState.SuppressIfNotFiltered            = true;                                                              } }
-				if (attribute == LineChunkAttribute.SuppressIfSubsequentlyTriggered) {                                                                                     lineState.SuppressIfSubsequentlyTriggered  = true;                                                                }
-				if (attribute == LineChunkAttribute.Suppress)                        {                                                                                     lineState.SuppressForSure                  = true;                                                                }
-
-				// In both cases, filtering and suppression, the current implementation retains the line until it is
-				// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs
-				// from the standard behavior which continuously shows data as it is coming in.
-				//
-				// Why this retaining approach? It would be possible to immediately display but then remove the line if it
-				// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach. At the
-				// price that there is no longer immediate feedback on single character transmission in case filtering or
-				// suppression is active, except in case of filtering when the first chunk of a line already contains the
-				// trigger, then the line is continuously shown ('FilterDetectedInFirstChunkOfLine').
-				//
-				// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
-				//
-				// To change from retaining to continuous approach, the #if (DEBUG) around 'clearAlreadyStartedLine' will
-				// have to be removed again. As a consequence, the flag can never get activated, thus excluding it (YAGNI).
-				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
-				//
-				// Note that logging works fine even when filtering or suppression is active, since logging is only
-				// triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus not affected by the more tricky to
-				// handle 'CurrentDisplayLine[Tx|Bidir|Rx]Replaced' and 'CurrentDisplayLine[Tx|Bidir|Rx]Cleared' events.
-
-				foreach (byte b in chunk.Content)
-				{
-					// In case of reload, timed line breaks are executed here:
-					if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-						ExecuteTimedLineBreakOnReload(displaySettings, lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-
-					// Line begin and time stamp:
-					if (lineState.Position == LinePosition.Begin)
-					{
-						ExecuteLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
-
-						if (displaySettings.TimedLineBreak.Enabled)
-							lineState.BreakTimeout.Start();
-					}
-					else
-					{
-						if (displaySettings.TimedLineBreak.Enabled)
-							lineState.BreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
-					}
-
-					// Content:
-					if (lineState.Position == LinePosition.Content)
-					{
-						bool replaceAlreadyStartedLine;
-
-						ExecuteContent(displaySettings, lineState, chunk.Device, chunk.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
-
-						if (replaceAlreadyStartedLine)
-							OnCurrentDisplayLineReplaced(chunk.Direction, lineState.Elements.Clone()); // Clone the ensure decoupling.
-					}
-
-					// Line end and length:
-					if (lineState.Position == LinePosition.End)
-					{
-						if (displaySettings.TimedLineBreak.Enabled)
-							lineState.BreakTimeout.Stop();
-
-						ExecuteLineEnd(lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-					}
-				} // foreach (byte)
-			} // lock (processSyncObj)
-		}
-
-	#if (WITH_SCRIPTING)
-
-		/// <remarks>
-		/// Processing for scripting differs from "normal" processing for displaying because...
-		/// ...received messages must not be impacted by 'DirectionLineBreak'.
-		/// ...received data must not be processed individually, only as packets/messages.
-		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
-		/// </remarks>
-		protected override void ProcessRawChunkForScripting(RawChunk chunk)
-		{
-			if (chunk.Direction == IODirection.Rx)
-			{
-				bool hideXOnXOff = (TerminalSettings.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually &&
-				                    TerminalSettings.CharHide.HideXOnXOff);
-
-				foreach (byte b in chunk.Content)
-				{
-					var isXOnXOffChar = ((b == 0x11) || (b == 0x13));
-					if (isXOnXOffChar && hideXOnXOff)
-						continue; // Do nothing, ignore the character.
-
-					this.rxScriptMessageState.Data.Add(b);
-					this.rxScriptMessageState.Eol.Enqueue(b);
-
-					if (this.rxScriptMessageState.Eol.IsCompleteMatch) // Processing and signalling
-						ProcessAndSignalMessageForScripting();         // in case EOL != <nothing>.
-				}
-			}
-		}
-
-		/// <summary></summary>
-		protected virtual void ProcessAndSignalMessageForScripting()
-		{
-			// Compose packet data:
-			var data = this.rxScriptMessageState.Data.ToArray();
-
-			// Remove EOL from data, as a script message shall not contain the EOL:
-			int eolLength = (this.rxScriptMessageState.EolSequence.Length);
-			int eolIndex  = (this.rxScriptMessageState.Data.Count - eolLength);
-			this.rxScriptMessageState.Data.RemoveRange(eolIndex, eolLength);
-
-			// Compose formatted message. Message format for scripting is fixed:
-			// "For text terminals, received messages are decoded strings, using the configured encoding."
-			var message = Format(this.rxScriptMessageState.Data.ToArray(), IODirection.Rx, Radix.String);
-
-			// Notify:
-			EnqueueReceivedMessageForScripting(message); // Enqueue before invoking event to
-			                                             // have message ready for event.
-			OnScriptPacketReceived(new PacketEventArgs(data));
-			OnScriptMessageReceived(new MessageEventArgs(message));
-
-			// Reset:
-			this.rxScriptMessageState.Reset();
-		}
-
-	#endif // WITH_SCRIPTING
-
-		#endregion
-
-		#region Timer Events
-		//------------------------------------------------------------------------------------------
-		// Timer Events
-		//------------------------------------------------------------------------------------------
-
-		/// <remarks>
-		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
-		/// </remarks>
-		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
-			{
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
-			}
-		}
-
-		/// <remarks>
-		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
-		/// </remarks>
-		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
-		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
-			{
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
-				EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
-			}
+			lineState.NotifyLineEnd(lineState.TimeStamp);
+			textLineState.NotifyLineEnd(dev, textLineState.EolIsCompleteMatch(dev));
 		}
 
 		#endregion

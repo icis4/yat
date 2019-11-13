@@ -28,17 +28,9 @@
 //==================================================================================================
 
 using System;
-#if (WITH_SCRIPTING)
-using System.Collections.Generic;
-#endif
 using System.Diagnostics.CodeAnalysis;
-#if (WITH_SCRIPTING)
-using System.Globalization;
-using System.Text;
-#endif
 
 using MKY;
-using MKY.Diagnostics;
 
 #endregion
 
@@ -74,9 +66,15 @@ namespace YAT.Domain
 		// Process Elements
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <summary>
+		/// Initializes the processing state.
+		/// </summary>
 		protected override void InitializeProcess()
 		{
+			// Binary unspecifics:
+			base.InitializeProcess();
+
+			// Binary specifics:
 			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, Parser.Modes.RadixAndAsciiEscapes))
 			{
 				// Tx:
@@ -104,52 +102,161 @@ namespace YAT.Domain
 						rxSequenceBreakBefore = null;
 
 					this.rxUnidirBinaryLineState = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
-					this.rxBidirBinaryLineState = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
+					this.rxBidirBinaryLineState  = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
 				}
 			}
 		}
 
-		/// <summary></summary>
-		protected override void ProcessRawByte(byte b, LineChunkAttribute attribute)
+		/// <summary>
+		/// Resets the processing state for the given <paramref name="repositoryType"/>.
+		/// </summary>
+		protected override void ResetProcess(RepositoryType repositoryType)
 		{
-			// Line begin and time stamp:
-			if (lineState.Position == LinePosition.Begin)
-				DoLineBegin(lineState, chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd);
+			// Binary unspecifics:
+			base.ResetProcess(repositoryType);
 
-			// Content:
-			if (lineState.Position == LinePosition.Content)
-				DoContent(displaySettings, lineState, chunk.Device, chunk.Direction, b, elementsToAdd, out replaceAlreadyStartedLine);
+			// Binary specifics:
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    this.txUnidirBinaryLineState.Reset();                                       break;
+				case RepositoryType.Bidir: this.txBidirBinaryLineState .Reset(); this.rxBidirBinaryLineState .Reset(); break;
+				case RepositoryType.Rx:                                          this.rxUnidirBinaryLineState.Reset(); break;
 
-			// Line end and length:
-			if (lineState.Position == LinePosition.End)
-				DoLineEnd(lineState, chunk.TimeStamp, chunk.Device, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
-		private void DoLineBegin(LineState lineState, DateTime ts, string dev, IODirection dir, DisplayElementCollection elementsToAdd)
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the quasi-private member
+		/// <see cref="BinaryTerminalSettings"/>.
+		/// </remarks>
+		protected Settings.BinaryDisplaySettings GetBinaryDisplaySettings(IODirection dir)
 		{
-			var lineState = GetLineState(repositoryType);
-			if (this.bidirLineState.IsFirstLine) // Properly initialize the time delta:
-				this.bidirLineState.LastLineTimeStamp = ts;
+			switch (dir)
+			{
+				case IODirection.Tx:    return (BinaryTerminalSettings.TxDisplay);
+				case IODirection.Rx:    return (BinaryTerminalSettings.RxDisplay);
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private members
+		/// <see cref="txUnidirBinaryLineState"/>, <see cref="rxUnidirBinaryLineState"/>,
+		/// <see cref="txBidirBinaryLineState"/>, <see cref="rxBidirBinaryLineState"/>.
+		/// </remarks>
+		protected BinaryLineState GetBinaryLineState(RepositoryType repositoryType, IODirection dir)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    return (this.txUnidirBinaryLineState);
+				case RepositoryType.Rx:    return (this.rxUnidirBinaryLineState);
+
+				case RepositoryType.Bidir: if (dir == IODirection.Tx) { return (this.txBidirBinaryLineState); }
+				                           else                       { return (this.rxBidirBinaryLineState); }
+				                           //// Invalid directions are asserted elsewhere.
+
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir, LineState lineState)
+		{
+			Settings.BinaryDisplaySettings binaryDisplaySettings = GetBinaryDisplaySettings(dir);
+			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, dir);
+
+			var elementsToAdd       = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+
+			if (lineState.Position == LinePosition.Begin)
+			{
+				DoLineBegin(ts, dev, dir, lineState, elementsToAdd);
+			}
+
+			if (lineState.Position == LinePosition.Content)
+			{
+				DoLineContent(b, dir, lineState, binaryDisplaySettings, binaryLineState, elementsToAdd, elementsForNextLine);
+			}
+
+			if (lineState.Position != LinePosition.End)
+			{
+				if (elementsToAdd.Count > 0)
+					AddDisplayElements(repositoryType, elementsToAdd);
+			}
+			else // (lineState.Position == LinePosition.End)
+			{
+				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
+				bool clearAlreadyStartedLineDummy;
+
+				DoLineEnd(repositoryType, ts, dev, dir, lineState, elementsToAdd, linesToAdd, out clearAlreadyStartedLineDummy);
+
+				if (elementsToAdd.Count > 0)
+					AddDisplayElements(repositoryType, elementsToAdd);
+
+				if (linesToAdd.Count > 0)
+					AddDisplayLines(repositoryType, linesToAdd);
+
+				// In case of a pending element immediately insert the sequence into a new line:
+				if (elementsForNextLine.Count > 0)
+				{
+					elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+					           //// Potentially same time stamp as end of previous line, since time stamp belongs to chunk.
+					DoLineBegin(ts, dev, dir, lineState, elementsToAdd);
+
+					foreach (var de in elementsForNextLine)
+					{
+						if (de.Origin != null) // Foreach element where origin exists.
+						{
+							foreach (var origin in de.Origin)
+							{
+								foreach (var originByte in origin.Value1)
+								{
+									DisplayElementCollection elementsForNextLineDummy = null;
+									DoLineContent(originByte, dir, lineState, binaryDisplaySettings, binaryLineState, elementsToAdd, elementsForNextLineDummy);
+								}
+							}
+						}
+					} // foreach (elementForNextLine)
+
+					if (elementsToAdd.Count > 0)
+						AddDisplayElements(repositoryType, elementsToAdd);
+
+				} // if (has elementsForNextLine)
+			}
+		}
+
+		private void DoLineBegin(DateTime ts, string dev, IODirection dir, LineState lineState,
+		                         DisplayElementCollection elementsToAdd)
+		{
+			if (lineState.IsFirstLine) // Properly initialize the time delta:
+				lineState.PreviousLineTimeStamp = ts;
 
 			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 
-			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
+			lp.Add(new DisplayElement.LineStart());
 
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
 			    TerminalSettings.Display.ShowDevice    ||
 			    TerminalSettings.Display.ShowDirection)
 			{
 				DisplayElementCollection info;
-				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - this.bidirLineState.LastLineTimeStamp), dev, dir, out info);
+				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - lineState.PreviousLineTimeStamp), dev, dir, out info);
 				lp.AddRange(info);
 			}
 
-			if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
+	/*		if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
 			{
 				lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 			////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
 			}
-			else
+			else !!!PENDING !!! */
 			{
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elementsToAdd.AddRange(lp);
@@ -157,16 +264,17 @@ namespace YAT.Domain
 
 			lineState.Position = LinePosition.Content;
 			lineState.TimeStamp = ts;
+			lineState.Device    = dev;
+			lineState.Direction = dir;
 		}
 
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void DoContent(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection dir, byte b, DisplayElementCollection elementsToAdd, out DisplayElementCollection elementsForNextLine)
+		private void DoLineContent(byte b, IODirection dir, LineState lineState,
+		                           Settings.BinaryDisplaySettings binaryDisplaySettings, BinaryLineState binaryLineState,
+		                           DisplayElementCollection elementsToAdd, DisplayElementCollection elementsForNextLine)
 		{
-			elementsForNextLine = null;
-
 			// Convert content:
 			var de = ByteToElement(b, dir);
-			de.Highlight = lineState.Highlight;
+	//		de.Highlight = lineState.Highlight; !!!PENDING !!!
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
@@ -176,44 +284,44 @@ namespace YAT.Domain
 			//  3. Evaluate the easiest case: Length line break.
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
-			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.ByteCount > 0) &&
+			if ((binaryDisplaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.ByteCount > 0) &&
 				(lineState.Position != LinePosition.End)))       // Also skip if line has just been brokwn.
 			{
-				lineState.SequenceBefore.Enqueue(b);
-				if (lineState.SequenceBefore.IsCompleteMatch)
+				binaryLineState.SequenceBefore.Enqueue(b);
+				if (binaryLineState.SequenceBefore.IsCompleteMatch)
 				{
 					// Sequence is complete, move them to the next line:
-					lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 
-					elementsForNextLine = new DisplayElementCollection(lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
-					foreach (DisplayElement dePending in lineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
+					elementsForNextLine = new DisplayElementCollection(binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
+					foreach (DisplayElement dePending in binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
 						elementsForNextLine.Add(dePending.Clone());
 
 					lineState.Position = LinePosition.End;
 				}
-				else if (lineState.SequenceBefore.IsPartlyMatchContinued)
+				else if (binaryLineState.SequenceBefore.IsPartlyMatchContinued)
 				{
 					// Keep sequence elements and delay them until sequence is either complete or refused:
-					lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 				}
-				else if (lineState.SequenceBefore.IsPartlyMatchBeginning)
+				else if (binaryLineState.SequenceBefore.IsPartlyMatchBeginning)
 				{
 					// Previous was no match, previous sequence can be treated as normal:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(binaryLineState, lp);
 
 					// Keep sequence elements and delay them until sequence is either complete or refused:
-					lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 				}
 				else
 				{
 					// No match at all, previous sequence can be treated as normal:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(binaryLineState, lp);
 				}
 			}
 
@@ -226,12 +334,12 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
-				if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
+	/*			if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
 				{
 					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 				////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
 				}
-				else
+				else !!!PENDING !!! */
 				{
 					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 					elementsToAdd.AddRange(lp);
@@ -244,18 +352,18 @@ namespace YAT.Domain
 			//  3. Evaluate the easiest case: Length line break.
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
-			if ((displaySettings.SequenceLineBreakAfter.Enabled) &&
+			if ((binaryDisplaySettings.SequenceLineBreakAfter.Enabled) &&
 				(lineState.Position != LinePosition.End))
 			{
-				lineState.SequenceAfter.Enqueue(b);
-				if (lineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
+				binaryLineState.SequenceAfter.Enqueue(b);
+				if (binaryLineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
 					lineState.Position = LinePosition.End;
 			}
 
-			if ((displaySettings.LengthLineBreak.Enabled) &&
+			if ((binaryDisplaySettings.LengthLineBreak.Enabled) &&
 				(lineState.Position != LinePosition.End))
 			{
-				if (lineState.Elements.ByteCount >= displaySettings.LengthLineBreak.Length)
+				if (lineState.Elements.ByteCount >= binaryDisplaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
 			}
 
@@ -273,29 +381,26 @@ namespace YAT.Domain
 			}
 		}
 
-		private void AddSpaceIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
+		private static void ReleaseRetainedUnconfirmedHiddenSequenceBefore(BinaryLineState binaryLineState, DisplayElementCollection lp)
 		{
-			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
+			if (binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Count > 0)
 			{
-				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
-					lp.Add(new DisplayElement.DataSpace());
+				lp.AddRange(binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements); // No clone needed as collection is cleared below.
+				binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Clear();
 			}
 		}
 
-		private static void ReleaseRetainedUnconfirmedHiddenSequenceBefore(LineState lineState, DisplayElementCollection lp)
+		/// <summary></summary>
+		protected override void DoLineEnd(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir, LineState lineState,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine)
 		{
-			if (lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Count > 0)
-			{
-				lp.AddRange(lineState.RetainedUnconfirmedHiddenSequenceBeforeElements); // No clone needed as collection is cleared below.
-				lineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Clear();
-			}
-		}
+			// Note: Code sequence the same as DoLineEnd() of TextTerminal for better comparability.
 
-		private void DoLineEnd(LineState lineState, DateTime ts, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			// Note: Code sequence the same as ExecuteLineEnd() of TextTerminal for better comparability.
+			clearAlreadyStartedLine = false;
 
-			// Potentially suppress line:
+			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, dir);
+
+	/*		// Potentially suppress line:
 			if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
 			#if (DEBUG)
@@ -309,7 +414,7 @@ namespace YAT.Domain
 				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
 			#endif
 			}
-			else
+			else !!!PENDING !!! */
 			{
 				// Process line length:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -319,14 +424,14 @@ namespace YAT.Domain
 					PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
 					lineEnd.AddRange(info);
 				}
-				lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
+				lineEnd.Add(new DisplayElement.LineBreak());
 
-				// Finalize elements:
+	/*			// Finalize elements:
 				if ((lineState.SuppressIfSubsequentlyTriggered && !lineState.SuppressForSure) ||    // Don't suppress line!
 				    (lineState.SuppressIfNotFiltered && lineState.FilterDetectedInSubsequentChunk)) // Filter line!
 				{                                                                                   // Both cases mean to delay-show the elements of the line.
 					elementsToAdd.AddRange(lineState.Elements.Clone()); // Clone elements because they are needed again further below.
-				}
+				} !!!PENDING !!! */
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
@@ -335,95 +440,12 @@ namespace YAT.Domain
 				l.AddRange(lineEnd);
 				l.TimeStamp = lineState.TimeStamp;
 				linesToAdd.Add(l);
-
-			#if (WITH_SCRIPTING)
-
-				if (!IsReloading)
-				{
-					// \ToDo: Currently limited to enqueing only after a display line has been completed.
-					//        This limits cases where the direction changes in the same displayed line.
-					//        This also limits cases where packet dimensions and display representation are different.
-					//        Handling shall be improved when implementing defect #129 "true support for binary terminals".
-					//        Consider to add a dedicated script setting, e.g. Binary > MessageSize.
-					var data = new List<byte>(128); // Preset the capacity to improve memory management. 128 is an arbitrary value.
-					var message = new StringBuilder();
-					foreach (var de in l)
-					{
-						// Compose received message line for scripting:
-						if ((de.Direction == Direction.Rx) && de.IsDataContent)
-						{
-							foreach (var b in de.ToOrigin())
-							{
-								data.Add(b);
-
-								if (message.Length > 0)  // Message format for scripting is fixed:
-									message.Append(" "); // "For binary terminals, received messages are
-								                         //  hexadecimal values, separated with spaces."
-								message.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-							}
-						}
-
-						// Handle potential direction changes inside the displayed line:
-						if ((de.Direction != Direction.Rx) && ((data.Count > 0) || (message.Length > 0)))
-						{
-							EnqueueReceivedMessageForScripting(message.ToString()); // Enqueue before invoking event to
-							                                                        // have message ready for event.
-							OnScriptPacketReceived(new PacketEventArgs(data.ToArray()));
-							OnScriptMessageReceived(new MessageEventArgs(message.ToString()));
-
-							data = new List<byte>(128); // Preset the capacity to improve memory management. 128 is an arbitrary value.
-							message = new StringBuilder();
-						}
-					}
-
-					if ((data.Count > 0) || (message.Length > 0))
-					{
-						EnqueueReceivedMessageForScripting(message.ToString()); // Enqueue before invoking event to
-						                                                        // have message ready for event.
-						OnScriptPacketReceived(new PacketEventArgs(data.ToArray()));
-						OnScriptMessageReceived(new MessageEventArgs(message.ToString()));
-					}
-				}
-			#endif // WITH_SCRIPTING
 			}
-
-			this.bidirLineState.IsFirstLine = false;
-			this.bidirLineState.LastLineTimeStamp = lineState.TimeStamp;
 
 			// Reset line state:
-			lineState.Reset();
+			lineState.NotifyLineEnd(lineState.TimeStamp);
+			binaryLineState.NotifyLineEnd();
 		}
-
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Readability.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Readability.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Readability.")]
-		private void DoTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
-		{
-			if (lineState.Elements.Count > 0)
-			{
-				var span = ts - lineState.TimeStamp;
-				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout)
-					ExecuteLineEnd(lineState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-			}
-
-			lineState.TimeStamp = ts;
-		}
-
-	#if (WITH_SCRIPTING)
-		/// <remarks>
-		/// Processing for scripting differs from "normal" processing for displaying because...
-		/// ...received messages must not be impacted by 'DirectionLineBreak'.
-		/// ...received data must not be processed individually, only as packets/messages.
-		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
-		/// </remarks>
-		protected override void ProcessRawChunkForScripting(RawChunk chunk)
-		{
-			// Do nothing, as EnqueueReceivedMessageForScripting(), OnScriptPacketReceived() and
-			// OnScriptMessageReceived() is invoked in ExecuteLineEnd() further above. See comment
-			// regarding defect #129 "true support for binary terminals" for more information.
-		}
-	#endif // WITH_SCRIPTING
 
 		#endregion
 

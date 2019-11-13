@@ -77,6 +77,42 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Types
+		//------------------------------------------------------------------------------------------
+		// Types
+		//------------------------------------------------------------------------------------------
+
+		private class LineSendDelayState
+		{
+			public int LineCount { get; set; }
+
+			public LineSendDelayState()
+			{
+				LineCount = 0;
+			}
+
+			public LineSendDelayState(LineSendDelayState rhs)
+			{
+				LineCount = rhs.LineCount;
+			}
+
+			public virtual void Reset()
+			{
+				LineCount = 0;
+			}
+		}
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private LineSendDelayState lineSendDelayState;
+
+		#endregion
+
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
@@ -87,7 +123,6 @@ namespace YAT.Domain
 			: base(settings)
 		{
 			AttachTextTerminalSettings();
-			InitializeStates();
 		}
 
 		/// <summary></summary>
@@ -99,37 +134,22 @@ namespace YAT.Domain
 			var casted = (terminal as TextTerminal);
 			if (casted != null)
 			{
-				this.rxMultiByteDecodingStream = casted.rxMultiByteDecodingStream;
-
 				// Tx:
-
-				this.txLineState = casted.txLineState;
-				                                           //// \remind (2016-09-08 / MKY)
-				if (this.txLineState.BreakTimeout != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.txLineState.BreakTimeout.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
-
-				this.txLineState.BreakTimeout = new LineBreakTimeout(TextTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				this.txLineState.BreakTimeout.Elapsed += txTimedLineBreakTimeout_Elapsed;
+				{
+					this.txUnidirTextLineState = new TextLineState(casted.txUnidirTextLineState);
+					this.txBidirTextLineState  = new TextLineState(casted.txBidirTextLineState);
+				}
 
 				// Rx:
-
-				this.rxLineState = casted.rxLineState;
-				                                           //// \remind (2016-09-08 / MKY)
-				if (this.rxLineState.BreakTimeout != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.rxLineState.BreakTimeout.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
-
-				this.rxLineState.BreakTimeout = new LineBreakTimeout(TextTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				this.rxLineState.BreakTimeout.Elapsed += rxTimedLineBreakTimeout_Elapsed;
+				{
+					this.rxUnidirTextLineState = new TextLineState(casted.rxUnidirTextLineState);
+					this.rxBidirTextLineState  = new TextLineState(casted.rxBidirTextLineState);
+				}
 
 				// Bidir:
-
-				this.bidirLineState = new BidirLineState(casted.bidirLineState);
-
-				this.lineSendDelayState = new LineSendDelayState(casted.lineSendDelayState);
-			}
-			else
-			{
-				InitializeStates();
+				{
+					this.lineSendDelayState = new LineSendDelayState(casted.lineSendDelayState);
+				}
 			}
 		}
 
@@ -147,17 +167,7 @@ namespace YAT.Domain
 				if (disposing)
 				{
 					DetachTextTerminalSettings();
-
-					if (this.txLineState != null)
-						this.txLineState.Dispose();
-
-					if (this.rxLineState != null)
-						this.rxLineState.Dispose();
 				}
-
-				// Set state to disposed:
-				this.txLineState = null;
-				this.rxLineState = null;
 			}
 
 			base.Dispose(disposing);
@@ -193,8 +203,8 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				if (this.txLineState != null)
-					return (this.txLineState.EolSequence);
+				if (this.txUnidirTextLineState != null)
+					return (this.txUnidirTextLineState.EolSequence);
 				else
 					return (null);
 			}
@@ -210,8 +220,8 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				if (this.rxLineState != null)
-					return (this.rxLineState.EolSequence);
+				if (this.rxUnidirTextLineState != null)
+					return (this.rxUnidirTextLineState.EolSequence);
 				else
 					return (null);
 			}
@@ -285,7 +295,6 @@ namespace YAT.Domain
 
 		private void ApplyTextTerminalSettings()
 		{
-			InitializeStates();
 			RefreshRepositories();
 		}
 

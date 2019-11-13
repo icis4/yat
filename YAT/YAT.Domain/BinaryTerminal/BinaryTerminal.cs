@@ -71,7 +71,6 @@ namespace YAT.Domain
 			: base(settings)
 		{
 			AttachBinaryTerminalSettings();
-			InitializeStates();
 		}
 
 		/// <summary></summary>
@@ -84,32 +83,16 @@ namespace YAT.Domain
 			if (casted != null)
 			{
 				// Tx:
-
-				this.txLineState = casted.txLineState;
-				                                           //// \remind (2016-09-08 / MKY)
-				if (this.txLineState.BreakTimeout != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.txLineState.BreakTimeout.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
-
-				this.txLineState.BreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				this.txLineState.BreakTimeout.Elapsed += txTimedLineBreakTimeout_Elapsed;
+				{
+					this.txUnidirBinaryLineState = new BinaryLineState(casted.txUnidirBinaryLineState);
+					this.txBidirBinaryLineState  = new BinaryLineState(casted.txBidirBinaryLineState);
+				}
 
 				// Rx:
-
-				this.rxLineState = casted.rxLineState;
-				                                           //// \remind (2016-09-08 / MKY)
-				if (this.rxLineState.BreakTimeout != null)   // Ensure to free referenced resources such as the 'Elapsed' event handler.
-					this.rxLineState.BreakTimeout.Dispose(); // Whole timer handling should be encapsulated into the 'LineState' class.
-
-				this.rxLineState.BreakTimeout = new LineBreakTimeout(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				this.rxLineState.BreakTimeout.Elapsed += rxTimedLineBreakTimeout_Elapsed;
-
-				// Bidir:
-
-				this.bidirLineState = new BidirLineState(casted.bidirLineState);
-			}
-			else
-			{
-				InitializeStates();
+				{
+					this.rxUnidirBinaryLineState = new BinaryLineState(casted.rxUnidirBinaryLineState);
+					this.rxBidirBinaryLineState  = new BinaryLineState(casted.rxBidirBinaryLineState);
+				}
 			}
 		}
 
@@ -127,17 +110,7 @@ namespace YAT.Domain
 				if (disposing)
 				{
 					DetachBinaryTerminalSettings();
-
-					if (this.txLineState != null)
-						this.txLineState.Dispose();
-
-					if (this.rxLineState != null)
-						this.rxLineState.Dispose();
 				}
-
-				// Set state to disposed:
-				this.txLineState = null;
-				this.rxLineState = null;
 			}
 
 			base.Dispose(disposing);
@@ -189,7 +162,6 @@ namespace YAT.Domain
 
 		private void ApplyBinaryTerminalSettings()
 		{
-			InitializeStates();
 			RefreshRepositories();
 		}
 
