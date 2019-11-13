@@ -59,7 +59,6 @@ namespace YAT.Domain
 	/// <item><description>Less "Durchlauferhitzer", e.g. directly raising events.</description></item>
 	/// </list>
 	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public partial class TextTerminal : Terminal
 	{
 		#region Constant Help Text
@@ -123,6 +122,8 @@ namespace YAT.Domain
 			: base(settings)
 		{
 			AttachTextTerminalSettings();
+
+			this.lineSendDelayState = new LineSendDelayState();
 		}
 
 		/// <summary></summary>
@@ -150,6 +151,10 @@ namespace YAT.Domain
 				{
 					this.lineSendDelayState = new LineSendDelayState(casted.lineSendDelayState);
 				}
+			}
+			else
+			{
+				this.lineSendDelayState = new LineSendDelayState();
 			}
 		}
 
