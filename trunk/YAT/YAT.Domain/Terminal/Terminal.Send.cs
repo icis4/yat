@@ -221,9 +221,9 @@ namespace YAT.Domain
 		/// on the same thread that triggered the send operation.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
 		/// to the main application. Small chunks of sent data would generate many events. However,
-		/// since <see cref="OnDisplayElementAdded"/> synchronously invokes the event, it will
-		/// take some time until the send queue is checked again. During this time, no more new
-		/// events are invoked, instead, outgoing data is buffered.
+		/// since the 'OnDisplayElements...' methods synchronously invoke the event, it will take
+		/// some time until the send queue is checked again. During this time, no more new events
+		/// are invoked, instead, outgoing data is buffered.
 		/// </summary>
 		/// <remarks>
 		/// Will be signaled by <see cref="DoSendData(IEnumerable{DataSendItem})"/> above.
@@ -371,7 +371,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParserResult(parseResult, item.IsLine);
 			else
-				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
@@ -594,12 +594,12 @@ namespace YAT.Domain
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing serial COM port settings has failed! " + ex.Message));
+								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing serial COM port settings has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Changing I/O settings is yet limited to serial COM ports (limitation #71).", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Changing I/O settings is yet limited to serial COM ports (limitation #71).", true));
 					}
 					break;
 				}
@@ -624,12 +624,12 @@ namespace YAT.Domain
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing baud rate has failed! " + ex.Message));
+								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing baud rate has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Baud rate can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Baud rate can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -654,12 +654,12 @@ namespace YAT.Domain
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing stop bits has failed! " + ex.Message));
+								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing stop bits has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Stop bits can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Stop bits can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -684,12 +684,12 @@ namespace YAT.Domain
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing data bits has failed! " + ex.Message));
+								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing data bits has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Data bits can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Data bits can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -714,12 +714,12 @@ namespace YAT.Domain
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing parity has failed! " + ex.Message));
+								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing parity has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Parity can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Parity can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -744,12 +744,12 @@ namespace YAT.Domain
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
-								OnDisplayElementAdded(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing flow control has failed! " + ex.Message));
+								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(Direction.Bidir, "Changing flow control has failed! " + ex.Message));
 						}
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Flow control can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Flow control can only be changed on serial COM ports.", true));
 					}
 					break;
 				}
@@ -765,7 +765,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -781,7 +781,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -797,7 +797,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
 					break;
 				}
@@ -813,7 +813,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -829,7 +829,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -845,7 +845,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
 					break;
 				}
@@ -865,18 +865,14 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Report ID can only be used with USB Ser/HID.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "Report ID can only be used with USB Ser/HID.", true));
 					}
 					break;
 				}
 
 				default: // = Unknown or not-yet-supported keyword.
 				{
-					// Add space if necessary:
-					if (ElementsAreSeparate(IODirection.Tx))
-						OnDisplayElementAdded(IODirection.Tx, new DisplayElement.DataSpace());
-
-					OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
+					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
 					break;
 				}
 			}

@@ -165,7 +165,7 @@ namespace YAT.Log.Utilities
 			else if ( element is DisplayElement.DirectionInfo)    { format = this.directionFormat;    }
 			else if ( element is DisplayElement.DataLength)       { format = this.lengthFormat;       }
 			else if ((element is DisplayElement.Nonentity) ||
-			         (element is DisplayElement.DataSpace) ||
+			         (element is DisplayElement.ContentSpace) ||
 			         (element is DisplayElement.InfoSeparator) ||
 			         (element is DisplayElement.LineStart) ||
 			         (element is DisplayElement.LineBreak))       { format = this.whiteSpacesFormat;  }

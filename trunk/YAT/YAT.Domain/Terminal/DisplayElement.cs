@@ -64,10 +64,11 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
 	[XmlInclude(typeof(FormatElement))]
-	[XmlInclude(typeof(DataSpace))]
+	[XmlInclude(typeof(ContentSpace))]
 	[XmlInclude(typeof(InfoSeparator))]
 	[XmlInclude(typeof(LineStart))]
 	[XmlInclude(typeof(LineBreak))]
+	[XmlInclude(typeof(InlineElement))]
 	[XmlInclude(typeof(IOControl))]
 	[XmlInclude(typeof(ErrorInfo))]
 	public abstract class DisplayElement
@@ -220,6 +221,12 @@ namespace YAT.Domain
 				: base(direction, text, ElementAttributes.Info)
 			{
 			}
+
+			/// <summary></summary>
+			protected InfoElement(InfoElement other)
+				: base(other)
+			{
+			}
 		}
 
 		/// <summary></summary>
@@ -367,19 +374,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public DeviceInfo()
-				: this(Direction.None, null, null, null)
+				: this(null, null, null)
 			{
 			}
 
 			/// <summary></summary>
 			public DeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, infoText, enclosureLeft, enclosureRight)
-			{
-			}
-
-			/// <summary></summary>
-			public DeviceInfo(Direction direction, string infoText, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + infoText + enclosureRight)
+				: base(enclosureLeft + infoText + enclosureRight)
 			{
 			}
 		}
@@ -409,25 +410,18 @@ namespace YAT.Domain
 			public int Length { get; }
 
 			/// <summary></summary>
-			public DataLength(DataLength other)
-				: base(other.Direction, other.Text)
-			{
-				Length = other.Length;
-			}
-
-			/// <summary></summary>
 			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public DataLength(int length, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, length, enclosureLeft, enclosureRight)
+				: base(enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight)
 			{
+				Length = length;
 			}
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public DataLength(Direction direction, int length, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight)
+			public DataLength(DataLength other)
+				: base(other)
 			{
-				Length = length;
+				Length = other.Length;
 			}
 		}
 
@@ -435,6 +429,12 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public abstract class FormatElement : DisplayElement
 		{
+			/// <summary></summary>
+			protected FormatElement()
+				: this(Direction.None)
+			{
+			}
+
 			/// <summary></summary>
 			protected FormatElement(Direction direction)
 				: this(direction, null)
@@ -454,43 +454,37 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary>The space that is added inbetween characters of the data content (i.e. radix = char).</summary>
+		/// <summary>The space that is added inbetween characters of the data/control content (e.g. radix = char).</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DataSpace : FormatElement
+		public class ContentSpace : FormatElement
 		{
 			/// <summary></summary>
-			public DataSpace()
+			public ContentSpace()
 				: this(Direction.None)
 			{
 			}
 
-			/// <summary></summary>
-			public DataSpace(Direction direction)
-				: base(direction, " ") // Data space is fixed to a normal space. If this is no longer the case, rename to 'DataSeparator'.
+			/// <remarks>Using direction since adjacent content is also directed.</remarks>
+			public ContentSpace(Direction direction)
+				: base(direction, " ") // Content space is fixed to a space. If this is no longer the case, rename to 'ContentSeparator'.
 			{
 			}
 		}
 
-		/// <summary>The margin that is added to the right of the data content.</summary>
+		/// <summary>The margin that is added to the right of the data/control content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class InfoSeparator : FormatElement
 		{
 			/// <summary></summary>
 			public InfoSeparator()
-				: this(Direction.None, null)
+				: this(null)
 			{
 			}
 
 			/// <summary></summary>
 			public InfoSeparator(string whiteSpace)
-				: this(Direction.None, whiteSpace)
-			{
-			}
-
-			/// <summary></summary>
-			public InfoSeparator(Direction direction, string whiteSpace)
-				: base(direction, whiteSpace)
+				: base(whiteSpace)
 			{
 			}
 		}
@@ -501,13 +495,6 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LineStart()
-				: this(Direction.None)
-			{
-			}
-
-			/// <summary></summary>
-			public LineStart(Direction direction)
-				: base(direction)
 			{
 			}
 		}
@@ -518,20 +505,38 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LineBreak()
-				: this(Direction.None)
-			{
-			}
-
-			/// <summary></summary>
-			public LineBreak(Direction direction)
-				: base(direction)
 			{
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class IOControl : DisplayElement
+		public abstract class InlineElement : DisplayElement
+		{
+			/// <summary></summary>
+			protected InlineElement(string text)
+				: this(Direction.None, text)
+			{
+			}
+
+			/// <summary></summary>
+			protected InlineElement(Direction direction, string text)
+				: base(direction, text, ElementAttributes.Inline)
+			{
+			}
+
+			/// <summary>
+			/// Creates and returns a new object that is a deep-copy of this instance.
+			/// </summary>
+			public new InlineElement Clone()
+			{
+				return ((InlineElement)base.Clone());
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class IOControl : InlineElement
 		{
 			/// <summary></summary>
 			public IOControl()
@@ -547,7 +552,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public IOControl(Direction direction, string message)
-				: base(direction, "[" + message + "]", ElementAttributes.Inline)
+				: base(direction, "[" + message + "]")
 			{
 			}
 		}
@@ -559,7 +564,7 @@ namespace YAT.Domain
 		/// will cause StyleCop/FxCop to issue a severe warning. So 'ErrorInfo' is used instead.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class ErrorInfo : DisplayElement
+		public class ErrorInfo : InlineElement
 		{
 			/// <summary></summary>
 			public ErrorInfo()
@@ -581,7 +586,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public ErrorInfo(Direction direction, string message, bool isWarningOnly)
-				: base(direction, (isWarningOnly ? ("[Warning: " + message + "]") : ("[Error: " + message + "]")), ElementAttributes.Inline)
+				: base(direction, (isWarningOnly ? ("[Warning: " + message + "]") : ("[Error: " + message + "]")))
 			{
 			}
 		}
@@ -659,6 +664,20 @@ namespace YAT.Domain
 			this.charCount  = charCount;
 			this.byteCount  = byteCount;
 			this.attributes = attributes;
+		}
+
+		/// <summary></summary>
+		protected DisplayElement(DisplayElement other)
+		{
+			Initialize
+			(
+				other.Direction,
+				new List<Pair<byte[], string>>(other.origin),
+				other.Text,
+				other.CharCount,
+				other.ByteCount,
+				other.Attributes
+			);
 		}
 
 	#if (DEBUG)
@@ -798,7 +817,7 @@ namespace YAT.Domain
 			else if (this is DeviceInfo)       clone = new DeviceInfo();
 			else if (this is DirectionInfo)    clone = new DirectionInfo();
 			else if (this is DataLength)       clone = new DataLength((DataLength)this);
-			else if (this is DataSpace)        clone = new DataSpace();
+			else if (this is ContentSpace)     clone = new ContentSpace();
 			else if (this is InfoSeparator)    clone = new InfoSeparator();
 			else if (this is LineStart)        clone = new LineStart();
 			else if (this is LineBreak)        clone = new LineBreak();

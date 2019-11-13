@@ -2701,7 +2701,7 @@ namespace YAT.Model
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
-			virtualLine.Add(new Domain.DisplayElement.DeviceInfo(Domain.Direction.None, IOStatusText, left, right));
+			virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
 			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
 			return (virtualLine);
@@ -2713,8 +2713,8 @@ namespace YAT.Model
 			var sep   = SettingsRoot.Display.InfoSeparatorCache;
 			var left  = SettingsRoot.Display.InfoEnclosureLeftCache;
 			var right = SettingsRoot.Display.InfoEnclosureRightCache;
-			                                                                    //// Forsee capacity for separators.
-			var virtualLine = new Domain.DisplayLine(1 + 2 + 2 + (e.Texts.Count * 2) + 1); // Preset the required capacity to improve memory management.
+
+			var virtualLine = new Domain.DisplayLine(1 + 2 + 2 + e.Texts.Count + 1); // Preset the required capacity to improve memory management.
 			virtualLine.Add(new Domain.DisplayElement.LineStart());
 
 			if (SettingsRoot.Display.ShowTimeStamp)
@@ -2725,24 +2725,18 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(Domain.Direction.None, IOStatusText, left, right));
-
-				if (e.Texts.Count > 0)
-					virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
+				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
-			                                                          //// Forsee capacity for separators.
-			var c = new Domain.DisplayElementCollection(e.Texts.Count * 2); // Preset the required capacity to improve memory management.
-			foreach (var t in e.Texts)
-			{
-				if (c.Count > 0)
-					c.Add(new Domain.DisplayElement.InfoSeparator(SettingsRoot.Display.InfoSeparatorCache));
 
+			var c = new Domain.DisplayElementCollection(e.Texts.Count); // Preset the required capacity to improve memory management.
+			foreach (var t in e.Texts)
+			{                               // 'IOControl' elements are neither content nor infos, thus neither add info separators nor content spaces inbetween.
 				c.Add(new Domain.DisplayElement.IOControl((Domain.Direction)e.Direction, t));
 			}
-
 			virtualLine.AddRange(c);
-			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
+			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 			return (virtualLine);
 		}
 
@@ -2753,7 +2747,7 @@ namespace YAT.Model
 			var left  = SettingsRoot.Display.InfoEnclosureLeftCache;
 			var right = SettingsRoot.Display.InfoEnclosureRightCache;
 
-			var virtualLine = new Domain.DisplayLine(1 + 2 + 4); // Preset the required capacity to improve memory management.
+			var virtualLine = new Domain.DisplayLine(1 + 2 + 2 + 1 + 1); // Preset the required capacity to improve memory management.
 			virtualLine.Add(new Domain.DisplayElement.LineStart());
 
 			if (SettingsRoot.Display.ShowTimeStamp)
@@ -2764,13 +2758,13 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(Domain.Direction.None, IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
 			virtualLine.Add(new Domain.DisplayElement.ErrorInfo((Domain.Direction)e.Direction, e.Message, (e.Severity == Domain.IOErrorSeverity.Acceptable)));
-			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
+			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 			return (virtualLine);
 		}
 
@@ -2977,7 +2971,7 @@ namespace YAT.Model
 		///  > If the trigger is spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
 		///  > If there is more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger is detected.
 		/// To make this change happen, trigger detection will have to be moved from here to one of the underlying methods of
-		/// <see cref="Domain.Terminal.ProcessRawChunk"/>, i.e. where chunks are being processed into lines.
+		/// <see cref="Domain.Terminal.ProcessRawChunk"/>, i.e. where chunks are being processed into lines. !!! PENDING !!!
 		/// </remarks>
 		/// <remarks>
 		/// This event is raised when a chunk is received by the <see cref="UnderlyingIOProvider"/>.

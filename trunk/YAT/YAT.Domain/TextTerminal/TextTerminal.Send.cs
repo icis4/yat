@@ -104,7 +104,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParserResult(parseResult, item.IsLine);
 			else
-				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
@@ -114,7 +114,7 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Eol:
 				{
-					AppendToPendingPacketAndForwardToRawTerminal(this.txLineState.EolSequence); // In-line.
+					AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence); // In-line.
 					break;
 				}
 
@@ -141,7 +141,7 @@ namespace YAT.Domain
 		protected override void ProcessLineEnd(bool sendEol)
 		{
 			if (sendEol)
-				AppendToPendingPacketAndForwardToRawTerminal(this.txLineState.EolSequence); // EOL.
+				AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence); // EOL.
 			else
 				ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
 		}
@@ -217,7 +217,7 @@ namespace YAT.Domain
 			}
 			catch (Exception ex)
 			{
-				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
 			}
 		}
 
