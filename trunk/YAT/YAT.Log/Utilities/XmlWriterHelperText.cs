@@ -145,7 +145,7 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.IOControl);
+					var casted = (de as DisplayElement.IOControlInfo);
 					if (casted != null)
 					{
 						textStr += casted.Text;
@@ -171,7 +171,7 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.DeviceInfo);
+					var casted = (de as DisplayElement.IODeviceInfo);
 					if (casted != null)
 					{
 						deviceStr = casted.Text;

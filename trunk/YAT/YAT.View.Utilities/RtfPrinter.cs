@@ -144,14 +144,14 @@ namespace YAT.View.Utilities
 		/// </exception>
 		public virtual void Print(DisplayLineCollection lines, FormatSettings formatSettings)
 		{
-			if (this.foreColorBrushColor != formatSettings.DeviceFormat.Color)
+			if (this.foreColorBrushColor != formatSettings.IODeviceFormat.Color)
 			{
-				this.foreColorBrushColor = formatSettings.DeviceFormat.Color;
+				this.foreColorBrushColor = formatSettings.IODeviceFormat.Color;
 
 				if (this.foreColorBrush != null)
 					this.foreColorBrush.Dispose();
 
-				this.foreColorBrush = new SolidBrush(formatSettings.DeviceFormat.Color);
+				this.foreColorBrush = new SolidBrush(formatSettings.IODeviceFormat.Color);
 			}
 
 			Print(RtfWriterHelper.CopyLinesToRichTextBox(lines, formatSettings));

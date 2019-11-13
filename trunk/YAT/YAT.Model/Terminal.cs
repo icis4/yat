@@ -2701,7 +2701,7 @@ namespace YAT.Model
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
-			virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
+			virtualLine.Add(new Domain.DisplayElement.IODeviceInfo(IOStatusText, left, right));
 			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
 			return (virtualLine);
@@ -2725,14 +2725,14 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.IODeviceInfo(IOStatusText, left, right));
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
 			var c = new Domain.DisplayElementCollection(e.Texts.Count); // Preset the required capacity to improve memory management.
 			foreach (var t in e.Texts)
-			{                               // 'IOControl' elements are neither content nor infos, thus neither add info separators nor content spaces inbetween.
-				c.Add(new Domain.DisplayElement.IOControl((Domain.Direction)e.Direction, t));
+			{                               // 'IOControlInfo' elements are inline elements, thus neither add info separators nor content spaces inbetween.
+				c.Add(new Domain.DisplayElement.IOControlInfo((Domain.Direction)e.Direction, t));
 			}
 			virtualLine.AddRange(c);
 
@@ -2758,7 +2758,7 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.IODeviceInfo(IOStatusText, left, right));
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
