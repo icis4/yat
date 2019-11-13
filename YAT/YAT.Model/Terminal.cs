@@ -5921,7 +5921,7 @@ namespace YAT.Model
 			sb.Append(this.autoActionCount);
 			sb.Append(Int32Ex.ToEnglishSuffix(this.autoActionCount));
 			sb.Append(" time at ");
-			sb.Append(this.terminal.Format(ts, Domain.Direction.Rx));
+			sb.Append(this.terminal.Format(ts));
 			sb.Append(".");
 
 			OnMessageInputRequest
