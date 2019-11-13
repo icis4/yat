@@ -74,15 +74,8 @@ namespace YAT.Domain
 				case Parser.Keyword.Eol:
 				case Parser.Keyword.NoEol:
 				{
-					// Add space if necessary:
-					if (ElementsAreSeparate(IODirection.Tx))
-					{
-						if (this.txLineState.Elements.ByteCount > 0)
-							OnDisplayElementAdded(IODirection.Tx, new DisplayElement.DataSpace());
-					}
-
-					string info = ((Parser.KeywordEx)(result.Keyword)) + " keyword is not supported for binary terminals";
-					OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, info));
+					string message = ((Parser.KeywordEx)(result.Keyword)) + " keyword is not supported for binary terminals";
+					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, message));
 					break;
 				}
 
@@ -147,7 +140,7 @@ namespace YAT.Domain
 			}
 			catch (Exception ex)
 			{
-				OnDisplayElementAdded(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
 			}
 		}
 

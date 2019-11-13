@@ -29,9 +29,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
+using System.Linq;
 using System.Threading;
 
 using MKY;
@@ -416,30 +414,13 @@ namespace YAT.Domain
 		protected virtual void AddDisplayElement(IODirection direction, DisplayElement element)
 		{
 			switch (direction)
-			{
-				case IODirection.Tx:
-				{
-					AddDisplayElement(RepositoryType.Tx,    element.Clone()); // Clone elements as they are needed again below.
-					AddDisplayElement(RepositoryType.Bidir, element);         // No clone needed as elements are not needed again.
-					break;
-				}
-
-				case IODirection.Rx:
-				{
-					AddDisplayElement(RepositoryType.Bidir, element.Clone()); // Clone elements as they are needed again below.
-					AddDisplayElement(RepositoryType.Rx,    element);         // No clone needed as elements are not needed again.
-					break;
-				}
-
-				case IODirection.None:
-				{
-					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-
-				default:
-				{
-					throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
+			{                                                                     // Clone element as it is needed right again.
+				case IODirection.Tx:    AddDisplayElement(RepositoryType.Tx, element.Clone()); AddDisplayElement(RepositoryType.Bidir, element);                                                        break;
+				case IODirection.Bidir: AddDisplayElement(RepositoryType.Tx, element.Clone()); AddDisplayElement(RepositoryType.Bidir, element.Clone()); AddDisplayElement(RepositoryType.Rx, element); break;
+				case IODirection.Rx:                                                           AddDisplayElement(RepositoryType.Bidir, element.Clone()); AddDisplayElement(RepositoryType.Rx, element); break;
+				                                                                                                                          //// Clone element as it is needed right again.
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -451,7 +432,11 @@ namespace YAT.Domain
 			AddDisplayElements(repositoryType, elements);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using <see cref="DisplayElementCollection"/> instead of <see cref="IEnumerable{T}"/> of
+		/// <see cref="DisplayElement.InlineElement "/> for <paramref name="elements"/> in order to
+		/// ease cloning.
+		/// </remarks>
 		protected virtual void AddDisplayElements(RepositoryType repositoryType, DisplayElementCollection elements)
 		{
 			lock (this.repositorySyncObj)
@@ -471,7 +456,103 @@ namespace YAT.Domain
 				OnDisplayElementsAdded(repositoryType, new DisplayElementsEventArgs(elements));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Inlines the given element into the data/control content of the related repositories.
+		/// </summary>
+		/// <remarks>
+		/// Opposed to the 'AddDisplayElement...' methods, the 'InlineDisplayElement...' methods
+		/// automatically insert a space if necessary.
+		/// </remarks>
+		protected virtual void InlineDisplayElement(IODirection direction, DisplayElement.InlineElement element)
+		{
+			switch (direction)
+			{                                                                                   // Clone element as it is needed right again.
+				case IODirection.Tx:    InlineDisplayElement(RepositoryType.Tx, direction, element.Clone()); InlineDisplayElement(RepositoryType.Bidir, direction, element);                                                                      break;
+				case IODirection.Bidir: InlineDisplayElement(RepositoryType.Tx, direction, element.Clone()); InlineDisplayElement(RepositoryType.Bidir, direction, element.Clone()); InlineDisplayElement(RepositoryType.Rx, direction, element); break;
+				case IODirection.Rx:                                                                         InlineDisplayElement(RepositoryType.Bidir, direction, element.Clone()); InlineDisplayElement(RepositoryType.Rx, direction, element); break;
+				                                                                                                                                                      //// Clone element as it is needed right again.
+				default:                throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Inlines the given element into the data/control content of the related repositories.
+		/// </summary>
+		/// <remarks>
+		/// Opposed to the 'AddDisplayElement...' methods, the 'InlineDisplayElement...' methods
+		/// automatically insert a space if necessary.
+		/// </remarks>
+		/// <remarks>
+		/// Using <see cref="DisplayElementCollection"/> instead of <see cref="IEnumerable{T}"/> of
+		/// <see cref="DisplayElement.InlineElement "/> for <paramref name="elements"/> in order to
+		/// ease cloning.
+		/// </remarks>
+		protected virtual void InlineDisplayElements(IODirection direction, DisplayElementCollection elements)
+		{
+			switch (direction)
+			{                                                                                     // Clone elements as they are needed right again.
+				case IODirection.Tx:    InlineDisplayElements(RepositoryType.Tx, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Bidir, direction, elements);                                                                        break;
+				case IODirection.Bidir: InlineDisplayElements(RepositoryType.Tx, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Bidir, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Rx, direction, elements); break;
+				case IODirection.Rx:                                                                           InlineDisplayElements(RepositoryType.Bidir, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Rx, direction, elements); break;
+				                                                                                                                                                          //// Clone elements as they are needed right again
+				default:                throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <remarks>
+		/// Helper method to ease handling direction/repositories.
+		/// </remarks>
+		/// <remarks>
+		/// Opposed to the 'AddDisplayElement...' methods, the 'InlineDisplayElement...' methods
+		/// automatically insert a space if necessary.
+		/// </remarks>
+		private void InlineDisplayElement(RepositoryType repositoryType, IODirection direction, DisplayElement.InlineElement element)
+		{
+			var lp = new DisplayElementCollection(1 + 1); // Preset the required capacity to improve memory management.
+			var lineState = GetLineState(repositoryType);
+
+			// Add space if necessary:
+			if (ElementsAreSeparate(lineState.Direction))
+				AddSpaceIfNecessary(lineState, direction, lp, element);
+
+			// Add element:
+			lp.Add(element);
+
+			AddDisplayElements(repositoryType, lp);
+		}
+
+		/// <remarks>
+		/// Helper method to ease handling direction/repositories.
+		/// </remarks>
+		/// <remarks>
+		/// Opposed to the 'AddDisplayElement...' methods, the 'InlineDisplayElement...' methods
+		/// automatically insert a space if necessary.
+		/// </remarks>
+		/// <remarks>
+		/// Using <see cref="DisplayElementCollection"/> instead of <see cref="IEnumerable{T}"/> of
+		/// <see cref="DisplayElement.InlineElement "/> for <paramref name="elements"/> in order to
+		/// ease cloning.
+		/// </remarks>
+		private void InlineDisplayElements(RepositoryType repositoryType, IODirection direction, DisplayElementCollection elements)
+		{
+			var lp = new DisplayElementCollection(1 + elements.Count); // Preset the required capacity to improve memory management.
+			var lineState = GetLineState(repositoryType);
+
+			// Add space if necessary:
+			if (ElementsAreSeparate(lineState.Direction))
+				AddSpaceIfNecessary(lineState, direction, lp, elements.First());
+
+			// Add elements:
+			lp.AddRange(elements);
+
+			AddDisplayElements(repositoryType, lp);
+		}
+
+		/// <remarks>
+		/// Using <see cref="DisplayElementCollection"/> instead of <see cref="IEnumerable{T}"/> of
+		/// <see cref="DisplayElement.InlineElement "/> for <paramref name="currentLineElements"/>
+		/// in order to ease cloning.
+		/// </remarks>
 		protected virtual void ReplaceCurrentDisplayLine(RepositoryType repositoryType, DisplayElementCollection currentLineElements)
 		{
 			lock (this.repositorySyncObj)

@@ -1393,7 +1393,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void EnqueueEasterEggMessage()
 		{
-			AddDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
+			InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
 		}
 
 		#endregion
@@ -1426,10 +1426,12 @@ namespace YAT.Domain
 		{
 			switch (d)
 			{
-				case IODirection.Tx: return (Format(data, d, TerminalSettings.Display.TxRadix));
-				case IODirection.Rx: return (Format(data, d, TerminalSettings.Display.RxRadix));
+				case IODirection.Tx:    return (Format(data, d, TerminalSettings.Display.TxRadix));
+				case IODirection.Rx:    return (Format(data, d, TerminalSettings.Display.RxRadix));
 
-				default: throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1466,7 +1468,7 @@ namespace YAT.Domain
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
 				if (lp.ByteCount > 0)
-					lp.Add(new DisplayElement.DataSpace());
+					lp.Add(new DisplayElement.ContentSpace((Direction)d));
 			}
 		}
 
@@ -1856,24 +1858,19 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.IncludeIOControl)
 			{
 				var texts = IOControlChangeTexts();
-				                                                 //// Forsee capacity for separators.
-				var c = new DisplayElementCollection(texts.Count * 2); // Preset the required capacity to improve memory management.
-				foreach (var text in texts)
-				{
-					if (c.Count > 0)
-						c.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-
-					c.Add(new DisplayElement.IOControl(Direction.Bidir, text));
+				var c = new DisplayElementCollection(texts.Count); // Preset the required capacity to improve memory management.
+				foreach (var t in texts)
+				{                        // 'IOControl' elements are neither content nor infos, thus neither add info separators nor content spaces inbetween.
+					c.Add(new DisplayElement.IOControl(Direction.Bidir, t));
 				}
 
 				// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
 				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
-					foreach (var de in c)
-						AddDisplayElement((IODirection)de.Direction, de);
+					InlineDisplayElements(IODirection.Bidir, c);
 				}
 
-				OnIOControlChanged(new IOControlEventArgs(texts));
+				OnIOControlChanged(new IOControlEventArgs(IODirection.Bidir, texts));
 			}
 			else
 			{
@@ -1894,22 +1891,22 @@ namespace YAT.Domain
 				{
 					// Handle serial port errors whenever possible:
 					switch (spe.SerialPortError)
-					{                                                                            // Same as 'spe.Direction'.
-						case System.IO.Ports.SerialError.Frame:    AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
-						case System.IO.Ports.SerialError.Overrun:  AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
-						case System.IO.Ports.SerialError.RXOver:   AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
-						case System.IO.Ports.SerialError.RXParity: AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
-						case System.IO.Ports.SerialError.TXFull:   AddDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
-						default:                                   OnIOError(e);                                                                                                   break;
+					{                                                                               // Same as 'spe.Direction'.
+						case System.IO.Ports.SerialError.Frame:    InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
+						case System.IO.Ports.SerialError.Overrun:  InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
+						case System.IO.Ports.SerialError.RXOver:   InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
+						case System.IO.Ports.SerialError.RXParity: InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
+						case System.IO.Ports.SerialError.TXFull:   InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
+						default:                                   OnIOError(e);                                                                                                  break;
 					}
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
 				{
-					AddDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
+					InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
 				{
-					AddDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
+					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
 				}
 				else
 				{

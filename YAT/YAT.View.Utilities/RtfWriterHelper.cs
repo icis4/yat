@@ -199,7 +199,7 @@ namespace YAT.View.Utilities
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticLengthFontCache, fontName, fontSize, fontStyle);
 			}
 			else if ((element is DisplayElement.Nonentity) ||
-			         (element is DisplayElement.DataSpace) ||
+			         (element is DisplayElement.ContentSpace) ||
 			         (element is DisplayElement.InfoSeparator) ||
 			         (element is DisplayElement.LineStart) ||
 			         (element is DisplayElement.LineBreak))
