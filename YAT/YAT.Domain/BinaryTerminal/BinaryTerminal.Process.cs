@@ -262,7 +262,7 @@ namespace YAT.Domain
 				elementsToAdd.AddRange(lp);
 			}
 
-			lineState.Position = LinePosition.Content;
+			lineState.Position  = LinePosition.Content;
 			lineState.TimeStamp = ts;
 			lineState.Device    = dev;
 			lineState.Direction = dir;

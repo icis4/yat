@@ -28,17 +28,7 @@
 //==================================================================================================
 
 using System;
-#if (WITH_SCRIPTING)
-using System.Collections.Generic;
-#endif
 using System.Diagnostics.CodeAnalysis;
-#if (WITH_SCRIPTING)
-using System.Globalization;
-using System.Text;
-#endif
-
-using MKY;
-using MKY.Diagnostics;
 
 #endregion
 
