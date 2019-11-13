@@ -36,15 +36,17 @@ namespace YAT.Domain
 	public enum Direction
 	{
 		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
-		None = IODirection.None,
+		/// <remarks>Also usable with meaning 'Unknown' (yet).</remarks>
+		None  = IODirection.None,
 
 		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
-		Tx = IODirection.Tx,
+		Tx    = IODirection.Tx,
 
 		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
-		Rx = IODirection.Rx,
+		Rx    = IODirection.Rx,
 
 		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
+		/// <remarks>Usable for I/O operations not tied to a direction.</remarks>
 		Bidir = IODirection.Bidir
 	}
 

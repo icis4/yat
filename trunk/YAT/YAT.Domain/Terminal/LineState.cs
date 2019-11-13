@@ -65,14 +65,34 @@ namespace YAT.Domain
 			Reset();
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Resets the state, i.e. restarts processing with empty repository.
+		/// </summary>
 		public virtual void Reset()
 		{
-			// Line
-			IsFirstChunk          = true;
+			// Overall:
+			IsFirstLine           = true;
 			PreviousLineTimeStamp = DateTime.MinValue;
 
 			// Line itself:
+			ResetLine();
+		}
+
+		/// <summary>
+		/// Notify the end of a line, i.e. continues processing with the next line.
+		/// </summary>
+		public virtual void NotifyLineEnd(DateTime lineTimeStamp)
+		{
+			// Overall:
+			IsFirstLine           = false;
+			PreviousLineTimeStamp = lineTimeStamp;
+
+			// Line itself:
+			ResetLine();
+		}
+
+		private void ResetLine()
+		{
 			Position     = LinePosition.Begin;
 			IsFirstChunk = true;
 			TimeStamp    = DateTime.Now;

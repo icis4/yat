@@ -33,6 +33,7 @@ namespace YAT.Domain
 	/// <summary></summary>
 	public enum IODirection
 	{
+		/// <remarks>Also usable with meaning 'Unknown' (yet).</remarks>
 		None = MKY.IO.Serial.Direction.None,
 
 		/// <remarks>YAT uses term 'Tx' instead of 'Output'.</remarks>
@@ -41,7 +42,10 @@ namespace YAT.Domain
 
 		/// <remarks>YAT uses term 'Rx' instead of 'Input'.</remarks>
 		/// <remarks>YAT sorts 'Rx' after 'Tx'.</remarks>
-		Rx = MKY.IO.Serial.Direction.Input
+		Rx = MKY.IO.Serial.Direction.Input,
+
+		/// <remarks>Usable for I/O operations not tied to a direction.</remarks>
+		Bidir = 3 // Explicit value is needed because Output = 2 / Input = 1.
 	}
 
 	/// <summary></summary>
