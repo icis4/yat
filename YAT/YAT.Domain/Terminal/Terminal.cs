@@ -1860,8 +1860,8 @@ namespace YAT.Domain
 				var texts = IOControlChangeTexts();
 				var c = new DisplayElementCollection(texts.Count); // Preset the required capacity to improve memory management.
 				foreach (var t in texts)
-				{                        // 'IOControl' elements are neither content nor infos, thus neither add info separators nor content spaces inbetween.
-					c.Add(new DisplayElement.IOControl(Direction.Bidir, t));
+				{                        // 'IOControlInfo' elements are inline elements, thus neither add info separators nor content spaces inbetween.
+					c.Add(new DisplayElement.IOControlInfo(Direction.Bidir, t));
 				}
 
 				// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose

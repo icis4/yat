@@ -79,7 +79,7 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor timeSpanFormat;
 		private FormatDescriptor timeDeltaFormat;
 		private FormatDescriptor timeDurationFormat;
-		private FormatDescriptor deviceFormat;
+		private FormatDescriptor ioDeviceFormat;
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
 		private FormatDescriptor whiteSpacesFormat;
@@ -124,7 +124,7 @@ namespace YAT.Log.Utilities
 			this.timeSpanFormat     = new FormatDescriptor(settings.TimeSpanFormat.FontStyle,     this.document.createColor(settings.TimeSpanFormat.Color),     this.document.createColor(settings.BackColor));
 			this.timeDeltaFormat    = new FormatDescriptor(settings.TimeDeltaFormat.FontStyle,    this.document.createColor(settings.TimeDeltaFormat.Color),    this.document.createColor(settings.BackColor));
 			this.timeDurationFormat = new FormatDescriptor(settings.TimeDurationFormat.FontStyle, this.document.createColor(settings.TimeDurationFormat.Color), this.document.createColor(settings.BackColor));
-			this.deviceFormat       = new FormatDescriptor(settings.DeviceFormat.FontStyle,       this.document.createColor(settings.DeviceFormat.Color),       this.document.createColor(settings.BackColor));
+			this.ioDeviceFormat     = new FormatDescriptor(settings.IODeviceFormat.FontStyle,     this.document.createColor(settings.IODeviceFormat.Color),     this.document.createColor(settings.BackColor));
 			this.directionFormat    = new FormatDescriptor(settings.DirectionFormat.FontStyle,    this.document.createColor(settings.DirectionFormat.Color),    this.document.createColor(settings.BackColor));
 			this.lengthFormat       = new FormatDescriptor(settings.LengthFormat.FontStyle,       this.document.createColor(settings.LengthFormat.Color),       this.document.createColor(settings.BackColor));
 			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle,  this.document.createColor(settings.WhiteSpacesFormat.Color),  this.document.createColor(settings.BackColor));
@@ -161,7 +161,7 @@ namespace YAT.Log.Utilities
 			else if ( element is DisplayElement.TimeSpanInfo)     { format = this.timeSpanFormat;     }
 			else if ( element is DisplayElement.TimeDeltaInfo)    { format = this.timeDeltaFormat;    }
 			else if ( element is DisplayElement.TimeDurationInfo) { format = this.timeDurationFormat; }
-			else if ( element is DisplayElement.DeviceInfo)       { format = this.deviceFormat;       }
+			else if ( element is DisplayElement.IODeviceInfo)     { format = this.ioDeviceFormat;     }
 			else if ( element is DisplayElement.DirectionInfo)    { format = this.directionFormat;    }
 			else if ( element is DisplayElement.DataLength)       { format = this.lengthFormat;       }
 			else if ((element is DisplayElement.Nonentity) ||
@@ -169,7 +169,7 @@ namespace YAT.Log.Utilities
 			         (element is DisplayElement.InfoSeparator) ||
 			         (element is DisplayElement.LineStart) ||
 			         (element is DisplayElement.LineBreak))       { format = this.whiteSpacesFormat;  }
-			else if ( element is DisplayElement.IOControl)        { format = this.ioControlFormat;    }
+			else if ( element is DisplayElement.IOControlInfo)    { format = this.ioControlFormat;    }
 			else if ( element is DisplayElement.ErrorInfo)        { format = this.errorFormat;        }
 			else
 			{
@@ -215,11 +215,11 @@ namespace YAT.Log.Utilities
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~RtfWriter()

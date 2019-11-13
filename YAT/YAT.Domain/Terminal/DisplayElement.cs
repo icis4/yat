@@ -60,7 +60,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(TimeSpanInfo))]
 	[XmlInclude(typeof(TimeDeltaInfo))]
 	[XmlInclude(typeof(TimeDurationInfo))]
-	[XmlInclude(typeof(DeviceInfo))]
+	[XmlInclude(typeof(IODeviceInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
 	[XmlInclude(typeof(FormatElement))]
@@ -69,7 +69,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(LineStart))]
 	[XmlInclude(typeof(LineBreak))]
 	[XmlInclude(typeof(InlineElement))]
-	[XmlInclude(typeof(IOControl))]
+	[XmlInclude(typeof(IOControlInfo))]
 	[XmlInclude(typeof(ErrorInfo))]
 	public abstract class DisplayElement
 	{
@@ -368,18 +368,20 @@ namespace YAT.Domain
 			}                                                         // Attention, slightly different than time span above!
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Named 'IODeviceInfo' instead of just 'IOInfo' for better comprehensibility.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DeviceInfo : InfoElement
+		public class IODeviceInfo : InfoElement
 		{
 			/// <summary></summary>
-			public DeviceInfo()
+			public IODeviceInfo()
 				: this(null, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public DeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
+			public IODeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
 				: base(enclosureLeft + infoText + enclosureRight)
 			{
 			}
@@ -536,22 +538,22 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class IOControl : InlineElement
+		public class IOControlInfo : InlineElement
 		{
 			/// <summary></summary>
-			public IOControl()
+			public IOControlInfo()
 				: this(null)
 			{
 			}
 
 			/// <summary></summary>
-			public IOControl(string message)
+			public IOControlInfo(string message)
 				: this(Direction.None, message)
 			{
 			}
 
 			/// <summary></summary>
-			public IOControl(Direction direction, string message)
+			public IOControlInfo(Direction direction, string message)
 				: base(direction, "[" + message + "]")
 			{
 			}
@@ -814,14 +816,14 @@ namespace YAT.Domain
 			else if (this is TimeSpanInfo)     clone = new TimeSpanInfo((TimeSpanInfo)this);
 			else if (this is TimeDeltaInfo)    clone = new TimeDeltaInfo((TimeDeltaInfo)this);
 			else if (this is TimeDurationInfo) clone = new TimeDurationInfo((TimeDurationInfo)this);
-			else if (this is DeviceInfo)       clone = new DeviceInfo();
+			else if (this is IODeviceInfo)     clone = new IODeviceInfo();
 			else if (this is DirectionInfo)    clone = new DirectionInfo();
 			else if (this is DataLength)       clone = new DataLength((DataLength)this);
 			else if (this is ContentSpace)     clone = new ContentSpace();
 			else if (this is InfoSeparator)    clone = new InfoSeparator();
 			else if (this is LineStart)        clone = new LineStart();
 			else if (this is LineBreak)        clone = new LineBreak();
-			else if (this is IOControl)        clone = new IOControl();
+			else if (this is IOControlInfo)    clone = new IOControlInfo();
 			else if (this is ErrorInfo)        clone = new ErrorInfo();
 			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 

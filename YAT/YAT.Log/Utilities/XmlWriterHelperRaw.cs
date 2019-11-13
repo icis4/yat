@@ -162,7 +162,7 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.DeviceInfo);
+					var casted = (de as DisplayElement.IODeviceInfo);
 					if (casted != null)
 					{
 						deviceStr = casted.Text;
@@ -174,6 +174,7 @@ namespace YAT.Log.Utilities
 				// 'TimeSpanInfo' is not used with 'XmlTransferRawLine'.
 				// 'TimeDeltaInfo' is not used with 'XmlTransferRawLine'.
 				// 'DirectionInfo' is handled below.
+				// 'IOControlInfo' is not used with 'XmlTransferRawLine'.
 				// 'ErrorInfo' is not used with 'XmlTransferRawLine'.
 				// 'Length' is not used with 'XmlTransferRawLine'.
 			}
