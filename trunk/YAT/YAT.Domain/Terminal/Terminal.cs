@@ -1406,10 +1406,9 @@ namespace YAT.Domain
 		/// <summary>
 		/// Formats the specified time stamp.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		public virtual string Format(DateTime ts, Direction d)
+		public virtual string Format(DateTime ts)
 		{
-			var de = new DisplayElement.TimeStampInfo(d, ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, "", "");
+			var de = new DisplayElement.TimeStampInfo(ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, "", "");
 			return (de.Text);
 		}
 

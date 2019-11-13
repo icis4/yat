@@ -238,20 +238,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeStampInfo(TimeStampInfo other)
-				: base(other.Direction, other.Text)
+				: base(other)
 			{
 				TimeStamp = other.TimeStamp;
 			}
 
 			/// <summary></summary>
 			public TimeStampInfo(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, timeStamp, format, useUtc, enclosureLeft, enclosureRight)
-			{
-			}
-
-			/// <summary></summary>
-			public TimeStampInfo(Direction direction, DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
-				: base(direction, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
+				: base(Direction.None, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
 			{
 				TimeStamp = timeStamp;
 			}
@@ -275,20 +269,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeSpanInfo(TimeSpanInfo other)
-				: base(other.Direction, other.Text)
+				: base(other)
 			{
 				TimeSpan = other.TimeSpan;
 			}
 
 			/// <summary></summary>
-			public TimeSpanInfo(TimeSpan timeStamp, string format, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, timeStamp, format, enclosureLeft, enclosureRight)
-			{
-			}
-
-			/// <summary></summary>
-			public TimeSpanInfo(Direction direction, TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, ToText(timeSpan, format, enclosureLeft, enclosureRight))
+			public TimeSpanInfo(TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
+				: base(Direction.None, ToText(timeSpan, format, enclosureLeft, enclosureRight))
 			{
 				TimeSpan = timeSpan;
 			}
@@ -309,20 +297,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeDeltaInfo(TimeDeltaInfo other)
-				: base(other.Direction, other.Text)
+				: base(other)
 			{
 				TimeDelta = other.TimeDelta;
 			}
 
 			/// <summary></summary>
 			public TimeDeltaInfo(TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, timeDelta, format, enclosureLeft, enclosureRight)
-			{
-			}
-
-			/// <summary></summary>
-			public TimeDeltaInfo(Direction direction, TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, ToText(timeDelta, format, enclosureLeft, enclosureRight))
+				: base(Direction.None, ToText(timeDelta, format, enclosureLeft, enclosureRight))
 			{
 				TimeDelta = timeDelta;
 			}
@@ -343,20 +325,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeDurationInfo(TimeDurationInfo other)
-				: base(other.Direction, other.Text)
+				: base(other)
 			{
 				TimeDuration = other.TimeDuration;
 			}
 
 			/// <summary></summary>
 			public TimeDurationInfo(TimeSpan timeDuration, string format, string enclosureLeft, string enclosureRight)
-				: this(Direction.None, timeDuration, format, enclosureLeft, enclosureRight)
-			{
-			}
-
-			/// <summary></summary>
-			public TimeDurationInfo(Direction direction, TimeSpan timeDuration, string format, string enclosureLeft, string enclosureRight)
-				: base(direction, ToText(timeDuration, format, enclosureLeft, enclosureRight))
+				: base(Direction.None, ToText(timeDuration, format, enclosureLeft, enclosureRight))
 			{
 				TimeDuration = timeDuration;
 			}

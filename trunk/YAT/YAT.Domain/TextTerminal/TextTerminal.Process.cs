@@ -691,7 +691,7 @@ namespace YAT.Domain
 
 			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 
-			lp.Add(new DisplayElement.LineStart()); // Direction may be both!
+			lp.Add(new DisplayElement.LineStart());
 
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
 			    TerminalSettings.Display.ShowDevice    ||
@@ -1046,7 +1046,7 @@ namespace YAT.Domain
 					PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
 					lineEnd.AddRange(info);
 				}
-				lineEnd.Add(new DisplayElement.LineBreak()); // Direction may be both!
+				lineEnd.Add(new DisplayElement.LineBreak());
 
 	/*			// Finalize elements:
 				if ((lineState.SuppressIfSubsequentlyTriggered && !lineState.SuppressForSure) ||    // Don't suppress line!
