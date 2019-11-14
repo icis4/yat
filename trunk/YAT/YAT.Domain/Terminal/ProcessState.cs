@@ -75,9 +75,12 @@ namespace YAT.Domain
 	public class OverallState
 	{
 		/// <summary></summary>
-		public bool        IsFirstLine           { get; protected set; }
+		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
 
 		/// <summary></summary>
+		public bool        IsFirstLine           { get; protected set; }
+
+		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
 		public string      Device                { get; set; }
 
 		/// <summary></summary>
@@ -97,14 +100,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Reset()
 		{
-			Initialize();
-		}
-
-		/// <summary>
-		/// Resets the state, i.e. restarts processing with empty repository.
-		/// </summary>
-		private void Initialize()
-		{
+			IsFirstChunk          = true;
 			IsFirstLine           = true;
 			Device                = null;
 			Direction             = IODirection.None;
@@ -136,13 +132,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public LinePosition             Position     { get; set; }
 
-		/// <summary></summary>
-		public bool                     IsFirstChunk { get; set; } // Cannot be 'protected set', see 'IsFirstChunk = false'.
-
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line".</remarks>
 		public DateTime                 TimeStamp    { get; set; }
 
-		/// <summary></summary>
+		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
 		public string                   Device       { get; set; }
 
 		/// <summary></summary>
@@ -162,17 +155,11 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Reset()
 		{
-			Initialize(LinePosition.Begin, DateTime.MinValue, null, IODirection.None);
-		}
-
-		private void Initialize(LinePosition pos, DateTime ts, string dev, IODirection dir)
-		{
-			Position     = pos;
-			IsFirstChunk = true;
-			TimeStamp    = ts;
-			Device       = dev;
-			Direction    = dir;
-			Elements     = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			Position  = LinePosition.Begin;
+			TimeStamp = DateTime.MinValue;
+			Device    = null;
+			Direction = IODirection.None;
+			Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 		}
 
 		/// <summary>
@@ -180,7 +167,10 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void NotifyLineBegin(DateTime ts, string dev, IODirection dir)
 		{
-			Initialize(LinePosition.Content, ts, dev, dir);
+			Position  = LinePosition.Content;
+			TimeStamp = ts;
+			Device    = dev;
+			Direction = dir;
 		}
 
 		/// <summary>
@@ -188,7 +178,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void NotifyLineEnd()
 		{
-			Position = LinePosition.Begin;
+			Reset(); // Important to reset the state, as the line state is e.g. used for evaluation line breaks.
 		}
 	}
 }
