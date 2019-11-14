@@ -37,11 +37,14 @@
 
 #if (DEBUG)
 
+	// Enable debugging of monitor content:
+////#define DEBUG_CONTENT              // The 'DebugEnabled' property is set for the 'Bidir' monitor.
+
 	// Enable debugging of update management (incl. CPU performance measurement):
-////#define DEBUG_UPDATE               // The 'DebugEnabled' property is set for 'Bidir' monitor.
+////#define DEBUG_UPDATE               // The 'DebugEnabled' property is set for the 'Bidir' monitor.
 
 	// Enable debugging of vertical semi-auto scrolling:
-////#define DEBUG_VERTICAL_AUTO_SCROLL // The 'DebugEnabled' property is set for 'Bidir' monitor.
+////#define DEBUG_VERTICAL_AUTO_SCROLL // The 'DebugEnabled' property is set for the 'Bidir' monitor.
 
 #endif // DEBUG
 
@@ -552,8 +555,6 @@ namespace YAT.View.Controls
 			get { return (textBox_CopyOfActiveLine.Focused); }
 		}
 
-	#if (DEBUG)
-
 		/// <remarks>
 		/// Flag in a addition to configuration item to allow selective debugging of just a single
 		/// monitor, e.g. the bidir monitor, to reduce debug output.
@@ -566,8 +567,6 @@ namespace YAT.View.Controls
 			get { return (this.fastListBox_Monitor.DebugEnabled); }
 			set { this.fastListBox_Monitor.DebugEnabled = value;  }
 		}
-
-	#endif // DEBUG
 
 		#endregion
 
@@ -600,6 +599,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddElement(Domain.DisplayElement element)
 		{
+			DebugContent("Adding single element '" + element.ToString() + "'...");
+
 			AddElementsOrLines(element);
 		}
 
@@ -607,6 +608,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddElements(Domain.DisplayElementCollection elements)
 		{
+			DebugContent("Adding " + elements.Count.ToString(CultureInfo.InvariantCulture) + " elements '" + elements.ToString() + "'...");
+
 			AddElementsOrLines(elements);
 		}
 
@@ -614,6 +617,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void ReplaceCurrentLine(Domain.DisplayElementCollection elements)
 		{
+			DebugContent("Replacing current line with " + elements.Count.ToString(CultureInfo.InvariantCulture) + " elements '" + elements.ToString() + "'...");
+
 			// Attention:
 			// Similar code exists in ClearCurrentLine() below.
 			// Changes here may have to be applied there too.
@@ -647,6 +652,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void ClearCurrentLine()
 		{
+			DebugContent("Clearing current line...");
+
 			// Attention:
 			// Similar code exists in ReplaceCurrentLine() above.
 			// Changes here may have to be applied there too.
@@ -678,6 +685,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddLine(Domain.DisplayLine line)
 		{
+			DebugContent("Adding single line '" + line.ToString() + "'...");
+
 			AddElementsOrLines(line);
 		}
 
@@ -685,6 +694,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddLines(Domain.DisplayLineCollection lines)
 		{
+			DebugContent("Adding " + lines.Count.ToString(CultureInfo.InvariantCulture) + " lines '" + lines.ToString() + "'...");
+
 			AddElementsOrLines(lines);
 		}
 
@@ -692,6 +703,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void Clear()
 		{
+			DebugContent("Clearning monitor...");
+
 			this.pendingElementsAndLines.Clear();
 
 			ClearAndResetListBoxes();
@@ -2120,12 +2133,20 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[Conditional("DEBUG_CONTENT")]
+		protected virtual void DebugContent(string message)
+		{
+			if (DebugEnabled)
+			{
+				Debug.WriteLine(message);
+			}
+		}
+
+		/// <summary></summary>
 		[Conditional("DEBUG_UPDATE")]
 		protected virtual void DebugUpdate(string message)
 		{
-		#if (DEBUG)
 			if (DebugEnabled)
-		#endif
 			{
 				Debug.WriteLine(message);
 			}
@@ -2135,9 +2156,7 @@ namespace YAT.View.Controls
 		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
 		protected virtual void DebugVerticalAutoScroll(string leadMessage)
 		{
-		#if (DEBUG)
 			if (DebugEnabled)
-		#endif
 			{
 				Debug.WriteLine
 				(
