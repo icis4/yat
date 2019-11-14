@@ -501,7 +501,7 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Comprehensibility method, i.e. making obvious that only
 		/// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/> and
-		/// <see cref="UsagePage"/> and <see cref="UsageId"/>are considered.
+		/// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPidUsage(HidDeviceInfo other)
 		{
@@ -522,7 +522,7 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Comprehensibility method, i.e. making obvious that only
 		/// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/> and
-		/// <see cref="UsagePage"/> and <see cref="UsageId"/>are considered.
+		/// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPidUsage(int vendorId, int productId, int usagePage, int usageId)
 		{
@@ -541,9 +541,9 @@ namespace MKY.IO.Usb
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		/// <remarks>
-		/// Comprehensibility method, i.e. making obvious that only
-		/// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
-		/// <see cref="UsagePage"/> and <see cref="UsageId"/>are considered.
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
+		/// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPidSerialUsage(HidDeviceInfo other)
 		{
@@ -554,9 +554,9 @@ namespace MKY.IO.Usb
 		/// Determines whether this instance and the specified properties have value equality.
 		/// </summary>
 		/// <remarks>
-		/// Comprehensibility method, i.e. making obvious that only
-		/// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
-		/// <see cref="UsagePage"/> and <see cref="UsageId"/>are considered.
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
+		/// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPidSerialUsage(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{

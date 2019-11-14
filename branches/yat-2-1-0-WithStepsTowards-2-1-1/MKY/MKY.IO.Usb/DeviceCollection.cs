@@ -115,6 +115,10 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
 		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
 		public virtual bool ContainsVidPid(T item)
 		{
 			lock (this)
@@ -138,6 +142,10 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
 		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
 		public virtual bool ContainsVidPidSerial(T item)
 		{
 			lock (this)
@@ -162,6 +170,10 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
 		public virtual T FindVidPid(T item)
 		{
 			lock (this)
@@ -181,6 +193,10 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
 		public virtual T FindVidPidSerial(T item)
 		{
 			lock (this)
@@ -201,6 +217,10 @@ namespace MKY.IO.Usb
 		/// The zero-based index of the first occurrence of an element that matches the
 		/// <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
 		public virtual int FindIndexVidPid(T item)
 		{
 			lock (this)
@@ -221,6 +241,10 @@ namespace MKY.IO.Usb
 		/// The zero-based index of the first occurrence of an element that matches the
 		/// <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
 		public virtual int FindIndexVidPidSerial(T item)
 		{
 			lock (this)

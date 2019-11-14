@@ -598,8 +598,8 @@ namespace MKY.IO.Usb
 		/// ignoring <see cref="Serial"/>, <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		/// <remarks>
-		/// Comprehensibility method, i.e. making obvious that only
-		/// <see cref="VendorId"/> and <see cref="ProductId"/> are considered.
+		/// Comprehensibility method, i.e. making obvious that only <see cref="VendorId"/> and
+		/// <see cref="ProductId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPid(DeviceInfo other)
 		{
@@ -617,8 +617,8 @@ namespace MKY.IO.Usb
 		/// ignoring <see cref="Serial"/>, <see cref="Manufacturer"/> and <see cref="Product"/>.
 		/// </summary>
 		/// <remarks>
-		/// Comprehensibility method, i.e. making obvious that only
-		/// <see cref="VendorId"/> and <see cref="ProductId"/> are considered.
+		/// Comprehensibility method, i.e. making obvious that only <see cref="VendorId"/> and
+		/// <see cref="ProductId"/> are considered.
 		/// </remarks>
 		public virtual bool EqualsVidPid(int vendorId, int productId)
 		{
