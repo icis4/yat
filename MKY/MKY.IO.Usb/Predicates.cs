@@ -74,6 +74,56 @@ namespace MKY.IO.Usb
 			return (DeviceInfo.EqualsVidPidSerial(other));
 		}
 	}
+
+	/// <summary></summary>
+	public class EqualsVidPidUsage<T>
+		where T : HidDeviceInfo
+	{
+		/// <summary></summary>
+		public T DeviceInfo { get; set; }
+
+		/// <summary></summary>
+		public EqualsVidPidUsage(T deviceInfo)
+		{
+			DeviceInfo = deviceInfo;
+		}
+
+		/// <summary></summary>
+		public Predicate<T> Match
+		{
+			get { return (IsMatch); }
+		}
+
+		private bool IsMatch(T other)
+		{
+			return (DeviceInfo.EqualsVidPidUsage(other));
+		}
+	}
+
+	/// <summary></summary>
+	public class EqualsVidPidSerialUsage<T>
+		where T : HidDeviceInfo
+	{
+		/// <summary></summary>
+		public T DeviceInfo { get; set; }
+
+		/// <summary></summary>
+		public EqualsVidPidSerialUsage(T deviceInfo)
+		{
+			DeviceInfo = deviceInfo;
+		}
+
+		/// <summary></summary>
+		public Predicate<T> Match
+		{
+			get { return (IsMatch); }
+		}
+
+		private bool IsMatch(T other)
+		{
+			return (DeviceInfo.EqualsVidPidSerialUsage(other));
+		}
+	}
 }
 
 //==================================================================================================
