@@ -608,7 +608,7 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddElements(Domain.DisplayElementCollection elements)
 		{
-			DebugContent("Adding " + elements.Count.ToString(CultureInfo.InvariantCulture) + " elements '" + elements.ToString() + "'...");
+			DebugContent("Adding " + elements.Count.ToString(CultureInfo.InvariantCulture) + " element(s) '" + elements.ToString() + "'...");
 
 			AddElementsOrLines(elements);
 		}
@@ -617,7 +617,7 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void ReplaceCurrentLine(Domain.DisplayElementCollection elements)
 		{
-			DebugContent("Replacing current line with " + elements.Count.ToString(CultureInfo.InvariantCulture) + " elements '" + elements.ToString() + "'...");
+			DebugContent("Replacing current line with " + elements.Count.ToString(CultureInfo.InvariantCulture) + " element(s) '" + elements.ToString() + "'...");
 
 			// Attention:
 			// Similar code exists in ClearCurrentLine() below.
@@ -694,7 +694,7 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void AddLines(Domain.DisplayLineCollection lines)
 		{
-			DebugContent("Adding " + lines.Count.ToString(CultureInfo.InvariantCulture) + " lines '" + lines.ToString() + "'...");
+			DebugContent("Adding " + lines.Count.ToString(CultureInfo.InvariantCulture) + " line(s) '" + lines.ToString() + "'...");
 
 			AddElementsOrLines(lines);
 		}
@@ -703,11 +703,11 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		public virtual void Clear()
 		{
-			DebugContent("Clearning monitor...");
-
 			this.pendingElementsAndLines.Clear();
 
 			ClearAndResetListBoxes();
+
+			DebugContent("Cleared");
 		}
 
 		/// <summary></summary>
