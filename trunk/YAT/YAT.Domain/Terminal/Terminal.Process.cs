@@ -22,12 +22,27 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of line break:
+////#define DEBUG_LINE_BREAK
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -857,7 +872,11 @@ namespace YAT.Domain
 					if (!StringEx.EqualsOrdinalIgnoreCase(dev, processState.Overall.Device) || (dir != processState.Overall.Direction))
 					{
 						if (processState.Line.Elements.Count > 0)
+						{
+							DebugLineBreak(repositoryType, "EvaluateDeviceOrDirectionLineBreak => DoLineEnd()");
+
 							DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+						}
 					}
 				}
 			}
@@ -869,7 +888,11 @@ namespace YAT.Domain
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Elements.Count > 0)
+			{
+				DebugLineBreak(repositoryType, "EvaluateChunkLineBreak => DoLineEnd()");
+
 				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			}
 		}
 
 		/// <summary></summary>
@@ -879,6 +902,8 @@ namespace YAT.Domain
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Elements.Count > 0)
 			{
+				DebugLineBreak(repositoryType, "EvaluateTimedLineBreak => DoLineEnd()");
+
 				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 			}
 		}
@@ -892,7 +917,11 @@ namespace YAT.Domain
 			{
 				var span = (ts - processState.Line.TimeStamp);
 				if (span.TotalMilliseconds >= timeout)
+				{
+					DebugLineBreak(repositoryType, "EvaluateTimedLineBreakOnReload => DoLineEnd()");
+
 					DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				}
 			}
 		}
 
@@ -908,6 +937,8 @@ namespace YAT.Domain
 		/// </remarks>
 		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
+			DebugLineBreak("txLineBreakTimeout_Elapsed");
+
 			lock (this.chunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
 				if (IsDisposed)
@@ -923,6 +954,8 @@ namespace YAT.Domain
 		/// </remarks>
 		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
+			DebugLineBreak("rxLineBreakTimeout_Elapsed");
+
 			lock (this.chunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
 				if (IsDisposed)
@@ -934,6 +967,28 @@ namespace YAT.Domain
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG_LINE_BREAK")]
+		protected virtual void DebugLineBreak(string message)
+		{
+			DebugMessage(message);
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_LINE_BREAK")]
+		protected virtual void DebugLineBreak(RepositoryType repositoryType, string message)
+		{
+			if (repositoryType == RepositoryType.Bidir) // Limited to tricky case.
+				DebugLineBreak(message);
+		}
 
 		#endregion
 	}
