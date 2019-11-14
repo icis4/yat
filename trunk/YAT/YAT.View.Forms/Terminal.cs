@@ -32,9 +32,6 @@
 	// Enable debugging of MDI related state changes:
 ////#define DEBUG_MDI
 
-	// Enable debugging of monitor content:
-////#define DEBUG_MONITOR_CONTENT
-
 #endif // DEBUG
 
 #endregion
@@ -5862,9 +5859,9 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
 		private void SetDataCountAndRateStatus()
 		{
-			SetTxDataCountAndRateStatus();
-			SetBidirDataCountAndRateStatus();
-			SetRxDataCountAndRateStatus();
+			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)    { SetTxDataCountAndRateStatus();    }
+			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { SetBidirDataCountAndRateStatus(); }
+			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)    { SetRxDataCountAndRateStatus();    }
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -5877,7 +5874,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 			{
-				monitor_Tx.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Tx.AddElements(e.Elements);
 
 				SetTxDataCountAndRateStatus();
 			}
@@ -5893,7 +5890,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 			{
-				monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Bidir.AddElements(e.Elements);
 
 				SetBidirDataCountAndRateStatus();
 			}
@@ -5909,7 +5906,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 			{
-				monitor_Rx.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Rx.AddElements(e.Elements);
 
 				SetRxDataCountAndRateStatus();
 			}
@@ -5923,8 +5920,8 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable)
-				monitor_Tx.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
+				monitor_Tx.ReplaceCurrentLine(e.Elements);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -5935,8 +5932,8 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable)
-				monitor_Bidir.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
+				monitor_Bidir.ReplaceCurrentLine(e.Elements);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -5948,7 +5945,7 @@ namespace YAT.View.Forms
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.ReplaceCurrentLine(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+				monitor_Rx.ReplaceCurrentLine(e.Elements);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -5959,7 +5956,7 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable)
+			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				monitor_Tx.ClearCurrentLine();
 		}
 
@@ -5971,7 +5968,7 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable)
+			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 				monitor_Bidir.ClearCurrentLine();
 		}
 
@@ -5995,7 +5992,7 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable)
+			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				SetTxDataCountAndRateStatus();
 		}
 
@@ -6007,7 +6004,7 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (TerminalIsAvailable)
+			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 				SetBidirDataCountAndRateStatus();
 		}
 

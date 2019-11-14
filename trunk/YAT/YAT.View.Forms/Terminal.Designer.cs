@@ -4775,6 +4775,7 @@ namespace YAT.View.Forms
 			// 
 			this.monitor_Bidir.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.ContextMenuStrip = this.contextMenuStrip_Monitor;
+			this.monitor_Bidir.DebugEnabled = true;
 			this.monitor_Bidir.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
