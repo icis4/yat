@@ -87,11 +87,11 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static readonly string LastUsageIdString    = LastUsageId   .ToString("X4", CultureInfo.InvariantCulture);
 
-		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
-		public const int UsagePageDefault = (int)(HidUsagePageEx.Default); // = HidUsagePage.Undefined = 0x0000
+		/// <summary></summary>
+		public const int AnyUsagePage = -1;
 
-		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
-		public const int UsageIdDefault   = (int)(HidUsageIdEx.Default);   // = HidUsageId.Undefined   = 0x0000
+		/// <summary></summary>
+		public const int AnyUsageId   = -1;
 
 		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
 
@@ -106,8 +106,8 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
-		private int usagePage = UsagePageDefault;
-		private int usageId   = UsageIdDefault;
+		private int usagePage = AnyUsagePage;
+		private int usageId   = AnyUsageId;
 
 		#endregion
 
@@ -139,7 +139,7 @@ namespace MKY.IO.Usb
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public HidDeviceInfo(int vendorId, int productId, int usagePage = UsagePageDefault, int usageId = UsageIdDefault)
+		public HidDeviceInfo(int vendorId, int productId, int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 		{
 			string path, manufacturer, product, serial;
 			if (HidDevice.GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
@@ -150,7 +150,7 @@ namespace MKY.IO.Usb
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public HidDeviceInfo(int vendorId, int productId, string serial, int usagePage = UsagePageDefault, int usageId = UsageIdDefault)
+		public HidDeviceInfo(int vendorId, int productId, string serial, int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 		{
 			string path, manufacturer, product;
 			if (HidDevice.GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
@@ -161,14 +161,14 @@ namespace MKY.IO.Usb
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public HidDeviceInfo(string path, int vendorId, int productId, int usagePage = UsagePageDefault, int usageId = UsageIdDefault)
+		public HidDeviceInfo(string path, int vendorId, int productId, int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 		{
 			Initialize(path, vendorId, productId, "", "", "", usagePage, usageId);
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public HidDeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serial, int usagePage = UsagePageDefault, int usageId = UsageIdDefault)
+		public HidDeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serial, int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 		{
 			Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 		}
@@ -178,8 +178,8 @@ namespace MKY.IO.Usb
 		{
 			base.Initialize();
 
-			this.usagePage = UsagePageDefault;
-			this.usageId   = UsageIdDefault;
+			this.usagePage = AnyUsagePage;
+			this.usageId   = AnyUsageId;
 		}
 
 		/// <remarks>Initialize this info based on the available information only.</remarks>
@@ -187,8 +187,8 @@ namespace MKY.IO.Usb
 		{
 			base.Initialize(path);
 
-			this.usagePage = UsagePageDefault;
-			this.usageId   = UsageIdDefault;
+			this.usagePage = AnyUsagePage;
+			this.usageId   = AnyUsageId;
 		}
 
 		/// <remarks>Initialize this info based on the available information only.</remarks>
@@ -248,7 +248,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public HidDeviceInfo(DeviceInfo rhs, int usagePage = UsagePageDefault, int usageId = UsageIdDefault)
+		public HidDeviceInfo(DeviceInfo rhs, int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 			: base(rhs)
 		{
 			this.usagePage = usagePage;
