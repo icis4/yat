@@ -680,6 +680,7 @@ namespace YAT.Domain
 				// However, this is considered too inefficient.
 
 				// Check whether device or direction has changed, a chunk is always tied to device and direction:
+				if (TerminalSettings.Display.DeviceLineBreakEnabled || TerminalSettings.Display.DirectionLineBreakEnabled)
 				{
 					if (txIsAffected)    { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
 					if (bidirIsAffected) { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
@@ -778,7 +779,7 @@ namespace YAT.Domain
 			processState.NotifyLineEnd();
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
 		protected virtual void EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -854,33 +855,32 @@ namespace YAT.Domain
 				ClearCurrentDisplayLine(repositoryType);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
 		protected virtual void EvaluateDeviceOrDirectionLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
 		                                                          DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Line.IsFirstChunk) // = 'IsSubsequentChunk'
-			{
-				processState.Line.IsFirstChunk = false; // Not the ideal but the most appropriate location to clear this flag.
-			}                                           // Good enough because this flag is not used anywhere else.
+			if (processState.Overall.IsFirstChunk)         // Not the ideal location to handle this flag
+			{                                              // and 'Device' and 'Direction' further below.
+				processState.Overall.IsFirstChunk = false; // But good enough because not needed anywhere
+			}                                              // else and more performant if only done here.
 			else // = 'IsSubsequentChunk'
-			{
-				if (TerminalSettings.Display.DeviceLineBreakEnabled ||
-				    TerminalSettings.Display.DirectionLineBreakEnabled)
+			{                                                                   // See above!                           // See above!
+				if (!StringEx.EqualsOrdinalIgnoreCase(dev, processState.Overall.Device) || (dir != processState.Overall.Direction))
 				{
-					if (!StringEx.EqualsOrdinalIgnoreCase(dev, processState.Overall.Device) || (dir != processState.Overall.Direction))
+					if (processState.Line.Elements.Count > 0)
 					{
-						if (processState.Line.Elements.Count > 0)
-						{
-							DebugLineBreak(repositoryType, "EvaluateDeviceOrDirectionLineBreak => DoLineEnd()");
+						DebugLineBreak(repositoryType, "EvaluateDeviceOrDirectionLineBreak => DoLineEnd()");
 
-							DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
-						}
+						DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 					}
 				}
 			}
-		}
+			                     //// See above!
+			processState.Overall.Device    = dev;
+			processState.Overall.Direction = dir;
+		}                        //// See above!
 
 		/// <summary></summary>
 		protected virtual void EvaluateChunkLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
