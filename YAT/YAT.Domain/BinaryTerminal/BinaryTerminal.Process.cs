@@ -167,22 +167,24 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir, LineState lineState)
+		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir)
 		{
-			Settings.BinaryDisplaySettings binaryDisplaySettings = GetBinaryDisplaySettings(dir);
-			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, dir);
+			var processState          = GetProcessState(repositoryType);
+			var lineState             = processState.Line; // Convenience shortcut.
+			var binaryLineState       = GetBinaryLineState(repositoryType, dir);
+			var binaryDisplaySettings = GetBinaryDisplaySettings(dir);
 
 			var elementsToAdd       = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			if (lineState.Position == LinePosition.Begin)
 			{
-				DoLineBegin(ts, dev, dir, lineState, elementsToAdd);
+				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 			}
 
 			if (lineState.Position == LinePosition.Content)
 			{
-				DoLineContent(b, dir, lineState, binaryDisplaySettings, binaryLineState, elementsToAdd, elementsForNextLine);
+				DoLineContent(processState, binaryLineState, binaryDisplaySettings, b, dir, elementsToAdd, elementsForNextLine);
 			}
 
 			if (lineState.Position != LinePosition.End)
@@ -193,9 +195,9 @@ namespace YAT.Domain
 			else // (lineState.Position == LinePosition.End)
 			{
 				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-				bool clearAlreadyStartedLineDummy;
+				bool clearAlreadyStartedLineDummy = false;
 
-				DoLineEnd(repositoryType, ts, dev, dir, lineState, elementsToAdd, linesToAdd, out clearAlreadyStartedLineDummy);
+				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLineDummy);
 
 				if (elementsToAdd.Count > 0)
 					AddDisplayElements(repositoryType, elementsToAdd);
@@ -207,8 +209,8 @@ namespace YAT.Domain
 				if (elementsForNextLine.Count > 0)
 				{
 					elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-					           //// Potentially same time stamp as end of previous line, since time stamp belongs to chunk.
-					DoLineBegin(ts, dev, dir, lineState, elementsToAdd);
+					                                         //// Potentially same time stamp as end of previous line, since time stamp belongs to chunk.
+					DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 
 					foreach (var de in elementsForNextLine)
 					{
@@ -219,7 +221,7 @@ namespace YAT.Domain
 								foreach (var originByte in origin.Value1)
 								{
 									DisplayElementCollection elementsForNextLineDummy = null;
-									DoLineContent(originByte, dir, lineState, binaryDisplaySettings, binaryLineState, elementsToAdd, elementsForNextLineDummy);
+									DoLineContent(processState, binaryLineState, binaryDisplaySettings, originByte, dir, elementsToAdd, elementsForNextLineDummy);
 								}
 							}
 						}
@@ -232,12 +234,14 @@ namespace YAT.Domain
 			}
 		}
 
-		private void DoLineBegin(DateTime ts, string dev, IODirection dir, LineState lineState,
-		                         DisplayElementCollection elementsToAdd)
+		/// <summary></summary>
+		protected override void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
+		                                    DateTime ts, string dev, IODirection dir,
+		                                    DisplayElementCollection elementsToAdd)
 		{
-			if (lineState.IsFirstLine) // Properly initialize the time delta:
-				lineState.PreviousLineTimeStamp = ts;
+			base.DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 
+			var lineState = processState.Line; // Convenience shortcut.
 			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart());
@@ -247,7 +251,7 @@ namespace YAT.Domain
 			    TerminalSettings.Display.ShowDirection)
 			{
 				DisplayElementCollection info;
-				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - lineState.PreviousLineTimeStamp), dev, dir, out info);
+				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - processState.Overall.PreviousLineTimeStamp), dev, dir, out info);
 				lp.AddRange(info);
 			}
 
@@ -261,17 +265,15 @@ namespace YAT.Domain
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elementsToAdd.AddRange(lp);
 			}
-
-			lineState.Position  = LinePosition.Content;
-			lineState.TimeStamp = ts;
-			lineState.Device    = dev;
-			lineState.Direction = dir;
 		}
 
-		private void DoLineContent(byte b, IODirection dir, LineState lineState,
-		                           Settings.BinaryDisplaySettings binaryDisplaySettings, BinaryLineState binaryLineState,
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		private void DoLineContent(ProcessState processState, BinaryLineState binaryLineState, Settings.BinaryDisplaySettings binaryDisplaySettings,
+		                           byte b, IODirection dir,
 		                           DisplayElementCollection elementsToAdd, DisplayElementCollection elementsForNextLine)
 		{
+			var lineState = processState.Line; // Convenience shortcut.
+
 			// Convert content:
 			var de = ByteToElement(b, dir);
 	//		de.Highlight = lineState.Highlight; !!!PENDING !!!
@@ -285,7 +287,7 @@ namespace YAT.Domain
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
 			if ((binaryDisplaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.ByteCount > 0) &&
-				(lineState.Position != LinePosition.End)))       // Also skip if line has just been brokwn.
+				(lineState.Position != LinePosition.End)))     // Also skip if line has just been brokwn.
 			{
 				binaryLineState.SequenceBefore.Enqueue(b);
 				if (binaryLineState.SequenceBefore.IsCompleteMatch)
@@ -391,14 +393,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void DoLineEnd(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir, LineState lineState,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine)
+		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState, DateTime ts,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			// Note: Code sequence the same as DoLineEnd() of TextTerminal for better comparability.
 
-			clearAlreadyStartedLine = false;
-
-			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, dir);
+			var lineState = processState.Line; // Convenience shortcut.
+			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, lineState.Direction);
 
 	/*		// Potentially suppress line:
 			if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
@@ -420,8 +421,10 @@ namespace YAT.Domain
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
 				{
+					var length = lineState.Elements.ByteCount;
+
 					DisplayElementCollection info;
-					PrepareLineEndInfo(lineState.Elements.ByteCount, (ts - lineState.TimeStamp), out info);
+					PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
 					lineEnd.AddRange(info);
 				}
 				lineEnd.Add(new DisplayElement.LineBreak());
@@ -442,9 +445,9 @@ namespace YAT.Domain
 				linesToAdd.Add(l);
 			}
 
-			// Reset line state:
-			lineState.NotifyLineEnd(lineState.TimeStamp);
+			// Finalize the line:
 			binaryLineState.NotifyLineEnd();
+			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 		}
 
 		#endregion

@@ -638,23 +638,25 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir, LineState lineState)
+		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir)
 		{
-			Settings.TextDisplaySettings textDisplaySettings = GetTextDisplaySettings(dir);
-			TextLineState textLineState = GetTextLineState(repositoryType, dir);
+			var processState        = GetProcessState(repositoryType);
+			var lineState           = processState.Line; // Convenience shortcut.
+			var textLineState       = GetTextLineState(repositoryType, dir);
+			var textDisplaySettings = GetTextDisplaySettings(dir);
 
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			if (lineState.Position == LinePosition.Begin)
 			{
-				DoLineBegin(ts, dev, dir, lineState, elementsToAdd);
+				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 			}
 
 			if (lineState.Position == LinePosition.Content)
 			{
 				bool replaceAlreadyStartedLine;
 
-				DoLineContent(b, dev, dir, lineState, textDisplaySettings, textLineState, elementsToAdd, out replaceAlreadyStartedLine);
+				DoLineContent(processState, textLineState, textDisplaySettings, b, dev, dir, elementsToAdd, out replaceAlreadyStartedLine);
 
 				if (replaceAlreadyStartedLine)
 					ReplaceCurrentDisplayLine(repositoryType, lineState.Elements);
@@ -668,9 +670,9 @@ namespace YAT.Domain
 			else // (lineState.Position == LinePosition.End)
 			{
 				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-				bool clearAlreadyStartedLine;
+				bool clearAlreadyStartedLine = false;
 
-				DoLineEnd(repositoryType, ts, dev, dir, lineState, elementsToAdd, linesToAdd, out clearAlreadyStartedLine);
+				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 
 				if (elementsToAdd.Count > 0)
 					AddDisplayElements(repositoryType, elementsToAdd);
@@ -683,12 +685,14 @@ namespace YAT.Domain
 			}
 		}
 
-		private void DoLineBegin(DateTime ts, string dev, IODirection dir, LineState lineState,
-		                         DisplayElementCollection elementsToAdd)
+		/// <summary></summary>
+		protected override void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
+		                                    DateTime ts, string dev, IODirection dir,
+		                                    DisplayElementCollection elementsToAdd)
 		{
-			if (lineState.IsFirstLine) // Properly initialize the time delta:
-				lineState.PreviousLineTimeStamp = ts;
+			base.DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 
+			var lineState = processState.Line; // Convenience shortcut.
 			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 
 			lp.Add(new DisplayElement.LineStart());
@@ -698,7 +702,7 @@ namespace YAT.Domain
 			    TerminalSettings.Display.ShowDirection)
 			{
 				DisplayElementCollection info;
-				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - lineState.PreviousLineTimeStamp), dev, dir, out info);
+				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - processState.Overall.PreviousLineTimeStamp), dev, dir, out info);
 				lp.AddRange(info);
 			}
 
@@ -712,18 +716,15 @@ namespace YAT.Domain
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elementsToAdd.AddRange(lp);
 			}
-
-			lineState.Position  = LinePosition.Content;
-			lineState.TimeStamp = ts;
-			lineState.Device    = dev;
-			lineState.Direction = dir;
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void DoLineContent(byte b, string dev, IODirection dir, LineState lineState,
-		                           Settings.TextDisplaySettings textDisplaySettings, TextLineState textLineState,
+		private void DoLineContent(ProcessState processState, TextLineState textLineState, Settings.TextDisplaySettings textDisplaySettings,
+		                           byte b, string dev, IODirection dir,
 		                           DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
 		{
+			var lineState = processState.Line; // Convenience shortcut.
+
 			// Convert content:
 			DisplayElement de;
 			bool isBackspace;
@@ -993,14 +994,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void DoLineEnd(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir, LineState lineState,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, out bool clearAlreadyStartedLine)
+		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
+		                                  DateTime ts,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			// Note: Code sequence the same as DoLineEnd() of BinaryTerminal for better comparability.
 
-			clearAlreadyStartedLine = false;
-
-			TextLineState textLineState = GetTextLineState(repositoryType, dir);
+			var lineState = processState.Line; // Convenience shortcut.
+			var textLineState = GetTextLineState(repositoryType, lineState.Direction);
+			var dev = lineState.Device;
 
 			bool isEmptyLine    = ( lineState.Elements.CharCount == 0);
 			bool isPendingEol   = (!textLineState.EolOfLastLineWasCompleteMatch(dev) &&  textLineState.EolIsAnyMatch(dev));
@@ -1064,9 +1066,9 @@ namespace YAT.Domain
 				linesToAdd.Add(l);
 			}
 
-			// Reset line state:
-			lineState.NotifyLineEnd(lineState.TimeStamp);
+			// Finalize the line:
 			textLineState.NotifyLineEnd(dev, textLineState.EolIsCompleteMatch(dev));
+			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
 		}
 
 		#endregion
