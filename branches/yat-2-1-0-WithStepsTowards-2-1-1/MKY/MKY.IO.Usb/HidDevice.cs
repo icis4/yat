@@ -208,8 +208,8 @@ namespace MKY.IO.Usb
 				}
 			}
 
-			usagePage = HidDeviceInfo.UsagePageDefault;
-			usageId   = HidDeviceInfo.UsageIdDefault;
+			usagePage = HidDeviceInfo.AnyUsagePage;
+			usageId   = HidDeviceInfo.AnyUsageId;
 			return (false);
 		}
 
@@ -517,12 +517,8 @@ namespace MKY.IO.Usb
 		private static string GetPathUsageAware(int vendorId, int productId, int usagePage, int usageId)
 		{
 			string path, manufacturer, product, serial;
-
 			if (GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
-				return (path); // Matching usage found.
-
-			if (GetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
-				return (path); // Fallback to non-matching usage.
+				return (path);
 
 			return (null);
 		}
@@ -530,12 +526,8 @@ namespace MKY.IO.Usb
 		private static string GetPathUsageAware(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
 			string path, manufacturer, product;
-
 			if (GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
-				return (path); // Matching usage found.
-
-			if (GetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
-				return (path); // Fallback to non-matching usage.
+				return (path);
 
 			return (null);
 		}
