@@ -540,6 +540,7 @@ namespace YAT.Model.Test
 			var settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.TextTerminal.ShowEol = true; // Required for easier test verification (byte count).
+			settings.Terminal.UpdateTerminalTypeDependentSettings();
 			return (settings);
 		}
 
@@ -553,6 +554,8 @@ namespace YAT.Model.Test
 			var settings = GetTextSettings();
 			settings.Terminal.IO.IOType = Domain.IOType.SerialPort;
 			settings.Terminal.IO.SerialPort.PortId = portId;
+			settings.Terminal.UpdateIOTypeDependentSettings();
+			settings.Terminal.UpdateIOSettingsDependentSettings();
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
@@ -659,6 +662,8 @@ namespace YAT.Model.Test
 			var settings = GetTextSettings();
 			settings.Terminal.IO.IOType = type;
 			settings.Terminal.IO.Socket.LocalInterface = networkInterface;
+			settings.Terminal.UpdateIOTypeDependentSettings();
+			settings.Terminal.UpdateIOSettingsDependentSettings();
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
@@ -1082,6 +1087,8 @@ namespace YAT.Model.Test
 			var settings = GetTextSettings();
 			settings.Terminal.IO.IOType = Domain.IOType.UsbSerialHid;
 			settings.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
+			settings.Terminal.UpdateIOTypeDependentSettings();
+			settings.Terminal.UpdateIOSettingsDependentSettings();
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
@@ -1178,6 +1185,7 @@ namespace YAT.Model.Test
 			// MT-SICS devices use XOn/XOff by default:
 			settings.Terminal.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
 			settings.Terminal.IO.UsbSerialHidDevice      .FlowControl = SerialHidFlowControl.Software;
+			settings.Terminal.UpdateIOSettingsDependentSettings();
 
 			// Set required USB Ser/HID format incl. dependent settings:
 			var presetEx = new MKY.IO.Usb.SerialHidDeviceSettingsPresetEx(MKY.IO.Usb.SerialHidDeviceSettingsPreset.MT_SerHid);
