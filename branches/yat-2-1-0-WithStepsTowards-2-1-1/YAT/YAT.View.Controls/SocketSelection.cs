@@ -814,7 +814,7 @@ namespace YAT.View.Controls
 				localInterfaces.FillWithAvailableLocalInterfaces();
 
 				// Attention:
-				// Similar code exists in Model.Terminal.ValidateIO().
+				// Similar code exists in Model.Terminal.CheckIOAvailability().
 				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
