@@ -104,7 +104,7 @@ namespace MKY.IO.Usb.Test
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID",     new string[] { "Company (VID:0ABC) Product (PID:1234) VID"     } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID ABC", new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID",     new string[] { "Company (VID:0ABC) Product (PID:1234) PID"     } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID ABC", new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID ABC", new string[] { "Company (VID:0ABC) Product (PID:1234) PID ABC" } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID PID", new string[] { "Company (VID:0ABC) Product (PID:1234) VID PID" } ));
 			}
 		}
@@ -160,11 +160,14 @@ namespace MKY.IO.Usb.Test
 					Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 					Assert.That(info.ProductId, Is.EqualTo(productId));
 
-					foreach (string descriptor in descriptors)
+					if (descriptors != null)
 					{
-						info = DeviceInfo.ParseVidPid(descriptor);
-						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-						Assert.That(info.ProductId, Is.EqualTo(productId));
+						foreach (string descriptor in descriptors)
+						{
+							info = DeviceInfo.ParseVidPid(descriptor);
+							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+							Assert.That(info.ProductId, Is.EqualTo(productId));
+						}
 					}
 				}
 				else // matchSerial
@@ -174,12 +177,15 @@ namespace MKY.IO.Usb.Test
 					Assert.That(info.ProductId, Is.EqualTo(productId));
 					Assert.That(info.Serial,    Is.EqualTo(serial));
 
-					foreach (string descriptor in descriptors)
+					if (descriptors != null)
 					{
-						info = DeviceInfo.ParseVidPidSerial(descriptor);
-						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-						Assert.That(info.ProductId, Is.EqualTo(productId));
-						Assert.That(info.Serial,    Is.EqualTo(serial));
+						foreach (string descriptor in descriptors)
+						{
+							info = DeviceInfo.ParseVidPidSerial(descriptor);
+							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+							Assert.That(info.ProductId, Is.EqualTo(productId));
+							Assert.That(info.Serial,    Is.EqualTo(serial));
+						}
 					}
 				}
 
@@ -215,24 +221,27 @@ namespace MKY.IO.Usb.Test
 					// Invalid input must throw an exception before Assert.Fail() above.
 				}
 
-				foreach (string descriptor in descriptors)
+				if (descriptors != null)
 				{
-					try
+					foreach (string descriptor in descriptors)
 					{
-						DeviceInfo dummyInfoToForceException;
+						try
+						{
+							DeviceInfo dummyInfoToForceException;
 
-						if (!matchSerial)
-							dummyInfoToForceException = DeviceInfo.ParseVidPid(descriptor);
-						else
-							dummyInfoToForceException = DeviceInfo.ParseVidPidSerial(descriptor);
+							if (!matchSerial)
+								dummyInfoToForceException = DeviceInfo.ParseVidPid(descriptor);
+							else
+								dummyInfoToForceException = DeviceInfo.ParseVidPidSerial(descriptor);
 
-						UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
+							UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
 
-						Assert.Fail("Invalid descripton " + descriptor + " wasn't properly handled!");
-					}
-					catch
-					{
-						// Invalid input must throw an exception before Assert.Fail() above.
+							Assert.Fail("Invalid descripton " + descriptor + " wasn't properly handled!");
+						}
+						catch
+						{
+							// Invalid input must throw an exception before Assert.Fail() above.
+						}
 					}
 				}
 			}
@@ -249,6 +258,8 @@ namespace MKY.IO.Usb.Test
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
 		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{
+			UnusedArg.PreventAnalysisWarning(descriptors); // Only used for other test case(s).
+
 			// Attention:
 			// Similar code exists in HidDeviceInfoTest.TestSerialization().
 			// Changes here may have to be applied there too.
