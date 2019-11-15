@@ -119,7 +119,7 @@ namespace MKY.IO.Usb.Test
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID",     true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID"     } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID ABC", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID",     true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) PID"     } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID ABC", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID ABC", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) PID ABC" } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID PID", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID PID" } ));
 			}
 		}
@@ -177,11 +177,14 @@ namespace MKY.IO.Usb.Test
 						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 						Assert.That(info.ProductId, Is.EqualTo(productId));
 
-						foreach (string descriptor in descriptors)
+						if (descriptors != null)
 						{
-							info = HidDeviceInfo.ParseVidPid(descriptor);
-							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-							Assert.That(info.ProductId, Is.EqualTo(productId));
+							foreach (string descriptor in descriptors)
+							{
+								info = HidDeviceInfo.ParseVidPid(descriptor);
+								Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+								Assert.That(info.ProductId, Is.EqualTo(productId));
+							}
 						}
 					}
 					else // matchUsage
@@ -192,21 +195,24 @@ namespace MKY.IO.Usb.Test
 						Assert.That(info.UsagePage, Is.EqualTo(usagePage));
 						Assert.That(info.UsageId,   Is.EqualTo(usageId));
 
-						foreach (string descriptor in descriptors)
+						if (descriptors != null)
 						{
-							info = HidDeviceInfo.ParseVidPid(descriptor);
-							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-							Assert.That(info.ProductId, Is.EqualTo(productId));
-							Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
-							Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
+							foreach (string descriptor in descriptors)
+							{
+								info = HidDeviceInfo.ParseVidPid(descriptor);
+								Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+								Assert.That(info.ProductId, Is.EqualTo(productId));
+								Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
+								Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
 
-						//// See explanation at HidDeviceInfo.TryParseConsiderately().
-						////
-						////info = HidDeviceInfo.ParseVidPidUsage(descriptor);
-						////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-						////Assert.That(info.ProductId, Is.EqualTo(productId));
-						////Assert.That(info.UsagePage, Is.EqualTo(usagePage));
-						////Assert.That(info.UsageId,   Is.EqualTo(usageId));
+							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							////
+							////info = HidDeviceInfo.ParseVidPidUsage(descriptor);
+							////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+							////Assert.That(info.ProductId, Is.EqualTo(productId));
+							////Assert.That(info.UsagePage, Is.EqualTo(usagePage));
+							////Assert.That(info.UsageId,   Is.EqualTo(usageId));
+							}
 						}
 					}
 				}
@@ -219,12 +225,15 @@ namespace MKY.IO.Usb.Test
 						Assert.That(info.ProductId, Is.EqualTo(productId));
 						Assert.That(info.Serial,    Is.EqualTo(serial));
 
-						foreach (string descriptor in descriptors)
+						if (descriptors != null)
 						{
-							info = HidDeviceInfo.ParseVidPidSerial(descriptor);
-							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-							Assert.That(info.ProductId, Is.EqualTo(productId));
-							Assert.That(info.Serial,    Is.EqualTo(serial));
+							foreach (string descriptor in descriptors)
+							{
+								info = HidDeviceInfo.ParseVidPidSerial(descriptor);
+								Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+								Assert.That(info.ProductId, Is.EqualTo(productId));
+								Assert.That(info.Serial,    Is.EqualTo(serial));
+							}
 						}
 					}
 					else // matchUsage
@@ -236,23 +245,26 @@ namespace MKY.IO.Usb.Test
 						Assert.That(info.UsagePage, Is.EqualTo(usagePage));
 						Assert.That(info.UsageId,   Is.EqualTo(usageId));
 
-						foreach (string descriptor in descriptors)
+						if (descriptors != null)
 						{
-							info = HidDeviceInfo.ParseVidPidSerial(descriptor);
-							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-							Assert.That(info.ProductId, Is.EqualTo(productId));
-							Assert.That(info.Serial,    Is.EqualTo(serial));
-							Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
-							Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
+							foreach (string descriptor in descriptors)
+							{
+								info = HidDeviceInfo.ParseVidPidSerial(descriptor);
+								Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+								Assert.That(info.ProductId, Is.EqualTo(productId));
+								Assert.That(info.Serial,    Is.EqualTo(serial));
+								Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
+								Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
 
-						//// See explanation at HidDeviceInfo.TryParseConsiderately().
-						////
-						////info = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
-						////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
-						////Assert.That(info.ProductId, Is.EqualTo(productId));
-						////Assert.That(info.Serial,    Is.EqualTo(serial));
-						////Assert.That(info.UsagePage, Is.EqualTo(usagePage));
-						////Assert.That(info.UsageId,   Is.EqualTo(usageId));
+							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							////
+							////info = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
+							////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+							////Assert.That(info.ProductId, Is.EqualTo(productId));
+							////Assert.That(info.Serial,    Is.EqualTo(serial));
+							////Assert.That(info.UsagePage, Is.EqualTo(usagePage));
+							////Assert.That(info.UsageId,   Is.EqualTo(usageId));
+							}
 						}
 					}
 				}
@@ -309,42 +321,45 @@ namespace MKY.IO.Usb.Test
 					// Invalid input must throw an exception before Assert.Fail() above.
 				}
 
-				foreach (string descriptor in descriptors)
+				if (descriptors != null)
 				{
-					try
+					foreach (string descriptor in descriptors)
 					{
-						HidDeviceInfo dummyInfoToForceException;
-
-						if (!matchSerial)
+						try
 						{
-							dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
+							HidDeviceInfo dummyInfoToForceException;
 
-						//// See explanation at HidDeviceInfo.TryParseConsiderately().
-						////
-						////if (!matchUsage)
-						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
-						////else
-						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidUsage(descriptor);
+							if (!matchSerial)
+							{
+								dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
+
+							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							////
+							////if (!matchUsage)
+							////	dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
+							////else
+							////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidUsage(descriptor);
+							}
+							else
+							{
+								dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);
+
+							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							////
+							////if (!matchUsage)
+							////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);
+							////else
+							////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
+							}
+
+							UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
+
+							Assert.Fail("Invalid descripton " + descriptor + " wasn't properly handled!");
 						}
-						else
+						catch
 						{
-							dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);
-
-						//// See explanation at HidDeviceInfo.TryParseConsiderately().
-						////
-						////if (!matchUsage)
-						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);
-						////else
-						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
+							// Invalid input must throw an exception before Assert.Fail() above.
 						}
-
-						UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
-
-						Assert.Fail("Invalid descripton " + descriptor + " wasn't properly handled!");
-					}
-					catch
-					{
-						// Invalid input must throw an exception before Assert.Fail() above.
 					}
 				}
 			}
@@ -361,6 +376,8 @@ namespace MKY.IO.Usb.Test
 		[Test, TestCaseSource(typeof(HidDeviceInfoTestData), "TestCases")]
 		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, bool matchUsage, int usagePage, int usageId, string[] descriptors)
 		{
+			UnusedArg.PreventAnalysisWarning(descriptors); // Only used for other test case(s).
+
 			// Attention:
 			// Similar code exists in DeviceInfoTest.TestSerialization().
 			// Changes here may have to be applied there too.
