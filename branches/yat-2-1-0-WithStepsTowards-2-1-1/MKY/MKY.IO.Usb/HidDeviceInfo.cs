@@ -304,6 +304,13 @@ namespace MKY.IO.Usb
 			get { return (UsageId.ToString("X4", CultureInfo.InvariantCulture)); }
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual string UsageString
+		{
+			get { return (UsagePageString + "/" + UsageIdString); }
+		}
+
 		#endregion
 
 		#region Methods
@@ -539,10 +546,10 @@ namespace MKY.IO.Usb
 			bool equals = true;
 
 			if ((UsagePage != AnyUsagePage) && (usagePage != AnyUsagePage))
-				equals = (equals || UsagePage.Equals(usagePage));
+				equals = (equals && UsagePage.Equals(usagePage));
 
 			if ((UsageId != AnyUsageId) && (usageId != AnyUsageId))
-				equals = (equals || UsageId.Equals(usageId));
+				equals = (equals && UsageId.Equals(usageId));
 
 			return (equals);
 		}
