@@ -246,7 +246,7 @@ namespace YAT.View.Controls
 
 				this.deviceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
-				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
+				var devices = new SerialHidDeviceCollection();
 				devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
 				// Attention:

@@ -368,32 +368,32 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the preset on device change.
 
 			this.newTerminalSettingsInEdit.UsbSerialHidPreset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the preset on device change.
 
 			this.newTerminalSettingsInEdit.UsbSerialHidReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
 		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the preset on device change.
 
 			this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the flow control on device change.
 
 			this.newTerminalSettingsInEdit.UsbSerialHidFlowControl = usbSerialHidDeviceSettings.FlowControl;
 		}
@@ -445,7 +445,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect        = this.newTerminalSettings.TcpClientAutoReconnect;
 			this.terminalSettings.Terminal.IO.Socket.UdpServerSendMode             = this.newTerminalSettings.UdpServerSendMode;
 
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo; // Note this setting is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;              // Note that 'MatchSerial' is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial       = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.Preset            = this.newTerminalSettings.UsbSerialHidPreset;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
@@ -596,7 +596,7 @@ namespace YAT.View.Forms
 				bool isValid = true;
 				switch (ioType)
 				{
-					case Domain.IOType.SerialPort:   isValid = serialPortSelection.IsValid;         break;
+					case Domain.IOType.SerialPort:   isValid = serialPortSelection        .IsValid; break;
 					case Domain.IOType.UsbSerialHid: isValid = usbSerialHidDeviceSelection.IsValid; break;
 				}
 				button_OK.Enabled = isValid;
@@ -620,13 +620,13 @@ namespace YAT.View.Forms
 			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
 
 			serialPortSelection.Visible = isSerialPort;
-			serialPortSettings.Visible  = isSerialPort;
+			serialPortSettings .Visible = isSerialPort;
 
 			socketSelection.Visible = isSocket;
-			socketSettings.Visible  = isSocket;
+			socketSettings .Visible = isSocket;
 
 			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
-			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
+			usbSerialHidDeviceSettings .Visible = isUsbSerialHid;
 		}
 
 		#endregion

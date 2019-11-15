@@ -399,32 +399,32 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the preset on device change.
 
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.Preset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the preset on device change.
 
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
 		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the preset on device change.
 
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
+		////	return shall not be done, as the control will automatically select the flow control on device change.
 
 			var flowControlOldUsedXOnXOffAutomatically = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOffAutomatically;
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl = usbSerialHidDeviceSettings.FlowControl;
@@ -463,7 +463,7 @@ namespace YAT.View.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.settings = this.settingsInEdit;         // Note this setting is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
+			this.settings = this.settingsInEdit;         // Note that 'MatchSerial' is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
 			this.settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
 		}
 

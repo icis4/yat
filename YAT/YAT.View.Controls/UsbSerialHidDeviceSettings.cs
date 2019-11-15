@@ -141,7 +141,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Used for...
 		/// ...initially updating <see cref="Preset"/> and <see cref="FlowControl"/>.
-		/// ...subsequently updating <see cref="Preset"/>.
+		/// ...subsequently updating <see cref="Preset"/> and <see cref="FlowControl"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
