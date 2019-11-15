@@ -1003,7 +1003,7 @@ namespace YAT.Model
 						if (!int.TryParse(this.commandLineArgs.UsageId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
 							return (false);
 
-						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageId(usageId))
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageIdIncludingAny(usageId))
 							return (false);
 
 						// The SNR is optional:

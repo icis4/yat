@@ -346,7 +346,7 @@ namespace MKY.IO.Usb
 			if (usageId == AnyUsageId)
 				return (true);
 			else
-				return (IsValidUsagePage(usageId));
+				return (IsValidUsageId(usageId));
 		}
 
 		#endregion
