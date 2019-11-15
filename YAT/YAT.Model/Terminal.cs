@@ -4059,7 +4059,7 @@ namespace YAT.Model
 					{
 						if (ApplicationSettings.LocalUserSettings.General.AskForAlternateUsbDevice) // Use this setting also for mismatch in usage.
 						{
-							var dr = ShowUsbSerialHidDeviceUsageNotAvailableAlternateQuestionYesNo(deviceInfo, devices[sameVidPidSerialIndex]);
+							var dr = ShowUsbSerialHidDeviceUsageNotAvailableAlternateQuestionYesNo(deviceInfo, deviceInfo.UsageString, devices[sameVidPidSerialIndex].UsageString);
 							if (dr == DialogResult.Yes)
 							{
 								this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidSerialIndex];
@@ -4339,11 +4339,11 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private DialogResult ShowUsbSerialHidDeviceUsageNotAvailableAlternateQuestionYesNo(string deviceInfoNotAvailable, string deviceInfoAlternate)
+		private DialogResult ShowUsbSerialHidDeviceUsageNotAvailableAlternateQuestionYesNo(string deviceInfo, string usageNotAvailable, string usageAlternate)
 		{
 			string message =
-				"The previous usage '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-				"Switch to '" + deviceInfoAlternate + "' (first available usage on same device) instead?";
+				"The previous usage '" + usageNotAvailable + "' of '" + deviceInfo + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"Switch to '" + usageAlternate + "' (first available usage on same device) instead?";
 
 			var dr = OnMessageInputRequest
 			(
