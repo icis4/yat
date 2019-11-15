@@ -580,17 +580,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool Equals(int vendorId, int productId, string serial)
 		{
-			return
-			(
-			////base.Equals(other) is not required when deriving from 'object'.
-
-				VendorId .Equals(vendorId)  &&
-				ProductId.Equals(productId) &&
-
-				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
-			);
-
-			// Do not care about path, the path is likely system dependent.
+			return (EqualsVidPidSerial(vendorId, productId, serial));
 		}
 
 		/// <summary>
@@ -624,6 +614,8 @@ namespace MKY.IO.Usb
 		{
 			return
 			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
 				VendorId .Equals(vendorId) &&
 				ProductId.Equals(productId)
 			);
@@ -644,7 +636,7 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			return (Equals(other)); // Same behavior as 'standard' Equals().
+			return (EqualsVidPidSerial(other.VendorId, other.ProductId, other.Serial));
 		}
 
 		/// <summary>
@@ -656,7 +648,17 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool EqualsVidPidSerial(int vendorId, int productId, string serial)
 		{
-			return (Equals(vendorId, productId, serial)); // Same behavior as 'standard' Equals().
+			return
+			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
+				VendorId .Equals(vendorId)  &&
+				ProductId.Equals(productId) &&
+
+				StringEx.EqualsOrdinalIgnoreCase(Serial, serial) // Case-insensitive, same behavior as Windows.
+			);
+
+			// Do not care about path, the path is likely system dependent.
 		}
 
 		/// <summary>
@@ -690,6 +692,8 @@ namespace MKY.IO.Usb
 		{
 			return
 			(
+			////base.Equals(other) is not required when deriving from 'object'.
+
 				VendorId .Equals(vendorId) &&
 				ProductId.Equals(productId) &&
 
