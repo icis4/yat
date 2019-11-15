@@ -69,42 +69,54 @@ namespace MKY.IO.Usb.Test
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, false, 0, 0, new string[] { "VID 0ABC&PID 1234", "vid 0ABC&pid 1234"} ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, false, 0, 0, new string[] { "Company (VID:0ABC) Product (PID:1234) Generic USB Hub" } ));
 
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", false, 0, 0, new string[] { "VID:0ABC PID:1234 SNR:XYZ", "vid:0ABC pid:1234 snr:XYZ" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", false, 0, 0, new string[] { "VID_0ABC PID_1234 SNR_XYZ", "vid_0ABC pid_1234 snr_XYZ" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", false, 0, 0, new string[] { "VID 0ABC PID 1234 SNR XYZ", "vid 0ABC pid 1234 snr XYZ" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", false, 0, 0, new string[] { "VID_0ABC&PID_1234&SNR_XYZ", "vid_0ABC&pid_1234&snr_XYZ" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", false, 0, 0, new string[] { "VID 0ABC&PID 1234&SNR XYZ", "vid 0ABC&pid 1234&snr XYZ" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", false, 0, 0, new string[] { "Company (VID:0ABC) Product (PID:1234) XYZ" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, -1, -1, new string[] { "VID:0ABC PID:1234 SNR:XYZ", "vid:0ABC pid:1234 snr:XYZ" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, -1, -1, new string[] { "VID_0ABC PID_1234 SNR_XYZ", "vid_0ABC pid_1234 snr_XYZ" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, -1, -1, new string[] { "VID 0ABC PID 1234 SNR XYZ", "vid 0ABC pid 1234 snr XYZ" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, -1, -1, new string[] { "VID_0ABC&PID_1234&SNR_XYZ", "vid_0ABC&pid_1234&snr_XYZ" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, -1, -1, new string[] { "VID 0ABC&PID 1234&SNR XYZ", "vid 0ABC&pid 1234&snr XYZ" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) XYZ" } ));
 
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä€¢", false, 0, 0, new string[] { "VID 0ABC&PID 1234&SNR ä€¢", "vid 0ABC&pid 1234&snr ä€¢" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä€¢", false, 0, 0, new string[] { "Company (VID:0ABC) Product (PID:1234) ä€¢" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä€¢", true, -1, -1, new string[] { "VID 0ABC&PID 1234&SNR ä€¢", "vid 0ABC&pid 1234&snr ä€¢" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä€¢", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) ä€¢" } ));
 
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", false, 0, 0, new string[] { "VID:0ABC PID:1234 SNR:X.Z", "vid:0ABC pid:1234 snr:X.Z" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", false, 0, 0, new string[] { "VID_0ABC PID_1234 SNR_X.Z", "vid_0ABC pid_1234 snr_X.Z" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", false, 0, 0, new string[] { "VID 0ABC PID 1234 SNR X.Z", "vid 0ABC pid 1234 snr X.Z" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", false, 0, 0, new string[] { "VID_0ABC&PID_1234&SNR_X.Z", "vid_0ABC&pid_1234&snr_X.Z" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", false, 0, 0, new string[] { "VID 0ABC&PID 1234&SNR X.Z", "vid 0ABC&pid 1234&snr X.Z" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", false, 0, 0, new string[] { "Company (VID:0ABC) Product (PID:1234) X.Z" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", true, -1, -1, new string[] { "VID:0ABC PID:1234 SNR:X.Z", "vid:0ABC pid:1234 snr:X.Z" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", true, -1, -1, new string[] { "VID_0ABC PID_1234 SNR_X.Z", "vid_0ABC pid_1234 snr_X.Z" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", true, -1, -1, new string[] { "VID 0ABC PID 1234 SNR X.Z", "vid 0ABC pid 1234 snr X.Z" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", true, -1, -1, new string[] { "VID_0ABC&PID_1234&SNR_X.Z", "vid_0ABC&pid_1234&snr_X.Z" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", true, -1, -1, new string[] { "VID 0ABC&PID 1234&SNR X.Z", "vid 0ABC&pid 1234&snr X.Z" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X.Z", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) X.Z" } ));
 
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä.¢", false, 0, 0, new string[] { "VID 0ABC&PID 1234&SNR ä.¢", "vid 0ABC&pid 1234&snr ä.¢" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä.¢", false, 0, 0, new string[] { "Company (VID:0ABC) Product (PID:1234) ä.¢" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä.¢", true, -1, -1, new string[] { "VID 0ABC&PID 1234&SNR ä.¢", "vid 0ABC&pid 1234&snr ä.¢" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä.¢", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) ä.¢" } ));
 
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", false, 0, 0, new string[] { "VID:0ABC PID:1234 SNR:X 8", "vid:0ABC pid:1234 snr:X 8" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", false, 0, 0, new string[] { "VID_0ABC PID_1234 SNR_X 8", "vid_0ABC pid_1234 snr_X 8" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", false, 0, 0, new string[] { "VID 0ABC PID 1234 SNR_X 8", "vid 0ABC pid 1234 snr X 8" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", false, 0, 0, new string[] { "VID_0ABC&PID_1234&SNR_X 8", "vid_0ABC&pid_1234&snr_X 8" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", false, 0, 0, new string[] { "VID 0ABC&PID 1234&SNR_X 8", "vid 0ABC&pid 1234&snr X 8" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", false, 0, 0, new string[] { "Company (VID:0ABC) Product (PID:1234) X 8" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", true, -1, -1, new string[] { "VID:0ABC PID:1234 SNR:X 8", "vid:0ABC pid:1234 snr:X 8" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", true, -1, -1, new string[] { "VID_0ABC PID_1234 SNR_X 8", "vid_0ABC pid_1234 snr_X 8" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", true, -1, -1, new string[] { "VID 0ABC PID 1234 SNR_X 8", "vid 0ABC pid 1234 snr X 8" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", true, -1, -1, new string[] { "VID_0ABC&PID_1234&SNR_X 8", "vid_0ABC&pid_1234&snr_X 8" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", true, -1, -1, new string[] { "VID 0ABC&PID 1234&SNR_X 8", "vid 0ABC&pid 1234&snr X 8" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "X 8", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) X 8" } ));
 
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", false, 0, 0, new string[] { "VID 0ABC&PID 1234&SNR_ä ¢", "vid 0ABC&pid 1234&snr ä ¢" } ));
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", false, 0, 0, new string[] { "Company (VID:0ABC) Product (PID:1234) ä ¢" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", true, -1, -1, new string[] { "VID 0ABC&PID 1234&SNR_ä ¢", "vid 0ABC&pid 1234&snr ä ¢" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) ä ¢" } ));
 
-				yield return (new TestCaseData(false,  0x0000,  0x0000, false, null, false, 0, 0, new string[] { " VID:0000  PID:0000" } ));
-				yield return (new TestCaseData(false,  0x0000,  0x0001, false, null, false, 0, 0, new string[] { " VID:0000  PID:0001" } ));
-				yield return (new TestCaseData(false,  0x0001,  0x0000, false, null, false, 0, 0, new string[] { " VID:0001  PID:0000" } ));
-				yield return (new TestCaseData(false,  0x0001, 0x10000, false, null, false, 0, 0, new string[] { " VID:0001 PID:10000" } ));
-				yield return (new TestCaseData(false, 0x10000,  0x0001, false, null, false, 0, 0, new string[] { "VID:10000  PID:0001" } ));
-				yield return (new TestCaseData(false, 0x10000, 0x10000, false, null, false, 0, 0, new string[] { "VID:10000 PID:10000" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, true, 0, 0, null)); // Parsing not supported for usage (yet).
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, 0, 0, null)); // Parsing not supported for usage (yet).
+
+				// Invalid PID/VID:
+				yield return (new TestCaseData(false,  0x0000,  0x0000, false, null, true, -1, -1, new string[] { " VID:0000  PID:0000" } ));
+				yield return (new TestCaseData(false,  0x0000,  0x0001, false, null, true, -1, -1, new string[] { " VID:0000  PID:0001" } ));
+				yield return (new TestCaseData(false,  0x0001,  0x0000, false, null, true, -1, -1, new string[] { " VID:0001  PID:0000" } ));
+				yield return (new TestCaseData(false,  0x0001, 0x10000, false, null, true, -1, -1, new string[] { " VID:0001 PID:10000" } ));
+				yield return (new TestCaseData(false, 0x10000,  0x0001, false, null, true, -1, -1, new string[] { "VID:10000  PID:0001" } ));
+				yield return (new TestCaseData(false, 0x10000, 0x10000, false, null, true, -1, -1, new string[] { "VID:10000 PID:10000" } ));
+
+				// Intentionally strange SNR:
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null,     false, 0,  0, new string[] { "Company (VID:0ABC) Product (PID:1234) VID PID" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID",     true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID"     } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID ABC", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID",     true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) PID"     } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID ABC", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID PID", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) VID PID" } ));
 			}
 		}
 

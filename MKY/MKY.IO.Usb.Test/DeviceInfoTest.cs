@@ -91,12 +91,21 @@ namespace MKY.IO.Usb.Test
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", new string[] { "VID 0ABC&PID 1234&SNR_ä ¢", "vid 0ABC&pid 1234&snr ä ¢" } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", new string[] { "Company (VID:0ABC) Product (PID:1234) ä ¢" } ));
 
+				// Invalid PID/VID:
 				yield return (new TestCaseData(false,  0x0000,  0x0000, false, null, new string[] { " VID:0000  PID:0000" } ));
 				yield return (new TestCaseData(false,  0x0000,  0x0001, false, null, new string[] { " VID:0000  PID:0001" } ));
 				yield return (new TestCaseData(false,  0x0001,  0x0000, false, null, new string[] { " VID:0001  PID:0000" } ));
 				yield return (new TestCaseData(false,  0x0001, 0x10000, false, null, new string[] { " VID:0001 PID:10000" } ));
 				yield return (new TestCaseData(false, 0x10000,  0x0001, false, null, new string[] { "VID:10000  PID:0001" } ));
 				yield return (new TestCaseData(false, 0x10000, 0x10000, false, null, new string[] { "VID:10000 PID:10000" } ));
+
+				// Strange SNR:
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null,     new string[] { "Company (VID:0ABC) Product (PID:1234) VID PID" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID",     new string[] { "Company (VID:0ABC) Product (PID:1234) VID"     } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID ABC", new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID",     new string[] { "Company (VID:0ABC) Product (PID:1234) PID"     } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "PID ABC", new string[] { "Company (VID:0ABC) Product (PID:1234) VID ABC" } ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "VID PID", new string[] { "Company (VID:0ABC) Product (PID:1234) VID PID" } ));
 			}
 		}
 
