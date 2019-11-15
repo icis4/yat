@@ -99,8 +99,12 @@ namespace MKY.IO.Usb.Test
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", true, -1, -1, new string[] { "VID 0ABC&PID 1234&SNR_ä ¢", "vid 0ABC&pid 1234&snr ä ¢" } ));
 				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "ä ¢", true, -1, -1, new string[] { "Company (VID:0ABC) Product (PID:1234) ä ¢" } ));
 
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, true, 0, 0, null)); // Parsing not supported for usage (yet).
-				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, 0, 0, null)); // Parsing not supported for usage (yet).
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, false, null, true, 0x0000, 0x0000, null)); // Parsing not supported for usage (yet).
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, 0x0000, 0x0000, null)); // Parsing not supported for usage (yet).
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, 0x0000, 0x0001, null)); // Parsing not supported for usage (yet).
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, 0x0001, 0x0000, null)); // Parsing not supported for usage (yet).
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, 0x0001, 0x0001, null)); // Parsing not supported for usage (yet).
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, true, "XYZ", true, 0xFFFF, 0xFFFF, null)); // Parsing not supported for usage (yet).
 
 				// Invalid PID/VID:
 				yield return (new TestCaseData(false,  0x0000,  0x0000, false, null, true, -1, -1, new string[] { " VID:0000  PID:0000" } ));
