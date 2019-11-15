@@ -887,7 +887,9 @@ namespace MKY.IO.Usb
 			var other = (obj as HidDeviceInfo);
 			if (other != null)
 			{
-				if (UsagePage != other.UsagePage)
+				if ((DeviceInfo)this != other)
+					return (base.CompareTo(other));
+				else if (UsagePage != other.UsagePage)
 					return (UsagePage.CompareTo(other.UsagePage));
 				else
 					return (UsageId.CompareTo(other.UsageId));
