@@ -4046,15 +4046,36 @@ namespace YAT.Model
 
 			if (devices.Count > 0)
 			{
-				if (devices.Contains(deviceInfo))
+				if      (devices.ContainsVidPidSerialUsage(deviceInfo)) // Full match, taking 'AnyUsage' into account.
 				{
 					return (CheckResult.OK);
 				}
-				else if (devices.ContainsVidPidSerial(deviceInfo))
+				else if (devices.ContainsVidPidSerial(deviceInfo)) // Mismatch in usage, i.e. device available but usage not.
 				{
-					return (CheckResult.OK); // Silently accept mismatch in usage only.
+					// A device with same VID/PID/SNR is available, use that:
+					int sameVidPidSerialIndex = devices.FindIndexVidPidSerial(deviceInfo);
+
+					// Inform the user in any case:
+					{
+						if (ApplicationSettings.LocalUserSettings.General.AskForAlternateUsbDevice) // Use this setting also for mismatch in usage.
+						{
+							var dr = ShowUsbSerialHidDeviceUsageNotAvailableAlternateQuestionYesNo(deviceInfo, devices[sameVidPidSerialIndex]);
+							if (dr == DialogResult.Yes)
+							{
+								this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidSerialIndex];
+								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+							}
+
+							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
+						}
+						else
+						{
+							OnResetStatusTextRequest();
+							return (CheckResult.Ignore); // Silently ignore.
+						}
+					}
 				}
-				else if (devices.ContainsVidPid(deviceInfo))
+				else if (devices.ContainsVidPid(deviceInfo)) // Mismatch in serial, i.e. device type available but not specific device.
 				{
 					// A device with same VID/PID is available, use that:
 					int sameVidPidIndex = devices.FindIndexVidPid(deviceInfo);
@@ -4064,7 +4085,7 @@ namespace YAT.Model
 					{
 						if (ApplicationSettings.LocalUserSettings.General.AskForAlternateUsbDevice)
 						{
-							var dr = ShowUsbSerialHidDeviceNotAvailableAlternateQuestionYesNo(deviceInfo, devices[sameVidPidIndex]);
+							var dr = ShowUsbSerialHidDeviceSerialNotAvailableAlternateQuestionYesNo(deviceInfo, devices[sameVidPidIndex]);
 							if (dr == DialogResult.Yes)
 							{
 								this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
@@ -4092,7 +4113,7 @@ namespace YAT.Model
 						return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
 					}
 				}
-				else
+				else // no device of same VID/PID
 				{
 					if (ApplicationSettings.LocalUserSettings.General.AskForAlternateUsbDevice)
 					{
@@ -4301,7 +4322,7 @@ namespace YAT.Model
 			return (dr);
 		}
 
-		private DialogResult ShowUsbSerialHidDeviceNotAvailableAlternateQuestionYesNo(string deviceInfoNotAvailable, string deviceInfoAlternate)
+		private DialogResult ShowUsbSerialHidDeviceSerialNotAvailableAlternateQuestionYesNo(string deviceInfoNotAvailable, string deviceInfoAlternate)
 		{
 			string message =
 				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
@@ -4311,6 +4332,23 @@ namespace YAT.Model
 			(
 				message,
 				"Switch USB HID device?",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question
+			);
+
+			return (dr);
+		}
+
+		private DialogResult ShowUsbSerialHidDeviceUsageNotAvailableAlternateQuestionYesNo(string deviceInfoNotAvailable, string deviceInfoAlternate)
+		{
+			string message =
+				"The previous usage '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"Switch to '" + deviceInfoAlternate + "' (first available usage on same device) instead?";
+
+			var dr = OnMessageInputRequest
+			(
+				message,
+				"Switch USB HID usage?",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question
 			);
