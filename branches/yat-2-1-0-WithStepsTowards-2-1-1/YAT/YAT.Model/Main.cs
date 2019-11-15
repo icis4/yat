@@ -997,7 +997,7 @@ namespace YAT.Model
 						if (!int.TryParse(this.commandLineArgs.UsagePage, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
 							return (false);
 
-						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePage(usagePage))
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePageIncludingAny(usagePage))
 							return (false);
 
 						if (!int.TryParse(this.commandLineArgs.UsageId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
