@@ -153,7 +153,7 @@ namespace MKY.IO.Usb.Test
 
 					foreach (string descriptor in descriptors)
 					{
-						info = DeviceInfo.Parse(descriptor);
+						info = DeviceInfo.ParseVidPid(descriptor);
 						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 						Assert.That(info.ProductId, Is.EqualTo(productId));
 					}
@@ -167,7 +167,7 @@ namespace MKY.IO.Usb.Test
 
 					foreach (string descriptor in descriptors)
 					{
-						info = DeviceInfo.ParseRequiringSerial(descriptor);
+						info = DeviceInfo.ParseVidPidSerial(descriptor);
 						Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 						Assert.That(info.ProductId, Is.EqualTo(productId));
 						Assert.That(info.Serial,    Is.EqualTo(serial));
@@ -213,9 +213,9 @@ namespace MKY.IO.Usb.Test
 						DeviceInfo dummyInfoToForceException;
 
 						if (!matchSerial)
-							dummyInfoToForceException = DeviceInfo.Parse(descriptor);
+							dummyInfoToForceException = DeviceInfo.ParseVidPid(descriptor);
 						else
-							dummyInfoToForceException = DeviceInfo.ParseRequiringSerial(descriptor);
+							dummyInfoToForceException = DeviceInfo.ParseVidPidSerial(descriptor);
 
 						UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
 

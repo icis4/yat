@@ -219,22 +219,22 @@ namespace MKY.IO.Usb.Test
 				// Set which physical items are available on the current machine:
 
 				HidDeviceInfo di;
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.DeviceA, out di))
+				if (HidDeviceInfo.TryParseVidPidSerial(configuration.DeviceA, out di))
 					configuration.DeviceAIsAvailable = availableDevices.ContainsVidPidSerial(di); // Ignore usage, configuration doesn't contain it!
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.DeviceB, out di))
+				if (HidDeviceInfo.TryParseVidPidSerial(configuration.DeviceB, out di))
 					configuration.DeviceBIsAvailable = availableDevices.ContainsVidPidSerial(di); // Ignore usage, configuration doesn't contain it!
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceA, out di))
+				if (HidDeviceInfo.TryParseVidPidSerial(configuration.MTSicsDeviceA, out di))
 					configuration.MTSicsDeviceAIsAvailable = availableDevices.ContainsVidPidSerial(di); // Ignore usage, configuration doesn't contain it!
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.MTSicsDeviceB, out di))
+				if (HidDeviceInfo.TryParseVidPidSerial(configuration.MTSicsDeviceB, out di))
 					configuration.MTSicsDeviceBIsAvailable = availableDevices.ContainsVidPidSerial(di); // Ignore usage, configuration doesn't contain it!
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceA, out di))
+				if (HidDeviceInfo.TryParseVidPidSerial(configuration.TILaunchPadDeviceA, out di))
 					configuration.TILaunchPadDeviceAIsAvailable = availableDevices.ContainsVidPidSerial(di); // Ignore usage, configuration doesn't contain it!
 
-				if (HidDeviceInfo.TryParseRequiringSerial(configuration.TILaunchPadDeviceB, out di))
+				if (HidDeviceInfo.TryParseVidPidSerial(configuration.TILaunchPadDeviceB, out di))
 					configuration.TILaunchPadDeviceBIsAvailable = availableDevices.ContainsVidPidSerial(di); // Ignore usage, configuration doesn't contain it!
 
 				// Activate the effective configuration:

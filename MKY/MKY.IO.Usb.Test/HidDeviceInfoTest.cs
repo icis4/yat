@@ -163,7 +163,7 @@ namespace MKY.IO.Usb.Test
 
 						foreach (string descriptor in descriptors)
 						{
-							info = HidDeviceInfo.Parse(descriptor);
+							info = HidDeviceInfo.ParseVidPid(descriptor);
 							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 							Assert.That(info.ProductId, Is.EqualTo(productId));
 						}
@@ -178,11 +178,19 @@ namespace MKY.IO.Usb.Test
 
 						foreach (string descriptor in descriptors)
 						{
-							info = HidDeviceInfo.ParseRequiringUsage(descriptor);
+							info = HidDeviceInfo.ParseVidPid(descriptor);
 							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 							Assert.That(info.ProductId, Is.EqualTo(productId));
-							Assert.That(info.UsagePage, Is.EqualTo(usagePage));
-							Assert.That(info.UsageId,   Is.EqualTo(usageId));
+							Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
+							Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
+
+						//// See explanation at HidDeviceInfo.TryParseConsiderately().
+						////
+						////info = HidDeviceInfo.ParseVidPidUsage(descriptor);
+						////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+						////Assert.That(info.ProductId, Is.EqualTo(productId));
+						////Assert.That(info.UsagePage, Is.EqualTo(usagePage));
+						////Assert.That(info.UsageId,   Is.EqualTo(usageId));
 						}
 					}
 				}
@@ -197,7 +205,7 @@ namespace MKY.IO.Usb.Test
 
 						foreach (string descriptor in descriptors)
 						{
-							info = HidDeviceInfo.ParseRequiringSerial(descriptor);
+							info = HidDeviceInfo.ParseVidPidSerial(descriptor);
 							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 							Assert.That(info.ProductId, Is.EqualTo(productId));
 							Assert.That(info.Serial,    Is.EqualTo(serial));
@@ -214,12 +222,21 @@ namespace MKY.IO.Usb.Test
 
 						foreach (string descriptor in descriptors)
 						{
-							info = HidDeviceInfo.ParseRequiringSerialAndUsage(descriptor);
+							info = HidDeviceInfo.ParseVidPidSerial(descriptor);
 							Assert.That(info.VendorId,  Is.EqualTo(vendorId));
 							Assert.That(info.ProductId, Is.EqualTo(productId));
 							Assert.That(info.Serial,    Is.EqualTo(serial));
-							Assert.That(info.UsagePage, Is.EqualTo(usagePage));
-							Assert.That(info.UsageId,   Is.EqualTo(usageId));
+							Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
+							Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
+
+						//// See explanation at HidDeviceInfo.TryParseConsiderately().
+						////
+						////info = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
+						////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
+						////Assert.That(info.ProductId, Is.EqualTo(productId));
+						////Assert.That(info.Serial,    Is.EqualTo(serial));
+						////Assert.That(info.UsagePage, Is.EqualTo(usagePage));
+						////Assert.That(info.UsageId,   Is.EqualTo(usageId));
 						}
 					}
 				}
@@ -284,17 +301,25 @@ namespace MKY.IO.Usb.Test
 
 						if (!matchSerial)
 						{
-							if (!matchUsage)
-								dummyInfoToForceException = HidDeviceInfo.Parse(descriptor);
-							else
-								dummyInfoToForceException = HidDeviceInfo.ParseRequiringUsage(descriptor);
+							dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
+
+						//// See explanation at HidDeviceInfo.TryParseConsiderately().
+						////
+						////if (!matchUsage)
+						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
+						////else
+						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidUsage(descriptor);
 						}
 						else
 						{
-							if (!matchUsage)
-								dummyInfoToForceException = HidDeviceInfo.ParseRequiringSerial(descriptor);
-							else
-								dummyInfoToForceException = HidDeviceInfo.ParseRequiringSerialAndUsage(descriptor);
+							dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);
+
+						//// See explanation at HidDeviceInfo.TryParseConsiderately().
+						////
+						////if (!matchUsage)
+						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);
+						////else
+						////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
 						}
 
 						UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);

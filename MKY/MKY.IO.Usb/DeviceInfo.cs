@@ -730,7 +730,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
@@ -745,29 +745,41 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static DeviceInfo ParseRequiringSerial(string s)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
+		public static DeviceInfo ParseVidPid(string s)
 		{
 			DeviceInfo result;
-			if (TryParseRequiringSerial(s, out result))
+			if (TryParseVidPid(s, out result))
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
 		}
 
 		/// <summary>
-		/// Tries to parse <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
+		/// Parses <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out DeviceInfo result)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
+		public static DeviceInfo ParseVidPidSerial(string s)
 		{
-			return (TryParse(s, false, out result));
+			DeviceInfo result;
+			if (TryParseVidPidSerial(s, out result))
+				return (result);
+			else
+				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
 		}
 
 		/// <summary>
@@ -776,13 +788,43 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParseRequiringSerial(string s, out DeviceInfo result)
+		public static bool TryParse(string s, out DeviceInfo result)
 		{
-			return (TryParse(s, true, out result));
+			return (TryParseConsiderately(s, true, out result));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
+		public static bool TryParseVidPid(string s, out DeviceInfo result)
+		{
+			return (TryParseConsiderately(s, false, out result));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for VID/PID/SNR and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
+		public static bool TryParseVidPidSerial(string s, out DeviceInfo result)
+		{
+			return (TryParseConsiderately(s, true, out result));
 		}
 
 		/// <summary></summary>
-		protected static bool TryParse(string s, bool requireSerial, out DeviceInfo result)
+		protected static bool TryParseConsiderately(string s, bool requireSerial, out DeviceInfo result)
 		{
 			if (s != null)
 				s = s.Trim();
@@ -917,10 +959,10 @@ namespace MKY.IO.Usb
 		public static implicit operator DeviceInfo(string s)
 		{
 			DeviceInfo result;
-			if (TryParseRequiringSerial(s, out result))
+			if (TryParseVidPidSerial(s, out result))
 				return (result);
 			else
-				return (Parse(s));
+				return (ParseVidPid(s));
 		}
 
 		#endregion

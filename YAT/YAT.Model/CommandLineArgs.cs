@@ -304,22 +304,22 @@ namespace YAT.Model
 		public string SerialString;
 
 		/// <remarks>
-		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.HidDeviceInfo.FirstUsagePageString"/>
-		/// and <see cref="MKY.IO.Usb.HidDeviceInfo.LastUsagePageString"/>.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.HidDeviceInfo.FirstUsagePageString"/>,
+		/// <see cref="MKY.IO.Usb.HidDeviceInfo.LastUsagePageString"/> and <see cref="MKY.IO.Usb.HidDeviceInfo.AnyUsagePageString"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "UsagePage", ShortName = "huPG", Description =
-			"The desired USB HID usage page. Must be a hexadecimal value within 0000 and FFFF. The default value is 0x0000 (Undefined)." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired USB HID usage page. Must be a hexadecimal value within 0000 and FFFF; or -1 [any]. The default value is -1 [any]." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string UsagePage;
 
 		/// <remarks>
-		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.HidDeviceInfo.FirstUsageIdString"/>
-		/// and <see cref="MKY.IO.Usb.HidDeviceInfo.LastUsageIdString"/>.
+		/// Values in descriptions correspond to <see cref="MKY.IO.Usb.HidDeviceInfo.FirstUsageIdString"/>,
+		/// <see cref="MKY.IO.Usb.HidDeviceInfo.LastUsageIdString"/> and <see cref="MKY.IO.Usb.HidDeviceInfo.AnyUsageIdString"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "UsageID", ShortName = "huID", Description =
-			"The desired USB HID usage ID. Must be a hexadecimal value within 0000 and FFFF. The default value is 0x0000 (Undefined)." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired USB HID usage ID. Must be a hexadecimal value within 0000 and FFFF; or -1 [any]. The default value is -1 [any]." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string UsageId;
 

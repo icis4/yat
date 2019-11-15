@@ -87,17 +87,25 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static readonly string LastUsageIdString    = LastUsageId   .ToString("X4", CultureInfo.InvariantCulture);
 
-		/// <summary></summary>
+		/// <summary>Special value to indicate that any usage page shall be accepted.</summary>
 		public const int AnyUsagePage = -1;
 
-		/// <summary></summary>
+		/// <summary>Special value to indicate that any usage ID shall be accepted.</summary>
 		public const int AnyUsageId   = -1;
 
-		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+		/// <summary></summary>
+		public static readonly string AnyUsagePageString = AnyUsagePage.ToString(CultureInfo.InvariantCulture);
 
-		/// <remarks><![CDATA["USAGE:00FF/0001"]]></remarks>
-		/// <remarks><![CDATA["usage_00FF_0001"]]></remarks>
-		public static readonly Regex UsageRegex = new Regex(@"USAGE[^0-9a-fA-F](?<usagePage>[0-9a-fA-F]+)[^0-9a-fA-F](?<usageId>[0-9a-fA-F]+)", Options);
+		/// <summary></summary>
+		public static readonly string AnyUsageIdString   = AnyUsageId  .ToString(CultureInfo.InvariantCulture);
+
+	////private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+	////
+	/////// <remarks><![CDATA["USAGE:00FF/0001"]]></remarks>
+	/////// <remarks><![CDATA["usage_00FF_0001"]]></remarks>
+	////public static readonly Regex UsageRegex = new Regex(@"USAGE[^0-9a-fA-F](?<usagePage>[0-9a-fA-F]+)[^0-9a-fA-F](?<usageId>[0-9a-fA-F]+)", Options);
+	////
+	//// See explanation at TryParseConsiderately() further below.
 
 		#endregion
 
@@ -312,11 +320,33 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
+		/// Returns whether the given number is a valid usage page; including <see cref="AnyUsagePage"/>.
+		/// </summary>
+		public static bool IsValidUsagePageIncludingAny(int usagePage)
+		{
+			if (usagePage == AnyUsagePage)
+				return (true);
+			else
+				return (IsValidUsagePage(usagePage));
+		}
+
+		/// <summary>
 		/// Returns whether the given number is a valid usage ID.
 		/// </summary>
 		public static bool IsValidUsageId(int usageId)
 		{
 			return (Int32Ex.IsWithin(usageId, FirstUsageId, LastUsageId));
+		}
+
+		/// <summary>
+		/// Returns whether the given number is a valid usage ID; including <see cref="AnyUsageId"/>.
+		/// </summary>
+		public static bool IsValidUsageIdIncludingAny(int usageId)
+		{
+			if (usageId == AnyUsageId)
+				return (true);
+			else
+				return (IsValidUsagePage(usageId));
 		}
 
 		#endregion
@@ -591,16 +621,37 @@ namespace MKY.IO.Usb
 		// Parse
 		//==========================================================================================
 
+	/////// <summary>
+	/////// Parses <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
+	/////// </summary>
+	/////// <remarks>
+	/////// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+	/////// </remarks>
+	////public static HidDeviceInfo Parse(string s)
+	////{
+	////	HidDeviceInfo result;
+	////	if (TryParse(s, out result))
+	////		return (result);
+	////	else
+	////		throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
+	////}
+	////
+	//// See explanation at TryParseConsiderately() further below.
+
 		/// <summary>
 		/// Parses <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static new HidDeviceInfo Parse(string s)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
+		public static new HidDeviceInfo ParseVidPid(string s)
 		{
 			HidDeviceInfo result;
-			if (TryParse(s, out result))
+			if (TryParseVidPid(s, out result))
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
@@ -612,44 +663,71 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static new HidDeviceInfo ParseRequiringSerial(string s)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
+		public static new HidDeviceInfo ParseVidPidSerial(string s)
 		{
 			HidDeviceInfo result;
-			if (TryParseRequiringSerial(s, out result))
+			if (TryParseVidPidSerial(s, out result))
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
 		}
 
-		/// <summary>
-		/// Parses <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
-		/// </summary>
-		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
-		/// </remarks>
-		public static HidDeviceInfo ParseRequiringSerialAndUsage(string s)
-		{
-			HidDeviceInfo result;
-			if (TryParseRequiringSerialAndUsage(s, out result))
-				return (result);
-			else
-				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
-		}
+	/////// <summary>
+	/////// Parses <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
+	/////// </summary>
+	/////// <remarks>
+	/////// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+	/////// </remarks>
+	/////// <remarks>
+	/////// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+	/////// <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
+	/////// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
+	/////// </remarks>
+	////public static HidDeviceInfo ParseVidPidSerialUsage(string s)
+	////{
+	////	HidDeviceInfo result;
+	////	if (TryParseVidPidSerialUsage(s, out result))
+	////		return (result);
+	////	else
+	////		throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
+	////}
+	////
+	//// See explanation at TryParseConsiderately() further below.
+	////
+	/////// <summary>
+	/////// Parses <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
+	/////// </summary>
+	/////// <remarks>
+	/////// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+	/////// </remarks>
+	/////// <remarks>
+	/////// Comprehensibility method, i.e. making obvious that only
+	/////// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/> and
+	/////// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
+	/////// </remarks>
+	////public static HidDeviceInfo ParseVidPidUsage(string s)
+	////{
+	////	HidDeviceInfo result;
+	////	if (TryParseVidPidUsage(s, out result))
+	////		return (result);
+	////	else
+	////		throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
+	////}
 
-		/// <summary>
-		/// Parses <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
-		/// </summary>
-		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
-		/// </remarks>
-		public static HidDeviceInfo ParseRequiringUsage(string s)
-		{
-			HidDeviceInfo result;
-			if (TryParseRequiringUsage(s, out result))
-				return (result);
-			else
-				throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
-		}
+	/////// <summary>
+	/////// Tries to parse <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
+	/////// </summary>
+	/////// <remarks>
+	/////// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+	/////// </remarks>
+	////public static bool TryParse(string s, out HidDeviceInfo result)
+	////{
+	////	return (TryParseConsiderately(s, true, true, out result));
+	////}
 
 		/// <summary>
 		/// Tries to parse <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
@@ -657,9 +735,23 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out HidDeviceInfo result)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
+		public static bool TryParseVidPid(string s, out HidDeviceInfo result)
 		{
-			return (TryParse(s, false, false, out result));
+		////return (TryParseConsiderately(s, false, false, out result)); See explanation at TryParseConsiderately() further below.
+
+			DeviceInfo di;
+			if (TryParseConsiderately(s, false, out di))
+			{
+				result = new HidDeviceInfo(di);
+				return (true);
+			}
+
+			result = null;
+			return (false);
 		}
 
 		/// <summary>
@@ -668,65 +760,93 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParseRequiringSerial(string s, out HidDeviceInfo result)
-		{
-			return (TryParse(s, true, false, out result));
-		}
-
-		/// <summary>
-		/// Tries to parse <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
-		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
 		/// </remarks>
-		public static bool TryParseRequiringSerialAndUsage(string s, out HidDeviceInfo result)
+		public static bool TryParseVidPidSerial(string s, out HidDeviceInfo result)
 		{
-			return (TryParse(s, true, true, out result));
-		}
+		////return (TryParseConsiderately(s, true, false, out result)); See explanation at TryParseConsiderately() further below.
 
-		/// <summary>
-		/// Tries to parse <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
-		/// </summary>
-		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
-		/// </remarks>
-		public static bool TryParseRequiringUsage(string s, out HidDeviceInfo result)
-		{
-			return (TryParse(s, false, true, out result));
-		}
-
-		/// <summary></summary>
-		protected static bool TryParse(string s, bool requireSerial, bool requireUsage, out HidDeviceInfo result)
-		{
 			DeviceInfo di;
-			if (TryParse(s, requireSerial, out di))
+			if (TryParseConsiderately(s, true, out di))
 			{
-				// e.g. "VID:0ABC PID:1234 SNR:XYZ USAGE:00FF/0001" or "vid_0ABC&pid_1234&snr_xyz&usage_00FF_0001"
-				var m = UsageRegex.Match(s);
-				if (m.Success)
-				{
-					int usagePage;       // m.Value is e.g. "USAGE:00FF/0001" thus [1] is "00FF".
-					if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
-					{
-						int usageId;     // m.Value is e.g. "USAGE:00FF/0001" thus [2] is "0001".
-						if (int.TryParse(m.Groups[2].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
-						{
-							result = new HidDeviceInfo(di, usagePage, usageId);
-							return (true);
-						}
-					}
-				}
-
-				if (!requireUsage)
-				{
-					result = new HidDeviceInfo(di);
-					return (true);
-				}
+				result = new HidDeviceInfo(di);
+				return (true);
 			}
 
 			result = null;
 			return (false);
 		}
+
+	/////// <summary>
+	/////// Tries to parse <paramref name="s"/> for VID/PID/SNR/USAGE and returns a corresponding device ID object.
+	/////// </summary>
+	/////// <remarks>
+	/////// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+	/////// </remarks>
+	/////// <remarks>
+	/////// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+	/////// <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
+	/////// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
+	/////// </remarks>
+	////public static bool TryParseVidPidSerialUsage(string s, out HidDeviceInfo result)
+	////{
+	////	return (TryParseConsiderately(s, true, true, out result));
+	////}
+	////
+	//// See explanation at TryParseConsiderately() further below.
+	////
+	/////// <summary>
+	/////// Tries to parse <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
+	/////// </summary>
+	/////// <remarks>
+	/////// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+	/////// </remarks>
+	/////// <remarks>
+	/////// Comprehensibility method, i.e. making obvious that only
+	/////// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/> and
+	/////// <see cref="UsagePage"/>, <see cref="UsageId"/> are considered.
+	/////// </remarks>
+	////public static bool TryParseVidPidUsage(string s, out HidDeviceInfo result)
+	////{
+	////	return (TryParseConsiderately(s, false, true, out result));
+	////}
+	////
+	//// Parsing usage not implemented (yet), because SNR may be any string, thus usage would have to be located ahead...
+	////
+	/////// <summary></summary>
+	////protected static bool TryParseConsiderately(string s, bool requireSerial, bool requireUsage, out HidDeviceInfo result)
+	////{
+	////	DeviceInfo di;
+	////	if (TryParseConsiderately(s, requireSerial, out di))
+	////	{
+	////		// e.g. "VID:0ABC PID:1234 SNR:XYZ USAGE:00FF/0001" or "vid_0ABC&pid_1234&snr_xyz&usage_00FF_0001"
+	////		var m = UsageRegex.Match(s);
+	////		if (m.Success)
+	////		{
+	////			int usagePage;       // m.Value is e.g. "USAGE:00FF/0001" thus [1] is "00FF".
+	////			if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
+	////			{
+	////				int usageId;     // m.Value is e.g. "USAGE:00FF/0001" thus [2] is "0001".
+	////				if (int.TryParse(m.Groups[2].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
+	////				{
+	////					result = new HidDeviceInfo(di, usagePage, usageId);
+	////					return (true);
+	////				}
+	////			}
+	////		}
+	////
+	////		if (!requireUsage)
+	////		{
+	////			result = new HidDeviceInfo(di);
+	////			return (true);
+	////		}
+	////	}
+	////
+	////	result = null;
+	////	return (false);
+	////}
 
 		#endregion
 
@@ -807,10 +927,10 @@ namespace MKY.IO.Usb
 		public static implicit operator HidDeviceInfo(string s)
 		{
 			HidDeviceInfo result;
-			if (TryParseRequiringSerial(s, out result))
+			if (TryParseVidPidSerial(s, out result))
 				return (result);
 			else
-				return (Parse(s));
+				return (ParseVidPid(s));
 		}
 
 		#endregion
