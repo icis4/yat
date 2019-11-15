@@ -203,10 +203,10 @@ namespace MKY.IO.Usb
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		private void Initialize(int vendorId, int productId, int usagePage, int usageId)
 		{
-			if (!IsValidVendorId(usagePage))
+			if (!IsValidUsageIdOrAny(usagePage))
 				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
-			if (!IsValidProductId(usageId))
+			if (!IsValidUsageIdOrAny(usageId))
 				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 			Initialize(vendorId, productId);
@@ -219,10 +219,10 @@ namespace MKY.IO.Usb
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		private void Initialize(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
-			if (!IsValidVendorId(usagePage))
+			if (!IsValidUsageIdOrAny(usagePage))
 				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
-			if (!IsValidProductId(usageId))
+			if (!IsValidUsageIdOrAny(usageId))
 				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 			Initialize(vendorId, productId, serial);
@@ -234,10 +234,10 @@ namespace MKY.IO.Usb
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial, int usagePage, int usageId)
 		{
-			if (!IsValidVendorId(usagePage))
+			if (!IsValidUsageIdOrAny(usagePage))
 				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
-			if (!IsValidProductId(usageId))
+			if (!IsValidUsageIdOrAny(usageId))
 				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
 
 			Initialize(path, vendorId, productId, manufacturer, product, serial);
