@@ -997,13 +997,13 @@ namespace YAT.Model
 						if (!int.TryParse(this.commandLineArgs.UsagePage, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
 							return (false);
 
-						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePageIncludingAny(usagePage))
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePageOrAny(usagePage))
 							return (false);
 
 						if (!int.TryParse(this.commandLineArgs.UsageId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
 							return (false);
 
-						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageIdIncludingAny(usageId))
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageIdOrAny(usageId))
 							return (false);
 
 						// The SNR is optional:

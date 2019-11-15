@@ -320,9 +320,9 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns whether the given number is a valid usage page; including <see cref="AnyUsagePage"/>.
+		/// Returns whether the given number is a valid usage page; or <see cref="AnyUsagePage"/>.
 		/// </summary>
-		public static bool IsValidUsagePageIncludingAny(int usagePage)
+		public static bool IsValidUsagePageOrAny(int usagePage)
 		{
 			if (usagePage == AnyUsagePage)
 				return (true);
@@ -339,9 +339,9 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns whether the given number is a valid usage ID; including <see cref="AnyUsageId"/>.
+		/// Returns whether the given number is a valid usage ID; or <see cref="AnyUsageId"/>.
 		/// </summary>
-		public static bool IsValidUsageIdIncludingAny(int usageId)
+		public static bool IsValidUsageIdOrAny(int usageId)
 		{
 			if (usageId == AnyUsageId)
 				return (true);
@@ -512,15 +512,39 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool Equals(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
-			return
-			(
-				base.Equals(vendorId, productId, serial) &&
+			return (EqualsVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId));
+		}
 
-				UsagePage.Equals(usagePage) &&
-				UsageId  .Equals(usageId)
-			);
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality
+		/// in respect to <see cref="UsagePage"/> and <see cref="UsageId"/>; taking the special
+		/// values <see cref="AnyUsagePage"/> and <see cref="AnyUsageId"/> into account.
+		/// </summary>
+		public virtual bool EqualsUsageOrAny(HidDeviceInfo other)
+		{
+			if (ReferenceEquals(other, null)) return (false);
+			if (ReferenceEquals(this, other)) return (true);
+			if (GetType() != other.GetType()) return (false);
 
-			// Do not care about path, the path is likely system dependent.
+			return (EqualsUsageOrAny(other.UsagePage, other.UsageId));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality
+		/// in respect to <see cref="UsagePage"/> and <see cref="UsageId"/>, taking the special
+		/// values <see cref="AnyUsagePage"/> and <see cref="AnyUsageId"/> into account.
+		/// </summary>
+		public virtual bool EqualsUsageOrAny(int usagePage, int usageId)
+		{
+			bool equals = true;
+
+			if ((UsagePage != AnyUsagePage) && (usagePage != AnyUsagePage))
+				equals = (equals || UsagePage.Equals(usagePage));
+
+			if ((UsageId != AnyUsageId) && (usageId != AnyUsageId))
+				equals = (equals || UsageId.Equals(usageId));
+
+			return (equals);
 		}
 
 		/// <summary>
@@ -558,10 +582,8 @@ namespace MKY.IO.Usb
 		{
 			return
 			(
-				VendorId .Equals(vendorId)  &&
-				ProductId.Equals(productId) &&
-				UsagePage.Equals(usagePage) &&
-				UsageId  .Equals(usageId)
+				EqualsVidPid(vendorId, productId) &&
+				EqualsUsageOrAny(usagePage, usageId)
 			);
 
 			// Do not care about path, the path is likely system dependent.
@@ -577,7 +599,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool EqualsVidPidSerialUsage(HidDeviceInfo other)
 		{
-			return (Equals(other)); // Same behavior as 'standard' Equals().
+			return (EqualsVidPidSerialUsage(other.VendorId, other.ProductId, other.Serial, other.UsagePage, other.UsageId));
 		}
 
 		/// <summary>
@@ -590,7 +612,11 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool EqualsVidPidSerialUsage(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
-			return (Equals(vendorId, productId, serial, usagePage, usageId)); // Same behavior as 'standard' Equals().
+			return
+			(
+				EqualsVidPidSerial(vendorId, productId, serial) &&
+				EqualsUsageOrAny(usagePage, usageId)
+			);
 		}
 
 		/// <summary>
