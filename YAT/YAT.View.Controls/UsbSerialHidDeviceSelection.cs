@@ -250,7 +250,7 @@ namespace YAT.View.Controls
 				devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
 				// Attention:
-				// Similar code exists in Model.Terminal.ValidateIO().
+				// Similar code exists in Model.Terminal.CheckIOAvailability().
 				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();
