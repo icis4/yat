@@ -177,64 +177,67 @@ namespace YAT.View.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically switch the port if not or no longer available.
+		////if (this.isSettingControls)
+		////	return; shall not be done, as...
+		////	...the control will automatically switch the port if not or no longer available.
+		////	...the control may automatically switch related settings such as Ser/HID presets.
+		////	...this event handler only updates the settings tree anyway.
 
 			this.newTerminalSettingsInEdit.SerialPortId = serialPortSelection.PortId;
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate = serialPortSettings.BaudRate;
 		}
 
 		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits = serialPortSettings.DataBits;
 		}
 
 		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.Parity = serialPortSettings.Parity;
 		}
 
 		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits = serialPortSettings.StopBits;
 		}
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl = serialPortSettings.FlowControl;
 		}
 
 		private void serialPortSettings_AliveMonitorChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortAliveMonitor = serialPortSettings.AliveMonitor;
 		}
 
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortAutoReopen = serialPortSettings.AutoReopen;
 		}
@@ -284,8 +287,11 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically switch the interface if not or no longer available.
+		////if (this.isSettingControls)
+		////	return; shall not be done, as...
+		////	...the control will automatically switch the interface if not or no longer available.
+		////	...the control may automatically switch related settings such as Ser/HID presets.
+		////	...this event handler only updates the settings tree anyway.
 
 			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
@@ -328,16 +334,16 @@ namespace YAT.View.Forms
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
 		private void socketSettings_UdpServerSendModeChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UdpServerSendMode = socketSettings.UdpServerSendMode;
 		}
@@ -351,8 +357,11 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically switch the device if not or no longer available.
+		////if (this.isSettingControls)
+		////	return; shall not be done, as...
+		////	...the control will automatically switch the device if not or no longer available.
+		////	...the control may automatically switch related settings such as Ser/HID presets.
+		////	...this event handler only updates the settings tree anyway.
 
 			// Attention:
 			// Same code exists in in the following location:
@@ -368,40 +377,40 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically select the preset on device change.
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidPreset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically select the preset on device change.
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
 		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically select the preset on device change.
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically select the flow control on device change.
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidFlowControl = usbSerialHidDeviceSettings.FlowControl;
 		}
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
