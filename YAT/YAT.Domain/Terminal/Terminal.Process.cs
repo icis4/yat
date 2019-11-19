@@ -861,13 +861,13 @@ namespace YAT.Domain
 		                                                          DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Overall.IsFirstChunk)         // Not the ideal location to handle this flag
-			{                                              // and 'Device' and 'Direction' further below.
-				processState.Overall.IsFirstChunk = false; // But good enough because not needed anywhere
-			}                                              // else and more performant if only done here.
+			if (processState.Overall.DeviceAndDirection.IsFirstChunk)         // Not the ideal location to handle this flag and 'Device' and 'Direction' further below.
+			{                                                                 // But good enough because not needed anywhere else and more performant if only done here.
+				processState.Overall.DeviceAndDirection.IsFirstChunk = false; // Mitigated by using a dedicated 'DeviceOrDirection' sub-item making the scope obvious.
+			}
 			else // = 'IsSubsequentChunk'
-			{                                                                   // See above!                           // See above!
-				if (!StringEx.EqualsOrdinalIgnoreCase(dev, processState.Overall.Device) || (dir != processState.Overall.Direction))
+			{                                                                   // See above!                                             // See above!
+				if (!StringEx.EqualsOrdinalIgnoreCase(dev, processState.Overall.DeviceAndDirection.Device) || (dir != processState.Overall.DeviceAndDirection.Direction))
 				{
 					if (processState.Line.Elements.Count > 0)
 					{
@@ -878,8 +878,8 @@ namespace YAT.Domain
 				}
 			}
 			                     //// See above!
-			processState.Overall.Device    = dev;
-			processState.Overall.Direction = dir;
+			processState.Overall.DeviceAndDirection.Device    = dev;
+			processState.Overall.DeviceAndDirection.Direction = dir;
 		}                        //// See above!
 
 		/// <summary></summary>
