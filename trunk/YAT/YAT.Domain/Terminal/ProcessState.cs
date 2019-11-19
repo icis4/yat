@@ -74,20 +74,14 @@ namespace YAT.Domain
 	/// <summary></summary>
 	public class OverallState
 	{
-		/// <summary></summary>
-		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
+		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
+		public DeviceAndDirectionState DeviceAndDirection    { get; protected set; }
 
 		/// <summary></summary>
-		public bool        IsFirstLine           { get; protected set; }
-
-		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
-		public string      Device                { get; set; }
-
-		/// <summary></summary>
-		public IODirection Direction             { get; set; }
+		public bool                    IsFirstLine           { get; protected set; }
 
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line" of the previous line.</remarks>
-		public DateTime    PreviousLineTimeStamp { get; protected set; }
+		public DateTime                PreviousLineTimeStamp { get; protected set; }
 
 		/// <summary></summary>
 		public OverallState()
@@ -100,10 +94,8 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Reset()
 		{
-			IsFirstChunk          = true;
+			DeviceAndDirection    = new DeviceAndDirectionState();
 			IsFirstLine           = true;
-			Device                = null;
-			Direction             = IODirection.None;
 			PreviousLineTimeStamp = DateTime.MinValue;
 		}
 
@@ -123,6 +115,27 @@ namespace YAT.Domain
 		{
 			IsFirstLine = false;
 			PreviousLineTimeStamp = lineTimeStamp;
+		}
+	}
+
+	/// <summary></summary>
+	public class DeviceAndDirectionState
+	{
+		/// <summary></summary>
+		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
+
+		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
+		public string      Device                { get; set; }
+
+		/// <summary></summary>
+		public IODirection Direction             { get; set; }
+
+		/// <summary></summary>
+		public DeviceAndDirectionState()
+		{
+			IsFirstChunk = true;
+			Device       = null;
+			Direction    = IODirection.None;
 		}
 	}
 
