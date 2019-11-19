@@ -1094,7 +1094,7 @@ namespace MKY.Win32
 				return (false);
 
 			Debug.WriteLine("USB HID device capabilities:");
-			Debug.Indent();
+			Debug.Indent(); // Terms "Usage page" and "Usage ID" are given by https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf section 3.1 [HID Usage Table Conventions].
 			Debug.WriteLine("Usage page:                    0x" + capabilities.UsagePage.ToString("X4", CultureInfo.InvariantCulture));
 			Debug.WriteLine("Usage ID:                      0x" + capabilities.Usage    .ToString("X4", CultureInfo.InvariantCulture));
 			Debug.WriteLine("Input report byte length:        " + capabilities.InputReportByteLength);

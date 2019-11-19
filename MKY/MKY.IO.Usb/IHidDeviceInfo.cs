@@ -24,36 +24,30 @@
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// Information about a USB device.
+	/// Information about a USB HID device.
 	/// </summary>
-	public interface IDeviceInfo
+	public interface IHidDeviceInfo
 	{
 		/// <summary></summary>
-		int VendorId { get; }
+		int UsagePage { get; }
 
 		/// <summary></summary>
-		string VendorIdString { get; }
+		string UsagePageString { get; }
 
 		/// <summary></summary>
-		int ProductId { get; }
+		int UsageId { get; }
 
 		/// <summary></summary>
-		string ProductIdString { get; }
-
-		/// <summary></summary>
-		string Manufacturer { get; }
-
-		/// <summary></summary>
-		string Product { get; }
-
-		/// <summary></summary>
-		string Serial { get; }
+		string UsageIdString { get; }
 
 		/// <summary></summary>
 		string ToString();
 
 		/// <summary></summary>
-		string ToString(bool insertIds);
+		string ToString(bool insertVidPid);
+
+		/// <summary></summary>
+		string ToString(bool insertVidPid, bool appendUsage);
 
 		/// <summary></summary>
 		string ToShortString();

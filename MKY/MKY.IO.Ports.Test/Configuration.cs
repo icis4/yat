@@ -270,9 +270,10 @@ namespace MKY.IO.Ports.Test
 			ConfigurationSection configuration;
 			if (Provider.TryOpenAndMergeConfigurations(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
-				// Set which physical items are available on the current machine:
 				var availablePorts = new SerialPortCollection();
 				availablePorts.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
+
+				// Set which physical items are available on the current machine:
 
 				configuration.PortAIsAvailable = availablePorts.Contains(configuration.PortA);
 				configuration.PortBIsAvailable = availablePorts.Contains(configuration.PortB);

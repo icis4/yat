@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preferences));
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
@@ -140,11 +141,10 @@
 			this.checkBox_MatchUsbSerial.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.checkBox_MatchUsbSerial.Location = new System.Drawing.Point(12, 37);
 			this.checkBox_MatchUsbSerial.Name = "checkBox_MatchUsbSerial";
-			this.checkBox_MatchUsbSerial.Size = new System.Drawing.Size(173, 17);
+			this.checkBox_MatchUsbSerial.Size = new System.Drawing.Size(213, 17);
 			this.checkBox_MatchUsbSerial.TabIndex = 1;
-			this.checkBox_MatchUsbSerial.Text = "...take s&erial string into account";
-			this.toolTip.SetToolTip(this.checkBox_MatchUsbSerial, "Enabled: Discovery takes VID, PID and serial string into account.\r\nDisabled: Disc" +
-        "overy is limited to VID and PID.");
+			this.checkBox_MatchUsbSerial.Text = "...take s&erial number/string into account";
+			this.toolTip.SetToolTip(this.checkBox_MatchUsbSerial, resources.GetString("checkBox_MatchUsbSerial.ToolTip"));
 			this.checkBox_MatchUsbSerial.UseVisualStyleBackColor = true;
 			this.checkBox_MatchUsbSerial.CheckedChanged += new System.EventHandler(this.checkBox_MatchUsbSerial_CheckedChanged);
 			// 
@@ -198,7 +198,7 @@
 			this.checkBox_ShowTerminalInfo.AutoSize = true;
 			this.checkBox_ShowTerminalInfo.Location = new System.Drawing.Point(12, 33);
 			this.checkBox_ShowTerminalInfo.Name = "checkBox_ShowTerminalInfo";
-			this.checkBox_ShowTerminalInfo.Size = new System.Drawing.Size(188, 17);
+			this.checkBox_ShowTerminalInfo.Size = new System.Drawing.Size(171, 17);
 			this.checkBox_ShowTerminalInfo.TabIndex = 0;
 			this.checkBox_ShowTerminalInfo.Text = "Show &terminal IDs in status bar";
 			this.checkBox_ShowTerminalInfo.UseVisualStyleBackColor = true;

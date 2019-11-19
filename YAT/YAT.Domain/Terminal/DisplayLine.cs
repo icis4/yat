@@ -393,7 +393,11 @@ namespace YAT.Domain
 			var l = new List<byte>(this.ByteCount); // Preset the required capacity to improve memory management.
 
 			foreach (var de in this)
-				l.AddRange(de.ToOrigin());
+			{
+				var origin = de.ToOrigin();
+				if (origin != null) // AddRainge(): "The collection itself cannot be null,..."
+					l.AddRange(origin);
+			}
 
 			return (l.ToArray());
 		}
@@ -404,7 +408,11 @@ namespace YAT.Domain
 			var sb = new StringBuilder();
 
 			foreach (var de in this)
-				sb.Append(de.ToString());
+			{
+				var s = de.ToString();
+				if (!string.IsNullOrEmpty(s)) // Similar implementation as 'ToOrigin()' above.
+					sb.Append(s);
+			}
 
 			return (sb.ToString());
 		}

@@ -50,10 +50,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB device information.
+	/// Base of list for containing USB device information.
 	/// </summary>
 	[Serializable]
-	public class DeviceCollection : List<DeviceInfo>
+	public abstract class DeviceCollection<T> : List<T>
+		where T : DeviceInfo
 	{
 		private DeviceClass deviceClass = DeviceClass.Any;
 		private Guid        classGuid   = Guid.Empty;
@@ -71,10 +72,10 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public DeviceCollection(IEnumerable<DeviceInfo> rhs)
+		public DeviceCollection(IEnumerable<T> rhs)
 			: base(rhs)
 		{
-			var casted = (rhs as DeviceCollection);
+			var casted = (rhs as DeviceCollection<T>);
 			if (casted != null)
 			{
 				this.deviceClass = casted.deviceClass;
@@ -93,7 +94,7 @@ namespace MKY.IO.Usb
 				Clear();
 
 				DebugVerboseIndent("Retrieving connected USB devices...");
-				foreach (var di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
+				foreach (T di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
 				{
 					DebugVerboseIndent(di);
 					Add(di);
@@ -114,13 +115,44 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
 		/// </returns>
-		public virtual bool ContainsVidPid(DeviceInfo item)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
+		public virtual bool ContainsVidPid(T item)
 		{
 			lock (this)
 			{
 				foreach (var di in this)
 				{
 					if (di.EqualsVidPid(item))
+						return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether an element is in the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
+		public virtual bool ContainsVidPidSerial(T item)
+		{
+			lock (this)
+			{
+				foreach (var di in this)
+				{
+					if (di.EqualsVidPidSerial(item))
 						return (true);
 				}
 
@@ -138,11 +170,38 @@ namespace MKY.IO.Usb
 		/// <returns>
 		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
-		public virtual DeviceInfo FindVidPid(DeviceInfo item)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
+		public virtual T FindVidPid(T item)
 		{
 			lock (this)
 			{
-				EqualsVidPid predicate = new EqualsVidPid(item);
+				EqualsVidPid<T> predicate = new EqualsVidPid<T>(item);
+				return (Find(predicate.Match));
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// first occurrence within the entire collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
+		public virtual T FindVidPidSerial(T item)
+		{
+			lock (this)
+			{
+				EqualsVidPidSerial<T> predicate = new EqualsVidPidSerial<T>(item);
 				return (Find(predicate.Match));
 			}
 		}
@@ -158,11 +217,39 @@ namespace MKY.IO.Usb
 		/// The zero-based index of the first occurrence of an element that matches the
 		/// <paramref name="item"/>, if found; otherwise, –1.
 		/// </returns>
-		public virtual int FindIndexVidPid(DeviceInfo item)
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>
+		/// and <see cref="DeviceInfo.ProductId"/> are considered.
+		/// </remarks>
+		public virtual int FindIndexVidPid(T item)
 		{
 			lock (this)
 			{
-				EqualsVidPid predicate = new EqualsVidPid(item);
+				EqualsVidPid<T> predicate = new EqualsVidPid<T>(item);
+				return (FindIndex(predicate.Match));
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// zero-based index of the first occurrence within the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The zero-based index of the first occurrence of an element that matches the
+		/// <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/> and <see cref="DeviceInfo.Serial"/> are considered.
+		/// </remarks>
+		public virtual int FindIndexVidPidSerial(T item)
+		{
+			lock (this)
+			{
+				EqualsVidPidSerial<T> predicate = new EqualsVidPidSerial<T>(item);
 				return (FindIndex(predicate.Match));
 			}
 		}
@@ -191,6 +278,30 @@ namespace MKY.IO.Usb
 		}
 
 		#endregion
+	}
+
+	/// <summary>
+	/// List containing USB device information.
+	/// </summary>
+	[Serializable]
+	public class DeviceCollection : DeviceCollection<DeviceInfo>
+	{
+		/// <summary></summary>
+		public DeviceCollection()
+		{
+		}
+
+		/// <summary></summary>
+		public DeviceCollection(DeviceClass deviceClass)
+			: base(deviceClass)
+		{
+		}
+
+		/// <summary></summary>
+		public DeviceCollection(IEnumerable<DeviceInfo> rhs)
+			: base(rhs)
+		{
+		}
 	}
 }
 

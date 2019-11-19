@@ -970,7 +970,6 @@ namespace YAT.Domain
 			{
 				return (null);
 			}
-
 		}
 
 		#endregion

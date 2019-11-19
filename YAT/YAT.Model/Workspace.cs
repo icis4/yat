@@ -1836,6 +1836,11 @@ namespace YAT.Model
 				sh.SettingsFilePath = absoluteFilePath;
 				if (sh.Load())
 				{
+					// The 'MatchSerial' setting is given by the 'LocalUserSettings' and always overridden.
+					// Still, it is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file.
+					sh.Settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial;
+					sh.Settings.ClearChanged(); // Overriding such setting shall not be reflected in the settings,
+					                          //// i.e. neither be indicated by a '*' nor lead to a file write.
 					settingsHandler = sh;
 					exception = null;
 					return (true);

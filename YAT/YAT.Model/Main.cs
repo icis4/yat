@@ -991,16 +991,31 @@ namespace YAT.Model
 						if (!MKY.IO.Usb.DeviceInfo.IsValidProductId(productId))
 							return (false);
 
+						int usagePage;
+						int usageId;
+
+						if (!int.TryParse(this.commandLineArgs.UsagePage, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
+							return (false);
+
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePageOrAny(usagePage))
+							return (false);
+
+						if (!int.TryParse(this.commandLineArgs.UsageId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
+							return (false);
+
+						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageIdOrAny(usageId))
+							return (false);
+
 						// The SNR is optional:
 						if (!this.commandLineArgs.OptionIsGiven("SerialString"))
 						{
-							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
-							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false;
+							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.HidDeviceInfo(vendorId, productId, usagePage, usageId);
+							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 						}
 						else
 						{
-							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId, this.commandLineArgs.SerialString);
-							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = true;
+							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.HidDeviceInfo(vendorId, productId, this.commandLineArgs.SerialString, usagePage, usageId);
+							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = true; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 						}
 					}
 					else
@@ -1078,12 +1093,13 @@ namespace YAT.Model
 			temp.IO.Socket.UdpServerSendMode         = newTerminalSettings.UdpServerSendMode;
 
 			temp.IO.UsbSerialHidDevice.DeviceInfo    = newTerminalSettings.UsbSerialHidDeviceInfo;
-			temp.IO.UsbSerialHidDevice.MatchSerial   = newTerminalSettings.UsbSerialHidMatchSerial;
+		////temp.IO.UsbSerialHidDevice.MatchSerial is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 			temp.IO.UsbSerialHidDevice.Preset        = newTerminalSettings.UsbSerialHidPreset;
 			temp.IO.UsbSerialHidDevice.ReportFormat  = newTerminalSettings.UsbSerialHidReportFormat;
 			temp.IO.UsbSerialHidDevice.RxFilterUsage = newTerminalSettings.UsbSerialHidRxFilterUsage;
 			temp.IO.UsbSerialHidDevice.FlowControl   = newTerminalSettings.UsbSerialHidFlowControl;
 			temp.IO.UsbSerialHidDevice.AutoOpen      = newTerminalSettings.UsbSerialHidAutoOpen;
+		////temp.IO.UsbSerialHidDevice.IncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
 			if (ProcessCommandLineArgsIntoExistingTerminalSettings(temp))
 			{
@@ -1106,12 +1122,13 @@ namespace YAT.Model
 				newTerminalSettings.UdpServerSendMode         = temp.IO.Socket.UdpServerSendMode;
 
 				newTerminalSettings.UsbSerialHidDeviceInfo    = temp.IO.UsbSerialHidDevice.DeviceInfo;
-				newTerminalSettings.UsbSerialHidMatchSerial   = temp.IO.UsbSerialHidDevice.MatchSerial;
+			////newTerminalSettings.UsbSerialHidMatchSerial is defined by 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 				newTerminalSettings.UsbSerialHidPreset        = temp.IO.UsbSerialHidDevice.Preset;
 				newTerminalSettings.UsbSerialHidReportFormat  = temp.IO.UsbSerialHidDevice.ReportFormat;
 				newTerminalSettings.UsbSerialHidRxFilterUsage = temp.IO.UsbSerialHidDevice.RxFilterUsage;
 				newTerminalSettings.UsbSerialHidFlowControl   = temp.IO.UsbSerialHidDevice.FlowControl;
 				newTerminalSettings.UsbSerialHidAutoOpen      = temp.IO.UsbSerialHidDevice.AutoOpen;
+			////newTerminalSettings.UsbSerialHidIncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
 				return (true);
 			}
@@ -1803,11 +1820,14 @@ namespace YAT.Model
 				sh.SettingsFilePath = absoluteTerminalFilePath;
 				if (sh.Load())
 				{
-					bool success = true;
-
+					// The 'MatchSerial' setting is given by the 'LocalUserSettings' and always overridden.
+					// Still, it is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file.
+					sh.Settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial;
+					sh.Settings.ClearChanged(); // Overriding such setting shall not be reflected in the settings,
+					                          //// i.e. neither be indicated by a '*' nor lead to a file write.
 					settingsHandler = sh;
 					exception = null;
-					return (success);
+					return (true);
 				}
 				else
 				{
