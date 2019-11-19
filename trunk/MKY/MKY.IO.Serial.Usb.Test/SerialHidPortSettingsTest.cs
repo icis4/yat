@@ -69,8 +69,8 @@ namespace MKY.IO.Serial.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
-		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
+		[Test, TestCaseSource(typeof(HidDeviceInfoTestData), "TestCases")]
+		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, bool matchUsage, int usagePage, int usageId, string[] descriptors)
 		{
 			if (isValid)
 			{
@@ -78,9 +78,19 @@ namespace MKY.IO.Serial.Usb.Test
 				SerialHidDeviceSettings settingsDeserialized = null;
 				SerialHidDeviceSettings settings = new SerialHidDeviceSettings();
 				if (!matchSerial)
-					settings.DeviceInfo = new DeviceInfo(vendorId, productId);
-				else
-					settings.DeviceInfo = new DeviceInfo(vendorId, productId, serial);
+				{
+					if (!matchUsage)
+						settings.DeviceInfo = new HidDeviceInfo(vendorId, productId);
+					else
+						settings.DeviceInfo = new HidDeviceInfo(vendorId, productId, usagePage, usageId);
+				}
+				else // matchSerial
+				{
+					if (!matchUsage)
+						settings.DeviceInfo = new HidDeviceInfo(vendorId, productId, serial);
+					else
+						settings.DeviceInfo = new HidDeviceInfo(vendorId, productId, serial, usagePage, usageId);
+				}
 
 				// Serialize to file:
 				XmlSerializerTest.TestSerializeToFile(typeof(SerialHidDeviceSettings), settings, filePath);

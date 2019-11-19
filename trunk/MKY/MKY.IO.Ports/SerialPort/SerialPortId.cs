@@ -38,11 +38,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
+using MKY.Contracts;
+
 #endregion
 
 namespace MKY.IO.Ports
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// \remind (2019-11-10 / MKY)
+	/// Instances of this container class shall be treated as immutable objects. However, it is not
+	/// possible to assign <see cref="ImmutableObjectAttribute"/>/<see cref="ImmutableContractAttribute"/>
+	/// because XML default serialization requires public setters. Split into mutable settings tuple
+	/// and immutable runtime container should be done.
+	/// </remarks>
 	[Serializable]
 	[TypeConverter(typeof(SerialPortIdConverter))]
 	public class SerialPortId : IEquatable<SerialPortId>, IComparable
@@ -162,9 +170,14 @@ namespace MKY.IO.Ports
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// \remind (2019-11-10 / MKY)
+		/// Parameter-less constructor is required for XML default serialization. Could be removed
+		/// after having split into mutable settings tuple and immutable runtime container.
+		/// </remarks>
 		public SerialPortId()
 		{
+			// Defaults only.
 		}
 
 		/// <summary></summary>

@@ -265,9 +265,11 @@ namespace MKY.IO.Usb
 		MagneticStripeReadingDevices = 0x8E,
 		PointOfSale                  = 0x8F,
 		CameraControl                = 0x90,
-		Arcade                       = 0x91
+		Arcade                       = 0x91,
 		////                           0x92..0xFEFF are reserved
+		VendorDefined_First        = 0xFF00,
 		////                         0xFF00..0xFFFF are vendor-defined
+		VendorDefined_Last         = 0xFFFF
 	}
 
 	#region HidUsagePage XEnum
@@ -426,9 +428,13 @@ namespace MKY.IO.Usb
 	[CLSCompliant(false)]
 	public enum HidUsageId : ushort // 16 bits!
 	{
-		Undefined                    = 0x00
+		Undefined                    = 0x00,
+		PageDefined_First            = 0x01,
 		////                           0x01..0xFEFF are defined per usage page
+		PageDefined_Last           = 0xFEFF,
+		VendorDefined_First        = 0xFF00,
 		////                         0xFF00..0xFFFF are vendor-defined
+		VendorDefined_Last         = 0xFFFF
 	}
 
 	#region HidUsageId XEnum

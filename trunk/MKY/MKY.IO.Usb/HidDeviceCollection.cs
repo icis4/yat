@@ -53,28 +53,20 @@ namespace MKY.IO.Usb
 	/// List containing USB HID device information.
 	/// </summary>
 	[Serializable]
-	public class HidDeviceCollection : DeviceCollection
+	public class HidDeviceCollection : DeviceCollection<HidDeviceInfo>
 	{
-		private HidUsagePage usagePage = HidUsagePage.Undefined;
-		private HidUsageId   usageId   = HidUsageId.Undefined;
+		/// <summary></summary>
+		public const int AnyUsagePage = -1;
 
 		/// <summary></summary>
-		public HidDeviceCollection()
-			: base(DeviceClass.Hid)
-		{
-		}
+		public const int AnyUsageId = -1;
+
+		private int usagePage = AnyUsagePage;
+		private int usageId   = AnyUsageId;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
-		public HidDeviceCollection(HidUsagePage usagePage)
-			: base(DeviceClass.Hid)
-		{
-			this.usagePage = usagePage;
-		}
-
-		/// <summary></summary>
-		[CLSCompliant(false)]
-		public HidDeviceCollection(HidUsagePage usagePage, HidUsageId usageId)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public HidDeviceCollection(int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 			: base(DeviceClass.Hid)
 		{
 			this.usagePage = usagePage;
@@ -82,7 +74,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public HidDeviceCollection(IEnumerable<DeviceInfo> rhs)
+		public HidDeviceCollection(IEnumerable<HidDeviceInfo> rhs)
 			: base(rhs)
 		{
 			var casted = (rhs as HidDeviceCollection);
@@ -114,6 +106,160 @@ namespace MKY.IO.Usb
 				DebugVerboseUnindent("...done");
 
 				Sort();
+			}
+		}
+
+		/// <summary>
+		/// Determines whether an element is in the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only
+		/// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/> and
+		/// <see cref="HidDeviceInfo.UsagePage"/>, <see cref="HidDeviceInfo.UsageId"/> are considered.
+		/// </remarks>
+		public virtual bool ContainsVidPidUsage(HidDeviceInfo item)
+		{
+			lock (this)
+			{
+				foreach (var di in this)
+				{
+					if (di.EqualsVidPidUsage(item))
+						return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether an element is in the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
+		/// <see cref="HidDeviceInfo.UsagePage"/>, <see cref="HidDeviceInfo.UsageId"/> are considered.
+		/// </remarks>
+		public virtual bool ContainsVidPidSerialUsage(HidDeviceInfo item)
+		{
+			lock (this)
+			{
+				foreach (var di in this)
+				{
+					if (di.EqualsVidPidSerialUsage(item))
+						return (true);
+				}
+
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// first occurrence within the entire collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only
+		/// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/> and
+		/// <see cref="HidDeviceInfo.UsagePage"/>, <see cref="HidDeviceInfo.UsageId"/> are considered.
+		/// </remarks>
+		public virtual HidDeviceInfo FindVidPidUsage(HidDeviceInfo item)
+		{
+			lock (this)
+			{
+				EqualsVidPidUsage<HidDeviceInfo> predicate = new EqualsVidPidUsage<HidDeviceInfo>(item);
+				return (Find(predicate.Match));
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// first occurrence within the entire collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The first element that matches the <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
+		/// <see cref="HidDeviceInfo.UsagePage"/>, <see cref="HidDeviceInfo.UsageId"/> are considered.
+		/// </remarks>
+		public virtual HidDeviceInfo FindVidPidSerialUsage(HidDeviceInfo item)
+		{
+			lock (this)
+			{
+				EqualsVidPidSerialUsage<HidDeviceInfo> predicate = new EqualsVidPidSerialUsage<HidDeviceInfo>(item);
+				return (Find(predicate.Match));
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// zero-based index of the first occurrence within the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The zero-based index of the first occurrence of an element that matches the
+		/// <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only
+		/// <see cref="DeviceInfo.VendorId"/>, <see cref="DeviceInfo.ProductId"/> and
+		/// <see cref="HidDeviceInfo.UsagePage"/>, <see cref="HidDeviceInfo.UsageId"/> are considered.
+		/// </remarks>
+		public virtual int FindIndexVidPidUsage(HidDeviceInfo item)
+		{
+			lock (this)
+			{
+				EqualsVidPidUsage<HidDeviceInfo> predicate = new EqualsVidPidUsage<HidDeviceInfo>(item);
+				return (FindIndex(predicate.Match));
+			}
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// zero-based index of the first occurrence within the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The zero-based index of the first occurrence of an element that matches the
+		/// <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		/// <remarks>
+		/// Comprehensibility method, i.e. making obvious that only <see cref="DeviceInfo.VendorId"/>,
+		/// <see cref="DeviceInfo.ProductId"/>, <see cref="DeviceInfo.Serial"/>, and
+		/// <see cref="HidDeviceInfo.UsagePage"/>, <see cref="HidDeviceInfo.UsageId"/> are considered.
+		/// </remarks>
+		public virtual int FindIndexVidPidSerialUsage(HidDeviceInfo item)
+		{
+			lock (this)
+			{
+				EqualsVidPidSerialUsage<HidDeviceInfo> predicate = new EqualsVidPidSerialUsage<HidDeviceInfo>(item);
+				return (FindIndex(predicate.Match));
 			}
 		}
 

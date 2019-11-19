@@ -89,6 +89,7 @@
     <Compile Include="ConfigurationTemplate\Generator.cs" />
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="HidDeviceInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DeviceInfoTest.cs" />
   </ItemGroup>

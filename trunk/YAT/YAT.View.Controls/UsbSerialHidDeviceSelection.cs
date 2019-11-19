@@ -58,7 +58,7 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private DeviceInfo deviceInfo; // = null;
+		private HidDeviceInfo deviceInfo; // = null;
 
 		#endregion
 
@@ -96,8 +96,8 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Device")]
-		[Description("USB device info.")]
-		public DeviceInfo DeviceInfo
+		[Description("USB HID device info.")]
+		public HidDeviceInfo DeviceInfo
 		{
 			get { return (this.deviceInfo); }
 			set
@@ -195,7 +195,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			DeviceInfo = (comboBox_Device.SelectedItem as DeviceInfo);
+			DeviceInfo = (comboBox_Device.SelectedItem as HidDeviceInfo);
 		}
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)
@@ -246,11 +246,11 @@ namespace YAT.View.Controls
 
 				this.deviceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
-				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
+				var devices = new SerialHidDeviceCollection();
 				devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.
 
 				// Attention:
-				// Similar code exists in Model.Terminal.ValidateIO().
+				// Similar code exists in Model.Terminal.CheckIOAvailability().
 				// Changes here may have to be applied there too!
 
 				this.isSettingControls.Enter();

@@ -177,64 +177,67 @@ namespace YAT.View.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically switch the port if not or no longer available.
+		////if (this.isSettingControls)
+		////	return; shall not be done, as...
+		////	...the control will automatically switch the port if not or no longer available.
+		////	...the control may automatically switch related settings such as Ser/HID presets.
+		////	...this event handler only updates the settings tree anyway.
 
 			this.newTerminalSettingsInEdit.SerialPortId = serialPortSelection.PortId;
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate = serialPortSettings.BaudRate;
 		}
 
 		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits = serialPortSettings.DataBits;
 		}
 
 		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.Parity = serialPortSettings.Parity;
 		}
 
 		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits = serialPortSettings.StopBits;
 		}
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl = serialPortSettings.FlowControl;
 		}
 
 		private void serialPortSettings_AliveMonitorChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortAliveMonitor = serialPortSettings.AliveMonitor;
 		}
 
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SerialPortAutoReopen = serialPortSettings.AutoReopen;
 		}
@@ -284,8 +287,11 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically switch the interface if not or no longer available.
+		////if (this.isSettingControls)
+		////	return; shall not be done, as...
+		////	...the control will automatically switch the interface if not or no longer available.
+		////	...the control may automatically switch related settings such as Ser/HID presets.
+		////	...this event handler only updates the settings tree anyway.
 
 			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
@@ -328,16 +334,16 @@ namespace YAT.View.Forms
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
 		private void socketSettings_UdpServerSendModeChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UdpServerSendMode = socketSettings.UdpServerSendMode;
 		}
@@ -351,57 +357,60 @@ namespace YAT.View.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-		////if (this.isSettingControls) \remind (2019-10-01 / MKY) not the ideal solution, but it works...
-		////	return shall not be done, as the control will automatically switch the device if not or no longer available.
+		////if (this.isSettingControls)
+		////	return; shall not be done, as...
+		////	...the control will automatically switch the device if not or no longer available.
+		////	...the control may automatically switch related settings such as Ser/HID presets.
+		////	...this event handler only updates the settings tree anyway.
 
 			// Attention:
 			// Same code exists in in the following location:
 			//  > TerminalSettings.usbSerialHidDeviceSelection_DeviceInfoChanged()
 			// Changes here must be applied there too.
 
-			MKY.IO.Usb.DeviceInfo deviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
-			this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo = deviceInfo;
+			var di = usbSerialHidDeviceSelection.DeviceInfo;
+			this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo = di;
 
 			// Also update settings control (not via SetControls(), that would be an overkill):
-			usbSerialHidDeviceSettings.DeviceInfo = deviceInfo;
+			usbSerialHidDeviceSettings.DeviceInfo = di;
 		}
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidPreset = usbSerialHidDeviceSettings.Preset;
 		}
 
 		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidReportFormat = usbSerialHidDeviceSettings.ReportFormat;
 		}
 
 		private void usbSerialHidDeviceSettings_RxFilterUsageChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage = usbSerialHidDeviceSettings.RxFilterUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidFlowControl = usbSerialHidDeviceSettings.FlowControl;
 		}
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
@@ -445,13 +454,14 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect        = this.newTerminalSettings.TcpClientAutoReconnect;
 			this.terminalSettings.Terminal.IO.Socket.UdpServerSendMode             = this.newTerminalSettings.UdpServerSendMode;
 
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial       = this.newTerminalSettings.UsbSerialHidMatchSerial;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;              // Note that 'MatchSerial' is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.MatchSerial       = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.Preset            = this.newTerminalSettings.UsbSerialHidPreset;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage     = this.newTerminalSettings.UsbSerialHidRxFilterUsage;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
+		////this.terminalSettings.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
 			this.terminalSettings.Terminal.UpdateIOSettingsDependentSettings(); // Needed because the parent settings don't notice the changes above!
 
@@ -467,7 +477,6 @@ namespace YAT.View.Forms
 		private void UpdateNewTerminalSettings()
 		{
 			this.newTerminalSettings = this.newTerminalSettingsInEdit;
-			this.newTerminalSettings.UsbSerialHidMatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Defined by the LocalUserSettings.
 		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -596,7 +605,7 @@ namespace YAT.View.Forms
 				bool isValid = true;
 				switch (ioType)
 				{
-					case Domain.IOType.SerialPort:   isValid = serialPortSelection.IsValid;         break;
+					case Domain.IOType.SerialPort:   isValid = serialPortSelection        .IsValid; break;
 					case Domain.IOType.UsbSerialHid: isValid = usbSerialHidDeviceSelection.IsValid; break;
 				}
 				button_OK.Enabled = isValid;
@@ -620,13 +629,13 @@ namespace YAT.View.Forms
 			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
 
 			serialPortSelection.Visible = isSerialPort;
-			serialPortSettings.Visible  = isSerialPort;
+			serialPortSettings .Visible = isSerialPort;
 
 			socketSelection.Visible = isSocket;
-			socketSettings.Visible  = isSocket;
+			socketSettings .Visible = isSocket;
 
 			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
-			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
+			usbSerialHidDeviceSettings .Visible = isUsbSerialHid;
 		}
 
 		#endregion

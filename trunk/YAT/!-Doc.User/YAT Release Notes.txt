@@ -100,6 +100,8 @@ Important changes:
 - Element processing refactored (preparing feature reqs. #19, #74 and fix of bugs #176, #477, #478).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
+- USB Ser/HID now takes the HID usage into account, allowing working with devices that implement
+  multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Project/Assembly structure slightly refined (preparing feature request #74).
 
 Fixed bugs:
@@ -109,6 +111,7 @@ Fixed bugs:
   configured now behaves correctly (bug #479, related to previous feature requests #28, #257, #365).
 - Automatic actions 'Filter' and 'Suppress' now also work for continuous data (bug #478) and on
   refresh (feature request #367).
+- Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

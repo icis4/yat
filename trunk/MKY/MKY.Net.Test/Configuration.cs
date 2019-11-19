@@ -192,9 +192,10 @@ namespace MKY.Net.Test
 			ConfigurationSection configuration;
 			if (Provider.TryOpenAndMergeConfigurations(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
-				// Set which physical items are available on the current machine:
 				IPNetworkInterfaceCollection inferfaces = new IPNetworkInterfaceCollection();
 				inferfaces.FillWithAvailableLocalInterfaces();
+
+				// Set which physical items are available on the current machine:
 
 				IPNetworkInterfaceEx ni;
 				if (IPNetworkInterfaceEx.TryParse(configuration.IPv4SpecificInterface, out ni))

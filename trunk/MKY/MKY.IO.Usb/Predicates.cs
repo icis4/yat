@@ -26,26 +26,102 @@ using System;
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
-	public class EqualsVidPid
+	public class EqualsVidPid<T>
+		where T : DeviceInfo
 	{
 		/// <summary></summary>
-		public DeviceInfo DeviceInfo { get; set; }
+		public T DeviceInfo { get; set; }
 
 		/// <summary></summary>
-		public EqualsVidPid(DeviceInfo deviceInfo)
+		public EqualsVidPid(T deviceInfo)
 		{
 			DeviceInfo = deviceInfo;
 		}
 
 		/// <summary></summary>
-		public Predicate<DeviceInfo> Match
+		public Predicate<T> Match
 		{
 			get { return (IsMatch); }
 		}
 
-		private bool IsMatch(DeviceInfo other)
+		private bool IsMatch(T other)
 		{
 			return (DeviceInfo.EqualsVidPid(other));
+		}
+	}
+
+	/// <summary></summary>
+	public class EqualsVidPidSerial<T>
+		where T : DeviceInfo
+	{
+		/// <summary></summary>
+		public T DeviceInfo { get; set; }
+
+		/// <summary></summary>
+		public EqualsVidPidSerial(T deviceInfo)
+		{
+			DeviceInfo = deviceInfo;
+		}
+
+		/// <summary></summary>
+		public Predicate<T> Match
+		{
+			get { return (IsMatch); }
+		}
+
+		private bool IsMatch(T other)
+		{
+			return (DeviceInfo.EqualsVidPidSerial(other));
+		}
+	}
+
+	/// <summary></summary>
+	public class EqualsVidPidUsage<T>
+		where T : HidDeviceInfo
+	{
+		/// <summary></summary>
+		public T DeviceInfo { get; set; }
+
+		/// <summary></summary>
+		public EqualsVidPidUsage(T deviceInfo)
+		{
+			DeviceInfo = deviceInfo;
+		}
+
+		/// <summary></summary>
+		public Predicate<T> Match
+		{
+			get { return (IsMatch); }
+		}
+
+		private bool IsMatch(T other)
+		{
+			return (DeviceInfo.EqualsVidPidUsage(other));
+		}
+	}
+
+	/// <summary></summary>
+	public class EqualsVidPidSerialUsage<T>
+		where T : HidDeviceInfo
+	{
+		/// <summary></summary>
+		public T DeviceInfo { get; set; }
+
+		/// <summary></summary>
+		public EqualsVidPidSerialUsage(T deviceInfo)
+		{
+			DeviceInfo = deviceInfo;
+		}
+
+		/// <summary></summary>
+		public Predicate<T> Match
+		{
+			get { return (IsMatch); }
+		}
+
+		private bool IsMatch(T other)
+		{
+			return (DeviceInfo.EqualsVidPidSerialUsage(other));
 		}
 	}
 }
