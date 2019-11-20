@@ -88,7 +88,7 @@ YAT 2.1.1 :: 2019-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- ...    <=  WAIT FOR ... (feature request #74, bug #176).
+- ...    <=  WAIT FOR ... (feature request #19, bug #176).
 
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
@@ -97,18 +97,23 @@ Important changes:
   renamed to \!(IOSettings()) (related to feature request #71).
 - Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
   break lines at the same location as the bidirectional monitor panel (bug #477).
-- Element processing refactored (preparing feature reqs. #19, #74 and fix of bugs #176, #477, #478).
+- Element and line processing refactored (precondition for feature reqests #19, #366, #367 and fix
+  of bugs #176, #477, #478 as well as preparing upcoming feature reqest #74).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
+- Chunk line break settings can now be found in [[Text|Binary] Settings...] (related to bug #477).
+- Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
+  on every chunk (also related to bug #477).
 - USB Ser/HID now takes the HID usage into account, allowing working with devices that implement
   multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
-- Project/Assembly structure slightly refined (preparing feature request #74).
+- Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 
 Fixed bugs:
 - Layout of predefined commands can now also be changed on a new terminal that doesn't contain
   commands yet (related to previous feature requests #28, #257, #365).
 - Import/Paste of a .yacp command page file that contains more predefined commands than currently
   configured now behaves correctly (bug #479, related to previous feature requests #28, #257, #365).
+- Automatic actions and responses now work chunk independently (feature request #366).
 - Automatic actions 'Filter' and 'Suppress' now also work for continuous data (bug #478) and on
   refresh (feature request #367).
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
@@ -147,9 +152,6 @@ Limitations and known issues:
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Line content and EOL may be sent in two separate chunks, because the parts are handled slightly
   after each other. Delay could be eliminated but requires some refactoring (feature request #333).
-- Automatic responses and actions work fine as long as the received chunks do not contain more than
-  one trigger and do not spread across multiple lines. Limitation could be eliminated but requires
-  some refactoring (feature request #366).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet

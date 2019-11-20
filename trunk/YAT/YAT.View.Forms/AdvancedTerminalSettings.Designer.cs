@@ -86,11 +86,11 @@
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepSendText = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display = new System.Windows.Forms.GroupBox();
+			this.label_LineBreaks = new System.Windows.Forms.Label();
 			this.comboBox_LengthSelection = new System.Windows.Forms.ComboBox();
 			this.comboBox_LineNumberSelection = new System.Windows.Forms.ComboBox();
 			this.checkBox_IncludeIOControl = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowDuration = new System.Windows.Forms.CheckBox();
-			this.checkBox_ChunkLineBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_UsbSerialHid = new System.Windows.Forms.GroupBox();
 			this.checkBox_IncludeNonPayloadData = new System.Windows.Forms.CheckBox();
@@ -785,11 +785,11 @@
 			// 
 			this.groupBox_Display.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Display.Controls.Add(this.label_LineBreaks);
 			this.groupBox_Display.Controls.Add(this.comboBox_LengthSelection);
 			this.groupBox_Display.Controls.Add(this.comboBox_LineNumberSelection);
 			this.groupBox_Display.Controls.Add(this.checkBox_IncludeIOControl);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowDuration);
-			this.groupBox_Display.Controls.Add(this.checkBox_ChunkLineBreak);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowCopyOfActiveLine);
 			this.groupBox_Display.Controls.Add(this.groupBox_Display_UsbSerialHid);
 			this.groupBox_Display.Controls.Add(this.textBox_MaxLineLength);
@@ -826,6 +826,15 @@
 			this.groupBox_Display.TabStop = false;
 			this.groupBox_Display.Text = "Display Settings";
 			// 
+			// label_LineBreaks
+			// 
+			this.label_LineBreaks.AutoSize = true;
+			this.label_LineBreaks.Location = new System.Drawing.Point(9, 304);
+			this.label_LineBreaks.Name = "label_LineBreaks";
+			this.label_LineBreaks.Size = new System.Drawing.Size(68, 13);
+			this.label_LineBreaks.TabIndex = 19;
+			this.label_LineBreaks.Text = "&Break lines...";
+			// 
 			// comboBox_LengthSelection
 			// 
 			this.comboBox_LengthSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -853,10 +862,10 @@
 			// checkBox_IncludeIOControl
 			// 
 			this.checkBox_IncludeIOControl.AutoSize = true;
-			this.checkBox_IncludeIOControl.Location = new System.Drawing.Point(12, 346);
+			this.checkBox_IncludeIOControl.Location = new System.Drawing.Point(12, 277);
 			this.checkBox_IncludeIOControl.Name = "checkBox_IncludeIOControl";
 			this.checkBox_IncludeIOControl.Size = new System.Drawing.Size(150, 17);
-			this.checkBox_IncludeIOControl.TabIndex = 22;
+			this.checkBox_IncludeIOControl.TabIndex = 18;
 			this.checkBox_IncludeIOControl.Text = "Include I/O control events";
 			this.toolTip.SetToolTip(this.checkBox_IncludeIOControl, "Include I/O control events in monitor view, i.e...\r\n...for serial COM ports: Flow" +
         " control (hardware, software), break state.\r\n...for USB Ser/HID ports: Flow cont" +
@@ -874,20 +883,6 @@
 			this.checkBox_ShowDuration.Text = "Show duration (line)";
 			this.checkBox_ShowDuration.UseVisualStyleBackColor = true;
 			this.checkBox_ShowDuration.CheckedChanged += new System.EventHandler(this.checkBox_ShowDuration_CheckedChanged);
-			// 
-			// checkBox_ChunkLineBreak
-			// 
-			this.checkBox_ChunkLineBreak.AutoSize = true;
-			this.checkBox_ChunkLineBreak.Location = new System.Drawing.Point(12, 323);
-			this.checkBox_ChunkLineBreak.Name = "checkBox_ChunkLineBreak";
-			this.checkBox_ChunkLineBreak.Size = new System.Drawing.Size(153, 17);
-			this.checkBox_ChunkLineBreak.TabIndex = 20;
-			this.checkBox_ChunkLineBreak.Text = "Break lines on each chunk";
-			this.toolTip.SetToolTip(this.checkBox_ChunkLineBreak, "Useful for message- rather than stream-oriented\r\ncommunication, e.g. most use cas" +
-        "es of UDP/IP.\r\n\r\nDefault for UDP/IP is enabled.\r\nDefault for all other port type" +
-        "s is disabled.");
-			this.checkBox_ChunkLineBreak.UseVisualStyleBackColor = true;
-			this.checkBox_ChunkLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_ChunkLineBreak_CheckedChanged);
 			// 
 			// checkBox_ShowCopyOfActiveLine
 			// 
@@ -954,11 +949,13 @@
 			// checkBox_DeviceLineBreak
 			// 
 			this.checkBox_DeviceLineBreak.AutoSize = true;
-			this.checkBox_DeviceLineBreak.Location = new System.Drawing.Point(12, 277);
+			this.checkBox_DeviceLineBreak.Location = new System.Drawing.Point(12, 346);
 			this.checkBox_DeviceLineBreak.Name = "checkBox_DeviceLineBreak";
-			this.checkBox_DeviceLineBreak.Size = new System.Drawing.Size(205, 17);
-			this.checkBox_DeviceLineBreak.TabIndex = 18;
-			this.checkBox_DeviceLineBreak.Text = "&Break lines when I/O device changes";
+			this.checkBox_DeviceLineBreak.Size = new System.Drawing.Size(159, 17);
+			this.checkBox_DeviceLineBreak.TabIndex = 21;
+			this.checkBox_DeviceLineBreak.Text = "...when I/O device changes";
+			this.toolTip.SetToolTip(this.checkBox_DeviceLineBreak, "Available for TCP/IP and UDP/IP servers. Useful if server is connected to multipl" +
+        "e clients (multiple I/O devices).\r\n\r\nDefault is enabled.");
 			this.checkBox_DeviceLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DeviceLineBreak_CheckedChanged);
 			// 
 			// checkBox_ShowDevice
@@ -1203,11 +1200,11 @@
 			// checkBox_DirectionLineBreak
 			// 
 			this.checkBox_DirectionLineBreak.AutoSize = true;
-			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 300);
+			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 323);
 			this.checkBox_DirectionLineBreak.Name = "checkBox_DirectionLineBreak";
-			this.checkBox_DirectionLineBreak.Size = new System.Drawing.Size(194, 17);
-			this.checkBox_DirectionLineBreak.TabIndex = 19;
-			this.checkBox_DirectionLineBreak.Text = "Break lines when direction changes";
+			this.checkBox_DirectionLineBreak.Size = new System.Drawing.Size(148, 17);
+			this.checkBox_DirectionLineBreak.TabIndex = 20;
+			this.checkBox_DirectionLineBreak.Text = "...when direction changes";
 			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
 			// 
 			// comboBox_RxRadix
@@ -1355,10 +1352,10 @@
 			// 
 			this.label_LineBreakRemark.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_LineBreakRemark.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_LineBreakRemark.Location = new System.Drawing.Point(159, 310);
+			this.label_LineBreakRemark.Location = new System.Drawing.Point(159, 309);
 			this.label_LineBreakRemark.Name = "label_LineBreakRemark";
 			this.label_LineBreakRemark.Size = new System.Drawing.Size(102, 44);
-			this.label_LineBreakRemark.TabIndex = 21;
+			this.label_LineBreakRemark.TabIndex = 22;
 			this.label_LineBreakRemark.Text = "Also see\r\n[Text Settings...]";
 			this.label_LineBreakRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
@@ -1521,7 +1518,6 @@
 		private System.Windows.Forms.CheckBox checkBox_IgnoreFramingErrors;
 		private System.Windows.Forms.CheckBox checkBox_ShowCopyOfActiveLine;
 		private System.Windows.Forms.CheckBox checkBox_EnableEscapesForText;
-		private System.Windows.Forms.CheckBox checkBox_ChunkLineBreak;
 		private System.Windows.Forms.CheckBox checkBox_SkipEmptyLines;
 		private System.Windows.Forms.CheckBox checkBox_ShowDuration;
 		private System.Windows.Forms.ComboBox comboBox_LineNumberSelection;
@@ -1532,5 +1528,6 @@
 		private System.Windows.Forms.CheckBox checkBox_BeepOnBell;
 		private System.Windows.Forms.Label label_LineBreakRemark;
 		private System.Windows.Forms.Label label_TextSettingsRemark;
+		private System.Windows.Forms.Label label_LineBreaks;
 	}
 }
