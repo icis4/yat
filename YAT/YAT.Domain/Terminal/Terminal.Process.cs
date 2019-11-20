@@ -910,19 +910,33 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void FlushAndReplaceAlreadyStartedLine(RepositoryType repositoryType)
+		protected virtual void FlushAndReplaceAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
+		                                                         DisplayElementCollection elementsToAdd)
 		{
-			var lineState = GetLineState(repositoryType);
+			// Flush:
+			if (elementsToAdd.Count > 0)
+				AddDisplayElements(repositoryType, elementsToAdd);
 
-			ReplaceCurrentDisplayLine(repositoryType, lineState.Elements);
+		////if (linesToAdd.Count > 0) is not needed (yet).
+		////	AddDisplayLines(repositoryType, linesToAdd);
+
+			// Replace:
+			ReplaceCurrentDisplayLine(repositoryType, processState.Line.Elements);
 		}
 
 		/// <summary></summary>
-		protected virtual void FlushAndClearAlreadyStartedLine(RepositoryType repositoryType)
+		protected virtual void FlushAndClearAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
+		                                                       DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			var lineState = GetLineState(repositoryType);
-			lineState.Elements.Clear();
+			// Flush:
+			if (elementsToAdd.Count > 0)
+				AddDisplayElements(repositoryType, elementsToAdd);
 
+			if (linesToAdd.Count > 0)
+				AddDisplayLines(repositoryType, linesToAdd);
+
+			// Clear:
+			processState.Line.Elements.Clear();
 			ClearCurrentDisplayLine(repositoryType);
 		}
 
