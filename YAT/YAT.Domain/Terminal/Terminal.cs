@@ -1947,9 +1947,6 @@ namespace YAT.Domain
 				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 				OnRawChunkReceived(args);
 				ProcessRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
-			#if (WITH_SCRIPTING)
-				ProcessRawChunkForScripting(e.Value);     // See method's remarks for background information.
-			#endif // WITH_SCRIPTING
 			}
 		}
 

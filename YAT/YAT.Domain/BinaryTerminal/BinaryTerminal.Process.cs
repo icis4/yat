@@ -167,14 +167,15 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir)
+		protected override void DoRawByte(RepositoryType repositoryType,
+		                                  byte b, DateTime ts, string dev, IODirection dir,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState          = GetProcessState(repositoryType);
 			var lineState             = processState.Line; // Convenience shortcut.
 			var binaryLineState       = GetBinaryLineState(repositoryType, dir);
 			var binaryDisplaySettings = GetBinaryDisplaySettings(dir);
 
-			var elementsToAdd       = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			if (lineState.Position == LinePosition.Begin)
@@ -187,27 +188,14 @@ namespace YAT.Domain
 				DoLineContent(processState, binaryLineState, binaryDisplaySettings, b, dir, elementsToAdd, elementsForNextLine);
 			}
 
-			if (lineState.Position != LinePosition.End)
+			if (lineState.Position == LinePosition.End)
 			{
-				if (elementsToAdd.Count > 0)
-					AddDisplayElements(repositoryType, elementsToAdd);
-			}
-			else // (lineState.Position == LinePosition.End)
-			{
-				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-
 				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 
-				if (elementsToAdd.Count > 0)
-					AddDisplayElements(repositoryType, elementsToAdd);
-
-				if (linesToAdd.Count > 0)
-					AddDisplayLines(repositoryType, linesToAdd);
-
-				// In case of a pending element immediately insert the sequence into a new line:
+				// In case of elements for next line immediately flush and start the new line:
 				if (elementsForNextLine.Count > 0)
 				{
-					elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+					Flush(repositoryType, elementsToAdd, linesToAdd);
 					                                         //// Potentially same time stamp as end of previous line, since time stamp belongs to chunk.
 					DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 
@@ -225,10 +213,6 @@ namespace YAT.Domain
 							}
 						}
 					} // foreach (elementForNextLine)
-
-					if (elementsToAdd.Count > 0)
-						AddDisplayElements(repositoryType, elementsToAdd);
-
 				} // if (has elementsForNextLine)
 			}
 		}

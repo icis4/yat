@@ -638,14 +638,14 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected override void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir)
+		protected override void DoRawByte(RepositoryType repositoryType,
+		                                  byte b, DateTime ts, string dev, IODirection dir,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState        = GetProcessState(repositoryType);
 			var lineState           = processState.Line; // Convenience shortcut.
 			var textLineState       = GetTextLineState(repositoryType, dir);
 			var textDisplaySettings = GetTextDisplaySettings(dir);
-
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
 			if (lineState.Position == LinePosition.Begin)
 			{
@@ -657,22 +657,9 @@ namespace YAT.Domain
 				DoLineContent(repositoryType, processState, textLineState, textDisplaySettings, b, dev, dir, elementsToAdd);
 			}
 
-			if (lineState.Position != LinePosition.End)
+			if (lineState.Position == LinePosition.End)
 			{
-				if (elementsToAdd.Count > 0)
-					AddDisplayElements(repositoryType, elementsToAdd);
-			}
-			else // (lineState.Position == LinePosition.End)
-			{
-				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-
 				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
-
-				if (elementsToAdd.Count > 0)
-					AddDisplayElements(repositoryType, elementsToAdd);
-
-				if (linesToAdd.Count > 0)
-					AddDisplayLines(repositoryType, linesToAdd);
 			}
 		}
 
@@ -869,7 +856,7 @@ namespace YAT.Domain
 						else
 						{
 							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
-							FlushAndReplaceAlreadyStartedLine(repositoryType, processState, elementsToAdd);
+							FlushReplaceAlreadyStartedLine(repositoryType, processState, elementsToAdd);
 						}
 					}
 				}
@@ -992,15 +979,15 @@ namespace YAT.Domain
 			bool isNotHiddenEol = ( textLineState.EolOfLastLineWasCompleteMatch(dev) && !textLineState.EolIsAnyMatch(dev));
 			if (isEmptyLine && isPendingEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden pending EOL character(s):
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                  //            All other elements must be removed as well!
-				FlushAndClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd);                  //            This is ensured by flushing here.
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart));                      // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                                       //            All other elements must be removed as well!
+				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
 			else if (isEmptyLine && isNotHiddenEol) // While intended empty lines must be shown, potentially suppress
 			{                                       // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                  //            All other elements must be removed as well!
-				FlushAndClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd);                  //            This is ensured by flushing here.
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart));                      // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                                       //            All other elements must be removed as well!
+				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
 	/*		else if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
