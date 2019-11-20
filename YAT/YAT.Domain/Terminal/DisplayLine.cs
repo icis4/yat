@@ -79,6 +79,8 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
+		private Direction direction; // = Direction.None;
+
 		private int charCount; // = 0;
 		private int byteCount; // = 0;
 
@@ -132,6 +134,26 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary>
+		/// The direction of the line.
+		/// </summary>
+		/// <remarks>
+		/// The value typically corresponds to <see cref="DisplayElement.Direction"/> of the
+		/// elements of the line, but may also be <see cref="Direction.Bidir"/> in case direction
+		/// line break is disabled.
+		/// It is the responsibility of the element processing terminal to set the correct value.
+		///
+		/// Rationale:
+		/// Containing a <see cref="DisplayElement.TimeStampInfo"/> is optional depending on the
+		/// setting of <see cref="Settings.DisplaySettings.ShowTimeStamp"/>, whereas this property
+		/// always has a value.
+		/// </remarks>
+		public virtual Direction Direction
+		{
+			get { return (this.direction); }
+			set { this.direction = value;  }
+		}
 
 		/// <summary>
 		/// Appends and returns the text of all display elements.
@@ -441,7 +463,8 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual string ToExtendedDiagnosticsString(string indent = "")
 		{
-			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
+			return (indent + "> Direction: " +      Direction.ToString()                           + Environment.NewLine +
+					indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> CharCount: " + this.charCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
 					indent + "> Elements: " + Environment.NewLine + ElementsToExtendedDiagnosticsString(indent + "   "));
@@ -541,10 +564,12 @@ namespace YAT.Domain
 		/// The time stamp at the beginning of the line.
 		/// </summary>
 		/// <remarks>
-		/// The value should correspond to <see cref="DisplayElement.TimeStampInfo.TimeStamp"/>. It
-		/// is the responsibility of the element processing terminal to set the same value to both.
+		/// The value should correspond to <see cref="DisplayElement.TimeStampInfo.TimeStamp"/>.
+		/// It is the responsibility of the element processing terminal to set the correct value.
+		///
 		/// Rationale:
-		/// <see cref="DisplayElement.TimeStampInfo.TimeStamp"/> is optional, whereas this property
+		/// Containing a <see cref="DisplayElement.TimeStampInfo"/> is optional depending on the
+		/// setting of <see cref="Settings.DisplaySettings.ShowTimeStamp"/>, whereas this property
 		/// always has a value.
 		/// </remarks>
 		public virtual DateTime TimeStamp
