@@ -243,7 +243,7 @@ namespace YAT.Model.Utilities
 						sb.Append(" - ");
 						var device = (terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 						if (device != null)
-							sb.Append(device.DeviceInfoString);
+							sb.Append(device.InfoString);
 						else
 							s.DeviceInfo.ToString(true, false);
 
