@@ -62,7 +62,7 @@ namespace YAT.View.Controls
 		private static Font staticTimeSpanFontCache;
 		private static Font staticTimeDeltaFontCache;
 		private static Font staticTimeDurationFontCache;
-		private static Font staticIODeviceFontCache;
+		private static Font staticDeviceFontCache;
 		private static Font staticDirectionFontCache;
 		private static Font staticLengthFontCache;
 		private static Font staticWhiteSpacesFontCache;
@@ -253,11 +253,11 @@ namespace YAT.View.Controls
 				fontStyle = settings.TimeDurationFormat.FontStyle;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticTimeDurationFontCache, fontName, fontSize, fontStyle);
 			}
-			else if (element is Domain.DisplayElement.IODeviceInfo)
+			else if (element is Domain.DisplayElement.DeviceInfo)
 			{
-				foreColor = settings.IODeviceFormat.Color;
-				fontStyle = settings.IODeviceFormat.FontStyle;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticIODeviceFontCache, fontName, fontSize, fontStyle);
+				foreColor = settings.DeviceFormat.Color;
+				fontStyle = settings.DeviceFormat.FontStyle;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticDeviceFontCache, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)
 			{

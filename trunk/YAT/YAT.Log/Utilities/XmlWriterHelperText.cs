@@ -171,7 +171,7 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.IODeviceInfo);
+					var casted = (de as DisplayElement.DeviceInfo);
 					if (casted != null)
 					{
 						deviceStr = casted.Text;

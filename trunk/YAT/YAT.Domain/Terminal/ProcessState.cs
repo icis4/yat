@@ -118,13 +118,13 @@ namespace YAT.Domain
 		}
 	}
 
-	/// <summary></summary>
+	/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 	public class DeviceAndDirectionState
 	{
 		/// <summary></summary>
 		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
 
-		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		public string      Device                { get; set; }
 
 		/// <summary></summary>
@@ -148,7 +148,7 @@ namespace YAT.Domain
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line".</remarks>
 		public DateTime                 TimeStamp    { get; set; }
 
-		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		public string                   Device       { get; set; }
 
 		/// <summary></summary>
