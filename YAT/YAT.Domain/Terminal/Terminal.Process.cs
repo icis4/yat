@@ -774,7 +774,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
 		                                 DateTime ts,
-		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			processState.NotifyLineEnd();
 		}
@@ -784,18 +784,14 @@ namespace YAT.Domain
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
-			bool clearAlreadyStartedLine = false;
 
-			EvaluateDeviceOrDirectionLineBreak(repositoryType, ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			EvaluateDeviceOrDirectionLineBreak(repositoryType, ts, dev, dir, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
 
 			if (linesToAdd.Count > 0)
 				AddDisplayLines(repositoryType, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				ClearCurrentDisplayLine(repositoryType);
 		}
 
 		/// <summary></summary>
@@ -803,18 +799,14 @@ namespace YAT.Domain
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
-			bool clearAlreadyStartedLine = false;
 
-			EvaluateChunkLineBreak(repositoryType, ts, dev, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			EvaluateChunkLineBreak(repositoryType, ts, dev, dir, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
 
 			if (linesToAdd.Count > 0)
 				AddDisplayLines(repositoryType, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				ClearCurrentDisplayLine(repositoryType);
 		}
 
 		/// <summary></summary>
@@ -822,18 +814,14 @@ namespace YAT.Domain
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
-			bool clearAlreadyStartedLine = false;
 
-			EvaluateTimedLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			EvaluateTimedLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
 
 			if (linesToAdd.Count > 0)
 				AddDisplayLines(repositoryType, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				ClearCurrentDisplayLine(repositoryType);
 		}
 
 		/// <summary></summary>
@@ -841,24 +829,20 @@ namespace YAT.Domain
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
-			bool clearAlreadyStartedLine = false;
 
-			EvaluateTimedLineBreakOnReload(repositoryType, ts, dir, timeout, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			EvaluateTimedLineBreakOnReload(repositoryType, ts, dir, timeout, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
 
 			if (linesToAdd.Count > 0)
 				AddDisplayLines(repositoryType, linesToAdd);
-
-			if (clearAlreadyStartedLine)
-				ClearCurrentDisplayLine(repositoryType);
 		}
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
 		protected virtual void EvaluateDeviceOrDirectionLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
-		                                                          DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		                                                          DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Overall.DeviceAndDirection.IsFirstChunk)         // Not the ideal location to handle this flag and 'Device' and 'Direction' further below.
@@ -873,7 +857,7 @@ namespace YAT.Domain
 					{
 						DebugLineBreak(repositoryType, "EvaluateDeviceOrDirectionLineBreak => DoLineEnd()");
 
-						DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+						DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 					}
 				}
 			}
@@ -884,33 +868,33 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		protected virtual void EvaluateChunkLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
-		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Elements.Count > 0)
 			{
 				DebugLineBreak(repositoryType, "EvaluateChunkLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 			}
 		}
 
 		/// <summary></summary>
 		protected virtual void EvaluateTimedLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
-		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Elements.Count > 0)
 			{
 				DebugLineBreak(repositoryType, "EvaluateTimedLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 			}
 		}
 
 		/// <summary></summary>
 		protected virtual void EvaluateTimedLineBreakOnReload(RepositoryType repositoryType, DateTime ts, IODirection dir, int timeout,
-		                                                      DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		                                                      DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Elements.Count > 0)
@@ -920,9 +904,26 @@ namespace YAT.Domain
 				{
 					DebugLineBreak(repositoryType, "EvaluateTimedLineBreakOnReload => DoLineEnd()");
 
-					DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+					DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 				}
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void FlushAndReplaceAlreadyStartedLine(RepositoryType repositoryType)
+		{
+			var lineState = GetLineState(repositoryType);
+
+			ReplaceCurrentDisplayLine(repositoryType, lineState.Elements);
+		}
+
+		/// <summary></summary>
+		protected virtual void FlushAndClearAlreadyStartedLine(RepositoryType repositoryType)
+		{
+			var lineState = GetLineState(repositoryType);
+			lineState.Elements.Clear();
+
+			ClearCurrentDisplayLine(repositoryType);
 		}
 
 		#endregion

@@ -654,12 +654,7 @@ namespace YAT.Domain
 
 			if (lineState.Position == LinePosition.Content)
 			{
-				bool replaceAlreadyStartedLine;
-
-				DoLineContent(processState, textLineState, textDisplaySettings, b, dev, dir, elementsToAdd, out replaceAlreadyStartedLine);
-
-				if (replaceAlreadyStartedLine)
-					ReplaceCurrentDisplayLine(repositoryType, lineState.Elements);
+				DoLineContent(repositoryType, processState, textLineState, textDisplaySettings, b, dev, dir, elementsToAdd);
 			}
 
 			if (lineState.Position != LinePosition.End)
@@ -670,18 +665,14 @@ namespace YAT.Domain
 			else // (lineState.Position == LinePosition.End)
 			{
 				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-				bool clearAlreadyStartedLine = false;
 
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 
 				if (elementsToAdd.Count > 0)
 					AddDisplayElements(repositoryType, elementsToAdd);
 
 				if (linesToAdd.Count > 0)
 					AddDisplayLines(repositoryType, linesToAdd);
-
-				if (clearAlreadyStartedLine)
-					ClearCurrentDisplayLine(repositoryType);
 			}
 		}
 
@@ -719,9 +710,9 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void DoLineContent(ProcessState processState, TextLineState textLineState, Settings.TextDisplaySettings textDisplaySettings,
+		private void DoLineContent(RepositoryType repositoryType, ProcessState processState, TextLineState textLineState, Settings.TextDisplaySettings textDisplaySettings,
 		                           byte b, string dev, IODirection dir,
-		                           DisplayElementCollection elementsToAdd, out bool replaceAlreadyStartedLine)
+		                           DisplayElementCollection elementsToAdd)
 		{
 			var lineState = processState.Line; // Convenience shortcut.
 
@@ -832,8 +823,6 @@ namespace YAT.Domain
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
-			replaceAlreadyStartedLine = false;
-
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
 				if (isBackspace)
@@ -880,14 +869,8 @@ namespace YAT.Domain
 						else
 						{
 							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
-							replaceAlreadyStartedLine = true;
+							FlushAndReplaceAlreadyStartedLine(repositoryType);
 						}
-
-						// Attention:
-						//
-						// Setting 'replaceAlreadyStartedLine' to 'true' will instruct the caller to
-						// call OnCurrentDisplayLineReplaced(). However, that method will be called
-						// *before* 'elementsToAdd' will get added by OnDisplayElement[s]Added() !!
 					}
 				}
 			}
@@ -996,7 +979,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
 		                                  DateTime ts,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			// Note: Code sequence the same as DoLineEnd() of BinaryTerminal for better comparability.
 
@@ -1011,13 +994,13 @@ namespace YAT.Domain
 			{                                // empty lines that only contain hidden pending EOL character(s):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
+				FlushAndClearAlreadyStartedLine(repositoryType);                  //            This is ensured by flushing here.
 			}
 			else if (isEmptyLine && isNotHiddenEol) // While intended empty lines must be shown, potentially suppress
 			{                                       // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
+				FlushAndClearAlreadyStartedLine(repositoryType);                  //            This is ensured by flushing here.
 			}
 	/*		else if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
@@ -1029,7 +1012,7 @@ namespace YAT.Domain
 
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
+				clearAlreadyStartedLine = true;                                   //            This is ensured by flushing here.
 			#endif
 			} !!!PENDING !!! */
 			else
@@ -1068,7 +1051,7 @@ namespace YAT.Domain
 
 			// Finalize the line:
 			textLineState.NotifyLineEnd(dev, textLineState.EolIsCompleteMatch(dev));
-			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 		}
 
 		#endregion

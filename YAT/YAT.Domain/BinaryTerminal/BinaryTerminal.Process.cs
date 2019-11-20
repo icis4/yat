@@ -195,9 +195,8 @@ namespace YAT.Domain
 			else // (lineState.Position == LinePosition.End)
 			{
 				var linesToAdd = new DisplayLineCollection(); // No preset needed, the default initial capacity is good enough.
-				bool clearAlreadyStartedLineDummy = false;
 
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLineDummy);
+				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 
 				if (elementsToAdd.Count > 0)
 					AddDisplayElements(repositoryType, elementsToAdd);
@@ -394,7 +393,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState, DateTime ts,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			// Note: Code sequence the same as DoLineEnd() of TextTerminal for better comparability.
 
@@ -412,7 +411,7 @@ namespace YAT.Domain
 
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				clearAlreadyStartedLine = true;                                   //            This is signaled by setting 'clearAlreadyStartedLine'.
+				clearAlreadyStartedLine = true;                                   //            This is ensured by flushing here.
 			#endif
 			}
 			else !!!PENDING !!! */
@@ -447,7 +446,7 @@ namespace YAT.Domain
 
 			// Finalize the line:
 			binaryLineState.NotifyLineEnd();
-			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd, ref clearAlreadyStartedLine);
+			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 		}
 
 		#endregion
