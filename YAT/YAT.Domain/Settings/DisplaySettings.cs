@@ -507,7 +507,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		[XmlElement("ShowDevice")]
 		public virtual bool ShowDevice
 		{
@@ -614,7 +614,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		[XmlElement("DeviceLineBreakEnabled")]
 		public virtual bool DeviceLineBreakEnabled
 		{

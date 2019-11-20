@@ -60,7 +60,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(TimeSpanInfo))]
 	[XmlInclude(typeof(TimeDeltaInfo))]
 	[XmlInclude(typeof(TimeDurationInfo))]
-	[XmlInclude(typeof(IODeviceInfo))]
+	[XmlInclude(typeof(DeviceInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
 	[XmlInclude(typeof(FormatElement))]
@@ -344,20 +344,18 @@ namespace YAT.Domain
 			}                                                         // Attention, slightly different than time span above!
 		}
 
-		/// <remarks>
-		/// Named 'IODeviceInfo' instead of just 'IOInfo' for better comprehensibility.
-		/// </remarks>
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class IODeviceInfo : InfoElement
+		public class DeviceInfo : InfoElement
 		{
 			/// <summary></summary>
-			public IODeviceInfo()
+			public DeviceInfo()
 				: this(null, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public IODeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
+			public DeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
 				: base(enclosureLeft + infoText + enclosureRight)
 			{
 			}
@@ -792,7 +790,7 @@ namespace YAT.Domain
 			else if (this is TimeSpanInfo)     clone = new TimeSpanInfo((TimeSpanInfo)this);
 			else if (this is TimeDeltaInfo)    clone = new TimeDeltaInfo((TimeDeltaInfo)this);
 			else if (this is TimeDurationInfo) clone = new TimeDurationInfo((TimeDurationInfo)this);
-			else if (this is IODeviceInfo)     clone = new IODeviceInfo();
+			else if (this is DeviceInfo)     clone = new DeviceInfo();
 			else if (this is DirectionInfo)    clone = new DirectionInfo();
 			else if (this is DataLength)       clone = new DataLength((DataLength)this);
 			else if (this is ContentSpace)     clone = new ContentSpace();

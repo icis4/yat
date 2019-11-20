@@ -2701,7 +2701,7 @@ namespace YAT.Model
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
-			virtualLine.Add(new Domain.DisplayElement.IODeviceInfo(IOStatusText, left, right));
+			virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
 			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 
 			return (virtualLine);
@@ -2725,7 +2725,7 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.IODeviceInfo(IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
@@ -2758,7 +2758,7 @@ namespace YAT.Model
 
 			if (includeIOStatusText)
 			{
-				virtualLine.Add(new Domain.DisplayElement.IODeviceInfo(IOStatusText, left, right));
+				virtualLine.Add(new Domain.DisplayElement.DeviceInfo(IOStatusText, left, right));
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 

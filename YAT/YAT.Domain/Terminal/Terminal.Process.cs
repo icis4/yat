@@ -475,7 +475,7 @@ namespace YAT.Domain
 
 				if (TerminalSettings.Display.ShowDevice)
 				{
-					lp.Add(new DisplayElement.IODeviceInfo(dev, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+					lp.Add(new DisplayElement.DeviceInfo(dev, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
 						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
@@ -779,7 +779,7 @@ namespace YAT.Domain
 			processState.NotifyLineEnd();
 		}
 
-		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		protected virtual void EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -855,7 +855,7 @@ namespace YAT.Domain
 				ClearCurrentDisplayLine(repositoryType);
 		}
 
-		/// <remarks>Named 'Device' for simplicity, named 'IODevice' in other locations.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
 		protected virtual void EvaluateDeviceOrDirectionLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
 		                                                          DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ref bool clearAlreadyStartedLine)

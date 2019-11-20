@@ -68,7 +68,7 @@ namespace YAT.Format.Settings
 		private TextFormat timeSpanFormat;
 		private TextFormat timeDeltaFormat;
 		private TextFormat timeDurationFormat;
-		private TextFormat ioDeviceFormat;
+		private TextFormat deviceFormat;
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
 		private TextFormat whiteSpacesFormat;
@@ -110,7 +110,7 @@ namespace YAT.Format.Settings
 			TimeSpanFormat     = new TextFormat(rhs.TimeSpanFormat);
 			TimeDeltaFormat    = new TextFormat(rhs.TimeDeltaFormat);
 			TimeDurationFormat = new TextFormat(rhs.TimeDurationFormat);
-			IODeviceFormat     = new TextFormat(rhs.IODeviceFormat);
+			DeviceFormat       = new TextFormat(rhs.DeviceFormat);
 			DirectionFormat    = new TextFormat(rhs.DirectionFormat);
 			LengthFormat       = new TextFormat(rhs.LengthFormat);
 			WhiteSpacesFormat  = new TextFormat(rhs.WhiteSpacesFormat);
@@ -141,7 +141,7 @@ namespace YAT.Format.Settings
 			TimeSpanFormat     = new TextFormat(InfoColorDefault,        false, false, false, false);
 			TimeDeltaFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
 			TimeDurationFormat = new TextFormat(InfoColorDefault,        false, false, false, false);
-			IODeviceFormat     = new TextFormat(InfoColorDefault,        false, false, false, false);
+			DeviceFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
 			DirectionFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
 			LengthFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
 			WhiteSpacesFormat  = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
@@ -321,16 +321,16 @@ namespace YAT.Format.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("IODeviceFormat")]
-		public TextFormat IODeviceFormat
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		[XmlElement("DeviceFormat")]
+		public TextFormat DeviceFormat
 		{
-			get { return (this.ioDeviceFormat); }
+			get { return (this.deviceFormat); }
 			set
 			{
-				if (this.ioDeviceFormat != value)
+				if (this.deviceFormat != value)
 				{
-					this.ioDeviceFormat = value;
+					this.deviceFormat = value;
 					SetMyChanged();
 				}
 			}
@@ -473,7 +473,7 @@ namespace YAT.Format.Settings
 				hashCode = (hashCode * 397) ^ (TimeSpanFormat     != null ? TimeSpanFormat    .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (TimeDeltaFormat    != null ? TimeDeltaFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (IODeviceFormat     != null ? IODeviceFormat    .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (DeviceFormat       != null ? DeviceFormat      .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (DirectionFormat    != null ? DirectionFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (LengthFormat       != null ? LengthFormat      .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat  != null ? WhiteSpacesFormat .GetHashCode() : 0);
@@ -523,7 +523,7 @@ namespace YAT.Format.Settings
 				ObjectEx.Equals(TimeSpanFormat,     other.TimeSpanFormat)     &&
 				ObjectEx.Equals(TimeDeltaFormat,    other.TimeDeltaFormat)    &&
 				ObjectEx.Equals(TimeDurationFormat, other.TimeDurationFormat) &&
-				ObjectEx.Equals(IODeviceFormat,     other.IODeviceFormat)     &&
+				ObjectEx.Equals(DeviceFormat,       other.DeviceFormat)       &&
 				ObjectEx.Equals(DirectionFormat,    other.DirectionFormat)    &&
 				ObjectEx.Equals(LengthFormat,       other.LengthFormat)       &&
 				ObjectEx.Equals(WhiteSpacesFormat,  other.WhiteSpacesFormat)  &&
