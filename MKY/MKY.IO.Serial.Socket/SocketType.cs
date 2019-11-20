@@ -152,6 +152,42 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool IsClient
+		{
+			get
+			{
+				switch ((SocketType)UnderlyingEnum)
+				{
+					case SocketType.TcpClient:     return (true);
+					case SocketType.TcpServer:     return (false);
+					case SocketType.TcpAutoSocket: return (false);
+					case SocketType.UdpClient:     return (true);
+					case SocketType.UdpServer:     return (false);
+					case SocketType.UdpPairSocket: return (false);
+					default:                       return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsServer
+		{
+			get
+			{
+				switch ((SocketType)UnderlyingEnum)
+				{
+					case SocketType.TcpClient:     return (false);
+					case SocketType.TcpServer:     return (true);
+					case SocketType.TcpAutoSocket: return (false);
+					case SocketType.UdpClient:     return (false);
+					case SocketType.UdpServer:     return (true);
+					case SocketType.UdpPairSocket: return (false);
+					default:                       return (false);
+				}
+			}
+		}
+
 		#endregion
 
 		#region ToString

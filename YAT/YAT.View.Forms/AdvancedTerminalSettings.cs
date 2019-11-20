@@ -315,34 +315,6 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.IncludeIOControl = checkBox_IncludeIOControl.Checked;
 		}
 
-		private void checkBox_DeviceLineBreak_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			if (!checkBox_DeviceLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDevice)
-			{
-				var dr = MessageBoxEx.Show
-				(
-					this,
-					"To disable this setting, I/O device can no longer be shown.",
-					"Incompatible Setting",
-					MessageBoxButtons.OKCancel,
-					MessageBoxIcon.Information
-				);
-
-				if (dr == DialogResult.OK)
-				{
-					this.settingsInEdit.Terminal.Display.ShowDevice             = false;
-					this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = false;
-				}
-			}
-			else
-			{
-				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = checkBox_DeviceLineBreak.Checked;
-			}
-		}
-
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -371,12 +343,32 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void checkBox_ChunkLineBreak_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_DeviceLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled = checkBox_ChunkLineBreak.Checked;
+			if (!checkBox_DeviceLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDevice)
+			{
+				var dr = MessageBoxEx.Show
+				(
+					this,
+					"To disable this setting, I/O device can no longer be shown.",
+					"Incompatible Setting",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Information
+				);
+
+				if (dr == DialogResult.OK)
+				{
+					this.settingsInEdit.Terminal.Display.ShowDevice             = false;
+					this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = false;
+				}
+			}
+			else
+			{
+				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = checkBox_DeviceLineBreak.Checked;
+			}
 		}
 
 		private void textBox_MaxLineCount_TextChanged(object sender, EventArgs e)
@@ -1096,6 +1088,9 @@ namespace YAT.View.Forms
 			bool isSerialPort   = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.SerialPort);
 			bool isUsbSerialHid = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.UsbSerialHid);
 
+			MKY.IO.Serial.Socket.SocketType socketType = (Domain.IOTypeEx)(this.settingsInEdit.Terminal.IO.IOType);
+			bool isServerSocket = ((MKY.IO.Serial.Socket.SocketTypeEx)socketType).IsServer;
+
 			this.isSettingControls.Enter();
 			try
 			{
@@ -1144,9 +1139,9 @@ namespace YAT.View.Forms
 				checkBox_IncludeIOControl.Enabled = (isSerialPort || isUsbSerialHid);
 				checkBox_IncludeIOControl.Checked = this.settingsInEdit.Terminal.Display.IncludeIOControl;
 
-				checkBox_DeviceLineBreak.Checked    = this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled;
 				checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-				checkBox_ChunkLineBreak.Checked     = this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled;
+				checkBox_DeviceLineBreak.Enabled    = isServerSocket;
+				checkBox_DeviceLineBreak.Checked    = this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled;
 				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
 
 				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
@@ -1285,9 +1280,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowDuration        = Domain.Settings.DisplaySettings.ShowDurationDefault;
 				this.settingsInEdit.Terminal.Display.IncludeIOControl    = Domain.Settings.DisplaySettings.IncludeIOControlDefault;
 
-				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = Domain.Settings.DisplaySettings.DeviceLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
-				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = Domain.Settings.DisplaySettings.ChunkLineBreakEnabledDefault;
+				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = Domain.Settings.DisplaySettings.DeviceLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 				this.settingsInEdit.Terminal.Display.MaxLineLength             = Domain.Settings.DisplaySettings.MaxLineLengthDefault;
 
