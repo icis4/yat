@@ -707,6 +707,10 @@ namespace YAT.Domain
 				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
+			if (txIsAffected)    { ProcessDirection(RepositoryType.Tx,    chunk.Direction, TerminalSettings.Display.ShowDirection); }
+			if (bidirIsAffected) { ProcessDirection(RepositoryType.Bidir, chunk.Direction, TerminalSettings.Display.ShowDirection); }
+			if (rxIsAffected)    { ProcessDirection(RepositoryType.Rx,    chunk.Direction, TerminalSettings.Display.ShowDirection); }
+
 			// Notes:
 			//  > Processing is done sequentially for all monitors, in order to get synchronized
 			//    content for Tx/Bidir and Bidir/Rx.
@@ -790,48 +794,20 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>
-		/// Must be abstract/virtual because settings and behavior differ among text and binary.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected abstract void DoRawByte(RepositoryType repositoryType,
-		                                  byte b, DateTime ts, string dev, IODirection dir,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd);
-
-		/// <summary>
-		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
-		/// </summary>
-		protected virtual void DoRawBytePre(DateTime ts, string dev, IODirection dir,
-		                                    TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
+		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		protected virtual void ProcessDirection(RepositoryType repositoryType, IODirection dir, bool showDirection)
 		{
-			// Handle start/restart of timed line breaks:
-			if (timedLineBreak.Enabled)
+			var processState = GetProcessState(repositoryType);
+			if (processState.Line.Direction != IODirection.None) // IODirection.None means that line processing has not started yet.
 			{
-				if (!IsReloading)
+				if (processState.Line.Direction != dir)
 				{
-					var lineState = GetUnidirLineState(dir); // Just checking for Tx or Rx is sufficient.
-					if (lineState.Position == LinePosition.Begin)
-						lineBreakTimeout.Start();
-					else
-						lineBreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
-				}
-			}
-		}
+					processState.Line.Direction = IODirection.Bidir;
 
-		/// <summary>
-		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
-		/// </summary>
-		protected virtual void DoRawBytePost(DateTime ts, string dev, IODirection dir,
-		                                     TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
-		{
-			// Handle stop of timed line breaks:
-			if (timedLineBreak.Enabled)
-			{
-				if (!IsReloading)
-				{
-					var lineState = GetUnidirLineState(dir); // Just checking for Tx or Rx is sufficient.
-					if (lineState.Position == LinePosition.End)
-						lineBreakTimeout.Stop();
+					if (showDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
+					{
+						FlushReplaceAlreadyStartedLine(repositoryType, processState, null);
+					}
 				}
 			}
 		}
@@ -951,6 +927,52 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// Must be abstract/virtual because settings and behavior differ among text and binary.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected abstract void DoRawByte(RepositoryType repositoryType,
+		                                  byte b, DateTime ts, string dev, IODirection dir,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd);
+
+		/// <summary>
+		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
+		/// </summary>
+		protected virtual void DoRawBytePre(DateTime ts, string dev, IODirection dir,
+		                                    TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
+		{
+			// Handle start/restart of timed line breaks:
+			if (timedLineBreak.Enabled)
+			{
+				if (!IsReloading)
+				{
+					var lineState = GetUnidirLineState(dir); // Just checking for Tx or Rx is sufficient.
+					if (lineState.Position == LinePosition.Begin)
+						lineBreakTimeout.Start();
+					else
+						lineBreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
+				}
+			}
+		}
+
+		/// <summary>
+		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
+		/// </summary>
+		protected virtual void DoRawBytePost(DateTime ts, string dev, IODirection dir,
+		                                     TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
+		{
+			// Handle stop of timed line breaks:
+			if (timedLineBreak.Enabled)
+			{
+				if (!IsReloading)
+				{
+					var lineState = GetUnidirLineState(dir); // Just checking for Tx or Rx is sufficient.
+					if (lineState.Position == LinePosition.End)
+						lineBreakTimeout.Stop();
+				}
+			}
+		}
+
 		/// <summary></summary>
 		protected virtual void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
 		                                   DateTime ts, string dev, IODirection dir,
@@ -971,13 +993,13 @@ namespace YAT.Domain
 		protected virtual void Flush(RepositoryType repositoryType,
 		                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			if (elementsToAdd.Count > 0)
+			if ((elementsToAdd != null) && (elementsToAdd.Count > 0))
 			{
 				AddDisplayElements(repositoryType, elementsToAdd);
 				elementsToAdd.Clear();
 			}
 
-			if (linesToAdd.Count > 0)
+			if ((linesToAdd != null) && (linesToAdd.Count > 0))
 			{
 				AddDisplayLines(repositoryType, linesToAdd);
 				linesToAdd.Clear();
@@ -988,13 +1010,13 @@ namespace YAT.Domain
 		protected virtual void FlushReplaceAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
 		                                                      DisplayElementCollection elementsToAdd)
 		{
-			if (elementsToAdd.Count > 0)
+			if ((elementsToAdd != null) && (elementsToAdd.Count > 0))
 			{
 				AddDisplayElements(repositoryType, elementsToAdd);
 				elementsToAdd.Clear();
 			}
 
-		////if (linesToAdd.Count > 0) is not needed (yet).
+		////if ((linesToAdd != null) && (linesToAdd.Count > 0)) is not needed (yet).
 		////{
 		////	AddDisplayLines(repositoryType, linesToAdd);
 		////	linesToAdd.Clear();
@@ -1007,13 +1029,13 @@ namespace YAT.Domain
 		protected virtual void FlushClearAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
 		                                                    DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			if (elementsToAdd.Count > 0)
+			if ((elementsToAdd != null) && (elementsToAdd.Count > 0))
 			{
 				AddDisplayElements(repositoryType, elementsToAdd);
 				elementsToAdd.Clear();
 			}
 
-			if (linesToAdd.Count > 0)
+			if ((linesToAdd != null) && (linesToAdd.Count > 0))
 			{
 				AddDisplayLines(repositoryType, linesToAdd);
 				linesToAdd.Clear();
