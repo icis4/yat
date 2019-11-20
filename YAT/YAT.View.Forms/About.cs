@@ -91,8 +91,8 @@ namespace YAT.View.Forms
 			// Form:
 			Text = ApplicationEx.CommonNameLong; // Fixed to "YAT - Yet Another Terminal".
 
-			// Title:
-			linkLabel_Title.Text = ApplicationEx.ProductCaptionAndVersion;
+			// Title:                                                         // Using more general term "Build" rather than .NET specific term "Revision".
+			linkLabel_Title.Text = ApplicationEx.ProductCaptionAndVersion + " Build " + ApplicationEx.ProductRevision;
 
 			// Copyright:
 			linkLabel_Copyright.Text = "";
