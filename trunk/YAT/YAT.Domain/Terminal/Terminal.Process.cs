@@ -662,50 +662,131 @@ namespace YAT.Domain
 				bool bidirIsAffected = ((chunk.Direction == IODirection.Tx) ||(chunk.Direction == IODirection.Rx));
 				bool rxIsAffected    =                                        (chunk.Direction == IODirection.Rx);
 
-				TimeoutSettingTuple timedLineBreak;
-				LineBreakTimeout lineBreakTimeout;
-				switch (chunk.Direction)
-				{
-					case IODirection.Tx: timedLineBreak = TerminalSettings.TxDisplayTimedLineBreak; lineBreakTimeout = this.txLineBreakTimeout; break;
-					case IODirection.Rx: timedLineBreak = TerminalSettings.RxDisplayTimedLineBreak; lineBreakTimeout = this.rxLineBreakTimeout; break;
+				ProcessAndSignalDeviceOrDirectionLineBreak(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+				ProcessAndSignalRawChunk(                  chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+				ProcessAndSignalChunkLineBreak(            chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+			}
+		}
 
-					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		/// <summary>Check whether device or direction has changed.</summary>
+		/// <remarks>A chunk is always tied to device and direction.</remarks>
+		protected virtual void ProcessAndSignalDeviceOrDirectionLineBreak(RawChunk chunk,
+		                                                                  bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		{
+			if (TerminalSettings.Display.DeviceLineBreakEnabled || TerminalSettings.Display.DirectionLineBreakEnabled)
+			{
+				if (txIsAffected)    { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (bidirIsAffected) { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (rxIsAffected)    { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+			}
+		}
+
+		/// <summary>Enforce line break if requested.</summary>
+		protected virtual void ProcessAndSignalChunkLineBreak(RawChunk chunk,
+		                                                      bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		{
+			if (TerminalSettings.Display.ChunkLineBreakEnabled)
+			{
+				if (txIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (bidirIsAffected) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (rxIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalRawChunk(RawChunk chunk,
+		                                                bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		{
+			TimeoutSettingTuple timedLineBreak;
+			LineBreakTimeout lineBreakTimeout;
+			switch (chunk.Direction)
+			{
+				case IODirection.Tx: timedLineBreak = TerminalSettings.TxDisplayTimedLineBreak; lineBreakTimeout = this.txLineBreakTimeout; break;
+				case IODirection.Rx: timedLineBreak = TerminalSettings.RxDisplayTimedLineBreak; lineBreakTimeout = this.rxLineBreakTimeout; break;
+
+				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			// Notes:
+			//  > Processing is done sequentially for all monitors, in order to get synchronized
+			//    content for Tx/Bidir and Bidir/Rx.
+			//  > Signaling is only done once per chunk (unless flushing is involved), in order to
+			//    improve performance (by reducing the number of events and monitor updates).
+			//  > Timed line breaks are processed asynchronously, except on reload.
+			//    Alternatively, the chunk loop could check for timeout on each byte.
+			//    However, this is considered too inefficient.
+
+			DisplayElementCollection txElementsToAdd    = null;
+			DisplayElementCollection bidirElementsToAdd = null;
+			DisplayElementCollection rxElementsToAdd    = null;
+
+			DisplayLineCollection txLinesToAdd    = null;
+			DisplayLineCollection bidirLinesToAdd = null;
+			DisplayLineCollection rxLinesToAdd    = null;
+
+			if (txIsAffected)
+			{
+				txElementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+				txLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+			}
+
+			if (bidirIsAffected)
+			{
+				bidirElementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+				bidirLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+			}
+
+			if (rxIsAffected)
+			{
+				rxElementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+				rxLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+			}
+
+			foreach (byte b in chunk.Content)
+			{
+				DoRawBytePre(chunk.TimeStamp, chunk.Device, chunk.Direction, timedLineBreak, lineBreakTimeout);
+
+				if (IsReloading) // In case of reloading, timed line breaks are synchronously evaluated here:
+				{
+					int timeout = timedLineBreak.Timeout;
+
+					if (txIsAffected)    { EvaluateTimedLineBreakOnReload(RepositoryType.Tx,    chunk.TimeStamp, chunk.Direction, timeout, txElementsToAdd,    txLinesToAdd);    }
+					if (bidirIsAffected) { EvaluateTimedLineBreakOnReload(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction, timeout, bidirElementsToAdd, bidirLinesToAdd); }
+					if (rxIsAffected)    { EvaluateTimedLineBreakOnReload(RepositoryType.Rx,    chunk.TimeStamp, chunk.Direction, timeout, rxElementsToAdd,    rxLinesToAdd);    }
 				}
 
-				// Note that processing is done sequentially for all monitors, in order to get more
-				// or less synchronized update for Tx/Bidir and Bidir/Rx.
-				//
-				// Also note that timed line breaks are processed asynchronously, except on reload.
-				// Alternatively, the chunk loop above could check for timeout on each byte.
-				// However, this is considered too inefficient.
+				if (txIsAffected)    { DoRawByte(RepositoryType.Tx,    b, chunk.TimeStamp, chunk.Device, chunk.Direction, txElementsToAdd,    txLinesToAdd);    }
+				if (bidirIsAffected) { DoRawByte(RepositoryType.Bidir, b, chunk.TimeStamp, chunk.Device, chunk.Direction, bidirElementsToAdd, bidirLinesToAdd); }
+				if (rxIsAffected)    { DoRawByte(RepositoryType.Rx,    b, chunk.TimeStamp, chunk.Device, chunk.Direction, rxElementsToAdd,    rxLinesToAdd);    }
 
-				// Check whether device or direction has changed, a chunk is always tied to device and direction:
-				if (TerminalSettings.Display.DeviceLineBreakEnabled || TerminalSettings.Display.DirectionLineBreakEnabled)
-				{
-					if (txIsAffected)    { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
-					if (bidirIsAffected) { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
-					if (rxIsAffected)    { EvaluateAndSignalDeviceOrDirectionLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
-				}
+				DoRawBytePost(chunk.TimeStamp, chunk.Device, chunk.Direction, timedLineBreak, lineBreakTimeout);
+			}
 
-				// Process chunk:
-				foreach (byte b in chunk.Content)
-				{
-					DoRawBytePre(chunk.TimeStamp, chunk.Device, chunk.Direction, timedLineBreak, lineBreakTimeout, txIsAffected, bidirIsAffected, rxIsAffected);
+			if (txIsAffected)
+			{
+				if ((txElementsToAdd != null) && (txElementsToAdd.Count > 0))
+					AddDisplayElements(RepositoryType.Tx, txElementsToAdd);
 
-					if (txIsAffected)    { DoRawByte(RepositoryType.Tx,    b, chunk.TimeStamp, chunk.Device, chunk.Direction); }
-					if (bidirIsAffected) { DoRawByte(RepositoryType.Bidir, b, chunk.TimeStamp, chunk.Device, chunk.Direction); }
-					if (rxIsAffected)    { DoRawByte(RepositoryType.Rx,    b, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if ((txLinesToAdd != null) && (txLinesToAdd.Count > 0))
+					AddDisplayLines(RepositoryType.Tx, txLinesToAdd);
+			}
 
-					DoRawBytePost(chunk.TimeStamp, chunk.Device, chunk.Direction, timedLineBreak, lineBreakTimeout, txIsAffected, bidirIsAffected, rxIsAffected);
-				}
+			if (bidirIsAffected)
+			{
+				if ((bidirElementsToAdd != null) && (bidirElementsToAdd.Count > 0))
+					AddDisplayElements(RepositoryType.Bidir, bidirElementsToAdd);
 
-				// Enforce line break if requested:
-				if (TerminalSettings.Display.ChunkLineBreakEnabled)
-				{
-					if (txIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
-					if (bidirIsAffected) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
-					if (rxIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
-				}
+				if ((bidirLinesToAdd != null) && (bidirLinesToAdd.Count > 0))
+					AddDisplayLines(RepositoryType.Bidir, bidirLinesToAdd);
+			}
+
+			if (rxIsAffected)
+			{
+				if ((rxElementsToAdd != null) && (rxElementsToAdd.Count > 0))
+					AddDisplayElements(RepositoryType.Rx, rxElementsToAdd);
+
+				if ((rxLinesToAdd != null) && (rxLinesToAdd.Count > 0))
+					AddDisplayLines(RepositoryType.Rx, rxLinesToAdd);
 			}
 		}
 
@@ -713,14 +794,15 @@ namespace YAT.Domain
 		/// Must be abstract/virtual because settings and behavior differ among text and binary.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected abstract void DoRawByte(RepositoryType repositoryType, byte b, DateTime ts, string dev, IODirection dir);
+		protected abstract void DoRawByte(RepositoryType repositoryType,
+		                                  byte b, DateTime ts, string dev, IODirection dir,
+		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd);
 
 		/// <summary>
 		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
 		/// </summary>
 		protected virtual void DoRawBytePre(DateTime ts, string dev, IODirection dir,
-		                                    TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout,
-		                                    bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		                                    TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
 		{
 			// Handle start/restart of timed line breaks:
 			if (timedLineBreak.Enabled)
@@ -733,14 +815,6 @@ namespace YAT.Domain
 					else
 						lineBreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
 				}
-				else // In case of reloading, timed line breaks are synchronously evaluated here:
-				{
-					int timeout = timedLineBreak.Timeout;
-
-					if (txIsAffected)    { EvaluateAndSignalTimedLineBreakOnReload(RepositoryType.Tx,    ts, dir, timeout); }
-					if (bidirIsAffected) { EvaluateAndSignalTimedLineBreakOnReload(RepositoryType.Bidir, ts, dir, timeout); }
-					if (rxIsAffected)    { EvaluateAndSignalTimedLineBreakOnReload(RepositoryType.Rx,    ts, dir, timeout); }
-				}
 			}
 		}
 
@@ -748,8 +822,7 @@ namespace YAT.Domain
 		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
 		/// </summary>
 		protected virtual void DoRawBytePost(DateTime ts, string dev, IODirection dir,
-		                                     TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout,
-		                                     bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		                                     TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
 		{
 			// Handle stop of timed line breaks:
 			if (timedLineBreak.Enabled)
@@ -761,22 +834,6 @@ namespace YAT.Domain
 						lineBreakTimeout.Stop();
 				}
 			}
-		}
-
-		/// <summary></summary>
-		protected virtual void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
-		                                   DateTime ts, string dev, IODirection dir,
-		                                   DisplayElementCollection elementsToAdd)
-		{
-			processState.NotifyLineBegin(ts, dev, dir);
-		}
-
-		/// <summary></summary>
-		protected virtual void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
-		                                 DateTime ts,
-		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
-		{
-			processState.NotifyLineEnd();
 		}
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
@@ -816,21 +873,6 @@ namespace YAT.Domain
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
 
 			EvaluateTimedLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
-
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				AddDisplayLines(repositoryType, linesToAdd);
-		}
-
-		/// <summary></summary>
-		protected virtual void EvaluateAndSignalTimedLineBreakOnReload(RepositoryType repositoryType, DateTime ts, IODirection dir, int timeout)
-		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
-
-			EvaluateTimedLineBreakOnReload(repositoryType, ts, dir, timeout, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
@@ -910,32 +952,73 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void FlushAndReplaceAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
-		                                                         DisplayElementCollection elementsToAdd)
+		protected virtual void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
+		                                   DateTime ts, string dev, IODirection dir,
+		                                   DisplayElementCollection elementsToAdd)
 		{
-			// Flush:
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-		////if (linesToAdd.Count > 0) is not needed (yet).
-		////	AddDisplayLines(repositoryType, linesToAdd);
-
-			// Replace:
-			ReplaceCurrentDisplayLine(repositoryType, processState.Line.Elements);
+			processState.NotifyLineBegin(ts, dev, dir);
 		}
 
 		/// <summary></summary>
-		protected virtual void FlushAndClearAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
-		                                                       DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+		protected virtual void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
+		                                 DateTime ts,
+		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			// Flush:
+			processState.NotifyLineEnd();
+		}
+
+		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
+		protected virtual void Flush(RepositoryType repositoryType,
+		                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+		{
 			if (elementsToAdd.Count > 0)
+			{
 				AddDisplayElements(repositoryType, elementsToAdd);
+				elementsToAdd.Clear();
+			}
 
 			if (linesToAdd.Count > 0)
+			{
 				AddDisplayLines(repositoryType, linesToAdd);
+				linesToAdd.Clear();
+			}
+		}
 
-			// Clear:
+		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
+		protected virtual void FlushReplaceAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
+		                                                      DisplayElementCollection elementsToAdd)
+		{
+			if (elementsToAdd.Count > 0)
+			{
+				AddDisplayElements(repositoryType, elementsToAdd);
+				elementsToAdd.Clear();
+			}
+
+		////if (linesToAdd.Count > 0) is not needed (yet).
+		////{
+		////	AddDisplayLines(repositoryType, linesToAdd);
+		////	linesToAdd.Clear();
+		////}
+
+			ReplaceCurrentDisplayLine(repositoryType, processState.Line.Elements);
+		}
+
+		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
+		protected virtual void FlushClearAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
+		                                                    DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+		{
+			if (elementsToAdd.Count > 0)
+			{
+				AddDisplayElements(repositoryType, elementsToAdd);
+				elementsToAdd.Clear();
+			}
+
+			if (linesToAdd.Count > 0)
+			{
+				AddDisplayLines(repositoryType, linesToAdd);
+				linesToAdd.Clear();
+			}
+
 			processState.Line.Elements.Clear();
 			ClearCurrentDisplayLine(repositoryType);
 		}
