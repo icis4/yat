@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+//    System is not used for making origin more obvious.
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -76,6 +77,36 @@ namespace YAT
 
 		/// <summary>The product version.</summary>
 		public static readonly string ProductVersion = System.Windows.Forms.Application.ProductVersion;
+
+		/// <summary>
+		/// The product version including <see cref="System.Version.Revision"/>.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="ProductVersion"/> uses the <see cref="System.Reflection.AssemblyInformationalVersionAttribute"/>
+		/// that hides the <see cref="System.Version.Revision"/> part.
+		/// </remarks>
+		public static System.Version ProductFullVersionValue
+		{
+			get { return (System.Reflection.Assembly.GetEntryAssembly().GetName().Version); }
+		}
+
+		/// <summary>
+		/// The product version including <see cref="System.Version.Revision"/>.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="ProductVersion"/> uses the <see cref="System.Reflection.AssemblyInformationalVersionAttribute"/>
+		/// that hides the <see cref="System.Version.Revision"/> part.
+		/// </remarks>
+		public static string ProductFullVersion
+		{
+			get { return (ProductFullVersionValue.ToString()); }
+		}
+
+		/// <summary>The <see cref="System.Version.Revision"/> part of the product version.</summary>
+		public static string ProductRevision
+		{
+			get { return (ProductFullVersionValue.Revision.ToString()); }
+		}
 
 		/// <summary>The version designation.</summary>
 	////public const string ProductVersionStabilityIndication = "";
