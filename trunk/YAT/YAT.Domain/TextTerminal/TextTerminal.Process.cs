@@ -869,7 +869,7 @@ namespace YAT.Domain
 						else
 						{
 							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
-							FlushAndReplaceAlreadyStartedLine(repositoryType);
+							FlushAndReplaceAlreadyStartedLine(repositoryType, processState, elementsToAdd);
 						}
 					}
 				}
@@ -994,13 +994,13 @@ namespace YAT.Domain
 			{                                // empty lines that only contain hidden pending EOL character(s):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				FlushAndClearAlreadyStartedLine(repositoryType);                  //            This is ensured by flushing here.
+				FlushAndClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd);                  //            This is ensured by flushing here.
 			}
 			else if (isEmptyLine && isNotHiddenEol) // While intended empty lines must be shown, potentially suppress
 			{                                       // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                  //            All other elements must be removed as well!
-				FlushAndClearAlreadyStartedLine(repositoryType);                  //            This is ensured by flushing here.
+				FlushAndClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd);                  //            This is ensured by flushing here.
 			}
 	/*		else if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
 			{
