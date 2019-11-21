@@ -150,14 +150,14 @@ either refer to one of the commands,
 or fill-in any command text.
 
 Note that...
-...'Any Line' is not available if action is 'Highlight', as that would otherwise result in all received lines being highlighted.</value>
+...[Any Line] is not available if action is [Highlight], as that would otherwise result in all received lines being highlighted.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
 
 Note that...
 ...trigger is highlighted for every action.
-...'Highlight' is not available if trigger is 'Any Line', as that would otherwise result in all received lines being highlighted.</value>
+...[Highlight] is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted.</value>
   </data>
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>432, 56</value>

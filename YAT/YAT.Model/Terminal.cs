@@ -213,16 +213,16 @@ namespace YAT.Model
 		// Logs:
 		private Log.Provider log;
 
-		// AutoResponse:
-		private int autoResponseCount;
-		private AutoTriggerHelper autoResponseTriggerHelper;
-		private object autoResponseTriggerHelperSyncObj = new object();
-
 		// AutoAction:
 		private int autoActionCount;
 		private AutoTriggerHelper autoActionTriggerHelper;
 		private object autoActionTriggerHelperSyncObj = new object();
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
+
+		// AutoResponse:
+		private int autoResponseCount;
+		private AutoTriggerHelper autoResponseTriggerHelper;
+		private object autoResponseTriggerHelperSyncObj = new object();
 
 		// Time status:
 		private Chronometer activeConnectChrono;
@@ -397,10 +397,10 @@ namespace YAT.Model
 		public event EventHandler RepositoryRxReloaded;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
+		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
+		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<string>> FixedStatusTextRequest;
@@ -500,9 +500,9 @@ namespace YAT.Model
 				// Create log:
 				this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, this.settingsRoot.Format);
 
-				// Create AutoResponse/Action:
-				CreateAutoResponseHelper();
+				// Create Auto[Action|Response]:
 				CreateAutoActionHelper();
+				CreateAutoResponseHelper();
 
 				// Create chronos:
 				CreateChronos();
@@ -558,8 +558,8 @@ namespace YAT.Model
 					// ...ensure that timed objects are stopped and do not raise events anymore...
 					DisposeRates();
 					DisposeChronos();
-					DisposeAutoResponseHelper();
 					DisposeAutoActionHelper();
+					DisposeAutoResponseHelper();
 
 					// ...close and dispose of terminal and log...
 					CloseAndDisposeTerminal();
@@ -1206,6 +1206,10 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private Domain.Endianness settingsRoot_Changed_endiannessOld = Domain.Settings.IOSettings.EndiannessDefault;
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'endianessOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int settingsRoot_Changed_encodingOld = Domain.Settings.TextTerminalSettings.EncodingDefault;
+
 		/// <remarks>
 		/// Required to solve the issue described in bug #223 "Settings events should state the exact settings diff".
 		/// </remarks>
@@ -1244,16 +1248,16 @@ namespace YAT.Model
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
 			{
-				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
-			{
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoAction))
 			{
 				UpdateAutoAction(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
+			{
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
@@ -1274,19 +1278,19 @@ namespace YAT.Model
 				if (settingsRoot_Changed_terminalTypeOld != this.settingsRoot.TerminalType) {
 					settingsRoot_Changed_terminalTypeOld = this.settingsRoot.TerminalType;
 
-					// Terminal type has changed, recreate AutoResponse/Action:
-					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					// Terminal type has changed, recreate Auto[Action|Response]:
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.IO))
 			{
 				if (settingsRoot_Changed_endiannessOld != this.settingsRoot.Terminal.IO.Endianness) {
-					settingsRoot_Changed_endiannessOld = this.settingsRoot.Terminal.IO.Endianness;
+					settingsRoot_Changed_endiannessOld = this.settingsRoot.Terminal.IO.Endianness; // Relevant for byte sequence based triggers.
 
-					// Endianness has changed, recreate AutoResponse/Action:
-					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					// Endianness has changed, recreate Auto[Action|Response]:
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.Send))
@@ -1302,8 +1306,13 @@ namespace YAT.Model
 			{
 				this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.Terminal.TextTerminal.Encoding;
 
-				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
-				UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+				if (settingsRoot_Changed_encodingOld != this.settingsRoot.Terminal.TextTerminal.Encoding) {
+					settingsRoot_Changed_encodingOld = this.settingsRoot.Terminal.TextTerminal.Encoding; // Relevant for byte sequence based triggers.
+
+					// Encoding has changed, recreate Auto[Action|Response]:
+					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+				}
 			}
 		}
 
@@ -3009,46 +3018,6 @@ namespace YAT.Model
 				this.log.Write(e.Value, Log.LogChannel.RawRx);
 			}
 
-			// AutoResponse (by specification only active on receive-path):
-			if (this.settingsRoot.AutoResponse.IsActive)
-			{
-				bool isTriggered = false;
-
-				foreach (byte b in e.Value.Content) // Note the feature request #366 related remark in the method header.
-				{
-					lock (this.autoResponseTriggerHelperSyncObj)
-					{
-						if (this.autoResponseTriggerHelper != null)
-						{
-							if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(b))
-								isTriggered = true;
-						}
-						else
-						{
-							break; // Break the for-loop if response got disposed in the meantime.
-						}          // Though unlikely, it may happen when deactivating response
-					}              // while receiving a very large chunk.
-				}
-
-				if (isTriggered)
-				{
-					// Invoke sending on different thread than the receive thread:
-					byte[] triggerSequence = null;
-
-					lock (this.autoResponseTriggerHelperSyncObj)
-					{
-						if (this.autoResponseTriggerHelper != null)
-							triggerSequence = this.autoResponseTriggerHelper.TriggerSequence;
-					}
-
-					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_SendAutoResponseAsync);
-					asyncInvoker.BeginInvoke(triggerSequence, null, null);
-
-					// Highlighting is done for all auto responses (so far):
-					e.Attribute = Domain.LineChunkAttribute.Highlight;
-				}
-			}
-
 			// AutoAction (by specification only active on receive-path):
 			if (this.settingsRoot.AutoAction.IsActive)
 			{
@@ -3119,19 +3088,59 @@ namespace YAT.Model
 				}
 			}
 
+			// AutoResponse (by specification only active on receive-path):
+			if (this.settingsRoot.AutoResponse.IsActive)
+			{
+				bool isTriggered = false;
+
+				foreach (byte b in e.Value.Content) // Note the feature request #366 related remark in the method header.
+				{
+					lock (this.autoResponseTriggerHelperSyncObj)
+					{
+						if (this.autoResponseTriggerHelper != null)
+						{
+							if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(b))
+								isTriggered = true;
+						}
+						else
+						{
+							break; // Break the for-loop if response got disposed in the meantime.
+						}          // Though unlikely, it may happen when deactivating response
+					}              // while receiving a very large chunk.
+				}
+
+				if (isTriggered)
+				{
+					// Invoke sending on different thread than the receive thread:
+					byte[] triggerSequence = null;
+
+					lock (this.autoResponseTriggerHelperSyncObj)
+					{
+						if (this.autoResponseTriggerHelper != null)
+							triggerSequence = this.autoResponseTriggerHelper.TriggerSequence;
+					}
+
+					var asyncInvoker = new Action<byte[]>(terminal_RawChunkReceived_SendAutoResponseAsync);
+					asyncInvoker.BeginInvoke(triggerSequence, null, null);
+
+					// Highlighting is done for all auto responses (so far):
+					e.Attribute = Domain.LineChunkAttribute.Highlight;
+				}
+			}
+
 		#if (WITH_SCRIPTING)
 			OnRawChunkReceived(e);
 		#endif
 		}
 
-		private void terminal_RawChunkReceived_SendAutoResponseAsync(byte[] triggerSequence)
-		{
-			SendAutoResponse(triggerSequence);
-		}
-
 		private void terminal_RawChunkReceived_InvokeAutoActionAsync(AutoAction action, byte[] triggerSequence, DateTime ts)
 		{
 			InvokeAutoAction(action, triggerSequence, ts);
+		}
+
+		private void terminal_RawChunkReceived_SendAutoResponseAsync(byte[] triggerSequence)
+		{
+			SendAutoResponse(triggerSequence);
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3319,12 +3328,12 @@ namespace YAT.Model
 					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
 			}
 
-			// AutoResponse:
-			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
+			// AutoAction:
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)
 				{
-					SendAutoResponse(LineWithoutRxEolToOrigin(dl));
+					InvokeAutoAction(this.settingsRoot.AutoAction.Action, LineWithoutRxEolToOrigin(dl), dl.TimeStamp);
 				}
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
@@ -3335,12 +3344,12 @@ namespace YAT.Model
 				// in the 'ElementsReceived' event above.
 			}
 
-			// AutoAction:
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
+			// AutoResponse:
+			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)
 				{
-					InvokeAutoAction(this.settingsRoot.AutoAction.Action, LineWithoutRxEolToOrigin(dl), dl.TimeStamp);
+					SendAutoResponse(LineWithoutRxEolToOrigin(dl));
 				}
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
@@ -5680,15 +5689,170 @@ namespace YAT.Model
 		// Auto
 		//==========================================================================================
 
-		// Note that AutoResponse/Action is intentionally implemented in 'Model' instead of 'Domain'
-		// for the following reasons:
-		//  > Triggers relate to 'Model' items SendText/SendFile/PredefinedCommand/....
-		//  > Responses relate to 'Model' items SendText/SendFile/PredefinedCommand/....
-		//  > Actions relate to 'Model' items as well.
+		// Note that Auto[Action|Response] is intentionally implemented in 'Model'
+		// instead of 'Domain' since Triggers/Patterns/Actions/Responses relate to 'Model' items
+		// SendText/SendFile/PredefinedCommand/....
 		//
 		// If needed one day, trigger evaluation could be moved to 'Domain', same as EOL evaluation.
 		// Moving this to 'Domain' would e.g. allow for coloring. However, this would require two or
 		// even four more colors (Tx/Rx data/control highlight). This becomes too complicated...
+
+		#region Auto > Action
+		//------------------------------------------------------------------------------------------
+		// Auto > Action
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAutoActionHelper()
+		{
+			UpdateAutoAction(); // Simply forward to general Update() method.
+		}
+
+		private void DisposeAutoActionHelper()
+		{
+			lock (this.autoActionTriggerHelperSyncObj)
+				this.autoActionTriggerHelper = null; // Simply delete the reference to the object.
+		}
+
+		/// <summary>
+		/// Updates the automatic action helper.
+		/// </summary>
+		protected virtual void UpdateAutoAction()
+		{
+			if (this.settingsRoot.AutoAction.IsActive)
+			{
+				if (this.settingsRoot.AutoAction.Trigger.CommandIsRequired) // = sequence required = helper required.
+				{
+					byte[] triggerSequence;
+					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoActionTrigger, out triggerSequence))
+					{
+						lock (this.autoActionTriggerHelperSyncObj)
+						{
+							if (this.autoActionTriggerHelper == null)
+								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerSequence);
+							else
+								this.autoActionTriggerHelper.TriggerSequence = triggerSequence;
+						}
+					}
+					else
+					{
+						DeactivateAutoAction();
+						DisposeAutoActionHelper();
+
+						OnMessageInputRequest
+						(
+							"Failed to parse the automatic action trigger! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
+							"To enable again, re-configure the automatic action.",
+							"Automatic Action Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
+					}
+				}
+				else // No command required = no sequence required = no helper required.
+				{
+					DisposeAutoActionHelper();
+				}
+			}
+			else // Disabled.
+			{
+				DisposeAutoActionHelper();
+			}
+		}
+
+		/// <summary>
+		/// Invokes the automatic action.
+		/// </summary>
+		/// <remarks>
+		/// Note the feature request #366 related remark in the method header of
+		/// <see cref="terminal_RawChunkReceived(object, Domain.RawChunkEventArgs)"/>.
+		/// </remarks>
+		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, DateTime ts)
+		{
+			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
+			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+
+			switch (action)
+			{
+				case AutoAction.Highlight:                       /* no additional action */                                    break;
+				case AutoAction.Filter:                          /* no additional action */                                    break;
+				case AutoAction.Suppress:                        /* no additional action */                                    break;
+				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                     break;
+				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, ts);                break;
+				case AutoAction.ClearRepositories:               ClearRepositories();                                          break;
+				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true; break;
+				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                        break;
+				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                break;
+				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                               break;
+				case AutoAction.StopIO:                          StopIO();                                                     break;
+				case AutoAction.CloseTerminal:                   Close();                                                      break;
+				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                               break;
+
+				case AutoAction.None:
+				default:
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Notifies the user about the action.
+		/// </summary>
+		protected virtual void RequestAutoActionMessage(byte[] triggerSequence, DateTime ts)
+		{
+			var sb = new StringBuilder();
+			sb.Append(@"Message has been triggered by """);
+			sb.Append(this.terminal.Format(triggerSequence, Domain.IODirection.Rx));
+			sb.Append(@""" the ");
+			sb.Append(this.autoActionCount);
+			sb.Append(Int32Ex.ToEnglishSuffix(this.autoActionCount));
+			sb.Append(" time at ");
+			sb.Append(this.terminal.Format(ts));
+			sb.Append(".");
+
+			OnMessageInputRequest
+			(
+				sb.ToString(),
+				IndicatedName + " Automatic Action",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
+		}
+
+		/// <summary>
+		/// Gets the automatic action count.
+		/// </summary>
+		public virtual int AutoActionCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.autoActionCount);
+			}
+		}
+
+		/// <summary>
+		/// Resets the automatic action count.
+		/// </summary>
+		public virtual void ResetAutoActionCount()
+		{
+			AssertNotDisposed();
+
+			this.autoActionCount = 0;
+			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+		}
+
+		/// <summary>
+		/// Deactivates the automatic action.
+		/// </summary>
+		public virtual void DeactivateAutoAction()
+		{
+			AssertNotDisposed();
+
+			this.settingsRoot.AutoAction.Deactivate();
+			ResetAutoActionCount();
+		}
+
+		#endregion
 
 		#region Auto > Response
 		//------------------------------------------------------------------------------------------
@@ -5851,163 +6015,6 @@ namespace YAT.Model
 
 			this.settingsRoot.AutoResponse.Deactivate();
 			ResetAutoResponseCount();
-		}
-
-		#endregion
-
-		#region Auto > Action
-		//------------------------------------------------------------------------------------------
-		// Auto > Action
-		//------------------------------------------------------------------------------------------
-
-		private void CreateAutoActionHelper()
-		{
-			UpdateAutoAction(); // Simply forward to general Update() method.
-		}
-
-		private void DisposeAutoActionHelper()
-		{
-			lock (this.autoActionTriggerHelperSyncObj)
-				this.autoActionTriggerHelper = null; // Simply delete the reference to the object.
-		}
-
-		/// <summary>
-		/// Updates the automatic action helper.
-		/// </summary>
-		protected virtual void UpdateAutoAction()
-		{
-			if (this.settingsRoot.AutoAction.IsActive)
-			{
-				if (this.settingsRoot.AutoAction.Trigger.CommandIsRequired) // = sequence required = helper required.
-				{
-					byte[] triggerSequence;
-					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoActionTrigger, out triggerSequence))
-					{
-						lock (this.autoActionTriggerHelperSyncObj)
-						{
-							if (this.autoActionTriggerHelper == null)
-								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerSequence);
-							else
-								this.autoActionTriggerHelper.TriggerSequence = triggerSequence;
-						}
-					}
-					else
-					{
-						DeactivateAutoAction();
-						DisposeAutoActionHelper();
-
-						OnMessageInputRequest
-						(
-							"Failed to parse the automatic action trigger! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
-							"To enable again, re-configure the automatic action.",
-							"Automatic Action Error",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
-						);
-					}
-				}
-				else // No command required = no sequence required = no helper required.
-				{
-					DisposeAutoActionHelper();
-				}
-			}
-			else // Disabled.
-			{
-				DisposeAutoActionHelper();
-			}
-		}
-
-		/// <summary>
-		/// Invokes the automatic action.
-		/// </summary>
-		/// <remarks>
-		/// Note the feature request #366 related remark in the method header of
-		/// <see cref="terminal_RawChunkReceived(object, Domain.RawChunkEventArgs)"/>.
-		/// </remarks>
-		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, DateTime ts)
-		{
-			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
-			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
-
-			switch (action)
-			{
-				case AutoAction.Highlight:                       /* no additional action */                                    break;
-				case AutoAction.Filter:                          /* no additional action */                                    break;
-				case AutoAction.Suppress:                        /* no additional action */                                    break;
-				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                     break;
-				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, ts);                break;
-				case AutoAction.ClearRepositories:               ClearRepositories();                                          break;
-				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true; break;
-				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                        break;
-				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                break;
-				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                               break;
-				case AutoAction.StopIO:                          StopIO();                                                     break;
-				case AutoAction.CloseTerminal:                   Close();                                                      break;
-				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                               break;
-
-				case AutoAction.None:
-				default:
-					break;
-			}
-		}
-
-		/// <summary>
-		/// Notifies the user about the action.
-		/// </summary>
-		protected virtual void RequestAutoActionMessage(byte[] triggerSequence, DateTime ts)
-		{
-			var sb = new StringBuilder();
-			sb.Append(@"Message has been triggered by """);
-			sb.Append(this.terminal.Format(triggerSequence, Domain.IODirection.Rx));
-			sb.Append(@""" the ");
-			sb.Append(this.autoActionCount);
-			sb.Append(Int32Ex.ToEnglishSuffix(this.autoActionCount));
-			sb.Append(" time at ");
-			sb.Append(this.terminal.Format(ts));
-			sb.Append(".");
-
-			OnMessageInputRequest
-			(
-				sb.ToString(),
-				IndicatedName + " Automatic Action",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Information
-			);
-		}
-
-		/// <summary>
-		/// Gets the automatic action count.
-		/// </summary>
-		public virtual int AutoActionCount
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.autoActionCount);
-			}
-		}
-
-		/// <summary>
-		/// Resets the automatic action count.
-		/// </summary>
-		public virtual void ResetAutoActionCount()
-		{
-			AssertNotDisposed();
-
-			this.autoActionCount = 0;
-			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
-		}
-
-		/// <summary>
-		/// Deactivates the automatic action.
-		/// </summary>
-		public virtual void DeactivateAutoAction()
-		{
-			AssertNotDisposed();
-
-			this.settingsRoot.AutoAction.Deactivate();
-			ResetAutoActionCount();
 		}
 
 		#endregion
@@ -6262,15 +6269,15 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
-		{
-			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
-		}
-
-		/// <summary></summary>
 		protected virtual void OnAutoActionCountChanged(EventArgs<int> e)
 		{
 			this.eventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
 		}
 
 		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>

@@ -86,6 +86,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\AutoTriggerSettings.cs" />
     <Compile Include="Settings\AutoActionSettings.cs" />
     <Compile Include="Settings\AutoResponseSettings.cs" />
     <Compile Include="Settings\LayoutSettings.cs" />
@@ -95,13 +96,13 @@
     <Compile Include="Settings\SendFileSettings.cs" />
     <Compile Include="Settings\SendTextSettings.cs" />
     <Compile Include="Settings\TerminalSettingsItem.cs" />
-    <Compile Include="Settings\ViewSettings.cs" />
     <Compile Include="Settings\WorkspaceSettings.cs" />
     <Compile Include="Types\AutoAction.cs" />
     <Compile Include="Types\AutoResponse.cs" />
     <Compile Include="Types\AutoTrigger.cs" />
     <Compile Include="Types\Command.cs" />
     <Compile Include="Types\EventArgs.cs" />
+    <Compile Include="Types\AutoTriggerOptions.cs" />
     <Compile Include="Types\PredefinedCommandPage.cs" />
     <Compile Include="Types\PredefinedCommandPageCollection.cs" />
     <Compile Include="Types\PredefinedCommandPageLayout.cs" />

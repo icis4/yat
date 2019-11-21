@@ -165,12 +165,16 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainTool_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_AutoAction_ShowHide = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoAction_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripButton_MainTool_AutoAction_UseText = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoAction_UseRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoAction_Action = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripLabel_MainTool_AutoAction_Count = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButton_MainTool_AutoAction_Deactivate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_8 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_AutoResponse_ShowHide = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripButton_MainTool_AutoResponse_UseText = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoResponse_UseRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripLabel_MainTool_AutoResponse_Count = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButton_MainTool_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripButton();
@@ -1012,12 +1016,16 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainTool_Separator_7,
             this.toolStripButton_MainTool_AutoAction_ShowHide,
             this.toolStripComboBox_MainTool_AutoAction_Trigger,
+            this.toolStripButton_MainTool_AutoAction_UseText,
+            this.toolStripButton_MainTool_AutoAction_UseRegex,
             this.toolStripComboBox_MainTool_AutoAction_Action,
             this.toolStripLabel_MainTool_AutoAction_Count,
             this.toolStripButton_MainTool_AutoAction_Deactivate,
             this.toolStripMenuItem_MainTool_Separator_8,
             this.toolStripButton_MainTool_AutoResponse_ShowHide,
             this.toolStripComboBox_MainTool_AutoResponse_Trigger,
+            this.toolStripButton_MainTool_AutoResponse_UseText,
+            this.toolStripButton_MainTool_AutoResponse_UseRegex,
             this.toolStripComboBox_MainTool_AutoResponse_Response,
             this.toolStripLabel_MainTool_AutoResponse_Count,
             this.toolStripButton_MainTool_AutoResponse_Deactivate,
@@ -1298,7 +1306,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_UseRegex.Name = "toolStripButton_MainTool_Find_UseRegex";
 			this.toolStripButton_MainTool_Find_UseRegex.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_UseRegex.Text = ".*";
-			this.toolStripButton_MainTool_Find_UseRegex.ToolTipText = "Use Regular Expression\r\n[Alt+E] (while in Find)";
+			this.toolStripButton_MainTool_Find_UseRegex.ToolTipText = "Enable Regular Expression\r\n[Alt+E] (while in Find)";
 			this.toolStripButton_MainTool_Find_UseRegex.Visible = false;
 			this.toolStripButton_MainTool_Find_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_UseRegex_Click);
 			// 
@@ -1398,6 +1406,28 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged);
 			// 
+			// toolStripButton_MainTool_AutoAction_UseText
+			// 
+			this.toolStripButton_MainTool_AutoAction_UseText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoAction_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripButton_MainTool_AutoAction_UseText.Name = "toolStripButton_MainTool_AutoAction_UseText";
+			this.toolStripButton_MainTool_AutoAction_UseText.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_AutoAction_UseText.Text = "Use Text";
+			this.toolStripButton_MainTool_AutoAction_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis opt" +
+    "ion switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
+			this.toolStripButton_MainTool_AutoAction_UseText.Visible = false;
+			this.toolStripButton_MainTool_AutoAction_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_UseText_Click);
+			// 
+			// toolStripButton_MainTool_AutoAction_UseRegex
+			// 
+			this.toolStripButton_MainTool_AutoAction_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_AutoAction_UseRegex.Name = "toolStripButton_MainTool_AutoAction_UseRegex";
+			this.toolStripButton_MainTool_AutoAction_UseRegex.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_AutoAction_UseRegex.Text = ".*";
+			this.toolStripButton_MainTool_AutoAction_UseRegex.ToolTipText = "Enable Regular Expression\r\n[Alt+E] (while editing)";
+			this.toolStripButton_MainTool_AutoAction_UseRegex.Visible = false;
+			this.toolStripButton_MainTool_AutoAction_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_UseRegex_Click);
+			// 
 			// toolStripComboBox_MainTool_AutoAction_Action
 			// 
 			this.toolStripComboBox_MainTool_AutoAction_Action.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1449,6 +1479,28 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_TextChanged);
+			// 
+			// toolStripButton_MainTool_AutoResponse_UseText
+			// 
+			this.toolStripButton_MainTool_AutoResponse_UseText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoResponse_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripButton_MainTool_AutoResponse_UseText.Name = "toolStripButton_MainTool_AutoResponse_UseText";
+			this.toolStripButton_MainTool_AutoResponse_UseText.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_AutoResponse_UseText.Text = "Use Text";
+			this.toolStripButton_MainTool_AutoResponse_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis opt" +
+    "ion switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
+			this.toolStripButton_MainTool_AutoResponse_UseText.Visible = false;
+			this.toolStripButton_MainTool_AutoResponse_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_UseText_Click);
+			// 
+			// toolStripButton_MainTool_AutoResponse_UseRegex
+			// 
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.Name = "toolStripButton_MainTool_AutoResponse_UseRegex";
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.Text = ".*";
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.ToolTipText = "Enable Regular Expression\r\n[Alt+E] (while editing)";
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.Visible = false;
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_UseRegex_Click);
 			// 
 			// toolStripComboBox_MainTool_AutoResponse_Response
 			// 
@@ -1720,22 +1772,26 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_ShowHide;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoResponse_Response;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoResponse_Trigger;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_UseText;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_UseRegex;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoResponse_Count;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Deactivate;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_8;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_ShowHide;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Find_Pattern;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Next;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Previous;
-		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoResponse_Count;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_ShowHide;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_9;
-		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoAction_Trigger;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_AutoAction_Action;
-		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoAction_Count;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_Deactivate;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_CaseSensitive;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_WholeWord;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_UseRegex;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_ShowHide;
+		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoAction_Trigger;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_UseText;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_UseRegex;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_AutoAction_Action;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoAction_Count;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_Deactivate;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_9;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Time;
 		private System.Windows.Forms.Timer timer_Time;
 	#if (WITH_SCRIPTING)

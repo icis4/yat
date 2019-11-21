@@ -182,10 +182,10 @@ namespace YAT.View.Forms
 		public event EventHandler<Model.SavedEventArgs> Saved;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
+		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
+		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
 
 		#endregion
 
@@ -890,6 +890,16 @@ namespace YAT.View.Forms
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
 		}
 
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_UseText_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoResponseUseText();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_UseRegex_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoResponseUseRegex();
+		}
+
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -960,9 +970,9 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction.Checked          = this.settingsRoot.AutoAction.IsActive;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Checked  = this.settingsRoot.AutoAction.TriggerIsActive;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Checked = this.settingsRoot.AutoAction.ActionIsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction.Checked         = this.settingsRoot.AutoAction.IsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Checked = this.settingsRoot.AutoAction.TriggerIsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Checked  = this.settingsRoot.AutoAction.ActionIsActive;
 
 				// Attention:
 				// Similar code exists in...
@@ -981,8 +991,8 @@ namespace YAT.View.Forms
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
 
-					var response = this.settingsRoot.AutoAction.Action;
-					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+					var action = this.settingsRoot.AutoAction.Action;
+					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
 				}
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;
@@ -1043,6 +1053,16 @@ namespace YAT.View.Forms
 
 			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.BackColor = SystemColors.Window;
 			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_UseText_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoActionUseText();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_UseRegex_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoActionUseRegex();
 		}
 
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
@@ -4123,7 +4143,7 @@ namespace YAT.View.Forms
 				{
 					case AutoAction.Highlight:
 					{
-						text.AppendLine("Trigger cannot be set to 'Any Line' when action is 'Highlight'!");
+						text.AppendLine("Trigger cannot be set to [Any Line] when action is [Highlight]!");
 						text.AppendLine();
 						text.Append    ("Reason: Such action would result in all received lines being highlighted.");
 						break;
@@ -4131,7 +4151,7 @@ namespace YAT.View.Forms
 
 					case AutoAction.Suppress:
 					{
-						text.AppendLine("Trigger cannot be set to 'Any Line' when action is 'Suppress'!");
+						text.AppendLine("Trigger cannot be set to [Any Line] when action is [Suppress]!");
 						text.AppendLine();
 						text.Append    ("Reason: Such action would result in all received lines being suppressed.");
 						break;
@@ -4163,6 +4183,22 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestToggleAutoActionUseText()
+		{
+			var options = this.settingsRoot.AutoAction.Options;
+			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoAction.Options = options;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoActionUseRegex()
+		{
+			var options = this.settingsRoot.AutoAction.Options;
+			options.UseRegex = !options.UseRegex; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoAction.Options = options;
+		}
+
+		/// <summary></summary>
 		public virtual void RequestAutoActionAction(AutoActionEx action)
 		{
 			if (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine)
@@ -4173,7 +4209,7 @@ namespace YAT.View.Forms
 				{
 					case AutoAction.Highlight:
 					{
-						text.AppendLine("Action cannot be set to 'Highlight' when trigger is 'Any Line'!");
+						text.AppendLine("Action cannot be set to [Highlight] when trigger is [Any Line]!");
 						text.AppendLine();
 						text.Append    ("Reason: Such action would result in all received lines being highlighted.");
 						break;
@@ -4181,7 +4217,7 @@ namespace YAT.View.Forms
 
 					case AutoAction.Suppress:
 					{
-						text.AppendLine("Action cannot be set to 'Suppress' when trigger is 'Any Line'!");
+						text.AppendLine("Action cannot be set to [Suppress] when trigger is [Any Line]!");
 						text.AppendLine();
 						text.Append    ("Reason: Such action would result in all received lines being suppressed.");
 						break;
@@ -4230,6 +4266,22 @@ namespace YAT.View.Forms
 		public virtual void RequestAutoResponseTrigger(AutoTriggerEx trigger)
 		{
 			this.settingsRoot.AutoResponse.Trigger = trigger;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoResponseUseText()
+		{
+			var options = this.settingsRoot.AutoResponse.Options;
+			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoResponse.Options = options;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoResponseUseRegex()
+		{
+			var options = this.settingsRoot.AutoResponse.Options;
+			options.UseRegex = !options.UseRegex; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoResponse.Options = options;
 		}
 
 		/// <summary></summary>
@@ -5629,8 +5681,8 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryBidirReloaded         += terminal_RepositoryBidirReloaded;
 				this.terminal.RepositoryRxReloaded            += terminal_RepositoryRxReloaded;
 
-				this.terminal.AutoResponseCountChanged        += terminal_AutoResponseCountChanged;
 				this.terminal.AutoActionCountChanged          += terminal_AutoActionCountChanged;
+				this.terminal.AutoResponseCountChanged        += terminal_AutoResponseCountChanged;
 
 				this.terminal.FixedStatusTextRequest             += terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             += terminal_TimedStatusTextRequest;
@@ -5678,8 +5730,8 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryBidirReloaded         -= terminal_RepositoryBidirReloaded;
 				this.terminal.RepositoryRxReloaded            -= terminal_RepositoryRxReloaded;
 
-				this.terminal.AutoResponseCountChanged        -= terminal_AutoResponseCountChanged;
 				this.terminal.AutoActionCountChanged          -= terminal_AutoActionCountChanged;
+				this.terminal.AutoResponseCountChanged        -= terminal_AutoResponseCountChanged;
 
 				this.terminal.FixedStatusTextRequest             -= terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             -= terminal_TimedStatusTextRequest;
@@ -6093,21 +6145,21 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_AutoResponseCountChanged(object sender, EventArgs<int> e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			OnAutoResponseCountChanged(e);
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_AutoActionCountChanged(object sender, EventArgs<int> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			OnAutoActionCountChanged(e);
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void terminal_AutoResponseCountChanged(object sender, EventArgs<int> e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			OnAutoResponseCountChanged(e);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6889,15 +6941,15 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
-		{
-			EventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
-		}
-
-		/// <summary></summary>
 		protected virtual void OnAutoActionCountChanged(EventArgs<int> e)
 		{
 			EventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
+		{
+			EventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
 		}
 
 		#endregion
