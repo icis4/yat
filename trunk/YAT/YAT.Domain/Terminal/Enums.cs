@@ -66,7 +66,7 @@ namespace YAT.Domain
 	/// So far there can only be one attribute, thus named "Attribute" and not marked [Flags].
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Enum actually implements an attribute, an attribute related to a display line.")]
-	public enum LineAttribute
+	public enum LineChangeAttribute
 	{
 		None = 0,
 

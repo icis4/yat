@@ -178,19 +178,19 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
-	public class DisplayLineAttributeEventArgs : DisplayElementsEventArgs
+	public class DisplayLineChangeEventArgs : DisplayElementsEventArgs
 	{
 		/// <remarks>
 		/// The <see cref="Attribute"/> is intended to be set by the event sink,
 		/// must therefore be settable.
 		/// </remarks>
-		public LineAttribute Attribute { get; set; } // = LineAttribute.None;
+		public LineChangeAttribute Attribute { get; set; } // = LineChangeAttribute.None;
 
 		/// <remarks>
 		/// The <see cref="Attribute"/> is intended to be set by the event sink,
 		/// therefore not part of the constructor parameters.
 		/// </remarks>
-		public DisplayLineAttributeEventArgs(DisplayElementCollection elements)
+		public DisplayLineChangeEventArgs(DisplayElementCollection elements)
 			: base(elements)
 		{
 		}

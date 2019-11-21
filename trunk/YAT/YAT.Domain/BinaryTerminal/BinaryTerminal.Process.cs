@@ -389,9 +389,9 @@ namespace YAT.Domain
 		#if (DEBUG)
 			if (lineState.Attribute.SuppressForSure || (lineState.Attribute.SuppressIfNotFiltered && !lineState.Attribute.AnyFilterDetected)) // Suppress:
 			{
-				// As described in 'EvaluateLineAttribute()', in both cases filtering and suppression, the
-				// current implementation retains the line until it is complete, i.e. until the final decision
-				// to filter or suppress could be done.
+				// As described in 'EvaluateLineChangeAttribute()', in both cases filtering and suppression,
+				// the current implementation retains the line until it is complete, i.e. until the final
+				// decision to filter or suppress could be done.
 				// Consequently, the above above condition will never become true, thus excluding it (YAGNI).
 				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 

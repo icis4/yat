@@ -3069,9 +3069,9 @@ namespace YAT.Model
 					// Mark the received chunk as needed (triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
-						case AutoAction.Filter:   e.Attribute = Domain.LineAttribute.Filter;    break;
-						case AutoAction.Suppress: e.Attribute = Domain.LineAttribute.Suppress;  break;
-						default:                  e.Attribute = Domain.LineAttribute.Highlight; break;
+						case AutoAction.Filter:   e.Attribute = Domain.LineChangeAttribute.Filter;    break;
+						case AutoAction.Suppress: e.Attribute = Domain.LineChangeAttribute.Suppress;  break;
+						default:                  e.Attribute = Domain.LineChangeAttribute.Highlight; break;
 					}
 				}
 				else
@@ -3079,8 +3079,8 @@ namespace YAT.Model
 					// Mark the received chunk as needed (non-triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
-						case AutoAction.Filter:   e.Attribute = Domain.LineAttribute.SuppressIfNotFiltered;           break;
-						case AutoAction.Suppress: e.Attribute = Domain.LineAttribute.SuppressIfSubsequentlyTriggered; break;
+						case AutoAction.Filter:   e.Attribute = Domain.LineChangeAttribute.SuppressIfNotFiltered;           break;
+						case AutoAction.Suppress: e.Attribute = Domain.LineChangeAttribute.SuppressIfSubsequentlyTriggered; break;
 					}
 				}
 			}
@@ -3121,7 +3121,7 @@ namespace YAT.Model
 					asyncInvoker.BeginInvoke(triggerSequence, null, null);
 
 					// Highlighting is done for all auto responses (so far):
-					e.Attribute = Domain.LineAttribute.Highlight;
+					e.Attribute = Domain.LineChangeAttribute.Highlight;
 				}
 			}
 
@@ -3178,7 +3178,7 @@ namespace YAT.Model
 
 	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirChanged", Rationale = "The terminal synchronizes display element/line processing.")]
 	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxChanged", Rationale = "The terminal synchronizes display element/line processing.")]
-	////private void terminal_CurrentDisplayLineTxChanged(object sender, Domain.DisplayLineAttributeEventArgs e)
+	////private void terminal_CurrentDisplayLineTxChanged(object sender, Domain.DisplayLineChangeAttributeEventArgs e)
 	////{
 	////	if (IsDisposed)
 	////		return; // Ensure not to handle events during closing anymore.
@@ -3188,7 +3188,7 @@ namespace YAT.Model
 	////
 	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirChanged", Rationale = "The terminal synchronizes display element/line processing.")]
 	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxChanged", Rationale = "The terminal synchronizes display element/line processing.")]
-	////private void terminal_CurrentDisplayLineBidirChanged(object sender, Domain.DisplayLineAttributeEventArgs e)
+	////private void terminal_CurrentDisplayLineBidirChanged(object sender, Domain.DisplayLineChangeAttributeEventArgs e)
 	////{
 	////	if (IsDisposed)
 	////		return; // Ensure not to handle events during closing anymore.
@@ -3211,11 +3211,11 @@ namespace YAT.Model
 		///
 		/// Approach b) was chosen (2019-11-21 / YAT 2.1.1). Rationale:
 		///  > Keep settings complexity in model, keep <see cref="Domain.Terminal"/> as simple as possible.
-		///  > Keep well-defined interface <see cref="Domain.LineAttribute"/> among the two objects.
+		///  > Keep well-defined interface <see cref="Domain.LineChangeAttribute"/> among the two objects.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirChanged", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxChanged", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_CurrentDisplayLineRxChanged(object sender, Domain.DisplayLineAttributeEventArgs e)
+		private void terminal_CurrentDisplayLineRxChanged(object sender, Domain.DisplayLineChangeEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
