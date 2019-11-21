@@ -101,9 +101,9 @@ Important changes:
   of bugs #176, #477, #478 as well as preparing upcoming feature reqest #74).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
-- Chunk line break settings can now be found in [[Text|Binary] Settings...] (related to bug #477).
 - Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
-  on every chunk (also related to bug #477).
+  on every chunk (related to bug #477).
+- Consequently, chunk line break settings are now located in the text/binary specific settings.
 - USB Ser/HID now takes the HID usage into account, allowing working with devices that implement
   multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).

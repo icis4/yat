@@ -114,7 +114,7 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-	//		this.settings.ChunkLineBreak = checkBox_ChunkLineBreak.Checked; PENDING
+			this.settings.ChunkLineBreakEnabled = checkBox_ChunkLineBreak.Checked;
 			SetControls();
 			OnSettingsChanged(EventArgs.Empty);
 		}
@@ -224,7 +224,7 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-			//	checkBox_ChunkLineBreak.Checked = this.settings.ChunkLineBreak;
+				checkBox_ChunkLineBreak.Checked = this.settings.ChunkLineBreakEnabled;
 
 				enabled = this.settings.LengthLineBreak.Enabled;
 				checkBox_LengthLineBreak.Checked = enabled;

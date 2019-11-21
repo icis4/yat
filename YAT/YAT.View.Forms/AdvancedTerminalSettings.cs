@@ -227,6 +227,7 @@ namespace YAT.View.Forms
 
 			this.settingsInEdit.Terminal.Display.ShowTimeDelta = checkBox_ShowTimeDelta.Checked;
 		}
+
 		private void checkBox_ShowDevice_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -245,8 +246,8 @@ namespace YAT.View.Forms
 
 				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = true;
 					this.settingsInEdit.Terminal.Display.ShowDevice             = true;
+					this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = true;
 				}
 			}
 			else
@@ -273,8 +274,8 @@ namespace YAT.View.Forms
 
 				if (dr == DialogResult.OK)
 				{
+					this.settingsInEdit.Terminal.Display.ShowDirection             = true;
 					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = true;
-					this.settingsInEdit.Terminal.Display.ShowDirection = true;
 				}
 			}
 			else
@@ -315,6 +316,10 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Display.IncludeIOControl = checkBox_IncludeIOControl.Checked;
 		}
 
+		/// <remarks>
+		/// Located before <see cref="checkBox_DeviceLineBreak"/> because the direction line
+		/// break is something more important (not only for TCP/IP and UDP/IP servers).
+		/// </remarks>
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -333,7 +338,7 @@ namespace YAT.View.Forms
 
 				if (dr == DialogResult.OK)
 				{
-					this.settingsInEdit.Terminal.Display.ShowDirection = false;
+					this.settingsInEdit.Terminal.Display.ShowDirection             = false;
 					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = false;
 				}
 			}
@@ -343,6 +348,10 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Located after <see cref="checkBox_DirectionLineBreak"/> because the device line
+		/// break is something less important (only for TCP/IP and UDP/IP servers).
+		/// </remarks>
 		private void checkBox_DeviceLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)

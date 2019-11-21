@@ -320,22 +320,22 @@ namespace YAT.Domain.Settings
 		// Property Redirects
 		//------------------------------------------------------------------------------------------
 
-	/*	/// <remarks>
+		/// <remarks>
 		/// Supported for text and binary terminals, but settings are separated to allow setting and
 		/// keeping them separate, as e.g. chunk and timed line breaks make more sense on a binary
 		/// than a text terminal.
 		/// </remarks>
 		[XmlIgnore]
-		public TimeoutSettingTuple TxDisplayChunkLineBreak
+		public bool TxDisplayChunkLineBreakEnabled
 		{
 			get
 			{
 				if (TerminalType == TerminalType.Text)
-					return (TextTerminal.TxDisplay.ChunkLineBreak);
+					return (TextTerminal.TxDisplay.ChunkLineBreakEnabled);
 				else
-					return (BinaryTerminal.TxDisplay.ChunkLineBreak);
+					return (BinaryTerminal.TxDisplay.ChunkLineBreakEnabled);
 			}
-		} !!! PENDING !!!
+		}
 
 		/// <remarks>
 		/// Supported for text and binary terminals, but settings are separated to allow setting and
@@ -343,16 +343,16 @@ namespace YAT.Domain.Settings
 		/// than a text terminal.
 		/// </remarks>
 		[XmlIgnore]
-		public TimeoutSettingTuple RxDisplayChunkLineBreak
+		public bool RxDisplayChunkLineBreakEnabled
 		{
 			get
 			{
 				if (TerminalType == TerminalType.Text)
-					return (TextTerminal.RxDisplay.ChunkLineBreak);
+					return (TextTerminal.RxDisplay.ChunkLineBreakEnabled);
 				else
-					return (BinaryTerminal.RxDisplay.ChunkLineBreak);
+					return (BinaryTerminal.RxDisplay.ChunkLineBreakEnabled);
 			}
-		}	*/
+		}
 
 		/// <remarks>
 		/// Supported for text and binary terminals, but settings are separated to allow setting and
@@ -488,13 +488,12 @@ namespace YAT.Domain.Settings
 			// ...code of property further below has to be adapted accordingly.
 			// ...messages in PotentiallyUpdateIOTypeDependentSettings() of View.Forms.TerminalSettings have to be adapted accordingly.
 
-			if (Display != null)
-			{
-				Display.ChunkLineBreakEnabled = isUdpSocket;
-			}
-
 			if (TextTerminal != null)
 			{
+				TextTerminal.TxDisplay.ChunkLineBreakEnabled = isUdpSocket;
+				TextTerminal.RxDisplay.ChunkLineBreakEnabled = isUdpSocket;
+				//// Only change text settings since chunk line break is default of binary settings anyway.
+
 				TextTerminal.TxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
 				TextTerminal.RxEol = (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault);
 				TextTerminal.SeparateTxRxEol = false;
@@ -516,13 +515,12 @@ namespace YAT.Domain.Settings
 
 			bool areDefaults = true;
 
-			if (Display != null)
-			{
-				areDefaults &= (Display.ChunkLineBreakEnabled == isUdpSocket);
-			}
-
 			if (TextTerminal != null)
 			{
+				areDefaults &= (TextTerminal.TxDisplay.ChunkLineBreakEnabled == isUdpSocket);
+				areDefaults &= (TextTerminal.RxDisplay.ChunkLineBreakEnabled == isUdpSocket);
+				//// Only evaluate text settings since chunk line break is default of binary settings anyway.
+
 				areDefaults &= (TextTerminal.TxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
 				areDefaults &= (TextTerminal.RxEol == (isUdpSocket ? ((EolEx)Eol.None).ToSequenceString() : TextTerminalSettings.EolDefault));
 				areDefaults &= (TextTerminal.SeparateTxRxEol == false);

@@ -208,9 +208,8 @@ namespace YAT.Domain.Settings
 			TimeDurationFormat  = rhs.TimeDurationFormat;
 			IncludeIOControl    = rhs.IncludeIOControl;
 
-			DeviceLineBreakEnabled    = rhs.DeviceLineBreakEnabled;
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
-			ChunkLineBreakEnabled     = rhs.ChunkLineBreakEnabled;
+			DeviceLineBreakEnabled    = rhs.DeviceLineBreakEnabled;
 
 			MaxLineCount         = rhs.MaxLineCount;
 			MaxLineLength        = rhs.MaxLineLength;
@@ -250,9 +249,8 @@ namespace YAT.Domain.Settings
 			TimeDurationFormat  = TimeDurationFormatDefault;
 			IncludeIOControl    = IncludeIOControlDefault;
 
-			DeviceLineBreakEnabled    = DeviceLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
-			ChunkLineBreakEnabled     = ChunkLineBreakEnabledDefault;
+			DeviceLineBreakEnabled    = DeviceLineBreakEnabledDefault;
 
 			MaxLineCount         = MaxLineCountDefault;
 			MaxLineLength        = MaxLineLengthDefault;
@@ -614,22 +612,14 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
-		[XmlElement("DeviceLineBreakEnabled")]
-		public virtual bool DeviceLineBreakEnabled
-		{
-			get { return (this.deviceLineBreakEnabled); }
-			set
-			{
-				if (this.deviceLineBreakEnabled != value)
-				{
-					this.deviceLineBreakEnabled = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
+		/// <remarks>
+		/// Part of the text/binary independent settings to ease handling the dependency
+		/// to <see cref="ShowDirection"/> in the advanced settings dialog.
+		/// </remarks>
+		/// <remarks>
+		/// Located before <see cref="DeviceLineBreakEnabled"/> because the direction line
+		/// break is something more important (not only for TCP/IP and UDP/IP servers).
+		/// </remarks>
 		[XmlElement("DirectionLineBreakEnabled")]
 		public virtual bool DirectionLineBreakEnabled
 		{
@@ -644,16 +634,26 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("ChunkLineBreakEnabled")]
-		public virtual bool ChunkLineBreakEnabled
+		/// <remarks>
+		/// Named 'Device' for simplicity even though using 'I/O Device' for user.
+		/// </remarks>
+		/// <remarks>
+		/// Part of the text/binary independent settings to ease handling the dependency
+		/// to <see cref="ShowDevice"/> in the advanced settings dialog.
+		/// </remarks>
+		/// <remarks>
+		/// Located after <see cref="DirectionLineBreakEnabled"/> because the device line
+		/// break is something less important (only for TCP/IP and UDP/IP servers).
+		/// </remarks>
+		[XmlElement("DeviceLineBreakEnabled")]
+		public virtual bool DeviceLineBreakEnabled
 		{
-			get { return (this.chunkLineBreakEnabled); }
+			get { return (this.deviceLineBreakEnabled); }
 			set
 			{
-				if (this.chunkLineBreakEnabled != value)
+				if (this.deviceLineBreakEnabled != value)
 				{
-					this.chunkLineBreakEnabled = value;
+					this.deviceLineBreakEnabled = value;
 					SetMyChanged();
 				}
 			}
@@ -846,9 +846,8 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  IncludeIOControl   .GetHashCode();
 
-				hashCode = (hashCode * 397) ^  DeviceLineBreakEnabled   .GetHashCode();
 				hashCode = (hashCode * 397) ^  DirectionLineBreakEnabled.GetHashCode();
-				hashCode = (hashCode * 397) ^  ChunkLineBreakEnabled    .GetHashCode();
+				hashCode = (hashCode * 397) ^  DeviceLineBreakEnabled   .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  MaxLineCount        .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxLineLength       .GetHashCode();
@@ -907,9 +906,8 @@ namespace YAT.Domain.Settings
 				StringEx.EqualsOrdinal(TimeDurationFormat, other.TimeDurationFormat)  &&
 				IncludeIOControl                   .Equals(other.IncludeIOControl)    &&
 
-				DeviceLineBreakEnabled   .Equals(other.DeviceLineBreakEnabled)    &&
 				DirectionLineBreakEnabled.Equals(other.DirectionLineBreakEnabled) &&
-				ChunkLineBreakEnabled    .Equals(other.ChunkLineBreakEnabled)     &&
+				DeviceLineBreakEnabled   .Equals(other.DeviceLineBreakEnabled)    &&
 
 				MaxLineCount        .Equals(other.MaxLineCount)         &&
 				MaxLineLength       .Equals(other.MaxLineLength)        &&
