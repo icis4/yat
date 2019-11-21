@@ -830,7 +830,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_MainMenu_Help_Update
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Update.Name = "toolStripMenuItem_MainMenu_Help_Update";
-			this.toolStripMenuItem_MainMenu_Help_Update.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_MainMenu_Help_Update.Size = new System.Drawing.Size(170, 22);
 			this.toolStripMenuItem_MainMenu_Help_Update.Text = "Update...";
 			this.toolStripMenuItem_MainMenu_Help_Update.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_Update_Click);
 			// 
@@ -1411,10 +1411,10 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoAction_UseText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton_MainTool_AutoAction_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
 			this.toolStripButton_MainTool_AutoAction_UseText.Name = "toolStripButton_MainTool_AutoAction_UseText";
-			this.toolStripButton_MainTool_AutoAction_UseText.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_AutoAction_UseText.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_AutoAction_UseText.Text = "Use Text";
-			this.toolStripButton_MainTool_AutoAction_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis opt" +
-    "ion switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
+			this.toolStripButton_MainTool_AutoAction_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
+    "switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
 			this.toolStripButton_MainTool_AutoAction_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoAction_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_UseText_Click);
 			// 
@@ -1485,10 +1485,10 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoResponse_UseText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton_MainTool_AutoResponse_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
 			this.toolStripButton_MainTool_AutoResponse_UseText.Name = "toolStripButton_MainTool_AutoResponse_UseText";
-			this.toolStripButton_MainTool_AutoResponse_UseText.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_AutoResponse_UseText.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_AutoResponse_UseText.Text = "Use Text";
-			this.toolStripButton_MainTool_AutoResponse_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis opt" +
-    "ion switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
+			this.toolStripButton_MainTool_AutoResponse_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
+    "switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
 			this.toolStripButton_MainTool_AutoResponse_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoResponse_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_UseText_Click);
 			// 

@@ -890,12 +890,12 @@ namespace YAT.View.Forms
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_UseText_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText_Click(object sender, EventArgs e)
 		{
 			RequestToggleAutoResponseUseText();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_UseRegex_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex_Click(object sender, EventArgs e)
 		{
 			RequestToggleAutoResponseUseRegex();
 		}
@@ -1055,12 +1055,12 @@ namespace YAT.View.Forms
 			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_UseText_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText_Click(object sender, EventArgs e)
 		{
 			RequestToggleAutoActionUseText();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_UseRegex_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex_Click(object sender, EventArgs e)
 		{
 			RequestToggleAutoActionUseRegex();
 		}
