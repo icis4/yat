@@ -34,11 +34,15 @@ namespace YAT.Domain.Settings
 	public class TextDisplaySettings : MKY.Settings.SettingsItem, IEquatable<TextDisplaySettings>
 	{
 		/// <summary></summary>
+		public static readonly bool ChunkLineBreakEnabledDefault = false;
+
+		/// <summary></summary>
 		public static readonly LengthSettingTuple LengthLineBreakDefault = new LengthSettingTuple(false, 80);
 
 		/// <summary></summary>
 		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, 500);
 
+		private bool                chunkLineBreakEnabled;
 		private LengthSettingTuple  lengthLineBreak;
 		private TimeoutSettingTuple timedLineBreak;
 
@@ -63,8 +67,9 @@ namespace YAT.Domain.Settings
 		public TextDisplaySettings(TextDisplaySettings rhs)
 			: base(rhs)
 		{
-			LengthLineBreak = rhs.LengthLineBreak;
-			TimedLineBreak  = rhs.TimedLineBreak;
+			ChunkLineBreakEnabled = rhs.ChunkLineBreakEnabled;
+			LengthLineBreak       = rhs.LengthLineBreak;
+			TimedLineBreak        = rhs.TimedLineBreak;
 
 			ClearChanged();
 		}
@@ -76,14 +81,30 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			LengthLineBreak = LengthLineBreakDefault;
-			TimedLineBreak  = TimedLineBreakDefault;
+			ChunkLineBreakEnabled = ChunkLineBreakEnabledDefault;
+			LengthLineBreak       = LengthLineBreakDefault;
+			TimedLineBreak        = TimedLineBreakDefault;
 		}
 
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("ChunkLineBreakEnabled")]
+		public bool ChunkLineBreakEnabled
+		{
+			get { return (this.chunkLineBreakEnabled); }
+			set
+			{
+				if (this.chunkLineBreakEnabled != value)
+				{
+					this.chunkLineBreakEnabled = value;
+					SetMyChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[XmlElement("LengthLineBreak")]
@@ -135,8 +156,9 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ LengthLineBreak.GetHashCode();
-				hashCode = (hashCode * 397) ^ TimedLineBreak .GetHashCode();
+				hashCode = (hashCode * 397) ^ ChunkLineBreakEnabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ LengthLineBreak      .GetHashCode();
+				hashCode = (hashCode * 397) ^ TimedLineBreak       .GetHashCode();
 
 				return (hashCode);
 			}
@@ -167,8 +189,9 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				LengthLineBreak.Equals(other.LengthLineBreak)         &&
-				TimedLineBreak .Equals(other.TimedLineBreak)
+				ChunkLineBreakEnabled.Equals(other.ChunkLineBreakEnabled)  &&
+				LengthLineBreak      .Equals(other.LengthLineBreak)        &&
+				TimedLineBreak       .Equals(other.TimedLineBreak)
 			);
 		}
 

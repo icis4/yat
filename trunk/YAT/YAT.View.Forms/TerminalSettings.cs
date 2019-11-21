@@ -735,9 +735,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Display.ShowDuration         = f.SettingsResult.Terminal.Display.ShowDuration;
 				this.settingsInEdit.Terminal.Display.IncludeIOControl     = f.SettingsResult.Terminal.Display.IncludeIOControl;
 
-				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = f.SettingsResult.Terminal.Display.DeviceLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
-				this.settingsInEdit.Terminal.Display.ChunkLineBreakEnabled     = f.SettingsResult.Terminal.Display.ChunkLineBreakEnabled;
+				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = f.SettingsResult.Terminal.Display.DeviceLineBreakEnabled;
 
 				this.settingsInEdit.Terminal.Display.MaxLineCount         = f.SettingsResult.Terminal.Display.MaxLineCount;
 				this.settingsInEdit.Terminal.Display.MaxLineLength        = f.SettingsResult.Terminal.Display.MaxLineLength;
@@ -813,7 +812,7 @@ namespace YAT.View.Forms
 					message.AppendLine("");
 					message.AppendLine("Confirming [Yes] will...");
 					message.AppendLine("...change [EOL sequence] to [None] in [Text Settings...].");
-					message.Append    ("...enable [Break lines on each chunk] in [Advanced Settings...].");
+					message.Append    ("...enable [Break lines on every chunk] in [Text Settings...].");
 
 					dr = MessageBoxEx.Show
 					(
@@ -831,7 +830,7 @@ namespace YAT.View.Forms
 					message.AppendLine("");
 					message.AppendLine("Confirming [Yes] will...");
 					message.AppendLine("...change [EOL sequence] in [Text Settings...] to the system default.");
-					message.Append    ("...disable [Break lines on each chunk] in [Advanced Settings...].");
+					message.Append    ("...disable [Break lines on every chunk] in [Text Settings...].");
 
 					dr = MessageBoxEx.Show
 					(

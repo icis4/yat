@@ -82,7 +82,7 @@
 			this.checkBox_SequenceLineBreakAfter.Name = "checkBox_SequenceLineBreakAfter";
 			this.checkBox_SequenceLineBreakAfter.Size = new System.Drawing.Size(152, 17);
 			this.checkBox_SequenceLineBreakAfter.TabIndex = 6;
-			this.checkBox_SequenceLineBreakAfter.Text = "Break lines &after sequence";
+			this.checkBox_SequenceLineBreakAfter.Text = "Break lines after sequence";
 			this.checkBox_SequenceLineBreakAfter.CheckedChanged += new System.EventHandler(this.checkBox_SequenceLineBreakAfter_CheckedChanged);
 			// 
 			// checkBox_LengthLineBreak
@@ -92,7 +92,7 @@
 			this.checkBox_LengthLineBreak.Name = "checkBox_LengthLineBreak";
 			this.checkBox_LengthLineBreak.Size = new System.Drawing.Size(102, 17);
 			this.checkBox_LengthLineBreak.TabIndex = 1;
-			this.checkBox_LengthLineBreak.Text = "Break &lines after";
+			this.checkBox_LengthLineBreak.Text = "Break lines after";
 			this.checkBox_LengthLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_LengthLineBreak_CheckedChanged);
 			// 
 			// label_TimedLineBreakUnit
@@ -122,7 +122,7 @@
 			this.checkBox_TimedLineBreak.Name = "checkBox_TimedLineBreak";
 			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(151, 17);
 			this.checkBox_TimedLineBreak.TabIndex = 8;
-			this.checkBox_TimedLineBreak.Text = "Break lines after ti&meout of";
+			this.checkBox_TimedLineBreak.Text = "Break lines after timeout of";
 			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
         "en.");
 			this.checkBox_TimedLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_TimedLineBreak_CheckedChanged);
@@ -144,7 +144,7 @@
 			this.checkBox_SequenceLineBreakBefore.Name = "checkBox_SequenceLineBreakBefore";
 			this.checkBox_SequenceLineBreakBefore.Size = new System.Drawing.Size(161, 17);
 			this.checkBox_SequenceLineBreakBefore.TabIndex = 4;
-			this.checkBox_SequenceLineBreakBefore.Text = "Break lines &before sequence";
+			this.checkBox_SequenceLineBreakBefore.Text = "Break lines before sequence";
 			this.checkBox_SequenceLineBreakBefore.UseVisualStyleBackColor = true;
 			this.checkBox_SequenceLineBreakBefore.CheckedChanged += new System.EventHandler(this.checkBox_SequenceLineBreakBefore_CheckedChanged);
 			// 
@@ -155,7 +155,7 @@
 			this.checkBox_ChunkLineBreak.Name = "checkBox_ChunkLineBreak";
 			this.checkBox_ChunkLineBreak.Size = new System.Drawing.Size(155, 17);
 			this.checkBox_ChunkLineBreak.TabIndex = 0;
-			this.checkBox_ChunkLineBreak.Text = "Break lines on every &chunk";
+			this.checkBox_ChunkLineBreak.Text = "Break lines on every chunk";
 			this.checkBox_ChunkLineBreak.UseVisualStyleBackColor = true;
 			this.checkBox_ChunkLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_ChunkLineBreak_CheckedChanged);
 			// 

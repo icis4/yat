@@ -34,7 +34,10 @@ namespace YAT.Domain.Settings
 	public class BinaryDisplaySettings : MKY.Settings.SettingsItem, IEquatable<BinaryDisplaySettings>
 	{
 		/// <summary></summary>
-		public static readonly LengthSettingTuple LengthLineBreakDefault = new LengthSettingTuple(true, 16); // Enabled to prevent too long display lines.
+		public static readonly bool ChunkLineBreakEnabledDefault = true;
+
+		/// <summary></summary>
+		public static readonly LengthSettingTuple LengthLineBreakDefault = new LengthSettingTuple(false, 16);
 
 		/// <summary></summary>
 		public static readonly BinarySequenceSettingTuple SequenceLineBreakBeforeDefault = new BinarySequenceSettingTuple(false, @"ABC");
@@ -45,6 +48,7 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, 500);
 
+		private bool                       chunkLineBreakEnabled;
 		private LengthSettingTuple         lengthLineBreak;
 		private BinarySequenceSettingTuple sequenceLineBreakBefore;
 		private BinarySequenceSettingTuple sequenceLineBreakAfter;
@@ -71,6 +75,7 @@ namespace YAT.Domain.Settings
 		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
 			: base(rhs)
 		{
+			ChunkLineBreakEnabled   = rhs.ChunkLineBreakEnabled;
 			LengthLineBreak         = rhs.LengthLineBreak;
 			SequenceLineBreakBefore = rhs.SequenceLineBreakBefore;
 			SequenceLineBreakAfter  = rhs.SequenceLineBreakAfter;
@@ -86,6 +91,7 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
+			ChunkLineBreakEnabled   = ChunkLineBreakEnabledDefault;
 			LengthLineBreak         = LengthLineBreakDefault;
 			SequenceLineBreakBefore = SequenceLineBreakBeforeDefault;
 			SequenceLineBreakAfter  = SequenceLineBreakAfterDefault;
@@ -96,6 +102,21 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("ChunkLineBreakEnabled")]
+		public bool ChunkLineBreakEnabled
+		{
+			get { return (this.chunkLineBreakEnabled); }
+			set
+			{
+				if (this.chunkLineBreakEnabled != value)
+				{
+					this.chunkLineBreakEnabled = value;
+					SetMyChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[XmlElement("LengthLineBreak")]
@@ -177,6 +198,7 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
+				hashCode = (hashCode * 397) ^ ChunkLineBreakEnabled  .GetHashCode();
 				hashCode = (hashCode * 397) ^ LengthLineBreak        .GetHashCode();
 				hashCode = (hashCode * 397) ^ SequenceLineBreakBefore.GetHashCode();
 				hashCode = (hashCode * 397) ^ SequenceLineBreakAfter .GetHashCode();
@@ -211,6 +233,7 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
+				ChunkLineBreakEnabled  .Equals(other.ChunkLineBreakEnabled)   &&
 				LengthLineBreak        .Equals(other.LengthLineBreak)         &&
 				SequenceLineBreakBefore.Equals(other.SequenceLineBreakBefore) &&
 				SequenceLineBreakAfter .Equals(other.SequenceLineBreakAfter)  &&

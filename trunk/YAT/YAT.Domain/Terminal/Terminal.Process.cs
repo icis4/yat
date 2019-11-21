@@ -685,11 +685,16 @@ namespace YAT.Domain
 		protected virtual void ProcessAndSignalChunkLineBreak(RawChunk chunk,
 		                                                      bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
-			if (TerminalSettings.Display.ChunkLineBreakEnabled)
+			if (TerminalSettings.TxDisplayChunkLineBreakEnabled)
 			{
-				if (txIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
-				if (bidirIsAffected) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
-				if (rxIsAffected)    { EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (txIsAffected)                                           { EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (bidirIsAffected && (chunk.Direction == IODirection.Tx)) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+			}
+
+			if (TerminalSettings.RxDisplayChunkLineBreakEnabled)
+			{
+				if (bidirIsAffected && (chunk.Direction == IODirection.Rx)) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (rxIsAffected)                                           { EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
 			}
 		}
 

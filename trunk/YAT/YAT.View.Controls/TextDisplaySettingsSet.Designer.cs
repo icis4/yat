@@ -67,7 +67,7 @@
 			this.checkBox_LengthLineBreak.Name = "checkBox_LengthLineBreak";
 			this.checkBox_LengthLineBreak.Size = new System.Drawing.Size(102, 17);
 			this.checkBox_LengthLineBreak.TabIndex = 1;
-			this.checkBox_LengthLineBreak.Text = "Break lines &after";
+			this.checkBox_LengthLineBreak.Text = "Break lines after";
 			this.toolTip.SetToolTip(this.checkBox_LengthLineBreak, "Useful to limit the number of characters displayed per line, i.e. \"word wrap\".\r\nU" +
         "seful to communicate with devices that do use text messages but no EOL sequence." +
         "");
@@ -100,7 +100,7 @@
 			this.checkBox_TimedLineBreak.Name = "checkBox_TimedLineBreak";
 			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(151, 17);
 			this.checkBox_TimedLineBreak.TabIndex = 4;
-			this.checkBox_TimedLineBreak.Text = "Break lines after ti&meout of";
+			this.checkBox_TimedLineBreak.Text = "Break lines after timeout of";
 			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
         "en.\r\n\r\nUseful to communicate with devices that do use text messages but no EOL s" +
         "equence.");
@@ -113,7 +113,7 @@
 			this.checkBox_ChunkLineBreak.Name = "checkBox_ChunkLineBreak";
 			this.checkBox_ChunkLineBreak.Size = new System.Drawing.Size(155, 17);
 			this.checkBox_ChunkLineBreak.TabIndex = 0;
-			this.checkBox_ChunkLineBreak.Text = "Break lines on every &chunk";
+			this.checkBox_ChunkLineBreak.Text = "Break lines on every chunk";
 			this.toolTip.SetToolTip(this.checkBox_ChunkLineBreak, "Useful for message- rather than stream-oriented\r\ncommunication, e.g. most use cas" +
         "es of UDP/IP.\r\n\r\nDefault for UDP/IP is enabled.\r\nDefault for all other port type" +
         "s is disabled.");
