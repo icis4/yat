@@ -654,7 +654,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// This method is private as it must synchronize against private <see cref="chunkVsTimeoutSyncObj"/>!
 		/// </remarks>
-		private void ProcessRawChunk(RawChunk chunk, LineChunkAttribute attribute)
+		private void ProcessRawChunk(RawChunk chunk)
 		{
 			lock (this.chunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{

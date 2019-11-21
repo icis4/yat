@@ -165,22 +165,6 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
-	public class RawChunkEventArgs : EventArgs<RawChunk>
-	{
-		/// <summary></summary>
-		public LineChunkAttribute Attribute { get; set; } // = LineChunkAttributeNone;
-
-		/// <remarks>
-		/// The <see cref="Attribute"/> is intended to be set by the event sink,
-		/// therefore not part of the constructor parameters.
-		/// </remarks>
-		public RawChunkEventArgs(RawChunk chunk)
-			: base(chunk)
-		{
-		}
-	}
-
-	/// <summary></summary>
 	public class DisplayElementsEventArgs : EventArgs
 	{
 		/// <summary></summary>
@@ -190,6 +174,25 @@ namespace YAT.Domain
 		public DisplayElementsEventArgs(DisplayElementCollection elements)
 		{
 			Elements = elements;
+		}
+	}
+
+	/// <summary></summary>
+	public class DisplayLineAttributeEventArgs : DisplayElementsEventArgs
+	{
+		/// <remarks>
+		/// The <see cref="Attribute"/> is intended to be set by the event sink,
+		/// must therefore be settable.
+		/// </remarks>
+		public LineAttribute Attribute { get; set; } // = LineAttribute.None;
+
+		/// <remarks>
+		/// The <see cref="Attribute"/> is intended to be set by the event sink,
+		/// therefore not part of the constructor parameters.
+		/// </remarks>
+		public DisplayLineAttributeEventArgs(DisplayElementCollection elements)
+			: base(elements)
+		{
 		}
 	}
 

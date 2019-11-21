@@ -238,12 +238,12 @@ namespace YAT.Domain
 				lp.AddRange(info);
 			}
 
-	/*		if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
+			if (lineState.Attribute.SuppressForSure || lineState.Attribute.SuppressIfSubsequentlyTriggered || lineState.Attribute.SuppressIfNotFiltered)
 			{
 				lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 			////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
 			}
-			else !!!PENDING !!! */
+			else
 			{
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elementsToAdd.AddRange(lp);
@@ -259,7 +259,9 @@ namespace YAT.Domain
 
 			// Convert content:
 			var de = ByteToElement(b, dir);
-	//		de.Highlight = lineState.Highlight; !!!PENDING !!!
+
+			// Mark as needed:
+			de.Highlight = lineState.Attribute.Highlight;
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
@@ -270,7 +272,7 @@ namespace YAT.Domain
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
 			if ((binaryDisplaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.ByteCount > 0) &&
-				(lineState.Position != LinePosition.End)))     // Also skip if line has just been brokwn.
+				(lineState.Position != LinePosition.End)))             // Also skip if line has just been broken.
 			{
 				binaryLineState.SequenceBefore.Enqueue(b);
 				if (binaryLineState.SequenceBefore.IsCompleteMatch)
@@ -319,12 +321,12 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
-	/*			if (lineState.SuppressForSure || lineState.SuppressIfSubsequentlyTriggered || lineState.SuppressIfNotFiltered)
+				if (lineState.Attribute.SuppressForSure || lineState.Attribute.SuppressIfSubsequentlyTriggered || lineState.Attribute.SuppressIfNotFiltered)
 				{
 					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
 				////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
 				}
-				else !!!PENDING !!! */
+				else
 				{
 					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 					elementsToAdd.AddRange(lp);
@@ -384,21 +386,23 @@ namespace YAT.Domain
 			var lineState = processState.Line; // Convenience shortcut.
 			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, lineState.Direction);
 
-	/*		// Potentially suppress line:
-			if (lineState.SuppressForSure || (lineState.SuppressIfNotFiltered && !lineState.AnyFilterDetected)) // Suppress line:
+		#if (DEBUG)
+			if (lineState.Attribute.SuppressForSure || (lineState.Attribute.SuppressIfNotFiltered && !lineState.Attribute.AnyFilterDetected)) // Suppress:
 			{
-			#if (DEBUG)
-				// As described in 'ProcessRawChunk()', the current implementation retains the line until it is
-				// complete, i.e. until the final decision to filter or suppress could be done. As a consequence,
-				// the 'clearAlreadyStartedLine' can never get activated, thus excluding it (YAGNI).
+				// As described in 'EvaluateLineAttribute()', in both cases filtering and suppression, the
+				// current implementation retains the line until it is complete, i.e. until the final decision
+				// to filter or suppress could be done.
+				// Consequently, the above above condition will never become true, thus excluding it (YAGNI).
 				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
 
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart)); // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                  //            All other elements must be removed as well!
-				clearAlreadyStartedLine = true;                                   //            This is ensured by flushing here.
-			#endif
+				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart));                      // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                                       //            All other elements must be removed as well!
+				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
+
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This condition must never become true!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			else !!!PENDING !!! */
+			else // Don't suppress:
+		#endif
 			{
 				// Process line length:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -412,12 +416,12 @@ namespace YAT.Domain
 				}
 				lineEnd.Add(new DisplayElement.LineBreak());
 
-	/*			// Finalize elements:
-				if ((lineState.SuppressIfSubsequentlyTriggered && !lineState.SuppressForSure) ||    // Don't suppress line!
-				    (lineState.SuppressIfNotFiltered && lineState.FilterDetectedInSubsequentChunk)) // Filter line!
-				{                                                                                   // Both cases mean to delay-show the elements of the line.
+				// Finalize elements:
+				if ((lineState.Attribute.SuppressIfSubsequentlyTriggered && !lineState.Attribute.SuppressForSure) ||     // Don't suppress line!
+				    (lineState.Attribute.SuppressIfNotFiltered && lineState.Attribute.FilterDetectedInSubsequentChange)) // Filter line!
+				{                                                                                                        // Both cases mean to delay-show the elements of the line.
 					elementsToAdd.AddRange(lineState.Elements.Clone()); // Clone elements because they are needed again further below.
-				} !!!PENDING !!! */
+				}
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
