@@ -33,9 +33,8 @@ using YAT.Model.Types;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class AutoResponseSettings : MKY.Settings.SettingsItem, IEquatable<AutoResponseSettings>
+	public class AutoResponseSettings : AutoTriggerSettings, IEquatable<AutoResponseSettings>
 	{
-		private AutoTriggerEx trigger;
 		private AutoResponseEx response;
 
 		/// <summary></summary>
@@ -59,7 +58,6 @@ namespace YAT.Model.Settings
 		public AutoResponseSettings(AutoResponseSettings rhs)
 			: base(rhs)
 		{
-			Trigger  = rhs.Trigger;
 			Response = rhs.Response;
 
 			ClearChanged();
@@ -72,7 +70,6 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Trigger  = AutoTrigger.None;
 			Response = AutoResponse.None;
 		}
 
@@ -80,42 +77,6 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <remarks>
-		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
-		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
-		/// </remarks>
-		[XmlIgnore]
-		public AutoTriggerEx Trigger
-		{
-			get { return (this.trigger); }
-			set
-			{
-				if (this.trigger != value)
-				{
-					this.trigger = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
-		[XmlElement("Trigger")]
-		public virtual string Trigger_ForSerialization
-		{
-			get { return (Trigger); }
-			set { Trigger = value;  }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public bool TriggerIsActive
-		{
-			get { return (Trigger != AutoTrigger.None); }
-		}
 
 		/// <remarks>
 		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
@@ -155,9 +116,9 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsActive
+		public override bool IsActive
 		{
-			get { return (TriggerIsActive && ResponseIsActive); }
+			get { return (base.IsActive && ResponseIsActive); }
 		}
 
 		#endregion
@@ -170,12 +131,13 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Resets the automatic response, i.e. trigger and response are reset to 'None'.
 		/// </summary>
-		public void Deactivate()
+		public override void Deactivate()
 		{
 			SuspendChangeEvent();
 			try
 			{
-				Trigger  = AutoTrigger.None;
+				base.Deactivate();
+
 				Response = AutoResponse.None;
 			}
 			finally
@@ -204,7 +166,6 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ ( Trigger_ForSerialization != null ?  Trigger_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (Response_ForSerialization != null ? Response_ForSerialization.GetHashCode() : 0);
 
 				return (hashCode);
@@ -236,7 +197,6 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase( Trigger_ForSerialization, other. Trigger_ForSerialization) &&
 				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization)
 			);
 		}

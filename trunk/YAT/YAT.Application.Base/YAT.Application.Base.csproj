@@ -98,6 +98,7 @@
     <Compile Include="Settings\WindowSettings.cs" />
     <Compile Include="Types\FindOptions.cs" />
     <Compile Include="Utilities\ExtensionHelper.cs" />
+    <Compile Include="Settings\ViewSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj">

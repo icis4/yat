@@ -360,18 +360,18 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Model.Settings.AutoResponseSettings AutoResponse
-		{
-			get { return (this.explicit_.AutoResponse); }
-			set { this.explicit_.AutoResponse = value;  }
-		}
-
-		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
-		[XmlIgnore]
 		public virtual YAT.Model.Settings.AutoActionSettings AutoAction
 		{
 			get { return (this.explicit_.AutoAction); }
 			set { this.explicit_.AutoAction = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
+		public virtual YAT.Model.Settings.AutoResponseSettings AutoResponse
+		{
+			get { return (this.explicit_.AutoResponse); }
+			set { this.explicit_.AutoResponse = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
@@ -438,7 +438,7 @@ namespace YAT.Settings.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// The currently valid response items usable for automatic response.
+		/// The currently valid triggers usable for automatic action or response.
 		/// </summary>
 		public virtual AutoTriggerEx[] GetValidAutoTriggerItems()
 		{
@@ -494,6 +494,15 @@ namespace YAT.Settings.Model
 			}
 
 			return (a.ToArray());
+		}
+
+		/// <summary>
+		/// The currently valid response items usable for automatic action.
+		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with GetValidAutoResponseItems() above.")]
+		public virtual AutoActionEx[] GetValidAutoActionItems()
+		{
+			return (AutoActionEx.GetItems()); // No restrictions (so far).
 		}
 
 		/// <summary>
@@ -574,50 +583,41 @@ namespace YAT.Settings.Model
 		}
 
 		/// <summary>
-		/// The currently valid response items usable for automatic action.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with GetValidAutoResponseItems() above.")]
-		public virtual AutoActionEx[] GetValidAutoActionItems()
-		{
-			return (AutoActionEx.GetItems()); // No restrictions (so far).
-		}
-
-		/// <summary>
-		/// The currently active response used for automatic response.
-		/// </summary>
-		[XmlIgnore]
-		public virtual Command ActiveAutoResponseTrigger
-		{
-			get
-			{
-				if (this.AutoResponse.TriggerIsActive)
-					return (GetActiveAutoTrigger(this.AutoResponse.Trigger));
-
-				return (null);
-			}
-		}
-
-		/// <summary>
-		/// The currently active response used for automatic action.
+		/// The currently active trigger used for automatic action.
 		/// </summary>
 		[XmlIgnore]
 		public virtual Command ActiveAutoActionTrigger
 		{
 			get
 			{
-				if (this.AutoAction.TriggerIsActive)
-					return (GetActiveAutoTrigger(this.AutoAction.Trigger));
+				if (AutoAction.TriggerIsActive)
+					return (GetActiveAutoTrigger(AutoAction.Trigger));
 
 				return (null);
 			}
 		}
 
 		/// <summary>
-		/// Gets the active automatic trigger.
+		/// The currently active trigger used for automatic response.
+		/// </summary>
+		[XmlIgnore]
+		public virtual Command ActiveAutoResponseTrigger
+		{
+			get
+			{
+				if (AutoResponse.TriggerIsActive)
+					return (GetActiveAutoTrigger(AutoResponse.Trigger));
+
+				return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the corresponding automatic trigger.
 		/// </summary>
 		protected virtual Command GetActiveAutoTrigger(AutoTriggerEx trigger)
 		{
-			Command response = null;
+			Command command = null;
 
 			switch ((AutoTrigger)trigger)
 			{
@@ -640,7 +640,7 @@ namespace YAT.Settings.Model
 					{
 						var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode()))) // Trigger can never be a file command.
-							response = c;
+							command = c;
 					}
 
 					break;
@@ -650,7 +650,7 @@ namespace YAT.Settings.Model
 				{
 					var c = new Command(trigger); // No explicit default radix available (yet).
 					if (c.IsValidText(Send.Text.ToParseMode())) // Trigger can never be a file command.
-						response = c;
+						command = c;
 
 					break;
 				}
@@ -663,7 +663,7 @@ namespace YAT.Settings.Model
 				}
 			}
 
-			return (response);
+			return (command);
 		}
 
 		#endregion

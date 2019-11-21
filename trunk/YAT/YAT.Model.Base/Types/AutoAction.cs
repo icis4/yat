@@ -100,9 +100,9 @@ namespace YAT.Model.Types
 		private const string             ClearRepositories_string = "[Clear Monitor]"; // Translating from code to user terminology.
 		private static readonly string[] ClearRepositories_stringAlternatives = new string[] { "[CM]" };
 
-		private const string             ClearRepositoriesOnSubsequentRx_string = "[Cl. Mon. on Subsequ. Rx]"; // Translating from code to user terminology.
+		private const string             ClearRepositoriesOnSubsequentRx_string = "[Clear Mon. on Subsequent Rx]"; // Translating from code to user terminology.
 		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternatives = new string[] { "[CMSR]" };
-		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Cl. Mon. ", "[Clear Monitor " }; // Including ' ' to distinguish from above.
+		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Clear Mon. ", "[Clear Monitor " }; // Including ' ' to distinguish from above.
 
 		private const string             ResetCountAndRate_string = "[Reset Count/Rate]";
 		private static readonly string[] ResetCountAndRate_stringAlternatives = new string[] { "[R]" };
@@ -113,8 +113,8 @@ namespace YAT.Model.Types
 		private const string             SwitchLogOff_string = "[Log Off]"; // Translating from code to user terminology.
 		private static readonly string[] SwitchLogOff_stringAlternatives = new string[] { "[LF]" };
 
-		private const string             StopIO_string = "[Close Port]"; // Translating from code to user terminology.
-		private static readonly string[] StopIO_stringAlternatives = new string[] { "[CP]" };
+		private const string             StopIO_string = "[Close/Stop I/O]"; // Translating from code to user terminology.
+		private static readonly string[] StopIO_stringAlternatives = new string[] { "[CIO]" };
 
 		private const string             CloseTerminal_string = "[Close Terminal]";
 		private static readonly string[] CloseTerminal_stringAlternatives = new string[] { "[CT]" };

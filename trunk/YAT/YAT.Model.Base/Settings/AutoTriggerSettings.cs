@@ -33,18 +33,19 @@ using YAT.Model.Types;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
-	public class AutoActionSettings : AutoTriggerSettings, IEquatable<AutoActionSettings>
+	public class AutoTriggerSettings : MKY.Settings.SettingsItem, IEquatable<AutoTriggerSettings>
 	{
-		private AutoActionEx action;
+		private AutoTriggerEx trigger;
+		private AutoTriggerOptions options;
 
 		/// <summary></summary>
-		public AutoActionSettings()
+		public AutoTriggerSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public AutoActionSettings(MKY.Settings.SettingsType settingsType)
+		public AutoTriggerSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -55,10 +56,11 @@ namespace YAT.Model.Settings
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public AutoActionSettings(AutoActionSettings rhs)
+		public AutoTriggerSettings(AutoTriggerSettings rhs)
 			: base(rhs)
 		{
-			Action = rhs.Action;
+			Trigger = rhs.Trigger;
+			Options = rhs.Options;
 
 			ClearChanged();
 		}
@@ -70,7 +72,8 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Action = AutoAction.None;
+			Trigger = AutoTrigger.None;
+			Options = new AutoTriggerOptions(false, false);
 		}
 
 		#region Properties
@@ -83,14 +86,14 @@ namespace YAT.Model.Settings
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
-		public AutoActionEx Action
+		public AutoTriggerEx Trigger
 		{
-			get { return (this.action); }
+			get { return (this.trigger); }
 			set
 			{
-				if (this.action != value)
+				if (this.trigger != value)
 				{
-					this.action = value;
+					this.trigger = value;
 					SetMyChanged();
 				}
 			}
@@ -100,25 +103,40 @@ namespace YAT.Model.Settings
 		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
-		[XmlElement("Action")]
-		public string Action_ForSerialization
+		[XmlElement("Trigger")]
+		public string Trigger_ForSerialization
 		{
-			get { return (Action); }
-			set { Action = value;  }
+			get { return (Trigger); }
+			set { Trigger = value;  }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool ActionIsActive
+		public bool TriggerIsActive
 		{
-			get { return (Action != AutoAction.None); }
+			get { return (Trigger != AutoTrigger.None); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public override bool IsActive
+		public virtual bool IsActive
 		{
-			get { return (base.IsActive && ActionIsActive); }
+			get { return (TriggerIsActive); }
+		}
+
+		/// <summary></summary>
+		[XmlElement("Options")]
+		public virtual AutoTriggerOptions Options
+		{
+			get { return (this.options); }
+			set
+			{
+				if (this.options != value)
+				{
+					this.options = value;
+					SetMyChanged();
+				}
+			}
 		}
 
 		#endregion
@@ -129,16 +147,14 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// Resets the automatic action, i.e. trigger and action are reset to 'None'.
+		/// Resets the automatic Action, i.e. trigger and Action are reset to 'None'.
 		/// </summary>
-		public override void Deactivate()
+		public virtual void Deactivate()
 		{
 			SuspendChangeEvent();
 			try
 			{
-				base.Deactivate();
-
-				Action = AutoAction.None;
+				Trigger = AutoTrigger.None;
 			}
 			finally
 			{
@@ -166,7 +182,8 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ (Action_ForSerialization != null ? Action_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (Trigger_ForSerialization != null ? Trigger_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^                                                      Options.GetHashCode();
 
 				return (hashCode);
 			}
@@ -177,7 +194,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as AutoActionSettings));
+			return (Equals(obj as AutoTriggerSettings));
 		}
 
 		/// <summary>
@@ -187,7 +204,7 @@ namespace YAT.Model.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(AutoActionSettings other)
+		public bool Equals(AutoTriggerSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -197,14 +214,15 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase(Action_ForSerialization, other.Action_ForSerialization)
+				StringEx.EqualsOrdinalIgnoreCase(Trigger_ForSerialization, other.Trigger_ForSerialization) &&
+				Options .Equals(                                           other.Options)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(AutoActionSettings lhs, AutoActionSettings rhs)
+		public static bool operator ==(AutoTriggerSettings lhs, AutoTriggerSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -217,7 +235,7 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(AutoActionSettings lhs, AutoActionSettings rhs)
+		public static bool operator !=(AutoTriggerSettings lhs, AutoTriggerSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

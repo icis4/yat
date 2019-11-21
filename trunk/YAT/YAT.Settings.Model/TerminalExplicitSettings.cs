@@ -43,8 +43,8 @@ namespace YAT.Settings.Model
 
 		private Domain.Settings.TerminalSettings terminal;
 		private YAT.Model.Settings.PredefinedCommandSettings predefinedCommand;
-		private YAT.Model.Settings.AutoResponseSettings autoResponse;
 		private YAT.Model.Settings.AutoActionSettings autoAction;
+		private YAT.Model.Settings.AutoResponseSettings autoResponse;
 		private Format.Settings.FormatSettings format;
 		private Log.Settings.LogSettings log;
 
@@ -65,8 +65,8 @@ namespace YAT.Settings.Model
 
 			Terminal          = new Domain.Settings.TerminalSettings(SettingsType);
 			PredefinedCommand = new YAT.Model.Settings.PredefinedCommandSettings(SettingsType);
-			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(SettingsType);
 			AutoAction        = new YAT.Model.Settings.AutoActionSettings(SettingsType);
+			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(SettingsType);
 			Format            = new Format.Settings.FormatSettings(SettingsType);
 			Log               = new Log.Settings.LogSettings(SettingsType);
 
@@ -85,8 +85,8 @@ namespace YAT.Settings.Model
 
 			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
 			PredefinedCommand = new YAT.Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
-			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(rhs.AutoResponse);
 			AutoAction        = new YAT.Model.Settings.AutoActionSettings(rhs.AutoAction);
+			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(rhs.AutoResponse);
 			Format            = new Format.Settings.FormatSettings(rhs.Format);
 			Log               = new Log.Settings.LogSettings(rhs.Log);
 
@@ -185,23 +185,6 @@ namespace YAT.Settings.Model
 		}
 
 		/// <summary></summary>
-		[XmlElement("AutoResponse")]
-		public virtual YAT.Model.Settings.AutoResponseSettings AutoResponse
-		{
-			get { return (this.autoResponse); }
-			set
-			{
-				if (this.autoResponse != value)
-				{
-					var oldNode = this.autoResponse;
-					this.autoResponse = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
-				}
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("AutoAction")]
 		public virtual YAT.Model.Settings.AutoActionSettings AutoAction
 		{
@@ -212,6 +195,23 @@ namespace YAT.Settings.Model
 				{
 					var oldNode = this.autoAction;
 					this.autoAction = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoResponse")]
+		public virtual YAT.Model.Settings.AutoResponseSettings AutoResponse
+		{
+			get { return (this.autoResponse); }
+			set
+			{
+				if (this.autoResponse != value)
+				{
+					var oldNode = this.autoResponse;
+					this.autoResponse = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

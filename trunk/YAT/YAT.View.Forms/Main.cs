@@ -489,10 +489,10 @@ namespace YAT.View.Forms
 			DebugMdi("Deactivated");
 
 			toolStripComboBox_MainTool_Find_Pattern         .OnFormDeactivateWorkaround();
-			toolStripComboBox_MainTool_AutoResponse_Trigger .OnFormDeactivateWorkaround();
-			toolStripComboBox_MainTool_AutoResponse_Response.OnFormDeactivateWorkaround();
 			toolStripComboBox_MainTool_AutoAction_Trigger   .OnFormDeactivateWorkaround();
 		////toolStripComboBox_MainTool_AutoAction_Action is a standard ToolStripComboBox.
+			toolStripComboBox_MainTool_AutoResponse_Trigger .OnFormDeactivateWorkaround();
+			toolStripComboBox_MainTool_AutoResponse_Response.OnFormDeactivateWorkaround();
 
 			// Also notify the active MDI child about switching to another application:
 			var f = (ActiveMdiChild as IOnFormDeactivateWorkaround);
@@ -1271,7 +1271,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-find controls (e.g. AutoAction and AutoResponse)
+		/// Separated to prevent flickering of non-find controls (e.g. Auto[Action|Response])
 		/// when editing the search pattern.
 		/// </remarks>
 		private void toolStripButton_MainTool_SetFindControls()
@@ -1283,8 +1283,7 @@ namespace YAT.View.Forms
 
 				DebugFindEnter(MethodBase.GetCurrentMethod().Name);
 				{
-					var findVisible = ApplicationSettings.RoamingUserSettings.View.FindIsVisible;
-					if (findVisible)
+					if (ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
 					{
 						toolStripButton_MainTool_Find_ShowHide.Checked = true;
 						toolStripButton_MainTool_Find_ShowHide.Text = "Hide Find";
@@ -1349,7 +1348,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-count controls on AutoAction/Response.
+		/// Separated to prevent flickering of non-count controls on Auto[Action|Response].
 		/// </remarks>
 		private void toolStripButton_MainTool_SetAutoActionCount()
 		{
@@ -1369,7 +1368,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-count controls on AutoAction/Response.
+		/// Separated to prevent flickering of non-count controls on Auto[Action|Response].
 		/// </remarks>
 		private void toolStripButton_MainTool_SetAutoResponseCount()
 		{
@@ -1389,7 +1388,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-count controls on AutoAction/Response.
+		/// Separated to prevent flickering of non-count controls on Auto[Action|Response].
 		/// </remarks>
 		private void toolStripButton_MainTool_SetAutoCountChildControls()
 		{
@@ -1966,7 +1965,7 @@ namespace YAT.View.Forms
 		protected virtual void ToggleFindCaseSensitive()
 		{
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
-			options.CaseSensitive = !options.CaseSensitive;
+			options.CaseSensitive = !options.CaseSensitive; // Settings member must be changed to let the changed event be raised!
 			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
 
@@ -1982,7 +1981,7 @@ namespace YAT.View.Forms
 		protected virtual void ToggleFindWholeWord()
 		{
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
-			options.WholeWord = !options.WholeWord;
+			options.WholeWord = !options.WholeWord;      // Settings member must be changed to let the changed event be raised!
 			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
 
@@ -1998,7 +1997,7 @@ namespace YAT.View.Forms
 		protected virtual void ToggleFindUseRegex()
 		{
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
-			options.UseRegex = !options.UseRegex;
+			options.UseRegex = !options.UseRegex;        // Settings member must be changed to let the changed event be raised!
 			ApplicationSettings.RoamingUserSettings.Find.Options = options;
 			ApplicationSettings.SaveRoamingUserSettings();
 
@@ -2118,7 +2117,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
+					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
 					{
 						toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
@@ -2139,6 +2138,16 @@ namespace YAT.View.Forms
 
 			toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.Window;
 			toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
+		}
+
+		private void toolStripButton_MainTool_AutoAction_UseText_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionUseText();
+		}
+
+		private void toolStripButton_MainTool_AutoAction_UseRegex_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionUseRegex();
 		}
 
 		private void toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
@@ -2195,7 +2204,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
+					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
 					{
 						toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
@@ -2216,6 +2225,16 @@ namespace YAT.View.Forms
 
 			toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.Window;
 			toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
+		}
+
+		private void toolStripButton_MainTool_AutoResponse_UseText_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseText();
+		}
+
+		private void toolStripButton_MainTool_AutoResponse_UseRegex_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseRegex();
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
@@ -2242,7 +2261,7 @@ namespace YAT.View.Forms
 				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
 				{
-					if (!Utilities.ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.AllEscapes))
+					if (!ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.AllEscapes))
 					{
 						toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.ControlText;
@@ -2936,7 +2955,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-find controls (e.g. AutoAction and AutoResponse)
+		/// Separated to prevent flickering of non-find controls (e.g. Auto[Action|Response])
 		/// when editing the search pattern.
 		/// </remarks>
 		private void SetFindControls()
@@ -3431,8 +3450,8 @@ namespace YAT.View.Forms
 			terminalMdiChild.Changed    += terminalMdiChild_Changed;
 			terminalMdiChild.Saved      += terminalMdiChild_Saved;
 
-			terminalMdiChild.AutoResponseCountChanged += terminalMdiChild_AutoResponseCountChanged;
 			terminalMdiChild.AutoActionCountChanged   += terminalMdiChild_AutoActionCountChanged;
+			terminalMdiChild.AutoResponseCountChanged += terminalMdiChild_AutoResponseCountChanged;
 
 			terminalMdiChild.Resize     += terminalMdiChild_Resize;
 			terminalMdiChild.FormClosed += terminalMdiChild_FormClosed;
@@ -3443,8 +3462,8 @@ namespace YAT.View.Forms
 			terminalMdiChild.Changed    -= terminalMdiChild_Changed;
 			terminalMdiChild.Saved      -= terminalMdiChild_Saved;
 
-			terminalMdiChild.AutoResponseCountChanged -= terminalMdiChild_AutoResponseCountChanged;
 			terminalMdiChild.AutoActionCountChanged   -= terminalMdiChild_AutoActionCountChanged;
+			terminalMdiChild.AutoResponseCountChanged -= terminalMdiChild_AutoResponseCountChanged;
 
 			terminalMdiChild.Resize     -= terminalMdiChild_Resize;
 			terminalMdiChild.FormClosed -= terminalMdiChild_FormClosed;
