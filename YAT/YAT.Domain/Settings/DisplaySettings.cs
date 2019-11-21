@@ -151,9 +151,8 @@ namespace YAT.Domain.Settings
 		private string timeDurationFormat;
 		private bool   includeIOControl;
 
-		private bool deviceLineBreakEnabled;
 		private bool directionLineBreakEnabled;
-		private bool chunkLineBreakEnabled;
+		private bool deviceLineBreakEnabled;
 
 		private int    maxLineCount;
 		private int    maxLineLength;
