@@ -135,7 +135,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(repositoryType))
 					{
-						ProcessRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
+						ProcessRawChunk(raw);
 					}
 					this.isReloading = false;
 					ReloadMyRepository(repositoryType);
@@ -185,7 +185,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
 					{
-						ProcessRawChunk(raw, LineChunkAttribute.None); // Attributes are not (yet) supported on reloading => bug #211.
+						ProcessRawChunk(raw);
 					}
 					this.isReloading = false;
 					ReloadMyRepository(RepositoryType.Tx);

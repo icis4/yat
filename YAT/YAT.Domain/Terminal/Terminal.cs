@@ -222,10 +222,10 @@ namespace YAT.Domain
 	#endif
 
 		/// <summary></summary>
-		public event EventHandler<RawChunkEventArgs> RawChunkSent;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
+		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsTxAdded;
@@ -235,6 +235,15 @@ namespace YAT.Domain
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsRxAdded;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayLineAttributeEventArgs> CurrentDisplayLineTxChanged;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayLineAttributeEventArgs> CurrentDisplayLineBidirChanged;
+
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		public event EventHandler<DisplayLineAttributeEventArgs> CurrentDisplayLineRxChanged;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
@@ -1926,9 +1935,8 @@ namespace YAT.Domain
 
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
-				OnRawChunkSent(args);
-				ProcessRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
+				OnRawChunkSent(e);        // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessRawChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 			}
 		}
 
@@ -1944,9 +1952,8 @@ namespace YAT.Domain
 
 			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				var args = new RawChunkEventArgs(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
-				OnRawChunkReceived(args);
-				ProcessRawChunk(e.Value, args.Attribute); // 'RawChunk' objects are immutable, subsequent use is OK.
+				OnRawChunkReceived(e);    // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessRawChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 			}
 		}
 
@@ -2008,20 +2015,20 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[CallingContract(IsAlwaysSequentialIncluding = "OnRawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
+		protected virtual void OnRawChunkSent(EventArgs<RawChunk> e)
 		{
 			DebugContentEvents("OnRawChunkSent " + e.Value.ToString());
 
-			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkSent, this, e);
+			this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		[CallingContract(IsAlwaysSequentialIncluding = "OnRawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
+		protected virtual void OnRawChunkReceived(EventArgs<RawChunk> e)
 		{
 			DebugContentEvents("OnRawChunkReceived " + e.Value.ToString());
 
-			this.eventHelper.RaiseSync<RawChunkEventArgs>(RawChunkReceived, this, e);
+			this.eventHelper.RaiseSync<EventArgs<RawChunk>>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -2063,6 +2070,78 @@ namespace YAT.Domain
 
 			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsRxAdded, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineChanged(RepositoryType repositoryType, DisplayLineAttributeEventArgs e)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    OnCurrentDisplayLineTxChanged   (e, this.txProcessState   .Line); break;
+				case RepositoryType.Bidir: OnCurrentDisplayLineBidirChanged(e, this.bidirProcessState.Line); break;
+				case RepositoryType.Rx:    OnCurrentDisplayLineRxChanged   (e, this.rxProcessState   .Line); break;
+
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineTxChanged(DisplayLineAttributeEventArgs e, LineState lineState)
+		{
+			DebugContentEvents("OnCurrentDisplayLineTxChanged " + e.Elements.ToString());
+
+			this.eventHelper.RaiseSync<DisplayLineAttributeEventArgs>(CurrentDisplayLineTxChanged, this, e);
+			EvaluateLineAttribute(RepositoryType.Tx, e.Attribute, lineState);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineBidirChanged(DisplayLineAttributeEventArgs e, LineState lineState)
+		{
+			DebugContentEvents("OnCurrentDisplayLineBidirChanged " + e.Elements.ToString());
+
+			this.eventHelper.RaiseSync<DisplayLineAttributeEventArgs>(CurrentDisplayLineBidirChanged, this, e);
+			EvaluateLineAttribute(RepositoryType.Bidir, e.Attribute, lineState);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCurrentDisplayLineRxChanged(DisplayLineAttributeEventArgs e, LineState lineState)
+		{
+			DebugContentEvents("OnCurrentDisplayLineRxChanged " + e.Elements.ToString());
+
+			this.eventHelper.RaiseSync<DisplayLineAttributeEventArgs>(CurrentDisplayLineRxChanged, this, e);
+			EvaluateLineAttribute(RepositoryType.Rx, e.Attribute, lineState);
+		}
+
+		/// <summary></summary>
+		protected virtual void EvaluateLineAttribute(RepositoryType repositoryType, LineAttribute attribute, LineState lineState)
+		{
+			// Activate flags as needed, leave unchanged otherwise.
+			// Note that each change will either have none or a single attribute activated.
+			// But the line state has to deal with multiple changes, thus multiples attribute may get activated.
+			if (attribute == LineAttribute.Highlight)                       {                                                                                               lineState.Attribute.Highlight                       = true;                                                                           }
+			if (attribute == LineAttribute.Filter)                          { if (!lineState.Attribute.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.Attribute.FilterDetectedInFirstChange     = true; } else { lineState.Attribute.FilterDetectedInSubsequentChange = true; } } }
+			if (attribute == LineAttribute.SuppressIfNotFiltered)           { if (!lineState.Attribute.AnyFilterDetected) {                                                 lineState.Attribute.SuppressIfNotFiltered           = true;                                                                         } }
+			if (attribute == LineAttribute.SuppressIfSubsequentlyTriggered) {                                                                                               lineState.Attribute.SuppressIfSubsequentlyTriggered = true;                                                                           }
+			if (attribute == LineAttribute.Suppress)                        {                                                                                               lineState.Attribute.SuppressForSure                 = true;                                                                           }
+
+			// In both cases, filtering and suppression, the current implementation retains the line until it is
+			// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs
+			// from the standard behavior which continuously shows data as it is coming in.
+			//
+			// Why this retaining approach? It would be possible to immediately display but then remove the line if it
+			// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach. At the
+			// price that there is no longer immediate feedback on single character transmission in case filtering or
+			// suppression is active, except in case of filtering when the first change of a line already contains the
+			// trigger, then the line is continuously shown ('FilterDetectedInFirstChange').
+			//
+			// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
+			//
+			// To change from retaining to continuous approach, the #if (DEBUG) in DoLineEnd() will have to be removed.
+			//
+			// Note that logging works fine even when filtering or suppression is active, since logging is only
+			// triggered by the 'DisplayLinesSent/Received' events and thus not affected by the more tricky to handle
+			// 'CurrentDisplayLineSent/ReceivedReplaced' and 'CurrentDisplayLineSent/ReceivedCleared' events.
 		}
 
 		/// <summary></summary>

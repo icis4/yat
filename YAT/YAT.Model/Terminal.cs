@@ -2617,6 +2617,9 @@ namespace YAT.Model
 				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
 				this.terminal.DisplayElementsBidirAdded       += terminal_DisplayElementsBidirAdded;
 				this.terminal.DisplayElementsRxAdded          += terminal_DisplayElementsRxAdded;
+			////this.terminal.CurrentDisplayLineTxChanged     += terminal_CurrentDisplayLineTxChanged;    Not needed (yet).
+			////this.terminal.CurrentDisplayLineBidirChanged  += terminal_CurrentDisplayLineBidirChanged; Not needed (yet).
+				this.terminal.CurrentDisplayLineRxChanged     += terminal_CurrentDisplayLineRxChanged;
 				this.terminal.CurrentDisplayLineTxReplaced    += terminal_CurrentDisplayLineTxReplaced;
 				this.terminal.CurrentDisplayLineBidirReplaced += terminal_CurrentDisplayLineBidirReplaced;
 				this.terminal.CurrentDisplayLineRxReplaced    += terminal_CurrentDisplayLineRxReplaced;
@@ -2655,6 +2658,9 @@ namespace YAT.Model
 				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
 				this.terminal.DisplayElementsBidirAdded       -= terminal_DisplayElementsBidirAdded;
 				this.terminal.DisplayElementsRxAdded          -= terminal_DisplayElementsRxAdded;
+			////this.terminal.CurrentDisplayLineTxChanged     -= terminal_CurrentDisplayLineTxChanged;    Not needed (yet).
+			////this.terminal.CurrentDisplayLineBidirChanged  -= terminal_CurrentDisplayLineBidirChanged; Not needed (yet).
+				this.terminal.CurrentDisplayLineRxChanged     -= terminal_CurrentDisplayLineRxChanged;
 				this.terminal.CurrentDisplayLineTxReplaced    -= terminal_CurrentDisplayLineTxReplaced;
 				this.terminal.CurrentDisplayLineBidirReplaced -= terminal_CurrentDisplayLineBidirReplaced;
 				this.terminal.CurrentDisplayLineRxReplaced    -= terminal_CurrentDisplayLineRxReplaced;
@@ -2920,7 +2926,7 @@ namespace YAT.Model
 		/// The event is not raised on reloading, reloading is done by the <see cref="Domain.Terminal"/>.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawChunkSent(object sender, Domain.RawChunkEventArgs e)
+		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -2974,20 +2980,11 @@ namespace YAT.Model
 		///    notified on updates after transmission.
 		/// </remarks>
 		/// <remarks>
-		/// \remind (2019-04-12 / MKY) (feature request #366 automatic response and action shall be made chunk independent)
-		/// Currently, trigger detection is implemented per chunk, i.e.:
-		///  > If the trigger is located in a single chunk, all fine, as long as the chunk does not spread across multiple lines.
-		///  > If the trigger is spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
-		///  > If there is more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger is detected.
-		/// To make this change happen, trigger detection will have to be moved from here to one of the underlying methods of
-		/// <see cref="Domain.Terminal.ProcessRawChunk"/>, i.e. where chunks are being processed into lines. !!! PENDING !!!
-		/// </remarks>
-		/// <remarks>
 		/// This event is raised when a chunk is received by the <see cref="UnderlyingIOProvider"/>.
 		/// The event is not raised on reloading, reloading is done by the <see cref="Domain.Terminal"/>.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawChunkReceived(object sender, Domain.RawChunkEventArgs e)
+		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -3072,9 +3069,9 @@ namespace YAT.Model
 					// Mark the received chunk as needed (triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
-						case AutoAction.Filter:   e.Attribute = Domain.LineChunkAttribute.Filter;    break;
-						case AutoAction.Suppress: e.Attribute = Domain.LineChunkAttribute.Suppress;  break;
-						default:                  e.Attribute = Domain.LineChunkAttribute.Highlight; break;
+						case AutoAction.Filter:   e.Attribute = Domain.LineAttribute.Filter;    break;
+						case AutoAction.Suppress: e.Attribute = Domain.LineAttribute.Suppress;  break;
+						default:                  e.Attribute = Domain.LineAttribute.Highlight; break;
 					}
 				}
 				else
@@ -3082,8 +3079,8 @@ namespace YAT.Model
 					// Mark the received chunk as needed (non-triggered):
 					switch ((AutoAction)this.settingsRoot.AutoAction.Action)
 					{
-						case AutoAction.Filter:   e.Attribute = Domain.LineChunkAttribute.SuppressIfNotFiltered;           break;
-						case AutoAction.Suppress: e.Attribute = Domain.LineChunkAttribute.SuppressIfSubsequentlyTriggered; break;
+						case AutoAction.Filter:   e.Attribute = Domain.LineAttribute.SuppressIfNotFiltered;           break;
+						case AutoAction.Suppress: e.Attribute = Domain.LineAttribute.SuppressIfSubsequentlyTriggered; break;
 					}
 				}
 			}
@@ -3124,7 +3121,7 @@ namespace YAT.Model
 					asyncInvoker.BeginInvoke(triggerSequence, null, null);
 
 					// Highlighting is done for all auto responses (so far):
-					e.Attribute = Domain.LineChunkAttribute.Highlight;
+					e.Attribute = Domain.LineAttribute.Highlight;
 				}
 			}
 
@@ -3177,6 +3174,53 @@ namespace YAT.Model
 			OnDisplayElementsRxAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
+		}
+
+	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirChanged", Rationale = "The terminal synchronizes display element/line processing.")]
+	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxChanged", Rationale = "The terminal synchronizes display element/line processing.")]
+	////private void terminal_CurrentDisplayLineTxChanged(object sender, Domain.DisplayLineAttributeEventArgs e)
+	////{
+	////	if (IsDisposed)
+	////		return; // Ensure not to handle events during closing anymore.
+	////
+	////	Not needed (yet).
+	////}
+	////
+	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirChanged", Rationale = "The terminal synchronizes display element/line processing.")]
+	////[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxChanged", Rationale = "The terminal synchronizes display element/line processing.")]
+	////private void terminal_CurrentDisplayLineBidirChanged(object sender, Domain.DisplayLineAttributeEventArgs e)
+	////{
+	////	if (IsDisposed)
+	////		return; // Ensure not to handle events during closing anymore.
+	////
+	////	Not needed (yet).
+	////}
+
+		/// <remarks>
+		/// Initially (2019-04..11 / YAT 2.1.0) the trigger detection was implemented per chunk, resulting in:
+		///  > If trigger was located in a single chunk, all fine, as long as the chunk does not spread across multiple lines.
+		///  > If trigger was spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
+		///  > If there was more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger was detected.
+		///  > No way to trigger for text.
+		///
+		/// Alternative approaches:
+		///  a) Move trigger detection from <see cref="terminal_RawChunkReceived"/> to one of the underlying methods of
+		///     <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, where the chunks are being processed into lines.
+		///  b) Keep trigger detection in model but move it from <see cref="terminal_RawChunkReceived"/> to this new
+		///     <see cref="terminal_CurrentDisplayLineRxChanged"/>.
+		///
+		/// Approach b) was chosen (2019-11-21 / YAT 2.1.1). Rationale:
+		///  > Keep settings complexity in model, keep <see cref="Domain.Terminal"/> as simple as possible.
+		///  > Keep well-defined interface <see cref="Domain.LineAttribute"/> among the two objects.
+		/// </remarks>
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirChanged", Rationale = "The terminal synchronizes display element/line processing.")]
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxChanged", Rationale = "The terminal synchronizes display element/line processing.")]
+		private void terminal_CurrentDisplayLineRxChanged(object sender, Domain.DisplayLineAttributeEventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			// PENDING !!!
 		}
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -5762,10 +5806,6 @@ namespace YAT.Model
 		/// <summary>
 		/// Invokes the automatic action.
 		/// </summary>
-		/// <remarks>
-		/// Note the feature request #366 related remark in the method header of
-		/// <see cref="terminal_RawChunkReceived(object, Domain.RawChunkEventArgs)"/>.
-		/// </remarks>
 		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, DateTime ts)
 		{
 			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
@@ -5919,10 +5959,6 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the automatic response.
 		/// </summary>
-		/// <remarks>
-		/// Note the feature request #366 related remark in the method header of
-		/// <see cref="terminal_RawChunkReceived(object, Domain.RawChunkEventArgs)"/>.
-		/// </remarks>
 		protected virtual void SendAutoResponse(byte[] triggerSequence)
 		{
 			this.autoResponseCount++; // Incrementing before sending to have the effective count available during sending.
