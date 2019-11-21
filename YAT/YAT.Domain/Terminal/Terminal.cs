@@ -237,13 +237,13 @@ namespace YAT.Domain
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsRxAdded;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLineAttributeEventArgs> CurrentDisplayLineTxChanged;
+		public event EventHandler<DisplayLineChangeEventArgs> CurrentDisplayLineTxChanged;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLineAttributeEventArgs> CurrentDisplayLineBidirChanged;
+		public event EventHandler<DisplayLineChangeEventArgs> CurrentDisplayLineBidirChanged;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLineAttributeEventArgs> CurrentDisplayLineRxChanged;
+		public event EventHandler<DisplayLineChangeEventArgs> CurrentDisplayLineRxChanged;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
@@ -2073,7 +2073,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineChanged(RepositoryType repositoryType, DisplayLineAttributeEventArgs e)
+		protected virtual void OnCurrentDisplayLineChanged(RepositoryType repositoryType, DisplayLineChangeEventArgs e)
 		{
 			switch (repositoryType)
 			{
@@ -2087,43 +2087,43 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineTxChanged(DisplayLineAttributeEventArgs e, LineState lineState)
+		protected virtual void OnCurrentDisplayLineTxChanged(DisplayLineChangeEventArgs e, LineState lineState)
 		{
 			DebugContentEvents("OnCurrentDisplayLineTxChanged " + e.Elements.ToString());
 
-			this.eventHelper.RaiseSync<DisplayLineAttributeEventArgs>(CurrentDisplayLineTxChanged, this, e);
-			EvaluateLineAttribute(RepositoryType.Tx, e.Attribute, lineState);
+			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineTxChanged, this, e);
+			EvaluateLineChangeAttribute(RepositoryType.Tx, e.Attribute, lineState);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineBidirChanged(DisplayLineAttributeEventArgs e, LineState lineState)
+		protected virtual void OnCurrentDisplayLineBidirChanged(DisplayLineChangeEventArgs e, LineState lineState)
 		{
 			DebugContentEvents("OnCurrentDisplayLineBidirChanged " + e.Elements.ToString());
 
-			this.eventHelper.RaiseSync<DisplayLineAttributeEventArgs>(CurrentDisplayLineBidirChanged, this, e);
-			EvaluateLineAttribute(RepositoryType.Bidir, e.Attribute, lineState);
+			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineBidirChanged, this, e);
+			EvaluateLineChangeAttribute(RepositoryType.Bidir, e.Attribute, lineState);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineRxChanged(DisplayLineAttributeEventArgs e, LineState lineState)
+		protected virtual void OnCurrentDisplayLineRxChanged(DisplayLineChangeEventArgs e, LineState lineState)
 		{
 			DebugContentEvents("OnCurrentDisplayLineRxChanged " + e.Elements.ToString());
 
-			this.eventHelper.RaiseSync<DisplayLineAttributeEventArgs>(CurrentDisplayLineRxChanged, this, e);
-			EvaluateLineAttribute(RepositoryType.Rx, e.Attribute, lineState);
+			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineRxChanged, this, e);
+			EvaluateLineChangeAttribute(RepositoryType.Rx, e.Attribute, lineState);
 		}
 
 		/// <summary></summary>
-		protected virtual void EvaluateLineAttribute(RepositoryType repositoryType, LineAttribute attribute, LineState lineState)
+		protected virtual void EvaluateLineChangeAttribute(RepositoryType repositoryType, LineChangeAttribute attribute, LineState lineState)
 		{
 			// Activate flags as needed, leave unchanged otherwise.
 			// Note that each change will either have none or a single attribute activated.
 			// But the line state has to deal with multiple changes, thus multiples attribute may get activated.
-			if (attribute == LineAttribute.Highlight)                       {                                                                                               lineState.Attribute.Highlight                       = true;                                                                           }
-			if (attribute == LineAttribute.Filter)                          { if (!lineState.Attribute.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.Attribute.FilterDetectedInFirstChange     = true; } else { lineState.Attribute.FilterDetectedInSubsequentChange = true; } } }
-			if (attribute == LineAttribute.SuppressIfNotFiltered)           { if (!lineState.Attribute.AnyFilterDetected) {                                                 lineState.Attribute.SuppressIfNotFiltered           = true;                                                                         } }
-			if (attribute == LineAttribute.SuppressIfSubsequentlyTriggered) {                                                                                               lineState.Attribute.SuppressIfSubsequentlyTriggered = true;                                                                           }
-			if (attribute == LineAttribute.Suppress)                        {                                                                                               lineState.Attribute.SuppressForSure                 = true;                                                                           }
+			if (attribute == LineChangeAttribute.Highlight)                       {                                                                                               lineState.Attribute.Highlight                       = true;                                                                           }
+			if (attribute == LineChangeAttribute.Filter)                          { if (!lineState.Attribute.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.Attribute.FilterDetectedInFirstChange     = true; } else { lineState.Attribute.FilterDetectedInSubsequentChange = true; } } }
+			if (attribute == LineChangeAttribute.SuppressIfNotFiltered)           { if (!lineState.Attribute.AnyFilterDetected) {                                                 lineState.Attribute.SuppressIfNotFiltered           = true;                                                                         } }
+			if (attribute == LineChangeAttribute.SuppressIfSubsequentlyTriggered) {                                                                                               lineState.Attribute.SuppressIfSubsequentlyTriggered = true;                                                                           }
+			if (attribute == LineChangeAttribute.Suppress)                        {                                                                                               lineState.Attribute.SuppressForSure                 = true;                                                                           }
 
 			// In both cases, filtering and suppression, the current implementation retains the line until it is
 			// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs
