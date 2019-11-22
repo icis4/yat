@@ -3198,20 +3198,47 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Initially (2019-04..11 / YAT 2.1.0) the trigger detection was implemented per chunk, resulting in:
-		///  > If trigger was located in a single chunk, all fine, as long as the chunk does not spread across multiple lines.
+		///  > If trigger was located in a single chunk, all fine, as long as the chunk did not spread across multiple lines.
 		///  > If trigger was spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
 		///  > If there was more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger was detected.
 		///  > No way to trigger for text.
 		///
-		/// Alternative approaches:
+		/// Potential approaches to overcome these limitations:
 		///  a) Move trigger detection from <see cref="terminal_RawChunkReceived"/> to one of the underlying methods of
 		///     <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, where the chunks are being processed into lines.
-		///  b) Keep trigger detection in model but move it from <see cref="terminal_RawChunkReceived"/> to this new
-		///     <see cref="terminal_CurrentDisplayLineRxChanged"/>.
+		///  b) Keep trigger detection in model but move it from <see cref="terminal_RawChunkReceived"/> to a new
+		///     'CurrentDisplayLineRxChanged' event. That event would have to include the current display line part (for
+		///     text triggering) as well as the changed part (for byte sequence triggering).
+		///     Advantages of this approach:
+		///      > Keep settings complexity in model.
+		///      > Keep well-defined interface <see cref="Domain.LineChangeAttribute"/> among model and domain.
+		///  c) Completely move handling to model, possible as long as using the retaining approach:
+		///      > "Simple" actions implemented in <see cref="terminal_DisplayElementsRxAdded"/> (immediate approach / element update mode).
+		///      > Filter/Suppress implemented in <see cref="terminal_DisplayLinesRxAdded"/> (retaining approach / line update mode).
+		///     Advantages of this approach:
+		///      > Keep <see cref="Domain.Terminal"/> as simple as possible, really.
+		///      > No interface among model and domain needed anymore.
+		///  d) Refine trigger detection such it detects multiple triggers. This can easily be achieved by upgrading the
+		///     'isTriggered' flag to a 'numOfTriggers' value.
 		///
-		/// Approach b) was chosen (2019-11-21 / YAT 2.1.1). Rationale:
-		///  > Keep settings complexity in model, keep <see cref="Domain.Terminal"/> as simple as possible.
-		///  > Keep well-defined interface <see cref="Domain.LineChangeAttribute"/> among the two objects.
+		/// There are additional ideas to further let these features evolve:
+		///  > Move filter/suppress to separate options:
+		///     + They not really are "actions" and are implemented partly differently then the true actions.
+		///     + Possibility to filter and suppress in parallel.
+		///     + Possibility to filter and suppress Tx as well.
+		///     - Further (over)loads the main tool bar.
+		///     - Lots of duplicated code.
+		///  > Provide n automatic actions:
+		///     + Possibility to filter/suppress/other in parallel.
+		///     - Further complicates the main tool bar.
+		///     - Further complicates usage.
+		/// These ideas are technically possible but are considered (2019-11-21..22 / YAT 2.1.1) over the top.
+		///  > Some inconsistency for filter/suppress is considered preferable over making things more complicated.
+		///  > Limited to Rx is considered sufficient.
+		///
+		/// Approach c) was chosen (2019-11-21..22 / YAT 2.1.1).
+		///
+		/// The last state of the initial implementation can be found in SVN revisions #2701..#2707.
 		/// </remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirChanged", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxChanged", Rationale = "The terminal synchronizes display element/line processing.")]
