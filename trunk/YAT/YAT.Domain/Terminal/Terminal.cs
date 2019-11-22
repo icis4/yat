@@ -307,20 +307,8 @@ namespace YAT.Domain
 		/// <summary>
 		/// Occurs when a packet has been received by the host application. The event args contain
 		/// the binary raw data that has been received, including control characters, EOL,...
-		/// In contrast, the <see cref="ScriptMessageReceived"/> event args contain the message in
-		/// formatted text representation.
 		/// </summary>
 		public event EventHandler<PacketEventArgs> ScriptPacketReceived;
-
-		/// <summary>
-		/// Occurs when a message has been received by the host application. The event args contain
-		/// the message in formatted text representation. For text terminals, the text is composed
-		/// of the decoded characters, excluding control characters. For binary terminals, the text
-		/// represents the received data in hexadecimal notation.
-		/// In contrast, the <see cref="ScriptPacketReceived"/> event args contain the binary raw
-		/// data that has been received.
-		/// </summary>
-		public event EventHandler<MessageEventArgs> ScriptMessageReceived;
 
 	#endif
 
@@ -2007,7 +1995,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void OnSendingPacket(ModifiablePacketEventArgs e)
 		{
-			if (!this.isReloading) // This plug-in event must only be raised once.
+			if (!IsReloading) // This plug-in event must only be raised once.
 				this.eventHelper.RaiseSync<ModifiablePacketEventArgs>(SendingPacket, this, e);
 		}
 
@@ -2048,28 +2036,34 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsTxAdded(DisplayElementsEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnDisplayElementsTxAdded " + e.Elements.ToString());
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsTxAdded, this, e);
+			this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsTxAdded, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsBidirAdded(DisplayElementsEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnDisplayElementsBidirAdded " + e.Elements.ToString());
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsBidirAdded, this, e);
+			this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsBidirAdded, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsRxAdded(DisplayElementsEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnDisplayElementsRxAdded " + e.Elements.ToString());
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsRxAdded, this, e);
+			this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsRxAdded, this, e);
 		}
 
 		/// <summary></summary>
@@ -2089,6 +2083,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineTxChanged(DisplayLineChangeEventArgs e, LineState lineState)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineTxChanged " + e.Elements.ToString());
 
 			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineTxChanged, this, e);
@@ -2098,6 +2095,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineBidirChanged(DisplayLineChangeEventArgs e, LineState lineState)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineBidirChanged " + e.Elements.ToString());
 
 			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineBidirChanged, this, e);
@@ -2107,6 +2107,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineRxChanged(DisplayLineChangeEventArgs e, LineState lineState)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineRxChanged " + e.Elements.ToString());
 
 			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineRxChanged, this, e);
@@ -2161,28 +2164,34 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineTxReplaced(DisplayElementsEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineTxReplaced " + e.Elements.ToString());
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineTxReplaced, this, e);
+			this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineTxReplaced, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineBidirReplaced(DisplayElementsEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineBidirReplaced " + e.Elements.ToString());
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineBidirReplaced, this, e);
+			this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineBidirReplaced, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineRxReplaced(DisplayElementsEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineRxReplaced " + e.Elements.ToString());
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineRxReplaced, this, e);
+			this.eventHelper.RaiseSync<DisplayElementsEventArgs>(CurrentDisplayLineRxReplaced, this, e);
 		}
 
 		/// <summary></summary>
@@ -2202,28 +2211,34 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineTxCleared(EventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineTxCleared");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineTxCleared, this, e);
+			this.eventHelper.RaiseSync(CurrentDisplayLineTxCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineBidirCleared(EventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineBidirCleared");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineBidirCleared, this, e);
+			this.eventHelper.RaiseSync(CurrentDisplayLineBidirCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineRxCleared(EventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnCurrentDisplayLineRxCleared");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(CurrentDisplayLineRxCleared, this, e);
+			this.eventHelper.RaiseSync(CurrentDisplayLineRxCleared, this, e);
 		}
 
 		/// <summary></summary>
@@ -2243,28 +2258,34 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesTxAdded(DisplayLinesEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnDisplayLinesTxAdded " + e.Lines.Count);
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesTxAdded, this, e);
+			this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesTxAdded, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesBidirAdded(DisplayLinesEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnDisplayLinesBidirAdded " + e.Lines.Count);
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesBidirAdded, this, e);
+			this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesBidirAdded, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesRxAdded(DisplayLinesEventArgs e)
 		{
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+				return;
+
 			DebugContentEvents("OnDisplayLinesRxAdded " + e.Lines.Count);
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesRxAdded, this, e);
+			this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesRxAdded, this, e);
 		}
 
 	#if (WITH_SCRIPTING)
@@ -2272,15 +2293,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnScriptPacketReceived(PacketEventArgs e)
 		{
-			if (!this.isReloading) // This plug-in event must only be raised once.
+			if (!IsReloading) // This plug-in event must only be raised once.
 				this.eventHelper.RaiseSync<PacketEventArgs>(ScriptPacketReceived, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnScriptMessageReceived(MessageEventArgs e)
-		{
-			if (!this.isReloading) // This plug-in event must only be raised once.
-				this.eventHelper.RaiseSync<PacketEventArgs>(ScriptMessageReceived, this, e);
 		}
 
 	#endif // WITH_SCRIPTING
@@ -2304,8 +2318,7 @@ namespace YAT.Domain
 		{
 			DebugContentEvents("OnRepositoryTxCleared");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryTxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryTxCleared, this, e);
+			this.eventHelper.RaiseSync(RepositoryTxCleared, this, e);
 		}
 
 		/// <summary></summary>
@@ -2313,8 +2326,7 @@ namespace YAT.Domain
 		{
 			DebugContentEvents("OnRepositoryBidirCleared");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryBidirReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryBidirCleared, this, e);
+			this.eventHelper.RaiseSync(RepositoryBidirCleared, this, e);
 		}
 
 		/// <summary></summary>
@@ -2322,8 +2334,7 @@ namespace YAT.Domain
 		{
 			DebugContentEvents("OnRepositoryRxCleared");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryRxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryRxCleared, this, e);
+			this.eventHelper.RaiseSync(RepositoryRxCleared, this, e);
 		}
 
 		/// <summary></summary>
@@ -2345,8 +2356,7 @@ namespace YAT.Domain
 		{
 			DebugContentEvents("OnRepositoryTxReloaded");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryTxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryTxReloaded, this, e);
+			this.eventHelper.RaiseSync(RepositoryTxReloaded, this, e);
 		}
 
 		/// <summary></summary>
@@ -2354,8 +2364,7 @@ namespace YAT.Domain
 		{
 			DebugContentEvents("OnRepositoryBidirReloaded");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryBidirReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryBidirReloaded, this, e);
+			this.eventHelper.RaiseSync(RepositoryBidirReloaded, this, e);
 		}
 
 		/// <summary></summary>
@@ -2363,8 +2372,7 @@ namespace YAT.Domain
 		{
 			DebugContentEvents("OnRepositoryRxReloaded");
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryRxReloaded' event will be raised after completion.
-				this.eventHelper.RaiseSync(RepositoryRxReloaded, this, e);
+			this.eventHelper.RaiseSync(RepositoryRxReloaded, this, e);
 		}
 
 		#endregion

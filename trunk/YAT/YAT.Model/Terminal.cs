@@ -361,20 +361,8 @@ namespace YAT.Model
 		/// <summary>
 		/// Occurs when a packet has been received by the host application. The event args contain
 		/// the binary raw data that has been received, including control characters, EOL,...
-		/// In contrast, the <see cref="ScriptMessageReceived"/> event args contain the message in
-		/// formatted text representation.
 		/// </summary>
 		public event EventHandler<Domain.PacketEventArgs> ScriptPacketReceived;
-
-		/// <summary>
-		/// Occurs when a message has been received by the host application. The event args contain
-		/// the message in formatted text representation. For text terminals, the text is composed
-		/// of the decoded characters, excluding control characters. For binary terminals, the text
-		/// represents the received data in hexadecimal notation.
-		/// In contrast, the <see cref="ScriptPacketReceived"/> event args contain the binary raw
-		/// data that has been received.
-		/// </summary>
-		public event EventHandler<Domain.MessageEventArgs> ScriptMessageReceived;
 
 	#endif // WITH_SCRIPTING
 
@@ -2631,7 +2619,6 @@ namespace YAT.Model
 				this.terminal.DisplayLinesRxAdded             += terminal_DisplayLinesRxAdded;
 			#if (WITH_SCRIPTING)
 				this.terminal.ScriptPacketReceived    += terminal_ScriptPacketReceived;
-				this.terminal.ScriptMessageReceived   += terminal_ScriptMessageReceived;
 			#endif
 				this.terminal.RepositoryTxCleared     += terminal_RepositoryTxCleared;
 				this.terminal.RepositoryBidirCleared  += terminal_RepositoryBidirCleared;
@@ -2672,7 +2659,6 @@ namespace YAT.Model
 				this.terminal.DisplayLinesRxAdded             -= terminal_DisplayLinesRxAdded;
 			#if (WITH_SCRIPTING)
 				this.terminal.ScriptPacketReceived    -= terminal_ScriptPacketReceived;
-				this.terminal.ScriptMessageReceived   -= terminal_ScriptMessageReceived;
 			#endif
 				this.terminal.RepositoryTxCleared     -= terminal_RepositoryTxCleared;
 				this.terminal.RepositoryBidirCleared  -= terminal_RepositoryBidirCleared;
@@ -3140,6 +3126,7 @@ namespace YAT.Model
 			SendAutoResponse(triggerSequence);
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
@@ -3152,6 +3139,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
@@ -3164,6 +3152,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
@@ -3250,6 +3239,7 @@ namespace YAT.Model
 			// PENDING !!!
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxReplaced(object sender, Domain.DisplayElementsEventArgs e)
@@ -3262,6 +3252,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirReplaced(object sender, Domain.DisplayElementsEventArgs e)
@@ -3274,6 +3265,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxReplaced(object sender, Domain.DisplayElementsEventArgs e)
@@ -3286,6 +3278,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxCleared(object sender, EventArgs e)
@@ -3298,6 +3291,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirCleared(object sender, EventArgs e)
@@ -3310,6 +3304,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxCleared(object sender, EventArgs e)
@@ -3322,6 +3317,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3348,6 +3344,7 @@ namespace YAT.Model
 			}
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3374,6 +3371,7 @@ namespace YAT.Model
 			}
 		}
 
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3453,14 +3451,13 @@ namespace YAT.Model
 
 	#if (WITH_SCRIPTING)
 
+		/// <remarks>
+		/// This event is raised when a packet has been receined by the <see cref="Domain.Terminal"/>.
+		/// This plug-in event is not raised during reloading.
+		/// </remarks>
 		private void terminal_ScriptPacketReceived(object sender, Domain.PacketEventArgs e)
 		{
 			OnScriptPacketReceived(e);
-		}
-
-		private void terminal_ScriptMessageReceived(object sender, Domain.MessageEventArgs e)
-		{
-			OnScriptMessageReceived(e);
 		}
 
 	#endif // WITH_SCRIPTING
@@ -6188,6 +6185,10 @@ namespace YAT.Model
 		/// even canceled using the <see cref="Domain.ModifiablePacketEventArgs.Cancel"/> property.
 		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
 		/// </remarks>
+		/// <remarks>
+		/// This event is raised when a packet is send by the <see cref="Domain.Terminal"/>.
+		/// This plug-in event is not raised during reloading.
+		/// </remarks>
 		protected virtual void OnSendingPacket(Domain.ModifiablePacketEventArgs e)
 		{
 			this.eventHelper.RaiseSync<Domain.ModifiablePacketEventArgs>(SendingPacket, this, e);
@@ -6285,12 +6286,6 @@ namespace YAT.Model
 		protected virtual void OnScriptPacketReceived(Domain.PacketEventArgs e)
 		{
 			this.eventHelper.RaiseSync<Domain.PacketEventArgs>(ScriptPacketReceived, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnScriptMessageReceived(Domain.MessageEventArgs e)
-		{
-			this.eventHelper.RaiseSync<Domain.PacketEventArgs>(ScriptMessageReceived, this, e);
 		}
 
 	#endif // WITH_SCRIPTING
