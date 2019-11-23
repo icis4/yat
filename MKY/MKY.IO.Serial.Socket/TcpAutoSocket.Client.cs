@@ -84,7 +84,7 @@ namespace MKY.IO.Serial.Socket
 		// Event Handling
 		//==========================================================================================
 
-		private void client_IOChanged(object sender, EventArgs e)
+		private void client_IOChanged(object sender, EventArgs<DateTime> e)
 		{
 			switch (GetStateSynchronized())
 			{

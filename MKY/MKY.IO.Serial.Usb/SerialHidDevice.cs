@@ -146,10 +146,10 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler IOChanged;
+		public event EventHandler<EventArgs<DateTime>> IOChanged;
 
 		/// <summary></summary>
-		public event EventHandler IOControlChanged;
+		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
@@ -573,7 +573,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				bool success = this.device.Start();
 
-				OnIOChanged(EventArgs.Empty);
+				OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 
 				if (success)
 				{
@@ -640,7 +640,7 @@ namespace MKY.IO.Serial.Usb
 				DebugEx.WriteException(GetType(), ex, "Exception while stopping threads!");
 			}
 
-			OnIOChanged(EventArgs.Empty);
+			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		#endregion
@@ -846,22 +846,22 @@ namespace MKY.IO.Serial.Usb
 
 		private void device_Connected(object sender, EventArgs e)
 		{
-			OnIOChanged(e);
+			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		private void device_Disconnected(object sender, EventArgs e)
 		{
-			OnIOChanged(e);
+			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		private void device_Opened(object sender, EventArgs e)
 		{
-			OnIOChanged(e);
+			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		private void device_Closed(object sender, EventArgs e)
 		{
-			OnIOChanged(e);
+			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses a 'ReceiveThread' to invoke this event.")]
@@ -914,7 +914,7 @@ namespace MKY.IO.Serial.Usb
 
 				// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 				if (signalXOnXOff || signalXOnXOffCount)
-					OnIOControlChangedAsync(EventArgs.Empty);
+					OnIOControlChangedAsync(new EventArgs<DateTime>(DateTime.Now));
 			} // if (!IsDisposed && ...)
 		}
 
@@ -938,7 +938,7 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
-		protected virtual void OnIOChanged(EventArgs e)
+		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
@@ -946,7 +946,7 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
-		protected virtual void OnIOControlChanged(EventArgs e)
+		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseSync(IOControlChanged, this, e);
@@ -954,7 +954,7 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
-		protected virtual void OnIOControlChangedAsync(EventArgs e)
+		protected virtual void OnIOControlChangedAsync(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseAsync(IOControlChanged, this, e);

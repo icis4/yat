@@ -99,7 +99,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			this.iXOnXOffHelper.OutputIsXOn = true;
 
-			OnIOControlChanged(EventArgs.Empty);
+			OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		/// <summary>
@@ -145,7 +145,7 @@ namespace MKY.IO.Serial.Usb
 
 			this.iXOnXOffHelper.ResetCounts();
 
-			OnIOControlChanged(EventArgs.Empty);
+			OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		#endregion
@@ -318,7 +318,7 @@ namespace MKY.IO.Serial.Usb
 			}
 
 			if (signalIOControlChanged)
-				OnIOControlChanged(EventArgs.Empty);
+				OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		private void SendXOnOrXOffAndNotify(byte b)
@@ -326,7 +326,7 @@ namespace MKY.IO.Serial.Usb
 			this.device.Send(b);
 
 			if (this.iXOnXOffHelper.XOnOrXOffSent(b))
-				OnIOControlChanged(EventArgs.Empty);
+				OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		private void InvokeXOffErrorEvent()

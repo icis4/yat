@@ -165,10 +165,10 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler IOChanged;
+		public event EventHandler<EventArgs<DateTime>> IOChanged;
 
 		/// <summary></summary>
-		public event EventHandler IOControlChanged;
+		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
