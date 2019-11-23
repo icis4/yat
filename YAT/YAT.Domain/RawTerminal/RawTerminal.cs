@@ -161,10 +161,10 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler IOChanged;
+		public event EventHandler<EventArgs<DateTime>> IOChanged;
 
 		/// <summary></summary>
-		public event EventHandler IOControlChanged;
+		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
@@ -728,20 +728,20 @@ namespace YAT.Domain
 		// I/O Events
 		//==========================================================================================
 
-		private void io_IOChanged(object sender, EventArgs e)
+		private void io_IOChanged(object sender, EventArgs<DateTime> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			OnIOChanged(EventArgs.Empty);
+			OnIOChanged(e);
 		}
 
-		private void io_IOControlChanged(object sender, EventArgs e)
+		private void io_IOControlChanged(object sender, EventArgs<DateTime> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			OnIOControlChanged(EventArgs.Empty);
+			OnIOControlChanged(e);
 		}
 
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
@@ -832,14 +832,14 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnIOChanged(EventArgs e)
+		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOControlChanged(EventArgs e)
+		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseSync(IOControlChanged, this, e);
