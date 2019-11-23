@@ -79,8 +79,6 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private Direction direction; // = Direction.None;
-
 		private int charCount; // = 0;
 		private int byteCount; // = 0;
 
@@ -136,23 +134,62 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// The direction of the line.
+		/// The time stamp of the elements in the collection.
 		/// </summary>
 		/// <remarks>
-		/// The value typically corresponds to <see cref="DisplayElement.Direction"/> of the
-		/// elements of the line, but may also be <see cref="Direction.Bidir"/> in case direction
-		/// line break is disabled.
-		/// It is the responsibility of the element processing terminal to set the correct value.
-		///
-		/// Rationale:
-		/// Containing a <see cref="DisplayElement.TimeStampInfo"/> is optional depending on the
-		/// setting of <see cref="Settings.DisplaySettings.ShowTimeStamp"/>, whereas this property
-		/// always has a value.
+		/// The value corresponds to <see cref="DisplayElement.TimeStamp"/> of the first element
+		/// in the collection; or <see cref="DateTime.MinValue"/> in case the collection is empty.
+		/// </remarks>
+		public virtual DateTime TimeStamp
+		{
+			get
+			{
+				if (this.Count > 0)
+					return (this[0].TimeStamp);
+				else
+					return (DateTime.MinValue);
+			}
+		}
+
+		/// <summary>
+		/// The direction of the elements in the collection.
+		/// </summary>
+		/// <remarks>
+		/// The value typically corresponds to <see cref="DisplayElement.Direction"/> of all
+		/// elements in the collection, but may also be <see cref="Direction.Bidir"/> in case
+		/// direction line break is disabled.
 		/// </remarks>
 		public virtual Direction Direction
 		{
-			get { return (this.direction); }
-			set { this.direction = value;  }
+			get
+			{
+				bool txIsContained = false;
+				bool rxIsContained = false;
+
+				foreach (var de in this)
+				{
+					if (de.Direction == Direction.Tx) { txIsContained = true; }
+					if (de.Direction == Direction.Rx) { rxIsContained = true; }
+				}
+
+				if (txIsContained)
+				{
+					if (!rxIsContained)
+						return (Direction.Tx); // The typical case if Tx is contained.
+					else
+						return (Direction.Bidir);
+				}
+
+				if (rxIsContained)
+				{
+					if (!txIsContained)
+						return (Direction.Rx); // The typical case if Rx is contained.
+					else
+						return (Direction.Bidir);
+				}
+
+				return (Direction.None);
+			}
 		}
 
 		/// <summary>
@@ -163,8 +200,11 @@ namespace YAT.Domain
 			get
 			{
 				var sb = new StringBuilder();
+
 				foreach (var de in this)
+				{
 					sb.Append(de.Text);
+				}
 
 				return (sb.ToString());
 			}
@@ -516,15 +556,6 @@ namespace YAT.Domain
 	[Serializable]
 	public class DisplayLine : DisplayElementCollection
 	{
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private DateTime timeStamp; // = 0;
-
-		#endregion
-
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
@@ -559,24 +590,6 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary>
-		/// The time stamp at the beginning of the line.
-		/// </summary>
-		/// <remarks>
-		/// The value should correspond to <see cref="DisplayElement.TimeStampInfo.TimeStamp"/>.
-		/// It is the responsibility of the element processing terminal to set the correct value.
-		///
-		/// Rationale:
-		/// Containing a <see cref="DisplayElement.TimeStampInfo"/> is optional depending on the
-		/// setting of <see cref="Settings.DisplaySettings.ShowTimeStamp"/>, whereas this property
-		/// always has a value.
-		/// </remarks>
-		public virtual DateTime TimeStamp
-		{
-			get { return (this.timeStamp); }
-			set { this.timeStamp = value;  }
-		}
 
 		/// <summary>
 		/// Indicates whether the line is complete, i.e. the collection of elements contains a

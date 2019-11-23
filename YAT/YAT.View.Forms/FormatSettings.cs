@@ -859,10 +859,10 @@ namespace YAT.View.Forms
 
 			var exampleLines = new Domain.DisplayLineCollection(13); // Preset the required capacity to improve memory management.
 
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(0x42, "42h")));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(now, 0x41, "41h")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(now, 0x13, "<CR>")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(now, 0x42, "42h")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(now, 0x10, "<LF>")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)));
@@ -889,9 +889,9 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(now, 0x41, "41h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSpace(Domain.Direction.Tx));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(0x13, "<CR>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(now, 0x13, "<CR>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
@@ -909,11 +909,11 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(now, 0x42, "42h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSpace(Domain.Direction.Rx));
-			exampleComplete.Enqueue(new Domain.DisplayElement.IOControlInfo(Domain.Direction.Tx, "RTS=on"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.IOControlInfo(now, Domain.Direction.Tx, "RTS=on"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSpace(Domain.Direction.Rx));
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(0x10, "<LF>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(now, 0x10, "<LF>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));

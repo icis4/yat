@@ -125,16 +125,16 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxData(byte origin, string text)
-				: base(Direction.Tx, origin, text, 1, ElementAttributes.DataContent)
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public TxData(DateTime timeStamp, byte origin, string text)
+				: base(timeStamp, Direction.Tx, origin, text, 1, ElementAttributes.DataContent)
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
-			public TxData(byte[] origin, string text)
-				: base(Direction.Tx, origin, text, 1, ElementAttributes.DataContent) // Elements are always created corresponding to a single shown character.
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public TxData(DateTime timeStamp, byte[] origin, string text)
+				: base(timeStamp, Direction.Tx, origin, text, 1, ElementAttributes.DataContent) // Elements are always created corresponding to a single shown character.
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -148,16 +148,16 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxControl(byte origin, string text)
-				: base(Direction.Tx, origin, text, 1, ElementAttributes.ControlContent)
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public TxControl(DateTime timeStamp, byte origin, string text)
+				: base(timeStamp, Direction.Tx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
-			public TxControl(byte[] origin, string text)
-				: base(Direction.Tx, origin, text, 1, ElementAttributes.ControlContent)
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public TxControl(DateTime timeStamp, byte[] origin, string text)
+				: base(timeStamp, Direction.Tx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -171,16 +171,16 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxData(byte origin, string text)
-				: base(Direction.Rx, origin, text, 1, ElementAttributes.DataContent)
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public RxData(DateTime timeStamp, byte origin, string text)
+				: base(timeStamp, Direction.Rx, origin, text, 1, ElementAttributes.DataContent)
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
-			public RxData(byte[] origin, string text)
-				: base(Direction.Rx, origin, text, 1, ElementAttributes.DataContent)
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public RxData(DateTime timeStamp, byte[] origin, string text)
+				: base(timeStamp, Direction.Rx, origin, text, 1, ElementAttributes.DataContent)
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -194,16 +194,16 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxControl(byte origin, string text)
-				: base(Direction.Rx, origin, text, 1, ElementAttributes.ControlContent)
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public RxControl(DateTime timeStamp, byte origin, string text)
+				: base(timeStamp, Direction.Rx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
 			/// <summary></summary>
-			public RxControl(byte[] origin, string text)
-				: base(Direction.Rx, origin, text, 1, ElementAttributes.ControlContent)
-			{                                   // ^ Elements are always created corresponding to a single shown character.
-			}                                   //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+			public RxControl(DateTime timeStamp, byte[] origin, string text)
+				: base(timeStamp, Direction.Rx, origin, text, 1, ElementAttributes.ControlContent)
+			{                                              // ^ Elements are always created corresponding to a single shown character.
+			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 		}
 
 		/// <summary></summary>
@@ -218,7 +218,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			protected InfoElement(Direction direction, string text)
-				: base(direction, text, ElementAttributes.Info)
+				: this(DateTime.MinValue, direction, text)
+			{
+			}
+
+			/// <summary></summary>
+			protected InfoElement(DateTime timeStamp, Direction direction, string text)
+				: base(timeStamp, direction, text, ElementAttributes.Info)
 			{
 			}
 
@@ -234,20 +240,15 @@ namespace YAT.Domain
 		public class TimeStampInfo : InfoElement
 		{
 			/// <summary></summary>
-			public DateTime TimeStamp { get; }
-
-			/// <summary></summary>
 			public TimeStampInfo(TimeStampInfo other)
 				: base(other)
 			{
-				TimeStamp = other.TimeStamp;
 			}
 
 			/// <summary></summary>
 			public TimeStampInfo(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
-				: base(Direction.None, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
+				: base(timeStamp, Direction.None, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
 			{
-				TimeStamp = timeStamp;
 			}
 
 			/// <summary></summary>
@@ -425,7 +426,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			protected FormatElement(Direction direction, string text)
-				: base(direction, text, ElementAttributes.Auxiliary)
+				: base(DateTime.MinValue, direction, text, ElementAttributes.Auxiliary)
 			{
 			}
 		}
@@ -497,7 +498,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			protected InlineElement(Direction direction, string text)
-				: base(direction, text, ElementAttributes.Inline)
+				: this(DateTime.MinValue, direction, text)
+			{
+			}
+
+			/// <summary></summary>
+			protected InlineElement(DateTime timeStamp, Direction direction, string text)
+				: base(timeStamp, direction, text, ElementAttributes.Inline)
 			{
 			}
 
@@ -522,13 +529,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public IOControlInfo(string message)
-				: this(Direction.None, message)
+				: this(DateTime.MinValue, Direction.None, message)
 			{
 			}
 
 			/// <summary></summary>
-			public IOControlInfo(Direction direction, string message)
-				: base(direction, "[" + message + "]")
+			public IOControlInfo(DateTime timeStamp, Direction direction, string message)
+				: base(timeStamp, direction, "[" + message + "]")
 			{
 			}
 		}
@@ -556,13 +563,19 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public ErrorInfo(Direction direction, string message)
-				: this(direction, message, false)
+				: this(DateTime.MinValue, direction, message, false)
 			{
 			}
 
 			/// <summary></summary>
-			public ErrorInfo(Direction direction, string message, bool isWarningOnly)
-				: base(direction, (isWarningOnly ? ("[Warning: " + message + "]") : ("[Error: " + message + "]")))
+			public ErrorInfo(DateTime timeStamp, Direction direction, string message)
+				: this(timeStamp, direction, message, false)
+			{
+			}
+
+			/// <summary></summary>
+			public ErrorInfo(DateTime timeStamp, Direction direction, string message, bool isWarningOnly)
+				: base(timeStamp, direction, (isWarningOnly ? ("[Warning: " + message + "]") : ("[Error: " + message + "]")))
 			{
 			}
 		}
@@ -574,6 +587,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
+		private DateTime timeStamp;                // = DateTime.MinValue;
 		private Direction direction;               // = Direction.None;
 		private List<Pair<byte[], string>> origin; // = null;
 		private string text;                       // = null;
@@ -608,32 +622,39 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(Direction direction, ElementAttributes flags)
-			: this(direction, null, flags)
+			: this(DateTime.MinValue, direction, null, flags)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, string text, ElementAttributes flags)
-		{
-			Initialize(direction, null, text, 0, 0, flags);
-		}
-
-		/// <summary></summary>
-		private DisplayElement(Direction direction, byte origin, string text, int charCount, ElementAttributes attributes)
-			: this(direction, new byte[] { origin }, text, charCount, attributes)
+		private DisplayElement(DateTime timeStamp, Direction direction, ElementAttributes flags)
+			: this(timeStamp, direction, null, flags)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, byte[] origin, string text, int charCount, ElementAttributes attributes)
+		private DisplayElement(DateTime timeStamp, Direction direction, string text, ElementAttributes flags)
+		{
+			Initialize(timeStamp, direction, null, text, 0, 0, flags);
+		}
+
+		/// <summary></summary>
+		private DisplayElement(DateTime timeStamp, Direction direction, byte origin, string text, int charCount, ElementAttributes attributes)
+			: this(timeStamp, direction, new byte[] { origin }, text, charCount, attributes)
+		{
+		}
+
+		/// <summary></summary>
+		private DisplayElement(DateTime timeStamp, Direction direction, byte[] origin, string text, int charCount, ElementAttributes attributes)
 		{                                                                   // Makes sense since elements of the same type will be appended.
 			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, charCount, origin.Length, attributes);
+			Initialize(timeStamp, direction, l, text, charCount, origin.Length, attributes);
 		}
 
-		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int charCount, int byteCount, ElementAttributes attributes)
+		private void Initialize(DateTime timeStamp, Direction direction, List<Pair<byte[], string>> origin, string text, int charCount, int byteCount, ElementAttributes attributes)
 		{
+			this.timeStamp  = timeStamp;
 			this.direction  = direction;
 			this.origin     = origin;
 			this.text       = text;
@@ -647,6 +668,7 @@ namespace YAT.Domain
 		{
 			Initialize
 			(
+				other.TimeStamp,
 				other.Direction,              // 'Pair' is a value type, thus the origin pairs will be cloned.
 			  ((other.origin != null) ? (new List<Pair<byte[], string>>(other.origin)) : null),
 				other.Text,
@@ -675,6 +697,14 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlAttribute("TimeStamp")]
+		public virtual DateTime TimeStamp
+		{
+			get { return (this.timeStamp); }
+			set { this.timeStamp = value; }
+		}
 
 		/// <summary></summary>
 		[XmlAttribute("Direction")]
@@ -790,7 +820,7 @@ namespace YAT.Domain
 			else if (this is TimeSpanInfo)     clone = new TimeSpanInfo((TimeSpanInfo)this);
 			else if (this is TimeDeltaInfo)    clone = new TimeDeltaInfo((TimeDeltaInfo)this);
 			else if (this is TimeDurationInfo) clone = new TimeDurationInfo((TimeDurationInfo)this);
-			else if (this is DeviceInfo)     clone = new DeviceInfo();
+			else if (this is DeviceInfo)       clone = new DeviceInfo();
 			else if (this is DirectionInfo)    clone = new DirectionInfo();
 			else if (this is DataLength)       clone = new DataLength((DataLength)this);
 			else if (this is ContentSpace)     clone = new ContentSpace();
@@ -801,6 +831,7 @@ namespace YAT.Domain
 			else if (this is ErrorInfo)        clone = new ErrorInfo();
 			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
+			clone.timeStamp  = this.timeStamp;
 			clone.direction  = this.direction;
 			clone.origin     = PerformDeepClone(this.origin);
 			clone.text       = this.text;
@@ -857,6 +888,8 @@ namespace YAT.Domain
 			if (!IsContent || !other.IsContent) // Disallow non-content elements.
 				return (false);
 
+			// TimeStamp may differ.
+
 			if (this.direction != other.direction) // Self-explaining.
 				return (false);
 
@@ -877,6 +910,8 @@ namespace YAT.Domain
 		{
 			if (!AcceptsAppendOf(other))
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The given element '" + other + "' cannot be appended to this element '" + this + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			// TimeStamp of this element is kept, other is ignored.
 
 			if (this.origin != null)
 				this.origin.AddRange(PerformDeepClone(other.origin));
