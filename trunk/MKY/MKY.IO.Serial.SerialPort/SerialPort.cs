@@ -193,10 +193,10 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler IOChanged;
+		public event EventHandler<EventArgs<DateTime>> IOChanged;
 
 		/// <summary></summary>
-		public event EventHandler IOControlChanged;
+		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
@@ -858,8 +858,9 @@ namespace MKY.IO.Serial.SerialPort
 				// likely result in a deadlock, in case the callback sink would call any method or
 				// property that also locks the port!
 
-				OnIOChangedAsync(EventArgs.Empty);
-				OnIOControlChangedAsync(EventArgs.Empty);
+				var now = DateTime.Now;
+				OnIOChangedAsync(       new EventArgs<DateTime>(now));
+				OnIOControlChangedAsync(new EventArgs<DateTime>(now));
 			}
 		}
 
@@ -1442,11 +1443,11 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						case MKY.IO.Ports.SerialPinChange.InputBreak:
 							if (this.settings.NoSendOnInputBreak)
-								OnIOChangedAsync(EventArgs.Empty); // Async! See remarks above.
+								OnIOChangedAsync(new EventArgs<DateTime>(DateTime.Now)); // Async! See remarks above.
 							break;
 
 						case MKY.IO.Ports.SerialPinChange.OutputBreak:
-							OnIOChangedAsync(EventArgs.Empty); // Async! See remarks above.
+							OnIOChangedAsync(new EventArgs<DateTime>(DateTime.Now)); // Async! See remarks above.
 							break;
 
 						default:
@@ -1746,7 +1747,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
-		protected virtual void OnIOChanged(EventArgs e)
+		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
@@ -1754,7 +1755,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
-		protected virtual void OnIOChangedAsync(EventArgs e)
+		protected virtual void OnIOChangedAsync(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseAsync(IOChanged, this, e);

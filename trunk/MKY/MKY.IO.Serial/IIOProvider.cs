@@ -48,7 +48,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Event raised after the I/O provider's state has changed, e.g. started or stopped.
 		/// </summary>
-		event EventHandler IOChanged;
+		event EventHandler<EventArgs<DateTime>> IOChanged;
 
 		/// <summary>
 		/// Event raised after the I/O provider's control state has changed.
@@ -56,7 +56,7 @@ namespace MKY.IO.Serial
 		/// <remarks>
 		/// For serial COM ports, this event indicates a change of the serial control pins.
 		/// </remarks>
-		event EventHandler IOControlChanged;
+		event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary>
 		/// Event raised after an I/O error has occurred.
