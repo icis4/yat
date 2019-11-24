@@ -327,6 +327,23 @@ namespace MKY
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Determines how many occurrances of <paramref name="value"/> are contained in <paramref name="str"/>.
+		/// </summary>
+		public static int ContainingCount(string str, string value)
+		{
+			int count = 0;
+
+			int i = 0;
+			while ((i = str.IndexOf(value, i)) >= 0)
+			{
+				i += value.Length;
+				count++;
+			}
+
+			return (count);
+		}
+
+		/// <summary>
 		/// Determines whether <paramref name="str"/> contains any of the <paramref name="anyOf"/>.
 		/// </summary>
 		public static bool ContainsAny(string str, char[] anyOf)
@@ -360,6 +377,7 @@ namespace MKY
 				if (str.Contains(v))
 					return (true); // Match.
 			}
+
 			return (false); // No match.
 		}
 
