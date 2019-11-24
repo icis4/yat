@@ -77,7 +77,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected override DisplayElement ByteToElement(byte b, IODirection d, Radix r)
+		protected override DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r)
 		{
 			switch (r)
 			{
@@ -86,7 +86,7 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					return (base.ByteToElement(b, d, r));
+					return (base.ByteToElement(b, ts, d, r));
 				}
 
 				case Radix.String:
@@ -101,11 +101,11 @@ namespace YAT.Domain
 
 						if      ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
 						{
-							return (base.ByteToElement(b, d, r));
+							return (base.ByteToElement(b, ts, d, r));
 						}
 						else if  (b == 0x20)                             // ASCII space.
 						{
-							return (base.ByteToElement(b, d, r));
+							return (base.ByteToElement(b, ts, d, r));
 						}                                                // Special case.
 						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 						{
@@ -113,7 +113,7 @@ namespace YAT.Domain
 						}
 						else                                             // ASCII and extended ASCII printable characters.
 						{
-							return (DecodeAndCreateElement(b, d, r, e)); // 'IsSingleByte' always results in a single character per byte.
+							return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsSingleByte' always results in a single character per byte.
 						}
 					}
 					else // 'IsMultiByte':
@@ -163,15 +163,15 @@ namespace YAT.Domain
 
 									if      ((code < 0x20) || (code == 0x7F))        // ASCII control characters.
 									{
-										return (base.ByteToElement((byte)code, d, r));
+										return (base.ByteToElement((byte)code, ts, d, r));
 									}
 									else if (code == 0x20)                           // ASCII space.
 									{
-										return (base.ByteToElement((byte)code, d, r));
+										return (base.ByteToElement((byte)code, ts, d, r));
 									}
 									else                                             // ASCII printable character.
-									{                                                        // 'effectiveCharCount' is 1 for sure.
-										return (CreateDataElement(decodingArray, d, r, chars[0]));
+									{                                                            // 'effectiveCharCount' is 1 for sure.
+										return (CreateDataElement(decodingArray, ts, d, r, chars[0]));
 									}
 								}
 								else // Single 'unknown' character 0xFFFD:
@@ -187,16 +187,16 @@ namespace YAT.Domain
 								}
 								else
 								{
-									pendingMultiBytesToDecode.Clear();          // Reset decoding stream.
+									pendingMultiBytesToDecode.Clear();               // Reset decoding stream.
 
-									return (CreateInvalidBytesWarning(decodingArray, d, e));
+									return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
 								}
 							}
 							else // (effectiveCharCount > 1) => Code doesn't fit into a single u16 value, thus more than one character will be returned.
 							{
-								pendingMultiBytesToDecode.Clear();              // Reset decoding stream.
+								pendingMultiBytesToDecode.Clear();                   // Reset decoding stream.
 
-								return (CreateOutsideUnicodePlane0Warning(decodingArray, d, e));
+								return (CreateOutsideUnicodePlane0Warning(decodingArray, ts, d, e));
 							}
 						}
 						else if ((EncodingEx)e == SupportedEncoding.UTF7)
@@ -204,35 +204,35 @@ namespace YAT.Domain
 							// Note that the following code is similar as above and below but with subtle differences
 							// such as treatment of Base64 bytes, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
-							if (pendingMultiBytesToDecode.Count == 0)       // A first 'MultiByte' is either direct or lead byte.
+							if (pendingMultiBytesToDecode.Count == 0)                // A first 'MultiByte' is either direct or lead byte.
 							{
-								if      ((b < 0x20) || (b == 0x7F))               // ASCII control characters.
+								if      ((b < 0x20) || (b == 0x7F))                  // ASCII control characters.
 								{
-									return (base.ByteToElement(b, d, r));
+									return (base.ByteToElement(b, ts, d, r));
 								}
-								else if (b == 0x20)                              // ASCII space.
+								else if (b == 0x20)                                  // ASCII space.
 								{
-									return (base.ByteToElement(b, d, r));
+									return (base.ByteToElement(b, ts, d, r));
 								}
 								else if (CharEx.IsValidForUTF7((char)b))
 								{
-									return (DecodeAndCreateElement(b, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
+									return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
 								}
-								else if (b == (byte)'+')                         // UTF-7 lead byte.
+								else if (b == (byte)'+')                             // UTF-7 lead byte.
 								{
 									pendingMultiBytesToDecode.Clear();
 									pendingMultiBytesToDecode.Add(b);
 
-									return (new DisplayElement.Nonentity());     // Nothing to decode (yet).
+									return (new DisplayElement.Nonentity());         // Nothing to decode (yet).
 								}
 								else
 								{
-									return (CreateInvalidByteWarning(b, d, e));
+									return (CreateInvalidByteWarning(b, ts, d, e));
 								}
 							}
 							else // (rxMultiByteDecodingStream.Count > 0) => Not lead byte.
 							{
-								if (b == (byte)'-')                              // UTF-7 terminating byte.
+								if (b == (byte)'-')                                  // UTF-7 terminating byte.
 								{
 									pendingMultiBytesToDecode.Add(b);
 									byte[] decodingArray = pendingMultiBytesToDecode.ToArray();
@@ -243,14 +243,14 @@ namespace YAT.Domain
 									int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 									if (effectiveCharCount == expectedCharCount)
 									{
-										return (CreateDataElement(decodingArray, d, r, chars));
+										return (CreateDataElement(decodingArray, ts, d, r, chars));
 									}
 									else // Decoder has failed:
 									{
-										return (CreateInvalidBytesWarning(decodingArray, d, e));
+										return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
 									}
 								}
-								else if (!CharEx.IsValidForBase64((char)b))      // Non-Base64 characters also terminates!
+								else if (!CharEx.IsValidForBase64((char)b))          // Non-Base64 characters also terminates!
 								{
 									byte[] decodingArray = pendingMultiBytesToDecode.ToArray();
 									pendingMultiBytesToDecode.Clear();
@@ -260,27 +260,27 @@ namespace YAT.Domain
 									int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 									if (effectiveCharCount == expectedCharCount)
 									{                                                                         // 'effectiveCharCount' is 1 for sure.
-										DisplayElement encoded = CreateDataElement(decodingArray, d, r, chars);
+										DisplayElement encoded = CreateDataElement(decodingArray, ts, d, r, chars);
 
 										// Note that the following code is similar as above and below but with subtle differences
 										// such as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
 										DisplayElement direct;
-										if      ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
+										if      ((b < 0x20) || (b == 0x7F)) // ASCII control characters.
 										{
-											direct = base.ByteToElement(b, d, r);
+											direct = base.ByteToElement(b, ts, d, r);
 										}
-										else if (b == 0x20)                              // ASCII space.
+										else if (b == 0x20)                 // ASCII space.
 										{
-											direct = base.ByteToElement(b, d, r);
+											direct = base.ByteToElement(b, ts, d, r);
 										}
 										else if (CharEx.IsValidForUTF7((char)b))
 										{
-											direct = DecodeAndCreateElement(b, d, r, e); // 'IsMultiByte' but the current byte must result in a single character here.
+											direct = DecodeAndCreateElement(b, ts, d, r, e); // 'IsMultiByte' but the current byte must result in a single character here.
 										}
 										else
 										{
-											return (CreateInvalidByteWarning(b, d, e));
+											return (CreateInvalidByteWarning(b, ts, d, e));
 										}
 
 										// Combine into single element, accepting the limitation that a potential control character will be contained in a data element:
@@ -293,8 +293,8 @@ namespace YAT.Domain
 
 										switch (d)
 										{
-											case IODirection.Tx:    return (new DisplayElement.TxData(origin.ToArray(), text));
-											case IODirection.Rx:    return (new DisplayElement.RxData(origin.ToArray(), text));
+											case IODirection.Tx:    return (new DisplayElement.TxData(ts, origin.ToArray(), text));
+											case IODirection.Rx:    return (new DisplayElement.RxData(ts, origin.ToArray(), text));
 
 											case IODirection.Bidir:
 											case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -303,7 +303,7 @@ namespace YAT.Domain
 									}
 									else // Decoder has failed:
 									{
-										return (CreateInvalidBytesWarning(decodingArray, d, e));
+										return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
 									}
 								}
 								else if (CharEx.IsValidForUTF7((char)b))     // UTF-7 trailing byte.
@@ -314,7 +314,7 @@ namespace YAT.Domain
 								}
 								else
 								{
-									return (CreateInvalidByteWarning(b, d, e));
+									return (CreateInvalidByteWarning(b, ts, d, e));
 								}
 							} // direct or lead or trailing byte.
 						}
@@ -323,25 +323,25 @@ namespace YAT.Domain
 							// Note that the following code is similar as several times above but with subtle differences
 							// such as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
 
-							if (pendingMultiBytesToDecode.Count == 0)       // A first 'MultiByte' is either ASCII or lead byte.
+							if (pendingMultiBytesToDecode.Count == 0)        // A first 'MultiByte' is either ASCII or lead byte.
 							{
-								if      (b >= 0x80)                              // DBCS/MBCS lead byte.
+								if      (b >= 0x80)                          // DBCS/MBCS lead byte.
 								{
 									pendingMultiBytesToDecode.Add(b);
 
-									return (new DisplayElement.Nonentity());     // Nothing to decode (yet).
+									return (new DisplayElement.Nonentity()); // Nothing to decode (yet).
 								}
-								else if ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
+								else if ((b < 0x20) || (b == 0x7F))          // ASCII control characters.
 								{
-									return (base.ByteToElement(b, d, r));
+									return (base.ByteToElement(b, ts, d, r));
 								}
-								else if (b == 0x20)                              // ASCII space.
+								else if (b == 0x20)                          // ASCII space.
 								{
-									return (base.ByteToElement(b, d, r));
+									return (base.ByteToElement(b, ts, d, r));
 								}
-								else                                             // ASCII printable character.
+								else                                         // ASCII printable character.
 								{
-									return (DecodeAndCreateElement(b, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
+									return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
 								}
 							}
 							else // (rxMultiByteDecodingStream.Count > 0) => Neither ASCII nor lead byte.
@@ -356,7 +356,7 @@ namespace YAT.Domain
 								{
 									pendingMultiBytesToDecode.Clear();
 									                                                    //// 'effectiveCharCount' is 1 for sure.
-									return (CreateDataElement(decodingArray, d, r, chars[0]));
+									return (CreateDataElement(decodingArray, ts, d, r, chars[0]));
 								}
 								else if (effectiveCharCount == 0)
 								{
@@ -368,14 +368,14 @@ namespace YAT.Domain
 									{
 										pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
-										return (CreateInvalidBytesWarning(decodingArray, d, e));
+										return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
 									}
 								}
 								else // (effectiveCharCount > 1)
 								{
 									pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
-									return (CreateInvalidBytesWarning(decodingArray, d, e));
+									return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
 								}
 							} // ASCII or lead or trailing byte
 						} // Unicode/Non-Unicode
@@ -394,18 +394,18 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement DecodeAndCreateElement(byte b, IODirection d, Radix r, Encoding e)
+		protected virtual DisplayElement DecodeAndCreateElement(byte b, DateTime ts, IODirection d, Radix r, Encoding e)
 		{
 			int expectedCharCount = 1;
 			char[] chars = new char[expectedCharCount];
 			int effectiveCharCount = e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true);
 			if (effectiveCharCount == expectedCharCount)
-			{                                            // 'effectiveCharCount' is 1 for sure.
-				return (CreateDataElement(b, d, r, chars[0]));
+			{                                                // 'effectiveCharCount' is 1 for sure.
+				return (CreateDataElement(b, ts, d, r, chars[0]));
 			}
 			else // Decoder has failed:
 			{
-				return (CreateInvalidByteWarning(b, d, e));
+				return (CreateInvalidByteWarning(b, ts, d, e));
 			}
 		}
 
@@ -413,17 +413,17 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte origin, IODirection d, Radix r, char c)
+		protected virtual DisplayElement CreateDataElement(byte origin, DateTime ts, IODirection d, Radix r, char c)
 		{
 			if (r != Radix.Unicode)
 			{
 				string text = c.ToString(CultureInfo.InvariantCulture);
-				return (CreateDataElement(origin, d, text));
+				return (CreateDataElement(origin, ts, d, text));
 			}
 			else // Unicode:
 			{
 				string text = UnicodeValueToNumericString(c);
-				return (CreateDataElement(origin, d, text));
+				return (CreateDataElement(origin, ts, d, text));
 			}
 		}
 
@@ -431,32 +431,32 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte[] origin, IODirection d, Radix r, char c)
+		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection d, Radix r, char c)
 		{
 			if (r != Radix.Unicode)
 			{
 				string text = c.ToString(CultureInfo.InvariantCulture);
-				return (CreateDataElement(origin, d, text));
+				return (CreateDataElement(origin, ts, d, text));
 			}
 			else // Unicode:
 			{
 				string text = UnicodeValueToNumericString(c);
-				return (CreateDataElement(origin, d, text));
+				return (CreateDataElement(origin, ts, d, text));
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte[] origin, IODirection d, Radix r, char[] text)
+		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection d, Radix r, char[] text)
 		{
 			if (r != Radix.Unicode)
 			{
-				return (CreateDataElement(origin, d, new string(text)));
+				return (CreateDataElement(origin, ts, d, new string(text)));
 			}
 			else // Unicode:
 			{
-				return (CreateDataElement(origin, d, new string(text)));
+				return (CreateDataElement(origin, ts, d, new string(text)));
 			}
 		}
 
@@ -464,7 +464,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateInvalidByteWarning(byte b, IODirection d, Encoding e)
+		protected virtual DisplayElement CreateInvalidByteWarning(byte b, DateTime ts, IODirection d, Encoding e)
 		{
 			var byteAsString = ByteHelper.FormatHexString(b, TerminalSettings.Display.ShowRadix);
 
@@ -475,14 +475,14 @@ namespace YAT.Domain
 			sb.Append(((EncodingEx)e).DisplayName);
 			sb.Append("' byte!");
 
-			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+			return (new DisplayElement.ErrorInfo(ts, (Direction)d, sb.ToString(), true));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateInvalidBytesWarning(byte[] a, IODirection d, Encoding e)
+		protected virtual DisplayElement CreateInvalidBytesWarning(byte[] a, DateTime ts, IODirection d, Encoding e)
 		{
 			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
 
@@ -493,14 +493,14 @@ namespace YAT.Domain
 			sb.Append(((EncodingEx)e).DisplayName);
 			sb.Append("' byte sequence!");
 
-			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+			return (new DisplayElement.ErrorInfo(ts, (Direction)d, sb.ToString(), true));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateOutsideUnicodePlane0Warning(byte[] a, IODirection d, Encoding e)
+		protected virtual DisplayElement CreateOutsideUnicodePlane0Warning(byte[] a, DateTime ts, IODirection d, Encoding e)
 		{
 			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
 
@@ -509,7 +509,7 @@ namespace YAT.Domain
 			sb.Append(bytesAsString);
 			sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
 
-			return (new DisplayElement.ErrorInfo((Direction)d, sb.ToString(), true));
+			return (new DisplayElement.ErrorInfo(ts, (Direction)d, sb.ToString(), true));
 		}
 
 		/// <remarks>This text specific implementation is based on <see cref="DisplayElementCollection.CharCount"/>.</remarks>
@@ -654,7 +654,7 @@ namespace YAT.Domain
 
 			if (lineState.Position == LinePosition.Content)
 			{
-				DoLineContent(repositoryType, processState, textLineState, textDisplaySettings, b, dev, dir, elementsToAdd);
+				DoLineContent(repositoryType, processState, textLineState, textDisplaySettings, b, ts, dev, dir, elementsToAdd);
 			}
 
 			if (lineState.Position == LinePosition.End)
@@ -684,21 +684,13 @@ namespace YAT.Domain
 				lp.AddRange(info);
 			}
 
-			if (lineState.Attribute.SuppressForSure || lineState.Attribute.SuppressIfSubsequentlyTriggered || lineState.Attribute.SuppressIfNotFiltered)
-			{
-				lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
-			////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
-			}
-			else
-			{
-				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elementsToAdd.AddRange(lp);
-			}
+			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+			elementsToAdd.AddRange(lp);
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void DoLineContent(RepositoryType repositoryType, ProcessState processState, TextLineState textLineState, Settings.TextDisplaySettings textDisplaySettings,
-		                           byte b, string dev, IODirection dir,
+		                           byte b, DateTime ts, string dev, IODirection dir,
 		                           DisplayElementCollection elementsToAdd)
 		{
 			var lineState = processState.Line; // Convenience shortcut.
@@ -706,11 +698,8 @@ namespace YAT.Domain
 			// Convert content:
 			DisplayElement de;
 			bool isBackspace;
-			if (!ControlCharacterHasBeenProcessed(b, dir, out de, out isBackspace))
-				de = ByteToElement(b, dir); // Default conversion to value or ASCII mnemonic.
-
-			// Mark as needed:
-			de.Highlight = lineState.Attribute.Highlight;
+			if (!ControlCharacterHasBeenProcessed(b, ts, dir, out de, out isBackspace))
+				de = ByteToElement(b, ts, dir); // Default conversion to value or ASCII mnemonic.
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
@@ -828,16 +817,8 @@ namespace YAT.Domain
 					}
 				}
 
-				if (lineState.Attribute.SuppressForSure || lineState.Attribute.SuppressIfSubsequentlyTriggered || lineState.Attribute.SuppressIfNotFiltered)
-				{
-					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
-				////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
-				}
-				else
-				{
-					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-					elementsToAdd.AddRange(lp);
-				}
+				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+				elementsToAdd.AddRange(lp);
 
 				if (isBackspace)
 				{
@@ -882,8 +863,8 @@ namespace YAT.Domain
 					lineState.Position = LinePosition.ContentExceeded;
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					var message = "Maximal number of bytes per line exceeded! Check the EOL (end-of-line) settings or increase the limit in the advanced terminal settings.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)dir, message, true));
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo((Direction)dir, message, true));
+					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
+					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
 				}
 			}
 		}
@@ -892,7 +873,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected virtual bool ControlCharacterHasBeenProcessed(byte b, IODirection dir, out DisplayElement de, out bool isBackspace)
+		protected virtual bool ControlCharacterHasBeenProcessed(byte b, DateTime ts, IODirection dir, out DisplayElement de, out bool isBackspace)
 		{
 			isBackspace = false;
 
@@ -935,7 +916,7 @@ namespace YAT.Domain
 						// tabs would only get aligned within the respective control element,
 						// thus resulting in misaligned tab stops.
 
-						de = CreateDataElement(b, dir, "\t");
+						de = CreateDataElement(b, ts, dir, "\t");
 						return (true);
 					}
 
@@ -990,23 +971,7 @@ namespace YAT.Domain
 				                                                                                       //            All other elements must be removed as well!
 				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
-		#if (DEBUG)
-			else if (lineState.Attribute.SuppressForSure || (lineState.Attribute.SuppressIfNotFiltered && !lineState.Attribute.AnyFilterDetected)) // Suppress:
-			{
-				// As described in 'EvaluateLineChangeAttribute()', in both cases filtering and suppression,
-				// the current implementation retains the line until it is complete, i.e. until the final
-				// decision to filter or suppress could be done.
-				// Consequently, the above above condition will never become true, thus excluding it (YAGNI).
-				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
-
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart));                      // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                                       //            All other elements must be removed as well!
-				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
-
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This condition must never become true!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		#endif
-			else // Neither empty nor suppress:
+			else // Not empty:
 			{
 				// Process line length:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -1022,21 +987,14 @@ namespace YAT.Domain
 					PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
 					lineEnd.AddRange(info);
 				}
-				lineEnd.Add(new DisplayElement.LineBreak());
 
-				// Finalize elements:
-				if ((lineState.Attribute.SuppressIfSubsequentlyTriggered && !lineState.Attribute.SuppressForSure) ||     // Don't suppress line!
-				    (lineState.Attribute.SuppressIfNotFiltered && lineState.Attribute.FilterDetectedInSubsequentChange)) // Filter line!
-				{                                                                                                        // Both cases mean to delay-show the elements of the line.
-					elementsToAdd.AddRange(lineState.Elements.Clone()); // Clone elements because they are needed again further below.
-				}
+				lineEnd.Add(new DisplayElement.LineBreak());
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
 				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
 				l.AddRange(lineEnd);
-				l.TimeStamp = lineState.TimeStamp;
 				linesToAdd.Add(l);
 			}
 

@@ -28,11 +28,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 #endif
 
-using MKY;
-
 namespace YAT.Domain
 {
 #if (WITH_SCRIPTING)
+
 	/// <summary></summary>
 	public class PacketEventArgs : EventArgs
 	{
@@ -78,6 +77,7 @@ namespace YAT.Domain
 			Message = message;
 		}
 	}
+
 #endif // WITH_SCRIPTING
 
 	/// <summary></summary>
@@ -174,25 +174,6 @@ namespace YAT.Domain
 		public DisplayElementsEventArgs(DisplayElementCollection elements)
 		{
 			Elements = elements;
-		}
-	}
-
-	/// <summary></summary>
-	public class DisplayLineChangeEventArgs : DisplayElementsEventArgs
-	{
-		/// <remarks>
-		/// The <see cref="Attribute"/> is intended to be set by the event sink,
-		/// must therefore be settable.
-		/// </remarks>
-		public LineChangeAttribute Attribute { get; set; } // = LineChangeAttribute.None;
-
-		/// <remarks>
-		/// The <see cref="Attribute"/> is intended to be set by the event sink,
-		/// therefore not part of the constructor parameters.
-		/// </remarks>
-		public DisplayLineChangeEventArgs(DisplayElementCollection elements)
-			: base(elements)
-		{
 		}
 	}
 

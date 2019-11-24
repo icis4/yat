@@ -93,12 +93,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, IODirection d)
+		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d)
 		{
 			switch (d)
 			{
-				case IODirection.Tx:   return (ByteToElement(b, d, TerminalSettings.Display.TxRadix));
-				case IODirection.Rx:   return (ByteToElement(b, d, TerminalSettings.Display.RxRadix));
+				case IODirection.Tx:   return (ByteToElement(b, ts, d, TerminalSettings.Display.TxRadix));
+				case IODirection.Rx:   return (ByteToElement(b, ts, d, TerminalSettings.Display.RxRadix));
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -110,17 +110,17 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
+		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r)
 		{
 			bool isControl;
 			bool isByteToHide;
 			bool isError;
 
-			string text = ByteToText(b, d, r, out isControl, out isByteToHide, out isError);
+			string text = ByteToText(b, ts, d, r, out isControl, out isByteToHide, out isError);
 
 			if      (isError)
 			{
-				return (new DisplayElement.ErrorInfo((Direction)d, text));
+				return (new DisplayElement.ErrorInfo(ts, (Direction)d, text));
 			}
 			else if (isByteToHide)
 			{
@@ -129,13 +129,13 @@ namespace YAT.Domain
 			else if (isControl)
 			{
 				if (TerminalSettings.CharReplace.ReplaceControlChars)
-					return (CreateControlElement(b, d, text));
+					return (CreateControlElement(b, ts, d, text));
 				else                         // !ReplaceControlChars => Use normal data element:
-					return (CreateDataElement(b, d, text));
+					return (CreateDataElement(b, ts, d, text));
 			}
 			else // Neither 'isError' nor 'isByteToHide' nor 'isError' => Use normal data element:
 			{
-				return (CreateDataElement(b, d, text));
+				return (CreateDataElement(b, ts, d, text));
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual string ByteToText(byte b, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
+		protected virtual string ByteToText(byte b, DateTime ts, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
 		{
 			isByteToHide = false;
 			if      (b == 0x00)
@@ -338,12 +338,12 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte origin, IODirection d, string text)
+		protected virtual DisplayElement CreateDataElement(byte origin, DateTime ts, IODirection d, string text)
 		{
 			switch (d)
 			{
-				case IODirection.Tx:    return (new DisplayElement.TxData(origin, text));
-				case IODirection.Rx:    return (new DisplayElement.RxData(origin, text));
+				case IODirection.Tx:    return (new DisplayElement.TxData(ts, origin, text));
+				case IODirection.Rx:    return (new DisplayElement.RxData(ts, origin, text));
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -353,12 +353,12 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte[] origin, IODirection d, string text)
+		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection d, string text)
 		{
 			switch (d)
 			{
-				case IODirection.Tx:    return (new DisplayElement.TxData(origin, text));
-				case IODirection.Rx:    return (new DisplayElement.RxData(origin, text));
+				case IODirection.Tx:    return (new DisplayElement.TxData(ts, origin, text));
+				case IODirection.Rx:    return (new DisplayElement.RxData(ts, origin, text));
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -368,12 +368,12 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateControlElement(byte origin, IODirection d, string text)
+		protected virtual DisplayElement CreateControlElement(byte origin, DateTime ts, IODirection d, string text)
 		{
 			switch (d)
 			{
-				case IODirection.Tx:   return (new DisplayElement.TxControl(origin, text));
-				case IODirection.Rx:   return (new DisplayElement.RxControl(origin, text));
+				case IODirection.Tx:   return (new DisplayElement.TxControl(ts, origin, text));
+				case IODirection.Rx:   return (new DisplayElement.RxControl(ts, origin, text));
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 using MKY;
 
@@ -39,76 +40,89 @@ namespace YAT.Model.Utilities
 	/// </remarks>
 	public class AutoTriggerHelper
 	{
-		/// <remarks>
-		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		private byte[] triggerSequence;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] TriggerSequence { get; }
 
-		private Domain.SequenceQueue triggerQueue;
+		private Domain.SequenceQueue triggerSequenceQueue;
 
 		/// <summary></summary>
-		public AutoTriggerHelper()
-		{
-		}
+		public string TriggerText { get; }
+
+		/// <summary></summary>
+		public string TriggerRegexPattern { get; }
+
+		/// <summary></summary>
+		public Regex TriggerRegex { get; }
+
+		/// <summary></summary>
+		public string EffectiveTriggerTextLine { get; set; }
 
 		/// <summary></summary>
 		public AutoTriggerHelper(byte[] triggerSequence)
 		{
 			lock (this)
 			{
-				this.triggerSequence = triggerSequence;
-				this.triggerQueue = new Domain.SequenceQueue(this.triggerSequence);
+				TriggerSequence = triggerSequence;
+
+				this.triggerSequenceQueue = new Domain.SequenceQueue(TriggerSequence);
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] TriggerSequence
-		{
-			get
-			{
-				return (this.triggerSequence);
-			}
-			set
-			{
-				lock (this)
-				{
-					if (!ArrayEx.ValuesEqual(this.triggerSequence, value))
-					{
-						this.triggerSequence = value;
-						this.triggerQueue = new Domain.SequenceQueue(this.triggerSequence);
-					}
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] TriggerQueueAsArray()
+		public AutoTriggerHelper(string triggerText)
 		{
 			lock (this)
 			{
-				return (this.triggerQueue.QueueAsArray());
+				TriggerText = triggerText;
+			}
+		}
+
+		/// <summary></summary>
+		public AutoTriggerHelper(string triggerRegexPattern, Regex triggerRegex)
+		{
+			lock (this)
+			{
+				TriggerRegexPattern = triggerRegexPattern;
+				TriggerRegex = triggerRegex;
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] TriggerSequenceQueueAsArray()
+		{
+			lock (this)
+			{
+				return (this.triggerSequenceQueue.QueueAsArray());
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		public bool EnqueueAndMatchTrigger(byte b)
+		public virtual bool EnqueueAndMatchTrigger(byte b)
 		{
 			lock (this)
 			{
-				if (this.triggerQueue != null)
+				if (this.triggerSequenceQueue != null)
 				{
-					this.triggerQueue.Enqueue(b);
-					return (this.triggerQueue.IsCompleteMatch);
+					this.triggerSequenceQueue.Enqueue(b);
+					return (this.triggerSequenceQueue.IsCompleteMatch);
 				}
 				else
 				{
 					return (false);
 				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void Reset()
+		{
+			lock (this)
+			{
+				if (this.triggerSequenceQueue != null)
+					this.triggerSequenceQueue.Reset();
 			}
 		}
 	}
