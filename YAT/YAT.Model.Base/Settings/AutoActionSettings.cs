@@ -121,6 +121,20 @@ namespace YAT.Model.Settings
 			get { return (base.IsActive && ActionIsActive); }
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsFilterOrSuppress
+		{
+			get { return ((Action == AutoAction.Filter) || (Action == AutoAction.Suppress)); }
+		}
+
+		/// <remarks>Convenience property, same as <code>!<see cref="IsFilterOrSuppress"/></code>.</remarks>
+		[XmlIgnore]
+		public virtual bool IsNeitherFilterNorSuppress
+		{
+			get { return (!IsFilterOrSuppress); }
+		}
+
 		#endregion
 
 		#region Methods

@@ -139,6 +139,34 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <remarks>Convenience property, same as <code>!<see cref="IsTextOrRegexTriggered"/></code>.</remarks>
+		[XmlIgnore]
+		public virtual bool IsByteSequenceTriggered
+		{
+			get { return (!IsTextOrRegexTriggered); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsTextTriggered
+		{
+			get { return (Options.UseText); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsRegexTriggered
+		{
+			get { return (Options.UseRegex); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsTextOrRegexTriggered
+		{
+			get { return (IsTextTriggered || IsRegexTriggered); }
+		}
+
 		#endregion
 
 		#region Methods

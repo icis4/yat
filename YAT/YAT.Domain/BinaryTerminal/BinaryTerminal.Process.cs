@@ -185,7 +185,7 @@ namespace YAT.Domain
 
 			if (lineState.Position == LinePosition.Content)
 			{
-				DoLineContent(processState, binaryLineState, binaryDisplaySettings, b, dir, elementsToAdd, elementsForNextLine);
+				DoLineContent(processState, binaryLineState, binaryDisplaySettings, b, ts, dir, elementsToAdd, elementsForNextLine);
 			}
 
 			if (lineState.Position == LinePosition.End)
@@ -208,7 +208,7 @@ namespace YAT.Domain
 								foreach (var originByte in origin.Value1)
 								{
 									DisplayElementCollection elementsForNextLineDummy = null;
-									DoLineContent(processState, binaryLineState, binaryDisplaySettings, originByte, dir, elementsToAdd, elementsForNextLineDummy);
+									DoLineContent(processState, binaryLineState, binaryDisplaySettings, originByte, ts, dir, elementsToAdd, elementsForNextLineDummy);
 								}
 							}
 						}
@@ -238,30 +238,19 @@ namespace YAT.Domain
 				lp.AddRange(info);
 			}
 
-			if (lineState.Attribute.SuppressForSure || lineState.Attribute.SuppressIfSubsequentlyTriggered || lineState.Attribute.SuppressIfNotFiltered)
-			{
-				lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
-			////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
-			}
-			else
-			{
-				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elementsToAdd.AddRange(lp);
-			}
+			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+			elementsToAdd.AddRange(lp);
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void DoLineContent(ProcessState processState, BinaryLineState binaryLineState, Settings.BinaryDisplaySettings binaryDisplaySettings,
-		                           byte b, IODirection dir,
+		                           byte b, DateTime ts, IODirection dir,
 		                           DisplayElementCollection elementsToAdd, DisplayElementCollection elementsForNextLine)
 		{
 			var lineState = processState.Line; // Convenience shortcut.
 
 			// Convert content:
-			var de = ByteToElement(b, dir);
-
-			// Mark as needed:
-			de.Highlight = lineState.Attribute.Highlight;
+			var de = ByteToElement(b, ts, dir);
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 
@@ -283,7 +272,7 @@ namespace YAT.Domain
 					de = null; // Indicate that element has been consumed.
 
 					elementsForNextLine = new DisplayElementCollection(binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
-					foreach (DisplayElement dePending in binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
+					foreach (var dePending in binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
 						elementsForNextLine.Add(dePending.Clone());
 
 					lineState.Position = LinePosition.End;
@@ -321,16 +310,8 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.ContentExceeded)
 			{
-				if (lineState.Attribute.SuppressForSure || lineState.Attribute.SuppressIfSubsequentlyTriggered || lineState.Attribute.SuppressIfNotFiltered)
-				{
-					lineState.Elements.AddRange(lp); // No clone needed as elements are not needed again.
-				////elementsToAdd.AddRange(lp) shall not be done for (potentially) suppressed element. Doing so would lead to unnecessary flickering.
-				}
-				else
-				{
-					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-					elementsToAdd.AddRange(lp);
-				}
+				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+				elementsToAdd.AddRange(lp);
 			}
 
 			// Evaluate line breaks:
@@ -362,8 +343,8 @@ namespace YAT.Domain
 					lineState.Position = LinePosition.ContentExceeded;
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
 					var message = "Maximal number of bytes per line exceeded! Check the line break settings or increase the limit in the advanced terminal settings.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo((Direction)dir, message, true));
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo((Direction)dir, message, true));
+					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
+					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
 				}
 			}
 		}
@@ -386,51 +367,25 @@ namespace YAT.Domain
 			var lineState = processState.Line; // Convenience shortcut.
 			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, lineState.Direction);
 
-		#if (DEBUG)
-			if (lineState.Attribute.SuppressForSure || (lineState.Attribute.SuppressIfNotFiltered && !lineState.Attribute.AnyFilterDetected)) // Suppress:
+			// Process line length:
+			var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
 			{
-				// As described in 'EvaluateLineChangeAttribute()', in both cases filtering and suppression,
-				// the current implementation retains the line until it is complete, i.e. until the final
-				// decision to filter or suppress could be done.
-				// Consequently, the above above condition will never become true, thus excluding it (YAGNI).
-				// Still, keeping the implementation to be prepared for potential reactivation (!YAGNI).
+				var length = lineState.Elements.ByteCount;
 
-				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart));                      // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                                       //            All other elements must be removed as well!
-				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
-
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This condition must never become true!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				DisplayElementCollection info;
+				PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
+				lineEnd.AddRange(info);
 			}
-			else // Don't suppress:
-		#endif
-			{
-				// Process line length:
-				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
-				{
-					var length = lineState.Elements.ByteCount;
 
-					DisplayElementCollection info;
-					PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
-					lineEnd.AddRange(info);
-				}
-				lineEnd.Add(new DisplayElement.LineBreak());
+			lineEnd.Add(new DisplayElement.LineBreak());
+			elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
-				// Finalize elements:
-				if ((lineState.Attribute.SuppressIfSubsequentlyTriggered && !lineState.Attribute.SuppressForSure) ||     // Don't suppress line!
-				    (lineState.Attribute.SuppressIfNotFiltered && lineState.Attribute.FilterDetectedInSubsequentChange)) // Filter line!
-				{                                                                                                        // Both cases mean to delay-show the elements of the line.
-					elementsToAdd.AddRange(lineState.Elements.Clone()); // Clone elements because they are needed again further below.
-				}
-				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
-
-				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-				l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
-				l.AddRange(lineEnd);
-				l.TimeStamp = lineState.TimeStamp;
-				linesToAdd.Add(l);
-			}
+			// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
+			l.AddRange(lineEnd);
+			linesToAdd.Add(l);
 
 			// Finalize the line:
 			binaryLineState.NotifyLineEnd();

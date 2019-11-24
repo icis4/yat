@@ -4139,7 +4139,7 @@ namespace YAT.View.Forms
 			{
 				var text = new StringBuilder();
 
-				switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+				switch ((AutoAction)(this.settingsRoot.AutoAction.Action))
 				{
 					case AutoAction.Highlight:
 					{

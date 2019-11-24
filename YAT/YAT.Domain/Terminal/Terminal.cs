@@ -194,7 +194,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler IOChanged;
+		public event EventHandler<EventArgs<DateTime>> IOChanged;
 
 		/// <summary></summary>
 		public event EventHandler<IOControlEventArgs> IOControlChanged;
@@ -235,15 +235,6 @@ namespace YAT.Domain
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsRxAdded;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLineChangeEventArgs> CurrentDisplayLineTxChanged;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLineChangeEventArgs> CurrentDisplayLineBidirChanged;
-
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler<DisplayLineChangeEventArgs> CurrentDisplayLineRxChanged;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
@@ -1390,7 +1381,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void EnqueueEasterEggMessage()
 		{
-			InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
+			InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
 		}
 
 		#endregion
@@ -1415,7 +1406,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
-		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		public virtual string Format(byte[] data, IODirection d)
@@ -1437,7 +1428,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
-		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, IODirection, Radix)"/>).
+		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
@@ -1446,8 +1437,8 @@ namespace YAT.Domain
 			var lp = new DisplayElementCollection();
 
 			foreach (byte b in data)
-			{
-				var de = ByteToElement(b, d, r);
+			{                                      // Time stamp is irrelevant for formatting.
+				var de = ByteToElement(b, DateTime.MinValue, d, r);
 				lp.Add(de);
 				AddSpaceIfNecessary(d, lp, de);
 			}
@@ -1838,7 +1829,7 @@ namespace YAT.Domain
 		// Raw Terminal Events
 		//------------------------------------------------------------------------------------------
 
-		private void rawTerminal_IOChanged(object sender, EventArgs e)
+		private void rawTerminal_IOChanged(object sender, EventArgs<DateTime> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -1846,7 +1837,7 @@ namespace YAT.Domain
 			OnIOChanged(e);
 		}
 
-		private void rawTerminal_IOControlChanged(object sender, EventArgs e)
+		private void rawTerminal_IOControlChanged(object sender, EventArgs<DateTime> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -1857,7 +1848,7 @@ namespace YAT.Domain
 				var c = new DisplayElementCollection(texts.Count); // Preset the required capacity to improve memory management.
 				foreach (var t in texts)
 				{                        // 'IOControlInfo' elements are inline elements, thus neither add info separators nor content spaces inbetween.
-					c.Add(new DisplayElement.IOControlInfo(Direction.Bidir, t));
+					c.Add(new DisplayElement.IOControlInfo(e.Value, Direction.Bidir, t));
 				}
 
 				// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
@@ -1888,21 +1879,21 @@ namespace YAT.Domain
 					// Handle serial port errors whenever possible:
 					switch (spe.SerialPortError)
 					{                                                                               // Same as 'spe.Direction'.
-						case System.IO.Ports.SerialError.Frame:    InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxFramingErrorString));        break;
-						case System.IO.Ports.SerialError.Overrun:  InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverrunErrorString));  break;
-						case System.IO.Ports.SerialError.RXOver:   InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxBufferOverflowErrorString)); break;
-						case System.IO.Ports.SerialError.RXParity: InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, RxParityErrorString));         break;
-						case System.IO.Ports.SerialError.TXFull:   InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, TxBufferFullErrorString));     break;
-						default:                                   OnIOError(e);                                                                                                  break;
+						case System.IO.Ports.SerialError.Frame:    InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxFramingErrorString));        break;
+						case System.IO.Ports.SerialError.Overrun:  InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverrunErrorString));  break;
+						case System.IO.Ports.SerialError.RXOver:   InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverflowErrorString)); break;
+						case System.IO.Ports.SerialError.RXParity: InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxParityErrorString));         break;
+						case System.IO.Ports.SerialError.TXFull:   InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx, TxBufferFullErrorString));     break;
+						default:                                   OnIOError(e);                                                                                                               break;
 					}
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
 				{
-					InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
+					InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, e.Message, true));
 				}
 				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
 				{
-					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
+					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx, e.Message, true));
 				}
 				else
 				{
@@ -2064,87 +2055,6 @@ namespace YAT.Domain
 			DebugContentEvents("OnDisplayElementsRxAdded " + e.Elements.ToString());
 
 			this.eventHelper.RaiseSync<DisplayElementsEventArgs>(DisplayElementsRxAdded, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineChanged(RepositoryType repositoryType, DisplayLineChangeEventArgs e)
-		{
-			switch (repositoryType)
-			{
-				case RepositoryType.Tx:    OnCurrentDisplayLineTxChanged   (e, this.txProcessState   .Line); break;
-				case RepositoryType.Bidir: OnCurrentDisplayLineBidirChanged(e, this.bidirProcessState.Line); break;
-				case RepositoryType.Rx:    OnCurrentDisplayLineRxChanged   (e, this.rxProcessState   .Line); break;
-
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineTxChanged(DisplayLineChangeEventArgs e, LineState lineState)
-		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
-				return;
-
-			DebugContentEvents("OnCurrentDisplayLineTxChanged " + e.Elements.ToString());
-
-			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineTxChanged, this, e);
-			EvaluateLineChangeAttribute(RepositoryType.Tx, e.Attribute, lineState);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineBidirChanged(DisplayLineChangeEventArgs e, LineState lineState)
-		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
-				return;
-
-			DebugContentEvents("OnCurrentDisplayLineBidirChanged " + e.Elements.ToString());
-
-			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineBidirChanged, this, e);
-			EvaluateLineChangeAttribute(RepositoryType.Bidir, e.Attribute, lineState);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCurrentDisplayLineRxChanged(DisplayLineChangeEventArgs e, LineState lineState)
-		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
-				return;
-
-			DebugContentEvents("OnCurrentDisplayLineRxChanged " + e.Elements.ToString());
-
-			this.eventHelper.RaiseSync<DisplayLineChangeEventArgs>(CurrentDisplayLineRxChanged, this, e);
-			EvaluateLineChangeAttribute(RepositoryType.Rx, e.Attribute, lineState);
-		}
-
-		/// <summary></summary>
-		protected virtual void EvaluateLineChangeAttribute(RepositoryType repositoryType, LineChangeAttribute attribute, LineState lineState)
-		{
-			// Activate flags as needed, leave unchanged otherwise.
-			// Note that each change will either have none or a single attribute activated.
-			// But the line state has to deal with multiple changes, thus multiples attribute may get activated.
-			if (attribute == LineChangeAttribute.Highlight)                       {                                                                                               lineState.Attribute.Highlight                       = true;                                                                           }
-			if (attribute == LineChangeAttribute.Filter)                          { if (!lineState.Attribute.AnyFilterDetected) { if (lineState.Position == LinePosition.Begin) { lineState.Attribute.FilterDetectedInFirstChange     = true; } else { lineState.Attribute.FilterDetectedInSubsequentChange = true; } } }
-			if (attribute == LineChangeAttribute.SuppressIfNotFiltered)           { if (!lineState.Attribute.AnyFilterDetected) {                                                 lineState.Attribute.SuppressIfNotFiltered           = true;                                                                         } }
-			if (attribute == LineChangeAttribute.SuppressIfSubsequentlyTriggered) {                                                                                               lineState.Attribute.SuppressIfSubsequentlyTriggered = true;                                                                           }
-			if (attribute == LineChangeAttribute.Suppress)                        {                                                                                               lineState.Attribute.SuppressForSure                 = true;                                                                           }
-
-			// In both cases, filtering and suppression, the current implementation retains the line until it is
-			// complete, i.e. until the final decision to filter or suppress could be done. This behavior differs
-			// from the standard behavior which continuously shows data as it is coming in.
-			//
-			// Why this retaining approach? It would be possible to immediately display but then remove the line if it
-			// is suppressed or not filtered. But that likely leads to flickering, thus the retaining approach. At the
-			// price that there is no longer immediate feedback on single character transmission in case filtering or
-			// suppression is active, except in case of filtering when the first change of a line already contains the
-			// trigger, then the line is continuously shown ('FilterDetectedInFirstChange').
-			//
-			// The test cases of [YAT - Test.ods]::[YAT.Model.Terminal] demonstrate the retaining approach.
-			//
-			// To change from retaining to continuous approach, the #if (DEBUG) in DoLineEnd() will have to be removed.
-			//
-			// Note that logging works fine even when filtering or suppression is active, since logging is only
-			// triggered by the 'DisplayLinesSent/Received' events and thus not affected by the more tricky to handle
-			// 'CurrentDisplayLineSent/ReceivedReplaced' and 'CurrentDisplayLineSent/ReceivedCleared' events.
 		}
 
 		/// <summary></summary>
