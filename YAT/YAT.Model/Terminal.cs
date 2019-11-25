@@ -3011,52 +3011,6 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>
-		/// Initially (2019-04..11 / YAT 2.1.0) the trigger detection was implemented per chunk, resulting in:
-		///  > If trigger was located in a single chunk, all fine, as long as the chunk did not spread across multiple lines.
-		///  > If trigger was spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
-		///  > If there was more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger was detected.
-		///  > No way to trigger for text.
-		///
-		/// Potential approaches to overcome these limitations:
-		///  a) Move trigger detection from <see cref="terminal_RawChunkReceived"/> to one of the underlying methods of
-		///     <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, where the chunks are being processed into lines.
-		///  b) Keep trigger detection in model but move it from <see cref="terminal_RawChunkReceived"/> to a new
-		///     'CurrentDisplayLineRxChanged' event. That event would have to include the current display line part (for
-		///     text triggering) as well as the changed part (for byte sequence triggering).
-		///     Advantages of this approach:
-		///      > Keep settings complexity in model.
-		///      > Keep well-defined interface <see cref="Domain.LineChangeAttribute"/> among model and domain.
-		///  c) Completely move handling to model, possible as long as using the retaining approach:
-		///      > Byte sequence based triggering implemented in <see cref="terminal_DisplayElementsRxAdded"/> (immediate approach / element update mode).
-		///      > Text and Regex based triggering implemented in <see cref="terminal_DisplayLinesRxAdded"/> (retaining approach / line update mode).
-		///     Advantages of this approach:
-		///      > Keep <see cref="Domain.Terminal"/> as simple as possible, really.
-		///      > No interface among model and domain needed anymore.
-		///
-		/// In addition:
-		///  > Refine trigger detection such it detects multiple triggers. This can easily be achieved by upgrading the
-		///    'isTriggered' flag to a 'triggerCount' value.
-		///
-		/// There are additional ideas to further let these features evolve:
-		///  > Move filter/suppress to separate options:
-		///     + They not really are "actions" and are implemented partly differently then the true actions.
-		///     + Possibility to filter and suppress in parallel.
-		///     + Possibility to filter and suppress Tx as well.
-		///     - Further (over)loads the main tool bar.
-		///     - Lots of duplicated code.
-		///  > Provide n automatic actions:
-		///     + Possibility to filter/suppress/other in parallel.
-		///     - Further complicates the main tool bar.
-		///     - Further complicates usage.
-		/// These ideas are technically possible but are considered (2019-11-21..22 / YAT 2.1.1) over the top.
-		///  > Some inconsistency for filter/suppress is considered preferable over making things more complicated.
-		///  > Limited to Rx is considered sufficient.
-		///
-		/// Approach c) was chosen (2019-11-21..22 / YAT 2.1.1).
-		///
-		/// The last state of the initial implementation can be found in SVN revisions #2701..#2707.
-		/// </remarks>
 		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3065,16 +3019,19 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			// AutoAction (by specification only active on receive-path):             // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
-			if (this.settingsRoot.AutoAction.IsActive && this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+			// AutoAction (by specification only active on receive-path):                      // See terminal_DisplayLinesRxAdded for background.
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    this.settingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
+			    this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be evaluated in terminal_DisplayLinesRxAdded.
 			{
-				EvaluateAutoAction(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoActionFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			// AutoResponse (by specification only active on receive-path):               // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
-			if (this.settingsRoot.AutoResponse.IsActive && this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
+			// AutoResponse (by specification only active on receive-path):                        // See terminal_DisplayLinesRxAdded for background.
+			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
+			    this.settingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
 			{
-				EvaluateAutoResponse(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoResponseFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			OnDisplayElementsRxAdded(e);
@@ -3214,6 +3171,55 @@ namespace YAT.Model
 			}
 		}
 
+		/// <remarks>
+		/// Initially (2019-04..11 / YAT 2.1.0) the trigger detection was implemented per chunk, resulting in:
+		///  > If trigger was located in a single chunk, all fine, as long as the chunk did not spread across multiple lines.
+		///  > If trigger was spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
+		///  > If there was more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger was detected.
+		///  > No way to trigger for text.
+		///
+		/// Potential approaches to overcome these limitations:
+		///  a) Move trigger detection from <see cref="terminal_RawChunkReceived"/> to one of the underlying methods of
+		///     <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, where the chunks are being processed into lines.
+		///  b) Keep trigger detection in model but move it from <see cref="terminal_RawChunkReceived"/> to a new
+		///     'CurrentDisplayLineRxChanged' event. That event would have to include the current display line part (for
+		///     text triggering) as well as the changed part (for byte sequence triggering).
+		///     Advantages of this approach:
+		///      > Keep settings complexity in model.
+		///      > Keep well-defined interface (former 'LineChunkAttribute') among model and domain.
+		///  c) Completely move handling to model, possible as long as using the retaining approach:
+		///      > Byte sequence based triggering implemented in <see cref="terminal_DisplayElementsRxAdded"/> (immediate approach / element update mode).
+		///      > Text and Regex based triggering implemented in <see cref="terminal_DisplayLinesRxAdded"/> (retaining approach / line update mode).
+		///     Advantages of this approach:
+		///      > Text and Regex based triggering possible.
+		///      > Keep <see cref="Domain.Terminal"/> as simple as possible, really.
+		///      > No additional interface (former 'LineChunkAttribute') among model and domain needed anymore.
+		///     Disadvantage of this approach:
+		///      > Elements/Lines cannot already be suppressed/filtered by <see cref="Domain.Terminal"/>.
+		///
+		/// In addition:
+		///  > Refine trigger detection such it detects multiple triggers. This can easily be achieved by upgrading the
+		///    'isTriggered' flag to a 'triggerCount' value.
+		///
+		/// There are additional ideas to further let these features evolve:
+		///  > Move filter/suppress to separate options:
+		///     + They not really are "actions" and are implemented partly differently then the true actions.
+		///     + Possibility to filter and suppress in parallel.
+		///     + Possibility to filter and suppress Tx as well.
+		///     - Further (over)loads the main tool bar.
+		///     - Lots of duplicated code.
+		///  > Provide n automatic actions:
+		///     + Possibility to filter/suppress/other in parallel.
+		///     - Further complicates the main tool bar.
+		///     - Further complicates usage.
+		/// These ideas are technically possible but are considered (2019-11-21..22 / YAT 2.1.1) over the top.
+		///  > Some inconsistency for filter/suppress is considered preferable over making things more complicated.
+		///  > Limited to Rx is considered sufficient.
+		///
+		/// Approach c) was chosen (2019-11-21..22 / YAT 2.1.1).
+		///
+		/// The last state of the initial implementation can be found in SVN revisions #2701..#2707.
+		/// </remarks>
 		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3234,16 +3240,14 @@ namespace YAT.Model
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    this.settingsRoot.AutoAction.IsTextOrRegexTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
 			{
-				foreach (var dl in e.Lines)
-					EvaluateAutoAction(dl); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoActionFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			// AutoResponse (by specification only active on receive-path):                        // See further below.
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    this.settingsRoot.AutoResponse.IsTextOrRegexTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
 			{
-				foreach (var dl in e.Lines)
-					EvaluateAutoResponse(dl); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoResponseFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			// Display:
@@ -3256,7 +3260,7 @@ namespace YAT.Model
 					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
 			}
 
-			// AutoAction (by specification only active on receive-path):
+			// AutoAction (by specification only active on receive-path):                      // No need for using the t
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)                                     // Used for user message.
@@ -3276,7 +3280,7 @@ namespace YAT.Model
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)                          // Response shall be based on origin, not text.
-					InvokeAutoResponse(LineWithoutRxEolToOrigin(dl), null);
+					InvokeAutoResponse(ToOriginWithoutRxEol(dl), null);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.
@@ -3363,8 +3367,7 @@ namespace YAT.Model
 			// AutoAction (by specification only active on receive-path):             // Only these pseudo-actions are reapplied on reload.
 			if (this.settingsRoot.AutoAction.IsActive && this.settingsRoot.AutoAction.IsFilterOrSuppress)
 			{
-				foreach (var dl in e.Lines)
-					EvaluateAutoAction(dl); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoActionFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			OnRepositoryRxReloaded(e);

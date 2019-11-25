@@ -268,6 +268,14 @@ namespace YAT.Domain
 
 				return (false);
 			}
+
+			set
+			{
+				foreach (var de in this)
+				{
+					de.Highlight = value;
+				}
+			}
 		}
 
 		#endregion

@@ -56,6 +56,8 @@ namespace YAT.Model
 		private AutoTriggerHelper autoActionTriggerHelper;
 		private object autoActionTriggerHelperSyncObj = new object();
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
+		private string autoActionClearRepositoriesTriggerText; // = null;
+		private DateTime autoActionClearRepositoriesTriggerTimeStamp; // = DateTime.MinValue;
 
 		#endregion
 
@@ -180,9 +182,9 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Sends the automatic response.
+		/// Processes <see cref="AutoAction.ClearRepositoriesOnSubsequentRx"/>.
 		/// </summary>
-		protected virtual void EvaluateAutoAction(Domain.DisplayElementCollection elements)
+		protected virtual void ProcessAutoActionClearRepositoriesOnSubsequentRx()
 		{
 			if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
 			{
@@ -190,93 +192,106 @@ namespace YAT.Model
 
 				byte[] triggerSequence;
 				string triggerText;
+				DateTime triggerTimeStamp;
 
 				lock (this.autoActionTriggerHelperSyncObj)
 				{
-					triggerSequence = this.autoActionTriggerHelper.TriggerSequence;
-					triggerText     = this.autoActionTriggerHelper.TriggerText;
+					triggerSequence  = this.autoActionTriggerHelper.TriggerSequence;
+					triggerText      = this.autoActionClearRepositoriesTriggerText;
+					triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
 				}
 				                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
-				InvokeAutoAction(AutoAction.ClearRepositories, triggerSequence, triggerText, elements.TimeStamp);
+				InvokeAutoAction(AutoAction.ClearRepositories, triggerSequence, triggerText, triggerTimeStamp);
 			}
+		}
 
-			int triggerCount = 0;
+		/// <summary>
+		/// Processes the automatic action.
+		/// </summary>
+		/// <remarks>
+		/// Automatic actions from elements always are non-reloadable.
+		/// </remarks>
+		protected virtual void ProcessAutoActionFromElements(Domain.DisplayElementCollection elements)
+		{
+			ProcessAutoActionClearRepositoriesOnSubsequentRx();
+
+			foreach (var de in elements)
+			{
+				lock (this.autoActionTriggerHelperSyncObj)
+				{
+					if (this.autoActionTriggerHelper != null)
+					{
+						if (de.Origin != null) // Foreach element where origin exists.
+						{
+							foreach (var origin in de.Origin)
+							{
+								foreach (var originByte in origin.Value1)
+								{
+									if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+									{
+										this.autoActionTriggerHelper.Reset();
+										de.Highlight = true;
+
+										// Invoke shall happen as short as possible after detection:
+										InvokeAutoResponse(this.autoActionTriggerHelper.TriggerSequence, null);
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						break; // Break the loop if action got disposed in the meantime.
+					}          // Though unlikely, it may happen when deactivating action
+				}              // while receiving a very large chunk.
+			}
+		}
+
+		/// <summary>
+		/// Processes the automatic action.
+		/// </summary>
+		/// <remarks>
+		/// Automatic actions from lines may be reloadable.
+		/// </remarks>
+		protected virtual void ProcessAutoActionFromLines(Domain.DisplayLineCollection lines)
+		{
+			ProcessAutoActionClearRepositoriesOnSubsequentRx();
 
 			if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
 			{
-				foreach (var de in elements)
+				foreach (var dl in lines)
+					ProcessAutoActionFromElements(dl);
+			}
+			else // IsTextOrRegexTriggered
+			{
+				foreach (var dl in lines)
 				{
 					lock (this.autoActionTriggerHelperSyncObj)
 					{
 						if (this.autoActionTriggerHelper != null)
 						{
-							if (de.Origin != null) // Foreach element where origin exists.
+							int triggerCount = 0;
+
+							if (this.settingsRoot.AutoAction.IsTextTriggered)
+								triggerCount = StringEx.ContainingCount(dl.Text, this.autoActionTriggerHelper.TriggerText);
+							else                            // IsRegexTriggered
+								triggerCount = this.autoActionTriggerHelper.TriggerRegex.Matches(dl.Text).Count;
+
+							if (triggerCount > 0)
 							{
-								foreach (var origin in de.Origin)
-								{
-									foreach (var originByte in origin.Value1)
-									{
-										if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
-										{
-											this.autoActionTriggerHelper.Reset();
-											triggerCount++;
-											de.Highlight = true;
-										}
-									}
-								}
+								this.autoActionTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
+								dl.Highlight = true;
+
+								for (int i = 0; i < triggerCount; i++)
+									InvokeAutoAction(this.settingsRoot.AutoAction.Action, null, dl.Text, dl.TimeStamp);
 							}
 						}
 						else
 						{
 							break; // Break the loop if action got disposed in the meantime.
 						}          // Though unlikely, it may happen when deactivating action
-					}              // while receiving a very large chunk.
+					}              // while processing many lines, e.g. on reload.
 				}
-			}
-			else // IsTextOrRegexTriggered
-			{
-				var dl = (elements as Domain.DisplayLine);
-				if (dl != null)
-				{
-					if (this.settingsRoot.AutoAction.IsTextTriggered)
-					{
-						lock (this.autoActionTriggerHelperSyncObj)
-						{
-							triggerCount = StringEx.ContainingCount(dl.Text, this.autoActionTriggerHelper.TriggerText);
-							if (triggerCount > 0)
-								this.autoActionTriggerHelper.EffectiveTriggerTextLine = dl.Text;
-						}
-					}
-					else // IsRegexTriggered
-					{
-						lock (this.autoActionTriggerHelperSyncObj)
-						{
-							var m = this.autoActionTriggerHelper.TriggerRegex.Matches(dl.Text);
-							triggerCount = m.Count;
-
-							if (triggerCount > 0)
-								this.autoActionTriggerHelper.EffectiveTriggerTextLine = dl.Text;
-						}
-					}
-				}
-				else
-				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A line must be provided for text or regex trigger evaluation!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			}
-
-			if ((triggerCount > 0) && (HasActionToInvoke(this.settingsRoot.AutoAction.Action)))
-			{
-				byte[] triggerSequence;
-				string triggerText;
-
-				lock (this.autoActionTriggerHelperSyncObj)
-				{
-					triggerSequence = this.autoActionTriggerHelper.TriggerSequence;
-					triggerText     = this.autoActionTriggerHelper.TriggerText;
-				}
-
-				InvokeAutoAction(this.settingsRoot.AutoAction.Action, triggerSequence, triggerText, elements.TimeStamp);
 			}
 		}
 
