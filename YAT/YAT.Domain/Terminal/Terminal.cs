@@ -313,13 +313,13 @@ namespace YAT.Domain
 		public event EventHandler RepositoryRxCleared;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryTxReloaded;
+		public event EventHandler<DisplayLinesEventArgs> RepositoryTxReloaded;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryBidirReloaded;
+		public event EventHandler<DisplayLinesEventArgs> RepositoryBidirReloaded;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryRxReloaded;
+		public event EventHandler<DisplayLinesEventArgs> RepositoryRxReloaded;
 
 		#endregion
 
@@ -2248,7 +2248,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryReloaded(RepositoryType repositoryType, EventArgs e)
+		protected virtual void OnRepositoryReloaded(RepositoryType repositoryType, DisplayLinesEventArgs e)
 		{
 			switch (repositoryType)
 			{
@@ -2262,7 +2262,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryTxReloaded(EventArgs e)
+		protected virtual void OnRepositoryTxReloaded(DisplayLinesEventArgs e)
 		{
 			DebugContentEvents("OnRepositoryTxReloaded");
 
@@ -2270,7 +2270,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryBidirReloaded(EventArgs e)
+		protected virtual void OnRepositoryBidirReloaded(DisplayLinesEventArgs e)
 		{
 			DebugContentEvents("OnRepositoryBidirReloaded");
 
@@ -2278,7 +2278,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryRxReloaded(EventArgs e)
+		protected virtual void OnRepositoryRxReloaded(DisplayLinesEventArgs e)
 		{
 			DebugContentEvents("OnRepositoryRxReloaded");
 

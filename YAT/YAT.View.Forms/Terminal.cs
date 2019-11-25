@@ -6111,37 +6111,37 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryTxReloaded(object sender, EventArgs e)
+		private void terminal_RepositoryTxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable && this.settingsRoot.Layout.TxMonitorPanelIsVisible)
-				monitor_Tx.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));
+				monitor_Tx.AddLines(e.Lines);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryBidirReloaded(object sender, EventArgs e)
+		private void terminal_RepositoryBidirReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable && this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
-				monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir));
+				monitor_Bidir.AddLines(e.Lines);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryRxReloaded(object sender, EventArgs e)
+		private void terminal_RepositoryRxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
 			if (TerminalIsAvailable && this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));
+				monitor_Rx.AddLines(e.Lines);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]

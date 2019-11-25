@@ -265,7 +265,7 @@ namespace YAT.Model
 				}
 			}
 
-			if (triggerCount > 0)
+			if ((triggerCount > 0) && (HasActionToInvoke(this.settingsRoot.AutoAction.Action)))
 			{
 				byte[] triggerSequence;
 				string triggerText;
@@ -297,6 +297,10 @@ namespace YAT.Model
 			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
 			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
 
+			// Attention:
+			// Same switch/case exists in HasActionToInvoke() below.
+			// Changes here must be applied there too.
+
 			switch (action)
 			{
 				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                     break;
@@ -320,6 +324,40 @@ namespace YAT.Model
 				default:
 					// Nothing to do.
 					break;
+			}
+		}
+
+		/// <summary>
+		/// Determines wether the given action has a true action to invoke.
+		/// </summary>
+		protected virtual bool HasActionToInvoke(AutoAction action)
+		{
+			// Attention:
+			// Same switch/case exists in PreformAutoAction() above.
+			// Changes here must be applied there too.
+
+			switch (action)
+			{
+				case AutoAction.Beep:
+				case AutoAction.ShowMessageBox:
+				case AutoAction.ClearRepositories:
+				case AutoAction.ClearRepositoriesOnSubsequentRx:
+				case AutoAction.ResetCountAndRate:
+				case AutoAction.SwitchLogOn:
+				case AutoAction.SwitchLogOff:
+				case AutoAction.StopIO:
+				case AutoAction.CloseTerminal:
+				case AutoAction.ExitApplication:
+					return (true);
+
+				case AutoAction.Highlight:
+				case AutoAction.Filter:
+				case AutoAction.Suppress:
+					return (false);
+
+				case AutoAction.None:
+				default:
+					return (false);
 			}
 		}
 
