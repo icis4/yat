@@ -224,9 +224,9 @@ namespace MKY.IO.Ports
 
 				lock (this)
 				{
-					foreach (SerialPortId portId in this)
+					foreach (var portId in this)
 					{
-						string portName = portId.Name;
+						var portName = portId.Name;
 						if (staticCaptionsCache.ContainsKey(portName))
 							portId.SetCaptionFromSystem(staticCaptionsCache[portName]);
 					}
