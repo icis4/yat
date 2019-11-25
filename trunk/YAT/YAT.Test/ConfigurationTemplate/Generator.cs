@@ -90,8 +90,8 @@ namespace YAT.Test.ConfigurationTemplate
 
 			// Tell user how to proceed:
 			var sb = new StringBuilder();
-			foreach (var l in TemplateGenerator.DefaultInstructions_1through7)
-				sb.AppendLine(l);
+			foreach (var line in TemplateGenerator.DefaultInstructions_1through7)
+				sb.AppendLine(line);
 
 			sb.AppendLine(@" 8. Update the solution's effective configuration e.g.");
 			sb.AppendLine(@"     "".\YAT.Test.config"" as required.");
