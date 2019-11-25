@@ -3230,11 +3230,20 @@ namespace YAT.Model
 			if (this.rxLineRate.Update(e.Lines.Count))
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
-			// AutoAction (by specification only active on receive-path):             // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
-			if (this.settingsRoot.AutoAction.IsActive && this.settingsRoot.AutoAction.IsTextOrRegexTriggered)
+			// AutoAction (by specification only active on receive-path):                      // See further below.
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    this.settingsRoot.AutoAction.IsTextOrRegexTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
 			{
-				foreach (var l in e.Lines)
-					EvaluateAutoAction(l); // // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				foreach (var dl in e.Lines)
+					EvaluateAutoAction(dl); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
+
+			// AutoResponse (by specification only active on receive-path):                        // See further below.
+			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
+			    this.settingsRoot.AutoResponse.IsTextOrRegexTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
+			{
+				foreach (var dl in e.Lines)
+					EvaluateAutoResponse(dl); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			// Display:
@@ -3250,33 +3259,29 @@ namespace YAT.Model
 			// AutoAction (by specification only active on receive-path):
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
-				foreach (var dl in e.Lines)
-				{
+				foreach (var dl in e.Lines)                                     // Used for user message.
 					InvokeAutoAction(this.settingsRoot.AutoAction.Action, null, dl.Text, dl.TimeStamp);
-				}
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highligted.
 				//
 				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
 				// doesn't help in this 'LinesReceived' event, as the monitors already get updated
-				// in the 'ElementsReceived' event above.
+				// in the 'ElementsRxAdded' event further above.
 			}
 
 			// AutoResponse (by specification only active on receive-path):
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 			{
-				foreach (var dl in e.Lines)
-				{
-					SendAutoResponse(LineWithoutRxEolToOrigin(dl));
-				}
+				foreach (var dl in e.Lines)                          // Response shall be based on origin, not text.
+					InvokeAutoResponse(LineWithoutRxEolToOrigin(dl), null);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highligted.
 				//
 				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
 				// doesn't help in this 'LinesReceived' event, as the monitors already get updated
-				// in the 'ElementsReceived' event above.
+				// in the 'ElementsRxAdded' event further above.
 			}
 		}
 

@@ -29,36 +29,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Collections.Specialized;
-using MKY.Contracts;
-using MKY.Diagnostics;
-using MKY.IO;
-using MKY.Settings;
-using MKY.Text;
-using MKY.Time;
-using MKY.Windows.Forms;
 
-#if (WITH_SCRIPTING)
-using MT.Albatros.Core;
-#endif
-
-using YAT.Application.Utilities;
-using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Model.Utilities;
-using YAT.Settings.Application;
-using YAT.Settings.Model;
 
 #endregion
 
@@ -115,7 +92,7 @@ namespace YAT.Model
 			{
 				if (this.settingsRoot.AutoResponse.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
-					if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+					if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
 					{
 						byte[] triggerSequence;
 						if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out triggerSequence))
@@ -137,6 +114,57 @@ namespace YAT.Model
 								MessageBoxIcon.Warning
 							);
 						}
+					}
+					else // IsTextOrRegexTriggered
+					{
+						if (this.settingsRoot.AutoResponse.IsTextTriggered)
+						{
+							string triggerText;
+							if (TryValidateCommandForTriggerText(this.settingsRoot.ActiveAutoResponseTrigger, out triggerText))
+							{
+								lock (this.autoResponseTriggerHelperSyncObj)
+									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerText);
+							}
+							else
+							{
+								DeactivateAutoResponse();
+								DisposeAutoResponseHelper();
+
+								OnMessageInputRequest
+								(
+									"Failed to parse the automatic response trigger! The trigger is not a single line command! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
+									"To enable again, re-configure the automatic response.",
+									"Automatic Response Error",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning
+								);
+							}
+						}
+						else // IsRegexTriggered
+						{
+							string triggerRegexPattern;
+							Regex triggerRegex;
+							if (TryCreateTriggerRegexFromCommand(this.settingsRoot.ActiveAutoResponseTrigger, out triggerRegexPattern, out triggerRegex))
+							{
+								lock (this.autoResponseTriggerHelperSyncObj)
+									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerRegexPattern, triggerRegex);
+							}
+							else
+							{
+								DeactivateAutoResponse();
+								DisposeAutoResponseHelper();
+
+								OnMessageInputRequest
+								(
+									"Failed to parse the automatic response trigger! The trigger does not specify a valid regular expression! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
+									"To enable again, re-configure the automatic response.",
+									"Automatic Response Error",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning
+								);
+							}
+						}
+					}
 				}
 				else // No command required = no sequence required = no helper required.
 				{
@@ -152,59 +180,101 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the automatic response trigger.
 		/// </summary>
-		protected virtual void EvaluateAutoResponse(Domain.DisplayElementsEventArgs e)
+		protected virtual void EvaluateAutoResponse(Domain.DisplayElementCollection elements)
 		{
 			int triggerCount = 0;
 
-			foreach (var de in e.Elements)
+			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
 			{
-				lock (this.autoResponseTriggerHelperSyncObj)
+				foreach (var de in elements)
 				{
-					if (this.autoResponseTriggerHelper != null)
+					lock (this.autoResponseTriggerHelperSyncObj)
 					{
-						if (de.Origin != null) // Foreach element where origin exists.
+						if (this.autoResponseTriggerHelper != null)
 						{
-							foreach (var origin in de.Origin)
+							if (de.Origin != null) // Foreach element where origin exists.
 							{
-								foreach (var originByte in origin.Value1)
+								foreach (var origin in de.Origin)
 								{
-									if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
+									foreach (var originByte in origin.Value1)
 									{
-										this.autoResponseTriggerHelper.Reset();
-										triggerCount++;
-										de.Highlight = true;
+										if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
+										{
+											this.autoResponseTriggerHelper.Reset();
+											triggerCount++;
+											de.Highlight = true;
+										}
 									}
 								}
 							}
 						}
-					}
-					else
+						else
+						{
+							break; // Break the loop if response got disposed in the meantime.
+						}          // Though unlikely, it may happen when deactivating response
+					}              // while receiving a very large chunk.
+				}
+			}
+			else // IsTextOrRegexTriggered
+			{
+				var dl = (elements as Domain.DisplayLine);
+				if (dl != null)
+				{
+					if (this.settingsRoot.AutoResponse.IsTextTriggered)
 					{
-						break; // Break the loop if action got disposed in the meantime.
-					}          // Though unlikely, it may happen when deactivating action
-				}              // while receiving a very large chunk.
+						lock (this.autoResponseTriggerHelperSyncObj)
+						{
+							triggerCount = StringEx.ContainingCount(dl.Text, this.autoResponseTriggerHelper.TriggerText);
+							if (triggerCount > 0)
+								this.autoResponseTriggerHelper.EffectiveTriggerTextLine = dl.Text;
+						}
+					}
+					else // IsRegexTriggered
+					{
+						lock (this.autoResponseTriggerHelperSyncObj)
+						{
+							var m = this.autoResponseTriggerHelper.TriggerRegex.Matches(dl.Text);
+							triggerCount = m.Count;
+
+							if (triggerCount > 0)
+								this.autoResponseTriggerHelper.EffectiveTriggerTextLine = dl.Text;
+						}
+					}
+				}
+				else
+				{
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A line must be provided for text or regex trigger evaluation!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 
 			if (triggerCount > 0)
 			{
-				// Invoke sending on other than the receive thread:
-				byte[] triggerSequence = null;
+				byte[] triggerSequence;
+				string triggerText;
 
 				lock (this.autoResponseTriggerHelperSyncObj)
 				{
-					if (this.autoResponseTriggerHelper != null)
-						triggerSequence = this.autoResponseTriggerHelper.TriggerSequence;
+					triggerSequence = this.autoResponseTriggerHelper.TriggerSequence;
+					triggerText     = this.autoResponseTriggerHelper.TriggerText;
 				}
 
-				var asyncInvoker = new Action<byte[]>(SendAutoResponse);
-				asyncInvoker.BeginInvoke(triggerSequence, null, null);
+				InvokeAutoResponse(triggerSequence, triggerText);
 			}
+		}
+
+		/// <summary>
+		/// Invokes sending of the automatic response on an other than the receive thread.
+		/// </summary>
+		protected virtual void InvokeAutoResponse(byte[] triggerSequence, string triggerText)
+		{
+			var asyncInvoker = new Action<byte[], string>(SendAutoResponse);
+			asyncInvoker.BeginInvoke(triggerSequence, triggerText, null, null);
 		}
 
 		/// <summary>
 		/// Sends the automatic response.
 		/// </summary>
-		protected virtual void SendAutoResponse(byte[] triggerSequence)
+		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText)
 		{
 			this.autoResponseCount++; // Incrementing before sending to have the effective count available during sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
@@ -212,21 +282,21 @@ namespace YAT.Model
 			int page = this.settingsRoot.Predefined.SelectedPageId;
 			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
 			{
-				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence); break;
-				case AutoResponse.SendText:            SendText();                               break;
-				case AutoResponse.SendFile:            SendFile();                               break;
-				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);                  break;
-				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);                  break;
-				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);                  break;
-				case AutoResponse.PredefinedCommand4:  SendPredefined(page, 4);                  break;
-				case AutoResponse.PredefinedCommand5:  SendPredefined(page, 5);                  break;
-				case AutoResponse.PredefinedCommand6:  SendPredefined(page, 6);                  break;
-				case AutoResponse.PredefinedCommand7:  SendPredefined(page, 7);                  break;
-				case AutoResponse.PredefinedCommand8:  SendPredefined(page, 8);                  break;
-				case AutoResponse.PredefinedCommand9:  SendPredefined(page, 9);                  break;
-				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10);                 break;
-				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11);                 break;
-				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12);                 break;
+				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence, triggerText); break;
+				case AutoResponse.SendText:            SendText();               break;
+				case AutoResponse.SendFile:            SendFile();               break;
+				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);  break;
+				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);  break;
+				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);  break;
+				case AutoResponse.PredefinedCommand4:  SendPredefined(page, 4);  break;
+				case AutoResponse.PredefinedCommand5:  SendPredefined(page, 5);  break;
+				case AutoResponse.PredefinedCommand6:  SendPredefined(page, 6);  break;
+				case AutoResponse.PredefinedCommand7:  SendPredefined(page, 7);  break;
+				case AutoResponse.PredefinedCommand8:  SendPredefined(page, 8);  break;
+				case AutoResponse.PredefinedCommand9:  SendPredefined(page, 9);  break;
+				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10); break;
+				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11); break;
+				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12); break;
 
 				case AutoResponse.Explicit:
 					SendCommand(new Command(this.settingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
@@ -241,15 +311,20 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the automatic response trigger.
 		/// </summary>
-		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence)
+		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence, string triggerText)
 		{
-			if (triggerSequence != null)
-				this.terminal.Send(TriggerSequenceWithTxEol(triggerSequence));
+			if (!ArrayEx.IsNullOrEmpty(triggerSequence))
+				this.terminal.Send(SequenceWithTxEol(triggerSequence));
+			else
+				this.terminal.SendTextLine(triggerText);
 		}
 
-		private byte[] TriggerSequenceWithTxEol(byte[] triggerSequence)
+		/// <summary>
+		/// Helper method to get the byte sequence including EOL.
+		/// </summary>
+		protected virtual byte[] SequenceWithTxEol(byte[] sequence)
 		{
-			var l = new List<byte>(triggerSequence);
+			var l = new List<byte>(sequence);
 
 			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
 			{
@@ -258,6 +333,28 @@ namespace YAT.Model
 				// Add Tx EOL:
 				var txEolSequence = textTerminal.TxEolSequence;
 				l.AddRange(txEolSequence);
+			}
+
+			return (l.ToArray());
+		}
+
+		/// <summary>
+		/// Helper method to get the byte sequence from a display line.
+		/// </summary>
+		protected virtual byte[] LineWithoutRxEolToOrigin(Domain.DisplayLine dl)
+		{
+			var l = new List<byte>(dl.ElementsToOrigin());
+
+			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
+			{
+				var textTerminal = (this.terminal as Domain.TextTerminal);
+
+				// Remove Rx EOL:
+				if (this.settingsRoot.TextTerminal.ShowEol)
+				{
+					var rxEolSequence = textTerminal.RxEolSequence;
+					l.RemoveRange((l.Count - rxEolSequence.Length), rxEolSequence.Length);
+				}
 			}
 
 			return (l.ToArray());
