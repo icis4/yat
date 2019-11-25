@@ -312,12 +312,15 @@ namespace YAT.Domain
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler RepositoryRxCleared;
 
+		/// <remarks>Separated from <see cref="DisplayLinesTxAdded"/> for not processing count/rate/log... on reload again.</remarks>
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayLinesEventArgs> RepositoryTxReloaded;
 
+		/// <remarks>Separated from <see cref="DisplayLinesBidirAdded"/> for not processing count/rate/log... on reload again.</remarks>
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayLinesEventArgs> RepositoryBidirReloaded;
 
+		/// <remarks>Separated from <see cref="DisplayLinesRxAdded"/> for not processing count/rate/log... on reload again.</remarks>
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayLinesEventArgs> RepositoryRxReloaded;
 
