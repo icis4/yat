@@ -32,6 +32,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+using MKY;
 using MKY.Text;
 
 using YAT.Application.Utilities;
@@ -203,7 +204,7 @@ namespace YAT.Domain
 
 						if (BreakSendFile)
 						{
-							OnIOChanged(EventArgs.Empty); // Raise the event to indicate that sending is no longer ongoing.
+							OnIOChanged(new EventArgs<DateTime>(DateTime.Now)); // Raise the event to indicate that sending is no longer ongoing.
 							break;
 						}
 

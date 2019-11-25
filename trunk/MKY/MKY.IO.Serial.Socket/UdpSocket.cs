@@ -779,7 +779,7 @@ namespace MKY.IO.Serial.Socket
 				DebugMessage("State is already " + oldState + ".");
 		#endif
 
-			OnIOChanged(EventArgs.Empty);
+			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		#endregion
@@ -1082,14 +1082,14 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnIOChanged(EventArgs e)
+		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOControlChanged(EventArgs e)
+		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
 			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The event 'IOControlChanged' is not in use for UDP/IP sockets!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

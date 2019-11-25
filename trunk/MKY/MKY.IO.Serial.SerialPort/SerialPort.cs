@@ -742,7 +742,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			this.iXOnXOffHelper.ResetCounts();
 
-			OnIOControlChanged(EventArgs.Empty);
+			OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		/// <summary>
@@ -1400,7 +1400,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 					if (signalXOnXOff || signalXOnXOffCount)
-						OnIOControlChangedAsync(EventArgs.Empty); // Async! See remarks above.
+						OnIOControlChangedAsync(new EventArgs<DateTime>(DateTime.Now)); // Async! See remarks above.
 				} // if (!IsDisposed && ...)
 			}
 			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
@@ -1461,8 +1461,9 @@ namespace MKY.IO.Serial.SerialPort
 
 					if (Stopwatch.GetTimestamp() >= nextTickStamp)
 					{
+						var now = DateTime.Now;
 						StopAndDisposeControlEventTimeout();
-						OnIOControlChangedAsync(EventArgs.Empty); // Async! See remarks above.
+						OnIOControlChangedAsync(new EventArgs<DateTime>(now)); // Async! See remarks above.
 					}
 					else
 					{
@@ -1530,7 +1531,7 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						try
 						{
-							OnIOControlChanged(EventArgs.Empty);
+							OnIOControlChanged(new EventArgs<DateTime>(e.SignalTime));
 						}
 						catch (Exception ex) // Handle any exception, port could e.g. got closed in the meantime.
 						{
@@ -1763,7 +1764,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true)]
-		protected virtual void OnIOControlChanged(EventArgs e)
+		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 			{
@@ -1775,7 +1776,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <remarks>See remarks on top of MKY.IO.Ports.SerialPort.SerialPortEx why asynchronously is required.</remarks>
 		[CallingContract(IsNeverMainThread = true)]
-		protected virtual void OnIOControlChangedAsync(EventArgs e)
+		protected virtual void OnIOControlChangedAsync(EventArgs<DateTime> e)
 		{
 			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
 			{
