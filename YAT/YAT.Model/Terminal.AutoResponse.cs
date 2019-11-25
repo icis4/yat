@@ -211,10 +211,10 @@ namespace YAT.Model
 					}
 					else
 					{
-						break; // Break the loop if response got disposed in the meantime.
-					}          // Though unlikely, it may happen when deactivating response
-				}              // while receiving a very large chunk.
-			}
+						break;     // Break the loop if response got disposed in the meantime.
+					}              // Though unlikely, it may happen when deactivating response
+				} // lock (helper) // while receiving a very large chunk.
+			} // foreach (element)
 		}
 
 		/// <summary>
@@ -256,11 +256,11 @@ namespace YAT.Model
 						}
 						else
 						{
-							break; // Break the loop if response got disposed in the meantime.
-						}          // Though unlikely, it may happen when deactivating response
-					}              // while processing many lines, e.g. on reload.
-				}
-			}
+							break;     // Break the loop if response got disposed in the meantime.
+						}              // Though unlikely, it may happen when deactivating response
+					} // lock (helper) // while processing many lines, e.g. on reload.
+				} // foreach (line)
+			} // IsTextOrRegexTriggered
 		}
 
 		/// <summary>
