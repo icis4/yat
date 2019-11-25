@@ -1227,6 +1227,9 @@ namespace YAT.Model
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoAction))
 			{
 				UpdateAutoAction(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+
+				if (this.settingsRoot.AutoAction.IsFilterOrSuppress)
+					RefreshRepositories();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
 			{
@@ -3367,7 +3370,7 @@ namespace YAT.Model
 			// AutoAction (by specification only active on receive-path):             // Only these pseudo-actions are reapplied on reload.
 			if (this.settingsRoot.AutoAction.IsActive && this.settingsRoot.AutoAction.IsFilterOrSuppress)
 			{
-				ProcessAutoActionFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			OnRepositoryRxReloaded(e);

@@ -667,6 +667,26 @@ namespace YAT.Domain
 		}
 
 		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Creates and returns a new object that is a deep-copy of this instance.
+		/// </summary>
+		public DisplayLineCollection Clone()
+		{
+			var c = new DisplayLineCollection(Capacity); // Preset the required capacity to improve memory management.
+
+			foreach (var line in this)
+				c.Add(line.Clone());
+
+			return (c);
+		}
+
+		#endregion
 	}
 }
 

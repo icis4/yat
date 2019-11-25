@@ -188,8 +188,6 @@ namespace YAT.Model
 		{
 			if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
 			{
-				this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
-
 				byte[] triggerSequence;
 				string triggerText;
 				DateTime triggerTimeStamp;
@@ -199,6 +197,10 @@ namespace YAT.Model
 					triggerSequence  = this.autoActionTriggerHelper.TriggerSequence;
 					triggerText      = this.autoActionClearRepositoriesTriggerText;
 					triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
+
+					this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
+					this.autoActionClearRepositoriesTriggerText = null;
+					this.autoActionClearRepositoriesTriggerTimeStamp = DateTime.MinValue;
 				}
 				                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
 				InvokeAutoAction(AutoAction.ClearRepositories, triggerSequence, triggerText, triggerTimeStamp);
@@ -241,10 +243,10 @@ namespace YAT.Model
 					}
 					else
 					{
-						break; // Break the loop if action got disposed in the meantime.
-					}          // Though unlikely, it may happen when deactivating action
-				}              // while receiving a very large chunk.
-			}
+						break;     // Break the loop if action got disposed in the meantime.
+					}              // Though unlikely, it may happen when deactivating action
+				} // lock (helper) // while receiving a very large chunk.
+			} // foreach (element)
 		}
 
 		/// <summary>
@@ -254,6 +256,20 @@ namespace YAT.Model
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
 		protected virtual void ProcessAutoActionFromLines(Domain.DisplayLineCollection lines)
+		{
+			if (this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress)
+				ProcessAutoActionOtherThanFilterOrSuppressFromLines(lines);
+			else
+				ProcessAutoActionFilterAndSuppressFromLines(lines);
+		}
+
+		/// <summary>
+		/// Processes the automatic actions other than <see cref="AutoAction.Filter"/> and <see cref="AutoAction.Suppress"/>.
+		/// </summary>
+		/// <remarks>
+		/// Automatic actions from lines may be reloadable.
+		/// </remarks>
+		protected virtual void ProcessAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines)
 		{
 			ProcessAutoActionClearRepositoriesOnSubsequentRx();
 
@@ -274,7 +290,7 @@ namespace YAT.Model
 
 							if (this.settingsRoot.AutoAction.IsTextTriggered)
 								triggerCount = StringEx.ContainingCount(dl.Text, this.autoActionTriggerHelper.TriggerText);
-							else                            // IsRegexTriggered
+							else                          // IsRegexTriggered
 								triggerCount = this.autoActionTriggerHelper.TriggerRegex.Matches(dl.Text).Count;
 
 							if (triggerCount > 0)
@@ -288,11 +304,80 @@ namespace YAT.Model
 						}
 						else
 						{
-							break; // Break the loop if action got disposed in the meantime.
-						}          // Though unlikely, it may happen when deactivating action
-					}              // while processing many lines, e.g. on reload.
+							break;     // Break the loop if action got disposed in the meantime.
+						}              // Though unlikely, it may happen when deactivating action
+					} // lock (helper) // while processing many lines, e.g. on reload.
+				} // foreach (line)
+			} // IsTextOrRegexTriggered
+		}
+
+		/// <summary>
+		/// Processes <see cref="AutoAction.Filter"/> and <see cref="AutoAction.Suppress"/>.
+		/// </summary>
+		/// <remarks>
+		/// Automatic actions <see cref="AutoAction.Filter"/> and <see cref="AutoAction.Suppress"/>
+		/// are never processed from elements.
+		/// </remarks>
+		/// <remarks>
+		/// <paramref name="lines"/> will be recreated. This is preferred over suppressing hidden
+		/// lines at the monitors because other terminal clients would also have to suppress them.
+		/// Also, suppressing here reduces the amount of data being forwarded to the monitors.
+		/// </remarks>
+		protected virtual void ProcessAutoActionFilterAndSuppressFromLines(Domain.DisplayLineCollection lines)
+		{
+			var linesInitially = lines.Clone(); // Needed because collection will be recreated.
+			lines.Clear();
+
+			foreach (var dl in linesInitially)
+			{
+				bool isTriggered = false;
+
+				lock (this.autoActionTriggerHelperSyncObj)
+				{
+					if (this.autoActionTriggerHelper != null)
+					{
+						if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+						{
+							foreach (var de in dl)
+							{
+								if (de.Origin != null) // Foreach element where origin exists.
+								{
+									foreach (var origin in de.Origin)
+									{
+										foreach (var originByte in origin.Value1)
+										{
+											if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+											{
+												this.autoActionTriggerHelper.Reset();
+												isTriggered = true;
+											}
+										}
+									}
+								}
+							}
+						}
+						else // IsTextOrRegexTriggered
+						{
+							if (this.settingsRoot.AutoAction.IsTextTriggered)
+								isTriggered = dl.Text.Contains(this.autoActionTriggerHelper.TriggerText);
+							else                          // IsRegexTriggered
+								isTriggered = this.autoActionTriggerHelper.TriggerRegex.Match(dl.Text).Success;
+						}
+					}
+					else
+					{
+						break;     // Break the loop if action got disposed in the meantime.
+					}              // Though unlikely, it may happen when deactivating action
+				} // lock (helper) // while processing many lines, e.g. on reload.
+
+				switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+				{
+					case AutoAction.Filter:   if ( isTriggered) { lines.Add(dl); } break;
+					case AutoAction.Suppress: if (!isTriggered) { lines.Add(dl); } break;
+
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-			}
+			} // foreach (lineCloned)
 		}
 
 		/// <summary>
@@ -321,7 +406,9 @@ namespace YAT.Model
 				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                     break;
 				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, triggerText, ts);   break;
 				case AutoAction.ClearRepositories:               ClearRepositories();                                          break;
-				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true; break;
+				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
+				                                                 this.autoActionClearRepositoriesTriggerText = triggerText;
+				                                                 this.autoActionClearRepositoriesTriggerTimeStamp = ts;        break;
 				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                        break;
 				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                break;
 				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                               break;
