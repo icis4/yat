@@ -367,13 +367,13 @@ namespace YAT.Model
 		public event EventHandler RepositoryRxCleared;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryTxReloaded;
+		public event EventHandler<Domain.DisplayLinesEventArgs> RepositoryTxReloaded;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryBidirReloaded;
+		public event EventHandler<Domain.DisplayLinesEventArgs> RepositoryBidirReloaded;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		public event EventHandler RepositoryRxReloaded;
+		public event EventHandler<Domain.DisplayLinesEventArgs> RepositoryRxReloaded;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<string>> FixedStatusTextRequest;
@@ -3330,7 +3330,7 @@ namespace YAT.Model
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryTxReloaded(object sender, EventArgs e)
+		private void terminal_RepositoryTxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -3340,7 +3340,7 @@ namespace YAT.Model
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryBidirReloaded(object sender, EventArgs e)
+		private void terminal_RepositoryBidirReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -3350,10 +3350,17 @@ namespace YAT.Model
 
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
-		private void terminal_RepositoryRxReloaded(object sender, EventArgs e)
+		private void terminal_RepositoryRxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
+
+			// AutoAction (by specification only active on receive-path):             // Only these pseudo-actions are reapplied on reload.
+			if (this.settingsRoot.AutoAction.IsActive && this.settingsRoot.AutoAction.IsFilterOrSuppress)
+			{
+				foreach (var dl in e.Lines)
+					EvaluateAutoAction(dl); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
 
 			OnRepositoryRxReloaded(e);
 		}
@@ -5770,19 +5777,19 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryTxReloaded(EventArgs e)
+		protected virtual void OnRepositoryTxReloaded(Domain.DisplayLinesEventArgs e)
 		{
 			this.eventHelper.RaiseSync(RepositoryTxReloaded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryBidirReloaded(EventArgs e)
+		protected virtual void OnRepositoryBidirReloaded(Domain.DisplayLinesEventArgs e)
 		{
 			this.eventHelper.RaiseSync(RepositoryBidirReloaded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryRxReloaded(EventArgs e)
+		protected virtual void OnRepositoryRxReloaded(Domain.DisplayLinesEventArgs e)
 		{
 			this.eventHelper.RaiseSync(RepositoryRxReloaded, this, e);
 		}

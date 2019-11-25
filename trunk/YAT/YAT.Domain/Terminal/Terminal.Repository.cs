@@ -644,7 +644,7 @@ namespace YAT.Domain
 		////	}
 		////}
 
-			OnRepositoryReloaded(repositoryType, EventArgs.Empty); // Raise event outside the lock.
+			OnRepositoryReloaded(repositoryType, new DisplayLinesEventArgs(RepositoryToDisplayLines(repositoryType))); // Raise event outside the lock.
 		}
 
 		#endregion
