@@ -149,8 +149,12 @@ Dark control color (typically dark grey) indicates 'invalid pattern'.</value>
 either refer to one of the commands,
 or fill-in any command text.
 
+By default, the command's resulting byte sequence is used for triggering.
+Optionally, use the command's text for triggering. Supported for single line text commands only.
+
 Note that...
-...[Any Line] is not available if action is [Highlight], as that would otherwise result in all received lines being highlighted.</value>
+...[Any Line] is not available if action is [Highlight], as that would otherwise result in all received lines being highlighted.
+...[Any Line] is not available if action is [Suppress], as that would otherwise result in all received lines being suppressed.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
@@ -158,6 +162,14 @@ Note that...
 Note that...
 ...trigger is highlighted for every action.
 ...[Highlight] is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted.</value>
+  </data>
+  <data name="toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText" xml:space="preserve">
+    <value>Configure Automatic Response Trigger,
+either refer to one of the commands,
+or fill-in any command text.
+
+By default, the command's resulting byte sequence is used for triggering.
+Optionally, use the command's text for triggering. Supported for single line text commands only.</value>
   </data>
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>432, 56</value>

@@ -3263,10 +3263,12 @@ namespace YAT.Model
 					InvokeAutoAction(this.settingsRoot.AutoAction.Action, null, dl.Text, dl.TimeStamp);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
-				// would result in all received lines highligted.
+				// would result in all received lines highlighted.
+				//
+				// Suppressing with [Trigger == AnyLine] is also prohibitied.
 				//
 				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
-				// doesn't help in this 'LinesReceived' event, as the monitors already get updated
+				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
 				// in the 'ElementsRxAdded' event further above.
 			}
 
@@ -3277,10 +3279,10 @@ namespace YAT.Model
 					InvokeAutoResponse(LineWithoutRxEolToOrigin(dl), null);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
-				// would result in all received lines highligted.
+				// would result in all received lines highlighted.
 				//
 				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
-				// doesn't help in this 'LinesReceived' event, as the monitors already get updated
+				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
 				// in the 'ElementsRxAdded' event further above.
 			}
 		}
