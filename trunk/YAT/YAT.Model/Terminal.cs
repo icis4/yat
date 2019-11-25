@@ -3328,6 +3328,7 @@ namespace YAT.Model
 			OnRepositoryRxCleared(e);
 		}
 
+		/// <remarks>Separated from <see cref="terminal_DisplayLinesTxAdded"/> for not processing count/rate/log... on reload again.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxReloaded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3338,6 +3339,7 @@ namespace YAT.Model
 			OnRepositoryTxReloaded(e);
 		}
 
+		/// <remarks>Separated from <see cref="terminal_DisplayLinesBidirAdded"/> for not processing count/rate/log... on reload again.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirReloaded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3348,6 +3350,7 @@ namespace YAT.Model
 			OnRepositoryBidirReloaded(e);
 		}
 
+		/// <remarks>Separated from <see cref="terminal_DisplayLinesRxAdded"/> for not processing count/rate/log... on reload again.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxReloaded(object sender, Domain.DisplayLinesEventArgs e)
