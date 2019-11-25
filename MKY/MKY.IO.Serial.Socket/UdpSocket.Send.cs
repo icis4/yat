@@ -188,7 +188,7 @@ namespace MKY.IO.Serial.Socket
 							}
 
 							if (hasChanged)
-								OnIOChanged(EventArgs.Empty);
+								OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 						} // Client
 					} // Inner loop
 				} // Outer loop

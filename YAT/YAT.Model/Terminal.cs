@@ -2765,7 +2765,7 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private bool terminal_IOChanged_hasBeenConnected;
 
-		private void terminal_IOChanged(object sender, EventArgs e)
+		private void terminal_IOChanged(object sender, EventArgs<DateTime> e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -5612,7 +5612,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnIOChanged(EventArgs e)
+		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
 			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}

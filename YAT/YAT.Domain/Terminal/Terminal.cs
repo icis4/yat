@@ -1962,7 +1962,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected virtual void OnIOChanged(EventArgs e)
+		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
 			this.eventHelper.RaiseSync(IOChanged, this, e);
 		}

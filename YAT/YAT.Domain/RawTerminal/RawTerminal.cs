@@ -96,7 +96,7 @@ namespace YAT.Domain
 		///             bei System.Delegate.DynamicInvokeImpl(Object[] args)
 		///             bei MKY.EventHelper.Item.InvokeOnCurrentThread(Delegate sink, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 595.
 		///             bei MKY.EventHelper.Item.RaiseSync(Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 370.
-		///             bei YAT.Domain.RawTerminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\RawTerminal\RawTerminal.cs:Zeile 792.
+		///             bei YAT.Domain.RawTerminal.OnIOChanged(EventArgs<DateTime> e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\RawTerminal\RawTerminal.cs:Zeile 792.
 		///             bei YAT.Domain.RawTerminal.io_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\RawTerminal\RawTerminal.cs:Zeile 689.
 		///        InnerException 2:
 		///             Message=Ein Aufrufziel hat einen Ausnahmefehler verursacht.
@@ -107,7 +107,7 @@ namespace YAT.Domain
 		///                  bei System.Delegate.DynamicInvokeImpl(Object[] args)
 		///                  bei MKY.EventHelper.Item.InvokeOnCurrentThread(Delegate sink, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 595.
 		///                  bei MKY.EventHelper.Item.RaiseSync(Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 370.
-		///                  bei YAT.Domain.Terminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\Terminal\Terminal.cs:Zeile 3890.
+		///                  bei YAT.Domain.Terminal.OnIOChanged(EventArgs<DateTime> e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\Terminal\Terminal.cs:Zeile 3890.
 		///                  bei YAT.Domain.Terminal.rawTerminal_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Domain\Terminal\Terminal.cs:Zeile 3767.
 		///             InnerException 3:
 		///                  Message=Invoke oder BeginInvoke kann für ein Steuerelement erst aufgerufen werden, wenn das Fensterhandle erstellt wurde.
@@ -118,7 +118,7 @@ namespace YAT.Domain
 		///                       bei System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
 		///                       bei MKY.EventHelper.Item.InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 567.
 		///                       bei MKY.EventHelper.Item.RaiseSync(Delegate eventDelegate, Object[] args) in D:\Workspace\YAT\Trunk\MKY\MKY\EventHelper.cs:Zeile 368.
-		///                       bei YAT.Model.Terminal.OnIOChanged(EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 5246.
+		///                       bei YAT.Model.Terminal.OnIOChanged(EventArgs<DateTime> e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 5246.
 		///                       bei YAT.Model.Terminal.terminal_IOChanged(Object sender, EventArgs e) in D:\Workspace\YAT\Trunk\YAT\YAT.Model\Terminal.cs:Zeile 2479.
 		/// ]]>
 		///

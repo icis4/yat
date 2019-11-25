@@ -120,7 +120,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			this.iXOnXOffHelper.OutputIsXOn = true;
 
-			OnIOControlChanged(EventArgs.Empty);
+			OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		/// <summary>
@@ -368,7 +368,9 @@ namespace MKY.IO.Serial.SerialPort
 									{
 										List<byte> effectiveChunkData;
 										bool signalIOControlChanged;
-										if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
+										DateTime signalIOControlChangedTimeStamp;
+
+										if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
 										{
 											DebugSendRequest("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
 											OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
@@ -379,7 +381,7 @@ namespace MKY.IO.Serial.SerialPort
 
 										if (signalIOControlChanged)
 										{
-											OnIOControlChanged(EventArgs.Empty);
+											OnIOControlChanged(new EventArgs<DateTime>(signalIOControlChangedTimeStamp));
 										}
 									}
 
@@ -486,13 +488,14 @@ namespace MKY.IO.Serial.SerialPort
 		private bool TryWriteXOnOrXOffAndNotify(byte b, out bool isWriteTimeout, out bool isOutputBreak)
 		{
 			bool signalIOControlChanged;
+			DateTime signalIOControlChangedTimeStamp;
 
-			if (TryWriteByteToPort(b, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
+			if (TryWriteByteToPort(b, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
 			{
 				OnDataSent(new SerialDataSentEventArgs(b, PortId)); // Skip I/O synchronization for simplicity.
 
 				if (signalIOControlChanged)
-					OnIOControlChanged(EventArgs.Empty); // Signal change of XOn/XOff state.
+					OnIOControlChanged(new EventArgs<DateTime>(signalIOControlChangedTimeStamp));
 
 				return (true);
 			}
@@ -505,11 +508,12 @@ namespace MKY.IO.Serial.SerialPort
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool TryWriteByteToPort(byte b, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged)
+		private bool TryWriteByteToPort(byte b, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged, out DateTime signalIOControlChangedTimeStamp)
 		{
 			isWriteTimeout         = false;
 			isOutputBreak          = false;
 			signalIOControlChanged = false;
+			signalIOControlChangedTimeStamp = DateTime.MinValue;
 
 			bool writeSuccess      = false;
 			Exception unhandled    = null;
@@ -542,6 +546,7 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						this.iXOnXOffHelper.XOnOrXOffSent(b);
 						signalIOControlChanged = true; // XOn/XOff count has changed.
+						signalIOControlChangedTimeStamp = DateTime.Now;
 					}
 				}
 			}
@@ -584,11 +589,12 @@ namespace MKY.IO.Serial.SerialPort
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged)
+		private bool TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged, out DateTime signalIOControlChangedTimeStamp)
 		{
 			isWriteTimeout         = false;
 			isOutputBreak          = false;
 			signalIOControlChanged = false;
+			signalIOControlChangedTimeStamp = DateTime.MinValue;
 
 			bool writeSuccess      = false;
 			Exception unhandled    = null;
@@ -641,6 +647,7 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								this.iXOnXOffHelper.XOnOrXOffSent(b);
 								signalIOControlChanged = true; // XOn/XOff count has changed.
+								signalIOControlChangedTimeStamp = DateTime.Now;
 							}
 						}
 					}
