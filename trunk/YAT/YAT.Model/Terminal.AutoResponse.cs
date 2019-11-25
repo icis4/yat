@@ -178,87 +178,88 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Sends the automatic response trigger.
+		/// Processes the automatic response.
 		/// </summary>
-		protected virtual void EvaluateAutoResponse(Domain.DisplayElementCollection elements)
+		/// <remarks>
+		/// Automatic responses always are non-reloadable.
+		/// </remarks>
+		protected virtual void ProcessAutoResponseFromElements(Domain.DisplayElementCollection elements)
 		{
-			int triggerCount = 0;
+			foreach (var de in elements)
+			{
+				lock (this.autoResponseTriggerHelperSyncObj)
+				{
+					if (this.autoResponseTriggerHelper != null)
+					{
+						if (de.Origin != null) // Foreach element where origin exists.
+						{
+							foreach (var origin in de.Origin)
+							{
+								foreach (var originByte in origin.Value1)
+								{
+									if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
+									{
+										this.autoResponseTriggerHelper.Reset();
+										de.Highlight = true;
 
+										// Invoke shall happen as short as possible after detection:
+										InvokeAutoResponse(this.autoResponseTriggerHelper.TriggerSequence, null);
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						break; // Break the loop if response got disposed in the meantime.
+					}          // Though unlikely, it may happen when deactivating response
+				}              // while receiving a very large chunk.
+			}
+		}
+
+		/// <summary>
+		/// Processes the automatic response.
+		/// </summary>
+		/// <remarks>
+		/// Automatic responses always are non-reloadable.
+		/// </remarks>
+		protected virtual void ProcessAutoResponseFromLines(Domain.DisplayLineCollection lines)
+		{
 			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
 			{
-				foreach (var de in elements)
+				foreach (var dl in lines)
+					ProcessAutoResponseFromElements(dl);
+			}
+			else // IsTextOrRegexTriggered
+			{
+				foreach (var dl in lines)
 				{
 					lock (this.autoResponseTriggerHelperSyncObj)
 					{
 						if (this.autoResponseTriggerHelper != null)
 						{
-							if (de.Origin != null) // Foreach element where origin exists.
+							int triggerCount = 0;
+
+							if (this.settingsRoot.AutoResponse.IsTextTriggered)
+								triggerCount = StringEx.ContainingCount(dl.Text, this.autoResponseTriggerHelper.TriggerText);
+							else                            // IsRegexTriggered
+								triggerCount = this.autoResponseTriggerHelper.TriggerRegex.Matches(dl.Text).Count;
+
+							if (triggerCount > 0)
 							{
-								foreach (var origin in de.Origin)
-								{
-									foreach (var originByte in origin.Value1)
-									{
-										if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
-										{
-											this.autoResponseTriggerHelper.Reset();
-											triggerCount++;
-											de.Highlight = true;
-										}
-									}
-								}
+								this.autoResponseTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
+								dl.Highlight = true;
+
+								for (int i = 0; i < triggerCount; i++)
+									InvokeAutoResponse(null, dl.Text);
 							}
 						}
 						else
 						{
 							break; // Break the loop if response got disposed in the meantime.
 						}          // Though unlikely, it may happen when deactivating response
-					}              // while receiving a very large chunk.
+					}              // while processing many lines, e.g. on reload.
 				}
-			}
-			else // IsTextOrRegexTriggered
-			{
-				var dl = (elements as Domain.DisplayLine);
-				if (dl != null)
-				{
-					if (this.settingsRoot.AutoResponse.IsTextTriggered)
-					{
-						lock (this.autoResponseTriggerHelperSyncObj)
-						{
-							triggerCount = StringEx.ContainingCount(dl.Text, this.autoResponseTriggerHelper.TriggerText);
-							if (triggerCount > 0)
-								this.autoResponseTriggerHelper.EffectiveTriggerTextLine = dl.Text;
-						}
-					}
-					else // IsRegexTriggered
-					{
-						lock (this.autoResponseTriggerHelperSyncObj)
-						{
-							var m = this.autoResponseTriggerHelper.TriggerRegex.Matches(dl.Text);
-							triggerCount = m.Count;
-
-							if (triggerCount > 0)
-								this.autoResponseTriggerHelper.EffectiveTriggerTextLine = dl.Text;
-						}
-					}
-				}
-				else
-				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A line must be provided for text or regex trigger evaluation!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			}
-
-			if (triggerCount > 0)
-			{
-				byte[] triggerSequence;
-				string triggerText;
-
-				lock (this.autoResponseTriggerHelperSyncObj)
-				{
-					triggerSequence = this.autoResponseTriggerHelper.TriggerSequence;
-					triggerText     = this.autoResponseTriggerHelper.TriggerText;
-				}
-
-				InvokeAutoResponse(triggerSequence, triggerText);
 			}
 		}
 
@@ -314,7 +315,7 @@ namespace YAT.Model
 		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence, string triggerText)
 		{
 			if (!ArrayEx.IsNullOrEmpty(triggerSequence))
-				this.terminal.Send(SequenceWithTxEol(triggerSequence));
+				this.terminal.Send(ToSequenceWithTxEol(triggerSequence));
 			else
 				this.terminal.SendTextLine(triggerText);
 		}
@@ -322,7 +323,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Helper method to get the byte sequence including EOL.
 		/// </summary>
-		protected virtual byte[] SequenceWithTxEol(byte[] sequence)
+		protected virtual byte[] ToSequenceWithTxEol(byte[] sequence)
 		{
 			var l = new List<byte>(sequence);
 
@@ -341,7 +342,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Helper method to get the byte sequence from a display line.
 		/// </summary>
-		protected virtual byte[] LineWithoutRxEolToOrigin(Domain.DisplayLine dl)
+		protected virtual byte[] ToOriginWithoutRxEol(Domain.DisplayLine dl)
 		{
 			var l = new List<byte>(dl.ElementsToOrigin());
 

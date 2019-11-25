@@ -61,31 +61,6 @@ namespace YAT.Domain
 		End
 	}
 
-
-	/// <remarks>
-	/// So far there can only be one attribute, thus named "Attribute" and not marked [Flags].
-	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Enum actually implements an attribute, an attribute related to a display line.")]
-	public enum LineChangeAttribute
-	{
-		None = 0,
-
-		/// <summary>Resulting line shall be highlighted.</summary>
-		Highlight,
-
-		/// <summary>Filtering is active; resulting line shall be included.</summary>
-		Filter,
-
-		/// <summary>Filtering is active; resulting line may be excluded.</summary>
-		SuppressIfNotFiltered,
-
-		/// <summary>Suppressing is active; resulting line may be excluded.</summary>
-		SuppressIfSubsequentlyTriggered,
-
-		/// <summary>Suppressing is active; resulting line shall be excluded.</summary>
-		Suppress
-	}
-
 	#pragma warning restore 1591
 }
 

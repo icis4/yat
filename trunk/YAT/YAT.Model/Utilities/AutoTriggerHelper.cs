@@ -56,9 +56,6 @@ namespace YAT.Model.Utilities
 		public Regex TriggerRegex { get; }
 
 		/// <summary></summary>
-		public string EffectiveTriggerTextLine { get; set; }
-
-		/// <summary></summary>
 		public AutoTriggerHelper(byte[] triggerSequence)
 		{
 			lock (this)
