@@ -1474,8 +1474,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Name = "toolStripComboBox_MainTool_AutoResponse_Trigger";
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Size = new System.Drawing.Size(160, 27);
-			this.toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText = "Configure Automatic Response Trigger,\r\neither refer to one of the commands,\r\nor f" +
-    "ill-in any command text.";
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText = resources.GetString("toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText");
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_TextChanged);
