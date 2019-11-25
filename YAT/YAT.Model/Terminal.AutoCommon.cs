@@ -126,7 +126,7 @@ namespace YAT.Model
 						triggerRegex = new Regex(triggerPattern);
 						return (true);
 					}
-					catch (ArgumentException ex)
+					catch (ArgumentException)
 					{
 						triggerPattern = null;
 						triggerRegex = null;

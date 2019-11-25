@@ -247,7 +247,7 @@ namespace YAT.Model
 								this.autoActionTriggerHelper.EffectiveTriggerTextLine = dl.Text;
 						}
 					}
-					else                          // IsRegexTriggered
+					else // IsRegexTriggered
 					{
 						lock (this.autoActionTriggerHelperSyncObj)
 						{
