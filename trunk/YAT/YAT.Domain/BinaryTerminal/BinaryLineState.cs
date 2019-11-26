@@ -63,7 +63,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Resets the state, i.e. restarts processing with empty repository.
+		/// Resets the state, i.e. restarts processing with an empty repository.
 		/// </summary>
 		public virtual void Reset()
 		{

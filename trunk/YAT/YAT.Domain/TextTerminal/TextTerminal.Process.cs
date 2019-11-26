@@ -733,11 +733,11 @@ namespace YAT.Domain
 				{
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
-			}                                                                // Note the inverted implementation sequence:
+			}                                                                    // Note the inverted implementation sequence:
 			else if (textLineState.EolOfGivenDevice[dev].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
-			{                                                                //  2. PartlyMatchContinued (intermediate, here)
-				if (de.IsContent)                                            //  3. PartlyMatchBeginning (first trigger, below)
-				{                                                            //  4. Unrelatd to EOL      (any time, further below)
+			{                                                                    //  2. PartlyMatchContinued (intermediate, here)
+				if (de.IsContent)                                                //  3. PartlyMatchBeginning (first trigger, below)
+				{                                                                //  4. Unrelatd to EOL      (any time, further below)
 					if (TextTerminalSettings.ShowEol)
 					{
 						AddSpaceIfNecessary(lineState, dir, lp, de);
@@ -928,6 +928,9 @@ namespace YAT.Domain
 			return (false);
 		}
 
+		/// <summary>
+		/// Confirms the retained unconfirmed hidden EOL elements by discarding them.
+		/// </summary>
 		private static void ConfirmRetainedUnconfirmedHiddenEolElements(TextLineState textLineState)
 		{
 			if (textLineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
@@ -936,6 +939,9 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary>
+		/// Releases the retained unconfirmed hidden EOL elements by adding them to <paramref name="lp"/>.
+		/// </summary>
 		private static void ReleaseRetainedUnconfirmedHiddenEolElements(TextLineState textLineState, DisplayElementCollection lp)
 		{
 			if (textLineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
