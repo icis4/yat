@@ -1371,6 +1371,10 @@ namespace YAT.Model.Test
 		/// </remarks>
 		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
+			// Attention:
+			// Similar code exists in Domain.Test.Utilities.WaitForTransmissionAndVerifyCounts().
+			// Changes here may have to be applied there too.
+
 			int txByteCount = 0;
 			int txLineCount = 0;
 			int rxByteCount = 0;

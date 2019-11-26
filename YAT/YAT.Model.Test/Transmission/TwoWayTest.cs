@@ -323,23 +323,32 @@ namespace YAT.Model.Test.Transmission
 		{
 			for (int cycle = 1; cycle <= transmissionCount; cycle++)
 			{
+				var cycleAB   = cycle;
+				var cycleABBA = cycle;
+
+				if (terminalA == terminalB) // Loopback self:
+				{                                  // Cycle 1, 2, 3,... must result in:
+					cycleAB   = ((cycle * 2) - 1); //       1, 3, 5,...
+					cycleABBA =  (cycle * 2);      //       2, 4, 6,...
+				}
+
 				// Send 'Ping' test command A >> B:
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycle);
+				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycleAB);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, cycle);
+				                      testSet, cycleAB);
 
 				// Send 'Pong' test command B >> A:
 				terminalB.SendText(testSet.Command);
-				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalB, terminalA, testSet, cycle);
+				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalB, terminalA, testSet, cycleABBA);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, cycle);
+				                      testSet, cycleABBA);
 			}
 		}
 

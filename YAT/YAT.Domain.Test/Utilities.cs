@@ -228,6 +228,10 @@ namespace YAT.Domain.Test
 			// Calculate timeout:
 			int timeout = WaitTimeoutForLineTransmission;
 
+			// Attention:
+			// Similar code exists in Model.Test.Utilities.WaitForTransmissionAndVerifyCounts().
+			// Changes here may have to be applied there too.
+
 			int txByteCount = 0;
 			int txLineCount = 0;
 			int rxByteCount = 0;
