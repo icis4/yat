@@ -421,15 +421,27 @@ namespace YAT.Model.Test.Transmission
 			{
 				// Send test command:
 				terminalA.SendText(testSet.Command);
-				if (testSet.ExpectedAlsoApplyToA)
+				if (testSet.ExpectedAlsoApplyToA) {
 					Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycle);
-				else
+				}
+				else if (testSet.ClearedIsExpectedInTheEnd && (terminalA == terminalB)) { // Clear* on loopback self:
+				////Utilities.WaitForReceivingCycleAndVerifyCounts(terminalB, testSet, cycle) doesn't work because clear will also be applied to Rx at an arbitrary moment.
+				}
+				else {
 					Utilities.WaitForReceivingCycleAndVerifyCounts(terminalB, testSet, cycle);
+				}
 
 				// Verify transmission:
-				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, cycle);
+				if (testSet.ClearedIsExpectedInTheEnd && (terminalA == terminalB)) { // Clear* on loopback self:
+				////Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+				////                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+				////                      testSet, cycle)  doesn't work because clear will also be applied to Rx at an arbitrary moment.
+				}
+				else {
+					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+					                      testSet, cycle);
+				}
 			}
 		}
 
