@@ -181,8 +181,16 @@ namespace YAT.Domain
 		{
 			var sb = new StringBuilder();
 
+			bool isFirst = true;
 			foreach (var re in ToChunks())
+			{
+				if (isFirst)
+					isFirst = false;
+				else
+					sb.Append(" ");
+
 				sb.Append(re.ToString());
+			}
 
 			return (sb.ToString());
 		}
