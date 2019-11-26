@@ -681,11 +681,11 @@ namespace YAT.Domain
 			}
 
 			if (TerminalSettings.Display.DirectionLineBreakEnabled)
-			{
-			////if (txIsAffected)    { EvaluateAndSignalDirectionLineBreak(RepositoryType.Tx must not be done for unidirectional repositories.
+			{ // Must not be done for unidirectional repositories.
+			////if (txIsAffected)    { EvaluateAndSignalDirectionLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Direction); }
 				if (bidirIsAffected) { EvaluateAndSignalDirectionLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction); }
-			////if (rxIsAffected)    { EvaluateAndSignalDirectionLineBreak(RepositoryType.Rx must not be done for unidirectional repositories.
-			}
+			////if (rxIsAffected)    { EvaluateAndSignalDirectionLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Direction); }
+			} // Must not be done for unidirectional repositories.
 		}
 
 		/// <summary>Enforce line break if requested.</summary>
