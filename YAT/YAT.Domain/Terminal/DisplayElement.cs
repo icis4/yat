@@ -135,6 +135,12 @@ namespace YAT.Domain
 				: base(timeStamp, Direction.Tx, origin, text, 1, ElementAttributes.DataContent) // Elements are always created corresponding to a single shown character.
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			public TxData(byte[] origin, string text)
+				: this(DateTime.MinValue, origin, text)
+			{
+			}
 		}
 
 		/// <summary></summary>
@@ -158,6 +164,12 @@ namespace YAT.Domain
 				: base(timeStamp, Direction.Tx, origin, text, 1, ElementAttributes.ControlContent)
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			public TxControl(byte[] origin, string text)
+				: this(DateTime.MinValue, origin, text)
+			{
+			}
 		}
 
 		/// <summary></summary>
@@ -181,6 +193,12 @@ namespace YAT.Domain
 				: base(timeStamp, Direction.Rx, origin, text, 1, ElementAttributes.DataContent)
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			public RxData(byte[] origin, string text)
+				: this(DateTime.MinValue, origin, text)
+			{
+			}
 		}
 
 		/// <summary></summary>
@@ -204,6 +222,12 @@ namespace YAT.Domain
 				: base(timeStamp, Direction.Rx, origin, text, 1, ElementAttributes.ControlContent)
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
+
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			public RxControl(byte[] origin, string text)
+				: this(DateTime.MinValue, origin, text)
+			{
+			}
 		}
 
 		/// <summary></summary>
@@ -844,17 +868,17 @@ namespace YAT.Domain
 			return (clone);
 		}
 
-	#if (FALSE)
+	#if (DEBUG) // No longer needed (YAGNI), but keeping for reference and potential future use (!YAGNI).
 		/// <remarks>
 		/// <paramref name="origin"/> must correspond to a single byte or character, i.e. result
 		/// in a single element, same as when creating elements "the normal way". ASCII mnemonics
-		/// (e.g. <CR>) are considered a single shown character.
+		/// (e.g. <![CDATA[<CR>]]>) are considered a single shown character.
 		/// </remarks>
 		public virtual DisplayElement RecreateFromOrigin(Pair<byte[], string> origin)
 		{
 			var clone = Clone(); // Ensure to recreate the proper type.
 
-			// Keep direction and attributes.
+			// Keep time stamp, direction and attributes.
 
 			// Replace origin and byteCount:
 			var clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capacity to improve memory management.
@@ -912,6 +936,7 @@ namespace YAT.Domain
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The given element '" + other + "' cannot be appended to this element '" + this + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// TimeStamp of this element is kept, other is ignored.
+			// Direction of this element is kept, other is same anyway (asserted by AcceptsAppendOf() above).
 
 			if (this.origin != null)
 				this.origin.AddRange(PerformDeepClone(other.origin));
@@ -946,7 +971,7 @@ namespace YAT.Domain
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The origin is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// Unfold the element:
-			var originConstructor = GetType().GetConstructor(new Type[] { typeof(byte[]), typeof(string) }); // All content elements have such constructor.
+			var originConstructor = GetType().GetConstructor(new Type[] { typeof(byte[]), typeof(string) }); // All content elements must have such constructor.
 			var unfolded = new List<DisplayElement>(this.origin.Count); // Preset the required capacity to improve memory management.
 			foreach (var p in this.origin)
 				unfolded.Add((DisplayElement)originConstructor.Invoke(new object[] { p.Value1, p.Value2 }));
@@ -977,6 +1002,7 @@ namespace YAT.Domain
 			foreach (var de in unfolded)
 				recreated.Append(de);
 
+		////this.timeStamp can be kept.
 		////this.direction can be kept.
 			this.origin    = recreated.origin;
 			this.text      = recreated.text;
@@ -992,7 +1018,7 @@ namespace YAT.Domain
 		{
 			if (Origin != null)
 			{
-				List<byte> l = new List<byte>();
+				var l = new List<byte>(Origin.Count); // Preset the required capacity to improve memory management.
 
 				foreach (var item in Origin)
 					l.AddRange(item.Value1);

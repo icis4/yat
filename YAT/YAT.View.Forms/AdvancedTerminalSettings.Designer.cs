@@ -1182,8 +1182,8 @@
 			this.checkBox_ReplaceTab.TabIndex = 4;
 			this.checkBox_ReplaceTab.Text = "Also replace horizontal tab (0x09) by";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceTab, "Replaces tabulator characters by <TAB> instead of executing the tabulator, i.e. i" +
-        "nserting a horizontal whitespace.\r\n\r\nOnly available for text terminals.\r\nOnly ap" +
-        "plies if radix is [String].");
+        "nserting a horizontal whitespace.\r\n\r\nOnly available for text terminals.\r\nApplica" +
+        "ble to any radix.");
 			this.checkBox_ReplaceTab.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceTab.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceTab_CheckedChanged);
 			// 
