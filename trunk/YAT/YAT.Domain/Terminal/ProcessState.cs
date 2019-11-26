@@ -75,13 +75,16 @@ namespace YAT.Domain
 	public class OverallState
 	{
 		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
-		public DeviceAndDirectionState DeviceAndDirection    { get; protected set; }
+		public DeviceState    DeviceLineBreak       { get; protected set; }
+
+		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
+		public DirectionState DirectionLineBreak    { get; protected set; }
 
 		/// <summary></summary>
-		public bool                    IsFirstLine           { get; protected set; }
+		public bool           IsFirstLine           { get; protected set; }
 
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line" of the previous line.</remarks>
-		public DateTime                PreviousLineTimeStamp { get; protected set; }
+		public DateTime       PreviousLineTimeStamp { get; protected set; }
 
 		/// <summary></summary>
 		public OverallState()
@@ -94,7 +97,8 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Reset()
 		{
-			DeviceAndDirection    = new DeviceAndDirectionState();
+			DeviceLineBreak       = new DeviceState();
+			DirectionLineBreak    = new DirectionState();
 			IsFirstLine           = true;
 			PreviousLineTimeStamp = DateTime.MinValue;
 		}
@@ -119,7 +123,7 @@ namespace YAT.Domain
 	}
 
 	/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
-	public class DeviceAndDirectionState
+	public class DeviceState
 	{
 		/// <summary></summary>
 		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
@@ -128,13 +132,26 @@ namespace YAT.Domain
 		public string      Device                { get; set; }
 
 		/// <summary></summary>
-		public IODirection Direction             { get; set; }
-
-		/// <summary></summary>
-		public DeviceAndDirectionState()
+		public DeviceState()
 		{
 			IsFirstChunk = true;
 			Device       = null;
+		}
+	}
+
+	/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+	public class DirectionState
+	{
+		/// <summary></summary>
+		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
+
+		/// <summary></summary>
+		public IODirection Direction             { get; set; }
+
+		/// <summary></summary>
+		public DirectionState()
+		{
+			IsFirstChunk = true;
 			Direction    = IODirection.None;
 		}
 	}
