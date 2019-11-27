@@ -381,8 +381,14 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public DeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
-				: base(enclosureLeft + infoText + enclosureRight)
+				: base(ToText(enclosureLeft, infoText, enclosureRight))
 			{
+			}
+
+			/// <summary></summary>
+			protected static string ToText(string infoText, string enclosureLeft, string enclosureRight)
+			{
+				return (enclosureLeft + infoText + enclosureRight);
 			}
 		}
 
@@ -398,8 +404,23 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public DirectionInfo(Direction direction, string enclosureLeft, string enclosureRight)
-				: base(direction, enclosureLeft + (DirectionEx)direction + enclosureRight)
+				: base(direction, ToText(direction, enclosureLeft, enclosureRight))
 			{
+			}
+
+			/// <summary></summary>
+			protected static string ToText(Direction direction, string enclosureLeft, string enclosureRight)
+			{
+				return (enclosureLeft + (DirectionEx)direction + enclosureRight);
+			}
+
+			/// <summary>
+			/// Replaces <see cref="Direction"/> and <see cref="Text"/> according to <paramref name="direction"/>.
+			/// </summary>
+			public void ReplaceDirection(Direction direction, string enclosureLeft, string enclosureRight)
+			{
+				Direction = direction;
+				Text = ToText(direction, enclosureLeft, enclosureRight);
 			}
 		}
 
@@ -413,9 +434,15 @@ namespace YAT.Domain
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public DataLength(int length, string enclosureLeft, string enclosureRight)
-				: base(enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight)
+				: base(ToText(length, enclosureLeft, enclosureRight))
 			{
 				Length = length;
+			}
+
+			/// <summary></summary>
+			protected static string ToText(int length, string enclosureLeft, string enclosureRight)
+			{
+				return (enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight);
 			}
 
 			/// <summary></summary>
