@@ -91,7 +91,8 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
-		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+		// Attention:
+		// XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
 		// Changes here must most likely be applied there too.
 
 		/// <summary></summary>
@@ -208,7 +209,8 @@ namespace MKY.IO.Serial.Usb
 						// Handle XOff state:
 						if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
 						{
-							// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+							// Attention:
+							// XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
 							// Changes here must most likely be applied there too.
 
 							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
@@ -301,7 +303,8 @@ namespace MKY.IO.Serial.Usb
 			DebugThreadState("SendThread() has terminated.");
 		}
 
-		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+		// Attention:
+		// XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
 		// Changes here must most likely be applied there too.
 
 		private void HandleXOnOrXOffAndNotify(byte[] data)

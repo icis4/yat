@@ -872,7 +872,8 @@ namespace MKY.IO.Serial.Usb
 				byte[] data;
 				this.device.Receive(out data);
 
-				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+				// Attention:
+				// XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
 				// Changes here must most likely be applied there too.
 
 				bool signalXOnXOff = false;

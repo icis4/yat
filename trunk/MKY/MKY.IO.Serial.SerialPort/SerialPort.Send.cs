@@ -112,7 +112,8 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+		// Attention:
+		// XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
 		// Changes here must most likely be applied there too.
 
 		/// <summary></summary>
@@ -263,7 +264,8 @@ namespace MKY.IO.Serial.SerialPort
 						// Handle XOff state:
 						if (this.settings.Communication.FlowControlManagesXOnXOffManually && !OutputIsXOn) // XOn/XOff information is not available for 'Software' or 'Combined'!
 						{
-							// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+							// Attention:
+							// XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
 							// Changes here must most likely be applied there too.
 
 							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.

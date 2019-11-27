@@ -1356,7 +1356,8 @@ namespace MKY.IO.Serial.SerialPort
 						this.port.Read(data, 0, bytesToRead);
 					}
 
-					// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+					// Attention:
+					// XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
 					// Changes here must most likely be applied there too.
 
 					bool signalXOnXOff = false;
