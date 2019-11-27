@@ -38,6 +38,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.ComponentModel;
 using MKY.Text;
+using MKY.Text.RegularExpressions;
 using MKY.Windows.Forms;
 
 #endregion
@@ -472,17 +473,13 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			try
-			{
-				var regex = new Regex(e.Value);
-				UnusedLocal.PreventAnalysisWarning(regex);
-			}
-			catch (ArgumentException ex)
+			string errorMessage;
+			if (!RegexEx.TryValidatePattern(e.Value, out errorMessage))
 			{
 				MessageBoxEx.Show
 				(
 					this,
-					ex.Message,
+					errorMessage,
 					"Invalid Regex",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

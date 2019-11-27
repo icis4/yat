@@ -1404,6 +1404,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText = resources.GetString("toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText");
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_KeyDown);
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_KeyUp);
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged);
 			// 
 			// toolStripButton_MainTool_AutoAction_UseText
@@ -1477,6 +1479,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText = resources.GetString("toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText");
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_KeyDown);
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_KeyUp);
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_TextChanged);
 			// 
 			// toolStripButton_MainTool_AutoResponse_UseText
