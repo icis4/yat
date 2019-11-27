@@ -673,7 +673,8 @@ namespace YAT.Domain
 		protected virtual void ProcessAndSignalDeviceOrDirectionLineBreak(RawChunk chunk,
 		                                                                  bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
-			if (TerminalSettings.Display.DeviceLineBreakEnabled)
+			var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
+			if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented in 'View.Forms.SetControls()'!
 			{
 				if (txIsAffected)    { EvaluateAndSignalDeviceLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device); }
 				if (bidirIsAffected) { EvaluateAndSignalDeviceLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device); }

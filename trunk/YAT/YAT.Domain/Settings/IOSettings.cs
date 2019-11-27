@@ -237,6 +237,27 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		#endregion
+
+		#region Property Combinations
+		//==========================================================================================
+		// Property Combinations
+		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IOTypeIsSocket
+		{
+			get { return (((IOTypeEx)IOType).IsSocket); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IOTypeIsServerSocket
+		{
+			get { return (((IOTypeEx)IOType).IsServerSocket); }
+		}
+
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool FlowControlIsInUse

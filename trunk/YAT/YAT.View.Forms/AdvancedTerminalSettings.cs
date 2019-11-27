@@ -1097,8 +1097,7 @@ namespace YAT.View.Forms
 			bool isSerialPort   = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.SerialPort);
 			bool isUsbSerialHid = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.UsbSerialHid);
 
-			MKY.IO.Serial.Socket.SocketType socketType = (Domain.IOTypeEx)(this.settingsInEdit.Terminal.IO.IOType);
-			bool isServerSocket = ((MKY.IO.Serial.Socket.SocketTypeEx)socketType).IsServer;
+			bool isServerSocket = this.settingsInEdit.Terminal.IO.IOTypeIsServerSocket;
 
 			this.isSettingControls.Enter();
 			try
@@ -1122,8 +1121,8 @@ namespace YAT.View.Forms
 
 				bool isShowable = ((this.settingsInEdit.Terminal.Display.TxRadixIsShowable) ||
 				                   (this.settingsInEdit.Terminal.Display.RxRadixIsShowable));
-				checkBox_ShowRadix.Enabled = isShowable; // Attention: Same code in two locations in 'View.Forms.Terminal'.
-				checkBox_ShowRadix.Checked = isShowable && this.settingsInEdit.Terminal.Display.ShowRadix;
+				checkBox_ShowRadix.Enabled =  isShowable; // Attention: This 'isShowable' restriction also exists in two locations in 'View.Forms.Terminal'.
+				checkBox_ShowRadix.Checked = (isShowable && this.settingsInEdit.Terminal.Display.ShowRadix);
 
 				// Display:
 				checkBox_ShowLineNumbers.Checked    = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
@@ -1148,9 +1147,9 @@ namespace YAT.View.Forms
 				checkBox_IncludeIOControl.Enabled = (isSerialPort || isUsbSerialHid);
 				checkBox_IncludeIOControl.Checked = this.settingsInEdit.Terminal.Display.IncludeIOControl;
 
-				checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-				checkBox_DeviceLineBreak.Enabled    = isServerSocket;
-				checkBox_DeviceLineBreak.Checked    = this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled;
+				checkBox_DirectionLineBreak.Checked =  this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
+				checkBox_DeviceLineBreak.Enabled    =  isServerSocket; // Attention: This 'isServerSocket' restriction is also implemented in 'Domain.Terminal.ProcessAndSignalDeviceOrDirectionLineBreak()'!
+				checkBox_DeviceLineBreak.Checked    = (isServerSocket && this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled);
 				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
 
 				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
