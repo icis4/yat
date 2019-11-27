@@ -62,6 +62,7 @@ using MKY.Diagnostics;
 using MKY.Drawing;
 using MKY.IO;
 using MKY.Settings;
+using MKY.Text.RegularExpressions;
 using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
@@ -4167,6 +4168,22 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual bool RequestAutoActionValidateTriggerTextSilently(string triggerText)
+		{
+			if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+			{
+				return (ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes));
+			}
+			else // IsTextOrRegexTriggered
+			{
+				if (this.settingsRoot.AutoAction.IsTextTriggered)
+					return (!string.IsNullOrEmpty(triggerText));
+				else                          // IsRegexTriggered
+					return (RegexEx.TryValidatePattern(triggerText));
+			}
+		}
+
+		/// <summary></summary>
 		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
 		{
 			if (trigger == AutoTrigger.AnyLine)
@@ -4294,6 +4311,22 @@ namespace YAT.View.Forms
 		{
 			if (this.terminal != null)
 				this.terminal.DeactivateAutoAction();
+		}
+
+		/// <summary></summary>
+		public virtual bool RequestAutoResponseValidateTriggerTextSilently(string triggerText)
+		{
+			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
+			{
+				return (ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes));
+			}
+			else // IsTextOrRegexTriggered
+			{
+				if (this.settingsRoot.AutoResponse.IsTextTriggered)
+					return (!string.IsNullOrEmpty(triggerText));
+				else                            // IsRegexTriggered
+					return (RegexEx.TryValidatePattern(triggerText));
+			}
 		}
 
 		/// <summary></summary>

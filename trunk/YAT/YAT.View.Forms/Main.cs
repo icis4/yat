@@ -63,6 +63,7 @@ using MKY;
 using MKY.Contracts;
 using MKY.IO;
 using MKY.Settings;
+using MKY.Text.RegularExpressions;
 using MKY.Windows.Forms;
 
 #if (WITH_SCRIPTING)
@@ -1125,6 +1126,12 @@ namespace YAT.View.Forms
 					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 					// Changes here may have to be applied there too.
 
+					toolStripButton_MainTool_AutoAction_UseText.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoAction_UseText.Visible = true;
+
+					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoAction_UseRegex.Visible = true;
+
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
 						toolStripComboBox_MainTool_AutoAction_Trigger.Items.Clear();
@@ -1151,6 +1158,12 @@ namespace YAT.View.Forms
 				else
 				{
 					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Show Automatic Action";
+
+					toolStripButton_MainTool_AutoAction_UseText.Visible = false;
+					toolStripButton_MainTool_AutoAction_UseText.Enabled = false;
+
+					toolStripButton_MainTool_AutoAction_UseRegex.Visible = false;
+					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = false;
 
 					toolStripComboBox_MainTool_AutoAction_Trigger.Visible = false;
 					toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = false;
@@ -1204,6 +1217,12 @@ namespace YAT.View.Forms
 					// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 					// Changes here may have to be applied there too.
 
+					toolStripButton_MainTool_AutoResponse_UseText.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoResponse_UseText.Visible = true;
+
+					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoResponse_UseRegex.Visible = true;
+
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
 						toolStripComboBox_MainTool_AutoResponse_Trigger.Items.Clear();
@@ -1230,6 +1249,12 @@ namespace YAT.View.Forms
 				else
 				{
 					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Show Automatic Response";
+
+					toolStripButton_MainTool_AutoResponse_UseText.Visible = false;
+					toolStripButton_MainTool_AutoResponse_UseText.Enabled = false;
+
+					toolStripButton_MainTool_AutoResponse_UseRegex.Visible = false;
+					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = false;
 
 					toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
 					toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = false;
@@ -1935,19 +1960,7 @@ namespace YAT.View.Forms
 		{
 			if (ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex)
 			{
-				try
-				{
-					var regex = new Regex(pattern);
-					UnusedLocal.PreventAnalysisWarning(regex);
-
-					errorMessage = null;
-					return (true);
-				}
-				catch (ArgumentException ex)
-				{
-					errorMessage = ex.Message;
-					return (false);
-				}
+				return (RegexEx.TryValidatePattern(pattern, out errorMessage));
 			}
 			else // Not using regex:
 			{
@@ -2140,6 +2153,41 @@ namespace YAT.View.Forms
 			toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
 		}
 
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_KeyDown(object sender, KeyEventArgs e)
+		{
+			// Note the \remind (2017-11-22..12-16 / MKY) limitations in .NET WinForms (or Win32)
+			// described in toolStripComboBox_MainTool_Find_Pattern_KeyDown() further above.
+
+			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoActionUseText();  e.SuppressKeyPress = true; break;
+					case Keys.E: ((Terminal)ActiveMdiChild).RequestToggleAutoActionUseRegex(); e.SuppressKeyPress = true; break;
+
+					default: break;
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Suppress same keys for symmetricity with 'KeyDown' above.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_KeyUp(object sender, KeyEventArgs e)
+		{
+			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.T: e.SuppressKeyPress = true; break;
+					case Keys.E: e.SuppressKeyPress = true; break;
+
+					default: break;
+				}
+			}
+		}
+
 		private void toolStripButton_MainTool_AutoAction_UseText_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestToggleAutoActionUseText();
@@ -2204,7 +2252,7 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
+					if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerTextSilently(triggerText))
 					{
 						toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
 						toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
@@ -2225,6 +2273,41 @@ namespace YAT.View.Forms
 
 			toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.Window;
 			toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
+		}
+
+		private void toolStripComboBox_MainTool_AutoResponse_Trigger_KeyDown(object sender, KeyEventArgs e)
+		{
+			// Note the \remind (2017-11-22..12-16 / MKY) limitations in .NET WinForms (or Win32)
+			// described in toolStripComboBox_MainTool_Find_Pattern_KeyDown() further above.
+
+			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseText();  e.SuppressKeyPress = true; break;
+					case Keys.E: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseRegex(); e.SuppressKeyPress = true; break;
+
+					default: break;
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Suppress same keys for symmetricity with 'KeyDown' above.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
+		private void toolStripComboBox_MainTool_AutoResponse_Trigger_KeyUp(object sender, KeyEventArgs e)
+		{
+			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.T: e.SuppressKeyPress = true; break;
+					case Keys.E: e.SuppressKeyPress = true; break;
+
+					default: break;
+				}
+			}
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_UseText_Click(object sender, EventArgs e)
