@@ -41,7 +41,7 @@ namespace MKY.Windows.Forms
 		/// <returns><c>true</c> if within; otherwise, <c>false</c>.</returns>
 		public static bool IsWithinAnyBounds(Rectangle bounds)
 		{
-			foreach (Screen screen in Screen.AllScreens)
+			foreach (var screen in Screen.AllScreens)
 			{
 				if (screen.Bounds.Contains(bounds))
 					return (true);

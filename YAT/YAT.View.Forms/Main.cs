@@ -2644,11 +2644,13 @@ namespace YAT.View.Forms
 
 			ApplicationSettings.LocalUserSettings.MainWindow.WindowState = WindowState;
 
-			if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
-				ApplicationSettings.LocalUserSettings.MainWindow.Location = Location;
-
 			if (WindowState == FormWindowState.Normal)
+			{
+				if (StartPosition == FormStartPosition.Manual)
+					ApplicationSettings.LocalUserSettings.MainWindow.Location = Location;
+
 				ApplicationSettings.LocalUserSettings.MainWindow.Size = Size;
+			}
 
 			ApplicationSettings.SaveLocalUserSettings();
 		}
