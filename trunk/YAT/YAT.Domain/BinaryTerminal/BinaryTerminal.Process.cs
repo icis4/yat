@@ -321,7 +321,7 @@ namespace YAT.Domain
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
 			if ((binaryDisplaySettings.SequenceLineBreakAfter.Enabled) &&
-				(lineState.Position != LinePosition.End))
+			    (lineState.Position != LinePosition.End))
 			{
 				binaryLineState.SequenceAfter.Enqueue(b);
 				if (binaryLineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
@@ -329,7 +329,7 @@ namespace YAT.Domain
 			}
 
 			if ((binaryDisplaySettings.LengthLineBreak.Enabled) &&
-				(lineState.Position != LinePosition.End))
+			    (lineState.Position != LinePosition.End))
 			{
 				if (lineState.Elements.ByteCount >= binaryDisplaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
@@ -338,7 +338,7 @@ namespace YAT.Domain
 			if (lineState.Position != LinePosition.End)
 			{
 				if ((lineState.Elements.ByteCount > TerminalSettings.Display.MaxLineLength) &&
-					(lineState.Position != LinePosition.ContentExceeded))
+				    (lineState.Position != LinePosition.ContentExceeded))
 				{
 					lineState.Position = LinePosition.ContentExceeded;
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
@@ -362,8 +362,6 @@ namespace YAT.Domain
 		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState, DateTime ts,
 		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			// Note: Code sequence the same as DoLineEnd() of TextTerminal for better comparability.
-
 			var lineState = processState.Line; // Convenience shortcut.
 			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, lineState.Direction);
 

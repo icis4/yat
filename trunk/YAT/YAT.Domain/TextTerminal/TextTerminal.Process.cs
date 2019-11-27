@@ -817,11 +817,15 @@ namespace YAT.Domain
 					}
 				}
 
+				textLineState.NotifyShownCharCount(lp.CharCount);
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elementsToAdd.AddRange(lp);
 
 				if (isBackspace)
 				{
+					// Note that backspace must be executed after adding above since...
+					// ...character to be removed likely had already been contained before adding above.
+
 					// If the current line does contain a preceeding "true" character...
 					if (lineState.Elements.DataContentCharCount > 0)
 					{
@@ -840,13 +844,16 @@ namespace YAT.Domain
 							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
 							FlushReplaceAlreadyStartedLine(repositoryType, processState, elementsToAdd);
 						}
+
+						// Don't forget to adjust state:
+						textLineState.NotifyShownCharCount(-1);
 					}
 				}
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 			if ((textDisplaySettings.LengthLineBreak.Enabled) &&
-				(lineState.Position != LinePosition.End))
+			    (lineState.Position != LinePosition.End))
 			{
 				if (lineState.Elements.CharCount >= textDisplaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
@@ -858,7 +865,7 @@ namespace YAT.Domain
 			if (lineState.Position != LinePosition.End)
 			{
 				if ((lineState.Elements.CharCount > TerminalSettings.Display.MaxLineLength) &&
-					(lineState.Position != LinePosition.ContentExceeded))
+				    (lineState.Position != LinePosition.ContentExceeded))
 				{
 					lineState.Position = LinePosition.ContentExceeded;
 					                                  //// Using term "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
@@ -956,28 +963,30 @@ namespace YAT.Domain
 		                                  DateTime ts,
 		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			// Note: Code sequence the same as DoLineEnd() of BinaryTerminal for better comparability.
+			// Note: The test cases of [YAT - Test.ods]::[YAT.Domain.Terminal] cover the empty line cases.
 
 			var lineState = processState.Line; // Convenience shortcut.
 			var textLineState = GetTextLineState(repositoryType, lineState.Direction);
 			var dev = lineState.Device;
+			                                                                   //// This count corresponds to the current line.
+			bool isEmptyLine                        = (lineState.Elements.CharCount == 0);
+			bool isEmptyLineWithHiddenNonEol        = (isEmptyLine && !textLineState.EolIsAnyMatch(dev));
+			bool isEmptyLineWithPendingEol          = (isEmptyLine &&  textLineState.EolIsAnyMatch(dev)      && !textLineState.EolOfLastLineWasCompleteMatch(dev));                                // No empty line formerly shown.
+			bool isEmptyLineWithPendingEolToBeShown = (isEmptyLine &&  textLineState.EolIsCompleteMatch(dev) && !textLineState.EolOfLastLineWasCompleteMatch(dev) && (textLineState.ShownCharCount == 0));
 
-			bool isEmptyLine    = ( lineState.Elements.CharCount == 0);
-			bool isPendingEol   = (!textLineState.EolOfLastLineWasCompleteMatch(dev) &&  textLineState.EolIsAnyMatch(dev));
-			bool isNotHiddenEol = ( textLineState.EolOfLastLineWasCompleteMatch(dev) && !textLineState.EolIsAnyMatch(dev));
-			if (isEmptyLine && isPendingEol) // While intended empty lines must be shown, potentially suppress
-			{                                // empty lines that only contain hidden pending EOL character(s):
+			if (isEmptyLineWithHiddenNonEol) // While intended empty lines must be shown, potentially suppress
+			{                                // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart));                      // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                                       //            All other elements must be removed as well!
 				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
-			else if (isEmptyLine && isNotHiddenEol) // While intended empty lines must be shown, potentially suppress
-			{                                       // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
+			else if (isEmptyLineWithPendingEol && !isEmptyLineWithPendingEolToBeShown) // While intended empty lines must be shown, potentially suppress
+			{                                                                          // empty lines that only contain hidden pending EOL character(s):
 				elementsToAdd.RemoveAtEndUntil(typeof(DisplayElement.LineStart));                      // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
 				                                                                                       //            All other elements must be removed as well!
 				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
-			else // Not empty:
+			else // Neither empty nor need to suppress:
 			{
 				// Process line length:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -1005,7 +1014,8 @@ namespace YAT.Domain
 			}
 
 			// Finalize the line:
-			textLineState.NotifyLineEnd(dev, textLineState.EolIsCompleteMatch(dev));
+			var eolWasCompleteMatch = textLineState.EolIsCompleteMatch(dev);
+			textLineState.NotifyLineEnd(dev, eolWasCompleteMatch);
 			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 		}
 
