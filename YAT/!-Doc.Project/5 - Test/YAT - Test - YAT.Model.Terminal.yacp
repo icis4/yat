@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SettingsName>YAT Command Page Definition</SettingsName>
+  <SettingsVersion>1.0.2</SettingsVersion>
+  <ProductVersion>2.1.1</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
+  <Mark>
+    <TimeStamp>2019-11-27T17:40:16.5079626+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Mark>
+  <Page>
+    <PageName>Page 1</PageName>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>123</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>123</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>2345</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>2345</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC\!(NoEOL)</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC\!(NoEOL)</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC\!(EOL)xyz</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC\!(EOL)xyz</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>xyz</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>xyz</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>xyz\!(NoEOL)</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>xyz\!(NoEOL)</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+  </Page>
+</Settings>
