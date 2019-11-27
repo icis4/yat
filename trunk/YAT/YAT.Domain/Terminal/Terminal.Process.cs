@@ -824,7 +824,16 @@ namespace YAT.Domain
 					processState.Line.Direction = IODirection.Bidir;
 
 					if (showDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
-						FlushReplaceAlreadyStartedLine(repositoryType, processState, null);
+					{
+						foreach (var element in processState.Line.Elements)
+						{
+							var casted = (element as DisplayElement.DirectionInfo);
+							if (casted != null)
+								casted.ReplaceDirection(Direction.Bidir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
+						}
+
+						FlushReplaceAlreadyStartedLine(repositoryType, processState);
+					}
 				}
 			}
 		}
@@ -1083,14 +1092,13 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
-		protected virtual void FlushReplaceAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
-		                                                      DisplayElementCollection elementsToAdd)
+		protected virtual void FlushReplaceAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState)
 		{
-			if ((elementsToAdd != null) && (elementsToAdd.Count > 0))
-			{
-				AddDisplayElements(repositoryType, elementsToAdd);
-				elementsToAdd.Clear();
-			}
+		////if ((elementsToAdd != null) && (elementsToAdd.Count > 0)) is not needed (yet).
+		////{
+		////	AddDisplayElements(repositoryType, elementsToAdd);
+		////	elementsToAdd.Clear();
+		////}
 
 		////if ((linesToAdd != null) && (linesToAdd.Count > 0)) is not needed (yet).
 		////{

@@ -842,7 +842,7 @@ namespace YAT.Domain
 						else
 						{
 							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
-							FlushReplaceAlreadyStartedLine(repositoryType, processState, elementsToAdd);
+							FlushReplaceAlreadyStartedLine(repositoryType, processState);
 						}
 
 						// Don't forget to adjust state:
