@@ -674,7 +674,7 @@ namespace YAT.Domain
 		                                                                  bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
 			var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
-			if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented in 'View.Forms.SetControls()'!
+			if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
 			{
 				if (txIsAffected)    { EvaluateAndSignalDeviceLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device); }
 				if (bidirIsAffected) { EvaluateAndSignalDeviceLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device); }

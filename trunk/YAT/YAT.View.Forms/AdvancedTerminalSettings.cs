@@ -233,19 +233,33 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			// Attention:
+			// Similar code exists in 'View.Forms.Terminal.toolStripMenuItem_TerminalMenu_View_ShowDevice_Click()'!
+			// Changes here must most likely be applied there too.
+
 			if (checkBox_ShowDevice.Checked && !this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled)
 			{
-				var dr = MessageBoxEx.Show
-				(
-					this,
-					"To enable this setting, lines must be broken when I/O device changes.",
-					"Incompatible Setting",
-					MessageBoxButtons.OKCancel,
-					MessageBoxIcon.Information
-				);
-
-				if (dr == DialogResult.OK)
+				var isServerSocket = this.settingsInEdit.Terminal.IO.IOTypeIsServerSocket;
+				if (isServerSocket) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
 				{
+					var dr = MessageBoxEx.Show
+					(
+						this,
+						"To enable this setting, lines must be broken when I/O device changes.",
+						"Incompatible Setting",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Information
+					);
+
+					if (dr == DialogResult.OK)
+					{
+						this.settingsInEdit.Terminal.Display.ShowDevice             = true;
+						this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = true;
+					}
+				}
+				else
+				{
+					// Silently make setting compatible:
 					this.settingsInEdit.Terminal.Display.ShowDevice             = true;
 					this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = true;
 				}
@@ -261,27 +275,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (checkBox_ShowDirection.Checked && !this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled)
-			{
-				var dr = MessageBoxEx.Show
-				(
-					this,
-					"To enable this setting, lines must be broken when direction changes.",
-					"Incompatible Setting",
-					MessageBoxButtons.OKCancel,
-					MessageBoxIcon.Information
-				);
-
-				if (dr == DialogResult.OK)
-				{
-					this.settingsInEdit.Terminal.Display.ShowDirection             = true;
-					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = true;
-				}
-			}
-			else
-			{
-				this.settingsInEdit.Terminal.Display.ShowDirection = checkBox_ShowDirection.Checked;
-			}
+			this.settingsInEdit.Terminal.Display.ShowDirection = checkBox_ShowDirection.Checked;
 		}
 
 		private void checkBox_ShowLength_CheckedChanged(object sender, EventArgs e)
@@ -325,27 +319,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (!checkBox_DirectionLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDirection)
-			{
-				var dr = MessageBoxEx.Show
-				(
-					this,
-					"To disable this setting, direction can no longer be shown.",
-					"Incompatible Setting",
-					MessageBoxButtons.OKCancel,
-					MessageBoxIcon.Information
-				);
-
-				if (dr == DialogResult.OK)
-				{
-					this.settingsInEdit.Terminal.Display.ShowDirection             = false;
-					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = false;
-				}
-			}
-			else
-			{
-				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
-			}
+			this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
 		}
 
 		/// <remarks>
@@ -359,6 +333,8 @@ namespace YAT.View.Forms
 
 			if (!checkBox_DeviceLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDevice)
 			{
+				// No need for 'isServerSocket' restriction as this check box is already restricted.
+
 				var dr = MessageBoxEx.Show
 				(
 					this,
@@ -1148,7 +1124,7 @@ namespace YAT.View.Forms
 				checkBox_IncludeIOControl.Checked = this.settingsInEdit.Terminal.Display.IncludeIOControl;
 
 				checkBox_DirectionLineBreak.Checked =  this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-				checkBox_DeviceLineBreak.Enabled    =  isServerSocket; // Attention: This 'isServerSocket' restriction is also implemented in 'Domain.Terminal.ProcessAndSignalDeviceOrDirectionLineBreak()'!
+				checkBox_DeviceLineBreak.Enabled    =  isServerSocket; // Attention: This 'isServerSocket' restriction is also implemented at other locations!
 				checkBox_DeviceLineBreak.Checked    = (isServerSocket && this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled);
 				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
 
