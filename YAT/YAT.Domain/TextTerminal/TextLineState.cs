@@ -38,6 +38,9 @@ namespace YAT.Domain
 		public List<byte>                        PendingMultiBytesToDecode                  { get; private set; }
 
 		/// <summary></summary>
+		public int                               ShownCharCount                             { get; private set; }
+
+		/// <summary></summary>
 		public Dictionary<string, SequenceQueue> EolOfGivenDevice                           { get; private set; }
 
 		/// <summary></summary>
@@ -69,6 +72,8 @@ namespace YAT.Domain
 		{
 			PendingMultiBytesToDecode                  = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 
+			ShownCharCount                             = 0;
+
 			EolOfGivenDevice                           = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
 			EolOfLastLineOfGivenDeviceWasCompleteMatch = new Dictionary<string, bool>();          // No preset needed, the default initial capacity is good enough.
 
@@ -76,10 +81,20 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
+		/// Notify added or removed <see cref="DisplayElement.CharCount"/> shown in the current line.
+		/// </summary>
+		public virtual void NotifyShownCharCount(int count)
+		{
+			ShownCharCount += count;
+		}
+
+		/// <summary>
 		/// Notify the end of a line, i.e. continues processing with the next line.
 		/// </summary>
 		public virtual void NotifyLineEnd(string formerDevice, bool eolWasCompleteMatch)
 		{
+			ShownCharCount = 0;
+
 			if (EolOfGivenDevice.ContainsKey(formerDevice))
 			{
 				if (EolOfGivenDevice[formerDevice].IsCompleteMatch)

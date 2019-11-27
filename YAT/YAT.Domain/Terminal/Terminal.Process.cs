@@ -812,7 +812,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <summary></summary>
 		protected virtual void ProcessDirection(RepositoryType repositoryType, IODirection dir, bool showDirection)
 		{
 			var processState = GetProcessState(repositoryType);
@@ -823,9 +823,7 @@ namespace YAT.Domain
 					processState.Line.Direction = IODirection.Bidir;
 
 					if (showDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
-					{
 						FlushReplaceAlreadyStartedLine(repositoryType, processState, null);
-					}
 				}
 			}
 		}
@@ -1047,6 +1045,8 @@ namespace YAT.Domain
 		                                   DateTime ts, string dev, IODirection dir,
 		                                   DisplayElementCollection elementsToAdd)
 		{
+			DebugLineBreak(repositoryType, string.Format("DoLineBegin() => NotifyLineBegin({0}, {1}, {2})", ts, dev, dir));
+
 			processState.NotifyLineBegin(ts, dev, dir);
 		}
 
@@ -1059,6 +1059,8 @@ namespace YAT.Domain
 		                                 DateTime ts,
 		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
+			DebugLineBreak(repositoryType, "DoLineEnd() => NotifyLineEnd()");
+
 			processState.NotifyLineEnd();
 		}
 
