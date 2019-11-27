@@ -1385,7 +1385,41 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowDevice_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowDevice = !this.settingsRoot.Display.ShowDevice;
+			// Attention:
+			// Similar code exists in 'View.Forms.AdvancedTerminalSetting.checkBox_ShowDevice_CheckedChanged()'!
+			// Changes here must most likely be applied there too.
+
+			if (toolStripMenuItem_TerminalMenu_View_ShowDevice.Checked && !this.settingsRoot.Display.DeviceLineBreakEnabled)
+			{
+				var isServerSocket = this.settingsRoot.IO.IOTypeIsServerSocket;
+				if (isServerSocket) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+				{
+					var dr = MessageBoxEx.Show
+					(
+						this,
+						"To enable this setting, lines must be broken when I/O device changes.",
+						"Incompatible Setting",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Information
+					);
+
+					if (dr == DialogResult.OK)
+					{
+						this.settingsRoot.Display.ShowDevice             = true;
+						this.settingsRoot.Display.DeviceLineBreakEnabled = true;
+					}
+				}
+				else
+				{
+					// Silently make setting compatible:
+					this.settingsRoot.Display.ShowDevice             = true;
+					this.settingsRoot.Display.DeviceLineBreakEnabled = true;
+				}
+			}
+			else
+			{
+				this.settingsRoot.Display.ShowDevice = !this.settingsRoot.Display.ShowDevice;
+			}
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowDirection_Click(object sender, EventArgs e)
