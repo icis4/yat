@@ -971,8 +971,8 @@ namespace YAT.Domain
 			                                                                   //// This count corresponds to the current line.
 			bool isEmptyLine                        = (lineState.Elements.CharCount == 0);
 			bool isEmptyLineWithHiddenNonEol        = (isEmptyLine && !textLineState.EolIsAnyMatch(dev));
-			bool isEmptyLineWithPendingEol          = (isEmptyLine &&  textLineState.EolIsAnyMatch(dev)      && !textLineState.EolOfLastLineWasCompleteMatch(dev));                                // No empty line formerly shown.
-			bool isEmptyLineWithPendingEolToBeShown = (isEmptyLine &&  textLineState.EolIsCompleteMatch(dev) && !textLineState.EolOfLastLineWasCompleteMatch(dev) && (textLineState.ShownCharCount == 0));
+			bool isEmptyLineWithPendingEol          = (isEmptyLine &&  textLineState.EolIsAnyMatch(dev));                                        // No empty line formerly shown.
+			bool isEmptyLineWithPendingEolToBeShown = (isEmptyLine &&  textLineState.EolIsCompleteMatch(dev) && (textLineState.ShownCharCount == 0));
 
 			if (isEmptyLineWithHiddenNonEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
@@ -1014,8 +1014,7 @@ namespace YAT.Domain
 			}
 
 			// Finalize the line:
-			var eolWasCompleteMatch = textLineState.EolIsCompleteMatch(dev);
-			textLineState.NotifyLineEnd(dev, eolWasCompleteMatch);
+			textLineState.NotifyLineEnd(dev);
 			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
 		}
 
