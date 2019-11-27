@@ -1223,8 +1223,8 @@ namespace YAT.View.Forms
 				// Display:
 				bool isShowable = (this.settingsRoot.Display.TxRadixIsShowable ||
 				                   this.settingsRoot.Display.RxRadixIsShowable);
-				toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isShowable; // Attention: Same code exists further below as well as in 'View.Forms.AdvancedTerminalSettings'.
-				toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
+				toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled =  isShowable; // Attention: This 'isShowable' restriction also exists further below as well as in 'View.Forms.AdvancedTerminalSettings'.
+				toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = (isShowable && this.settingsRoot.Display.ShowRadix);
 
 				string showLineNumbersText = "&Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)this.settingsRoot.Display.LineNumberSelection + ")";
 				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Text    = showLineNumbersText;
@@ -1554,8 +1554,8 @@ namespace YAT.View.Forms
 
 				bool isShowable = (this.settingsRoot.Display.TxRadixIsShowable ||
 				                   this.settingsRoot.Display.RxRadixIsShowable);
-				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isShowable; // Attention: Same code exists further above as well as in 'View.Forms.AdvancedTerminalSettings'.
-				toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isShowable && this.settingsRoot.Display.ShowRadix;
+				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled =  isShowable; // Attention: This 'isShowable' restriction also exists further above as well as in 'View.Forms.AdvancedTerminalSettings'.
+				toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = (isShowable && this.settingsRoot.Display.ShowRadix);
 
 				string showLineNumbersText = "Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)this.settingsRoot.Display.LineNumberSelection + ")";
 				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Text    = showLineNumbersText;

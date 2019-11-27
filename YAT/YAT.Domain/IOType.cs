@@ -163,6 +163,20 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual bool IsServerSocket
+		{
+			get
+			{
+				switch ((IOType)UnderlyingEnum)
+				{
+					case IOType.TcpServer:     return (true);
+					case IOType.UdpServer:     return (true);
+					default:                   return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsUsbSerialHid
 		{
 			get { return ((IOType)UnderlyingEnum == IOType.UsbSerialHid); }
