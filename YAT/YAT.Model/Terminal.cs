@@ -1146,13 +1146,23 @@ namespace YAT.Model
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
+			{
 				this.settingsRoot.Changed += settingsRoot_Changed;
+
+				// Initialize 'Changed' detectors:
+				this.settingsRoot_Changed_terminalTypeOld    = this.settingsRoot.Terminal.TerminalType;
+				this.settingsRoot_Changed_endiannessOld      = this.settingsRoot.Terminal.IO.Endianness;
+				this.settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.Text.SendImmediately;
+				this.settingsRoot_Changed_encodingOld        = this.settingsRoot.Terminal.TextTerminal.Encoding;
+			}
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
+			{
 				this.settingsRoot.Changed -= settingsRoot_Changed;
+			}
 		}
 
 		private void DisposeSettingsHandler()
@@ -1171,22 +1181,18 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'terminalTypeOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private Domain.TerminalType settingsRoot_Changed_terminalTypeOld = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'endianessOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private Domain.Endianness settingsRoot_Changed_endiannessOld = Domain.Settings.IOSettings.EndiannessDefault;
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'endianessOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int settingsRoot_Changed_encodingOld = Domain.Settings.TextTerminalSettings.EncodingDefault;
 
 		/// <remarks>
 		/// Required to solve the issue described in bug #223 "Settings events should state the exact settings diff".
 		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'sendImmediatelyOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private bool settingsRoot_Changed_sendImmediatelyOld = Domain.Settings.SendSettingsText.SendImmediatelyDefault;
 
@@ -1251,8 +1257,8 @@ namespace YAT.Model
 
 			if (e.Inner == null)
 			{
-				if (settingsRoot_Changed_terminalTypeOld != this.settingsRoot.TerminalType) {
-					settingsRoot_Changed_terminalTypeOld = this.settingsRoot.TerminalType;
+				if (this.settingsRoot_Changed_terminalTypeOld != this.settingsRoot.TerminalType) {
+					this.settingsRoot_Changed_terminalTypeOld = this.settingsRoot.TerminalType;
 
 					// Terminal type has changed, recreate Auto[Action|Response]:
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
@@ -1261,8 +1267,8 @@ namespace YAT.Model
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.IO))
 			{
-				if (settingsRoot_Changed_endiannessOld != this.settingsRoot.Terminal.IO.Endianness) {
-					settingsRoot_Changed_endiannessOld = this.settingsRoot.Terminal.IO.Endianness; // Relevant for byte sequence based triggers.
+				if (this.settingsRoot_Changed_endiannessOld != this.settingsRoot.Terminal.IO.Endianness) {
+					this.settingsRoot_Changed_endiannessOld = this.settingsRoot.Terminal.IO.Endianness; // Relevant for byte sequence based triggers.
 
 					// Endianness has changed, recreate Auto[Action|Response]:
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
@@ -1271,8 +1277,8 @@ namespace YAT.Model
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.Send))
 			{
-				if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Terminal.Send.Text.SendImmediately) {
-					settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.Text.SendImmediately;
+				if (this.settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Terminal.Send.Text.SendImmediately) {
+					this.settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.Text.SendImmediately;
 
 					// Send immediately has changed, reset the command:
 					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
@@ -1282,8 +1288,8 @@ namespace YAT.Model
 			{
 				this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.Terminal.TextTerminal.Encoding;
 
-				if (settingsRoot_Changed_encodingOld != this.settingsRoot.Terminal.TextTerminal.Encoding) {
-					settingsRoot_Changed_encodingOld = this.settingsRoot.Terminal.TextTerminal.Encoding; // Relevant for byte sequence based triggers.
+				if (this.settingsRoot_Changed_encodingOld != this.settingsRoot.Terminal.TextTerminal.Encoding) {
+					this.settingsRoot_Changed_encodingOld = this.settingsRoot.Terminal.TextTerminal.Encoding; // Relevant for byte sequence based triggers.
 
 					// Encoding has changed, recreate Auto[Action|Response]:
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.

@@ -5501,13 +5501,22 @@ namespace YAT.View.Forms
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
+			{
 				this.settingsRoot.Changed += settingsRoot_Changed;
+
+				// Initialize 'Changed' detectors:
+				this.settingsRoot_Changed_txMonitorPanelIsVisibleOld    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+				this.settingsRoot_Changed_bidirMonitorPanelIsVisibleOld = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
+				this.settingsRoot_Changed_rxMonitorPanelIsVisibleOld    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+			}
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
+			{
 				this.settingsRoot.Changed -= settingsRoot_Changed;
+			}
 		}
 
 		#endregion
@@ -5637,14 +5646,47 @@ namespace YAT.View.Forms
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
 			{
-				// Nothing to do, windows settings are only saved.
+				// Nothing to do, window settings are only saved.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Layout))
 			{
+				if (this.settingsRoot_Changed_txMonitorPanelIsVisibleOld != this.settingsRoot.Layout.TxMonitorPanelIsVisible) {
+					this.settingsRoot_Changed_txMonitorPanelIsVisibleOld = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+
+					if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
+						RefreshMonitor(Domain.RepositoryType.Tx);
+				}
+
+				if (this.settingsRoot_Changed_bidirMonitorPanelIsVisibleOld != this.settingsRoot.Layout.BidirMonitorPanelIsVisible) {
+					this.settingsRoot_Changed_bidirMonitorPanelIsVisibleOld = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
+
+					if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
+						RefreshMonitor(Domain.RepositoryType.Bidir);
+				}
+
+				if (this.settingsRoot_Changed_rxMonitorPanelIsVisibleOld != this.settingsRoot.Layout.RxMonitorPanelIsVisible) {
+					this.settingsRoot_Changed_rxMonitorPanelIsVisibleOld = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+
+					if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
+						RefreshMonitor(Domain.RepositoryType.Rx);
+				}
+
 				LayoutTerminal();
 				SetLayoutControls();
 			}
 		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'txMonitorPanelIsVisibleOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool settingsRoot_Changed_txMonitorPanelIsVisibleOld = Model.Settings.LayoutSettings.TxMonitorPanelIsVisibleDefault;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'txMonitorPanelIsVisibleOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool settingsRoot_Changed_bidirMonitorPanelIsVisibleOld = Model.Settings.LayoutSettings.BidirMonitorPanelIsVisibleDefault;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'txMonitorPanelIsVisibleOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool settingsRoot_Changed_rxMonitorPanelIsVisibleOld = Model.Settings.LayoutSettings.RxMonitorPanelIsVisibleDefault;
 
 		#endregion
 
