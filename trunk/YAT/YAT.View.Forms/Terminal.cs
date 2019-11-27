@@ -377,13 +377,13 @@ namespace YAT.View.Forms
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
 			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
-				SaveWindowSettings();
+				UpdateWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
 			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
-				SaveWindowSettings();
+				UpdateWindowSettings();
 		}
 
 		/// <summary>
@@ -396,7 +396,7 @@ namespace YAT.View.Forms
 		public void NotifyWindowStateChanged()
 		{
 			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
-				SaveWindowSettings();
+				UpdateWindowSettings();
 		}
 
 		/// <remarks>Requires that <see cref="Form.KeyPreview"/> is enabled.</remarks>
@@ -4384,7 +4384,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void SaveWindowSettings()
+		private void UpdateWindowSettings()
 		{
 			this.settingsRoot.Window.State = WindowState;
 			if (WindowState == FormWindowState.Normal)
