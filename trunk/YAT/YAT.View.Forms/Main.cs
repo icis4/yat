@@ -2603,8 +2603,8 @@ namespace YAT.View.Forms
 
 					// Start position:
 					var savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
-					var savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location;
-					var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;
+					var savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location; // Note the issue/limitation described
+					var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;     // in SaveWindowSettings() below.
 
 					var savedBounds = new Rectangle(savedLocation, savedSize);
 					var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
@@ -2650,6 +2650,30 @@ namespace YAT.View.Forms
 					ApplicationSettings.LocalUserSettings.MainWindow.Location = Location;
 
 				ApplicationSettings.LocalUserSettings.MainWindow.Size = Size;
+
+				// Note the following issue/limitation:
+				// Windows or WinForm seems to consider the shadow around a form to belong to the form,
+				// i.e. a form that is placed at a screen's edge, may tell values outside the screen.
+				//
+				// Example with two screens [2] [1] (where 1 is the main screen, and both screens are 1920 × 1080)
+				// and the main form placed at the upper left corner, spreading across the whole screen. This may
+				// result in the following [LocalUserSettings] values:
+				//
+				//    <Location>
+				//      <X>-1924</X>
+				//      <Y>2</Y>
+				//    </Location>
+				//    <Size>
+				//      <Width>1926</Width>
+				//      <Height>480</Height>
+				//    </Size>
+				//
+				// Location.X and Size.Width are outside the screen's dimensions even though the form is inside!
+				// As a consequence, MKY.Windows.Forms.ScreenEx.IsWithinAnyBounds() will wrongly determine that
+				// the form doesn't fit a screen and ApplyWindowSettingsAccordingToStartup() will fall back to
+				// 'FormStartPosition.WindowsDefaultBounds'.
+				//
+				// Issue/limitation is considered very acceptable, neither bug filed nor added to release notes.
 			}
 
 			ApplicationSettings.SaveLocalUserSettings();
