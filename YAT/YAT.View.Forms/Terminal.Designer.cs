@@ -620,7 +620,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Tx";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Text = "Send Panel (Tx)";
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Text = "Unidirectional Send (Tx) Panel";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels_Bidir
@@ -629,14 +629,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Bidir";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Text = "Bidirectional Panel";
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Text = "Bidirectional Send/Receive Panel";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels_Rx
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Rx";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Text = "Receive Panel (Rx)";
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Text = "Unidirectional Receive (Rx) Panel";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Panels_Rx_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels_Separator1
@@ -4067,7 +4067,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Tx";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Size = new System.Drawing.Size(228, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Text = "&Send Panel (Tx)";
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Text = "Unidirectional &Send (Tx) Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Bidir
@@ -4076,14 +4076,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Bidir";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Size = new System.Drawing.Size(228, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Text = "&Bidirectional Panel";
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Text = "&Bidirectional Send/Receive Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Rx
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Rx";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Size = new System.Drawing.Size(228, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Text = "&Receive Panel (Rx)";
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Text = "Unidirectional &Receive (Rx) Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Rx_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_1
