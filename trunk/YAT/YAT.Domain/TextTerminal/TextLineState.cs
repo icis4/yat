@@ -85,16 +85,16 @@ namespace YAT.Domain
 		/// <summary>
 		/// Notify the end of a line, i.e. continues processing with the next line.
 		/// </summary>
-		public virtual void NotifyLineEnd(string formerDevice)
+		public virtual void NotifyLineEnd(string dev)
 		{
 			ShownCharCount = 0;
 
 			var eolOfGivenDeviceIsCompleteMatch = false;
 
-			if (EolOfGivenDevice.ContainsKey(formerDevice))
+			if (EolOfGivenDevice.ContainsKey(dev))
 			{
-				if (EolOfGivenDevice[formerDevice].IsCompleteMatch) {
-					EolOfGivenDevice[formerDevice].Reset();
+				if (EolOfGivenDevice[dev].IsCompleteMatch) {
+					EolOfGivenDevice[dev].Reset();
 
 					eolOfGivenDeviceIsCompleteMatch = true;
 				}
@@ -102,10 +102,10 @@ namespace YAT.Domain
 				// Keep EOL state when incomplete. Subsequent lines
 				// need this to handle broken/pending EOL characters.
 			}
-			else                                                                    // It is OK to only access or add to the collection,
-			{                                                                       // this will not lead to excessive use of memory,
-				EolOfGivenDevice.Add(formerDevice, new SequenceQueue(EolSequence)); // since there is only a given number of devices.
-			}                                                                       // Applies to TCP and UDP terminals only.
+			else                                                           // It is OK to only access or add to the collection,
+			{                                                              // this will not lead to excessive use of memory,
+				EolOfGivenDevice.Add(dev, new SequenceQueue(EolSequence)); // since there is only a given number of devices.
+			}                                                              // Applies to TCP and UDP terminals only.
 
 			if (eolOfGivenDeviceIsCompleteMatch) // Otherwise keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
 				RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
