@@ -33,6 +33,15 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	public class LayoutSettings : MKY.Settings.SettingsItem, IEquatable<LayoutSettings>
 	{
+		/// <summary></summary>
+		public const bool TxMonitorPanelIsVisibleDefault = false;
+
+		/// <summary></summary>
+		public const bool BidirMonitorPanelIsVisibleDefault = true;
+
+		/// <summary></summary>
+		public const bool RxMonitorPanelIsVisibleDefault = false;
+
 		private bool txMonitorPanelIsVisible;
 		private bool bidirMonitorPanelIsVisible;
 		private bool rxMonitorPanelIsVisible;
@@ -90,9 +99,9 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			TxMonitorPanelIsVisible    = false;
-			BidirMonitorPanelIsVisible = true;
-			RxMonitorPanelIsVisible    = false;
+			TxMonitorPanelIsVisible    = TxMonitorPanelIsVisibleDefault;
+			BidirMonitorPanelIsVisible = BidirMonitorPanelIsVisibleDefault;
+			RxMonitorPanelIsVisible    = RxMonitorPanelIsVisibleDefault;
 			MonitorOrientation         = Orientation.Vertical;
 			TxMonitorSplitterRatio     = (float) 1 / 3;
 			RxMonitorSplitterRatio     = (float) 1 / 2;

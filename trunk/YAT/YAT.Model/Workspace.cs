@@ -574,13 +574,17 @@ namespace YAT.Model
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
+			{
 				this.settingsRoot.Changed += settingsRoot_Changed;
+			}
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
+			{
 				this.settingsRoot.Changed -= settingsRoot_Changed;
+			}
 		}
 
 		private void DisposeSettingsHandler()
