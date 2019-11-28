@@ -165,6 +165,11 @@ namespace YAT.View.Forms
 		// Find:
 		private string lastFindPattern; // = null; Remark: Using "Pattern" instead of "TextOrPattern" for simplicity.
 
+		// Auto:
+		private AutoContentState autoActionTriggerState;    // = AutoContentState.Neutral;
+		private AutoContentState autoResponseTriggerState;  // = AutoContentState.Neutral;
+		private AutoContentState autoResponseResponseState; // = AutoContentState.Neutral;
+
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		private bool terminalMenuValidationWorkaround_UpdateIsSuspended;
@@ -183,7 +188,25 @@ namespace YAT.View.Forms
 		public event EventHandler<Model.SavedEventArgs> Saved;
 
 		/// <summary></summary>
+		public event EventHandler AutoActionSettingsChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<AutoContentState>> AutoActionTriggerStateChanged;
+
+	/////// <summary></summary>
+	////public event EventHandler<EventArgs<AutoContentState>> AutoActionTriggerStateChanged is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+
+		/// <summary></summary>
 		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
+
+		/// <summary></summary>
+		public event EventHandler AutoResponseSettingsChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<AutoContentState>> AutoResponseTriggerStateChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<AutoContentState>> AutoResponseResponseStateChanged;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
@@ -732,6 +755,24 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Enabled = (pageCount > 0);
 
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_SetMenuItems(); // See remark of that method.
+
+				// Note that 'AutoAction' is implemented in 'Receive'.
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Separated to ease updating on settings change.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_SetMenuItems()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.ResponseIsActive;
@@ -746,20 +787,25 @@ namespace YAT.View.Forms
 				{
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
-
 					var trigger = this.settingsRoot.AutoResponse.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
-
 					var response = this.settingsRoot.AutoResponse.Response;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 				}
 
+				SetAutoResponseTriggerStateControls();
+				SetAutoResponseResponseStateControls();
+
+				var useText = this.settingsRoot.AutoResponse.Options.UseText;
+				var useRegex = this.settingsRoot.AutoResponse.Options.UseRegex;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = useText;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Checked = useRegex;
+
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
 
-				// Note that 'AutoAction' is implemented in 'Receive'.
 			}
 			finally
 			{
@@ -868,10 +914,9 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
+					if (!RequestAutoResponseValidateTriggerTextSilently(triggerText))
 					{
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
+						AutoResponseTriggerState = AutoContentState.Invalid;
 						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 
@@ -887,8 +932,7 @@ namespace YAT.View.Forms
 				}
 			}
 
-			toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.BackColor = SystemColors.Window;
-			toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
+			AutoResponseTriggerState = AutoContentState.Neutral;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText_Click(object sender, EventArgs e)
@@ -971,6 +1015,24 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				toolStripMenuItem_TerminalMenu_Send_AutoAction_SetMenuItems(); // See remark of that method.
+
+				// Note that 'AutoResponse' is implemented in 'Send'.
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Separated to ease updating on settings change.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_Send_AutoAction_SetMenuItems()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction.Checked         = this.settingsRoot.AutoAction.IsActive;
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Checked = this.settingsRoot.AutoAction.TriggerIsActive;
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Checked  = this.settingsRoot.AutoAction.ActionIsActive;
@@ -985,16 +1047,22 @@ namespace YAT.View.Forms
 				{
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
-
 					var trigger = this.settingsRoot.AutoAction.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
-
 					var action = this.settingsRoot.AutoAction.Action;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
 				}
+
+				SetAutoActionTriggerStateControls();
+			////SetAutoActionActionStateControls() is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+
+				var useText = this.settingsRoot.AutoAction.Options.UseText;
+				var useRegex = this.settingsRoot.AutoAction.Options.UseRegex;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Checked = useText;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Checked = useRegex;
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;
 			}
@@ -4168,6 +4236,40 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual AutoContentState AutoActionTriggerState
+		{
+			get { return (this.autoActionTriggerState); }
+			set
+			{
+				if (this.autoActionTriggerState != value)
+				{
+					this.autoActionTriggerState = value;
+					SetAutoActionTriggerStateControls();
+					OnAutoActionTriggerStateChanged();
+				}
+			}
+		}
+
+		private void SetAutoActionTriggerStateControls()
+		{
+			switch (this.autoActionTriggerState)
+			{
+				case AutoContentState.Neutral:
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.BackColor = SystemColors.Window;
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
+					break;
+
+				case AutoContentState.Invalid:
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
+					break;
+
+				default:
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoActionTriggerState + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool RequestAutoActionValidateTriggerTextSilently(string triggerText)
 		{
 			if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
@@ -4239,6 +4341,8 @@ namespace YAT.View.Forms
 			var options = this.settingsRoot.AutoAction.Options;
 			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
 			this.settingsRoot.AutoAction.Options = options;
+
+			RevalidateAutoActionTriggerTextSilently();
 		}
 
 		/// <summary></summary>
@@ -4247,7 +4351,22 @@ namespace YAT.View.Forms
 			var options = this.settingsRoot.AutoAction.Options;
 			options.UseRegex = !options.UseRegex; // Settings member must be changed to let the changed event be raised!
 			this.settingsRoot.AutoAction.Options = options;
+
+			RevalidateAutoActionTriggerTextSilently();
 		}
+
+		/// <summary></summary>
+		protected virtual void RevalidateAutoActionTriggerTextSilently()
+		{
+			if (RequestAutoActionValidateTriggerTextSilently(this.settingsRoot.AutoAction.Trigger))
+				AutoActionTriggerState = AutoContentState.Neutral;
+			else
+				AutoActionTriggerState = AutoContentState.Invalid;
+		}
+
+	////public virtual AutoContentState AutoActionTriggerState                               is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////private void SetAutoActionTriggerState(AutoContentState state)                       is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////public virtual bool RequestAutoActionValidateTriggerTextSilently(string triggerText) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
 		/// <summary></summary>
 		public virtual void RequestAutoActionAction(AutoActionEx action)
@@ -4314,6 +4433,40 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual AutoContentState AutoResponseTriggerState
+		{
+			get { return (this.autoResponseTriggerState); }
+			set
+			{
+				if (this.autoResponseTriggerState != value)
+				{
+					this.autoResponseTriggerState = value;
+					SetAutoResponseTriggerStateControls();
+					OnAutoResponseTriggerStateChanged();
+				}
+			}
+		}
+
+		private void SetAutoResponseTriggerStateControls()
+		{
+			switch (this.autoResponseTriggerState)
+			{
+				case AutoContentState.Neutral:
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.BackColor = SystemColors.Window;
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
+					break;
+
+				case AutoContentState.Invalid:
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
+					break;
+
+				default:
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseTriggerState + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool RequestAutoResponseValidateTriggerTextSilently(string triggerText)
 		{
 			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
@@ -4341,6 +4494,8 @@ namespace YAT.View.Forms
 			var options = this.settingsRoot.AutoResponse.Options;
 			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
 			this.settingsRoot.AutoResponse.Options = options;
+
+			RevalidateAutoResponseTriggerTextSilently();
 		}
 
 		/// <summary></summary>
@@ -4349,6 +4504,57 @@ namespace YAT.View.Forms
 			var options = this.settingsRoot.AutoResponse.Options;
 			options.UseRegex = !options.UseRegex; // Settings member must be changed to let the changed event be raised!
 			this.settingsRoot.AutoResponse.Options = options;
+
+			RevalidateAutoResponseTriggerTextSilently();
+		}
+
+		/// <summary></summary>
+		protected virtual void RevalidateAutoResponseTriggerTextSilently()
+		{
+			if (RequestAutoResponseValidateTriggerTextSilently(this.settingsRoot.AutoResponse.Trigger))
+				AutoResponseTriggerState = AutoContentState.Neutral;
+			else
+				AutoResponseTriggerState = AutoContentState.Invalid;
+		}
+
+		/// <summary></summary>
+		public virtual AutoContentState AutoResponseResponseState
+		{
+			get { return (this.autoResponseResponseState); }
+			set
+			{
+				if (this.autoResponseResponseState != value)
+				{
+					this.autoResponseResponseState = value;
+					SetAutoResponseResponseStateControls();
+					OnAutoResponseResponseStateChanged();
+				}
+			}
+		}
+
+		private void SetAutoResponseResponseStateControls()
+		{
+			switch (this.autoResponseResponseState)
+			{
+				case AutoContentState.Neutral:
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.Window;
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.WindowText;
+					break;
+
+				case AutoContentState.Invalid:
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.ControlText;
+					break;
+
+				default:
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseResponseState + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool RequestAutoResponseValidateResponseTextSilently(string responseText)
+		{
+			return (ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.RadixAndAsciiEscapes));
 		}
 
 		/// <summary></summary>
@@ -4754,6 +4960,16 @@ namespace YAT.View.Forms
 				predefined.ResumeCommandStateUpdate();
 				this.isSettingControls.Leave();
 			}
+		}
+
+		private void SetAutoActionControls()
+		{
+			toolStripMenuItem_TerminalMenu_Send_AutoAction_SetMenuItems();
+		}
+
+		private void SetAutoResponseControls()
+		{
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_SetMenuItems();
 		}
 
 		private void SetSendControls()
@@ -5606,6 +5822,16 @@ namespace YAT.View.Forms
 				}
 
 				SetPredefinedControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoAction))
+			{
+				SetAutoActionControls();
+				OnAutoActionSettingsChanged(EventArgs.Empty);
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
+			{
+				SetAutoResponseControls();
+				OnAutoResponseSettingsChanged(EventArgs.Empty);
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
@@ -7050,9 +7276,45 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		protected virtual void OnAutoActionSettingsChanged(EventArgs e)
+		{
+			EventHelper.RaiseSync(AutoActionSettingsChanged, this, e);
+		}
+
+		/// <remarks>Not using event args parameter for simplicity.</remarks>
+		protected virtual void OnAutoActionTriggerStateChanged()
+		{
+			EventHelper.RaiseSync<EventArgs<AutoContentState>>(AutoActionTriggerStateChanged, this, new EventArgs<AutoContentState>(this.autoActionTriggerState));
+		}
+
+	/////// <remarks>Not using event args parameter for simplicity.</remarks>
+	////protected virtual void OnAutoActionActionStateChanged() is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////{
+	////	EventHelper.RaiseSync<EventArgs<AutoContentState>>(AutoActionActionStateChanged, this, , new EventArgs<AutoContentState>(this.autoActionActionState));
+	////}
+
+		/// <summary></summary>
 		protected virtual void OnAutoActionCountChanged(EventArgs<int> e)
 		{
 			EventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnAutoResponseSettingsChanged(EventArgs e)
+		{
+			EventHelper.RaiseSync(AutoResponseSettingsChanged, this, e);
+		}
+
+		/// <remarks>Not using event args parameter for simplicity.</remarks>
+		protected virtual void OnAutoResponseTriggerStateChanged()
+		{
+			EventHelper.RaiseSync<EventArgs<AutoContentState>>(AutoResponseTriggerStateChanged, this, new EventArgs<AutoContentState>(this.autoResponseTriggerState));
+		}
+
+		/// <remarks>Not using event args parameter for simplicity.</remarks>
+		protected virtual void OnAutoResponseResponseStateChanged()
+		{
+			EventHelper.RaiseSync<EventArgs<AutoContentState>>(AutoResponseResponseStateChanged, this, new EventArgs<AutoContentState>(this.autoResponseResponseState));
 		}
 
 		/// <summary></summary>

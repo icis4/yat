@@ -179,6 +179,7 @@
     <Compile Include="TrackerInstructions.Designer.cs">
       <DependentUpon>TrackerInstructions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Types\AutoContentState.cs" />
     <Compile Include="Types\FindResult.cs" />
     <Compile Include="UnhandledException.cs">
       <SubType>Form</SubType>
