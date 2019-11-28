@@ -1440,8 +1440,8 @@ namespace YAT.Domain
 			var lp = new DisplayElementCollection();
 
 			foreach (byte b in data)
-			{                                      // Time stamp is irrelevant for formatting.
-				var de = ByteToElement(b, DateTime.MinValue, d, r);
+			{                                                     // Time stamp is irrelevant for formatting.
+				var de = ByteToElement(b, DisplayElement.TimeStampDefault, d, r);
 				lp.Add(de);
 				AddSpaceIfNecessary(d, lp, de);
 			}

@@ -88,17 +88,18 @@ namespace YAT.Log.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ConvertLine(DisplayLine displayLine, out XmlTransferTextLine transferLine)
 		{
-			// Note that display elements are text-only and no longer contain the underlying typed
-			// information such as the time stamp of the origin. Since the XML schema is strongly-
-			// typed again, the items need to be reconstructed. Not optimal, but simply a trade-off
-			// between display and log performance. After all, XML logging is probably rarly used.
+			// Note that display elements don't contain all underlying typed information such as the
+			// device string of the originating chunk. Since the XML schema is strongly-typed again,
+			// such items need to be reconstructed. Not optimal, but kind of a trade-off between the
+			// amount of date for displaying and log performance. Considered acceptable, XML logging
+			// is probably rarly used.
 
 			bool success = true;
 
 			string textStr = "";
 			string errorStr = "";
 
-			DateTime timeStamp = DateTime.MinValue;
+			DateTime timeStamp = DisplayElement.TimeStampDefault;
 			string deviceStr = "";
 			int length = 0;
 
@@ -107,14 +108,14 @@ namespace YAT.Log.Utilities
 
 			foreach (var de in displayLine)
 			{
-				// Try to cast to the more frequent Tx/Rx elements first, in order to improve speed!
+				// Try to cast to the more frequent Tx/Rx elements first, in order to improve speed.
 				{
 					var casted = (de as DisplayElement.TxData);
 					if (casted != null)
 					{
 						textStr += casted.Text;
 						containsTx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -123,7 +124,7 @@ namespace YAT.Log.Utilities
 					{
 						textStr += casted.Text;
 						containsTx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -132,7 +133,7 @@ namespace YAT.Log.Utilities
 					{
 						textStr += casted.Text;
 						containsRx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -141,7 +142,7 @@ namespace YAT.Log.Utilities
 					{
 						textStr += casted.Text;
 						containsRx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -149,7 +150,7 @@ namespace YAT.Log.Utilities
 					if (casted != null)
 					{
 						textStr += casted.Text;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -157,7 +158,7 @@ namespace YAT.Log.Utilities
 					if (casted != null)
 					{
 						errorStr += casted.Text;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 
@@ -167,7 +168,7 @@ namespace YAT.Log.Utilities
 					if (casted != null)
 					{
 						timeStamp = casted.TimeStamp;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -175,7 +176,7 @@ namespace YAT.Log.Utilities
 					if (casted != null)
 					{
 						deviceStr = casted.Text;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -183,18 +184,24 @@ namespace YAT.Log.Utilities
 					if (casted != null)
 					{
 						length = casted.Length;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 
 				// All white-space elements do not need to be processed.
-				// 'TimeSpanInfo' is not used with 'XmlTransferRawLine'.
-				// 'TimeDeltaInfo' is not used with 'XmlTransferRawLine'.
+				// 'TimeSpanInfo' is not used with 'XmlTransferTextLine'.
+				// 'TimeDeltaInfo' is not used with 'XmlTransferTextLine'.
 				// 'DirectionInfo' is handled below.
 			}
 
-			Direction direction;
+			// In case the meta information elements are not contained (e.g. if not shown),
+			// fall-back to the 'DisplayElemetColletion' property:
+			if (timeStamp == DisplayElement.TimeStampDefault) { timeStamp = displayLine.TimeStamp; }
+			if (length    == 0)                               { length    = displayLine.CharCount; } // 'CharCount' for 'Text' log.
 
+			// Direction could also be retrieved from 'displayLine.Direction', but that would require
+			// another loop over the whole collection, thus evaluating here base on the flags:
+			Direction direction;
 			if (containsTx && containsRx)
 				direction = Direction.Bidir;
 			else if (containsTx)

@@ -137,17 +137,22 @@ namespace YAT.Domain
 		/// The time stamp of the elements in the collection.
 		/// </summary>
 		/// <remarks>
-		/// The value corresponds to <see cref="DisplayElement.TimeStamp"/> of the first element
-		/// in the collection; or <see cref="DateTime.MinValue"/> in case the collection is empty.
+		/// The value corresponds to <see cref="DisplayElement.TimeStamp"/> of the first element in
+		/// the collection which has a value other than <see cref="DisplayElement.TimeStampDefault"/>;
+		/// or <see cref="DisplayElement.TimeStampDefault"/>/> in case the collection is empty or no
+		/// element has a value other than <see cref="DisplayElement.TimeStampDefault"/>.
 		/// </remarks>
 		public virtual DateTime TimeStamp
 		{
 			get
 			{
-				if (this.Count > 0)
-					return (this[0].TimeStamp);
-				else
-					return (DateTime.MinValue);
+				foreach (var de in this)
+				{
+					if (de.TimeStamp != DisplayElement.TimeStampDefault)
+						return (de.TimeStamp);
+				}
+
+				return (DisplayElement.TimeStampDefault);
 			}
 		}
 
