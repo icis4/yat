@@ -799,10 +799,12 @@ namespace YAT.View.Forms
 				SetAutoResponseTriggerStateControls();
 				SetAutoResponseResponseStateControls();
 
-				var useText = this.settingsRoot.AutoResponse.Options.UseText;
+				var useText  = this.settingsRoot.AutoResponse.Options.UseText;
 				var useRegex = this.settingsRoot.AutoResponse.Options.UseRegex;
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = useText;
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Checked = useRegex;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText .Checked = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText .Enabled =  textIsSupported;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Checked = (regexIsSupported && useRegex);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Enabled =  regexIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
 
@@ -1059,10 +1061,12 @@ namespace YAT.View.Forms
 				SetAutoActionTriggerStateControls();
 			////SetAutoActionActionStateControls() is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
-				var useText = this.settingsRoot.AutoAction.Options.UseText;
+				var useText  = this.settingsRoot.AutoAction.Options.UseText;
 				var useRegex = this.settingsRoot.AutoAction.Options.UseRegex;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Checked = useText;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Checked = useRegex;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText .Checked = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText .Enabled =  textIsSupported;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Checked = (regexIsSupported && useRegex);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Enabled =  regexIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;
 			}
