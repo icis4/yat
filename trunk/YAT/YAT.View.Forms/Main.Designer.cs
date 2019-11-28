@@ -1284,7 +1284,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_CaseSensitive.Name = "toolStripButton_MainTool_Find_CaseSensitive";
 			this.toolStripButton_MainTool_Find_CaseSensitive.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_CaseSensitive.Text = "Find Case Sensitive";
-			this.toolStripButton_MainTool_Find_CaseSensitive.ToolTipText = "Find Case Sensitive\r\nSame as \"(?-i)\" when using regex\r\n[Alt+C] (while in Find)";
+			this.toolStripButton_MainTool_Find_CaseSensitive.ToolTipText = "Find Case Sensitive\r\nSame as \"(?-i)\" when using regex\r\n[Alt+C] (while in find)";
 			this.toolStripButton_MainTool_Find_CaseSensitive.Visible = false;
 			this.toolStripButton_MainTool_Find_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_CaseSensitive_Click);
 			// 
@@ -1295,7 +1295,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_WholeWord.Name = "toolStripButton_MainTool_Find_WholeWord";
 			this.toolStripButton_MainTool_Find_WholeWord.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_WholeWord.Text = "Find Whole Word";
-			this.toolStripButton_MainTool_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex\r\n[Alt+W] (while in Find)" +
+			this.toolStripButton_MainTool_Find_WholeWord.ToolTipText = "Find Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex\r\n[Alt+W] (while in find)" +
     "";
 			this.toolStripButton_MainTool_Find_WholeWord.Visible = false;
 			this.toolStripButton_MainTool_Find_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_WholeWord_Click);
@@ -1305,8 +1305,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripButton_MainTool_Find_UseRegex.Name = "toolStripButton_MainTool_Find_UseRegex";
 			this.toolStripButton_MainTool_Find_UseRegex.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Find_UseRegex.Text = ".*";
-			this.toolStripButton_MainTool_Find_UseRegex.ToolTipText = "Enable Regular Expression\r\n[Alt+E] (while in Find)";
+			this.toolStripButton_MainTool_Find_UseRegex.Text = "(.*)";
+			this.toolStripButton_MainTool_Find_UseRegex.ToolTipText = "Enable Regular Expression\r\n[Alt+E] (while in find)";
 			this.toolStripButton_MainTool_Find_UseRegex.Visible = false;
 			this.toolStripButton_MainTool_Find_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_UseRegex_Click);
 			// 
@@ -1317,7 +1317,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_Next.Name = "toolStripButton_MainTool_Find_Next";
 			this.toolStripButton_MainTool_Find_Next.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_Next.Text = "Find Next";
-			this.toolStripButton_MainTool_Find_Next.ToolTipText = "Find Next\r\n[Enter] / [Ctrl+F/N] / [Alt+F/N] (while in Find)\r\n[Alt+Shift+N] (alway" +
+			this.toolStripButton_MainTool_Find_Next.ToolTipText = "Find Next\r\n[Enter] / [Ctrl+F/N] / [Alt+F/N] (while in find)\r\n[Alt+Shift+N] (alway" +
     "s)";
 			this.toolStripButton_MainTool_Find_Next.Visible = false;
 			this.toolStripButton_MainTool_Find_Next.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_Next_Click);
@@ -1329,7 +1329,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_Previous.Name = "toolStripButton_MainTool_Find_Previous";
 			this.toolStripButton_MainTool_Find_Previous.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_Find_Previous.Text = "Find Previous";
-			this.toolStripButton_MainTool_Find_Previous.ToolTipText = "Find Previous\r\n[Ctrl+P] / [Alt+P] (while in Find)\r\n[Alt+Shift+P] (always)";
+			this.toolStripButton_MainTool_Find_Previous.ToolTipText = "Find Previous\r\n[Ctrl+P] / [Alt+P] (while in find)\r\n[Alt+Shift+P] (always)";
 			this.toolStripButton_MainTool_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_Previous_Click);
 			// 
@@ -1425,7 +1425,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoAction_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripButton_MainTool_AutoAction_UseRegex.Name = "toolStripButton_MainTool_AutoAction_UseRegex";
 			this.toolStripButton_MainTool_AutoAction_UseRegex.Size = new System.Drawing.Size(23, 19);
-			this.toolStripButton_MainTool_AutoAction_UseRegex.Text = ".*";
+			this.toolStripButton_MainTool_AutoAction_UseRegex.Text = "(.*)";
 			this.toolStripButton_MainTool_AutoAction_UseRegex.ToolTipText = "Enable Regular Expression\r\n[Alt+E] (while editing)";
 			this.toolStripButton_MainTool_AutoAction_UseRegex.Visible = false;
 			this.toolStripButton_MainTool_AutoAction_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_UseRegex_Click);
@@ -1500,7 +1500,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoResponse_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripButton_MainTool_AutoResponse_UseRegex.Name = "toolStripButton_MainTool_AutoResponse_UseRegex";
 			this.toolStripButton_MainTool_AutoResponse_UseRegex.Size = new System.Drawing.Size(23, 19);
-			this.toolStripButton_MainTool_AutoResponse_UseRegex.Text = ".*";
+			this.toolStripButton_MainTool_AutoResponse_UseRegex.Text = "(.*)";
 			this.toolStripButton_MainTool_AutoResponse_UseRegex.ToolTipText = "Enable Regular Expression\r\n[Alt+E] (while editing)";
 			this.toolStripButton_MainTool_AutoResponse_UseRegex.Visible = false;
 			this.toolStripButton_MainTool_AutoResponse_UseRegex.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_UseRegex_Click);
