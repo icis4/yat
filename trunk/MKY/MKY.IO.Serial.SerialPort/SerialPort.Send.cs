@@ -515,7 +515,7 @@ namespace MKY.IO.Serial.SerialPort
 			isWriteTimeout         = false;
 			isOutputBreak          = false;
 			signalIOControlChanged = false;
-			signalIOControlChangedTimeStamp = DateTime.MinValue;
+			signalIOControlChangedTimeStamp = DateTime.MinValue; // Initial value is only kept on failure; value will be set to 'DateTime.Now' on success.
 
 			bool writeSuccess      = false;
 			Exception unhandled    = null;
@@ -596,7 +596,7 @@ namespace MKY.IO.Serial.SerialPort
 			isWriteTimeout         = false;
 			isOutputBreak          = false;
 			signalIOControlChanged = false;
-			signalIOControlChangedTimeStamp = DateTime.MinValue;
+			signalIOControlChangedTimeStamp = DateTime.MinValue; // Initial value is only kept on failure; value will be set to 'DateTime.Now' on success.
 
 			bool writeSuccess      = false;
 			Exception unhandled    = null;
