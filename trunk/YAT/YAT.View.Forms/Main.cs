@@ -1188,9 +1188,11 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive = false;
-				bool useText  = false;
-				bool useRegex = false;
+				bool isActive         = false;
+				bool textIsSupported  = false;
+				bool regexIsSupported = false;
+				bool useText          = false;
+ 				bool useRegex         = false;
 
 				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger      = AutoTrigger.None;
@@ -1205,17 +1207,19 @@ namespace YAT.View.Forms
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
-						isActive     = activeTerminal.SettingsRoot.AutoAction.IsActive;
-						useText      = activeTerminal.SettingsRoot.AutoAction.Options.UseText;
-						useRegex     = activeTerminal.SettingsRoot.AutoAction.Options.UseRegex;
+						isActive         = activeTerminal.SettingsRoot.AutoAction.IsActive;
+						textIsSupported  =
+						regexIsSupported =
+						useText          = activeTerminal.SettingsRoot.AutoAction.Options.UseText;
+						useRegex         = activeTerminal.SettingsRoot.AutoAction.Options.UseRegex;
 
-						triggerItems = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
-						trigger      = activeTerminal.SettingsRoot.AutoAction.Trigger;
-						triggerState = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
+						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
+						trigger          = activeTerminal.SettingsRoot.AutoAction.Trigger;
+						triggerState     = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
 
-						actionItems  = activeTerminal.SettingsRoot.GetValidAutoActionItems();
-						action       = activeTerminal.SettingsRoot.AutoAction.Action;
-					////actionState  = ((Terminal)ActiveMdiChild).AutoActionActionState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+						actionItems      = activeTerminal.SettingsRoot.GetValidAutoActionItems();
+						action           = activeTerminal.SettingsRoot.AutoAction.Action;
+					////actionState      = ((Terminal)ActiveMdiChild).AutoActionActionState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 					}
 				}
 
@@ -1248,13 +1252,13 @@ namespace YAT.View.Forms
 					SetAutoActionTriggerControls(triggerState);
 				////SetAutoActionActionState(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
-					toolStripButton_MainTool_AutoAction_UseText.Checked = useText;
-					toolStripButton_MainTool_AutoAction_UseText.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoAction_UseText.Visible = true;
+					toolStripButton_MainTool_AutoAction_UseText.Checked = (childIsReady && textIsSupported && useText);
+					toolStripButton_MainTool_AutoAction_UseText.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoAction_UseText.Visible =  true;
 
-					toolStripButton_MainTool_AutoAction_UseRegex.Checked = useRegex;
-					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoAction_UseRegex.Visible = true;
+					toolStripButton_MainTool_AutoAction_UseRegex.Checked = (childIsReady && regexIsSupported && useRegex);
+					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = (childIsReady && regexIsSupported);
+					toolStripButton_MainTool_AutoAction_UseRegex.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoActionCount();
 
@@ -1297,9 +1301,11 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive = false;
-				bool useText  = false;
-				bool useRegex = false;
+				bool isActive         = false;
+				bool textIsSupported  = false;
+				bool regexIsSupported = false;
+				bool useText          = false;
+ 				bool useRegex         = false;
 
 				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger      = AutoTrigger.None;
@@ -1314,17 +1320,19 @@ namespace YAT.View.Forms
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
-						isActive      = activeTerminal.SettingsRoot.AutoResponse.IsActive;
-						useText       = activeTerminal.SettingsRoot.AutoResponse.Options.UseText;
-						useRegex      = activeTerminal.SettingsRoot.AutoResponse.Options.UseRegex;
+						isActive         = activeTerminal.SettingsRoot.AutoResponse.IsActive;
+						textIsSupported  =
+						regexIsSupported =
+						useText          = activeTerminal.SettingsRoot.AutoResponse.Options.UseText;
+						useRegex         = activeTerminal.SettingsRoot.AutoResponse.Options.UseRegex;
 
-						triggerItems  = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
-						trigger       = activeTerminal.SettingsRoot.AutoResponse.Trigger;
-						triggerState  = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
+						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
+						trigger          = activeTerminal.SettingsRoot.AutoResponse.Trigger;
+						triggerState     = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
 
-						responseItems = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
-						response      = activeTerminal.SettingsRoot.AutoResponse.Response;
-						responseState = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
+						responseItems    = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
+						response         = activeTerminal.SettingsRoot.AutoResponse.Response;
+						responseState    = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
 					}
 				}
 
@@ -1355,13 +1363,13 @@ namespace YAT.View.Forms
 					SetAutoResponseTriggerControls(triggerState);
 					SetAutoResponseResponseControls(responseState);
 
-					toolStripButton_MainTool_AutoResponse_UseText.Checked = useText;
-					toolStripButton_MainTool_AutoResponse_UseText.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoResponse_UseText.Visible = true;
+					toolStripButton_MainTool_AutoResponse_UseText.Checked = (childIsReady && textIsSupported && useText);
+					toolStripButton_MainTool_AutoResponse_UseText.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoResponse_UseText.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_UseRegex.Checked = useRegex;
-					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoResponse_UseRegex.Visible = true;
+					toolStripButton_MainTool_AutoResponse_UseRegex.Checked = (childIsReady && regexIsSupported && useRegex);
+					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = (childIsReady && regexIsSupported);
+					toolStripButton_MainTool_AutoResponse_UseRegex.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoResponseCount();
 
@@ -2647,8 +2655,8 @@ namespace YAT.View.Forms
 			try
 			{
 				toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Checked = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
-				toolStripMenuItem_StatusContextMenu_ShowTime.Checked         = ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
-				toolStripMenuItem_StatusContextMenu_ShowChrono.Checked       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
+				toolStripMenuItem_StatusContextMenu_ShowTime        .Checked = ApplicationSettings.LocalUserSettings.MainWindow.ShowTime;
+				toolStripMenuItem_StatusContextMenu_ShowChrono      .Checked = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
 			}
 			finally
 			{
