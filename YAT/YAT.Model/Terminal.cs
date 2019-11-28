@@ -5932,7 +5932,7 @@ namespace YAT.Model
 			}
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
 			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));

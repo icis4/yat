@@ -2387,14 +2387,14 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync<TerminalEventArgs>(TerminalRemoved, this, e);
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
 			this.eventHelper.RaiseSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
@@ -2496,7 +2496,7 @@ namespace YAT.Model
 			}
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
 			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));

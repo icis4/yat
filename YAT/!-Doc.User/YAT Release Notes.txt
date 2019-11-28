@@ -90,6 +90,13 @@ YAT 2.1.1 :: 2019-xx-xx
 New:
 - ...    <=  WAIT FOR ... (feature request #19, bug #176).
 
+  This feature is useful for limiting the rate when sending a large amount of data with ping-pong
+  style commands.
+  For serial COM ports with active hardware or software flow control, this feature not necessarily
+  needs to be activated, as YAT typically limits the send rate [Settings... > Advanced... > Buffer
+  not more than baud rate permits]. This setting limits the send rate enough to let flow control do
+  its job even with large amount of data.
+
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
@@ -105,8 +112,8 @@ Important changes:
 - Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
   on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific settings.
-- USB Ser/HID now takes the HID usage into account, allowing working with devices that implement
-  multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
+- USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
+  implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 
 Fixed bugs:
@@ -179,7 +186,7 @@ New:
 - Additional option [View > Show Duration (Line)] (feature request #348).
 - Additional terminal option [Include Port Control Events] (feature request #350).
 - Additional log channel [Log Port Control] (related to feature request #350).
-- Text terminals: Additional options to control line break:
+- Text terminals: Additional options to configure line break:
    > Length line break (feature request #224).
      Useful to limit the number of characters displayed per line, i.e. "word wrap".
      Useful to communicate with devices that do use text messages but no EOL sequence.

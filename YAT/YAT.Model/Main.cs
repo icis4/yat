@@ -2122,7 +2122,7 @@ namespace YAT.Model
 		// Event Raising
 		//==========================================================================================
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnWorkspaceOpened(Workspace workspace)
 		{
 			this.eventHelper.RaiseSync<EventArgs<Workspace>>(WorkspaceOpened, this, new EventArgs<Workspace>(workspace));
@@ -2134,14 +2134,14 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync<ClosedEventArgs>(WorkspaceClosed, this, e);
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
 			this.eventHelper.RaiseSync<EventArgs<string>>(FixedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
 			DebugMessage(text);
@@ -2171,7 +2171,7 @@ namespace YAT.Model
 			}
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnCursorRequest(Cursor cursor)
 		{
 			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
@@ -2189,7 +2189,7 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync(Started, this, EventArgs.Empty);
 		}
 
-		/// <remarks>Using item instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
 		protected virtual void OnExited(MainResult result)
 		{
 			this.eventHelper.RaiseSync<EventArgs<MainResult>>(Exited, this, new EventArgs<MainResult>(result));
