@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Linq;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -250,20 +251,6 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Processes the automatic action.
-		/// </summary>
-		/// <remarks>
-		/// Automatic actions from lines may be reloadable.
-		/// </remarks>
-		protected virtual void ProcessAutoActionFromLines(Domain.DisplayLineCollection lines)
-		{
-			if (this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress)
-				ProcessAutoActionOtherThanFilterOrSuppressFromLines(lines);
-			else
-				ProcessAutoActionFilterAndSuppressFromLines(lines);
-		}
-
-		/// <summary>
 		/// Processes the automatic actions other than <see cref="AutoAction.Filter"/> and <see cref="AutoAction.Suppress"/>.
 		/// </summary>
 		/// <remarks>
@@ -327,8 +314,8 @@ namespace YAT.Model
 		{
 			var linesInitially = lines.Clone(); // Needed because collection will be recreated.
 			lines.Clear();
-
-			foreach (var dl in linesInitially)
+			                                    // Limit processing to pure 'Rx' lines. Required for 'Bidir' monitor!
+			foreach (var dl in linesInitially.Where(dl => dl.Direction == Domain.Direction.Rx))
 			{
 				bool isTriggered = false;
 

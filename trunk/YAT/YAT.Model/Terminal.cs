@@ -3015,6 +3015,9 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			// Auto[Action|Response] is mostly handled in 'Rx' events, except for filter/suppress
+			// which is handled in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+
 			OnDisplayElementsBidirAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
@@ -3031,7 +3034,7 @@ namespace YAT.Model
 			// AutoAction (by specification only active on receive-path):                      // See terminal_DisplayLinesRxAdded for background.
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    this.settingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
-			    this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be evaluated in terminal_DisplayLinesRxAdded.
+			    this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				ProcessAutoActionFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3169,6 +3172,13 @@ namespace YAT.Model
 		////if (this.bidirLineRate.Update(e.Lines.Count)) would technically be possible, but doesn't make much sense.
 		////	OnIORateChanged_Promptly(EventArgs.Empty);
 
+			// AutoAction Filter/Suppress (by specification only active on receive-path):      // See terminal_DisplayLinesRxAdded for background.
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    this.settingsRoot.AutoAction.IsFilterOrSuppress)
+			{                           // This method restricts processing to pure 'Rx' lines.
+				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
+
 			// Display:
 			OnDisplayLinesBidirAdded(e);
 
@@ -3245,14 +3255,21 @@ namespace YAT.Model
 			if (this.rxLineRate.Update(e.Lines.Count))
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
-			// AutoAction (by specification only active on receive-path):                      // See further below.
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoAction.IsTextOrRegexTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
+			// AutoAction (by specification only active on receive-path):              // See [== AutoTrigger.AnyLine] below.
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				ProcessAutoActionFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				if (this.settingsRoot.AutoAction.IsTextOrRegexTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
+				    this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated below.
+				{
+					ProcessAutoActionOtherThanFilterOrSuppressFromLines(e.Lines);
+				}
+				else if (this.settingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated here.
+				{
+					ProcessAutoActionFilterAndSuppressFromLines(e.Lines);
+				}
 			}
 
-			// AutoResponse (by specification only active on receive-path):                        // See further below.
+			// AutoResponse (by specification only active on receive-path):                // See [== AutoTrigger.AnyLine] below.
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    this.settingsRoot.AutoResponse.IsTextOrRegexTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
 			{
@@ -3269,7 +3286,7 @@ namespace YAT.Model
 					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
 			}
 
-			// AutoAction (by specification only active on receive-path):                      // No need for using the t
+			// AutoAction (by specification only active on receive-path):
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)                                     // Used for user message.
@@ -3278,7 +3295,8 @@ namespace YAT.Model
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.
 				//
-				// Suppressing with [Trigger == AnyLine] is also prohibitied.
+				// Filtering with [Trigger == AnyLine] is possible but has no effect.
+				// Suppressing with [Trigger == AnyLine] is prohibitied.
 				//
 				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
 				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
@@ -3288,7 +3306,7 @@ namespace YAT.Model
 			// AutoResponse (by specification only active on receive-path):
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 			{
-				foreach (var dl in e.Lines)                          // Response shall be based on origin, not text.
+				foreach (var dl in e.Lines)                       // Response shall be based on origin, not text.
 					InvokeAutoResponse(ToOriginWithoutRxEol(dl), null);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
@@ -3362,6 +3380,13 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			// AutoAction Filter/Suppress (by specification only active on receive-path):      // See terminal_DisplayLinesRxAdded for background.
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    this.settingsRoot.AutoAction.IsFilterOrSuppress) // Only these pseudo-actions are reapplied on reload.
+			{                           // This method restricts processing to pure 'Rx' lines.
+				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
+
 			OnRepositoryBidirReloaded(e);
 		}
 
@@ -3373,8 +3398,9 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			// AutoAction (by specification only active on receive-path):             // Only these pseudo-actions are reapplied on reload.
-			if (this.settingsRoot.AutoAction.IsActive && this.settingsRoot.AutoAction.IsFilterOrSuppress)
+			// AutoAction Filter/Suppress (by specification only active on receive-path):      // See terminal_DisplayLinesRxAdded for background.
+			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    this.settingsRoot.AutoAction.IsFilterOrSuppress) // Only these pseudo-actions are reapplied on reload.
 			{
 				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
