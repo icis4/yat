@@ -619,7 +619,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_MonitorContextMenu_Panels_Tx
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Tx";
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Text = "Unidirectional Send (Tx) Panel";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click);
 			// 
@@ -628,21 +628,21 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = true;
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Bidir";
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Text = "Bidirectional Send/Receive Panel";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels_Rx
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Rx";
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Text = "Unidirectional Receive (Rx) Panel";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Panels_Rx_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels_Separator1
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Separator1.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Separator1";
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Separator1.Size = new System.Drawing.Size(222, 6);
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Separator1.Size = new System.Drawing.Size(243, 6);
 			// 
 			// toolStripComboBox_MonitorContextMenu_Panels_Orientation
 			// 
@@ -3766,6 +3766,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText
 			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Text = "Use &Text";
@@ -3850,6 +3851,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText
 			// 
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Text = "Use &Text";
@@ -4066,7 +4068,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_View_Panels_Tx
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Tx";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Size = new System.Drawing.Size(228, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Text = "Unidirectional &Send (Tx) Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click);
 			// 
@@ -4075,21 +4077,21 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = true;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Bidir";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Size = new System.Drawing.Size(228, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Text = "&Bidirectional Send/Receive Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Bidir_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Rx
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Rx";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Size = new System.Drawing.Size(228, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Text = "Unidirectional &Receive (Rx) Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Rx.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Rx_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_1
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_1";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_1.Size = new System.Drawing.Size(243, 6);
 			// 
 			// toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation
 			// 
@@ -4101,21 +4103,21 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_2
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_2.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_2";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_2.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_2.Size = new System.Drawing.Size(243, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Predefined
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = true;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Predefined";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Size = new System.Drawing.Size(228, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Text = "&Predefined Commands Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Predefined_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_3
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_3";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_3.Size = new System.Drawing.Size(243, 6);
 			// 
 			// toolStripComboBox_TerminalMenu_View_Panels_PageLayout
 			// 
@@ -4126,14 +4128,14 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_4
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_4.Size = new System.Drawing.Size(243, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_SendText
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = true;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.Name = "toolStripMenuItem_TerminalMenu_View_Panels_SendText";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.Size = new System.Drawing.Size(228, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.Text = "Send &Text Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_SendText_Click);
 			// 
@@ -4142,19 +4144,19 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked = true;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Name = "toolStripMenuItem_TerminalMenu_View_Panels_SendFile";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Size = new System.Drawing.Size(228, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Text = "Send &File Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_SendFile_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Separator_5
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_5.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Separator_5";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_5.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Separator_5.Size = new System.Drawing.Size(243, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll.Name = "toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll";
-			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll.Size = new System.Drawing.Size(228, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll.Size = new System.Drawing.Size(246, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll.Text = "R&earrange All";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Rearrange_Click);
 			// 
