@@ -55,7 +55,6 @@ using System.IO;
 using System.Security.Permissions;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -1073,7 +1072,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_SaveToFile     .Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_Print          .Enabled = childIsReady;
 
-				toolStripButton_MainTool_SetFindControls(); // See remarks of that method.
+				toolStripButton_MainTool_SetFindControls(childIsReady); // See remark of that method.
 
 				bool logIsOn = false;
 				if (childIsReady)
@@ -1089,190 +1088,10 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Log_OpenFile     .Enabled = (childIsReady &&  logFileExists);
 			////toolStripButton_MainTool_Log_OpenDirectory.Enabled shall always be active, default folder can be opened even if child is inactive.
 
-				// AutoAction:
-
-				bool aaIsActive = false;
-
-				AutoTriggerEx[] aaTriggerItems = AutoTriggerEx.GetFixedItems();
-				AutoTriggerEx   aaTrigger      = AutoTrigger.None;
-
-				AutoActionEx[] aaActionItems = AutoActionEx.GetItems();
-				AutoActionEx   aaAction      = AutoAction.None;
-
-				if (childIsReady)
-				{
-					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
-					{
-					////aaVisible      = activeTerminal.SettingsRoot.AutoAction.Visible; => See above.
-						aaIsActive     = activeTerminal.SettingsRoot.AutoAction.IsActive;
-
-						aaTriggerItems = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
-						aaTrigger      = activeTerminal.SettingsRoot.AutoAction.Trigger;
-
-						aaActionItems  = activeTerminal.SettingsRoot.GetValidAutoActionItems();
-						aaAction       = activeTerminal.SettingsRoot.AutoAction.Action;
-					}
-				}
-
-				toolStripButton_MainTool_AutoAction_ShowHide.Checked = aaIsActive;
-
-				if (ApplicationSettings.RoamingUserSettings.View.AutoActionIsVisible)
-				{
-					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Hide Automatic Action";
-
-					// Attention:
-					// Similar code exists in the following location:
-					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-					// Changes here may have to be applied there too.
-
-					toolStripButton_MainTool_AutoAction_UseText.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoAction_UseText.Visible = true;
-
-					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoAction_UseRegex.Visible = true;
-
-					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
-					{
-						toolStripComboBox_MainTool_AutoAction_Trigger.Items.Clear();
-						toolStripComboBox_MainTool_AutoAction_Trigger.Items.AddRange(aaTriggerItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoAction_Trigger, aaTrigger, new Command(aaTrigger).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoAction_Trigger.Visible = true;
-
-						toolStripComboBox_MainTool_AutoAction_Action.Items.Clear();
-						toolStripComboBox_MainTool_AutoAction_Action.Items.AddRange(aaActionItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoAction_Action, aaAction, new Command(aaAction).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_AutoAction_Action.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
-					}
-
-					toolStripButton_MainTool_SetAutoActionCount();
-
-					toolStripLabel_MainTool_AutoAction_Count.Enabled = aaIsActive;
-					toolStripLabel_MainTool_AutoAction_Count.Visible = true;
-
-					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = aaIsActive;
-					toolStripButton_MainTool_AutoAction_Deactivate.Visible = true;
-				}
-				else
-				{
-					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Show Automatic Action";
-
-					toolStripButton_MainTool_AutoAction_UseText.Visible = false;
-					toolStripButton_MainTool_AutoAction_UseText.Enabled = false;
-
-					toolStripButton_MainTool_AutoAction_UseRegex.Visible = false;
-					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = false;
-
-					toolStripComboBox_MainTool_AutoAction_Trigger.Visible = false;
-					toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = false;
-					toolStripComboBox_MainTool_AutoAction_Trigger.Items.Clear();
-
-					toolStripComboBox_MainTool_AutoAction_Action.Visible = false;
-					toolStripComboBox_MainTool_AutoAction_Action.Enabled = false;
-					toolStripComboBox_MainTool_AutoAction_Action.Items.Clear();
-
-					toolStripLabel_MainTool_AutoAction_Count.Visible = false;
-					toolStripLabel_MainTool_AutoAction_Count.Text = "";
-
-					toolStripButton_MainTool_AutoAction_Deactivate.Visible = false;
-					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = false;
-				}
-
-				// AutoResponse:
-
-				bool arIsActive = false;
-
-				AutoTriggerEx[] arTriggerItems = AutoTriggerEx.GetFixedItems();
-				AutoTriggerEx   arTrigger      = AutoTrigger.None;
-
-				AutoResponseEx[] arResponseItems = AutoResponseEx.GetFixedItems();
-				AutoResponseEx   arResponse      = AutoResponse.None;
-
-				if (childIsReady)
-				{
-					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
-					{
-					////arVisible       = activeTerminal.SettingsRoot.AutoResponse.Visible; => See above.
-						arIsActive      = activeTerminal.SettingsRoot.AutoResponse.IsActive;
-
-						arTriggerItems  = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
-						arTrigger       = activeTerminal.SettingsRoot.AutoResponse.Trigger;
-
-						arResponseItems = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
-						arResponse      = activeTerminal.SettingsRoot.AutoResponse.Response;
-					}
-				}
-
-				toolStripButton_MainTool_AutoResponse_ShowHide.Checked = arIsActive;
-
-				if (ApplicationSettings.RoamingUserSettings.View.AutoResponseIsVisible)
-				{
-					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Hide Automatic Response";
-
-					// Attention:
-					// Similar code exists in...
-					// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-					// Changes here may have to be applied there too.
-
-					toolStripButton_MainTool_AutoResponse_UseText.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoResponse_UseText.Visible = true;
-
-					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = childIsReady;
-					toolStripButton_MainTool_AutoResponse_UseRegex.Visible = true;
-
-					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
-					{
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Items.Clear();
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoResponse_Trigger, arTrigger, new Command(arTrigger).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = true;
-
-						toolStripComboBox_MainTool_AutoResponse_Response.Items.Clear();
-						toolStripComboBox_MainTool_AutoResponse_Response.Items.AddRange(arResponseItems);
-						ToolStripComboBoxHelper.Select(toolStripComboBox_MainTool_AutoResponse_Response, arResponse, new Command(arResponse).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_AutoResponse_Response.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
-					}
-
-					toolStripButton_MainTool_SetAutoResponseCount();
-
-					toolStripLabel_MainTool_AutoResponse_Count.Enabled = arIsActive;
-					toolStripLabel_MainTool_AutoResponse_Count.Visible = true;
-
-					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = arIsActive;
-					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = true;
-				}
-				else
-				{
-					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Show Automatic Response";
-
-					toolStripButton_MainTool_AutoResponse_UseText.Visible = false;
-					toolStripButton_MainTool_AutoResponse_UseText.Enabled = false;
-
-					toolStripButton_MainTool_AutoResponse_UseRegex.Visible = false;
-					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = false;
-
-					toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
-					toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = false;
-					toolStripComboBox_MainTool_AutoResponse_Trigger.Items.Clear();
-
-					toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
-					toolStripComboBox_MainTool_AutoResponse_Response.Enabled = false;
-					toolStripComboBox_MainTool_AutoResponse_Response.Items.Clear();
-
-					toolStripLabel_MainTool_AutoResponse_Count.Visible = false;
-					toolStripLabel_MainTool_AutoResponse_Count.Text = "";
-
-					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = false;
-					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = false;
-				}
+				toolStripButton_MainTool_SetAutoActionControls(  childIsReady); // See remark of that method.
+				toolStripButton_MainTool_SetAutoResponseControls(childIsReady); // See remark of that method.
 
 			#if (WITH_SCRIPTING)
-
 			////if (ApplicationSettings.RoamingUserSettings.View.ScriptPanelIsVisible)
 				if (this.scriptDialogIsOpen)
 				{
@@ -1284,7 +1103,6 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_Script_ShowHide.Checked = false;
 					toolStripButton_MainTool_Script_ShowHide.Text = "Show Script Panel";
 				}
-
 			#endif // WITH_SCRIPTING
 
 				toolStripButton_MainTool_Terminal_Format.Enabled = childIsReady;
@@ -1296,16 +1114,13 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-find controls (e.g. Auto[Action|Response])
-		/// when editing the search pattern.
+		/// Separated to prevent flickering of other text/combo controls when editing the search pattern.
 		/// </remarks>
-		private void toolStripButton_MainTool_SetFindControls()
+		private void toolStripButton_MainTool_SetFindControls(bool childIsReady)
 		{
 			this.isSettingControls.Enter();
 			try
 			{
-				bool childIsReady = (ActiveMdiChild != null);
-
 				DebugFindEnter(MethodBase.GetCurrentMethod().Name);
 				{
 					if (ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
@@ -1313,21 +1128,17 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Find_ShowHide.Checked = true;
 						toolStripButton_MainTool_Find_ShowHide.Text = "Hide Find";
 
-						// Attention:
-						// Similar code exists in...
-						// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-						// Changes here may have to be applied there too.
-
 						if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 						{
 							var activePattern = ApplicationSettings.RoamingUserSettings.Find.ActivePattern;
 							var recentPatterns = ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.ToArray();
 
 							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Find_Pattern, recentPatterns);
-							ToolStripComboBoxHelper.Select                              (toolStripComboBox_MainTool_Find_Pattern, activePattern, activePattern);
-
+							ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_Find_Pattern, activePattern, activePattern);
 							toolStripComboBox_MainTool_Find_Pattern.Visible = true; // Note that pattern shall also be editable when no terminal is open.
 						}
+
+						SetFindStateAndControls();
 
 						toolStripButton_MainTool_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
 						toolStripButton_MainTool_Find_CaseSensitive.Enabled = childIsReady;
@@ -1338,8 +1149,6 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Find_UseRegex     .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.UseRegex;
 						////                          UseRegex     .Enabled = true (always true).
 						toolStripButton_MainTool_Find_UseRegex     .Visible = true;
-
-						SetFindState();
 
 						toolStripButton_MainTool_Find_Next    .Enabled = childIsReady;
 						toolStripButton_MainTool_Find_Next    .Visible = true;
@@ -1353,7 +1162,6 @@ namespace YAT.View.Forms
 
 						ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_Find_Pattern);
 						ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_Find_Pattern);
-
 						toolStripComboBox_MainTool_Find_Pattern.Visible = false;
 
 						toolStripButton_MainTool_Find_CaseSensitive.Visible = false;
@@ -1373,7 +1181,223 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-count controls on Auto[Action|Response].
+		/// Separated to prevent flickering of other text/combo controls when editing the trigger.
+		/// </remarks>
+		private void toolStripButton_MainTool_SetAutoActionControls(bool childIsReady)
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				bool isActive = false;
+				bool useText  = false;
+				bool useRegex = false;
+
+				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
+				AutoTriggerEx    trigger      = AutoTrigger.None;
+				AutoContentState triggerState = AutoContentState.Neutral;
+
+				AutoActionEx[]   actionItems = AutoActionEx.GetItems();
+				AutoActionEx     action      = AutoAction.None;
+			////AutoContentState actionState = AutoContentState.Neutral is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+
+				if (childIsReady)
+				{
+					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+					{
+						isActive     = activeTerminal.SettingsRoot.AutoAction.IsActive;
+						useText      = activeTerminal.SettingsRoot.AutoAction.Options.UseText;
+						useRegex     = activeTerminal.SettingsRoot.AutoAction.Options.UseRegex;
+
+						triggerItems = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
+						trigger      = activeTerminal.SettingsRoot.AutoAction.Trigger;
+						triggerState = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
+
+						actionItems  = activeTerminal.SettingsRoot.GetValidAutoActionItems();
+						action       = activeTerminal.SettingsRoot.AutoAction.Action;
+					////actionState  = ((Terminal)ActiveMdiChild).AutoActionActionState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+					}
+				}
+
+				toolStripButton_MainTool_AutoAction_ShowHide.Checked = isActive;
+
+				if (ApplicationSettings.RoamingUserSettings.View.AutoActionIsVisible)
+				{
+					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Hide Automatic Action";
+
+					// Attention:
+					// Similar code exists in the following location:
+					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+					// Changes here may have to be applied there too.
+
+					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
+					{
+						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Trigger, triggerItems);
+						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+
+						toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoAction_Trigger.Visible = true;
+
+						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Action, actionItems);
+						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
+
+						toolStripComboBox_MainTool_AutoAction_Action.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
+					}
+
+					SetAutoActionTriggerControls(triggerState);
+				////SetAutoActionActionState(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+
+					toolStripButton_MainTool_AutoAction_UseText.Checked = useText;
+					toolStripButton_MainTool_AutoAction_UseText.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoAction_UseText.Visible = true;
+
+					toolStripButton_MainTool_AutoAction_UseRegex.Checked = useRegex;
+					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoAction_UseRegex.Visible = true;
+
+					toolStripButton_MainTool_SetAutoActionCount();
+
+					toolStripLabel_MainTool_AutoAction_Count.Enabled = isActive;
+					toolStripLabel_MainTool_AutoAction_Count.Visible = true;
+
+					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = isActive;
+					toolStripButton_MainTool_AutoAction_Deactivate.Visible = true;
+				}
+				else
+				{
+					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Show Automatic Action";
+
+					toolStripButton_MainTool_AutoAction_UseText   .Visible = false;
+					toolStripButton_MainTool_AutoAction_UseRegex  .Visible = false;
+
+					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoAction_Trigger);
+					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Trigger);
+					toolStripComboBox_MainTool_AutoAction_Trigger .Visible = false;
+
+					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoAction_Action);
+					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Action);
+					toolStripComboBox_MainTool_AutoAction_Action  .Visible = false;
+
+					toolStripLabel_MainTool_AutoAction_Count      .Visible = false;
+					toolStripButton_MainTool_AutoAction_Deactivate.Visible = false;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Separated to prevent flickering of other text/combo controls when editing trigger/response.
+		/// </remarks>
+		private void toolStripButton_MainTool_SetAutoResponseControls(bool childIsReady)
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				bool isActive = false;
+				bool useText  = false;
+				bool useRegex = false;
+
+				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
+				AutoTriggerEx    trigger      = AutoTrigger.None;
+				AutoContentState triggerState = AutoContentState.Neutral;
+
+				AutoResponseEx[] responseItems = AutoResponseEx.GetFixedItems();
+				AutoResponseEx   response      = AutoResponse.None;
+				AutoContentState responseState = AutoContentState.Neutral;
+
+				if (childIsReady)
+				{
+					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+					{
+						isActive      = activeTerminal.SettingsRoot.AutoResponse.IsActive;
+						useText       = activeTerminal.SettingsRoot.AutoResponse.Options.UseText;
+						useRegex      = activeTerminal.SettingsRoot.AutoResponse.Options.UseRegex;
+
+						triggerItems  = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
+						trigger       = activeTerminal.SettingsRoot.AutoResponse.Trigger;
+						triggerState  = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
+
+						responseItems = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
+						response      = activeTerminal.SettingsRoot.AutoResponse.Response;
+						responseState = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
+					}
+				}
+
+				toolStripButton_MainTool_AutoResponse_ShowHide.Checked = isActive;
+
+				if (ApplicationSettings.RoamingUserSettings.View.AutoResponseIsVisible)
+				{
+					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Hide Automatic Response";
+
+					// Attention:
+					// Similar code exists in...
+					// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+					// Changes here may have to be applied there too.
+
+					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
+					{
+						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Trigger, triggerItems);
+						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = true;
+
+						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Response, responseItems);
+						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+						toolStripComboBox_MainTool_AutoResponse_Response.Enabled = childIsReady;
+						toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
+					}
+
+					SetAutoResponseTriggerControls(triggerState);
+					SetAutoResponseResponseControls(responseState);
+
+					toolStripButton_MainTool_AutoResponse_UseText.Checked = useText;
+					toolStripButton_MainTool_AutoResponse_UseText.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoResponse_UseText.Visible = true;
+
+					toolStripButton_MainTool_AutoResponse_UseRegex.Checked = useRegex;
+					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = childIsReady;
+					toolStripButton_MainTool_AutoResponse_UseRegex.Visible = true;
+
+					toolStripButton_MainTool_SetAutoResponseCount();
+
+					toolStripLabel_MainTool_AutoResponse_Count.Enabled = isActive;
+					toolStripLabel_MainTool_AutoResponse_Count.Visible = true;
+
+					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = isActive;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = true;
+				}
+				else
+				{
+					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Show Automatic Response";
+
+					toolStripButton_MainTool_AutoResponse_UseText   .Visible = false;
+					toolStripButton_MainTool_AutoResponse_UseRegex  .Visible = false;
+
+					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoResponse_Trigger);
+					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Trigger);
+					toolStripComboBox_MainTool_AutoResponse_Trigger .Visible = false;
+
+					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoResponse_Response);
+					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Response);
+					toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
+
+					toolStripLabel_MainTool_AutoResponse_Count      .Visible = false;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = false;
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <remarks>
+		/// Separated to prevent flickering of text/combo controls.
 		/// </remarks>
 		private void toolStripButton_MainTool_SetAutoActionCount()
 		{
@@ -1384,16 +1408,14 @@ namespace YAT.View.Forms
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
-				{
 					count = activeTerminal.AutoActionCount;
-				}
 			}
 
 			toolStripLabel_MainTool_AutoAction_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", count);
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-count controls on Auto[Action|Response].
+		/// Separated to prevent flickering of text/combo controls.
 		/// </remarks>
 		private void toolStripButton_MainTool_SetAutoResponseCount()
 		{
@@ -1404,21 +1426,10 @@ namespace YAT.View.Forms
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
-				{
 					count = activeTerminal.AutoResponseCount;
-				}
 			}
 
 			toolStripLabel_MainTool_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", count);
-		}
-
-		/// <remarks>
-		/// Separated to prevent flickering of non-count controls on Auto[Action|Response].
-		/// </remarks>
-		private void toolStripButton_MainTool_SetAutoCountChildControls()
-		{
-			toolStripButton_MainTool_SetAutoActionCount();
-			toolStripButton_MainTool_SetAutoResponseCount();
 		}
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
@@ -1605,7 +1616,7 @@ namespace YAT.View.Forms
 					{
 						if (!TryValidateFindPattern(pattern))
 						{
-							SetFindState(FindDirection.Undetermined, FindResult.Invalid);
+							SetFindStateAndControls(FindDirection.Undetermined, FindResult.Invalid);
 							return; // Skip 'FindOnEdit' in case of invalid (regex) pattern.
 						}
 
@@ -1722,12 +1733,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void SetFindState()
+		private void SetFindStateAndControls()
 		{
-			SetFindState(this.findDirection, this.findResult);
+			SetFindStateAndControls(this.findDirection, this.findResult);
 		}
 
-		private void SetFindState(FindDirection direction, FindResult result)
+		private void SetFindStateAndControls(FindDirection direction, FindResult result)
 		{
 			this.findDirection = direction;
 			this.findResult    = result;
@@ -1777,7 +1788,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("value", result, MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("result", result, MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1799,7 +1810,7 @@ namespace YAT.View.Forms
 				}
 				else
 				{
-					SetFindState(FindDirection.Undetermined, FindResult.Invalid);
+					SetFindStateAndControls(FindDirection.Undetermined, FindResult.Invalid);
 				}
 			}
 			else // Opposed to FindNext/Previous(), an "empty" FindOnEdit() shall result in 'Reset'.
@@ -1820,7 +1831,7 @@ namespace YAT.View.Forms
 				if (t != null)
 					fr = t.TryFindOnEdit(pattern, out fd);
 
-				SetFindState(fd, fr);
+				SetFindStateAndControls(fd, fr);
 			}
 			else
 			{
@@ -1835,7 +1846,7 @@ namespace YAT.View.Forms
 			if (t != null)
 				t.EmptyFindOnEdit();
 
-			SetFindState(FindDirection.Undetermined, FindResult.Empty);
+			SetFindStateAndControls(FindDirection.Undetermined, FindResult.Empty);
 		}
 
 		/// <summary></summary>
@@ -1845,7 +1856,7 @@ namespace YAT.View.Forms
 			if (t != null)
 				t.LeaveFindOnEdit(pattern);
 
-			SetFindState(FindDirection.Undetermined, FindResult.Reset);
+			SetFindStateAndControls(FindDirection.Undetermined, FindResult.Reset);
 		}
 
 		private void toolStripButton_MainTool_Find_Next_Click(object sender, EventArgs e)
@@ -1865,11 +1876,11 @@ namespace YAT.View.Forms
 				if (t != null)
 					fr = t.TryFindNext(pattern, MessageBoxIsPermissible);
 
-				SetFindState(FindDirection.Forward, fr);
+				SetFindStateAndControls(FindDirection.Forward, fr);
 			}
 			else
 			{
-				SetFindState(FindDirection.Forward, FindResult.Invalid);
+				SetFindStateAndControls(FindDirection.Forward, FindResult.Invalid);
 			}
 		}
 
@@ -1890,11 +1901,11 @@ namespace YAT.View.Forms
 				if (t != null)
 					fr = t.TryFindPrevious(pattern, MessageBoxIsPermissible);
 
-				SetFindState(FindDirection.Backward, fr);
+				SetFindStateAndControls(FindDirection.Backward, fr);
 			}
 			else
 			{
-				SetFindState(FindDirection.Backward, FindResult.Invalid);
+				SetFindStateAndControls(FindDirection.Backward, FindResult.Invalid);
 			}
 		}
 
@@ -2130,10 +2141,9 @@ namespace YAT.View.Forms
 				var triggerText = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
-					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
+					if (!((Terminal)ActiveMdiChild).RequestAutoActionValidateTriggerTextSilently(triggerText))
 					{
-						toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
-						toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
+						((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
 						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 
@@ -2149,8 +2159,26 @@ namespace YAT.View.Forms
 				}
 			}
 
-			toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.Window;
-			toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
+			((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
+		}
+
+		private void SetAutoActionTriggerControls(AutoContentState state)
+		{
+			switch (state)
+			{
+				case AutoContentState.Neutral:
+					toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.Window;
+					toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
+					break;
+
+				case AutoContentState.Invalid:
+					toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -2208,6 +2236,9 @@ namespace YAT.View.Forms
 				((Terminal)ActiveMdiChild).RequestAutoActionAction(response);
 		}
 
+	////private void toolStripComboBox_MainTool_AutoAction_Action_TextChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////private void SetAutoActionActionState(AutoContentState state)                                     is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+
 		private void toolStripLabel_MainTool_AutoAction_Count_Click(object sender, EventArgs e)
 		{
 			var t = (ActiveMdiChild as Terminal);
@@ -2254,8 +2285,7 @@ namespace YAT.View.Forms
 				{
 					if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerTextSilently(triggerText))
 					{
-						toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
-						toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
+						((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
 						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 
@@ -2271,8 +2301,26 @@ namespace YAT.View.Forms
 				}
 			}
 
-			toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.Window;
-			toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
+			((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
+		}
+
+		private void SetAutoResponseTriggerControls(AutoContentState state)
+		{
+			switch (state)
+			{
+				case AutoContentState.Neutral:
+					toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.Window;
+					toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
+					break;
+
+				case AutoContentState.Invalid:
+					toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -2344,10 +2392,9 @@ namespace YAT.View.Forms
 				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
 				{
-					if (!ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.AllEscapes))
+					if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponseTextSilently(responseText))
 					{
-						toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.ControlDark;
-						toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.ControlText;
+						((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
 						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 
@@ -2363,8 +2410,26 @@ namespace YAT.View.Forms
 				}
 			}
 
-			toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.Window;
-			toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.WindowText;
+			((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
+		}
+
+		private void SetAutoResponseResponseControls(AutoContentState state)
+		{
+			switch (state)
+			{
+				case AutoContentState.Neutral:
+					toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.Window;
+					toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.WindowText;
+					break;
+
+				case AutoContentState.Invalid:
+					toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.ControlDark;
+					toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.ControlText;
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		private void toolStripLabel_MainTool_AutoResponse_Count_Click(object sender, EventArgs e)
@@ -3064,12 +3129,15 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Separated to prevent flickering of non-find controls (e.g. Auto[Action|Response])
-		/// when editing the search pattern.
+		/// Separated to prevent flickering of other text/combo controls when editing the search pattern.
+		/// </remarks>
+		/// <remarks>
+		/// 'Find' belongs to 'Main' even though the child state is required below.
 		/// </remarks>
 		private void SetFindControls()
 		{
-			toolStripButton_MainTool_SetFindControls(); // See above.
+			bool childIsReady = (ActiveMdiChild != null);
+			toolStripButton_MainTool_SetFindControls(childIsReady); // See remark above.
 		}
 
 		private void SetChildControls()
@@ -3082,9 +3150,32 @@ namespace YAT.View.Forms
 			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls.
 		}
 
-		private void SetAutoCountChildControls()
+		/// <remarks>
+		/// Separated to prevent flickering of other text/combo controls when editing the trigger.
+		/// </remarks>
+		private void SetAutoActionChildControls()
 		{
-			toolStripButton_MainTool_SetAutoCountChildControls();
+			bool childIsReady = (ActiveMdiChild != null);
+			toolStripButton_MainTool_SetAutoActionControls(childIsReady);
+		}
+
+		private void SetAutoActionCountChildControls()
+		{
+			toolStripButton_MainTool_SetAutoActionCount();
+		}
+
+		/// <remarks>
+		/// Separated to prevent flickering of other text/combo controls when editing the response.
+		/// </remarks>
+		private void SetAutoResponseChildControls()
+		{
+			bool childIsReady = (ActiveMdiChild != null);
+			toolStripButton_MainTool_SetAutoResponseControls(childIsReady);
+		}
+
+		private void SetAutoResponseCountChildControls()
+		{
+			toolStripButton_MainTool_SetAutoResponseCount();
 		}
 
 		private void SetRecentControls()
@@ -3556,26 +3647,38 @@ namespace YAT.View.Forms
 		{
 			terminalMdiChild.MdiParent = this;
 
-			terminalMdiChild.Changed    += terminalMdiChild_Changed;
-			terminalMdiChild.Saved      += terminalMdiChild_Saved;
+			terminalMdiChild.Changed                          += terminalMdiChild_Changed;
+			terminalMdiChild.Saved                            += terminalMdiChild_Saved;
 
-			terminalMdiChild.AutoActionCountChanged   += terminalMdiChild_AutoActionCountChanged;
-			terminalMdiChild.AutoResponseCountChanged += terminalMdiChild_AutoResponseCountChanged;
+			terminalMdiChild.AutoActionSettingsChanged        += terminalMdiChild_AutoActionSettingsChanged;
+			terminalMdiChild.AutoActionTriggerStateChanged    += terminalMdiChild_AutoActionTriggerStateChanged;
+		////terminalMdiChild.AutoActionActionStateChanged     += terminalMdiChild_AutoActionActionStateChanged is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+			terminalMdiChild.AutoActionCountChanged           += terminalMdiChild_AutoActionCountChanged;
+			terminalMdiChild.AutoResponseSettingsChanged      += terminalMdiChild_AutoResponseSettingsChanged;
+			terminalMdiChild.AutoResponseTriggerStateChanged  += terminalMdiChild_AutoResponseTriggerStateChanged;
+			terminalMdiChild.AutoResponseResponseStateChanged += terminalMdiChild_AutoResponseResponseStateChanged;
+			terminalMdiChild.AutoResponseCountChanged         += terminalMdiChild_AutoResponseCountChanged;
 
-			terminalMdiChild.Resize     += terminalMdiChild_Resize;
-			terminalMdiChild.FormClosed += terminalMdiChild_FormClosed;
+			terminalMdiChild.Resize                           += terminalMdiChild_Resize;
+			terminalMdiChild.FormClosed                       += terminalMdiChild_FormClosed;
 		}
 
 		private void DetachTerminalEventHandlersAndMdiChildFromParent(Terminal terminalMdiChild)
 		{
-			terminalMdiChild.Changed    -= terminalMdiChild_Changed;
-			terminalMdiChild.Saved      -= terminalMdiChild_Saved;
+			terminalMdiChild.Changed                          -= terminalMdiChild_Changed;
+			terminalMdiChild.Saved                            -= terminalMdiChild_Saved;
 
-			terminalMdiChild.AutoActionCountChanged   -= terminalMdiChild_AutoActionCountChanged;
-			terminalMdiChild.AutoResponseCountChanged -= terminalMdiChild_AutoResponseCountChanged;
+			terminalMdiChild.AutoActionSettingsChanged        -= terminalMdiChild_AutoActionSettingsChanged;
+			terminalMdiChild.AutoActionTriggerStateChanged    -= terminalMdiChild_AutoActionTriggerStateChanged;
+		////terminalMdiChild.AutoActionActionStateChanged     -= terminalMdiChild_AutoActionActionStateChanged is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+			terminalMdiChild.AutoActionCountChanged           -= terminalMdiChild_AutoActionCountChanged;
+			terminalMdiChild.AutoResponseSettingsChanged      -= terminalMdiChild_AutoResponseSettingsChanged;
+			terminalMdiChild.AutoResponseTriggerStateChanged  -= terminalMdiChild_AutoResponseTriggerStateChanged;
+			terminalMdiChild.AutoResponseResponseStateChanged -= terminalMdiChild_AutoResponseResponseStateChanged;
+			terminalMdiChild.AutoResponseCountChanged         -= terminalMdiChild_AutoResponseCountChanged;
 
-			terminalMdiChild.Resize     -= terminalMdiChild_Resize;
-			terminalMdiChild.FormClosed -= terminalMdiChild_FormClosed;
+			terminalMdiChild.Resize                           -= terminalMdiChild_Resize;
+			terminalMdiChild.FormClosed                       -= terminalMdiChild_FormClosed;
 
 			// Do not set terminalMdiChild.MdiParent to null. Doing so results in a detached non-
 			// MDI-form which appears for a short moment at the default startup location of windows.
@@ -3604,14 +3707,44 @@ namespace YAT.View.Forms
 			SetChildControls();
 		}
 
-		private void terminalMdiChild_AutoResponseCountChanged(object sender, EventArgs<int> e)
+		private void terminalMdiChild_AutoActionSettingsChanged(object sender, EventArgs e)
 		{
-			SetAutoCountChildControls();
+			SetAutoActionChildControls();
 		}
+
+		private void terminalMdiChild_AutoActionTriggerStateChanged(object sender, EventArgs e)
+		{
+			var state = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
+			SetAutoActionTriggerControls(state);
+		}
+
+	////private void terminalMdiChild_AutoActionActionStateChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
 		private void terminalMdiChild_AutoActionCountChanged(object sender, EventArgs<int> e)
 		{
-			SetAutoCountChildControls();
+			SetAutoActionCountChildControls();
+		}
+
+		private void terminalMdiChild_AutoResponseSettingsChanged(object sender, EventArgs e)
+		{
+			SetAutoResponseChildControls();
+		}
+
+		private void terminalMdiChild_AutoResponseTriggerStateChanged(object sender, EventArgs e)
+		{
+			var state = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
+			SetAutoResponseTriggerControls(state);
+		}
+
+		private void terminalMdiChild_AutoResponseResponseStateChanged(object sender, EventArgs e)
+		{
+			var state = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
+			SetAutoResponseResponseControls(state);
+		}
+
+		private void terminalMdiChild_AutoResponseCountChanged(object sender, EventArgs<int> e)
+		{
+			SetAutoResponseCountChildControls();
 		}
 
 		private void terminalMdiChild_Resize(object sender, EventArgs e)
