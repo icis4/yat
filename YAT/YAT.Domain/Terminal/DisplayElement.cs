@@ -138,7 +138,7 @@ namespace YAT.Domain
 
 			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
 			public TxData(byte[] origin, string text)
-				: this(DateTime.MinValue, origin, text)
+				: this(TimeStampDefault, origin, text)
 			{
 			}
 		}
@@ -167,7 +167,7 @@ namespace YAT.Domain
 
 			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
 			public TxControl(byte[] origin, string text)
-				: this(DateTime.MinValue, origin, text)
+				: this(TimeStampDefault, origin, text)
 			{
 			}
 		}
@@ -196,7 +196,7 @@ namespace YAT.Domain
 
 			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
 			public RxData(byte[] origin, string text)
-				: this(DateTime.MinValue, origin, text)
+				: this(TimeStampDefault, origin, text)
 			{
 			}
 		}
@@ -225,7 +225,7 @@ namespace YAT.Domain
 
 			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
 			public RxControl(byte[] origin, string text)
-				: this(DateTime.MinValue, origin, text)
+				: this(TimeStampDefault, origin, text)
 			{
 			}
 		}
@@ -236,13 +236,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			protected InfoElement(string text)
-				: this(Direction.None, text)
+				: this(DirectionDefault, text)
 			{
 			}
 
 			/// <summary></summary>
 			protected InfoElement(Direction direction, string text)
-				: this(DateTime.MinValue, direction, text)
+				: this(TimeStampDefault, direction, text)
 			{
 			}
 
@@ -271,7 +271,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeStampInfo(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
-				: base(timeStamp, Direction.None, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
+				: base(timeStamp, DirectionDefault, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
 			{
 			}
 
@@ -301,7 +301,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeSpanInfo(TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
-				: base(Direction.None, ToText(timeSpan, format, enclosureLeft, enclosureRight))
+				: base(DirectionDefault, ToText(timeSpan, format, enclosureLeft, enclosureRight))
 			{
 				TimeSpan = timeSpan;
 			}
@@ -329,7 +329,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeDeltaInfo(TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
-				: base(Direction.None, ToText(timeDelta, format, enclosureLeft, enclosureRight))
+				: base(DirectionDefault, ToText(timeDelta, format, enclosureLeft, enclosureRight))
 			{
 				TimeDelta = timeDelta;
 			}
@@ -357,7 +357,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeDurationInfo(TimeSpan timeDuration, string format, string enclosureLeft, string enclosureRight)
-				: base(Direction.None, ToText(timeDuration, format, enclosureLeft, enclosureRight))
+				: base(DirectionDefault, ToText(timeDuration, format, enclosureLeft, enclosureRight))
 			{
 				TimeDuration = timeDuration;
 			}
@@ -398,7 +398,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public DirectionInfo()
-				: this(Direction.None, null, null)
+				: this(DirectionDefault, null, null)
 			{
 			}
 
@@ -459,7 +459,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			protected FormatElement()
-				: this(Direction.None)
+				: this(DirectionDefault)
 			{
 			}
 
@@ -471,13 +471,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			protected FormatElement(string text)
-				: this(Direction.None, text)
+				: this(DirectionDefault, text)
 			{
 			}
 
 			/// <summary></summary>
 			protected FormatElement(Direction direction, string text)
-				: base(DateTime.MinValue, direction, text, ElementAttributes.Auxiliary)
+				: base(TimeStampDefault, direction, text, ElementAttributes.Auxiliary)
 			{
 			}
 		}
@@ -489,7 +489,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public ContentSpace()
-				: this(Direction.None)
+				: this(DirectionDefault)
 			{
 			}
 
@@ -543,13 +543,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			protected InlineElement(string text)
-				: this(Direction.None, text)
+				: this(DirectionDefault, text)
 			{
 			}
 
 			/// <summary></summary>
 			protected InlineElement(Direction direction, string text)
-				: this(DateTime.MinValue, direction, text)
+				: this(TimeStampDefault, direction, text)
 			{
 			}
 
@@ -580,7 +580,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public IOControlInfo(string message)
-				: this(DateTime.MinValue, Direction.None, message)
+				: this(TimeStampDefault, DirectionDefault, message)
 			{
 			}
 
@@ -608,13 +608,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public ErrorInfo(string message)
-				: this(Direction.None, message)
+				: this(DirectionDefault, message)
 			{
 			}
 
 			/// <summary></summary>
 			public ErrorInfo(Direction direction, string message)
-				: this(DateTime.MinValue, direction, message, false)
+				: this(TimeStampDefault, direction, message, false)
 			{
 			}
 
@@ -630,6 +630,29 @@ namespace YAT.Domain
 			{
 			}
 		}
+
+		#endregion
+
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary>
+		/// The <see cref="DateTime"/> used if no dedicated time stamp information is available.
+		/// </summary>
+		/// <remarks>
+		/// Corresponds to <see cref="DateTime.MinValue"/>.
+		/// </remarks>
+		public static readonly DateTime TimeStampDefault = DateTime.MinValue;
+
+		/// <summary>
+		/// The <see cref="Direction"/> used if no dedicated direction information is available.
+		/// </summary>
+		/// <remarks>
+		/// Corresponds to <see cref="Direction.None"/>.
+		/// </remarks>
+		public const Direction DirectionDefault = Direction.None;
 
 		#endregion
 
@@ -667,13 +690,13 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(ElementAttributes flags)
-			: this(Direction.None, flags)
+			: this(DirectionDefault, flags)
 		{
 		}
 
 		/// <summary></summary>
 		private DisplayElement(Direction direction, ElementAttributes flags)
-			: this(DateTime.MinValue, direction, null, flags)
+			: this(TimeStampDefault, direction, null, flags)
 		{
 		}
 

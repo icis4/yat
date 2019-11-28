@@ -100,7 +100,7 @@ namespace YAT.Domain
 			DeviceLineBreak       = new DeviceState();
 			DirectionLineBreak    = new DirectionState();
 			IsFirstLine           = true;
-			PreviousLineTimeStamp = DateTime.MinValue;
+			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
 		}
 
 		/// <summary>
@@ -186,7 +186,7 @@ namespace YAT.Domain
 		public virtual void Reset()
 		{
 			Position  = LinePosition.Begin;
-			TimeStamp = DateTime.MinValue;
+			TimeStamp = DisplayElement.TimeStampDefault;
 			Device    = null;
 			Direction = IODirection.None;
 			Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.

@@ -52,7 +52,7 @@ namespace YAT.Log.Utilities
 		public static int SaveLinesToFile(DisplayLineCollection displayLines, string filePath, bool addSchema)
 		{
 			List<XmlTransferRawLine> transferLines;
-			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
+			int count = ConvertLines(displayLines, out transferLines);
 			if (count > 0)
 			{
 				Type type = typeof(List<XmlTransferRawLine>);
@@ -70,13 +70,13 @@ namespace YAT.Log.Utilities
 		}
 
 		/// <returns>Returns the number of lines that could successfully be converted.</returns>
-		private static int LinesFromDisplayToTransfer(DisplayLineCollection displayLines, out List<XmlTransferRawLine> transferLines)
+		private static int ConvertLines(DisplayLineCollection displayLines, out List<XmlTransferRawLine> transferLines)
 		{
 			transferLines = new List<XmlTransferRawLine>(displayLines.Count); // Preset the required capacity to improve memory management.
 			foreach (var dl in displayLines)
 			{
 				XmlTransferRawLine tl;
-				if (LineFromDisplayToTransfer(dl, out tl))
+				if (ConvertLine(dl, out tl))
 					transferLines.Add(tl);
 				else
 					break; // Immediately break, 'output' will only contain successfully converted lines.
@@ -87,18 +87,19 @@ namespace YAT.Log.Utilities
 
 		/// <returns>Returns <c>true</c> if the line could successfully be converted.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferRawLine transferLine)
+		public static bool ConvertLine(DisplayLine displayLine, out XmlTransferRawLine transferLine)
 		{
-			// Note that display elements are text-only and no longer contain the underlying typed
-			// information such as the time stamp of the origin. Since the XML schema is strongly-
-			// typed again, the items need to be reconstructed. Not optimal, but simply a trade-off
-			// between display and log performance. After all, XML logging is probably rarly used.
+			// Note that display elements don't contain all underlying typed information such as the
+			// device string of the originating chunk. Since the XML schema is strongly-typed again,
+			// such items need to be reconstructed. Not optimal, but kind of a trade-off between the
+			// amount of date for displaying and log performance. Considered acceptable, XML logging
+			// is probably rarly used.
 
 			bool success = true;
 
 			var content = new List<byte>(displayLine.ByteCount); // Preset the required capacity to improve memory management.
 
-			DateTime timeStamp = DateTime.MinValue;
+			DateTime timeStamp = DisplayElement.TimeStampDefault;
 			string deviceStr = "";
 
 			bool containsTx = false;
@@ -106,7 +107,7 @@ namespace YAT.Log.Utilities
 
 			foreach (var de in displayLine)
 			{
-				// Try to cast to the more frequent Tx/Rx elements first, in order to improve speed!
+				// Try to cast to the more frequent Tx/Rx elements first, in order to improve speed.
 				{
 					var casted = (de as DisplayElement.TxData);
 					if (casted != null)
@@ -115,7 +116,7 @@ namespace YAT.Log.Utilities
 							content.AddRange(origin.Value1);
 
 						containsTx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -126,7 +127,7 @@ namespace YAT.Log.Utilities
 							content.AddRange(origin.Value1);
 
 						containsTx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -137,7 +138,7 @@ namespace YAT.Log.Utilities
 							content.AddRange(origin.Value1);
 
 						containsRx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -148,7 +149,7 @@ namespace YAT.Log.Utilities
 							content.AddRange(origin.Value1);
 
 						containsRx = true;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 
@@ -158,7 +159,7 @@ namespace YAT.Log.Utilities
 					if (casted != null)
 					{
 						timeStamp = casted.TimeStamp;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 				{
@@ -166,7 +167,7 @@ namespace YAT.Log.Utilities
 					if (casted != null)
 					{
 						deviceStr = casted.Text;
-						continue; // Immediately continue, makes no sense to also try other types!
+						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
 
@@ -179,8 +180,13 @@ namespace YAT.Log.Utilities
 				// 'Length' is not used with 'XmlTransferRawLine'.
 			}
 
-			Direction direction;
+			// In case the meta information elements are not contained (e.g. if not shown),
+			// fall-back to the 'DisplayElemetColletion' property:
+			if (timeStamp == DisplayElement.TimeStampDefault) { timeStamp = displayLine.TimeStamp; }
 
+			// Direction could also be retrieved from 'displayLine.Direction', but that would require
+			// another loop over the whole collection, thus evaluating here base on the flags:
+			Direction direction;
 			if (containsTx && containsRx)
 				direction = Direction.Bidir;
 			else if (containsTx)
