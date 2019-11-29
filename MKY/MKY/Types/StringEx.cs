@@ -246,6 +246,7 @@ namespace MKY
 		/// <summary>
 		/// Counts the number of <paramref name="countChars"/> to the left of <paramref name="str"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static int CountLeft(string str, params char[] countChars)
 		{
@@ -284,6 +285,7 @@ namespace MKY
 		/// <summary>
 		/// Counts the number of <paramref name="countChars"/> to the right of <paramref name="str"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static int CountRight(string str, params char[] countChars)
 		{
@@ -329,8 +331,13 @@ namespace MKY
 		/// <summary>
 		/// Determines how many occurrances of <paramref name="value"/> are contained in <paramref name="str"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static int ContainingCount(string str, string value)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			int count = 0;
 
 			int i = 0;
@@ -346,8 +353,12 @@ namespace MKY
 		/// <summary>
 		/// Determines whether <paramref name="str"/> contains any of the <paramref name="anyOf"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static bool ContainsAny(string str, char[] anyOf)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			return (str.IndexOfAny(anyOf) >= 0);
 		}
 
@@ -357,7 +368,8 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool ContainsAny(string str, params string[] values)
 		{
 			return (ContainsAny(str, (IEnumerable<string>)values));
@@ -369,9 +381,13 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool ContainsAny(string str, IEnumerable<string> values)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			foreach (string v in values)
 			{
 				if (str.Contains(v))
@@ -394,9 +410,13 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="value">The string to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of the comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static bool StartsWithOrdinal(string str, string value)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			return (str.StartsWith(value, StringComparison.Ordinal));
 		}
 
@@ -406,9 +426,13 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="value">The string to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of the comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static bool StartsWithOrdinalIgnoreCase(string str, string value)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			return (str.StartsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
 
@@ -418,10 +442,11 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool StartsWithAny(string str, params string[] values)
 		{
-			return (StartsWithAny(str, (IEnumerable<string>)values, false, null));
+			return (StartsWithAny(str, values, false, null));
 		}
 
 		/// <summary>
@@ -430,7 +455,8 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool StartsWithAny(string str, IEnumerable<string> values)
 		{
 			return (StartsWithAny(str, values, false, null));
@@ -445,9 +471,13 @@ namespace MKY
 		/// <param name="ignoreCase">true to ignore case when comparing this string and value; otherwise, false.</param>
 		/// <param name="culture">Cultural information that determines how this string and value are compared. If culture is null, the current culture is used.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool StartsWithAny(string str, IEnumerable<string> values, bool ignoreCase, CultureInfo culture)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			foreach (string v in values)
 			{
 				if (str.StartsWith(v, ignoreCase, culture))
@@ -464,10 +494,14 @@ namespace MKY
 		/// <param name="values">The strings to compare with.</param>
 		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values that determines how the strings and the value are compared.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
 		public static bool StartsWithAny(string str, IEnumerable<string> values, StringComparison comparisonType)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			foreach (string v in values)
 			{
 				if (str.StartsWith(v, comparisonType))
@@ -482,7 +516,8 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool StartsWithAnyOrdinalIgnoreCase(string str, IEnumerable<string> values)
 		{
 			return (StartsWithAny(str, values, StringComparison.OrdinalIgnoreCase));
@@ -494,7 +529,8 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool StartsWithAnyOrdinalIgnoreCase(string str, params string[] values)
 		{
 			return (StartsWithAnyOrdinalIgnoreCase(str, (IEnumerable<string>)values));
@@ -506,9 +542,13 @@ namespace MKY
 		/// <param name="str">The string.</param>
 		/// <param name="value">The string to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the end of the comparing string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static bool EndsWithOrdinalIgnoreCase(string str, string value)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			return (str.EndsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
 
@@ -522,8 +562,12 @@ namespace MKY
 		/// <summary>
 		/// Truncates <paramref name="str"/> to the <paramref name="length"/> leftmost characters.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string Left(string str, int length)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			if (length >= str.Length)
 				return (str);
 			else if (length <= 0)
@@ -535,8 +579,12 @@ namespace MKY
 		/// <summary>
 		/// Truncates <paramref name="str"/> from <paramref name="begin"/> to <paramref name="end"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string Mid(string str, int begin, int end)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			if (begin >= end)
 				return ("");
 			else if ((begin < 0) || (begin >= str.Length) || (end < 0))
@@ -550,8 +598,12 @@ namespace MKY
 		/// <summary>
 		/// Truncates <paramref name="str"/> to the <paramref name="length"/> rightmost characters.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string Right(string str, int length)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			if (length >= str.Length)
 				return (str);
 			else if (length <= 0)
@@ -568,8 +620,12 @@ namespace MKY
 		/// Limits the give string to the specified max length. If the string exceed the max length,
 		/// <see cref="Ellipsis"/> are appended.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string Limit(string str, int length)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			if (str.Length <= length)
 				return (str);
 			else
@@ -586,8 +642,12 @@ namespace MKY
 		/// <summary>
 		/// Splits <paramref name="str"/> to the <paramref name="length"/> leftmost characters.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitLeft(string str, int length)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			string left = Left(str, length);
 			string right = Right(str, (str.Length - left.Length));
 
@@ -600,8 +660,12 @@ namespace MKY
 		/// <summary>
 		/// Splits <paramref name="str"/> to the <paramref name="length"/> rightmost characters.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitRight(string str, int length)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			string right = Right(str, length);
 			string left = Left(str, (str.Length - right.Length));
 
@@ -614,8 +678,12 @@ namespace MKY
 		/// <summary>
 		/// Splits <paramref name="str"/> into chunks of <paramref name="desiredChunkLength"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitFixedLength(string str, int desiredChunkLength)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			var l = new List<string>(str.Length); // Preset the required capacity to improve memory management.
 			for (int i = 0; i < str.Length; i += desiredChunkLength)
 			{
@@ -629,8 +697,12 @@ namespace MKY
 		/// Splits <paramref name="str"/> into chunks of <paramref name="desiredChunkLength"/>,
 		/// taking word boundaries into account.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitLexically(string str, int desiredChunkLength)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			string[] newLineSeparators = new string[] { Environment.NewLine, "\n", "\r" };
 
@@ -640,8 +712,12 @@ namespace MKY
 			return (chunks.ToArray());
 		}
 
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkLength)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			var spaces = new List<int>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 
 			// Retrieve all spaces within the string:
@@ -706,9 +782,13 @@ namespace MKY
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string Trim(string str, int maxLength, params char[] trimChars)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			if (trimChars != null)
 			{
 				// Left:
@@ -746,9 +826,13 @@ namespace MKY
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string TrimSymmetrical(string str, int maxLength, params char[] trimChars)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			if (trimChars != null)
 			{
 				// Count the number of trim characters at both ends:
@@ -782,9 +866,13 @@ namespace MKY
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string TrimSymmetrical(string str, params char[] trimChars)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			if (trimChars != null)
 			{
 				return (TrimSymmetrical(str, int.MaxValue, trimChars));
@@ -810,8 +898,12 @@ namespace MKY
 		/// <returns>
 		/// The zero-based index position of the start of the same character class in the string.
 		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static int IndexOfSameCharacterClass(string str, int startIndex)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			int i = startIndex;
 
 			if (char.IsWhiteSpace(str, i)) // Includes 'IsSeparator' (Unicode space/line/paragraph
@@ -859,6 +951,7 @@ namespace MKY
 		/// <returns>
 		/// The zero-based index position of the start of the same character class in the string.
 		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static int IndexOfWholeWord(string str, string searchWord, StringComparison comparisonType)
 		{
 			return (IndexOfWholeWord(str, searchWord, 0, comparisonType));
@@ -874,8 +967,12 @@ namespace MKY
 		/// <returns>
 		/// The zero-based index position of the start of the same character class in the string.
 		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static int IndexOfWholeWord(string str, string searchWord, int startIndex, StringComparison comparisonType)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			int i = startIndex;  // Using string.IndexOf() because string.Contains() does not allow controlling culture and case.
 			while ((i < str.Length) && ((i = str.IndexOf(searchWord, i, comparisonType)) != InvalidIndex))
 			{
@@ -907,6 +1004,7 @@ namespace MKY
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
 		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, StringComparison comparisonType)
 		{
@@ -928,12 +1026,16 @@ namespace MKY
 		/// or <see cref="InvalidIndex"/> if it is not. If value is <see cref="String.Empty"/>,
 		/// the return value is <paramref name="startIndex"/>.
 		/// </returns>
-		/// <exception cref="ArgumentNullException">searchString is null.</exception>
-		/// <exception cref="ArgumentOutOfRangeException">count or startIndex is negative.  -or- count plus startIndex specify a position that is not within this instance.</exception>
-		/// <exception cref="ArgumentException">comparisonType is not a valid <see cref="StringComparison"/> value.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="searchString"/> is null.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> or <paramref name="startIndex"/> is negative.  -or- <paramref name="count"/> plus <paramref name="startIndex"/> specify a position that is not within this instance.</exception>
+		/// <exception cref="ArgumentException"><paramref name="comparisonType"/> is not a valid <see cref="StringComparison"/> value.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
 		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, int startIndex, int count, StringComparison comparisonType)
 		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
 			string substring = str.Substring(startIndex, count); // Crop the string as desired.
 
 			string rep = substring.Replace(@"\""", @""""); // Replace \" by "" to ease processing below.
