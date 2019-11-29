@@ -45,7 +45,7 @@ namespace YAT.Model.Types
 	{
 		None = 0,
 
-		PredefinedCommand1 = 1,
+		PredefinedCommand1 = 1, // 1:1 mapping used by ToPredefinedCommandId().
 		PredefinedCommand2 = 2,
 		PredefinedCommand3 = 3,
 		PredefinedCommand4 = 4,
@@ -131,38 +131,30 @@ namespace YAT.Model.Types
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Technically, 'Predefined' could also support text/regex, but doesn't make much sense:
+		/// <list type="bullet">
+		/// <item><description>Command defines a byte sequence anyway.</description></item>
+		/// <item><description>YAT style escapes are useless for text maching.</description></item>
+		/// <item><description>Regex style escapes are not supported for commands.</description></item>
+		/// </list>
+		/// </remarks>
 		public bool TextIsSupported
 		{
-			get
-			{
-				switch ((AutoTrigger)UnderlyingEnum)
-				{
-					case AutoTrigger.None:
-					case AutoTrigger.AnyLine:
-						return (false);
-
-					default:
-						return (true);
-				}
-			}
+			get { return (((AutoTrigger)UnderlyingEnum) == AutoTrigger.Explicit); }
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Technically, 'Predefined' could also support text/regex, but doesn't make much sense:
+		/// <list type="bullet">
+		/// <item><description>Command defines a byte sequence anyway.</description></item>
+		/// <item><description>YAT style escapes are useless for text maching.</description></item>
+		/// <item><description>Regex style escapes are not supported for commands.</description></item>
+		/// </list>
+		/// </remarks>
 		public bool RegexIsSupported
 		{
-			get
-			{
-				switch ((AutoTrigger)UnderlyingEnum)
-				{
-					case AutoTrigger.None:
-					case AutoTrigger.AnyLine:
-						return (false);
-
-					default:
-						return (true);
-				}
-			}
+			get { return (((AutoTrigger)UnderlyingEnum) == AutoTrigger.Explicit); }
 		}
 
 		/// <summary></summary>
