@@ -1330,10 +1330,10 @@ namespace YAT.Application
 		/// ]]>
 		/// Common:
 		/// <list type="bullet">
-		/// </list>
 		/// <item><description>Source is "System" or "mscorlib".</description></item>
 		/// <item><description>Stack trace contains "SafeFileHandle" or "SafeWaitHandle".</description></item>
 		/// <item><description>Stack trace contains "System.IO.Ports.SerialStream".</description></item>
+		/// </list>
 		/// </remarks>
 		private static bool IsSerialPortCausedObjectDisposedExceptionInMscorlibOrSystem(Exception ex)
 		{
@@ -1374,9 +1374,9 @@ namespace YAT.Application
 		/// ]]>
 		/// Common:
 		/// <list type="bullet">
-		/// </list>
 		/// <item><description>Source is "System".</description></item>
 		/// <item><description>Stack trace contains "System.IO.Ports.SerialStream.EventLoopRunner".</description></item>
+		/// </list>
 		/// </remarks>
 		private static bool IsSerialPortCausedUnauthorizedAccessExceptionInEventLoopRunner(Exception ex)
 		{
