@@ -783,12 +783,18 @@ namespace YAT.View.Forms
 				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
+				bool textIsSupported  = false;
+				bool regexIsSupported = false;
+
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
 					var trigger = this.settingsRoot.AutoResponse.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+
+					textIsSupported  = trigger.TextIsSupported;
+					regexIsSupported = trigger.RegexIsSupported;
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
@@ -1045,12 +1051,18 @@ namespace YAT.View.Forms
 				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
+				bool textIsSupported  = false;
+				bool regexIsSupported = false;
+
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
 					var trigger = this.settingsRoot.AutoAction.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+
+					textIsSupported  = trigger.TextIsSupported;
+					regexIsSupported = trigger.RegexIsSupported;
 
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());

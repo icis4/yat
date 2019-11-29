@@ -1188,15 +1188,16 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive         = false;
-				bool textIsSupported  = false;
-				bool regexIsSupported = false;
-				bool useText          = false;
- 				bool useRegex         = false;
+				bool isActive = false;
+				bool useText  = false;
+ 				bool useRegex = false;
 
 				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger      = AutoTrigger.None;
 				AutoContentState triggerState = AutoContentState.Neutral;
+
+				bool textIsSupported  = false;
+				bool regexIsSupported = false;
 
 				AutoActionEx[]   actionItems = AutoActionEx.GetItems();
 				AutoActionEx     action      = AutoAction.None;
@@ -1208,14 +1209,15 @@ namespace YAT.View.Forms
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
 						isActive         = activeTerminal.SettingsRoot.AutoAction.IsActive;
-						textIsSupported  =
-						regexIsSupported =
 						useText          = activeTerminal.SettingsRoot.AutoAction.Options.UseText;
 						useRegex         = activeTerminal.SettingsRoot.AutoAction.Options.UseRegex;
 
 						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
 						trigger          = activeTerminal.SettingsRoot.AutoAction.Trigger;
 						triggerState     = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
+
+						textIsSupported  = trigger.TextIsSupported;
+						regexIsSupported = trigger.RegexIsSupported;
 
 						actionItems      = activeTerminal.SettingsRoot.GetValidAutoActionItems();
 						action           = activeTerminal.SettingsRoot.AutoAction.Action;
@@ -1301,15 +1303,16 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive         = false;
-				bool textIsSupported  = false;
-				bool regexIsSupported = false;
-				bool useText          = false;
- 				bool useRegex         = false;
+				bool isActive = false;
+				bool useText  = false;
+ 				bool useRegex = false;
 
 				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger      = AutoTrigger.None;
 				AutoContentState triggerState = AutoContentState.Neutral;
+
+				bool textIsSupported  = false;
+				bool regexIsSupported = false;
 
 				AutoResponseEx[] responseItems = AutoResponseEx.GetFixedItems();
 				AutoResponseEx   response      = AutoResponse.None;
@@ -1321,14 +1324,15 @@ namespace YAT.View.Forms
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
 						isActive         = activeTerminal.SettingsRoot.AutoResponse.IsActive;
-						textIsSupported  =
-						regexIsSupported =
 						useText          = activeTerminal.SettingsRoot.AutoResponse.Options.UseText;
 						useRegex         = activeTerminal.SettingsRoot.AutoResponse.Options.UseRegex;
 
 						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
 						trigger          = activeTerminal.SettingsRoot.AutoResponse.Trigger;
 						triggerState     = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
+
+						textIsSupported  = trigger.TextIsSupported;
+						regexIsSupported = trigger.RegexIsSupported;
 
 						responseItems    = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
 						response         = activeTerminal.SettingsRoot.AutoResponse.Response;
