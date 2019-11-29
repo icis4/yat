@@ -30,9 +30,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Diagnostics;
+using MKY.Text.RegularExpressions;
 using MKY.Time;
 using MKY.Xml;
 
@@ -440,6 +444,9 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// The currently valid triggers usable for automatic action or response.
 		/// </summary>
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
 		public virtual AutoTriggerEx[] GetValidAutoTriggerItems()
 		{
 			AutoTriggerEx[] triggers = AutoTriggerEx.GetAllItems();
@@ -476,10 +483,7 @@ namespace YAT.Settings.Model
 
 					case AutoTrigger.Explicit:
 					{
-						var c = new Command(AutoResponse.Trigger); // No explicit default radix available (yet).
-						if (c.IsValidText(Send.Text.ToParseMode())) // Trigger can never be a file command.
-							a.Add(trigger);
-
+						// AutoTriggerEx.GetAllItems() only contains the defined items, 'Explicit' is not contained.
 						break;
 					}
 
@@ -499,6 +503,9 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// The currently valid response items usable for automatic action.
 		/// </summary>
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Symmetricity with GetValidAutoResponseItems() above.")]
 		public virtual AutoActionEx[] GetValidAutoActionItems()
 		{
@@ -508,6 +515,9 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// The currently valid response items usable for automatic response.
 		/// </summary>
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
 		public virtual AutoResponseEx[] GetValidAutoResponseItems(string rootDirectoryForFile)
 		{
 			var responses = AutoResponseEx.GetAllItems();
@@ -562,10 +572,7 @@ namespace YAT.Settings.Model
 
 					case YAT.Model.Types.AutoResponse.Explicit:
 					{
-						var c = new Command(AutoResponse.Response); // No explicit default radix available (yet).
-						if (c.IsValid(Send.Text.ToParseMode(), rootDirectoryForFile))
-							l.Add(response);
-
+						// AutoResponseEx.GetAllItems() only contains the defined items, 'Explicit' is not contained.
 						break;
 					}
 
@@ -585,40 +592,48 @@ namespace YAT.Settings.Model
 		/// <summary>
 		/// The currently active trigger used for automatic action.
 		/// </summary>
-		[XmlIgnore]
-		public virtual Command ActiveAutoActionTrigger
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
+		public virtual bool TryGetActiveAutoActionTrigger(out Command command, out string textOrRegexPattern, out Regex regex)
 		{
-			get
-			{
-				if (AutoAction.TriggerIsActive)
-					return (GetActiveAutoTrigger(AutoAction.Trigger));
+			if (AutoAction.TriggerIsActive)
+				return (TryGetActiveAutoTrigger(AutoAction.Trigger, AutoAction.Options.UseText, AutoAction.Options.UseRegex,
+				                                out command, out textOrRegexPattern, out regex));
 
-				return (null);
-			}
+			command = null;
+			textOrRegexPattern = null;
+			regex = null;
+			return (false);
 		}
 
 		/// <summary>
 		/// The currently active trigger used for automatic response.
 		/// </summary>
-		[XmlIgnore]
-		public virtual Command ActiveAutoResponseTrigger
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
+		public virtual bool TryGetActiveAutoResponseTrigger(out Command command, out string textOrRegexPattern, out Regex regex)
 		{
-			get
-			{
-				if (AutoResponse.TriggerIsActive)
-					return (GetActiveAutoTrigger(AutoResponse.Trigger));
+			if (AutoResponse.TriggerIsActive)
+				return (TryGetActiveAutoTrigger(AutoResponse.Trigger, AutoResponse.Options.UseText, AutoResponse.Options.UseRegex,
+				                                out command, out textOrRegexPattern, out regex));
 
-				return (null);
-			}
+			command = null;
+			textOrRegexPattern = null;
+			regex = null;
+			return (false);
 		}
 
 		/// <summary>
 		/// Gets the corresponding automatic trigger.
 		/// </summary>
-		protected virtual Command GetActiveAutoTrigger(AutoTriggerEx trigger)
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
+		protected virtual bool TryGetActiveAutoTrigger(AutoTriggerEx trigger, bool useText, bool useRegex,
+		                                               out Command command, out string textOrRegexPattern, out Regex regex)
 		{
-			Command command = null;
-
 			switch ((AutoTrigger)trigger)
 			{
 				case AutoTrigger.PredefinedCommand1:
@@ -640,7 +655,12 @@ namespace YAT.Settings.Model
 					{
 						var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode()))) // Trigger can never be a file command.
+						{
 							command = c;
+							textOrRegexPattern = null;
+							regex = null;
+							return (true);
+						}
 					}
 
 					break;
@@ -648,9 +668,40 @@ namespace YAT.Settings.Model
 
 				case AutoTrigger.Explicit:
 				{
-					var c = new Command(trigger); // No explicit default radix available (yet).
-					if (c.IsValidText(Send.Text.ToParseMode())) // Trigger can never be a file command.
-						command = c;
+					if (!useText && !useRegex) // == IsByteSequenceTriggered
+					{
+						var c = new Command(trigger); // No explicit default radix available (yet).
+						if (c.IsValidText(Send.Text.ToParseMode())) // Trigger can never be a file command.
+						{
+							command = c;
+							textOrRegexPattern = null;
+							regex = null;
+							return (true);
+						}
+					}
+					else // IsTextOrRegexTriggered
+					{
+						command = null;
+						textOrRegexPattern = trigger;
+
+						if (useText)
+						{
+							regex = null;
+							return (true);
+						}
+						else // useRegex
+						{
+							try
+							{
+								regex = new Regex(trigger);
+								return (true);
+							}
+							catch (ArgumentException ex)
+							{
+								TraceEx.WriteException(this.GetType(), ex, string.Format(CultureInfo.CurrentCulture, @"Failed to create regex object for trigger ""{0}""!", trigger));
+							}
+						}
+					}
 
 					break;
 				}
@@ -663,7 +714,10 @@ namespace YAT.Settings.Model
 				}
 			}
 
-			return (command);
+			command = null;
+			textOrRegexPattern = null;
+			regex = null;
+			return (false);
 		}
 
 		#endregion

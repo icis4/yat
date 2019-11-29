@@ -27,9 +27,7 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 using YAT.Model.Types;
 
@@ -53,7 +51,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Tries to parse the given command into the corresponding byte sequence, taking the current settings into account.
 		/// </summary>
-		private bool TryParseCommandToSequence(Command c, out byte[] sequence)
+		protected virtual bool TryParseCommandToSequence(Command c, out byte[] sequence)
 		{
 			if ((c != null) && (this.terminal != null))
 			{
@@ -86,61 +84,6 @@ namespace YAT.Model
 			}
 
 			sequence = null;
-			return (false);
-		}
-
-		/// <summary>
-		/// Tries to parse the given command into the corresponding byte sequence, taking the current settings into account.
-		/// </summary>
-		private bool TryValidateCommandForTriggerText(Command c, out string triggerText)
-		{
-			if ((c != null) && (this.terminal != null))
-			{
-				if (c.IsSingleLineText)
-				{
-					triggerText = c.SingleLineText;
-					return (true);
-				}
-				else if (c.IsMultiLineText)
-				{
-					// Not (yet) supported.
-				}
-			}
-
-			triggerText = null;
-			return (false);
-		}
-
-		/// <summary>
-		/// Tries to parse the given command into a <see cref="Regex"/>.
-		/// </summary>
-		private bool TryCreateTriggerRegexFromCommand(Command c, out string triggerPattern, out Regex triggerRegex)
-		{
-			if ((c != null) && (this.terminal != null))
-			{
-				if (c.IsSingleLineText)
-				{
-					try
-					{
-						triggerPattern = c.SingleLineText;
-						triggerRegex = new Regex(triggerPattern);
-						return (true);
-					}
-					catch (ArgumentException)
-					{
-						triggerPattern = null;
-						triggerRegex = null;
-						return (false);
-					}
-				}
-				else if (c.IsMultiLineText)
-				{
-					// Not (yet) supported.
-				}
-			}
-
-			triggerPattern = null;
-			triggerRegex = null;
 			return (false);
 		}
 	}
