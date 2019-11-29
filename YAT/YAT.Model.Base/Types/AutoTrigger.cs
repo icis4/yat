@@ -126,6 +126,45 @@ namespace YAT.Model.Types
 			this.explicitCommandString = explicitCommandString;
 		}
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool TextIsSupported
+		{
+			get
+			{
+				switch ((AutoTrigger)UnderlyingEnum)
+				{
+					case AutoTrigger.None:
+					case AutoTrigger.AnyLine:
+						return (false);
+
+					default:
+						return (true);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public bool RegexIsSupported
+		{
+			get
+			{
+				switch ((AutoTrigger)UnderlyingEnum)
+				{
+					case AutoTrigger.None:
+					case AutoTrigger.AnyLine:
+						return (false);
+
+					default:
+						return (true);
+				}
+			}
+		}
+
 		/// <summary></summary>
 		public bool CommandIsRequired
 		{
@@ -158,6 +197,8 @@ namespace YAT.Model.Types
 				return (InvalidPredefinedCommandId);
 			}
 		}
+
+		#endregion
 
 		#region Object Members
 		//==========================================================================================
