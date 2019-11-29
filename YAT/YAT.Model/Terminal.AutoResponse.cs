@@ -92,78 +92,62 @@ namespace YAT.Model
 			{
 				if (this.settingsRoot.AutoResponse.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
-					if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
-					{
-						byte[] triggerSequence;
-						if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out triggerSequence))
-						{
-							lock (this.autoResponseTriggerHelperSyncObj)
-								this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerSequence);
-						}
-						else
-						{
-							DeactivateAutoResponse();
-							DisposeAutoResponseHelper();
+					Command triggerCommand;
+					string  triggerTextOrRegexPattern;
+					Regex   triggerRegex;
 
-							OnMessageInputRequest
-							(
-								"Failed to parse the automatic response trigger! The trigger does not specify valid YAT command text! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
-								"To enable again, re-configure the automatic response.",
-								"Automatic Response Error",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
+					if (this.settingsRoot.TryGetActiveAutoResponseTrigger(out triggerCommand, out triggerTextOrRegexPattern, out triggerRegex))
+					{
+						if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
+						{
+							byte[] triggerSequence;
+							if (TryParseCommandToSequence(triggerCommand, out triggerSequence))
+							{
+								lock (this.autoResponseTriggerHelperSyncObj)
+									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerSequence);
+							}
+							else
+							{
+								DeactivateAutoResponse();
+								DisposeAutoResponseHelper();
+
+								OnMessageInputRequest
+								(
+									"Failed to parse the automatic response trigger! The trigger does not specify valid YAT command text! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
+									"To enable again, re-configure the automatic response.",
+									"Automatic Response Error",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning
+								);
+							}
+						}
+						else // IsTextOrRegexTriggered
+						{
+							if (this.settingsRoot.AutoResponse.IsTextTriggered)
+							{
+								lock (this.autoResponseTriggerHelperSyncObj)
+									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern);
+							}
+							else // IsRegexTriggered
+							{
+								lock (this.autoResponseTriggerHelperSyncObj)
+									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, triggerRegex);
+							}
 						}
 					}
-					else // IsTextOrRegexTriggered
+					else
 					{
-						if (this.settingsRoot.AutoResponse.IsTextTriggered)
-						{
-							string triggerText;
-							if (TryValidateCommandForTriggerText(this.settingsRoot.ActiveAutoResponseTrigger, out triggerText))
-							{
-								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerText);
-							}
-							else
-							{
-								DeactivateAutoResponse();
-								DisposeAutoResponseHelper();
+						DeactivateAutoResponse();
+						DisposeAutoResponseHelper();
 
-								OnMessageInputRequest
-								(
-									"Failed to parse the automatic response trigger! The trigger is not a single line command! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
-									"To enable again, re-configure the automatic response.",
-									"Automatic Response Error",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning
-								);
-							}
-						}
-						else // IsRegexTriggered
-						{
-							string triggerRegexPattern;
-							Regex triggerRegex;
-							if (TryCreateTriggerRegexFromCommand(this.settingsRoot.ActiveAutoResponseTrigger, out triggerRegexPattern, out triggerRegex))
-							{
-								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerRegexPattern, triggerRegex);
-							}
-							else
-							{
-								DeactivateAutoResponse();
-								DisposeAutoResponseHelper();
-
-								OnMessageInputRequest
-								(
-									"Failed to parse the automatic response trigger! The trigger does not specify a valid regular expression! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
-									"To enable again, re-configure the automatic response.",
-									"Automatic Response Error",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning
-								);
-							}
-						}
+						OnMessageInputRequest
+						(
+							"Failed to retrieve the automatic response trigger! The trigger does not available! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
+							"To enable again, re-configure the automatic response.",
+							"Automatic Response Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
 					}
 				}
 				else // No command required = no sequence required = no helper required.

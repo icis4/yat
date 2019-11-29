@@ -97,78 +97,62 @@ namespace YAT.Model
 			{
 				if (this.settingsRoot.AutoAction.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
-					if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
-					{
-						byte[] triggerSequence;
-						if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoActionTrigger, out triggerSequence))
-						{
-							lock (this.autoActionTriggerHelperSyncObj)
-								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerSequence);
-						}
-						else
-						{
-							DeactivateAutoAction();
-							DisposeAutoActionHelper();
+					Command triggerCommand;
+					string  triggerTextOrRegexPattern;
+					Regex   triggerRegex;
 
-							OnMessageInputRequest
-							(
-								"Failed to parse the automatic action trigger! The trigger does not specify valid YAT command text! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
-								"To enable again, re-configure the automatic action.",
-								"Automatic Action Error",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
+					if (this.settingsRoot.TryGetActiveAutoActionTrigger(out triggerCommand, out triggerTextOrRegexPattern, out triggerRegex))
+					{
+						if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+						{
+							byte[] triggerSequence;
+							if (TryParseCommandToSequence(triggerCommand, out triggerSequence))
+							{
+								lock (this.autoActionTriggerHelperSyncObj)
+									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerSequence);
+							}
+							else
+							{
+								DeactivateAutoAction();
+								DisposeAutoActionHelper();
+
+								OnMessageInputRequest
+								(
+									"Failed to parse the automatic action trigger! The trigger does not specify valid YAT command text! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
+									"To enable again, re-configure the automatic action.",
+									"Automatic Action Error",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning
+								);
+							}
+						}
+						else // IsTextOrRegexTriggered
+						{
+							if (this.settingsRoot.AutoAction.IsTextTriggered)
+							{
+								lock (this.autoActionTriggerHelperSyncObj)
+									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern);
+							}
+							else // IsRegexTriggered
+							{
+								lock (this.autoActionTriggerHelperSyncObj)
+									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, triggerRegex);
+							}
 						}
 					}
-					else // IsTextOrRegexTriggered
+					else
 					{
-						if (this.settingsRoot.AutoAction.IsTextTriggered)
-						{
-							string triggerText;
-							if (TryValidateCommandForTriggerText(this.settingsRoot.ActiveAutoActionTrigger, out triggerText))
-							{
-								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerText);
-							}
-							else
-							{
-								DeactivateAutoAction();
-								DisposeAutoActionHelper();
+						DeactivateAutoAction();
+						DisposeAutoActionHelper();
 
-								OnMessageInputRequest
-								(
-									"Failed to parse the automatic action trigger! The trigger is not a single line command! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
-									"To enable again, re-configure the automatic action.",
-									"Automatic Action Error",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning
-								);
-							}
-						}
-						else // IsRegexTriggered
-						{
-							string triggerRegexPattern;
-							Regex triggerRegex;
-							if (TryCreateTriggerRegexFromCommand(this.settingsRoot.ActiveAutoActionTrigger, out triggerRegexPattern, out triggerRegex))
-							{
-								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerRegexPattern, triggerRegex);
-							}
-							else
-							{
-								DeactivateAutoAction();
-								DisposeAutoActionHelper();
-
-								OnMessageInputRequest
-								(
-									"Failed to parse the automatic action trigger! The trigger does not specify a valid regular expression! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
-									"To enable again, re-configure the automatic action.",
-									"Automatic Action Error",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning
-								);
-							}
-						}
+						OnMessageInputRequest
+						(
+							"Failed to retrieve the automatic action trigger! The trigger does not available! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
+							"To enable again, re-configure the automatic action.",
+							"Automatic Action Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
 					}
 				}
 				else // No command required = no sequence required = no helper required.

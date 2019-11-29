@@ -317,7 +317,7 @@ namespace YAT.Model.Types
 			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand11));
 			if (addVariable) a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand12));
 
-			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+			// This method shall only return the defined items, 'Explicit' is not added therefore.
 
 			return (a.ToArray());
 		}
