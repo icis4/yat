@@ -677,9 +677,9 @@ namespace YAT.Domain
 			var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
 			if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
 			{
-				if (txIsAffected)    { EvaluateAndSignalDeviceLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device); }
-				if (bidirIsAffected) { EvaluateAndSignalDeviceLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device); }
-				if (rxIsAffected)    { EvaluateAndSignalDeviceLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device); }
+				if (txIsAffected)    { EvaluateAndSignalDeviceLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (bidirIsAffected) { EvaluateAndSignalDeviceLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
+				if (rxIsAffected)    { EvaluateAndSignalDeviceLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
 			}
 
 			if (TerminalSettings.Display.DirectionLineBreakEnabled)
@@ -696,14 +696,14 @@ namespace YAT.Domain
 		{
 			if (TerminalSettings.TxDisplayChunkLineBreakEnabled)
 			{
-				if (txIsAffected)                                           { EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp); }
-				if (bidirIsAffected && (chunk.Direction == IODirection.Tx)) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp); }
+				if (txIsAffected)                                           { EvaluateAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Direction); }
+				if (bidirIsAffected && (chunk.Direction == IODirection.Tx)) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction); }
 			}
 
 			if (TerminalSettings.RxDisplayChunkLineBreakEnabled)
 			{
-				if (bidirIsAffected && (chunk.Direction == IODirection.Rx)) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp); }
-				if (rxIsAffected)                                           { EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp); }
+				if (bidirIsAffected && (chunk.Direction == IODirection.Rx)) { EvaluateAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction); }
+				if (rxIsAffected)                                           { EvaluateAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Direction); }
 			}
 		}
 
@@ -768,14 +768,14 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.TxDisplayTimedLineBreak.Enabled)
 					{
-						if (txIsAffected)                                           { EvaluateTimedLineBreakOnReload(RepositoryType.Tx,    chunk.TimeStamp, timedLineBreak.Timeout, txElementsToAdd,    txLinesToAdd);    }
-						if (bidirIsAffected && (chunk.Direction == IODirection.Tx)) { EvaluateTimedLineBreakOnReload(RepositoryType.Bidir, chunk.TimeStamp, timedLineBreak.Timeout, bidirElementsToAdd, bidirLinesToAdd); }
+						if (txIsAffected)                                           { EvaluateTimedLineBreakOnReload(RepositoryType.Tx,    chunk.TimeStamp, chunk.Direction, timedLineBreak.Timeout, txElementsToAdd,    txLinesToAdd);    }
+						if (bidirIsAffected && (chunk.Direction == IODirection.Tx)) { EvaluateTimedLineBreakOnReload(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction, timedLineBreak.Timeout, bidirElementsToAdd, bidirLinesToAdd); }
 					}
 
 					if (TerminalSettings.RxDisplayTimedLineBreak.Enabled)
 					{
-						if (bidirIsAffected && (chunk.Direction == IODirection.Rx)) { EvaluateTimedLineBreakOnReload(RepositoryType.Bidir, chunk.TimeStamp, timedLineBreak.Timeout, bidirElementsToAdd, bidirLinesToAdd); }
-						if (rxIsAffected)                                           { EvaluateTimedLineBreakOnReload(RepositoryType.Rx,    chunk.TimeStamp, timedLineBreak.Timeout, rxElementsToAdd,    rxLinesToAdd);    }
+						if (bidirIsAffected && (chunk.Direction == IODirection.Rx)) { EvaluateTimedLineBreakOnReload(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction, timedLineBreak.Timeout, bidirElementsToAdd, bidirLinesToAdd); }
+						if (rxIsAffected)                                           { EvaluateTimedLineBreakOnReload(RepositoryType.Rx,    chunk.TimeStamp, chunk.Direction, timedLineBreak.Timeout, rxElementsToAdd,    rxLinesToAdd);    }
 					}
 				}
 
@@ -840,12 +840,12 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
-		protected virtual void EvaluateAndSignalDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev)
+		protected virtual void EvaluateAndSignalDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
 
-			EvaluateDeviceLineBreak(repositoryType, ts, dev, elementsToAdd, linesToAdd);
+			EvaluateDeviceLineBreak(repositoryType, ts, dev, dir, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
@@ -870,12 +870,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void EvaluateAndSignalChunkLineBreak(RepositoryType repositoryType, DateTime ts)
+		protected virtual void EvaluateAndSignalChunkLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
 
-			EvaluateChunkLineBreak(repositoryType, ts, elementsToAdd, linesToAdd);
+			EvaluateChunkLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
@@ -885,12 +885,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void EvaluateAndSignalTimedLineBreak(RepositoryType repositoryType, DateTime ts)
+		protected virtual void EvaluateAndSignalTimedLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
 
-			EvaluateTimedLineBreak(repositoryType, ts, elementsToAdd, linesToAdd);
+			EvaluateTimedLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
@@ -901,7 +901,7 @@ namespace YAT.Domain
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
-		protected virtual void EvaluateDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev,
+		protected virtual void EvaluateDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
 		                                               DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
@@ -917,7 +917,7 @@ namespace YAT.Domain
 					{
 						DebugLineBreak(repositoryType, "EvaluateDeviceLineBreak => DoLineEnd()");
 
-						DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 					}
 				}
 			}
@@ -943,7 +943,7 @@ namespace YAT.Domain
 					{
 						DebugLineBreak(repositoryType, "EvaluateDirectionLineBreak => DoLineEnd()");
 
-						DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 					}
 				}
 			}
@@ -952,7 +952,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void EvaluateChunkLineBreak(RepositoryType repositoryType, DateTime ts,
+		protected virtual void EvaluateChunkLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
 		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
@@ -960,12 +960,12 @@ namespace YAT.Domain
 			{
 				DebugLineBreak(repositoryType, "EvaluateChunkLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void EvaluateTimedLineBreak(RepositoryType repositoryType, DateTime ts,
+		protected virtual void EvaluateTimedLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
 		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
@@ -973,12 +973,12 @@ namespace YAT.Domain
 			{
 				DebugLineBreak(repositoryType, "EvaluateTimedLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void EvaluateTimedLineBreakOnReload(RepositoryType repositoryType, DateTime ts, int timeout,
+		protected virtual void EvaluateTimedLineBreakOnReload(RepositoryType repositoryType, DateTime ts, IODirection dir, int timeout,
 		                                                      DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
@@ -989,7 +989,7 @@ namespace YAT.Domain
 				{
 					DebugLineBreak(repositoryType, "EvaluateTimedLineBreakOnReload => DoLineEnd()");
 
-					DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+					DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 				}
 			}
 		}
@@ -1067,7 +1067,7 @@ namespace YAT.Domain
 		/// for specialization by <see cref="BinaryTerminal"/> and <see cref="TextTerminal"/>.
 		/// </remarks>
 		protected virtual void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
-		                                 DateTime ts,
+		                                 DateTime ts, IODirection dir,
 		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			DebugLineBreak(repositoryType, "DoLineEnd() => NotifyLineEnd()");
@@ -1151,8 +1151,8 @@ namespace YAT.Domain
 
 			////if (TerminalSettings.TxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{
-					EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now);
-					EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now);
+					EvaluateAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
+					EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
 				}
 			}
 		}
@@ -1171,8 +1171,8 @@ namespace YAT.Domain
 
 			////if (TerminalSettings.RxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{
-					EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now);
-					EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now);
+					EvaluateAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
+					EvaluateAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
 				}
 			}
 		}

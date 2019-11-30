@@ -5,7 +5,7 @@
   <ProductVersion>2.1.1</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Mark>
-    <TimeStamp>2019-11-30T13:22:20.5466234+01:00</TimeStamp>
+    <TimeStamp>2019-11-30T21:57:45.798494+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Mark>
   <Page>
@@ -83,10 +83,26 @@
     </Commands>
     <Commands>
       <IsDefined>true</IsDefined>
-      <Description>&lt;2 lines...&gt; [A] [AB\!(Delay(1000))ABC]</Description>
+      <Description>&lt;2 lines...&gt; [A] [B\!(Delay(1000))ABC]</Description>
       <DefaultRadix>String</DefaultRadix>
       <CommandLines>A</CommandLines>
-      <CommandLines>AB\!(Delay(1000))ABC</CommandLines>
+      <CommandLines>B\!(Delay(1000))ABC</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>123ABC123</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>123ABC123</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>23&lt;NUL&gt;1</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>23&lt;NUL&gt;1</CommandLines>
       <IsFilePath>false</IsFilePath>
       <FilePath />
     </Commands>
