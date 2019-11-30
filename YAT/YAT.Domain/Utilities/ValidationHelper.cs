@@ -111,13 +111,13 @@ namespace YAT.Domain.Utilities
 				{
 					if (successfullyParsed.Length <= textToValidate.Length)
 					{
-						sb.Append(                          " is incomplete");
+						sb.Append(                          " is incomplete!");
 					}
 					else
 					{
 						sb.Append(                          " is invalid at position ");
 						sb.Append(                                                  (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture));
-						sb.Append(                                                                                                                     ".");
+						sb.Append(                                                                                                                     "!");
 						if (successfullyParsed.Length > 0)
 						{
 							sb.Append(Environment.NewLine);
@@ -129,7 +129,7 @@ namespace YAT.Domain.Utilities
 				}
 				else
 				{
-					sb.Append(                              " is invalid.");
+					sb.Append(                              " is invalid!");
 				}
 
 				if (!string.IsNullOrEmpty(formatException.Message))

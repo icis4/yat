@@ -932,7 +932,7 @@ namespace YAT.Domain
 			if (successfullyParsed != null)
 			{
 				sb.Append(            " is invalid at position ");
-				sb.Append(                                    (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
+				sb.Append(                                    (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + "!");
 				if (successfullyParsed.Length > 0)
 				{
 					sb.Append(                                           @" Only """);
@@ -942,7 +942,7 @@ namespace YAT.Domain
 			}
 			else
 			{
-				sb.Append(            " is invalid.");
+				sb.Append(            " is invalid!");
 			}
 
 			return (sb.ToString());
