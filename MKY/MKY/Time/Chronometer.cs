@@ -90,7 +90,7 @@ namespace MKY.Time
 		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
-	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
+	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName); // See remarks above!
 
 		private System.Timers.Timer secondTicker; // Not "using" 'System.Timers' to prevent conflicts with 'System.Threading'.
 		private DateTime startTimeStamp = DateTime.Now;
