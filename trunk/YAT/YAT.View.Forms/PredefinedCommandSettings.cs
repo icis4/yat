@@ -334,7 +334,7 @@ namespace YAT.View.Forms
 		private void button_CopyPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			CommandPagesSettingsClipboardHelper.TrySetOne(this.settingsInEdit, this.selectedPageId);
+			CommandPagesSettingsClipboardHelper.TrySetOne(this, this.settingsInEdit, this.selectedPageId);
 		}
 
 		private void button_ExportPageToFile_Click(object sender, EventArgs e)
@@ -350,7 +350,7 @@ namespace YAT.View.Forms
 		private void button_CutPageToClipboard_Click(object sender, EventArgs e)
 		{
 			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-			if (CommandPagesSettingsClipboardHelper.TrySetOne(this.settingsInEdit, this.selectedPageId))
+			if (CommandPagesSettingsClipboardHelper.TrySetOne(this, this.settingsInEdit, this.selectedPageId))
 				DeletePage();
 		}
 
@@ -383,7 +383,7 @@ namespace YAT.View.Forms
 
 		private void button_ExportAllPagesToClipboard_Click(object sender, EventArgs e)
 		{
-			CommandPagesSettingsClipboardHelper.TrySetAll(this.settingsInEdit);
+			CommandPagesSettingsClipboardHelper.TrySetAll(this, this.settingsInEdit);
 		}
 
 		private void button_ImportAllPagesFromClipboard_Click(object sender, EventArgs e)
@@ -911,7 +911,7 @@ namespace YAT.View.Forms
 			{
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
-				if (CommandSettingsClipboardHelper.TrySet(sc))
+				if (CommandSettingsClipboardHelper.TrySet(this, sc))
 				{
 					this.settingsInEdit.ClearCommand(SelectedPageIndex, (contextMenuStrip_Commands_SelectedCommandId - 1));
 					SetControls();
@@ -932,7 +932,7 @@ namespace YAT.View.Forms
 			{
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
-				CommandSettingsClipboardHelper.TrySet(sc);
+				CommandSettingsClipboardHelper.TrySet(this, sc);
 				Cursor = Cursors.Default;
 			}
 		}
@@ -940,7 +940,7 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_CommandContextMenu_Paste_Click(object sender, EventArgs e)
 		{
 			Command cc;
-			if (CommandSettingsClipboardHelper.TryGet(out cc))
+			if (CommandSettingsClipboardHelper.TryGet(this, out cc))
 			{
 				this.settingsInEdit.SetCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId - 1, cc);
 				SetControls();

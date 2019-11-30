@@ -71,9 +71,9 @@ namespace YAT.View.Utilities
 		public static bool TrySet(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId)
 		{
 			var pageCount = settings.Pages.Count;
-			if (pageCount <= 1) // Copy without asking:
-			{                   // Specifying '1' will copy a single page (not all).
-				return (TrySet(settings.Pages, 1));
+			if (pageCount <= 1)        // Copy without asking:
+			{                          // Specifying '1' will copy a single page (not all).
+				return (TrySet(owner, settings.Pages, 1));
 			}
 			else // if (pageCount > 1)
 			{
@@ -90,8 +90,8 @@ namespace YAT.View.Utilities
 						MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: return (TrySetAll(settings));
-					case DialogResult.No:  return (TrySetOne(settings, selectedPageId));
+					case DialogResult.Yes: return (TrySetAll(owner, settings));
+					case DialogResult.No:  return (TrySetOne(owner, settings, selectedPageId));
 
 					default:               return (false);
 				}
@@ -104,9 +104,9 @@ namespace YAT.View.Utilities
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TrySetAll(PredefinedCommandSettings settings)
-		{                                                   // Specifying 'NoPageId' will copy all pages (not a single).
-			return (TrySet(settings.Pages, PredefinedCommandPageCollection.NoPageId));
+		public static bool TrySetAll(IWin32Window owner, PredefinedCommandSettings settings)
+		{                                                          // Specifying 'NoPageId' will copy all pages (not a single).
+			return (TrySet(owner, settings.Pages, PredefinedCommandPageCollection.NoPageId));
 		}
 
 		/// <summary>
@@ -115,28 +115,28 @@ namespace YAT.View.Utilities
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static bool TrySetOne(PredefinedCommandSettings settings, int pageId)
+		public static bool TrySetOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId)
 		{
 			var pages = new PredefinedCommandPageCollection();
 			pages.Add(new PredefinedCommandPage(settings.Pages[pageId - 1])); // Clone to ensure decoupling.
-			       // Specifying '1' will copy a single page (not all).
-			return (TrySet(pages, 1));
+			              // Specifying '1' will copy a single page (not all).
+			return (TrySet(owner, pages, 1));
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool TrySet(PredefinedCommandPageCollection pages, int pageId)
+		private static bool TrySet(IWin32Window owner, PredefinedCommandPageCollection pages, int pageId)
 		{
 			if ((pages.Count == 1) && (pageId != PredefinedCommandPageCollection.NoPageId))
-				return (TrySet(pages[0]));
+				return (TrySet(owner, pages[0]));
 			else
-				return (TrySet(pages));
+				return (TrySet(owner, pages));
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
-		private static bool TrySet(PredefinedCommandPage page)
+		private static bool TrySet(IWin32Window owner, PredefinedCommandPage page)
 		{
 			try
 			{
@@ -153,6 +153,7 @@ namespace YAT.View.Utilities
 			{                         // occurs when it is being used by another process.
 				MessageBoxEx.Show
 				(
+					owner,
 					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
 					"Make sure the clipboard is not blocked by another process.",
 					"Clipboard Error",
@@ -166,7 +167,7 @@ namespace YAT.View.Utilities
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
-		private static bool TrySet(PredefinedCommandPageCollection pages)
+		private static bool TrySet(IWin32Window owner, PredefinedCommandPageCollection pages)
 		{
 			try
 			{
@@ -183,6 +184,7 @@ namespace YAT.View.Utilities
 			{                         // occurs when it is being used by another process.
 				MessageBoxEx.Show
 				(
+					owner,
 					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
 					"Make sure the clipboard is not blocked by another process.",
 					"Clipboard Error",
@@ -197,7 +199,7 @@ namespace YAT.View.Utilities
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Required for fallback handling.")]
-		private static bool TryGet(out PredefinedCommandPageCollection pages)
+		private static bool TryGet(IWin32Window owner, out PredefinedCommandPageCollection pages)
 		{
 			string s;
 
@@ -209,6 +211,7 @@ namespace YAT.View.Utilities
 			{                         // occurs when it is being used by another process.
 				MessageBoxEx.Show
 				(
+					owner,
 					"Failed to paste from clipboard!" + Environment.NewLine + Environment.NewLine +
 					"Make sure the clipboard is not blocked by another process.",
 					"Clipboard Error",
@@ -251,6 +254,7 @@ namespace YAT.View.Utilities
 					{
 						MessageBoxEx.Show
 						(
+							owner,
 							((rootCasted.Pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
 							"No Commands",
 							MessageBoxButtons.OK,
@@ -293,6 +297,7 @@ namespace YAT.View.Utilities
 
 			MessageBoxEx.Show
 			(
+				owner,
 				"Clipboard does not contain valid " + ApplicationEx.CommonName + " command page(s) definition content.",
 				"Clipboard Content Not Valid",
 				MessageBoxButtons.OK,
@@ -309,7 +314,7 @@ namespace YAT.View.Utilities
 		public static bool TryGetAndImportAll(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
-			if (TryGet(out pagesImported))
+			if (TryGet(owner, out pagesImported))
 			{
 				if (settingsOld.Pages.TotalDefinedCommandCount > 0)
 				{
@@ -354,7 +359,7 @@ namespace YAT.View.Utilities
 		public static bool TryGetAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
-			if (TryGet(out pagesImported))
+			if (TryGet(owner, out pagesImported))
 			{
 				if (settingsOld.Pages.TotalDefinedCommandCount > 0)
 				{
@@ -418,7 +423,7 @@ namespace YAT.View.Utilities
 		public static bool TryGetAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
-			if (TryGet(out pagesImported))
+			if (TryGet(owner, out pagesImported))
 			{
 				                                           // Specifying 'selectedPageId' will insert (instead of add).
 				return (TryAddOrInsert(owner, settingsOld, pagesImported, selectedPageId, out settingsNew));
@@ -434,7 +439,7 @@ namespace YAT.View.Utilities
 		public static bool TryGetAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
 			PredefinedCommandPageCollection pagesImported;
-			if (TryGet(out pagesImported))
+			if (TryGet(owner, out pagesImported))
 			{
 				                                                                           // Specifying 'NoPageId' will add (not insert).
 				return (TryAddOrInsert(owner, settingsOld, pagesImported, PredefinedCommandPageCollection.NoPageId, out settingsNew));
