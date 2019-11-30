@@ -386,11 +386,11 @@ namespace YAT.Domain
 		protected virtual bool ElementsAreSeparate(IODirection d)
 		{
 			switch (d)
-			{
-				case IODirection.None:  return (false); // This can be the case e.g. when the line direction has not yet been determined.
-
-				case IODirection.Tx:    return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) /* Pragmatic best-effort approach. */                   );
+			{                                                                                         // Pragmatic best-effort approach.
+				case IODirection.None:  return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) || ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 				case IODirection.Bidir: return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) || ElementsAreSeparate(TerminalSettings.Display.RxRadix));
+
+				case IODirection.Tx:    return (ElementsAreSeparate(TerminalSettings.Display.TxRadix)                                                         );
 				case IODirection.Rx:    return (                                                         ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 
 				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
