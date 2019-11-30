@@ -122,9 +122,9 @@ namespace YAT.Domain
 		// Constants
 		//==========================================================================================
 
-		private const string RxFramingErrorString        = "RX FRAMING ERROR";
-		private const string RxBufferOverrunErrorString  = "RX BUFFER OVERRUN";
-		private const string RxBufferOverflowErrorString = "RX BUFFER OVERFLOW";
+		private const string RxFramingErrorString        = "RX FRAMING ERROR";   // No '!' for these
+		private const string RxBufferOverrunErrorString  = "RX BUFFER OVERRUN";  // special inline
+		private const string RxBufferOverflowErrorString = "RX BUFFER OVERFLOW"; // error messages.
 		private const string RxParityErrorString         = "RX PARITY ERROR";
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 

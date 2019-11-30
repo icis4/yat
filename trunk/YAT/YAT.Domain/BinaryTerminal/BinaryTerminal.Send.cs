@@ -76,7 +76,7 @@ namespace YAT.Domain
 				case Parser.Keyword.Eol:
 				case Parser.Keyword.NoEol:
 				{
-					string message = ((Parser.KeywordEx)(result.Keyword)) + " keyword is not supported for binary terminals";
+					string message = ((Parser.KeywordEx)(result.Keyword)) + " keyword is not supported for binary terminals!";
 					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, message));
 					break;
 				}
