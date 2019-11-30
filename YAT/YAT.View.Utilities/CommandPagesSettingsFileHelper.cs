@@ -183,6 +183,7 @@ namespace YAT.View.Utilities
 
 				MessageBoxEx.Show
 				(
+					owner,
 					errorMessage,
 					"File Error",
 					MessageBoxButtons.OK,
@@ -353,6 +354,7 @@ namespace YAT.View.Utilities
 						{
 							MessageBoxEx.Show
 							(
+								owner,
 								"File contains no command pages.",
 								"No Pages",
 								MessageBoxButtons.OK,
@@ -367,6 +369,7 @@ namespace YAT.View.Utilities
 						{
 							MessageBoxEx.Show
 							(
+								owner,
 								((pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
 								"No Commands",
 								MessageBoxButtons.OK,
@@ -389,6 +392,7 @@ namespace YAT.View.Utilities
 						{
 							MessageBoxEx.Show
 							(
+								owner,
 								"File contains no command pages.",
 								"No Pages",
 								MessageBoxButtons.OK,
@@ -403,6 +407,7 @@ namespace YAT.View.Utilities
 						{
 							MessageBoxEx.Show
 							(
+								owner,
 								((settings.Pages.Count == 1) ? "Page contains" : "Pages contain") + " no commands.",
 								"No Commands",
 								MessageBoxButtons.OK,
@@ -427,6 +432,7 @@ namespace YAT.View.Utilities
 						{
 							MessageBoxEx.Show
 							(
+								owner,
 								"File contains no commands.",
 								"No Commands",
 								MessageBoxButtons.OK,
@@ -451,6 +457,7 @@ namespace YAT.View.Utilities
 
 				MessageBoxEx.Show
 				(
+					owner,
 					errorMessage,
 					"File Error",
 					MessageBoxButtons.OK,

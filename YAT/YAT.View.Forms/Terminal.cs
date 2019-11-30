@@ -2816,7 +2816,7 @@ namespace YAT.View.Forms
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
 				SetFixedStatusText("Cutting to clipboard...");
-				if (CommandSettingsClipboardHelper.TrySet(sc))
+				if (CommandSettingsClipboardHelper.TrySet(this, sc))
 				{
 					this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
 
@@ -2845,7 +2845,7 @@ namespace YAT.View.Forms
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
 				SetFixedStatusText("Copying to clipboard...");
-				if (CommandSettingsClipboardHelper.TrySet(sc))
+				if (CommandSettingsClipboardHelper.TrySet(this, sc))
 				{
 					Cursor = Cursors.Default;
 					SetTimedStatusText("Copying to clipboard done");
@@ -2862,7 +2862,7 @@ namespace YAT.View.Forms
 		{
 			Command cc;
 			SetFixedStatusText("Pasting from clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
-			if (CommandSettingsClipboardHelper.TryGet(out cc))
+			if (CommandSettingsClipboardHelper.TryGet(this, out cc))
 			{
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, cc);
 				SetTimedStatusText("Pasting from clipboard done");

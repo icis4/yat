@@ -68,7 +68,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
-		public static bool TrySet(Command c)
+		public static bool TrySet(IWin32Window owner, Command c)
 		{
 			var root = new CommandSettingsRoot();
 			root.Command = c;
@@ -85,6 +85,7 @@ namespace YAT.View.Utilities
 			{                         // occurs when it is being used by another process.
 				MessageBoxEx.Show
 				(
+					owner,
 					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
 					"Make sure the clipboard is not blocked by another process.",
 					"Clipboard Error",
@@ -98,7 +99,7 @@ namespace YAT.View.Utilities
 
 		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		public static bool TryGet(out Command c)
+		public static bool TryGet(IWin32Window owner, out Command c)
 		{
 			string s;
 
@@ -110,6 +111,7 @@ namespace YAT.View.Utilities
 			{                         // occurs when it is being used by another process.
 				MessageBoxEx.Show
 				(
+					owner,
 					"Failed to paste from clipboard!" + Environment.NewLine + Environment.NewLine +
 					"Make sure the clipboard is not blocked by another process.",
 					"Clipboard Error",
@@ -164,6 +166,7 @@ namespace YAT.View.Utilities
 
 			MessageBoxEx.Show
 			(
+				owner,
 				"Clipboard does not contain valid " + ApplicationEx.CommonName + " command definition content.",
 				"Clipboard Content Not Valid",
 				MessageBoxButtons.OK,

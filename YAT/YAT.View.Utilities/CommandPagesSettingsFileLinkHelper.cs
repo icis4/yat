@@ -176,16 +176,25 @@ namespace YAT.View.Utilities
 				{
 					if (page.DefinedCommandCount < 1)
 					{
-						MessageBoxEx.Show
-						(
-							"File contains no commands.",
-							"No Commands",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Exclamation
-						);
+						var message = new StringBuilder();
+						message.AppendLine("File contains no commands.");
+						message.AppendLine();
+						message.AppendLine("Would you like to link to");
+						message.AppendLine(@"""" + ofd.FileName + @"""");
+						message.Append    ("anyway?");
 
-						filePath = null;
-						return (false);
+						if (MessageBoxEx.Show
+							(
+								owner,
+								message.ToString(),
+								"No Commands",
+								MessageBoxButtons.YesNo,
+								MessageBoxIcon.Exclamation
+							) != DialogResult.Yes)
+						{
+							filePath = null;
+							return (false);
+						}
 					}
 
 					filePath = ofd.FileName;
@@ -200,6 +209,7 @@ namespace YAT.View.Utilities
 
 				MessageBoxEx.Show
 				(
+					owner,
 					errorMessage,
 					"File Error",
 					MessageBoxButtons.OK,
