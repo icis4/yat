@@ -190,7 +190,7 @@ namespace YAT.Domain
 
 			if (lineState.Position == LinePosition.End)
 			{
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 
 				// In case of elements for next line immediately flush and start the new line:
 				if (elementsForNextLine.Count > 0)
@@ -271,9 +271,7 @@ namespace YAT.Domain
 
 					de = null; // Indicate that element has been consumed.
 
-					elementsForNextLine = new DisplayElementCollection(binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Capacity); // Preset the required capacity to improve memory management.
-					foreach (var dePending in binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
-						elementsForNextLine.Add(dePending.Clone());
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, elementsForNextLine);
 
 					lineState.Position = LinePosition.End;
 				}
@@ -286,8 +284,8 @@ namespace YAT.Domain
 				}
 				else if (binaryLineState.SequenceBefore.IsPartlyMatchBeginning)
 				{
-					// Previous was no match, previous sequence can be treated as normal:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(binaryLineState, lp);
+					// Previous was no match, retained potential sequence elements can be treated as non-sequence:
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, lp);
 
 					// Keep sequence elements and delay them until sequence is either complete or refused:
 					binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
@@ -296,8 +294,8 @@ namespace YAT.Domain
 				}
 				else
 				{
-					// No match at all, previous sequence can be treated as normal:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(binaryLineState, lp);
+					// No match at all, retained potential sequence elements can be treated as non-sequence:
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, lp);
 				}
 			}
 
@@ -349,21 +347,33 @@ namespace YAT.Domain
 			}
 		}
 
-		private static void ReleaseRetainedUnconfirmedHiddenSequenceBefore(BinaryLineState binaryLineState, DisplayElementCollection lp)
+		private void ReleaseRetainedUnconfirmedHiddenSequenceBefore(LineState lineState, BinaryLineState binaryLineState, IODirection dir, DisplayElementCollection lp)
 		{
 			if (binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Count > 0)
 			{
-				lp.AddRange(binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements); // No clone needed as collection is cleared below.
+				foreach (var de in binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
+				{
+					AddSpaceIfNecessary(lineState, dir, lp, de);
+					lp.Add(de); // No clone needed as element is no more used below.
+				}
+
 				binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Clear();
 			}
 		}
 
 		/// <summary></summary>
-		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState, DateTime ts,
+		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
+		                                  DateTime ts, IODirection dir,
 		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var lineState = processState.Line; // Convenience shortcut.
 			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, lineState.Direction);
+
+			// In case of e.g. a timed line break, retained potential sequence elements can be treated as non-sequence:
+			ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, lineState.Elements);
+
+			// Note that it is OK to release the elements above, as binary terminals always show all bytes.
+			// This is opposed to text terminals where potential EOL elements are potentially hidden.
 
 			// Process line length:
 			var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
@@ -387,7 +397,7 @@ namespace YAT.Domain
 
 			// Finalize the line:
 			binaryLineState.NotifyLineEnd();
-			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+			base.DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 		}
 
 		#endregion

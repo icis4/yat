@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections.Generic;
+
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
 // YAT.Domain\Terminal for better separation of the implementation files.
@@ -30,13 +32,13 @@ namespace YAT.Domain
 	public class BinaryLineState
 	{
 		/// <summary></summary>
-		public SequenceQueue            SequenceAfter                                   { get; set; }
+		public SequenceQueue        SequenceAfter                                   { get; set; }
 
 		/// <summary></summary>
-		public SequenceQueue            SequenceBefore                                  { get; set; }
+		public SequenceQueue        SequenceBefore                                  { get; set; }
 
-		/// <summary></summary>
-		public DisplayElementCollection RetainedUnconfirmedHiddenSequenceBeforeElements { get; set; }
+		/// <remarks>Must not be a <see cref="DisplayElementCollection"/> to prevent elements from being appended/merged.</remarks>
+		public List<DisplayElement> RetainedUnconfirmedHiddenSequenceBeforeElements { get; set; }
 
 		/// <summary></summary>
 		public BinaryLineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore)
@@ -59,7 +61,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Initialize()
 		{
-			RetainedUnconfirmedHiddenSequenceBeforeElements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, the default initial capacity is good enough.
 		}
 
 		/// <summary>

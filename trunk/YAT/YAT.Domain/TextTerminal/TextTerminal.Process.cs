@@ -659,7 +659,7 @@ namespace YAT.Domain
 
 			if (lineState.Position == LinePosition.End)
 			{
-				DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 			}
 		}
 
@@ -741,7 +741,7 @@ namespace YAT.Domain
 					if (TextTerminalSettings.ShowEol)
 					{
 						AddSpaceIfNecessary(lineState, dir, lp, de);
-						lp.Add(de.Clone()); // No clone needed as element is no more used below.
+						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
 					{
@@ -756,14 +756,14 @@ namespace YAT.Domain
 			else if (textLineState.EolOfGivenDevice[dev].IsPartlyMatchBeginning)
 			{
 				// Previous was no match, retained potential EOL elements can be treated as non-EOL:
-				ReleaseRetainedUnconfirmedHiddenEolElements(textLineState, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textLineState, dir, lp);
 
 				if (de.IsContent)
 				{
 					if (TextTerminalSettings.ShowEol)
 					{
 						AddSpaceIfNecessary(lineState, dir, lp, de);
-						lp.Add(de.Clone()); // No clone needed as element is no more used below.
+						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
 					{
@@ -793,7 +793,7 @@ namespace YAT.Domain
 			else
 			{
 				// No match at all, retained potential EOL elements can be treated as non-EOL:
-				ReleaseRetainedUnconfirmedHiddenEolElements(textLineState, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textLineState, dir, lp);
 
 				// Add the current element, which for sure is not related to EOL:
 				AddSpaceIfNecessary(lineState, dir, lp, de);
@@ -949,18 +949,23 @@ namespace YAT.Domain
 		/// <summary>
 		/// Releases the retained unconfirmed hidden EOL elements by adding them to <paramref name="lp"/>.
 		/// </summary>
-		private static void ReleaseRetainedUnconfirmedHiddenEolElements(TextLineState textLineState, DisplayElementCollection lp)
+		private void ReleaseRetainedUnconfirmedHiddenEolElements(LineState lineState, TextLineState textLineState, IODirection dir, DisplayElementCollection lp)
 		{
 			if (textLineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
-				lp.AddRange(textLineState.RetainedUnconfirmedHiddenEolElements); // No clone needed as collection is cleared below.
+				foreach (var de in textLineState.RetainedUnconfirmedHiddenEolElements)
+				{
+					AddSpaceIfNecessary(lineState, dir, lp, de);
+					lp.Add(de); // No clone needed as element is no more used below.
+				}
+
 				textLineState.RetainedUnconfirmedHiddenEolElements.Clear();
 			}
 		}
 
 		/// <summary></summary>
 		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
-		                                  DateTime ts,
+		                                  DateTime ts, IODirection dir,
 		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			// Note: The test cases of [YAT - Test.ods]::[YAT.Domain.Terminal] cover the empty line cases.
@@ -968,7 +973,10 @@ namespace YAT.Domain
 			var lineState = processState.Line; // Convenience shortcut.
 			var textLineState = GetTextLineState(repositoryType, lineState.Direction);
 			var dev = lineState.Device;
-			                                                                   //// This count corresponds to the current line.
+
+			// Note that, in case of e.g. a timed line break, retained potential EOL elements will be handled by DoLineContent().
+			// This is needed because potential EOL elements are potentially hidden. Opposed to binary terminals, where all bytes are shown.
+			                                                                  // This count corresponds to the current line.
 			bool isEmptyLine                        = (lineState.Elements.CharCount == 0);
 			bool isEmptyLineWithHiddenNonEol        = (isEmptyLine && !textLineState.EolIsAnyMatch(dev));
 			bool isEmptyLineWithPendingEol          = (isEmptyLine &&  textLineState.EolIsAnyMatch(dev));                                        // No empty line formerly shown.
@@ -1015,7 +1023,7 @@ namespace YAT.Domain
 
 			// Finalize the line:
 			textLineState.NotifyLineEnd(dev);
-			base.DoLineEnd(repositoryType, processState, ts, elementsToAdd, linesToAdd);
+			base.DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 		}
 
 		#endregion

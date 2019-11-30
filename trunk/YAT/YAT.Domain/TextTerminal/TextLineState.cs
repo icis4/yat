@@ -43,9 +43,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Dictionary<string, SequenceQueue> EolOfGivenDevice                     { get; private set; }
 
-
-		/// <summary></summary>
-		public DisplayElementCollection          RetainedUnconfirmedHiddenEolElements { get; private set; }
+		/// <remarks>Must not be a <see cref="DisplayElementCollection"/> to prevent elements from being appended/merged.</remarks>
+		public List<DisplayElement>              RetainedUnconfirmedHiddenEolElements { get; private set; }
 
 		/// <summary></summary>
 		public TextLineState(byte[] eolSequence)
@@ -71,7 +70,7 @@ namespace YAT.Domain
 			PendingMultiBytesToDecode            = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			ShownCharCount                       = 0;
 			EolOfGivenDevice                     = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
-			RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			RetainedUnconfirmedHiddenEolElements = new List<DisplayElement>(); // No preset needed, the default initial capacity is good enough.
 		}
 
 		/// <summary>
