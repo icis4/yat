@@ -80,7 +80,7 @@ namespace MKY.Time
 		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RateProvider).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
-	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
+	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RateProvider).FullName); // See remarks above!
 
 		private Rate rate;
 

@@ -138,7 +138,7 @@ namespace YAT.Domain
 		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
-	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
+	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName); // See remarks above!
 
 		private int instanceId;
 
