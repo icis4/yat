@@ -387,11 +387,12 @@ namespace YAT.Domain
 		{
 			switch (d)
 			{
+				case IODirection.None:  return (false); // This can be the case e.g. when the line direction has not yet been determined.
+
 				case IODirection.Tx:    return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) /* Pragmatic best-effort approach. */                   );
 				case IODirection.Bidir: return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) || ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 				case IODirection.Rx:    return (                                                         ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
