@@ -55,7 +55,11 @@ namespace YAT.Domain
 	/// <summary></summary>
 	public enum LinePosition
 	{
+		/// <remarks>
+		/// Also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+		/// </remarks>
 		Begin,
+
 		Content,
 		ContentExceeded,
 		End
