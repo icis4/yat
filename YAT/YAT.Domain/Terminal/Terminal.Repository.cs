@@ -135,7 +135,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(repositoryType))
 					{
-						ProcessRawChunk(raw);
+						ProcessRawChunk(repositoryType, raw);
 					}
 					this.isReloading = false;
 					ReloadMyRepository(repositoryType);
@@ -183,11 +183,19 @@ namespace YAT.Domain
 
 					// Reload repositories:
 					this.isReloading = true;
+					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Tx))
+					{                                            // Separate Tx/Bidir/Rx processing is required...
+						ProcessRawChunk(RepositoryType.Tx, raw); // ...for selectively clearing repositories...
+					}                                            // ...with ClearRepository(repository).
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
 					{
-						ProcessRawChunk(raw);
+						ProcessRawChunk(RepositoryType.Bidir, raw);
 					}
-					this.isReloading = false;
+					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Rx))
+					{                                            // Synchronized Tx/Bidir/Rx processing is not...
+						ProcessRawChunk(RepositoryType.Rx, raw); // ...useful for synchronized incremental monitor...
+					}                                            // ...refresh because monitors are only refreshed...
+					this.isReloading = false;                    // ...by the subsequent 'ReloadMyRepository' calls.
 					ReloadMyRepository(RepositoryType.Tx);
 					ReloadMyRepository(RepositoryType.Bidir);
 					ReloadMyRepository(RepositoryType.Rx);

@@ -1409,7 +1409,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
-		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix)"/>).
+		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		public virtual string Format(byte[] data, IODirection d)
@@ -1431,7 +1431,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
-		/// (<see cref="ProcessRawChunk"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix)"/>).
+		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix)"/>).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
