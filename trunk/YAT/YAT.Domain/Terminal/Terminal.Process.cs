@@ -652,17 +652,43 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary>
+		/// This is the main processing method. It is called by the <see cref="RawTerminal.ChunkSent"/> and
+		/// <see cref="RawTerminal.ChunkReceived"/> event handlers. It updates the affected repositories.
+		/// </summary>
+		protected virtual void ProcessRawChunk(RawChunk chunk)
+		{
+			bool txIsAffected    =  (chunk.Direction == IODirection.Tx);
+			bool bidirIsAffected = ((chunk.Direction == IODirection.Tx) ||(chunk.Direction == IODirection.Rx));
+			bool rxIsAffected    =                                        (chunk.Direction == IODirection.Rx);
+
+			ProcessRawChunk(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+		}
+
+		/// <summary>
+		/// This is the alternative processing method. It is called by the <see cref="RefreshRepository"/> and
+		/// <see cref="RefreshRepositories"/> methods on reloading. It only affects one of the repositories.
+		/// </summary>
+		protected virtual void ProcessRawChunk(RepositoryType repositoryType, RawChunk chunk)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    ProcessRawChunk(chunk, true,  false, false); break;
+				case RepositoryType.Bidir: ProcessRawChunk(chunk, false, true,  false); break;
+				case RepositoryType.Rx:    ProcessRawChunk(chunk, false, false, true ); break;
+
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
 		/// <remarks>
 		/// This method is private as it must synchronize against private <see cref="chunkVsTimeoutSyncObj"/>!
 		/// </remarks>
-		private void ProcessRawChunk(RawChunk chunk)
+		private void ProcessRawChunk(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
 			lock (this.chunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
-				bool txIsAffected    =  (chunk.Direction == IODirection.Tx);
-				bool bidirIsAffected = ((chunk.Direction == IODirection.Tx) ||(chunk.Direction == IODirection.Rx));
-				bool rxIsAffected    =                                        (chunk.Direction == IODirection.Rx);
-
 				ProcessAndSignalDeviceOrDirectionLineBreak(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
 				ProcessAndSignalRawChunk(                  chunk, txIsAffected, bidirIsAffected, rxIsAffected);
 				ProcessAndSignalChunkLineBreak(            chunk, txIsAffected, bidirIsAffected, rxIsAffected);
