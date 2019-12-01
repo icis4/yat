@@ -284,11 +284,15 @@ namespace YAT.View.Utilities
 			var pageLayoutOld = settingsOld.PageLayout;
 			var commandCapacityPerPageOld = ((PredefinedCommandPageLayoutEx)pageLayoutOld).CommandCapacityPerPage;
 			var selectedPageOldDefinedCommandCount = 0;
+			var selectedPageOldWasLinkedToFilePath = false;
 			if (Int32Ex.IsWithin(selectedPageId, PredefinedCommandPageCollection.FirstPageId, settingsOld.Pages.Count))
+			{
 				selectedPageOldDefinedCommandCount = settingsOld.Pages[selectedPageId - 1].DefinedCommandCount;
+				selectedPageOldWasLinkedToFilePath = settingsOld.Pages[selectedPageId - 1].IsLinkedToFilePath;
+			}
 
 			// 1st confirmation "current commands will be hidden":
-			if (selectedPageOldDefinedCommandCount > 0)
+			if ((selectedPageOldDefinedCommandCount > 0) && (!selectedPageOldWasLinkedToFilePath))
 			{
 				var message = new StringBuilder();
 				message.Append("Currently ");
