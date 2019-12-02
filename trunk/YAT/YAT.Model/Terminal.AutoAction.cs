@@ -399,9 +399,11 @@ namespace YAT.Model
 					break;
 
 				case AutoAction.None:
-				default:
 					// Nothing to do.
 					break;
+
+				default:
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -434,8 +436,10 @@ namespace YAT.Model
 					return (false);
 
 				case AutoAction.None:
-				default:
 					return (false);
+
+				default:
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -454,12 +458,14 @@ namespace YAT.Model
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Either byte sequence or text must be defined!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			sb.Append(@""" the ");
+			sb.Append(@""" at ");
+			sb.Append(this.terminal.Format(ts));
+			sb.AppendLine(".");
+
+			sb.Append("Message has been triggered the ");
 			sb.Append(this.autoActionCount);
 			sb.Append(Int32Ex.ToEnglishSuffix(this.autoActionCount));
-			sb.Append(" time at ");
-			sb.Append(this.terminal.Format(ts));
-			sb.Append(".");
+			sb.Append(" time.");
 
 			OnMessageInputRequest
 			(
