@@ -225,12 +225,6 @@ namespace YAT.View.Forms
 		//     3. Place "splitContainer_Terminal" and dock it to fill
 
 		/// <summary></summary>
-		public Terminal()
-			: this(new Model.Terminal())
-		{
-		}
-
-		/// <summary></summary>
 		public Terminal(Model.Terminal terminal)
 		{
 			DebugMessage("Creating...");
