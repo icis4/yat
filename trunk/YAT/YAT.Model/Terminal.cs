@@ -2033,9 +2033,9 @@ namespace YAT.Model
 				DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler;
 
 				// Load linked page:
-				bool hasChanged;
-				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, false, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out hasChanged, out isCanceled)) {
-					if (hasChanged)
+				bool linkFilePathHasChanged;
+				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, false, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out linkFilePathHasChanged, out isCanceled)) {
+					if (linkFilePathHasChanged)
 						this.settingsHandler.Settings.PredefinedCommand.SetChanged();
 
 					if (!linkedPage.IsLinkedToFilePath) // = is no longer linked, i.e. did get unlinked.
@@ -2054,8 +2054,8 @@ namespace YAT.Model
 				var explicitHaveChanged = !linkedSettingsHandler.Settings.Page.EqualsEffectivelyInUse(linkedPage);
 				if (explicitHaveChanged)
 				{
-					if (TrySaveLinkedCommandPageConsiderately(linkedPage, linkedSettingsHandler, userInteractionIsAllowed, out hasChanged, out isCanceled)) {
-						if (hasChanged)
+					if (TrySaveLinkedCommandPageConsiderately(linkedPage, linkedSettingsHandler, userInteractionIsAllowed, out linkFilePathHasChanged, out isCanceled)) {
+						if (linkFilePathHasChanged)
 							this.settingsHandler.Settings.PredefinedCommand.SetChanged();
 
 						if (linkedPage.IsLinkedToFilePath) // = is still linked, i.e. did not get unlinked.
@@ -2183,7 +2183,7 @@ namespace YAT.Model
 		protected virtual bool TryLoadLinkedPredefinedCommandPageConsiderately(PredefinedCommandPage linkedPage, bool doUpdateLinkedPage,
 		                                                                       bool userInteractionIsAllowed, bool canBeCanceled,
 		                                                                       out DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
-		                                                                       out bool hasChanged, out bool isCanceled)
+		                                                                       out bool linkFilePathHasChanged, out bool isCanceled)
 		{
 			// Attention:
 			// Similar code exists in SaveConsiderately() further above.
@@ -2199,7 +2199,7 @@ namespace YAT.Model
 
 			try
 			{
-				hasChanged = false;
+				linkFilePathHasChanged = false;
 				isCanceled = false;
 
 				while (!string.IsNullOrEmpty(currentFilePath))
@@ -2215,13 +2215,13 @@ namespace YAT.Model
 								if (isFirst) {
 									isFirst = false;
 									linkedPage.LinkFilePath = linkFilePathNewOrConfirmed;
-									hasChanged = true;
+									linkFilePathHasChanged = true;
 								}
 							}
 							else if (doUnlink) {
 								linkedPage.Unlink();
 								linkedSettingsHandler = null;
-								hasChanged = true;
+								linkFilePathHasChanged = true;
 								return (true);
 							}
 							else {
@@ -2254,7 +2254,7 @@ namespace YAT.Model
 				DebugEx.WriteException(typeof(Terminal), ex, "Error retrieving linked predefined command page!");
 
 				linkedSettingsHandler = null;
-				hasChanged = false;
+				linkFilePathHasChanged = false;
 
 				if (userInteractionIsAllowed)
 				{
@@ -2297,10 +2297,9 @@ namespace YAT.Model
 				DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler;
 
 				// Load linked page:
-				bool hasChanged;
-				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, true, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out hasChanged, out isCanceled)) {
-					if (hasChanged)
-						this.settingsHandler.Settings.PredefinedCommand.SetChanged();
+				bool linkFilePathHasChanged;
+				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, true, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out linkFilePathHasChanged, out isCanceled)) {
+					this.settingsHandler.Settings.PredefinedCommand.SetChanged(); // Commands have changed in any case.
 
 					if (linkedPage.IsLinkedToFilePath) // = is still linked, i.e. did not get unlinked.
 						successCount++;
