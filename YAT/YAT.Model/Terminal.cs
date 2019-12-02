@@ -205,6 +205,9 @@ namespace YAT.Model
 		private string sequentialName;
 		private string fileName;
 
+		// Startup:
+		private bool autoIsReady; // = false;
+
 		// Settings:
 		private DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler;
 		private TerminalSettingsRoot settingsRoot;
@@ -414,12 +417,6 @@ namespace YAT.Model
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
-
-		/// <summary></summary>
-		public Terminal()
-			: this(new TerminalSettingsRoot())
-		{
-		}
 
 		/// <summary></summary>
 		public Terminal(TerminalSettingsRoot settings)
@@ -1419,6 +1416,14 @@ namespace YAT.Model
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether one or more automatic items are active.
+		/// </summary>
+		public virtual bool AutoIsActive
+		{
+			get { return (SettingsRoot.AutoIsActive); }
+		}
+
+		/// <summary>
 		/// Gets a value indicating whether this instance has linked settings.
 		/// </summary>
 		public virtual bool HasLinkedSettings
@@ -1432,6 +1437,27 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 		// Settings > Methods
 		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Notifies this instance that startup by the parent has completed.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2019-12-02 / MKY)
+		///
+		/// Background:
+		///  1. The workspace will create this terminal.
+		///  2. The constructor of this terminal will call CreateAuto[Action|Response]Helper() but
+		///     linked settings are not be available yet.
+		///      => TryGetActiveAutoActionTrigger() will fail in case of linked commands.
+		///  3. The workspace will also calle TryLoadLinkedSettings().
+		///      => TryGetActiveAutoActionTrigger() will succeed.
+		///
+		/// Not the perfect solution, but good enough for the moment.
+		/// </remarks>
+		public virtual void NotifyAutoIsReady()
+		{
+			this.autoIsReady = true;
+		}
 
 		/// <summary>
 		/// Applies new terminal settings.
@@ -5877,7 +5903,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (e.Result);
 			}
@@ -5901,7 +5933,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (e.Result);
 			}
@@ -5925,7 +5963,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (new FilePathDialogResult(e.Result, e.FilePathNew));
 			}
@@ -5949,7 +5993,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(OpenCommandPageFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by terminal '" + Caption + "' was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (new FilePathDialogResult(e.Result, e.FilePathNew));
 			}

@@ -2161,7 +2161,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + " 'Message Input' request by main was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by main has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (e.Result);
 			}

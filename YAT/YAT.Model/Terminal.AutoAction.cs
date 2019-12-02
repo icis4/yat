@@ -140,19 +140,24 @@ namespace YAT.Model
 							}
 						}
 					}
-					else
+					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.
 					{
 						DeactivateAutoAction();
 						DisposeAutoActionHelper();
 
 						OnMessageInputRequest
 						(
-							"Failed to retrieve the automatic action trigger! The trigger does not available! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
+							"Failed to retrieve the automatic action trigger! The trigger is not available! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
 							"To enable again, re-configure the automatic action.",
 							"Automatic Action Error",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
 						);
+					}
+					else // (!this.autoIsReady)
+					{
+						// Ignore, update will again be invoked after e.g. having loaded linked settings.
+						// See remarks of 'Terminal.NotifyAutoIsReady()' for background.
 					}
 				}
 				else // No command required = no sequence required = no helper required.
