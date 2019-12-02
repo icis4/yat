@@ -293,8 +293,11 @@ namespace YAT.Model
 					break;
 
 				case AutoResponse.None:
-				default:
+					// Nothing to do.
 					break;
+
+				default:
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoResponse)this.settingsRoot.AutoResponse.Response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
