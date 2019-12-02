@@ -436,10 +436,18 @@ namespace YAT.Settings.Model
 
 		#endregion
 
-		#region Properties > Combinations
+		#region Properties > Auto
 		//------------------------------------------------------------------------------------------
-		// Properties > Combinations
+		// Properties > Auto
 		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Gets a value indicating whether one or more automatic items are active.
+		/// </summary>
+		public virtual bool AutoIsActive
+		{
+			get { return (AutoAction.IsActive || AutoResponse.IsActive); }
+		}
 
 		/// <summary>
 		/// The currently valid triggers usable for automatic action or response.
@@ -653,6 +661,20 @@ namespace YAT.Settings.Model
 		{
 			switch ((AutoTrigger)trigger)
 			{
+				case AutoTrigger.SendText:
+				{
+					var c = SendText.Command;
+					if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+					{
+						command = c;
+						textOrRegexPattern = null;
+						regex = null;
+						return (true);
+					}
+
+					break;
+				}
+
 				case AutoTrigger.PredefinedCommand1:
 				case AutoTrigger.PredefinedCommand2:
 				case AutoTrigger.PredefinedCommand3:

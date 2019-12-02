@@ -1452,11 +1452,20 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Create new terminal:
 			OnFixedStatusTextRequest("Creating new terminal...");
 			OnCursorRequest(Cursors.WaitCursor);
 
-			var t = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
+			// Create new terminal:
+			Terminal t;
+			try
+			{
+				t = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "Failed to create/open new terminal!");
+				return (false);
+			}
 
 			// Attention:
 			// Similar code exists in OpenTerminalFromSettings() further below.
@@ -1468,6 +1477,9 @@ namespace YAT.Model
 
 			OnCursorReset();
 			OnTimedStatusTextRequest("New terminal created.");
+
+			if (t.AutoIsActive)
+				t.NotifyAutoIsReady(); // See remarks of this method.
 
 			if (t.HasLinkedSettings)
 			{
@@ -1723,7 +1735,7 @@ namespace YAT.Model
 			if (this.startArgs.Override.KeepLogOff)
 				settingsHandler.Settings.LogIsOn = false;
 
-			// Create terminal:
+			// Create terminal from settings:
 			Terminal t;
 			try
 			{
@@ -1748,6 +1760,9 @@ namespace YAT.Model
 				SetRecent(settingsHandler.SettingsFilePath);
 
 			OnTimedStatusTextRequest("Terminal opened.");
+
+			if (t.AutoIsActive)
+				t.NotifyAutoIsReady(); // See remarks of this method.
 
 			if (t.HasLinkedSettings)
 			{
@@ -2414,7 +2429,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (e.Result);
 			}
@@ -2438,7 +2459,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (e.Result);
 			}
@@ -2462,7 +2489,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(SaveCommandPageAsFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (new FilePathDialogResult(e.Result, e.FilePathNew));
 			}
@@ -2486,7 +2519,13 @@ namespace YAT.Model
 				this.eventHelper.RaiseSync<FilePathDialogEventArgs>(OpenCommandPageFileDialogRequest, this, e);
 
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by the workspace was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
 
 				return (new FilePathDialogResult(e.Result, e.FilePathNew));
 			}
