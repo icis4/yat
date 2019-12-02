@@ -166,6 +166,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoAction_ShowHide = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoAction_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripButton_MainTool_AutoAction_UseText = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoAction_WholeWord = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_AutoAction_UseRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoAction_Action = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripLabel_MainTool_AutoAction_Count = new System.Windows.Forms.ToolStripLabel();
@@ -174,6 +176,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoResponse_ShowHide = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripButton_MainTool_AutoResponse_UseText = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_AutoResponse_WholeWord = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_AutoResponse_UseRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripLabel_MainTool_AutoResponse_Count = new System.Windows.Forms.ToolStripLabel();
@@ -1017,6 +1021,8 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_AutoAction_ShowHide,
             this.toolStripComboBox_MainTool_AutoAction_Trigger,
             this.toolStripButton_MainTool_AutoAction_UseText,
+            this.toolStripButton_MainTool_AutoAction_CaseSensitive,
+            this.toolStripButton_MainTool_AutoAction_WholeWord,
             this.toolStripButton_MainTool_AutoAction_UseRegex,
             this.toolStripComboBox_MainTool_AutoAction_Action,
             this.toolStripLabel_MainTool_AutoAction_Count,
@@ -1025,6 +1031,8 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_AutoResponse_ShowHide,
             this.toolStripComboBox_MainTool_AutoResponse_Trigger,
             this.toolStripButton_MainTool_AutoResponse_UseText,
+            this.toolStripButton_MainTool_AutoResponse_CaseSensitive,
+            this.toolStripButton_MainTool_AutoResponse_WholeWord,
             this.toolStripButton_MainTool_AutoResponse_UseRegex,
             this.toolStripComboBox_MainTool_AutoResponse_Response,
             this.toolStripLabel_MainTool_AutoResponse_Count,
@@ -1411,7 +1419,7 @@ namespace YAT.View.Forms
 			// toolStripButton_MainTool_AutoAction_UseText
 			// 
 			this.toolStripButton_MainTool_AutoAction_UseText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_AutoAction_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripButton_MainTool_AutoAction_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_formatting_text_containing_16x16;
 			this.toolStripButton_MainTool_AutoAction_UseText.Name = "toolStripButton_MainTool_AutoAction_UseText";
 			this.toolStripButton_MainTool_AutoAction_UseText.Size = new System.Drawing.Size(23, 20);
 			this.toolStripButton_MainTool_AutoAction_UseText.Text = "Use Text";
@@ -1419,6 +1427,29 @@ namespace YAT.View.Forms
     "switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
 			this.toolStripButton_MainTool_AutoAction_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoAction_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_UseText_Click);
+			// 
+			// toolStripButton_MainTool_AutoAction_CaseSensitive
+			// 
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_match_character_literally_16x16;
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.Name = "toolStripButton_MainTool_AutoAction_CaseSensitive";
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.Text = "Case Sensitive";
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.ToolTipText = "Case Sensitive\r\nSame as \"(?-i)\" when using regex\r\n[Alt+C] (while editing)";
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.Visible = false;
+			this.toolStripButton_MainTool_AutoAction_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_CaseSensitive_Click);
+			// 
+			// toolStripButton_MainTool_AutoAction_WholeWord
+			// 
+			this.toolStripButton_MainTool_AutoAction_WholeWord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoAction_WholeWord.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripButton_MainTool_AutoAction_WholeWord.Name = "toolStripButton_MainTool_AutoAction_WholeWord";
+			this.toolStripButton_MainTool_AutoAction_WholeWord.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_AutoAction_WholeWord.Text = "Whole Word";
+			this.toolStripButton_MainTool_AutoAction_WholeWord.ToolTipText = "Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex\r\n[Alt+W] (while editing)" +
+    "";
+			this.toolStripButton_MainTool_AutoAction_WholeWord.Visible = false;
+			this.toolStripButton_MainTool_AutoAction_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_WholeWord_Click);
 			// 
 			// toolStripButton_MainTool_AutoAction_UseRegex
 			// 
@@ -1486,7 +1517,7 @@ namespace YAT.View.Forms
 			// toolStripButton_MainTool_AutoResponse_UseText
 			// 
 			this.toolStripButton_MainTool_AutoResponse_UseText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_AutoResponse_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripButton_MainTool_AutoResponse_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_formatting_text_containing_16x16;
 			this.toolStripButton_MainTool_AutoResponse_UseText.Name = "toolStripButton_MainTool_AutoResponse_UseText";
 			this.toolStripButton_MainTool_AutoResponse_UseText.Size = new System.Drawing.Size(23, 20);
 			this.toolStripButton_MainTool_AutoResponse_UseText.Text = "Use Text";
@@ -1494,6 +1525,29 @@ namespace YAT.View.Forms
     "switches to a trigger based on the text of a command.\r\n[Alt+T] (while editing)";
 			this.toolStripButton_MainTool_AutoResponse_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoResponse_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_UseText_Click);
+			// 
+			// toolStripButton_MainTool_AutoResponse_CaseSensitive
+			// 
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_match_character_literally_16x16;
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.Name = "toolStripButton_MainTool_AutoResponse_CaseSensitive";
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.Text = "Case Sensitive";
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.ToolTipText = "Case Sensitive\r\nSame as \"(?-i)\" when using regex\r\n[Alt+C] (while editing)";
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.Visible = false;
+			this.toolStripButton_MainTool_AutoResponse_CaseSensitive.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_CaseSensitive_Click);
+			// 
+			// toolStripButton_MainTool_AutoResponse_WholeWord
+			// 
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.Name = "toolStripButton_MainTool_AutoResponse_WholeWord";
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.Text = "Whole Word";
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.ToolTipText = "Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex\r\n[Alt+W] (while editing)" +
+    "";
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.Visible = false;
+			this.toolStripButton_MainTool_AutoResponse_WholeWord.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_WholeWord_Click);
 			// 
 			// toolStripButton_MainTool_AutoResponse_UseRegex
 			// 
@@ -1776,6 +1830,8 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoResponse_Response;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoResponse_Trigger;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_UseText;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_CaseSensitive;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_WholeWord;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_UseRegex;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoResponse_Count;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Deactivate;
@@ -1790,6 +1846,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_ShowHide;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoAction_Trigger;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_UseText;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_CaseSensitive;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_WholeWord;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_UseRegex;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_MainTool_AutoAction_Action;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoAction_Count;

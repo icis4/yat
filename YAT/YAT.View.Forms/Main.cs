@@ -2227,6 +2227,16 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).RequestToggleAutoActionUseText();
 		}
 
+		private void toolStripButton_MainTool_AutoAction_CaseSensitive_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionCaseSensitive();
+		}
+
+		private void toolStripButton_MainTool_AutoAction_WholeWord_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionWholeWord();
+		}
+
 		private void toolStripButton_MainTool_AutoAction_UseRegex_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestToggleAutoActionUseRegex();
@@ -2367,6 +2377,16 @@ namespace YAT.View.Forms
 		private void toolStripButton_MainTool_AutoResponse_UseText_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseText();
+		}
+
+		private void toolStripButton_MainTool_AutoResponse_CaseSensitive_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseCaseSensitive();
+		}
+
+		private void toolStripButton_MainTool_AutoResponse_WholeWord_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseWholeWord();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_UseRegex_Click(object sender, EventArgs e)
