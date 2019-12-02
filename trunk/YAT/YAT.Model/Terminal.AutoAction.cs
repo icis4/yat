@@ -172,32 +172,6 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Processes <see cref="AutoAction.ClearRepositoriesOnSubsequentRx"/>.
-		/// </summary>
-		protected virtual void ProcessAutoActionClearRepositoriesOnSubsequentRx()
-		{
-			if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
-			{
-				byte[] triggerSequence;
-				string triggerText;
-				DateTime triggerTimeStamp;
-
-				lock (this.autoActionTriggerHelperSyncObj)
-				{
-					triggerSequence  = this.autoActionTriggerHelper.TriggerSequence;
-					triggerText      = this.autoActionClearRepositoriesTriggerText;
-					triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
-
-					this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
-					this.autoActionClearRepositoriesTriggerText = null;
-					this.autoActionClearRepositoriesTriggerTimeStamp = DateTime.MinValue;
-				}
-				                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
-				InvokeAutoAction(AutoAction.ClearRepositories, triggerSequence, triggerText, triggerTimeStamp);
-			}
-		}
-
-		/// <summary>
 		/// Processes the automatic action.
 		/// </summary>
 		/// <remarks>
@@ -225,7 +199,7 @@ namespace YAT.Model
 										de.Highlight = true;
 
 										// Invoke shall happen as short as possible after detection:
-										InvokeAutoResponse(this.autoActionTriggerHelper.TriggerSequence, null);
+										InvokeAutoAction(this.settingsRoot.AutoAction.Action, this.autoActionTriggerHelper.TriggerSequence, null, de.TimeStamp);
 									}
 								}
 							}
@@ -354,6 +328,32 @@ namespace YAT.Model
 					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			} // foreach (lineCloned)
+		}
+
+		/// <summary>
+		/// Processes <see cref="AutoAction.ClearRepositoriesOnSubsequentRx"/>.
+		/// </summary>
+		protected virtual void ProcessAutoActionClearRepositoriesOnSubsequentRx()
+		{
+			if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
+			{
+				byte[] triggerSequence;
+				string triggerText;
+				DateTime triggerTimeStamp;
+
+				lock (this.autoActionTriggerHelperSyncObj)
+				{
+					triggerSequence  = this.autoActionTriggerHelper.TriggerSequence;
+					triggerText      = this.autoActionClearRepositoriesTriggerText;
+					triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
+
+					this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
+					this.autoActionClearRepositoriesTriggerText = null;
+					this.autoActionClearRepositoriesTriggerTimeStamp = DateTime.MinValue;
+				}
+				                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
+				InvokeAutoAction(AutoAction.ClearRepositories, triggerSequence, triggerText, triggerTimeStamp);
+			}
 		}
 
 		/// <summary>
