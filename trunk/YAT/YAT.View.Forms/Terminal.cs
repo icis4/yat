@@ -942,6 +942,16 @@ namespace YAT.View.Forms
 			RequestToggleAutoResponseUseText();
 		}
 
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoResponseCaseSensitive();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoResponseWholeWord();
+		}
+
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex_Click(object sender, EventArgs e)
 		{
 			RequestToggleAutoResponseUseRegex();
@@ -1137,6 +1147,16 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText_Click(object sender, EventArgs e)
 		{
 			RequestToggleAutoActionUseText();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoActionCaseSensitive();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoActionWholeWord();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex_Click(object sender, EventArgs e)
@@ -4356,6 +4376,26 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestToggleAutoActionCaseSensitive()
+		{
+			var options = this.settingsRoot.AutoAction.Options;
+			options.CaseSensitive = !options.CaseSensitive; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoAction.Options = options;
+
+			RevalidateAutoActionTriggerTextSilently();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoActionWholeWord()
+		{
+			var options = this.settingsRoot.AutoAction.Options;
+			options.WholeWord = !options.WholeWord; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoAction.Options = options;
+
+			RevalidateAutoActionTriggerTextSilently();
+		}
+
+		/// <summary></summary>
 		public virtual void RequestToggleAutoActionUseRegex()
 		{
 			var options = this.settingsRoot.AutoAction.Options;
@@ -4503,6 +4543,26 @@ namespace YAT.View.Forms
 		{
 			var options = this.settingsRoot.AutoResponse.Options;
 			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoResponse.Options = options;
+
+			RevalidateAutoResponseTriggerTextSilently();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoResponseCaseSensitive()
+		{
+			var options = this.settingsRoot.AutoResponse.Options;
+			options.CaseSensitive = !options.CaseSensitive; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoResponse.Options = options;
+
+			RevalidateAutoResponseTriggerTextSilently();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoResponseWholeWord()
+		{
+			var options = this.settingsRoot.AutoResponse.Options;
+			options.WholeWord = !options.WholeWord; // Settings member must be changed to let the changed event be raised!
 			this.settingsRoot.AutoResponse.Options = options;
 
 			RevalidateAutoResponseTriggerTextSilently();

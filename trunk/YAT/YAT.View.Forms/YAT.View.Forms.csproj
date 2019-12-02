@@ -395,6 +395,7 @@
     <Content Include="Resources\Tool\Image_Tool_font_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_font_add_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_font_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_formatting_text_containing_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_gift_add_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_help_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_help_32x32.png" />

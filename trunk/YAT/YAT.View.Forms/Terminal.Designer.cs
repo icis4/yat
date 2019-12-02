@@ -408,6 +408,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
@@ -417,6 +419,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action = new System.Windows.Forms.ToolStripComboBox();
@@ -3749,6 +3753,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger,
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText,
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive,
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord,
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(171, 22);
@@ -3766,13 +3772,32 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText
 			// 
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_formatting_text_containing_16x16;
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Text = "Use &Text";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
     "switches to a trigger based on the text of a command.";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_match_character_literally_16x16;
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Text = "&Case Sensitive";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.ToolTipText = "Case Sensitive\r\nSame as \"(?-i)\" when using regex";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Text = "Whole &Word";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.ToolTipText = "Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex" +
+    "";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex
 			// 
@@ -3835,6 +3860,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger,
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText,
+            this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive,
+            this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord,
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(154, 22);
@@ -3851,13 +3878,32 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText
 			// 
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_formatting_text_containing_16x16;
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Text = "Use &Text";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
     "switches to a trigger based on the text of a command.";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive
+			// 
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_match_character_literally_16x16;
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Text = "&Case Sensitive";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.ToolTipText = "Case Sensitive\r\nSame as \"(?-i)\" when using regex";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord
+			// 
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_token_literal_text_16x16;
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Text = "Whole &Word";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.ToolTipText = "Whole Word\r\nSame as \"\\bSomeWord\\b\" when using regex" +
+    "";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex
 			// 
@@ -5203,6 +5249,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Send_AutoResponse_Response;
@@ -5246,6 +5294,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Receive_AutoAction_Action;
