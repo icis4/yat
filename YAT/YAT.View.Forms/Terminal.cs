@@ -4281,7 +4281,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoActionTriggerState + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoActionTriggerState + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -4478,7 +4478,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseTriggerState + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseTriggerState + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -4563,7 +4563,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseResponseState + "' is an auto content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseResponseState + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

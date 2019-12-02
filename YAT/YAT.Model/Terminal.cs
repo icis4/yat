@@ -1306,6 +1306,7 @@ namespace YAT.Model
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendText))
 			{
+				UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
