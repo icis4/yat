@@ -181,12 +181,6 @@ namespace YAT.View.Forms
 		// - (In source code, proceed according to the MenuStrip class example in the MSDN)
 
 		/// <summary></summary>
-		public Main()
-			: this(new Model.Main())
-		{
-		}
-
-		/// <summary></summary>
 		public Main(Model.Main main)
 		{
 			DebugMessage("Creating...");
