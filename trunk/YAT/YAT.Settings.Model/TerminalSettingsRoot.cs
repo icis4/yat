@@ -449,13 +449,22 @@ namespace YAT.Settings.Model
 		/// </remarks>
 		public virtual AutoTriggerEx[] GetValidAutoTriggerItems()
 		{
-			AutoTriggerEx[] triggers = AutoTriggerEx.GetAllItems();
-			List<AutoTriggerEx> a = new List<AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
+			var triggers = AutoTriggerEx.GetAllItems();
+			var l = new List<AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
 
 			foreach (AutoTriggerEx trigger in triggers)
 			{
 				switch ((AutoTrigger)trigger)
 				{
+					case AutoTrigger.SendText:
+					{
+						var c = SendText.Command;
+						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+							l.Add(trigger);
+
+						break;
+					}
+
 					case AutoTrigger.PredefinedCommand1:
 					case AutoTrigger.PredefinedCommand2:
 					case AutoTrigger.PredefinedCommand3:
@@ -475,9 +484,16 @@ namespace YAT.Settings.Model
 						{
 							var c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
 							if ((c != null) && (c.IsValidText(Send.Text.ToParseMode()))) // Trigger can never be a file command.
-								a.Add(trigger);
+								l.Add(trigger);
 						}
 
+						break;
+					}
+
+					case AutoTrigger.AnyLine:
+					case AutoTrigger.None:
+					{
+						l.Add(trigger); // Always add these fixed responses.
 						break;
 					}
 
@@ -487,17 +503,14 @@ namespace YAT.Settings.Model
 						break;
 					}
 
-					case AutoTrigger.AnyLine:
-					case AutoTrigger.None:
 					default:
 					{
-						a.Add(trigger); // Always add these fixed responses.
-						break;
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoTrigger)trigger + "' is an automatic trigger that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
 
-			return (a.ToArray());
+			return (l.ToArray());
 		}
 
 		/// <summary>
@@ -570,18 +583,22 @@ namespace YAT.Settings.Model
 						break;
 					}
 
+					case YAT.Model.Types.AutoResponse.None:
+					case YAT.Model.Types.AutoResponse.Trigger:
+					{
+						l.Add(response); // Always add these fixed responses.
+						break;
+					}
+
 					case YAT.Model.Types.AutoResponse.Explicit:
 					{
 						// AutoResponseEx.GetAllItems() only contains the defined items, 'Explicit' is not contained.
 						break;
 					}
 
-					case YAT.Model.Types.AutoResponse.None:
-					case YAT.Model.Types.AutoResponse.Trigger:
 					default:
 					{
-						l.Add(response); // Always add these fixed responses.
-						break;
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoResponse)response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}

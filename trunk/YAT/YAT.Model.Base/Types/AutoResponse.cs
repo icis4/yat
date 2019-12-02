@@ -45,7 +45,7 @@ namespace YAT.Model.Types
 	{
 		None = 0,
 
-		PredefinedCommand1 = 1,
+		PredefinedCommand1 = 1, // 1:1 mapping used by ToPredefinedCommandId().
 		PredefinedCommand2 = 2,
 		PredefinedCommand3 = 3,
 		PredefinedCommand4 = 4,
@@ -58,8 +58,8 @@ namespace YAT.Model.Types
 		PredefinedCommand11 = 11,
 		PredefinedCommand12 = 12,
 
-		Trigger, // Located after predefined commands to allow numbering them 1..12 accordingly.
-
+		// Logically before, but located after the predefined commands to allow numbering them 1..12 accordingly.
+		Trigger,
 		SendText,
 		SendFile,
 
@@ -135,6 +135,11 @@ namespace YAT.Model.Types
 			this.explicitCommandString = explicitCommandString;
 		}
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
 		/// <summary></summary>
 		public bool CommandIsRequired
 		{
@@ -166,6 +171,8 @@ namespace YAT.Model.Types
 				return (InvalidPredefinedCommandId);
 			}
 		}
+
+		#endregion
 
 		#region Object Members
 		//==========================================================================================

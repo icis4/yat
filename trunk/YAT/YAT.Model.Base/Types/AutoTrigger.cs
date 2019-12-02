@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,6 +34,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using MKY;
+
+#endregion
 
 namespace YAT.Model.Types
 {
@@ -58,7 +65,9 @@ namespace YAT.Model.Types
 		PredefinedCommand11 = 11,
 		PredefinedCommand12 = 12,
 
-		AnyLine, // Located after predefined commands to allow numbering them 1..12 accordingly.
+		// Logically before, but located after the predefined commands to allow numbering them 1..12 accordingly.
+		AnyLine,
+		SendText,
 
 		Explicit
 	}
@@ -91,6 +100,9 @@ namespace YAT.Model.Types
 
 		private const string             AnyLine_string = "[Any Line]";
 		private static readonly string[] AnyLine_stringAlternatives = new string[] { "[A]", "[AL]", "[*L]" };
+
+		private const string             SendText_string = "[Send Text]";
+		private static readonly string[] SendText_stringAlternatives = new string[] { "[Text]", "[ST]" };
 
 		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
 		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
@@ -207,6 +219,7 @@ namespace YAT.Model.Types
 			{
 				case AutoTrigger.None:                return (None_string);
 				case AutoTrigger.AnyLine:             return (AnyLine_string);
+				case AutoTrigger.SendText:            return (SendText_string);
 				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
 				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
 				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
@@ -325,6 +338,7 @@ namespace YAT.Model.Types
 
 			if (addFixed)    a.Add(new AutoTriggerEx(AutoTrigger.None));
 			if (addFixed)    a.Add(new AutoTriggerEx(AutoTrigger.AnyLine));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.SendText));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand1));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand2));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand3));
@@ -407,6 +421,12 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, AnyLine_stringAlternatives))
 			{
 				result = AutoTrigger.AnyLine;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendText_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendText_stringAlternatives))
+			{
+				result = AutoTrigger.SendText;
 				return (true);
 			}
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
