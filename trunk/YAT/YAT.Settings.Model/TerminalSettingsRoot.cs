@@ -464,12 +464,10 @@ namespace YAT.Settings.Model
 			{
 				switch ((AutoTrigger)trigger)
 				{
-					case AutoTrigger.SendText:
+					case AutoTrigger.None:
+					case AutoTrigger.AnyLine:
 					{
-						var c = SendText.Command;
-						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
-							l.Add(trigger);
-
+						l.Add(trigger); // Always add these fixed responses.
 						break;
 					}
 
@@ -498,10 +496,12 @@ namespace YAT.Settings.Model
 						break;
 					}
 
-					case AutoTrigger.AnyLine:
-					case AutoTrigger.None:
+					case AutoTrigger.SendText:
 					{
-						l.Add(trigger); // Always add these fixed responses.
+						var c = SendText.Command;
+						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+							l.Add(trigger);
+
 						break;
 					}
 
@@ -548,21 +548,10 @@ namespace YAT.Settings.Model
 			{
 				switch ((AutoResponse)response)
 				{
-					case YAT.Model.Types.AutoResponse.SendText:
+					case YAT.Model.Types.AutoResponse.None:
+					case YAT.Model.Types.AutoResponse.Trigger:
 					{
-						var c = SendText.Command;
-						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
-							l.Add(response);
-
-						break;
-					}
-
-					case YAT.Model.Types.AutoResponse.SendFile:
-					{
-						var c = SendFile.Command;
-						if ((c != null) && (c.IsValidFilePath(rootDirectoryForFile)))
-							l.Add(response);
-
+						l.Add(response); // Always add these fixed responses.
 						break;
 					}
 
@@ -591,10 +580,21 @@ namespace YAT.Settings.Model
 						break;
 					}
 
-					case YAT.Model.Types.AutoResponse.None:
-					case YAT.Model.Types.AutoResponse.Trigger:
+					case YAT.Model.Types.AutoResponse.SendText:
 					{
-						l.Add(response); // Always add these fixed responses.
+						var c = SendText.Command;
+						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+							l.Add(response);
+
+						break;
+					}
+
+					case YAT.Model.Types.AutoResponse.SendFile:
+					{
+						var c = SendFile.Command;
+						if ((c != null) && (c.IsValidFilePath(rootDirectoryForFile)))
+							l.Add(response);
+
 						break;
 					}
 
@@ -661,17 +661,10 @@ namespace YAT.Settings.Model
 		{
 			switch ((AutoTrigger)trigger)
 			{
-				case AutoTrigger.SendText:
+				case AutoTrigger.None:
+				case AutoTrigger.AnyLine:
 				{
-					var c = SendText.Command;
-					if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
-					{
-						command = c;
-						textOrRegexPattern = null;
-						regex = null;
-						return (true);
-					}
-
+					// No trigger.
 					break;
 				}
 
@@ -700,6 +693,20 @@ namespace YAT.Settings.Model
 							regex = null;
 							return (true);
 						}
+					}
+
+					break;
+				}
+
+				case AutoTrigger.SendText:
+				{
+					var c = SendText.Command;
+					if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+					{
+						command = c;
+						textOrRegexPattern = null;
+						regex = null;
+						return (true);
 					}
 
 					break;
@@ -754,11 +761,9 @@ namespace YAT.Settings.Model
 					break;
 				}
 
-				case AutoTrigger.AnyLine:
-				case AutoTrigger.None:
 				default:
 				{
-					break;
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoTrigger)trigger + "' is an automatic trigger that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 
