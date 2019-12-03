@@ -450,12 +450,34 @@ namespace YAT.Settings.Model
 		}
 
 		/// <summary>
+		/// The currently valid triggers usable for automatic action.
+		/// </summary>
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
+		public virtual AutoTriggerEx[] GetValidAutoActionTriggerItems()
+		{
+			return (GetValidAutoTriggerItems(AutoAction.IsByteSequenceTriggered));
+		}
+
+		/// <summary>
+		/// The currently valid triggers usable for automatic response.
+		/// </summary>
+		/// <remarks>
+		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
+		/// </remarks>
+		public virtual AutoTriggerEx[] GetValidAutoResponseTriggerItems()
+		{
+			return (GetValidAutoTriggerItems(AutoResponse.IsByteSequenceTriggered));
+		}
+
+		/// <summary>
 		/// The currently valid triggers usable for automatic action or response.
 		/// </summary>
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
-		public virtual AutoTriggerEx[] GetValidAutoTriggerItems()
+		protected virtual AutoTriggerEx[] GetValidAutoTriggerItems(bool isByteSequenceTriggered)
 		{
 			var triggers = AutoTriggerEx.GetAllItems();
 			var l = new List<AutoTriggerEx>(triggers.Length); // Preset the required capacity to improve memory management.
@@ -489,7 +511,7 @@ namespace YAT.Settings.Model
 						if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 						{
 							var c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-							if ((c != null) && (c.IsValidText(Send.Text.ToParseMode()))) // Trigger can never be a file command.
+							if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 								l.Add(trigger);
 						}
 
@@ -499,7 +521,7 @@ namespace YAT.Settings.Model
 					case AutoTrigger.SendText:
 					{
 						var c = SendText.Command;
-						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+						if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 							l.Add(trigger);
 
 						break;
@@ -519,6 +541,21 @@ namespace YAT.Settings.Model
 			}
 
 			return (l.ToArray());
+		}
+
+		/// <remarks>Trigger can never be a file command.</remarks>
+		public virtual bool IsValidAutoTriggerCommand(Command command, bool isByteSequenceTriggered)
+		{
+			if ((command != null) && (command.IsText))
+			{
+				if (command.IsSingleLineText || (command.IsMultiLineText && isByteSequenceTriggered)) // 'MultiLineText' is only OK for such triggers.
+				{
+					if (!command.TextLinesAreNullOrEmpty) // Empty "" is not OK for triggers.
+						return (command.IsValidText(Send.Text.ToParseMode()));
+				}
+			}
+
+			return (false);
 		}
 
 		/// <summary>
@@ -573,7 +610,7 @@ namespace YAT.Settings.Model
 						if (commandId != AutoResponseEx.InvalidPredefinedCommandId)
 						{
 							var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-							if ((c != null) && (c.IsValid(Send.Text.ToParseMode(), rootDirectoryForFile)))
+							if (IsValidAutoResponseCommand(c))
 								l.Add(response);
 						}
 
@@ -583,7 +620,7 @@ namespace YAT.Settings.Model
 					case YAT.Model.Types.AutoResponse.SendText:
 					{
 						var c = SendText.Command;
-						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+						if (IsValidAutoResponseCommand(c))
 							l.Add(response);
 
 						break;
@@ -592,7 +629,7 @@ namespace YAT.Settings.Model
 					case YAT.Model.Types.AutoResponse.SendFile:
 					{
 						var c = SendFile.Command;
-						if ((c != null) && (c.IsValidFilePath(rootDirectoryForFile)))
+						if (IsValidAutoResponseCommand(c, rootDirectoryForFile))
 							l.Add(response);
 
 						break;
@@ -612,6 +649,20 @@ namespace YAT.Settings.Model
 			}
 
 			return (l.ToArray());
+		}
+
+		/// <summary></summary>
+		public virtual bool IsValidAutoResponseCommand(Command command, string rootDirectoryForFile = null)
+		{
+			if (command != null)
+			{
+				if (command.IsText)
+					return (command.IsValidText(Send.Text.ToParseMode())); // 'MultiLineText' as well as empty "" is OK.
+				else     // IsFilePath
+					return (command.IsValidFilePath(rootDirectoryForFile));
+			}
+
+			return (false);
 		}
 
 		/// <summary>
@@ -659,6 +710,8 @@ namespace YAT.Settings.Model
 		protected virtual bool TryGetActiveAutoTrigger(AutoTriggerEx trigger, bool useText, bool useRegex,
 		                                               out Command command, out string textOrRegexPattern, out Regex regex)
 		{
+			bool isByteSequenceTriggered = (!useText && !useRegex);
+
 			switch ((AutoTrigger)trigger)
 			{
 				case AutoTrigger.None:
@@ -686,7 +739,7 @@ namespace YAT.Settings.Model
 					if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 					{
 						var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
-						if ((c != null) && (c.IsValidText(Send.Text.ToParseMode()))) // Trigger can never be a file command.
+						if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 						{
 							command = c;
 							textOrRegexPattern = null;
@@ -701,7 +754,7 @@ namespace YAT.Settings.Model
 				case AutoTrigger.SendText:
 				{
 					var c = SendText.Command;
-					if ((c != null) && (c.IsValidText(Send.Text.ToParseMode())))
+					if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 					{
 						command = c;
 						textOrRegexPattern = null;
@@ -714,10 +767,10 @@ namespace YAT.Settings.Model
 
 				case AutoTrigger.Explicit:
 				{
-					if (!useText && !useRegex) // == IsByteSequenceTriggered
+					if (isByteSequenceTriggered)
 					{
 						var c = new Command(trigger); // No explicit default radix available (yet).
-						if (c.IsValidText(Send.Text.ToParseMode())) // Trigger can never be a file command.
+						if (IsValidAutoTriggerCommand(c, true))
 						{
 							command = c;
 							textOrRegexPattern = null;

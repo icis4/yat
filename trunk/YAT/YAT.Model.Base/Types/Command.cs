@@ -650,6 +650,13 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool TextLinesAreNullOrEmpty
+		{
+			get { return ((TextLines == null) || (TextLines.Length < 1) || (string.IsNullOrEmpty(TextLines[0]))); }
+		}
+
 		/// <remarks>
 		/// Validation is dependent on <see cref="Domain.Parser.Modes"/>! Thus, validation must be
 		/// done during runtime when the mode is given; i.e. it cannot be done once and then kept.

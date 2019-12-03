@@ -1210,7 +1210,7 @@ namespace YAT.View.Forms
 						wholeWord        = activeTerminal.SettingsRoot.AutoAction.Options.WholeWord;
 						useRegex         = activeTerminal.SettingsRoot.AutoAction.Options.UseRegex;
 
-						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
+						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoActionTriggerItems();
 						trigger          = activeTerminal.SettingsRoot.AutoAction.Trigger;
 						triggerState     = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
 
@@ -1339,7 +1339,7 @@ namespace YAT.View.Forms
 						wholeWord        = activeTerminal.SettingsRoot.AutoResponse.Options.WholeWord;
 						useRegex         = activeTerminal.SettingsRoot.AutoResponse.Options.UseRegex;
 
-						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoTriggerItems();
+						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems();
 						trigger          = activeTerminal.SettingsRoot.AutoResponse.Trigger;
 						triggerState     = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
 
