@@ -65,9 +65,9 @@ namespace YAT.Model.Types
 		PredefinedCommand11 = 11,
 		PredefinedCommand12 = 12,
 
-		// Logically before, but located after the predefined commands to allow numbering them 1..12 accordingly.
-		AnyLine,
-		SendText,
+		AnyLine, // Logically before, but located after the predefined commands to allow numbering them 1..12 accordingly.
+
+		SendText, // Located after predefined commands same as on view.
 
 		Explicit
 	}
@@ -101,11 +101,11 @@ namespace YAT.Model.Types
 		private const string             AnyLine_string = "[Any Line]";
 		private static readonly string[] AnyLine_stringAlternatives = new string[] { "[A]", "[AL]", "[*L]" };
 
-		private const string             SendText_string = "[Send Text]";
-		private static readonly string[] SendText_stringAlternatives = new string[] { "[Text]", "[ST]" };
-
 		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
 		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
+
+		private const string             SendText_string = "[Send Text]";
+		private static readonly string[] SendText_stringAlternatives = new string[] { "[Text]", "[ST]" };
 
 		#endregion
 
@@ -219,7 +219,6 @@ namespace YAT.Model.Types
 			{
 				case AutoTrigger.None:                return (None_string);
 				case AutoTrigger.AnyLine:             return (AnyLine_string);
-				case AutoTrigger.SendText:            return (SendText_string);
 				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
 				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
 				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
@@ -232,6 +231,7 @@ namespace YAT.Model.Types
 				case AutoTrigger.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
 				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
 				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
+				case AutoTrigger.SendText:            return (SendText_string);
 				case AutoTrigger.Explicit:            return (this.explicitCommandString);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -338,7 +338,6 @@ namespace YAT.Model.Types
 
 			if (addFixed)    a.Add(new AutoTriggerEx(AutoTrigger.None));
 			if (addFixed)    a.Add(new AutoTriggerEx(AutoTrigger.AnyLine));
-			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.SendText));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand1));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand2));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand3));
@@ -351,6 +350,7 @@ namespace YAT.Model.Types
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand10));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand11));
 			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.PredefinedCommand12));
+			if (addVariable) a.Add(new AutoTriggerEx(AutoTrigger.SendText));
 
 			// This method shall only return the defined items, 'Explicit' is not added therefore.
 
@@ -423,12 +423,6 @@ namespace YAT.Model.Types
 				result = AutoTrigger.AnyLine;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendText_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendText_stringAlternatives))
-			{
-				result = AutoTrigger.SendText;
-				return (true);
-			}
 			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
 			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives)) // StartWith()! Not Equals()!
 			{
@@ -450,6 +444,12 @@ namespace YAT.Model.Types
 				// Fallback:
 				result = AutoTrigger.PredefinedCommand1;
 				return (false);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendText_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendText_stringAlternatives))
+			{
+				result = AutoTrigger.SendText;
+				return (true);
 			}
 			else // Explicit!
 			{

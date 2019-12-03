@@ -266,9 +266,11 @@ namespace YAT.Model
 			int page = this.settingsRoot.Predefined.SelectedPageId;
 			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
 			{
+				case AutoResponse.None:
+					// Nothing to do.
+					break;
+
 				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence, triggerText); break;
-				case AutoResponse.SendText:            SendText();               break;
-				case AutoResponse.SendFile:            SendFile();               break;
 				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);  break;
 				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);  break;
 				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);  break;
@@ -281,13 +283,11 @@ namespace YAT.Model
 				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10); break;
 				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11); break;
 				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12); break;
+				case AutoResponse.SendText:            SendText();               break;
+				case AutoResponse.SendFile:            SendFile();               break;
 
 				case AutoResponse.Explicit:
 					SendCommand(new Command(this.settingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
-					break;
-
-				case AutoResponse.None:
-					// Nothing to do.
 					break;
 
 				default:

@@ -378,6 +378,16 @@ namespace YAT.Model
 
 			switch (action)
 			{
+				case AutoAction.None:
+					// Nothing to do.
+					break;
+
+				case AutoAction.Highlight:
+				case AutoAction.Filter:
+				case AutoAction.Suppress:
+					// No additional action.
+					break;
+
 				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                                 break;
 				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, triggerText, triggerTimeStamp); break;
 				case AutoAction.ClearRepositories:               ClearRepositories();                                                      break;
@@ -390,16 +400,6 @@ namespace YAT.Model
 				case AutoAction.StopIO:                          StopIO();                                                                 break;
 				case AutoAction.CloseTerminal:                   Close();                                                                  break;
 				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                                           break;
-
-				case AutoAction.Highlight:
-				case AutoAction.Filter:
-				case AutoAction.Suppress:
-					// No additional action.
-					break;
-
-				case AutoAction.None:
-					// Nothing to do.
-					break;
 
 				default:
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -417,6 +417,14 @@ namespace YAT.Model
 
 			switch (action)
 			{
+				case AutoAction.None:
+					return (false);
+
+				case AutoAction.Highlight:
+				case AutoAction.Filter:
+				case AutoAction.Suppress:
+					return (false);
+
 				case AutoAction.Beep:
 				case AutoAction.ShowMessageBox:
 				case AutoAction.ClearRepositories:
@@ -428,14 +436,6 @@ namespace YAT.Model
 				case AutoAction.CloseTerminal:
 				case AutoAction.ExitApplication:
 					return (true);
-
-				case AutoAction.Highlight:
-				case AutoAction.Filter:
-				case AutoAction.Suppress:
-					return (false);
-
-				case AutoAction.None:
-					return (false);
 
 				default:
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
