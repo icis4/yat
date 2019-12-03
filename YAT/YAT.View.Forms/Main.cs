@@ -1249,8 +1249,8 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
 					}
 
-					SetAutoActionTriggerControls(triggerState);
-				////SetAutoActionActionState(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+					SetAutoActionTriggerStateControls(triggerState);
+				////SetAutoActionActionStateControls(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
 					toolStripButton_MainTool_AutoAction_UseText.Checked = (textIsSupported && useText);
 					toolStripButton_MainTool_AutoAction_UseText.Enabled =  textIsSupported;
@@ -1376,8 +1376,8 @@ namespace YAT.View.Forms
 						toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
 					}
 
-					SetAutoResponseTriggerControls(triggerState);
-					SetAutoResponseResponseControls(responseState);
+					SetAutoResponseTriggerStateControls(triggerState);
+					SetAutoResponseResponseStateControls(responseState);
 
 					toolStripButton_MainTool_AutoResponse_UseText.Checked = (textIsSupported && useText);
 					toolStripButton_MainTool_AutoResponse_UseText.Enabled =  textIsSupported;
@@ -2151,6 +2151,11 @@ namespace YAT.View.Forms
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_DropDown(object sender, EventArgs e)
+		{
+			SetAutoActionChildControls(); // Needed to refresh trigger validation.
+		}
+
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2196,7 +2201,7 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
 		}
 
-		private void SetAutoActionTriggerControls(AutoContentState state)
+		private void SetAutoActionTriggerStateControls(AutoContentState state)
 		{
 			switch (state)
 			{
@@ -2307,6 +2312,11 @@ namespace YAT.View.Forms
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
+		private void toolStripComboBox_MainTool_AutoResponse_Trigger_DropDown(object sender, EventArgs e)
+		{
+			SetAutoResponseChildControls(); // Needed to refresh trigger validation.
+		}
+
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2352,7 +2362,7 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
 		}
 
-		private void SetAutoResponseTriggerControls(AutoContentState state)
+		private void SetAutoResponseTriggerStateControls(AutoContentState state)
 		{
 			switch (state)
 			{
@@ -2430,6 +2440,11 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseRegex();
 		}
 
+		private void toolStripComboBox_MainTool_AutoResponse_Response_DropDown(object sender, EventArgs e)
+		{
+			SetAutoResponseChildControls(); // Needed to refresh response validation.
+		}
+
 		private void toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2475,7 +2490,7 @@ namespace YAT.View.Forms
 			((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
 		}
 
-		private void SetAutoResponseResponseControls(AutoContentState state)
+		private void SetAutoResponseResponseStateControls(AutoContentState state)
 		{
 			switch (state)
 			{
@@ -3777,7 +3792,7 @@ namespace YAT.View.Forms
 		private void terminalMdiChild_AutoActionTriggerStateChanged(object sender, EventArgs e)
 		{
 			var state = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
-			SetAutoActionTriggerControls(state);
+			SetAutoActionTriggerStateControls(state);
 		}
 
 	////private void terminalMdiChild_AutoActionActionStateChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
@@ -3795,13 +3810,13 @@ namespace YAT.View.Forms
 		private void terminalMdiChild_AutoResponseTriggerStateChanged(object sender, EventArgs e)
 		{
 			var state = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
-			SetAutoResponseTriggerControls(state);
+			SetAutoResponseTriggerStateControls(state);
 		}
 
 		private void terminalMdiChild_AutoResponseResponseStateChanged(object sender, EventArgs e)
 		{
 			var state = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
-			SetAutoResponseResponseControls(state);
+			SetAutoResponseResponseStateControls(state);
 		}
 
 		private void terminalMdiChild_AutoResponseCountChanged(object sender, EventArgs<int> e)
