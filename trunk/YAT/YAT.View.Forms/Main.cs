@@ -1252,20 +1252,20 @@ namespace YAT.View.Forms
 					SetAutoActionTriggerControls(triggerState);
 				////SetAutoActionActionState(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
-					toolStripButton_MainTool_AutoAction_UseText.Checked = (childIsReady && textIsSupported && useText);
-					toolStripButton_MainTool_AutoAction_UseText.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoAction_UseText.Checked = (textIsSupported && useText);
+					toolStripButton_MainTool_AutoAction_UseText.Enabled =  textIsSupported;
 					toolStripButton_MainTool_AutoAction_UseText.Visible =  true;
 
-					toolStripButton_MainTool_AutoAction_CaseSensitive.Checked = (childIsReady && textIsSupported && useText && caseSensitive);
-					toolStripButton_MainTool_AutoAction_CaseSensitive.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoAction_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
+					toolStripButton_MainTool_AutoAction_CaseSensitive.Enabled = (textIsSupported && useText);
 					toolStripButton_MainTool_AutoAction_CaseSensitive.Visible =  true;
 
-					toolStripButton_MainTool_AutoAction_WholeWord.Checked = (childIsReady && textIsSupported && useText && wholeWord);
-					toolStripButton_MainTool_AutoAction_WholeWord.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoAction_WholeWord.Checked = (textIsSupported && useText && wholeWord);
+					toolStripButton_MainTool_AutoAction_WholeWord.Enabled = (textIsSupported && useText);
 					toolStripButton_MainTool_AutoAction_WholeWord.Visible =  true;
 
-					toolStripButton_MainTool_AutoAction_UseRegex.Checked = (childIsReady && textIsSupported && regexIsSupported && useText && useRegex);
-					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = (childIsReady && textIsSupported && regexIsSupported);
+					toolStripButton_MainTool_AutoAction_UseRegex.Checked = (textIsSupported && useText && regexIsSupported && useRegex);
+					toolStripButton_MainTool_AutoAction_UseRegex.Enabled = (textIsSupported && useText && regexIsSupported);
 					toolStripButton_MainTool_AutoAction_UseRegex.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoActionCount();
@@ -1379,20 +1379,20 @@ namespace YAT.View.Forms
 					SetAutoResponseTriggerControls(triggerState);
 					SetAutoResponseResponseControls(responseState);
 
-					toolStripButton_MainTool_AutoResponse_UseText.Checked = (childIsReady && textIsSupported && useText);
-					toolStripButton_MainTool_AutoResponse_UseText.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoResponse_UseText.Checked = (textIsSupported && useText);
+					toolStripButton_MainTool_AutoResponse_UseText.Enabled =  textIsSupported;
 					toolStripButton_MainTool_AutoResponse_UseText.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_CaseSensitive.Checked = (childIsReady && textIsSupported && useText && caseSensitive);
-					toolStripButton_MainTool_AutoResponse_CaseSensitive.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoResponse_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
+					toolStripButton_MainTool_AutoResponse_CaseSensitive.Enabled = (textIsSupported && useText);
 					toolStripButton_MainTool_AutoResponse_CaseSensitive.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_WholeWord.Checked = (childIsReady && textIsSupported && useText && wholeWord);
-					toolStripButton_MainTool_AutoResponse_WholeWord.Enabled = (childIsReady && textIsSupported);
+					toolStripButton_MainTool_AutoResponse_WholeWord.Checked = (textIsSupported && useText && wholeWord);
+					toolStripButton_MainTool_AutoResponse_WholeWord.Enabled = (textIsSupported && useText);
 					toolStripButton_MainTool_AutoResponse_WholeWord.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_UseRegex.Checked = (childIsReady && textIsSupported && regexIsSupported && useText && useRegex);
-					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = (childIsReady && textIsSupported && regexIsSupported);
+					toolStripButton_MainTool_AutoResponse_UseRegex.Checked = (textIsSupported && useText && regexIsSupported && useRegex);
+					toolStripButton_MainTool_AutoResponse_UseRegex.Enabled = (textIsSupported && useText && regexIsSupported);
 					toolStripButton_MainTool_AutoResponse_UseRegex.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoResponseCount();
