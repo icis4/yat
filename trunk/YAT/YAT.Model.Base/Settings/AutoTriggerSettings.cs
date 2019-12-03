@@ -74,8 +74,8 @@ namespace YAT.Model.Settings
 
 			Trigger = AutoTrigger.None;
 			Options = new AutoTriggerOptions(false, true, false, false);
-		}                                            // Same as regex, which are "case-sensitive by default".
-
+		}                                            // Same as .NET regex, which are "case-sensitive by default".
+		                                             // Also same as byte sequence based triggers, which are case-sensitive by nature.
 		#region Properties
 		//==========================================================================================
 		// Properties
@@ -139,11 +139,11 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <remarks>Convenience property, same as <code>!<see cref="IsTextOrRegexTriggered"/></code>.</remarks>
+		/// <remarks>Convenience property, same as <code>!<see cref="IsTextTriggered"/></code>.</remarks>
 		[XmlIgnore]
 		public virtual bool IsByteSequenceTriggered
 		{
-			get { return (!IsTextOrRegexTriggered); }
+			get { return (!IsTextTriggered); }
 		}
 
 		/// <summary></summary>
@@ -151,20 +151,6 @@ namespace YAT.Model.Settings
 		public virtual bool IsTextTriggered
 		{
 			get { return (Options.UseText); }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool IsRegexTriggered
-		{
-			get { return (Options.UseRegex); }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool IsTextOrRegexTriggered
-		{
-			get { return (IsTextTriggered || IsRegexTriggered); }
 		}
 
 		#endregion

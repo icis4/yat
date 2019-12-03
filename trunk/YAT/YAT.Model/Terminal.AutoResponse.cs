@@ -121,18 +121,10 @@ namespace YAT.Model
 								);
 							}
 						}
-						else // IsTextOrRegexTriggered
+						else // IsTextTriggered
 						{
-							if (this.settingsRoot.AutoResponse.IsTextTriggered)
-							{
-								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoResponse.Options.CaseSensitive, this.settingsRoot.AutoResponse.Options.WholeWord);
-							}
-							else // IsRegexTriggered
-							{
-								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoResponse.Options.CaseSensitive, this.settingsRoot.AutoResponse.Options.WholeWord, triggerRegex);
-							}
+							lock (this.autoResponseTriggerHelperSyncObj)
+								this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoResponse.Options.CaseSensitive, this.settingsRoot.AutoResponse.Options.WholeWord, triggerRegex);
 						}
 					}
 					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.
@@ -219,7 +211,7 @@ namespace YAT.Model
 				foreach (var dl in lines)
 					ProcessAutoResponseFromElements(dl);
 			}
-			else // IsTextOrRegexTriggered
+			else // IsTextTriggered
 			{
 				foreach (var dl in lines)
 				{
@@ -227,14 +219,14 @@ namespace YAT.Model
 					{
 						if (this.autoResponseTriggerHelper != null)
 						{
-							int triggerCount = this.autoResponseTriggerHelper.TextOrRegexTriggerCount(dl.Text);
+							int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text);
 							if (triggerCount > 0)
 							{
 								this.autoResponseTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
 								dl.Highlight = true;
 
-								for (int i = 0; i < triggerCount; i++)
-									InvokeAutoResponse(null, dl.Text);
+								for (int i = 0; i < triggerCount; i++)                      // Use for [Trigger] response.
+									InvokeAutoResponse(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern);
 							}
 						}
 						else
@@ -243,7 +235,7 @@ namespace YAT.Model
 						}              // Though unlikely, it may happen when deactivating response
 					} // lock (helper) // while processing many lines, e.g. on reload.
 				} // foreach (line)
-			} // IsTextOrRegexTriggered
+			} // IsTextTriggered
 		}
 
 		/// <summary>

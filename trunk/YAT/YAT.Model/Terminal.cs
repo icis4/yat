@@ -3284,7 +3284,7 @@ namespace YAT.Model
 			// AutoAction (by specification only active on receive-path):              // See [== AutoTrigger.AnyLine] below.
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (this.settingsRoot.AutoAction.IsTextOrRegexTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
+				if (this.settingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
 				    this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated below.
 				{
 					ProcessAutoActionOtherThanFilterOrSuppressFromLines(e.Lines);
@@ -3297,7 +3297,7 @@ namespace YAT.Model
 
 			// AutoResponse (by specification only active on receive-path):                // See [== AutoTrigger.AnyLine] below.
 			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoResponse.IsTextOrRegexTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
+			    this.settingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
 			{
 				ProcessAutoResponseFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3315,8 +3315,8 @@ namespace YAT.Model
 			// AutoAction (by specification only active on receive-path):
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
-				foreach (var dl in e.Lines)   // Used for user message.
-					InvokeAutoAction(null, dl.Text, dl.TimeStamp);
+				foreach (var dl in e.Lines)
+					InvokeAutoAction(dl.Text, dl.TimeStamp);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.

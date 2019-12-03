@@ -81,7 +81,8 @@ namespace YAT.Application.Settings
 			ActivePattern  = null;
 			RecentPatterns = new RecentItemCollection<string>(MaxRecentPatterns);
 			Options        = new FindOptions(true, false, false);
-		}                                     // Same as regex, which are "case-sensitive by default".
+		}                                     // Same as .NET regex, which are "case-sensitive by default".
+		                                      // Also same as byte sequence based triggers, which are case-sensitive by nature.
 
 		#region Properties
 		//==========================================================================================
