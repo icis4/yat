@@ -106,9 +106,9 @@ namespace MKY.Windows.Forms
 			if (control != null)
 				return (control.RightToLeft == RightToLeft.Yes);
 
-			// If no parent control is available, query the CurrentCulture whether we are running
-			// under right-to-left:
-			return (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft);
+			// If no parent control is available, query the 'CurrentUICulture' whether we are
+			// running under right-to-left:
+			return (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft);
 		}
 	}
 }

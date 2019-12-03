@@ -1128,7 +1128,7 @@ namespace YAT.View.Forms
 				checkBox_DeviceLineBreak.Checked    = (isServerSocket && this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled);
 				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
 
-				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount.ToString(CultureInfo.CurrentCulture);
+				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount .ToString(CultureInfo.CurrentCulture);
 				textBox_MaxLineLength.Text            = this.settingsInEdit.Terminal.Display.MaxLineLength.ToString(CultureInfo.CurrentCulture);
 				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
@@ -1211,10 +1211,10 @@ namespace YAT.View.Forms
 				checkBox_EnableEscapesForFile.Checked = this.settingsInEdit.Terminal.Send.File.EnableEscapes;
 
 				groupBox_Send_Keywords.Enabled   = (this.settingsInEdit.Terminal.Send.Text.EnableEscapes || this.settingsInEdit.Terminal.Send.File.EnableEscapes);
-				textBox_DefaultDelay.Text        =  this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
-				textBox_DefaultLineDelay.Text    =  this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
+				textBox_DefaultDelay.Text        =  this.settingsInEdit.Terminal.Send.DefaultDelay       .ToString(CultureInfo.CurrentCulture);
+				textBox_DefaultLineDelay.Text    =  this.settingsInEdit.Terminal.Send.DefaultLineDelay   .ToString(CultureInfo.CurrentCulture);
 				textBox_DefaultLineInterval.Text =  this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
-				textBox_DefaultLineRepeat.Text   =  this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
+				textBox_DefaultLineRepeat.Text   =  this.settingsInEdit.Terminal.Send.DefaultLineRepeat  .ToString(CultureInfo.CurrentCulture);
 
 				// User:
 				textBox_UserName.Text = this.settingsInEdit.UserName;

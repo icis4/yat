@@ -159,11 +159,11 @@ Base class
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~CLASS()
@@ -264,6 +264,12 @@ Threads should never be aborted. The thread that calls Abort() might block if th
 Reference:
 http://stackoverflow.com/questions/7634797/why-threadabortexception-does-not-throw-in-catch-block
 http://msdn.microsoft.com/en-us/library/5b50fdsz.aspx
+
+
+Globalization
+-------------
+Use 'CurrentCulture' for numbers/formats and the like.
+Use 'CurrentUICulture' for adapting to the language.
 
 
 Known issues

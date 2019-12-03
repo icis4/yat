@@ -6953,7 +6953,7 @@ namespace YAT.View.Forms
 						toolStripStatusLabel_TerminalStatus_CTS.Text += (" | " + pinCount.CtsDisableCount.ToString(CultureInfo.CurrentCulture));
 						toolStripStatusLabel_TerminalStatus_DTR.Text += (" | " + pinCount.DtrDisableCount.ToString(CultureInfo.CurrentCulture));
 						toolStripStatusLabel_TerminalStatus_DSR.Text += (" | " + pinCount.DsrDisableCount.ToString(CultureInfo.CurrentCulture));
-						toolStripStatusLabel_TerminalStatus_DCD.Text += (" | " + pinCount.DcdCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_DCD.Text += (" | " + pinCount.DcdCount       .ToString(CultureInfo.CurrentCulture));
 
 						toolStripStatusLabel_TerminalStatus_RTS.ToolTipText += (" | Disable Count");
 						toolStripStatusLabel_TerminalStatus_CTS.ToolTipText += (" | Disable Count");
@@ -6966,7 +6966,7 @@ namespace YAT.View.Forms
 						var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
 						var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
 
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount    .ToString(CultureInfo.CurrentCulture) + " | " + sentXOffCount    .ToString(CultureInfo.CurrentCulture));
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
 
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
@@ -6978,7 +6978,7 @@ namespace YAT.View.Forms
 						var inputBreakCount      = ((this.terminal != null) ? (this.terminal.InputBreakCount)  : (0));
 						var outputBreakCount     = ((this.terminal != null) ? (this.terminal.OutputBreakCount) : (0));
 
-						toolStripStatusLabel_TerminalStatus_InputBreak.Text  += (" | " + inputBreakCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_InputBreak.Text  += (" | " + inputBreakCount .ToString(CultureInfo.CurrentCulture));
 						toolStripStatusLabel_TerminalStatus_OutputBreak.Text += (" | " + outputBreakCount.ToString(CultureInfo.CurrentCulture));
 
 						toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText  += (" | Input Break Count");
@@ -7179,7 +7179,7 @@ namespace YAT.View.Forms
 						var receivedXOnCount  = ((this.terminal != null) ? (this.terminal.ReceivedXOnCount)  : (0));
 						var receivedXOffCount = ((this.terminal != null) ? (this.terminal.ReceivedXOffCount) : (0));
 
-						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + sentXOffCount.ToString(CultureInfo.CurrentCulture));
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + sentXOnCount    .ToString(CultureInfo.CurrentCulture) + " | " + sentXOffCount    .ToString(CultureInfo.CurrentCulture));
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + receivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + receivedXOffCount.ToString(CultureInfo.CurrentCulture));
 
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");

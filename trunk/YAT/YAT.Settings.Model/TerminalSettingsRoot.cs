@@ -797,7 +797,7 @@ namespace YAT.Settings.Model
 									options |= RegexOptions.IgnoreCase;
 
 								if (AutoAction.Options.WholeWord)   // Surround with Regex word delimiter:
-									pattern = string.Format(CultureInfo.CurrentUICulture, "{0}{1}{0}", @"\b", pattern);
+									pattern = string.Format(CultureInfo.CurrentCulture, "{0}{1}{0}", @"\b", pattern);
 
 								regex = new Regex(pattern);
 								return (true);
