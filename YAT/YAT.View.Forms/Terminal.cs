@@ -783,7 +783,7 @@ namespace YAT.View.Forms
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
 					var trigger = this.settingsRoot.AutoResponse.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
@@ -1071,7 +1071,7 @@ namespace YAT.View.Forms
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
-					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoTriggerItems());
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoActionTriggerItems());
 					var trigger = this.settingsRoot.AutoAction.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
@@ -3674,7 +3674,7 @@ namespace YAT.View.Forms
 		private void send_TextCommandChanged(object sender, EventArgs e)
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Implicit.SendText.Command = send.TextCommand;
+				this.settingsRoot.Implicit.SendText.Command = new Command(send.TextCommand); // Clone to ensure decoupling.
 		}
 
 		/// <remarks>
@@ -3703,7 +3703,7 @@ namespace YAT.View.Forms
 		private void send_FileCommandChanged(object sender, EventArgs e)
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Implicit.SendFile.Command = send.FileCommand;
+				this.settingsRoot.Implicit.SendFile.Command = new Command(send.FileCommand); // Clone to ensure decoupling.
 		}
 
 		private void send_SendFileCommandRequest(object sender, EventArgs e)
