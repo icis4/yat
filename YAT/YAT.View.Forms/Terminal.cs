@@ -799,12 +799,22 @@ namespace YAT.View.Forms
 				SetAutoResponseTriggerStateControls();
 				SetAutoResponseResponseStateControls();
 
-				var useText  = this.settingsRoot.AutoResponse.Options.UseText;
-				var useRegex = this.settingsRoot.AutoResponse.Options.UseRegex;
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText .Checked = (textIsSupported && useText);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText .Enabled =  textIsSupported;
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Checked = (regexIsSupported && useRegex);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Enabled =  regexIsSupported;
+				var useText       = this.settingsRoot.AutoResponse.Options.UseText;
+				var caseSensitive = this.settingsRoot.AutoResponse.Options.CaseSensitive;
+				var wholeWord     = this.settingsRoot.AutoResponse.Options.WholeWord;
+				var useRegex      = this.settingsRoot.AutoResponse.Options.UseRegex;
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Enabled =  textIsSupported;
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Enabled = (textIsSupported && useText);
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Checked = (textIsSupported && useText && wholeWord);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Enabled = (textIsSupported && useText);
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Checked = (textIsSupported && useText && regexIsSupported && useRegex);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Enabled =  textIsSupported && useText && regexIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
 
@@ -1077,12 +1087,22 @@ namespace YAT.View.Forms
 				SetAutoActionTriggerStateControls();
 			////SetAutoActionActionStateControls() is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
-				var useText  = this.settingsRoot.AutoAction.Options.UseText;
-				var useRegex = this.settingsRoot.AutoAction.Options.UseRegex;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText .Checked = (textIsSupported && useText);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText .Enabled =  textIsSupported;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Checked = (regexIsSupported && useRegex);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Enabled =  regexIsSupported;
+				var useText       = this.settingsRoot.AutoAction.Options.UseText;
+				var caseSensitive = this.settingsRoot.AutoAction.Options.CaseSensitive;
+				var wholeWord     = this.settingsRoot.AutoAction.Options.WholeWord;
+				var useRegex      = this.settingsRoot.AutoAction.Options.UseRegex;
+
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Checked = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Enabled =  textIsSupported;
+
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Enabled = (textIsSupported && useText);
+
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Checked = (textIsSupported && useText && wholeWord);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Enabled = (textIsSupported && useText);
+
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Checked = (textIsSupported && useText && regexIsSupported && useRegex);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Enabled =  textIsSupported && useText && regexIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;
 			}
