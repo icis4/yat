@@ -32,6 +32,7 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -367,8 +368,8 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void PreformAutoAction(AutoAction action, string originText, DateTime originTimeStamp)
 		{
-			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
-			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+			int count = Interlocked.Increment(ref this.autoActionCount); // Incrementing before invoking to have the effective count updated during action.
+			OnAutoActionCountChanged(new EventArgs<int>(count));
 
 			// Attention:
 			// Same switch/case exists in HasActionToInvoke() below.
@@ -387,7 +388,7 @@ namespace YAT.Model
 					break;
 
 				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                          break;
-				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(originText, originTimeStamp);             break;
+				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(originText, originTimeStamp, count);      break;
 				case AutoAction.ClearRepositories:               ClearRepositories();                                               break;
 				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
 				                                                 this.autoActionClearRepositoriesOriginText      = originText;
@@ -443,7 +444,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Notifies the user about the action.
 		/// </summary>
-		protected virtual void RequestAutoActionMessage(string originText, DateTime originTimeStamp)
+		protected virtual void RequestAutoActionMessage(string originText, DateTime originTimeStamp, int count)
 		{
 			var sb = new StringBuilder();
 
@@ -454,8 +455,8 @@ namespace YAT.Model
 			sb.AppendLine(".");
 
 			sb.Append("Message has been triggered the ");
-			sb.Append(this.autoActionCount);
-			sb.Append(Int32Ex.ToEnglishSuffix(this.autoActionCount));
+			sb.Append(count);
+			sb.Append(Int32Ex.ToEnglishSuffix(count));
 			sb.Append(" time.");
 
 			OnMessageInputRequest
@@ -487,8 +488,8 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			this.autoActionCount = 0;
-			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
+			int count = Interlocked.Exchange(ref this.autoActionCount, 0);
+			OnAutoActionCountChanged(new EventArgs<int>(count));
 		}
 
 		/// <summary>

@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -252,8 +253,8 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText)
 		{
-			this.autoResponseCount++; // Incrementing before sending to have the effective count available during sending.
-			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
+			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
+			OnAutoResponseCountChanged(new EventArgs<int>(count));
 
 			int page = this.settingsRoot.Predefined.SelectedPageId;
 			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
@@ -359,8 +360,8 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			this.autoResponseCount = 0;
-			OnAutoResponseCountChanged(new EventArgs<int>(this.autoResponseCount));
+			int count = Interlocked.Exchange(ref this.autoResponseCount, 0);
+			OnAutoResponseCountChanged(new EventArgs<int>(count));
 		}
 
 		/// <summary>
