@@ -204,7 +204,7 @@ namespace YAT.Model.Types
 				if (spreadRatio <= 1) // Keep page name unchanged.
 					spreadPage.Name = page.Name;
 				else                  // Standard named pages could be renumbered on spread, but decided against to make spread obvious to user.
-					spreadPage.Name = page.Name + string.Format(CultureInfo.CurrentUICulture, " ({0}/{1})", (i + 1), spreadRatio);
+					spreadPage.Name = page.Name + string.Format(CultureInfo.CurrentCulture, " ({0}/{1})", (i + 1), spreadRatio);
 
 				for (int j = 0; j < commandCapacityPerPage; j++)
 				{

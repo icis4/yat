@@ -1445,7 +1445,7 @@ namespace YAT.View.Forms
 					count = activeTerminal.AutoActionCount;
 			}
 
-			toolStripLabel_MainTool_AutoAction_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", count);
+			toolStripLabel_MainTool_AutoAction_Count.Text = string.Format(CultureInfo.CurrentCulture, "({0})", count);
 		}
 
 		/// <remarks>
@@ -1463,7 +1463,7 @@ namespace YAT.View.Forms
 					count = activeTerminal.AutoResponseCount;
 			}
 
-			toolStripLabel_MainTool_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentUICulture, "({0})", count);
+			toolStripLabel_MainTool_AutoResponse_Count.Text = string.Format(CultureInfo.CurrentCulture, "({0})", count);
 		}
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
