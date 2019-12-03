@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+//using System.Threading.Tasks; activate after having upgraded to .NET 4.0
 using System.Windows.Forms;
 
 using MKY;
@@ -55,6 +56,7 @@ namespace YAT.Model
 		private int autoResponseCount;
 		private AutoTriggerHelper autoResponseTriggerHelper;
 		private object autoResponseTriggerHelperSyncObj = new object();
+	////private Queue<Action<byte[], string>> autoResponseTasks = new Queue<Action<byte[], string>>(); activate after having upgraded to .NET 4.0
 
 		#endregion
 
@@ -228,6 +230,7 @@ namespace YAT.Model
 
 								for (int i = 0; i < triggerCount; i++)                      // Use for [Trigger] response.
 									InvokeAutoResponse(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern);
+								////EnqueueAutoResponse(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern); activate after having upgraded to .NET 4.0
 							}
 						}
 						else
@@ -253,6 +256,17 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText)
 		{
+		////while (this.autoResponseTasks.Count > 0) activate after having upgraded to .NET 4.0
+		////{
+		////	var task = this.autoResponseTasks.Dequeue();
+		////	task.Invoke(...);
+
+			// \remind (2019-12-03 / MKY)
+			// Until .NET 4.0, there is an (acceptable) limitation with the current implementation:
+			// If multiple triggers are detected within the same chunk or close after each other,
+			// the sequence of the responses may get mixed up. For 'AutoResponse', this should not
+			// be an issue, but for 'AutoAction::MessageBox' this is not "nice".
+
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(count));
 
