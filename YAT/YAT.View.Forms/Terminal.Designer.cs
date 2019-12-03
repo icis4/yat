@@ -410,7 +410,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripMenuItem();
@@ -421,7 +421,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate = new System.Windows.Forms.ToolStripMenuItem();
@@ -3755,7 +3755,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText,
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive,
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord,
-            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex});
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(171, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Text = "&Trigger/Pattern";
@@ -3799,12 +3799,12 @@ namespace YAT.View.Forms
     "";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex
 			// 
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Size = new System.Drawing.Size(240, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Text = "Enable Regular &Expression";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex_Click);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Text = "Enable Regular &Expression";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response
 			// 
@@ -3862,7 +3862,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText,
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive,
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord,
-            this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex});
+            this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(154, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Text = "&Trigger/Pattern";
@@ -3905,13 +3905,13 @@ namespace YAT.View.Forms
     "";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex
+			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex
 			// 
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Size = new System.Drawing.Size(240, 22);
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Text = "Enable Regular &Expression";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex_Click);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Text = "Enable Regular &Expression";
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action
 			// 
@@ -5251,7 +5251,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseRegex;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Send_AutoResponse_Response;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowDevice;
@@ -5296,7 +5296,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseRegex;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Receive_AutoAction_Action;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate;

@@ -57,8 +57,8 @@ namespace YAT.Model
 		private AutoTriggerHelper autoActionTriggerHelper;
 		private object autoActionTriggerHelperSyncObj = new object();
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
-		private string autoActionClearRepositoriesTriggerText; // = null;
-		private DateTime autoActionClearRepositoriesTriggerTimeStamp; // = DateTime.MinValue;
+		private string autoActionClearRepositoriesOriginText; // = null;
+		private DateTime autoActionClearRepositoriesOriginTimeStamp; // = DateTime.MinValue;
 
 		#endregion
 
@@ -126,18 +126,10 @@ namespace YAT.Model
 								);
 							}
 						}
-						else // IsTextOrRegexTriggered
+						else // IsTextTriggered
 						{
-							if (this.settingsRoot.AutoAction.IsTextTriggered)
-							{
-								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoAction.Options.CaseSensitive, this.settingsRoot.AutoAction.Options.WholeWord);
-							}
-							else // IsRegexTriggered
-							{
-								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoAction.Options.CaseSensitive, this.settingsRoot.AutoAction.Options.WholeWord, triggerRegex);
-							}
+							lock (this.autoActionTriggerHelperSyncObj)
+								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoAction.Options.CaseSensitive, this.settingsRoot.AutoAction.Options.WholeWord, triggerRegex);
 						}
 					}
 					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.
@@ -199,7 +191,15 @@ namespace YAT.Model
 										de.Highlight = true;
 
 										// Invoke shall happen as short as possible after detection:
-										InvokeAutoAction(this.autoActionTriggerHelper.TriggerSequence, null, de.TimeStamp);
+										InvokeAutoAction(elements.Text, de.TimeStamp);
+
+										// Note that 'elements.Text' is not perfect, as it could only contain
+										// parts of the trigger. However, using...
+										// this.autoActionTriggerHelper.TriggerSequence
+										// ...formatted with...
+										// this.terminal.Format(riggerSequence, Domain.IODirection.Rx)
+										// ...in RequestAutoActionMessage() isn't perfect either, as it will
+										// never contain more than the trigger. Preferring 'elements.Text'.
 									}
 								}
 							}
@@ -228,7 +228,7 @@ namespace YAT.Model
 				foreach (var dl in lines)
 					ProcessAutoActionFromElements(dl);
 			}
-			else // IsTextOrRegexTriggered
+			else // IsTextTriggered
 			{
 				foreach (var dl in lines)
 				{
@@ -236,14 +236,14 @@ namespace YAT.Model
 					{
 						if (this.autoActionTriggerHelper != null)
 						{
-							int triggerCount = this.autoActionTriggerHelper.TextOrRegexTriggerCount(dl.Text);
+							int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.Text);
 							if (triggerCount > 0)
 							{
 								this.autoActionTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
 								dl.Highlight = true;
 
 								for (int i = 0; i < triggerCount; i++)
-									InvokeAutoAction(null, dl.Text, dl.TimeStamp);
+									InvokeAutoAction(dl.Text, dl.TimeStamp);
 							}
 						}
 						else
@@ -252,7 +252,7 @@ namespace YAT.Model
 						}              // Though unlikely, it may happen when deactivating action
 					} // lock (helper) // while processing many lines, e.g. on reload.
 				} // foreach (line)
-			} // IsTextOrRegexTriggered
+			} // IsTextTriggered
 		}
 
 		/// <summary>
@@ -300,9 +300,9 @@ namespace YAT.Model
 								}
 							}
 						}
-						else // IsTextOrRegexTriggered
+						else // IsTextTriggered
 						{
-							isTriggered = this.autoActionTriggerHelper.TextOrRegexTriggerSuccess(dl.Text);
+							isTriggered = this.autoActionTriggerHelper.TextTriggerSuccess(dl.Text);
 						}
 					}
 					else
@@ -328,46 +328,44 @@ namespace YAT.Model
 		{
 			if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
 			{
-				byte[] triggerSequence;
-				string triggerText;
-				DateTime triggerTimeStamp;
+				string originText;
+				DateTime originTimeStamp;
 
 				lock (this.autoActionTriggerHelperSyncObj)
 				{
-					triggerSequence  = this.autoActionTriggerHelper.TriggerSequence;
-					triggerText      = this.autoActionClearRepositoriesTriggerText;
-					triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
+					originText      = this.autoActionClearRepositoriesOriginText;
+					originTimeStamp = this.autoActionClearRepositoriesOriginTimeStamp;
 
 					this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
-					this.autoActionClearRepositoriesTriggerText = null;
-					this.autoActionClearRepositoriesTriggerTimeStamp = DateTime.MinValue;
+					this.autoActionClearRepositoriesOriginText            = null;
+					this.autoActionClearRepositoriesOriginTimeStamp       = DateTime.MinValue;
 				}
 				                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
-				InvokeAutoAction(AutoAction.ClearRepositories, triggerSequence, triggerText, triggerTimeStamp);
+				InvokeAutoAction(AutoAction.ClearRepositories, originText, originTimeStamp);
 			}
 		}
 
 		/// <summary>
 		/// Invokes the automatic action on an other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoAction(byte[] triggerSequence, string triggerText, DateTime triggerTimeStamp)
+		protected virtual void InvokeAutoAction(string originText, DateTime originTimeStamp)
 		{
-			InvokeAutoAction(this.settingsRoot.AutoAction.Action, triggerSequence, triggerText, triggerTimeStamp);
+			InvokeAutoAction(this.settingsRoot.AutoAction.Action, originText, originTimeStamp);
 		}
 
 		/// <summary>
 		/// Invokes the automatic action on an other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, string triggerText, DateTime triggerTimeStamp)
+		protected virtual void InvokeAutoAction(AutoAction action, string originText, DateTime originTimeStamp)
 		{
-			var asyncInvoker = new Action<AutoAction, byte[], string, DateTime>(PreformAutoAction);
-			asyncInvoker.BeginInvoke(action, triggerSequence, triggerText, triggerTimeStamp, null, null);
+			var asyncInvoker = new Action<AutoAction, string, DateTime>(PreformAutoAction);
+			asyncInvoker.BeginInvoke(action, originText, originTimeStamp, null, null);
 		}
 
 		/// <summary>
 		/// Performs the automatic action.
 		/// </summary>
-		protected virtual void PreformAutoAction(AutoAction action, byte[] triggerSequence, string triggerText, DateTime triggerTimeStamp)
+		protected virtual void PreformAutoAction(AutoAction action, string originText, DateTime originTimeStamp)
 		{
 			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
 			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
@@ -388,18 +386,18 @@ namespace YAT.Model
 					// No additional action.
 					break;
 
-				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                                 break;
-				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, triggerText, triggerTimeStamp); break;
-				case AutoAction.ClearRepositories:               ClearRepositories();                                                      break;
+				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                          break;
+				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(originText, originTimeStamp);             break;
+				case AutoAction.ClearRepositories:               ClearRepositories();                                               break;
 				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
-				                                                 this.autoActionClearRepositoriesTriggerText      = triggerText;
-				                                                 this.autoActionClearRepositoriesTriggerTimeStamp = triggerTimeStamp;      break;
-				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                                    break;
-				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                            break;
-				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                                           break;
-				case AutoAction.StopIO:                          StopIO();                                                                 break;
-				case AutoAction.CloseTerminal:                   Close();                                                                  break;
-				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                                           break;
+				                                                 this.autoActionClearRepositoriesOriginText      = originText;
+				                                                 this.autoActionClearRepositoriesOriginTimeStamp = originTimeStamp; break;
+				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                             break;
+				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                     break;
+				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                                    break;
+				case AutoAction.StopIO:                          StopIO();                                                          break;
+				case AutoAction.CloseTerminal:                   Close();                                                           break;
+				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                                    break;
 
 				default:
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -445,20 +443,14 @@ namespace YAT.Model
 		/// <summary>
 		/// Notifies the user about the action.
 		/// </summary>
-		protected virtual void RequestAutoActionMessage(byte[] triggerSequence, string triggerText, DateTime ts)
+		protected virtual void RequestAutoActionMessage(string originText, DateTime originTimeStamp)
 		{
 			var sb = new StringBuilder();
+
 			sb.Append(@"Message has been triggered by """);
-
-			if (!ArrayEx.IsNullOrEmpty(triggerSequence))
-				sb.Append(this.terminal.Format(triggerSequence, Domain.IODirection.Rx));
-			else if (!string.IsNullOrEmpty(triggerText))
-				sb.Append(triggerText);
-			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Either byte sequence or text must be defined!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
+			sb.Append(originText);
 			sb.Append(@""" at ");
-			sb.Append(this.terminal.Format(ts));
+			sb.Append(this.terminal.Format(originTimeStamp));
 			sb.AppendLine(".");
 
 			sb.Append("Message has been triggered the ");

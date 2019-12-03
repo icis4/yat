@@ -39,15 +39,15 @@ namespace YAT.Application.Types
 		public bool WholeWord { get; set; }
 
 		/// <summary></summary>
-		[XmlElement("UseRegex")]
-		public bool UseRegex { get; set; }
+		[XmlElement("EnableRegex")]
+		public bool EnableRegex { get; set; }
 
 		/// <summary></summary>
-		public FindOptions(bool caseSensitive, bool wholeWord, bool useRegex)
+		public FindOptions(bool caseSensitive, bool wholeWord, bool enableRegex)
 		{
 			CaseSensitive = caseSensitive;
 			WholeWord     = wholeWord;
-			UseRegex      = useRegex;
+			EnableRegex   = enableRegex;
 		}
 
 		#region Object Members
@@ -68,7 +68,7 @@ namespace YAT.Application.Types
 			(
 				CaseSensitive + ", " +
 				WholeWord     + ", " +
-				UseRegex
+				EnableRegex
 			);
 		}
 
@@ -87,7 +87,7 @@ namespace YAT.Application.Types
 
 				hashCode =                    CaseSensitive.GetHashCode();
 				hashCode = (hashCode * 397) ^ WholeWord    .GetHashCode();
-				hashCode = (hashCode * 397) ^ UseRegex     .GetHashCode();
+				hashCode = (hashCode * 397) ^ EnableRegex  .GetHashCode();
 
 				return (hashCode);
 			}
@@ -117,7 +117,7 @@ namespace YAT.Application.Types
 			(
 				CaseSensitive.Equals(other.CaseSensitive) &&
 				WholeWord    .Equals(other.WholeWord)     &&
-				UseRegex     .Equals(other.UseRegex)
+				EnableRegex  .Equals(other.EnableRegex)
 			);
 		}
 

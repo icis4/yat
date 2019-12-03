@@ -671,14 +671,14 @@ namespace YAT.Settings.Model
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
-		public virtual bool TryGetActiveAutoActionTrigger(out Command command, out string textOrRegexPattern, out Regex regex)
+		public virtual bool TryGetActiveAutoActionTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
 			if (AutoAction.TriggerIsActive)
-				return (TryGetActiveAutoTrigger(AutoAction.Trigger, AutoAction.Options.UseText, AutoAction.Options.UseRegex,
-				                                out command, out textOrRegexPattern, out regex));
+				return (TryGetActiveAutoTrigger(AutoAction.Trigger, AutoAction.IsByteSequenceTriggered, AutoAction.Options.EnableRegex,
+				                                out command, out triggerTextOrRegexPattern, out regex));
 
 			command = null;
-			textOrRegexPattern = null;
+			triggerTextOrRegexPattern = null;
 			regex = null;
 			return (false);
 		}
@@ -689,14 +689,14 @@ namespace YAT.Settings.Model
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
-		public virtual bool TryGetActiveAutoResponseTrigger(out Command command, out string textOrRegexPattern, out Regex regex)
+		public virtual bool TryGetActiveAutoResponseTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
 			if (AutoResponse.TriggerIsActive)
-				return (TryGetActiveAutoTrigger(AutoResponse.Trigger, AutoResponse.Options.UseText, AutoResponse.Options.UseRegex,
-				                                out command, out textOrRegexPattern, out regex));
+				return (TryGetActiveAutoTrigger(AutoResponse.Trigger, AutoResponse.IsByteSequenceTriggered, AutoResponse.Options.EnableRegex,
+				                                out command, out triggerTextOrRegexPattern, out regex));
 
 			command = null;
-			textOrRegexPattern = null;
+			triggerTextOrRegexPattern = null;
 			regex = null;
 			return (false);
 		}
@@ -707,11 +707,9 @@ namespace YAT.Settings.Model
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
-		protected virtual bool TryGetActiveAutoTrigger(AutoTriggerEx trigger, bool useText, bool useRegex,
-		                                               out Command command, out string textOrRegexPattern, out Regex regex)
+		protected virtual bool TryGetActiveAutoTrigger(AutoTriggerEx trigger, bool isByteSequenceTriggered, bool enableRegex,
+		                                               out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
-			bool isByteSequenceTriggered = (!useText && !useRegex);
-
 			switch ((AutoTrigger)trigger)
 			{
 				case AutoTrigger.None:
@@ -742,7 +740,7 @@ namespace YAT.Settings.Model
 						if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 						{
 							command = c;
-							textOrRegexPattern = null;
+							triggerTextOrRegexPattern = null;
 							regex = null;
 							return (true);
 						}
@@ -757,7 +755,7 @@ namespace YAT.Settings.Model
 					if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 					{
 						command = c;
-						textOrRegexPattern = null;
+						triggerTextOrRegexPattern = null;
 						regex = null;
 						return (true);
 					}
@@ -773,22 +771,22 @@ namespace YAT.Settings.Model
 						if (IsValidAutoTriggerCommand(c, true))
 						{
 							command = c;
-							textOrRegexPattern = null;
+							triggerTextOrRegexPattern = null;
 							regex = null;
 							return (true);
 						}
 					}
-					else // IsTextOrRegexTriggered
+					else // IsTextTriggered
 					{
 						command = null;
-						textOrRegexPattern = trigger;
+						triggerTextOrRegexPattern = trigger;
 
-						if (useText)
+						if (!enableRegex)
 						{
 							regex = null;
 							return (true);
 						}
-						else // useRegex
+						else
 						{
 							try
 							{
@@ -798,7 +796,7 @@ namespace YAT.Settings.Model
 								if (!AutoAction.Options.CaseSensitive)
 									options |= RegexOptions.IgnoreCase;
 
-								if (AutoAction.Options.WholeWord)         // Add the Regex word delimiter:
+								if (AutoAction.Options.WholeWord)   // Surround with Regex word delimiter:
 									pattern = string.Format(CultureInfo.CurrentUICulture, "{0}{1}{0}", @"\b", pattern);
 
 								regex = new Regex(pattern);
@@ -821,7 +819,7 @@ namespace YAT.Settings.Model
 			}
 
 			command = null;
-			textOrRegexPattern = null;
+			triggerTextOrRegexPattern = null;
 			regex = null;
 			return (false);
 		}
