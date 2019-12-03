@@ -33,6 +33,7 @@ using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+//using System.Threading.Tasks; activate after having upgraded to .NET 4.0
 using System.Windows.Forms;
 
 using MKY;
@@ -57,6 +58,7 @@ namespace YAT.Model
 		private int autoActionCount;
 		private AutoTriggerHelper autoActionTriggerHelper;
 		private object autoActionTriggerHelperSyncObj = new object();
+	////private Queue<Action<AutoAction, string, DateTime>> autoActionTasks = new Queue<Action<AutoAction, string, DateTime>>(); activate after having upgraded to .NET 4.0
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
 		private string autoActionClearRepositoriesOriginText; // = null;
 		private DateTime autoActionClearRepositoriesOriginTimeStamp; // = DateTime.MinValue;
@@ -245,6 +247,7 @@ namespace YAT.Model
 
 								for (int i = 0; i < triggerCount; i++)
 									InvokeAutoAction(dl.Text, dl.TimeStamp);
+								////EnqueueAutoAction(dl.Text, dl.TimeStamp); activate after having upgraded to .NET 4.0
 							}
 						}
 						else
@@ -368,6 +371,17 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void PreformAutoAction(AutoAction action, string originText, DateTime originTimeStamp)
 		{
+		////while (this.autoActionTasks.Count > 0) activate after having upgraded to .NET 4.0
+		////{
+		////	var task = this.autoActionTasks.Dequeue();
+		////	task.Invoke(...);
+
+			// \remind (2019-12-03 / MKY)
+			// Until .NET 4.0, there is an (acceptable) limitation with the current implementation:
+			// If multiple triggers are detected within the same chunk or close after each other,
+			// the sequence of the responses may get mixed up. For 'AutoResponse', this should not
+			// be an issue, but for 'AutoAction::MessageBox' this is not "nice".
+
 			int count = Interlocked.Increment(ref this.autoActionCount); // Incrementing before invoking to have the effective count updated during action.
 			OnAutoActionCountChanged(new EventArgs<int>(count));
 
