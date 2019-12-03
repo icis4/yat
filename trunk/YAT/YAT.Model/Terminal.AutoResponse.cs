@@ -126,12 +126,12 @@ namespace YAT.Model
 							if (this.settingsRoot.AutoResponse.IsTextTriggered)
 							{
 								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern);
+									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoResponse.Options.CaseSensitive, this.settingsRoot.AutoResponse.Options.WholeWord);
 							}
 							else // IsRegexTriggered
 							{
 								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, triggerRegex);
+									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoResponse.Options.CaseSensitive, this.settingsRoot.AutoResponse.Options.WholeWord, triggerRegex);
 							}
 						}
 					}
@@ -227,13 +227,7 @@ namespace YAT.Model
 					{
 						if (this.autoResponseTriggerHelper != null)
 						{
-							int triggerCount = 0;
-
-							if (this.settingsRoot.AutoResponse.IsTextTriggered)
-								triggerCount = StringEx.ContainingCount(dl.Text, this.autoResponseTriggerHelper.TriggerText);
-							else                            // IsRegexTriggered
-								triggerCount = this.autoResponseTriggerHelper.TriggerRegex.Matches(dl.Text).Count;
-
+							int triggerCount = this.autoResponseTriggerHelper.TextOrRegexTriggerCount(dl.Text);
 							if (triggerCount > 0)
 							{
 								this.autoResponseTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
@@ -306,8 +300,8 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence, string triggerText)
 		{
-			if (!ArrayEx.IsNullOrEmpty(triggerSequence))
-				this.terminal.Send(ToSequenceWithTxEol(triggerSequence));
+			if (!ArrayEx.IsNullOrEmpty(triggerSequence))                  // If sequence is given, use that, no matter
+				this.terminal.Send(ToSequenceWithTxEol(triggerSequence)); // whether 'UseText' is enabled or not.
 			else
 				this.terminal.SendTextLine(triggerText);
 		}

@@ -732,7 +732,16 @@ namespace YAT.Settings.Model
 						{
 							try
 							{
-								regex = new Regex(trigger);
+								var pattern = (string)trigger;
+								var options = RegexOptions.Singleline;
+
+								if (!AutoAction.Options.CaseSensitive)
+									options |= RegexOptions.IgnoreCase;
+
+								if (AutoAction.Options.WholeWord)         // Add the Regex word delimiter:
+									pattern = string.Format(CultureInfo.CurrentUICulture, "{0}{1}{0}", @"\b", pattern);
+
+								regex = new Regex(pattern);
 								return (true);
 							}
 							catch (ArgumentException ex)

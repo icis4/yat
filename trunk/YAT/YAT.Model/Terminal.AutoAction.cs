@@ -131,12 +131,12 @@ namespace YAT.Model
 							if (this.settingsRoot.AutoAction.IsTextTriggered)
 							{
 								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern);
+									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoAction.Options.CaseSensitive, this.settingsRoot.AutoAction.Options.WholeWord);
 							}
 							else // IsRegexTriggered
 							{
 								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, triggerRegex);
+									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoAction.Options.CaseSensitive, this.settingsRoot.AutoAction.Options.WholeWord, triggerRegex);
 							}
 						}
 					}
@@ -199,7 +199,7 @@ namespace YAT.Model
 										de.Highlight = true;
 
 										// Invoke shall happen as short as possible after detection:
-										InvokeAutoAction(this.settingsRoot.AutoAction.Action, this.autoActionTriggerHelper.TriggerSequence, null, de.TimeStamp);
+										InvokeAutoAction(this.autoActionTriggerHelper.TriggerSequence, null, de.TimeStamp);
 									}
 								}
 							}
@@ -236,20 +236,14 @@ namespace YAT.Model
 					{
 						if (this.autoActionTriggerHelper != null)
 						{
-							int triggerCount = 0;
-
-							if (this.settingsRoot.AutoAction.IsTextTriggered)
-								triggerCount = StringEx.ContainingCount(dl.Text, this.autoActionTriggerHelper.TriggerText);
-							else                          // IsRegexTriggered
-								triggerCount = this.autoActionTriggerHelper.TriggerRegex.Matches(dl.Text).Count;
-
+							int triggerCount = this.autoActionTriggerHelper.TextOrRegexTriggerCount(dl.Text);
 							if (triggerCount > 0)
 							{
 								this.autoActionTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
 								dl.Highlight = true;
 
 								for (int i = 0; i < triggerCount; i++)
-									InvokeAutoAction(this.settingsRoot.AutoAction.Action, null, dl.Text, dl.TimeStamp);
+									InvokeAutoAction(null, dl.Text, dl.TimeStamp);
 							}
 						}
 						else
@@ -308,10 +302,7 @@ namespace YAT.Model
 						}
 						else // IsTextOrRegexTriggered
 						{
-							if (this.settingsRoot.AutoAction.IsTextTriggered)
-								isTriggered = dl.Text.Contains(this.autoActionTriggerHelper.TriggerText);
-							else                          // IsRegexTriggered
-								isTriggered = this.autoActionTriggerHelper.TriggerRegex.Match(dl.Text).Success;
+							isTriggered = this.autoActionTriggerHelper.TextOrRegexTriggerSuccess(dl.Text);
 						}
 					}
 					else
@@ -359,16 +350,24 @@ namespace YAT.Model
 		/// <summary>
 		/// Invokes the automatic action on an other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, string triggerText, DateTime timeStamp)
+		protected virtual void InvokeAutoAction(byte[] triggerSequence, string triggerText, DateTime triggerTimeStamp)
+		{
+			InvokeAutoAction(this.settingsRoot.AutoAction.Action, triggerSequence, triggerText, triggerTimeStamp);
+		}
+
+		/// <summary>
+		/// Invokes the automatic action on an other than the receive thread.
+		/// </summary>
+		protected virtual void InvokeAutoAction(AutoAction action, byte[] triggerSequence, string triggerText, DateTime triggerTimeStamp)
 		{
 			var asyncInvoker = new Action<AutoAction, byte[], string, DateTime>(PreformAutoAction);
-			asyncInvoker.BeginInvoke(action, triggerSequence, triggerText, timeStamp, null, null);
+			asyncInvoker.BeginInvoke(action, triggerSequence, triggerText, triggerTimeStamp, null, null);
 		}
 
 		/// <summary>
 		/// Performs the automatic action.
 		/// </summary>
-		protected virtual void PreformAutoAction(AutoAction action, byte[] triggerSequence, string triggerText, DateTime ts)
+		protected virtual void PreformAutoAction(AutoAction action, byte[] triggerSequence, string triggerText, DateTime triggerTimeStamp)
 		{
 			this.autoActionCount++; // Incrementing before invoking to have the effective count available during invoking.
 			OnAutoActionCountChanged(new EventArgs<int>(this.autoActionCount));
@@ -379,18 +378,18 @@ namespace YAT.Model
 
 			switch (action)
 			{
-				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                     break;
-				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, triggerText, ts);   break;
-				case AutoAction.ClearRepositories:               ClearRepositories();                                          break;
+				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                                 break;
+				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerSequence, triggerText, triggerTimeStamp); break;
+				case AutoAction.ClearRepositories:               ClearRepositories();                                                      break;
 				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
-				                                                 this.autoActionClearRepositoriesTriggerText = triggerText;
-				                                                 this.autoActionClearRepositoriesTriggerTimeStamp = ts;        break;
-				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                        break;
-				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                break;
-				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                               break;
-				case AutoAction.StopIO:                          StopIO();                                                     break;
-				case AutoAction.CloseTerminal:                   Close();                                                      break;
-				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                               break;
+				                                                 this.autoActionClearRepositoriesTriggerText      = triggerText;
+				                                                 this.autoActionClearRepositoriesTriggerTimeStamp = triggerTimeStamp;      break;
+				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                                    break;
+				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                            break;
+				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                                           break;
+				case AutoAction.StopIO:                          StopIO();                                                                 break;
+				case AutoAction.CloseTerminal:                   Close();                                                                  break;
+				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                                           break;
 
 				case AutoAction.Highlight:
 				case AutoAction.Filter:

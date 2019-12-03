@@ -60,6 +60,35 @@ namespace MKY.Text.RegularExpressions
 				return (false);
 			}
 		}
+
+		/// <summary>
+		/// Validates the given regular expression pattern.
+		/// </summary>
+		public static bool TryValidatePattern(string pattern, RegexOptions options)
+		{
+			string errorMessage;
+			return (TryValidatePattern(pattern, options, out errorMessage));
+		}
+
+		/// <summary>
+		/// Validates the given regular expression pattern.
+		/// </summary>
+		public static bool TryValidatePattern(string pattern, RegexOptions options, out string errorMessage)
+		{
+			try
+			{
+				var regex = new Regex(pattern, options);
+				UnusedLocal.PreventAnalysisWarning(regex);
+
+				errorMessage = null;
+				return (true);
+			}
+			catch (ArgumentException ex)
+			{
+				errorMessage = ex.Message;
+				return (false);
+			}
+		}
 	}
 }
 
