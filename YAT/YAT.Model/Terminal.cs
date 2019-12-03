@@ -3315,8 +3315,8 @@ namespace YAT.Model
 			// AutoAction (by specification only active on receive-path):
 			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
-				foreach (var dl in e.Lines)                                     // Used for user message.
-					InvokeAutoAction(this.settingsRoot.AutoAction.Action, null, dl.Text, dl.TimeStamp);
+				foreach (var dl in e.Lines)   // Used for user message.
+					InvokeAutoAction(null, dl.Text, dl.TimeStamp);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.

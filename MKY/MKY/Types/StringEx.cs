@@ -333,7 +333,7 @@ namespace MKY
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
-		public static int ContainingCount(string str, string value)
+		public static int ContainingCount(string str, string value, StringComparison comparisonType)
 		{
 			if (str == null)
 				throw (new ArgumentNullException("str"));
@@ -341,7 +341,29 @@ namespace MKY
 			int count = 0;
 
 			int i = 0;
-			while ((i = str.IndexOf(value, i)) >= 0)
+			while ((i = str.IndexOf(value, i, comparisonType)) >= 0)
+			{
+				i += value.Length;
+				count++;
+			}
+
+			return (count);
+		}
+
+		/// <summary>
+		/// Determines how many occurrances of <paramref name="value"/> are contained in <paramref name="str"/>.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+		public static int ContainingWholeWordCount(string str, string value, StringComparison comparisonType)
+		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
+			int count = 0;
+
+			int i = 0;
+			while ((i = IndexOfWholeWord(str, value, i, comparisonType)) >= 0)
 			{
 				i += value.Length;
 				count++;
@@ -946,35 +968,35 @@ namespace MKY
 		/// Reports the index of the first occurrence of the specified word in <paramref name="str"/>.
 		/// </summary>
 		/// <param name="str">The <see cref="string"/> object to process.</param>
-		/// <param name="searchWord">The word to search for.</param>
+		/// <param name="value">The word to search for.</param>
 		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
 		/// <returns>
 		/// The zero-based index position of the start of the same character class in the string.
 		/// </returns>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
-		public static int IndexOfWholeWord(string str, string searchWord, StringComparison comparisonType)
+		public static int IndexOfWholeWord(string str, string value, StringComparison comparisonType)
 		{
-			return (IndexOfWholeWord(str, searchWord, 0, comparisonType));
+			return (IndexOfWholeWord(str, value, 0, comparisonType));
 		}
 
 		/// <summary>
 		/// Reports the index of the first occurrence of the specified word in <paramref name="str"/>.
 		/// </summary>
 		/// <param name="str">The <see cref="string"/> object to process.</param>
-		/// <param name="searchWord">The word to search for.</param>
+		/// <param name="value">The word to search for.</param>
 		/// <param name="startIndex">The search starting position.</param>
 		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
 		/// <returns>
 		/// The zero-based index position of the start of the same character class in the string.
 		/// </returns>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
-		public static int IndexOfWholeWord(string str, string searchWord, int startIndex, StringComparison comparisonType)
+		public static int IndexOfWholeWord(string str, string value, int startIndex, StringComparison comparisonType)
 		{
 			if (str == null)
 				throw (new ArgumentNullException("str"));
 
 			int i = startIndex;  // Using string.IndexOf() because string.Contains() does not allow controlling culture and case.
-			while ((i < str.Length) && ((i = str.IndexOf(searchWord, i, comparisonType)) != InvalidIndex))
+			while ((i < str.Length) && ((i = str.IndexOf(value, i, comparisonType)) != InvalidIndex))
 			{
 				bool isStartBoundary;
 				int wordStart = i;
@@ -984,7 +1006,7 @@ namespace MKY
 					isStartBoundary = !char.IsLetterOrDigit(str[wordStart - 1]);
 
 				bool isEndBoundary;
-				int wordEnd = (i + searchWord.Length - 1);
+				int wordEnd = (i + value.Length - 1);
 				if (wordEnd >= (str.Length - 1))
 					isEndBoundary = true;
 				else

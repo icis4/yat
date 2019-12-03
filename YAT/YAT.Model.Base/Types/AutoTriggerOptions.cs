@@ -35,14 +35,24 @@ namespace YAT.Model.Types
 		public bool UseText { get; set; }
 
 		/// <summary></summary>
+		[XmlElement("CaseSensitive")]
+		public bool CaseSensitive { get; set; }
+
+		/// <summary></summary>
+		[XmlElement("WholeWord")]
+		public bool WholeWord { get; set; }
+
+		/// <summary></summary>
 		[XmlElement("UseRegex")]
 		public bool UseRegex { get; set; }
 
 		/// <summary></summary>
-		public AutoTriggerOptions(bool useText, bool useRegex)
+		public AutoTriggerOptions(bool useText, bool caseSensitive, bool wholeWord, bool useRegex)
 		{
-			UseText  = useText;
-			UseRegex = useRegex;
+			UseText       = useText;
+			CaseSensitive = caseSensitive;
+			WholeWord     = wholeWord;
+			UseRegex      = useRegex;
 		}
 
 		#region Object Members
@@ -61,7 +71,9 @@ namespace YAT.Model.Types
 		{
 			return
 			(
-				UseText + ", " +
+				UseText       + ", " +
+				CaseSensitive + ", " +
+				WholeWord     + ", " +
 				UseRegex
 			);
 		}
@@ -79,8 +91,10 @@ namespace YAT.Model.Types
 			{
 				int hashCode;
 
-				hashCode =                    UseText .GetHashCode();
-				hashCode = (hashCode * 397) ^ UseRegex.GetHashCode();
+				hashCode =                    UseText      .GetHashCode();
+				hashCode = (hashCode * 397) ^ CaseSensitive.GetHashCode();
+				hashCode = (hashCode * 397) ^ WholeWord    .GetHashCode();
+				hashCode = (hashCode * 397) ^ UseRegex     .GetHashCode();
 
 				return (hashCode);
 			}
@@ -108,8 +122,10 @@ namespace YAT.Model.Types
 		{
 			return
 			(
-				UseText .Equals(other.UseText) &&
-				UseRegex.Equals(other.UseRegex)
+				UseText      .Equals(other.UseText)       &&
+				CaseSensitive.Equals(other.CaseSensitive) &&
+				WholeWord    .Equals(other.WholeWord)     &&
+				UseRegex     .Equals(other.UseRegex)
 			);
 		}
 

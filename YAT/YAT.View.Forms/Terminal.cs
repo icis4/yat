@@ -4308,9 +4308,9 @@ namespace YAT.View.Forms
 			}
 			else // IsTextOrRegexTriggered
 			{
-				if (this.settingsRoot.AutoAction.IsTextTriggered)
+				if (this.settingsRoot.AutoAction.IsTextTriggered) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerText));
-				else                          // IsRegexTriggered
+				else                          // IsRegexTriggered // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (RegexEx.TryValidatePattern(triggerText));
 			}
 		}
@@ -4525,9 +4525,9 @@ namespace YAT.View.Forms
 			}
 			else // IsTextOrRegexTriggered
 			{
-				if (this.settingsRoot.AutoResponse.IsTextTriggered)
+				if (this.settingsRoot.AutoResponse.IsTextTriggered) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerText));
-				else                            // IsRegexTriggered
+				else                            // IsRegexTriggered // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (RegexEx.TryValidatePattern(triggerText));
 			}
 		}

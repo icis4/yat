@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -47,10 +48,13 @@ namespace YAT.Model.Utilities
 		private Domain.SequenceQueue triggerSequenceQueue;
 
 		/// <summary></summary>
-		public string TriggerText { get; }
+		public string TriggerTextOrRegexPattern { get; }
 
 		/// <summary></summary>
-		public string TriggerRegexPattern { get; }
+		public bool TriggerTextOrRegexCaseSensitive { get; }
+
+		/// <summary></summary>
+		public bool TriggerTextOrRegexWholeWord { get; }
 
 		/// <summary></summary>
 		public Regex TriggerRegex { get; }
@@ -67,21 +71,25 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public AutoTriggerHelper(string triggerText)
+		public AutoTriggerHelper(string triggerText, bool caseSensitive, bool wholeWord)
 		{
 			lock (this)
 			{
-				TriggerText = triggerText;
+				TriggerTextOrRegexPattern       = triggerText;
+				TriggerTextOrRegexCaseSensitive = caseSensitive;
+				TriggerTextOrRegexWholeWord     = wholeWord;
 			}
 		}
 
 		/// <summary></summary>
-		public AutoTriggerHelper(string triggerRegexPattern, Regex triggerRegex)
+		public AutoTriggerHelper(string triggerRegexPattern, bool caseSensitive, bool wholeWord, Regex triggerRegex)
 		{
 			lock (this)
 			{
-				TriggerRegexPattern = triggerRegexPattern;
-				TriggerRegex = triggerRegex;
+				TriggerTextOrRegexPattern       = triggerRegexPattern;
+				TriggerTextOrRegexCaseSensitive = caseSensitive;
+				TriggerTextOrRegexWholeWord     = wholeWord;
+				TriggerRegex                    = triggerRegex;
 			}
 		}
 
@@ -111,6 +119,66 @@ namespace YAT.Model.Utilities
 					return (false);
 				}
 			}
+		}
+
+		/// <summary></summary>
+		public virtual bool TextOrRegexTriggerSuccess(string input)
+		{
+			if (TriggerRegex == null) // IsTextTriggered
+				return (TextTriggerSuccess(input));
+			else                      // IsRegexTriggered
+				return (RegexTriggerSuccess(input));
+		}
+
+		/// <summary></summary>
+		public virtual int TextOrRegexTriggerCount(string input)
+		{
+			if (TriggerRegex == null) // IsTextTriggered
+				return (TextTriggerCount(input));
+			else                      // IsRegexTriggered
+				return (RegexTriggerCount(input));
+		}
+
+		/// <summary></summary>
+		public virtual bool TextTriggerSuccess(string input)
+		{
+			StringComparison comparisonType;
+			if (TriggerTextOrRegexCaseSensitive)
+				comparisonType = StringComparison.CurrentCulture;
+			else
+				comparisonType = StringComparison.CurrentCultureIgnoreCase;
+
+			if (TriggerTextOrRegexWholeWord)
+				return (StringEx.IndexOfWholeWord(TriggerTextOrRegexPattern, input, comparisonType) >= 0);
+			else
+				return (TriggerTextOrRegexPattern.IndexOf(input, comparisonType) >= 0); // Using string.IndexOf() because string.Contains()
+		}                                                                               // does not allow controlling culture and case.
+
+		/// <summary></summary>
+		public virtual int TextTriggerCount(string input)
+		{
+			StringComparison comparisonType;
+			if (TriggerTextOrRegexCaseSensitive)
+				comparisonType = StringComparison.CurrentCulture;
+			else
+				comparisonType = StringComparison.CurrentCultureIgnoreCase;
+
+			if (TriggerTextOrRegexWholeWord)
+				return (StringEx.ContainingWholeWordCount(input, TriggerTextOrRegexPattern, comparisonType));
+			else
+				return (StringEx.ContainingCount(input, TriggerTextOrRegexPattern, comparisonType));
+		}
+
+		/// <summary></summary>
+		public virtual bool RegexTriggerSuccess(string input)
+		{
+			return (TriggerRegex.Match(input).Success);
+		}
+
+		/// <summary></summary>
+		public virtual int RegexTriggerCount(string input)
+		{
+			return (TriggerRegex.Matches(input).Count);
 		}
 
 		/// <summary></summary>

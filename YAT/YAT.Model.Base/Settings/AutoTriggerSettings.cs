@@ -73,8 +73,8 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			Trigger = AutoTrigger.None;
-			Options = new AutoTriggerOptions(false, false);
-		}
+			Options = new AutoTriggerOptions(false, true, false, false);
+		}                                            // Same as regex, which are "case-sensitive by default".
 
 		#region Properties
 		//==========================================================================================
