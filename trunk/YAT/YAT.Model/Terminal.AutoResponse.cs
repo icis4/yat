@@ -91,17 +91,17 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void UpdateAutoResponse()
 		{
-			if (this.settingsRoot.AutoResponse.IsActive)
+			if (SettingsRoot.AutoResponse.IsActive)
 			{
-				if (this.settingsRoot.AutoResponse.Trigger.CommandIsRequired) // = sequence required = helper required.
+				if (SettingsRoot.AutoResponse.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
 					Command triggerCommand;
 					string  triggerTextOrRegexPattern;
 					Regex   triggerRegex;
 
-					if (this.settingsRoot.TryGetActiveAutoResponseTrigger(out triggerCommand, out triggerTextOrRegexPattern, out triggerRegex))
+					if (SettingsRoot.TryGetActiveAutoResponseTrigger(out triggerCommand, out triggerTextOrRegexPattern, out triggerRegex))
 					{
-						if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
+						if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 						{
 							byte[] triggerSequence;
 							if (TryParseCommandToSequence(triggerCommand, out triggerSequence))
@@ -127,7 +127,7 @@ namespace YAT.Model
 						else // IsTextTriggered
 						{
 							lock (this.autoResponseTriggerHelperSyncObj)
-								this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoResponse.Options.CaseSensitive, this.settingsRoot.AutoResponse.Options.WholeWord, triggerRegex);
+								this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoResponse.Options.CaseSensitive, SettingsRoot.AutoResponse.Options.WholeWord, triggerRegex);
 						}
 					}
 					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.
@@ -209,7 +209,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void ProcessAutoResponseFromLines(Domain.DisplayLineCollection lines)
 		{
-			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
+			if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 			{
 				foreach (var dl in lines)
 					ProcessAutoResponseFromElements(dl);
@@ -270,8 +270,8 @@ namespace YAT.Model
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(count));
 
-			int page = this.settingsRoot.Predefined.SelectedPageId;
-			switch ((AutoResponse)this.settingsRoot.AutoResponse.Response)
+			int page = SettingsRoot.Predefined.SelectedPageId;
+			switch ((AutoResponse)SettingsRoot.AutoResponse.Response)
 			{
 				case AutoResponse.None:
 					// Nothing to do.
@@ -294,11 +294,11 @@ namespace YAT.Model
 				case AutoResponse.SendFile:            SendFile();               break;
 
 				case AutoResponse.Explicit:
-					SendCommand(new Command(this.settingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
+					SendCommand(new Command(SettingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
 					break;
 
 				default:
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoResponse)this.settingsRoot.AutoResponse.Response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoResponse)SettingsRoot.AutoResponse.Response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -320,7 +320,7 @@ namespace YAT.Model
 		{
 			var l = new List<byte>(sequence);
 
-			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
+			if (SettingsRoot.TerminalType == Domain.TerminalType.Text)
 			{
 				var textTerminal = (this.terminal as Domain.TextTerminal);
 
@@ -339,12 +339,12 @@ namespace YAT.Model
 		{
 			var l = new List<byte>(dl.ElementsToOrigin());
 
-			if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
+			if (SettingsRoot.TerminalType == Domain.TerminalType.Text)
 			{
 				var textTerminal = (this.terminal as Domain.TextTerminal);
 
 				// Remove Rx EOL:
-				if (this.settingsRoot.TextTerminal.ShowEol)
+				if (SettingsRoot.TextTerminal.ShowEol)
 				{
 					var rxEolSequence = textTerminal.RxEolSequence;
 					l.RemoveRange((l.Count - rxEolSequence.Length), rxEolSequence.Length);
@@ -385,7 +385,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			this.settingsRoot.AutoResponse.Deactivate();
+			SettingsRoot.AutoResponse.Deactivate();
 			ResetAutoResponseCount();
 		}
 
