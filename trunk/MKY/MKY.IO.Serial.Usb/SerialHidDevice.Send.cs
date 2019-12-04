@@ -283,7 +283,11 @@ namespace MKY.IO.Serial.Usb
 							{
 								Monitor.Exit(this.dataEventSyncObj);
 							}
-						} // Monitor.TryEnter()
+						}
+						else // Monitor.TryEnter()
+						{
+							DebugMessage("SendThread() monitor has timed out!");
+						}
 					} // Inner loop
 				} // Outer loop
 			}

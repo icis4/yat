@@ -786,7 +786,11 @@ namespace YAT.Domain
 					}
 
 					break; // Successfully entered the lock and processed the event => break the while-loop.
-				} // Monitor.TryEnter()
+				}
+				else // Monitor.TryEnter()
+				{
+					DebugMessage("io_DataReceived() monitor has timed out!");
+				}
 			} // while (!IsDisposed)
 		}
 
@@ -820,7 +824,11 @@ namespace YAT.Domain
 					}
 
 					break; // Successfully entered the lock and processed the event => break the while-loop.
-				} // Monitor.TryEnter()
+				}
+				else // Monitor.TryEnter()
+				{
+					DebugMessage("io_DataSent() monitor has timed out!");
+				}
 			} // while (!IsDisposed)
 		}
 

@@ -173,8 +173,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
-		private System.Timers.Timer aliveMonitor;
-		private object aliveMonitorSyncObj = new object();
+		private System.Timers.Timer aliveMonitorTimeout;
+		private object aliveMonitorTimeoutSyncObj = new object();
 
 		private System.Timers.Timer reopenTimeout;
 		private object reopenTimeoutSyncObj = new object();
@@ -418,8 +418,10 @@ namespace MKY.IO.Serial.SerialPort
 						Monitor.Exit(this.portSyncObj);
 					}
 				}
-				else
+				else // Monitor.TryEnter()
 				{
+					DebugMessage("IsOpen monitor has timed out!");
+
 					return (false);
 				}
 			}
@@ -448,8 +450,10 @@ namespace MKY.IO.Serial.SerialPort
 						Monitor.Exit(this.portSyncObj);
 					}
 				}
-				else
+				else // Monitor.TryEnter()
 				{
+					DebugMessage("IsConnected monitor has timed out!");
+
 					return (false);
 				}
 			}
@@ -484,8 +488,10 @@ namespace MKY.IO.Serial.SerialPort
 						Monitor.Exit(this.portSyncObj);
 					}
 				}
-				else
+				else // Monitor.TryEnter()
 				{
+					DebugMessage("IsTransmissive monitor has timed out!");
+
 					return (false);
 				}
 			}
@@ -1544,7 +1550,11 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					Monitor.Exit(ioControlEventTimeout_Elapsed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("ioControlEventTimeout_Elapsed() monitor has timed out!");
+			}
 		}
 
 		/// <remarks>
@@ -1589,14 +1599,14 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Well, any better idea on how to check whether the serial port is still alive?")]
 		private void StartAliveMonitor()
 		{
-			lock (this.aliveMonitorSyncObj)
+			lock (this.aliveMonitorTimeoutSyncObj)
 			{
-				if (this.aliveMonitor == null)
+				if (this.aliveMonitorTimeout == null)
 				{
-					this.aliveMonitor = new System.Timers.Timer(this.settings.AliveMonitor.Interval);
-					this.aliveMonitor.AutoReset = true;
-					this.aliveMonitor.Elapsed += aliveMonitor_Elapsed;
-					this.aliveMonitor.Start();
+					this.aliveMonitorTimeout = new System.Timers.Timer(this.settings.AliveMonitor.Interval);
+					this.aliveMonitorTimeout.AutoReset = true;
+					this.aliveMonitorTimeout.Elapsed += aliveMonitorTimeout_Elapsed;
+					this.aliveMonitorTimeout.Start();
 				}
 				else
 				{
@@ -1607,27 +1617,27 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void StopAndDisposeAliveMonitor()
 		{
-			lock (this.aliveMonitorSyncObj)
+			lock (this.aliveMonitorTimeoutSyncObj)
 			{
-				if (this.aliveMonitor != null)
+				if (this.aliveMonitorTimeout != null)
 				{
-					this.aliveMonitor.Stop();
-					this.aliveMonitor.Dispose();
-					this.aliveMonitor = null;
+					this.aliveMonitorTimeout.Stop();
+					this.aliveMonitorTimeout.Dispose();
+					this.aliveMonitorTimeout = null;
 				}
 			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object aliveMonitor_Elapsed_SyncObj = new object();
+		private object aliveMonitorTimeout_Elapsed_SyncObj = new object();
 
-		private void aliveMonitor_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void aliveMonitorTimeout_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(aliveMonitor_Elapsed_SyncObj))
+			if (Monitor.TryEnter(aliveMonitorTimeout_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -1635,7 +1645,7 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						if (!Ports.SerialPortCollection.IsAvailable(PortId))
 						{
-							DebugMessage("AliveMonitorElapsed() has detected shutdown of port as it is no longer available.");
+							DebugMessage("aliveMonitorTimeout_Elapsed() has detected shutdown of port as it is no longer available.");
 							RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 						}
 
@@ -1648,9 +1658,13 @@ namespace MKY.IO.Serial.SerialPort
 				}
 				finally
 				{
-					Monitor.Exit(aliveMonitor_Elapsed_SyncObj);
+					Monitor.Exit(aliveMonitorTimeout_Elapsed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("aliveMonitorTimeout_Elapsed() monitor has timed out!");
+			}
 		}
 
 		#endregion
@@ -1713,11 +1727,11 @@ namespace MKY.IO.Serial.SerialPort
 							try
 							{
 								CreateAndOpenPortAndThreadsAndNotify(); // Try to reopen port.
-								DebugMessage("ReopenTimerElapsed() successfully reopened the port.");
+								DebugMessage("reopenTimeout_Elapsed() successfully reopened the port.");
 							}
 							catch // Do not output exception onto debug console, console would get spoilt with useless information.
 							{
-								DebugMessage("ReopenTimerElapsed() has failed to reopen the port.");
+								DebugMessage("reopenTimeout_Elapsed() has failed to reopen the port.");
 								RestartOrResetPortAndThreadsAfterExceptionWithoutNotify(); // Cleanup and restart. No notifications.
 							}
 						}
@@ -1737,7 +1751,11 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					Monitor.Exit(reopenTimeout_Elapsed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("reopenTimeout_Elapsed() monitor has timed out!");
+			}
 		}
 
 		#endregion

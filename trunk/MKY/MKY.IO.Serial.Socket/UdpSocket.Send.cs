@@ -168,7 +168,11 @@ namespace MKY.IO.Serial.Socket
 							{
 								Monitor.Exit(this.dataEventSyncObj);
 							}
-						} // Monitor.TryEnter()
+						}
+						else // Monitor.TryEnter()
+						{
+							DebugMessage("SendThread() monitor has timed out!");
+						}
 
 						// Note the Thread.Sleep(TimeSpan.Zero) above.
 
