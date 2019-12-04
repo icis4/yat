@@ -150,7 +150,7 @@ namespace YAT.Model.Settings
 		[XmlIgnore]
 		public virtual bool IsTextTriggered
 		{
-			get { return (Options.UseText); }
+			get { return (Trigger.TextIsSupported && Options.UseText); }
 		}
 
 		#endregion
