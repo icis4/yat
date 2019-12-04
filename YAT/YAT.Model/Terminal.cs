@@ -641,10 +641,10 @@ namespace YAT.Model
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				if (this.settingsRoot != null)
+				if (SettingsRoot != null)
 				{
-					if (!string.IsNullOrEmpty(this.settingsRoot.UserName))
-						return (this.settingsRoot.UserName);
+					if (!string.IsNullOrEmpty(SettingsRoot.UserName))
+						return (SettingsRoot.UserName);
 				}
 
 				return ("");
@@ -689,8 +689,8 @@ namespace YAT.Model
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				if (this.settingsRoot != null)
-					return (this.settingsRoot.IOType);
+				if (SettingsRoot != null)
+					return (SettingsRoot.IOType);
 				else
 					return (Domain.IOType.Unknown);
 			}
@@ -901,10 +901,10 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (this.settingsRoot != null)
+				if (SettingsRoot != null)
 				{
-					if (this.settingsRoot.IOType == Domain.IOType.SerialPort)
-						return (this.settingsRoot.IO.SerialPort.PortId);
+					if (SettingsRoot.IOType == Domain.IOType.SerialPort)
+						return (SettingsRoot.IO.SerialPort.PortId);
 				}
 
 				return (null);
@@ -1099,14 +1099,14 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// Switch log on if selected:
-			if (this.settingsRoot.LogIsOn)
+			if (SettingsRoot.LogIsOn)
 			{
 				if (!SwitchLogOn())
 					return (false);
 			}
 
 			// Then start terminal if selected:
-			if (this.settingsRoot.TerminalIsStarted)
+			if (SettingsRoot.TerminalIsStarted)
 			{
 				// Check availability of I/O before starting:
 				var result = CheckIOAvailability();
@@ -1197,11 +1197,11 @@ namespace YAT.Model
 			{
 				// Nothing to do, no need to care about 'ProductVersion' and such.
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Explicit))
 			{
 				HandleExplicitSettings(e.Inner);
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Implicit))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Implicit))
 			{
 				HandleImplicitSettings(e.Inner);
 			}
@@ -1213,33 +1213,33 @@ namespace YAT.Model
 			{
 				// Nothing to do.
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Terminal))
 			{
 				HandleTerminalSettings(e.Inner);
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.PredefinedCommand))
 			{
 				UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoAction))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.AutoAction))
 			{
 				UpdateAutoAction(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 
-				if (this.settingsRoot.AutoAction.IsFilterOrSuppress)
+				if (SettingsRoot.AutoAction.IsFilterOrSuppress)
 					RefreshRepositories();
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.AutoResponse))
 			{
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Format))
 			{
-				this.log.NeatFormat = this.settingsRoot.Format;
+				this.log.NeatFormat = SettingsRoot.Format;
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Log))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Log))
 			{
-				this.log.Settings = this.settingsRoot.Log;
+				this.log.Settings = SettingsRoot.Log;
 			}
 		}
 
@@ -1249,39 +1249,39 @@ namespace YAT.Model
 
 			if (e.Inner == null)
 			{
-				if (this.settingsRoot_Changed_terminalTypeOld != this.settingsRoot.TerminalType) {
-					this.settingsRoot_Changed_terminalTypeOld = this.settingsRoot.TerminalType;
+				if (this.settingsRoot_Changed_terminalTypeOld != SettingsRoot.TerminalType) {
+					this.settingsRoot_Changed_terminalTypeOld = SettingsRoot.TerminalType;
 
 					// Terminal type has changed, recreate Auto[Action|Response]:
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.IO))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Terminal.IO))
 			{
-				if (this.settingsRoot_Changed_endiannessOld != this.settingsRoot.Terminal.IO.Endianness) {
-					this.settingsRoot_Changed_endiannessOld = this.settingsRoot.Terminal.IO.Endianness; // Relevant for byte sequence based triggers.
+				if (this.settingsRoot_Changed_endiannessOld != SettingsRoot.Terminal.IO.Endianness) {
+					this.settingsRoot_Changed_endiannessOld = SettingsRoot.Terminal.IO.Endianness; // Relevant for byte sequence based triggers.
 
 					// Endianness has changed, recreate Auto[Action|Response]:
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.Send))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Terminal.Send))
 			{
-				if (this.settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Terminal.Send.Text.SendImmediately) {
-					this.settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Terminal.Send.Text.SendImmediately;
+				if (this.settingsRoot_Changed_sendImmediatelyOld != SettingsRoot.Terminal.Send.Text.SendImmediately) {
+					this.settingsRoot_Changed_sendImmediatelyOld = SettingsRoot.Terminal.Send.Text.SendImmediately;
 
 					// Send immediately has changed, reset the command:
-					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
+					this.settingsRoot.SendText.Command = new Command(SettingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 				}
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal.TextTerminal))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Terminal.TextTerminal))
 			{
-				this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.Terminal.TextTerminal.Encoding;
+				this.log.TextTerminalEncoding = (EncodingEx)SettingsRoot.Terminal.TextTerminal.Encoding;
 
-				if (this.settingsRoot_Changed_encodingOld != this.settingsRoot.Terminal.TextTerminal.Encoding) {
-					this.settingsRoot_Changed_encodingOld = this.settingsRoot.Terminal.TextTerminal.Encoding; // Relevant for byte sequence based triggers.
+				if (this.settingsRoot_Changed_encodingOld != SettingsRoot.Terminal.TextTerminal.Encoding) {
+					this.settingsRoot_Changed_encodingOld = SettingsRoot.Terminal.TextTerminal.Encoding; // Relevant for byte sequence based triggers.
 
 					// Encoding has changed, recreate Auto[Action|Response]:
 					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
@@ -1296,12 +1296,12 @@ namespace YAT.Model
 			{
 				// Nothing to do.
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendText))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.SendText))
 			{
 				UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
+			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.SendFile))
 			{
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
@@ -2818,10 +2818,10 @@ namespace YAT.Model
 					this.activeConnectChrono.Restart(now); // Restart, i.e. reset and start from zero.
 					this.totalConnectChrono.Start(now);    // Start again, i.e. continue at last time.
 
-					this.terminal.InitialTimeStamp = now;       // The initial time stamp is used for
-					                                            // time spans. Consequently, the spans
-					if (this.settingsRoot.Display.ShowTimeSpan) // will be based on the active connect
-						this.terminal.RefreshRepositories();    // time, not the total connect time.
+					this.terminal.InitialTimeStamp = now;    // The initial time stamp is used for
+					                                         // time spans. Consequently, the spans
+					if (SettingsRoot.Display.ShowTimeSpan)   // will be based on the active connect
+						this.terminal.RefreshRepositories(); // time, not the total connect time.
 				}
 				else if (!isConnectedNow && hasBeenConnected)
 				{
@@ -3052,17 +3052,17 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			// AutoAction (by specification only active on receive-path):                      // See terminal_DisplayLinesRxAdded for background.
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
-			    this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			// AutoAction (by specification only active on receive-path):            // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
+			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				ProcessAutoActionFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			// AutoResponse (by specification only active on receive-path):                        // See terminal_DisplayLinesRxAdded for background.
-			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
+			// AutoResponse (by specification only active on receive-path):              // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
 			{
 				ProcessAutoResponseFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3193,9 +3193,9 @@ namespace YAT.Model
 		////if (this.bidirLineRate.Update(e.Lines.Count)) would technically be possible, but doesn't make much sense.
 		////	OnIORateChanged_Promptly(EventArgs.Empty);
 
-			// AutoAction Filter/Suppress (by specification only active on receive-path):      // See terminal_DisplayLinesRxAdded for background.
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoAction.IsFilterOrSuppress)
+			// AutoAction Filter/Suppress (by specification only active on receive-path):           // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoAction.IsFilterOrSuppress)
 			{                           // This method restricts processing to pure 'Rx' lines.
 				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3276,23 +3276,23 @@ namespace YAT.Model
 			if (this.rxLineRate.Update(e.Lines.Count))
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
-			// AutoAction (by specification only active on receive-path):              // See [== AutoTrigger.AnyLine] below.
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
+			// AutoAction (by specification only active on receive-path):    // See [== AutoTrigger.AnyLine] below.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (this.settingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
-				    this.settingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated below.
+				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
+				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated below.
 				{
 					ProcessAutoActionOtherThanFilterOrSuppressFromLines(e.Lines);
 				}
-				else if (this.settingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated here.
+				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated here.
 				{
 					ProcessAutoActionFilterAndSuppressFromLines(e.Lines);
 				}
 			}
 
-			// AutoResponse (by specification only active on receive-path):                // See [== AutoTrigger.AnyLine] below.
-			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
+			// AutoResponse (by specification only active on receive-path):      // See [== AutoTrigger.AnyLine] below.
+			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
 			{
 				ProcessAutoResponseFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3308,7 +3308,7 @@ namespace YAT.Model
 			}
 
 			// AutoAction (by specification only active on receive-path):
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)
 					InvokeAutoAction(dl.Text, dl.TimeStamp);
@@ -3325,7 +3325,7 @@ namespace YAT.Model
 			}
 
 			// AutoResponse (by specification only active on receive-path):
-			if (this.settingsRoot.AutoResponse.IsActive && (this.settingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
+			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)                       // Response shall be based on origin, not text.
 					InvokeAutoResponse(ToOriginWithoutRxEol(dl), null);
@@ -3401,9 +3401,9 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			// AutoAction Filter/Suppress (by specification only active on receive-path):      // See terminal_DisplayLinesRxAdded for background.
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoAction.IsFilterOrSuppress) // Only these pseudo-actions are reapplied on reload.
+			// AutoAction Filter/Suppress (by specification only active on receive-path):           // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoAction.IsFilterOrSuppress) // Only these pseudo-actions are reapplied on reload.
 			{                           // This method restricts processing to pure 'Rx' lines.
 				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3419,9 +3419,9 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			// AutoAction Filter/Suppress (by specification only active on receive-path):      // See terminal_DisplayLinesRxAdded for background.
-			if (this.settingsRoot.AutoAction.IsActive && (this.settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    this.settingsRoot.AutoAction.IsFilterOrSuppress) // Only these pseudo-actions are reapplied on reload.
+			// AutoAction Filter/Suppress (by specification only active on receive-path):           // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoAction.IsFilterOrSuppress) // Only these pseudo-actions are reapplied on reload.
 			{
 				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3448,11 +3448,11 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual CheckResult CheckIOAvailability()
 		{
-			switch (this.settingsRoot.IOType)
+			switch (SettingsRoot.IOType)
 			{
 				case Domain.IOType.SerialPort:
 				{
-					var portId = this.settingsRoot.Terminal.IO.SerialPort.PortId;
+					var portId = SettingsRoot.Terminal.IO.SerialPort.PortId;
 					if (portId != null)
 						return (CheckSerialPortAvailability(portId));
 					else
@@ -3463,7 +3463,7 @@ namespace YAT.Model
 				case Domain.IOType.TcpServer:
 				case Domain.IOType.TcpAutoSocket:
 				{
-					MKY.Net.IPNetworkInterfaceEx localInterface = this.settingsRoot.Terminal.IO.Socket.LocalInterface;
+					MKY.Net.IPNetworkInterfaceEx localInterface = SettingsRoot.Terminal.IO.Socket.LocalInterface;
 					if (localInterface != null)
 						return (CheckLocalInterfaceAvailability(localInterface));
 					else
@@ -3472,7 +3472,7 @@ namespace YAT.Model
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					var deviceInfo = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+					var deviceInfo = SettingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 					if (deviceInfo != null)
 						return (CheckUsbDeviceAvailability(deviceInfo));
 					else
@@ -3513,8 +3513,8 @@ namespace YAT.Model
 							var dr = ShowSerialPortNotAvailableSwitchQuestionYesNo(portId, portIdAlternate);
 							if (dr == DialogResult.Yes)
 							{
-								this.settingsRoot.Explicit.Terminal.IO.SerialPort.PortId = portIdAlternate;
-								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+								SettingsRoot.Explicit.Terminal.IO.SerialPort.PortId = portIdAlternate;
+								ApplyTerminalSettings(SettingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							}
 
 							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
@@ -3582,8 +3582,8 @@ namespace YAT.Model
 						var dr = ShowLocalInterfaceNotAvailableAlternateQuestionYesNo(localInterface, localInterfaces[sameDescriptionIndex]);
 						if (dr == DialogResult.Yes)
 						{
-							this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
-							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+							SettingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
+							ApplyTerminalSettings(SettingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							return (CheckResult.OK);
 						}
 						else
@@ -3594,8 +3594,8 @@ namespace YAT.Model
 					}
 					else // Silently switch interface:
 					{
-						this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
-						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+						SettingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[sameDescriptionIndex];
+						ApplyTerminalSettings(SettingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 						return (CheckResult.OK);
 					}
 				}
@@ -3606,8 +3606,8 @@ namespace YAT.Model
 						var dr = ShowLocalInterfaceNotAvailableDefaultQuestionYesNo(localInterface, localInterfaces[0]);
 						if (dr == DialogResult.Yes)
 						{
-							this.settingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[0];
-							ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+							SettingsRoot.Explicit.Terminal.IO.Socket.LocalInterface = localInterfaces[0];
+							ApplyTerminalSettings(SettingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							return (CheckResult.OK);
 						}
 						else
@@ -3668,8 +3668,8 @@ namespace YAT.Model
 							var dr = ShowUsbSerialHidDeviceUsageNotAvailableAlternateQuestionYesNo(deviceInfo, deviceInfo.UsageString, devices[sameVidPidSerialIndex].UsageString);
 							if (dr == DialogResult.Yes)
 							{
-								this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidSerialIndex];
-								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+								SettingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidSerialIndex];
+								ApplyTerminalSettings(SettingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							}
 
 							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
@@ -3694,8 +3694,8 @@ namespace YAT.Model
 							var dr = ShowUsbSerialHidDeviceSerialNotAvailableAlternateQuestionYesNo(deviceInfo, devices[sameVidPidIndex]);
 							if (dr == DialogResult.Yes)
 							{
-								this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
-								ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+								SettingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+								ApplyTerminalSettings(SettingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 							}
 
 							return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
@@ -3709,12 +3709,12 @@ namespace YAT.Model
 					else
 					{
 						// Clear the 'Changed' flag in case of automatically changing settings:
-						bool hadAlreadyBeenChanged = this.settingsRoot.Terminal.IO.UsbSerialHidDevice.HaveChanged;
-						this.settingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+						bool hadAlreadyBeenChanged = SettingsRoot.Terminal.IO.UsbSerialHidDevice.HaveChanged;
+						SettingsRoot.Terminal.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
 						if (!hadAlreadyBeenChanged)
-							this.settingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.ClearChanged();
+							SettingsRoot.Explicit.Terminal.IO.UsbSerialHidDevice.ClearChanged();
 
-						ApplyTerminalSettings(this.settingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
+						ApplyTerminalSettings(SettingsRoot.Explicit); // \ToDo: Not a good solution, should be called in HandleTerminalSettings(), but that gets called too often => FR #309.
 
 						return (CheckResult.OK); // Device may not yet be available but 'AutoOpen'.
 					}
@@ -4017,7 +4017,7 @@ namespace YAT.Model
 				if (this.terminal.Start())
 				{
 					if (saveStatus)
-						this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
+						SettingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
 					OnTimedStatusTextRequest("Terminal successfully started.");
 					errorMessage = null;
@@ -4031,7 +4031,7 @@ namespace YAT.Model
 					if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 					{
 						string yatLead, yatText;
-						ErrorHelper.MakeStartHint(this.settingsRoot.IOType, out yatLead, out yatText);
+						ErrorHelper.MakeStartHint(SettingsRoot.IOType, out yatLead, out yatText);
 
 						OnMessageInputRequest
 						(
@@ -4051,7 +4051,7 @@ namespace YAT.Model
 				if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 				{
 					string yatLead, yatText;
-					ErrorHelper.MakeExceptionHint(this.settingsRoot.IOType, out yatLead, out yatText);
+					ErrorHelper.MakeExceptionHint(SettingsRoot.IOType, out yatLead, out yatText);
 
 					errorMessage = ErrorHelper.ComposeMessage(errorMessage, ex, yatLead, yatText);
 					OnMessageInputRequest
@@ -4115,7 +4115,7 @@ namespace YAT.Model
 				this.terminal.Stop();
 
 				if (saveStatus)
-					this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
+					SettingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
 				OnTimedStatusTextRequest("Terminal stopped.");
 				errorMessage = null;
@@ -4345,7 +4345,7 @@ namespace YAT.Model
 
 			this.terminal.InitialTimeStamp = now;
 
-			if (this.settingsRoot.Display.ShowTimeSpan)
+			if (SettingsRoot.Display.ShowTimeSpan)
 				this.terminal.RefreshRepositories();
 		}
 
@@ -4928,7 +4928,7 @@ namespace YAT.Model
 			try
 			{
 				this.log.SwitchOn();
-				this.settingsRoot.LogIsOn = true;
+				SettingsRoot.LogIsOn = true;
 
 				return (true);
 			}
@@ -4983,7 +4983,7 @@ namespace YAT.Model
 			try
 			{
 				this.log.SwitchOff();
-				this.settingsRoot.LogIsOn = false;
+				SettingsRoot.LogIsOn = false;
 
 				return (true);
 			}

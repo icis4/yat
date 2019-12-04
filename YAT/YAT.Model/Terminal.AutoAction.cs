@@ -96,17 +96,17 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void UpdateAutoAction()
 		{
-			if (this.settingsRoot.AutoAction.IsActive)
+			if (SettingsRoot.AutoAction.IsActive)
 			{
-				if (this.settingsRoot.AutoAction.Trigger.CommandIsRequired) // = sequence required = helper required.
+				if (SettingsRoot.AutoAction.Trigger.CommandIsRequired) // = sequence required = helper required.
 				{
 					Command triggerCommand;
 					string  triggerTextOrRegexPattern;
 					Regex   triggerRegex;
 
-					if (this.settingsRoot.TryGetActiveAutoActionTrigger(out triggerCommand, out triggerTextOrRegexPattern, out triggerRegex))
+					if (SettingsRoot.TryGetActiveAutoActionTrigger(out triggerCommand, out triggerTextOrRegexPattern, out triggerRegex))
 					{
-						if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+						if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 						{
 							byte[] triggerSequence;
 							if (TryParseCommandToSequence(triggerCommand, out triggerSequence))
@@ -132,7 +132,7 @@ namespace YAT.Model
 						else // IsTextTriggered
 						{
 							lock (this.autoActionTriggerHelperSyncObj)
-								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, this.settingsRoot.AutoAction.Options.CaseSensitive, this.settingsRoot.AutoAction.Options.WholeWord, triggerRegex);
+								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoAction.Options.CaseSensitive, SettingsRoot.AutoAction.Options.WholeWord, triggerRegex);
 						}
 					}
 					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.
@@ -226,7 +226,7 @@ namespace YAT.Model
 		{
 			ProcessAutoActionClearRepositoriesOnSubsequentRx();
 
-			if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+			if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 			{
 				foreach (var dl in lines)
 					ProcessAutoActionFromElements(dl);
@@ -284,7 +284,7 @@ namespace YAT.Model
 				{
 					if (this.autoActionTriggerHelper != null)
 					{
-						if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+						if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 						{
 							foreach (var de in dl)
 							{
@@ -315,7 +315,7 @@ namespace YAT.Model
 					}              // Though unlikely, it may happen when deactivating action
 				} // lock (helper) // while processing many lines, e.g. on reload.
 
-				switch ((AutoAction)this.settingsRoot.AutoAction.Action)
+				switch ((AutoAction)SettingsRoot.AutoAction.Action)
 				{
 					case AutoAction.Filter:   if ( isTriggered) { lines.Add(dl); } break;
 					case AutoAction.Suppress: if (!isTriggered) { lines.Add(dl); } break;
@@ -354,7 +354,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void InvokeAutoAction(string originText, DateTime originTimeStamp)
 		{
-			InvokeAutoAction(this.settingsRoot.AutoAction.Action, originText, originTimeStamp);
+			InvokeAutoAction(SettingsRoot.AutoAction.Action, originText, originTimeStamp);
 		}
 
 		/// <summary>
@@ -513,7 +513,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			this.settingsRoot.AutoAction.Deactivate();
+			SettingsRoot.AutoAction.Deactivate();
 			ResetAutoActionCount();
 		}
 
