@@ -914,8 +914,9 @@ namespace YAT.View.Forms
 		{
 			var now = DateTime.Now;
 			var diff = (now - this.initialTimeStamp);
-			var delta = new TimeSpan(0, 0, 0, 0, 111); // 111 ms
-			var duration = new TimeSpan(0, 0, 0, 0, 22); // 22 ms
+			var delta      = new TimeSpan(0, 0, 0, 0, 111); // 111 ms
+			var durationTx = new TimeSpan(0, 0, 0, 0,  22); //  22 ms
+			var durationRx = new TimeSpan(0, 0, 0, 0,  3);  //   3 ms
 
 			var contentSeparator   = this.contentSeparator.ToSeparator();
 			var infoSeparator      = this.infoSeparator.ToSeparator();
@@ -928,13 +929,13 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(now, 0x13, "<CR>")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(now, 0x42, "42h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(now, 0x10, "<LF>")));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDurationInfo(duration, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DeviceInfo("COM1", infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(   now,        this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(    diff,       this.timeSpanFormat,                        infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDeltaInfo(   delta,      this.timeDeltaFormat,                       infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDurationInfo(durationTx, this.timeDurationFormat,                    infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DeviceInfo("COM1",                                                       infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx,                                       infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2,                                                            infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOControlInfo("RTS=on")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.InfoSeparator("_-°,;")));
@@ -967,7 +968,7 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(5, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(duration, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(durationTx, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
@@ -989,7 +990,7 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(duration, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(durationRx, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
