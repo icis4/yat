@@ -82,9 +82,9 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor deviceFormat;
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
-		private FormatDescriptor whiteSpacesFormat;
 		private FormatDescriptor ioControlFormat;
 		private FormatDescriptor errorFormat;
+		private FormatDescriptor whiteSpacesFormat;
 
 		private StreamWriter writer;
 		private object writerSyncObj = new object();
@@ -127,9 +127,9 @@ namespace YAT.Log.Utilities
 			this.deviceFormat       = new FormatDescriptor(settings.DeviceFormat.FontStyle,       this.document.createColor(settings.DeviceFormat.Color),       this.document.createColor(settings.BackColor));
 			this.directionFormat    = new FormatDescriptor(settings.DirectionFormat.FontStyle,    this.document.createColor(settings.DirectionFormat.Color),    this.document.createColor(settings.BackColor));
 			this.lengthFormat       = new FormatDescriptor(settings.LengthFormat.FontStyle,       this.document.createColor(settings.LengthFormat.Color),       this.document.createColor(settings.BackColor));
-			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle,  this.document.createColor(settings.WhiteSpacesFormat.Color),  this.document.createColor(settings.BackColor));
 			this.ioControlFormat    = new FormatDescriptor(settings.IOControlFormat.FontStyle,    this.document.createColor(settings.IOControlFormat.Color),    this.document.createColor(settings.BackColor));
 			this.errorFormat        = new FormatDescriptor(settings.ErrorFormat.FontStyle,        this.document.createColor(settings.ErrorFormat.Color),        this.document.createColor(settings.BackColor));
+			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle,  this.document.createColor(settings.WhiteSpacesFormat.Color),  this.document.createColor(settings.BackColor));
 
 			// Header:
 			var header = this.document.Header.addParagraph();
@@ -161,13 +161,13 @@ namespace YAT.Log.Utilities
 			else if ( element is DisplayElement.TimeSpanInfo)     { format = this.timeSpanFormat;     }
 			else if ( element is DisplayElement.TimeDeltaInfo)    { format = this.timeDeltaFormat;    }
 			else if ( element is DisplayElement.TimeDurationInfo) { format = this.timeDurationFormat; }
-			else if ( element is DisplayElement.DeviceInfo)     { format = this.deviceFormat;     }
+			else if ( element is DisplayElement.DeviceInfo)       { format = this.deviceFormat;       }
 			else if ( element is DisplayElement.DirectionInfo)    { format = this.directionFormat;    }
 			else if ( element is DisplayElement.DataLength)       { format = this.lengthFormat;       }
-			else if ((element is DisplayElement.Nonentity) ||
-			         (element is DisplayElement.ContentSpace) ||
-			         (element is DisplayElement.InfoSeparator) ||
-			         (element is DisplayElement.LineStart) ||
+			else if ((element is DisplayElement.Nonentity)        ||
+			         (element is DisplayElement.ContentSeparator) ||
+			         (element is DisplayElement.InfoSeparator)    ||
+			         (element is DisplayElement.LineStart)        ||
 			         (element is DisplayElement.LineBreak))       { format = this.whiteSpacesFormat;  }
 			else if ( element is DisplayElement.IOControlInfo)    { format = this.ioControlFormat;    }
 			else if ( element is DisplayElement.ErrorInfo)        { format = this.errorFormat;        }

@@ -65,9 +65,9 @@ namespace YAT.View.Controls
 		private static Font staticDeviceFontCache;
 		private static Font staticDirectionFontCache;
 		private static Font staticLengthFontCache;
-		private static Font staticWhiteSpacesFontCache;
 		private static Font staticIOControlFontCache;
 		private static Font staticErrorFontCache;
+		private static Font staticWhiteSpacesFontCache;
 
 		/// <summary>String format used for drawing line numbers.</summary>
 		private static TextFormatFlags staticLineNumberFormat;
@@ -271,16 +271,6 @@ namespace YAT.View.Controls
 				fontStyle = settings.LengthFormat.FontStyle;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticLengthFontCache, fontName, fontSize, fontStyle);
 			}
-			else if ((element is Domain.DisplayElement.Nonentity) ||
-			         (element is Domain.DisplayElement.ContentSpace) ||
-			         (element is Domain.DisplayElement.InfoSeparator) ||
-			         (element is Domain.DisplayElement.LineStart) ||
-			         (element is Domain.DisplayElement.LineBreak))
-			{
-				foreColor = settings.WhiteSpacesFormat.Color;
-				fontStyle = settings.WhiteSpacesFormat.FontStyle;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpacesFontCache, fontName, fontSize, fontStyle);
-			}
 			else if (element is Domain.DisplayElement.IOControlInfo)
 			{
 				foreColor = settings.IOControlFormat.Color;
@@ -292,6 +282,16 @@ namespace YAT.View.Controls
 				foreColor = settings.ErrorFormat.Color;
 				fontStyle = settings.ErrorFormat.FontStyle;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticErrorFontCache, fontName, fontSize, fontStyle);
+			}
+			else if ((element is Domain.DisplayElement.Nonentity)        ||
+			         (element is Domain.DisplayElement.ContentSeparator) ||
+			         (element is Domain.DisplayElement.InfoSeparator)    ||
+			         (element is Domain.DisplayElement.LineStart)        ||
+			         (element is Domain.DisplayElement.LineBreak))
+			{
+				foreColor = settings.WhiteSpacesFormat.Color;
+				fontStyle = settings.WhiteSpacesFormat.FontStyle;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpacesFontCache, fontName, fontSize, fontStyle);
 			}
 			else
 			{

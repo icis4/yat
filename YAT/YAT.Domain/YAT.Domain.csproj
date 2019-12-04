@@ -120,7 +120,7 @@
     <Compile Include="IOControlState.cs" />
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
-    <Compile Include="Terminal\InfoEnclosure.cs" />
+    <Compile Include="Terminal\Enclosure.cs" />
     <Compile Include="Terminal\ProcessState.cs" />
     <Compile Include="Terminal\Terminal.Process.cs" />
     <Compile Include="Terminal\Terminal.Repository.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Terminal\TimeDeltaFormatPreset.cs" />
     <Compile Include="Terminal\TimeSpanFormatPreset.cs" />
     <Compile Include="Terminal\TimeStampFormatPreset.cs" />
-    <Compile Include="Terminal\InfoSeparator.cs" />
+    <Compile Include="Terminal\Separator.cs" />
     <Compile Include="Terminal\SendItems.cs" />
     <Compile Include="Settings\SendSettingsFile.cs" />
     <Compile Include="TextSettings\TextDisplaySettings.cs" />

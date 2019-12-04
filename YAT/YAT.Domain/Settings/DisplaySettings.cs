@@ -125,7 +125,10 @@ namespace YAT.Domain.Settings
 		public const bool ChunkLineBreakEnabledDefault = false;
 
 		/// <summary></summary>
-		public static readonly string InfoSeparatorDefault = " "; // Space for better separability of elements.
+		public static readonly string ContentSeparatorDefault = " ";
+
+		/// <summary></summary>
+		public static readonly string InfoSeparatorDefault = " "; // Space for better separability of info elements.
 
 		/// <summary></summary>
 		public static readonly string InfoEnclosureDefault = "()"; // Parentheses for better recognizability of info elements.
@@ -158,9 +161,11 @@ namespace YAT.Domain.Settings
 		private int    maxLineLength;
 		private bool   showCopyOfActiveLine;
 
-		private InfoSeparatorEx infoSeparator; // = null;
-		private InfoEnclosureEx infoEnclosure; // = null;
+		private SeparatorEx contentSeparator; // = null;
+		private SeparatorEx infoSeparator;    // = null;
+		private EnclosureEx infoEnclosure;    // = null;
 
+		private string contentSeparatorCache;   // = null;
 		private string infoSeparatorCache;      // = null;
 		private string infoEnclosureLeftCache;  // = null;
 		private string infoEnclosureRightCache; // = null;
@@ -214,8 +219,9 @@ namespace YAT.Domain.Settings
 			MaxLineLength        = rhs.MaxLineLength;
 			ShowCopyOfActiveLine = rhs.ShowCopyOfActiveLine;
 
-			InfoSeparator = rhs.InfoSeparator;
-			InfoEnclosure = rhs.InfoEnclosure;
+			ContentSeparator = rhs.ContentSeparator;
+			InfoSeparator    = rhs.InfoSeparator;
+			InfoEnclosure    = rhs.InfoEnclosure;
 
 			ClearChanged();
 		}
@@ -255,8 +261,9 @@ namespace YAT.Domain.Settings
 			MaxLineLength        = MaxLineLengthDefault;
 			ShowCopyOfActiveLine = ShowCopyOfActiveLineDefault;
 
-			InfoSeparator = InfoSeparatorDefault;
-			InfoEnclosure = InfoEnclosureDefault;
+			ContentSeparator = ContentSeparatorDefault;
+			InfoSeparator    = InfoSeparatorDefault;
+			InfoEnclosure    = InfoEnclosureDefault;
 		}
 
 		#region Properties
@@ -725,7 +732,45 @@ namespace YAT.Domain.Settings
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
-		public InfoSeparatorEx InfoSeparator
+		public SeparatorEx ContentSeparator
+		{
+			get { return (this.contentSeparator); }
+			set
+			{
+				if (this.contentSeparator != value)
+				{
+					this.contentSeparator = value;
+					this.contentSeparatorCache  = this.contentSeparator.ToSeparator(); // For performance reasons.
+
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		[XmlElement("ContentSeparator")]
+		public virtual string ContentSeparator_ForSerialization
+		{
+			get { return (ContentSeparator.ToSeparator()); } // Use separator string only!
+			set { ContentSeparator = value;                }
+		}
+
+		/// <remarks>Available for performance reasons.</remarks>
+		[XmlIgnore]
+		public string ContentSeparatorCache
+		{
+			get { return (this.contentSeparatorCache); }
+		}
+
+		/// <remarks>
+		/// This 'EnumEx' cannot be serialized, thus, the helper below is used for serialization.
+		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
+		/// </remarks>
+		[XmlIgnore]
+		public SeparatorEx InfoSeparator
 		{
 			get { return (this.infoSeparator); }
 			set
@@ -763,7 +808,7 @@ namespace YAT.Domain.Settings
 		/// Still, this settings object shall provide an 'EnumEx' for full control of the setting.
 		/// </remarks>
 		[XmlIgnore]
-		public InfoEnclosureEx InfoEnclosure
+		public EnclosureEx InfoEnclosure
 		{
 			get { return (this.infoEnclosure); }
 			set
@@ -852,8 +897,9 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^  MaxLineLength       .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowCopyOfActiveLine.GetHashCode();
 
-				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (InfoEnclosure != null ? InfoEnclosure.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (ContentSeparator != null ? ContentSeparator.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (InfoSeparator    != null ? InfoSeparator   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (InfoEnclosure    != null ? InfoEnclosure   .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -912,8 +958,9 @@ namespace YAT.Domain.Settings
 				MaxLineLength       .Equals(other.MaxLineLength)        &&
 				ShowCopyOfActiveLine.Equals(other.ShowCopyOfActiveLine) &&
 
-				ObjectEx.Equals(InfoSeparator, other.InfoSeparator) &&
-				ObjectEx.Equals(InfoEnclosure, other.InfoEnclosure)
+				ObjectEx.Equals(ContentSeparator, other.ContentSeparator) &&
+				ObjectEx.Equals(InfoSeparator,    other.InfoSeparator)    &&
+				ObjectEx.Equals(InfoEnclosure,    other.InfoEnclosure)
 			);
 		}
 

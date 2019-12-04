@@ -90,14 +90,15 @@ YAT 2.1.1 :: 2019-xx-xx
 New:
 - ...    <=  WAIT FOR ... (feature request #19, bug #176).
 
-  This feature is useful for limiting the rate when sending a large amount of data with ping-pong
-  style commands.
+  Useful for limiting the rate when sending a large amount of data with ping-pong style commands.
   For serial COM ports with active hardware or software flow control, this feature not necessarily
   needs to be activated, as YAT typically limits the send rate [Settings... > Advanced... > Buffer
   not more than baud rate permits]. This setting limits the send rate enough to let flow control do
   its job even with large amount of data.
 
 Important changes:
+- Content separator can now be configured. Useful for e.g. displaying or logging hex data without
+  separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been

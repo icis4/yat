@@ -60,9 +60,9 @@ namespace YAT.View.Utilities
 		private static Font staticDeviceFontCache;
 		private static Font staticDirectionFontCache;
 		private static Font staticLengthFontCache;
-		private static Font staticWhiteSpacesFontCache;
 		private static Font staticIOControlFontCache;
 		private static Font staticErrorFontCache;
+		private static Font staticWhiteSpacesFontCache;
 
 		/// <remarks>
 		/// Pragmatic implementation of copying RTF to the clipboard. 'netrtfwriter' is only used for stream-based logging.
@@ -198,16 +198,6 @@ namespace YAT.View.Utilities
 				color     = settings.LengthFormat.Color;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticLengthFontCache, fontName, fontSize, fontStyle);
 			}
-			else if ((element is DisplayElement.Nonentity) ||
-			         (element is DisplayElement.ContentSpace) ||
-			         (element is DisplayElement.InfoSeparator) ||
-			         (element is DisplayElement.LineStart) ||
-			         (element is DisplayElement.LineBreak))
-			{
-				fontStyle = settings.WhiteSpacesFormat.FontStyle;
-				color     = settings.WhiteSpacesFormat.Color;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpacesFontCache, fontName, fontSize, fontStyle);
-			}
 			else if (element is DisplayElement.IOControlInfo)
 			{
 				fontStyle = settings.IOControlFormat.FontStyle;
@@ -219,6 +209,16 @@ namespace YAT.View.Utilities
 				fontStyle = settings.ErrorFormat.FontStyle;
 				color     = settings.ErrorFormat.Color;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticErrorFontCache, fontName, fontSize, fontStyle);
+			}
+			else if ((element is DisplayElement.Nonentity)        ||
+			         (element is DisplayElement.ContentSeparator) ||
+			         (element is DisplayElement.InfoSeparator)    ||
+			         (element is DisplayElement.LineStart)        ||
+			         (element is DisplayElement.LineBreak))
+			{
+				fontStyle = settings.WhiteSpacesFormat.FontStyle;
+				color     = settings.WhiteSpacesFormat.Color;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpacesFontCache, fontName, fontSize, fontStyle);
 			}
 			else
 			{

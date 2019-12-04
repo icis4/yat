@@ -514,12 +514,12 @@ namespace YAT.Domain
 
 		/// <remarks>This text specific implementation is based on <see cref="DisplayElementCollection.CharCount"/>.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected override void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
+		protected override void AddContentSeparatorIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
-					lp.Add(new DisplayElement.ContentSpace((Direction)d));
+					lp.Add(new DisplayElement.ContentSeparator((Direction)d, TerminalSettings.Display.ContentSeparatorCache));
 			}
 		}
 
@@ -717,7 +717,7 @@ namespace YAT.Domain
 				{
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddSpaceIfNecessary(lineState, dir, lp, de);
+						AddContentSeparatorIfNecessary(lineState, dir, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
@@ -740,7 +740,7 @@ namespace YAT.Domain
 				{                                                                //  4. Unrelatd to EOL      (any time, further below)
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddSpaceIfNecessary(lineState, dir, lp, de);
+						AddContentSeparatorIfNecessary(lineState, dir, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
@@ -762,7 +762,7 @@ namespace YAT.Domain
 				{
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddSpaceIfNecessary(lineState, dir, lp, de);
+						AddContentSeparatorIfNecessary(lineState, dir, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
@@ -796,7 +796,7 @@ namespace YAT.Domain
 				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textLineState, dir, lp);
 
 				// Add the current element, which for sure is not related to EOL:
-				AddSpaceIfNecessary(lineState, dir, lp, de);
+				AddContentSeparatorIfNecessary(lineState, dir, lp, de);
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
@@ -813,7 +813,7 @@ namespace YAT.Domain
 					if ((count > 0) && (lp[count - 1] is DisplayElement.Nonentity))
 					{
 						lp.RemoveLast();
-						RemoveSpaceIfNecessary(dir, lp);
+						RemoveContentSeparatorIfNecessary(dir, lp);
 					}
 				}
 
@@ -831,13 +831,13 @@ namespace YAT.Domain
 					{
 						// ...remove it in the current line...
 						lineState.Elements.RemoveLastDataContentChar();
-						RemoveSpaceIfNecessary(dir, lineState.Elements);
+						RemoveContentSeparatorIfNecessary(dir, lineState.Elements);
 
 						if (elementsToAdd.DataContentCharCount > 0)
 						{
 							// ..as well as in the pending elements:
 							elementsToAdd.RemoveLastDataContentChar();
-							RemoveSpaceIfNecessary(dir, elementsToAdd);
+							RemoveContentSeparatorIfNecessary(dir, elementsToAdd);
 						}
 						else
 						{
@@ -955,7 +955,7 @@ namespace YAT.Domain
 			{
 				foreach (var de in textLineState.RetainedUnconfirmedHiddenEolElements)
 				{
-					AddSpaceIfNecessary(lineState, dir, lp, de);
+					AddContentSeparatorIfNecessary(lineState, dir, lp, de);
 					lp.Add(de); // No clone needed as element is no more used below.
 				}
 
