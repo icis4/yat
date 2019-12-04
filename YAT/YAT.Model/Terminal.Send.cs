@@ -52,23 +52,6 @@ namespace YAT.Model
 	/// </remarks>
 	public partial class Terminal
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		/// <summary>
-		/// The timeout for sending, related to <see cref="SendSyncObj"/>.
-		/// </summary>
-		/// <remarks>
-		/// 400 ms same as e.g. <see cref="Domain.Terminal.ClearAndRefreshTimeout"/> should be more
-		/// than sufficient, since timeout only applies to enqueuing the send item, not the send
-		/// operation itself.
-		/// </remarks>
-		protected const int SendTimeout = 400;
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -100,22 +83,15 @@ namespace YAT.Model
 		public virtual void SendCommand(Command command)
 		{
 			// AssertNotDisposed() is called by 'Send...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
-				{
-					if (command.IsText)
-						SendText(command);
-					else if (command.IsFilePath)
-						SendFile(command);
-					else
-						throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + command + "' does not specify a known command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "command"));
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+				if (command.IsText)
+					SendText(command);
+				else if (command.IsFilePath)
+					SendFile(command);
+				else
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + command + "' does not specify a known command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "command"));
 			}
 		}
 
@@ -134,39 +110,32 @@ namespace YAT.Model
 		public virtual void SendRaw(byte[] data)
 		{
 			AssertNotDisposed();
-			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
+				OnFixedStatusTextRequest("Sending " + data.Length + " bytes...");
 				try
 				{
-					OnFixedStatusTextRequest("Sending " + data.Length + " bytes...");
-					try
-					{
-						this.terminal.Send(data);
-					}
-					catch (IOException ex)
-					{
-						OnFixedStatusTextRequest("Error sending " + data.Length + " bytes!");
-
-						string text;
-						string title;
-						ComposeSendRawErrorMessage(out text, out title);
-						OnMessageInputRequest
-						(
-							text + Environment.NewLine + Environment.NewLine +
-							"System error message:" + Environment.NewLine +
-							ex.Message,
-							title,
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-						);
-
-						OnTimedStatusTextRequest("Data not sent!");
-					}
+					this.terminal.Send(data);
 				}
-				finally
+				catch (IOException ex)
 				{
-					Monitor.Exit(SendSyncObj);
+					OnFixedStatusTextRequest("Error sending " + data.Length + " bytes!");
+
+					string text;
+					string title;
+					ComposeSendRawErrorMessage(out text, out title);
+					OnMessageInputRequest
+					(
+						text + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine +
+						ex.Message,
+						title,
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+
+					OnTimedStatusTextRequest("Data not sent!");
 				}
 			}
 		}
@@ -224,21 +193,14 @@ namespace YAT.Model
 		public virtual void SendText()
 		{
 			// AssertNotDisposed() is called by 'Send...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
-			{
-				try
-				{
-					SendText(this.settingsRoot.SendText.Command);
 
-					// Clear command if desired:
-					if (!this.settingsRoot.Send.Text.KeepSendText)
-						this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+			lock (SendSyncObj)
+			{
+				SendText(this.settingsRoot.SendText.Command);
+
+				// Clear command if desired:
+				if (!this.settingsRoot.Send.Text.KeepSendText)
+					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 			}
 		}
 
@@ -248,21 +210,14 @@ namespace YAT.Model
 		public virtual void SendTextWithoutEol()
 		{
 			// AssertNotDisposed() is called by 'Send...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
-			{
-				try
-				{
-					SendTextWithoutEol(this.settingsRoot.SendText.Command);
 
-					// Clear command if desired:
-					if (!this.settingsRoot.Send.Text.KeepSendText)
-						this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+			lock (SendSyncObj)
+			{
+				SendTextWithoutEol(this.settingsRoot.SendText.Command);
+
+				// Clear command if desired:
+				if (!this.settingsRoot.Send.Text.KeepSendText)
+					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
 			}
 		}
 
@@ -272,17 +227,10 @@ namespace YAT.Model
 		public virtual void SendPartialTextEol()
 		{
 			// AssertNotDisposed() is called by 'Send...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
-				{
-					SendText(new Command(true, this.settingsRoot.SendText.Command.DefaultRadix));
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+				SendText(new Command(true, this.settingsRoot.SendText.Command.DefaultRadix));
 			}
 		}
 
@@ -293,17 +241,10 @@ namespace YAT.Model
 		public virtual void SendText(string text)
 		{
 			// AssertNotDisposed() is called by 'Send...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
-				{
-					SendText(new Command(text));
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+				SendText(new Command(text));
 			}
 		}
 
@@ -314,20 +255,13 @@ namespace YAT.Model
 		public virtual void SendText(Command command)
 		{
 			// AssertNotDisposed() is called by 'DoSend...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
-				{
-					if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
-						DoSendText(command);
-					else
-						DoSendText(command.ToCommandWithoutDefaultRadix());
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+				if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
+					DoSendText(command);
+				else
+					DoSendText(command.ToCommandWithoutDefaultRadix());
 			}
 		}
 
@@ -338,20 +272,13 @@ namespace YAT.Model
 		public virtual void SendTextWithoutEol(Command command)
 		{
 			// AssertNotDisposed() is called by 'DoSend...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
-				{
-					if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
-						DoSendTextWithoutEol(command);
-					else
-						DoSendTextWithoutEol(command.ToCommandWithoutDefaultRadix());
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+				if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
+					DoSendTextWithoutEol(command);
+				else
+					DoSendTextWithoutEol(command.ToCommandWithoutDefaultRadix());
 			}
 		}
 
@@ -510,17 +437,10 @@ namespace YAT.Model
 		public virtual void SendFile()
 		{
 			// AssertNotDisposed() is called by 'Send...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
-				{
-					SendFile(this.settingsRoot.SendFile.Command);
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+				SendFile(this.settingsRoot.SendFile.Command);
 			}
 		}
 
@@ -531,20 +451,13 @@ namespace YAT.Model
 		public virtual void SendFile(Command command)
 		{
 			// AssertNotDisposed() is called by 'DoSend...' below.
-			            // Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
-				{
-					if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
-						DoSendFile(command);
-					else
-						DoSendFile(command.ToCommandWithoutDefaultRadix());
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
+				if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
+					DoSendFile(command);
+				else
+					DoSendFile(command.ToCommandWithoutDefaultRadix());
 			}
 		}
 
@@ -605,48 +518,37 @@ namespace YAT.Model
 		public virtual bool SendPredefined(int pageId, int commandId)
 		{
 			AssertNotDisposed();
-			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
+
+			lock (SendSyncObj)
 			{
-				try
+				// Verify arguments:
+				if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(pageId - 1, commandId - 1))
+					return (false);
+
+				// Process command:
+				var c = this.settingsRoot.PredefinedCommand.Pages[pageId - 1].Commands[commandId - 1];
+				if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 				{
-					// Verify arguments:
-					if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(pageId - 1, commandId - 1))
-						return (false);
+					SendText(c);
 
-					// Process command:
-					var c = this.settingsRoot.PredefinedCommand.Pages[pageId - 1].Commands[commandId - 1];
-					if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
-					{
-						SendText(c);
+					if (this.settingsRoot.Send.CopyPredefined)
+						this.settingsRoot.SendText.Command = new Command(c); // Clone to ensure decoupling.
 
-						if (this.settingsRoot.Send.CopyPredefined)
-							this.settingsRoot.SendText.Command = new Command(c); // Clone to ensure decoupling.
-
-						return (true);
-					}
-					else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
-					{
-						SendFile(c);
-
-						if (this.settingsRoot.Send.CopyPredefined)
-							this.settingsRoot.SendFile.Command = new Command(c); // Clone to ensure decoupling.
-
-						return (true);
-					}
-					else
-					{
-						return (false);
-					}
+					return (true);
 				}
-				finally
+				else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 				{
-					Monitor.Exit(SendSyncObj);
+					SendFile(c);
+
+					if (this.settingsRoot.Send.CopyPredefined)
+						this.settingsRoot.SendFile.Command = new Command(c); // Clone to ensure decoupling.
+
+					return (true);
 				}
-			}
-			else
-			{
-				return (false);
+				else
+				{
+					return (false);
+				}
 			}
 		}
 
@@ -659,40 +561,29 @@ namespace YAT.Model
 		public virtual bool CopyPredefined(int pageId, int commandId)
 		{
 			AssertNotDisposed();
-			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(SendSyncObj, SendTimeout))
-			{
-				try
-				{
-					// Verify arguments:
-					if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(pageId - 1, commandId - 1))
-						return (false);
 
-					// Process command:
-					var c = this.settingsRoot.PredefinedCommand.Pages[pageId - 1].Commands[commandId - 1];
-					if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
-					{
-						this.settingsRoot.SendText.Command = new Command(c); // Clone to ensure decoupling.
-						return (true);
-					}
-					else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
-					{
-						this.settingsRoot.SendFile.Command = new Command(c); // Clone to ensure decoupling.
-						return (true);
-					}
-					else
-					{
-						return (false);
-					}
-				}
-				finally
-				{
-					Monitor.Exit(SendSyncObj);
-				}
-			}
-			else
+			lock (SendSyncObj)
 			{
-				return (false);
+				// Verify arguments:
+				if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(pageId - 1, commandId - 1))
+					return (false);
+
+				// Process command:
+				var c = this.settingsRoot.PredefinedCommand.Pages[pageId - 1].Commands[commandId - 1];
+				if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
+				{
+					this.settingsRoot.SendText.Command = new Command(c); // Clone to ensure decoupling.
+					return (true);
+				}
+				else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
+				{
+					this.settingsRoot.SendFile.Command = new Command(c); // Clone to ensure decoupling.
+					return (true);
+				}
+				else
+				{
+					return (false);
+				}
 			}
 		}
 
