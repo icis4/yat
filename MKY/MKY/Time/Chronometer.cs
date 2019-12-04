@@ -372,7 +372,11 @@ namespace MKY.Time
 				{
 					Monitor.Exit(secondTicker_Elapsed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("secondTicker_Elapsed() monitor has timed out!");
+			}
 		}
 
 		#endregion

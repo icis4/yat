@@ -620,7 +620,11 @@ namespace YAT.Model
 				{
 					Monitor.Exit(settingsRoot_Changed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("settingsRoot_Changed() monitor has timed out!");
+			}
 		}
 
 		#endregion

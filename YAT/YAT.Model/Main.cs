@@ -2012,7 +2012,11 @@ namespace YAT.Model
 				{
 					Monitor.Exit(operationTimer_Elapsed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("operationTimer_Elapsed() monitor has timed out!");
+			}
 		}
 
 		private void CreateAndStartExitTimerIfNeeded(bool operationSuccess)
@@ -2112,7 +2116,11 @@ namespace YAT.Model
 				{
 					Monitor.Exit(exitTimer_Elapsed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("exitTimer_Elapsed() monitor has timed out!");
+			}
 		}
 
 		#endregion

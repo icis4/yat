@@ -1175,7 +1175,11 @@ namespace YAT.Domain
 				{
 					Monitor.Exit(periodicXOnTimer_Elapsed_SyncObj);
 				}
-			} // Monitor.TryEnter()
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("periodicXOnTimer_Elapsed() monitor has timed out!");
+			}
 		}
 
 		/// <summary>

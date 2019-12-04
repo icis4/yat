@@ -403,7 +403,11 @@ namespace MKY.IO.Serial.SerialPort
 								{
 									Monitor.Exit(this.dataEventSyncObj);
 								}
-							} // Monitor.TryEnter()
+							}
+							else // Monitor.TryEnter()
+							{
+								DebugMessage("SendThread() monitor has timed out!");
+							}
 						}
 
 						if (isWriteTimeout) // Timeout detected while trying to call System.IO.Ports.SerialPort.Write().

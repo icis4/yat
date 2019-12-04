@@ -123,7 +123,11 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								Monitor.Exit(this.dataEventSyncObj);
 							}
-						} // Monitor.TryEnter()
+						}
+						else // Monitor.TryEnter()
+						{
+							DebugMessage("ReceiveThread() monitor has timed out!");
+						}
 					} // Inner loop
 				} // Outer loop
 			}
