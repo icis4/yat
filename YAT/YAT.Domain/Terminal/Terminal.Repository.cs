@@ -73,7 +73,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
 				try
 				{
@@ -81,7 +81,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(this.clearAndRefreshSyncObj);
+					Monitor.Exit(ClearAndRefreshSyncObj);
 				}
 
 				return (true);
@@ -97,7 +97,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
 				try
 				{
@@ -105,7 +105,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(this.clearAndRefreshSyncObj);
+					Monitor.Exit(ClearAndRefreshSyncObj);
 				}
 
 				return (true);
@@ -121,7 +121,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
 				try
 				{
@@ -142,7 +142,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(this.clearAndRefreshSyncObj);
+					Monitor.Exit(ClearAndRefreshSyncObj);
 				}
 
 				return (true);
@@ -167,7 +167,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(this.clearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
 				try
 				{
@@ -202,7 +202,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(this.clearAndRefreshSyncObj);
+					Monitor.Exit(ClearAndRefreshSyncObj);
 				}
 
 				return (true);

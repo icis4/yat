@@ -91,6 +91,7 @@
     <Compile Include="MainResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartArgs.cs" />
+    <Compile Include="Terminal.Send.cs" />
     <Compile Include="Terminal.AutoResponse.cs" />
     <Compile Include="Terminal.AutoCommon.cs" />
     <Compile Include="Terminal.AutoAction.cs" />
