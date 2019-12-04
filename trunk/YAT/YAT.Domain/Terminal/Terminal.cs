@@ -128,7 +128,10 @@ namespace YAT.Domain
 		private const string RxParityErrorString         = "RX PARITY ERROR";
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 
-		private const int ClearAndRefreshTimeout = 400;
+		/// <summary>
+		/// The timeout for clearing and refreshing, related to <see cref="ClearAndRefreshSyncObj"/>.
+		/// </summary>
+		protected const int ClearAndRefreshTimeout = 400;
 
 		#endregion
 
@@ -183,8 +186,12 @@ namespace YAT.Domain
 
 	#endif
 
-		private object clearAndRefreshSyncObj = new object();
 		private bool isReloading;
+
+		/// <summary>
+		/// Synchronization object for clearing and refreshing.
+		/// </summary>
+		protected object ClearAndRefreshSyncObj { get; } = new object();
 
 		#endregion
 
@@ -1841,7 +1848,7 @@ namespace YAT.Domain
 					c.Add(new DisplayElement.IOControlInfo(e.Value, Direction.Bidir, t));
 				}
 
-				// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
+				// Do not lock (ClearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
 				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
 					InlineDisplayElements(IODirection.Bidir, c);
@@ -1860,7 +1867,7 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			// Do not lock (this.clearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
+			// Do not lock (ClearAndRefreshSyncObj)! That would lead to deadlocks if close/dispose
 			// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 			{
 				var spe = (e as SerialPortErrorEventArgs);
@@ -1902,7 +1909,7 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
+			lock (ClearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
 				OnRawChunkSent(e);        // 'RawChunk' objects are immutable, subsequent use is OK.
 				ProcessRawChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
@@ -1919,7 +1926,7 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
+			lock (ClearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
 				OnRawChunkReceived(e);    // 'RawChunk' objects are immutable, subsequent use is OK.
 				ProcessRawChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
@@ -1931,7 +1938,7 @@ namespace YAT.Domain
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			lock (this.clearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
+			lock (ClearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
 				// Reset processing:
 				ResetProcess(e.Value);
