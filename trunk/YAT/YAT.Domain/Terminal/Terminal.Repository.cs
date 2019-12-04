@@ -521,7 +521,7 @@ namespace YAT.Domain
 
 			// Add space if necessary:
 			if (ElementsAreSeparate(lineState.Direction))
-				AddSpaceIfNecessary(lineState, direction, lp, element);
+				AddContentSeparatorIfNecessary(lineState, direction, lp, element);
 
 			// Add element:
 			lp.Add(element);
@@ -571,7 +571,7 @@ namespace YAT.Domain
 
 			// Add space if necessary:
 			if (ElementsAreSeparate(lineState.Direction))
-				AddSpaceIfNecessary(lineState, direction, lp, elements.First());
+				AddContentSeparatorIfNecessary(lineState, direction, lp, elements.First());
 
 			// Add elements:
 			lp.AddRange(elements);

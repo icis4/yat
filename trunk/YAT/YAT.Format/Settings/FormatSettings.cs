@@ -71,9 +71,9 @@ namespace YAT.Format.Settings
 		private TextFormat deviceFormat;
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
-		private TextFormat whiteSpacesFormat;
 		private TextFormat ioControlFormat;
 		private TextFormat errorFormat;
+		private TextFormat whiteSpacesFormat;
 
 		private BackFormat backFormat;
 
@@ -113,11 +113,11 @@ namespace YAT.Format.Settings
 			DeviceFormat       = new TextFormat(rhs.DeviceFormat);
 			DirectionFormat    = new TextFormat(rhs.DirectionFormat);
 			LengthFormat       = new TextFormat(rhs.LengthFormat);
-			WhiteSpacesFormat  = new TextFormat(rhs.WhiteSpacesFormat);
 			IOControlFormat    = new TextFormat(rhs.IOControlFormat);
 			ErrorFormat        = new TextFormat(rhs.ErrorFormat);
+			WhiteSpacesFormat  = new TextFormat(rhs.WhiteSpacesFormat);
 
-			BackFormat        = new BackFormat(rhs.BackFormat);
+			BackFormat         = new BackFormat(rhs.BackFormat);
 
 			ClearChanged();
 		}
@@ -144,9 +144,9 @@ namespace YAT.Format.Settings
 			DeviceFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
 			DirectionFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
 			LengthFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
-			WhiteSpacesFormat  = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
 			IOControlFormat    = new TextFormat(IOControlColorDefault,    true, false, false, false); // Bold.
 			ErrorFormat        = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
+			WhiteSpacesFormat  = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
 
 			BackFormat = new BackFormat(BackColorDefault);
 		}
@@ -367,21 +367,6 @@ namespace YAT.Format.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("WhiteSpacesFormat")]
-		public TextFormat WhiteSpacesFormat
-		{
-			get { return (this.whiteSpacesFormat); }
-			set
-			{
-				if (this.whiteSpacesFormat != value)
-				{
-					this.whiteSpacesFormat = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("IOControlFormat")]
 		public TextFormat IOControlFormat
 		{
@@ -406,6 +391,24 @@ namespace YAT.Format.Settings
 				if (this.errorFormat != value)
 				{
 					this.errorFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// "WhiteSpaces" is a bit misleading, as the format also applies to non-white-spaced
+		/// separators. But for a YAT monitor perspective, those are also considered "white-space".
+		/// </remarks>
+		[XmlElement("WhiteSpacesFormat")]
+		public TextFormat WhiteSpacesFormat
+		{
+			get { return (this.whiteSpacesFormat); }
+			set
+			{
+				if (this.whiteSpacesFormat != value)
+				{
+					this.whiteSpacesFormat = value;
 					SetMyChanged();
 				}
 			}
@@ -476,9 +479,9 @@ namespace YAT.Format.Settings
 				hashCode = (hashCode * 397) ^ (DeviceFormat       != null ? DeviceFormat      .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (DirectionFormat    != null ? DirectionFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (LengthFormat       != null ? LengthFormat      .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat  != null ? WhiteSpacesFormat .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (IOControlFormat    != null ? IOControlFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (ErrorFormat        != null ? ErrorFormat       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat  != null ? WhiteSpacesFormat .GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^ (BackFormat         != null ? BackFormat        .GetHashCode() : 0);
 
@@ -526,9 +529,9 @@ namespace YAT.Format.Settings
 				ObjectEx.Equals(DeviceFormat,       other.DeviceFormat)       &&
 				ObjectEx.Equals(DirectionFormat,    other.DirectionFormat)    &&
 				ObjectEx.Equals(LengthFormat,       other.LengthFormat)       &&
-				ObjectEx.Equals(WhiteSpacesFormat,  other.WhiteSpacesFormat)  &&
 				ObjectEx.Equals(IOControlFormat,    other.IOControlFormat)    &&
 				ObjectEx.Equals(ErrorFormat,        other.ErrorFormat)        &&
+				ObjectEx.Equals(WhiteSpacesFormat,  other.WhiteSpacesFormat)  &&
 
 				ObjectEx.Equals(BackFormat,         other.BackFormat)
 			);

@@ -417,27 +417,63 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>This default implementation is based on <see cref="DisplayElementCollection.ByteCount"/>.</remarks>
+		/// <summary>
+		/// Add a separator to the given collection, depending on the given state.
+		/// </summary>
+		/// <remarks>
+		/// Non-line-state dependent implementation for e.g. <see cref="Format(byte[], IODirection, Radix)"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
+		protected virtual void AddContentSeparatorIfNecessary(IODirection d, DisplayElementCollection lp, DisplayElement de)
+		{
+			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
+			{
+				if (lp.ByteCount > 0)
+				{
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
+						lp.Add(new DisplayElement.ContentSeparator((Direction)d, TerminalSettings.Display.ContentSeparatorCache));
+				}
+			}
+		}
+
+		/// <summary>
+		/// Add a separator to the given collection, depending on the given state.
+		/// </summary>
+		/// <remarks>
+		/// This default implementation is based on <see cref="DisplayElementCollection.ByteCount"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		protected virtual void AddContentSeparatorIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
-					lp.Add(new DisplayElement.ContentSpace((Direction)d));
+				{
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
+						lp.Add(new DisplayElement.ContentSeparator((Direction)d, TerminalSettings.Display.ContentSeparatorCache));
+				}
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void RemoveSpaceIfNecessary(IODirection d, DisplayElementCollection lp)
+		protected virtual void RemoveContentSeparatorIfNecessary(IODirection d, DisplayElementCollection lp)
 		{
 			if (ElementsAreSeparate(d))
 			{
 				int count = lp.Count;
-				if ((count > 0) && (lp[count - 1] is DisplayElement.ContentSpace))
+				if ((count > 0) && (lp[count - 1] is DisplayElement.ContentSeparator))
 					lp.RemoveLast();
 			}
+		}
+
+		/// <summary>
+		/// Add a separator to the given collection, depending on the given state.
+		/// </summary>
+		protected virtual void AddInfoSeparatorIfNecessary(DisplayElementCollection lp)
+		{
+			if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+				lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 		}
 
 		/// <summary></summary>
@@ -453,42 +489,34 @@ namespace YAT.Domain
 				if (TerminalSettings.Display.ShowTimeStamp)
 				{
 					lp.Add(new DisplayElement.TimeStampInfo(ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+					AddInfoSeparatorIfNecessary(lp);
 				}
 
 				if (TerminalSettings.Display.ShowTimeSpan)
 				{
 					lp.Add(new DisplayElement.TimeSpanInfo(diff, TerminalSettings.Display.TimeSpanFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+					AddInfoSeparatorIfNecessary(lp);
 				}
 
 				if (TerminalSettings.Display.ShowTimeDelta)
 				{
 					lp.Add(new DisplayElement.TimeDeltaInfo(delta, TerminalSettings.Display.TimeDeltaFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+					AddInfoSeparatorIfNecessary(lp);
 				}
 
 				if (TerminalSettings.Display.ShowDevice)
 				{
 					lp.Add(new DisplayElement.DeviceInfo(dev, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+					AddInfoSeparatorIfNecessary(lp);
 				}
 
 				if (TerminalSettings.Display.ShowDirection)
 				{
 					lp.Add(new DisplayElement.DirectionInfo((Direction)dir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
-
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
+					AddInfoSeparatorIfNecessary(lp);
 				}
+
+				// Last separator will separate info(s) from content, i.e. be the former 'LeftMargin'.
 			}
 			else
 			{
@@ -505,19 +533,17 @@ namespace YAT.Domain
 			{
 				lp = new DisplayElementCollection(4); // Preset the required capacity to improve memory management.
 
+				// First separator will separate content from info(s), i.e. be the former 'RightMargin'.
+
 				if (TerminalSettings.Display.ShowLength)
 				{
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-
+					AddInfoSeparatorIfNecessary(lp);
 					lp.Add(new DisplayElement.DataLength(length, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 				}
 
 				if (TerminalSettings.Display.ShowDuration)
 				{
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
-						lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
-
+					AddInfoSeparatorIfNecessary(lp);
 					lp.Add(new DisplayElement.TimeDurationInfo(duration, TerminalSettings.Display.TimeDurationFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 				}
 			}

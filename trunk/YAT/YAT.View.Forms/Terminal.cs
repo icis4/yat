@@ -5529,7 +5529,10 @@ namespace YAT.View.Forms
 		{
 			int[] customColors = ApplicationSettings.RoamingUserSettings.View.CustomColorsToWin32();
 
-			var f = new FormatSettings(this.settingsRoot.Format, customColors, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure, this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.TimeDurationFormat);
+			var f = new FormatSettings(this.settingsRoot.Format, customColors,
+			                           this.settingsRoot.Display.ContentSeparator, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure,
+			                           this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.TimeDurationFormat);
+
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				this.settingsRoot.Format = f.FormatSettingsResult;
@@ -5540,8 +5543,9 @@ namespace YAT.View.Forms
 					ApplicationSettings.SaveRoamingUserSettings();
 				}
 
-				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
-				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;
+				this.settingsRoot.Display.ContentSeparator = f.ContentSeparatorResult;
+				this.settingsRoot.Display.InfoSeparator    = f.InfoSeparatorResult;
+				this.settingsRoot.Display.InfoEnclosure    = f.InfoEnclosureResult;
 
 				this.settingsRoot.Display.TimeStampUseUtc    = f.TimeStampUseUtcResult;
 				this.settingsRoot.Display.TimeStampFormat    = f.TimeStampFormatResult;

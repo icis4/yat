@@ -1443,23 +1443,10 @@ namespace YAT.Domain
 			{                                                     // Time stamp is irrelevant for formatting.
 				var de = ByteToElement(b, DisplayElement.TimeStampDefault, d, r);
 				lp.Add(de);
-				AddSpaceIfNecessary(d, lp, de);
+				AddContentSeparatorIfNecessary(d, lp, de);
 			}
 
 			return (lp.ElementsToString());
-		}
-
-		/// <summary>
-		/// Add a space to the given line part, depending on the give state.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void AddSpaceIfNecessary(IODirection d, DisplayElementCollection lp, DisplayElement de)
-		{
-			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
-			{
-				if (lp.ByteCount > 0)
-					lp.Add(new DisplayElement.ContentSpace((Direction)d));
-			}
 		}
 
 		#endregion

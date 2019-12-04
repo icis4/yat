@@ -64,7 +64,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(DataLength))]
 	[XmlInclude(typeof(FormatElement))]
-	[XmlInclude(typeof(ContentSpace))]
+	[XmlInclude(typeof(ContentSeparator))]
 	[XmlInclude(typeof(InfoSeparator))]
 	[XmlInclude(typeof(LineStart))]
 	[XmlInclude(typeof(LineBreak))]
@@ -118,7 +118,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class TxData : DisplayElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public TxData()
 				: base(Direction.Tx, ElementAttributes.DataContent)
 			{
@@ -147,7 +147,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class TxControl : DisplayElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public TxControl()
 				: base(Direction.Tx, ElementAttributes.ControlContent)
 			{
@@ -176,7 +176,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class RxData : DisplayElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public RxData()
 				: base(Direction.Rx, ElementAttributes.DataContent)
 			{
@@ -205,7 +205,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class RxControl : DisplayElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public RxControl()
 				: base(Direction.Rx, ElementAttributes.ControlContent)
 			{
@@ -235,6 +235,12 @@ namespace YAT.Domain
 		public abstract class InfoElement : DisplayElement
 		{
 			/// <summary></summary>
+			protected InfoElement()
+				: base(ElementAttributes.Info)
+			{
+			}
+
+			/// <summary></summary>
 			protected InfoElement(string text)
 				: this(DirectionDefault, text)
 			{
@@ -263,9 +269,9 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class TimeStampInfo : InfoElement
 		{
-			/// <summary></summary>
-			public TimeStampInfo(TimeStampInfo other)
-				: base(other)
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			public TimeStampInfo()
+				: base()
 			{
 			}
 
@@ -292,7 +298,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TimeSpan TimeSpan { get; }
 
-			/// <summary></summary>
+			/// <remarks>This copy-constructor is required for <see cref="Clone"/>.</remarks>
 			public TimeSpanInfo(TimeSpanInfo other)
 				: base(other)
 			{
@@ -320,7 +326,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TimeSpan TimeDelta { get; }
 
-			/// <summary></summary>
+			/// <remarks>This copy-constructor is required for <see cref="Clone"/>.</remarks>
 			public TimeDeltaInfo(TimeDeltaInfo other)
 				: base(other)
 			{
@@ -348,7 +354,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TimeSpan TimeDuration { get; }
 
-			/// <summary></summary>
+			/// <remarks>This copy-constructor is required for <see cref="Clone"/>.</remarks>
 			public TimeDurationInfo(TimeDurationInfo other)
 				: base(other)
 			{
@@ -373,15 +379,15 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class DeviceInfo : InfoElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public DeviceInfo()
-				: this(null, null, null)
+				: base()
 			{
 			}
 
 			/// <summary></summary>
 			public DeviceInfo(string infoText, string enclosureLeft, string enclosureRight)
-				: base(ToText(enclosureLeft, infoText, enclosureRight))
+				: base(ToText(infoText, enclosureLeft, enclosureRight))
 			{
 			}
 
@@ -396,9 +402,9 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class DirectionInfo : InfoElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public DirectionInfo()
-				: this(DirectionDefault, null, null)
+				: base()
 			{
 			}
 
@@ -431,6 +437,13 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public int Length { get; }
 
+			/// <remarks>This copy-constructor is required for <see cref="Clone"/>.</remarks>
+			public DataLength(DataLength other)
+				: base(other)
+			{
+				Length = other.Length;
+			}
+
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 			public DataLength(int length, string enclosureLeft, string enclosureRight)
@@ -443,13 +456,6 @@ namespace YAT.Domain
 			protected static string ToText(int length, string enclosureLeft, string enclosureRight)
 			{
 				return (enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight);
-			}
-
-			/// <summary></summary>
-			public DataLength(DataLength other)
-				: base(other)
-			{
-				Length = other.Length;
 			}
 		}
 
@@ -482,31 +488,31 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary>The space that is added inbetween characters of the data/control content (e.g. radix = char).</summary>
+		/// <summary>The separator that is added inbetween characters of the data/control content (e.g. radix = char).</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class ContentSpace : FormatElement
+		public class ContentSeparator : FormatElement
 		{
-			/// <summary></summary>
-			public ContentSpace()
-				: this(DirectionDefault)
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			public ContentSeparator()
+				: base()
 			{
 			}
 
 			/// <remarks>Using direction since adjacent content is also directed.</remarks>
-			public ContentSpace(Direction direction)
-				: base(direction, " ") // Content space is fixed to a space. If this is no longer the case, rename to 'ContentSeparator'.
+			public ContentSeparator(Direction direction, string whiteSpace)
+				: base(direction, whiteSpace)
 			{
 			}
 		}
 
-		/// <summary>The margin that is added to the right of the data/control content.</summary>
+		/// <summary>The separator that is added inbetween info elements as well as to the left/right of the data/control content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class InfoSeparator : FormatElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public InfoSeparator()
-				: this(null)
+				: base()
 			{
 			}
 
@@ -542,6 +548,12 @@ namespace YAT.Domain
 		public abstract class InlineElement : DisplayElement
 		{
 			/// <summary></summary>
+			protected InlineElement()
+				: base(ElementAttributes.Inline)
+			{
+			}
+
+			/// <summary></summary>
 			protected InlineElement(string text)
 				: this(DirectionDefault, text)
 			{
@@ -572,9 +584,9 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class IOControlInfo : InlineElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public IOControlInfo()
-				: this(null)
+				: base()
 			{
 			}
 
@@ -600,9 +612,9 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class ErrorInfo : InlineElement
 		{
-			/// <summary></summary>
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
 			public ErrorInfo()
-				: this(null)
+				: base()
 			{
 			}
 
@@ -890,14 +902,14 @@ namespace YAT.Domain
 			else if (this is TxControl)        clone = new TxControl();
 			else if (this is RxData)           clone = new RxData();
 			else if (this is RxControl)        clone = new RxControl();
-			else if (this is TimeStampInfo)    clone = new TimeStampInfo((TimeStampInfo)this);
+			else if (this is TimeStampInfo)    clone = new TimeStampInfo();
 			else if (this is TimeSpanInfo)     clone = new TimeSpanInfo((TimeSpanInfo)this);
 			else if (this is TimeDeltaInfo)    clone = new TimeDeltaInfo((TimeDeltaInfo)this);
 			else if (this is TimeDurationInfo) clone = new TimeDurationInfo((TimeDurationInfo)this);
 			else if (this is DeviceInfo)       clone = new DeviceInfo();
 			else if (this is DirectionInfo)    clone = new DirectionInfo();
 			else if (this is DataLength)       clone = new DataLength((DataLength)this);
-			else if (this is ContentSpace)     clone = new ContentSpace();
+			else if (this is ContentSeparator) clone = new ContentSeparator();
 			else if (this is InfoSeparator)    clone = new InfoSeparator();
 			else if (this is LineStart)        clone = new LineStart();
 			else if (this is LineBreak)        clone = new LineBreak();
