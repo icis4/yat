@@ -35,6 +35,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections.Generic;
 
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -162,60 +163,93 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Processes the automatic response.
+		/// Evaluates the automatic response.
 		/// </summary>
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void ProcessAutoResponseFromElements(Domain.DisplayElementCollection elements)
+		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements)
 		{
+			List<Pair<byte[], string>> triggersDummy;
+			EvaluateAutoResponseFromElements(elements, out triggersDummy);
+		}
+
+		/// <summary>
+		/// Evaluates the automatic response.
+		/// </summary>
+		/// <remarks>
+		/// Automatic responses always are non-reloadable.
+		/// </remarks>
+		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements, out List<Pair<byte[], string>> triggers)
+		{
+			triggers = new List<Pair<byte[], string>>(); // No preset needed, the default behavior is good enough.
+
 			foreach (var de in elements)
 			{
-				lock (this.autoResponseTriggerHelperSyncObj)
+				if (de.Direction == Domain.Direction.Rx) // By specification only active on receive-path.
 				{
-					if (this.autoResponseTriggerHelper != null)
+					lock (this.autoResponseTriggerHelperSyncObj)
 					{
-						if (de.Origin != null) // Foreach element where origin exists.
+						if (this.autoResponseTriggerHelper != null)
 						{
-							foreach (var origin in de.Origin)
+							if (de.Origin != null) // Foreach element where origin exists.
 							{
-								foreach (var originByte in origin.Value1)
+								foreach (var origin in de.Origin)
 								{
-									if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
+									foreach (var originByte in origin.Value1)
 									{
-										this.autoResponseTriggerHelper.Reset();
-										de.Highlight = true;
+										if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
+										{
+											this.autoResponseTriggerHelper.Reset();
+											de.Highlight = true;
 
-										// Invoke shall happen as short as possible after detection:
-										InvokeAutoResponse(this.autoResponseTriggerHelper.TriggerSequence, null);
+											// Signal the trigger:
+											triggers.Add(new Pair<byte[], string>(this.autoResponseTriggerHelper.TriggerSequence, null));
+										}
 									}
 								}
 							}
 						}
-					}
-					else
-					{
-						break;     // Break the loop if response got disposed in the meantime.
-					}              // Though unlikely, it may happen when deactivating response
-				} // lock (helper) // while receiving a very large chunk.
+						else
+						{
+							break;     // Break the loop if response got disposed in the meantime.
+						}              // Though unlikely, it may happen when deactivating response
+					} // lock (helper) // while receiving a very large chunk.
+				} // if (direction == Rx)
 			} // foreach (element)
 		}
 
 		/// <summary>
-		/// Processes the automatic response.
+		/// Evaluates the automatic response.
 		/// </summary>
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void ProcessAutoResponseFromLines(Domain.DisplayLineCollection lines)
+		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines)
+		{
+			List<Pair<byte[], string>> triggersDummy;
+			EvaluateAutoResponseFromLines(lines, out triggersDummy);
+		}
+
+		/// <summary>
+		/// Evaluates the automatic response.
+		/// </summary>
+		/// <remarks>
+		/// Automatic responses always are non-reloadable.
+		/// </remarks>
+		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines, out List<Pair<byte[], string>> triggers)
 		{
 			if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 			{
+				triggers = null;
+
 				foreach (var dl in lines)
-					ProcessAutoResponseFromElements(dl);
+					EvaluateAutoResponseFromElements(dl, out triggers);
 			}
 			else // IsTextTriggered
 			{
+				triggers = new List<Pair<byte[], string>>(); // No preset needed, the default behavior is good enough.
+
 				foreach (var dl in lines)
 				{
 					lock (this.autoResponseTriggerHelperSyncObj)
@@ -228,9 +262,9 @@ namespace YAT.Model
 								this.autoResponseTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
 								dl.Highlight = true;
 
-								for (int i = 0; i < triggerCount; i++)                      // Use for [Trigger] response.
-									InvokeAutoResponse(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern);
-								////EnqueueAutoResponse(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern); activate after having upgraded to .NET 4.0
+								// Signal the trigger(s):
+								for (int i = 0; i < triggerCount; i++)                             // Use for [Trigger] response.
+									triggers.Add(new Pair<byte[], string>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern));
 							}
 						}
 						else
@@ -247,6 +281,8 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void InvokeAutoResponse(byte[] triggerSequence, string triggerText)
 		{
+		////Replace by EnqueueAutoResponse(); after having upgraded to .NET 4.0
+
 			var asyncInvoker = new Action<byte[], string>(SendAutoResponse);
 			asyncInvoker.BeginInvoke(triggerSequence, triggerText, null, null);
 		}
@@ -256,7 +292,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText)
 		{
-		////while (this.autoResponseTasks.Count > 0) activate after having upgraded to .NET 4.0
+		////while (this.autoResponseTasks.Count > 0) after having upgraded to .NET 4.0
 		////{
 		////	var task = this.autoResponseTasks.Dequeue();
 		////	task.Invoke(...);
@@ -270,8 +306,9 @@ namespace YAT.Model
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(count));
 
+			AutoResponseEx response = SettingsRoot.AutoResponse.Response;
 			int page = SettingsRoot.Predefined.SelectedPageId;
-			switch ((AutoResponse)SettingsRoot.AutoResponse.Response)
+			switch ((AutoResponse)response)
 			{
 				case AutoResponse.None:
 					// Nothing to do.
@@ -294,11 +331,11 @@ namespace YAT.Model
 				case AutoResponse.SendFile:            SendFile();               break;
 
 				case AutoResponse.Explicit:
-					SendCommand(new Command(SettingsRoot.AutoResponse.Response)); // No explicit default radix available (yet).
+					SendCommand(new Command(response)); // No explicit default radix available (yet).
 					break;
 
 				default:
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoResponse)SettingsRoot.AutoResponse.Response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
