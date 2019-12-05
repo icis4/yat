@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -37,6 +38,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections.Generic;
 
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -59,9 +61,11 @@ namespace YAT.Model
 		private AutoTriggerHelper autoActionTriggerHelper;
 		private object autoActionTriggerHelperSyncObj = new object();
 	////private Queue<Action<AutoAction, string, DateTime>> autoActionTasks = new Queue<Action<AutoAction, string, DateTime>>(); activate after having upgraded to .NET 4.0
+
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
-		private string autoActionClearRepositoriesOriginText; // = null;
-		private DateTime autoActionClearRepositoriesOriginTimeStamp; // = DateTime.MinValue;
+		private string autoActionClearRepositoriesTriggerText; // = null;
+		private DateTime autoActionClearRepositoriesTriggerTimeStamp; // = DateTime.MinValue;
+		private object autoActionClearRepositoriesSyncObj = new object();
 
 		#endregion
 
@@ -167,72 +171,103 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Processes the automatic action.
+		/// Evaluates the automatic action.
 		/// </summary>
 		/// <remarks>
 		/// Automatic actions from elements always are non-reloadable.
 		/// </remarks>
-		protected virtual void ProcessAutoActionFromElements(Domain.DisplayElementCollection elements)
+		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements)
 		{
-			ProcessAutoActionClearRepositoriesOnSubsequentRx();
+			List<Pair<string, DateTime>> triggersDummy;
+			EvaluateAutoActionFromElements(elements, out triggersDummy);
+		}
+
+		/// <summary>
+		/// Evaluates the automatic action.
+		/// </summary>
+		/// <remarks>
+		/// Automatic actions from elements always are non-reloadable.
+		/// </remarks>
+		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, out List<Pair<string, DateTime>> triggers)
+		{
+			triggers = new List<Pair<string, DateTime>>(); // No preset needed, the default behavior is good enough.
+
+			EvaluateAndInvokeAutoActionClearRepositoriesOnSubsequentRx();
 
 			foreach (var de in elements)
 			{
-				lock (this.autoActionTriggerHelperSyncObj)
+				if (de.Direction == Domain.Direction.Rx) // By specification only active on receive-path.
 				{
-					if (this.autoActionTriggerHelper != null)
+					lock (this.autoActionTriggerHelperSyncObj)
 					{
-						if (de.Origin != null) // Foreach element where origin exists.
+						if (this.autoActionTriggerHelper != null)
 						{
-							foreach (var origin in de.Origin)
+							if (de.Origin != null) // Foreach element where origin exists.
 							{
-								foreach (var originByte in origin.Value1)
+								foreach (var origin in de.Origin)
 								{
-									if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+									foreach (var originByte in origin.Value1)
 									{
-										this.autoActionTriggerHelper.Reset();
-										de.Highlight = true;
+										if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+										{
+											this.autoActionTriggerHelper.Reset();
+											de.Highlight = true;
 
-										// Invoke shall happen as short as possible after detection:
-										InvokeAutoAction(elements.Text, de.TimeStamp);
+											// Signal the trigger:
+											triggers.Add(new Pair<string, DateTime>(elements.Text, de.TimeStamp));
 
-										// Note that 'elements.Text' is not perfect, as it could only contain
-										// parts of the trigger. However, using...
-										// this.autoActionTriggerHelper.TriggerSequence
-										// ...formatted with...
-										// this.terminal.Format(riggerSequence, Domain.IODirection.Rx)
-										// ...in RequestAutoActionMessage() isn't perfect either, as it will
-										// never contain more than the trigger. Preferring 'elements.Text'.
+											// Note that 'elements.Text' is not perfect, as it could only contain parts of
+											// the trigger. However, using the trigger sequence formatted with...
+											// this.terminal.Format(triggerSequence, Domain.IODirection.Rx)
+											// ...in RequestAutoActionMessage() isn't perfect either, as it will *never*
+											// contain more than the trigger. Thus preferring 'Elements.Text'.
+										}
 									}
 								}
 							}
 						}
-					}
-					else
-					{
-						break;     // Break the loop if action got disposed in the meantime.
-					}              // Though unlikely, it may happen when deactivating action
-				} // lock (helper) // while receiving a very large chunk.
+						else
+						{
+							break;     // Break the loop if action got disposed in the meantime.
+						}              // Though unlikely, it may happen when deactivating action
+					} // lock (helper) // while receiving a very large chunk.
+				} // if (direction == Rx)
 			} // foreach (element)
 		}
 
 		/// <summary>
-		/// Processes the automatic actions other than <see cref="AutoAction.Filter"/> and <see cref="AutoAction.Suppress"/>.
+		/// Evaluates the automatic actions other than <see cref="AutoAction.Filter"/> and <see cref="AutoAction.Suppress"/>.
 		/// </summary>
 		/// <remarks>
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
-		protected virtual void ProcessAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines)
+		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines)
 		{
-			ProcessAutoActionClearRepositoriesOnSubsequentRx();
+			List<Pair<string, DateTime>> triggersDummy;
+			EvaluateAutoActionOtherThanFilterOrSuppressFromLines(lines, out triggersDummy);
+		}
+
+		/// <summary>
+		/// Evaluates the automatic actions other than <see cref="AutoAction.Filter"/> and <see cref="AutoAction.Suppress"/>.
+		/// </summary>
+		/// <remarks>
+		/// Automatic actions from lines may be reloadable.
+		/// </remarks>
+		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, out List<Pair<string, DateTime>> triggers)
+		{
+			EvaluateAndInvokeAutoActionClearRepositoriesOnSubsequentRx();
 
 			if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 			{
+				triggers = null;
+
 				foreach (var dl in lines)
-					ProcessAutoActionFromElements(dl);
+					EvaluateAutoActionFromElements(dl, out triggers);
 			}
 			else // IsTextTriggered
 			{
+				triggers = new List<Pair<string, DateTime>>(); // No preset needed, the default behavior is good enough.
+
 				foreach (var dl in lines)
 				{
 					lock (this.autoActionTriggerHelperSyncObj)
@@ -245,9 +280,9 @@ namespace YAT.Model
 								this.autoActionTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
 								dl.Highlight = true;
 
+								// Signal the trigger(s):
 								for (int i = 0; i < triggerCount; i++)
-									InvokeAutoAction(dl.Text, dl.TimeStamp);
-								////EnqueueAutoAction(dl.Text, dl.TimeStamp); activate after having upgraded to .NET 4.0
+									triggers.Add(new Pair<string, DateTime>(dl.Text, dl.TimeStamp));
 							}
 						}
 						else
@@ -326,52 +361,57 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Processes <see cref="AutoAction.ClearRepositoriesOnSubsequentRx"/>.
+		/// Evaluates and invokes <see cref="AutoAction.ClearRepositoriesOnSubsequentRx"/>.
 		/// </summary>
-		protected virtual void ProcessAutoActionClearRepositoriesOnSubsequentRx()
+		protected virtual void EvaluateAndInvokeAutoActionClearRepositoriesOnSubsequentRx()
 		{
-			if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
+			lock (this.autoActionClearRepositoriesSyncObj)
 			{
-				string originText;
-				DateTime originTimeStamp;
-
-				lock (this.autoActionTriggerHelperSyncObj)
+				if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
 				{
-					originText      = this.autoActionClearRepositoriesOriginText;
-					originTimeStamp = this.autoActionClearRepositoriesOriginTimeStamp;
+					string triggerText;
+					DateTime triggerTimeStamp;
 
-					this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
-					this.autoActionClearRepositoriesOriginText            = null;
-					this.autoActionClearRepositoriesOriginTimeStamp       = DateTime.MinValue;
+					lock (this.autoActionTriggerHelperSyncObj)
+					{
+						triggerText      = this.autoActionClearRepositoriesTriggerText;
+						triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
+
+						this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
+						this.autoActionClearRepositoriesTriggerText            = null;
+						this.autoActionClearRepositoriesTriggerTimeStamp       = DateTime.MinValue;
+					}
+					                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
+					InvokeAutoAction(AutoAction.ClearRepositories, triggerText, triggerTimeStamp);
 				}
-				                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
-				InvokeAutoAction(AutoAction.ClearRepositories, originText, originTimeStamp);
 			}
 		}
 
 		/// <summary>
 		/// Invokes the automatic action on an other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoAction(string originText, DateTime originTimeStamp)
+		protected virtual void InvokeAutoAction(string triggerText, DateTime triggerTimeStamp)
 		{
-			InvokeAutoAction(SettingsRoot.AutoAction.Action, originText, originTimeStamp);
+			InvokeAutoAction(SettingsRoot.AutoAction.Action, triggerText, triggerTimeStamp);
 		}
 
 		/// <summary>
 		/// Invokes the automatic action on an other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoAction(AutoAction action, string originText, DateTime originTimeStamp)
+		protected virtual void InvokeAutoAction(AutoAction action, string triggerText, DateTime triggerTimeStamp)
 		{
+		////Replace by EnqueueAutoAction(); after having upgraded to .NET 4.0
+
 			var asyncInvoker = new Action<AutoAction, string, DateTime>(PreformAutoAction);
-			asyncInvoker.BeginInvoke(action, originText, originTimeStamp, null, null);
+			asyncInvoker.BeginInvoke(action, triggerText, triggerTimeStamp, null, null);
 		}
 
 		/// <summary>
 		/// Performs the automatic action.
 		/// </summary>
-		protected virtual void PreformAutoAction(AutoAction action, string originText, DateTime originTimeStamp)
+		protected virtual void PreformAutoAction(AutoAction action, string triggerText, DateTime triggerTimeStamp)
 		{
-		////while (this.autoActionTasks.Count > 0) activate after having upgraded to .NET 4.0
+		////while (this.autoActionTasks.Count > 0) after having upgraded to .NET 4.0
 		////{
 		////	var task = this.autoActionTasks.Dequeue();
 		////	task.Invoke(...);
@@ -401,18 +441,25 @@ namespace YAT.Model
 					// No additional action.
 					break;
 
-				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                          break;
-				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(originText, originTimeStamp, count);      break;
-				case AutoAction.ClearRepositories:               ClearRepositories();                                               break;
-				case AutoAction.ClearRepositoriesOnSubsequentRx: this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
-				                                                 this.autoActionClearRepositoriesOriginText      = originText;
-				                                                 this.autoActionClearRepositoriesOriginTimeStamp = originTimeStamp; break;
-				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();                                             break;
-				case AutoAction.SwitchLogOn:                     SwitchLogOn();                                                     break;
-				case AutoAction.SwitchLogOff:                    SwitchLogOff();                                                    break;
-				case AutoAction.StopIO:                          StopIO();                                                          break;
-				case AutoAction.CloseTerminal:                   Close();                                                           break;
-				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty);                                    break;
+				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                       break;
+				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerText, triggerTimeStamp, count); break;
+				case AutoAction.ClearRepositories:               ClearRepositories();                                            break;
+				case AutoAction.ClearRepositoriesOnSubsequentRx:
+				{
+					lock (this.autoActionClearRepositoriesSyncObj)
+					{
+						this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
+						this.autoActionClearRepositoriesTriggerText      = triggerText;
+						this.autoActionClearRepositoriesTriggerTimeStamp = triggerTimeStamp;
+					}
+					break;
+				}
+				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();          break;
+				case AutoAction.SwitchLogOn:                     SwitchLogOn();                  break;
+				case AutoAction.SwitchLogOff:                    SwitchLogOff();                 break;
+				case AutoAction.StopIO:                          StopIO();                       break;
+				case AutoAction.CloseTerminal:                   Close();                        break;
+				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty); break;
 
 				default:
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -458,19 +505,19 @@ namespace YAT.Model
 		/// <summary>
 		/// Notifies the user about the action.
 		/// </summary>
-		protected virtual void RequestAutoActionMessage(string originText, DateTime originTimeStamp, int count)
+		protected virtual void RequestAutoActionMessage(string triggerText, DateTime triggerTimeStamp, int totalCount)
 		{
 			var sb = new StringBuilder();
 
 			sb.Append(@"Message has been triggered by """);
-			sb.Append(originText);
+			sb.Append(triggerText);
 			sb.Append(@""" at ");
-			sb.Append(this.terminal.Format(originTimeStamp));
+			sb.Append(this.terminal.Format(triggerTimeStamp));
 			sb.AppendLine(".");
 
 			sb.Append("Message has been triggered the ");
-			sb.Append(count);
-			sb.Append(Int32Ex.ToEnglishSuffix(count));
+			sb.Append(totalCount);
+			sb.Append(Int32Ex.ToEnglishSuffix(totalCount));
 			sb.Append(" time.");
 
 			OnMessageInputRequest
