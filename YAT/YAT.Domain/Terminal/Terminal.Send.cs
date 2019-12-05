@@ -107,6 +107,8 @@ namespace YAT.Domain
 		{
 			get
 			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				lock (this.breakStateSyncObj)
 					return (this.breakState);
 			}
@@ -378,20 +380,20 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		protected virtual void ProcessParserResult(Parser.Result[] results, bool sendEol = false)
 		{
-			bool performLineRepeat    = false; // \remind For binary terminals, this is rather a 'PacketRepeat'.
-			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
-			int  lineRepeatRemaining  =  TerminalSettings.Send.DefaultLineRepeat;
-			bool isFirstRepetition    = true;
+			var performLineRepeat    = false; // \remind For binary terminals, this is rather a 'PacketRepeat'.
+			var lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
+			var lineRepeatRemaining  =  TerminalSettings.Send.DefaultLineRepeat;
+			var isFirstRepetition    = true;
 
 			do // Process at least once, potentially repeat.
 			{
 				// --- Initialize the line/packet ---
 
-				DateTime lineBeginTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'PacketBegin'.
-				bool performLineDelay       = false;        // \remind For binary terminals, this is rather a 'PacketDelay'.
-				int lineDelay               = TerminalSettings.Send.DefaultLineDelay;
-				bool performLineInterval    = false;        // \remind For binary terminals, this is rather a 'PacketInterval'.
-				int lineInterval            = TerminalSettings.Send.DefaultLineInterval;
+				var lineBeginTimeStamp  = DateTime.Now; // \remind For binary terminals, this is rather a 'PacketBegin'.
+				var performLineDelay    = false;        // \remind For binary terminals, this is rather a 'PacketDelay'.
+				var lineDelay           = TerminalSettings.Send.DefaultLineDelay;
+				var performLineInterval = false;        // \remind For binary terminals, this is rather a 'PacketInterval'.
+				var lineInterval        = TerminalSettings.Send.DefaultLineInterval;
 
 				// --- Process the line/packet ---
 
@@ -548,7 +550,8 @@ namespace YAT.Domain
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = port.Settings;
+						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
+						setting.ClearChanged();                                                       // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
@@ -609,7 +612,8 @@ namespace YAT.Domain
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = port.Settings;
+						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
+						setting.ClearChanged();                                                       // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
@@ -639,7 +643,8 @@ namespace YAT.Domain
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = port.Settings;
+						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
+						setting.ClearChanged();                                                       // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
@@ -669,7 +674,8 @@ namespace YAT.Domain
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = port.Settings;
+						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
+						setting.ClearChanged();                                                       // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
@@ -699,7 +705,8 @@ namespace YAT.Domain
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = port.Settings;
+						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
+						setting.ClearChanged();                                                       // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
@@ -729,7 +736,8 @@ namespace YAT.Domain
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
 						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = port.Settings;
+						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
+						setting.ClearChanged();                                                       // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
@@ -1064,7 +1072,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected virtual bool TryApplySettings(MKY.IO.Serial.SerialPort.SerialPort port, MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exception)
+		protected static bool TryApplySettings(MKY.IO.Serial.SerialPort.SerialPort port, MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exception)
 		{
 			try
 			{
