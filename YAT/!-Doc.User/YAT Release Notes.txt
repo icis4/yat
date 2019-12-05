@@ -88,7 +88,7 @@ YAT 2.1.1 :: 2019-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- ...    <=  WAIT FOR ... (feature request #19, bug #176).
+- ...    <=  WAIT FOR ... (feature requests #387 as well as #19 and bug #176).
 
   Useful for limiting the rate when sending a large amount of data with ping-pong style commands.
   For serial COM ports with active hardware or software flow control, this feature not necessarily
