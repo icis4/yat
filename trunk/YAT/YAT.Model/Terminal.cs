@@ -305,24 +305,12 @@ namespace YAT.Model
 
 	#endif // WITH_SCRIPTING
 
-		/// <remarks>
-		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-		/// </remarks>
 		/// <remarks>Also see <see cref="Domain.Terminal.DisplayElementsTxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsTxAdded;
 
-		/// <remarks>
-		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-		/// </remarks>
 		/// <remarks>Also see <see cref="Domain.Terminal.DisplayElementsBidirAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsBidirAdded;
 
-		/// <remarks>
-		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-		/// </remarks>
 		/// <remarks>Also see <see cref="Domain.Terminal.DisplayElementsRxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsRxAdded;
 
@@ -344,24 +332,12 @@ namespace YAT.Model
 		/// <remarks>See <see cref="Domain.Terminal.CurrentDisplayLineRxCleared"/>.</remarks>
 		public event EventHandler CurrentDisplayLineRxCleared;
 
-		/// <remarks>
-		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-		/// </remarks>
 		/// <remarks>Also see <see cref="Domain.Terminal.DisplayLinesTxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesTxAdded;
 
-		/// <remarks>
-		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-		/// </remarks>
 		/// <remarks>Also see <see cref="Domain.Terminal.DisplayLinesBidirAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesBidirAdded;
 
-		/// <remarks>
-		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-		/// </remarks>
 		/// <remarks>Also see <see cref="Domain.Terminal.DisplayLinesRxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesRxAdded;
 
@@ -1243,7 +1219,7 @@ namespace YAT.Model
 			{
 				UpdateAutoAction(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 
-				if (SettingsRoot.AutoAction.IsFilterOrSuppress)
+				if (SettingsRoot.AutoAction.IsActiveAsFilterOrSuppress)
 					RefreshRepositories();
 			}
 			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.AutoResponse))
@@ -3040,11 +3016,7 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-		////bool suppressEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		////                            // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-
-		////if (!suppressEvent) always evaluates to true.
-				OnDisplayElementsTxAdded(e);
+			OnDisplayElementsTxAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
@@ -3057,18 +3029,12 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			bool suppressEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-			                            // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoActionFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
-			}
-			else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-			{
-				suppressEvent = true;
 			}
 
 			// AutoResponse:                                                             // See terminal_DisplayLinesRxAdded for background.
@@ -3078,8 +3044,7 @@ namespace YAT.Model
 				EvaluateAutoResponseFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			if (!suppressEvent)
-				OnDisplayElementsBidirAdded(e);
+			OnDisplayElementsBidirAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
@@ -3092,8 +3057,6 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			bool suppressEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-			                            // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// AutoAction:
 			List<Pair<string, DateTime>> autoActionTriggers = null;                  // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
@@ -3101,10 +3064,6 @@ namespace YAT.Model
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoActionFromElements(e.Elements, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
-			}
-			else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-			{
-				suppressEvent = true;
 			}
 
 			// AutoResponse:
@@ -3115,8 +3074,7 @@ namespace YAT.Model
 				EvaluateAutoResponseFromElements(e.Elements, out autoResponseTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			if (!suppressEvent)
-				OnDisplayElementsRxAdded(e);
+			OnDisplayElementsRxAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 
@@ -3269,8 +3227,6 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-		////bool forwardEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		////                           // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// Count:
 			this.txLineCount += e.Lines.Count;
 			OnIOCountChanged_Promptly(EventArgs.Empty);
@@ -3279,9 +3235,8 @@ namespace YAT.Model
 			if (this.txLineRate.Update(e.Lines.Count))
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
-		////// Display:
-		////if (forwardEvent) always evaluates to false.
-		////	OnDisplayLinesTxAdded(e);
+			// Display:
+			OnDisplayLinesTxAdded(e);
 
 			// Log:
 			if (this.log.NeatTxIsOn)
@@ -3299,8 +3254,6 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			bool forwardEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-			                           // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 		////// Count:
 		////this.bidirLineCount += e.Lines.Count would technically be possible, but doesn't make much sense.
 		////OnIOCountChanged_Promptly(EventArgs.Empty);
@@ -3310,15 +3263,11 @@ namespace YAT.Model
 		////	OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// AutoAction:
-			if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
-			{
+			if (SettingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // Filter/Suppress is processed here.
 				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
-				forwardEvent = true;
-			}
 
 			// Display:
-			if (forwardEvent)
-				OnDisplayLinesBidirAdded(e);
+			OnDisplayLinesBidirAdded(e);
 
 			// Log:
 			if (this.log.NeatBidirIsOn)
@@ -3336,8 +3285,6 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			bool forwardEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-			                           // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// Count:
 			this.rxLineCount += e.Lines.Count;
 			OnIOCountChanged_Promptly(EventArgs.Empty);
@@ -3347,15 +3294,11 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// AutoAction:
-			if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
-			{
+			if (SettingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // Filter/Suppress is processed here.
 				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
-				forwardEvent = true;
-			}
 
 			// Display:
-			if (forwardEvent)
-				OnDisplayLinesRxAdded(e);
+			OnDisplayLinesRxAdded(e);
 
 			// Log:
 			if (this.log.NeatRxIsOn)
@@ -3430,11 +3373,11 @@ namespace YAT.Model
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting incl. 'IsByteSequenceTriggered' is evaluated here.
+				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 				{
 					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
-				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
+				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is processed here.
 				{
 					ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
 				}
@@ -3460,11 +3403,11 @@ namespace YAT.Model
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting incl. 'IsByteSequenceTriggered' is evaluated here.
+				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 				{
 					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
-				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
+				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is processed here.
 				{
 					ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
 				}

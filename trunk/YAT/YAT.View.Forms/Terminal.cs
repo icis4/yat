@@ -6314,6 +6314,9 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
 		private void SetDataCountAndRateStatusSent()
 		{
+			if (!TerminalIsAvailable)
+				return; // Ensure not to handle events during closing anymore.
+
 			int txByte, txLine, rxByte, rxLine = 0;
 
 			this.terminal.GetDataCount(out txByte, out txLine, out rxByte, out rxLine);
@@ -6331,6 +6334,9 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
 		private void SetDataCountAndRateStatusReceived()
 		{
+			if (!TerminalIsAvailable)
+				return; // Ensure not to handle events during closing anymore.
+
 			int txByte, txLine, rxByte, rxLine = 0;
 
 			this.terminal.GetDataCount(out txByte, out txLine, out rxByte, out rxLine);
@@ -6350,8 +6356,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
-				monitor_Tx.AddElements(e.Elements);
+			if (!this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
+			{                                                             // 'DisplayElements[Tx|Bidir|Rx]Added' events,
+				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)     // except for filter/suppress which are limited to be
+					monitor_Tx.AddElements(e.Elements);                   // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+			}                                                             // Not the perfect solution, but considered good enough.
 
 			SetDataCountAndRateStatusSent();
 		}
@@ -6364,8 +6373,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
-				monitor_Bidir.AddElements(e.Elements);
+			if (!this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
+			{                                                             // 'DisplayElements[Tx|Bidir|Rx]Added' events,
+				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)  // except for filter/suppress which are limited to be
+					monitor_Bidir.AddElements(e.Elements);                // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+			}                                                             // Not the perfect solution, but considered good enough.
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6376,8 +6388,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.AddElements(e.Elements);
+			if (!this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
+			{                                                             // 'DisplayElements[Tx|Bidir|Rx]Added' events,
+				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)     // except for filter/suppress which are limited to be
+					monitor_Rx.AddElements(e.Elements);                   // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+			}                                                             // Not the perfect solution, but considered good enough.
 
 			SetDataCountAndRateStatusReceived();
 		}
@@ -6470,8 +6485,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
-				monitor_Tx.AddLines(e.Lines);
+			if (this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
+			{                                                            // 'DisplayElements[Tx|Bidir|Rx]Added' events,
+				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)    // except for filter/suppress which are limited to be
+					monitor_Tx.AddLines(e.Lines);                        // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+			}                                                            // Not the perfect solution, but considered good enough.
 
 			SetDataCountAndRateStatusSent();
 		}
@@ -6484,8 +6502,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
-				monitor_Bidir.AddLines(e.Lines);
+			if (this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
+			{                                                            // 'DisplayElements[Tx|Bidir|Rx]Added' events,
+				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) // except for filter/suppress which are limited to be
+					monitor_Bidir.AddLines(e.Lines);                     // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+			}                                                            // Not the perfect solution, but considered good enough.
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6496,8 +6517,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
-				monitor_Rx.AddLines(e.Lines);
+			if (this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
+			{                                                            // 'DisplayElements[Tx|Bidir|Rx]Added' events,
+				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)    // except for filter/suppress which are limited to be
+					monitor_Rx.AddLines(e.Lines);                        // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+			}                                                            // Not the perfect solution, but considered good enough.
 
 			SetDataCountAndRateStatusReceived();
 		}
