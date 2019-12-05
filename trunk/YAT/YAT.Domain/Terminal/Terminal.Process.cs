@@ -796,20 +796,20 @@ namespace YAT.Domain
 
 			if (txIsAffected)
 			{
-				txElementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-				txLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+				txElementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+				txLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 			}
 
 			if (bidirIsAffected)
 			{
-				bidirElementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-				bidirLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+				bidirElementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+				bidirLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 			}
 
 			if (rxIsAffected)
 			{
-				rxElementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-				rxLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+				rxElementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+				rxLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 			}
 
 			foreach (byte b in chunk.Content)
@@ -894,8 +894,8 @@ namespace YAT.Domain
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
 		protected virtual void EvaluateAndSignalDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 
 			EvaluateDeviceLineBreak(repositoryType, ts, dev, dir, elementsToAdd, linesToAdd);
 
@@ -909,8 +909,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void EvaluateAndSignalDirectionLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 
 			EvaluateDirectionLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
 
@@ -924,8 +924,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void EvaluateAndSignalChunkLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 
 			EvaluateChunkLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
 
@@ -939,8 +939,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void EvaluateAndSignalTimedLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default initial capacity is good enough.
+			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 
 			EvaluateTimedLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
 
