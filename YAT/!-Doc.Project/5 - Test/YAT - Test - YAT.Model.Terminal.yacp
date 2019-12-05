@@ -5,7 +5,7 @@
   <ProductVersion>2.1.1</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Mark>
-    <TimeStamp>2019-12-03T11:07:16.8002303+01:00</TimeStamp>
+    <TimeStamp>2019-12-05T14:24:27.9977259+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Mark>
   <Page>
@@ -28,14 +28,6 @@
     </Commands>
     <Commands>
       <IsDefined>true</IsDefined>
-      <Description>ABC\!(EOL)xyz</Description>
-      <DefaultRadix>String</DefaultRadix>
-      <CommandLines>ABC\!(EOL)xyz</CommandLines>
-      <IsFilePath>false</IsFilePath>
-      <FilePath />
-    </Commands>
-    <Commands>
-      <IsDefined>true</IsDefined>
       <Description>xyz</Description>
       <DefaultRadix>String</DefaultRadix>
       <CommandLines>xyz</CommandLines>
@@ -51,10 +43,18 @@
       <FilePath />
     </Commands>
     <Commands>
-      <IsDefined>false</IsDefined>
-      <Description />
+      <IsDefined>true</IsDefined>
+      <Description>ABC\!(EOL)xyz</Description>
       <DefaultRadix>String</DefaultRadix>
-      <CommandLines />
+      <CommandLines>ABC\!(EOL)xyz</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC\!(EOL)xyz\!(LineRepeat(100))</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC\!(EOL)xyz\!(LineRepeat(100))</CommandLines>
       <IsFilePath>false</IsFilePath>
       <FilePath />
     </Commands>
