@@ -243,7 +243,6 @@ namespace YAT.Domain
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsRxAdded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
 		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
 		/// elements would likely be more error prone since...
@@ -252,9 +251,9 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineTxReplaced;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
 		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
 		/// elements would likely be more error prone since...
@@ -263,9 +262,9 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineBidirReplaced;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		/// <remarks>
 		/// Using "current line replaced" rather than "element(s) removed" semantic because removing
 		/// elements would likely be more error prone since...
@@ -274,6 +273,7 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
 		public event EventHandler<DisplayElementsEventArgs> CurrentDisplayLineRxReplaced;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>

@@ -305,74 +305,89 @@ namespace YAT.Model
 
 	#endif // WITH_SCRIPTING
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>
+		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+		/// </remarks>
+		/// <remarks>Also see <see cref="Domain.Terminal.DisplayElementsTxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsTxAdded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>
+		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+		/// </remarks>
+		/// <remarks>Also see <see cref="Domain.Terminal.DisplayElementsBidirAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsBidirAdded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>
+		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+		/// </remarks>
+		/// <remarks>Also see <see cref="Domain.Terminal.DisplayElementsRxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsRxAdded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineTxReplaced"/></remarks>
+		/// <remarks>See <see cref="Domain.Terminal.CurrentDisplayLineTxReplaced"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineTxReplaced;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineBidirReplaced"/></remarks>
+		/// <remarks>See <see cref="Domain.Terminal.CurrentDisplayLineBidirReplaced"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineBidirReplaced;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineRxReplaced"/></remarks>
+		/// <remarks>See <see cref="Domain.Terminal.CurrentDisplayLineRxReplaced"/>.</remarks>
 		public event EventHandler<Domain.DisplayElementsEventArgs> CurrentDisplayLineRxReplaced;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineTxCleared"/></remarks>
+		/// <remarks>See <see cref="Domain.Terminal.CurrentDisplayLineTxCleared"/>.</remarks>
 		public event EventHandler CurrentDisplayLineTxCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineBidirCleared"/></remarks>
+		/// <remarks>See <see cref="Domain.Terminal.CurrentDisplayLineBidirCleared"/>.</remarks>
 		public event EventHandler CurrentDisplayLineBidirCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
-		/// <remarks><see cref="Domain.Terminal.CurrentDisplayLineRxCleared"/></remarks>
+		/// <remarks>See <see cref="Domain.Terminal.CurrentDisplayLineRxCleared"/>.</remarks>
 		public event EventHandler CurrentDisplayLineRxCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>
+		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+		/// </remarks>
+		/// <remarks>Also see <see cref="Domain.Terminal.DisplayLinesTxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesTxAdded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>
+		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+		/// </remarks>
+		/// <remarks>Also see <see cref="Domain.Terminal.DisplayLinesBidirAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesBidirAdded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>
+		/// 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		/// except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+		/// </remarks>
+		/// <remarks>Also see <see cref="Domain.Terminal.DisplayLinesRxAdded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesRxAdded;
 
 	#if (WITH_SCRIPTING)
 
-		/// <summary>
-		/// Occurs when a packet has been received by the host application. The event args contain
-		/// the binary raw data that has been received, including control characters, EOL,...
-		/// </summary>
+		/// <remarks>See <see cref="Domain.Terminal.ScriptPacketReceived"/>.</remarks>
 		public event EventHandler<Domain.PacketEventArgs> ScriptPacketReceived;
 
 	#endif // WITH_SCRIPTING
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>See <see cref="Domain.Terminal.RepositoryTxCleared"/>.</remarks>
 		public event EventHandler RepositoryTxCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>See <see cref="Domain.Terminal.RepositoryBidirCleared"/>.</remarks>
 		public event EventHandler RepositoryBidirCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>See <see cref="Domain.Terminal.RepositoryRxCleared"/>.</remarks>
 		public event EventHandler RepositoryRxCleared;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>See <see cref="Domain.Terminal.RepositoryTxReloaded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> RepositoryTxReloaded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>See <see cref="Domain.Terminal.RepositoryBidirReloaded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> RepositoryBidirReloaded;
 
-		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
+		/// <remarks>See <see cref="Domain.Terminal.RepositoryRxReloaded"/>.</remarks>
 		public event EventHandler<Domain.DisplayLinesEventArgs> RepositoryRxReloaded;
 
 		/// <summary></summary>
@@ -433,7 +448,7 @@ namespace YAT.Model
 		{
 		}
 
-		/// <remarks><see cref="Guid.Empty"/> cannot be used as default argument as it is read-only.</remarks>
+		/// <remarks>See <see cref="Guid.Empty"/> cannot be used as default argument as it is read-only.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
@@ -2910,8 +2925,8 @@ namespace YAT.Model
 		///  > The <see cref="TimedStatusTextRequest"/> will only be raised
 		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
 		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
-		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
-		///    when processing <see cref="DisplayElementsTxAdded"/>, <see cref="DisplayElementsRxAdded"/>,
+		///    will not be used by the view. Instead, the values will synchronously be retrieved when
+		///    processing the <see cref="DisplayElementsTxAdded"/>, <see cref="DisplayElementsRxAdded"/>,
 		///    <see cref="CurrentDisplayLineTxReplaced"/>, <see cref="CurrentDisplayLineRxReplaced"/>,
 		///    <see cref="CurrentDisplayLineTxCleared"/>, <see cref="CurrentDisplayLineRxCleared"/>,
 		///    <see cref="DisplayLinesTxAdded"/> and <see cref="DisplayLinesRxAdded"/> events.
@@ -2968,8 +2983,8 @@ namespace YAT.Model
 		///  > The <see cref="TimedStatusTextRequest"/> will only be raised
 		///    each <see cref="TimedStatusTextRequestTickInterval"/> milliseconds.
 		///  > The <see cref="IOCountChanged_Promptly"/> and <see cref="IORateChanged_Promptly"/> events
-		///    will not be used by the terminal form. Instead, the values will synchronously be retrieved
-		///    when processing <see cref="DisplayElementsTxAdded"/>, <see cref="DisplayElementsRxAdded"/>,
+		///    will not be used by the view. Instead, the values will synchronously be retrieved when
+		///    processing the <see cref="DisplayElementsTxAdded"/>, <see cref="DisplayElementsRxAdded"/>,
 		///    <see cref="CurrentDisplayLineTxReplaced"/>, <see cref="CurrentDisplayLineRxReplaced"/>,
 		///    <see cref="CurrentDisplayLineTxCleared"/>, <see cref="CurrentDisplayLineRxCleared"/>,
 		///    <see cref="DisplayLinesTxAdded"/> and <see cref="DisplayLinesRxAdded"/> events.
@@ -3025,7 +3040,11 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			OnDisplayElementsTxAdded(e);
+		////bool suppressEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		////                            // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
+
+		////if (!suppressEvent) always evaluates to true.
+				OnDisplayElementsTxAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
@@ -3038,22 +3057,29 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			bool suppressEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+			                            // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
-			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoActionFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
+			else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			{
+				suppressEvent = true;
 			}
 
 			// AutoResponse:                                                             // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
+			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoResponseFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			OnDisplayElementsBidirAdded(e);
+			if (!suppressEvent)
+				OnDisplayElementsBidirAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
@@ -3066,24 +3092,31 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			bool suppressEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+			                            // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// AutoAction:
 			List<Pair<string, DateTime>> autoActionTriggers = null;                  // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
-			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoActionFromElements(e.Elements, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
+			else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			{
+				suppressEvent = true;
 			}
 
 			// AutoResponse:
 			List<Pair<byte[], string>> autoResponseTriggers = null;                      // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLinesRxAdded.
+			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoResponseFromElements(e.Elements, out autoResponseTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			OnDisplayElementsRxAdded(e);
+			if (!suppressEvent)
+				OnDisplayElementsRxAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 
@@ -3101,6 +3134,54 @@ namespace YAT.Model
 					InvokeAutoResponse(trigger.Value1, trigger.Value2);
 			}
 		}
+
+		// Initially (2019-04..11 / YAT 2.1.0) the trigger detection was implemented per chunk, resulting in:
+		//  > If trigger was located in a single chunk, all fine, as long as the chunk did not spread across multiple lines.
+		//  > If trigger was spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
+		//  > If there was more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger was detected.
+		//  > No way to trigger for text.
+		//
+		// Potential approaches to overcome these limitations:
+		//  a) Move trigger detection from <see cref="terminal_RawChunkReceived"/> to one of the underlying methods of
+		//     <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, where the chunks are being processed into lines.
+		//  b) Keep trigger detection in model but move it from <see cref="terminal_RawChunkReceived"/> to a new
+		//     'CurrentDisplayLineRxChanged' event. That event would have to include the current display line part (for
+		//     text triggering) as well as the changed part (for byte sequence triggering).
+		//     Advantages of this approach:
+		//      > Keep settings complexity in model.
+		//      > Keep well-defined interface (former 'LineChunkAttribute') among model and domain.
+		//  c) Completely move handling to model, possible as long as using the retaining approach:
+		//      > Byte sequence based triggering implemented in <see cref="terminal_DisplayElementsRxAdded"/> (immediate approach / element update mode).
+		//      > Text and Regex based triggering implemented in <see cref="terminal_DisplayLinesRxAdded"/> (retaining approach / line update mode).
+		//     Advantages of this approach:
+		//      > Text and Regex based triggering possible.
+		//      > Keep <see cref="Domain.Terminal"/> as simple as possible, really.
+		//      > No additional interface (former 'LineChunkAttribute') among model and domain needed anymore.
+		//     Disadvantage of this approach:
+		//      > Elements/Lines cannot already be suppressed/filtered by <see cref="Domain.Terminal"/>.
+		//
+		// In addition:
+		//  > Refine trigger detection such it detects multiple triggers. This can easily be achieved by upgrading the
+		//    'isTriggered' flag to a 'triggerCount' value.
+		//
+		// There are additional ideas to further let these features evolve:
+		//  > Move filter/suppress to separate options:
+		//     + They not really are "actions" and are implemented partly differently then the true actions.
+		//     + Possibility to filter and suppress in parallel.
+		//     + Possibility to filter and suppress Tx as well.
+		//     - Further (over)loads the main tool bar.
+		//     - Lots of duplicated code.
+		//  > Provide n automatic actions:
+		//     + Possibility to filter/suppress/other in parallel.
+		//     - Further complicates the main tool bar.
+		//     - Further complicates usage.
+		// These ideas are technically possible but are considered (2019-11-21..22 / YAT 2.1.1) over the top.
+		//  > Some inconsistency for filter/suppress is considered preferable over making things more complicated.
+		//  > Limited to Rx is considered sufficient.
+		//
+		// Approach c) was chosen (2019-11-21..22 / YAT 2.1.1).
+		//
+		// The last state of the initial implementation can be found in SVN revisions #2701..#2707.
 
 		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3188,6 +3269,8 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+		////bool forwardEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		////                           // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// Count:
 			this.txLineCount += e.Lines.Count;
 			OnIOCountChanged_Promptly(EventArgs.Empty);
@@ -3196,8 +3279,9 @@ namespace YAT.Model
 			if (this.txLineRate.Update(e.Lines.Count))
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
-			// Display:
-			OnDisplayLinesTxAdded(e);
+		////// Display:
+		////if (forwardEvent) always evaluates to false.
+		////	OnDisplayLinesTxAdded(e);
 
 			// Log:
 			if (this.log.NeatTxIsOn)
@@ -3215,6 +3299,8 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			bool forwardEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+			                           // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 		////// Count:
 		////this.bidirLineCount += e.Lines.Count would technically be possible, but doesn't make much sense.
 		////OnIOCountChanged_Promptly(EventArgs.Empty);
@@ -3223,29 +3309,16 @@ namespace YAT.Model
 		////if (this.bidirLineRate.Update(e.Lines.Count)) would technically be possible, but doesn't make much sense.
 		////	OnIORateChanged_Promptly(EventArgs.Empty);
 
-			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
-			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
+			// AutoAction:
+			if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
 			{
-				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
-				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated below.
-				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
-				}
-				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
-				{
-					ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
-				}
-			}
-
-			// AutoResponse:                                                             // See terminal_DisplayLinesRxAdded for background.
-			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
-			{
-				EvaluateAutoResponseFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
+				forwardEvent = true;
 			}
 
 			// Display:
-			OnDisplayLinesBidirAdded(e);
+			if (forwardEvent)
+				OnDisplayLinesBidirAdded(e);
 
 			// Log:
 			if (this.log.NeatBidirIsOn)
@@ -3255,55 +3328,6 @@ namespace YAT.Model
 			}
 		}
 
-		/// <remarks>
-		/// Initially (2019-04..11 / YAT 2.1.0) the trigger detection was implemented per chunk, resulting in:
-		///  > If trigger was located in a single chunk, all fine, as long as the chunk did not spread across multiple lines.
-		///  > If trigger was spread across multiple chunks, all fine, also as long as the chunks do not spread across multiple lines.
-		///  > If there was more than one trigger in a chunk, or last byte of one trigger and another complete one, only a single trigger was detected.
-		///  > No way to trigger for text.
-		///
-		/// Potential approaches to overcome these limitations:
-		///  a) Move trigger detection from <see cref="terminal_RawChunkReceived"/> to one of the underlying methods of
-		///     <see cref="Domain.Terminal.ProcessAndSignalRawChunk"/>, where the chunks are being processed into lines.
-		///  b) Keep trigger detection in model but move it from <see cref="terminal_RawChunkReceived"/> to a new
-		///     'CurrentDisplayLineRxChanged' event. That event would have to include the current display line part (for
-		///     text triggering) as well as the changed part (for byte sequence triggering).
-		///     Advantages of this approach:
-		///      > Keep settings complexity in model.
-		///      > Keep well-defined interface (former 'LineChunkAttribute') among model and domain.
-		///  c) Completely move handling to model, possible as long as using the retaining approach:
-		///      > Byte sequence based triggering implemented in <see cref="terminal_DisplayElementsRxAdded"/> (immediate approach / element update mode).
-		///      > Text and Regex based triggering implemented in <see cref="terminal_DisplayLinesRxAdded"/> (retaining approach / line update mode).
-		///     Advantages of this approach:
-		///      > Text and Regex based triggering possible.
-		///      > Keep <see cref="Domain.Terminal"/> as simple as possible, really.
-		///      > No additional interface (former 'LineChunkAttribute') among model and domain needed anymore.
-		///     Disadvantage of this approach:
-		///      > Elements/Lines cannot already be suppressed/filtered by <see cref="Domain.Terminal"/>.
-		///
-		/// In addition:
-		///  > Refine trigger detection such it detects multiple triggers. This can easily be achieved by upgrading the
-		///    'isTriggered' flag to a 'triggerCount' value.
-		///
-		/// There are additional ideas to further let these features evolve:
-		///  > Move filter/suppress to separate options:
-		///     + They not really are "actions" and are implemented partly differently then the true actions.
-		///     + Possibility to filter and suppress in parallel.
-		///     + Possibility to filter and suppress Tx as well.
-		///     - Further (over)loads the main tool bar.
-		///     - Lots of duplicated code.
-		///  > Provide n automatic actions:
-		///     + Possibility to filter/suppress/other in parallel.
-		///     - Further complicates the main tool bar.
-		///     - Further complicates usage.
-		/// These ideas are technically possible but are considered (2019-11-21..22 / YAT 2.1.1) over the top.
-		///  > Some inconsistency for filter/suppress is considered preferable over making things more complicated.
-		///  > Limited to Rx is considered sufficient.
-		///
-		/// Approach c) was chosen (2019-11-21..22 / YAT 2.1.1).
-		///
-		/// The last state of the initial implementation can be found in SVN revisions #2701..#2707.
-		/// </remarks>
 		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -3312,6 +3336,8 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			bool forwardEvent = false; // 'Normally', the display is updated via the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+			                           // except for filter/suppress which are limited to be processed in 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
 			// Count:
 			this.rxLineCount += e.Lines.Count;
 			OnIOCountChanged_Promptly(EventArgs.Empty);
@@ -3321,77 +3347,21 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// AutoAction:
-			List<Pair<string, DateTime>> autoActionTriggers = null;                  // See [== AutoTrigger.AnyLine] below.
-			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
+			if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
 			{
-				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
-				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is evaluated below.
-				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
-				}
-				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
-				{
-					ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
-				}
-			}
-
-			// AutoResponse:
-			List<Pair<byte[], string>> autoResponseTriggers = null;                      // See [== AutoTrigger.AnyLine] below.
-			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElementsRxAdded.
-			{
-				EvaluateAutoResponseFromLines(e.Lines, out autoResponseTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
+				forwardEvent = true;
 			}
 
 			// Display:
-			OnDisplayLinesRxAdded(e);
+			if (forwardEvent)
+				OnDisplayLinesRxAdded(e);
 
 			// Log:
 			if (this.log.NeatRxIsOn)
 			{
 				foreach (var dl in e.Lines)
 					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
-			}
-
-			// AutoAction:
-			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
-			{
-				foreach (var dl in e.Lines)
-					InvokeAutoAction(dl.Text, dl.TimeStamp);
-
-				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
-				// would result in all received lines highlighted.
-				//
-				// Filtering with [Trigger == AnyLine] is possible but has no effect.
-				// Suppressing with [Trigger == AnyLine] is prohibitied.
-				//
-				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
-				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
-				// in the 'ElementsRxAdded' event further above.
-			}
-			else if ((autoActionTriggers != null) && (autoActionTriggers.Count > 0))
-			{
-				foreach (var trigger in autoActionTriggers)
-					InvokeAutoAction(trigger.Value1, trigger.Value2);
-			}
-
-			// AutoResponse:
-			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
-			{
-				foreach (var dl in e.Lines)                       // Response shall be based on origin, not text.
-					InvokeAutoResponse(ToOriginWithoutRxEol(dl), null);
-
-				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
-				// would result in all received lines highlighted.
-				//
-				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
-				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
-				// in the 'ElementsRxAdded' event further above.
-			}
-			else if ((autoResponseTriggers != null) && (autoResponseTriggers.Count > 0))
-			{
-				foreach (var trigger in autoResponseTriggers)
-					InvokeAutoResponse(trigger.Value1, trigger.Value2);
 			}
 		}
 

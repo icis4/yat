@@ -310,54 +310,57 @@ namespace YAT.Model
 		{
 			var linesInitially = lines.Clone(); // Needed because collection will be recreated.
 			lines.Clear();
-			                                    // Limit processing to pure 'Rx' lines. Required for 'Bidir' monitor!
-			foreach (var dl in linesInitially.Where(dl => dl.Direction == Domain.Direction.Rx))
-			{
-				bool isTriggered = false;
 
-				lock (this.autoActionTriggerHelperSyncObj)
+			foreach (var dl in linesInitially)
+			{
+				if (dl.Direction != Domain.Direction.Tx) // By specification only active on receive-path.
 				{
-					if (this.autoActionTriggerHelper != null)
+					bool isTriggered = false;
+
+					lock (this.autoActionTriggerHelperSyncObj)
 					{
-						if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
+						if (this.autoActionTriggerHelper != null)
 						{
-							foreach (var de in dl)
+							if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 							{
-								if (de.Origin != null) // Foreach element where origin exists.
+								foreach (var de in dl)
 								{
-									foreach (var origin in de.Origin)
+									if (de.Origin != null) // Foreach element where origin exists.
 									{
-										foreach (var originByte in origin.Value1)
+										foreach (var origin in de.Origin)
 										{
-											if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+											foreach (var originByte in origin.Value1)
 											{
-												this.autoActionTriggerHelper.Reset();
-												isTriggered = true;
+												if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+												{
+													this.autoActionTriggerHelper.Reset();
+													isTriggered = true;
+												}
 											}
 										}
 									}
 								}
 							}
+							else // IsTextTriggered
+							{
+								isTriggered = this.autoActionTriggerHelper.TextTriggerSuccess(dl.Text);
+							}
 						}
-						else // IsTextTriggered
+						else
 						{
-							isTriggered = this.autoActionTriggerHelper.TextTriggerSuccess(dl.Text);
-						}
-					}
-					else
+							break;     // Break the loop if action got disposed in the meantime.
+						}              // Though unlikely, it may happen when deactivating action
+					} // lock (helper) // while processing many lines, e.g. on reload.
+
+					switch ((AutoAction)SettingsRoot.AutoAction.Action)
 					{
-						break;     // Break the loop if action got disposed in the meantime.
-					}              // Though unlikely, it may happen when deactivating action
-				} // lock (helper) // while processing many lines, e.g. on reload.
+						case AutoAction.Filter:   if ( isTriggered) { lines.Add(dl); } break;
+						case AutoAction.Suppress: if (!isTriggered) { lines.Add(dl); } break;
 
-				switch ((AutoAction)SettingsRoot.AutoAction.Action)
-				{
-					case AutoAction.Filter:   if ( isTriggered) { lines.Add(dl); } break;
-					case AutoAction.Suppress: if (!isTriggered) { lines.Add(dl); } break;
-
-					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			} // foreach (lineCloned)
+						default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				} // if (direction != Tx)
+			} // foreach (linesInitially)
 		}
 
 		/// <summary>
