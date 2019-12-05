@@ -643,8 +643,8 @@ namespace YAT.Domain
 	/// Implements a collection of display lines.
 	/// </summary>
 	/// <remarks>
-	/// This calls redirects to <see cref="T:List`"/>. The sole purpose of this collection is
-	/// consistency with <see cref="DisplayElementCollection"/>.
+	/// This calls redirects to <see cref="T:List`"/>. The sole purpose of this
+	/// collection is consistency with <see cref="DisplayElementCollection"/>.
 	/// </remarks>
 	[Serializable]
 	public class DisplayLineCollection : List<DisplayLine>

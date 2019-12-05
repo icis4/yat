@@ -1159,8 +1159,8 @@ namespace YAT.Domain
 		////	linesToAdd.Clear();
 		////}
 
-			ReplaceCurrentDisplayLine(repositoryType, processState.Line.Elements);
-		}
+			ReplaceCurrentDisplayLine(repositoryType, processState.Line.Elements.Clone()); // Clone to ensure decoupling!
+		}                                                                                  // Elements will be used again!
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
 		protected virtual void FlushClearAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
