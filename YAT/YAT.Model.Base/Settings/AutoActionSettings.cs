@@ -121,19 +121,32 @@ namespace YAT.Model.Settings
 			get { return (base.IsActive && ActionIsActive); }
 		}
 
-		/// <remarks>"IsFilterOrSuppress" also means "IsReloadable".</remarks>
+		/// <remarks>"FilterOrSuppress" also means "IsReloadable".</remarks>
 		[XmlIgnore]
 		public virtual bool IsFilterOrSuppress
 		{
 			get { return ((Action == AutoAction.Filter) || (Action == AutoAction.Suppress)); }
 		}
 
-		/// <remarks>"IsNeitherFilterNorSuppress" also means "IsNotReloadable".</remarks>
-		/// <remarks>Convenience property, same as <code>!<see cref="IsFilterOrSuppress"/></code>.</remarks>
+		/// <remarks>"FilterOrSuppress" also means "IsReloadable".</remarks>
+		[XmlIgnore]
+		public virtual bool IsActiveAsFilterOrSuppress
+		{
+			get { return (IsActive && IsFilterOrSuppress); }
+		}
+
+		/// <remarks>"NeitherFilterNorSuppress" also means "IsNotReloadable".</remarks>
 		[XmlIgnore]
 		public virtual bool IsNeitherFilterNorSuppress
 		{
-			get { return (!IsFilterOrSuppress); }
+			get { return ((Action != AutoAction.Filter) && (Action != AutoAction.Suppress)); }
+		}
+
+		/// <remarks>"NeitherFilterNorSuppress" also means "IsNotReloadable".</remarks>
+		[XmlIgnore]
+		public virtual bool IsActiveAsNeitherFilterNorSuppress
+		{
+			get { return (IsActive && IsNeitherFilterNorSuppress); }
 		}
 
 		#endregion
