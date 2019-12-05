@@ -97,22 +97,22 @@ New:
   its job even with large amount of data.
 
 Important changes:
-- Content separator can now be configured. Useful for e.g. displaying or logging hex data without
-  separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
   renamed to \!(IOSettings()) (related to feature request #71).
-- Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
-  break lines at the same location as the bidirectional monitor panel (bugs #371 and #477).
 - Element and line processing refactored (precondition for feature reqests #19, #366, #367 and fix
   of bugs #176, #371, #477, #478 as well as preparing upcoming feature reqest #74).
+- Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
+  break lines at the same location as the bidirectional monitor panel (bugs #371 and #477).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
-- Automatic actions and responses now support text triggers, optionally using regular expression.
 - Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
   on every chunk (related to bug #477).
-- Consequently, chunk line break settings are now located in the text/binary specific settings.
+- Consequently, chunk line break settings are now located in the text/binary specific dialog.
+- Content separator can now be configured. Useful for e.g. displaying or logging hex data without
+  separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
+- Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
   implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
