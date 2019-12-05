@@ -4697,18 +4697,18 @@ namespace YAT.View.Forms
 			// appear somewhere at the top-left corner of the screen if this fix isn't done.
 			SuspendLayout();
 
-			foreach (ContextMenuStrip strip in strips)
+			foreach (var strip in strips)
 				strip.OwnerItem = null;
 
 			ResumeLayout();
 
 			// Also fix the issue with shortcuts defined in context menus:
 			int itemCount = 0;
-			foreach (ContextMenuStrip strip in strips)
+			foreach (var strip in strips)
 				itemCount += strip.Items.Count;
 
 			this.contextMenuStripShortcutTargetWorkaround = new ContextMenuStripShortcutTargetWorkaround(itemCount); // Preset the required capacity to improve memory management.
-			foreach (ContextMenuStrip strip in strips)
+			foreach (var strip in strips)
 				this.contextMenuStripShortcutTargetWorkaround.Add(strip);
 		}
 

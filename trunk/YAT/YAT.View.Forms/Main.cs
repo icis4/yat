@@ -2665,37 +2665,6 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary>
-		/// Makes sure that context menus are at the right position upon first drop down. This is
-		/// a fix, it should be that way by default. However, due to some reasons, they sometimes
-		/// appear somewhere at the top-left corner of the screen if this fix isn't done.
-		/// </summary>
-		/// <remarks>
-		/// Is this a .NET bug?
-		///
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		private void contextMenuStrip_FileRecent_Paint(object sender, PaintEventArgs e)
-		{
-			ContextMenuStrip contextMenuStrip = sender as ContextMenuStrip;
-			if (contextMenuStrip != null)
-			{
-				if (contextMenuStrip.SourceControl == null)
-				{
-					contextMenuStrip_FileRecent.SuspendLayout();
-					try
-					{
-						contextMenuStrip_FileRecent.Top = toolStripMenuItem_MainMenu_File_Recent.Bounds.Top;
-						contextMenuStrip_FileRecent.Left = toolStripMenuItem_MainMenu_File_Recent.Bounds.Left + toolStripMenuItem_MainMenu_File_Recent.Bounds.Width;
-					}
-					finally
-					{
-						contextMenuStrip_FileRecent.ResumeLayout();
-					}
-				}
-			}
-		}
-
 		private void contextMenuStrip_FileRecent_Opening(object sender, CancelEventArgs e)
 		{
 		////ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll(); No need to validate again, is already done on opening of parent menu.
@@ -3148,18 +3117,18 @@ namespace YAT.View.Forms
 			// appear somewhere at the top-left corner of the screen if this fix isn't done.
 			SuspendLayout();
 
-			foreach (ContextMenuStrip strip in strips)
+			foreach (var strip in strips)
 				strip.OwnerItem = null;
 
 			ResumeLayout();
 
 			// Also fix the issue with shortcuts defined in context menus:
 			int itemCount = 0;
-			foreach (ContextMenuStrip strip in strips)
+			foreach (var strip in strips)
 				itemCount += strip.Items.Count;
 
 			this.contextMenuStripShortcutTargetWorkaround = new ContextMenuStripShortcutTargetWorkaround(itemCount); // Preset the required capacity to improve memory management.
-			foreach (ContextMenuStrip strip in strips)
+			foreach (var strip in strips)
 				this.contextMenuStripShortcutTargetWorkaround.Add(strip);
 		}
 
