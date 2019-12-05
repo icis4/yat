@@ -1755,7 +1755,7 @@ namespace YAT.View.Controls
 						}
 						else // [LineStart] is located inside the collection, remove the correct elements and return:
 						{
-							var elementsBeforeCurrentLine = new Domain.DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+							var elementsBeforeCurrentLine = new Domain.DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 							elements.CloneTo(0, elementsBeforeCurrentLine, (lineStartIndex - 1));
 							this.pendingElementsAndLines[this.pendingElementsAndLines.Count - 1] = elementsBeforeCurrentLine;
 							return (ClearResult.HasClearedAndCompleted);

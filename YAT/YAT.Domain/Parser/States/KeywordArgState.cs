@@ -172,7 +172,7 @@ namespace YAT.Domain.Parser
 				if (!TryParseAndValidate(s, out thisArg, ref formatException))
 					return (false);
 
-				var l = new List<int>(); // Default capacity of 4 is OK in most cases.
+				var l = new List<int>(); // No preset needed, the default behavior is good enough.
 				if (!ArrayEx.IsNullOrEmpty(this.previousArgs))
 					l.AddRange(this.previousArgs);
 
@@ -197,7 +197,7 @@ namespace YAT.Domain.Parser
 				if (!TryParseAndValidate(s, out thisArg, ref formatException))
 					return (false);
 
-				var l = new List<int>(); // Default capacity of 4 is OK in most cases.
+				var l = new List<int>(); // No preset needed, the default behavior is good enough.
 				if (!ArrayEx.IsNullOrEmpty(this.previousArgs))
 					l.AddRange(this.previousArgs);
 

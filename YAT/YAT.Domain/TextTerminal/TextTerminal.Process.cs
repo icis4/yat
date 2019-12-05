@@ -701,7 +701,7 @@ namespace YAT.Domain
 			if (!ControlCharacterHasBeenProcessed(b, ts, dir, out de, out isBackspace))
 				de = ByteToElement(b, ts, dir); // Default conversion to value or ASCII mnemonic.
 
-			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			// Prepare EOL:
 			if (!textLineState.EolOfGivenDevice.ContainsKey(dev))                                      // It is OK to only access or add to the collection,
@@ -997,7 +997,7 @@ namespace YAT.Domain
 			else // Neither empty nor need to suppress:
 			{
 				// Process line length:
-				var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+				var lineEnd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count"/"char count" and "line duration".
 				{
 					int length;

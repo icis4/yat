@@ -69,8 +69,8 @@ namespace YAT.Domain
 		{
 			PendingMultiBytesToDecode            = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			ShownCharCount                       = 0;
-			EolOfGivenDevice                     = new Dictionary<string, SequenceQueue>(); // No preset needed, the default initial capacity is good enough.
-			RetainedUnconfirmedHiddenEolElements = new List<DisplayElement>(); // No preset needed, the default initial capacity is good enough.
+			EolOfGivenDevice                     = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
+			RetainedUnconfirmedHiddenEolElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace YAT.Domain
 			}                                                              // Applies to TCP and UDP terminals only.
 
 			if (eolOfGivenDeviceIsCompleteMatch) // Otherwise keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
-				RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+				RetainedUnconfirmedHiddenEolElements = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary></summary>

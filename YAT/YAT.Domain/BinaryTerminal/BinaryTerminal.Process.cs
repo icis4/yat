@@ -176,7 +176,7 @@ namespace YAT.Domain
 			var binaryLineState       = GetBinaryLineState(repositoryType, dir);
 			var binaryDisplaySettings = GetBinaryDisplaySettings(dir);
 
-			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			if (lineState.Position == LinePosition.Begin)
 			{
@@ -252,7 +252,7 @@ namespace YAT.Domain
 			// Convert content:
 			var de = ByteToElement(b, ts, dir);
 
-			var lp = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			// Evaluate line breaks:
 			//  1. Evaluate the tricky case: Sequence before.
@@ -376,7 +376,7 @@ namespace YAT.Domain
 			// This is opposed to text terminals where potential EOL elements are potentially hidden.
 
 			// Process line length:
-			var lineEnd = new DisplayElementCollection(); // No preset needed, the default initial capacity is good enough.
+			var lineEnd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
 			{
 				var length = lineState.Elements.ByteCount;

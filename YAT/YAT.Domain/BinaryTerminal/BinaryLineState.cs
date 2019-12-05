@@ -61,7 +61,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Initialize()
 		{
-			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, the default initial capacity is good enough.
+			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary>
