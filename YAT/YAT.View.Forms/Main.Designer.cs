@@ -290,7 +290,6 @@ namespace YAT.View.Forms
 			// END OF ATTENTION BLOCK
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
-			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
 			// 
 			// toolStripMenuItem_FileRecentContextMenu_1
 			// 
