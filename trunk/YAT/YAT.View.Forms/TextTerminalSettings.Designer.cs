@@ -52,6 +52,11 @@ namespace YAT.View.Forms
 			this.label_TxEol = new System.Windows.Forms.Label();
 			this.comboBox_Encoding = new MKY.Windows.Forms.ComboBoxEx();
 			this.groupBox_Send = new System.Windows.Forms.GroupBox();
+			this.label_WaitForResponseTimeout = new System.Windows.Forms.Label();
+			this.textBox_WaitForResponseNext = new MKY.Windows.Forms.TextBoxEx();
+			this.label_WaitForResponseNext = new System.Windows.Forms.Label();
+			this.label_WaitForResponseOf = new System.Windows.Forms.Label();
+			this.textBox_WaitForResponseOf = new MKY.Windows.Forms.TextBoxEx();
 			this.groupBox_Exclude = new System.Windows.Forms.GroupBox();
 			this.linkLabel_Regex = new System.Windows.Forms.LinkLabel();
 			this.stringListEdit_ExcludePatterns = new MKY.Windows.Forms.StringListEdit();
@@ -62,10 +67,10 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteNone = new System.Windows.Forms.RadioButton();
 			this.checkBox_WaitForResponse = new System.Windows.Forms.CheckBox();
 			this.textBox_DelayInterval = new MKY.Windows.Forms.TextBoxEx();
-			this.label_WaitForResponse = new System.Windows.Forms.Label();
-			this.label_WaitForResponseUnit = new System.Windows.Forms.Label();
+			this.label_WaitForResponseNextUnit = new System.Windows.Forms.Label();
+			this.label_WaitForResponseTimeoutUnit = new System.Windows.Forms.Label();
 			this.label_DelayUnit = new System.Windows.Forms.Label();
-			this.textBox_WaitForResponse = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_WaitForResponseTimeout = new MKY.Windows.Forms.TextBoxEx();
 			this.textBox_Delay = new MKY.Windows.Forms.TextBoxEx();
 			this.label_DelayIntervalUnit = new System.Windows.Forms.Label();
 			this.checkBox_Delay = new System.Windows.Forms.CheckBox();
@@ -87,7 +92,7 @@ namespace YAT.View.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(590, 71);
+			this.button_OK.Location = new System.Drawing.Point(615, 71);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -98,7 +103,7 @@ namespace YAT.View.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(590, 100);
+			this.button_Cancel.Location = new System.Drawing.Point(615, 100);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -117,7 +122,7 @@ namespace YAT.View.Forms
 			this.groupBox_Settings.Controls.Add(this.label_Encoding);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(562, 439);
+			this.groupBox_Settings.Size = new System.Drawing.Size(587, 439);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -277,23 +282,78 @@ namespace YAT.View.Forms
 			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Send.Controls.Add(this.label_WaitForResponseTimeout);
+			this.groupBox_Send.Controls.Add(this.textBox_WaitForResponseNext);
+			this.groupBox_Send.Controls.Add(this.label_WaitForResponseNext);
+			this.groupBox_Send.Controls.Add(this.label_WaitForResponseOf);
+			this.groupBox_Send.Controls.Add(this.textBox_WaitForResponseOf);
 			this.groupBox_Send.Controls.Add(this.groupBox_Exclude);
 			this.groupBox_Send.Controls.Add(this.groupBox_Substitute);
 			this.groupBox_Send.Controls.Add(this.checkBox_WaitForResponse);
 			this.groupBox_Send.Controls.Add(this.textBox_DelayInterval);
-			this.groupBox_Send.Controls.Add(this.label_WaitForResponse);
-			this.groupBox_Send.Controls.Add(this.label_WaitForResponseUnit);
+			this.groupBox_Send.Controls.Add(this.label_WaitForResponseNextUnit);
+			this.groupBox_Send.Controls.Add(this.label_WaitForResponseTimeoutUnit);
 			this.groupBox_Send.Controls.Add(this.label_DelayUnit);
-			this.groupBox_Send.Controls.Add(this.textBox_WaitForResponse);
+			this.groupBox_Send.Controls.Add(this.textBox_WaitForResponseTimeout);
 			this.groupBox_Send.Controls.Add(this.textBox_Delay);
 			this.groupBox_Send.Controls.Add(this.label_DelayIntervalUnit);
 			this.groupBox_Send.Controls.Add(this.checkBox_Delay);
 			this.groupBox_Send.Location = new System.Drawing.Point(284, 16);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(272, 417);
+			this.groupBox_Send.Size = new System.Drawing.Size(297, 417);
 			this.groupBox_Send.TabIndex = 4;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settings";
+			// 
+			// label_WaitForResponseTimeout
+			// 
+			this.label_WaitForResponseTimeout.AutoSize = true;
+			this.label_WaitForResponseTimeout.Location = new System.Drawing.Point(130, 65);
+			this.label_WaitForResponseTimeout.Name = "label_WaitForResponseTimeout";
+			this.label_WaitForResponseTimeout.Size = new System.Drawing.Size(65, 13);
+			this.label_WaitForResponseTimeout.TabIndex = 11;
+			this.label_WaitForResponseTimeout.Text = "timeout after";
+			this.label_WaitForResponseTimeout.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox_WaitForResponseNext
+			// 
+			this.textBox_WaitForResponseNext.Location = new System.Drawing.Point(56, 62);
+			this.textBox_WaitForResponseNext.Name = "textBox_WaitForResponseNext";
+			this.textBox_WaitForResponseNext.Size = new System.Drawing.Size(40, 20);
+			this.textBox_WaitForResponseNext.TabIndex = 9;
+			this.textBox_WaitForResponseNext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_WaitForResponseNext.TextChanged += new System.EventHandler(this.textBox_WaitForResponseNext_TextChanged);
+			this.textBox_WaitForResponseNext.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponseNext_Validating);
+			// 
+			// label_WaitForResponseNext
+			// 
+			this.label_WaitForResponseNext.AutoSize = true;
+			this.label_WaitForResponseNext.Location = new System.Drawing.Point(29, 65);
+			this.label_WaitForResponseNext.Name = "label_WaitForResponseNext";
+			this.label_WaitForResponseNext.Size = new System.Drawing.Size(27, 13);
+			this.label_WaitForResponseNext.TabIndex = 8;
+			this.label_WaitForResponseNext.Text = "next";
+			this.label_WaitForResponseNext.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label_WaitForResponseOf
+			// 
+			this.label_WaitForResponseOf.AutoSize = true;
+			this.label_WaitForResponseOf.Location = new System.Drawing.Point(172, 44);
+			this.label_WaitForResponseOf.Name = "label_WaitForResponseOf";
+			this.label_WaitForResponseOf.Size = new System.Drawing.Size(114, 13);
+			this.label_WaitForResponseOf.TabIndex = 7;
+			this.label_WaitForResponseOf.Text = "line before sending the";
+			this.label_WaitForResponseOf.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox_WaitForResponseOf
+			// 
+			this.textBox_WaitForResponseOf.Location = new System.Drawing.Point(131, 41);
+			this.textBox_WaitForResponseOf.Name = "textBox_WaitForResponseOf";
+			this.textBox_WaitForResponseOf.Size = new System.Drawing.Size(40, 20);
+			this.textBox_WaitForResponseOf.TabIndex = 6;
+			this.textBox_WaitForResponseOf.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_WaitForResponseOf.TextChanged += new System.EventHandler(this.textBox_WaitForResponseOf_TextChanged);
+			this.textBox_WaitForResponseOf.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponseOf_Validating);
 			// 
 			// groupBox_Exclude
 			// 
@@ -303,10 +363,10 @@ namespace YAT.View.Forms
 			this.groupBox_Exclude.Controls.Add(this.linkLabel_Regex);
 			this.groupBox_Exclude.Controls.Add(this.stringListEdit_ExcludePatterns);
 			this.groupBox_Exclude.Controls.Add(this.checkBox_Exclude);
-			this.groupBox_Exclude.Location = new System.Drawing.Point(6, 187);
+			this.groupBox_Exclude.Location = new System.Drawing.Point(6, 189);
 			this.groupBox_Exclude.Name = "groupBox_Exclude";
-			this.groupBox_Exclude.Size = new System.Drawing.Size(259, 224);
-			this.groupBox_Exclude.TabIndex = 10;
+			this.groupBox_Exclude.Size = new System.Drawing.Size(285, 222);
+			this.groupBox_Exclude.TabIndex = 15;
 			this.groupBox_Exclude.TabStop = false;
 			this.groupBox_Exclude.Text = "Text E&xclusion";
 			this.toolTip.SetToolTip(this.groupBox_Exclude, resources.GetString("groupBox_Exclude.ToolTip"));
@@ -315,7 +375,7 @@ namespace YAT.View.Forms
 			// 
 			this.linkLabel_Regex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Regex.AutoSize = true;
-			this.linkLabel_Regex.Location = new System.Drawing.Point(21, 200);
+			this.linkLabel_Regex.Location = new System.Drawing.Point(30, 199);
 			this.linkLabel_Regex.Name = "linkLabel_Regex";
 			this.linkLabel_Regex.Size = new System.Drawing.Size(150, 13);
 			this.linkLabel_Regex.TabIndex = 2;
@@ -331,7 +391,7 @@ namespace YAT.View.Forms
 			this.stringListEdit_ExcludePatterns.Location = new System.Drawing.Point(3, 40);
 			this.stringListEdit_ExcludePatterns.MinimumSize = new System.Drawing.Size(132, 116);
 			this.stringListEdit_ExcludePatterns.Name = "stringListEdit_ExcludePatterns";
-			this.stringListEdit_ExcludePatterns.Size = new System.Drawing.Size(250, 155);
+			this.stringListEdit_ExcludePatterns.Size = new System.Drawing.Size(279, 155);
 			this.stringListEdit_ExcludePatterns.StringList = new string[0];
 			this.stringListEdit_ExcludePatterns.TabIndex = 1;
 			this.stringListEdit_ExcludePatterns.Validating += new System.EventHandler<MKY.ComponentModel.StringCancelEventArgs>(this.stringListEdit_ExcludePatterns_Validating);
@@ -355,10 +415,10 @@ namespace YAT.View.Forms
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteToLower);
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteToUpper);
 			this.groupBox_Substitute.Controls.Add(this.radioButton_SubstituteNone);
-			this.groupBox_Substitute.Location = new System.Drawing.Point(6, 86);
+			this.groupBox_Substitute.Location = new System.Drawing.Point(6, 88);
 			this.groupBox_Substitute.Name = "groupBox_Substitute";
-			this.groupBox_Substitute.Size = new System.Drawing.Size(260, 95);
-			this.groupBox_Substitute.TabIndex = 9;
+			this.groupBox_Substitute.Size = new System.Drawing.Size(285, 95);
+			this.groupBox_Substitute.TabIndex = 14;
 			this.groupBox_Substitute.TabStop = false;
 			this.groupBox_Substitute.Text = "Character Substitution";
 			// 
@@ -397,15 +457,15 @@ namespace YAT.View.Forms
 			this.checkBox_WaitForResponse.AutoSize = true;
 			this.checkBox_WaitForResponse.Location = new System.Drawing.Point(12, 43);
 			this.checkBox_WaitForResponse.Name = "checkBox_WaitForResponse";
-			this.checkBox_WaitForResponse.Size = new System.Drawing.Size(242, 17);
+			this.checkBox_WaitForResponse.Size = new System.Drawing.Size(121, 17);
 			this.checkBox_WaitForResponse.TabIndex = 5;
-			this.checkBox_WaitForResponse.Text = "&Wait for response before sending the next line";
+			this.checkBox_WaitForResponse.Text = "&Wait for response of";
 			this.checkBox_WaitForResponse.UseVisualStyleBackColor = true;
 			this.checkBox_WaitForResponse.CheckedChanged += new System.EventHandler(this.checkBox_WaitForResponse_CheckedChanged);
 			// 
 			// textBox_DelayInterval
 			// 
-			this.textBox_DelayInterval.Location = new System.Drawing.Point(193, 17);
+			this.textBox_DelayInterval.Location = new System.Drawing.Point(194, 17);
 			this.textBox_DelayInterval.Name = "textBox_DelayInterval";
 			this.textBox_DelayInterval.Size = new System.Drawing.Size(40, 20);
 			this.textBox_DelayInterval.TabIndex = 3;
@@ -413,44 +473,44 @@ namespace YAT.View.Forms
 			this.textBox_DelayInterval.TextChanged += new System.EventHandler(this.textBox_DelayInterval_TextChanged);
 			this.textBox_DelayInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DelayInterval_Validating);
 			// 
-			// label_WaitForResponse
+			// label_WaitForResponseNextUnit
 			// 
-			this.label_WaitForResponse.AutoSize = true;
-			this.label_WaitForResponse.Location = new System.Drawing.Point(28, 63);
-			this.label_WaitForResponse.Name = "label_WaitForResponse";
-			this.label_WaitForResponse.Size = new System.Drawing.Size(84, 13);
-			this.label_WaitForResponse.TabIndex = 6;
-			this.label_WaitForResponse.Text = "with a timeout of";
-			this.label_WaitForResponse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_WaitForResponseNextUnit.AutoSize = true;
+			this.label_WaitForResponseNextUnit.Location = new System.Drawing.Point(97, 65);
+			this.label_WaitForResponseNextUnit.Name = "label_WaitForResponseNextUnit";
+			this.label_WaitForResponseNextUnit.Size = new System.Drawing.Size(26, 13);
+			this.label_WaitForResponseNextUnit.TabIndex = 10;
+			this.label_WaitForResponseNextUnit.Text = "line;";
+			this.label_WaitForResponseNextUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// label_WaitForResponseUnit
+			// label_WaitForResponseTimeoutUnit
 			// 
-			this.label_WaitForResponseUnit.AutoSize = true;
-			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(164, 63);
-			this.label_WaitForResponseUnit.Name = "label_WaitForResponseUnit";
-			this.label_WaitForResponseUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_WaitForResponseUnit.TabIndex = 8;
-			this.label_WaitForResponseUnit.Text = "ms";
-			this.label_WaitForResponseUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_WaitForResponseTimeoutUnit.AutoSize = true;
+			this.label_WaitForResponseTimeoutUnit.Location = new System.Drawing.Point(249, 65);
+			this.label_WaitForResponseTimeoutUnit.Name = "label_WaitForResponseTimeoutUnit";
+			this.label_WaitForResponseTimeoutUnit.Size = new System.Drawing.Size(20, 13);
+			this.label_WaitForResponseTimeoutUnit.TabIndex = 13;
+			this.label_WaitForResponseTimeoutUnit.Text = "ms";
+			this.label_WaitForResponseTimeoutUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_DelayUnit
 			// 
 			this.label_DelayUnit.AutoSize = true;
-			this.label_DelayUnit.Location = new System.Drawing.Point(146, 20);
+			this.label_DelayUnit.Location = new System.Drawing.Point(147, 20);
 			this.label_DelayUnit.Name = "label_DelayUnit";
 			this.label_DelayUnit.Size = new System.Drawing.Size(47, 13);
 			this.label_DelayUnit.TabIndex = 2;
 			this.label_DelayUnit.Text = "ms each";
 			this.label_DelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textBox_WaitForResponse
+			// textBox_WaitForResponseTimeout
 			// 
-			this.textBox_WaitForResponse.Location = new System.Drawing.Point(113, 60);
-			this.textBox_WaitForResponse.Name = "textBox_WaitForResponse";
-			this.textBox_WaitForResponse.Size = new System.Drawing.Size(51, 20);
-			this.textBox_WaitForResponse.TabIndex = 7;
-			this.textBox_WaitForResponse.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_WaitForResponse.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponse_Validating);
+			this.textBox_WaitForResponseTimeout.Location = new System.Drawing.Point(197, 62);
+			this.textBox_WaitForResponseTimeout.Name = "textBox_WaitForResponseTimeout";
+			this.textBox_WaitForResponseTimeout.Size = new System.Drawing.Size(51, 20);
+			this.textBox_WaitForResponseTimeout.TabIndex = 12;
+			this.textBox_WaitForResponseTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_WaitForResponseTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponseTimeout_Validating);
 			// 
 			// textBox_Delay
 			// 
@@ -464,7 +524,7 @@ namespace YAT.View.Forms
 			// label_DelayIntervalUnit
 			// 
 			this.label_DelayIntervalUnit.AutoSize = true;
-			this.label_DelayIntervalUnit.Location = new System.Drawing.Point(233, 20);
+			this.label_DelayIntervalUnit.Location = new System.Drawing.Point(235, 20);
 			this.label_DelayIntervalUnit.Name = "label_DelayIntervalUnit";
 			this.label_DelayIntervalUnit.Size = new System.Drawing.Size(23, 13);
 			this.label_DelayIntervalUnit.TabIndex = 4;
@@ -494,7 +554,7 @@ namespace YAT.View.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(590, 171);
+			this.button_Defaults.Location = new System.Drawing.Point(615, 171);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
@@ -507,7 +567,7 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_AdvancedSettingsRemark.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_AdvancedSettingsRemark.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_AdvancedSettingsRemark.Location = new System.Drawing.Point(574, 215);
+			this.label_AdvancedSettingsRemark.Location = new System.Drawing.Point(599, 215);
 			this.label_AdvancedSettingsRemark.Name = "label_AdvancedSettingsRemark";
 			this.label_AdvancedSettingsRemark.Size = new System.Drawing.Size(102, 236);
 			this.label_AdvancedSettingsRemark.TabIndex = 4;
@@ -520,7 +580,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(677, 463);
+			this.ClientSize = new System.Drawing.Size(702, 463);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Cancel);
@@ -572,9 +632,9 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.TextBoxEx textBox_Delay;
 		private System.Windows.Forms.Label label_DelayIntervalUnit;
 		private System.Windows.Forms.CheckBox checkBox_Delay;
-		private System.Windows.Forms.Label label_WaitForResponse;
-		private System.Windows.Forms.Label label_WaitForResponseUnit;
-		private MKY.Windows.Forms.TextBoxEx textBox_WaitForResponse;
+		private System.Windows.Forms.Label label_WaitForResponseNextUnit;
+		private System.Windows.Forms.Label label_WaitForResponseTimeoutUnit;
+		private MKY.Windows.Forms.TextBoxEx textBox_WaitForResponseTimeout;
 		private System.Windows.Forms.GroupBox groupBox_Eol;
 		private System.Windows.Forms.CheckBox checkBox_ShowEol;
 		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxEol;
@@ -594,5 +654,10 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.GroupBox groupBox_TxDisplay;
 		private YAT.View.Controls.TextDisplaySettingsSet textTerminalSettingsSet_Tx;
 		private System.Windows.Forms.Label label_AdvancedSettingsRemark;
+		private System.Windows.Forms.Label label_WaitForResponseTimeout;
+		private MKY.Windows.Forms.TextBoxEx textBox_WaitForResponseNext;
+		private System.Windows.Forms.Label label_WaitForResponseNext;
+		private System.Windows.Forms.Label label_WaitForResponseOf;
+		private MKY.Windows.Forms.TextBoxEx textBox_WaitForResponseOf;
 	}
 }

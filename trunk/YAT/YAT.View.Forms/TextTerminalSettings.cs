@@ -368,14 +368,88 @@ namespace YAT.View.Forms
 			this.settingsInEdit.WaitForResponse = wfr; // Settings member must be changed to let the changed event be raised!
 		}
 
+		private void textBox_WaitForResponseOf_TextChanged(object sender, EventArgs e)
+		{
+			int interval;
+			if (int.TryParse(textBox_WaitForResponseOf.Text, out interval) && (Math.Abs(interval) == 1))
+				label_WaitForResponseOf.Text = "line before sending the";
+			else
+				label_WaitForResponseOf.Text = "lines before sending the";
+		}
+
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void textBox_WaitForResponse_Validating(object sender, CancelEventArgs e)
+		private void textBox_WaitForResponseOf_Validating(object sender, CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			int count;
+			if (int.TryParse(textBox_WaitForResponseOf.Text, out count) || (count >= 1))
+			{
+				var wfr = this.settingsInEdit.WaitForResponse;
+				wfr.ResponseLineCount = count;
+				this.settingsInEdit.WaitForResponse = wfr; // Settings member must be changed to let the changed event be raised!
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Line count must be at least 1 line!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
+		}
+
+		private void textBox_WaitForResponseNext_TextChanged(object sender, EventArgs e)
+		{
+			int interval;
+			if (int.TryParse(textBox_WaitForResponseNext.Text, out interval) && (Math.Abs(interval) == 1))
+				label_WaitForResponseNextUnit.Text = "line;";
+			else
+				label_WaitForResponseNextUnit.Text = "lines;";
+		}
+
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_WaitForResponseNext_Validating(object sender, CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			int count;
+			if (int.TryParse(textBox_WaitForResponseNext.Text, out count) || (count >= 1))
+			{
+				var wfr = this.settingsInEdit.WaitForResponse;
+				wfr.ClearanceLineCount = count;
+				this.settingsInEdit.WaitForResponse = wfr; // Settings member must be changed to let the changed event be raised!
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Line count must be at least 1 line!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
+		}
+
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_WaitForResponseTimeout_Validating(object sender, CancelEventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
 			int timeout;
-			if (int.TryParse(textBox_WaitForResponse.Text, out timeout) && (timeout >= 1))
+			if (int.TryParse(textBox_WaitForResponseTimeout.Text, out timeout) && (timeout >= 1))
 			{
 				var wfr = this.settingsInEdit.WaitForResponse;
 				wfr.Timeout = timeout;
@@ -584,10 +658,14 @@ namespace YAT.View.Forms
 				textBox_DelayInterval.Enabled = delayEnabled;
 				textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
 
-				bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
-				checkBox_WaitForResponse.Checked = waitEnabled;
-				textBox_WaitForResponse.Enabled  = waitEnabled;
-				textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
+				bool waitEnabled                       = this.settingsInEdit.WaitForResponse.Enabled;
+				checkBox_WaitForResponse.Checked       = waitEnabled;
+				textBox_WaitForResponseOf.Enabled      = waitEnabled;
+				textBox_WaitForResponseOf.Text         = this.settingsInEdit.WaitForResponse.ResponseLineCount.ToString(CultureInfo.CurrentCulture);
+				textBox_WaitForResponseNext.Enabled    = waitEnabled;
+				textBox_WaitForResponseNext.Text       = this.settingsInEdit.WaitForResponse.ClearanceLineCount.ToString(CultureInfo.CurrentCulture);
+				textBox_WaitForResponseTimeout.Enabled = waitEnabled;
+				textBox_WaitForResponseTimeout.Text    = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
 
 				switch (this.settingsInEdit.CharSubstitution)
 				{
