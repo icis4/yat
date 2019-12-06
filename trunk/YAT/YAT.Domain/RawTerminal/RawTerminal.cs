@@ -480,9 +480,9 @@ namespace YAT.Domain
 				{
 					string message;
 					if (data.Length <= 1)
-						message = data.Length + " byte could not be sent as the underlying I/O instance is not ready!"; // Using "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
+						message = data.Length + " byte could not be sent as the underlying I/O instance is not ready!"; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 					else
-						message = data.Length + " bytes could not be sent as the underlying I/O instance is not ready!"; // Using "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
+						message = data.Length + " bytes could not be sent as the underlying I/O instance is not ready!"; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 
 					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, IODirection.Tx, message));
 				}
@@ -491,9 +491,9 @@ namespace YAT.Domain
 			{
 				string message;
 				if (data.Length <= 1)
-					message = data.Length + " byte not sent anymore as terminal has been closed."; // Using "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
+					message = data.Length + " byte not sent anymore as terminal has been closed."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 				else
-					message = data.Length + " bytes not sent anymore as terminal has been closed."; // Using "byte" instead of "octet" as that is more common, and .NET uses "byte" as well.
+					message = data.Length + " bytes not sent anymore as terminal has been closed."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 
 				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Tx, message));
 			}
