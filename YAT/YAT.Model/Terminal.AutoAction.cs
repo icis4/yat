@@ -29,16 +29,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-//using System.Threading.Tasks; activate after having upgraded to .NET 4.0
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
+using MKY.Diagnostics;
 
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -60,12 +61,20 @@ namespace YAT.Model
 		private int autoActionCount;
 		private AutoTriggerHelper autoActionTriggerHelper;
 		private object autoActionTriggerHelperSyncObj = new object();
-	////private Queue<Action<AutoAction, string, DateTime>> autoActionTasks = new Queue<Action<AutoAction, string, DateTime>>(); activate after having upgraded to .NET 4.0
 
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
 		private string autoActionClearRepositoriesTriggerText; // = null;
 		private DateTime autoActionClearRepositoriesTriggerTimeStamp; // = DateTime.MinValue;
 		private object autoActionClearRepositoriesSyncObj = new object();
+
+		private bool autoActionCloseOrExitHasBeenTriggered; // = false;
+		private object autoActionCloseOrExitSyncObj = new object();
+
+		private Queue<Triple<AutoAction, string, DateTime>> autoActionQueue = new Queue<Triple<AutoAction, string, DateTime>>();
+		private bool autoActionThreadRunFlag;
+		private AutoResetEvent autoActionThreadEvent;
+		private Thread autoActionThread;
+		private object autoActionThreadSyncObj = new object();
 
 		#endregion
 
@@ -84,15 +93,11 @@ namespace YAT.Model
 		// Methods
 		//==========================================================================================
 
-		private void CreateAutoActionHelper()
+		private void CreateAutoAction()
 		{
 			UpdateAutoAction(); // Simply forward to general Update() method.
-		}
 
-		private void DisposeAutoActionHelper()
-		{
-			lock (this.autoActionTriggerHelperSyncObj)
-				this.autoActionTriggerHelper = null; // Simply delete the reference to the object.
+			CreateAndStartAutoActionThread();
 		}
 
 		/// <summary>
@@ -170,6 +175,12 @@ namespace YAT.Model
 			}
 		}
 
+		private void DisposeAutoActionHelper()
+		{
+			lock (this.autoActionTriggerHelperSyncObj)
+				this.autoActionTriggerHelper = null; // Simply delete the reference to the object.
+		}
+
 		/// <summary>
 		/// Evaluates the automatic action.
 		/// </summary>
@@ -192,7 +203,7 @@ namespace YAT.Model
 		{
 			triggers = new List<Pair<string, DateTime>>(); // No preset needed, the default behavior is good enough.
 
-			EvaluateAndInvokeAutoActionClearRepositoriesOnSubsequentRx();
+			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
 
 			foreach (var de in elements)
 			{
@@ -255,7 +266,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, out List<Pair<string, DateTime>> triggers)
 		{
-			EvaluateAndInvokeAutoActionClearRepositoriesOnSubsequentRx();
+			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
 
 			if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 			{
@@ -364,9 +375,9 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Evaluates and invokes <see cref="AutoAction.ClearRepositoriesOnSubsequentRx"/>.
+		/// Evaluates <see cref="AutoAction.ClearRepositoriesOnSubsequentRx"/> and enqueues it for invocation.
 		/// </summary>
-		protected virtual void EvaluateAndInvokeAutoActionClearRepositoriesOnSubsequentRx()
+		protected virtual void EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx()
 		{
 			lock (this.autoActionClearRepositoriesSyncObj)
 			{
@@ -381,32 +392,112 @@ namespace YAT.Model
 						triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
 
 						this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
-						this.autoActionClearRepositoriesTriggerText            = null;
-						this.autoActionClearRepositoriesTriggerTimeStamp       = DateTime.MinValue;
+						this.autoActionClearRepositoriesTriggerText           = null;
+						this.autoActionClearRepositoriesTriggerTimeStamp      = DateTime.MinValue;
 					}
-					                       //// ClearRepositories is to be invoked, not ClearRepositoriesOnSubsequentRx!
-					InvokeAutoAction(AutoAction.ClearRepositories, triggerText, triggerTimeStamp);
+					                        //// ClearRepositories is to be enqueued, not ClearRepositoriesOnSubsequentRx!
+					EnqueueAutoAction(AutoAction.ClearRepositories, triggerText, triggerTimeStamp);
 				}
 			}
 		}
 
 		/// <summary>
-		/// Invokes the automatic action on an other than the receive thread.
+		/// Enqueues the automatic actions for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoAction(string triggerText, DateTime triggerTimeStamp)
+		protected virtual void EnqueueAutoActions(List<Pair<string, DateTime>> triggers)
 		{
-			InvokeAutoAction(SettingsRoot.AutoAction.Action, triggerText, triggerTimeStamp);
+			foreach (var trigger in triggers)
+				EnqueueAutoAction(trigger.Value1, trigger.Value2);
 		}
 
 		/// <summary>
-		/// Invokes the automatic action on an other than the receive thread.
+		/// Enqueues the automatic action for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoAction(AutoAction action, string triggerText, DateTime triggerTimeStamp)
+		protected virtual void EnqueueAutoAction(string triggerText, DateTime triggerTimeStamp)
 		{
-		////Replace by EnqueueAutoAction(); after having upgraded to .NET 4.0
+			EnqueueAutoAction(SettingsRoot.AutoAction.Action, triggerText, triggerTimeStamp);
+		}
 
-			var asyncInvoker = new Action<AutoAction, string, DateTime>(PreformAutoAction);
-			asyncInvoker.BeginInvoke(action, triggerText, triggerTimeStamp, null, null);
+		/// <summary>
+		/// Enqueues the automatic action for invocation on other than the receive thread.
+		/// </summary>
+		protected virtual void EnqueueAutoAction(AutoAction action, string triggerText, DateTime triggerTimeStamp)
+		{
+			lock (this.autoActionQueue) // Lock is required because Queue<T> is not synchronized.
+				this.autoActionQueue.Enqueue(new Triple<AutoAction, string, DateTime>(action, triggerText, triggerTimeStamp));
+
+			SignalAutoActionThreadSafely();
+		}
+
+		/// <summary>
+		/// Asynchronously invoke the automatic actions on other than the receive thread.
+		/// </summary>
+		/// <remarks>
+		/// Will be signaled by <see cref="EnqueueAutoAction(AutoAction, string, DateTime)"/> above.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
+		private void AutoActionThread()
+		{
+			DebugThreadState("AutoActionThread() has started.");
+
+			try
+			{
+				// Outer loop, processes data after a signal was received:
+				while (!IsDisposed && this.autoActionThreadRunFlag) // Check 'IsDisposed' first!
+				{
+					try
+					{
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.autoActionThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in AutoActionThread()!");
+						break;
+					}
+
+					// Inner loop, runs as long as there is data in the send queue.
+					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.autoActionThreadRunFlag && IsReadyToSend && (this.autoActionQueue.Count > 0))
+					{                                                                   // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue,
+						// since it is likely that more triggers are to be enqueued.
+						Thread.Sleep(TimeSpan.Zero);
+
+						Triple<AutoAction, string, DateTime>[] pendingItems;
+						lock (this.autoActionQueue) // Lock is required because Queue<T> is not synchronized.
+						{
+							pendingItems = this.autoActionQueue.ToArray();
+							this.autoActionQueue.Clear();
+						}
+
+						foreach (var item in pendingItems)
+						{
+							PreformAutoAction(item.Value1, item.Value2, item.Value3);
+						}
+					} // Inner loop
+				} // Outer loop
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "AutoActionThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
+
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the terminal!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
+
+			DebugThreadState("AutoActionThread() has terminated.");
 		}
 
 		/// <summary>
@@ -414,17 +505,6 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void PreformAutoAction(AutoAction action, string triggerText, DateTime triggerTimeStamp)
 		{
-		////while (this.autoActionTasks.Count > 0) after having upgraded to .NET 4.0
-		////{
-		////	var task = this.autoActionTasks.Dequeue();
-		////	task.Invoke(...);
-
-			// \remind (2019-12-03 / MKY)
-			// Until .NET 4.0, there is an (acceptable) limitation with the current implementation:
-			// If multiple triggers are detected within the same chunk or close after each other,
-			// the sequence of the responses may get mixed up. For 'AutoResponse', this should not
-			// be an issue, but for 'AutoAction::MessageBox' this is not "nice".
-
 			int count = Interlocked.Increment(ref this.autoActionCount); // Incrementing before invoking to have the effective count updated during action.
 			OnAutoActionCountChanged(new EventArgs<int>(count));
 
@@ -457,12 +537,36 @@ namespace YAT.Model
 					}
 					break;
 				}
+
 				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();          break;
 				case AutoAction.SwitchLogOn:                     SwitchLogOn();                  break;
 				case AutoAction.SwitchLogOff:                    SwitchLogOff();                 break;
 				case AutoAction.StopIO:                          StopIO();                       break;
-				case AutoAction.CloseTerminal:                   Close();                        break;
-				case AutoAction.ExitApplication:                 OnExitRequest(EventArgs.Empty); break;
+				case AutoAction.CloseTerminal:
+				{
+					lock (this.autoActionCloseOrExitSyncObj)
+					{
+						if (!this.autoActionCloseOrExitHasBeenTriggered)
+						{
+							this.autoActionCloseOrExitHasBeenTriggered = true;
+							Close();
+						}
+					}
+					break;
+				}
+
+				case AutoAction.ExitApplication:
+				{
+					lock (this.autoActionCloseOrExitSyncObj)
+					{
+						if (!this.autoActionCloseOrExitHasBeenTriggered)
+						{
+							this.autoActionCloseOrExitHasBeenTriggered = true;
+							OnExitRequest(EventArgs.Empty);
+						}
+					}
+					break;
+				}
 
 				default:
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -565,6 +669,126 @@ namespace YAT.Model
 
 			SettingsRoot.AutoAction.Deactivate();
 			ResetAutoActionCount();
+		}
+
+		#endregion
+
+		#region Thread
+		//------------------------------------------------------------------------------------------
+		// Thread
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAndStartAutoActionThread()
+		{
+			lock (this.autoActionThreadSyncObj)
+			{
+				DebugThreadState("AutoActionThread() gets created...");
+
+				if (this.autoActionThread == null)
+				{
+					this.autoActionThreadRunFlag = true;
+					this.autoActionThreadEvent = new AutoResetEvent(false);
+					this.autoActionThread = new Thread(new ThreadStart(AutoActionThread));
+					this.autoActionThread.Name = "Terminal [" + Guid + "] Auto Action Thread";
+					this.autoActionThread.Start();
+
+					DebugThreadState("...successfully created.");
+				}
+			#if (DEBUG)
+				else
+				{
+					DebugThreadState("...failed as it already exists.");
+				}
+			#endif
+			}
+		}
+
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
+		private void StopAutoActionThread()
+		{
+			lock (this.autoActionThreadSyncObj)
+			{
+				if (this.autoActionThread != null)
+				{
+					DebugThreadState("AutoActionThread() gets stopped...");
+
+					this.autoActionThreadRunFlag = false;
+
+					// Ensure that send thread has stopped after the stop request:
+					try
+					{
+						Debug.Assert(this.autoActionThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+						bool isAborting = false;
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.autoActionThread.Join(interval = staticRandom.Next(5, 20)))
+						{
+							SignalAutoActionThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.autoActionThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								break;
+							}
+
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+
+						if (!isAborting)
+							DebugThreadState("...successfully stopped.");
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+
+					this.autoActionThread = null;
+				}
+			#if (DEBUG)
+				else // (this.autoActionThread == null)
+				{
+					DebugThreadState("...not necessary as it doesn't exist anymore.");
+				}
+			#endif
+
+				if (this.autoActionThreadEvent != null)
+				{
+					try     { this.autoActionThreadEvent.Close(); }
+					finally { this.autoActionThreadEvent = null; }
+				}
+			} // lock (autoActionThreadSyncObj)
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalAutoActionThreadSafely()
+		{
+			try
+			{
+				if (this.autoActionThreadEvent != null)
+					this.autoActionThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
 		}
 
 		#endregion

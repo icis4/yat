@@ -29,13 +29,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Threading;
-//using System.Threading.Tasks; activate after having upgraded to .NET 4.0
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
+using MKY.Diagnostics;
 
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -57,7 +59,12 @@ namespace YAT.Model
 		private int autoResponseCount;
 		private AutoTriggerHelper autoResponseTriggerHelper;
 		private object autoResponseTriggerHelperSyncObj = new object();
-	////private Queue<Action<byte[], string>> autoResponseTasks = new Queue<Action<byte[], string>>(); activate after having upgraded to .NET 4.0
+
+		private Queue<Pair<byte[], string>> autoResponseQueue = new Queue<Pair<byte[], string>>();
+		private bool autoResponseThreadRunFlag;
+		private AutoResetEvent autoResponseThreadEvent;
+		private Thread autoResponseThread;
+		private object autoResponseThreadSyncObj = new object();
 
 		#endregion
 
@@ -76,15 +83,11 @@ namespace YAT.Model
 		// Methods
 		//==========================================================================================
 
-		private void CreateAutoResponseHelper()
+		private void CreateAutoResponse()
 		{
 			UpdateAutoResponse(); // Simply forward to general Update() method.
-		}
 
-		private void DisposeAutoResponseHelper()
-		{
-			lock (this.autoResponseTriggerHelperSyncObj)
-				this.autoResponseTriggerHelper = null; // Simply delete the reference to the object.
+			CreateAndStartAutoResponseThread();
 		}
 
 		/// <summary>
@@ -160,6 +163,12 @@ namespace YAT.Model
 			{
 				DisposeAutoResponseHelper();
 			}
+		}
+
+		private void DisposeAutoResponseHelper()
+		{
+			lock (this.autoResponseTriggerHelperSyncObj)
+				this.autoResponseTriggerHelper = null; // Simply delete the reference to the object.
 		}
 
 		/// <summary>
@@ -277,14 +286,94 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Invokes sending of the automatic response on an other than the receive thread.
+		/// Enqueues the automatic responses for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void InvokeAutoResponse(byte[] triggerSequence, string triggerText)
+		protected virtual void EnqueueAutoResponses(List<Pair<byte[], string>> triggers)
 		{
-		////Replace by EnqueueAutoResponse(); after having upgraded to .NET 4.0
+			foreach (var trigger in triggers)
+				EnqueueAutoResponse(trigger.Value1, trigger.Value2);
+		}
 
-			var asyncInvoker = new Action<byte[], string>(SendAutoResponse);
-			asyncInvoker.BeginInvoke(triggerSequence, triggerText, null, null);
+		/// <summary>
+		/// Enqueues the automatic response for invocation on other than the receive thread.
+		/// </summary>
+		protected virtual void EnqueueAutoResponse(byte[] triggerSequence, string triggerText)
+		{
+			lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
+				this.autoResponseQueue.Enqueue(new Pair<byte[], string>(triggerSequence, triggerText));
+
+			SignalAutoResponseThreadSafely();
+		}
+
+		/// <summary>
+		/// Asynchronously invoke the automatic responses on other than the receive thread.
+		/// </summary>
+		/// <remarks>
+		/// Will be signaled by <see cref="EnqueueAutoResponse(byte[], string)"/> above.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
+		private void AutoResponseThread()
+		{
+			DebugThreadState("AutoResponseThread() has started.");
+
+			try
+			{
+				// Outer loop, processes data after a signal was received:
+				while (!IsDisposed && this.autoResponseThreadRunFlag) // Check 'IsDisposed' first!
+				{
+					try
+					{
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.autoResponseThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in AutoResponseThread()!");
+						break;
+					}
+
+					// Inner loop, runs as long as there is data in the send queue.
+					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
+					while (!IsDisposed && this.autoResponseThreadRunFlag && IsReadyToSend && (this.autoResponseQueue.Count > 0))
+					{                                                                   // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue,
+						// since it is likely that more triggers are to be enqueued.
+						Thread.Sleep(TimeSpan.Zero);
+
+						Pair<byte[], string>[] pendingItems;
+						lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
+						{
+							pendingItems = this.autoResponseQueue.ToArray();
+							this.autoResponseQueue.Clear();
+						}
+
+						foreach (var item in pendingItems)
+						{
+							SendAutoResponse(item.Value1, item.Value2);
+						}
+					} // Inner loop
+				} // Outer loop
+			}
+			catch (ThreadAbortException ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "AutoResponseThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
+
+				// Should only happen when failing to 'friendly' join the thread on stopping!
+				// Don't try to set and notify a state change, or even restart the terminal!
+
+				// But reset the abort request, as 'ThreadAbortException' is a special exception
+				// that would be rethrown at the end of the catch block otherwise!
+
+				Thread.ResetAbort();
+			}
+
+			DebugThreadState("AutoResponseThread() has terminated.");
 		}
 
 		/// <summary>
@@ -292,17 +381,6 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText)
 		{
-		////while (this.autoResponseTasks.Count > 0) after having upgraded to .NET 4.0
-		////{
-		////	var task = this.autoResponseTasks.Dequeue();
-		////	task.Invoke(...);
-
-			// \remind (2019-12-03 / MKY)
-			// Until .NET 4.0, there is an (acceptable) limitation with the current implementation:
-			// If multiple triggers are detected within the same chunk or close after each other,
-			// the sequence of the responses may get mixed up. For 'AutoResponse', this should not
-			// be an issue, but for 'AutoAction::MessageBox' this is not "nice".
-
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(count));
 
@@ -424,6 +502,126 @@ namespace YAT.Model
 
 			SettingsRoot.AutoResponse.Deactivate();
 			ResetAutoResponseCount();
+		}
+
+		#endregion
+
+		#region Thread
+		//------------------------------------------------------------------------------------------
+		// Thread
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAndStartAutoResponseThread()
+		{
+			lock (this.autoResponseThreadSyncObj)
+			{
+				DebugThreadState("AutoResponseThread() gets created...");
+
+				if (this.autoResponseThread == null)
+				{
+					this.autoResponseThreadRunFlag = true;
+					this.autoResponseThreadEvent = new AutoResetEvent(false);
+					this.autoResponseThread = new Thread(new ThreadStart(AutoResponseThread));
+					this.autoResponseThread.Name = "Terminal [" + Guid + "] Auto Response Thread";
+					this.autoResponseThread.Start();
+
+					DebugThreadState("...successfully created.");
+				}
+			#if (DEBUG)
+				else
+				{
+					DebugThreadState("...failed as it already exists.");
+				}
+			#endif
+			}
+		}
+
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
+		private void StopAutoResponseThread()
+		{
+			lock (this.autoResponseThreadSyncObj)
+			{
+				if (this.autoResponseThread != null)
+				{
+					DebugThreadState("AutoResponseThread() gets stopped...");
+
+					this.autoResponseThreadRunFlag = false;
+
+					// Ensure that send thread has stopped after the stop request:
+					try
+					{
+						Debug.Assert(this.autoResponseThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+						bool isAborting = false;
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.autoResponseThread.Join(interval = staticRandom.Next(5, 20)))
+						{
+							SignalAutoResponseThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.autoResponseThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								break;
+							}
+
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+
+						if (!isAborting)
+							DebugThreadState("...successfully stopped.");
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+
+					this.autoResponseThread = null;
+				}
+			#if (DEBUG)
+				else // (this.autoResponseThread == null)
+				{
+					DebugThreadState("...not necessary as it doesn't exist anymore.");
+				}
+			#endif
+
+				if (this.autoResponseThreadEvent != null)
+				{
+					try     { this.autoResponseThreadEvent.Close(); }
+					finally { this.autoResponseThreadEvent = null; }
+				}
+			} // lock (autoResponseThreadSyncObj)
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalAutoResponseThreadSafely()
+		{
+			try
+			{
+				if (this.autoResponseThreadEvent != null)
+					this.autoResponseThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
 		}
 
 		#endregion
