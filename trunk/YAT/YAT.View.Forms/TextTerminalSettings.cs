@@ -290,7 +290,7 @@ namespace YAT.View.Forms
 
 			var lsd = this.settingsInEdit.LineSendDelay;
 			lsd.Enabled = checkBox_Delay.Checked;
-			this.settingsInEdit.LineSendDelay = lsd;
+			this.settingsInEdit.LineSendDelay = lsd; // Settings member must be changed to let the changed event be raised!
 		}
 
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -304,7 +304,7 @@ namespace YAT.View.Forms
 			{
 				var lsd = this.settingsInEdit.LineSendDelay;
 				lsd.Delay = delay;
-				this.settingsInEdit.LineSendDelay = lsd;
+				this.settingsInEdit.LineSendDelay = lsd; // Settings member must be changed to let the changed event be raised!
 			}
 			else
 			{
@@ -341,7 +341,7 @@ namespace YAT.View.Forms
 			{
 				var lsd = this.settingsInEdit.LineSendDelay;
 				lsd.LineInterval = interval;
-				this.settingsInEdit.LineSendDelay = lsd;
+				this.settingsInEdit.LineSendDelay = lsd; // Settings member must be changed to let the changed event be raised!
 			}
 			else
 			{
@@ -363,28 +363,9 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-		////var wfr = this.settingsInEdit.WaitForResponse;
-		////wfr.Enabled = checkBox_WaitForResponse.Checked;
-		////this.settingsInEdit.WaitForResponse = wfr;
-
-			var enabled = checkBox_WaitForResponse.Checked;
-			if (enabled != this.settingsInEdit.WaitForResponse.Enabled)
-			{
-				string message =
-					"This feature is not yet implemented. " +
-					"It is tracked as feature request #19 and bug #176.";
-
-				MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Limitation",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information
-				);
-
-				SetControls();
-			}
+			var wfr = this.settingsInEdit.WaitForResponse;
+			wfr.Enabled = checkBox_WaitForResponse.Checked;
+			this.settingsInEdit.WaitForResponse = wfr; // Settings member must be changed to let the changed event be raised!
 		}
 
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -396,27 +377,9 @@ namespace YAT.View.Forms
 			int timeout;
 			if (int.TryParse(textBox_WaitForResponse.Text, out timeout) && (timeout >= 1))
 			{
-			////var wfr = this.settingsInEdit.WaitForResponse;
-			////wfr.Timeout = timeout;
-			////this.settingsInEdit.WaitForResponse = wfr;
-
-				if (timeout != this.settingsInEdit.WaitForResponse.Timeout)
-				{
-					string message =
-						"This feature is not yet implemented. " +
-						"It is tracked as feature request #19 and bug #176.";
-
-					MessageBoxEx.Show
-					(
-						this,
-						message,
-						"Limitation",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Information
-					);
-
-					SetControls();
-				}
+				var wfr = this.settingsInEdit.WaitForResponse;
+				wfr.Timeout = timeout;
+				this.settingsInEdit.WaitForResponse = wfr; // Settings member must be changed to let the changed event be raised!
 			}
 			else
 			{
