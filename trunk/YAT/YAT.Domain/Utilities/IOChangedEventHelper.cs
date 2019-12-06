@@ -28,7 +28,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain.Utilities
 {
 	/// <summary>
-	/// While sending, the 'IOChanged' event must be raised if intensive processing is done.
+	/// While sending, the 'IOIsBusyChanged' event must be raised if intensive processing is done.
 	/// This is required because a client may want to indicate that time intensive sending is
 	/// currently ongoing and no further data shall be sent.
 	/// The event shall be raised if the time lag will significantly be noticeable by the user
