@@ -39,7 +39,7 @@ namespace YAT.Domain.Utilities
 	public struct IOChangedEventHelper
 	{
 		/// <summary></summary>
-		public const int ThresholdMs = 400; // 400 Bytes @ 9600 Baud ~= 400 ms
+		public const int ThresholdMs = 400;
 
 		private bool eventMustBeRaised;
 		private DateTime initialTimeStamp;
@@ -57,17 +57,17 @@ namespace YAT.Domain.Utilities
 			this.initialTimeStamp = DateTime.Now;
 		}
 
-		/// <summary></summary>
-		public static bool ChunkSizeIsAboveThreshold(int chunkSize)
+		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
+		public static bool ChunkSizeIsAboveThreshold(int chunkSize, double bytesPerMillisecond)
 		{
-			return (chunkSize >= ThresholdMs);
+			return (chunkSize >= (ThresholdMs * bytesPerMillisecond));
 		}
 
-		/// <summary></summary>
-		public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize)
+		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
+		public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize, double bytesPerMillisecond)
 		{
 			// Only let the event get raised if it hasn't been yet:
-			if (!this.eventMustBeRaised && ChunkSizeIsAboveThreshold(chunkSize))
+			if (!this.eventMustBeRaised && ChunkSizeIsAboveThreshold(chunkSize, bytesPerMillisecond))
 			{
 				this.eventMustBeRaised = true;
 				return (true);
@@ -113,12 +113,6 @@ namespace YAT.Domain.Utilities
 			}
 
 			return (false);
-		}
-
-		/// <summary></summary>
-		public void EventMustBeRaisedBecauseStatusHasBeenAccessed()
-		{
-			this.eventMustBeRaised = true;
 		}
 	}
 }

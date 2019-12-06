@@ -310,6 +310,48 @@ namespace YAT.Domain.Settings
 			get { return (FlowControlUsesXOnXOff && !FlowControlManagesXOnXOffManually); }
 		}
 
+		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
+		[XmlIgnore]
+		public virtual double RoughlyEstimatedMaxBytesPerMillisecond
+		{
+			get
+			{
+				switch (this.ioType)
+				{
+					case IOType.SerialPort:
+					{
+						return (this.serialPort.Communication.FramesPerMillisecond); // Ignore potential mismatch if 7 data bits are used.
+					}
+
+					case IOType.TcpClient:
+					case IOType.TcpServer:
+					case IOType.TcpAutoSocket:
+					case IOType.UdpClient:
+					case IOType.UdpServer:
+					case IOType.UdpPairSocket:
+					{
+						// TCP/IP in theory: Less than 6.55 Mbit/sec (https://www.switch.ch/network/tools/tcp_throughput/).
+						// TCP/IP in YAT practise (Stress-4-Huge.txt on two interconnected AutoSockets): ~50000 bytes/s.
+						// UDP/IP in YAT practise (Stress-4-Huge.txt on two interconnected PairSockets): ~50000 bytes/s.
+						return (50);
+					}
+
+					case IOType.UsbSerialHid:
+					{
+						// In theory: 64 kByte/s (https://www.tracesystemsinc.com/USB_Tutorials_web/USB/B1_USB_Classes/Books/A3_A_Closer_Look_at_HID_Class/slide01.htm).
+						// In YAT practise probably same as above.
+						return (50);
+					}
+
+					default:
+					{
+						return (50); // Just a rough estimate anyway.
+					}
+				}
+			}
+		}
+
+
 		#endregion
 
 		#region Object Members

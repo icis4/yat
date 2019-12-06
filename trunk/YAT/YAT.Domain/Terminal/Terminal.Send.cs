@@ -259,8 +259,8 @@ namespace YAT.Domain
 
 					// Inner loop, runs as long as there is data in the send queue.
 					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendDataThreadRunFlag && IsReadyToSend_Internal && (this.sendDataQueue.Count > 0))
-					{                                                                          // No lock required, just checking for empty.
+					while (!IsDisposed && this.sendDataThreadRunFlag && IsReadyToSend && (this.sendDataQueue.Count > 0))
+					{                                                                 // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
@@ -275,7 +275,7 @@ namespace YAT.Domain
 
 						if (pendingItems.Length > 0)
 						{
-							this.ioChangedEventHelper.Initialize();
+							this.ioIsBusyChangedEventHelper.Initialize();
 							this.sendingIsOngoing = true;
 
 							foreach (var item in pendingItems)
@@ -286,8 +286,8 @@ namespace YAT.Domain
 
 								if (BreakSendData)
 								{
-									if (this.ioChangedEventHelper.EventMustBeRaised)
-										OnIOChanged(new EventArgs<DateTime>(DateTime.Now)); // Raise the event to indicate that sending is no longer ongoing.
+									if (this.ioIsBusyChangedEventHelper.EventMustBeRaised)
+										OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
 
 									break;
 								}
@@ -297,13 +297,14 @@ namespace YAT.Domain
 								// e.g. due to RaiseEventIfTotalTimeLagIsAboveThreshold(). This indicates
 								// that there are really many pending items, and this foreach-loop would
 								// result in kind of freezing all other threads => Yield!
-								if (this.ioChangedEventHelper.EventMustBeRaised)
+								// Attention: The below condition relies on the helper's proper usage!
+								if (this.ioIsBusyChangedEventHelper.EventMustBeRaised)
 									Thread.Sleep(1); // Yield to other threads to e.g. allow refreshing of view.
 							}                        // Note that Thread.Sleep(TimeSpan.Zero) is not sufficient.
 
 							this.sendingIsOngoing = false;
-							if (this.ioChangedEventHelper.EventMustBeRaised)
-								OnIOChanged(new EventArgs<DateTime>(DateTime.Now)); // Raise the event to indicate that sending is no longer ongoing.
+							if (this.ioIsBusyChangedEventHelper.EventMustBeRaised)
+								OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
 						}
 					} // Inner loop
 				} // Outer loop
@@ -403,8 +404,8 @@ namespace YAT.Domain
 					if (byteResult != null)
 					{
 						// Raise the 'IOChanged' event if a large chunk is about to be sent:
-						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(byteResult.Bytes.Length))
-							OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+						if (this.ioIsBusyChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(byteResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
+							OnIOIsBusyChanged(new EventArgs<bool>(true));
 
 						// For performance reasons, as well as joining text terminal EOL with line content,
 						// collect as many chunks as possible into a larger chunk:
@@ -479,8 +480,8 @@ namespace YAT.Domain
 					}
 
 					// Raise the 'IOChanged' event if sending already takes quite long:
-					if (this.ioChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
-						OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+					if (this.ioIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+						OnIOIsBusyChanged(new EventArgs<bool>(true));
 				}
 
 				// --- Finalize the line/packet ---
@@ -539,8 +540,8 @@ namespace YAT.Domain
 						delay = result.Args[0];
 
 					// Raise the 'IOChanged' event if sending is about to be delayed:
-					if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
-						OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+					if (this.ioIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
+						OnIOIsBusyChanged(new EventArgs<bool>(true));
 
 					Thread.Sleep(delay);
 					break;
@@ -913,8 +914,8 @@ namespace YAT.Domain
 			if (effectiveDelay > 0)
 			{
 				// Raise the 'IOChanged' event if sending is about to be delayed for too long:
-				if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
-					OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+				if (this.ioIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
+					OnIOIsBusyChanged(new EventArgs<bool>(true));
 
 				Thread.Sleep(effectiveDelay);
 				return (effectiveDelay);
@@ -1186,8 +1187,8 @@ namespace YAT.Domain
 
 					// Inner loop, runs as long as there is data in the send queue.
 					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendFileThreadRunFlag && IsReadyToSend_Internal && (this.sendFileQueue.Count > 0))
-					{                                                                      // No lock required, just checking for empty.
+					while (!IsDisposed && this.sendFileThreadRunFlag && IsReadyToSend && (this.sendFileQueue.Count > 0))
+					{                                                                 // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
@@ -1210,7 +1211,7 @@ namespace YAT.Domain
 
 								if (BreakSendFile)
 								{
-									OnIOChanged(new EventArgs<DateTime>(DateTime.Now)); // Raise the event to indicate that sending is no longer ongoing.
+									OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
 									break;
 								}
 
@@ -1280,7 +1281,7 @@ namespace YAT.Domain
 
 					if (BreakSendFile)
 					{
-						OnIOChanged(new EventArgs<DateTime>(DateTime.Now)); // Raise the event to indicate that sending is no longer ongoing.
+						OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
 						break;
 					}
 
@@ -1303,7 +1304,7 @@ namespace YAT.Domain
 
 				if (BreakSendFile)
 				{
-					OnIOChanged(new EventArgs<DateTime>(DateTime.Now)); // Raise the event to indicate that sending is no longer ongoing.
+					OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
 					break;
 				}
 
