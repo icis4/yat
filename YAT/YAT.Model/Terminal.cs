@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of thread state:
+////#define DEBUG_THREAD_STATE
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -85,6 +99,8 @@ namespace YAT.Model
 		/// </summary>
 		private const int SequentialIdCounterDefault = (TerminalIds.FirstSequentialId - 1);
 
+		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
+
 		#endregion
 
 		#region Static Fields
@@ -93,6 +109,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		private static int staticSequentialIdCounter = SequentialIdCounterDefault;
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
 
@@ -462,8 +479,8 @@ namespace YAT.Model
 				this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, this.settingsRoot.Format);
 
 				// Create Auto[Action|Response]:
-				CreateAutoActionHelper();
-				CreateAutoResponseHelper();
+				CreateAutoAction();
+				CreateAutoResponse();
 
 				// Create chronos:
 				CreateChronos();
@@ -515,6 +532,10 @@ namespace YAT.Model
 
 					// ...detach event handlers to ensure that no more events are received...
 					DetachTerminalEventHandlers();
+
+					// ...ensure that threads are stopped and do not raise events anymore...
+					StopAutoActionThread();
+					StopAutoResponseThread();
 
 					// ...ensure that timed objects are stopped and do not raise events anymore...
 					DisposeRates();
@@ -2526,6 +2547,12 @@ namespace YAT.Model
 			// Stop the underlying items:
 			// -------------------------------------------------------------------------------------
 
+			if (success)
+			{
+				StopAutoActionThread();
+				StopAutoResponseThread();
+			}
+
 			if (success && this.terminal.IsStarted)
 			{
 				success = StopIO(false);
@@ -3092,15 +3119,13 @@ namespace YAT.Model
 			// AutoAction:
 			if ((autoActionTriggers != null) && (autoActionTriggers.Count > 0))
 			{
-				foreach (var trigger in autoActionTriggers)
-					InvokeAutoAction(trigger.Value1, trigger.Value2);
+				EnqueueAutoActions(autoActionTriggers);
 			}
 
 			// AutoResponse:
 			if ((autoResponseTriggers != null) && (autoResponseTriggers.Count > 0))
 			{
-				foreach (var trigger in autoResponseTriggers)
-					InvokeAutoResponse(trigger.Value1, trigger.Value2);
+				EnqueueAutoResponses(autoResponseTriggers);
 			}
 		}
 
@@ -3316,6 +3341,37 @@ namespace YAT.Model
 			{
 				foreach (var dl in e.Lines)
 					this.log.WriteLine(dl, Log.LogChannel.NeatRx);
+			}
+
+			// AutoAction:
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
+			{
+				foreach (var dl in e.Lines)
+					EnqueueAutoAction(dl.Text, dl.TimeStamp);
+
+				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
+				// would result in all received lines highlighted.
+				//
+				// Filtering with [Trigger == AnyLine] is possible but has no effect.
+				// Suppressing with [Trigger == AnyLine] is prohibitied.
+				//
+				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
+				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
+				// in the 'ElementsRxAdded' event further above.
+			}
+
+			// AutoResponse:
+			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
+			{
+				foreach (var dl in e.Lines)                       // Response shall be based on origin, not text.
+					EnqueueAutoResponse(ToOriginWithoutRxEol(dl), null);
+
+				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
+				// would result in all received lines highlighted.
+				//
+				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
+				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
+				// in the 'ElementsRxAdded' event further above.
 			}
 		}
 
@@ -5582,6 +5638,12 @@ namespace YAT.Model
 					message
 				)
 			);
+		}
+
+		[Conditional("DEBUG_THREAD_STATE")]
+		private void DebugThreadState(string message)
+		{
+			DebugMessage(message);
 		}
 
 		#endregion
