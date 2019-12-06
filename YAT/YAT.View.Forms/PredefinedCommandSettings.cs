@@ -1379,7 +1379,7 @@ namespace YAT.View.Forms
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
+				ResumeLayout(false);
 			}
 		}
 

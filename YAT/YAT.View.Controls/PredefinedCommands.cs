@@ -890,7 +890,7 @@ namespace YAT.View.Controls
 			finally
 			{
 				this.isSettingControls.Leave();
-				ResumeLayout();
+				ResumeLayout(false);
 			}
 		}
 

@@ -77,7 +77,7 @@ namespace YAT.View.Controls
 
 			SuspendLayout(); // Useful as the 'Location' property will get changed.
 			Location = startupLocation;
-			ResumeLayout();
+			ResumeLayout(false);
 
 			this.defaultRadix = defaultRadix;
 			this.parseMode = parseMode;
