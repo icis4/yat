@@ -129,15 +129,15 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Close/Reopen without sending. -----------------------------------------
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),     Is.True);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// --- Test: Close/Reopen with previous and subsequent sending. --------------------
 
@@ -159,15 +159,15 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),     Is.True);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Send something and verify response:
 				terminal.SendText(emptyCommand);
@@ -184,25 +184,25 @@ namespace YAT.Model.Test.Connection
 				Thread.Sleep(WaitForOperation);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),     Is.True);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Stop continuous data:
 				terminal.SendText("<ESC>"); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 
 				// Close terminal. Expected: No exceptions, terminal can be closed.
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 			} // Expected: No exceptions, terminal can be disposed.
 		}
 
@@ -295,34 +295,34 @@ namespace YAT.Model.Test.Connection
 				Assert.That(UsbHubControl.Set(UsbHubDevices.Hub2, UsbHubSettings.None), Is.True, "Failed to change USB hub configuration!"); // Disabling all outputs is used to improve speed when enabling single outputs below. See comments in implementation of 'UsbHubControl' for explanation.
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
 				Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 				Utilities.WaitForOpen(terminal);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Verify that subsequently calling StartIO() also works:
-				Assert.That(terminal.StartIO(),     Is.True);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),     Is.True);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// --- Test: Disconnect/Reconnect with previous and subsequent sending. ------------
 
@@ -347,15 +347,15 @@ namespace YAT.Model.Test.Connection
 				Assert.That(UsbHubControl.Disable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
 				Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 				Utilities.WaitForOpen(terminal);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Send something and verify response:
 				terminal.SendText(emptyCommand);
@@ -364,10 +364,10 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Verify that subsequently calling StartIO() also works:
-				Assert.That(terminal.StartIO(),     Is.True);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Send something and verify response:
 				terminal.SendText(emptyCommand);
@@ -376,16 +376,16 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
 
-				Assert.That(terminal.StartIO(),     Is.True);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 				Thread.Sleep(WaitForOperation);
 
 				// Send something and verify response:
@@ -408,8 +408,8 @@ namespace YAT.Model.Test.Connection
 					Assert.That(UsbHubControl.Disable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 					Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 					Utilities.WaitForClose(terminal);
-					Assert.That(terminal.IsOpen,        Is.False);
-					Assert.That(terminal.IsReadyToSend, Is.False);
+					Assert.That(terminal.IsOpen,         Is.False);
+					Assert.That(terminal.IsTransmissive, Is.False);
 
 					// \remind: The underlying port should be closed here. However, this doesn't
 					// work due to the issue documented in the header of 'SerialPortEx'. Still, a
@@ -419,8 +419,8 @@ namespace YAT.Model.Test.Connection
 					Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 					Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically reopen!
 					Utilities.WaitForOpen(terminal);
-					Assert.That(terminal.IsOpen,        Is.True);
-					Assert.That(terminal.IsReadyToSend, Is.True);
+					Assert.That(terminal.IsOpen,         Is.True);
+					Assert.That(terminal.IsTransmissive, Is.True);
 
 					// Stop continuous data:
 					terminal.SendText("<ESC>"); // <ESC> to quit ECHO mode.
@@ -433,14 +433,14 @@ namespace YAT.Model.Test.Connection
 				Assert.That(UsbHubControl.Disable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
 				Assert.That(terminal.IsStarted, Is.True); // Terminal still started, and must automatically close!
 				Utilities.WaitForClose(terminal);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 
 				// Manually close terminal. Expected: No exceptions, terminal can be closed.
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
 				Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
@@ -450,16 +450,16 @@ namespace YAT.Model.Test.Connection
 				Thread.Sleep(WaitForOperation);
 				Assert.That(terminal.StartIO(), Is.True);
 				Utilities.WaitForOpen(terminal);
-				Assert.That(terminal.IsStarted,     Is.True);
-				Assert.That(terminal.IsOpen,        Is.True);
-				Assert.That(terminal.IsReadyToSend, Is.True);
+				Assert.That(terminal.IsStarted,      Is.True);
+				Assert.That(terminal.IsOpen,         Is.True);
+				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Close terminal. Expected: No exceptions, terminal can be closed.
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StopIO(),      Is.True);
-				Assert.That(terminal.IsStarted,     Is.False);
-				Assert.That(terminal.IsOpen,        Is.False);
-				Assert.That(terminal.IsReadyToSend, Is.False);
+				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.IsStarted,      Is.False);
+				Assert.That(terminal.IsOpen,         Is.False);
+				Assert.That(terminal.IsTransmissive, Is.False);
 			} // Expected: No exceptions, terminal can be disposed.
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
