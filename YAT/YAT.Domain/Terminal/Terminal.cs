@@ -171,7 +171,7 @@ namespace YAT.Domain
 		private RawTerminal rawTerminal;
 		private DateTime initialTimeStamp;
 
-		private IOChangedEventHelper ioChangedEventHelper;
+		private IOChangedEventHelper ioIsBusyChangedEventHelper;
 
 		private IOControlState ioControlStateCache;
 		private object ioControlStateCacheSyncObj = new object();
@@ -205,6 +205,9 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public event EventHandler<IOControlEventArgs> IOControlChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<bool>> IOIsBusyChanged;
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
@@ -546,18 +549,6 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>Required to prevent superfluous 'IOChanged' events.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the scope.")]
-		protected virtual bool IsReadyToSend_Internal
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (IsTransmissive && !this.sendingIsOngoing);
-			}
-		}
-
 		/// <summary></summary>
 		public virtual bool IsReadyToSend
 		{
@@ -565,21 +556,15 @@ namespace YAT.Domain
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				this.ioChangedEventHelper.EventMustBeRaisedBecauseStatusHasBeenAccessed();
+				return (IsTransmissive);
 
-				return (IsReadyToSend_Internal);
-			}
-		}
-
-		/// <remarks>Required to prevent superfluous 'IOChanged' events.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the scope.")]
-		protected virtual bool IsBusy_Internal
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (IsTransmissive && this.sendingIsOngoing);
+				// Until YAT 2.1.0, this property was implemented as 'IsReadyToSend_Internal'
+				// as (IsTransmissive && !this.sendingIsOngoing) and it also signalled
+				// 'EventMustBeRaisedBecauseStatusHasBeenAccessed()'. This was necessary as
+				// until YAT 2.1.0 it was not possible to run multiple commands concurrently.
+				// With YAT 2.1.1 this became possible, but keeping this property because its
+				// meaning still makes sense, e.g. send related controls can adapt to this send
+				// specific property instead of using the more general 'IsTransmissive'.
 			}
 		}
 
@@ -590,9 +575,7 @@ namespace YAT.Domain
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				this.ioChangedEventHelper.EventMustBeRaisedBecauseStatusHasBeenAccessed();
-
-				return (IsBusy_Internal);
+				return (IsTransmissive && this.sendingIsOngoing);
 			}
 		}
 
@@ -1168,7 +1151,7 @@ namespace YAT.Domain
 				try
 				{
 					// Ensure not to forward events during closing anymore:
-					if (!IsDisposed && IsReadyToSend_Internal)
+					if (!IsDisposed && IsReadyToSend)
 						RequestSignalInputXOn();
 				}
 				finally
@@ -1969,6 +1952,12 @@ namespace YAT.Domain
 		protected virtual void OnIOControlChanged(IOControlEventArgs e)
 		{
 			this.eventHelper.RaiseSync(IOControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOIsBusyChanged(EventArgs<bool> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<bool>>(IOIsBusyChanged, this, e);
 		}
 
 		/// <summary></summary>

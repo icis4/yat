@@ -278,6 +278,9 @@ namespace YAT.Model
 		public event EventHandler IORateChanged_Decimated;
 
 		/// <summary></summary>
+		public event EventHandler<EventArgs<bool>> IOIsBusyChanged;
+
+		/// <summary></summary>
 		public event EventHandler<Domain.IOErrorEventArgs> IOError;
 
 	#if (WITH_SCRIPTING)
@@ -2603,6 +2606,7 @@ namespace YAT.Model
 			{
 				this.terminal.IOChanged        += terminal_IOChanged;
 				this.terminal.IOControlChanged += terminal_IOControlChanged;
+				this.terminal.IOIsBusyChanged  += terminal_IOIsBusyChanged;
 				this.terminal.IOError          += terminal_IOError;
 			#if (WITH_SCRIPTING)
 				this.terminal.SendingPacket    += terminal_SendingPacket;
@@ -2640,6 +2644,7 @@ namespace YAT.Model
 			{
 				this.terminal.IOChanged        -= terminal_IOChanged;
 				this.terminal.IOControlChanged -= terminal_IOControlChanged;
+				this.terminal.IOIsBusyChanged  -= terminal_IOIsBusyChanged;
 				this.terminal.IOError          -= terminal_IOError;
 			#if (WITH_SCRIPTING)
 				this.terminal.SendingPacket    -= terminal_SendingPacket;
@@ -2848,6 +2853,12 @@ namespace YAT.Model
 
 			// Forward:
 			OnIOControlChanged(e);
+		}
+
+		private void terminal_IOIsBusyChanged(object sender, EventArgs<bool> e)
+		{
+			// Forward:
+			OnIOIsBusyChanged(e);
 		}
 
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
@@ -5188,6 +5199,12 @@ namespace YAT.Model
 		protected virtual void OnIORateChanged_Decimated(EventArgs e)
 		{
 			this.eventHelper.RaiseSync(IORateChanged_Decimated, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOIsBusyChanged(EventArgs<bool> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<bool>>(IOIsBusyChanged, this, e);
 		}
 
 		/// <summary></summary>

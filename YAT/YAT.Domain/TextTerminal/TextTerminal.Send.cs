@@ -204,7 +204,7 @@ namespace YAT.Domain
 
 						if (BreakSendFile)
 						{
-							OnIOChanged(new EventArgs<DateTime>(DateTime.Now)); // Raise the event to indicate that sending is no longer ongoing.
+							OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
 							break;
 						}
 

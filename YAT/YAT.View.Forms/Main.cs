@@ -3740,7 +3740,7 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_Changed(object sender, EventArgs e)
 		{
-		////SetTimedStatus(Status.ChildChanged) is no longer used, in order to reduce the amount of status information.
+			SetTimedStatus(Status.ChildChanged);
 
 			SetChildControls();
 		}
@@ -3986,8 +3986,7 @@ namespace YAT.View.Forms
 		private enum Status
 		{
 			ChildActivated,
-		////ChildActive is no longer used, in order to reduce the amount of status information.
-		////ChildChanged is no longer used, in order to reduce the amount of status information. Used to display "childText + " changed"" but that resulted in messages each time a command was sent (due to the 'IsReadyToSend' changes). In order to get this again, 'IsReadyToSend' changes would have to be separated from the 'IOChanged' event.
+			ChildChanged,
 			ChildSaved,
 			ChildClosed,
 			Default
@@ -4001,6 +4000,7 @@ namespace YAT.View.Forms
 				switch (status)
 				{
 					case Status.ChildActivated: return (childText + " activated");
+					case Status.ChildChanged:   return (childText + " changed");
 					case Status.ChildSaved:     return (childText + " saved");
 					case Status.ChildClosed:    return (childText + " closed");
 				}

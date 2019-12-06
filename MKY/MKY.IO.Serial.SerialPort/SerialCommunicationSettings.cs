@@ -249,6 +249,18 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
+		/// <summary>
+		/// The frames per millisecond.
+		/// </summary>
+		[XmlIgnore]
+		public virtual double FramesPerMillisecond
+		{
+			get
+			{
+				return (1 / FrameTime);
+			}
+		}
+
 		/// <summary></summary>
 		[XmlElement("FlowControl")]
 		public virtual SerialFlowControl FlowControl
