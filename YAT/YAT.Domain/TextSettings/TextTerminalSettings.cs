@@ -351,11 +351,11 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// This option is one of two ways to delay while sending.
 		/// It supports adding a fixed delay each N lines.
-		/// 
+		///
 		/// Alternatively, the \!(LineDelay) or \!(LineInterval) keyword can be used.
 		/// The first is equal to setting "each 1 line".
 		/// The latter allows a more precise timing.
-		/// 
+		///
 		/// The text above is copy-pasted into the tool tip text of the text settings dialog.
 		/// </remarks>
 		[XmlElement("LineSendDelay")]
@@ -372,20 +372,16 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>
-		/// \remind (2017-12-11 / MKY)
-		/// This feature is not yet implemented.
-		/// It is tracked as feature request #19 and bug #176.
-		/// </remarks>
+		/// <summary></summary>
 		[XmlElement("WaitForResponse")]
 		public virtual TimeoutSettingTuple WaitForResponse
 		{
 			get { return (this.waitForResponse); }
 			set
 			{
-				if (this.waitForResponse != WaitForResponseDefault) // value)
+				if (this.waitForResponse != value)
 				{
-					this.waitForResponse = WaitForResponseDefault; // value;
+					this.waitForResponse = value;
 					SetMyChanged();
 				}
 			}

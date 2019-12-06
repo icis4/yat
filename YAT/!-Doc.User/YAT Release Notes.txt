@@ -88,8 +88,9 @@ YAT 2.1.1 :: 2019-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- ...    <=  WAIT FOR ... (feature requests #387 as well as #19 and bug #176).
-
+- Concurrent sending, i.e. multiple commands can be active simultaneously (feature request #387).
+  Useful for e.g. requesting a command while a repeating or file command is already ongoing.
+- Text terminals: Wait for response before sending the next line implemented (feat. #19, bug #176).
   Useful for limiting the rate when sending a large amount of data with ping-pong style commands.
   For serial COM ports with active hardware or software flow control, this feature not necessarily
   needs to be activated, as YAT typically limits the send rate [Settings... > Advanced... > Buffer
@@ -101,6 +102,7 @@ Important changes:
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
   renamed to \!(IOSettings()) (related to feature request #71).
+- Sending slightly refactored (precondition for feature reqests #19, #387 and fix of bug #176).
 - Element and line processing refactored (precondition for feature reqests #19, #366, #367 and fix
   of bugs #176, #371, #477, #478 as well as preparing upcoming feature reqest #74).
 - Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
@@ -290,7 +292,7 @@ Limitations and known issues:
   one trigger and do not spread across multiple lines. Limitation could be eliminated but requires
   some refactoring (feature request #366).
 - Automatic actions 'Filter' and 'Suppress' do not get reapplied on refresh (feature request #367).
-- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
@@ -360,7 +362,7 @@ Limitations and known issues:
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Line content and EOL may be sent in two separate chunks, because the parts are handled slightly
   after each other. Delay could be eliminated but requires some refactoring (feature request #333).
-- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
@@ -443,7 +445,7 @@ Limitations and known issues:
      while its port is open. Or, manually close the port after the device got disconnected.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
-- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
@@ -526,7 +528,7 @@ Limitations and known issues:
      its port is open. Or, manually close the port after the device got disconnected.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
-- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
@@ -610,7 +612,7 @@ Limitations and known issues:
      occurs, the serial COM port connection monitoring has to be disabled in the terminal settings.
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
-- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Breaking while sending files not possible yet (bug #305 and feature request #295).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
@@ -754,7 +756,7 @@ Limitations and known issues:
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139).
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
-- Wait for answer line (text terminals) not yet implemented (feature request #19 and bug #176).
+- Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Breaking while sending files not possible yet (bug #305).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
