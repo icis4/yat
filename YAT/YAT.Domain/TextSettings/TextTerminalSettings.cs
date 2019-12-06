@@ -73,7 +73,7 @@ namespace YAT.Domain.Settings
 		public static readonly TextLineSendDelaySettingTuple LineSendDelayDefault = new TextLineSendDelaySettingTuple(false, 500, 1);
 
 		/// <summary></summary>
-		public static readonly TimeoutSettingTuple WaitForResponseDefault = new TimeoutSettingTuple(false, 500);
+		public static readonly TextWaitForResponseSettingTuple WaitForResponseDefault = new TextWaitForResponseSettingTuple(false, 1, 1, 500);
 
 		/// <summary></summary>
 		public const CharSubstitution CharSubstitutionDefault = CharSubstitution.None;
@@ -95,10 +95,10 @@ namespace YAT.Domain.Settings
 		private TextDisplaySettings txDisplay;
 		private TextDisplaySettings rxDisplay;
 
-		private TextLineSendDelaySettingTuple lineSendDelay;
-		private TimeoutSettingTuple           waitForResponse;
-		private CharSubstitution              charSubstitution;
-		private TextExclusionSettings         textExclusion;
+		private TextLineSendDelaySettingTuple   lineSendDelay;
+		private TextWaitForResponseSettingTuple waitForResponse;
+		private CharSubstitution                charSubstitution;
+		private TextExclusionSettings           textExclusion;
 
 		#endregion
 
@@ -374,7 +374,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("WaitForResponse")]
-		public virtual TimeoutSettingTuple WaitForResponse
+		public virtual TextWaitForResponseSettingTuple WaitForResponse
 		{
 			get { return (this.waitForResponse); }
 			set

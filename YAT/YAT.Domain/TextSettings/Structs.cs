@@ -126,6 +126,110 @@ namespace YAT.Domain
 
 		#endregion
 	}
+
+	/// <summary></summary>
+	[Serializable]
+	public struct TextWaitForResponseSettingTuple : IEquatable<TextWaitForResponseSettingTuple>
+	{
+		/// <summary></summary>
+		[XmlElement("Enabled")]
+		public bool Enabled { get; set; }
+
+		/// <summary></summary>
+		[XmlElement("ResponseLineCount")]
+		public int ResponseLineCount { get; set; }
+
+		/// <summary></summary>
+		[XmlElement("ClearanceLineCount")]
+		public int ClearanceLineCount { get; set; }
+
+		/// <summary>Timeout in milliseconds.</summary>
+		[XmlElement("Timeout")]
+		public int Timeout { get; set; }
+
+		/// <summary></summary>
+		public TextWaitForResponseSettingTuple(bool enabled, int responseLineCount, int clearanceLineCount, int timeout)
+		{
+			Enabled            = enabled;
+			ResponseLineCount  = responseLineCount;
+			ClearanceLineCount = clearanceLineCount;
+			Timeout            = timeout;
+		}
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled           .GetHashCode();
+				hashCode = (hashCode * 397) ^ ResponseLineCount .GetHashCode();
+				hashCode = (hashCode * 397) ^ ClearanceLineCount.GetHashCode();
+				hashCode = (hashCode * 397) ^ Timeout           .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is TextWaitForResponseSettingTuple)
+				return (Equals((TextWaitForResponseSettingTuple)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public bool Equals(TextWaitForResponseSettingTuple other)
+		{
+			return
+			(
+				Enabled           .Equals(other.Enabled)            &&
+				ResponseLineCount .Equals(other.ResponseLineCount)  &&
+				ClearanceLineCount.Equals(other.ClearanceLineCount) &&
+				Timeout           .Equals(other.Timeout)
+			);
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have value equality.
+		/// </summary>
+		public static bool operator ==(TextWaitForResponseSettingTuple lhs, TextWaitForResponseSettingTuple rhs)
+		{
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have value inequality.
+		/// </summary>
+		public static bool operator !=(TextWaitForResponseSettingTuple lhs, TextWaitForResponseSettingTuple rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
+	}
 }
 
 //==================================================================================================
