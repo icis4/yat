@@ -88,8 +88,8 @@ YAT 2.1.1 :: 2019-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Concurrent sending, i.e. multiple commands can be active simultaneously (feature request #387).
-  Useful for e.g. requesting a command while a repeating or file command is already ongoing.
+- Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
+  Useful e.g. for sending a text command while a repeating text command is already ongoing.
 - Text terminals: Wait for response before sending the next line implemented (feat. #19, bug #176).
   Useful for limiting the rate when sending a large amount of data with ping-pong style commands.
   For serial COM ports with active hardware or software flow control, this feature not necessarily
