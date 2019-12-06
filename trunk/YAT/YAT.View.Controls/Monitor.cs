@@ -578,21 +578,26 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void Activate()
 		{
-			label_TimeStatus     .BackColor = SystemColors.GradientActiveCaption;
-			label_TimeStatusEmpty.BackColor = SystemColors.GradientActiveCaption;
-
-			label_DataStatus     .BackColor = SystemColors.GradientActiveCaption;
-			label_DataStatusEmpty.BackColor = SystemColors.GradientActiveCaption;
+			SetHeaderBackColor(SystemColors.GradientActiveCaption);
 		}
 
 		/// <summary></summary>
 		public virtual void Deactivate()
 		{
-			label_TimeStatus     .BackColor = SystemColors.Control;
-			label_TimeStatusEmpty.BackColor = SystemColors.Control;
+			SetHeaderBackColor(SystemColors.Control);
+		}
 
-			label_DataStatus     .BackColor = SystemColors.Control;
-			label_DataStatusEmpty.BackColor = SystemColors.Control;
+		/// <summary></summary>
+		protected virtual void SetHeaderBackColor(Color color)
+		{
+			label_TimeStatus_Active .BackColor = color;
+			label_TimeStatus_Total  .BackColor = color;
+			label_TimeStatus_Back   .BackColor = color;
+
+			label_DataStatus_BidirTx.BackColor = color;
+			label_DataStatus_Unidir .BackColor = color;
+			label_DataStatus_BidirRx.BackColor = color;
+			label_DataStatus_Back   .BackColor = color;
 		}
 
 		/// <summary></summary>
@@ -1089,18 +1094,46 @@ namespace YAT.View.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
+		/// <remarks>
+		/// Labels are manually resized/relocated because <see cref="Label.AutoSize"/> doesn't work
+		/// with <see cref="Label.AutoEllipsis"/>. But, not using <see cref="Label.AutoSize"/> means
+		/// that label will not adjust to different font size, tja...
+		/// </remarks>
+		/// <remarks>
+		/// From YAT 2.1.1, two separate labels are used. This prevents undesireable line breaks a
+		/// single label containing two lines will show when size becomes too small. Both labels
+		/// have a <see cref="Control.Height"/> of 15, i.e. half the 'IconPanelHeightAvailable'.
+		/// </remarks>
+		/// <remarks>
+		/// Note a limitation of <see cref="Label.AutoEllipsis"/>:
+		/// As soon as ellipsis are required, <see cref="Label.TextAlign"/> will fallback to the
+		/// default of <see cref="ContentAlignment.TopLeft"/>, resulting an odd looking 'BidirTx'
+		/// label. This limitation is considered acceptable.
+		/// </remarks>
 		private void Monitor_Resize(object sender, EventArgs e)
 		{
-			const int IconDistance = 14; // 14 relates to half the size of the direction icon.
+		////const int IconPanelHeight          = 34; // Informational only.
+		////const int IconPanelBottomPadding   =  4; // Informational only.
+		////const int IconPanelHeightAvailable = 30; // Informational only.
+
+			const int HalfIconWidth = 14;
 			int middle = (Width / 2);
+			int labelWidth = (middle - HalfIconWidth);
+			int labelLeft  = (middle + HalfIconWidth);
 
-			label_TimeStatus     .Width  = middle - IconDistance;
-			label_TimeStatusEmpty.Width  = middle - IconDistance;
+			label_TimeStatus_Active .Width = labelWidth;
+			label_TimeStatus_Total  .Width = labelWidth;
+			label_TimeStatus_Back   .Width = labelWidth;
 
-			label_DataStatus     .Left  = middle + IconDistance;
-			label_DataStatusEmpty.Left  = middle + IconDistance;
-			label_DataStatus     .Width = middle - IconDistance;
-			label_DataStatusEmpty.Width = middle - IconDistance;
+			label_DataStatus_BidirTx.Width = labelWidth;
+			label_DataStatus_Unidir .Width = labelWidth;
+			label_DataStatus_BidirRx.Width = labelWidth;
+			label_DataStatus_Back   .Width = labelWidth;
+
+			label_DataStatus_BidirTx.Left = labelLeft;
+			label_DataStatus_Unidir .Left = labelLeft;
+			label_DataStatus_BidirRx.Left = labelLeft;
+			label_DataStatus_Back   .Left = labelLeft;
 		}
 
 		#endregion
@@ -1857,9 +1890,9 @@ namespace YAT.View.Controls
 		{
 			// --- Width ---
 
-			fastListBox_LineNumbers.Visible = this.showLineNumbers;
+			fastListBox_LineNumbers.Visible = ShowLineNumbers;
 
-			if (this.showLineNumbers)
+			if (ShowLineNumbers)
 			{
 				int effectiveWidth = requestedLineNumberWidth + VerticalScrollBarWidth + AdditionalMargin;
 				fastListBox_LineNumbers.Width = effectiveWidth;
@@ -1885,7 +1918,7 @@ namespace YAT.View.Controls
 			// --- Height ---
 
 			var availableHeight = Height;
-			var showAL = this.showCopyOfActiveLine;
+			var showAL = ShowCopyOfActiveLine;
 
 			textBox_CopyOfActiveLine.Visible = showAL;
 
@@ -1936,20 +1969,22 @@ namespace YAT.View.Controls
 		/// <remarks>Separated from <see cref="SetTimeStatusText"/> to improve performance.</remarks>
 		private void SetTimeStatusVisible()
 		{
-			label_TimeStatus.Visible      =  this.showTimeStatus;
-			label_TimeStatusEmpty.Visible = !this.showTimeStatus;
+			label_TimeStatus_Active.Visible = ShowTimeStatus;
+			label_TimeStatus_Total .Visible = ShowTimeStatus;
 		}
 
 		private void SetTimeStatusText()
 		{
-			label_TimeStatus.Text = this.timeStatusHelper.StatusText;
+			label_TimeStatus_Active.Text = this.timeStatusHelper.ActiveStatusText;
+			label_TimeStatus_Total .Text = this.timeStatusHelper.TotalStatusText;
 		}
 
 		/// <remarks>Separated from <see cref="SetDataStatusText"/> to improve performance.</remarks>
 		private void SetDataStatusVisible()
 		{
-			label_DataStatus.Visible      =  this.showDataStatus;
-			label_DataStatusEmpty.Visible = !this.showDataStatus;
+			label_DataStatus_BidirTx.Visible = (ShowDataStatus && (RepositoryType == Domain.RepositoryType.Bidir));
+			label_DataStatus_Unidir .Visible = (ShowDataStatus && (RepositoryType != Domain.RepositoryType.Bidir));
+			label_DataStatus_BidirRx.Visible = (ShowDataStatus && (RepositoryType == Domain.RepositoryType.Bidir));
 		}
 
 		private void SetDataStatusText()
@@ -1964,7 +1999,16 @@ namespace YAT.View.Controls
 
 		private void UpdateDataStatusText()
 		{
-			label_DataStatus.Text = this.dataStatusHelper.StatusText;
+			switch (RepositoryType)
+			{
+				case Domain.RepositoryType.Tx:    label_DataStatus_Unidir .Text = this.dataStatusHelper.TxStatusText; break;
+				case Domain.RepositoryType.Bidir: label_DataStatus_BidirTx.Text = this.dataStatusHelper.TxStatusText;
+				                                  label_DataStatus_BidirRx.Text = this.dataStatusHelper.RxStatusText; break;
+				case Domain.RepositoryType.Rx:    label_DataStatus_Unidir .Text = this.dataStatusHelper.RxStatusText; break;
+
+				case Domain.RepositoryType.None:
+				default: /* Do nothing, and also don't throw, as this case/default will occur during control init. */ break;
+			}
 
 			// Calculate tick stamp of next update:
 			unchecked

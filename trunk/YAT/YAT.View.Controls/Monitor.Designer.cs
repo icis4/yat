@@ -36,10 +36,13 @@
 			this.fastListBox_Monitor = new MKY.Windows.Forms.FastListBox();
 			this.fastListBox_LineNumbers = new MKY.Windows.Forms.FastListBox();
 			this.panel_Picture = new System.Windows.Forms.Panel();
-			this.label_DataStatus = new System.Windows.Forms.Label();
-			this.label_TimeStatus = new System.Windows.Forms.Label();
-			this.label_DataStatusEmpty = new System.Windows.Forms.Label();
-			this.label_TimeStatusEmpty = new System.Windows.Forms.Label();
+			this.label_TimeStatus_Total = new System.Windows.Forms.Label();
+			this.label_DataStatus_Unidir = new System.Windows.Forms.Label();
+			this.label_DataStatus_BidirTx = new System.Windows.Forms.Label();
+			this.label_DataStatus_BidirRx = new System.Windows.Forms.Label();
+			this.label_TimeStatus_Active = new System.Windows.Forms.Label();
+			this.label_DataStatus_Back = new System.Windows.Forms.Label();
+			this.label_TimeStatus_Back = new System.Windows.Forms.Label();
 			this.pictureBox_Monitor = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
@@ -117,10 +120,13 @@
 			// 
 			// panel_Picture
 			// 
-			this.panel_Picture.Controls.Add(this.label_DataStatus);
-			this.panel_Picture.Controls.Add(this.label_TimeStatus);
-			this.panel_Picture.Controls.Add(this.label_DataStatusEmpty);
-			this.panel_Picture.Controls.Add(this.label_TimeStatusEmpty);
+			this.panel_Picture.Controls.Add(this.label_TimeStatus_Total);
+			this.panel_Picture.Controls.Add(this.label_DataStatus_Unidir);
+			this.panel_Picture.Controls.Add(this.label_DataStatus_BidirTx);
+			this.panel_Picture.Controls.Add(this.label_DataStatus_BidirRx);
+			this.panel_Picture.Controls.Add(this.label_TimeStatus_Active);
+			this.panel_Picture.Controls.Add(this.label_DataStatus_Back);
+			this.panel_Picture.Controls.Add(this.label_TimeStatus_Back);
 			this.panel_Picture.Controls.Add(this.pictureBox_Monitor);
 			this.panel_Picture.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel_Picture.Location = new System.Drawing.Point(0, 0);
@@ -129,49 +135,87 @@
 			this.panel_Picture.Size = new System.Drawing.Size(300, 34);
 			this.panel_Picture.TabIndex = 0;
 			// 
-			// label_DataStatus
+			// label_TimeStatus_Total
 			// 
-			this.label_DataStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.label_TimeStatus_Total.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_DataStatus.AutoEllipsis = true;
-			this.label_DataStatus.Location = new System.Drawing.Point(166, 0);
-			this.label_DataStatus.Name = "label_DataStatus";
-			this.label_DataStatus.Size = new System.Drawing.Size(134, 30);
-			this.label_DataStatus.TabIndex = 1;
-			this.label_DataStatus.Text = "888 | 888 @ 8/s | 8/s\r\n888 | 888 @ 8/s | 8/s";
-			this.label_DataStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.label_DataStatus, "Number of bytes | lines @ bytes | lines per second");
+			this.label_TimeStatus_Total.AutoEllipsis = true;
+			this.label_TimeStatus_Total.Location = new System.Drawing.Point(0, 15);
+			this.label_TimeStatus_Total.Name = "label_TimeStatus_Total";
+			this.label_TimeStatus_Total.Size = new System.Drawing.Size(134, 15);
+			this.label_TimeStatus_Total.TabIndex = 1;
+			this.label_TimeStatus_Total.Text = "m:ss";
+			this.label_TimeStatus_Total.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.toolTip.SetToolTip(this.label_TimeStatus_Total, "Total connect time (m:ss)");
 			// 
-			// label_TimeStatus
+			// label_DataStatus_Unidir
 			// 
-			this.label_TimeStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.label_DataStatus_Unidir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_TimeStatus.AutoEllipsis = true;
-			this.label_TimeStatus.Location = new System.Drawing.Point(0, 0);
-			this.label_TimeStatus.Name = "label_TimeStatus";
-			this.label_TimeStatus.Size = new System.Drawing.Size(134, 30);
-			this.label_TimeStatus.TabIndex = 0;
-			this.label_TimeStatus.Text = "m:ss\r\nm:ss";
-			this.label_TimeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip.SetToolTip(this.label_TimeStatus, "Connect time (m:ss)\r\nTotal connect time (m:ss)");
+			this.label_DataStatus_Unidir.AutoEllipsis = true;
+			this.label_DataStatus_Unidir.Location = new System.Drawing.Point(166, 8);
+			this.label_DataStatus_Unidir.Name = "label_DataStatus_Unidir";
+			this.label_DataStatus_Unidir.Size = new System.Drawing.Size(134, 15);
+			this.label_DataStatus_Unidir.TabIndex = 5;
+			this.label_DataStatus_Unidir.Text = "888 | 888 @ 8/s | 8/s";
+			this.label_DataStatus_Unidir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolTip.SetToolTip(this.label_DataStatus_Unidir, "Number of bytes | lines @ bytes | lines per second");
 			// 
-			// label_DataStatusEmpty
+			// label_DataStatus_BidirTx
 			// 
-			this.label_DataStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.label_DataStatus_BidirTx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_DataStatusEmpty.Location = new System.Drawing.Point(166, 0);
-			this.label_DataStatusEmpty.Name = "label_DataStatusEmpty";
-			this.label_DataStatusEmpty.Size = new System.Drawing.Size(134, 30);
-			this.label_DataStatusEmpty.TabIndex = 3;
+			this.label_DataStatus_BidirTx.AutoEllipsis = true;
+			this.label_DataStatus_BidirTx.Location = new System.Drawing.Point(166, 0);
+			this.label_DataStatus_BidirTx.Name = "label_DataStatus_BidirTx";
+			this.label_DataStatus_BidirTx.Size = new System.Drawing.Size(134, 15);
+			this.label_DataStatus_BidirTx.TabIndex = 4;
+			this.label_DataStatus_BidirTx.Text = "888 | 888 @ 8/s | 8/s";
+			this.label_DataStatus_BidirTx.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.toolTip.SetToolTip(this.label_DataStatus_BidirTx, "Number of bytes | lines @ bytes | lines per second");
 			// 
-			// label_TimeStatusEmpty
+			// label_DataStatus_BidirRx
 			// 
-			this.label_TimeStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.label_DataStatus_BidirRx.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_TimeStatusEmpty.Location = new System.Drawing.Point(0, 0);
-			this.label_TimeStatusEmpty.Name = "label_TimeStatusEmpty";
-			this.label_TimeStatusEmpty.Size = new System.Drawing.Size(134, 30);
-			this.label_TimeStatusEmpty.TabIndex = 1;
+			this.label_DataStatus_BidirRx.AutoEllipsis = true;
+			this.label_DataStatus_BidirRx.Location = new System.Drawing.Point(166, 15);
+			this.label_DataStatus_BidirRx.Name = "label_DataStatus_BidirRx";
+			this.label_DataStatus_BidirRx.Size = new System.Drawing.Size(134, 15);
+			this.label_DataStatus_BidirRx.TabIndex = 6;
+			this.label_DataStatus_BidirRx.Text = "888 | 888 @ 8/s | 8/s";
+			this.toolTip.SetToolTip(this.label_DataStatus_BidirRx, "Number of bytes | lines @ bytes | lines per second");
+			// 
+			// label_TimeStatus_Active
+			// 
+			this.label_TimeStatus_Active.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_TimeStatus_Active.AutoEllipsis = true;
+			this.label_TimeStatus_Active.Location = new System.Drawing.Point(0, 0);
+			this.label_TimeStatus_Active.Name = "label_TimeStatus_Active";
+			this.label_TimeStatus_Active.Size = new System.Drawing.Size(134, 15);
+			this.label_TimeStatus_Active.TabIndex = 0;
+			this.label_TimeStatus_Active.Text = "m:ss";
+			this.label_TimeStatus_Active.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolTip.SetToolTip(this.label_TimeStatus_Active, "Active connect time (m:ss)");
+			// 
+			// label_DataStatus_Back
+			// 
+			this.label_DataStatus_Back.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_DataStatus_Back.Location = new System.Drawing.Point(166, 0);
+			this.label_DataStatus_Back.Name = "label_DataStatus_Back";
+			this.label_DataStatus_Back.Size = new System.Drawing.Size(134, 30);
+			this.label_DataStatus_Back.TabIndex = 7;
+			// 
+			// label_TimeStatus_Back
+			// 
+			this.label_TimeStatus_Back.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_TimeStatus_Back.Location = new System.Drawing.Point(0, 0);
+			this.label_TimeStatus_Back.Name = "label_TimeStatus_Back";
+			this.label_TimeStatus_Back.Size = new System.Drawing.Size(134, 30);
+			this.label_TimeStatus_Back.TabIndex = 2;
 			// 
 			// pictureBox_Monitor
 			// 
@@ -225,16 +269,19 @@
 		private MKY.Windows.Forms.FastListBox fastListBox_Monitor;
 		private System.Windows.Forms.Panel panel_Picture;
 		private System.Windows.Forms.PictureBox pictureBox_Monitor;
-		private System.Windows.Forms.Label label_DataStatus;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Timer timer_Opacity;
-		private System.Windows.Forms.Label label_TimeStatus;
+		private System.Windows.Forms.Label label_TimeStatus_Active;
 		private System.Windows.Forms.Timer timer_MonitorUpdateTimeout;
 		private System.Windows.Forms.Timer timer_DataStatusUpdateTimeout;
 		private MKY.Windows.Forms.FastListBox fastListBox_LineNumbers;
-		private System.Windows.Forms.Label label_DataStatusEmpty;
-		private System.Windows.Forms.Label label_TimeStatusEmpty;
+		private System.Windows.Forms.Label label_DataStatus_Back;
+		private System.Windows.Forms.Label label_TimeStatus_Back;
 		private System.Windows.Forms.Timer timer_ProcessorLoad;
 		private System.Windows.Forms.TextBox textBox_CopyOfActiveLine;
+		private System.Windows.Forms.Label label_DataStatus_BidirRx;
+		private System.Windows.Forms.Label label_DataStatus_BidirTx;
+		private System.Windows.Forms.Label label_DataStatus_Unidir;
+		private System.Windows.Forms.Label label_TimeStatus_Total;
 	}
 }

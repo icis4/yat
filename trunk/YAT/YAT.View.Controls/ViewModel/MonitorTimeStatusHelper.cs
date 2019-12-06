@@ -42,7 +42,8 @@ namespace YAT.View.Controls
 		private TimeSpan activeConnectTime;
 		private TimeSpan totalConnectTime;
 
-		private string statusText;
+		private string activeStatusText;
+		private string totalStatusText;
 
 		#endregion
 
@@ -103,9 +104,15 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual string StatusText
+		public virtual string ActiveStatusText
 		{
-			get { return (this.statusText); }
+			get { return (this.activeStatusText); }
+		}
+
+		/// <summary></summary>
+		public virtual string TotalStatusText
+		{
+			get { return (this.totalStatusText); }
 		}
 
 		#endregion
@@ -135,13 +142,8 @@ namespace YAT.View.Controls
 
 		private void SetStatusText()
 		{
-			var sb = new StringBuilder();
-
-			sb.Append(TimeSpanEx.FormatInvariantSecondsEnforceMinutes(this.activeConnectTime));
-			sb.Append(Environment.NewLine);
-			sb.Append(TimeSpanEx.FormatInvariantSecondsEnforceMinutes(this.totalConnectTime));
-
-			this.statusText = sb.ToString();
+			this.activeStatusText = TimeSpanEx.FormatInvariantSecondsEnforceMinutes(this.activeConnectTime);
+			this.totalStatusText  = TimeSpanEx.FormatInvariantSecondsEnforceMinutes(this.totalConnectTime);
 
 			OnStatusTextChanged(EventArgs.Empty);
 		}
