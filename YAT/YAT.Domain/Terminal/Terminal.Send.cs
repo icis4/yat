@@ -403,7 +403,7 @@ namespace YAT.Domain
 					var byteResult = (result as Parser.BytesResult);
 					if (byteResult != null)
 					{
-						// Raise the 'IOChanged' event if a large chunk is about to be sent:
+						// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
 						if (this.ioIsBusyChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(byteResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
 							OnIOIsBusyChanged(new EventArgs<bool>(true));
 
@@ -479,7 +479,7 @@ namespace YAT.Domain
 						}
 					}
 
-					// Raise the 'IOChanged' event if sending already takes quite long:
+					// Raise the 'IOIsBusyChanged' event if sending already takes quite long:
 					if (this.ioIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 						OnIOIsBusyChanged(new EventArgs<bool>(true));
 				}
@@ -539,7 +539,7 @@ namespace YAT.Domain
 					if (!ArrayEx.IsNullOrEmpty(result.Args))
 						delay = result.Args[0];
 
-					// Raise the 'IOChanged' event if sending is about to be delayed:
+					// Raise the 'IOIsBusyChanged' event if sending is about to be delayed:
 					if (this.ioIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
 						OnIOIsBusyChanged(new EventArgs<bool>(true));
 
@@ -913,7 +913,7 @@ namespace YAT.Domain
 
 			if (effectiveDelay > 0)
 			{
-				// Raise the 'IOChanged' event if sending is about to be delayed for too long:
+				// Raise the 'IOIsBusyChanged' event if sending is about to be delayed for too long:
 				if (this.ioIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
 					OnIOIsBusyChanged(new EventArgs<bool>(true));
 
@@ -958,13 +958,9 @@ namespace YAT.Domain
 			return (sb.ToString());
 		}
 
-		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
-		/// </remarks>
-		protected void AppendToPendingPacketWithoutForwardingToRawTerminalYet(byte[] data)
+		/// <summary></summary>
+		protected virtual void AppendToPendingPacketWithoutForwardingToRawTerminalYet(byte[] data)
 		{
-			AssertNotDisposed();
-
 			lock (this.conflateDataQueue)
 			{
 				foreach (byte b in data)
@@ -972,26 +968,18 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
-		/// </remarks>
-		protected void AppendToPendingPacketAndForwardToRawTerminal(ReadOnlyCollection<byte> data)
+		/// <summary></summary>
+		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(ReadOnlyCollection<byte> data)
 		{
-			// AssertNotDisposed() is called by 'AppendToPendingPacketAndForwardToRawTerminal()' below.
-
 			byte[] a = new byte[data.Count];
 			data.CopyTo(a, 0);
 
 			AppendToPendingPacketAndForwardToRawTerminal(a);
 		}
 
-		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
-		/// </remarks>
-		protected void AppendToPendingPacketAndForwardToRawTerminal(byte[] data)
+		/// <summary></summary>
+		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(byte[] data)
 		{
-			// AssertNotDisposed() is called by 'ForwardPendingPacketToRawTerminal()' below.
-
 			lock (this.conflateDataQueue)
 			{
 				foreach (byte b in data)
@@ -1005,12 +993,11 @@ namespace YAT.Domain
 		/// Not the best approach to require to call this method at so many locations...
 		/// </remarks>
 		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member <see cref="conflateDataQueue"/>.
+		/// Named 'packet' rather than 'chunk' to emphasize difference to <see cref="RawChunkSent"/>
+		/// which corresponds to the chunks effectively sent by the underlying I/O instance.
 		/// </remarks>
-		protected void ForwardPendingPacketToRawTerminal()
+		protected virtual void ForwardPendingPacketToRawTerminal()
 		{
-			// AssertNotDisposed() is called by 'ForwardPacketToRawTerminal()' below.
-
 			// Retrieve pending data:
 			byte[] data;
 			lock (this.conflateDataQueue)
@@ -1022,12 +1009,15 @@ namespace YAT.Domain
 			ForwardPacketToRawTerminal(data);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Named 'packet' rather than 'chunk' to emphasize difference to <see cref="RawChunkSent"/>
+		/// which corresponds to the chunks effectively sent by the underlying I/O instance.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual void ForwardPacketToRawTerminal(byte[] data)
 		{
 		#if (WITH_SCRIPTING)
-			// Invoke plug-in interface which potentially modifies the data or even cancels the packet:
+			// Invoke plug-in interface which potentially modifies the data or even cancels the whole packet:
 			var e = new ModifiablePacketEventArgs(data);
 			OnSendingPacket(e);
 			if (e.Cancel)

@@ -70,11 +70,7 @@ namespace YAT.Domain
 			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true));
 		}
 
-		/// <remarks>
-		/// \remind (2017-09-02 / MKY) there is a limitation in this implementation:
-		/// This method will be called per item, not per complete line. But, regexes below are
-		/// likely using beginning or end of line anchors ("^" and "$"). Well, a limitation.
-		/// </remarks>
+		/// <summary></summary>
 		protected override void ProcessTextDataSendItem(TextDataSendItem item)
 		{
 			string textToParse = item.Data;
@@ -114,8 +110,9 @@ namespace YAT.Domain
 			switch (result.Keyword)
 			{
 				case Parser.Keyword.Eol:
-				{
-					AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence); // In-line.
+				{                        // Complete and immediately forward the line.
+					AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence);
+				////base.ProcessInLineKeywords(result) must not be called as keyword has fully been processed. Calling it would result in an error message!
 					break;
 				}
 
@@ -127,24 +124,13 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>
-		/// \remind (2018-01-17 / MKY / FR #333) there is a limitation in this implementation:
-		/// This method will be called slightly after the line content has been forwarded to the raw
-		/// terminal, thus may result in a short delay between content and EOL. With 9600 baud, no
-		/// delay is noticeable. With 115200 baud, delay is still not noticeable most of the times,
-		/// but sometimes it's 30 ms! For most use cases this doesn't matter. But still, it is not
-		/// ideal, as behavior doesn't reproduce.
-		/// On the other hand, there are also drawbacks in refactoring the current implementation.
-		/// Already tried once in 2015 (while working between TextTerminal.cs SVN revisions 680 and
-		/// 695), but reverted again.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
+		/// <summary></summary>
 		protected override void ProcessLineEnd(bool sendEol)
 		{
-			if (sendEol)
-				AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence); // EOL.
-			else
-				ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+			if (sendEol)             // Just append the EOL, the base method will forward the completed line.
+				AppendToPendingPacketWithoutForwardingToRawTerminalYet(this.txUnidirTextLineState.EolSequence);
+
+			base.ProcessLineEnd(sendEol);
 		}
 
 		/// <summary></summary>
