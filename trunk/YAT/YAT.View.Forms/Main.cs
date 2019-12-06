@@ -2818,7 +2818,7 @@ namespace YAT.View.Forms
 				}
 				finally
 				{
-					ResumeLayout();
+					ResumeLayout(false);
 				}
 			}
 		}
@@ -3120,7 +3120,7 @@ namespace YAT.View.Forms
 			foreach (var strip in strips)
 				strip.OwnerItem = null;
 
-			ResumeLayout();
+			ResumeLayout(false);
 
 			// Also fix the issue with shortcuts defined in context menus:
 			int itemCount = 0;
