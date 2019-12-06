@@ -103,6 +103,7 @@ Important changes:
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
   renamed to \!(IOSettings()) (related to feature request #71).
 - Sending slightly refactored (precondition for feature reqests #19, #387 and fix of bug #176).
+- Line content and EOL is no longer sent in two separate chunks (feature request #333).
 - Element and line processing refactored (precondition for feature reqests #19, #366, #367 and fix
   of bugs #176, #371, #477, #478 as well as preparing upcoming feature reqest #74).
 - Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
@@ -161,8 +162,6 @@ Limitations and known issues:
 - The \!(IOSettings()) keyword is yet limited to serial COM ports (feature request #71).
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
-- Line content and EOL may be sent in two separate chunks, because the parts are handled slightly
-  after each other. Delay could be eliminated but requires some refactoring (feature request #333).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
