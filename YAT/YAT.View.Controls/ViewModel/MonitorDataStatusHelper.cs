@@ -66,7 +66,8 @@ namespace YAT.View.Controls
 		private int txLineRate = RateDefault;
 		private int rxLineRate = RateDefault;
 
-		private string statusText;
+		private string txStatusText;
+		private string rxStatusText;
 
 		#endregion
 
@@ -225,9 +226,15 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual string StatusText
+		public virtual string TxStatusText
 		{
-			get { return (this.statusText); }
+			get { return (this.txStatusText); }
+		}
+
+		/// <summary></summary>
+		public virtual string RxStatusText
+		{
+			get { return (this.rxStatusText); }
 		}
 
 		#endregion
@@ -279,23 +286,23 @@ namespace YAT.View.Controls
 		{
 			if (RepositoryType != Domain.RepositoryType.None)
 			{
-				var sb = new StringBuilder();
 				switch (RepositoryType)
 				{
-					case Domain.RepositoryType.Tx:    AppendTxStatus(sb);                                                     break;
-					case Domain.RepositoryType.Bidir: AppendTxStatus(sb); sb.Append(Environment.NewLine); AppendRxStatus(sb); break;
-					case Domain.RepositoryType.Rx:                                                        AppendRxStatus(sb); break;
+					case Domain.RepositoryType.Tx:    SetTxStatusText();                    break;
+					case Domain.RepositoryType.Bidir: SetTxStatusText(); SetRxStatusText(); break;
+					case Domain.RepositoryType.Rx:                       SetRxStatusText(); break;
 
 					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + RepositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
-				this.statusText = sb.ToString();
 
 				OnStatusTextChanged(EventArgs.Empty);
 			}
 		}
 
-		private void AppendTxStatus(StringBuilder sb)
+		private void SetTxStatusText()
 		{
+			var sb = new StringBuilder();
+
 			sb.Append(this.txByteCount);
 			sb.Append(" | ");
 			sb.Append(this.txLineCount);
@@ -305,10 +312,14 @@ namespace YAT.View.Controls
 			sb.Append(" | "); //   and consider that the values may be flickering...
 			sb.Append(this.txLineRate);
 			sb.Append("/s");
+
+			this.txStatusText = sb.ToString();
 		}
 
-		private void AppendRxStatus(StringBuilder sb)
+		private void SetRxStatusText()
 		{
+			var sb = new StringBuilder();
+
 			sb.Append(this.rxByteCount);
 			sb.Append(" | ");
 			sb.Append(this.rxLineCount);
@@ -318,6 +329,8 @@ namespace YAT.View.Controls
 			sb.Append(" | ");
 			sb.Append(this.rxLineRate);
 			sb.Append("/s");
+
+			this.rxStatusText = sb.ToString();
 		}
 
 		#endregion
