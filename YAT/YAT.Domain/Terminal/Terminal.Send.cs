@@ -406,7 +406,8 @@ namespace YAT.Domain
 						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(byteResult.Bytes.Length))
 							OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 
-						// For performance reasons, collect as many chunks as possible into a larger chunk:
+						// For performance reasons, as well as joining text terminal EOL with line content,
+						// collect as many chunks as possible into a larger chunk:
 						AppendToPendingPacketWithoutForwardingToRawTerminalYet(byteResult.Bytes);
 					}
 					else // if keyword result (will not occur if keywords are disabled while parsing)
@@ -486,7 +487,7 @@ namespace YAT.Domain
 
 				ProcessLineEnd(sendEol);
 
-				DateTime lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
+				var lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
 
 				// --- Perform line/packet related post-processing ---
 
