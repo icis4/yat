@@ -1606,14 +1606,14 @@ is already ongoing.
 public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 
 
-YAT 4 with Scripting :: Expected in 2020
+YAT 4 with Scripting :: Expected in late 2020
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
 implement protocol layers,... whatever you can think of. Examples and templates will be included.
 
-It is also planned to demonstrate how to use YAT from a PowerShell script and along with NUnit. All
-these features aim for providing a versatile automatic testing tool for serial communications.
+It is also planned to demonstrate how to use YAT from a PowerShell script and along with NUnit.
+All these features aim for providing a versatile automatic testing tool for serial communications.
 
 
 ====================================================================================================
