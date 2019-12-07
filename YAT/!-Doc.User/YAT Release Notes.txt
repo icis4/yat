@@ -116,7 +116,7 @@ Important changes:
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
-- Automatic actions and responses now support nultiple triggers within a line or chunk.
+- Automatic actions and responses now support multiple triggers within a line or chunk.
 - USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
   implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
