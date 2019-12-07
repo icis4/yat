@@ -127,7 +127,7 @@ Fixed bugs:
 - Import/Paste of a .yacp command page file that contains more predefined commands than currently
   configured now behaves correctly (bug #479, related to previous feature requests #28, #257, #365).
 - Automatic actions and responses now work chunk independently (feature request #366).
-- Automatic actions 'Filter' and 'Suppress' now also work for continuous data (bug #478) and on
+- Automatic actions [Filter] and [Suppress] now also work for continuous data (bug #478) and on
   refresh (feature request #367).
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
@@ -291,7 +291,7 @@ Limitations and known issues:
 - Automatic responses and actions work fine as long as the received chunks do not contain more than
   one trigger and do not spread across multiple lines. Limitation could be eliminated but requires
   some refactoring (feature request #366).
-- Automatic actions 'Filter' and 'Suppress' do not get reapplied on refresh (feature request #367).
+- Automatic actions [Filter] and [Suppress] do not get reapplied on refresh (feature request #367).
 - Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
