@@ -111,10 +111,10 @@ namespace MKY.Windows.Forms
 		private const bool VerticalAutoScrollDefault = false;
 	#endif
 
-	#if (DEBUG)
-		/// <summary></summary>
+////#if (DEBUG) must not be active, configuration shall always be available.
+		/// <remarks>Public for use in parent controls.</remarks>
 		public const bool DebugEnabledDefault = false;
-	#endif
+////#endif
 
 		#endregion
 
@@ -140,9 +140,9 @@ namespace MKY.Windows.Forms
 
 		private int lastSelectedIndex = ControlEx.InvalidIndex;
 
-	#if (DEBUG)
+////#if (DEBUG) must not be active, configuration shall always be available.
 		private bool debugEnabled = DebugEnabledDefault;
-	#endif
+////#endif
 
 		#endregion
 
@@ -783,6 +783,7 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+////#if (DEBUG) must not be active, configuration shall always be available.
 		/// <remarks>
 		/// Flag in a addition to configuration items to allow selective debugging of just a single
 		/// list box, in order to reduce debug output.
@@ -795,6 +796,7 @@ namespace MKY.Windows.Forms
 			get { return (this.debugEnabled); }
 			set { this.debugEnabled = value;  }
 		}
+////#endif
 
 		#endregion
 
