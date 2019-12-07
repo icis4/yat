@@ -142,11 +142,6 @@ namespace YAT.View.Controls
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly long DataStatusTickInterval = StopwatchEx.TimeToTicks(DataStatusIntervalMs);
 
-		// Debug:
-	#if (DEBUG)
-		private const bool DebugEnabledDefault = ListBoxEx.DebugEnabledDefault;
-	#endif
-
 		#endregion
 
 		#region Fields
@@ -555,18 +550,20 @@ namespace YAT.View.Controls
 			get { return (textBox_CopyOfActiveLine.Focused); }
 		}
 
+////#if (DEBUG) must not be active, configuration shall always be available.
 		/// <remarks>
 		/// Flag in a addition to configuration item to allow selective debugging of just a single
 		/// monitor, e.g. the bidir monitor, to reduce debug output.
 		/// </remarks>
 		[Category("Bevavior")]
 		[Description("Enables or disables debugging.")]
-		[DefaultValue(DebugEnabledDefault)]
+		[DefaultValue(ListBoxEx.DebugEnabledDefault)]
 		public virtual bool DebugEnabled
 		{
 			get { return (this.fastListBox_Monitor.DebugEnabled); }
 			set { this.fastListBox_Monitor.DebugEnabled = value;  }
 		}
+////#endif
 
 		#endregion
 
