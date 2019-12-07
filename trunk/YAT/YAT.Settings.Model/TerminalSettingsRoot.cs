@@ -673,7 +673,7 @@ namespace YAT.Settings.Model
 		/// </remarks>
 		public virtual bool TryGetActiveAutoActionTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
-			if (AutoAction.TriggerIsActive)
+			if (AutoAction.Trigger.IsActive)
 				return (TryGetActiveAutoTrigger(AutoAction.Trigger, AutoAction.IsByteSequenceTriggered, AutoAction.Options.EnableRegex,
 				                                out command, out triggerTextOrRegexPattern, out regex));
 
@@ -691,7 +691,7 @@ namespace YAT.Settings.Model
 		/// </remarks>
 		public virtual bool TryGetActiveAutoResponseTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
-			if (AutoResponse.TriggerIsActive)
+			if (AutoResponse.Trigger.IsActive)
 				return (TryGetActiveAutoTrigger(AutoResponse.Trigger, AutoResponse.IsByteSequenceTriggered, AutoResponse.Options.EnableRegex,
 				                                out command, out triggerTextOrRegexPattern, out regex));
 

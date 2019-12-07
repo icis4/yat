@@ -768,8 +768,8 @@ namespace YAT.View.Forms
 			try
 			{
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          = this.settingsRoot.AutoResponse.IsActive;
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.TriggerIsActive;
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.ResponseIsActive;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = this.settingsRoot.AutoResponse.Trigger.IsActive;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = this.settingsRoot.AutoResponse.Response.IsActive;
 
 				// Attention:
 				// Similar code exists in...
@@ -816,7 +816,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Checked = (textIsSupported && useText && regexIsSupported && enableRegex);
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Enabled =  textIsSupported && useText && regexIsSupported;
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = (this.settingsRoot.AutoResponse.Trigger.IsActive || this.settingsRoot.AutoResponse.Response.IsActive);
 
 			}
 			finally
@@ -1056,8 +1056,8 @@ namespace YAT.View.Forms
 			try
 			{
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction.Checked         = this.settingsRoot.AutoAction.IsActive;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Checked = this.settingsRoot.AutoAction.TriggerIsActive;
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Checked  = this.settingsRoot.AutoAction.ActionIsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Checked = this.settingsRoot.AutoAction.Trigger.IsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Checked  = this.settingsRoot.AutoAction.Action.IsActive;
 
 				// Attention:
 				// Similar code exists in...
@@ -1104,7 +1104,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Checked = (textIsSupported && useText && regexIsSupported && enableRegex);
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Enabled =  textIsSupported && useText && regexIsSupported;
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = (this.settingsRoot.AutoAction.Trigger.IsActive || this.settingsRoot.AutoAction.Action.IsActive);
 			}
 			finally
 			{

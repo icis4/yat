@@ -109,16 +109,9 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool ActionIsActive
-		{
-			get { return (Action != AutoAction.None); }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
 		public override bool IsActive
 		{
-			get { return (base.IsActive && ActionIsActive); }
+			get { return (base.IsActive && Action.IsActive); }
 		}
 
 		/// <remarks>"FilterOrSuppress" also means "IsReloadable".</remarks>

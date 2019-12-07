@@ -133,9 +133,9 @@ namespace YAT.Model.Utilities
 					comparisonType = StringComparison.CurrentCultureIgnoreCase;
 
 				if (TriggerTextOrRegexWholeWord)
-					return (StringEx.IndexOfWholeWord(TriggerTextOrRegexPattern, input, comparisonType) >= 0);
+					return (StringEx.IndexOfWholeWord(input, TriggerTextOrRegexPattern, comparisonType) >= 0);
 				else
-					return (TriggerTextOrRegexPattern.IndexOf(input, comparisonType) >= 0); // Using string.IndexOf() because string.Contains()
+					return (input.IndexOf(TriggerTextOrRegexPattern, comparisonType) >= 0); // Using string.IndexOf() because string.Contains()
 			}                                                                               // does not allow controlling culture and case.
 			else // Regex enabled.
 			{

@@ -109,16 +109,9 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool ResponseIsActive
-		{
-			get { return (Response != AutoResponse.None); }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
 		public override bool IsActive
 		{
-			get { return (base.IsActive && ResponseIsActive); }
+			get { return (base.IsActive && Response.IsActive); }
 		}
 
 		#endregion

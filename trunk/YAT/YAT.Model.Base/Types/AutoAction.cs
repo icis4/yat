@@ -143,6 +143,19 @@ namespace YAT.Model.Types
 		{
 		}
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool IsActive
+		{
+			get { return ((AutoAction)UnderlyingEnum != AutoAction.None); }
+		}
+
+		#endregion
+
 		#region Object Members
 		//==========================================================================================
 		// Object Members
