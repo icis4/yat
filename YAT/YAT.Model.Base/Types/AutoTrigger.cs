@@ -138,6 +138,19 @@ namespace YAT.Model.Types
 			this.explicitCommandString = explicitCommandString;
 		}
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool IsActive
+		{
+			get { return ((AutoTrigger)UnderlyingEnum != AutoTrigger.None); }
+		}
+
+		#endregion
+
 		#region Methods
 		//==========================================================================================
 		// Methods

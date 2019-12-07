@@ -112,16 +112,9 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool TriggerIsActive
-		{
-			get { return (Trigger != AutoTrigger.None); }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
 		public virtual bool IsActive
 		{
-			get { return (TriggerIsActive); }
+			get { return (Trigger.IsActive); }
 		}
 
 		/// <summary></summary>

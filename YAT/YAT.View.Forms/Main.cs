@@ -1273,8 +1273,8 @@ namespace YAT.View.Forms
 					toolStripLabel_MainTool_AutoAction_Count.Enabled = isActive;
 					toolStripLabel_MainTool_AutoAction_Count.Visible = true;
 
-					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = isActive;
-					toolStripButton_MainTool_AutoAction_Deactivate.Visible = true;
+					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = (trigger.IsActive || action.IsActive);
+					toolStripButton_MainTool_AutoAction_Deactivate.Visible =  true;
 				}
 				else
 				{
@@ -1400,8 +1400,8 @@ namespace YAT.View.Forms
 					toolStripLabel_MainTool_AutoResponse_Count.Enabled = isActive;
 					toolStripLabel_MainTool_AutoResponse_Count.Visible = true;
 
-					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = isActive;
-					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = true;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = (trigger.IsActive || response.IsActive);
+					toolStripButton_MainTool_AutoResponse_Deactivate.Visible =  true;
 				}
 				else
 				{
