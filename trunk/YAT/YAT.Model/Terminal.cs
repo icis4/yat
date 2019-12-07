@@ -5065,6 +5065,15 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool ToggleLogOnOrOff()
+		{
+			if (this.log.AnyIsOn)
+				return (SwitchLogOff());
+			else
+				return (SwitchLogOn());
+		}
+
+		/// <summary></summary>
 		public virtual bool OpenLogFile()
 		{
 			int fileCount = 0;

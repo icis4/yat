@@ -541,6 +541,7 @@ namespace YAT.Model
 				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();          break;
 				case AutoAction.SwitchLogOn:                     SwitchLogOn();                  break;
 				case AutoAction.SwitchLogOff:                    SwitchLogOff();                 break;
+				case AutoAction.ToggleLogOnOrOff:                ToggleLogOnOrOff();             break;
 				case AutoAction.StopIO:                          StopIO();                       break;
 				case AutoAction.CloseTerminal:
 				{
@@ -599,6 +600,7 @@ namespace YAT.Model
 				case AutoAction.ResetCountAndRate:
 				case AutoAction.SwitchLogOn:
 				case AutoAction.SwitchLogOff:
+				case AutoAction.ToggleLogOnOrOff:
 				case AutoAction.StopIO:
 				case AutoAction.CloseTerminal:
 				case AutoAction.ExitApplication:

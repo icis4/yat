@@ -55,6 +55,7 @@ namespace YAT.Model.Types
 		ResetCountAndRate,
 		SwitchLogOn,
 		SwitchLogOff,
+		ToggleLogOnOrOff,
 
 		StopIO,
 		CloseTerminal,
@@ -113,6 +114,9 @@ namespace YAT.Model.Types
 		private const string             SwitchLogOff_string = "[Log Off]"; // Translating from code to user terminology.
 		private static readonly string[] SwitchLogOff_stringAlternatives = new string[] { "[LF]" };
 
+		private const string             ToggleLogOnOrOff_string = "[Toggle Log On/Off]"; // Translating from code to user terminology.
+		private static readonly string[] ToggleLogOnOrOff_stringAlternatives = new string[] { "[TL]" };
+
 		private const string             StopIO_string = "[Close/Stop I/O]"; // Translating from code to user terminology.
 		private static readonly string[] StopIO_stringAlternatives = new string[] { "[CIO]" };
 
@@ -166,6 +170,7 @@ namespace YAT.Model.Types
 				case AutoAction.ResetCountAndRate:               return (ResetCountAndRate_string);
 				case AutoAction.SwitchLogOn:                     return (SwitchLogOn_string);
 				case AutoAction.SwitchLogOff:                    return (SwitchLogOff_string);
+				case AutoAction.ToggleLogOnOrOff:                return (ToggleLogOnOrOff_string);
 
 				case AutoAction.StopIO:                          return (StopIO_string);
 				case AutoAction.CloseTerminal:                   return (CloseTerminal_string);
@@ -256,6 +261,7 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.ResetCountAndRate));
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOn));
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOff));
+			a.Add(new AutoActionEx(AutoAction.ToggleLogOnOrOff));
 
 			a.Add(new AutoActionEx(AutoAction.StopIO));
 			a.Add(new AutoActionEx(AutoAction.CloseTerminal));
@@ -379,6 +385,12 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SwitchLogOff_stringAlternatives))
 			{
 				result = AutoAction.SwitchLogOff;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ToggleLogOnOrOff_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ToggleLogOnOrOff_stringAlternatives))
+			{
+				result = AutoAction.ToggleLogOnOrOff;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, StopIO_string) ||
