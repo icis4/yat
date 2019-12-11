@@ -555,7 +555,7 @@ namespace YAT.Domain.Settings
 			// ...messages in PotentiallyUpdateIOSettingsDependentSettings() of View.Forms.TerminalSettings have to be adapted accordingly.
 
 			if (CharHide != null)
-			{
+			{            // Required for scripting, as YAT initially sends an <XOn> which must not be contained in a script message!
 				CharHide.HideXOnXOff = flowControlUsesXOnXOffAutomatically;
 			}
 
