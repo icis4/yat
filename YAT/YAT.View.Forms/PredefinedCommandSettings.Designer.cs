@@ -235,6 +235,8 @@
 			this.label_Example = new System.Windows.Forms.Label();
 			this.button_Help = new System.Windows.Forms.Button();
 			this.groupBox_Pages = new System.Windows.Forms.GroupBox();
+			this.label_PasteImportAllPages = new System.Windows.Forms.Label();
+			this.label_CopyExportAllPages = new System.Windows.Forms.Label();
 			this.button_RenumberPages = new System.Windows.Forms.Button();
 			this.button_ExportAllPagesToClipboard = new System.Windows.Forms.Button();
 			this.button_ImportAllPagesFromClipboard = new System.Windows.Forms.Button();
@@ -273,8 +275,6 @@
 			this.subpageCheckBox_2A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.subpageCheckBox_1A = new YAT.View.Controls.PredefinedCommandSubpageCheckBox();
 			this.label_SubpageSelection = new System.Windows.Forms.Label();
-			this.label_CopyExportAllPages = new System.Windows.Forms.Label();
-			this.label_PasteImportAllPages = new System.Windows.Forms.Label();
 			this.groupBox_Page.SuspendLayout();
 			this.contextMenuStrip_Commands.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -2003,9 +2003,9 @@
 			this.label_ExampleBinary_Description.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(402, 397);
 			this.label_ExampleBinary_Description.Name = "label_ExampleBinary_Description";
-			this.label_ExampleBinary_Description.Size = new System.Drawing.Size(72, 13);
+			this.label_ExampleBinary_Description.Size = new System.Drawing.Size(71, 13);
 			this.label_ExampleBinary_Description.TabIndex = 33;
-			this.label_ExampleBinary_Description.Text = "Reset Device";
+			this.label_ExampleBinary_Description.Text = "Request ABC";
 			// 
 			// label_ExampleBinary_Data
 			// 
@@ -2058,9 +2058,9 @@
 			this.label_ExampleText_Description.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_ExampleText_Description.Location = new System.Drawing.Point(402, 379);
 			this.label_ExampleText_Description.Name = "label_ExampleText_Description";
-			this.label_ExampleText_Description.Size = new System.Drawing.Size(72, 13);
+			this.label_ExampleText_Description.Size = new System.Drawing.Size(71, 13);
 			this.label_ExampleText_Description.TabIndex = 31;
-			this.label_ExampleText_Description.Text = "Reset Device";
+			this.label_ExampleText_Description.Text = "Request ABC";
 			// 
 			// label_ExampleText_Data
 			// 
@@ -2129,6 +2129,24 @@
 			this.groupBox_Pages.TabIndex = 1;
 			this.groupBox_Pages.TabStop = false;
 			this.groupBox_Pages.Text = "&Pages";
+			// 
+			// label_PasteImportAllPages
+			// 
+			this.label_PasteImportAllPages.AutoSize = true;
+			this.label_PasteImportAllPages.Location = new System.Drawing.Point(171, 268);
+			this.label_PasteImportAllPages.Name = "label_PasteImportAllPages";
+			this.label_PasteImportAllPages.Size = new System.Drawing.Size(85, 13);
+			this.label_PasteImportAllPages.TabIndex = 19;
+			this.label_PasteImportAllPages.Text = "Paste/I&mport All:";
+			// 
+			// label_CopyExportAllPages
+			// 
+			this.label_CopyExportAllPages.AutoSize = true;
+			this.label_CopyExportAllPages.Location = new System.Drawing.Point(173, 249);
+			this.label_CopyExportAllPages.Name = "label_CopyExportAllPages";
+			this.label_CopyExportAllPages.Size = new System.Drawing.Size(83, 13);
+			this.label_CopyExportAllPages.TabIndex = 16;
+			this.label_CopyExportAllPages.Text = "Copy/E&xport All:";
 			// 
 			// button_RenumberPages
 			// 
@@ -2542,24 +2560,6 @@
 			this.label_SubpageSelection.Size = new System.Drawing.Size(100, 13);
 			this.label_SubpageSelection.TabIndex = 2;
 			this.label_SubpageSelection.Text = "Subpage Selection:";
-			// 
-			// label_CopyExportAllPages
-			// 
-			this.label_CopyExportAllPages.AutoSize = true;
-			this.label_CopyExportAllPages.Location = new System.Drawing.Point(173, 249);
-			this.label_CopyExportAllPages.Name = "label_CopyExportAllPages";
-			this.label_CopyExportAllPages.Size = new System.Drawing.Size(83, 13);
-			this.label_CopyExportAllPages.TabIndex = 16;
-			this.label_CopyExportAllPages.Text = "Copy/E&xport All:";
-			// 
-			// label_PasteImportAllPages
-			// 
-			this.label_PasteImportAllPages.AutoSize = true;
-			this.label_PasteImportAllPages.Location = new System.Drawing.Point(171, 268);
-			this.label_PasteImportAllPages.Name = "label_PasteImportAllPages";
-			this.label_PasteImportAllPages.Size = new System.Drawing.Size(85, 13);
-			this.label_PasteImportAllPages.TabIndex = 19;
-			this.label_PasteImportAllPages.Text = "Paste/I&mport All:";
 			// 
 			// PredefinedCommandSettings
 			// 
