@@ -31,17 +31,12 @@ namespace YAT.Model.Types
 	public struct AutoResponseOptions : IEquatable<AutoResponseOptions>
 	{
 		/// <summary></summary>
-		[XmlElement("UseText")]
-		public bool UseText { get; set; }
-
-		/// <summary></summary>
 		[XmlElement("EnableReplace")]
 		public bool EnableReplace { get; set; }
 
 		/// <summary></summary>
 		public AutoResponseOptions(bool useText, bool enableReplace)
 		{
-			UseText       = useText;
 			EnableReplace = enableReplace;
 		}
 
@@ -61,8 +56,7 @@ namespace YAT.Model.Types
 		{
 			return
 			(
-				UseText + ", " +
-				EnableReplace
+				EnableReplace.ToString()
 			);
 		}
 
@@ -79,8 +73,7 @@ namespace YAT.Model.Types
 			{
 				int hashCode;
 
-				hashCode =                    UseText      .GetHashCode();
-				hashCode = (hashCode * 397) ^ EnableReplace.GetHashCode();
+				hashCode = EnableReplace.GetHashCode();
 
 				return (hashCode);
 			}
@@ -108,7 +101,6 @@ namespace YAT.Model.Types
 		{
 			return
 			(
-				UseText      .Equals(other.UseText) &&
 				EnableReplace.Equals(other.EnableReplace)
 			);
 		}

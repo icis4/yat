@@ -154,23 +154,9 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <remarks>
-		/// Technically, 'Predefined' could also support text/replace, but doesn't make much sense:
+		/// Technically, 'Predefined' could also support replace, but doesn't make much sense:
 		/// <list type="bullet">
-		/// <item><description>Command defines a byte sequence anyway.</description></item>
-		/// <item><description>YAT style escapes are useless for text maching.</description></item>
-		/// <item><description>Regex style replacement is not supported for commands.</description></item>
-		/// </list>
-		/// </remarks>
-		public bool TextIsSupported
-		{
-			get { return (((AutoResponse)UnderlyingEnum) == AutoResponse.Explicit); }
-		}
-
-		/// <remarks>
-		/// Technically, 'Predefined' could also support text/replace, but doesn't make much sense:
-		/// <list type="bullet">
-		/// <item><description>Command defines a byte sequence anyway.</description></item>
-		/// <item><description>YAT style escapes are useless for text maching.</description></item>
+		/// <item><description>YAT style escapes are useless for text replacement.</description></item>
 		/// <item><description>Regex style replacement is not supported for commands.</description></item>
 		/// </list>
 		/// </remarks>

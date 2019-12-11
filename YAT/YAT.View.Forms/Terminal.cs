@@ -779,7 +779,6 @@ namespace YAT.View.Forms
 
 				bool triggerTextIsSupported     = false;
 				bool triggerRegexIsSupported    = false;
-				bool responseTextIsSupported    = false;
 				bool responseReplaceIsSupported = false;
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
@@ -797,7 +796,6 @@ namespace YAT.View.Forms
 					var response = this.settingsRoot.AutoResponse.Response;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 
-					responseTextIsSupported    = response.TextIsSupported;
 					responseReplaceIsSupported = response.ReplaceIsSupported;
 				}
 
@@ -808,7 +806,6 @@ namespace YAT.View.Forms
 				var triggerCaseSensitive  = this.settingsRoot.AutoResponse.TriggerOptions.CaseSensitive;
 				var triggerWholeWord      = this.settingsRoot.AutoResponse.TriggerOptions.WholeWord;
 				var triggerEnableRegex    = this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex;
-				var responseUseText       = this.settingsRoot.AutoResponse.ResponseOptions.UseText;
 				var responseEnableReplace = this.settingsRoot.AutoResponse.ResponseOptions.EnableReplace;
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
@@ -823,11 +820,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Checked = (responseTextIsSupported && responseUseText);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Enabled =  responseTextIsSupported;
-
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported && responseEnableReplace);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported);
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = (this.settingsRoot.AutoResponse.Trigger.IsActive || this.settingsRoot.AutoResponse.Response.IsActive);
 
@@ -1025,11 +1019,6 @@ namespace YAT.View.Forms
 
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.Window;
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.WindowText;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText_Click(object sender, EventArgs e)
-		{
-			RequestToggleAutoResponseResponseUseText();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace_Click(object sender, EventArgs e)
@@ -4674,16 +4663,6 @@ namespace YAT.View.Forms
 		public virtual void RequestAutoResponseResponse(AutoResponseEx response)
 		{
 			this.settingsRoot.AutoResponse.Response = response;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestToggleAutoResponseResponseUseText()
-		{
-			var options = this.settingsRoot.AutoResponse.ResponseOptions;
-			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoResponse.ResponseOptions = options;
-
-		////RevalidateAutoResponseResponseTextSilently() is not required as Regex.Replace() will accept any text.
 		}
 
 		/// <summary></summary>

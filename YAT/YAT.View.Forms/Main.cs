@@ -1318,7 +1318,6 @@ namespace YAT.View.Forms
 				bool triggerCaseSensitive  = false;
 				bool triggerWholeWord      = false;
  				bool triggerEnableRegex    = false;
-				bool responseUseText       = false;
  				bool responseEnableReplace = false;
 
 				AutoTriggerEx[]  triggerItems  = AutoTriggerEx.GetFixedItems();
@@ -1332,8 +1331,8 @@ namespace YAT.View.Forms
 				AutoResponseEx   response       = AutoResponse.None;
 				AutoContentState responseState  = AutoContentState.Neutral;
 
-				bool responseTextIsSupported    = false;
 				bool responseReplaceIsSupported = false;
+
 				if (childIsReady)
 				{
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
@@ -1345,7 +1344,6 @@ namespace YAT.View.Forms
 						triggerCaseSensitive       = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.CaseSensitive;
 						triggerWholeWord           = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.WholeWord;
 						triggerEnableRegex         = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.EnableRegex;
-						responseUseText            = activeTerminal.SettingsRoot.AutoResponse.ResponseOptions.UseText;
 						responseEnableReplace      = activeTerminal.SettingsRoot.AutoResponse.ResponseOptions.EnableReplace;
 
 						triggerItems               = activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems();
@@ -1359,7 +1357,6 @@ namespace YAT.View.Forms
 						response                   = activeTerminal.SettingsRoot.AutoResponse.Response;
 						responseState              = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
 
-						responseTextIsSupported    = response.TextIsSupported;
 						responseReplaceIsSupported = response.ReplaceIsSupported;
 					}
 				}
@@ -1407,12 +1404,8 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
 					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_Response_UseText.Checked = (responseTextIsSupported && responseUseText);
-					toolStripButton_MainTool_AutoResponse_Response_UseText.Enabled =  responseTextIsSupported;
-					toolStripButton_MainTool_AutoResponse_Response_UseText.Visible =  true;
-
-					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
-					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported);
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported && responseEnableReplace);
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported);
 					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoResponseCount();
@@ -1440,7 +1433,6 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord     .Visible = false;
 					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex   .Visible = false;
 
-					toolStripButton_MainTool_AutoResponse_Response_UseText      .Visible = false;
 					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Visible = false;
 
 					toolStripLabel_MainTool_AutoResponse_Count                  .Visible = false;
@@ -2541,7 +2533,6 @@ namespace YAT.View.Forms
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseUseText();       e.SuppressKeyPress = true; break;
 					case Keys.R: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace(); e.SuppressKeyPress = true; break;
 
 					default: break;
@@ -2559,17 +2550,11 @@ namespace YAT.View.Forms
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.T: e.SuppressKeyPress = true; break;
 					case Keys.R: e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
 			}
-		}
-
-		private void toolStripButton_MainTool_AutoResponse_Response_UseText_Click(object sender, EventArgs e)
-		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseUseText();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_Response_EnableReplace_Click(object sender, EventArgs e)

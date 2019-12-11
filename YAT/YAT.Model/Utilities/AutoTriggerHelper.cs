@@ -124,7 +124,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public virtual bool TextTriggerSuccess(string input)
 		{
-			if (TriggerRegex == null) // Text only.
+			if (TriggerRegex == null) // Text only:
 			{
 				StringComparison comparisonType;
 				if (TriggerTextOrRegexCaseSensitive)
@@ -137,7 +137,7 @@ namespace YAT.Model.Utilities
 				else
 					return (input.IndexOf(TriggerTextOrRegexPattern, comparisonType) >= 0); // Using string.IndexOf() because string.Contains()
 			}                                                                               // does not allow controlling culture and case.
-			else // Regex enabled.
+			else // Regex enabled:
 			{
 				return (TriggerRegex.Match(input).Success);
 			}
@@ -146,7 +146,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public virtual int TextTriggerCount(string input)
 		{
-			if (TriggerRegex == null) // Text only.
+			if (TriggerRegex == null) // Text only:
 			{
 				StringComparison comparisonType;
 				if (TriggerTextOrRegexCaseSensitive)
@@ -159,7 +159,7 @@ namespace YAT.Model.Utilities
 				else
 					return (StringEx.ContainingCount(input, TriggerTextOrRegexPattern, comparisonType));
 			}
-			else // Regex enabled.
+			else // Regex enabled:
 			{
 				return (TriggerRegex.Matches(input).Count);
 			}
