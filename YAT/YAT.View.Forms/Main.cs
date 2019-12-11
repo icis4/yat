@@ -1005,7 +1005,6 @@ namespace YAT.View.Forms
 		// Controls Event Handlers > Toolbar
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'aa' = AutoAction, 'ar' = AutoResponse.")]
 		private void toolStripButton_MainTool_SetControls()
 		{
 			this.isSettingControls.Enter();
@@ -1322,19 +1321,19 @@ namespace YAT.View.Forms
 				bool responseUseText       = false;
  				bool responseEnableReplace = false;
 
-				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
-				AutoTriggerEx    trigger      = AutoTrigger.None;
-				AutoContentState triggerState = AutoContentState.Neutral;
+				AutoTriggerEx[]  triggerItems  = AutoTriggerEx.GetFixedItems();
+				AutoTriggerEx    trigger       = AutoTrigger.None;
+				AutoContentState triggerState  = AutoContentState.Neutral;
 
 				bool triggerTextIsSupported     = false;
 				bool triggerRegexIsSupported    = false;
+
+				AutoResponseEx[] responseItems  = AutoResponseEx.GetFixedItems();
+				AutoResponseEx   response       = AutoResponse.None;
+				AutoContentState responseState  = AutoContentState.Neutral;
+
 				bool responseTextIsSupported    = false;
 				bool responseReplaceIsSupported = false;
-
-				AutoResponseEx[] responseItems = AutoResponseEx.GetFixedItems();
-				AutoResponseEx   response      = AutoResponse.None;
-				AutoContentState responseState = AutoContentState.Neutral;
-
 				if (childIsReady)
 				{
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
@@ -1355,12 +1354,13 @@ namespace YAT.View.Forms
 
 						triggerTextIsSupported     = trigger.TextIsSupported;
 						triggerRegexIsSupported    = trigger.RegexIsSupported;
-						responseTextIsSupported    = response.TextIsSupported;
-						responseReplaceIsSupported = response.ReplaceIsSupported;
 
 						responseItems              = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
 						response                   = activeTerminal.SettingsRoot.AutoResponse.Response;
 						responseState              = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
+
+						responseTextIsSupported    = response.TextIsSupported;
+						responseReplaceIsSupported = response.ReplaceIsSupported;
 					}
 				}
 
