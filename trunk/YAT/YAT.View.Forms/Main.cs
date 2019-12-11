@@ -1182,18 +1182,19 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive      = false;
-				bool caseSensitive = false;
-				bool wholeWord     = false;
-				bool useText       = false;
-				bool enableRegex   = false;
+				bool isActive             = false;
+
+				bool triggerCaseSensitive = false;
+				bool triggerWholeWord     = false;
+				bool triggerUseText       = false;
+				bool triggerEnableRegex   = false;
 
 				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger      = AutoTrigger.None;
 				AutoContentState triggerState = AutoContentState.Neutral;
 
-				bool textIsSupported  = false;
-				bool regexIsSupported = false;
+				bool triggerTextIsSupported  = false;
+				bool triggerRegexIsSupported = false;
 
 				AutoActionEx[]   actionItems = AutoActionEx.GetItems();
 				AutoActionEx     action      = AutoAction.None;
@@ -1204,22 +1205,23 @@ namespace YAT.View.Forms
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
-						isActive         = activeTerminal.SettingsRoot.AutoAction.IsActive;
-						useText          = activeTerminal.SettingsRoot.AutoAction.Options.UseText;
-						caseSensitive    = activeTerminal.SettingsRoot.AutoAction.Options.CaseSensitive;
-						wholeWord        = activeTerminal.SettingsRoot.AutoAction.Options.WholeWord;
-						enableRegex      = activeTerminal.SettingsRoot.AutoAction.Options.EnableRegex;
+						isActive                = activeTerminal.SettingsRoot.AutoAction.IsActive;
 
-						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoActionTriggerItems();
-						trigger          = activeTerminal.SettingsRoot.AutoAction.Trigger;
-						triggerState     = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
+						triggerUseText          = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.UseText;
+						triggerCaseSensitive    = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.CaseSensitive;
+						triggerWholeWord        = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.WholeWord;
+						triggerEnableRegex      = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.EnableRegex;
 
-						textIsSupported  = trigger.TextIsSupported;
-						regexIsSupported = trigger.RegexIsSupported;
+						triggerItems            = activeTerminal.SettingsRoot.GetValidAutoActionTriggerItems();
+						trigger                 = activeTerminal.SettingsRoot.AutoAction.Trigger;
+						triggerState            = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
 
-						actionItems      = activeTerminal.SettingsRoot.GetValidAutoActionItems();
-						action           = activeTerminal.SettingsRoot.AutoAction.Action;
-					////actionState      = ((Terminal)ActiveMdiChild).AutoActionActionState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+						triggerTextIsSupported  = trigger.TextIsSupported;
+						triggerRegexIsSupported = trigger.RegexIsSupported;
+
+						actionItems             = activeTerminal.SettingsRoot.GetValidAutoActionItems();
+						action                  = activeTerminal.SettingsRoot.AutoAction.Action;
+					////actionState             = ((Terminal)ActiveMdiChild).AutoActionActionState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 					}
 				}
 
@@ -1252,21 +1254,21 @@ namespace YAT.View.Forms
 					SetAutoActionTriggerStateControls(triggerState);
 				////SetAutoActionActionStateControls(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
-					toolStripButton_MainTool_AutoAction_UseText.Checked = (textIsSupported && useText);
-					toolStripButton_MainTool_AutoAction_UseText.Enabled =  textIsSupported;
-					toolStripButton_MainTool_AutoAction_UseText.Visible =  true;
+					toolStripButton_MainTool_AutoAction_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
+					toolStripButton_MainTool_AutoAction_Trigger_UseText.Enabled =  triggerTextIsSupported;
+					toolStripButton_MainTool_AutoAction_Trigger_UseText.Visible =  true;
 
-					toolStripButton_MainTool_AutoAction_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
-					toolStripButton_MainTool_AutoAction_CaseSensitive.Enabled = (textIsSupported && useText);
-					toolStripButton_MainTool_AutoAction_CaseSensitive.Visible =  true;
+					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
+					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
+					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Visible =  true;
 
-					toolStripButton_MainTool_AutoAction_WholeWord.Checked = (textIsSupported && useText && wholeWord);
-					toolStripButton_MainTool_AutoAction_WholeWord.Enabled = (textIsSupported && useText);
-					toolStripButton_MainTool_AutoAction_WholeWord.Visible =  true;
+					toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+					toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
+					toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Visible =  true;
 
-					toolStripButton_MainTool_AutoAction_EnableRegex.Checked = (textIsSupported && useText && regexIsSupported && enableRegex);
-					toolStripButton_MainTool_AutoAction_EnableRegex.Enabled = (textIsSupported && useText && regexIsSupported);
-					toolStripButton_MainTool_AutoAction_EnableRegex.Visible =  true;
+					toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+					toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
+					toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoActionCount();
 
@@ -1280,21 +1282,21 @@ namespace YAT.View.Forms
 				{
 					toolStripButton_MainTool_AutoAction_ShowHide.Text = "Show Automatic Action";
 
-					toolStripButton_MainTool_AutoAction_UseText      .Visible = false;
-					toolStripButton_MainTool_AutoAction_CaseSensitive.Visible = false;
-					toolStripButton_MainTool_AutoAction_WholeWord    .Visible = false;
-					toolStripButton_MainTool_AutoAction_EnableRegex  .Visible = false;
-
 					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoAction_Trigger);
 					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Trigger);
-					toolStripComboBox_MainTool_AutoAction_Trigger .Visible = false;
+					toolStripComboBox_MainTool_AutoAction_Trigger            .Visible = false;
 
 					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoAction_Action);
 					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Action);
-					toolStripComboBox_MainTool_AutoAction_Action  .Visible = false;
+					toolStripComboBox_MainTool_AutoAction_Action             .Visible = false;
 
-					toolStripLabel_MainTool_AutoAction_Count      .Visible = false;
-					toolStripButton_MainTool_AutoAction_Deactivate.Visible = false;
+					toolStripButton_MainTool_AutoAction_Trigger_UseText      .Visible = false;
+					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Visible = false;
+					toolStripButton_MainTool_AutoAction_Trigger_WholeWord    .Visible = false;
+					toolStripButton_MainTool_AutoAction_Trigger_EnableRegex  .Visible = false;
+
+					toolStripLabel_MainTool_AutoAction_Count                 .Visible = false;
+					toolStripButton_MainTool_AutoAction_Deactivate           .Visible = false;
 				}
 			}
 			finally
@@ -1311,18 +1313,23 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive      = false;
-				bool useText       = false;
-				bool caseSensitive = false;
-				bool wholeWord     = false;
- 				bool enableRegex   = false;
+				bool isActive              = false;
+
+				bool triggerUseText        = false;
+				bool triggerCaseSensitive  = false;
+				bool triggerWholeWord      = false;
+ 				bool triggerEnableRegex    = false;
+				bool responseUseText       = false;
+ 				bool responseEnableReplace = false;
 
 				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger      = AutoTrigger.None;
 				AutoContentState triggerState = AutoContentState.Neutral;
 
-				bool textIsSupported  = false;
-				bool regexIsSupported = false;
+				bool triggerTextIsSupported     = false;
+				bool triggerRegexIsSupported    = false;
+				bool responseTextIsSupported    = false;
+				bool responseReplaceIsSupported = false;
 
 				AutoResponseEx[] responseItems = AutoResponseEx.GetFixedItems();
 				AutoResponseEx   response      = AutoResponse.None;
@@ -1333,22 +1340,27 @@ namespace YAT.View.Forms
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
 					{
-						isActive         = activeTerminal.SettingsRoot.AutoResponse.IsActive;
-						useText          = activeTerminal.SettingsRoot.AutoResponse.Options.UseText;
-						caseSensitive    = activeTerminal.SettingsRoot.AutoResponse.Options.CaseSensitive;
-						wholeWord        = activeTerminal.SettingsRoot.AutoResponse.Options.WholeWord;
-						enableRegex      = activeTerminal.SettingsRoot.AutoResponse.Options.EnableRegex;
+						isActive                   = activeTerminal.SettingsRoot.AutoResponse.IsActive;
 
-						triggerItems     = activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems();
-						trigger          = activeTerminal.SettingsRoot.AutoResponse.Trigger;
-						triggerState     = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
+						triggerUseText             = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
+						triggerCaseSensitive       = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.CaseSensitive;
+						triggerWholeWord           = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.WholeWord;
+						triggerEnableRegex         = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.EnableRegex;
+						responseUseText            = activeTerminal.SettingsRoot.AutoResponse.ResponseOptions.UseText;
+						responseEnableReplace      = activeTerminal.SettingsRoot.AutoResponse.ResponseOptions.EnableReplace;
 
-						textIsSupported  = trigger.TextIsSupported;
-						regexIsSupported = trigger.RegexIsSupported;
+						triggerItems               = activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems();
+						trigger                    = activeTerminal.SettingsRoot.AutoResponse.Trigger;
+						triggerState               = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
 
-						responseItems    = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
-						response         = activeTerminal.SettingsRoot.AutoResponse.Response;
-						responseState    = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
+						triggerTextIsSupported     = trigger.TextIsSupported;
+						triggerRegexIsSupported    = trigger.RegexIsSupported;
+						responseTextIsSupported    = response.TextIsSupported;
+						responseReplaceIsSupported = response.ReplaceIsSupported;
+
+						responseItems              = activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath));
+						response                   = activeTerminal.SettingsRoot.AutoResponse.Response;
+						responseState              = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
 					}
 				}
 
@@ -1379,21 +1391,29 @@ namespace YAT.View.Forms
 					SetAutoResponseTriggerStateControls(triggerState);
 					SetAutoResponseResponseStateControls(responseState);
 
-					toolStripButton_MainTool_AutoResponse_UseText.Checked = (textIsSupported && useText);
-					toolStripButton_MainTool_AutoResponse_UseText.Enabled =  textIsSupported;
-					toolStripButton_MainTool_AutoResponse_UseText.Visible =  true;
+					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
+					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Enabled =  triggerTextIsSupported;
+					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
-					toolStripButton_MainTool_AutoResponse_CaseSensitive.Enabled = (textIsSupported && useText);
-					toolStripButton_MainTool_AutoResponse_CaseSensitive.Visible =  true;
+					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
+					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
+					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_WholeWord.Checked = (textIsSupported && useText && wholeWord);
-					toolStripButton_MainTool_AutoResponse_WholeWord.Enabled = (textIsSupported && useText);
-					toolStripButton_MainTool_AutoResponse_WholeWord.Visible =  true;
+					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
+					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_EnableRegex.Checked = (textIsSupported && useText && regexIsSupported && enableRegex);
-					toolStripButton_MainTool_AutoResponse_EnableRegex.Enabled = (textIsSupported && useText && regexIsSupported);
-					toolStripButton_MainTool_AutoResponse_EnableRegex.Visible =  true;
+					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
+					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Visible =  true;
+
+					toolStripButton_MainTool_AutoResponse_Response_UseText.Checked = (responseTextIsSupported && responseUseText);
+					toolStripButton_MainTool_AutoResponse_Response_UseText.Enabled =  responseTextIsSupported;
+					toolStripButton_MainTool_AutoResponse_Response_UseText.Visible =  true;
+
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Checked = (responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Enabled = (responseTextIsSupported && responseUseText && responseReplaceIsSupported);
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoResponseCount();
 
@@ -1407,21 +1427,24 @@ namespace YAT.View.Forms
 				{
 					toolStripButton_MainTool_AutoResponse_ShowHide.Text = "Show Automatic Response";
 
-					toolStripButton_MainTool_AutoResponse_UseText      .Visible = false;
-					toolStripButton_MainTool_AutoResponse_CaseSensitive.Visible = false;
-					toolStripButton_MainTool_AutoResponse_WholeWord    .Visible = false;
-					toolStripButton_MainTool_AutoResponse_EnableRegex  .Visible = false;
-
 					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoResponse_Trigger);
 					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Trigger);
-					toolStripComboBox_MainTool_AutoResponse_Trigger .Visible = false;
+					toolStripComboBox_MainTool_AutoResponse_Trigger             .Visible = false;
 
 					ToolStripComboBoxHelper.Deselect                           (toolStripComboBox_MainTool_AutoResponse_Response);
 					ToolStripComboBoxHelper.ClearItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Response);
-					toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
+					toolStripComboBox_MainTool_AutoResponse_Response            .Visible = false;
 
-					toolStripLabel_MainTool_AutoResponse_Count      .Visible = false;
-					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = false;
+					toolStripButton_MainTool_AutoResponse_Trigger_UseText       .Visible = false;
+					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive .Visible = false;
+					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord     .Visible = false;
+					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex   .Visible = false;
+
+					toolStripButton_MainTool_AutoResponse_Response_UseText      .Visible = false;
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Visible = false;
+
+					toolStripLabel_MainTool_AutoResponse_Count                  .Visible = false;
+					toolStripButton_MainTool_AutoResponse_Deactivate            .Visible = false;
 				}
 			}
 			finally
@@ -2259,22 +2282,22 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripButton_MainTool_AutoAction_UseText_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoAction_Trigger_UseText_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestToggleAutoActionUseText();
 		}
 
-		private void toolStripButton_MainTool_AutoAction_CaseSensitive_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestToggleAutoActionCaseSensitive();
 		}
 
-		private void toolStripButton_MainTool_AutoAction_WholeWord_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoAction_Trigger_WholeWord_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestToggleAutoActionWholeWord();
 		}
 
-		private void toolStripButton_MainTool_AutoAction_EnableRegex_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoAction_Trigger_EnableRegex_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestToggleAutoActionEnableRegex();
 		}
@@ -2390,10 +2413,10 @@ namespace YAT.View.Forms
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseText();       e.SuppressKeyPress = true; break;
-					case Keys.C: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseCaseSensitive(); e.SuppressKeyPress = true; break;
-					case Keys.W: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseWholeWord();     e.SuppressKeyPress = true; break;
-					case Keys.E: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseEnableRegex();   e.SuppressKeyPress = true; break;
+					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerUseText();       e.SuppressKeyPress = true; break;
+					case Keys.C: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive(); e.SuppressKeyPress = true; break;
+					case Keys.W: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();     e.SuppressKeyPress = true; break;
+					case Keys.E: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();   e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2420,24 +2443,24 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripButton_MainTool_AutoResponse_UseText_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoResponse_Trigger_UseText_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseUseText();
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerUseText();
 		}
 
-		private void toolStripButton_MainTool_AutoResponse_CaseSensitive_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseCaseSensitive();
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive();
 		}
 
-		private void toolStripButton_MainTool_AutoResponse_WholeWord_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoResponse_Trigger_WholeWord_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseWholeWord();
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();
 		}
 
-		private void toolStripButton_MainTool_AutoResponse_EnableRegex_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseEnableRegex();
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_DropDown(object sender, EventArgs e)
@@ -2507,6 +2530,51 @@ namespace YAT.View.Forms
 				default:
 					throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+		}
+
+		private void toolStripComboBox_MainTool_AutoResponse_Response_KeyDown(object sender, KeyEventArgs e)
+		{
+			// Note the \remind (2017-11-22..12-16 / MKY) limitations in .NET WinForms (or Win32)
+			// described in toolStripComboBox_MainTool_Find_Pattern_KeyDown() further above.
+
+			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseUseText();       e.SuppressKeyPress = true; break;
+					case Keys.R: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace(); e.SuppressKeyPress = true; break;
+
+					default: break;
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Suppress same keys for symmetricity with 'KeyDown' above.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
+		private void toolStripComboBox_MainTool_AutoResponse_Response_KeyUp(object sender, KeyEventArgs e)
+		{
+			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			{
+				switch (e.KeyData & Keys.KeyCode)
+				{
+					case Keys.T: e.SuppressKeyPress = true; break;
+					case Keys.R: e.SuppressKeyPress = true; break;
+
+					default: break;
+				}
+			}
+		}
+
+		private void toolStripButton_MainTool_AutoResponse_Response_UseText_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseUseText();
+		}
+
+		private void toolStripButton_MainTool_AutoResponse_Response_EnableReplace_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace();
 		}
 
 		private void toolStripLabel_MainTool_AutoResponse_Count_Click(object sender, EventArgs e)

@@ -777,8 +777,10 @@ namespace YAT.View.Forms
 				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
-				bool textIsSupported  = false;
-				bool regexIsSupported = false;
+				bool triggerTextIsSupported     = false;
+				bool triggerRegexIsSupported    = false;
+				bool responseTextIsSupported    = false;
+				bool responseReplaceIsSupported = false;
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
@@ -787,34 +789,45 @@ namespace YAT.View.Forms
 					var trigger = this.settingsRoot.AutoResponse.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
-					textIsSupported  = trigger.TextIsSupported;
-					regexIsSupported = trigger.RegexIsSupported;
+					triggerTextIsSupported  = trigger.TextIsSupported;
+					triggerRegexIsSupported = trigger.RegexIsSupported;
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
 					var response = this.settingsRoot.AutoResponse.Response;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+
+					responseTextIsSupported    = response.TextIsSupported;
+					responseReplaceIsSupported = response.ReplaceIsSupported;
 				}
 
 				SetAutoResponseTriggerStateControls();
 				SetAutoResponseResponseStateControls();
 
-				var useText       = this.settingsRoot.AutoResponse.Options.UseText;
-				var caseSensitive = this.settingsRoot.AutoResponse.Options.CaseSensitive;
-				var wholeWord     = this.settingsRoot.AutoResponse.Options.WholeWord;
-				var enableRegex   = this.settingsRoot.AutoResponse.Options.EnableRegex;
+				var triggerUseText        = this.settingsRoot.AutoResponse.TriggerOptions.UseText;
+				var triggerCaseSensitive  = this.settingsRoot.AutoResponse.TriggerOptions.CaseSensitive;
+				var triggerWholeWord      = this.settingsRoot.AutoResponse.TriggerOptions.WholeWord;
+				var triggerEnableRegex    = this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex;
+				var responseUseText       = this.settingsRoot.AutoResponse.ResponseOptions.UseText;
+				var responseEnableReplace = this.settingsRoot.AutoResponse.ResponseOptions.EnableReplace;
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = (textIsSupported && useText);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Enabled =  textIsSupported;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Enabled =  triggerTextIsSupported;
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Enabled = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Checked = (textIsSupported && useText && wholeWord);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Enabled = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Checked = (textIsSupported && useText && regexIsSupported && enableRegex);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Enabled =  textIsSupported && useText && regexIsSupported;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Enabled =  triggerTextIsSupported && triggerUseText && triggerRegexIsSupported;
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Checked = (responseTextIsSupported && responseUseText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Enabled =  responseTextIsSupported;
+
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Checked = (responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Enabled =  responseTextIsSupported && responseUseText && responseReplaceIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = (this.settingsRoot.AutoResponse.Trigger.IsActive || this.settingsRoot.AutoResponse.Response.IsActive);
 
@@ -949,22 +962,22 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText_Click(object sender, EventArgs e)
 		{
-			RequestToggleAutoResponseUseText();
+			RequestToggleAutoResponseTriggerUseText();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive_Click(object sender, EventArgs e)
 		{
-			RequestToggleAutoResponseCaseSensitive();
+			RequestToggleAutoResponseTriggerCaseSensitive();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord_Click(object sender, EventArgs e)
 		{
-			RequestToggleAutoResponseWholeWord();
+			RequestToggleAutoResponseTriggerWholeWord();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex_Click(object sender, EventArgs e)
 		{
-			RequestToggleAutoResponseEnableRegex();
+			RequestToggleAutoResponseTriggerEnableRegex();
 		}
 
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
@@ -1012,6 +1025,16 @@ namespace YAT.View.Forms
 
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.Window;
 			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.WindowText;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoResponseResponseUseText();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace_Click(object sender, EventArgs e)
+		{
+			RequestToggleAutoResponseResponseEnableReplace();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_Click(object sender, EventArgs e)
@@ -1065,8 +1088,8 @@ namespace YAT.View.Forms
 				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
-				bool textIsSupported  = false;
-				bool regexIsSupported = false;
+				bool triggerTextIsSupported  = false;
+				bool triggerRegexIsSupported = false;
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
@@ -1075,8 +1098,8 @@ namespace YAT.View.Forms
 					var trigger = this.settingsRoot.AutoAction.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
-					textIsSupported  = trigger.TextIsSupported;
-					regexIsSupported = trigger.RegexIsSupported;
+					triggerTextIsSupported  = trigger.TextIsSupported;
+					triggerRegexIsSupported = trigger.RegexIsSupported;
 
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
@@ -1087,22 +1110,22 @@ namespace YAT.View.Forms
 				SetAutoActionTriggerStateControls();
 			////SetAutoActionActionStateControls() is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
-				var useText       = this.settingsRoot.AutoAction.Options.UseText;
-				var caseSensitive = this.settingsRoot.AutoAction.Options.CaseSensitive;
-				var wholeWord     = this.settingsRoot.AutoAction.Options.WholeWord;
-				var enableRegex   = this.settingsRoot.AutoAction.Options.EnableRegex;
+				var triggerUseText       = this.settingsRoot.AutoAction.TriggerOptions.UseText;
+				var triggerCaseSensitive = this.settingsRoot.AutoAction.TriggerOptions.CaseSensitive;
+				var triggerWholeWord     = this.settingsRoot.AutoAction.TriggerOptions.WholeWord;
+				var triggerEnableRegex   = this.settingsRoot.AutoAction.TriggerOptions.EnableRegex;
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Checked = (textIsSupported && useText);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Enabled =  textIsSupported;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Enabled =  triggerTextIsSupported;
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Checked = (textIsSupported && useText && caseSensitive);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Enabled = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Checked = (textIsSupported && useText && wholeWord);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Enabled = (textIsSupported && useText);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Checked = (textIsSupported && useText && regexIsSupported && enableRegex);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Enabled =  textIsSupported && useText && regexIsSupported;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Enabled =  triggerTextIsSupported && triggerUseText && triggerRegexIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = (this.settingsRoot.AutoAction.Trigger.IsActive || this.settingsRoot.AutoAction.Action.IsActive);
 			}
@@ -4328,9 +4351,9 @@ namespace YAT.View.Forms
 			}
 			else // IsTextTriggered
 			{
-				if (!this.settingsRoot.AutoAction.Options.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
+				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
-				else                                   // EnableRegex
+				else                                          // EnableRegex
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
 			}
 		}
@@ -4388,9 +4411,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionUseText()
 		{
-			var options = this.settingsRoot.AutoAction.Options;
+			var options = this.settingsRoot.AutoAction.TriggerOptions;
 			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoAction.Options = options;
+			this.settingsRoot.AutoAction.TriggerOptions = options;
 
 			RevalidateAutoActionTriggerTextSilently();
 		}
@@ -4398,9 +4421,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionCaseSensitive()
 		{
-			var options = this.settingsRoot.AutoAction.Options;
+			var options = this.settingsRoot.AutoAction.TriggerOptions;
 			options.CaseSensitive = !options.CaseSensitive; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoAction.Options = options;
+			this.settingsRoot.AutoAction.TriggerOptions = options;
 
 			RevalidateAutoActionTriggerTextSilently();
 		}
@@ -4408,9 +4431,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionWholeWord()
 		{
-			var options = this.settingsRoot.AutoAction.Options;
+			var options = this.settingsRoot.AutoAction.TriggerOptions;
 			options.WholeWord = !options.WholeWord; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoAction.Options = options;
+			this.settingsRoot.AutoAction.TriggerOptions = options;
 
 			RevalidateAutoActionTriggerTextSilently();
 		}
@@ -4418,9 +4441,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionEnableRegex()
 		{
-			var options = this.settingsRoot.AutoAction.Options;
+			var options = this.settingsRoot.AutoAction.TriggerOptions;
 			options.EnableRegex = !options.EnableRegex; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoAction.Options = options;
+			this.settingsRoot.AutoAction.TriggerOptions = options;
 
 			RevalidateAutoActionTriggerTextSilently();
 		}
@@ -4545,9 +4568,9 @@ namespace YAT.View.Forms
 			}
 			else // IsTextTriggered
 			{
-				if (!this.settingsRoot.AutoResponse.Options.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
+				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
-				else                                     // EnableRegex
+				else                                            // EnableRegex
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
 			}
 		}
@@ -4559,41 +4582,41 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestToggleAutoResponseUseText()
+		public virtual void RequestToggleAutoResponseTriggerUseText()
 		{
-			var options = this.settingsRoot.AutoResponse.Options;
+			var options = this.settingsRoot.AutoResponse.TriggerOptions;
 			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoResponse.Options = options;
+			this.settingsRoot.AutoResponse.TriggerOptions = options;
 
 			RevalidateAutoResponseTriggerTextSilently();
 		}
 
 		/// <summary></summary>
-		public virtual void RequestToggleAutoResponseCaseSensitive()
+		public virtual void RequestToggleAutoResponseTriggerCaseSensitive()
 		{
-			var options = this.settingsRoot.AutoResponse.Options;
+			var options = this.settingsRoot.AutoResponse.TriggerOptions;
 			options.CaseSensitive = !options.CaseSensitive; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoResponse.Options = options;
+			this.settingsRoot.AutoResponse.TriggerOptions = options;
 
 			RevalidateAutoResponseTriggerTextSilently();
 		}
 
 		/// <summary></summary>
-		public virtual void RequestToggleAutoResponseWholeWord()
+		public virtual void RequestToggleAutoResponseTriggerWholeWord()
 		{
-			var options = this.settingsRoot.AutoResponse.Options;
+			var options = this.settingsRoot.AutoResponse.TriggerOptions;
 			options.WholeWord = !options.WholeWord; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoResponse.Options = options;
+			this.settingsRoot.AutoResponse.TriggerOptions = options;
 
 			RevalidateAutoResponseTriggerTextSilently();
 		}
 
 		/// <summary></summary>
-		public virtual void RequestToggleAutoResponseEnableRegex()
+		public virtual void RequestToggleAutoResponseTriggerEnableRegex()
 		{
-			var options = this.settingsRoot.AutoResponse.Options;
+			var options = this.settingsRoot.AutoResponse.TriggerOptions;
 			options.EnableRegex = !options.EnableRegex; // Settings member must be changed to let the changed event be raised!
-			this.settingsRoot.AutoResponse.Options = options;
+			this.settingsRoot.AutoResponse.TriggerOptions = options;
 
 			RevalidateAutoResponseTriggerTextSilently();
 		}
@@ -4651,6 +4674,26 @@ namespace YAT.View.Forms
 		public virtual void RequestAutoResponseResponse(AutoResponseEx response)
 		{
 			this.settingsRoot.AutoResponse.Response = response;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoResponseResponseUseText()
+		{
+			var options = this.settingsRoot.AutoResponse.ResponseOptions;
+			options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoResponse.ResponseOptions = options;
+
+		////RevalidateAutoResponseResponseTextSilently() is not required as Regex.Replace() will accept any text.
+		}
+
+		/// <summary></summary>
+		public virtual void RequestToggleAutoResponseResponseEnableReplace()
+		{
+			var options = this.settingsRoot.AutoResponse.ResponseOptions;
+			options.EnableReplace = !options.EnableReplace; // Settings member must be changed to let the changed event be raised!
+			this.settingsRoot.AutoResponse.ResponseOptions = options;
+
+		////RevalidateAutoResponseResponseTextSilently() is not required as Regex.Replace() will accept any text.
 		}
 
 		/// <summary></summary>

@@ -36,6 +36,7 @@ namespace YAT.Model.Settings
 	public class AutoResponseSettings : AutoTriggerSettings, IEquatable<AutoResponseSettings>
 	{
 		private AutoResponseEx response;
+		private AutoResponseOptions responseOptions;
 
 		/// <summary></summary>
 		public AutoResponseSettings()
@@ -58,7 +59,8 @@ namespace YAT.Model.Settings
 		public AutoResponseSettings(AutoResponseSettings rhs)
 			: base(rhs)
 		{
-			Response = rhs.Response;
+			Response        = rhs.Response;
+			ResponseOptions = rhs.ResponseOptions;
 
 			ClearChanged();
 		}
@@ -70,7 +72,8 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Response = AutoResponse.None;
+			Response        = AutoResponse.None;
+			ResponseOptions = new AutoResponseOptions(false);
 		}
 
 		#region Properties
@@ -112,6 +115,21 @@ namespace YAT.Model.Settings
 		public override bool IsActive
 		{
 			get { return (base.IsActive && Response.IsActive); }
+		}
+
+		/// <summary></summary>
+		[XmlElement("ResponseOptions")]
+		public virtual AutoResponseOptions ResponseOptions
+		{
+			get { return (this.responseOptions); }
+			set
+			{
+				if (this.responseOptions != value)
+				{
+					this.responseOptions = value;
+					SetMyChanged();
+				}
+			}
 		}
 
 		#endregion
@@ -160,6 +178,7 @@ namespace YAT.Model.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (Response_ForSerialization != null ? Response_ForSerialization.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^                                      ResponseOptions          .GetHashCode();
 
 				return (hashCode);
 			}
@@ -190,7 +209,8 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization)
+				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization) &&
+				ResponseOptions.Equals(                                     other.ResponseOptions)
 			);
 		}
 
