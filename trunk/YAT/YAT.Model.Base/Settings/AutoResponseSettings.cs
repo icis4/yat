@@ -73,7 +73,7 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			Response        = AutoResponse.None;
-			ResponseOptions = new AutoResponseOptions(false);
+			ResponseOptions = new AutoResponseOptions(false, false);
 		}
 
 		#region Properties

@@ -1411,8 +1411,8 @@ namespace YAT.View.Forms
 					toolStripButton_MainTool_AutoResponse_Response_UseText.Enabled =  responseTextIsSupported;
 					toolStripButton_MainTool_AutoResponse_Response_UseText.Visible =  true;
 
-					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Checked = (responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
-					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Enabled = (responseTextIsSupported && responseUseText && responseReplaceIsSupported);
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
+					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported);
 					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Visible =  true;
 
 					toolStripButton_MainTool_SetAutoResponseCount();

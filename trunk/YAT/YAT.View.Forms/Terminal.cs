@@ -821,13 +821,13 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Enabled =  triggerTextIsSupported && triggerUseText && triggerRegexIsSupported;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Checked = (responseTextIsSupported && responseUseText);
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Enabled =  responseTextIsSupported;
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Checked = (responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Enabled =  responseTextIsSupported && responseUseText && responseReplaceIsSupported;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported && responseEnableReplace);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseTextIsSupported && responseUseText && responseReplaceIsSupported);
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = (this.settingsRoot.AutoResponse.Trigger.IsActive || this.settingsRoot.AutoResponse.Response.IsActive);
 
