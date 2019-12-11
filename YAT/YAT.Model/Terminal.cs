@@ -3069,7 +3069,7 @@ namespace YAT.Model
 
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoActionFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
@@ -3077,7 +3077,7 @@ namespace YAT.Model
 
 			// AutoResponse:                                                             // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoResponseFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3098,7 +3098,7 @@ namespace YAT.Model
 			// AutoAction:
 			List<Pair<string, DateTime>> autoActionTriggers = null;                  // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoActionFromElements(e.Elements, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
@@ -3107,7 +3107,7 @@ namespace YAT.Model
 			// AutoResponse:
 			List<Pair<byte[], string>> autoResponseTriggers = null;                      // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text and Regex based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
 				EvaluateAutoResponseFromElements(e.Elements, out autoResponseTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3146,9 +3146,9 @@ namespace YAT.Model
 		//      > Keep well-defined interface (former 'LineChunkAttribute') among model and domain.
 		//  c) Completely move handling to model, possible as long as using the retaining approach:
 		//      > Byte sequence based triggering implemented in <see cref="terminal_DisplayElementsRxAdded"/> (immediate approach / element update mode).
-		//      > Text and Regex based triggering implemented in <see cref="terminal_DisplayLinesRxAdded"/> (retaining approach / line update mode).
+		//      > Text based triggering implemented in <see cref="terminal_DisplayLinesRxAdded"/> (retaining approach / line update mode).
 		//     Advantages of this approach:
-		//      > Text and Regex based triggering possible.
+		//      > Text based triggering possible.
 		//      > Keep <see cref="Domain.Terminal"/> as simple as possible, really.
 		//      > No additional interface (former 'LineChunkAttribute') among model and domain needed anymore.
 		//     Disadvantage of this approach:
@@ -3298,9 +3298,26 @@ namespace YAT.Model
 		////if (this.bidirLineRate.Update(e.Lines.Count)) would technically be possible, but doesn't make much sense.
 		////	OnIORateChanged_Promptly(EventArgs.Empty);
 
-			// AutoAction:
-			if (SettingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // Filter/Suppress is processed here.
-				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
+			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
+			{
+				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
+				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress)
+				{
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				}
+				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
+				{
+					ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
+				}
+			}
+
+			// AutoResponse:                                                             // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
+			{
+				EvaluateAutoResponseFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
 
 			// Display:
 			OnDisplayLinesBidirAdded(e);
@@ -3330,8 +3347,27 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// AutoAction:
-			if (SettingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // Filter/Suppress is processed here.
-				ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
+			List<Pair<string, DateTime>> autoActionTriggers = null;                  // See [== AutoTrigger.AnyLine] below.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
+			{
+				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
+				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress)
+				{
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				}
+				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
+				{
+					ProcessAutoActionFilterAndSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method will recreate the display lines.
+				}
+			}
+
+			// AutoResponse:
+			List<Pair<byte[], string>> autoResponseTriggers = null;                      // See [== AutoTrigger.AnyLine] below.
+			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
+			{
+				EvaluateAutoResponseFromLines(e.Lines, out autoResponseTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
 
 			// Display:
 			OnDisplayLinesRxAdded(e);
@@ -3359,6 +3395,10 @@ namespace YAT.Model
 				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
 				// in the 'ElementsRxAdded' event further above.
 			}
+			else if ((autoActionTriggers != null) && (autoActionTriggers.Count > 0))
+			{
+				EnqueueAutoActions(autoActionTriggers);
+			}
 
 			// AutoResponse:
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
@@ -3372,6 +3412,10 @@ namespace YAT.Model
 				// Also note that implementation wouldn't be that simple, since "e.Highlight = true"
 				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
 				// in the 'ElementsRxAdded' event further above.
+			}
+			else if ((autoResponseTriggers != null) && (autoResponseTriggers.Count > 0))
+			{
+				EnqueueAutoResponses(autoResponseTriggers);
 			}
 		}
 
