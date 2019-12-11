@@ -28,31 +28,21 @@ namespace YAT.Model.Types
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct AutoTriggerOptions : IEquatable<AutoTriggerOptions>
+	public struct AutoResponseOptions : IEquatable<AutoResponseOptions>
 	{
 		/// <summary></summary>
 		[XmlElement("UseText")]
 		public bool UseText { get; set; }
 
 		/// <summary></summary>
-		[XmlElement("CaseSensitive")]
-		public bool CaseSensitive { get; set; }
+		[XmlElement("EnableReplace")]
+		public bool EnableReplace { get; set; }
 
 		/// <summary></summary>
-		[XmlElement("WholeWord")]
-		public bool WholeWord { get; set; }
-
-		/// <summary></summary>
-		[XmlElement("EnableRegex")]
-		public bool EnableRegex { get; set; }
-
-		/// <summary></summary>
-		public AutoTriggerOptions(bool useText, bool caseSensitive, bool wholeWord, bool enableRegex)
+		public AutoResponseOptions(bool useText, bool enableReplace)
 		{
 			UseText       = useText;
-			CaseSensitive = caseSensitive;
-			WholeWord     = wholeWord;
-			EnableRegex   = enableRegex;
+			EnableReplace = enableReplace;
 		}
 
 		#region Object Members
@@ -71,10 +61,8 @@ namespace YAT.Model.Types
 		{
 			return
 			(
-				UseText       + ", " +
-				CaseSensitive + ", " +
-				WholeWord     + ", " +
-				EnableRegex
+				UseText + ", " +
+				EnableReplace
 			);
 		}
 
@@ -92,9 +80,7 @@ namespace YAT.Model.Types
 				int hashCode;
 
 				hashCode =                    UseText      .GetHashCode();
-				hashCode = (hashCode * 397) ^ CaseSensitive.GetHashCode();
-				hashCode = (hashCode * 397) ^ WholeWord    .GetHashCode();
-				hashCode = (hashCode * 397) ^ EnableRegex  .GetHashCode();
+				hashCode = (hashCode * 397) ^ EnableReplace.GetHashCode();
 
 				return (hashCode);
 			}
@@ -105,8 +91,8 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is AutoTriggerOptions)
-				return (Equals((AutoTriggerOptions)obj));
+			if (obj is AutoResponseOptions)
+				return (Equals((AutoResponseOptions)obj));
 			else
 				return (false);
 		}
@@ -118,21 +104,19 @@ namespace YAT.Model.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(AutoTriggerOptions other)
+		public bool Equals(AutoResponseOptions other)
 		{
 			return
 			(
-				UseText      .Equals(other.UseText)       &&
-				CaseSensitive.Equals(other.CaseSensitive) &&
-				WholeWord    .Equals(other.WholeWord)     &&
-				EnableRegex  .Equals(other.EnableRegex)
+				UseText      .Equals(other.UseText) &&
+				EnableReplace.Equals(other.EnableReplace)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have value equality.
 		/// </summary>
-		public static bool operator ==(AutoTriggerOptions lhs, AutoTriggerOptions rhs)
+		public static bool operator ==(AutoResponseOptions lhs, AutoResponseOptions rhs)
 		{
 			return (lhs.Equals(rhs));
 		}
@@ -140,7 +124,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
-		public static bool operator !=(AutoTriggerOptions lhs, AutoTriggerOptions rhs)
+		public static bool operator !=(AutoResponseOptions lhs, AutoResponseOptions rhs)
 		{
 			return (!(lhs == rhs));
 		}

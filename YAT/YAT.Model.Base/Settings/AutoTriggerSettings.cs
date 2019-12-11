@@ -36,7 +36,7 @@ namespace YAT.Model.Settings
 	public class AutoTriggerSettings : MKY.Settings.SettingsItem, IEquatable<AutoTriggerSettings>
 	{
 		private AutoTriggerEx trigger;
-		private AutoTriggerOptions options;
+		private AutoTriggerOptions triggerOptions;
 
 		/// <summary></summary>
 		public AutoTriggerSettings()
@@ -59,8 +59,8 @@ namespace YAT.Model.Settings
 		public AutoTriggerSettings(AutoTriggerSettings rhs)
 			: base(rhs)
 		{
-			Trigger = rhs.Trigger;
-			Options = rhs.Options;
+			Trigger        = rhs.Trigger;
+			TriggerOptions = rhs.TriggerOptions;
 
 			ClearChanged();
 		}
@@ -72,10 +72,10 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Trigger = AutoTrigger.None;
-			Options = new AutoTriggerOptions(false, true, false, false);
-		}                                            // Same as .NET regex, which are "case-sensitive by default".
-		                                             // Also same as byte sequence based triggers, which are case-sensitive by nature.
+			Trigger        = AutoTrigger.None;
+			TriggerOptions = new AutoTriggerOptions(false, true, false, false);
+		}                                                   // Same as .NET regex, which are "case-sensitive by default".
+		                                                    // Also same as byte sequence based triggers, which are case-sensitive by nature.
 		#region Properties
 		//==========================================================================================
 		// Properties
@@ -118,15 +118,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("Options")]
-		public virtual AutoTriggerOptions Options
+		[XmlElement("TriggerOptions")]
+		public virtual AutoTriggerOptions TriggerOptions
 		{
-			get { return (this.options); }
+			get { return (this.triggerOptions); }
 			set
 			{
-				if (this.options != value)
+				if (this.triggerOptions != value)
 				{
-					this.options = value;
+					this.triggerOptions = value;
 					SetMyChanged();
 				}
 			}
@@ -143,7 +143,7 @@ namespace YAT.Model.Settings
 		[XmlIgnore]
 		public virtual bool IsTextTriggered
 		{
-			get { return (Trigger.TextIsSupported && Options.UseText); }
+			get { return (Trigger.TextIsSupported && TriggerOptions.UseText); }
 		}
 
 		#endregion
@@ -190,7 +190,7 @@ namespace YAT.Model.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (Trigger_ForSerialization != null ? Trigger_ForSerialization.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^                                                      Options.GetHashCode();
+				hashCode = (hashCode * 397) ^                                     TriggerOptions          .GetHashCode();
 
 				return (hashCode);
 			}
@@ -222,7 +222,7 @@ namespace YAT.Model.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				StringEx.EqualsOrdinalIgnoreCase(Trigger_ForSerialization, other.Trigger_ForSerialization) &&
-				Options .Equals(                                           other.Options)
+				TriggerOptions.Equals(                                     other.TriggerOptions)
 			);
 		}
 

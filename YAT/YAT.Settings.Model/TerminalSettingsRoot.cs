@@ -674,7 +674,7 @@ namespace YAT.Settings.Model
 		public virtual bool TryGetActiveAutoActionTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
 			if (AutoAction.Trigger.IsActive)
-				return (TryGetActiveAutoTrigger(AutoAction.Trigger, AutoAction.IsByteSequenceTriggered, AutoAction.Options.EnableRegex,
+				return (TryGetActiveAutoTrigger(AutoAction.Trigger, AutoAction.TriggerOptions, AutoAction.IsByteSequenceTriggered,
 				                                out command, out triggerTextOrRegexPattern, out regex));
 
 			command = null;
@@ -692,7 +692,7 @@ namespace YAT.Settings.Model
 		public virtual bool TryGetActiveAutoResponseTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
 			if (AutoResponse.Trigger.IsActive)
-				return (TryGetActiveAutoTrigger(AutoResponse.Trigger, AutoResponse.IsByteSequenceTriggered, AutoResponse.Options.EnableRegex,
+				return (TryGetActiveAutoTrigger(AutoResponse.Trigger, AutoResponse.TriggerOptions, AutoResponse.IsByteSequenceTriggered,
 				                                out command, out triggerTextOrRegexPattern, out regex));
 
 			command = null;
@@ -707,7 +707,7 @@ namespace YAT.Settings.Model
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
-		protected virtual bool TryGetActiveAutoTrigger(AutoTriggerEx trigger, bool isByteSequenceTriggered, bool enableRegex,
+		protected virtual bool TryGetActiveAutoTrigger(AutoTriggerEx trigger, AutoTriggerOptions triggerOptions, bool isByteSequenceTriggered,
 		                                               out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
 			switch ((AutoTrigger)trigger)
@@ -781,7 +781,7 @@ namespace YAT.Settings.Model
 						command = null;
 						triggerTextOrRegexPattern = trigger;
 
-						if (!enableRegex)
+						if (!triggerOptions.EnableRegex)
 						{
 							regex = null;
 							return (true);
@@ -790,16 +790,16 @@ namespace YAT.Settings.Model
 						{
 							try
 							{
-								var pattern = (string)trigger;
-								var options = RegexOptions.Singleline;
+								var regexPattern = (string)trigger;
+								var regexOptions = RegexOptions.Singleline;
 
-								if (!AutoAction.Options.CaseSensitive)
-									options |= RegexOptions.IgnoreCase;
+								if (!triggerOptions.CaseSensitive)
+									regexOptions |= RegexOptions.IgnoreCase;
 
-								if (AutoAction.Options.WholeWord)   // Surround with Regex word delimiter:
-									pattern = string.Format(CultureInfo.CurrentCulture, "{0}{1}{0}", @"\b", pattern);
+								if (triggerOptions.WholeWord)          // Surround with Regex word delimiter:
+									regexPattern = string.Format(CultureInfo.CurrentCulture, "{0}{1}{0}", @"\b", regexPattern);
 
-								regex = new Regex(pattern);
+								regex = new Regex(regexPattern, regexOptions);
 								return (true);
 							}
 							catch (ArgumentException ex)

@@ -141,7 +141,7 @@ namespace YAT.Model
 						else // IsTextTriggered
 						{
 							lock (this.autoActionTriggerHelperSyncObj)
-								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoAction.Options.CaseSensitive, SettingsRoot.AutoAction.Options.WholeWord, triggerRegex);
+								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoAction.TriggerOptions.CaseSensitive, SettingsRoot.AutoAction.TriggerOptions.WholeWord, triggerRegex);
 						}
 					}
 					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.

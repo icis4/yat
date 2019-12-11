@@ -413,6 +413,8 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Receive = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction = new System.Windows.Forms.ToolStripMenuItem();
@@ -3809,7 +3811,9 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response});
+            this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response,
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText,
+            this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(171, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Text = "&Response";
@@ -3823,6 +3827,23 @@ namespace YAT.View.Forms
     "ll-in any command text.";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_formatting_text_containing_16x16;
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Text = "Use &Text";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.ToolTipText = "By default, the response is based on the byte sequence of a command.\r\nThis option" +
+    " switches to a response based on the text of a command.";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Text = "Enable &Replace";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate
 			// 
@@ -5254,6 +5275,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_TerminalMenu_Send_AutoResponse_Response;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_UseText;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowDevice;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Send_Separator_4;
