@@ -180,7 +180,6 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoResponse_Trigger_WholeWord = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripComboBox_MainTool_AutoResponse_Response = new MKY.Windows.Forms.ToolStripComboBoxEx();
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_AutoResponse_Response_EnableReplace = new System.Windows.Forms.ToolStripButton();
 			this.toolStripLabel_MainTool_AutoResponse_Count = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButton_MainTool_AutoResponse_Deactivate = new System.Windows.Forms.ToolStripButton();
@@ -1036,7 +1035,6 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_AutoResponse_Trigger_WholeWord,
             this.toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex,
             this.toolStripComboBox_MainTool_AutoResponse_Response,
-            this.toolStripButton_MainTool_AutoResponse_Response_UseText,
             this.toolStripButton_MainTool_AutoResponse_Response_EnableReplace,
             this.toolStripLabel_MainTool_AutoResponse_Count,
             this.toolStripButton_MainTool_AutoResponse_Deactivate,
@@ -1572,18 +1570,6 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoResponse_Response.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_KeyUp);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_TextChanged);
 			// 
-			// toolStripButton_MainTool_AutoResponse_Response_UseText
-			// 
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_formatting_text_containing_16x16;
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText.Name = "toolStripButton_MainTool_AutoResponse_Response_UseText";
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText.Size = new System.Drawing.Size(23, 20);
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText.ToolTipText = "Use Text\r\nBy default, the response is based on the byte sequence of a command.\r\nT" +
-    "his option switches to a response based on the text of a command.\r\n[Alt+T] (whil" +
-    "e editing)";
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText.Visible = false;
-			this.toolStripButton_MainTool_AutoResponse_Response_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_Response_UseText_Click);
-			// 
 			// toolStripButton_MainTool_AutoResponse_Response_EnableReplace
 			// 
 			this.toolStripButton_MainTool_AutoResponse_Response_EnableReplace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -1858,7 +1844,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Trigger_WholeWord;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Response_UseText;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Response_EnableReplace;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel_MainTool_AutoResponse_Count;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoResponse_Deactivate;
