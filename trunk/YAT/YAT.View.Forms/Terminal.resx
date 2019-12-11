@@ -144,6 +144,16 @@
   <metadata name="contextMenuStrip_Preset.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>559, 17</value>
   </metadata>
+  <data name="toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.ToolTipText" xml:space="preserve">
+    <value>Requires that trigger uses text with enabled regular expression,
+because replacement is done using  that regular expression object.
+
+Example usage:
+ &gt; Trigger = (\d+)ABC
+ &gt; Response = $1XYZ
+Receiving e.g. 99ABC will trigger the response, 99 being captured by (\d+).
+The $1 replacement tag will be filled with 99, resulting in sending 99XYZ.</value>
+  </data>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText" xml:space="preserve">
     <value>Configure Automatic Action Trigger,
 either refer to one of the commands,
