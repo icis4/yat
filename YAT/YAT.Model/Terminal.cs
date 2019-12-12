@@ -49,6 +49,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -3105,7 +3106,7 @@ namespace YAT.Model
 			}
 
 			// AutoResponse:
-			List<Pair<byte[], string>> autoResponseTriggers = null;                      // See terminal_DisplayLinesRxAdded for background.
+			List<Triple<byte[], string, MatchCollection>> autoResponseTriggers = null;   // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
@@ -3362,7 +3363,7 @@ namespace YAT.Model
 			}
 
 			// AutoResponse:
-			List<Pair<byte[], string>> autoResponseTriggers = null;                      // See [== AutoTrigger.AnyLine] below.
+			List<Triple<byte[], string, MatchCollection>> autoResponseTriggers = null;   // See [== AutoTrigger.AnyLine] below.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 			{
@@ -3403,8 +3404,8 @@ namespace YAT.Model
 			// AutoResponse:
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger == AutoTrigger.AnyLine))
 			{
-				foreach (var dl in e.Lines)                       // Response shall be based on origin, not text.
-					EnqueueAutoResponse(ToOriginWithoutRxEol(dl), null);
+				foreach (var dl in e.Lines) // Response must always be based on origin, not text, since text could be formatted
+					EnqueueAutoResponse(ToOriginWithoutRxEol(dl), null, null); // not suitable for sending, e.g. in binary radix.
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.
