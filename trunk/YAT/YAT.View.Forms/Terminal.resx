@@ -146,13 +146,15 @@
   </metadata>
   <data name="toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.ToolTipText" xml:space="preserve">
     <value>Requires that trigger uses text with enabled regular expression,
-because replacement is done using  that regular expression object.
+because replacement is done based on regular expression captures.
 
 Example usage:
  &gt; Trigger = (\d+)ABC
  &gt; Response = $1XYZ
 Receiving e.g. 99ABC will trigger the response, 99 being captured by (\d+).
-The $1 replacement tag will be filled with 99, resulting in sending 99XYZ.</value>
+The $1 replacement tag will be filled with 99, resulting in sending 99XYZ.
+
+Replacement tags are $1, $2,... (regular expression syntax).</value>
   </data>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText" xml:space="preserve">
     <value>Configure Automatic Action Trigger,
