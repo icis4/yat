@@ -6370,6 +6370,32 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)    { monitor_Rx.   SetDataRateStatus(txByte, txLine, rxByte, rxLine); }
 		}
 
+		/// <summary>
+		/// 'Normally', the display is updated by the 'DisplayElements[Tx|Bidir|Rx]Added' events,
+		/// except for those cases where processing is limited to 'DisplayLines[Bidir|Rx][Added|Reloaded]':
+		/// <list type="bullet">
+		/// <item><description>AutoAction: Filter/Suppress.</description></item>
+		/// <item><description>AutoAction: Text based triggers.</description></item>
+		/// <item><description>AutoReponse: Text based triggers.</description></item>
+		/// </list>
+		/// Not the perfect solution, but considered good enough, although it doesn't fully work when both
+		/// automatic action and response are active. But then highlighting becomes limited anyway...
+		/// </summary>
+		private bool UseDisplayElementsAdded
+		{
+			get
+			{
+				var autoActionCondition = (settingsRoot.AutoAction.IsActive && (settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+				                           settingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+				                           settingsRoot.AutoAction.IsNeitherFilterNorSuppress); // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+
+				var autoResponseCondition = (settingsRoot.AutoResponse.IsActive && (settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
+				                             settingsRoot.AutoResponse.IsByteSequenceTriggered); // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+
+				return (autoActionCondition || autoResponseCondition);
+			}
+		}
+
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
@@ -6378,11 +6404,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (!this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
-			{                                                             // 'DisplayElements[Tx|Bidir|Rx]Added' events,
-				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)     // except for filter/suppress which are limited to be
-					monitor_Tx.AddElements(e.Elements);                   // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-			}                                                             // Not the perfect solution, but considered good enough.
+			if (UseDisplayElementsAdded) // See propery for background.
+			{
+				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
+					monitor_Tx.AddElements(e.Elements);
+			}
 
 			SetDataCountAndRateStatusSent();
 		}
@@ -6395,11 +6421,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (!this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
-			{                                                             // 'DisplayElements[Tx|Bidir|Rx]Added' events,
-				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)  // except for filter/suppress which are limited to be
-					monitor_Bidir.AddElements(e.Elements);                // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-			}                                                             // Not the perfect solution, but considered good enough.
+			if (UseDisplayElementsAdded) // See propery for background.
+			{
+				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
+					monitor_Bidir.AddElements(e.Elements);
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6410,11 +6436,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (!this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
-			{                                                             // 'DisplayElements[Tx|Bidir|Rx]Added' events,
-				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)     // except for filter/suppress which are limited to be
-					monitor_Rx.AddElements(e.Elements);                   // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-			}                                                             // Not the perfect solution, but considered good enough.
+			if (UseDisplayElementsAdded) // See propery for background.
+			{
+				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
+					monitor_Rx.AddElements(e.Elements);
+			}
 
 			SetDataCountAndRateStatusReceived();
 		}
@@ -6507,11 +6533,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
-			{                                                            // 'DisplayElements[Tx|Bidir|Rx]Added' events,
-				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)    // except for filter/suppress which are limited to be
-					monitor_Tx.AddLines(e.Lines);                        // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-			}                                                            // Not the perfect solution, but considered good enough.
+			if (!UseDisplayElementsAdded) // See propery for background.
+			{
+				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
+					monitor_Tx.AddLines(e.Lines);
+			}
 
 			SetDataCountAndRateStatusSent();
 		}
@@ -6524,11 +6550,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
-			{                                                            // 'DisplayElements[Tx|Bidir|Rx]Added' events,
-				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) // except for filter/suppress which are limited to be
-					monitor_Bidir.AddLines(e.Lines);                     // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-			}                                                            // Not the perfect solution, but considered good enough.
+			if (!UseDisplayElementsAdded) // See propery for background.
+			{
+				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
+					monitor_Bidir.AddLines(e.Lines);
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6539,11 +6565,11 @@ namespace YAT.View.Forms
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			if (this.settingsRoot.AutoAction.IsActiveAsFilterOrSuppress) // 'Normally', the display is updated by the
-			{                                                            // 'DisplayElements[Tx|Bidir|Rx]Added' events,
-				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)    // except for filter/suppress which are limited to be
-					monitor_Rx.AddLines(e.Lines);                        // processed by 'DisplayLines[Bidir|Rx][Added|Reloaded]'.
-			}                                                            // Not the perfect solution, but considered good enough.
+			if (!UseDisplayElementsAdded) // See propery for background.
+			{
+				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
+					monitor_Rx.AddLines(e.Lines);
+			}
 
 			SetDataCountAndRateStatusReceived();
 		}
