@@ -60,7 +60,7 @@ namespace YAT.Model
 		private AutoTriggerHelper autoResponseTriggerHelper;
 		private object autoResponseTriggerHelperSyncObj = new object();
 
-		private Queue<Pair<byte[], string>> autoResponseQueue = new Queue<Pair<byte[], string>>();
+		private Queue<Triple<byte[], string, MatchCollection>> autoResponseQueue = new Queue<Triple<byte[], string, MatchCollection>>();
 		private bool autoResponseThreadRunFlag;
 		private AutoResetEvent autoResponseThreadEvent;
 		private Thread autoResponseThread;
@@ -179,7 +179,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements)
 		{
-			List<Pair<byte[], string>> triggersDummy;
+			List<Triple<byte[], string, MatchCollection>> triggersDummy;
 			EvaluateAutoResponseFromElements(elements, out triggersDummy);
 		}
 
@@ -189,9 +189,9 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements, out List<Pair<byte[], string>> triggers)
+		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements, out List<Triple<byte[], string, MatchCollection>> triggers)
 		{
-			triggers = new List<Pair<byte[], string>>(); // No preset needed, the default behavior is good enough.
+			triggers = new List<Triple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
 
 			foreach (var de in elements)
 			{
@@ -212,8 +212,8 @@ namespace YAT.Model
 											this.autoResponseTriggerHelper.Reset();
 											de.Highlight = true;
 
-											// Signal the trigger:
-											triggers.Add(new Pair<byte[], string>(this.autoResponseTriggerHelper.TriggerSequence, null));
+											// Signal the trigger:                                   // Always use sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
+											triggers.Add(new Triple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.TriggerSequence, null, null));
 										}
 									}
 								}
@@ -236,7 +236,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines)
 		{
-			List<Pair<byte[], string>> triggersDummy;
+			List<Triple<byte[], string, MatchCollection>> triggersDummy;
 			EvaluateAutoResponseFromLines(lines, out triggersDummy);
 		}
 
@@ -246,7 +246,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines, out List<Pair<byte[], string>> triggers)
+		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines, out List<Triple<byte[], string, MatchCollection>> triggers)
 		{
 			if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 			{
@@ -257,7 +257,7 @@ namespace YAT.Model
 			}
 			else // IsTextTriggered
 			{
-				triggers = new List<Pair<byte[], string>>(); // No preset needed, the default behavior is good enough.
+				triggers = new List<Triple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
 
 				foreach (var dl in lines)
 				{
@@ -265,15 +265,16 @@ namespace YAT.Model
 					{
 						if (this.autoResponseTriggerHelper != null)
 						{
-							int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text);
+							MatchCollection matches;
+							int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text, out matches);
 							if (triggerCount > 0)
 							{
 								this.autoResponseTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
 								dl.Highlight = true;
 
 								// Signal the trigger(s):
-								for (int i = 0; i < triggerCount; i++)                             // Use for [Trigger] response.
-									triggers.Add(new Pair<byte[], string>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern));
+								for (int i = 0; i < triggerCount; i++)                 // Always use text for [Trigger] response, since always 'IsTextTriggered' when evaluated here.
+									triggers.Add(new Triple<byte[], string, MatchCollection>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern, matches));
 							}
 						}
 						else
@@ -288,19 +289,19 @@ namespace YAT.Model
 		/// <summary>
 		/// Enqueues the automatic responses for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void EnqueueAutoResponses(List<Pair<byte[], string>> triggers)
+		protected virtual void EnqueueAutoResponses(List<Triple<byte[], string, MatchCollection>> triggers)
 		{
 			foreach (var trigger in triggers)
-				EnqueueAutoResponse(trigger.Value1, trigger.Value2);
+				EnqueueAutoResponse(trigger.Value1, trigger.Value2, trigger.Value3);
 		}
 
 		/// <summary>
 		/// Enqueues the automatic response for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void EnqueueAutoResponse(byte[] triggerSequence, string triggerText)
+		protected virtual void EnqueueAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection matches)
 		{
 			lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
-				this.autoResponseQueue.Enqueue(new Pair<byte[], string>(triggerSequence, triggerText));
+				this.autoResponseQueue.Enqueue(new Triple<byte[], string, MatchCollection>(triggerSequence, triggerText, matches));
 
 			SignalAutoResponseThreadSafely();
 		}
@@ -309,7 +310,7 @@ namespace YAT.Model
 		/// Asynchronously invoke the automatic responses on other than the receive thread.
 		/// </summary>
 		/// <remarks>
-		/// Will be signaled by <see cref="EnqueueAutoResponse(byte[], string)"/> above.
+		/// Will be signaled by <see cref="EnqueueAutoResponse(byte[], string, MatchCollection)"/> above.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void AutoResponseThread()
@@ -346,7 +347,7 @@ namespace YAT.Model
 						// since it is likely that more triggers are to be enqueued.
 						Thread.Sleep(TimeSpan.Zero);
 
-						Pair<byte[], string>[] pendingItems;
+						Triple<byte[], string, MatchCollection>[] pendingItems;
 						lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
 						{
 							pendingItems = this.autoResponseQueue.ToArray();
@@ -355,7 +356,7 @@ namespace YAT.Model
 
 						foreach (var item in pendingItems)
 						{
-							SendAutoResponse(item.Value1, item.Value2);
+							SendAutoResponse(item.Value1, item.Value2, item.Value3);
 						}
 					} // Inner loop
 				} // Outer loop
@@ -379,7 +380,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the automatic response.
 		/// </summary>
-		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText)
+		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection matches)
 		{
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(count));
@@ -389,8 +390,10 @@ namespace YAT.Model
 			switch ((AutoResponse)response)
 			{
 				case AutoResponse.None:
+				{
 					// Nothing to do.
 					break;
+				}
 
 				case AutoResponse.Trigger:             SendAutoResponseTrigger(triggerSequence, triggerText); break;
 				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);  break;
@@ -409,11 +412,37 @@ namespace YAT.Model
 				case AutoResponse.SendFile:            SendFile();               break;
 
 				case AutoResponse.Explicit:
-					SendCommand(new Command(response)); // No explicit default radix available (yet).
+				{
+					string textLine = response;
+
+					if (SettingsRoot.AutoResponse.ResponseOptions.EnableReplace)
+					{
+						if (matches != null)
+						{
+							var values = new List<string>(); // No preset needed, the default behavior is good enough.
+							foreach (Match m in matches)
+							{
+								for (int gnum = 1; gnum <= m.Groups.Count; gnum++)
+								{
+									foreach (Capture c in m.Groups[gnum].Captures)
+										values.Add(c.Value);
+								}            // Negative lookbehind for not matching "\$" nor "$$".
+							}                          // Replacement '$'.
+							                              // Replacement tag ID.
+							var pattern = @"(?<![\\$])\$(\d+)";
+							var evaluator = new AutoResponseReplaceEvaluator(values);
+							textLine = Regex.Replace(textLine, pattern, evaluator.Evaluate);
+						}
+					}
+
+					SendCommand(new Command(textLine)); // No explicit default radix available (yet).
 					break;
+				}
 
 				default:
+				{
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 

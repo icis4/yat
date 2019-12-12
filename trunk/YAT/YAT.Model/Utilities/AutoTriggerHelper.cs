@@ -146,8 +146,17 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public virtual int TextTriggerCount(string input)
 		{
+			MatchCollection matchesDummy;
+			return (TextTriggerCount(input, out matchesDummy));
+		}
+
+		/// <summary></summary>
+		public virtual int TextTriggerCount(string input, out MatchCollection matches)
+		{
 			if (TriggerRegex == null) // Text only:
 			{
+				matches = null;
+
 				StringComparison comparisonType;
 				if (TriggerTextOrRegexCaseSensitive)
 					comparisonType = StringComparison.CurrentCulture;
@@ -161,7 +170,9 @@ namespace YAT.Model.Utilities
 			}
 			else // Regex enabled:
 			{
-				return (TriggerRegex.Matches(input).Count);
+				matches = TriggerRegex.Matches(input);
+
+				return (matches.Count);
 			}
 		}
 
