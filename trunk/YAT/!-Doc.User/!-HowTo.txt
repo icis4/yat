@@ -22,9 +22,12 @@ Dropbox Access
 
 Hi <>,
 
-I have just given you access to the YAT preliminary binaries at dropbox. Either, extract the binaries to a temporary location and run "YAT.exe", or replace the files in "C:\Program Files\YAT". See preliminary release notes for list of changes.
+I have just given you access to the YAT preliminary binaries at dropbox.
+Here is the link to the YAT preliminary binaries at dropbox: <>.
+Either, extract the binaries to a temporary location and run "YAT.exe", or replace the files in "C:\Program Files\YAT". See preliminary release notes for list of changes.
 
 Let me know <whatever>.
+Any other finding or feedback to YAT is also highly appreciated.
 
 Best regards,
 Matthias
