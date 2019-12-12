@@ -179,14 +179,15 @@ Optionally, use the command's text for triggering. Supported for single line tex
 [Alt+R] (while editing)
 
 Requires that trigger uses text with enabled regular expression,
-because replacement is done using  that regular expression object.
-
+because replacement is done based on regular expression captures.
 
 Example usage:
  &gt; Trigger = (\d+)ABC
  &gt; Response = $1XYZ
 Receiving e.g. 99ABC will trigger the response, 99 being captured by (\d+).
-The $1 replacement tag will be filled with 99, resulting in sending 99XYZ.</value>
+The $1 replacement tag will be filled with 99, resulting in sending 99XYZ.
+
+Replacement tags are $1, $2,... (regular expression syntax).</value>
   </data>
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>432, 56</value>
