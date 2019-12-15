@@ -88,6 +88,8 @@ YAT 2.2.0 :: 20xx-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
+- USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
+  implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
   Useful e.g. for sending a text command while a repeating text command is already ongoing.
 - Text terminals: Wait for response before sending the next line implemented (feat. #19, bug #176).
@@ -96,6 +98,11 @@ New:
   needs to be activated, as YAT typically limits the send rate [Settings... > Advanced... > Buffer
   not more than baud rate permits]. This setting limits the send rate enough to let flow control do
   its job even with large amount of data.
+- Content separator can now be configured. Useful for e.g. displaying or logging hex data without
+  separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
+- Automatic actions and responses now support multiple triggers within a line or chunk.
+- Automatic actions and responses now support text triggers, optionally incl. regular expression.
+- Automatic responses now support injection of trigger captures, given regular expression is used.
 
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
@@ -113,13 +120,6 @@ Important changes:
 - Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
   on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
-- Content separator can now be configured. Useful for e.g. displaying or logging hex data without
-  separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
-- Automatic actions and responses now support multiple triggers within a line or chunk.
-- Automatic actions and responses now support text triggers, optionally incl. regular expression.
-- Automatic responses now optionally support injection of trigger captures.
-- USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
-  implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 
 Fixed bugs:
