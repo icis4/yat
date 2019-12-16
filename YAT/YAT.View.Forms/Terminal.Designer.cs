@@ -4514,7 +4514,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(380, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(349, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4541,7 +4541,8 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Name = "toolStripStatusLabel_TerminalStatus_IOStatusIndicator";
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Size = new System.Drawing.Size(16, 20);
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.ToolTipText = "I/O Status";
+			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.ToolTipText = "I/O Status\r\n\r\ngreen = open/connected\r\ngreen flashing = busy\r\nyellow = suspended\r\n" +
+    "red = disconnected\r\ngrey = closed";
 			// 
 			// toolStripStatusLabel_TerminalStatus_Separator1
 			// 

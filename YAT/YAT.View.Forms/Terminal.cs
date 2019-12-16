@@ -6110,6 +6110,7 @@ namespace YAT.View.Forms
 			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly; // See further below for reason.
 			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly;  // See further below for reason.
 				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
+				this.terminal.IOIsBusyChanged         += terminal_IOIsBusyChanged;
 				this.terminal.IOError                 += terminal_IOError;
 
 				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
@@ -6159,6 +6160,7 @@ namespace YAT.View.Forms
 			////this.terminal.IOCountChanged_Promptly -= terminal_IOCountChanged_Promptly; // See further below for reason.
 			////this.terminal.IORateChanged_Promptly  -= terminal_IORateChanged_Promptly;  // See further below for reason.
 				this.terminal.IORateChanged_Decimated -= terminal_IORateChanged_Decimated;
+				this.terminal.IOIsBusyChanged         -= terminal_IOIsBusyChanged;
 				this.terminal.IOError                 -= terminal_IOError;
 
 				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
@@ -6272,6 +6274,15 @@ namespace YAT.View.Forms
 				monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 				monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void terminal_IOIsBusyChanged(object sender, EventArgs<bool> e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			SetIOStatus();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6892,8 +6903,9 @@ namespace YAT.View.Forms
 
 		private void SetIOStatus()
 		{
-			Image on  = Properties.Resources.Image_Status_Green_12x12;
-			Image off = Properties.Resources.Image_Status_Red_12x12;
+			Image green  = Properties.Resources.Image_Status_Green_12x12;
+			Image yellow = Properties.Resources.Image_Status_Yellow_12x12;
+			Image red    = Properties.Resources.Image_Status_Red_12x12;
 
 			if (TerminalIsAvailable)
 			{
@@ -6903,20 +6915,20 @@ namespace YAT.View.Forms
 				{
 					if (this.terminal.IsTransmissive)
 					{
-						if (this.terminal.IsReadyToSend)
+						if (!this.terminal.IsBusy)
 						{
 							ResetIOStatusFlashing();
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 
-							if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != on) // Improve performance by only assigning if different.
-								toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
+							if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != green) // Improve performance by only assigning if different.
+								toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = green;
 						}
-						else // sending is ongoing
+						else // is busy
 						{
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
+							StartIOStatusFlashing();
 							//// Do not directly access the image, it will be flashed by the timer below.
 							//// Directly accessing the image could result in irregular flashing.
-							StartIOStatusFlashing();
 						}
 					}
 					else // can only receive (so far)
@@ -6924,8 +6936,8 @@ namespace YAT.View.Forms
 						ResetIOStatusFlashing();
 						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 
-						if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != on) // Improve performance by only assigning if different.
-							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
+						if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != yellow) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = yellow;
 					}
 				}
 				else // is closed
@@ -6933,8 +6945,8 @@ namespace YAT.View.Forms
 					ResetIOStatusFlashing();
 					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 
-					if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != off) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = off;
+					if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != red) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = red;
 				}
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
@@ -6945,8 +6957,8 @@ namespace YAT.View.Forms
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled = false;
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 
-				if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != off) // Improve performance by only assigning if different.
-					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = off;
+				if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != red) // Improve performance by only assigning if different.
+					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = red;
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = "";
 			}
