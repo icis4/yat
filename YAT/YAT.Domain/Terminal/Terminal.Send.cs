@@ -52,6 +52,67 @@ namespace YAT.Domain
 	/// <remarks>
 	/// This partial class implements the send part of <see cref="Terminal"/>.
 	/// </remarks>
+	/// <remarks>
+	/// Design Criteria
+	/// ---------------
+	///
+	/// Decoupling from calling thread (typically the main thread) is required for:
+	///  > All below calling sequences (in order to not potentially block the main thread).
+	///
+	/// Sequencing is required for the following calling sequences, because all...
+	///  > [File > Lines > Line                  > Items > Raw] ...lines of a file...
+	///  >        [Lines > Line                  > Items > Raw] ...lines of a multi-line command...
+	///  >                [Line/LinePart/EOL/... > Items > Raw] ...chunks of a line/linepart/EOL...
+	///  >                            [ByteArray > Item  > Raw] ...chunks of a byte array...
+	///                                                         ...must be sequential.
+	/// At the same time, concurrency may make sense when the following keywords are active, because...
+	///  > <code>\!(Delay(...))</code>
+	///  > <code>\!(LineDelay(...))</code>
+	///  > <code>\!(LineInterval(...))</code>                   ...any kind of delaying must not block other commands...
+	///  > <code>\!(LineRepeat(...))</code>                     ...same as any kind of repeating...
+	/// ...as well as sending a command while a file is being sent.
+	///
+	/// Furthermore, commands shall be "kept together", no matter whether single- or multi-line text or file.
+	///
+	/// Potential Appproaches
+	/// ---------------------
+	///
+	/// 0. Implementation as up to YAT 2.1.0:
+	///     > [File > sendFileQueue > SendFileThread > Lines > Line                  > sendDataQueue > SendDataThread > Items > Raw]
+	///     >                                         [Lines > Line                  > sendDataQueue > SendDataThread > Items > Raw]
+	///     >                                                 [Line/LinePart/EOL/... > sendDataQueue > SendDataThread > Items > Raw]
+	///     >                                                             [ByteArray > sendDataQueue > SendDataThread > Item  > Raw]
+	///       +/- Purely sequential, but not capable of concurrent sending.
+	///       +/- Implementation relies on non-concurrent sending, no prevention of line(s) being requested while file is ongoing.
+	/// 1. Invocation only when needed:
+	///     > Same as above, but <code>\!(LineRepeat(...))</code> results in Invoke().
+	///        +  Good enough in most cases.
+	///        +  Easy upgrade path from implementation as up to YAT 2.1.0.
+	///        -  Inconsistent.
+	///       --- An embedded e.g. <code>\!(LineRepeat(5))</code> will no longer be sequential with subsequent lines!
+	/// 2. Immediate invocation per request:
+	///     > [File > Invoke() > Lines            > Line                             > Items > Raw]
+	///     >                   [Lines > Invoke() > Line                             > Items > Raw]
+	///     >                                      [Line/LinePart/EOL/... > Invoke() > Items > Raw]
+	///     >                                                  [ByteArray > Invoke() > Item  > Raw]
+	///       --- Invoke() doesn't guarantee sequence! Quickly requesting two different commands,
+	///           e.g. by quickly clicking two buttons, may result in wrong command order!
+	///       --- Requirement of commands being "kept together" is no longer met!
+	/// 3. Immediate invocation per request with addition sequence number handling and locks:
+	///     > [File > Invoke(seqNum) > WaitFor(seqNum) > Lines                                    > Line                  > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
+	///     >                                           [Lines > Invoke(seqNum) > WaitFor(seqNum) > Line                  > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
+	///     >                                                                                      [Line/LinePart/EOL/... > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
+	///     >                                                                                                  [ByteArray > Invoke(seqNum) > WaitFor(seqNum) > Item  > Confirm(seqNum) > Raw]
+	///       +++ All requirements met, configurable behavior implementable.
+	///        -  Requires quite some refactoring...
+	///
+	/// Conclusion
+	/// ----------
+	///
+	/// > The sum of all requirements conflict with each other, especially the request to allow concurrent sending.
+	/// > An additional [Settings... > Advanced... > Send > Allow concurrent sending] is required.
+	/// > Only approach 3. fulfills the requirements.
+	/// </remarks>
 	public abstract partial class Terminal : IDisposable, IDisposableEx
 	{
 		#region Constants

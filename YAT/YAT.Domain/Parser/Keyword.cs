@@ -47,7 +47,7 @@ namespace YAT.Domain.Parser
 		Delay,
 		LineDelay,
 		LineInterval,
-	////Repeat, is yet pending (FR #13) and requires parser support for strings.
+	////Repeat is yet pending (FR #13) and requires parser support for strings.
 		LineRepeat,
 		Eol,
 		NoEol,
@@ -66,14 +66,14 @@ namespace YAT.Domain.Parser
 		ReportId,
 
 		/// <summary>
-		/// A special keyword for internal testing (= FIT).
+		/// A special keyword For Internal Testing (= FIT).
 		/// </summary>
 		/// <remarks>
-		/// Prepended "ZZZ_" to get it at the bottom of a selection list.
+		/// Prepended "ZZZ_" to even more obviously indicate internal usage.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "See remarks above.")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ZZZ", Justification = "See remarks above.")]
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FIT", Justification = "See remarks above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FIT", Justification = "See summary above.")]
 		ZZZ_FIT
 	}
 
