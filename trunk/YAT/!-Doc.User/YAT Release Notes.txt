@@ -92,12 +92,13 @@ New:
   implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
   Useful e.g. for sending a text command while a repeating text command is already ongoing.
+  Can be enabled at [Settings... > Advanced... > Send > Allow concurrent sending].
 - Text terminals: Wait for response before sending the next line implemented (feat. #19, bug #176).
   Useful for limiting the rate when sending a large amount of data with ping-pong style commands.
   For serial COM ports with active hardware or software flow control, this feature not necessarily
-  needs to be activated, as YAT typically limits the send rate [Settings... > Advanced... > Buffer
-  not more than baud rate permits]. This setting limits the send rate enough to let flow control do
-  its job even with large amount of data.
+  needs to be activated, as YAT typically limits the send rate [Settings... > Advanced... > Send >
+  Buffer not more than baud rate permits]. This setting limits the send rate enough to let flow
+  control do its job even with large amount of data.
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Automatic actions and responses now support multiple triggers within a line or chunk.
