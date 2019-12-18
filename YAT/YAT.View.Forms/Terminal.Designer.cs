@@ -337,6 +337,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_SendFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_AllowConcurrency = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
@@ -390,6 +391,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
@@ -400,9 +402,9 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripMenuItem();
@@ -3051,6 +3053,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_SendContextMenu_SendFile,
             this.toolStripMenuItem_SendContextMenu_Separator_2,
             this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix,
+            this.toolStripMenuItem_SendContextMenu_AllowConcurrency,
             this.toolStripMenuItem_SendContextMenu_Separator_3,
             this.toolStripMenuItem_SendContextMenu_KeepSendText,
             this.toolStripMenuItem_SendContextMenu_SendImmediately,
@@ -3063,7 +3066,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_SendContextMenu_Separator_6,
             this.toolStripMenuItem_SendContextMenu_CopyPredefined});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(334, 304);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(334, 348);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
 			// 
 			// toolStripMenuItem_SendContextMenu_Panels
@@ -3131,10 +3134,19 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Name = "toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix";
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Text = "&Use Explicit Default Radix";
-			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.ToolTipText = "Applies to the [Send Text] and [Send File] commands.\r\nWhen enabled, the default r" +
-    "adix can explicitly be selected.\r\nWhen disabled, the default radix is \'String\'.";
+			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Text = "Use Explicit Default Radix";
+			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.ToolTipText = "When enabled, the default radix can explicitly be selected.\r\nWhen disabled, the d" +
+    "efault radix is \'String\'.\r\nApplies to [Send Text], [Send File] as well as [Prede" +
+    "fined Commands].";
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix_Click);
+			// 
+			// toolStripMenuItem_SendContextMenu_AllowConcurrency
+			// 
+			this.toolStripMenuItem_SendContextMenu_AllowConcurrency.Name = "toolStripMenuItem_SendContextMenu_AllowConcurrency";
+			this.toolStripMenuItem_SendContextMenu_AllowConcurrency.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_SendContextMenu_AllowConcurrency.Text = "Allow Concurrent Sending";
+			this.toolStripMenuItem_SendContextMenu_AllowConcurrency.ToolTipText = resources.GetString("toolStripMenuItem_SendContextMenu_AllowConcurrency.ToolTipText");
+			this.toolStripMenuItem_SendContextMenu_AllowConcurrency.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_AllowConcurrency_Click);
 			// 
 			// toolStripMenuItem_SendContextMenu_Separator_3
 			// 
@@ -3578,6 +3590,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Send_File,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_1,
             this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix,
+            this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_2,
             this.toolStripMenuItem_TerminalMenu_Send_KeepSendText,
             this.toolStripMenuItem_TerminalMenu_Send_SendImmediately,
@@ -3588,11 +3601,11 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines,
             this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_5,
-            this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined,
-            this.toolStripMenuItem_TerminalMenu_Send_Separator_6,
             this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommands,
             this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage,
             this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine,
+            this.toolStripMenuItem_TerminalMenu_Send_Separator_6,
+            this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_7,
             this.toolStripMenuItem_TerminalMenu_Send_AutoResponse});
 			this.toolStripMenuItem_TerminalMenu_Send.MergeAction = System.Windows.Forms.MergeAction.Insert;
@@ -3636,9 +3649,18 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Name = "toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix";
 			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Size = new System.Drawing.Size(333, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Text = "&Use Explicit Default Radix";
-			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.ToolTipText = "Applies to the [Send Text] and [Send File] commands.\r\nWhen enabled, the default r" +
-    "adix can explicitly be selected.\r\nWhen disabled, the default radix is \'String\'.";
+			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.ToolTipText = "When enabled, the default radix can explicitly be selected.\r\nWhen disabled, the d" +
+    "efault radix is \'String\'.\r\nApplies to [Send Text], [Send File] as well as [Prede" +
+    "fined Commands].";
 			this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_AllowConcurrency
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.Name = "toolStripMenuItem_TerminalMenu_Send_AllowConcurrency";
+			this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.Text = "Allo&w Concurrent Sending";
+			this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.ToolTipText = resources.GetString("toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.ToolTipText");
+			this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AllowConcurrency_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_Separator_2
 			// 
@@ -3710,20 +3732,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_5";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Size = new System.Drawing.Size(330, 6);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.P)));
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to [Send Text/File]";
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
-			// 
-			// toolStripMenuItem_TerminalMenu_Send_Separator_6
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_6";
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Size = new System.Drawing.Size(330, 6);
-			// 
 			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine";
@@ -3732,6 +3740,20 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Size = new System.Drawing.Size(333, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Text = "Predefined Commands &Define...";
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_Separator_6
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_6";
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Size = new System.Drawing.Size(330, 6);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to [Send Text/File]";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_Separator_7
 			// 
@@ -4514,7 +4536,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(349, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(380, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -5531,5 +5553,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Panels_Separator_5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_CopyToClipboard;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_AllowConcurrency;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AllowConcurrency;
 	}
 }

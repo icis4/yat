@@ -767,6 +767,7 @@ namespace YAT.View.Forms
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = f.SettingsResult.Terminal.Send.UseExplicitDefaultRadix;
+				this.settingsInEdit.Terminal.Send.AllowConcurrency                = f.SettingsResult.Terminal.Send.AllowConcurrency;
 				this.settingsInEdit.Terminal.Send.Text.KeepSendText               = f.SettingsResult.Terminal.Send.Text.KeepSendText;
 				this.settingsInEdit.Terminal.Send.Text.SendImmediately            = f.SettingsResult.Terminal.Send.Text.SendImmediately;
 				this.settingsInEdit.Terminal.Send.File.SkipEmptyLines             = f.SettingsResult.Terminal.Send.File.SkipEmptyLines;

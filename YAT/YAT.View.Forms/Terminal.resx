@@ -138,12 +138,24 @@
   <metadata name="contextMenuStrip_Send.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>934, 17</value>
   </metadata>
+  <data name="toolStripMenuItem_SendContextMenu_AllowConcurrency.ToolTipText" xml:space="preserve">
+    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
+Enabling this option allows multiple commands being active simultaneously.
+Useful e.g. for sending a text command while a repeating text command is already ongoing.
+Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
+  </data>
   <metadata name="menuStrip_Terminal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <metadata name="contextMenuStrip_Preset.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>559, 17</value>
   </metadata>
+  <data name="toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.ToolTipText" xml:space="preserve">
+    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
+Enabling this option allows multiple commands being active simultaneously.
+Useful e.g. for sending a text command while a repeating text command is already ongoing.
+Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
+  </data>
   <data name="toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.ToolTipText" xml:space="preserve">
     <value>Requires that trigger uses text with enabled regular expression,
 because replacement is done based on regular expression captures.

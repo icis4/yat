@@ -37,6 +37,9 @@ namespace YAT.Domain.Settings
 		public const bool UseExplicitDefaultRadixDefault = false;
 
 		/// <summary></summary>
+		public const bool AllowConcurrencyDefault = false;
+
+		/// <summary></summary>
 		public const bool CopyPredefinedDefault = false;
 
 		/// <summary></summary>
@@ -64,6 +67,7 @@ namespace YAT.Domain.Settings
 		}
 
 		private bool useExplicitDefaultRadix;
+		private bool allowConcurrency;
 		private bool copyPredefined;
 
 		private SendSettingsText text;
@@ -104,6 +108,7 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			UseExplicitDefaultRadix = rhs.UseExplicitDefaultRadix;
+			AllowConcurrency        = rhs.AllowConcurrency;
 			CopyPredefined          = rhs.CopyPredefined;
 
 			Text = new SendSettingsText(rhs.Text);
@@ -128,6 +133,7 @@ namespace YAT.Domain.Settings
 			base.SetMyDefaults();
 
 			UseExplicitDefaultRadix = UseExplicitDefaultRadixDefault;
+			AllowConcurrency        = AllowConcurrencyDefault;
 			CopyPredefined          = CopyPredefinedDefault;
 
 			DefaultDelay        = DefaultDelayDefault;
@@ -144,7 +150,7 @@ namespace YAT.Domain.Settings
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>Rather a 'Model' setting, but here for historical reasons.</remarks>
 		[XmlElement("UseExplicitDefaultRadix")]
 		public virtual bool UseExplicitDefaultRadix
 		{
@@ -160,6 +166,21 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("AllowConcurrency")]
+		public virtual bool AllowConcurrency
+		{
+			get { return (this.allowConcurrency); }
+			set
+			{
+				if (this.allowConcurrency != value)
+				{
+					this.allowConcurrency = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>Rather a 'Model' setting, but here for historical reasons.</remarks>
 		[XmlElement("CopyPredefined")]
 		public virtual bool CopyPredefined
 		{
@@ -319,6 +340,7 @@ namespace YAT.Domain.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ UseExplicitDefaultRadix.GetHashCode();
+				hashCode = (hashCode * 397) ^ AllowConcurrency       .GetHashCode();
 				hashCode = (hashCode * 397) ^ CopyPredefined         .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ DefaultDelay;
@@ -359,6 +381,7 @@ namespace YAT.Domain.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				UseExplicitDefaultRadix.Equals(other.UseExplicitDefaultRadix) &&
+				AllowConcurrency       .Equals(other.AllowConcurrency)        &&
 				CopyPredefined         .Equals(other.CopyPredefined)          &&
 
 				DefaultDelay       .Equals(other.DefaultDelay)        &&

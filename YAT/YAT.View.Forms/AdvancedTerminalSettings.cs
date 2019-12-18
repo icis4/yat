@@ -592,6 +592,14 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix = checkBox_UseExplicitDefaultRadix.Checked;
 		}
 
+		private void checkBox_AllowConcurrency_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.Send.AllowConcurrency = checkBox_AllowConcurrency.Checked;
+		}
+
 		private void checkBox_KeepSendText_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1176,12 +1184,13 @@ namespace YAT.View.Forms
 				checkBox_ShowFlowControlCount.Checked      = this.settingsInEdit.Terminal.Status.ShowFlowControlCount;
 
 				// Send:
-				checkBox_UseExplicitDefaultRadix.Checked =  this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
-				checkBox_KeepSendText.Enabled            = !this.settingsInEdit.Terminal.Send.Text.SendImmediately;
-				checkBox_KeepSendText.Checked            = !this.settingsInEdit.Terminal.Send.Text.SendImmediately && this.settingsInEdit.Terminal.Send.Text.KeepSendText;
-				checkBox_SendImmediately.Checked         =  this.settingsInEdit.Terminal.Send.Text.SendImmediately;
-				checkBox_SkipEmptyLines.Checked          =  this.settingsInEdit.Terminal.Send.File.SkipEmptyLines;
-				checkBox_CopyPredefined.Checked          =  this.settingsInEdit.Terminal.Send.CopyPredefined;
+				checkBox_UseExplicitDefaultRadix.Checked =   this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
+				checkBox_AllowConcurrency.Checked        =   this.settingsInEdit.Terminal.Send.AllowConcurrency;
+				checkBox_KeepSendText.Enabled            =  !this.settingsInEdit.Terminal.Send.Text.SendImmediately;
+				checkBox_KeepSendText.Checked            = (!this.settingsInEdit.Terminal.Send.Text.SendImmediately && this.settingsInEdit.Terminal.Send.Text.KeepSendText);
+				checkBox_SendImmediately.Checked         =   this.settingsInEdit.Terminal.Send.Text.SendImmediately;
+				checkBox_SkipEmptyLines.Checked          =   this.settingsInEdit.Terminal.Send.File.SkipEmptyLines;
+				checkBox_CopyPredefined.Checked          =   this.settingsInEdit.Terminal.Send.CopyPredefined;
 
 				checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 				checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
@@ -1294,6 +1303,7 @@ namespace YAT.View.Forms
 
 				// Send:
 				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix         = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
+				this.settingsInEdit.Terminal.Send.AllowConcurrency                = Domain.Settings.SendSettings.AllowConcurrencyDefault;
 				this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
 				this.settingsInEdit.Terminal.Send.Text.KeepSendText               = Domain.Settings.SendSettingsText.KeepSendTextDefault;
 				this.settingsInEdit.Terminal.Send.Text.SendImmediately            = Domain.Settings.SendSettingsText.SendImmediatelyDefault;
