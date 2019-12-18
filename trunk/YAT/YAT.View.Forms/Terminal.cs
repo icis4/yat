@@ -728,17 +728,18 @@ namespace YAT.View.Forms
 
 				// Set the menu item properties:
 
-				toolStripMenuItem_TerminalMenu_Send_Text.Text              = sendTextText;
-				toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
-				toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_TerminalMenu_Send_File.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
+				toolStripMenuItem_TerminalMenu_Send_Text.Text              =  sendTextText;
+				toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = (sendTextEnabled && this.terminal.IsReadyToSend);
+				toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = (sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately);
+				toolStripMenuItem_TerminalMenu_Send_File.Enabled           = (sendFileEnabled && this.terminal.IsReadyToSend);
 
 				toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
+				toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.Checked        = this.settingsRoot.Send.AllowConcurrency;
 
-				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Enabled         = !this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Checked         = !this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText;
-				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked      =  this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked =  this.settingsRoot.Send.Text.EnableEscapes;
+				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Enabled         =  !this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Checked         = (!this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText);
+				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked      =   this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked =   this.settingsRoot.Send.Text.EnableEscapes;
 
 				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled =  this.settingsRoot.SendText.Command.IsMultiLineText;
 
@@ -861,6 +862,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.UseExplicitDefaultRadix = !this.settingsRoot.Send.UseExplicitDefaultRadix;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_AllowConcurrency_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.AllowConcurrency = !this.settingsRoot.Send.AllowConcurrency;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_KeepSendText_Click(object sender, EventArgs e)
@@ -3310,17 +3316,18 @@ namespace YAT.View.Forms
 				toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
 				toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
-				toolStripMenuItem_SendContextMenu_SendText.Text              = sendTextText;
-				toolStripMenuItem_SendContextMenu_SendText.Enabled           = sendTextEnabled && this.terminal.IsReadyToSend;
-				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_SendContextMenu_SendFile.Enabled           = sendFileEnabled && this.terminal.IsReadyToSend;
+				toolStripMenuItem_SendContextMenu_SendText.Text              =  sendTextText;
+				toolStripMenuItem_SendContextMenu_SendText.Enabled           = (sendTextEnabled && this.terminal.IsReadyToSend);
+				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = (sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately);
+				toolStripMenuItem_SendContextMenu_SendFile.Enabled           = (sendFileEnabled && this.terminal.IsReadyToSend);
 
 				toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
+				toolStripMenuItem_SendContextMenu_AllowConcurrency.Checked        = this.settingsRoot.Send.AllowConcurrency;
 
-				toolStripMenuItem_SendContextMenu_KeepSendText.Enabled         = !this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_SendContextMenu_KeepSendText.Checked         = !this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText;
-				toolStripMenuItem_SendContextMenu_SendImmediately.Checked      =  this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_SendContextMenu_EnableEscapesForText.Checked =  this.settingsRoot.Send.Text.EnableEscapes;
+				toolStripMenuItem_SendContextMenu_KeepSendText.Enabled         =  !this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_SendContextMenu_KeepSendText.Checked         = (!this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText);
+				toolStripMenuItem_SendContextMenu_SendImmediately.Checked      =   this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_SendContextMenu_EnableEscapesForText.Checked =   this.settingsRoot.Send.Text.EnableEscapes;
 
 				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Checked       = this.settingsRoot.Send.File.SkipEmptyLines;
 				toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Checked = this.settingsRoot.Send.File.EnableEscapes;
@@ -3392,6 +3399,14 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsRoot.Send.UseExplicitDefaultRadix = !this.settingsRoot.Send.UseExplicitDefaultRadix;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_AllowConcurrency_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Send.AllowConcurrency = !this.settingsRoot.Send.AllowConcurrency;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_KeepSendText_Click(object sender, EventArgs e)

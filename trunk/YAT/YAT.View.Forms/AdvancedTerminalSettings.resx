@@ -120,6 +120,12 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="checkBox_AllowConcurrency.ToolTip" xml:space="preserve">
+    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
+Enabling this option allows multiple commands being active simultaneously.
+Useful e.g. for sending a text command while a repeating text command is already ongoing.
+Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
+  </data>
   <data name="checkBox_BufferMaxBaudRate.ToolTip" xml:space="preserve">
     <value>Limiting writing to the output buffer prevents data loss in case of
 USB/COM and SPI/COM converters that have a hardware output
