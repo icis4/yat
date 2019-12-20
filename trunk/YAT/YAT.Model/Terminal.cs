@@ -296,9 +296,6 @@ namespace YAT.Model
 		public event EventHandler IORateChanged_Decimated;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> IOIsBusyChanged;
-
-		/// <summary></summary>
 		public event EventHandler<Domain.IOErrorEventArgs> IOError;
 
 	#if (WITH_SCRIPTING)
@@ -317,6 +314,16 @@ namespace YAT.Model
 		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
 		/// </remarks>
 		public event EventHandler<Domain.ModifiablePacketEventArgs> SendingPacket;
+
+	#endif // WITH_SCRIPTING
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<bool>> SendingIsOngoingChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<bool>> SendingIsBusyChanged;
+
+	#if (WITH_SCRIPTING)
 
 		/// <summary></summary>
 		public event EventHandler<Domain.RawChunkEventArgs> RawChunkSent;
@@ -799,14 +806,32 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool IsBusy
+		public virtual bool SendingIsOngoing
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.terminal != null)
-					return (this.terminal.IsBusy);
+					return (this.terminal.SendingIsOngoing);
+				else
+					return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Opposed to <see cref="SendingIsOngoing"/>, this property only becomes <c>true</c> when
+		/// sending has been ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.ThresholdMs"/>,
+		/// or is about to be ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.ThresholdMs"/>.
+		/// </remarks>
+		public virtual bool SendingIsBusy
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.SendingIsBusy);
 				else
 					return (false);
 			}
@@ -2634,11 +2659,14 @@ namespace YAT.Model
 			{
 				this.terminal.IOChanged        += terminal_IOChanged;
 				this.terminal.IOControlChanged += terminal_IOControlChanged;
-				this.terminal.IOIsBusyChanged  += terminal_IOIsBusyChanged;
 				this.terminal.IOError          += terminal_IOError;
 			#if (WITH_SCRIPTING)
 				this.terminal.SendingPacket    += terminal_SendingPacket;
 			#endif
+
+				this.terminal.SendingIsOngoingChanged += terminal_SendingIsOngoingChanged;
+				this.terminal.SendingIsBusyChanged    += terminal_SendingIsBusyChanged;
+
 				this.terminal.RawChunkSent     += terminal_RawChunkSent;
 				this.terminal.RawChunkReceived += terminal_RawChunkReceived;
 
@@ -2672,11 +2700,14 @@ namespace YAT.Model
 			{
 				this.terminal.IOChanged        -= terminal_IOChanged;
 				this.terminal.IOControlChanged -= terminal_IOControlChanged;
-				this.terminal.IOIsBusyChanged  -= terminal_IOIsBusyChanged;
 				this.terminal.IOError          -= terminal_IOError;
 			#if (WITH_SCRIPTING)
 				this.terminal.SendingPacket    -= terminal_SendingPacket;
 			#endif
+
+				this.terminal.SendingIsOngoingChanged -= terminal_SendingIsOngoingChanged;
+				this.terminal.SendingIsBusyChanged    -= terminal_SendingIsBusyChanged;
+
 				this.terminal.RawChunkSent     -= terminal_RawChunkSent;
 				this.terminal.RawChunkReceived -= terminal_RawChunkReceived;
 
@@ -2883,12 +2914,6 @@ namespace YAT.Model
 			OnIOControlChanged(e);
 		}
 
-		private void terminal_IOIsBusyChanged(object sender, EventArgs<bool> e)
-		{
-			// Forward:
-			OnIOIsBusyChanged(e);
-		}
-
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			if (IsDisposed)
@@ -2916,6 +2941,16 @@ namespace YAT.Model
 			OnSendingPacket(e);
 		}
 	#endif
+
+		private void terminal_SendingIsOngoingChanged(object sender, EventArgs<bool> e)
+		{
+			OnSendingIsOngoingChanged(e);
+		}
+
+		private void terminal_SendingIsBusyChanged(object sender, EventArgs<bool> e)
+		{
+			OnSendingIsBusyChanged(e);
+		}
 
 		/// <remarks>
 		/// Interval can be quite long, because...
@@ -5312,12 +5347,6 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOIsBusyChanged(EventArgs<bool> e)
-		{
-			this.eventHelper.RaiseSync<EventArgs<bool>>(IOIsBusyChanged, this, e);
-		}
-
-		/// <summary></summary>
 		protected virtual void OnIOError(Domain.IOErrorEventArgs e)
 		{
 			this.eventHelper.RaiseSync<Domain.IOErrorEventArgs>(IOError, this, e);
@@ -5339,6 +5368,22 @@ namespace YAT.Model
 		{
 			this.eventHelper.RaiseSync<Domain.ModifiablePacketEventArgs>(SendingPacket, this, e);
 		}
+
+	#endif // WITH_SCRIPTING
+
+		/// <summary></summary>
+		protected virtual void OnSendingIsOngoingChanged(EventArgs<bool> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsOngoingChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnSendingIsBusyChanged(EventArgs<bool> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsBusyChanged, this, e);
+		}
+
+	#if (WITH_SCRIPTING)
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkSent(EventArgs<Domain.RawChunk> e)

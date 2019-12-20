@@ -563,7 +563,7 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
 					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled =  this.terminal.IsStarted;
 
-					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
+					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.SendingIsBusy;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  monitorIsDefined;
 
 					if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
@@ -6122,11 +6122,13 @@ namespace YAT.View.Forms
 				this.terminal.IOChanged               += terminal_IOChanged;
 				this.terminal.IOControlChanged        += terminal_IOControlChanged;
 				this.terminal.IOConnectTimeChanged    += terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly;  // See further below for reason.
+			////this.terminal.IOCountChanged_Promptly += terminal_IOCountChanged_Promptly is not used, see further below for reason.
+			////this.terminal.IORateChanged_Promptly  += terminal_IORateChanged_Promptly  is not used, see further below for reason.
 				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
-				this.terminal.IOIsBusyChanged         += terminal_IOIsBusyChanged;
 				this.terminal.IOError                 += terminal_IOError;
+
+			////this.terminal.SendingIsOngoingChanged += terminal_SendingIsOngoingChanged is not needed yet.
+				this.terminal.SendingIsBusyChanged    += terminal_SendingIsBusyChanged;
 
 				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
 				this.terminal.DisplayElementsBidirAdded       += terminal_DisplayElementsBidirAdded;
@@ -6172,11 +6174,13 @@ namespace YAT.View.Forms
 				this.terminal.IOChanged               -= terminal_IOChanged;
 				this.terminal.IOControlChanged        -= terminal_IOControlChanged;
 				this.terminal.IOConnectTimeChanged    -= terminal_IOConnectTimeChanged;
-			////this.terminal.IOCountChanged_Promptly -= terminal_IOCountChanged_Promptly; // See further below for reason.
-			////this.terminal.IORateChanged_Promptly  -= terminal_IORateChanged_Promptly;  // See further below for reason.
+			////this.terminal.IOCountChanged_Promptly -= terminal_IOCountChanged_Promptly is not used, see further below for reason.
+			////this.terminal.IORateChanged_Promptly  -= terminal_IORateChanged_Promptly  is not used, see further below for reason.
 				this.terminal.IORateChanged_Decimated -= terminal_IORateChanged_Decimated;
-				this.terminal.IOIsBusyChanged         -= terminal_IOIsBusyChanged;
 				this.terminal.IOError                 -= terminal_IOError;
+
+			////this.terminal.SendingIsOngoingChanged -= terminal_SendingIsOngoingChanged is not needed yet.
+				this.terminal.SendingIsBusyChanged    -= terminal_SendingIsBusyChanged;
 
 				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
 				this.terminal.DisplayElementsBidirAdded       -= terminal_DisplayElementsBidirAdded;
@@ -6292,15 +6296,6 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_IOIsBusyChanged(object sender, EventArgs<bool> e)
-		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			SetIOStatus();
-		}
-
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
@@ -6347,6 +6342,15 @@ namespace YAT.View.Forms
 					);
 				}
 			}
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void terminal_SendingIsBusyChanged(object sender, EventArgs<bool> e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			SetIOStatus();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
@@ -6930,7 +6934,7 @@ namespace YAT.View.Forms
 				{
 					if (this.terminal.IsTransmissive)
 					{
-						if (!this.terminal.IsBusy)
+						if (!this.terminal.SendingIsBusy)
 						{
 							ResetIOStatusFlashing();
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
@@ -6938,7 +6942,7 @@ namespace YAT.View.Forms
 							if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != green) // Improve performance by only assigning if different.
 								toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = green;
 						}
-						else // is busy
+						else // sending is busy
 						{
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
 							StartIOStatusFlashing();

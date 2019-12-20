@@ -30,9 +30,6 @@
 #if (DEBUG)
 
 	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE
-
-	// Enable debugging of thread state:
 ////#define DEBUG_CONTENT_EVENTS
 
 // Enable debug output line handling for scripting:
@@ -171,8 +168,6 @@ namespace YAT.Domain
 		private RawTerminal rawTerminal;
 		private DateTime initialTimeStamp;
 
-		private IOChangedEventHelper ioIsBusyChangedEventHelper;
-
 		private IOControlState ioControlStateCache;
 		private object ioControlStateCacheSyncObj = new object();
 
@@ -207,9 +202,6 @@ namespace YAT.Domain
 		public event EventHandler<IOControlEventArgs> IOControlChanged;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> IOIsBusyChanged;
-
-		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 	#if (WITH_SCRIPTING)
@@ -230,6 +222,12 @@ namespace YAT.Domain
 		public event EventHandler<ModifiablePacketEventArgs> SendingPacket;
 
 	#endif
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<bool>> SendingIsOngoingChanged;
+
+		/// <summary></summary>
+		public event EventHandler<EventArgs<bool>> SendingIsBusyChanged;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
@@ -549,36 +547,6 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		public virtual bool IsReadyToSend
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (IsTransmissive);
-
-				// Until YAT 2.1.0, this property was implemented as 'IsReadyToSend_Internal'
-				// as (IsTransmissive && !this.sendingIsOngoing) and it also signalled
-				// 'EventMustBeRaisedBecauseStatusHasBeenAccessed()'. This was necessary as
-				// until YAT 2.1.0 it was not possible to run multiple commands concurrently.
-				// With YAT 2.1.1 this became possible, but keeping this property because its
-				// meaning still makes sense, e.g. send related controls can adapt to this send
-				// specific property instead of using the more general 'IsTransmissive'.
-			}
-		}
-
-		/// <summary></summary>
-		public virtual bool IsBusy
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (IsTransmissive && this.sendingIsOngoing);
-			}
-		}
-
 	#if (WITH_SCRIPTING)
 
 		/// <summary>
@@ -705,7 +673,7 @@ namespace YAT.Domain
 
 			if (IsStarted)
 			{
-				// Note that send processing may continue for some instants, until the send thread
+				// Note that send processing may continue for some instants, until the send threads
 				// has noticed that it should stop/pause. The system (e.g. event handling) must be
 				// able to deal with this design!
 				// An alternative approach would be to lock/synchronize here, i.e. wait until the
@@ -1955,12 +1923,6 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOIsBusyChanged(EventArgs<bool> e)
-		{
-			this.eventHelper.RaiseSync<EventArgs<bool>>(IOIsBusyChanged, this, e);
-		}
-
-		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
 			this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
@@ -2383,12 +2345,6 @@ namespace YAT.Domain
 					message
 				)
 			);
-		}
-
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
-		{
-			DebugMessage(message);
 		}
 
 		[Conditional("DEBUG_CONTENT_EVENTS")]
