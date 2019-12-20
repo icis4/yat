@@ -2073,9 +2073,9 @@ namespace YAT.Model
 						int id = this.startArgs.RequestedDynamicTerminalId;
 
 						Terminal t;
-						if (this.workspace.TryGetTerminalByDynamicId(id, out t) && (t.IsBusy))
+						if (this.workspace.TryGetTerminalByDynamicId(id, out t) && (t.SendingIsOngoing))
 						{
-							OnTimedStatusTextRequest("Exit triggered, pending while terminal is busy...");
+							OnTimedStatusTextRequest("Exit triggered, pending while terminal is sending...");
 							return; // Pend!
 						}
 					}
