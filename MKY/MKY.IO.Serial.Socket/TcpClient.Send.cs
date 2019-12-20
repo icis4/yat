@@ -196,7 +196,7 @@ namespace MKY.IO.Serial.Socket
 
 			try
 			{
-				// Outer loop, processes data after a signal was received:
+				// Outer loop, processes data after a signal has been received:
 				while (!IsDisposed && this.dataSentThreadRunFlag) // Check 'IsDisposed' first!
 				{
 					try

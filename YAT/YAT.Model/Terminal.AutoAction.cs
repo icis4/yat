@@ -442,7 +442,7 @@ namespace YAT.Model
 
 			try
 			{
-				// Outer loop, processes data after a signal was received:
+				// Outer loop, processes data after a signal has been received:
 				while (!IsDisposed && this.autoActionThreadRunFlag) // Check 'IsDisposed' first!
 				{
 					try

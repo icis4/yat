@@ -73,7 +73,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			try
 			{
-				// Outer loop, processes data after a signal was received:
+				// Outer loop, processes data after a signal has been received:
 				while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
 				{
 					try

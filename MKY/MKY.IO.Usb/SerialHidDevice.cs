@@ -1087,7 +1087,7 @@ namespace MKY.IO.Usb
 
 			try
 			{
-				// Outer loop, processes data after a signal was received:
+				// Outer loop, processes data after a signal has been received:
 				while (this.receiveThreadRunFlag && !IsDisposed) // Check 'IsDisposed' first!
 				{
 					try
