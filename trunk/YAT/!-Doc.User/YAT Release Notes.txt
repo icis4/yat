@@ -110,7 +110,7 @@ Important changes:
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
   renamed to \!(IOSettings()) (related to feature request #71).
-- Sending slightly refactored (precondition for feature reqests #19, #387 and fix of bug #176).
+- Sending refactored (precondition for feature reqests #19, #333, #387 and fix of bug #176).
 - Line content and EOL is no longer sent in two separate chunks (feature request #333).
 - Element and line processing refactored (precondition for feature reqests #19, #366, #367 and fix
   of bugs #176, #371, #477, #478 as well as preparing upcoming feature reqest #74).
