@@ -398,7 +398,7 @@ namespace YAT.Domain
 					DisposePeriodicXOnTimer();
 
 					// ...and the send threads will already have been stopped in Close()...
-					StopSendThreads();
+					BreakSendThreads();
 
 					// ...and objects will already have been detached and disposed of in Close():
 					DetachTerminalSettings();
@@ -649,6 +649,7 @@ namespace YAT.Domain
 					this.initialTimeStamp = DateTime.Now;
 
 					ConfigurePeriodicXOnTimer();
+					PermitSendThreads();
 				}
 				return (success);
 			}
@@ -677,7 +678,7 @@ namespace YAT.Domain
 				// is called from the same thread where the ...Sent events get invoked (e.g. the UI
 				// thread).
 
-				StopSendThreads();
+				BreakSendThreads();
 				DisablePeriodicXOnTimer(); // Disable!
 				this.rawTerminal.Stop(); // Stop!
 			}
@@ -694,7 +695,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			StopSendThreads();
+			BreakSendThreads();
 			DisposePeriodicXOnTimer(); // Dispose!
 			this.rawTerminal.Close(); // Close!
 

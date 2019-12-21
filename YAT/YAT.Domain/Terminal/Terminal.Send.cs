@@ -30,7 +30,7 @@
 #if (DEBUG)
 
 	// Enable debugging of send:
-	#define DEBUG_SEND
+////#define DEBUG_SEND
 
 #endif // DEBUG
 
@@ -174,7 +174,7 @@ namespace YAT.Domain
 		private long nextPermittedSequenceNumber; // = 0;
 		private ManualResetEvent nextPermittedSequenceNumberEvent = new ManualResetEvent(false);
 
-		private bool sendThreadsRunFlag;
+		private bool sendThreadsArePermitted;
 
 		private int sendingIsOngoingCount; // = 0;
 		private object sendingIsOngoingCountSyncObj = new object();
@@ -262,7 +262,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				return (BreakState || !(!IsDisposed && this.sendThreadsRunFlag && IsTransmissive)); // Check 'IsDisposed' first!
+				return (BreakState || !(!IsDisposed && this.sendThreadsArePermitted && IsTransmissive)); // Check 'IsDisposed' first!
 			}
 		}
 
@@ -288,7 +288,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} bytes of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
-			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber))
 			{
 				try
 				{
@@ -303,7 +303,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					LeaveRequestGateAsRequired();
+					LeaveRequestGate();
 				}
 			}
 		}
@@ -327,7 +327,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
 
-			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber))
 			{
 				try
 				{
@@ -342,7 +342,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					LeaveRequestGateAsRequired();
+					LeaveRequestGate();
 				}
 			}
 		}
@@ -366,7 +366,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
 
-			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber))
 			{
 				try
 				{
@@ -381,7 +381,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					LeaveRequestGateAsRequired();
+					LeaveRequestGate();
 				}
 			}
 		}
@@ -409,7 +409,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
 
-			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber))
 			{
 				try
 				{
@@ -427,7 +427,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					LeaveRequestGateAsRequired();
+					LeaveRequestGate();
 				}
 			}
 		}
@@ -450,7 +450,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
 
-			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber))
 			{
 				try
 				{
@@ -465,7 +465,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					LeaveRequestGateAsRequired();
+					LeaveRequestGate();
 				}
 			}
 		}
@@ -476,6 +476,23 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Non-Public Methods
 		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void PermitSendThreads()
+		{
+			this.sendThreadsArePermitted = true;
+		}
+
+		/// <summary></summary>
+		protected virtual void BreakSendThreads()
+		{
+			// Clear flag telling threads to stop...
+			this.sendThreadsArePermitted = false;
+
+			// ...then signal threads:
+			this.nextPermittedSequenceNumberEvent.Set();
+			this.packetGateEvent.Set();
+		}
 
 		/// <summary></summary>
 		protected virtual void DoSendPre(bool raiseSendingIsBusyChangedEvent)
@@ -538,10 +555,11 @@ namespace YAT.Domain
 
 				if (TryEnterPacketGate())
 				{
-					var lineBeginTimeStamp  = DateTime.Now; // \remind For binary terminals, this is rather a 'PacketBegin'.
-					var performLineDelay    = false;        // \remind For binary terminals, this is rather a 'PacketDelay'.
+					var lineBeginTimeStamp  = DateTime.Now;      // \remind For binary terminals, this is rather a 'PacketBegin'.
+					var lineEndTimeStamp    = DateTime.MinValue; // \remind For binary terminals, this is rather a 'PacketBegin'.
+					var performLineDelay    = false;             // \remind For binary terminals, this is rather a 'PacketDelay'.
 					var lineDelay           = TerminalSettings.Send.DefaultLineDelay;
-					var performLineInterval = false;        // \remind For binary terminals, this is rather a 'PacketInterval'.
+					var performLineInterval = false;             // \remind For binary terminals, this is rather a 'PacketInterval'.
 					var lineInterval        = TerminalSettings.Send.DefaultLineInterval;
 					var conflateDataQueue   = new Queue<byte>();
 
@@ -640,17 +658,17 @@ namespace YAT.Domain
 							if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 								OnThisRequestSendingIsBusyChanged(true);
 						}
+
+						// --- Finalize the line/packet ---
+
+						ProcessLineEnd(isLine, conflateDataQueue);
+
+						lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
 					}
 					finally
 					{
 						LeavePacketGate(); // Not the best approach to require this call at so many locations...
 					}
-
-					// --- Finalize the line/packet ---
-
-					ProcessLineEnd(isLine, conflateDataQueue);
-
-					var lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
 
 					// --- Perform line/packet related post-processing ---
 
@@ -1078,13 +1096,12 @@ namespace YAT.Domain
 			UnusedArg.PreventAnalysisWarning(sendEol); // Doesn't need to be handled for the 'neutral' terminal base.
 
 			ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-			LeavePacketGate();                                    // Not the best approach to require this call at so many locations...
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryEnterRequestGateAsRequired(long sequenceNumber)
+		protected virtual bool TryEnterRequestGate(long sequenceNumber)
 		{
-			while (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+			while (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1092,14 +1109,19 @@ namespace YAT.Domain
 				}
 				else
 				{
+					if (sequenceNumber == Interlocked.Read(ref this.nextPermittedSequenceNumber))
+					{
+						this.nextPermittedSequenceNumberEvent.Reset();
+						return (true);
+					}
+
 					try
 					{
 						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
 						// Therefore, only wait for a certain period and then poll the run flag again.
 						// The period can be quite long, as an event trigger will immediately resume.
-						if (!this.nextPermittedSequenceNumberEvent.WaitOne(staticRandom.Next(50, 200)))
-							continue;
+						this.nextPermittedSequenceNumberEvent.WaitOne(staticRandom.Next(50, 200));
 					}
 					catch (AbandonedMutexException ex)
 					{
@@ -1108,22 +1130,17 @@ namespace YAT.Domain
 						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in TryEnterSequenceGateAsRequired()!");
 						break;
 					}
-
-					if (sequenceNumber == Interlocked.Read(ref this.nextPermittedSequenceNumber))
-					{
-						this.nextPermittedSequenceNumberEvent.Reset();
-						return (true);
-					}
 				}
 			}
 
+			DebugSend(string.Format("TryEnterRequestGate() has determined to break because 'IsDisposed' = {0} / 'this.sendThreadsRunFlag' = {1}", IsDisposed, this.sendThreadsArePermitted));
 			return (false);
 		}
 
 		/// <summary></summary>
-		protected virtual void LeaveRequestGateAsRequired()
+		protected virtual void LeaveRequestGate()
 		{
-			if (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+			if (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1143,7 +1160,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual bool TryEnterPacketGate()
 		{
-			while (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+			while (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
 			{
 				if (Monitor.TryEnter(this.packetGateSyncObj))
 				{
@@ -1153,8 +1170,11 @@ namespace YAT.Domain
 
 				try
 				{
-					if (!this.packetGateEvent.WaitOne(staticRandom.Next(50, 200)))
-						continue;
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
+					this.packetGateEvent.WaitOne(staticRandom.Next(50, 200));
 				}
 				catch (AbandonedMutexException ex)
 				{
@@ -1165,6 +1185,7 @@ namespace YAT.Domain
 				}
 			}
 
+			DebugSend(string.Format("TryEnterPacketGate() has determined to break because 'IsDisposed' = {0} / 'this.sendThreadsRunFlag' = {1}", IsDisposed, this.sendThreadsArePermitted));
 			return (false);
 		}
 
@@ -1173,7 +1194,7 @@ namespace YAT.Domain
 		{
 			Monitor.Exit(this.packetGateSyncObj);
 
-			if (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+			if (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
 				this.packetGateEvent.Set();
 		}
 
@@ -1460,24 +1481,6 @@ namespace YAT.Domain
 		{
 			lock (this.breakStateSyncObj)
 				this.breakState = false;
-		}
-
-		#endregion
-
-		#region Stop
-		//------------------------------------------------------------------------------------------
-		// Stop
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public virtual void StopSendThreads()
-		{
-			// Clear flag telling threads to stop...
-			this.sendThreadsRunFlag = false;
-
-			// ...then signal threads:
-			this.nextPermittedSequenceNumberEvent.Set();
-			this.packetGateEvent.Set();
 		}
 
 		#endregion
