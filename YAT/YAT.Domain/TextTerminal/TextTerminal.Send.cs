@@ -28,11 +28,11 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-using MKY;
 using MKY.Text;
 
 using YAT.Application.Utilities;
@@ -50,28 +50,13 @@ namespace YAT.Domain
 	/// </remarks>
 	public partial class TextTerminal
 	{
-		#region Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Methods
+		// Non-Public Methods
 		//==========================================================================================
-
-		#region Send Data
-		//------------------------------------------------------------------------------------------
-		// Send Data
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public override void SendFileLine(string dataLine, Radix defaultRadix)
-		{
-			// AssertNotDisposed() is called by DoSendData().
-
-			var parseMode = TerminalSettings.Send.File.ToParseMode();
-
-			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true));
-		}
-
-		/// <summary></summary>
-		protected override void ProcessTextDataSendItem(TextDataSendItem item)
+		protected override void DoSendTextItem(TextSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
 			string textToParse = item.Data;
 
@@ -99,44 +84,47 @@ namespace YAT.Domain
 				hasSucceeded = p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
-				ProcessParserResult(parseResult, item.IsLine);
+				DoSendText(sendingIsBusyChangedEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
+		protected override void ProcessInLineKeywords(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
 		{
 			switch (result.Keyword)
 			{
 				case Parser.Keyword.Eol:
-				{                        // Complete and immediately forward the line.
-					AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence);
-				////base.ProcessInLineKeywords(result) must not be called as keyword has fully been processed. Calling it would result in an error message!
+				{                   // Complete and immediately forward the pending packets.
+					ProcessLineEnd(true, conflateDataQueue); // Would also result in completing and immediately forwarding, but not handle 'Wait for Response(s)'.
+				////AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence, conflateDataQueue);
+				////base.ProcessInLineKeywords(sendingIsBusyChangedEventHelper, result, conflateDataQueue) must not be called as keyword has fully been processed. Calling it would result in an error message!
 					break;
 				}
 
 				default:
 				{
-					base.ProcessInLineKeywords(result);
+					base.ProcessInLineKeywords(sendingIsBusyChangedEventHelper, result, conflateDataQueue, ref doBreakSend);
 					break;
 				}
 			}
 		}
 
 		/// <summary></summary>
-		protected override void ProcessLineEnd(bool sendEol)
+		protected override void ProcessLineEnd(bool sendEol, Queue<byte> conflateDataQueue)
 		{
 			if (sendEol)             // Just append the EOL, the base method will forward the completed line.
-				AppendToPendingPacketWithoutForwardingToRawTerminalYet(this.txUnidirTextLineState.EolSequence);
+				AppendToPendingPacketWithoutForwardingToRawTerminalYet(this.txUnidirTextLineState.EolSequence, conflateDataQueue);
 
-			base.ProcessLineEnd(sendEol);
+			base.ProcessLineEnd(sendEol, conflateDataQueue);
+
+		//	PENDING: Block if currently no line allowance
 		}
 
 		/// <summary></summary>
-		protected override int ProcessLineDelayOrInterval(bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
+		protected override int ProcessLineDelayOrInterval(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
 		{
-			int accumulatedLineDelay = base.ProcessLineDelayOrInterval(performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
+			int accumulatedLineDelay = base.ProcessLineDelayOrInterval(sendingIsBusyChangedEventHelper, performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
 
 			if (TerminalSettings.TextTerminal.LineSendDelay.Enabled)
 			{
@@ -158,24 +146,17 @@ namespace YAT.Domain
 			return (accumulatedLineDelay);
 		}
 
-		#endregion
-
-		#region Send File
-		//------------------------------------------------------------------------------------------
-		// Send File
-		//------------------------------------------------------------------------------------------
-
 		/// <remarks>
 		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected override void ProcessSendFileItem(FileSendItem item)
+		protected override void DoSendFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
 			try
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					ProcessSendXmlFileItem(item);
+					DoSendXmlFileItem(item, sendingIsBusyChangedEventHelper);
 				}
 				else if (ExtensionHelper.IsRtfFile(item.FilePath))
 				{
@@ -186,20 +167,17 @@ namespace YAT.Domain
 						if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 							continue;
 
-						SendFileLine(line, item.DefaultRadix);
+						DoSendFileLine(sendingIsBusyChangedEventHelper, line, item.DefaultRadix);
 
-						if (BreakSendFile)
-						{
-							OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
+						if (DoBreak)
 							break;
-						}
 
 						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 					}
 				}
 				else // By default treat as text file:
 				{
-					ProcessSendTextFileItem(item, (EncodingEx)TextTerminalSettings.Encoding);
+					DoSendTextFileItem(item, (EncodingEx)TextTerminalSettings.Encoding, sendingIsBusyChangedEventHelper);
 				}
 			}
 			catch (Exception ex)
@@ -207,8 +185,6 @@ namespace YAT.Domain
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
 			}
 		}
-
-		#endregion
 
 		#endregion
 	}

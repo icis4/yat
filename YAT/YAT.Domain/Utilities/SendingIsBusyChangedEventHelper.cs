@@ -28,15 +28,15 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain.Utilities
 {
 	/// <summary>
-	/// While sending, the 'IOIsBusyChanged' event must be raised if intensive processing is done.
-	/// This is required because a client may want to indicate that time intensive sending is
+	/// While sending, the 'SendingIsBusyChanged' event must be raised if intensive processing is
+	/// done. This is required because a client may want to indicate that time intensive sending is
 	/// currently ongoing and no further data shall be sent.
 	/// The event shall be raised if the time lag will significantly be noticeable by the user
 	/// (i.e. >= 400 ms). But the event shall be raised BEFORE the actual time lag. This helper
 	/// struct manages the state and the various criteria.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
-	public struct IOChangedEventHelper
+	public struct SendingIsBusyChangedEventHelper
 	{
 		/// <summary></summary>
 		public const int ThresholdMs = 400;
@@ -45,16 +45,16 @@ namespace YAT.Domain.Utilities
 		private DateTime initialTimeStamp;
 
 		/// <summary></summary>
-		public bool EventMustBeRaised
+		public SendingIsBusyChangedEventHelper(DateTime initialTimeStamp)
 		{
-			get { return (this.eventMustBeRaised); }
+			this.eventMustBeRaised = false;
+			this.initialTimeStamp = initialTimeStamp;
 		}
 
 		/// <summary></summary>
-		public void Initialize()
+		public bool EventMustBeRaised
 		{
-			this.eventMustBeRaised = false;
-			this.initialTimeStamp = DateTime.Now;
+			get { return (this.eventMustBeRaised); }
 		}
 
 		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
