@@ -159,7 +159,7 @@
     <Compile Include="TextTerminal\TextTerminal.Send.cs" />
     <Compile Include="TextTerminal\TextTerminal.cs" />
     <Compile Include="TextTerminal\ControlCharRadix.cs" />
-    <Compile Include="Utilities\IOChangedEventHelper.cs" />
+    <Compile Include="Utilities\SendingIsBusyChangedEventHelper.cs" />
     <Compile Include="Utilities\ByteHelper.cs" />
     <Compile Include="Utilities\LengthSelection.cs" />
     <Compile Include="Utilities\LineNumberSelection.cs" />

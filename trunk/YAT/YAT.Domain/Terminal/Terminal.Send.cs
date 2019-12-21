@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of send:
+	#define DEBUG_SEND
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -53,6 +67,7 @@ namespace YAT.Domain
 	/// This partial class implements the send part of <see cref="Terminal"/>.
 	/// </remarks>
 	/// <remarks>
+	///
 	/// Design Criteria
 	/// ---------------
 	///
@@ -60,10 +75,10 @@ namespace YAT.Domain
 	///  > All below calling sequences (in order to not potentially block the main thread).
 	///
 	/// Sequencing is required for the following calling sequences, because all...
-	///  > [File > Lines > Line                  > Items > Raw] ...lines of a file...
-	///  >        [Lines > Line                  > Items > Raw] ...lines of a multi-line command...
-	///  >                [Line/LinePart/EOL/... > Items > Raw] ...chunks of a line/linepart/EOL...
 	///  >                            [ByteArray > Item  > Raw] ...chunks of a byte array...
+	///  >                [Line/LinePart/EOL/... > Items > Raw] ...chunks of a line/linepart/EOL...
+	///  >        [Lines > Line                  > Items > Raw] ...lines of a multi-line command...
+	///  > [File > Lines > Line                  > Items > Raw] ...lines of a file...
 	///                                                         ...must be sequential.
 	/// At the same time, concurrency may make sense when the following keywords are active, because...
 	///  > <code>\!(Delay(...))</code>
@@ -78,10 +93,10 @@ namespace YAT.Domain
 	/// ---------------------
 	///
 	/// 0. Implementation as up to YAT 2.1.0:
-	///     > [File > sendFileQueue > SendFileThread > Lines > Line                  > sendDataQueue > SendDataThread > Items > Raw]
-	///     >                                         [Lines > Line                  > sendDataQueue > SendDataThread > Items > Raw]
-	///     >                                                 [Line/LinePart/EOL/... > sendDataQueue > SendDataThread > Items > Raw]
 	///     >                                                             [ByteArray > sendDataQueue > SendDataThread > Item  > Raw]
+	///     >                                                 [Line/LinePart/EOL/... > sendDataQueue > SendDataThread > Items > Raw]
+	///     >                                         [Lines > Line                  > sendDataQueue > SendDataThread > Items > Raw]
+	///     > [File > sendFileQueue > SendFileThread > Lines > Line                  > sendDataQueue > SendDataThread > Items > Raw]
 	///       +/- Purely sequential, but not capable of concurrent sending.
 	///       +/- Implementation relies on non-concurrent sending, no prevention of line(s) being requested while file is ongoing.
 	/// 1. Invocation only when needed:
@@ -91,18 +106,20 @@ namespace YAT.Domain
 	///        -  Inconsistent.
 	///       --- An embedded e.g. <code>\!(LineRepeat(5))</code> will no longer be sequential with subsequent lines!
 	/// 2. Immediate invocation per request:
-	///     > [File > Invoke() > Lines            > Line                             > Items > Raw]
-	///     >                   [Lines > Invoke() > Line                             > Items > Raw]
-	///     >                                      [Line/LinePart/EOL/... > Invoke() > Items > Raw]
 	///     >                                                  [ByteArray > Invoke() > Item  > Raw]
+	///     >                                      [Line/LinePart/EOL/... > Invoke() > Items > Raw]
+	///     >                   [Lines > Invoke() > Line                             > Items > Raw]
+	///     > [File > Invoke() > Lines            > Line                             > Items > Raw]
 	///       --- Invoke() doesn't guarantee sequence! Quickly requesting two different commands,
 	///           e.g. by quickly clicking two buttons, may result in wrong command order!
 	///       --- Requirement of commands being "kept together" is no longer met!
 	/// 3. Immediate invocation per request with addition sequence number handling and locks:
-	///     > [File > Invoke(seqNum) > WaitFor(seqNum) > Lines                                    > Line                  > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
-	///     >                                           [Lines > Invoke(seqNum) > WaitFor(seqNum) > Line                  > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
-	///     >                                                                                      [Line/LinePart/EOL/... > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
 	///     >                                                                                                  [ByteArray > Invoke(seqNum) > WaitFor(seqNum) > Item  > Confirm(seqNum) > Raw]
+	///     >                                                                                      [Line/LinePart/EOL/... > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
+	///     >                                           [Lines > Invoke(seqNum) > WaitFor(seqNum) > Line                  > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
+	///     > [File > Invoke(seqNum) > WaitFor(seqNum) > Lines                                    > Line                  > Invoke(seqNum) > WaitFor(seqNum) > Items > Confirm(seqNum) > Raw]
+	///        +  No longer need for two subsequent queues in case of file sending.
+	///        +  Purely sequential implementation for each request, should also be relatively easy to debug.
 	///       +++ All requirements met, configurable behavior implementable.
 	///        -  Requires quite some refactoring...
 	///
@@ -112,6 +129,7 @@ namespace YAT.Domain
 	/// > The sum of all requirements conflict with each other, especially the request to allow concurrent sending.
 	/// > An additional [Settings... > Advanced... > Send > Allow concurrent sending] is required.
 	/// > Only approach 3. fulfills the requirements.
+	///
 	/// </remarks>
 	public abstract partial class Terminal : IDisposable, IDisposableEx
 	{
@@ -129,20 +147,42 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private Queue<DataSendItem> sendDataQueue = new Queue<DataSendItem>();
-		private Queue<byte> conflateDataQueue = new Queue<byte>();
-		private bool sendDataThreadRunFlag;
-		private AutoResetEvent sendDataThreadEvent;
-		private Thread sendDataThread;
-		private object sendDataThreadSyncObj = new object();
+		/// <summary>
+		/// The sequence number of the next send request.
+		/// </summary>
+		/// <remarks>
+		/// The number is needed to properly sequence send requests. See design consideration above.
+		/// </remarks>
+		/// <remarks>
+		/// "A\!(LineRepeat)" throughput is approx. 5'000 lines per second (YAT 2.1.0). This will
+		/// also be the uppermost limit when sending different commands from a script. Using an
+		/// enormous safety margin of 100'000 lines per second this results in a worst case of
+		/// 3'153'600'000'000 lines per year (31'536'000‬ seconds per year). Thus, <see cref="int"/>
+		/// is not good enough, but <see cref="long"/> is more than good enough, its 9E+18 results
+		/// in approx. 300E+9 years!
+		///
+		/// Note that <see cref="Interlocked.Increment(ref long)"/> is used for incrementing. That
+		/// method will "handle an overflow condition by wrapping" and "no exception is thrown".
+		/// Such loop around would not work in the (unlikely) case where a repeating command e.g.
+		/// has sequence number 1 and single-line commands loop around. But since this will not
+		/// happen in magnitude of years this case is neglected for ease of implementation.
+		///
+		/// Also note that <see cref="ulong"/> is not used since <see cref="Interlocked"/> only
+		/// supports <see cref="long"/>.
+		/// </remarks>
+		private long previousRequestedSequenceNumber = -1;
+		private long nextPermittedSequenceNumber; // = 0;
+		private ManualResetEvent nextPermittedSequenceNumberEvent = new ManualResetEvent(false);
 
-		private Queue<FileSendItem> sendFileQueue = new Queue<FileSendItem>();
-		private bool sendFileThreadRunFlag;
-		private AutoResetEvent sendFileThreadEvent;
-		private Thread sendFileThread;
-		private object sendFileThreadSyncObj = new object();
+		private bool sendThreadsRunFlag;
 
-		private bool sendingIsOngoing;
+		private int sendingIsOngoingCount; // = 0;
+		private object sendingIsOngoingCountSyncObj = new object();
+		private int sendingIsBusyCount; // = 0;
+		private object sendingIsBusyCountSyncObj = new object();
+
+		private ManualResetEvent packetGateEvent = new ManualResetEvent(false);
+		private object packetGateSyncObj = new object();
 
 		private bool breakState;
 		private object breakStateSyncObj = new object();
@@ -156,10 +196,50 @@ namespace YAT.Domain
 		// Properties
 		//==========================================================================================
 
-		#region Break/Resume
-		//------------------------------------------------------------------------------------------
-		// Break/Resume
-		//------------------------------------------------------------------------------------------
+		/// <summary></summary>
+		public virtual bool IsReadyToSend
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (IsTransmissive);
+
+				// Until YAT 2.1.0, this property was implemented as 'IsReadyToSend_Internal'
+				// as (IsTransmissive && !this.sendingIsOngoing) and it also signalled
+				// 'EventMustBeRaisedBecauseStatusHasBeenAccessed()'. This was necessary as
+				// until YAT 2.1.0 it was not possible to run multiple commands concurrently.
+				// With YAT 2.1.1 this became possible, but keeping this property because its
+				// meaning still makes sense, e.g. send related controls can adapt to this send
+				// specific property instead of using the more general 'IsTransmissive'.
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool SendingIsOngoing
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (IsTransmissive && (this.sendingIsOngoingCount > 0)); // No need to lock (this.sendingIsOngoingSyncObj), retrieving only.
+			}
+		}
+
+		/// <remarks>
+		/// Opposed to <see cref="SendingIsOngoing"/>, this property only becomes <c>true</c> when
+		/// sending has been ongoing for more than <see cref="SendingIsBusyChangedEventHelper.ThresholdMs"/>,
+		/// or is about to be ongoing for more than <see cref="SendingIsBusyChangedEventHelper.ThresholdMs"/>.
+		/// </remarks>
+		public virtual bool SendingIsBusy
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (SendingIsOngoing && (this.sendingIsBusyCount > 0)); // No need to lock (this.sendingIsOngoingSyncObj), retrieving only.
+			}
+		}
 
 		/// <summary>
 		/// Returns the current break state.
@@ -175,7 +255,16 @@ namespace YAT.Domain
 			}
 		}
 
-		#endregion
+		/// <remarks>
+		/// Break if requested or terminal has stopped or closed.
+		/// </remarks>
+		protected virtual bool DoBreak
+		{
+			get
+			{
+				return (BreakState || !(!IsDisposed && this.sendThreadsRunFlag && IsTransmissive)); // Check 'IsDisposed' first!
+			}
+		}
 
 		#endregion
 
@@ -184,246 +273,242 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Send Data
-		//------------------------------------------------------------------------------------------
-		// Send Data
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by DoSendData().
+			AssertNotDisposed();
 
-			DoSendData(new RawDataSendItem(data));
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var asyncInvoker = new Action<byte[], long>(DoSend);
+			asyncInvoker.BeginInvoke(data, sequenceNumber, null, null);
+		}
+
+		/// <remarks>This method will be called asynchronously.</remarks>
+		protected virtual void DoSend(byte[] data, long sequenceNumber)
+		{
+			DebugSend(string.Format("Sending of {0} bytes of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
+
+			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			{
+				try
+				{
+					DebugSend(string.Format("Sending of {0} bytes of raw data has been permitted (sequence number = {1}).", data.Length, sequenceNumber));
+
+					var raiseSendingIsBusyChangedEvent = SendingIsBusyChangedEventHelper.ChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond);
+					DoSendPre(raiseSendingIsBusyChangedEvent);
+					DoSendRawData(data);
+					DoSendPost(raiseSendingIsBusyChangedEvent);
+
+					DebugSend(string.Format("Sending of {0} bytes of raw data has been completed (sequence number = {1}).", data.Length, sequenceNumber));
+				}
+				finally
+				{
+					LeaveRequestGateAsRequired();
+				}
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendText(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by DoSendData().
+			AssertNotDisposed();
 
-			var parseMode = TerminalSettings.Send.Text.ToParseMode();
+			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
+			var item = new TextSendItem(data, defaultRadix, parseMode, SendMode.Text, false);
 
-			DoSendData(new TextDataSendItem(data, defaultRadix, parseMode, SendMode.Text, false));
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var asyncInvoker = new Action<TextSendItem, long>(DoSendText);
+			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
+		}
+
+		/// <remarks>This method will be called asynchronously.</remarks>
+		protected virtual void DoSendText(TextSendItem item, long sequenceNumber)
+		{
+			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
+
+			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			{
+				try
+				{
+					DebugSend(string.Format(@"Sending of text ""{0}"" has been permitted (sequence number = {1}).", item.Data, sequenceNumber));
+
+					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
+					DoSendTextItem(item, sendingIsBusyChangedEvent);
+					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+
+					DebugSend(string.Format(@"Sending of text ""{0}"" has been completed (sequence number = {1}).", item.Data, sequenceNumber));
+				}
+				finally
+				{
+					LeaveRequestGateAsRequired();
+				}
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by DoSendData().
+			AssertNotDisposed();
 
-			var parseMode = TerminalSettings.Send.Text.ToParseMode();
+			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
+			var item = new TextSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true);
 
-			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true));
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var asyncInvoker = new Action<TextSendItem, long>(DoSendTextLine);
+			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
+		}
+
+		/// <remarks>This method will be called asynchronously.</remarks>
+		protected virtual void DoSendTextLine(TextSendItem item, long sequenceNumber)
+		{
+			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
+
+			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			{
+				try
+				{
+					DebugSend(string.Format(@"Sending of text line ""{0}"" has been permitted (sequence number = {1}).", item.Data, sequenceNumber));
+
+					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
+					DoSendTextItem(item, sendingIsBusyChangedEvent);
+					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+
+					DebugSend(string.Format(@"Sending of text line ""{0}"" has been completed (sequence number = {1}).", item.Data, sequenceNumber));
+				}
+				finally
+				{
+					LeaveRequestGateAsRequired();
+				}
+			}
 		}
 
 		/// <remarks>
-		/// Required to allow sending multi-line commands in a single operation. Otherwise, using
-		/// <see cref="SendTextLine"/>, sending gets mixed-up because of the following sequence:
-		///  1. First line gets sent/enqueued.
-		///  2. Second line gets sent/enqueued.
-		///  3. Response to first line is received and displayed
-		///     and so on, mix-up among sent and received lines...
+		/// Required to allow sending multi-line commands "kept together".
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLines(string[] dataLines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by DoSendData().
+			AssertNotDisposed();
 
-			var parseMode = TerminalSettings.Send.Text.ToParseMode();
-
-			var l = new List<TextDataSendItem>(dataLines.Length); // Preset the required capacity to improve memory management.
+			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
+			var items = new List<TextSendItem>(dataLines.Length); // Preset the required capacity to improve memory management.
 			foreach (string dataLine in dataLines)
-				l.Add(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true));
+				items.Add(new TextSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true));
 
-			DoSendData(l.ToArray());
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var asyncInvoker = new Action<List<TextSendItem>, long>(DoSendTextLines);
+			asyncInvoker.BeginInvoke(items, sequenceNumber, null, null);
+		}
+
+		/// <remarks>This method will be called asynchronously.</remarks>
+		protected virtual void DoSendTextLines(List<TextSendItem> items, long sequenceNumber)
+		{
+			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
+
+			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			{
+				try
+				{
+					DebugSend(string.Format("Sending of {0} text lines has been permitted (sequence number = {1}).", items.Count, sequenceNumber));
+
+					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
+
+					foreach (var item in items)
+						DoSendTextItem(item, sendingIsBusyChangedEvent);
+
+					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+
+					DebugSend(string.Format("Sending of {0} text lines has been completed (sequence number = {1}).", items.Count, sequenceNumber));
+				}
+				finally
+				{
+					LeaveRequestGateAsRequired();
+				}
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public abstract void SendFileLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault);
-
-		/// <remarks>
-		/// This method shall not be overridden. All send items shall be enqueued using this
-		/// method, but inheriting terminals can override <see cref="ProcessSendDataItem"/> instead.
-		/// </remarks>
-		protected void DoSendData(DataSendItem item)
-		{
-			DoSendData(new DataSendItem[] { item });
-		}
-
-		/// <remarks>
-		/// This method shall not be overridden. All send items shall be enqueued using this
-		/// method, but inheriting terminals can override <see cref="ProcessSendDataItem"/> instead.
-		/// </remarks>
-		protected void DoSendData(IEnumerable<DataSendItem> items)
+		public virtual void SendFile(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			AssertNotDisposed();
 
+			var item = new FileSendItem(filePath, defaultRadix);
+
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var asyncInvoker = new Action<FileSendItem, long>(DoSendFile);
+			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
+		}
+
+		/// <remarks>This method will be called asynchronously.</remarks>
+		protected virtual void DoSendFile(FileSendItem item, long sequenceNumber)
+		{
+			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
+
+			if (TryEnterRequestGateAsRequired(sequenceNumber))
+			{
+				try
+				{
+					DebugSend(string.Format(@"Sending of ""{0}"" has been permitted (sequence number = {1}).", item.FilePath, sequenceNumber));
+
+					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
+					DoSendFileItem(item, sendingIsBusyChangedEvent);
+					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+
+					DebugSend(string.Format(@"Sending of ""{0}"" has been completed (sequence number = {1}).", item.FilePath, sequenceNumber));
+				}
+				finally
+				{
+					LeaveRequestGateAsRequired();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Non-Public Methods
+		//==========================================================================================
+		// Non-Public Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void DoSendPre(bool raiseSendingIsBusyChangedEvent)
+		{
 			// Each send request shall resume a pending break condition:
 			ResumeBreak();
 
 			if (TerminalSettings.Send.SignalXOnBeforeEachTransmission)
 				RequestSignalInputXOn();
 
-			// Enqueue the items for sending:
-			lock (this.sendDataQueue) // Lock is required because Queue<T> is not synchronized.
-			{
-				foreach (var item in items)
-					this.sendDataQueue.Enqueue(item);
-			}
+			if (raiseSendingIsBusyChangedEvent)
+				OnThisRequestSendingIsBusyChanged(true);
 
-			// Signal thread:
-			SignalSendDataThreadSafely();
-		}
-
-		/// <summary>
-		/// Asynchronously manage outgoing send requests to ensure that send events are not invoked
-		/// on the same thread that triggered the send operation.
-		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of sent data would generate many events. However,
-		/// since the 'OnDisplayElements...' methods synchronously invoke the event, it will take
-		/// some time until the send queue is checked again. During this time, no more new events
-		/// are invoked, instead, outgoing data is buffered.
-		/// </summary>
-		/// <remarks>
-		/// Will be signaled by <see cref="DoSendData(IEnumerable{DataSendItem})"/> above.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
-		private void SendDataThread()
-		{
-			DebugThreadState("SendDataThread() has started.");
-
-			try
-			{
-				// Outer loop, processes data after a signal was received:
-				while (!IsDisposed && this.sendDataThreadRunFlag) // Check 'IsDisposed' first!
-				{
-					try
-					{
-						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
-						if (!this.sendDataThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-							continue;
-					}
-					catch (AbandonedMutexException ex)
-					{
-						// The mutex should never be abandoned, but in case it nevertheless happens,
-						// at least output a debug message and gracefully exit the thread.
-						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendDataThread()!");
-						break;
-					}
-
-					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendDataThreadRunFlag && IsReadyToSend && (this.sendDataQueue.Count > 0))
-					{                                                                 // No lock required, just checking for empty.
-						// Initially, yield to other threads before starting to read the queue, since it is very
-						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero);
-
-						DataSendItem[] pendingItems;
-						lock (this.sendDataQueue) // Lock is required because Queue<T> is not synchronized.
-						{
-							pendingItems = this.sendDataQueue.ToArray();
-							this.sendDataQueue.Clear();
-						}
-
-						if (pendingItems.Length > 0)
-						{
-							this.ioIsBusyChangedEventHelper.Initialize();
-							this.sendingIsOngoing = true;
-
-							foreach (var item in pendingItems)
-							{
-								DebugMessage(@"Processing item """ + item.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
-
-								ProcessSendDataItem(item);
-
-								if (BreakSendData)
-								{
-									if (this.ioIsBusyChangedEventHelper.EventMustBeRaised)
-										OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
-
-									break;
-								}
-
-								// \remind (2017-09-16 / MKY) related to FR #262 "IIOProvider should be..."
-								// In case of many pending items, 'EventMustBeRaised' will become 'true',
-								// e.g. due to RaiseEventIfTotalTimeLagIsAboveThreshold(). This indicates
-								// that there are really many pending items, and this foreach-loop would
-								// result in kind of freezing all other threads => Yield!
-								// Attention: The below condition relies on the helper's proper usage!
-								if (this.ioIsBusyChangedEventHelper.EventMustBeRaised)
-									Thread.Sleep(1); // Yield to other threads to e.g. allow refreshing of view.
-							}                        // Note that Thread.Sleep(TimeSpan.Zero) is not sufficient.
-
-							this.sendingIsOngoing = false;
-							if (this.ioIsBusyChangedEventHelper.EventMustBeRaised)
-								OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
-						}
-					} // Inner loop
-				} // Outer loop
-			}
-			catch (ThreadAbortException ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "SendDataThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
-
-				// Should only happen when failing to 'friendly' join the thread on stopping!
-				// Don't try to set and notify a state change, or even restart the terminal!
-
-				// But reset the abort request, as 'ThreadAbortException' is a special exception
-				// that would be rethrown at the end of the catch block otherwise!
-
-				Thread.ResetAbort();
-			}
-
-			DebugThreadState("SendDataThread() has terminated.");
-		}
-
-		/// <remarks>
-		/// Break if requested or terminal has stopped or closed.
-		/// </remarks>
-		protected virtual bool BreakSendData
-		{
-			get
-			{
-				return (BreakState || !(!IsDisposed && this.sendDataThreadRunFlag && IsTransmissive)); // Check 'IsDisposed' first!
-			}
+			OnThisRequestSendingIsOngoingChanged(true);
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessSendDataItem(DataSendItem item)
+		protected virtual void DoSendPost(bool raiseSendingIsBusyChangedEvent)
 		{
-			var rsi = (item as RawDataSendItem);
-			if (rsi != null)
-			{
-				ProcessRawDataSendItem(rsi);
-			}
-			else
-			{
-				var psi = (item as TextDataSendItem);
-				if (psi != null)
-					ProcessTextDataSendItem(psi);
-				else
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + item.GetType() + "' is a send item type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
+			OnThisRequestSendingIsOngoingChanged(false);
+
+			if (raiseSendingIsBusyChangedEvent)
+				OnThisRequestSendingIsBusyChanged(false);
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessRawDataSendItem(RawDataSendItem item)
+		protected virtual void DoSendRawData(byte[] data)
 		{
-			ForwardPacketToRawTerminal(item.Data); // Nothing for further processing, simply forward.
+			ForwardPacketToRawTerminal(data); // Nothing for further processing, simply forward.
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
-		protected virtual void ProcessTextDataSendItem(TextDataSendItem item)
+		protected virtual void DoSendTextItem(TextSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
 			bool hasSucceeded;
 			Parser.Result[] parseResult;
@@ -433,141 +518,157 @@ namespace YAT.Domain
 				hasSucceeded = p.TryParse(item.Data, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
 
 			if (hasSucceeded)
-				ProcessParserResult(parseResult, item.IsLine);
+				DoSendText(sendingIsBusyChangedEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		protected virtual void ProcessParserResult(Parser.Result[] results, bool sendEol = false)
+		protected virtual void DoSendText(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.Result[] parseResult, bool isLine = false)
 		{
 			var performLineRepeat    = false; // \remind For binary terminals, this is rather a 'PacketRepeat'.
 			var lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
 			var lineRepeatRemaining  =  TerminalSettings.Send.DefaultLineRepeat;
 			var isFirstRepetition    = true;
 
-			do // Process at least once, potentially repeat.
+			do // Process at least once, potentially repeat:
 			{
 				// --- Initialize the line/packet ---
 
-				var lineBeginTimeStamp  = DateTime.Now; // \remind For binary terminals, this is rather a 'PacketBegin'.
-				var performLineDelay    = false;        // \remind For binary terminals, this is rather a 'PacketDelay'.
-				var lineDelay           = TerminalSettings.Send.DefaultLineDelay;
-				var performLineInterval = false;        // \remind For binary terminals, this is rather a 'PacketInterval'.
-				var lineInterval        = TerminalSettings.Send.DefaultLineInterval;
-
-				// --- Process the line/packet ---
-
-				foreach (var result in results)
+				if (TryEnterPacketGate())
 				{
-					var byteResult = (result as Parser.BytesResult);
-					if (byteResult != null)
-					{
-						// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
-						if (this.ioIsBusyChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(byteResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
-							OnIOIsBusyChanged(new EventArgs<bool>(true));
+					var lineBeginTimeStamp  = DateTime.Now; // \remind For binary terminals, this is rather a 'PacketBegin'.
+					var performLineDelay    = false;        // \remind For binary terminals, this is rather a 'PacketDelay'.
+					var lineDelay           = TerminalSettings.Send.DefaultLineDelay;
+					var performLineInterval = false;        // \remind For binary terminals, this is rather a 'PacketInterval'.
+					var lineInterval        = TerminalSettings.Send.DefaultLineInterval;
+					var conflateDataQueue   = new Queue<byte>();
 
-						// For performance reasons, as well as joining text terminal EOL with line content,
-						// collect as many chunks as possible into a larger chunk:
-						AppendToPendingPacketWithoutForwardingToRawTerminalYet(byteResult.Bytes);
-					}
-					else // if keyword result (will not occur if keywords are disabled while parsing)
+					try
 					{
-						var keywordResult = (result as Parser.KeywordResult);
-						if (keywordResult != null)
+						// --- Process the line/packet ---
+
+						foreach (var result in parseResult)
 						{
-							switch (keywordResult.Keyword)
+							var doBreak = false;
+
+							var bytesResult = (result as Parser.BytesResult);
+							if (bytesResult != null)
 							{
-								// Process line related keywords:
-								case Parser.Keyword.NoEol: // \remind Only needed for text terminals.
+								// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
+								if (sendingIsBusyChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
+									OnThisRequestSendingIsBusyChanged(true);
+
+								// For performance reasons, as well as joining text terminal EOL with line content,
+								// collect as many chunks as possible into a larger chunk:
+								AppendToPendingPacketWithoutForwardingToRawTerminalYet(bytesResult.Bytes, conflateDataQueue);
+							}
+							else // if keyword result (will not occur if keywords are disabled while parsing)
+							{
+								var keywordResult = (result as Parser.KeywordResult);
+								if (keywordResult != null)
 								{
-									sendEol = false;
-									break;
-								}
-
-								case Parser.Keyword.LineDelay: // \remind For binary terminals, this is rather a 'PacketDelay'.
-								{
-									performLineDelay = true;
-
-									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
-										lineDelay = keywordResult.Args[0];
-
-									break;
-								}
-
-								case Parser.Keyword.LineInterval: // \remind For binary terminals, this is rather a 'PacketInterval'.
-								{
-									performLineInterval = true;
-
-									if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
-										lineInterval = keywordResult.Args[0];
-
-									break;
-								}
-
-							////case Parser.Keyword.Repeat: is yet pending (FR #13) and requires parser support for strings.
-							////{
-							////}
-
-								case Parser.Keyword.LineRepeat: // \remind For binary terminals, this is rather a 'PacketRepeat'.
-								{
-									if (isFirstRepetition)
+									switch (keywordResult.Keyword)
 									{
-										performLineRepeat = true;
-
-										if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
+										// Process line related keywords:
+										case Parser.Keyword.NoEol: // \remind Only needed for text terminals.
 										{
-											lineRepeatIsInfinite = (keywordResult.Args[0] == Settings.SendSettings.LineRepeatInfinite);
-											lineRepeatRemaining  =  keywordResult.Args[0];
+											isLine = false;
+											break;
+										}
+
+										case Parser.Keyword.LineDelay: // \remind For binary terminals, this is rather a 'PacketDelay'.
+										{
+											performLineDelay = true;
+
+											if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
+												lineDelay = keywordResult.Args[0];
+
+											break;
+										}
+
+										case Parser.Keyword.LineInterval: // \remind For binary terminals, this is rather a 'PacketInterval'.
+										{
+											performLineInterval = true;
+
+											if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
+												lineInterval = keywordResult.Args[0];
+
+											break;
+										}
+
+									////case Parser.Keyword.Repeat: is yet pending (FR #13) and requires parser support for strings.
+									////{
+									////}
+
+										case Parser.Keyword.LineRepeat: // \remind For binary terminals, this is rather a 'PacketRepeat'.
+										{
+											if (isFirstRepetition)
+											{
+												performLineRepeat = true;
+
+												if (!ArrayEx.IsNullOrEmpty(keywordResult.Args)) // If arg is non-existant, the default value will be used.
+												{
+													lineRepeatIsInfinite = (keywordResult.Args[0] == Settings.SendSettings.LineRepeatInfinite);
+													lineRepeatRemaining  =  keywordResult.Args[0];
+												}
+											}
+											else
+											{
+												Thread.Sleep(TimeSpan.Zero); // Make sure the application stays responsive while repeating.
+											}
+
+											break;
+										}
+
+										// Process in-line keywords:
+										default:
+										{
+											ProcessInLineKeywords(sendingIsBusyChangedEventHelper, keywordResult, conflateDataQueue, ref doBreak);
+
+											break;
 										}
 									}
-									else
-									{
-										Thread.Sleep(TimeSpan.Zero); // Make sure the application stays responsive while repeating.
-									}
-
-									break;
-								}
-
-								// Process in-line keywords:
-								default:
-								{
-									ProcessInLineKeywords(keywordResult);
-									break;
 								}
 							}
+
+							if (DoBreak || doBreak) // (global || local)
+								break;
+
+							// Raise the 'IOIsBusyChanged' event if sending already takes quite long:
+							if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+								OnThisRequestSendingIsBusyChanged(true);
 						}
 					}
+					finally
+					{
+						LeavePacketGate(); // Not the best approach to require this call at so many locations...
+					}
 
-					// Raise the 'IOIsBusyChanged' event if sending already takes quite long:
-					if (this.ioIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
-						OnIOIsBusyChanged(new EventArgs<bool>(true));
+					// --- Finalize the line/packet ---
+
+					ProcessLineEnd(isLine, conflateDataQueue);
+
+					var lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
+
+					// --- Perform line/packet related post-processing ---
+
+					// Break if requested or terminal has stopped or closed! Must be done prior to a potential Sleep() or repeat!
+					if (DoBreak)
+						break;
+
+					ProcessLineDelayOrInterval(sendingIsBusyChangedEventHelper, performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
+
+					// Process repeat:
+					if (!lineRepeatIsInfinite)
+					{
+						if (lineRepeatRemaining > 0)
+							lineRepeatRemaining--;
+					}
+
+					isFirstRepetition = false;
 				}
-
-				// --- Finalize the line/packet ---
-
-				ProcessLineEnd(sendEol);
-
-				var lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
-
-				// --- Perform line/packet related post-processing ---
-
-				// Break if requested or terminal has stopped or closed!
-				// Note that breaking is done prior to a potential Sleep() or repeat.
-				if (BreakState || !(!IsDisposed && this.sendDataThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
-					break;
-
-				ProcessLineDelayOrInterval(performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
-
-				// Process repeat:
-				if (!lineRepeatIsInfinite)
-				{
-					if (lineRepeatRemaining > 0)
-						lineRepeatRemaining--;
-				}
-
-				isFirstRepetition = false;
 			}
 			while (performLineRepeat && (lineRepeatIsInfinite || (lineRepeatRemaining > 0)));
 		}
@@ -575,13 +676,16 @@ namespace YAT.Domain
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InLine", Justification = "It's 'in line' and not inline!")]
 		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agreed, could be refactored. Could be.")]
-		protected virtual void ProcessInLineKeywords(Parser.KeywordResult result)
+		protected virtual void ProcessInLineKeywords(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
 		{
+			doBreakSend = false;
+
 			switch (result.Keyword)
 			{
 				case Parser.Keyword.Clear:
 				{
-					ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+					ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+				////LeavePacketGate() must not be called, clearing yet is about to happen and packet shall resume afterwards
 
 					// Wait some time to allow previous data being transmitted.
 					// Wait quite long as the 'DataSent' event will take time.
@@ -589,22 +693,27 @@ namespace YAT.Domain
 					Thread.Sleep(150);
 
 					this.ClearRepositories();
+
 					break;
 				}
 
 				case Parser.Keyword.Delay:
 				{
-					ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+					ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+					LeavePacketGate();                                    // Not the best approach to require this call at so many locations...
+					{
+						int delay = TerminalSettings.Send.DefaultDelay;
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+							delay = result.Args[0];
 
-					int delay = TerminalSettings.Send.DefaultDelay;
-					if (!ArrayEx.IsNullOrEmpty(result.Args))
-						delay = result.Args[0];
+						// Raise the 'IOIsBusyChanged' event if sending is about to be delayed:
+						if (sendingIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
+							OnThisRequestSendingIsBusyChanged(true);
 
-					// Raise the 'IOIsBusyChanged' event if sending is about to be delayed:
-					if (this.ioIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
-						OnIOIsBusyChanged(new EventArgs<bool>(true));
+						Thread.Sleep(delay);
+					}
+					doBreakSend = !TryEnterPacketGate();
 
-					Thread.Sleep(delay);
 					break;
 				}
 
@@ -656,7 +765,7 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
-							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
@@ -667,6 +776,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Changing I/O settings is yet limited to serial COM ports (limitation #71).", true));
 					}
+
 					break;
 				}
 
@@ -687,7 +797,7 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
-							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
@@ -698,6 +808,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Baud rate can only be changed on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -718,7 +829,7 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
-							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
@@ -729,6 +840,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Stop bits can only be changed on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -749,7 +861,7 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
-							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
@@ -760,6 +872,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Data bits can only be changed on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -780,7 +893,7 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
-							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
@@ -791,6 +904,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Parity can only be changed on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -811,7 +925,7 @@ namespace YAT.Domain
 
 						if (setting.Communication.HaveChanged)
 						{
-							ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
 							if (!TryApplySettings(port, setting, out ex))
@@ -822,6 +936,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Flow control can only be changed on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -829,7 +944,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = false;
@@ -838,6 +953,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -845,7 +961,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = true;
@@ -854,6 +970,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -861,7 +978,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.IgnoreFramingErrors = TerminalSettings.IO.SerialPort.IgnoreFramingErrors;
@@ -870,6 +987,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -877,7 +995,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = true;
@@ -886,6 +1004,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -893,7 +1012,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.OutputBreak = false;
@@ -902,6 +1021,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -909,7 +1029,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
 						port.ToggleOutputBreak();
@@ -918,6 +1038,7 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Break is only supported on serial COM ports.", true));
 					}
+
 					break;
 				}
 
@@ -925,7 +1046,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.UsbSerialHid)
 					{
-						ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 						byte reportId = TerminalSettings.IO.UsbSerialHidDevice.ReportFormat.Id;
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
@@ -938,27 +1059,126 @@ namespace YAT.Domain
 					{
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Report ID can only be used with USB Ser/HID.", true));
 					}
+
 					break;
 				}
 
 				default: // = Unknown or not-yet-supported keyword.
 				{
 					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, MessageHelper.InvalidExecutionPreamble + "The '" + (Parser.KeywordEx)result.Keyword + "' keyword is unknown! " + MessageHelper.SubmitBug));
+
 					break;
 				}
 			}
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketEnd'.</remarks>
-		protected virtual void ProcessLineEnd(bool sendEol)
+		protected virtual void ProcessLineEnd(bool sendEol, Queue<byte> conflateDataQueue)
 		{
 			UnusedArg.PreventAnalysisWarning(sendEol); // Doesn't need to be handled for the 'neutral' terminal base.
 
-			ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+			ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+			LeavePacketGate();                                    // Not the best approach to require this call at so many locations...
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryEnterRequestGateAsRequired(long sequenceNumber)
+		{
+			while (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+			{
+				if (TerminalSettings.Send.AllowConcurrency)
+				{
+					return (true);
+				}
+				else
+				{
+					try
+					{
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						if (!this.nextPermittedSequenceNumberEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in TryEnterSequenceGateAsRequired()!");
+						break;
+					}
+
+					if (sequenceNumber == Interlocked.Read(ref this.nextPermittedSequenceNumber))
+					{
+						this.nextPermittedSequenceNumberEvent.Reset();
+						return (true);
+					}
+				}
+			}
+
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual void LeaveRequestGateAsRequired()
+		{
+			if (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+			{
+				if (TerminalSettings.Send.AllowConcurrency)
+				{
+					// PENDING !!!
+
+					// Nothing to do, no need to handle 'nextPermittedSequenceNumber' ?!?
+					// If 'AllowConcurrency' gets disabled, will parent recreate the terminal ?!? No !!! But it probably must...
+				}
+				else
+				{
+					Interlocked.Increment(ref this.nextPermittedSequenceNumber);
+					this.nextPermittedSequenceNumberEvent.Set();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryEnterPacketGate()
+		{
+			while (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+			{
+				if (Monitor.TryEnter(this.packetGateSyncObj))
+				{
+					this.packetGateEvent.Reset();
+					return (true);
+				}
+
+				try
+				{
+					if (!this.packetGateEvent.WaitOne(staticRandom.Next(50, 200)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in TryEnterSequenceGateAsRequired()!");
+					break;
+				}
+			}
+
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual void LeavePacketGate()
+		{
+			Monitor.Exit(this.packetGateSyncObj);
+
+			if (!IsDisposed && this.sendThreadsRunFlag) // Check 'IsDisposed' first!
+				this.packetGateEvent.Set();
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketDelayOrInterval'.</remarks>
-		protected virtual int ProcessLineDelayOrInterval(bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
+		protected virtual int ProcessLineDelayOrInterval(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
 		{
 			int effectiveDelay = 0;
 
@@ -975,8 +1195,8 @@ namespace YAT.Domain
 			if (effectiveDelay > 0)
 			{
 				// Raise the 'IOIsBusyChanged' event if sending is about to be delayed for too long:
-				if (this.ioIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
-					OnIOIsBusyChanged(new EventArgs<bool>(true));
+				if (sendingIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
+					OnThisRequestSendingIsBusyChanged(true);
 
 				Thread.Sleep(effectiveDelay);
 				return (effectiveDelay);
@@ -1020,34 +1240,34 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void AppendToPendingPacketWithoutForwardingToRawTerminalYet(byte[] data)
+		protected static void AppendToPendingPacketWithoutForwardingToRawTerminalYet(byte[] data, Queue<byte> conflateDataQueue)
 		{
-			lock (this.conflateDataQueue)
+			lock (conflateDataQueue)
 			{
 				foreach (byte b in data)
-					this.conflateDataQueue.Enqueue(b);
+					conflateDataQueue.Enqueue(b);
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(ReadOnlyCollection<byte> data)
+		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(ReadOnlyCollection<byte> data, Queue<byte> conflateDataQueue)
 		{
 			byte[] a = new byte[data.Count];
 			data.CopyTo(a, 0);
 
-			AppendToPendingPacketAndForwardToRawTerminal(a);
+			AppendToPendingPacketAndForwardToRawTerminal(a, conflateDataQueue);
 		}
 
 		/// <summary></summary>
-		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(byte[] data)
+		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(byte[] data, Queue<byte> conflateDataQueue)
 		{
-			lock (this.conflateDataQueue)
+			lock (conflateDataQueue)
 			{
 				foreach (byte b in data)
-					this.conflateDataQueue.Enqueue(b);
+					conflateDataQueue.Enqueue(b);
 			}
 
-			ForwardPendingPacketToRawTerminal(); // Not the best approach to require this call at so many locations...
+			ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 		}
 
 		/// <remarks>
@@ -1057,14 +1277,14 @@ namespace YAT.Domain
 		/// Named 'packet' rather than 'chunk' to emphasize difference to <see cref="RawChunkSent"/>
 		/// which corresponds to the chunks effectively sent by the underlying I/O instance.
 		/// </remarks>
-		protected virtual void ForwardPendingPacketToRawTerminal()
+		protected virtual void ForwardPendingPacketToRawTerminal(Queue<byte> conflateDataQueue)
 		{
 			// Retrieve pending data:
 			byte[] data;
-			lock (this.conflateDataQueue)
+			lock (conflateDataQueue)
 			{
-				data = this.conflateDataQueue.ToArray();
-				this.conflateDataQueue.Clear();
+				data = conflateDataQueue.ToArray();
+				conflateDataQueue.Clear();
 			}
 
 			ForwardPacketToRawTerminal(data);
@@ -1154,171 +1374,23 @@ namespace YAT.Domain
 			}
 		}
 
-		#endregion
-
-		#region Send File
-		//------------------------------------------------------------------------------------------
-		// Send File
-		//------------------------------------------------------------------------------------------
+		/// <remarks>
+		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// </remarks>
+		protected abstract void DoSendFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper);
 
 		/// <remarks>
 		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendFile(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		protected virtual void DoSendTextFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
-			// AssertNotDisposed() is called by DoSendFile().
-
-			DoSendFile(filePath, defaultRadix);
-		}
-
-		/// <remarks>
-		/// This method shall not be overridden. All send items shall be enqueued using this
-		/// method, but inheriting terminals can override <see cref="ProcessSendFileItem"/> instead.
-		/// </remarks>
-		/// <remarks>
-		/// Separate "Do...()" method for symmetricity with <see cref="DoSendData(IEnumerable{DataSendItem})"/>.
-		/// </remarks>
-		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
-		/// </remarks>
-		protected void DoSendFile(string filePath, Radix defaultRadix)
-		{
-			AssertNotDisposed();
-
-			// Enqueue the items for sending:
-			lock (this.sendFileQueue) // Lock is required because Queue<T> is not synchronized.
-			{
-				this.sendFileQueue.Enqueue(new FileSendItem(filePath, defaultRadix));
-			}
-
-			// Signal thread:
-			SignalSendFileThreadSafely();
-		}
-
-		/// <remarks>
-		/// Will be signaled by <see cref="DoSendFile(string, Radix)"/> above.
-		/// </remarks>
-		/// <remarks>
-		/// Separate thread (and not integrated into <see cref="SendDataThread"/>) because that
-		/// thread queues <see cref="TextDataSendItem"/> objects, thus some kind of a two-level
-		/// infrastructure is required (SendFile => SendData). The considered \!(SendFile("..."))
-		/// keyword doesn't help either since the file may again contain keywords, thus again some
-		/// kind of a two-level infrastructure is required.
-		/// </remarks>
-		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
-		private void SendFileThread()
-		{
-			DebugThreadState("SendFileThread() has started.");
-
-			try
-			{
-				// Outer loop, processes data after a signal was received:
-				while (!IsDisposed && this.sendFileThreadRunFlag) // Check 'IsDisposed' first!
-				{
-					try
-					{
-						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
-						if (!this.sendFileThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-							continue;
-					}
-					catch (AbandonedMutexException ex)
-					{
-						// The mutex should never be abandoned, but in case it nevertheless happens,
-						// at least output a debug message and gracefully exit the thread.
-						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendFileThread()!");
-						break;
-					}
-
-					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendFileThreadRunFlag && IsReadyToSend && (this.sendFileQueue.Count > 0))
-					{                                                                 // No lock required, just checking for empty.
-						// Initially, yield to other threads before starting to read the queue, since it is very
-						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
-						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero);
-
-						FileSendItem[] pendingItems;
-						lock (this.sendFileQueue) // Lock is required because Queue<T> is not synchronized.
-						{
-							pendingItems = this.sendFileQueue.ToArray();
-							this.sendFileQueue.Clear();
-						}
-
-						if (pendingItems.Length > 0)
-						{
-							foreach (var item in pendingItems)
-							{
-								DebugMessage(@"Processing item """ + item.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
-
-								ProcessSendFileItem(item);
-
-								if (BreakSendFile)
-								{
-									OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
-									break;
-								}
-
-								// \remind (2017-09-16 / MKY) related to FR #262 "IIOProvider should be..."
-								// No need to yield here (like done in SendDataThread()) since...
-								// ...it is very unlikely that very many files are sent at once.
-								// ...and the for-loop in ProcessSendFileItem() already yields.
-							}
-						}
-					} // Inner loop
-				} // Outer loop
-			}
-			catch (ThreadAbortException ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "SendFileThread() has been aborted! Confirming the abort, i.e. Thread.ResetAbort() will be called...");
-
-				// Should only happen when failing to 'friendly' join the thread on stopping!
-				// Don't try to set and notify a state change, or even restart the terminal!
-
-				// But reset the abort request, as 'ThreadAbortException' is a special exception
-				// that would be rethrown at the end of the catch block otherwise!
-
-				Thread.ResetAbort();
-			}
-
-			DebugThreadState("SendFileThread() has terminated.");
-		}
-
-		/// <remarks>
-		/// Break if requested or terminal has stopped or closed.
-		/// </remarks>
-		protected virtual bool BreakSendFile
-		{
-			get
-			{
-				return (BreakState || !(!IsDisposed && this.sendFileThreadRunFlag && IsTransmissive)); // Check 'IsDisposed' first!
-			}
+			DoSendTextFileItem(item, Encoding.Default, sendingIsBusyChangedEventHelper);
 		}
 
 		/// <remarks>
 		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
 		/// </remarks>
-		protected abstract void ProcessSendFileItem(FileSendItem item);
-
-		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
-		/// </remarks>
-		protected virtual void ProcessSendTextFileItem(FileSendItem item)
-		{
-			ProcessSendTextFileItem(item, Encoding.Default);
-		}
-
-		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
-		/// </remarks>
-		protected virtual void ProcessSendTextFileItem(FileSendItem item, Encoding encodingFallback)
+		protected virtual void DoSendTextFileItem(FileSendItem item, Encoding encodingFallback, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
 			using (var sr = new StreamReader(item.FilePath, encodingFallback, true))
 			{                             // Automatically detect encoding from BOM, otherwise use fallback.
@@ -1328,13 +1400,10 @@ namespace YAT.Domain
 					if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 						continue;
 
-					SendFileLine(line, item.DefaultRadix);
+					DoSendFileLine(sendingIsBusyChangedEventHelper, line, item.DefaultRadix);
 
-					if (BreakSendFile)
-					{
-						OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
+					if (DoBreak)
 						break;
-					}
 
 					Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 				}
@@ -1342,7 +1411,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessSendXmlFileItem(FileSendItem item)
+		protected virtual void DoSendXmlFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
 			string[] lines;
 			XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
@@ -1351,16 +1420,21 @@ namespace YAT.Domain
 				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 					continue;
 
-				SendFileLine(line, item.DefaultRadix);
+				DoSendFileLine(sendingIsBusyChangedEventHelper, line, item.DefaultRadix);
 
-				if (BreakSendFile)
-				{
-					OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
+				if (DoBreak)
 					break;
-				}
 
 				Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void DoSendFileLine(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, string dataLine, Radix defaultRadix)
+		{
+			var parseMode = TerminalSettings.Send.File.ToParseMode();
+			var item = new TextSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true);
+			DoSendTextItem(item, sendingIsBusyChangedEventHelper);
 		}
 
 		#endregion
@@ -1390,235 +1464,93 @@ namespace YAT.Domain
 
 		#endregion
 
-		#endregion
-
-		#region Non-Public Methods
-		//==========================================================================================
-		// Non-Public Methods
-		//==========================================================================================
-
-		#region Send Threads
+		#region Stop
 		//------------------------------------------------------------------------------------------
-		// Send Threads
+		// Stop
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAndStartSendThreads()
+		/// <summary></summary>
+		public virtual void StopSendThreads()
 		{
-			lock (this.sendDataThreadSyncObj)
-			{
-				DebugThreadState("SendDataThread() gets created...");
+			// Clear flag telling threads to stop...
+			this.sendThreadsRunFlag = false;
 
-				if (this.sendDataThread == null)
-				{
-					this.sendDataThreadRunFlag = true;
-					this.sendDataThreadEvent = new AutoResetEvent(false);
-					this.sendDataThread = new Thread(new ThreadStart(SendDataThread));
-					this.sendDataThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Data Thread";
-					this.sendDataThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
-
-					DebugThreadState("...successfully created.");
-				}
-			#if (DEBUG)
-				else
-				{
-					DebugThreadState("...failed as it already exists.");
-				}
-			#endif
-			}
-
-			lock (this.sendFileThreadSyncObj)
-			{
-				DebugThreadState("SendFileThread() gets created...");
-
-				if (this.sendFileThread == null)
-				{
-					this.sendFileThreadRunFlag = true;
-					this.sendFileThreadEvent = new AutoResetEvent(false);
-					this.sendFileThread = new Thread(new ThreadStart(SendFileThread));
-					this.sendFileThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send File Thread";
-					this.sendFileThread.Start();  // Offset of 1000 to distinguish this ID from the 'real' terminal ID.
-
-					DebugThreadState("...successfully created.");
-				}
-			#if (DEBUG)
-				else
-				{
-					DebugThreadState("...failed as it already exists.");
-				}
-			#endif
-			}
-		}
-
-		/// <remarks>
-		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
-		/// to join first, then abort if not successfully joined.
-		/// </remarks>
-		private void StopSendThreads()
-		{
-			lock (this.sendFileThreadSyncObj)
-			{
-				if (this.sendFileThread != null)
-				{
-					DebugThreadState("SendFileThread() gets stopped...");
-
-					this.sendFileThreadRunFlag = false;
-
-					// Ensure that send thread has stopped after the stop request:
-					try
-					{
-						Debug.Assert(this.sendFileThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
-
-						bool isAborting = false;
-						int accumulatedTimeout = 0;
-						int interval = 0; // Use a relatively short random interval to trigger the thread:
-						while (!this.sendFileThread.Join(interval = staticRandom.Next(5, 20)))
-						{
-							SignalSendFileThreadSafely();
-
-							accumulatedTimeout += interval;
-							if (accumulatedTimeout >= ThreadWaitTimeout)
-							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
-
-								isAborting = true;       // Thread.Abort() must not be used whenever possible!
-								this.sendFileThread.Abort(); // This is only the fall-back in case joining fails for too long.
-								break;
-							}
-
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
-						}
-
-						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
-					}
-					catch (ThreadStateException)
-					{
-						// Ignore thread state exceptions such as "Thread has not been started" and
-						// "Thread cannot be aborted" as it just needs to be ensured that the thread
-						// has or will be terminated for sure.
-
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
-					}
-
-					this.sendFileThread = null;
-				}
-			#if (DEBUG)
-				else // (this.sendFileThread == null)
-				{
-					DebugThreadState("...not necessary as it doesn't exist anymore.");
-				}
-			#endif
-
-				if (this.sendFileThreadEvent != null)
-				{
-					try     { this.sendFileThreadEvent.Close(); }
-					finally { this.sendFileThreadEvent = null; }
-				}
-			} // lock (sendFileThreadSyncObj)
-
-			lock (this.sendDataThreadSyncObj)
-			{
-				if (this.sendDataThread != null)
-				{
-					DebugThreadState("SendDataThread() gets stopped...");
-
-					this.sendDataThreadRunFlag = false;
-
-					// Ensure that send thread has stopped after the stop request:
-					try
-					{
-						Debug.Assert(this.sendDataThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
-
-						bool isAborting = false;
-						int accumulatedTimeout = 0;
-						int interval = 0; // Use a relatively short random interval to trigger the thread:
-						while (!this.sendDataThread.Join(interval = staticRandom.Next(5, 20)))
-						{
-							SignalSendDataThreadSafely();
-
-							accumulatedTimeout += interval;
-							if (accumulatedTimeout >= ThreadWaitTimeout)
-							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
-
-								isAborting = true;       // Thread.Abort() must not be used whenever possible!
-								this.sendDataThread.Abort(); // This is only the fall-back in case joining fails for too long.
-								break;
-							}
-
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
-						}
-
-						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
-					}
-					catch (ThreadStateException)
-					{
-						// Ignore thread state exceptions such as "Thread has not been started" and
-						// "Thread cannot be aborted" as it just needs to be ensured that the thread
-						// has or will be terminated for sure.
-
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
-					}
-
-					this.sendDataThread = null;
-				}
-			#if (DEBUG)
-				else // (this.sendDataThread == null)
-				{
-					DebugThreadState("...not necessary as it doesn't exist anymore.");
-				}
-			#endif
-
-				if (this.sendDataThreadEvent != null)
-				{
-					try     { this.sendDataThreadEvent.Close(); }
-					finally { this.sendDataThreadEvent = null; }
-				}
-			} // lock (sendDataThreadSyncObj)
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalSendDataThreadSafely()
-		{
-			try
-			{
-				if (this.sendDataThreadEvent != null)
-					this.sendDataThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
-		}
-
-		/// <remarks>
-		/// Especially useful during potentially dangerous creation and disposal sequence.
-		/// </remarks>
-		private void SignalSendFileThreadSafely()
-		{
-			try
-			{
-				if (this.sendFileThreadEvent != null)
-					this.sendFileThreadEvent.Set();
-			}
-			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
-
-			// Catch 'NullReferenceException' for the unlikely case that the event has just been
-			// disposed after the if-check. This way, the event doesn't need to be locked (which
-			// is a relatively time-consuming operation). Still keep the if-check for the normal
-			// cases.
+			// ...then signal threads:
+			this.nextPermittedSequenceNumberEvent.Set();
+			this.packetGateEvent.Set();
 		}
 
 		#endregion
+
+		#region Event Raising
+		//------------------------------------------------------------------------------------------
+		// Event Raising
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected virtual void OnThisRequestSendingIsOngoingChanged(bool value)
+		{
+			bool raiseEvent = false;
+
+			lock (this.sendingIsOngoingCountSyncObj)
+			{
+				if (value)
+					this.sendingIsOngoingCount++;
+				else
+					this.sendingIsOngoingCount--;
+
+				if (this.sendingIsOngoingCount <= 0)
+					raiseEvent = true;
+			}
+
+			if (raiseEvent)
+				OnSendingIsOngoingChanged(new EventArgs<bool>(value));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnSendingIsOngoingChanged(EventArgs<bool> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsOngoingChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnThisRequestSendingIsBusyChanged(bool value)
+		{
+			bool raiseEvent = false;
+
+			lock (this.sendingIsBusyCountSyncObj)
+			{
+				if (value)
+					this.sendingIsBusyCount++;
+				else
+					this.sendingIsBusyCount--;
+
+				if (this.sendingIsBusyCount <= 0)
+					raiseEvent = true;
+			}
+
+			if (raiseEvent)
+				OnSendingIsBusyChanged(new EventArgs<bool>(value));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnSendingIsBusyChanged(EventArgs<bool> e)
+		{
+			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsBusyChanged, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_SEND")]
+		private void DebugSend(string message)
+		{
+			DebugMessage(message);
+		}
 
 		#endregion
 	}

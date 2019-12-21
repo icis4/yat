@@ -28,13 +28,13 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 
-using MKY;
-
 using YAT.Application.Utilities;
+using YAT.Domain.Utilities;
 
 #endregion
 
@@ -48,28 +48,13 @@ namespace YAT.Domain
 	/// </remarks>
 	public partial class BinaryTerminal
 	{
-		#region Methods
+		#region Non-Public Methods
 		//==========================================================================================
-		// Methods
+		// Non-Public Methods
 		//==========================================================================================
-
-		#region Send Data
-		//------------------------------------------------------------------------------------------
-		// Send Data
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public override void SendFileLine(string dataLine, Radix defaultRadix)
-		{
-			// AssertNotDisposed() is called by DoSendData().
-
-			var parseMode = TerminalSettings.Send.File.ToParseMode();
-
-			DoSendData(new TextDataSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true));
-		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
+		protected override void ProcessInLineKeywords(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
 		{
 			switch (result.Keyword)
 			{
@@ -83,34 +68,27 @@ namespace YAT.Domain
 
 				default:
 				{
-					base.ProcessInLineKeywords(result);
+					base.ProcessInLineKeywords(sendingIsBusyChangedEventHelper, result, conflateDataQueue, ref doBreakSend);
 					break;
 				}
 			}
 		}
 
-		#endregion
-
-		#region Send File
-		//------------------------------------------------------------------------------------------
-		// Send File
-		//------------------------------------------------------------------------------------------
-
 		/// <remarks>
 		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected override void ProcessSendFileItem(FileSendItem item)
+		protected override void DoSendFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
 			try
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					ProcessSendXmlFileItem(item);
+					DoSendXmlFileItem(item, sendingIsBusyChangedEventHelper);
 				}
 				else if (ExtensionHelper.IsTextFile(item.FilePath))
 				{
-					ProcessSendTextFileItem(item);
+					DoSendTextFileItem(item, sendingIsBusyChangedEventHelper);
 				}
 				else // By default treat as binary file:
 				{
@@ -122,14 +100,11 @@ namespace YAT.Domain
 							byte[] a = new byte[1024]; // 1 KB chunks.
 							int n = fs.Read(a, 0, a.Length);
 							Array.Resize<byte>(ref a, n);
-							Send(a);
+							DoSendRawData(a);
 							remaining -= n;
 
-							if (BreakSendFile)
-							{
-								OnIOIsBusyChanged(new EventArgs<bool>(false)); // Raise the event to indicate that sending is no longer ongoing.
+							if (DoBreak)
 								break;
-							}
 
 							Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 						}
@@ -145,8 +120,6 @@ namespace YAT.Domain
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
 			}
 		}
-
-		#endregion
 
 		#endregion
 	}

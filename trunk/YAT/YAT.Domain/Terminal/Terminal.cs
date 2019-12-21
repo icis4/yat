@@ -350,8 +350,6 @@ namespace YAT.Domain
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 		////this.isReloading has been initialized to false.
-
-			CreateAndStartSendThreads();
 		}
 
 		/// <summary></summary>
@@ -365,8 +363,6 @@ namespace YAT.Domain
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 			this.isReloading = terminal.isReloading;
-
-			CreateAndStartSendThreads();
 		}
 
 		#region Disposal
@@ -401,7 +397,7 @@ namespace YAT.Domain
 					DisposeProcess();
 					DisposePeriodicXOnTimer();
 
-					// ...and the send thread will already have been stopped in Close()...
+					// ...and the send threads will already have been stopped in Close()...
 					StopSendThreads();
 
 					// ...and objects will already have been detached and disposed of in Close():
@@ -681,15 +677,9 @@ namespace YAT.Domain
 				// is called from the same thread where the ...Sent events get invoked (e.g. the UI
 				// thread).
 
-				DisablePeriodicXOnTimer();
-
-				this.rawTerminal.Stop();
-
-				lock (this.sendDataQueue) // Lock is required because Queue<T> is not synchronized.
-					this.sendDataQueue.Clear();
-
-				lock (this.sendFileQueue) // Lock is required because Queue<T> is not synchronized.
-					this.sendFileQueue.Clear();
+				StopSendThreads();
+				DisablePeriodicXOnTimer(); // Disable!
+				this.rawTerminal.Stop(); // Stop!
 			}
 		}
 
@@ -705,7 +695,9 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			StopSendThreads();
-			this.rawTerminal.Close();
+			DisposePeriodicXOnTimer(); // Dispose!
+			this.rawTerminal.Close(); // Close!
+
 			DetachAndDisposeRawTerminal();
 			DisposeRepositories();
 		}
