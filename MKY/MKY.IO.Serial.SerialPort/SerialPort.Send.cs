@@ -179,7 +179,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// Will be signaled by <see cref="Send(byte[])"/> method above, or by XOn/XOff while receiving.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
 			// Calculate maximum baud defined send rate:

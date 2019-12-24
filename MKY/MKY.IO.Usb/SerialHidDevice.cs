@@ -1080,7 +1080,6 @@ namespace MKY.IO.Usb
 		/// Will be signaled by <see cref="AsyncReadCompleted"/> event above, or by XOn/XOff while
 		/// sending.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
 			DebugThreadState("ReceiveThread() has started.");

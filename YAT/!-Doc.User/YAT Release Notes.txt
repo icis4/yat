@@ -33,8 +33,8 @@ Contents
 1. Installation
 ====================================================================================================
 
-YAT uses .NET 3.5 SP1. The YAT installer verifies that .NET is installed on the target computer.
-The YAT installer also verifies that Windows Installer 4.5 is installed on the target computer.
+YAT uses .NET 4.0. The installer verifies that .NET 4.0 is installed on the target computer.
+It also verifies that Windows Installer 4.5 is installed on the target computer.
 
 First, chose the most appropriate package:
  > For up-to-date systems, use the compact package "...(32-bit).zip" or "...(64-bit).zip".
@@ -52,8 +52,8 @@ Run the ".msi" if Windows Installer is installed, otherwise "setup.exe".
 
 For installation of a binary distribution, refer to the instructions inside that package.
 
-You can also download .NET and/or Windows Installer from <https://www.microsoft.com/en-us/download>
-or by googling for "Microsoft Download .NET Framework 3.5 SP1 Full" or "Windows Installer 4.5".
+You can also download .NET and/or Windows Installer from <https://www.microsoft.com/download>
+or by googling for "Download Microsoft .NET Framework 4.0" or "Windows Installer 4.5".
 Installing .NET and/or Windows Installer requires administrator permissions.
 
 
@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.2.0 :: 20xx-xx-xx
+YAT 2.2.0 :: 2020-01-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -122,6 +122,9 @@ Important changes:
   on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
+- Upgrade to .NET 4.0 runtime (precondition for automatic actions [Plot*], preparing upcoming
+  feature request #74, part of feature request #229).
+- Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 
 Fixed bugs:
 - Layout of predefined commands can now also be changed on a new terminal that doesn't contain
@@ -134,7 +137,6 @@ Fixed bugs:
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General imitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
@@ -1605,8 +1607,9 @@ YAT 2 is in maintenance mode now, i.e. focus on bug fixes and minor changes, whi
 is already ongoing.
 
 
-(Major version 3 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became
+(YAT 3 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became
 public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
+----------------------------------------------------------------------------------------------------
 
 
 YAT 4 with Scripting :: Expected in late 2020

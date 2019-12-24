@@ -1423,11 +1423,9 @@ Global
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup with Prerequisites|Any CPU.ActiveCfg = Release|Any CPU
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup with Prerequisites|x64.ActiveCfg = Release|x64
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup with Prerequisites|x86.ActiveCfg = Release|x86
-		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup with Prerequisites|x86.Build.0 = Release|x86
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup|Any CPU.ActiveCfg = Release|Any CPU
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup|x64.ActiveCfg = Release|x64
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup|x86.ActiveCfg = Release|x86
-		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup|x86.Build.0 = Release|x86
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug Test|Any CPU.ActiveCfg = Setup
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug Test|x64.ActiveCfg = Setup
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug Test|x86.ActiveCfg = Setup
@@ -1441,12 +1439,12 @@ Global
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Release|x64.ActiveCfg = Setup
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Release|x86.ActiveCfg = Setup
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|Any CPU.ActiveCfg = Setup with Prerequisites
-		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|Any CPU.Build.0 = Setup with Prerequisites
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|x64.ActiveCfg = Setup with Prerequisites
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|x64.Build.0 = Setup with Prerequisites
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|x86.ActiveCfg = Setup with Prerequisites
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|Any CPU.ActiveCfg = Setup
-		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|Any CPU.Build.0 = Setup
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|x64.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|x64.Build.0 = Setup
 		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|x86.ActiveCfg = Setup
 		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug Test|Any CPU.ActiveCfg = Setup
 		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug Test|x64.ActiveCfg = Setup
