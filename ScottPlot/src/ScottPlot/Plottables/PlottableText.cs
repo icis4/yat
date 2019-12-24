@@ -18,7 +18,11 @@ namespace ScottPlot
 
         public PlottableText(string text, double x, double y, Color color, string fontName, double fontSize, bool bold, string label, TextAlignment alignment)
         {
-            this.text = text ?? throw new Exception("Text cannot be null");
+            if (text != null)
+                this.text = text;
+            else
+                throw new Exception("Text cannot be null");
+
             this.x = x;
             this.y = y;
             this.label = label;

@@ -39,7 +39,7 @@ namespace ScottPlotDemos
             var rand = new Random(0);
             xs100 = ScottPlot.DataGen.Consecutive(100);
             ys100 = ScottPlot.DataGen.NoisySin(rand, 100);
-            tenMillionPoints = ScottPlot.DataGen.RandomWalk(rand, 10_000_000);
+            tenMillionPoints = ScottPlot.DataGen.RandomWalk(rand, 10000000);
         }
 
         private void PlotScatter100()

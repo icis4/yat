@@ -114,7 +114,8 @@ namespace ScottPlot
             else
             {
                 PointF newPosition = settings.GetLocation(eLocation.X, eLocation.Y);
-                if (plottableBeingDragged is PlottableAxLine axLine)
+                var axLine = (plottableBeingDragged as PlottableAxLine);
+                if (axLine != null)
                 {
                     if (axLine.vertical)
                         axLine.position = newPosition.X;
@@ -167,7 +168,8 @@ namespace ScottPlot
 
             for (int i = 0; i < settings.plottables.Count; i++)
             {
-                if (settings.plottables[i] is PlottableAxLine axLine)
+                var axLine = (settings.plottables[i] as PlottableAxLine);
+                if (axLine != null)
                 {
                     if (axLine.draggable == false)
                         continue;

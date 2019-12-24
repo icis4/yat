@@ -16,7 +16,7 @@ namespace ScottPlotDemos
         {
             InitializeComponent();
             Random rand = new Random(0);
-            formsPlot1.plt.PlotSignal(ScottPlot.DataGen.RandomWalk(rand, 10_000));
+            formsPlot1.plt.PlotSignal(ScottPlot.DataGen.RandomWalk(rand, 10000));
             formsPlot1.plt.XLabel("horizontal units");
             formsPlot1.plt.YLabel("vertical units");
             formsPlot1.Render();

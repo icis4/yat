@@ -1016,8 +1016,8 @@ namespace ScottPlot
         {
             throw new NotImplementedException("parallel processing should not used enabled at this time");
 
-            foreach (var plottable in GetPlottables())
-                plottable.useParallel = useParallel;
+        ////foreach (var plottable in GetPlottables()) (2019-12-24 / MKY) removed for eliminating warning CS0162 "Unreachable code detected"
+        ////    plottable.useParallel = useParallel;
         }
 
         #endregion

@@ -26,12 +26,12 @@ namespace ScottPlotDemos
         private void GenerateData()
         {
             label1.Text = "allocating memory";
-            oneBillionPoints = new byte[1_000_000_000];
+            oneBillionPoints = new byte[1000000000];
 
             double density = 50.0;
             for (int i = 0; i < oneBillionPoints.Length; i++)
             {
-                if (i % 100_000 == 0)
+                if (i % 100000 == 0)
                 {
                     double percentComplete = 100 * (double)i / oneBillionPoints.Length;
                     label1.Text = string.Format("creating data ({0:0.00}%)", percentComplete);
