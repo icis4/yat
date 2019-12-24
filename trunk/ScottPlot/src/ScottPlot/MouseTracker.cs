@@ -37,32 +37,32 @@ namespace ScottPlot
                 return false;
         }
 
-        public bool ctrlIsDown()
-        {
-            bool leftCtrl = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftCtrl);
-            bool rightCtrl = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightCtrl);
-            return (leftCtrl || rightCtrl);
-        }
+    ////public bool ctrlIsDown() (2019-12-24 / MKY) removed for eliminating dependency to WPF
+    ////{
+    ////    bool leftCtrl = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftCtrl);
+    ////    bool rightCtrl = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightCtrl);
+    ////    return (leftCtrl || rightCtrl);
+    ////}
 
-        public bool altIsDown()
-        {
-            bool leftAlt = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftAlt);
-            bool rightAlt = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightAlt);
-            return (leftAlt || rightAlt);
-        }
+    ////public bool altIsDown() (2019-12-24 / MKY) removed for eliminating dependency to WPF
+    ////{
+    ////    bool leftAlt = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftAlt);
+    ////    bool rightAlt = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightAlt);
+    ////    return (leftAlt || rightAlt);
+    ////}
 
-        public bool shiftIsDown()
-        {
-            bool leftShift = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift);
-            bool rightShift = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift);
-            return (leftShift || rightShift);
-        }
+    ////public bool shiftIsDown() (2019-12-24 / MKY) removed for eliminating dependency to WPF
+    ////{
+    ////    bool leftShift = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift);
+    ////    bool rightShift = System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightShift);
+    ////    return (leftShift || rightShift);
+    ////}
 
-        public void MouseDown(System.Windows.Point mousePoint)
-        {
-            Point eLocation = new Point((int)mousePoint.X, (int)mousePoint.Y);
-            MouseDown(eLocation);
-        }
+    ////public void MouseDown(System.Windows.Point mousePoint) (2019-12-24 / MKY) removed for eliminating dependency to WPF
+    ////{
+    ////    Point eLocation = new Point((int)mousePoint.X, (int)mousePoint.Y);
+    ////    MouseDown(eLocation);
+    ////}
 
         public bool MouseHasMoved()
         {
@@ -90,20 +90,20 @@ namespace ScottPlot
                 settings.mouse.downMiddle = eLocation;
         }
 
-        public void MouseMove(System.Windows.Point mousePoint)
-        {
-            Point eLocation = new Point((int)mousePoint.X, (int)mousePoint.Y);
-            MouseMove(eLocation);
-        }
+    ////public void MouseMove(System.Windows.Point mousePoint) (2019-12-24 / MKY) removed for eliminating dependency to WPF
+    ////{
+    ////    Point eLocation = new Point((int)mousePoint.X, (int)mousePoint.Y);
+    ////    MouseMove(eLocation);
+    ////}
 
-        public void MouseMove(Point eLocation)
+        public void MouseMove(Point eLocation, bool ctrlIsDown, bool altIsDown)
         {
             if (plottableBeingDragged == null)
             {
                 if ((Control.MouseButtons == MouseButtons.Left) || (Control.MouseButtons == MouseButtons.Right))
                 {
                     // left-click-dragging or right-click-dragging
-                    settings.MouseMoveAxis(Cursor.Position.X, Cursor.Position.Y, ctrlIsDown(), altIsDown());
+                    settings.MouseMoveAxis(Cursor.Position.X, Cursor.Position.Y, ctrlIsDown, altIsDown);
                 }
                 else if (Control.MouseButtons == MouseButtons.Middle)
                 {
@@ -130,17 +130,17 @@ namespace ScottPlot
             }
         }
 
-        public void MouseUp(System.Windows.Point mousePoint)
-        {
-            Point eLocation = new Point((int)mousePoint.X, (int)mousePoint.Y);
-            MouseUp(eLocation);
-        }
+    ////public void MouseUp(System.Windows.Point mousePoint) (2019-12-24 / MKY) removed for eliminating dependency to WPF
+    ////{
+    ////    Point eLocation = new Point((int)mousePoint.X, (int)mousePoint.Y);
+    ////    MouseUp(eLocation);
+    ////}
 
-        public void MouseUp(Point eLocation)
+        public void MouseUp(Point eLocation, bool ctrlIsDown, bool altIsDown)
         {
             if (plottableBeingDragged == null)
             {
-                settings.MouseMoveAxis(Cursor.Position.X, Cursor.Position.Y, ctrlIsDown(), altIsDown());
+                settings.MouseMoveAxis(Cursor.Position.X, Cursor.Position.Y, ctrlIsDown, altIsDown);
                 settings.MouseUpAxis();
             }
             else
