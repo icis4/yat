@@ -612,6 +612,8 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		private void StopSockets()
 		{
+			DebugMessage("Stopping sockets...");
+
 			lock (this.socketSyncObj)
 			{
 				if (this.client != null)
@@ -620,6 +622,8 @@ namespace MKY.IO.Serial.Socket
 				if (this.server != null)
 					this.server.Stop();
 			}
+
+			DebugMessage("...sucessfully stopped.");
 		}
 
 		private void DisposeSockets()
