@@ -62,7 +62,8 @@ namespace ScottPlotDemos
             var plottables = formsPlot1.plt.GetPlottables();
             for (int i = 0; i < plottables.Count; i++)
             {
-                if (plottables[i] is ScottPlot.PlottableAxLine axLine)
+                var axLine = (plottables[i] as ScottPlot.PlottableAxLine);
+                if (axLine != null)
                 {
                     string lineType = (axLine.vertical) ? "VLine" : "HLine";
                     msg += $"{i}: {lineType} at {Math.Round(axLine.position, 4)}\r\n";

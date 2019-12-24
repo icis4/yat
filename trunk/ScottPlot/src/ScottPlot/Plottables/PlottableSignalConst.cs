@@ -94,9 +94,9 @@ namespace ScottPlot
                 throw new ArgumentOutOfRangeException("Unsupported data type, provide convertable to double data types");
             }
             InitExp();         
-            if (useParallel)
-                UpdateTreesInBackground();
-            else
+        ////if (useParallel)
+        ////    UpdateTreesInBackground(); (2019-12-24 / MKY) parallelism removed for compatibility with .NET 4.0
+        ////else
                 UpdateTrees();
         }
 
@@ -212,10 +212,10 @@ namespace ScottPlot
             updateData(0, newData.Length, newData);
         }
 
-        public void UpdateTreesInBackground()
-        {
-            Task.Run(() => { UpdateTrees(); });
-        }
+    ////public void UpdateTreesInBackground() (2019-12-24 / MKY) parallelism removed for compatibility with .NET 4.0
+    ////{
+    ////    Task.Run(() => { UpdateTrees(); });
+    ////}
 
         public void UpdateTrees()
         {
@@ -226,10 +226,10 @@ namespace ScottPlot
                 if (ys.Length == 0)
                     throw new ArgumentOutOfRangeException($"Array cant't be empty");
                 // Size up to pow2
-                if (ys.Length > 0x40_00_00_00) // pow 2 must be more then int.MaxValue
-                    throw new ArgumentOutOfRangeException($"Array higher than {0x40_00_00_00} not supported by SignalConst");
+                if (ys.Length > 0x40000000) // pow 2 must be more then int.MaxValue
+                    throw new ArgumentOutOfRangeException($"Array higher than {0x40000000} not supported by SignalConst");
                 int pow2 = 1;
-                while (pow2 < 0x40_00_00_00 && pow2 < ys.Length)
+                while (pow2 < 0x40000000 && pow2 < ys.Length)
                     pow2 <<= 1;
                 n = pow2;
                 TreeMin = new T[n];

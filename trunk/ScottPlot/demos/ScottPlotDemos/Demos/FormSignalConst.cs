@@ -25,7 +25,7 @@ namespace ScottPlotDemos
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            data = ScottPlot.DataGen.RandomWalk(rand, 10_000_000);
+            data = ScottPlot.DataGen.RandomWalk(rand, 10000000);
             signal = formsPlot1.plt.PlotSignalConst(data);
             formsPlot1.plt.PlotSignalConst(data.Select(x=>(int)x).ToArray());
             formsPlot1.plt.Benchmark();
@@ -35,7 +35,7 @@ namespace ScottPlotDemos
         private void BtnUpdateData_Click(object sender, EventArgs e)
         {
             btnUpdateData.Enabled = false;
-            int updateRangeSize = 1_000_000; // 0 means update by element
+            int updateRangeSize = 1000000; // 0 means update by element
             System.Timers.Timer timer;
             // timer for auto redraw plot every 200 ms 
             timer = new System.Timers.Timer(200);
@@ -61,8 +61,8 @@ namespace ScottPlotDemos
                 newSignal[i] = newSignal[i - 1] + (rand.NextDouble() * 2 - 1) * 10;
             }
             // run plot data updates at max speed in background thread                
-            Task.Run(() =>
-            {
+        ////Task.Run(() => (2019-12-24 / MKY) parallelism removed for compatibility with .NET 4.0
+        ////{
                 if (signal is ScottPlot.PlottableSignalConst<double>)
                 {
                     var signalConst = signal as ScottPlot.PlottableSignalConst<double>;
@@ -100,7 +100,7 @@ namespace ScottPlotDemos
                     formsPlot1.Render();
                     btnUpdateData.Enabled = true;
                 }));                
-            });
+        ////});
         }
     }
 }

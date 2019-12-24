@@ -168,22 +168,22 @@ namespace ScottPlotDemos
 
         private void BtnSignal1k_Click(object sender, EventArgs e)
         {
-            PlotSignalRandomWalk(1_000);
+            PlotSignalRandomWalk(1000);
         }
 
         private void BtnSignal100k_Click(object sender, EventArgs e)
         {
-            PlotSignalRandomWalk(100_000);
+            PlotSignalRandomWalk(100000);
         }
 
         private void BtnSignal1m_Click(object sender, EventArgs e)
         {
-            PlotSignalRandomWalk(1_000_000);
+            PlotSignalRandomWalk(1000000);
         }
 
         private void BtnSignal10m_Click(object sender, EventArgs e)
         {
-            PlotSignalRandomWalk(10_000_000);
+            PlotSignalRandomWalk(10000000);
         }
     }
 }

@@ -92,7 +92,8 @@ namespace ScottPlot
             List<PlottableAxLine> axisLines = new List<PlottableAxLine>();
             foreach (Plottable plottable in plottables)
             {
-                if (plottable is PlottableAxLine axLine)
+                var axLine = (plottable as PlottableAxLine);
+                if (axLine != null)
                     axisLines.Add(axLine);
                 else
                     plottables2d.Add(plottable);
@@ -108,7 +109,7 @@ namespace ScottPlot
                 axes.Set(plottables[0].GetLimits());
                 foreach (Plottable plottable in plottables)
                 {
-                    if (!(plottable is PlottableAxLine axLine))
+                    if (!(plottable is PlottableAxLine))
                         axes.Expand(plottable.GetLimits());
                 }
             }
@@ -128,7 +129,8 @@ namespace ScottPlot
             // expand on axis lines last
             foreach (Plottable plottable in plottables)
             {
-                if (plottable is PlottableAxLine axLine)
+                var axLine = (plottable as PlottableAxLine);
+                if (axLine != null)
                 {
                     var axl = (PlottableAxLine)plottable;
                     double[] limits = plottable.GetLimits();

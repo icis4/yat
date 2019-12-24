@@ -107,7 +107,7 @@ namespace ScottPlot
         {
             plt.mouseTracker.MouseMove(e.GetPosition(this));
             if ((Mouse.LeftButton == MouseButtonState.Pressed) || (Mouse.RightButton == MouseButtonState.Pressed))
-                Render(skipIfCurrentlyRendering: true, plt.mouseTracker.lowQualityWhileInteracting);
+                Render(skipIfCurrentlyRendering: true, lowQuality: plt.mouseTracker.lowQualityWhileInteracting);
         }
 
         private void UserControl_MouseUp(object sender, MouseButtonEventArgs e)

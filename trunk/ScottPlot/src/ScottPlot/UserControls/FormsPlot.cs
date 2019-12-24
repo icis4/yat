@@ -154,7 +154,9 @@ namespace ScottPlot
             {
                 if (e.Button != MouseButtons.None)
                     OnMouseDragPlottable(EventArgs.Empty);
-                if (plottableUnderCursor is PlottableAxLine axLine)
+
+                var axLine = (plottableUnderCursor as PlottableAxLine);
+                if (axLine != null)
                 {
                     if (axLine.vertical == true)
                         pbPlot.Cursor = Cursors.SizeWE;
