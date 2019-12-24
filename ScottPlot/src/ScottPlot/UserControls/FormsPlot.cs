@@ -146,7 +146,7 @@ namespace ScottPlot
 
         private void PbPlot_MouseMove(object sender, MouseEventArgs e)
         {
-            plt.mouseTracker.MouseMove(e.Location);
+            plt.mouseTracker.MouseMove(e.Location, (ModifierKeys == Keys.Control), (ModifierKeys == Keys.Alt));
             OnMouseMoved(EventArgs.Empty);
 
             Plottable plottableUnderCursor = plt.mouseTracker.PlottableUnderCursor(e.Location);
@@ -192,7 +192,7 @@ namespace ScottPlot
                 return;
             }
 
-            plt.mouseTracker.MouseUp(e.Location);
+            plt.mouseTracker.MouseUp(e.Location, (ModifierKeys == Keys.Control), (ModifierKeys == Keys.Alt));
             if (plt.mouseTracker.lowQualityWhileInteracting && plt.mouseTracker.mouseUpHQRenderDelay > 0)
             {
                 Render(false, true);
@@ -233,11 +233,11 @@ namespace ScottPlot
             PointF zoomCenter = plt.CoordinateFromPixel(e.Location);
 
             double zoomAmountY = 0.15;
-            if (plt.mouseTracker.ctrlIsDown())
+            if (ModifierKeys == Keys.Control)
                 zoomAmountY = 0;
 
             double zoomAmountX = 0.15;
-            if (plt.mouseTracker.altIsDown())
+            if (ModifierKeys == Keys.Alt)
                 zoomAmountX = 0;
 
             if (e.Delta > 0)

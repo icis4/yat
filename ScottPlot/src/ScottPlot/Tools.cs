@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
 
 namespace ScottPlot
 {
@@ -178,17 +174,17 @@ namespace ScottPlot
             return bmp;
         }
 
-        public static BitmapImage bmpImageFromBmp(System.Drawing.Bitmap bmp)
-        {
-            System.IO.MemoryStream stream = new System.IO.MemoryStream();
-            ((System.Drawing.Bitmap)bmp).Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-            BitmapImage bmpImage = new BitmapImage();
-            bmpImage.BeginInit();
-            stream.Seek(0, System.IO.SeekOrigin.Begin);
-            bmpImage.StreamSource = stream;
-            bmpImage.EndInit();
-            return bmpImage;
-        }
+    ////public static BitmapImage bmpImageFromBmp(System.Drawing.Bitmap bmp) (2019-12-24 / MKY) removed for eliminating dependency to WPF
+    ////{
+    ////    System.IO.MemoryStream stream = new System.IO.MemoryStream();
+    ////    ((System.Drawing.Bitmap)bmp).Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+    ////    BitmapImage bmpImage = new BitmapImage();
+    ////    bmpImage.BeginInit();
+    ////    stream.Seek(0, System.IO.SeekOrigin.Begin);
+    ////    bmpImage.StreamSource = stream;
+    ////    bmpImage.EndInit();
+    ////    return bmpImage;
+    ////}
 
         public static void SaveImageDialog(Plot plt)
         {
