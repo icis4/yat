@@ -312,7 +312,6 @@ namespace YAT.Model
 		/// <remarks>
 		/// Will be signaled by <see cref="EnqueueAutoResponse(byte[], string, MatchCollection)"/> above.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void AutoResponseThread()
 		{
 			DebugThreadState("AutoResponseThread() has started.");

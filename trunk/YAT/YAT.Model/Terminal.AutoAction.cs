@@ -435,7 +435,6 @@ namespace YAT.Model
 		/// <remarks>
 		/// Will be signaled by <see cref="EnqueueAutoAction(AutoAction, string, DateTime)"/> above.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void AutoActionThread()
 		{
 			DebugThreadState("AutoActionThread() has started.");

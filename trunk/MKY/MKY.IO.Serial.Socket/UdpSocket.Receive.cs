@@ -230,7 +230,6 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Will be signaled by <see cref="ReceiveCallback"/> event above.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
 			DebugThreadState("ReceiveThread() has started.");
