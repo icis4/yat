@@ -30,7 +30,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -38,6 +37,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Collections.Generic;
 using MKY.Diagnostics;
+using MKY.Text.RegularExpressions;
 
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -265,16 +265,16 @@ namespace YAT.Model
 					{
 						if (this.autoResponseTriggerHelper != null)
 						{
-							MatchCollection matches;
-							int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text, out matches);
+							MatchCollection triggerMatches;
+							int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
 							if (triggerCount > 0)
 							{
 								this.autoResponseTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
 								dl.Highlight = true;
 
 								// Signal the trigger(s):
-								for (int i = 0; i < triggerCount; i++)                 // Always use text for [Trigger] response, since always 'IsTextTriggered' when evaluated here.
-									triggers.Add(new Triple<byte[], string, MatchCollection>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern, matches));
+								for (int i = 0; i < triggerCount; i++)                             // Always use text for [Trigger] response, since always 'IsTextTriggered' when evaluated here.
+									triggers.Add(new Triple<byte[], string, MatchCollection>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern, triggerMatches));
 							}
 						}
 						else
@@ -298,10 +298,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Enqueues the automatic response for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void EnqueueAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection matches)
+		protected virtual void EnqueueAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection triggerMatches)
 		{
 			lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
-				this.autoResponseQueue.Enqueue(new Triple<byte[], string, MatchCollection>(triggerSequence, triggerText, matches));
+				this.autoResponseQueue.Enqueue(new Triple<byte[], string, MatchCollection>(triggerSequence, triggerText, triggerMatches));
 
 			SignalAutoResponseThreadSafely();
 		}
@@ -379,7 +379,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the automatic response.
 		/// </summary>
-		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection matches)
+		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection triggerMatches)
 		{
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
 			OnAutoResponseCountChanged(new EventArgs<int>(count));
@@ -416,17 +416,12 @@ namespace YAT.Model
 
 					if (SettingsRoot.AutoResponse.ResponseOptions.EnableReplace)
 					{
-						if (matches != null)
+						if (triggerMatches != null)
 						{
-							var values = new List<string>(); // No preset needed, the default behavior is good enough.
-							foreach (Match m in matches)
-							{
-								for (int gnum = 1; gnum <= m.Groups.Count; gnum++)
-								{
-									foreach (Capture c in m.Groups[gnum].Captures)
-										values.Add(c.Value);
-								}            // Negative lookbehind for not matching "\$" nor "$$".
-							}                          // Replacement '$'.
+							var values = MatchCollectionEx.ConvertToStringArray(triggerMatches);
+
+							                 // Negative lookbehind for not matching "\$" nor "$$".
+							                           // Replacement '$'.
 							                              // Replacement tag ID.
 							var pattern = @"(?<![\\$])\$(\d+)";
 							var evaluator = new AutoResponseReplaceEvaluator(values);
