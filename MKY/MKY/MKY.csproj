@@ -162,6 +162,7 @@
     <Compile Include="Settings\ApplicationSettingsHandler.cs" />
     <Compile Include="Settings\DocumentSettingsHandler.cs" />
     <Compile Include="Settings\EventArgs.cs" />
+    <Compile Include="Text\RegularExpressions\MatchCollectionEx.cs" />
     <Compile Include="Text\RegularExpressions\RegexEx.cs" />
     <Compile Include="Time\UserTimeStamp.cs" />
     <Compile Include="Settings\SettingsFileHandler.cs" />
