@@ -404,6 +404,9 @@ namespace YAT.Model
 		public event EventHandler ResetStatusTextRequest;
 
 		/// <summary></summary>
+		public event EventHandler<EventArgs<Cursor>> CursorRequest;
+
+		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
@@ -414,9 +417,6 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<FilePathDialogEventArgs> OpenCommandPageFileDialogRequest;
-
-		/// <summary></summary>
-		public event EventHandler<EventArgs<Cursor>> CursorRequest;
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
@@ -3132,7 +3132,7 @@ namespace YAT.Model
 				return; // Ensure not to handle events during closing anymore.
 
 			// AutoAction:
-			List<Pair<string, DateTime>> autoActionTriggers = null;                  // See terminal_DisplayLinesRxAdded for background.
+			List<Triple<DateTime, string, MatchCollection>> autoActionTriggers = null; // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
@@ -3383,7 +3383,7 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// AutoAction:
-			List<Pair<string, DateTime>> autoActionTriggers = null;                  // See [== AutoTrigger.AnyLine] below.
+			List<Triple<DateTime, string, MatchCollection>> autoActionTriggers = null; // See [== AutoTrigger.AnyLine] below.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
 				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
@@ -3419,7 +3419,7 @@ namespace YAT.Model
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)
-					EnqueueAutoAction(dl.Text, dl.TimeStamp);
+					EnqueueAutoAction(dl.TimeStamp, dl.Text, null);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.
@@ -5537,6 +5537,18 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync(ResetStatusTextRequest, this, EventArgs.Empty);
 		}
 
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnCursorRequest(Cursor cursor)
+		{
+			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCursorReset()
+		{
+			OnCursorRequest(Cursors.Default);
+		}
+
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
@@ -5660,18 +5672,6 @@ namespace YAT.Model
 			{
 				return (new FilePathDialogResult(DialogResult.None));
 			}
-		}
-
-		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
-		protected virtual void OnCursorRequest(Cursor cursor)
-		{
-			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCursorReset()
-		{
-			OnCursorRequest(Cursors.Default);
 		}
 
 		/// <summary></summary>

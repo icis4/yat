@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -37,13 +38,45 @@ namespace YAT.Model.Utilities
 	public static class CaptionHelper
 	{
 		/// <summary></summary>
+		public static string ComposeInvariant(string indicatedName, string info)
+		{
+			return (ComposeInvariant(indicatedName, new string[] { info }));
+		}
+
+		/// <summary></summary>
+		public static string ComposeInvariant(string indicatedName, IEnumerable<string> infos)
+		{
+			var sb = new StringBuilder();
+
+			// Attention:
+			// Similar "[IndicatedName] - Info - Info - Info" as in...
+			// ...Compose() below.
+			// ...Workspace.ActiveTerminalInfoText{get}.
+			// Changes here may have to be applied there too.
+
+			sb.Append("[");
+			sb.Append(indicatedName);
+			sb.Append("]");
+
+			foreach (var info in infos)
+			{
+				sb.Append(" - ");
+				sb.Append(info);
+			}
+
+			return (sb.ToString());
+		}
+
+		/// <summary></summary>
 		public static string Compose(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, TerminalSettingsRoot settingsRoot, Domain.Terminal terminal,
 		                             string indicatedName, bool isStarted, bool isOpen, bool isConnected)
 		{
 			var sb = new StringBuilder();
 
 			// Attention:
-			// Similar "[IndicatedName] - Info - Info - Info" as in Workspace.ActiveTerminalInfoText{get}.
+			// Similar "[IndicatedName] - Info - Info - Info" as in...
+			// ...ComposeInvariant() above.
+			// ...Workspace.ActiveTerminalInfoText{get}.
 			// Changes here may have to be applied there too.
 
 			if ((settingsHandler == null) || (settingsRoot == null))

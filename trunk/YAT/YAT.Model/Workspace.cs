@@ -137,6 +137,9 @@ namespace YAT.Model
 		public event EventHandler<EventArgs<string>> TimedStatusTextRequest;
 
 		/// <summary></summary>
+		public event EventHandler<EventArgs<Cursor>> CursorRequest;
+
+		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
@@ -147,9 +150,6 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<FilePathDialogEventArgs> OpenCommandPageFileDialogRequest;
-
-		/// <summary></summary>
-		public event EventHandler<EventArgs<Cursor>> CursorRequest;
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
@@ -535,7 +535,9 @@ namespace YAT.Model
 					var sb = new StringBuilder();
 
 					// Attention:
-					// Similar "[IndicatedName] - Info - Info - Info" as in Terminal.Caption{get}.
+					// Similar "[IndicatedName] - Info - Info - Info" as in...
+					// ...Terminal.Caption{get}.
+					// ...Terminal.InvariantCaption{get}.
 					// Changes here may have to be applied there too.
 
 					sb.Append("[");
@@ -2420,6 +2422,18 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync<EventArgs<string>>(TimedStatusTextRequest, this, new EventArgs<string>(text));
 		}
 
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnCursorRequest(Cursor cursor)
+		{
+			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnCursorReset()
+		{
+			OnCursorRequest(Cursors.Default);
+		}
+
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
@@ -2537,18 +2551,6 @@ namespace YAT.Model
 			{
 				return (new FilePathDialogResult(DialogResult.None));
 			}
-		}
-
-		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
-		protected virtual void OnCursorRequest(Cursor cursor)
-		{
-			this.eventHelper.RaiseSync<EventArgs<Cursor>>(CursorRequest, this, new EventArgs<Cursor>(cursor));
-		}
-
-		/// <summary></summary>
-		protected virtual void OnCursorReset()
-		{
-			OnCursorRequest(Cursors.Default);
 		}
 
 		/// <summary></summary>

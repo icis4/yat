@@ -135,6 +135,12 @@
     <Compile Include="NewTerminal.Designer.cs">
       <DependentUpon>NewTerminal.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutoActionPlot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoActionPlot.Designer.cs">
+      <DependentUpon>AutoActionPlot.cs</DependentUpon>
+    </Compile>
     <Compile Include="PredefinedCommandSettings.Designer.cs">
       <DependentUpon>PredefinedCommandSettings.cs</DependentUpon>
     </Compile>
@@ -203,6 +209,9 @@
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoActionPlot.resx">
+      <DependentUpon>AutoActionPlot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BinaryTerminalSettings.resx">
       <DependentUpon>BinaryTerminalSettings.cs</DependentUpon>

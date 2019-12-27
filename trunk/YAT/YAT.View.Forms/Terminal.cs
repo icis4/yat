@@ -169,6 +169,8 @@ namespace YAT.View.Forms
 		private AutoContentState autoActionTriggerState;    // = AutoContentState.Neutral;
 		private AutoContentState autoResponseTriggerState;  // = AutoContentState.Neutral;
 		private AutoContentState autoResponseResponseState; // = AutoContentState.Neutral;
+		private AutoActionPlot autoActionPlotForm;
+		private object autoActionPlotFormSyncObj = new object();
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
@@ -6150,17 +6152,18 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryBidirReloaded         += terminal_RepositoryBidirReloaded;
 				this.terminal.RepositoryRxReloaded            += terminal_RepositoryRxReloaded;
 
+				this.terminal.AutoActionPlotRequest           += terminal_AutoActionPlotRequest;
 				this.terminal.AutoActionCountChanged          += terminal_AutoActionCountChanged;
 				this.terminal.AutoResponseCountChanged        += terminal_AutoResponseCountChanged;
 
 				this.terminal.FixedStatusTextRequest             += terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             += terminal_TimedStatusTextRequest;
 				this.terminal.ResetStatusTextRequest             += terminal_ResetStatusTextRequest;
+				this.terminal.CursorRequest                      += terminal_CursorRequest;
 				this.terminal.MessageInputRequest                += terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest            += terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest += terminal_SaveCommandPageAsFileDialogRequest;
 				this.terminal.OpenCommandPageFileDialogRequest   += terminal_OpenCommandPageFileDialogRequest;
-				this.terminal.CursorRequest                      += terminal_CursorRequest;
 
 				this.terminal.Saved                              += terminal_Saved;
 				this.terminal.Closed                             += terminal_Closed;
@@ -6202,17 +6205,18 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryBidirReloaded         -= terminal_RepositoryBidirReloaded;
 				this.terminal.RepositoryRxReloaded            -= terminal_RepositoryRxReloaded;
 
+				this.terminal.AutoActionPlotRequest           -= terminal_AutoActionPlotRequest;
 				this.terminal.AutoActionCountChanged          -= terminal_AutoActionCountChanged;
 				this.terminal.AutoResponseCountChanged        -= terminal_AutoResponseCountChanged;
 
 				this.terminal.FixedStatusTextRequest             -= terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             -= terminal_TimedStatusTextRequest;
 				this.terminal.ResetStatusTextRequest             -= terminal_ResetStatusTextRequest;
+				this.terminal.CursorRequest                      -= terminal_CursorRequest;
 				this.terminal.MessageInputRequest                -= terminal_MessageInputRequest;
 				this.terminal.SaveAsFileDialogRequest            -= terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest -= terminal_SaveCommandPageAsFileDialogRequest;
 				this.terminal.OpenCommandPageFileDialogRequest   -= terminal_OpenCommandPageFileDialogRequest;
-				this.terminal.CursorRequest                      -= terminal_CursorRequest;
 
 				this.terminal.Saved                              -= terminal_Saved;
 				this.terminal.Closed                             -= terminal_Closed;
@@ -6674,6 +6678,15 @@ namespace YAT.View.Forms
 
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 				monitor_Rx.AddLines(e.Lines);
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void terminal_AutoActionPlotRequest(object sender, Model.AutoActionPlotEventArgs e)
+		{
+			if (IsDisposed)
+				return; // Ensure not to handle events during closing anymore.
+
+			AutoActionPlot(e);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -7421,6 +7434,55 @@ namespace YAT.View.Forms
 			{
 				if (toolStripStatusLabel_TerminalStatus_RTS.Image != off) // Improve performance by only assigning if different.
 					toolStripStatusLabel_TerminalStatus_RTS.Image = off;
+			}
+		}
+
+		#endregion
+
+		#region Terminal > AutoActionPlot
+		//------------------------------------------------------------------------------------------
+		// Terminal > AutoActionPlot
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected virtual void AutoActionPlot(Model.AutoActionPlotEventArgs e)
+		{
+			lock (this.autoActionPlotFormSyncObj)
+			{
+				if (this.autoActionPlotForm == null)
+				{
+					this.autoActionPlotForm = new AutoActionPlot();
+					this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText(e.Caption);
+					this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
+					this.autoActionPlotForm.Show();
+				}
+				else
+				{
+					this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText(e.Caption);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual string ComposeAutoActionPlotFormText(string caption)
+		{
+			// Note:
+			// Same "YAT - [Caption]" as for MDI main form.
+
+			var sb = new StringBuilder(ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
+
+			sb.Append(" - [");
+			sb.Append(caption);
+			sb.Append("]");
+
+			return (sb.ToString());
+		}
+
+		private void AutoActionPlotForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			lock (this.autoActionPlotFormSyncObj)
+			{
+				this.autoActionPlotForm = null;
 			}
 		}
 
