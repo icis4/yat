@@ -3591,12 +3591,12 @@ namespace YAT.View.Forms
 
 				this.workspace.TimedStatusTextRequest             += workspace_TimedStatusTextRequest;
 				this.workspace.FixedStatusTextRequest             += workspace_FixedStatusTextRequest;
+				this.workspace.CursorRequest                      += workspace_CursorRequest;
 				this.workspace.MessageInputRequest                += workspace_MessageInputRequest;
 
 				this.workspace.SaveAsFileDialogRequest            += workspace_SaveAsFileDialogRequest;
 				this.workspace.SaveCommandPageAsFileDialogRequest += workspace_SaveCommandPageAsFileDialogRequest;
 				this.workspace.OpenCommandPageFileDialogRequest   += workspace_OpenCommandPageFileDialogRequest;
-				this.workspace.CursorRequest                      += workspace_CursorRequest;
 
 				this.workspace.Closed                             += workspace_Closed;
 
@@ -3614,12 +3614,12 @@ namespace YAT.View.Forms
 
 				this.workspace.TimedStatusTextRequest             -= workspace_TimedStatusTextRequest;
 				this.workspace.FixedStatusTextRequest             -= workspace_FixedStatusTextRequest;
+				this.workspace.CursorRequest                      -= workspace_CursorRequest;
 				this.workspace.MessageInputRequest                -= workspace_MessageInputRequest;
 
 				this.workspace.SaveAsFileDialogRequest            -= workspace_SaveAsFileDialogRequest;
 				this.workspace.SaveCommandPageAsFileDialogRequest -= workspace_SaveCommandPageAsFileDialogRequest;
 				this.workspace.OpenCommandPageFileDialogRequest   -= workspace_OpenCommandPageFileDialogRequest;
-				this.workspace.CursorRequest                      -= workspace_CursorRequest;
 
 				this.workspace.Closed                             -= workspace_Closed;
 

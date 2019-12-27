@@ -59,7 +59,7 @@ using YAT.Domain.Utilities;
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// is intentionally placed into the YAT.Domain namespace even though the file is located in
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {

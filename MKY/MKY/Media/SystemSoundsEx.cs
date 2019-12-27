@@ -302,7 +302,7 @@ namespace MKY.Media
 				case SystemSounds.Hand:        return (System.Media.SystemSounds.Hand);
 				case SystemSounds.Question:    return (System.Media.SystemSounds.Question);
 
-				default: throw (new ArgumentOutOfRangeException("sound", MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is a system sound that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("sound", sound, MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is a system sound that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

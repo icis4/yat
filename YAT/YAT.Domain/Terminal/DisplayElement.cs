@@ -41,7 +41,7 @@ using MKY.Diagnostics;
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// is intentionally placed into the YAT.Domain namespace even though the file is located in
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
@@ -633,6 +633,12 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public ErrorInfo(DateTime timeStamp, Direction direction, string message)
 				: this(timeStamp, direction, message, false)
+			{
+			}
+
+			/// <summary></summary>
+			public ErrorInfo(Direction direction, string message, bool isWarningOnly)
+				: this(TimeStampDefault, direction, message, isWarningOnly)
 			{
 			}
 
