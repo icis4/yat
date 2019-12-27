@@ -36,12 +36,12 @@ namespace YAT.Model.Types
 	/// </summary>
 	public class AutoResponseReplaceEvaluator
 	{
-		private List<string> triggerCaptureValues;
+		private string[] triggerCaptureValues;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AutoResponseReplaceEvaluator"/> class.
 		/// </summary>
-		public AutoResponseReplaceEvaluator(List<string> triggerCaptureValues)
+		public AutoResponseReplaceEvaluator(string[] triggerCaptureValues)
 		{
 			this.triggerCaptureValues = triggerCaptureValues;
 		}
@@ -58,7 +58,7 @@ namespace YAT.Model.Types
 				if (tagNumber >= 1)
 				{
 					int tagIndex = (tagNumber - 1);
-					if (this.triggerCaptureValues.Count > tagIndex)
+					if (this.triggerCaptureValues.Length > tagIndex)
 						return (this.triggerCaptureValues[tagIndex]);
 
 					var sb = new StringBuilder();
@@ -67,8 +67,8 @@ namespace YAT.Model.Types
 					sb.Append(" ($");
 					sb.Append(tagNumberString);
 					sb.Append(") was requested but trigger only contains ");
-					sb.Append(this.triggerCaptureValues.Count);
-					sb.Append((this.triggerCaptureValues.Count == 1) ? " capture!]" : " captures!]");
+					sb.Append(this.triggerCaptureValues.Length);
+					sb.Append((this.triggerCaptureValues.Length == 1) ? " capture!]" : " captures!]");
 					return (sb.ToString());
 				}
 				else
