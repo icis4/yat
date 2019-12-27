@@ -50,13 +50,17 @@ namespace YAT.Model.Types
 		Beep,
 		ShowMessageBox,
 
+		LineChartIndex,
+		LineChartTime,
+		ScatterPlot,
+		Histogram,
+
 		ClearRepositories,
 		ClearRepositoriesOnSubsequentRx,
 		ResetCountAndRate,
 		SwitchLogOn,
 		SwitchLogOff,
 		ToggleLogOnOrOff,
-
 		StopIO,
 		CloseTerminal,
 		ExitApplication
@@ -97,6 +101,18 @@ namespace YAT.Model.Types
 
 		private const string             ShowMessageBox_string = "[Show Message Box]";
 		private static readonly string[] ShowMessageBox_stringAlternatives = new string[] { "[M]" };
+
+		private const string             LineChartIndex_string = "[Line Chart (Index)]";
+		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LCI]" };
+
+		private const string             LineChartTime_string = "[Line Chart (Time)]";
+		private static readonly string[] LineChartTime_stringAlternatives = new string[] { "[LCT]" };
+
+		private const string             ScatterPlot_string = "[Scatter Plot]";
+		private static readonly string[] ScatterPlot_stringAlternatives = new string[] { "[SP]" };
+
+		private const string             Histogram_string = "[Histogram]";
+		private static readonly string[] Histogram_stringAlternatives = new string[] { "[HG]" };
 
 		private const string             ClearRepositories_string = "[Clear Monitor]"; // Translating from code to user terminology.
 		private static readonly string[] ClearRepositories_stringAlternatives = new string[] { "[CM]" };
@@ -178,13 +194,17 @@ namespace YAT.Model.Types
 				case AutoAction.Beep:                            return (Beep_string);
 				case AutoAction.ShowMessageBox:                  return (ShowMessageBox_string);
 
+				case AutoAction.LineChartIndex:                  return (LineChartIndex_string);
+				case AutoAction.LineChartTime:                   return (LineChartTime_string);
+				case AutoAction.ScatterPlot:                     return (ScatterPlot_string);
+				case AutoAction.Histogram:                       return (Histogram_string);
+
 				case AutoAction.ClearRepositories:               return (ClearRepositories_string);
 				case AutoAction.ClearRepositoriesOnSubsequentRx: return (ClearRepositoriesOnSubsequentRx_string);
 				case AutoAction.ResetCountAndRate:               return (ResetCountAndRate_string);
 				case AutoAction.SwitchLogOn:                     return (SwitchLogOn_string);
 				case AutoAction.SwitchLogOff:                    return (SwitchLogOff_string);
 				case AutoAction.ToggleLogOnOrOff:                return (ToggleLogOnOrOff_string);
-
 				case AutoAction.StopIO:                          return (StopIO_string);
 				case AutoAction.CloseTerminal:                   return (CloseTerminal_string);
 				case AutoAction.ExitApplication:                 return (ExitApplication_string);
@@ -258,7 +278,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(16); // Preset the required capacity to improve memory management; 16 is a large enough value.
+			var a = new List<AutoActionEx>(19); // Preset the required capacity to improve memory management.
 
 			a.Add(new AutoActionEx(AutoAction.None));
 
@@ -269,13 +289,17 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.Beep));
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
 
+			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
+			a.Add(new AutoActionEx(AutoAction.LineChartTime));
+			a.Add(new AutoActionEx(AutoAction.ScatterPlot));
+			a.Add(new AutoActionEx(AutoAction.Histogram));
+
 			a.Add(new AutoActionEx(AutoAction.ClearRepositories));
 			a.Add(new AutoActionEx(AutoAction.ClearRepositoriesOnSubsequentRx));
 			a.Add(new AutoActionEx(AutoAction.ResetCountAndRate));
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOn));
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOff));
 			a.Add(new AutoActionEx(AutoAction.ToggleLogOnOrOff));
-
 			a.Add(new AutoActionEx(AutoAction.StopIO));
 			a.Add(new AutoActionEx(AutoAction.CloseTerminal));
 			a.Add(new AutoActionEx(AutoAction.ExitApplication));
@@ -367,6 +391,30 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ShowMessageBox_stringAlternatives))
 			{
 				result = AutoAction.ShowMessageBox;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartIndex_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartIndex_stringAlternatives))
+			{
+				result = AutoAction.LineChartIndex;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartTime_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartTime_stringAlternatives))
+			{
+				result = AutoAction.LineChartTime;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlot_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlot_stringAlternatives))
+			{
+				result = AutoAction.ScatterPlot;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Histogram_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Histogram_stringAlternatives))
+			{
+				result = AutoAction.Histogram;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ClearRepositories_string) ||

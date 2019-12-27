@@ -26,6 +26,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using YAT.Model.Types;
+
 namespace YAT.Model
 {
 	/// <summary></summary>
@@ -150,6 +152,23 @@ namespace YAT.Model
 		public FilePathDialogEventArgs(string filePathOld)
 		{
 			FilePathOld = filePathOld;
+		}
+	}
+
+	/// <summary></summary>
+	public class AutoActionPlotEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public string Caption { get; }
+
+		/// <summary></summary>
+		public AutoActionPlotItem PlotItem { get; }
+
+		/// <summary></summary>
+		public AutoActionPlotEventArgs(string caption, AutoActionPlotItem plotItem)
+		{
+			Caption = caption;
+			PlotItem = plotItem;
 		}
 	}
 }

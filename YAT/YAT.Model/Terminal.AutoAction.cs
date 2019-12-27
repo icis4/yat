@@ -30,7 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -40,6 +40,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Collections.Generic;
 using MKY.Diagnostics;
+using MKY.Text.RegularExpressions;
 
 using YAT.Model.Types;
 using YAT.Model.Utilities;
@@ -63,14 +64,15 @@ namespace YAT.Model
 		private object autoActionTriggerHelperSyncObj = new object();
 
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
-		private string autoActionClearRepositoriesTriggerText; // = null;
 		private DateTime autoActionClearRepositoriesTriggerTimeStamp; // = DateTime.MinValue;
+		private string autoActionClearRepositoriesTriggerText; // = null;
+		private MatchCollection autoActionClearRepositoriesTriggerMatches; // = null;
 		private object autoActionClearRepositoriesSyncObj = new object();
 
 		private bool autoActionCloseOrExitHasBeenTriggered; // = false;
 		private object autoActionCloseOrExitSyncObj = new object();
 
-		private Queue<Triple<AutoAction, string, DateTime>> autoActionQueue = new Queue<Triple<AutoAction, string, DateTime>>();
+		private Queue<Quadruple<AutoAction, DateTime, string, MatchCollection>> autoActionQueue = new Queue<Quadruple<AutoAction, DateTime, string, MatchCollection>>();
 		private bool autoActionThreadRunFlag;
 		private AutoResetEvent autoActionThreadEvent;
 		private Thread autoActionThread;
@@ -82,6 +84,9 @@ namespace YAT.Model
 		//==========================================================================================
 		// Events
 		//==========================================================================================
+
+		/// <summary></summary>
+		public event EventHandler<AutoActionPlotEventArgs> AutoActionPlotRequest;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
@@ -189,7 +194,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements)
 		{
-			List<Pair<string, DateTime>> triggersDummy;
+			List<Triple<DateTime, string, MatchCollection>> triggersDummy;
 			EvaluateAutoActionFromElements(elements, out triggersDummy);
 		}
 
@@ -199,9 +204,9 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from elements always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, out List<Pair<string, DateTime>> triggers)
+		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, out List<Triple<DateTime, string, MatchCollection>> triggers)
 		{
-			triggers = new List<Pair<string, DateTime>>(); // No preset needed, the default behavior is good enough.
+			triggers = new List<Triple<DateTime, string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
 
 			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
 
@@ -225,7 +230,7 @@ namespace YAT.Model
 											de.Highlight = true;
 
 											// Signal the trigger:
-											triggers.Add(new Pair<string, DateTime>(elements.Text, de.TimeStamp));
+											triggers.Add(new Triple<DateTime, string, MatchCollection>(de.TimeStamp, elements.Text, null));
 
 											// Note that 'elements.Text' is not perfect, as it could only contain parts of
 											// the trigger. However, using the trigger sequence formatted with...
@@ -254,7 +259,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines)
 		{
-			List<Pair<string, DateTime>> triggersDummy;
+			List<Triple<DateTime, string, MatchCollection>> triggersDummy;
 			EvaluateAutoActionOtherThanFilterOrSuppressFromLines(lines, out triggersDummy);
 		}
 
@@ -264,7 +269,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, out List<Pair<string, DateTime>> triggers)
+		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, out List<Triple<DateTime, string, MatchCollection>> triggers)
 		{
 			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
 
@@ -277,7 +282,7 @@ namespace YAT.Model
 			}
 			else // IsTextTriggered
 			{
-				triggers = new List<Pair<string, DateTime>>(); // No preset needed, the default behavior is good enough.
+				triggers = new List<Triple<DateTime, string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
 
 				foreach (var dl in lines)
 				{
@@ -285,7 +290,8 @@ namespace YAT.Model
 					{
 						if (this.autoActionTriggerHelper != null)
 						{
-							int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.Text);
+							MatchCollection triggerMatches;
+							int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
 							if (triggerCount > 0)
 							{
 								this.autoActionTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
@@ -293,7 +299,7 @@ namespace YAT.Model
 
 								// Signal the trigger(s):
 								for (int i = 0; i < triggerCount; i++)
-									triggers.Add(new Pair<string, DateTime>(dl.Text, dl.TimeStamp));
+									triggers.Add(new Triple<DateTime, string, MatchCollection>(dl.TimeStamp, dl.Text, triggerMatches));
 							}
 						}
 						else
@@ -383,20 +389,23 @@ namespace YAT.Model
 			{
 				if (this.autoActionClearRepositoriesOnSubsequentRxIsArmed)
 				{
-					string triggerText;
 					DateTime triggerTimeStamp;
+					string triggerText;
+					MatchCollection triggerMatches;
 
 					lock (this.autoActionTriggerHelperSyncObj)
 					{
-						triggerText      = this.autoActionClearRepositoriesTriggerText;
 						triggerTimeStamp = this.autoActionClearRepositoriesTriggerTimeStamp;
+						triggerText      = this.autoActionClearRepositoriesTriggerText;
+						triggerMatches   = this.autoActionClearRepositoriesTriggerMatches;
 
 						this.autoActionClearRepositoriesOnSubsequentRxIsArmed = false;
-						this.autoActionClearRepositoriesTriggerText           = null;
 						this.autoActionClearRepositoriesTriggerTimeStamp      = DateTime.MinValue;
+						this.autoActionClearRepositoriesTriggerText           = null;
+						this.autoActionClearRepositoriesTriggerMatches        = null;
 					}
 					                        //// ClearRepositories is to be enqueued, not ClearRepositoriesOnSubsequentRx!
-					EnqueueAutoAction(AutoAction.ClearRepositories, triggerText, triggerTimeStamp);
+					EnqueueAutoAction(AutoAction.ClearRepositories, triggerTimeStamp, triggerText, triggerMatches);
 				}
 			}
 		}
@@ -404,27 +413,27 @@ namespace YAT.Model
 		/// <summary>
 		/// Enqueues the automatic actions for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void EnqueueAutoActions(List<Pair<string, DateTime>> triggers)
+		protected virtual void EnqueueAutoActions(List<Triple<DateTime, string, MatchCollection>> triggers)
 		{
 			foreach (var trigger in triggers)
-				EnqueueAutoAction(trigger.Value1, trigger.Value2);
+				EnqueueAutoAction(trigger.Value1, trigger.Value2, trigger.Value3);
 		}
 
 		/// <summary>
 		/// Enqueues the automatic action for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void EnqueueAutoAction(string triggerText, DateTime triggerTimeStamp)
+		protected virtual void EnqueueAutoAction(DateTime triggerTimeStamp, string triggerText, MatchCollection triggerMatches)
 		{
-			EnqueueAutoAction(SettingsRoot.AutoAction.Action, triggerText, triggerTimeStamp);
+			EnqueueAutoAction(SettingsRoot.AutoAction.Action, triggerTimeStamp, triggerText, triggerMatches);
 		}
 
 		/// <summary>
 		/// Enqueues the automatic action for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void EnqueueAutoAction(AutoAction action, string triggerText, DateTime triggerTimeStamp)
+		protected virtual void EnqueueAutoAction(AutoAction action, DateTime triggerTimeStamp, string triggerText, MatchCollection triggerMatches)
 		{
 			lock (this.autoActionQueue) // Lock is required because Queue<T> is not synchronized.
-				this.autoActionQueue.Enqueue(new Triple<AutoAction, string, DateTime>(action, triggerText, triggerTimeStamp));
+				this.autoActionQueue.Enqueue(new Quadruple<AutoAction, DateTime, string, MatchCollection>(action, triggerTimeStamp, triggerText, triggerMatches));
 
 			SignalAutoActionThreadSafely();
 		}
@@ -433,7 +442,7 @@ namespace YAT.Model
 		/// Asynchronously invoke the automatic actions on other than the receive thread.
 		/// </summary>
 		/// <remarks>
-		/// Will be signaled by <see cref="EnqueueAutoAction(AutoAction, string, DateTime)"/> above.
+		/// Will be signaled by <see cref="EnqueueAutoAction(AutoAction, DateTime, string, MatchCollection)"/> above.
 		/// </remarks>
 		private void AutoActionThread()
 		{
@@ -469,7 +478,7 @@ namespace YAT.Model
 						// since it is likely that more triggers are to be enqueued.
 						Thread.Sleep(TimeSpan.Zero);
 
-						Triple<AutoAction, string, DateTime>[] pendingItems;
+						Quadruple<AutoAction, DateTime, string, MatchCollection>[] pendingItems;
 						lock (this.autoActionQueue) // Lock is required because Queue<T> is not synchronized.
 						{
 							pendingItems = this.autoActionQueue.ToArray();
@@ -478,7 +487,7 @@ namespace YAT.Model
 
 						foreach (var item in pendingItems)
 						{
-							PreformAutoAction(item.Value1, item.Value2, item.Value3);
+							PreformAutoAction(item.Value1, item.Value2, item.Value3, item.Value4);
 						}
 					} // Inner loop
 				} // Outer loop
@@ -502,7 +511,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Performs the automatic action.
 		/// </summary>
-		protected virtual void PreformAutoAction(AutoAction action, string triggerText, DateTime triggerTimeStamp)
+		protected virtual void PreformAutoAction(AutoAction action, DateTime triggerTimeStamp, string triggerText, MatchCollection triggerMatches)
 		{
 			int count = Interlocked.Increment(ref this.autoActionCount); // Incrementing before invoking to have the effective count updated during action.
 			OnAutoActionCountChanged(new EventArgs<int>(count));
@@ -523,25 +532,33 @@ namespace YAT.Model
 					// No additional action.
 					break;
 
-				case AutoAction.Beep:                            SystemSounds.Beep.Play();                                       break;
-				case AutoAction.ShowMessageBox:                  RequestAutoActionMessage(triggerText, triggerTimeStamp, count); break;
-				case AutoAction.ClearRepositories:               ClearRepositories();                                            break;
+				case AutoAction.Beep:              SystemSounds.Beep.Play();                                                     break;
+				case AutoAction.ShowMessageBox:    RequestAutoActionMessage(triggerTimeStamp, triggerText, count);               break;
+
+				case AutoAction.LineChartIndex:    RequestPlot(AutoActionPlot.LineChartIndex, triggerTimeStamp, triggerMatches); break;
+				case AutoAction.LineChartTime:     RequestPlot(AutoActionPlot.LineChartTime,  triggerTimeStamp, triggerMatches); break;
+				case AutoAction.ScatterPlot:       RequestPlot(AutoActionPlot.ScatterPlot,    triggerTimeStamp, triggerMatches); break;
+				case AutoAction.Histogram:         RequestPlot(AutoActionPlot.Histogram,      triggerTimeStamp, triggerMatches); break;
+
+				case AutoAction.ClearRepositories: ClearRepositories();                                                          break;
+
 				case AutoAction.ClearRepositoriesOnSubsequentRx:
 				{
 					lock (this.autoActionClearRepositoriesSyncObj)
 					{
 						this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
-						this.autoActionClearRepositoriesTriggerText      = triggerText;
 						this.autoActionClearRepositoriesTriggerTimeStamp = triggerTimeStamp;
+						this.autoActionClearRepositoriesTriggerText      = triggerText;
+						this.autoActionClearRepositoriesTriggerMatches   = triggerMatches;
 					}
 					break;
 				}
 
-				case AutoAction.ResetCountAndRate:               ResetIOCountAndRate();          break;
-				case AutoAction.SwitchLogOn:                     SwitchLogOn();                  break;
-				case AutoAction.SwitchLogOff:                    SwitchLogOff();                 break;
-				case AutoAction.ToggleLogOnOrOff:                ToggleLogOnOrOff();             break;
-				case AutoAction.StopIO:                          StopIO();                       break;
+				case AutoAction.ResetCountAndRate: ResetIOCountAndRate(); break;
+				case AutoAction.SwitchLogOn:       SwitchLogOn();         break;
+				case AutoAction.SwitchLogOff:      SwitchLogOff();        break;
+				case AutoAction.ToggleLogOnOrOff:  ToggleLogOnOrOff();    break;
+				case AutoAction.StopIO:            StopIO();              break;
 				case AutoAction.CloseTerminal:
 				{
 					lock (this.autoActionCloseOrExitSyncObj)
@@ -594,6 +611,10 @@ namespace YAT.Model
 
 				case AutoAction.Beep:
 				case AutoAction.ShowMessageBox:
+				case AutoAction.LineChartIndex:
+				case AutoAction.LineChartTime:
+				case AutoAction.ScatterPlot:
+				case AutoAction.Histogram:
 				case AutoAction.ClearRepositories:
 				case AutoAction.ClearRepositoriesOnSubsequentRx:
 				case AutoAction.ResetCountAndRate:
@@ -613,7 +634,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Notifies the user about the action.
 		/// </summary>
-		protected virtual void RequestAutoActionMessage(string triggerText, DateTime triggerTimeStamp, int totalCount)
+		protected virtual void RequestAutoActionMessage(DateTime triggerTimeStamp, string triggerText, int totalCount)
 		{
 			var sb = new StringBuilder();
 
@@ -635,6 +656,72 @@ namespace YAT.Model
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual void RequestPlot(AutoActionPlot plot, DateTime triggerTimeStamp, MatchCollection triggerMatches)
+		{
+			AutoActionPlotItem pi;
+			string errorMessage;
+			if (TryCreatePlotItem(plot, triggerTimeStamp, triggerMatches, out pi, out errorMessage))
+				OnAutoActionPlotRequest(new AutoActionPlotEventArgs(CaptionHelper.ComposeInvariant(IndicatedName, "Plot"), pi));
+			else
+				this.terminal.InlineErrorMessage(Domain.Direction.Rx, errorMessage, true);
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual bool TryCreatePlotItem(AutoActionPlot plot, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			switch (plot)
+			{
+				case AutoActionPlot.LineChartIndex: return (TryCreateLineChartIndexItem(                 triggerMatches, out pi, out errorMessage));
+//				case AutoActionPlot.LineChartTime:  return (TryCreateLineChartTimeItem(triggerTimeStamp, triggerMatches, out pi, out errorMessage));
+// PENDING		case AutoActionPlot.ScatterPlot:    return (TryCreateScatterPlotItem(                    triggerMatches, out pi, out errorMessage));
+//				case AutoActionPlot.Histogram:      return (TryCreateHistogramItem(                      triggerMatches, out pi, out errorMessage));
+
+				default: throw (new ArgumentOutOfRangeException("plot", plot, MessageHelper.InvalidExecutionPreamble + "'" + plot.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual bool TryCreateLineChartIndexItem(MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			var values = MatchCollectionEx.ConvertToStringArray(triggerMatches);
+			pi = ConvertToMultiValuePlotItem(AutoActionPlot.LineChartIndex, values);
+			errorMessage = null;
+			return (true);
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual MultiValueAutoActionPlotItem ConvertToMultiValuePlotItem(AutoActionPlot plot, string[] values)
+		{
+			var l = new List<double>(); // No preset needed, the default behavior is good enough.
+
+			foreach (var s in values)
+			{
+				// Try parse double:
+				{
+					double result;
+					if (double.TryParse(s, out result))
+					{
+						l.Add(result);
+						continue;
+					}
+				}
+
+// PENDING	Zersch mal nume mit double or decimal mache, dänn au DT und s. //.  Textli eimal formuliere, dänn ToolTip & MsgBox
+
+			}
+
+			return (new MultiDoubleAutoActionPlotItem(plot, l.ToArray()));
 		}
 
 		/// <summary>
@@ -798,6 +885,12 @@ namespace YAT.Model
 		//==========================================================================================
 		// Event Raising
 		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void OnAutoActionPlotRequest(AutoActionPlotEventArgs e)
+		{
+			this.eventHelper.RaiseSync<AutoActionPlotEventArgs>(AutoActionPlotRequest, this, e);
+		}
 
 		/// <summary></summary>
 		protected virtual void OnAutoActionCountChanged(EventArgs<int> e)

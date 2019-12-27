@@ -104,6 +104,7 @@ New:
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - Automatic responses now support injection of trigger captures, given regular expression is used.
+- New automatic actions [Line Chart (Index)], [Line Chart (Time)], [Scatter Plot] and [Histogram].
 
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
@@ -122,8 +123,8 @@ Important changes:
   on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
-- Upgrade to .NET 4.0 runtime (precondition for automatic actions [Plot*], preparing upcoming
-  feature request #74, part of feature request #229).
+- Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
+  preparing upcoming feature request #74, part of feature request #229).
 - Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 
 Fixed bugs:
