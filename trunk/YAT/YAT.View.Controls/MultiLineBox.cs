@@ -70,7 +70,10 @@ namespace YAT.View.Controls
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This mini-form must be located in 'Controls' rather than 'Forms' because other controls
+		/// use it.
+		/// </remarks>
 		public MultiLineBox(Command command, Point startupLocation, Domain.Radix defaultRadix, Domain.Parser.Modes parseMode)
 		{
 			InitializeComponent();

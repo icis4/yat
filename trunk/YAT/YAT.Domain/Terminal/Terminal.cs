@@ -63,7 +63,7 @@ using YAT.Domain.Utilities;
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// is intentionally placed into the YAT.Domain namespace even though the file is located in
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
@@ -1325,6 +1325,25 @@ namespace YAT.Domain
 			}
 
 			return (l.AsReadOnly());
+		}
+
+		#endregion
+
+		#region Error Handling
+		//------------------------------------------------------------------------------------------
+		// Error Handling
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Inlines an error message.
+		/// </summary>
+		public virtual void InlineErrorMessage(Direction direction, string message, bool isWarningOnly)
+		{
+			var ioDirection = (IODirection)direction;
+			if (ioDirection == IODirection.None)
+				ioDirection = IODirection.Bidir; // Inlining requires a direction other than 'None'.
+
+			InlineDisplayElement(ioDirection, new DisplayElement.ErrorInfo(direction, message, isWarningOnly));
 		}
 
 		#endregion

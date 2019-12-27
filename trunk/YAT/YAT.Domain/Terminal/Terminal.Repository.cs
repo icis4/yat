@@ -37,7 +37,7 @@ using MKY;
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// is intentionally placed into the YAT.Domain namespace even though the file is located in
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
@@ -62,11 +62,6 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Public Methods
 		//==========================================================================================
-
-		#region Repository Access
-		//------------------------------------------------------------------------------------------
-		// Repository Access
-		//------------------------------------------------------------------------------------------
 
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
 		public virtual bool ClearRepository(RepositoryType repositoryType)
@@ -398,17 +393,10 @@ namespace YAT.Domain
 
 		#endregion
 
-		#endregion
-
 		#region Non-Public Methods
 		//==========================================================================================
 		// Non-Public Methods
 		//==========================================================================================
-
-		#region Repositories
-		//------------------------------------------------------------------------------------------
-		// Repositories
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		protected virtual void CreateRepositories(Settings.TerminalSettings settings)
@@ -479,6 +467,10 @@ namespace YAT.Domain
 		/// Opposed to the 'AddDisplayElement...' methods, the 'InlineDisplayElement...' methods
 		/// automatically insert a space if necessary.
 		/// </remarks>
+		/// <remarks>
+		/// Explicit <paramref name="direction"/> because <see cref="DisplayElement.Direction"/>
+		/// may be <see cref="Direction.None"/>.
+		/// </remarks>
 		protected virtual void InlineDisplayElement(IODirection direction, DisplayElement.InlineElement element)
 		{
 			switch (direction)
@@ -497,6 +489,10 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Opposed to the 'AddDisplayElement...' methods, the 'InlineDisplayElement...' methods
 		/// automatically insert a space if necessary.
+		/// </remarks>
+		/// <remarks>
+		/// Explicit <paramref name="direction"/> because <see cref="DisplayElement.Direction"/>
+		/// may be <see cref="Direction.None"/>.
 		/// </remarks>
 		/// <remarks>
 		/// Using <see cref="DisplayElementCollection"/> instead of <see cref="IEnumerable{T}"/> of
@@ -687,8 +683,6 @@ namespace YAT.Domain
 
 			OnRepositoryReloaded(repositoryType, new DisplayLinesEventArgs(RepositoryToDisplayLines(repositoryType))); // Raise event outside the lock.
 		}
-
-		#endregion
 
 		#endregion
 	}
