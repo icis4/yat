@@ -88,7 +88,9 @@ namespace YAT.Model.Types
 		public const int InvalidPredefinedCommandId = 0;
 
 		#region String Definitions
-
+		                                 // Attention:
+		                                 // These strings are used for XML serialization!
+		                                 // Not ideal, but required for 'Explicit'!
 		private const string             None_string = "[None]";
 		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
 

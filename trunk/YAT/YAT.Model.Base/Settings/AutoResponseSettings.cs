@@ -101,13 +101,21 @@ namespace YAT.Model.Settings
 
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// Must be string because of <see cref="AutoResponse.Explicit"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("Response")]
 		public virtual string Response_ForSerialization
 		{
 			get { return (Response); }
-			set { Response = value;  }
+			set
+			{
+				AutoResponseEx result;
+				if (AutoResponseEx.TryParse(value, out result))
+					Response = result;
+				else
+					Response = AutoResponseEx.Default; // Silently reset to default, in order to prevent exceptions on changed strings.
+			}                                          // Not ideal, but considered good enough. Could be refined by 'intelligent' fallback.
 		}
 
 		/// <summary></summary>

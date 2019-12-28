@@ -52,7 +52,8 @@ namespace YAT.Model.Types
 
 		LineChartIndex,
 		LineChartTime,
-		ScatterPlot,
+		ScatterPlotXY,
+		ScatterPlotTime,
 		Histogram,
 
 		ClearRepositories,
@@ -83,7 +84,9 @@ namespace YAT.Model.Types
 	public class AutoActionEx : EnumEx, IEquatable<AutoActionEx>
 	{
 		#region String Definitions
-
+		                                 // Attention:
+		                                 // These strings are used for XML serialization!
+		                                 // Not ideal, but required for explicit 'AutoTrigger' and 'AutoResponse', thus here too.
 		private const string             None_string = "[None]";
 		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
 
@@ -102,14 +105,17 @@ namespace YAT.Model.Types
 		private const string             ShowMessageBox_string = "[Show Message Box]";
 		private static readonly string[] ShowMessageBox_stringAlternatives = new string[] { "[M]" };
 
-		private const string             LineChartIndex_string = "[Line Chart (Index)]";
-		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LCI]" };
+		private const string             LineChartIndex_string = "[Line Chart]";
+		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LC]" };
 
 		private const string             LineChartTime_string = "[Line Chart (Time)]";
 		private static readonly string[] LineChartTime_stringAlternatives = new string[] { "[LCT]" };
 
-		private const string             ScatterPlot_string = "[Scatter Plot]";
-		private static readonly string[] ScatterPlot_stringAlternatives = new string[] { "[SP]" };
+		private const string             ScatterPlotXY_string = "[Scatter Plot]";
+		private static readonly string[] ScatterPlotXY_stringAlternatives = new string[] { "[SP]" };
+
+		private const string             ScatterPlotTime_string = "[Scatter Plot (Time)]";
+		private static readonly string[] ScatterPlotTime_stringAlternatives = new string[] { "[SPT]" };
 
 		private const string             Histogram_string = "[Histogram]";
 		private static readonly string[] Histogram_stringAlternatives = new string[] { "[HG]" };
@@ -196,7 +202,8 @@ namespace YAT.Model.Types
 
 				case AutoAction.LineChartIndex:                  return (LineChartIndex_string);
 				case AutoAction.LineChartTime:                   return (LineChartTime_string);
-				case AutoAction.ScatterPlot:                     return (ScatterPlot_string);
+				case AutoAction.ScatterPlotXY:                   return (ScatterPlotXY_string);
+				case AutoAction.ScatterPlotTime:                 return (ScatterPlotTime_string);
 				case AutoAction.Histogram:                       return (Histogram_string);
 
 				case AutoAction.ClearRepositories:               return (ClearRepositories_string);
@@ -278,7 +285,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(19); // Preset the required capacity to improve memory management.
+			var a = new List<AutoActionEx>(20); // Preset the required capacity to improve memory management.
 
 			a.Add(new AutoActionEx(AutoAction.None));
 
@@ -291,7 +298,8 @@ namespace YAT.Model.Types
 
 			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
 			a.Add(new AutoActionEx(AutoAction.LineChartTime));
-			a.Add(new AutoActionEx(AutoAction.ScatterPlot));
+			a.Add(new AutoActionEx(AutoAction.ScatterPlotXY));
+			a.Add(new AutoActionEx(AutoAction.ScatterPlotTime));
 			a.Add(new AutoActionEx(AutoAction.Histogram));
 
 			a.Add(new AutoActionEx(AutoAction.ClearRepositories));
@@ -405,10 +413,16 @@ namespace YAT.Model.Types
 				result = AutoAction.LineChartTime;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlot_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlot_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlotXY_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlotXY_stringAlternatives))
 			{
-				result = AutoAction.ScatterPlot;
+				result = AutoAction.ScatterPlotXY;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlotTime_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlotTime_stringAlternatives))
+			{
+				result = AutoAction.ScatterPlotTime;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Histogram_string) ||

@@ -98,13 +98,21 @@ namespace YAT.Model.Settings
 
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// Is a string rather than enum same as for <see cref="AutoTriggerSettings.Trigger_ForSerialization"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("Action")]
 		public string Action_ForSerialization
 		{
 			get { return (Action); }
-			set { Action = value;  }
+			set
+			{
+				AutoActionEx result;
+				if (AutoActionEx.TryParse(value, out result))
+					Action = result;
+				else
+					Action = AutoActionEx.Default; // Silently reset to default, in order to prevent exceptions on changed strings.
+			}                                      // Not ideal, but considered good enough. Could be refined by 'intelligent' fallback.
 		}
 
 		/// <summary></summary>
