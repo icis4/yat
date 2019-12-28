@@ -60,6 +60,7 @@ namespace YAT.Settings.Application
 		private SocketSettings socket;
 		private FindSettings find;
 		private ViewSettings view;
+		private PlotSettings plot;
 		private ExtensionSettings extensions;
 
 		/// <remarks>
@@ -72,6 +73,7 @@ namespace YAT.Settings.Application
 			Socket     = new SocketSettings(MKY.Settings.SettingsType.Explicit);
 			Find       = new FindSettings(MKY.Settings.SettingsType.Explicit);
 			View       = new ViewSettings(MKY.Settings.SettingsType.Explicit);
+			Plot       = new PlotSettings(MKY.Settings.SettingsType.Explicit);
 			Extensions = new ExtensionSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
@@ -87,6 +89,7 @@ namespace YAT.Settings.Application
 			Socket     = new SocketSettings(rhs.Socket);
 			Find       = new FindSettings(rhs.Find);
 			View       = new ViewSettings(rhs.View);
+			Plot       = new PlotSettings(rhs.Plot);
 			Extensions = new ExtensionSettings(rhs.Extensions);
 
 			ClearChanged();
@@ -182,6 +185,23 @@ namespace YAT.Settings.Application
 				{
 					var oldNode = this.view;
 					this.view = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Plot")]
+		public virtual PlotSettings Plot
+		{
+			get { return (this.plot); }
+			set
+			{
+				if (this.plot != value)
+				{
+					var oldNode = this.plot;
+					this.plot = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

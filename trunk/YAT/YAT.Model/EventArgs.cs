@@ -159,15 +159,15 @@ namespace YAT.Model
 	public class AutoActionPlotEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public string Caption { get; }
+		public string FormTitle { get; }
 
 		/// <summary></summary>
 		public AutoActionPlotItem PlotItem { get; }
 
 		/// <summary></summary>
-		public AutoActionPlotEventArgs(string caption, AutoActionPlotItem plotItem)
+		public AutoActionPlotEventArgs(string formTitle, AutoActionPlotItem plotItem)
 		{
-			Caption = caption;
+			FormTitle = formTitle;
 			PlotItem = plotItem;
 		}
 	}

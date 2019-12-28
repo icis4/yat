@@ -327,6 +327,10 @@
       <Project>{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}</Project>
       <Name>MKY.Windows.Forms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ScottPlot\src\ScottPlot\ScottPlot.csproj">
+      <Project>{ee9215c6-01c1-4835-8514-3a708f9291f1}</Project>
+      <Name>ScottPlot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
       <Name>YAT.Application.Base</Name>
