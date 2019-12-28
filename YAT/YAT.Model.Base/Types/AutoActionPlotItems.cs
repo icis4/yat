@@ -23,7 +23,6 @@
 //==================================================================================================
 
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace YAT.Model.Types
 {
@@ -36,9 +35,21 @@ namespace YAT.Model.Types
 		public AutoActionPlot Type { get; }
 
 		/// <summary></summary>
-		public AutoActionPlotItem(AutoActionPlot type)
+		public string Title { get; }
+
+		/// <summary></summary>
+		public string XCaption { get; }
+
+		/// <summary></summary>
+		public string YCaption { get; }
+
+		/// <summary></summary>
+		public AutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption)
 		{
 			Type = type;
+			Title = title;
+			XCaption = xCaption;
+			YCaption = yCaption;
 		}
 	}
 
@@ -48,8 +59,8 @@ namespace YAT.Model.Types
 	public abstract class MultiValueAutoActionPlotItem : AutoActionPlotItem
 	{
 		/// <summary></summary>
-		public MultiValueAutoActionPlotItem(AutoActionPlot type)
-			: base(type)
+		public MultiValueAutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption)
+			: base(type, title, xCaption, yCaption)
 		{
 		}
 	}
@@ -60,14 +71,13 @@ namespace YAT.Model.Types
 	public class MultiDoubleAutoActionPlotItem : MultiValueAutoActionPlotItem
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Source is an array, sink is an array, this class transports the array from source to sink, there's no purpose to use a ReadOnlyCollection here.")]
-		public IEnumerable<double> Values { get; }
+		public IEnumerable<double> YValues { get; }
 
 		/// <summary></summary>
-		public MultiDoubleAutoActionPlotItem(AutoActionPlot type, IEnumerable<double> values)
-			: base(type)
+		public MultiDoubleAutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption, IEnumerable<double> yValues)
+			: base(type, title, xCaption, yCaption)
 		{
-			Values = values;
+			YValues  = yValues;
 		}
 	}
 }

@@ -721,7 +721,7 @@ namespace YAT.Model
 
 			}
 
-			return (new MultiDoubleAutoActionPlotItem(plot, l.ToArray()));
+			return (new MultiDoubleAutoActionPlotItem(plot, (AutoActionPlotEx)plot, "Index", "Value", l.ToArray()));
 		}
 
 		/// <summary>
