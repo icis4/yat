@@ -12,7 +12,7 @@ Assemblies
 Sign all library/dll assemblies using the strong name tool:
 1. Open the Visual Studio command prompt with administrator rights
 2. Go to "C:\"
-3. Enter "sn -k <FileName>.snk"
+3. Run "sn -k <FileName>.snk"
 4. Move the .snk file to the "\Properties" directory of the project
 5. Project Properties > Signing > Sign
 
