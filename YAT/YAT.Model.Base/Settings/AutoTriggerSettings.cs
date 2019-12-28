@@ -101,13 +101,21 @@ namespace YAT.Model.Settings
 
 		/// <remarks>
 		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// Must be string because of <see cref="AutoTrigger.Explicit"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		[XmlElement("Trigger")]
 		public string Trigger_ForSerialization
 		{
 			get { return (Trigger); }
-			set { Trigger = value;  }
+			set
+			{
+				AutoTriggerEx result;
+				if (AutoTriggerEx.TryParse(value, out result))
+					Trigger = result;
+				else
+					Trigger = AutoTriggerEx.Default; // Silently reset to default, in order to prevent exceptions on changed strings.
+			}                                        // Not ideal, but considered good enough. Could be refined by 'intelligent' fallback.
 		}
 
 		/// <summary></summary>
