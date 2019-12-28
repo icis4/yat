@@ -43,7 +43,8 @@ namespace YAT.Model.Types
 	{
 		LineChartIndex,
 		LineChartTime,
-		ScatterPlot,
+		ScatterPlotXY,
+		ScatterPlotTime,
 		Histogram
 	}
 
@@ -65,14 +66,17 @@ namespace YAT.Model.Types
 	{
 		#region String Definitions
 
-		private const string             LineChartIndex_string = "[Line Chart (Index)]";
-		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LCI]" };
+		private const string             LineChartIndex_string = "[Line Chart]";
+		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LC]" };
 
 		private const string             LineChartTime_string = "[Line Chart (Time)]";
 		private static readonly string[] LineChartTime_stringAlternatives = new string[] { "[LCT]" };
 
-		private const string             ScatterPlot_string = "[Scatter Plot]";
-		private static readonly string[] ScatterPlot_stringAlternatives = new string[] { "[SP]" };
+		private const string             ScatterPlotXY_string = "[Scatter Plot]";
+		private static readonly string[] ScatterPlotXY_stringAlternatives = new string[] { "[SP]" };
+
+		private const string             ScatterPlotTime_string = "[Scatter Plot (Time)]";
+		private static readonly string[] ScatterPlotTime_stringAlternatives = new string[] { "[SPT]" };
 
 		private const string             Histogram_string = "[Histogram]";
 		private static readonly string[] Histogram_stringAlternatives = new string[] { "[HG]" };
@@ -107,10 +111,11 @@ namespace YAT.Model.Types
 		{
 			switch ((AutoActionPlot)UnderlyingEnum)
 			{
-				case AutoActionPlot.LineChartIndex: return (LineChartIndex_string);
-				case AutoActionPlot.LineChartTime:  return (LineChartTime_string);
-				case AutoActionPlot.ScatterPlot:    return (ScatterPlot_string);
-				case AutoActionPlot.Histogram:      return (Histogram_string);
+				case AutoActionPlot.LineChartIndex:  return (LineChartIndex_string);
+				case AutoActionPlot.LineChartTime:   return (LineChartTime_string);
+				case AutoActionPlot.ScatterPlotXY:   return (ScatterPlotXY_string);
+				case AutoActionPlot.ScatterPlotTime: return (ScatterPlotTime_string);
+				case AutoActionPlot.Histogram:       return (Histogram_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -181,11 +186,12 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionPlotEx[] GetItems()
 		{
-			var a = new List<AutoActionPlotEx>(4); // Preset the required capacity to improve memory management.
+			var a = new List<AutoActionPlotEx>(5); // Preset the required capacity to improve memory management.
 
 			a.Add(new AutoActionPlotEx(AutoActionPlot.LineChartIndex));
 			a.Add(new AutoActionPlotEx(AutoActionPlot.LineChartTime));
-			a.Add(new AutoActionPlotEx(AutoActionPlot.ScatterPlot));
+			a.Add(new AutoActionPlotEx(AutoActionPlot.ScatterPlotXY));
+			a.Add(new AutoActionPlotEx(AutoActionPlot.ScatterPlotTime));
 			a.Add(new AutoActionPlotEx(AutoActionPlot.Histogram));
 
 			return (a.ToArray());
@@ -253,10 +259,16 @@ namespace YAT.Model.Types
 				result = AutoActionPlot.LineChartTime;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlot_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlot_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlotXY_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlotXY_stringAlternatives))
 			{
-				result = AutoActionPlot.ScatterPlot;
+				result = AutoActionPlot.ScatterPlotXY;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlotTime_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlotTime_stringAlternatives))
+			{
+				result = AutoActionPlot.ScatterPlotTime;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Histogram_string) ||
