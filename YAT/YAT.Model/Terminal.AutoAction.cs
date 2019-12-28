@@ -532,13 +532,14 @@ namespace YAT.Model
 					// No additional action.
 					break;
 
-				case AutoAction.Beep:              SystemSounds.Beep.Play();                                                     break;
-				case AutoAction.ShowMessageBox:    RequestAutoActionMessage(triggerTimeStamp, triggerText, count);               break;
+				case AutoAction.Beep:              SystemSounds.Beep.Play();                                                      break;
+				case AutoAction.ShowMessageBox:    RequestAutoActionMessage(triggerTimeStamp,  triggerText, count);               break;
 
-				case AutoAction.LineChartIndex:    RequestPlot(AutoActionPlot.LineChartIndex, triggerTimeStamp, triggerMatches); break;
-				case AutoAction.LineChartTime:     RequestPlot(AutoActionPlot.LineChartTime,  triggerTimeStamp, triggerMatches); break;
-				case AutoAction.ScatterPlot:       RequestPlot(AutoActionPlot.ScatterPlot,    triggerTimeStamp, triggerMatches); break;
-				case AutoAction.Histogram:         RequestPlot(AutoActionPlot.Histogram,      triggerTimeStamp, triggerMatches); break;
+				case AutoAction.LineChartIndex:    RequestPlot(AutoActionPlot.LineChartIndex,  triggerTimeStamp, triggerMatches); break;
+				case AutoAction.LineChartTime:     RequestPlot(AutoActionPlot.LineChartTime,   triggerTimeStamp, triggerMatches); break;
+				case AutoAction.ScatterPlotXY:     RequestPlot(AutoActionPlot.ScatterPlotXY,   triggerTimeStamp, triggerMatches); break;
+				case AutoAction.ScatterPlotTime:   RequestPlot(AutoActionPlot.ScatterPlotTime, triggerTimeStamp, triggerMatches); break;
+				case AutoAction.Histogram:         RequestPlot(AutoActionPlot.Histogram,       triggerTimeStamp, triggerMatches); break;
 
 				case AutoAction.ClearRepositories: ClearRepositories();                                                          break;
 
@@ -613,7 +614,8 @@ namespace YAT.Model
 				case AutoAction.ShowMessageBox:
 				case AutoAction.LineChartIndex:
 				case AutoAction.LineChartTime:
-				case AutoAction.ScatterPlot:
+				case AutoAction.ScatterPlotXY:
+				case AutoAction.ScatterPlotTime:
 				case AutoAction.Histogram:
 				case AutoAction.ClearRepositories:
 				case AutoAction.ClearRepositoriesOnSubsequentRx:
@@ -693,7 +695,7 @@ namespace YAT.Model
 		protected virtual bool TryCreateLineChartIndexItem(MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
 		{
 			var values = MatchCollectionEx.ConvertToStringArray(triggerMatches);
-			pi = ConvertToMultiValuePlotItem(AutoActionPlot.LineChartIndex, values);
+			pi = ConvertToPlotItem(AutoActionPlot.LineChartIndex, values);
 			errorMessage = null;
 			return (true);
 		}
@@ -701,9 +703,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual MultiValueAutoActionPlotItem ConvertToMultiValuePlotItem(AutoActionPlot plot, string[] values)
+		protected virtual AutoActionPlotItem ConvertToPlotItem(AutoActionPlot plot, string[] values)
 		{
-			var l = new List<double>(); // No preset needed, the default behavior is good enough.
+			var yValues = new List<double>(); // No preset needed, the default behavior is good enough.
 
 			foreach (var s in values)
 			{
@@ -712,7 +714,7 @@ namespace YAT.Model
 					double result;
 					if (double.TryParse(s, out result))
 					{
-						l.Add(result);
+						yValues.Add(result);
 						continue;
 					}
 				}
@@ -721,7 +723,7 @@ namespace YAT.Model
 
 			}
 
-			return (new MultiDoubleAutoActionPlotItem(plot, (AutoActionPlotEx)plot, "Index", "Value", l.ToArray()));
+			return (new AutoActionPlotItem(plot, (AutoActionPlotEx)plot, "Index", "Value", null, yValues.ToArray()));
 		}
 
 		/// <summary>

@@ -3,10 +3,10 @@
 // Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/YAT/YAT.View.Forms/Main.cs $
-// $Revision: 2826 $
-// $Date: 2019-12-12 00:06:45 +0100 (Do., 12 Dez 2019) $
-// $Author: maettu_this $
+// $URL$
+// $Revision$
+// $Date$
+// $Author$
 // ------------------------------------------------------------------------------------------------
 // YAT Version 2.1.1 Development
 // ------------------------------------------------------------------------------------------------
@@ -32,6 +32,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+using MKY;
+
 using YAT.Model.Types;
 using YAT.Settings.Application;
 
@@ -42,7 +44,27 @@ namespace YAT.View.Forms
 	/// <summary></summary>
 	public partial class AutoActionPlot : Form
 	{
-		List<double> values = new List<double>(1024); // Preset the initial capacity to improve memory management; 1024 is an arbitrary value.
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool plotUpdateIsSuspended; // = false;
+
+		private Model.Types.AutoActionPlot plotType;
+		private string plotTitle;
+		private string plotXLabel;
+		private string plotYLabel;
+		private List<double> plotXValues = new List<double>(1024); // Preset the initial capacity to improve memory management; 1024 is an arbitrary value.
+		private List<double> plotYValues = new List<double>(1024); // Preset the initial capacity to improve memory management; 1024 is an arbitrary value.
+		private object plotSyncObj = new object();
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public AutoActionPlot()
@@ -50,16 +72,37 @@ namespace YAT.View.Forms
 			InitializeComponent();
 		}
 
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
 		/// <summary></summary>
 		public void AddItem(AutoActionPlotItem pi)
 		{
 			switch (pi.Type)
 			{
-				case Model.Types.AutoActionPlot.LineChartIndex: UpdateLineChartIndex(pi); break;
-				case Model.Types.AutoActionPlot.LineChartTime:  UpdateLineChartTime(pi);  break;
-				case Model.Types.AutoActionPlot.ScatterPlot:    UpdateScatterPlot(pi);    break;
-				case Model.Types.AutoActionPlot.Histogram:      UpdateHistogram(pi);      break;
+				case Model.Types.AutoActionPlot.LineChartIndex:  AddItemToLineChartIndex(pi);  break;
+				case Model.Types.AutoActionPlot.LineChartTime:   AddItemToLineChartTime(pi);   break;
+				case Model.Types.AutoActionPlot.ScatterPlotXY:   AddItemToScatterPlotXY(pi);   break;
+				case Model.Types.AutoActionPlot.ScatterPlotTime: AddItemToScatterPlotTime(pi); break;
+				case Model.Types.AutoActionPlot.Histogram:       AddItemToHistogram(pi);       break;
 			}
+		}
+
+		#endregion
+
+		#region Controls Event Handlers
+		//==========================================================================================
+		// Controls Event Handlers
+		//==========================================================================================
+
+		private void timer_PlotUpdate_Tick(object sender, EventArgs e)
+		{
+			if (!this.plotUpdateIsSuspended)
+				UpdatePlot();
 		}
 
 		private void scottPlot_MouseMoved(object sender, EventArgs e)
@@ -83,9 +126,25 @@ namespace YAT.View.Forms
 			UpdateHover();
 		}
 
-		private void button_Reset_Click(object sender, EventArgs e)
+		private void button_Pause_Click(object sender, EventArgs e)
 		{
-			ClearPlot();
+			this.plotUpdateIsSuspended = true;
+
+			button_Pause   .Visible = false;
+			button_Continue.Visible = true;
+		}
+
+		private void button_Continue_Click(object sender, EventArgs e)
+		{
+			this.plotUpdateIsSuspended = false;
+
+			button_Continue.Visible = false;
+			button_Pause   .Visible = true;
+		}
+
+		private void button_Clear_Click(object sender, EventArgs e)
+		{
+			ClearValues();
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)
@@ -93,80 +152,207 @@ namespace YAT.View.Forms
 			Close();
 		}
 
-		/// <remarks>Based on 'ScottPlotDemos.PENDING'.</remarks>
-		private void UpdateLineChartIndex(AutoActionPlotItem pi)
+		#endregion
+
+		#region Non-Public Methods
+		//==========================================================================================
+		// Non-Public Methods
+		//==========================================================================================
+
+		private void AddItemToLineChartIndex(AutoActionPlotItem pi)
 		{
-			scottPlot.plt.Clear();
-			scottPlot.plt.Title(pi.Title);
-			scottPlot.plt.XLabel(pi.XCaption);
-			scottPlot.plt.YLabel(pi.YCaption);
+			lock (this.plotSyncObj)
+			{
+				this.plotType = pi.Type;
 
-			var casted = (pi as MultiDoubleAutoActionPlotItem);
-			this.values.AddRange(casted.YValues);
+				this.plotTitle = pi.Title;
 
-			scottPlot.plt.PlotSignal(this.values.ToArray());
-			scottPlot.plt.AxisAuto();
+				this.plotXLabel = pi.XCaption;
+				this.plotYLabel = pi.YCaption;
 
-			UpdatePlot();
+				this.plotYValues.AddRange(pi.YValues); // PENDING: Chabis, multiple signals !!!
+			}
 		}
 
-		/// <remarks>Based on 'ScottPlotDemos.PENDING'.</remarks>
-		private void UpdateLineChartTime(AutoActionPlotItem pi)
+		private void AddItemToLineChartTime(AutoActionPlotItem pi)
 		{
-			// PENDING
+			lock (this.plotSyncObj)
+			{
+				this.plotType = pi.Type;
 
-			UpdatePlot();
+				this.plotTitle = pi.Title;
+
+				this.plotXLabel = pi.XCaption;
+				this.plotYLabel = pi.YCaption;
+
+				this.plotXValues.AddRange(pi.XValues);
+				this.plotYValues.AddRange(pi.YValues);
+			}
 		}
 
-		/// <remarks>Based on 'ScottPlotDemos.PENDING'.</remarks>
-		private void UpdateScatterPlot(AutoActionPlotItem pi)
+		private void AddItemToScatterPlotXY(AutoActionPlotItem pi)
 		{
-			// PENDING
+			lock (this.plotSyncObj)
+			{
+				this.plotType = pi.Type;
 
-			UpdatePlot();
+				this.plotTitle = pi.Title;
+
+				this.plotXLabel = pi.XCaption;
+				this.plotYLabel = pi.YCaption;
+
+				this.plotXValues.AddRange(pi.XValues);
+				this.plotYValues.AddRange(pi.YValues);
+			}
 		}
 
-		/// <remarks>Based on 'ScottPlotDemos.PENDING'.</remarks>
-		private void UpdateHistogram(AutoActionPlotItem pi)
+		private void AddItemToScatterPlotTime(AutoActionPlotItem pi)
 		{
-			// PENDING
+			lock (this.plotSyncObj)
+			{
+				this.plotType = pi.Type;
 
-			UpdatePlot();
+				this.plotTitle = pi.Title;
+
+				this.plotXLabel = pi.XCaption;
+				this.plotYLabel = pi.YCaption;
+
+				this.plotXValues.AddRange(pi.XValues);
+				this.plotYValues.AddRange(pi.YValues);
+			}
+		}
+
+		private void AddItemToHistogram(AutoActionPlotItem pi)
+		{
+			lock (this.plotSyncObj)
+			{
+				this.plotType = pi.Type;
+
+				this.plotTitle = pi.Title;
+
+				this.plotXLabel = pi.XCaption;
+				this.plotYLabel = pi.YCaption;
+
+				this.plotXValues.AddRange(pi.XValues);
+				this.plotYValues.AddRange(pi.YValues);
+
+				// PENDING Make histo bins and counts
+			}
+		}
+
+		private void ClearValues()
+		{
+			lock (this.plotSyncObj)
+			{
+				this.plotXValues.Clear();
+				this.plotYValues.Clear();
+			}
 		}
 
 		private void UpdatePlot()
 		{
+			scottPlot.plt.Clear();
+
+			lock (this.plotSyncObj)
+			{
+				scottPlot.plt.Title(this.plotTitle);
+				scottPlot.plt.XLabel(this.plotXLabel);
+				scottPlot.plt.YLabel(this.plotYLabel);
+
+				switch (this.plotType)
+				{
+					case Model.Types.AutoActionPlot.LineChartIndex:
+						scottPlot.plt.PlotSignal(this.plotYValues.ToArray());
+						break;
+
+					case Model.Types.AutoActionPlot.LineChartTime:
+						scottPlot.plt.Ticks(dateTimeX: true);
+						scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray());
+						break;
+
+					case Model.Types.AutoActionPlot.ScatterPlotXY:
+						scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+						break;
+
+					case Model.Types.AutoActionPlot.ScatterPlotTime:
+						scottPlot.plt.Ticks(dateTimeX: true);
+						scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+						break;
+
+					case Model.Types.AutoActionPlot.Histogram:
+						scottPlot.plt.PlotBar(this.plotXValues.ToArray(), this.plotYValues.ToArray(), barWidth: ToHistogramBarWidth(this.plotXValues));
+						break;
+
+					default:
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.plotType.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+
+			scottPlot.plt.AxisAuto();
 			scottPlot.plt.Legend(enableLegend: ApplicationSettings.RoamingUserSettings.Plot.ShowLegend);
 
 			scottPlot.Render();
 		}
 
-		private void ClearPlot()
+		private double? ToHistogramBarWidth(List<double> xValues)
 		{
-			this.values.Clear();
-
-			scottPlot.plt.Clear(false);
-
-			UpdatePlot();
+			if ((xValues != null) && (xValues.Count > 1))
+				return (xValues[1] - xValues[0]);
+			else
+				return (null);
 		}
 
-		/// <remarks>Taken from 'ScottPlotDemos.FormHoverValue'.</remarks>
+		/// <remarks>Based on 'ScottPlotDemos.FormHoverValue'.</remarks>
 		private void UpdateHover()
 		{
-			return; // PENDING
-
-			var plottables = scottPlot.plt.GetPlottables();
-
-			var scatterPlot      = (ScottPlot.PlottableScatter)plottables[0];
-			var highlightScatter = (ScottPlot.PlottableScatter)plottables[1];
-			var highlightText    = (ScottPlot.PlottableText)   plottables[2];
-
 			// Get cursor/mouse position:
 			var cursorPos = new Point(Cursor.Position.X, Cursor.Position.Y);
 
 			// Adjust to position on ScottPlot:
 			cursorPos.X -= this.PointToScreen(scottPlot.Location).X;
 			cursorPos.Y -= this.PointToScreen(scottPlot.Location).Y;
+
+			switch (this.plotType)
+			{
+				case Model.Types.AutoActionPlot.LineChartIndex:
+					UpdateHoverOnSignal(cursorPos);
+					break;
+
+				case Model.Types.AutoActionPlot.LineChartTime:
+				case Model.Types.AutoActionPlot.ScatterPlotXY:
+				case Model.Types.AutoActionPlot.ScatterPlotTime:
+					UpdateHoverOnScatter(cursorPos);
+					break;
+
+				case Model.Types.AutoActionPlot.Histogram:
+					UpdateHoverOnHistogram(cursorPos);
+					break;
+
+				default:
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.plotType.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			scottPlot.Render();
+		}
+
+		/// <remarks>Based on 'ScottPlotDemos.FormHoverValue'.</remarks>
+		private void UpdateHoverOnSignal(Point cursorPos)
+		{
+			var plottables = scottPlot.plt.GetPlottables();
+
+			// PENDING
+		}
+
+		/// <remarks>Based on 'ScottPlotDemos.FormHoverValue'.</remarks>
+		private void UpdateHoverOnScatter(Point cursorPos)
+		{
+			var plottables = scottPlot.plt.GetPlottables();
+
+			// PENDING: How to deal with multiple signals ?!?
+
+			var scatterPlot      = (ScottPlot.PlottableScatter)plottables[0];
+			var highlightScatter = (ScottPlot.PlottableScatter)plottables[1];
+			var highlightText    = (ScottPlot.PlottableText)   plottables[2];
 
 			// Determine which point is closest to the cursor/mouse:
 			int closestIndex = 0;
@@ -207,13 +393,21 @@ namespace YAT.View.Forms
 				highlightText.text = "";
 				highlightScatter.markerSize = 0;
 			}
-
-			scottPlot.Render();
 		}
+
+		/// <remarks>Based on 'ScottPlotDemos.FormHoverValue'.</remarks>
+		private void UpdateHoverOnHistogram(Point cursorPos)
+		{
+			var plottables = scottPlot.plt.GetPlottables();
+
+			// PENDING
+		}
+
+		#endregion
 	}
 }
 
 //==================================================================================================
 // End of
-// $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/YAT/YAT.View.Forms/Main.cs $
+// $URL$
 //==================================================================================================

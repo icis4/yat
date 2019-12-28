@@ -29,7 +29,7 @@ namespace YAT.Model.Types
 	/// <summary>
 	/// Defines an item to plot.
 	/// </summary>
-	public abstract class AutoActionPlotItem
+	public class AutoActionPlotItem
 	{
 		/// <summary></summary>
 		public AutoActionPlot Type { get; }
@@ -44,40 +44,23 @@ namespace YAT.Model.Types
 		public string YCaption { get; }
 
 		/// <summary></summary>
-		public AutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption)
+		public double[] XValues { get; }
+
+		/// <summary></summary>
+		public double[] YValues { get; }
+
+		/// <summary></summary>
+		public AutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption, double[] xValues, double[] yValues)
 		{
 			Type = type;
+
 			Title = title;
+
 			XCaption = xCaption;
 			YCaption = yCaption;
-		}
-	}
 
-	/// <summary>
-	/// Defines an item to plot.
-	/// </summary>
-	public abstract class MultiValueAutoActionPlotItem : AutoActionPlotItem
-	{
-		/// <summary></summary>
-		public MultiValueAutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption)
-			: base(type, title, xCaption, yCaption)
-		{
-		}
-	}
-
-	/// <summary>
-	/// Defines an item to plot.
-	/// </summary>
-	public class MultiDoubleAutoActionPlotItem : MultiValueAutoActionPlotItem
-	{
-		/// <summary></summary>
-		public IEnumerable<double> YValues { get; }
-
-		/// <summary></summary>
-		public MultiDoubleAutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption, IEnumerable<double> yValues)
-			: base(type, title, xCaption, yCaption)
-		{
-			YValues  = yValues;
+			XValues = xValues;
+			YValues = yValues;
 		}
 	}
 }
