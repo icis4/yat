@@ -108,7 +108,7 @@ namespace ScottPlot.UserControls
             plottable.label = tbLabel.Text;
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
+        private void BtnOK_Click(object sender, EventArgs e)
         {
             var settings = plt.GetSettings();
 
