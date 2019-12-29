@@ -532,16 +532,16 @@ namespace YAT.Model
 					// No additional action.
 					break;
 
-				case AutoAction.Beep:              SystemSounds.Beep.Play();                                                      break;
-				case AutoAction.ShowMessageBox:    RequestAutoActionMessage(triggerTimeStamp,  triggerText, count);               break;
+				case AutoAction.Beep:               SystemSounds.Beep.Play();                                        break;
+				case AutoAction.ShowMessageBox:     RequestAutoActionMessage(triggerTimeStamp,  triggerText, count); break;
 
-				case AutoAction.LineChartIndex:    RequestPlot(AutoActionPlot.LineChartIndex,  triggerTimeStamp, triggerMatches); break;
-				case AutoAction.LineChartTime:     RequestPlot(AutoActionPlot.LineChartTime,   triggerTimeStamp, triggerMatches); break;
-				case AutoAction.ScatterPlotXY:     RequestPlot(AutoActionPlot.ScatterPlotXY,   triggerTimeStamp, triggerMatches); break;
-				case AutoAction.ScatterPlotTime:   RequestPlot(AutoActionPlot.ScatterPlotTime, triggerTimeStamp, triggerMatches); break;
-				case AutoAction.Histogram:         RequestPlot(AutoActionPlot.Histogram,       triggerTimeStamp, triggerMatches); break;
+				case AutoAction.LineChartIndex:     RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
+				case AutoAction.LineChartTimeStamp: RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
+				case AutoAction.ScatterPlotXY:      RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
+				case AutoAction.ScatterPlotTime:    RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
+				case AutoAction.Histogram:          RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
 
-				case AutoAction.ClearRepositories: ClearRepositories();                                                          break;
+				case AutoAction.ClearRepositories:  ClearRepositories();                                             break;
 
 				case AutoAction.ClearRepositoriesOnSubsequentRx:
 				{
@@ -613,7 +613,7 @@ namespace YAT.Model
 				case AutoAction.Beep:
 				case AutoAction.ShowMessageBox:
 				case AutoAction.LineChartIndex:
-				case AutoAction.LineChartTime:
+				case AutoAction.LineChartTimeStamp:
 				case AutoAction.ScatterPlotXY:
 				case AutoAction.ScatterPlotTime:
 				case AutoAction.Histogram:
@@ -663,11 +663,11 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual void RequestPlot(AutoActionPlot plot, DateTime triggerTimeStamp, MatchCollection triggerMatches)
+		protected virtual void RequestAutoActionPlot(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches)
 		{
 			AutoActionPlotItem pi;
 			string errorMessage;
-			if (TryCreatePlotItem(plot, triggerTimeStamp, triggerMatches, out pi, out errorMessage))
+			if (TryCreateAutoActionPlotItem(plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage))
 				OnAutoActionPlotRequest(new AutoActionPlotEventArgs(CaptionHelper.ComposeInvariant(IndicatedName, "Plot"), pi));
 			else
 				this.terminal.InlineErrorMessage(Domain.Direction.Rx, errorMessage, true);
@@ -676,26 +676,31 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual bool TryCreatePlotItem(AutoActionPlot plot, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		protected virtual bool TryCreateAutoActionPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
 		{
-			switch (plot)
+			switch (plotAction)
 			{
-				case AutoActionPlot.LineChartIndex: return (TryCreateLineChartIndexItem(                 triggerMatches, out pi, out errorMessage));
-//				case AutoActionPlot.LineChartTime:  return (TryCreateLineChartTimeItem(triggerTimeStamp, triggerMatches, out pi, out errorMessage));
-// PENDING		case AutoActionPlot.ScatterPlot:    return (TryCreateScatterPlotItem(                    triggerMatches, out pi, out errorMessage));
-//				case AutoActionPlot.Histogram:      return (TryCreateHistogramItem(                      triggerMatches, out pi, out errorMessage));
+				case AutoAction.LineChartIndex: return (TryCreateLineChartIndexItem(plotAction,                   triggerMatches, out pi, out errorMessage));
+//				case AutoAction.LineChartTime:  return (TryCreateLineChartTimeItem( plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage));
+// PENDING		case AutoAction.ScatterPlot:    return (TryCreateScatterPlotItem(   plotAction,                   triggerMatches, out pi, out errorMessage));
+// PENDING		case AutoAction.ScatterPlot:    return (TryCreateScatterPlotItem(   plotAction,                   triggerMatches, out pi, out errorMessage));
+//				case AutoAction.Histogram:      return (TryCreateHistogramItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
 
-				default: throw (new ArgumentOutOfRangeException("plot", plot, MessageHelper.InvalidExecutionPreamble + "'" + plot.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+// PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
+// Histogram: Each capture
+
+				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual bool TryCreateLineChartIndexItem(MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		protected virtual bool TryCreateLineChartIndexItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
 		{
-			var values = MatchCollectionEx.ConvertToStringArray(triggerMatches);
-			pi = ConvertToPlotItem(AutoActionPlot.LineChartIndex, values);
+			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
+			var values = ConvertCapturesToPlotValues(AutoAction.LineChartIndex, captures);
+			pi = new ValueCollectionAutoActionPlotItem(plotAction, (AutoActionEx)plotAction, "Index", "Value", values);
 			errorMessage = null;
 			return (true);
 		}
@@ -703,13 +708,13 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual AutoActionPlotItem ConvertToPlotItem(AutoActionPlot plot, string[] values)
+		protected virtual double[] ConvertCapturesToPlotValues(AutoAction plotAction, string[] captures)
 		{
 			var yValues = new List<double>(); // No preset needed, the default behavior is good enough.
 
-			foreach (var s in values)
+			foreach (var s in captures)
 			{
-				// Try parse double:
+				// Try double:
 				{
 					double result;
 					if (double.TryParse(s, out result))
@@ -719,11 +724,27 @@ namespace YAT.Model
 					}
 				}
 
-// PENDING	Zersch mal nume mit double or decimal mache, dänn au DT und s. //.  Textli eimal formuliere, dänn ToolTip & MsgBox
+				// Try DateTime:
+				{
+					DateTime result;
+					if (DateTime.TryParse(s, out result))
+					{
+						yValues.Add(result.ToOADate());
+						continue;
+					}
+				}
 
+				// Use string:
+				{
+					long hash = 0;
+					foreach (char c in s)
+						hash += c;
+
+					yValues.Add(hash);
+				}
 			}
 
-			return (new AutoActionPlotItem(plot, (AutoActionPlotEx)plot, "Index", "Value", null, yValues.ToArray()));
+			return (yValues.ToArray());
 		}
 
 		/// <summary>

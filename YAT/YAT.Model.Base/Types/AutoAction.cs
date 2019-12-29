@@ -51,7 +51,7 @@ namespace YAT.Model.Types
 		ShowMessageBox,
 
 		LineChartIndex,
-		LineChartTime,
+		LineChartTimeStamp,
 		ScatterPlotXY,
 		ScatterPlotTime,
 		Histogram,
@@ -108,13 +108,13 @@ namespace YAT.Model.Types
 		private const string             LineChartIndex_string = "[Line Chart]";
 		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LC]" };
 
-		private const string             LineChartTime_string = "[Line Chart (Time)]";
-		private static readonly string[] LineChartTime_stringAlternatives = new string[] { "[LCT]" };
+		private const string             LineChartTimeStamp_string = "[Line Chart (X = Time Stamp)]";
+		private static readonly string[] LineChartTimeStamp_stringAlternatives = new string[] { "[LCT]" };
 
 		private const string             ScatterPlotXY_string = "[Scatter Plot]";
 		private static readonly string[] ScatterPlotXY_stringAlternatives = new string[] { "[SP]" };
 
-		private const string             ScatterPlotTime_string = "[Scatter Plot (Time)]";
+		private const string             ScatterPlotTime_string = "[Scatter Plot (X = Time)]";
 		private static readonly string[] ScatterPlotTime_stringAlternatives = new string[] { "[SPT]" };
 
 		private const string             Histogram_string = "[Histogram]";
@@ -201,7 +201,7 @@ namespace YAT.Model.Types
 				case AutoAction.ShowMessageBox:                  return (ShowMessageBox_string);
 
 				case AutoAction.LineChartIndex:                  return (LineChartIndex_string);
-				case AutoAction.LineChartTime:                   return (LineChartTime_string);
+				case AutoAction.LineChartTimeStamp:              return (LineChartTimeStamp_string);
 				case AutoAction.ScatterPlotXY:                   return (ScatterPlotXY_string);
 				case AutoAction.ScatterPlotTime:                 return (ScatterPlotTime_string);
 				case AutoAction.Histogram:                       return (Histogram_string);
@@ -297,7 +297,7 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
 
 			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
-			a.Add(new AutoActionEx(AutoAction.LineChartTime));
+			a.Add(new AutoActionEx(AutoAction.LineChartTimeStamp));
 			a.Add(new AutoActionEx(AutoAction.ScatterPlotXY));
 			a.Add(new AutoActionEx(AutoAction.ScatterPlotTime));
 			a.Add(new AutoActionEx(AutoAction.Histogram));
@@ -407,10 +407,10 @@ namespace YAT.Model.Types
 				result = AutoAction.LineChartIndex;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartTime_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartTime_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartTimeStamp_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartTimeStamp_stringAlternatives))
 			{
-				result = AutoAction.LineChartTime;
+				result = AutoAction.LineChartTimeStamp;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlotXY_string) ||

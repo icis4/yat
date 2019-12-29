@@ -22,17 +22,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.Generic;
+using System;
 
 namespace YAT.Model.Types
 {
 	/// <summary>
 	/// Defines an item to plot.
 	/// </summary>
-	public class AutoActionPlotItem
+	public abstract class AutoActionPlotItem
 	{
 		/// <summary></summary>
-		public AutoActionPlot Type { get; }
+		public AutoAction Action { get; }
 
 		/// <summary></summary>
 		public string Title { get; }
@@ -44,23 +44,68 @@ namespace YAT.Model.Types
 		public string YCaption { get; }
 
 		/// <summary></summary>
-		public double[] XValues { get; }
+		public AutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption)
+		{
+			Action   = action;
+			Title    = title;
+			XCaption = xCaption;
+			YCaption = yCaption;
+		}
+	}
 
+	/// <summary>
+	/// Defines an item to plot.
+	/// </summary>
+	public class ValueCollectionAutoActionPlotItem : AutoActionPlotItem
+	{
 		/// <summary></summary>
 		public double[] YValues { get; }
 
 		/// <summary></summary>
-		public AutoActionPlotItem(AutoActionPlot type, string title, string xCaption, string yCaption, double[] xValues, double[] yValues)
+		public ValueCollectionAutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption, double[] yValues)
+			: base(action, title, xCaption, yCaption)
 		{
-			Type = type;
-
-			Title = title;
-
-			XCaption = xCaption;
-			YCaption = yCaption;
-
-			XValues = xValues;
 			YValues = yValues;
+		}
+	}
+
+	/// <summary>
+	/// Defines an item to plot.
+	/// </summary>
+	public class ValuePairAutoActionPlotItem : AutoActionPlotItem
+	{
+		/// <summary></summary>
+		public double XValue { get; }
+
+		/// <summary></summary>
+		public double YValue { get; }
+
+		/// <summary></summary>
+		public ValuePairAutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption, double xValue, double yValue)
+			: base(action, title, xCaption, yCaption)
+		{
+			XValue = xValue;
+			YValue = yValue;
+		}
+	}
+
+	/// <summary>
+	/// Defines an item to plot.
+	/// </summary>
+	public class ValueTimeAutoActionPlotItem : AutoActionPlotItem
+	{
+		/// <summary></summary>
+		public DateTime XValue { get; }
+
+		/// <summary></summary>
+		public double YValue { get; }
+
+		/// <summary></summary>
+		public ValueTimeAutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption, DateTime xValue, double yValue)
+			: base(action, title, xCaption, yCaption)
+		{
+			XValue = xValue;
+			YValue = yValue;
 		}
 	}
 }
