@@ -137,6 +137,16 @@ namespace ScottPlot
             Render(skipIfCurrentlyRendering: false);
         }
 
+        private void PbPlot_MouseEnter(object sender, EventArgs e)
+        {
+            OnMouseEntered(EventArgs.Empty);
+        }
+
+        private void PbPlot_MouseLeave(object sender, EventArgs e)
+        {
+            OnMouseLeft(EventArgs.Empty);
+        }
+
         private void PbPlot_MouseDown(object sender, MouseEventArgs e)
         {
             plt.mouseTracker.MouseDown(e.Location);
@@ -257,6 +267,8 @@ namespace ScottPlot
             AxesChanged?.Invoke(this, e);
         }
 
+        public event EventHandler MouseEntered;
+        public event EventHandler MouseLeft;
         public event EventHandler MouseDownOnPlottable;
         public event EventHandler MouseDragPlottable;
         public event EventHandler MouseMoved;
@@ -264,6 +276,8 @@ namespace ScottPlot
         public event EventHandler MouseDropPlottable;
         public event EventHandler AxesChanged;
         public event MouseEventHandler MouseClicked;
+        protected virtual void OnMouseEntered(EventArgs e) { MouseEntered?.Invoke(this, e); }
+        protected virtual void OnMouseLeft(EventArgs e) { MouseLeft?.Invoke(this, e); }
         protected virtual void OnMouseDownOnPlottable(EventArgs e) { MouseDownOnPlottable?.Invoke(this, e); }
         protected virtual void OnMouseDragPlottable(EventArgs e) { MouseDragPlottable?.Invoke(this, e); }
         protected virtual void OnMouseMoved(EventArgs e) { MouseMoved?.Invoke(this, e); }
