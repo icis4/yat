@@ -35,7 +35,7 @@ namespace MKY.Text.RegularExpressions
 		/// <summary>
 		/// Validates the given regular expression pattern.
 		/// </summary>
-		public static string[] ConvertToStringArray(MatchCollection matches)
+		public static string[] UnfoldCapturesToStringArray(MatchCollection matches)
 		{
 			var values = new List<string>(); // No preset needed, the default behavior is good enough.
 

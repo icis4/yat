@@ -418,7 +418,7 @@ namespace YAT.Model
 					{
 						if (triggerMatches != null)
 						{
-							var values = MatchCollectionEx.ConvertToStringArray(triggerMatches);
+							var values = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
 
 							                 // Negative lookbehind for not matching "\$" nor "$$".
 							                           // Replacement '$'.
