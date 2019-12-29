@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSettings));
-			this.btnSave = new System.Windows.Forms.Button();
+			this.btnOK = new System.Windows.Forms.Button();
 			this.tbY2 = new System.Windows.Forms.TextBox();
 			this.tbY1 = new System.Windows.Forms.TextBox();
 			this.tbX2 = new System.Windows.Forms.TextBox();
@@ -78,16 +78,16 @@
 			this.groupBox7.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// btnSave
+			// btnOK
 			// 
-			this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnSave.Location = new System.Drawing.Point(390, 441);
-			this.btnSave.Name = "btnSave";
-			this.btnSave.Size = new System.Drawing.Size(59, 23);
-			this.btnSave.TabIndex = 10;
-			this.btnSave.Text = "Save";
-			this.btnSave.UseVisualStyleBackColor = true;
-			this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnOK.Location = new System.Drawing.Point(390, 441);
+			this.btnOK.Name = "btnOK";
+			this.btnOK.Size = new System.Drawing.Size(59, 23);
+			this.btnOK.TabIndex = 10;
+			this.btnOK.Text = "OK";
+			this.btnOK.UseVisualStyleBackColor = true;
+			this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
 			// 
 			// tbY2
 			// 
@@ -119,12 +119,14 @@
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.cbQualityLowWhileDragging);
 			this.groupBox3.Controls.Add(this.rbQualityHigh);
 			this.groupBox3.Controls.Add(this.rbQualityLow);
 			this.groupBox3.Location = new System.Drawing.Point(263, 241);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(245, 47);
+			this.groupBox3.Size = new System.Drawing.Size(251, 47);
 			this.groupBox3.TabIndex = 5;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Image Quality";
@@ -387,6 +389,7 @@
 			// btnCancel
 			// 
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.Location = new System.Drawing.Point(455, 441);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(59, 23);
@@ -439,10 +442,12 @@
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox2.Controls.Add(this.cbLegend);
 			this.groupBox2.Location = new System.Drawing.Point(263, 188);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(245, 47);
+			this.groupBox2.Size = new System.Drawing.Size(251, 47);
 			this.groupBox2.TabIndex = 16;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Legend";
@@ -459,10 +464,12 @@
 			// 
 			// groupBox7
 			// 
+			this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox7.Controls.Add(this.cbStyle);
 			this.groupBox7.Location = new System.Drawing.Point(263, 294);
 			this.groupBox7.Name = "groupBox7";
-			this.groupBox7.Size = new System.Drawing.Size(245, 47);
+			this.groupBox7.Size = new System.Drawing.Size(251, 47);
 			this.groupBox7.TabIndex = 17;
 			this.groupBox7.TabStop = false;
 			this.groupBox7.Text = "Color Style";
@@ -475,7 +482,7 @@
 			this.cbStyle.FormattingEnabled = true;
 			this.cbStyle.Location = new System.Drawing.Point(6, 19);
 			this.cbStyle.Name = "cbStyle";
-			this.cbStyle.Size = new System.Drawing.Size(233, 21);
+			this.cbStyle.Size = new System.Drawing.Size(239, 21);
 			this.cbStyle.TabIndex = 0;
 			// 
 			// btnTighten
@@ -490,21 +497,27 @@
 			// 
 			// FormSettings
 			// 
+			this.AcceptButton = this.btnOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(526, 476);
 			this.Controls.Add(this.btnTighten);
 			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.btnCancel);
-			this.Controls.Add(this.btnSave);
+			this.Controls.Add(this.btnOK);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.groupBox3);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "FormSettings";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Plot Settings";
 			this.Load += new System.EventHandler(this.FormSettings_Load);
 			this.groupBox3.ResumeLayout(false);
@@ -535,7 +548,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button btnExportCSV;
         private System.Windows.Forms.ListBox lbPlotObjects;
-        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.CheckBox cbQualityLowWhileDragging;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button btnFitDataY;
