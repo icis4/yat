@@ -33,6 +33,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections.Generic;
 
 using YAT.Model.Types;
 using YAT.Settings.Application;
@@ -49,15 +50,17 @@ namespace YAT.View.Forms
 		// Fields
 		//==========================================================================================
 
+		private bool plotUpdateIsRequired; // = false;
 		private bool plotUpdateIsSuspended; // = false;
 
-		private Model.Types.AutoActionPlot plotType;
+		private AutoAction plotAction;
 		private string plotTitle;
 		private string plotXLabel;
 		private string plotYLabel;
-		private List<double> plotXValues = new List<double>(1024); // Preset the initial capacity to improve memory management; 1024 is an arbitrary value.
-		private List<double> plotYValues = new List<double>(1024); // Preset the initial capacity to improve memory management; 1024 is an arbitrary value.
-		private object plotSyncObj = new object();
+		private List<List<double>> plotYSets;
+		private List<DateTime> plotXTimes;
+		private List<double> plotXValues;
+		private List<double> plotYValues;
 
 		#endregion
 
@@ -70,6 +73,9 @@ namespace YAT.View.Forms
 		public AutoActionPlot()
 		{
 			InitializeComponent();
+
+			checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+			checkBox_ShowHover .Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowHover;
 		}
 
 		#endregion
@@ -82,13 +88,18 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public void AddItem(AutoActionPlotItem pi)
 		{
-			switch (pi.Type)
+			this.plotAction = pi.Action;
+			this.plotTitle  = pi.Title;
+			this.plotXLabel = pi.XCaption;
+			this.plotYLabel = pi.YCaption;
+
+			switch (pi.Action)
 			{
-				case Model.Types.AutoActionPlot.LineChartIndex:  AddItemToLineChartIndex(pi);  break;
-				case Model.Types.AutoActionPlot.LineChartTime:   AddItemToLineChartTime(pi);   break;
-				case Model.Types.AutoActionPlot.ScatterPlotXY:   AddItemToScatterPlotXY(pi);   break;
-				case Model.Types.AutoActionPlot.ScatterPlotTime: AddItemToScatterPlotTime(pi); break;
-				case Model.Types.AutoActionPlot.Histogram:       AddItemToHistogram(pi);       break;
+				case AutoAction.LineChartIndex:     AddItemToLineChartIndex(pi);     break;
+				case AutoAction.LineChartTimeStamp: AddItemToLineChartTimeStamp(pi); break;
+				case AutoAction.ScatterPlotXY:      AddItemToScatterPlotXY(pi);      break;
+				case AutoAction.ScatterPlotTime:    AddItemToScatterPlotXTime(pi);   break;
+				case AutoAction.Histogram:          AddItemToHistogram(pi);          break;
 			}
 		}
 
@@ -101,8 +112,22 @@ namespace YAT.View.Forms
 
 		private void timer_PlotUpdate_Tick(object sender, EventArgs e)
 		{
-			if (!this.plotUpdateIsSuspended)
+			if (this.plotUpdateIsRequired && !this.plotUpdateIsSuspended) {
+				this.plotUpdateIsRequired = false; // No synchronization is needed
 				UpdatePlot();
+			}
+		}
+
+		private void scottPlot_MouseEntered(object sender, EventArgs e)
+		{
+			label_UpdateSuspended.Visible = true;
+			this.plotUpdateIsSuspended = true;
+		}
+
+		private void scottPlot_MouseLeft(object sender, EventArgs e)
+		{
+			this.plotUpdateIsSuspended = false;
+			label_UpdateSuspended.Visible = false;
 		}
 
 		private void scottPlot_MouseMoved(object sender, EventArgs e)
@@ -126,22 +151,6 @@ namespace YAT.View.Forms
 			UpdateHover();
 		}
 
-		private void button_Pause_Click(object sender, EventArgs e)
-		{
-			this.plotUpdateIsSuspended = true;
-
-			button_Pause   .Visible = false;
-			button_Continue.Visible = true;
-		}
-
-		private void button_Continue_Click(object sender, EventArgs e)
-		{
-			this.plotUpdateIsSuspended = false;
-
-			button_Continue.Visible = false;
-			button_Pause   .Visible = true;
-		}
-
 		private void button_Clear_Click(object sender, EventArgs e)
 		{
 			ClearValues();
@@ -161,130 +170,96 @@ namespace YAT.View.Forms
 
 		private void AddItemToLineChartIndex(AutoActionPlotItem pi)
 		{
-			lock (this.plotSyncObj)
+			var vc = (pi as ValueCollectionAutoActionPlotItem);
+
+			if (this.plotYSets == null)
 			{
-				this.plotType = pi.Type;
-
-				this.plotTitle = pi.Title;
-
-				this.plotXLabel = pi.XCaption;
-				this.plotYLabel = pi.YCaption;
-
-				this.plotYValues.AddRange(pi.YValues); // PENDING: Chabis, multiple signals !!!
+				this.plotYSets = new List<List<double>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
+				for (int i = 0; i < vc.YValues.Length; i++)
+					this.plotYSets.Add(new List<double>(1024)); // Preset the initial capacity to improve memory management; 1024 is an arbitrary value.
 			}
+
+			for (int i = 0; i < vc.YValues.Length; i++)
+				this.plotYSets[i].Add(vc.YValues[i]);
+
+			this.plotUpdateIsRequired = true;
 		}
 
-		private void AddItemToLineChartTime(AutoActionPlotItem pi)
+		private void AddItemToLineChartTimeStamp(AutoActionPlotItem pi)
 		{
-			lock (this.plotSyncObj)
-			{
-				this.plotType = pi.Type;
-
-				this.plotTitle = pi.Title;
-
-				this.plotXLabel = pi.XCaption;
-				this.plotYLabel = pi.YCaption;
-
-				this.plotXValues.AddRange(pi.XValues);
-				this.plotYValues.AddRange(pi.YValues);
-			}
+			// PENDING
 		}
 
 		private void AddItemToScatterPlotXY(AutoActionPlotItem pi)
 		{
-			lock (this.plotSyncObj)
-			{
-				this.plotType = pi.Type;
-
-				this.plotTitle = pi.Title;
-
-				this.plotXLabel = pi.XCaption;
-				this.plotYLabel = pi.YCaption;
-
-				this.plotXValues.AddRange(pi.XValues);
-				this.plotYValues.AddRange(pi.YValues);
-			}
+			// PENDING
 		}
 
-		private void AddItemToScatterPlotTime(AutoActionPlotItem pi)
+		private void AddItemToScatterPlotXTime(AutoActionPlotItem pi)
 		{
-			lock (this.plotSyncObj)
-			{
-				this.plotType = pi.Type;
-
-				this.plotTitle = pi.Title;
-
-				this.plotXLabel = pi.XCaption;
-				this.plotYLabel = pi.YCaption;
-
-				this.plotXValues.AddRange(pi.XValues);
-				this.plotYValues.AddRange(pi.YValues);
-			}
+			// PENDING
 		}
 
 		private void AddItemToHistogram(AutoActionPlotItem pi)
 		{
-			lock (this.plotSyncObj)
-			{
-				this.plotType = pi.Type;
-
-				this.plotTitle = pi.Title;
-
-				this.plotXLabel = pi.XCaption;
-				this.plotYLabel = pi.YCaption;
-
-				this.plotXValues.AddRange(pi.XValues);
-				this.plotYValues.AddRange(pi.YValues);
-
-				// PENDING Make histo bins and counts
-			}
+			// PENDING Make histo bins and counts (bins epsilon up to 1024, then equally distributed)
 		}
 
 		private void ClearValues()
 		{
-			lock (this.plotSyncObj)
-			{
-				this.plotXValues.Clear();
-				this.plotYValues.Clear();
-			}
+			this.plotYSets = null;
+			this.plotXTimes = null;
+			this.plotXValues = null;
+			this.plotYValues = null;
 		}
 
 		private void UpdatePlot()
 		{
 			scottPlot.plt.Clear();
 
-			lock (this.plotSyncObj)
+			scottPlot.plt.Title(this.plotTitle);
+			scottPlot.plt.XLabel(this.plotXLabel);
+			scottPlot.plt.YLabel(this.plotYLabel);
+
+			switch (this.plotAction)
 			{
-				scottPlot.plt.Title(this.plotTitle);
-				scottPlot.plt.XLabel(this.plotXLabel);
-				scottPlot.plt.YLabel(this.plotYLabel);
+				case AutoAction.LineChartIndex: {
+					if (this.plotYSets != null) {
+						foreach (var l in this.plotYSets) {
+							scottPlot.plt.PlotSignal(l.ToArray());
+						}
+					}
+					break;
+				}
 
-				switch (this.plotType)
-				{
-					case Model.Types.AutoActionPlot.LineChartIndex:
-						scottPlot.plt.PlotSignal(this.plotYValues.ToArray());
-						break;
+				case AutoAction.LineChartTimeStamp: {
+					// PENDING
+				//	scottPlot.plt.Ticks(dateTimeX: true);
+				//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray());
+					break;
+				}
 
-					case Model.Types.AutoActionPlot.LineChartTime:
-						scottPlot.plt.Ticks(dateTimeX: true);
-						scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray());
-						break;
+				case AutoAction.ScatterPlotXY: {
+					// PENDING
+				//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+					break;
+				}
 
-					case Model.Types.AutoActionPlot.ScatterPlotXY:
-						scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
-						break;
+				case AutoAction.ScatterPlotTime: {
+					// PENDING
+				//	scottPlot.plt.Ticks(dateTimeX: true);
+				//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+					break;
+				}
 
-					case Model.Types.AutoActionPlot.ScatterPlotTime:
-						scottPlot.plt.Ticks(dateTimeX: true);
-						scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
-						break;
+				case AutoAction.Histogram: {
+					// PENDING
+				//	scottPlot.plt.PlotBar(this.plotXValues.ToArray(), this.plotYValues.ToArray(), barWidth: ToHistogramBarWidth(this.plotXValues));
+					break;
+				}
 
-					case Model.Types.AutoActionPlot.Histogram:
-						scottPlot.plt.PlotBar(this.plotXValues.ToArray(), this.plotYValues.ToArray(), barWidth: ToHistogramBarWidth(this.plotXValues));
-						break;
-
-					default:
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.plotType.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: {
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.plotAction.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 
@@ -312,24 +287,24 @@ namespace YAT.View.Forms
 			cursorPos.X -= this.PointToScreen(scottPlot.Location).X;
 			cursorPos.Y -= this.PointToScreen(scottPlot.Location).Y;
 
-			switch (this.plotType)
+			switch (this.plotAction)
 			{
-				case Model.Types.AutoActionPlot.LineChartIndex:
+				case AutoAction.LineChartIndex:
 					UpdateHoverOnSignal(cursorPos);
 					break;
 
-				case Model.Types.AutoActionPlot.LineChartTime:
-				case Model.Types.AutoActionPlot.ScatterPlotXY:
-				case Model.Types.AutoActionPlot.ScatterPlotTime:
+				case AutoAction.LineChartTimeStamp:
+				case AutoAction.ScatterPlotXY:
+				case AutoAction.ScatterPlotTime:
 					UpdateHoverOnScatter(cursorPos);
 					break;
 
-				case Model.Types.AutoActionPlot.Histogram:
+				case AutoAction.Histogram:
 					UpdateHoverOnHistogram(cursorPos);
 					break;
 
 				default:
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.plotType.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.plotAction.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			scottPlot.Render();
