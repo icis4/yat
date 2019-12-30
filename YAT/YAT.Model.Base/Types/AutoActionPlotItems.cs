@@ -35,21 +35,9 @@ namespace YAT.Model.Types
 		public AutoAction Action { get; }
 
 		/// <summary></summary>
-		public string Title { get; }
-
-		/// <summary></summary>
-		public string XCaption { get; }
-
-		/// <summary></summary>
-		public string YCaption { get; }
-
-		/// <summary></summary>
-		public AutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption)
+		public AutoActionPlotItem(AutoAction action)
 		{
-			Action   = action;
-			Title    = title;
-			XCaption = xCaption;
-			YCaption = yCaption;
+			Action = action;
 		}
 	}
 
@@ -59,11 +47,11 @@ namespace YAT.Model.Types
 	public class ValueCollectionAutoActionPlotItem : AutoActionPlotItem
 	{
 		/// <summary></summary>
-		public double[] YValues { get; }
+		public Tuple<string, double>[] YValues { get; }
 
 		/// <summary></summary>
-		public ValueCollectionAutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption, double[] yValues)
-			: base(action, title, xCaption, yCaption)
+		public ValueCollectionAutoActionPlotItem(AutoAction action, Tuple<string, double>[] yValues)
+			: base(action)
 		{
 			YValues = yValues;
 		}
@@ -75,14 +63,14 @@ namespace YAT.Model.Types
 	public class ValuePairAutoActionPlotItem : AutoActionPlotItem
 	{
 		/// <summary></summary>
-		public double XValue { get; }
+		public Tuple<string, double> XValue { get; }
 
 		/// <summary></summary>
-		public double YValue { get; }
+		public Tuple<string, double> YValue { get; }
 
 		/// <summary></summary>
-		public ValuePairAutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption, double xValue, double yValue)
-			: base(action, title, xCaption, yCaption)
+		public ValuePairAutoActionPlotItem(AutoAction action, Tuple<string, double> xValue, Tuple<string, double> yValue)
+			: base(action)
 		{
 			XValue = xValue;
 			YValue = yValue;
@@ -95,14 +83,14 @@ namespace YAT.Model.Types
 	public class ValueTimeAutoActionPlotItem : AutoActionPlotItem
 	{
 		/// <summary></summary>
-		public DateTime XValue { get; }
+		public Tuple<string, DateTime> XValue { get; }
 
 		/// <summary></summary>
-		public double YValue { get; }
+		public Tuple<string, double> YValue { get; }
 
 		/// <summary></summary>
-		public ValueTimeAutoActionPlotItem(AutoAction action, string title, string xCaption, string yCaption, DateTime xValue, double yValue)
-			: base(action, title, xCaption, yCaption)
+		public ValueTimeAutoActionPlotItem(AutoAction action, Tuple<string, DateTime> xValue, Tuple<string, double> yValue)
+			: base(action)
 		{
 			XValue = xValue;
 			YValue = yValue;

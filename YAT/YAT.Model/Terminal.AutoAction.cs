@@ -700,7 +700,7 @@ namespace YAT.Model
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
 			var values = ConvertCapturesToPlotValues(AutoAction.LineChartIndex, captures);
-			pi = new ValueCollectionAutoActionPlotItem(plotAction, (AutoActionEx)plotAction, "Index", "Value", values);
+			pi = new ValueCollectionAutoActionPlotItem(plotAction, values);
 			errorMessage = null;
 			return (true);
 		}
@@ -708,9 +708,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual double[] ConvertCapturesToPlotValues(AutoAction plotAction, string[] captures)
+		protected virtual Tuple<string, double>[] ConvertCapturesToPlotValues(AutoAction plotAction, string[] captures)
 		{
-			var yValues = new List<double>(); // No preset needed, the default behavior is good enough.
+			var yValues = new List<Tuple<string, double>>(); // No preset needed, the default behavior is good enough.
 
 			foreach (var s in captures)
 			{
@@ -719,7 +719,7 @@ namespace YAT.Model
 					double result;
 					if (double.TryParse(s, out result))
 					{
-						yValues.Add(result);
+						yValues.Add(new Tuple<string, double>("numeric values", result));
 						continue;
 					}
 				}
@@ -729,7 +729,7 @@ namespace YAT.Model
 					DateTime result;
 					if (DateTime.TryParse(s, out result))
 					{
-						yValues.Add(result.ToOADate());
+						yValues.Add(new Tuple<string, double>("time", result.ToOADate()));
 						continue;
 					}
 				}
@@ -740,7 +740,7 @@ namespace YAT.Model
 					foreach (char c in s)
 						hash += c;
 
-					yValues.Add(hash);
+					yValues.Add(new Tuple<string, double>("sum of character codes", hash));
 				}
 			}
 

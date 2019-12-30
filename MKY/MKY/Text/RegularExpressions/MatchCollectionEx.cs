@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -33,7 +34,7 @@ namespace MKY.Text.RegularExpressions
 	public static class MatchCollectionEx
 	{
 		/// <summary>
-		/// Validates the given regular expression pattern.
+		/// Unfolds the captures of the given matches to a string array.
 		/// </summary>
 		public static string[] UnfoldCapturesToStringArray(MatchCollection matches)
 		{
@@ -45,6 +46,25 @@ namespace MKY.Text.RegularExpressions
 				{
 					foreach (Capture c in m.Groups[gnum].Captures)
 						values.Add(c.Value);
+				}
+			}
+
+			return (values.ToArray());
+		}
+
+		/// <summary>
+		/// Unfolds the captures of the given matches to a tuple array.
+		/// </summary>
+		public static Tuple<Match, Group, Capture>[] UnfoldCapturesToTupleArray(MatchCollection matches)
+		{
+			var values = new List<Tuple<Match, Group, Capture>>(); // No preset needed, the default behavior is good enough.
+
+			foreach (Match m in matches)
+			{
+				for (int gnum = 1; gnum <= m.Groups.Count; gnum++)
+				{
+					foreach (Capture c in m.Groups[gnum].Captures)
+						values.Add(new Tuple<Match, Group, Capture>(m, m.Groups[gnum], c));
 				}
 			}
 

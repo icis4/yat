@@ -7455,7 +7455,7 @@ namespace YAT.View.Forms
 					this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText(e.FormTitle);
 					this.autoActionPlotForm.AddItem(e.PlotItem);
 					this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
-					this.autoActionPlotForm.Show();
+					this.autoActionPlotForm.Show(this);
 				}
 				else
 				{

@@ -33,7 +33,6 @@
 			this.button_Close = new System.Windows.Forms.Button();
 			this.button_Clear = new System.Windows.Forms.Button();
 			this.checkBox_ShowLegend = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowHover = new System.Windows.Forms.CheckBox();
 			this.timer_PlotUpdate = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
@@ -46,7 +45,7 @@
 			this.button_Close.Location = new System.Drawing.Point(797, 406);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
-			this.button_Close.TabIndex = 5;
+			this.button_Close.TabIndex = 4;
 			this.button_Close.Text = "&Close";
 			this.button_Close.UseVisualStyleBackColor = true;
 			this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
@@ -57,7 +56,7 @@
 			this.button_Clear.Location = new System.Drawing.Point(716, 406);
 			this.button_Clear.Name = "button_Clear";
 			this.button_Clear.Size = new System.Drawing.Size(75, 23);
-			this.button_Clear.TabIndex = 4;
+			this.button_Clear.TabIndex = 3;
 			this.button_Clear.Text = "C&lear";
 			this.button_Clear.UseVisualStyleBackColor = true;
 			this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
@@ -74,18 +73,6 @@
 			this.checkBox_ShowLegend.UseVisualStyleBackColor = true;
 			this.checkBox_ShowLegend.CheckedChanged += new System.EventHandler(this.checkBox_ShowLegend_CheckedChanged);
 			// 
-			// checkBox_ShowHover
-			// 
-			this.checkBox_ShowHover.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkBox_ShowHover.AutoSize = true;
-			this.checkBox_ShowHover.Location = new System.Drawing.Point(110, 410);
-			this.checkBox_ShowHover.Name = "checkBox_ShowHover";
-			this.checkBox_ShowHover.Size = new System.Drawing.Size(130, 17);
-			this.checkBox_ShowHover.TabIndex = 2;
-			this.checkBox_ShowHover.Text = "Show Value on &Hover";
-			this.checkBox_ShowHover.UseVisualStyleBackColor = true;
-			this.checkBox_ShowHover.CheckedChanged += new System.EventHandler(this.checkBox_ShowHover_CheckedChanged);
-			// 
 			// timer_PlotUpdate
 			// 
 			this.timer_PlotUpdate.Enabled = true;
@@ -97,10 +84,10 @@
 			this.label_UpdateSuspended.AutoSize = true;
 			this.label_UpdateSuspended.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_UpdateSuspended.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_UpdateSuspended.Location = new System.Drawing.Point(246, 411);
+			this.label_UpdateSuspended.Location = new System.Drawing.Point(184, 411);
 			this.label_UpdateSuspended.Name = "label_UpdateSuspended";
 			this.label_UpdateSuspended.Size = new System.Drawing.Size(444, 13);
-			this.label_UpdateSuspended.TabIndex = 3;
+			this.label_UpdateSuspended.TabIndex = 2;
 			this.label_UpdateSuspended.Text = "Update is suspended while mouse is on plot (required for mouse interaction, e.g. " +
     "zoom in/out)";
 			this.label_UpdateSuspended.Visible = false;
@@ -124,7 +111,6 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(884, 441);
 			this.Controls.Add(this.label_UpdateSuspended);
-			this.Controls.Add(this.checkBox_ShowHover);
 			this.Controls.Add(this.checkBox_ShowLegend);
 			this.Controls.Add(this.button_Clear);
 			this.Controls.Add(this.scottPlot);
@@ -144,7 +130,6 @@
 		private ScottPlot.FormsPlot scottPlot;
 		private System.Windows.Forms.Button button_Clear;
 		private System.Windows.Forms.CheckBox checkBox_ShowLegend;
-		private System.Windows.Forms.CheckBox checkBox_ShowHover;
 		private System.Windows.Forms.Timer timer_PlotUpdate;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_UpdateSuspended;
