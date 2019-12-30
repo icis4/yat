@@ -1,0 +1,29 @@
+
+Note that .ods or .xlsx intentionally isn't committed to source control.
+This saves approx. 100 MB of repo space.
+
+1. Open OpenOffice Calc or Microsoft Excel
+2. Fill in the following values and formula:
+    A1: 0
+    B1: =SIN((A1/360)*2*PI())
+    C1: =RUNDEN(B1*360; 2)
+    D1: =RUNDEN(B1*360; 2)
+    E1: =WENN(D1>=0; 100; -100)
+    F1: =ZEICHEN(65+(ABS(D1)/15))
+    G1: =VERKETTEN("A"; F1; "Z")
+3. Extend:
+    A2: =A1+1
+    B1:G1 copy and paste to B2:G2
+3. Complete short series by selecting A2:G2 and drag down to row 361
+4. Complete long series by selecting A361:E361 and then...
+    ...Calc: [Ctrl+Shift+End], [Ctrl+D]
+    ...Excel: [Ctrl+C], [Ctrl+Shift+ArrowDown], [Ctrl+V]
+5. Export short series by selecting then copy-pasting to a text editor
+    Save C1 through C361 to Plot-1-Double.txt
+    Save D1 through D361 to Plot-2-Integer.txt
+    Save G1 through G361 to Plot-3-String.txt
+    Save C1:G1 through C361:G361 to Plot-4-Combined.txt
+6. Export short series by selecting then copy-pasting to a text editor
+    Save row C to Plot-5-EnormousDouble.txt
+    Save rows D:E to Plot-6-EnormousIntegers.txt
+   (or copy D:E into new sheet and then export as tab separated .txt)
