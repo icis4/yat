@@ -31,7 +31,6 @@ namespace YAT.Application.Settings
 	public class PlotSettings : MKY.Settings.SettingsItem, IEquatable<PlotSettings>
 	{
 		private bool showLegend;
-		private bool showHover;
 
 		/// <summary></summary>
 		public PlotSettings()
@@ -55,7 +54,6 @@ namespace YAT.Application.Settings
 			: base(rhs)
 		{
 			ShowLegend = rhs.ShowLegend;
-			ShowHover  = rhs.ShowHover;
 
 			ClearChanged();
 		}
@@ -68,7 +66,6 @@ namespace YAT.Application.Settings
 			base.SetMyDefaults();
 
 			ShowLegend = false;
-			ShowHover  = false;
 		}
 
 		#region Properties
@@ -86,21 +83,6 @@ namespace YAT.Application.Settings
 				if (this.showLegend != value)
 				{
 					this.showLegend = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ShowHover")]
-		public bool ShowHover
-		{
-			get { return (this.showHover); }
-			set
-			{
-				if (this.showHover != value)
-				{
-					this.showHover = value;
 					SetMyChanged();
 				}
 			}
@@ -127,7 +109,6 @@ namespace YAT.Application.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ ShowLegend.GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowHover .GetHashCode();
 
 				return (hashCode);
 			}
@@ -158,8 +139,7 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				ShowLegend.Equals(other.ShowLegend) &&
-				ShowHover .Equals(other.ShowHover)
+				ShowLegend.Equals(other.ShowLegend)
 			);
 		}
 

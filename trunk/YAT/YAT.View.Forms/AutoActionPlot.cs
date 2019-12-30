@@ -57,10 +57,13 @@ namespace YAT.View.Forms
 		private string plotTitle;
 		private string plotXLabel;
 		private string plotYLabel;
-		private List<List<double>> plotYSets;
-		private List<DateTime> plotXTimes;
-		private List<double> plotXValues;
-		private List<double> plotYValues;
+		private List<Tuple<string, List<double>>> plotYSets;
+		private List<Tuple<string, DateTime>> plotXTimes;
+		private List<Tuple<string, double>> plotXValues;
+		private List<Tuple<string, double>> plotYValues;
+
+		// The above variables define the plot model. For simplicity, the model is directly defined
+		// here in the view, i.e. is more of a view model than a true model.
 
 		#endregion
 
@@ -75,7 +78,6 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
-			checkBox_ShowHover .Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowHover;
 		}
 
 		#endregion
@@ -89,9 +91,8 @@ namespace YAT.View.Forms
 		public void AddItem(AutoActionPlotItem pi)
 		{
 			this.plotAction = pi.Action;
-			this.plotTitle  = pi.Title;
-			this.plotXLabel = pi.XCaption;
-			this.plotYLabel = pi.YCaption;
+
+			this.plotTitle = (AutoActionEx)pi.Action;
 
 			switch (pi.Action)
 			{
@@ -143,17 +144,9 @@ namespace YAT.View.Forms
 			UpdatePlot();
 		}
 
-		private void checkBox_ShowHover_CheckedChanged(object sender, EventArgs e)
-		{
-			ApplicationSettings.RoamingUserSettings.Plot.ShowHover = !ApplicationSettings.RoamingUserSettings.Plot.ShowHover;
-			ApplicationSettings.SaveRoamingUserSettings();
-
-			UpdateHover();
-		}
-
 		private void button_Clear_Click(object sender, EventArgs e)
 		{
-			ClearValues();
+			Clear();
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)
@@ -170,17 +163,29 @@ namespace YAT.View.Forms
 
 		private void AddItemToLineChartIndex(AutoActionPlotItem pi)
 		{
+			this.plotXLabel = "Index";
+			this.plotYLabel = "Value";
+
 			var vc = (pi as ValueCollectionAutoActionPlotItem);
 
 			if (this.plotYSets == null)
+				this.plotYSets = new List<Tuple<string, List<double>>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
+
+			for (int i = this.plotYSets.Count; i < vc.YValues.Length; i++)
 			{
-				this.plotYSets = new List<List<double>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
-				for (int i = 0; i < vc.YValues.Length; i++)
-					this.plotYSets.Add(new List<double>(1024)); // Preset the initial capacity to improve memory management; 1024 is an arbitrary value.
+				string label = vc.YValues[i].Item1;
+
+				List<double> values;
+				if ((i == 0) || (this.plotYSets[0].Item2.Count == 0))
+					values = new List<double>(1024); // Add a new empty list.
+				else
+					values = new List<double>(new double[this.plotYSets[0].Item2.Count]); // Add a new list filled with default values.
+
+				this.plotYSets.Add(new Tuple<string, List<double>>(label, values));
 			}
 
 			for (int i = 0; i < vc.YValues.Length; i++)
-				this.plotYSets[i].Add(vc.YValues[i]);
+				this.plotYSets[i].Item2.Add(vc.YValues[i].Item2);
 
 			this.plotUpdateIsRequired = true;
 		}
@@ -205,12 +210,14 @@ namespace YAT.View.Forms
 			// PENDING Make histo bins and counts (bins epsilon up to 1024, then equally distributed)
 		}
 
-		private void ClearValues()
+		private void Clear()
 		{
 			this.plotYSets = null;
 			this.plotXTimes = null;
 			this.plotXValues = null;
 			this.plotYValues = null;
+
+			UpdatePlot();
 		}
 
 		private void UpdatePlot()
@@ -225,8 +232,8 @@ namespace YAT.View.Forms
 			{
 				case AutoAction.LineChartIndex: {
 					if (this.plotYSets != null) {
-						foreach (var l in this.plotYSets) {
-							scottPlot.plt.PlotSignal(l.ToArray());
+						foreach (var kvp in this.plotYSets) {
+							scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
 						}
 					}
 					break;
@@ -353,7 +360,7 @@ namespace YAT.View.Forms
 			highlightScatter.xs[0] = scatterPlot.xs[closestIndex];
 			highlightScatter.ys[0] = scatterPlot.ys[closestIndex];
 
-			if ((ApplicationSettings.RoamingUserSettings.Plot.ShowHover) && (closestDistance < 20))
+			if (closestDistance < 20)
 			{
 				highlightText.text = string.Format
 				(
