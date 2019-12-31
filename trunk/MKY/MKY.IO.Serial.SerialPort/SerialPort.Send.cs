@@ -183,14 +183,14 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			// Calculate maximum baud defined send rate:
 			double frameTime   = this.settings.Communication.FrameTime;
-			int    frameTime10 = (int)Math.Ceiling(frameTime * 10);
+			int    frameTime10 = (int)(System.Math.Ceiling(frameTime * 10));
 
 			int interval = 50;          // Interval shall be rather narrow to ensure being inside
 			if (interval < frameTime10) // the limits, but ensure that interval is at least 10 times
 				interval = frameTime10; // the frame time.
 
 			Rate maxBaudRatePerInterval = new Rate(interval);
-			int maxFramesPerInterval = (int)Math.Ceiling(((1.0 / frameTime) * interval * 0.75)); // 25% safety margin.
+			int maxFramesPerInterval = (int)(System.Math.Ceiling((1.0 / frameTime) * interval * 0.75)); // 25% safety margin.
 
 			// Calculate maximum user defined send rate:
 			Rate maxSendRate = new Rate(this.settings.MaxSendRate.Interval);
@@ -347,14 +347,14 @@ namespace MKY.IO.Serial.SerialPort
 									if (this.settings.BufferMaxBaudRate)
 									{
 										int remainingSizeInInterval = (maxFramesPerInterval - maxBaudRatePerInterval.Value);
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
+										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, System.Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
 									}
 
 									// Reduce chunk size if maximum send rate is specified:
 									if (this.settings.MaxSendRate.Enabled)
 									{
 										int remainingSizeInInterval = (this.settings.MaxSendRate.Size - maxSendRate.Value);
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
+										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, System.Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
 									}
 
 									// Further reduce chunk size if maximum is specified:
@@ -577,7 +577,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
 				this.port.Flush(); // Make sure that data is sent before restoring RTS, including the underlying physical UART.
-				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameTime)); // Single byte/frame.
+				Thread.Sleep((int)(System.Math.Ceiling(this.settings.Communication.FrameTime))); // Single byte/frame.
 				this.port.RtsEnable = false;
 			}
 
@@ -625,7 +625,7 @@ namespace MKY.IO.Serial.SerialPort
 					a = this.sendQueue.ToArray();
 				}
 
-				int triedChunkSize = Math.Min(maxChunkSize, a.Length);
+				int triedChunkSize = System.Math.Min(maxChunkSize, a.Length);
 				effectiveChunkData = new List<byte>(triedChunkSize);
 
 				DebugTransmission("Writing " + triedChunkSize + " byte(s) to port...");
@@ -687,10 +687,10 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				int maxFramesInFifo = 0;
 				if (effectiveChunkData != null)
-					maxFramesInFifo = Math.Min(effectiveChunkData.Count, 16); // Max 16 bytes/frames in FIFO.
+					maxFramesInFifo = System.Math.Min(effectiveChunkData.Count, 16); // Max 16 bytes/frames in FIFO.
 
 				this.port.Flush(); // Make sure that data is sent before restoring RTS, including the underlying physical UART.
-				Thread.Sleep((int)Math.Ceiling(this.settings.Communication.FrameTime * maxFramesInFifo));
+				Thread.Sleep((int)(System.Math.Ceiling(this.settings.Communication.FrameTime * maxFramesInFifo)));
 				this.port.RtsEnable = false;
 			}
 

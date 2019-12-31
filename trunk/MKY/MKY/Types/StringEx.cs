@@ -862,11 +862,11 @@ namespace MKY
 				int countRight = CountRight(str, trimChars);
 
 				// Limit the number of trim characters at both ends:
-				countLeft = Math.Min(countLeft, maxLength);
-				countRight = Math.Min(countRight, maxLength);
+				countLeft = System.Math.Min(countLeft, maxLength);
+				countRight = System.Math.Min(countRight, maxLength);
 
 				// Evaluate the symmetrical portion and trim it:
-				int trimMaxLength = Math.Min(countLeft, countRight);
+				int trimMaxLength = System.Math.Min(countLeft, countRight);
 				return (Trim(str, trimMaxLength, trimChars));
 			}
 			else

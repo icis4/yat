@@ -197,7 +197,7 @@ namespace MKY.Time
 					foreach (TimeStampItem<int> tsi in qa)
 					{
 						TimeSpan ts = (now - tsi.TimeStamp);
-						int i = Int32Ex.Limit((int)(ts.TotalMilliseconds / this.interval), 0, Math.Max((numberOfIntervals - 1), 0)); // 'max' must be 0 or above.
+						int i = Int32Ex.Limit((int)(ts.TotalMilliseconds / this.interval), 0, System.Math.Max((numberOfIntervals - 1), 0)); // 'max' must be 0 or above.
 						valuePerInterval[i] += tsi.Item;
 					}
 
@@ -213,7 +213,7 @@ namespace MKY.Time
 					}
 
 					// Evaluate the rate:
-					newValue = (int)Math.Round((double)weighedSum / sumOfWeights);
+					newValue = (int)(System.Math.Round((double)weighedSum / sumOfWeights));
 				}
 			}
 

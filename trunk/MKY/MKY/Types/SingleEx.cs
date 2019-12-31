@@ -65,7 +65,7 @@ namespace MKY
 		/// </exception>
 		public static bool AlmostEquals(float lhs, float rhs, int digits)
 		{
-			float diff = Math.Abs(lhs - rhs);
+			float diff = System.Math.Abs(lhs - rhs);
 
 			switch (digits)
 			{
