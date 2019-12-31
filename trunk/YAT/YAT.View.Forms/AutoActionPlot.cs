@@ -184,8 +184,13 @@ namespace YAT.View.Forms
 				this.plotYSets.Add(new Tuple<string, List<double>>(label, values));
 			}
 
-			for (int i = 0; i < vc.YValues.Length; i++)
-				this.plotYSets[i].Item2.Add(vc.YValues[i].Item2);
+			for (int i = 0; i < this.plotYSets.Count; i++)
+			{
+				if (i < vc.YValues.Length)
+					this.plotYSets[i].Item2.Add(vc.YValues[i].Item2);
+				else
+					this.plotYSets[i].Item2.Add(0); // Fill with default value.
+			}
 
 			this.plotUpdateIsRequired = true;
 		}

@@ -30,7 +30,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -717,8 +716,8 @@ namespace YAT.Model
 				// Try double:
 				{
 					double result;
-					if (double.TryParse(s, out result))
-					{
+					if (double.TryParse(s, out result))       // Always name series, even if legend is disabled
+					{                                         // currently, as user can enable it at any time.
 						yValues.Add(new Tuple<string, double>("numeric values", result));
 						continue;
 					}
