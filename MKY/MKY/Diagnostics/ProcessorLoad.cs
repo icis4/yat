@@ -33,7 +33,7 @@ namespace MKY.Diagnostics
 	/// because that...
 	/// ...is pretty resource hungry, and...
 	/// ...is language dependent!
-	/// 
+	///
 	/// Saying hello to StyleCop ;-.
 	/// </summary>
 	/// <remarks>
@@ -93,7 +93,7 @@ namespace MKY.Diagnostics
 					if (intervalTime > 0)
 					{
 						int percentage = (int)(100.0 * (intervalProcessorTime.TotalMilliseconds / intervalTime));
-						CurrentPercentage = Math.Min(percentage, 100);
+						CurrentPercentage = System.Math.Min(percentage, 100);
 					}
 				}
 

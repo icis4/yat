@@ -342,7 +342,7 @@ namespace MKY.IO
 			if (path.IndexOf(Path.VolumeSeparatorChar) < 0)
 			{                                          // Local path ?
 				limitedPath = StringEx.Left(path, 3) + StringEx.Ellipsis +
-				              StringEx.Right(path, Math.Max(length - 6, 0));
+				              StringEx.Right(path, System.Math.Max(length - 6, 0));
 			}
 			else                                       // Network path !
 			{
@@ -350,12 +350,12 @@ namespace MKY.IO
 				if ((separatorPosition >= 0) && (separatorPosition < length - 4))
 				{
 					limitedPath = StringEx.Left(path, separatorPosition) + StringEx.Ellipsis +
-					              StringEx.Right(path, Math.Max(length - 4 - separatorPosition, 0));
+					              StringEx.Right(path, System.Math.Max(length - 4 - separatorPosition, 0));
 				}
 				else
 				{
 					limitedPath = StringEx.Left(path, 5) + StringEx.Ellipsis +
-					              StringEx.Right(path, Math.Max(length - 8, 0));
+					              StringEx.Right(path, System.Math.Max(length - 8, 0));
 				}
 			}
 

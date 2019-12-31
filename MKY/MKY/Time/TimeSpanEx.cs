@@ -127,43 +127,43 @@ namespace MKY
 
 			if (addThousandths)
 			{
-				sb.Insert(0, (Math.Abs(value.Milliseconds) / 1).ToString("D3", CultureInfo.InvariantCulture));
+				sb.Insert(0, (System.Math.Abs(value.Milliseconds) / 1).ToString("D3", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addHundredths)
 			{
-				sb.Insert(0, (Math.Abs(value.Milliseconds) / 10).ToString("D2", CultureInfo.InvariantCulture));
+				sb.Insert(0, (System.Math.Abs(value.Milliseconds) / 10).ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 			else if (addTenths)
 			{
-				sb.Insert(0, (Math.Abs(value.Milliseconds) / 100).ToString("D1", CultureInfo.InvariantCulture));
+				sb.Insert(0, (System.Math.Abs(value.Milliseconds) / 100).ToString("D1", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 
-			if ((Math.Abs(value.TotalSeconds) <= 0.0) && (!enforceMinutes)) // There shall at least be "0":
+			if ((System.Math.Abs(value.TotalSeconds) <= 0.0) && (!enforceMinutes)) // There shall at least be "0":
 			{
 				sb.Insert(0, "0");
 			}
 			else
 			{
-				var addMinutes = ((Math.Abs(value.TotalMinutes) >= 1.0) || enforceMinutes);
+				var addMinutes = ((System.Math.Abs(value.TotalMinutes) >= 1.0) || enforceMinutes);
 				if (addMinutes) // There shall at least be "0:00":
 				{
-					sb.Insert(0, Math.Abs(value.Seconds).ToString("D2", CultureInfo.InvariantCulture));
+					sb.Insert(0, System.Math.Abs(value.Seconds).ToString("D2", CultureInfo.InvariantCulture));
 					sb.Insert(0, ":");
 
-					var addHours = (Math.Abs(value.TotalHours) >= 1.0);
+					var addHours = (System.Math.Abs(value.TotalHours) >= 1.0);
 					if (addHours) // There shall at least be "0:00:00":
 					{
-						sb.Insert(0, Math.Abs(value.Minutes).ToString("D2", CultureInfo.InvariantCulture));
+						sb.Insert(0, System.Math.Abs(value.Minutes).ToString("D2", CultureInfo.InvariantCulture));
 						sb.Insert(0, ":");
 
-						if (Math.Abs(value.TotalDays) >= 1.0)
+						if (System.Math.Abs(value.TotalDays) >= 1.0)
 						{
-							sb.Insert(0, Math.Abs(value.Hours).ToString(CultureInfo.InvariantCulture));
+							sb.Insert(0, System.Math.Abs(value.Hours).ToString(CultureInfo.InvariantCulture));
 
-							if (Math.Abs(value.TotalDays) < 2.0)
+							if (System.Math.Abs(value.TotalDays) < 2.0)
 								sb.Insert(0, " day ");
 							else
 								sb.Insert(0, " days ");
@@ -177,7 +177,7 @@ namespace MKY
 					}
 					else
 					{
-						if (enforceMinutes && (Math.Abs(value.Minutes) <= 0.0) && (value.TotalSeconds < 0.0))
+						if (enforceMinutes && (System.Math.Abs(value.Minutes) <= 0.0) && (value.TotalSeconds < 0.0))
 						{
 							sb.Insert(0, value.Minutes.ToString(CultureInfo.InvariantCulture));
 							sb.Insert(0, "-");
