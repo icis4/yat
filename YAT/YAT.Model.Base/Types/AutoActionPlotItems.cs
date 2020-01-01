@@ -47,12 +47,16 @@ namespace YAT.Model.Types
 	public class ValueCollectionAutoActionPlotItem : AutoActionPlotItem
 	{
 		/// <summary></summary>
+		public Tuple<string, double> XValue { get; }
+
+		/// <summary></summary>
 		public Tuple<string, double>[] YValues { get; }
 
 		/// <summary></summary>
-		public ValueCollectionAutoActionPlotItem(AutoAction action, Tuple<string, double>[] yValues)
+		public ValueCollectionAutoActionPlotItem(AutoAction action, Tuple<string, double> xValue, Tuple<string, double>[] yValues)
 			: base(action)
 		{
+			XValue = xValue;
 			YValues = yValues;
 		}
 	}
