@@ -29,11 +29,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Collections.Generic;
+using MKY.Diagnostics;
 
 using YAT.Model.Types;
 using YAT.Settings.Application;
@@ -57,10 +58,8 @@ namespace YAT.View.Forms
 		private string plotTitle;
 		private string plotXLabel;
 		private string plotYLabel;
-		private List<Tuple<string, List<double>>> plotYSets;
-		private List<Tuple<string, DateTime>> plotXTimes;
-		private List<Tuple<string, double>> plotXValues;
-		private List<Tuple<string, double>> plotYValues;
+		private Tuple<string, List<double>> plotXValues;
+		private List<Tuple<string, List<double>>> plotYValues;
 
 		// The above variables define the plot model. For simplicity, the model is directly defined
 		// here in the view, i.e. is more of a view model than a true model.
@@ -164,40 +163,53 @@ namespace YAT.View.Forms
 		private void AddItemToLineChartIndex(AutoActionPlotItem pi)
 		{
 			this.plotXLabel = "Index";
-			this.plotYLabel = "Value";
 
-			var vc = (pi as ValueCollectionAutoActionPlotItem);
-
-			if (this.plotYSets == null)
-				this.plotYSets = new List<Tuple<string, List<double>>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
-
-			for (int i = this.plotYSets.Count; i < vc.YValues.Length; i++)
-			{
-				string label = vc.YValues[i].Item1;
-
-				List<double> values;
-				if ((i == 0) || (this.plotYSets[0].Item2.Count == 0))
-					values = new List<double>(1024); // Add a new empty list.
-				else
-					values = new List<double>(new double[this.plotYSets[0].Item2.Count]); // Add a new list filled with default values.
-
-				this.plotYSets.Add(new Tuple<string, List<double>>(label, values));
-			}
-
-			for (int i = 0; i < this.plotYSets.Count; i++)
-			{
-				if (i < vc.YValues.Length)
-					this.plotYSets[i].Item2.Add(vc.YValues[i].Item2);
-				else
-					this.plotYSets[i].Item2.Add(0); // Fill with default value.
-			}
-
-			this.plotUpdateIsRequired = true;
+			AddItemToLineChart(pi);
 		}
 
 		private void AddItemToLineChartTimeStamp(AutoActionPlotItem pi)
 		{
-			// PENDING
+			this.plotXLabel = "Time Stamp";
+
+			AddItemToLineChart(pi);
+		}
+
+		private void AddItemToLineChart(AutoActionPlotItem pi)
+		{
+			this.plotYLabel = "Value";
+
+			var vc = (pi as ValueCollectionAutoActionPlotItem);
+
+			if ((this.plotXValues == null) || (this.plotYValues == null))
+			{
+				this.plotXValues = new Tuple<string, List<double>>(vc.XValue.Item1, new List<double>(1024)); // Add a new empty list.
+				this.plotYValues = new List<Tuple<string, List<double>>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
+			}
+
+			this.plotXValues.Item2.Add(vc.XValue.Item2);
+
+			for (int i = this.plotYValues.Count; i < vc.YValues.Length; i++)
+			{
+				string label = vc.YValues[i].Item1;
+
+				List<double> values;
+				if ((i == 0) || (this.plotYValues[0].Item2.Count == 0))
+					values = new List<double>(1024); // Add a new empty list.
+				else
+					values = new List<double>(new double[this.plotYValues[0].Item2.Count]); // Add a new list filled with default values.
+
+				this.plotYValues.Add(new Tuple<string, List<double>>(label, values));
+			}
+
+			for (int i = 0; i < this.plotYValues.Count; i++)
+			{
+				if (i < vc.YValues.Length)
+					this.plotYValues[i].Item2.Add(vc.YValues[i].Item2);
+				else
+					this.plotYValues[i].Item2.Add(0); // Fill with default value.
+			}
+
+			this.plotUpdateIsRequired = true;
 		}
 
 		private void AddItemToScatterPlotXY(AutoActionPlotItem pi)
@@ -217,8 +229,6 @@ namespace YAT.View.Forms
 
 		private void Clear()
 		{
-			this.plotYSets = null;
-			this.plotXTimes = null;
 			this.plotXValues = null;
 			this.plotYValues = null;
 
@@ -236,8 +246,8 @@ namespace YAT.View.Forms
 			switch (this.plotAction)
 			{
 				case AutoAction.LineChartIndex: {
-					if (this.plotYSets != null) {
-						foreach (var kvp in this.plotYSets) {
+					if (this.plotYValues != null) {
+						foreach (var kvp in this.plotYValues) {
 							scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
 						}
 					}
@@ -245,9 +255,12 @@ namespace YAT.View.Forms
 				}
 
 				case AutoAction.LineChartTimeStamp: {
-					// PENDING
-				//	scottPlot.plt.Ticks(dateTimeX: true);
-				//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray());
+					scottPlot.plt.Ticks(dateTimeX: true);
+					if ((this.plotXValues != null) && (this.plotYValues != null)) {
+						foreach (var kvp in this.plotYValues) {
+							scottPlot.plt.PlotScatter(this.plotXValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
+						}
+					}
 					break;
 				}
 
@@ -278,7 +291,12 @@ namespace YAT.View.Forms
 			scottPlot.plt.AxisAuto();
 			scottPlot.plt.Legend(enableLegend: ApplicationSettings.RoamingUserSettings.Plot.ShowLegend);
 
+			var renderBegin = Stopwatch.GetTimestamp();
 			scottPlot.Render();
+			var renderEnd = Stopwatch.GetTimestamp();
+			var renderSpan = (renderEnd - renderBegin); // => MEASURE @ MODEL, what takes that long ?!? Consider collecting data at MODEL.
+
+			Debug.WriteLine("Rendering took " + StopwatchEx.TicksToTime(renderSpan) + " ms"); // PENDING: Moving average => Reduce update interval
 		}
 
 		private double? ToHistogramBarWidth(List<double> xValues)
@@ -336,6 +354,8 @@ namespace YAT.View.Forms
 			var plottables = scottPlot.plt.GetPlottables();
 
 			// PENDING: How to deal with multiple signals ?!?
+
+			return;
 
 			var scatterPlot      = (ScottPlot.PlottableScatter)plottables[0];
 			var highlightScatter = (ScottPlot.PlottableScatter)plottables[1];

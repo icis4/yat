@@ -679,11 +679,11 @@ namespace YAT.Model
 		{
 			switch (plotAction)
 			{
-				case AutoAction.LineChartIndex: return (TryCreateLineChartIndexItem(plotAction,                   triggerMatches, out pi, out errorMessage));
-//				case AutoAction.LineChartTime:  return (TryCreateLineChartTimeItem( plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage));
-// PENDING		case AutoAction.ScatterPlot:    return (TryCreateScatterPlotItem(   plotAction,                   triggerMatches, out pi, out errorMessage));
-// PENDING		case AutoAction.ScatterPlot:    return (TryCreateScatterPlotItem(   plotAction,                   triggerMatches, out pi, out errorMessage));
-//				case AutoAction.Histogram:      return (TryCreateHistogramItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
+				case AutoAction.LineChartIndex:
+				case AutoAction.LineChartTimeStamp: return (TryCreateLineChartItem(  plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage));
+// PENDING		case AutoAction.ScatterPlot:        return (TryCreateScatterPlotItem(plotAction,                   triggerMatches, out pi, out errorMessage));
+// PENDING		case AutoAction.ScatterPlot:        return (TryCreateScatterPlotItem(plotAction,                   triggerMatches, out pi, out errorMessage));
+//				case AutoAction.Histogram:          return (TryCreateHistogramItem(  plotAction,                   triggerMatches, out pi, out errorMessage));
 
 // PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
 // Histogram: Each capture
@@ -695,11 +695,12 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual bool TryCreateLineChartIndexItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		protected virtual bool TryCreateLineChartItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
 		{
+			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
-			var values = ConvertCapturesToPlotValues(AutoAction.LineChartIndex, captures);
-			pi = new ValueCollectionAutoActionPlotItem(plotAction, values);
+			var yValues = ConvertCapturesToPlotValues(AutoAction.LineChartIndex, captures);
+			pi = new ValueCollectionAutoActionPlotItem(plotAction, xValue, yValues);
 			errorMessage = null;
 			return (true);
 		}
@@ -718,7 +719,7 @@ namespace YAT.Model
 					double result;
 					if (double.TryParse(s, out result))       // Always name series, even if legend is disabled
 					{                                         // currently, as user can enable it at any time.
-						yValues.Add(new Tuple<string, double>("numeric values", result));
+						yValues.Add(new Tuple<string, double>("Numeric Values", result));
 						continue;
 					}
 				}
@@ -728,7 +729,7 @@ namespace YAT.Model
 					DateTime result;
 					if (DateTime.TryParse(s, out result))
 					{
-						yValues.Add(new Tuple<string, double>("time", result.ToOADate()));
+						yValues.Add(new Tuple<string, double>("Time", result.ToOADate()));
 						continue;
 					}
 				}
@@ -739,7 +740,7 @@ namespace YAT.Model
 					foreach (char c in s)
 						hash += c;
 
-					yValues.Add(new Tuple<string, double>("sum of character codes", hash));
+					yValues.Add(new Tuple<string, double>("Sum of Character Codes", hash));
 				}
 			}
 
