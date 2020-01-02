@@ -38,10 +38,10 @@ namespace MKY.Net
 		/// </summary>
 		/// <remarks>
 		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...
-		/// 
+		///
 		/// This method is simply a wrapper to <see cref="object.Equals(object, object)"/>.
 		/// It can e.g. be used to implement an overloaded Equals() method.
-		/// 
+		///
 		/// Note the logic behind <see cref="object.Equals(object, object)"/>:
 		///  - If both objects represent the same object reference, it returns true.
 		///  - If either or object is <c>null</c>, it returns false.

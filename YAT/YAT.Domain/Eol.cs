@@ -75,7 +75,7 @@ namespace YAT.Domain
 	/// LF:   Unix, Linux, Mac OS from version X, AmigaOS, BSD
 	/// CRLF: Windows, DOS, OS/2, CP/M
 	/// CR:   Mac OS up to version 9, Apple II
-	/// 
+	///
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>

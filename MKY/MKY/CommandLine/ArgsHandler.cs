@@ -46,20 +46,20 @@ namespace MKY.CommandLine
 	/// This command line infrastructure is based on the NUnit command line infrastructure:
 	/// > NUnit version 2.5.10 (2011-03-14)
 	/// > NUnit file "/src/ClientUtilities/util/CommandLineOptions.cs" (nunit.util.dll)
-	/// 
+	///
 	/// See below for original file header content:
 	/// -------------------------------------------------------------------------------------------
 	/// This is a re-usable component to be used when you need to parse command-line options and
 	/// parameters. It separates command line parameters from command line options. It uses
 	/// reflection to populate member variables the derived class with the values of the options.
-	/// 
+	///
 	/// An option can start with "-" or "--". On Windows systems, it can start with "/" as well.
-	/// 
+	///
 	/// I define 3 types of "options":
 	///   1. Boolean options (yes/no values), e.g. /r to recurse
 	///   2. Value options, e.g. /loglevel=3
 	///   3. Parameters, i.e. standalone strings like file names
-	/// 
+	///
 	/// An example to explain:
 	///   csc /nologo /t:exe myfile.cs
 	///       |       |      |
@@ -68,21 +68,21 @@ namespace MKY.CommandLine
 	///       |       + value option
 	///       |
 	///       + boolean option
-	/// 
+	///
 	/// Please see a short description of the CommandLineOptions class
 	/// at http://codeblast.com/~gert/dotnet/sells.html
-	/// 
+	///
 	/// Gert Lombard (gert@codeblast.com)
 	/// James Newkirk (jim@nunit.org)
 	/// -------------------------------------------------------------------------------------------
-	/// 
+	///
 	/// The implementation has been copied and improved to be more .NET-ish and edited to comply
 	/// with the YAT/MKY naming and coding conventions such as passing FxCop and StyleCop analysis.
-	/// 
+	///
 	/// In addition, this implementation has added so-called array-options. Array-options can be
 	/// used to deal with a variable number of additional argument, i.e. ellipsis. This feature is
 	/// optional.
-	/// 
+	///
 	/// An alternative command line infrastructure can be found at http://commandline.codeplex.com/.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
@@ -905,7 +905,7 @@ namespace MKY.CommandLine
 		/// </summary>
 		/// <remarks>
 		/// This mechanism allows to override an argument WITHOUT changing the original command line.
-		/// 
+		///
 		/// Unfortunately, there is no practicable way to use a delegate to access a field, nor an
 		/// easy way to get a <see cref="FieldInfo"/> of a given class' field. So, the field name
 		/// is used to reflect the field.

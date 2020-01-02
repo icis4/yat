@@ -135,7 +135,7 @@ namespace MKY.Windows.Forms
 		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
 		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
 		/// contain "AA", that item is wrongly selected.
-		/// 
+		///
 		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
@@ -217,7 +217,7 @@ namespace MKY.Windows.Forms
 		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
 		/// If <see cref="ComboBox.Text"/> is e.g. set to "abc" while <see cref="ComboBox.Items"/>
 		/// contain "ABC", that item is wrongly selected.
-		/// 
+		///
 		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Come on, 'abc'...")]
@@ -242,7 +242,7 @@ namespace MKY.Windows.Forms
 		/// Attention, <see cref="ComboBox"/> objects have a limitation regarding case sensitivity:
 		/// If <see cref="ComboBox.Text"/> is e.g. set to "abc" while <see cref="ComboBox.Items"/>
 		/// contain "ABC", that item is wrongly selected.
-		/// 
+		///
 		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Come on, 'abc'...")]

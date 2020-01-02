@@ -53,7 +53,7 @@ namespace MKY
 		/// method <see cref="System.Object.Equals(object, object)"/> to prevent code check from
 		/// suggesting to simply call <see cref="Equals(object, object)"/> as that could result in
 		/// an unintended call stack as soon as a class overloads that method.
-		/// 
+		///
 		/// Note the logic behind <see cref="object.Equals(object, object)"/>:
 		///  - If both objects represent the same object reference, it returns true.
 		///  - If either or object is <c>null</c>, it returns false.
