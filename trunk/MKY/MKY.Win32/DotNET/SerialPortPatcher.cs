@@ -37,15 +37,15 @@ namespace MKY.Win32.DotNet
 	/// Implements a workaround to the <see cref="IOException"/> issue in <see cref="SerialPort"/>
 	/// based on http://zachsaw.blogspot.ch/2010/07/serialport-ioexception-workaround-in-c.html
 	/// by Zach Saw.
-	/// 
+	///
 	/// Advantages:
 	/// Prevents the exception (lookahead) instead of handling it (lookbehind),
 	/// the implementation of the workaround is properly encapsulated.
-	/// 
+	///
 	/// Big disadvantage:
 	/// Requires 'Microsoft.Win32.SafeHandles' and several Win32 APIs, thus
 	/// introduces platform dependency.
-	/// 
+	///
 	/// The <see cref="IOException"/> issue can also be solved by actively managing the
 	/// <see cref="SerialPort.BaseStream"/>. The implementation in 'MKY.IO.Ports.SerialPort'
 	/// uses this approach, in order to not depend upon Win32 specifics.
@@ -162,11 +162,11 @@ namespace MKY.Win32.DotNet
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
 		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
+		///
 		/// Well, true for best performance on finalizing. However, it's not easy to find missing
 		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
 		/// is kept for DEBUG, indicating missing calls.
-		/// 
+		///
 		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
 		/// </remarks>
 		~SerialPortPatcher()

@@ -446,7 +446,7 @@ namespace MKY.Net
 		/// Compare readability:
 		/// "1:2:3:4:5:6:7:8:8080"
 		/// "[1:2:3:4:5:6:7:8]:8080"
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
@@ -480,7 +480,7 @@ namespace MKY.Net
 		/// Compare readability:
 		/// "1:2:3:4:5:6:7:8:8080"
 		/// "[1:2:3:4:5:6:7:8]:8080"
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
