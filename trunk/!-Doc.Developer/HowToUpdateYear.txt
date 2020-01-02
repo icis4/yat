@@ -4,10 +4,10 @@ Takes approx. 20 minutes, plus changes in procedure.
 1.	Open Visual Studio (without opening the solution).
 	(This step is required because the .vdproj files cannot be edited while the solution is open.)
 
-2.	Search "\Trunk" for the following expressions (match case and whole word) throughout...
+2.	Search/replace "\Trunk" for the following expressions (match case and whole word) throughout...
 	*.vdproj
 	...and update year:
-	 > "Copyright © 2003-2020 Matthias Kläy."  => 4 replacements
+	 > "Copyright © 2003-2020 Matthias Kläy." => 4 replacements
 
 3.	Open the solution.
 
@@ -15,7 +15,7 @@ Takes approx. 20 minutes, plus changes in procedure.
 	...speed up search/replace.
 	...speed up verification throughout "\Trunk\*.*".
 
-5.	Search solution (includes this file) for the following expressions (match case and whole word) throughout...
+5.	Search/replace solution (includes this file) for the following expressions (match case and whole word) throughout...
 	*.*
 	...and update year:                 (approx. counts for feasibility check)
 	 > "Copyright © 2003-2020 Matthias Kläy."  => ~481 replacements
@@ -24,10 +24,10 @@ Takes approx. 20 minutes, plus changes in procedure.
 	 > "Copyright © 2008-2020 Mettler-Toledo." => ~307 replacements (=> scripting, testing)
 	 > "Copyright © 2014-2020 Mettler-Toledo." =>   ~6 replacements (=> scripting templates)
 	 > "Copyright © 2017-2020 Mettler-Toledo." => ~268 replacements (=> scripting examples, NUnit testing)
-	 > " and 2003-2020 Matthias Kläy."         =>   ~2 replacements
-	 > "2020, Matthias Kläy"                   =>   ~2 replacements
+	 > " and 2003-2020 Matthias Kläy."         =>    2 replacements
+	 > "2020, Matthias Kläy"                   =>    2 replacements
 
-6.	Then, search "\Trunk" (neither match case and nor whole word) throughout...
+6.	Then, search/replace "\Trunk" (neither match case and nor whole word) throughout...
 	*.*
 	...and verify that the following expressions are no more found...
 	...except within SVN, 3rd party, archives and other explainable locations:
@@ -35,11 +35,15 @@ Takes approx. 20 minutes, plus changes in procedure.
 	 > "-201\d " (<= incl. space!) using RegEx
 	 > "-202[^1] " (<= incl. space!) using RegEx, where year = 2021 is already the 'new' year
 
-7.	Finally, commit all changes, verifying that SVN properties of all files are up-to-date.
+7.	Next, commit all changes, verifying that SVN properties of all files are up-to-date.
 
 (Note that this procedure "schlägt drei weitere Fliegen auf einen Streich":
  > Detection whether all intended files are included in the solution.
  > Detection whether there are superfluous files in "\Trunk".
  > Detection whether SVN properties of all files are up-to-date.)
 
-Then, consider to also check for trailing whitespace according to HowToRemoveTrailingWhitespace.txt.
+8.	Then, search/replace "<OFFLINE>\Releases and Checkpoints\Template" for the following expressions (match case and whole word) throughout...
+	*.*
+	 > "Copyright © 2003-2020 Matthias Kläy." => 6 replacements
+
+Finally, consider to also check for trailing whitespace according to HowToRemoveTrailingWhitespace.txt.
