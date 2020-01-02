@@ -3286,7 +3286,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:YAT is licensed under the GNU LGPL.                                                                                See http://www.gnu.org/licenses/lgpl.html for license details.                                   Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.                    Copyright © 2003-2019 Matthias Kläy. All rights reserved."
+                            "Value" = "8:YAT is licensed under the GNU LGPL.                                                                                See http://www.gnu.org/licenses/lgpl.html for license details.                                   Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.                    Copyright © 2003-2020 Matthias Kläy. All rights reserved."
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -3447,7 +3447,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:YAT is licensed under the GNU LGPL. See http://www.gnu.org/licenses/lgpl.html for license details. Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2019 Matthias Kläy. All rights reserved."
+                            "Value" = "8:YAT is licensed under the GNU LGPL. See http://www.gnu.org/licenses/lgpl.html for license details. Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2020 Matthias Kläy. All rights reserved."
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }

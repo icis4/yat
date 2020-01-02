@@ -10,7 +10,7 @@
                      Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
  --------------------------------------------------------------------------------------------------
                     Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-                                Copyright © 2003-2019 Matthias Kläy.
+                                Copyright © 2003-2020 Matthias Kläy.
                                         All rights reserved.
  --------------------------------------------------------------------------------------------------
                                 YAT is licensed under the GNU LGPL.
@@ -870,7 +870,7 @@ these features aim for providing a versatile automatic testing tool for serial c
 ====================================================================================================
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-Copyright © 2003-2019 Matthias Kläy.
+Copyright © 2003-2020 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the GNU LGPL.

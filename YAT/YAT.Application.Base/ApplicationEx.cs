@@ -15,7 +15,7 @@
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2019 Matthias Kläy.
+// Copyright © 2003-2020 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -153,9 +153,9 @@ namespace YAT
 			"",
 	#if !(WITH_SCRIPTING)
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
-			"Copyright © 2003-2019 Matthias Kläy.",
+			"Copyright © 2003-2020 Matthias Kläy.",
 	#else
-			"Copyright © 2008-2019 Mettler-Toledo.",
+			"Copyright © 2008-2020 Mettler-Toledo.",
 	#endif
 			"All rights reserved.",
 	#if !(WITH_SCRIPTING)

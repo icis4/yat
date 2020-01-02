@@ -15,7 +15,7 @@
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2019 Matthias Kläy.
+// Copyright © 2003-2020 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("NUnit")]
-[assembly: AssemblyCopyright("Copyright © 2010-2019 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2010-2020 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
