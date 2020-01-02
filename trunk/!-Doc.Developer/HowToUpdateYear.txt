@@ -1,12 +1,13 @@
 ﻿
+Takes approx. 20 minutes, plus changes in procedure.
+
 1.	Open Visual Studio (without opening the solution).
+	(This step is required because the .vdproj files cannot be edited while the solution is open.)
 
 2.	Search "\Trunk" for the following expressions (match case and whole word) throughout...
 	*.vdproj
 	...and update year:
-	 > "Copyright © 2003-2019 Matthias Kläy."  => 4 replacements
-
-(The above step is required because the .vdproj files cannot be edited while the solution is open.)
+	 > "Copyright © 2003-2020 Matthias Kläy."  => 4 replacements
 
 3.	Open the solution.
 
@@ -14,23 +15,25 @@
 	...speed up search/replace.
 	...speed up verification throughout "\Trunk\*.*".
 
-5.	Search solution for the following expressions (match case and whole word) throughout...
+5.	Search solution (includes this file) for the following expressions (match case and whole word) throughout...
 	*.*
-	...and update year:
-	 > "Copyright © 2003-2019 Matthias Kläy."  => 434 replacements
-	 > "Copyright © 2007-2019 Matthias Kläy."  => 147 replacements
-	 > "Copyright © 2010-2019 Matthias Kläy."  =>  59 replacements
-	 > "Copyright © 2008-2018 Mettler-Toledo." => 307 replacements (=> scripting, testing)
-	 > "Copyright © 2014-2018 Mettler-Toledo." =>   6 replacements (=> scripting templates)
-	 > "Copyright © 2017-2018 Mettler-Toledo." => 268 replacements (=> scripting examples, NUnit testing)
-	 > "2019, Matthias Kläy"                   =>   2 replacements
+	...and update year:                 (approx. counts for feasibility check)
+	 > "Copyright © 2003-2020 Matthias Kläy."  => ~481 replacements
+	 > "Copyright © 2007-2020 Matthias Kläy."  => ~147 replacements
+	 > "Copyright © 2010-2020 Matthias Kläy."  =>  ~69 replacements
+	 > "Copyright © 2008-2020 Mettler-Toledo." => ~307 replacements (=> scripting, testing)
+	 > "Copyright © 2014-2020 Mettler-Toledo." =>   ~6 replacements (=> scripting templates)
+	 > "Copyright © 2017-2020 Mettler-Toledo." => ~268 replacements (=> scripting examples, NUnit testing)
+	 > " and 2003-2020 Matthias Kläy."         =>   ~2 replacements
+	 > "2020, Matthias Kläy"                   =>   ~2 replacements
 
 6.	Then, search "\Trunk" (neither match case and nor whole word) throughout...
 	*.*
 	...and verify that the following expressions are no more found...
 	...except within SVN, 3rd party, archives and other explainable locations:
-	 > "2018 " (<= incl. space!), where year = 2018 is the 'old' year
-	 > "-201[^9] " (<= incl. space!) using RegEx, where year = 2019 is already the 'new' year
+	 > "2019 " (<= incl. space!), where year = 2019 is the 'old' year
+	 > "-201\d " (<= incl. space!) using RegEx
+	 > "-202[^1] " (<= incl. space!) using RegEx, where year = 2021 is already the 'new' year
 
 7.	Finally, commit all changes, verifying that SVN properties of all files are up-to-date.
 
@@ -39,4 +42,4 @@
  > Detection whether there are superfluous files in "\Trunk".
  > Detection whether SVN properties of all files are up-to-date.)
 
-(8. Consider to check for trailing whitespace according to HowToRemoveTrailingWhitespace.txt)
+Then, consider to also check for trailing whitespace according to HowToRemoveTrailingWhitespace.txt.

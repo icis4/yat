@@ -15,7 +15,7 @@
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2019 Matthias Kläy.
+// Copyright © 2003-2020 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -100,12 +100,12 @@ namespace YAT.View.Forms
 			textBefore = "Copyright © 2003-2004 ";
 			textLink   =                       "HSR Hochschule für Technik Rapperswil";
 			textAfter  =                                                            "." + Environment.NewLine +
-			             "Copyright © 2003-2019 Matthias Kläy.";
+			             "Copyright © 2003-2020 Matthias Kläy.";
 		#else
 			textBefore = "YAT copyright © 2003-2004 ";
 			textLink   =                           "HSR Hochschule für Technik Rapperswil";
-			textAfter  =                                                                " and 2003-2019 Matthias Kläy." + Environment.NewLine +
-			             "Albatros copyright © 2008-2019 Mettler-Toledo.";
+			textAfter  =                                                                " and 2003-2020 Matthias Kläy." + Environment.NewLine +
+			             "Albatros copyright © 2008-2020 Mettler-Toledo.";
 		#endif
 			linkLabel_Copyright.Text += textBefore;
 			linkStart = linkLabel_Copyright.Text.Length;
@@ -422,7 +422,7 @@ namespace YAT.View.Forms
 		#endif // WITH_SCRIPTING
 
 			// Author:
-			linkLabel_Author.Text = "2019, Matthias Kläy";
+			linkLabel_Author.Text = "2020, Matthias Kläy";
 
 		#if !(WITH_SCRIPTING)
 			// License:
