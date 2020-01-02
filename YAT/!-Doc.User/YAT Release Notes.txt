@@ -33,8 +33,8 @@ Contents
 1. Installation
 ====================================================================================================
 
-YAT uses .NET 4.0. The installer verifies that .NET 4.0 is installed on the target computer.
-It also verifies that Windows Installer 4.5 is installed on the target computer.
+YAT uses .NET 4.0. The YAT installer ensures that .NET 4.0 is available on the target computer.
+The installer also ensures that Windows Installer 4.5 is available on the target computer.
 
 First, chose the most appropriate package:
  > For up-to-date systems, use the compact package "...(32-bit).zip" or "...(64-bit).zip".
