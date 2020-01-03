@@ -7456,6 +7456,8 @@ namespace YAT.View.Forms
 
 			if (this.autoActionPlotForm == null)
 			{
+				this.terminal.SuspendAutoActionPlotRequestEvent(); // Disarm.
+
 				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
 				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
 				this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
@@ -7494,6 +7496,8 @@ namespace YAT.View.Forms
 		private void AutoActionPlotForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			this.autoActionPlotForm = null;
+
+			this.terminal.ResumeAutoActionPlotRequestEvent(); // Arm again.
 		}
 
 		#endregion

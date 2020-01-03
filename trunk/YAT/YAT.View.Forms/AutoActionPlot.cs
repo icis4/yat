@@ -30,7 +30,7 @@
 #if (DEBUG)
 
 	// Enable debugging of plot update:
-	#define DEBUG_UPDATE
+////#define DEBUG_UPDATE
 
 #endif // DEBUG
 
@@ -52,6 +52,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Diagnostics;
 using MKY.Math;
+using MKY.Windows.Forms;
 
 using YAT.Model.Types;
 using YAT.Settings.Application;
@@ -80,6 +81,8 @@ namespace YAT.View.Forms
 		private readonly long lowerSpanTicks; // = 0;
 		private readonly long upperSpanTicks; // = 0;
 
+		private SettingControlsHelper isSettingControls;
+
 		private Model.Terminal model; // = null;
 
 		private int lastUpdateCount; // = 0;
@@ -99,8 +102,9 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			this.initialAndMinimumUpdateInterval = timer_Update.Interval; // 73 ms (a prime number)
-			this.lowerSpanTicks = StopwatchEx.TimeToTicks(this.initialAndMinimumUpdateInterval); // 73 ms
-			this.upperSpanTicks = StopwatchEx.TimeToTicks(500); // ms
+			var lowerSpan = this.initialAndMinimumUpdateInterval / 10; // 7 ms
+			this.lowerSpanTicks = StopwatchEx.TimeToTicks(lowerSpan);
+			this.upperSpanTicks = StopwatchEx.TimeToTicks(lowerSpan + 75); // ms
 
 			checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
 
@@ -125,22 +129,23 @@ namespace YAT.View.Forms
 		private void timer_Update_Tick(object sender, EventArgs e)
 		{
 			long updateSpanTicksAvg10s;
-			UpdatePlot(out updateSpanTicksAvg10s); // No additional synchronization is needed, the System.Windows.Forms.Timer is synchronized.
+			if (UpdatePlot(out updateSpanTicksAvg10s)) // No additional synchronization is needed, the System.Windows.Forms.Timer is synchronized.
+			{
+				DebugUpdate("Update span (moving average) of " + updateSpanTicksAvg10s.ToString(CultureInfo.CurrentCulture) + " ticks = ");
+				DebugUpdate(StopwatchEx.TicksToTime(updateSpanTicksAvg10s).ToString(CultureInfo.CurrentCulture) + " ms resulting in ");
 
-			DebugUpdate("Update average load of " + updateSpanTicksAvg10s.ToString(CultureInfo.CurrentCulture) + " ticks = ");
-			DebugUpdate(StopwatchEx.TicksToTime(updateSpanTicksAvg10s).ToString(CultureInfo.CurrentCulture) + " ms resulting in ");
+				int interval = CalculateUpdateInterval(updateSpanTicksAvg10s);
+				if (timer_Update.Interval != interval) {
+					timer_Update.Interval = interval;
 
-			int interval = CalculateUpdateInterval(updateSpanTicksAvg10s);
-			if (timer_Update.Interval != interval) {
-				timer_Update.Interval = interval;
+					DebugUpdate("changed.");
+				}
+				else {
+					DebugUpdate("kept.");
+				}
 
-				DebugUpdate("changed.");
+				DebugUpdate(Environment.NewLine);
 			}
-			else {
-				DebugUpdate("kept.");
-			}
-
-			DebugUpdate(Environment.NewLine);
 		}
 
 		private void scottPlot_MouseEntered(object sender, EventArgs e)
@@ -162,10 +167,13 @@ namespace YAT.View.Forms
 
 		private void checkBox_ShowLegend_CheckedChanged(object sender, EventArgs e)
 		{
+			if (this.isSettingControls)
+				return;
+
 			ApplicationSettings.RoamingUserSettings.Plot.ShowLegend = !ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
 			ApplicationSettings.SaveRoamingUserSettings();
 
-			UpdatePlot(); // Immediately update, don't wait for update ticker.
+			UpdatePlot(true); // Immediately update, don't wait for update ticker.
 		}
 
 		private void button_Clear_Click(object sender, EventArgs e)
@@ -186,21 +194,23 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// The update interval is calculated dependent on the time needed to update:
+		/// The update interval is calculated dependent on the time needed to update. Less than ~10%
+		/// of the CPU load shall be consumed by the plot:
 		///
-		///      update interval in ms
-		///                 ^
-		///      max = 1125 |--------------x|
-		///                 |             x |
-		///                 |            x  |
-		///                 |         xx    |
-		///                 |     xxx       |
-		///        min = 73 |xxxx           |
-		///                 o-----------------> time needed to update in ms
-		///                 0 73   250     500
+		/// update interval in ms
+		///            ^
+		/// max = 1125 |--------------x|
+		///            |             x |
+		///            |            x  |
+		///            |           x   |
+		///            |        xx     |
+		///            |     xx        |
+		///   min = 73 |xxx            |
+		///            o-----------------> time needed to update in ms
+		///            0  7           82
 		///
-		/// Up to 73 ms, the update is done more or less immediately.
-		/// Above 500 ms, the update is done every 1125 milliseconds.
+		/// Up to 7 ms, the update is done more or less immediately.
+		/// Above 82 ms, the update is done every 1125 milliseconds.
 		/// Quadratic inbetween, at y = x^2.
 		///
 		/// Rationale:
@@ -232,8 +242,8 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				long x = (updateSpanTicksAvg10s - this.lowerSpanTicks); // Resulting x is equivalent to max. 427 ms
-				int y = (int)((x * x) / 5);
+				int x = StopwatchEx.TicksToTime(updateSpanTicksAvg10s - this.lowerSpanTicks); // Resulting x must be equivalent to max. 75 ms.
+				int y = lowerInterval + ((x * x) / 5);
 
 				y = Int32Ex.Limit(y, lowerInterval, UpperInterval); // 'min' and 'max' are fixed.
 
@@ -252,92 +262,102 @@ namespace YAT.View.Forms
 			lock (this.model.AutoActionPlotModelSyncObj)
 				this.model.AutoActionPlotModel.ClearAllItems();
 
-			UpdatePlot(); // Immediately update, don't wait for update ticker.
+			UpdatePlot(true); // Immediately update, don't wait for update ticker.
 		}
 
-		private void UpdatePlot()
+		private void UpdatePlot(bool force)
 		{
 			long spanTicksAvg10sDummy;
-			UpdatePlot(out spanTicksAvg10sDummy);
+			UpdatePlot(force, out spanTicksAvg10sDummy);
 		}
 
-		private void UpdatePlot(out long spanTicksAvg10s)
+		private bool UpdatePlot(out long spanTicksAvg10s)
+		{
+			return (UpdatePlot(false, out spanTicksAvg10s));
+		}
+
+		private bool UpdatePlot(bool force, out long spanTicksAvg10s)
 		{
 			spanTicksAvg10s = 0;
 
-			if (!this.updateIsSuspended) // Only update when allowed.
+			if (this.updateIsSuspended && !force) // Only update when allowed.
+				return (false);
+
+			var beginTicks = Stopwatch.GetTimestamp(); // Measure including waiting for lock!
+
+			lock (this.model.AutoActionPlotModelSyncObj)
 			{
-				lock (this.model.AutoActionPlotModelSyncObj)
+				var mdl = this.model.AutoActionPlotModel;
+				if ((this.lastUpdateCount != mdl.UpdateCounter) || force) // Only update when needed.
 				{
-					var mdl = this.model.AutoActionPlotModel;
-					if (this.lastUpdateCount != mdl.UpdateCounter) // Only update when needed.
+					scottPlot.plt.Clear();
+
+					scottPlot.plt.Title(mdl.Title);
+
+					scottPlot.plt.XLabel(mdl.XLabel);
+					scottPlot.plt.YLabel(mdl.YLabel);
+
+					switch (mdl.Action)
 					{
-						var beginTicks = Stopwatch.GetTimestamp();
-
-						scottPlot.plt.Clear();
-
-						scottPlot.plt.Title(mdl.Title);
-
-						scottPlot.plt.XLabel(mdl.XLabel);
-						scottPlot.plt.YLabel(mdl.YLabel);
-
-						switch (mdl.Action)
-						{
-							case AutoAction.LineChartIndex: {
-								if (mdl.YValues != null) {
-									foreach (var kvp in mdl.YValues) {
-										scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
-									}
+						case AutoAction.LineChartIndex: {
+							if (mdl.YValues != null) {
+								foreach (var kvp in mdl.YValues) {
+									scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
 								}
-								break;
 							}
-
-							case AutoAction.LineChartTimeStamp: {
-								scottPlot.plt.Ticks(dateTimeX: true);
-								if ((mdl.XValues != null) && (mdl.YValues != null)) {
-									foreach (var kvp in mdl.YValues) {
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
-									}
-								}
-								break;
-							}
-
-							case AutoAction.ScatterPlotXY: {
-								// PENDING
-							//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
-								break;
-							}
-
-							case AutoAction.ScatterPlotTime: {
-								// PENDING
-							//	scottPlot.plt.Ticks(dateTimeX: true);
-							//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
-								break;
-							}
-
-							case AutoAction.Histogram: {
-								// PENDING
-							//	scottPlot.plt.PlotBar(this.plotXValues.ToArray(), this.plotYValues.ToArray(), barWidth: ToHistogramBarWidth(this.plotXValues));
-								break;
-							}
-
-							default: {
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + mdl.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							}
+							break;
 						}
 
-						scottPlot.plt.AxisAuto();
-						scottPlot.plt.Legend(enableLegend: ApplicationSettings.RoamingUserSettings.Plot.ShowLegend);
+						case AutoAction.LineChartTimeStamp: {
+							scottPlot.plt.Ticks(dateTimeX: true);
+							if ((mdl.XValues != null) && (mdl.YValues != null)) {
+								foreach (var kvp in mdl.YValues) {
+									scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
+								}
+							}
+							break;
+						}
 
-						scottPlot.Render();
+						case AutoAction.ScatterPlotXY: {
+							// PENDING
+						//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+							break;
+						}
 
-						this.lastUpdateCount = mdl.UpdateCounter;
+						case AutoAction.ScatterPlotTime: {
+							// PENDING
+						//	scottPlot.plt.Ticks(dateTimeX: true);
+						//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+							break;
+						}
 
-						var endTicks = Stopwatch.GetTimestamp();
-						var spanTicks = (endTicks - beginTicks);
-						spanTicksAvg10s = this.updateSpanAvg10s.EnqueueAndCalculate(spanTicks); // No additional synchronization is needed, all access to this form is synchronized onto the main thread.
-						DebugUpdate("Update took " + StopwatchEx.TicksToTime(spanTicks) + " ms; in average (moving, 10 s) " + StopwatchEx.TicksToTime(spanTicksAvg10s) + " ms");
+						case AutoAction.Histogram: {
+							// PENDING
+						//	scottPlot.plt.PlotBar(this.plotXValues.ToArray(), this.plotYValues.ToArray(), barWidth: ToHistogramBarWidth(this.plotXValues));
+							break;
+						}
+
+						default: {
+							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + mdl.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
 					}
+
+					scottPlot.plt.AxisAuto();
+					scottPlot.plt.Legend(enableLegend: ApplicationSettings.RoamingUserSettings.Plot.ShowLegend);
+
+					scottPlot.Render();
+
+					this.lastUpdateCount = mdl.UpdateCounter;
+
+					var endTicks = Stopwatch.GetTimestamp();
+					var spanTicks = (endTicks - beginTicks);
+					spanTicksAvg10s = this.updateSpanAvg10s.EnqueueAndCalculate(spanTicks); // No additional synchronization is needed, all access to this form is synchronized onto the main thread.
+
+					return (true);
+				}
+				else
+				{
+					return (false);
 				}
 			}
 		}
