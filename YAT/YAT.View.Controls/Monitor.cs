@@ -68,6 +68,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Contracts;
 using MKY.Diagnostics;
+using MKY.Math;
 using MKY.Windows.Forms;
 
 using YAT.Application.Types;
@@ -1347,7 +1348,7 @@ namespace YAT.View.Controls
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int timer_ProcessorLoad_Tick_LastValue = 100;
+		private MovingAverageInt32 timer_ProcessorLoad_Tick_MovingAverage = new MovingAverageInt32(11); // 11 is an arbitrary prime number.
 
 		/// <remarks>
 		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread.
@@ -1359,10 +1360,9 @@ namespace YAT.View.Controls
 			// Calculate average of last two samples:
 
 			int currentValue = ProcessorLoad.Update();
-			int averageValue = ((currentValue + timer_ProcessorLoad_Tick_LastValue) / 2);
-			timer_ProcessorLoad_Tick_LastValue = currentValue;
+			int averageValue = timer_ProcessorLoad_Tick_MovingAverage.EnqueueAndCalculate(currentValue);
 
-			DebugUpdate("CPU load of " + averageValue.ToString(CultureInfo.CurrentCulture) + "% resulting in ");
+			DebugUpdate("CPU load (moving average) of " + averageValue.ToString(CultureInfo.CurrentCulture) + "% resulting in ");
 			CalculateUpdateTickInterval(averageValue);
 		}
 
@@ -2064,8 +2064,8 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				int x = (processorLoadPercentage - LowerLoad); // Resulting x is max. 75%
-				int y = (x * x) / 5;
+				int x = (processorLoadPercentage - LowerLoad); // Resulting x must be max. 75%.
+				int y = (LowerInterval + ((x * x) / 5));
 
 				y = Int32Ex.Limit(y, LowerInterval, UpperInterval); // 'min' and 'max' are fixed.
 
