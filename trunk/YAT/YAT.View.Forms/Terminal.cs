@@ -170,7 +170,6 @@ namespace YAT.View.Forms
 		private AutoContentState autoResponseTriggerState;  // = AutoContentState.Neutral;
 		private AutoContentState autoResponseResponseState; // = AutoContentState.Neutral;
 		private AutoActionPlot autoActionPlotForm;
-		private object autoActionPlotFormSyncObj = new object();
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
@@ -6681,12 +6680,12 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_AutoActionPlotRequest(object sender, Model.AutoActionPlotEventArgs e)
+		private void terminal_AutoActionPlotRequest(object sender, EventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			AutoActionPlot(e);
+			AutoActionPlot();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6925,12 +6924,17 @@ namespace YAT.View.Forms
 
 			// Preset:
 			SetPresetControls();
+
+			// AutoAction:
+			SetAutoActionPlotFormCaption();
 		}
 
 		private void SetTerminalCaption()
 		{
 			if (TerminalIsAvailable)
 				Text = this.terminal.Caption;
+			else
+				Text = "";
 		}
 
 		private void SetIOStatus()
@@ -7445,47 +7449,51 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected virtual void AutoActionPlot(Model.AutoActionPlotEventArgs e)
+		protected virtual void AutoActionPlot()
 		{
-			lock (this.autoActionPlotFormSyncObj)
+			// No additional synchronization is needed, the event handler and thus this method
+			// already gets synchronized onto the main thread.
+
+			if (this.autoActionPlotForm == null)
 			{
-				if (this.autoActionPlotForm == null)
-				{
-					this.autoActionPlotForm = new AutoActionPlot();
-					this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText(e.FormTitle);
-					this.autoActionPlotForm.AddItem(e.PlotItem);
-					this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
-					this.autoActionPlotForm.Show(this);
-				}
-				else
-				{
-					this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText(e.FormTitle);
-					this.autoActionPlotForm.AddItem(e.PlotItem);
-				}
+				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
+				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+				this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
+				this.autoActionPlotForm.Show(this);
+			}
+			else
+			{
+				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
 			}
 		}
 
+		private void SetAutoActionPlotFormCaption()
+		{
+			if (this.autoActionPlotForm != null)
+				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+		}
+
 		/// <summary></summary>
-		protected virtual string ComposeAutoActionPlotFormText(string caption)
+		protected virtual string ComposeAutoActionPlotFormText()
 		{
 			// Note:
 			// Same "YAT - [Caption]" as for MDI main form.
 
 			var sb = new StringBuilder(ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
 
-			sb.Append(" - [");
-			sb.Append(caption);
-			sb.Append("]");
+			if (this.terminal != null)
+			{
+				sb.Append(" - [");
+				sb.Append(this.terminal.ComposeInvariantCaption("Automatic Action Plot"));
+				sb.Append("]");
+			}
 
 			return (sb.ToString());
 		}
 
 		private void AutoActionPlotForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			lock (this.autoActionPlotFormSyncObj)
-			{
-				this.autoActionPlotForm = null;
-			}
+			this.autoActionPlotForm = null;
 		}
 
 		#endregion

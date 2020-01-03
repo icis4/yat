@@ -85,6 +85,9 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="AutoActionPlotModel.cs" />
+    <Compile Include="AutoActionPlotItems.cs" />
+    <Compile Include="AutoResponseReplaceEvaluator.cs" />
     <Compile Include="CheckResult.cs" />
     <Compile Include="CommandLineArgs.cs" />
     <Compile Include="EventArgs.cs" />
