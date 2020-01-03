@@ -33,7 +33,7 @@
 			this.button_Close = new System.Windows.Forms.Button();
 			this.button_Clear = new System.Windows.Forms.Button();
 			this.checkBox_ShowLegend = new System.Windows.Forms.CheckBox();
-			this.timer_PlotUpdate = new System.Windows.Forms.Timer(this.components);
+			this.timer_Update = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
 			this.scottPlot = new ScottPlot.FormsPlot();
@@ -73,11 +73,11 @@
 			this.checkBox_ShowLegend.UseVisualStyleBackColor = true;
 			this.checkBox_ShowLegend.CheckedChanged += new System.EventHandler(this.checkBox_ShowLegend_CheckedChanged);
 			// 
-			// timer_PlotUpdate
+			// timer_Update
 			// 
-			this.timer_PlotUpdate.Enabled = true;
-			this.timer_PlotUpdate.Interval = 75;
-			this.timer_PlotUpdate.Tick += new System.EventHandler(this.timer_PlotUpdate_Tick);
+			this.timer_Update.Enabled = true;
+			this.timer_Update.Interval = 73;
+			this.timer_Update.Tick += new System.EventHandler(this.timer_Update_Tick);
 			// 
 			// label_UpdateSuspended
 			// 
@@ -130,7 +130,7 @@
 		private ScottPlot.FormsPlot scottPlot;
 		private System.Windows.Forms.Button button_Clear;
 		private System.Windows.Forms.CheckBox checkBox_ShowLegend;
-		private System.Windows.Forms.Timer timer_PlotUpdate;
+		private System.Windows.Forms.Timer timer_Update;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_UpdateSuspended;
 	}

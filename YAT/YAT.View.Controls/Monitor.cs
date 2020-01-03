@@ -1363,7 +1363,7 @@ namespace YAT.View.Controls
 			timer_ProcessorLoad_Tick_LastValue = currentValue;
 
 			DebugUpdate("CPU load = " + averageValue.ToString(CultureInfo.CurrentCulture) + "% resulting in ");
-			CalculateUpdateRates(averageValue);
+			CalculateUpdateTickInterval(averageValue);
 		}
 
 		/// <remarks>
@@ -2019,17 +2019,17 @@ namespace YAT.View.Controls
 		///
 		///      update interval in ms
 		///                 ^
-		///      max = 1250 |-------------xx|
+		///      max = 1125 |-------------xx|
 		///                 |            x  |
 		///                 |           x   |
 		///                 |          x    |
 		///                 |       xx      |
-		/// min = immediate |xxxxx          |
-		///       (means 0) o-----------------> total CPU load in %
+		///        min = 41 |xxxxx          |
+		///                 o-----------------> total CPU load in %
 		///                 0  25  50  75  100
 		///
-		/// Up to 25%, the update is done immediately.
-		/// Above 95%, the update is done every 1250 milliseconds.
+		/// Up to 25%, the update is done more or less immediately.
+		/// Above 95%, the update is done every 1125 milliseconds.
 		/// Quadratic inbetween, at y = x^2.
 		///
 		/// Rationale:
@@ -2040,7 +2040,7 @@ namespace YAT.View.Controls
 		/// Load in %, i.e. values from 0 to 100.
 		/// </param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inbetween' is a correct English term.")]
-		private void CalculateUpdateRates(int processorLoadPercentage)
+		private void CalculateUpdateTickInterval(int processorLoadPercentage)
 		{
 			const int LowerLoad = 25; // %
 			const int UpperLoad = 95; // %
