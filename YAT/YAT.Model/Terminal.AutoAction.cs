@@ -77,6 +77,14 @@ namespace YAT.Model
 		private Thread autoActionThread;
 		private object autoActionThreadSyncObj = new object();
 
+		/// <remarks>Public getter for simplicity (update of corresponding view).</remarks>
+		/// <remarks><see cref="AutoActionPlotModelSyncObj"/> must be locked when accessing this property!</remarks>
+		public AutoActionPlotModel AutoActionPlotModel { get; protected set; }
+
+		/// <remarks>Public getter for simplicity (update of corresponding view).</remarks>
+		/// <remarks>Required for locking when accessing <see cref="AutoActionPlotModel"/>!</remarks>
+		public object AutoActionPlotModelSyncObj { get; protected set; } = new object();
+
 		#endregion
 
 		#region Events
@@ -85,7 +93,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler<AutoActionPlotEventArgs> AutoActionPlotRequest;
+		public event EventHandler AutoActionPlotRequest;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
@@ -667,9 +675,21 @@ namespace YAT.Model
 			AutoActionPlotItem pi;
 			string errorMessage;
 			if (TryCreateAutoActionPlotItem(plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage))
-				OnAutoActionPlotRequest(new AutoActionPlotEventArgs(CaptionHelper.ComposeInvariant(IndicatedName, "Plot"), pi));
+			{
+				lock (AutoActionPlotModelSyncObj)
+				{
+					if (AutoActionPlotModel == null)
+						AutoActionPlotModel = new AutoActionPlotModel();
+
+					AutoActionPlotModel.AddItem(pi);
+
+					OnAutoActionPlotRequest(EventArgs.Empty);
+				}
+			}
 			else
+			{
 				this.terminal.InlineErrorMessage(Domain.Direction.Rx, errorMessage, true);
+			}
 		}
 
 		/// <summary>
@@ -910,9 +930,9 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnAutoActionPlotRequest(AutoActionPlotEventArgs e)
+		protected virtual void OnAutoActionPlotRequest(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<AutoActionPlotEventArgs>(AutoActionPlotRequest, this, e);
+			this.eventHelper.RaiseSync<EventArgs>(AutoActionPlotRequest, this, e);
 		}
 
 		/// <summary></summary>

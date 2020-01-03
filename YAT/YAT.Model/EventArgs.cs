@@ -154,23 +154,6 @@ namespace YAT.Model
 			FilePathOld = filePathOld;
 		}
 	}
-
-	/// <summary></summary>
-	public class AutoActionPlotEventArgs : EventArgs
-	{
-		/// <summary></summary>
-		public string FormTitle { get; }
-
-		/// <summary></summary>
-		public AutoActionPlotItem PlotItem { get; }
-
-		/// <summary></summary>
-		public AutoActionPlotEventArgs(string formTitle, AutoActionPlotItem plotItem)
-		{
-			FormTitle = formTitle;
-			PlotItem = plotItem;
-		}
-	}
 }
 
 //==================================================================================================

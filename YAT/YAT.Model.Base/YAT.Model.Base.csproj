@@ -99,8 +99,6 @@
     <Compile Include="Settings\TerminalSettingsItem.cs" />
     <Compile Include="Settings\WorkspaceSettings.cs" />
     <Compile Include="Types\AutoAction.cs" />
-    <Compile Include="Types\AutoActionPlotItems.cs" />
-    <Compile Include="Types\AutoResponseReplaceEvaluator.cs" />
     <Compile Include="Types\AutoResponse.cs" />
     <Compile Include="Types\AutoTrigger.cs" />
     <Compile Include="Types\AutoResponseOptions.cs" />

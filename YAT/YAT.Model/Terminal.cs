@@ -924,6 +924,14 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual string ComposeInvariantCaption(string info)
+		{
+			// Do not call AssertNotDisposed() in a simple get-method.
+
+			return (CaptionHelper.ComposeInvariant(IndicatedName, info));
+		}
+
+		/// <summary></summary>
 		public virtual string IOStatusText
 		{
 			get
