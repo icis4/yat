@@ -85,6 +85,9 @@ namespace YAT.Model
 		/// <remarks>Required for locking when accessing <see cref="AutoActionPlotModel"/>!</remarks>
 		public object AutoActionPlotModelSyncObj { get; protected set; } = new object();
 
+		private bool autoActionPlotRequestEventIsSuspended; // = false;
+		private object autoActionPlotRequestEventIsSuspendedSyncObj = new object();
+
 		#endregion
 
 		#region Events
@@ -693,6 +696,34 @@ namespace YAT.Model
 		}
 
 		/// <summary>
+		/// Suspends the <see cref="AutoActionPlotRequest"/> event.
+		/// </summary>
+		/// <remarks>
+		/// Required to prevent unnecessary delays when calling <see cref="OnAutoActionPlotRequest"/>
+		/// because the event will be synchronized onto the main thread, which in case of massive sending
+		/// or receiving is already heavily loaded by the monitor update.
+		/// </remarks>
+		public void SuspendAutoActionPlotRequestEvent()
+		{
+			lock (this.autoActionPlotRequestEventIsSuspendedSyncObj)
+				this.autoActionPlotRequestEventIsSuspended = true;
+		}
+
+		/// <summary>
+		/// Resumes the <see cref="AutoActionPlotRequest"/> event.
+		/// </summary>
+		/// <remarks>
+		/// Required to prevent unnecessary delays when calling <see cref="OnAutoActionPlotRequest"/>
+		/// because the event will be synchronized onto the main thread, which in case of massive sending
+		/// or receiving is already heavily loaded by the monitor update.
+		/// </remarks>
+		public void ResumeAutoActionPlotRequestEvent()
+		{
+			lock (this.autoActionPlotRequestEventIsSuspendedSyncObj)
+				this.autoActionPlotRequestEventIsSuspended = false;
+		}
+
+		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
 		protected virtual bool TryCreateAutoActionPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
@@ -932,7 +963,12 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnAutoActionPlotRequest(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs>(AutoActionPlotRequest, this, e);
+			bool isSuspended;
+			lock (this.autoActionPlotRequestEventIsSuspendedSyncObj)
+				isSuspended = this.autoActionPlotRequestEventIsSuspended;
+
+			if (!isSuspended)
+				this.eventHelper.RaiseSync<EventArgs>(AutoActionPlotRequest, this, e); // Raise outside the lock!
 		}
 
 		/// <summary></summary>
