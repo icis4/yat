@@ -1362,7 +1362,7 @@ namespace YAT.View.Controls
 			int averageValue = ((currentValue + timer_ProcessorLoad_Tick_LastValue) / 2);
 			timer_ProcessorLoad_Tick_LastValue = currentValue;
 
-			DebugUpdate("CPU load = " + averageValue.ToString(CultureInfo.CurrentCulture) + "% resulting in ");
+			DebugUpdate("CPU load of " + averageValue.ToString(CultureInfo.CurrentCulture) + "% resulting in ");
 			CalculateUpdateTickInterval(averageValue);
 		}
 
@@ -2015,7 +2015,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary>
-		/// The update rate is calculated reverse-proportional to the total CPU load:
+		/// The update interval is calculated dependent on the total CPU load:
 		///
 		///      update interval in ms
 		///                 ^
@@ -2076,7 +2076,7 @@ namespace YAT.View.Controls
 			}
 
 			DebugUpdate(this.monitorUpdateTickInterval.ToString(CultureInfo.CurrentCulture) + " ticks = ");
-			DebugUpdate(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.CurrentCulture) + " ms");
+			DebugUpdate(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.CurrentCulture) + " ms.");
 			DebugUpdate(Environment.NewLine);
 		}
 
@@ -2189,7 +2189,7 @@ namespace YAT.View.Controls
 		{
 			if (DebugEnabled)
 			{
-				Debug.WriteLine(message);
+				Debug.Write(message);
 			}
 		}
 
