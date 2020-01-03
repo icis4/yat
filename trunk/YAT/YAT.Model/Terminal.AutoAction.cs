@@ -682,9 +682,9 @@ namespace YAT.Model
 						AutoActionPlotModel = new AutoActionPlotModel();
 
 					AutoActionPlotModel.AddItem(pi);
-
-					OnAutoActionPlotRequest(EventArgs.Empty);
 				}
+
+				OnAutoActionPlotRequest(EventArgs.Empty);
 			}
 			else
 			{

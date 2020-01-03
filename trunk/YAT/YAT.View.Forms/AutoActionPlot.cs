@@ -44,7 +44,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
@@ -74,7 +76,9 @@ namespace YAT.View.Forms
 		// Fields
 		//==========================================================================================
 
-		private readonly long initialAndMinimumUpdateInterval; // = 0;
+		private readonly int initialAndMinimumUpdateInterval; // = 0;
+		private readonly long lowerSpanTicks; // = 0;
+		private readonly long upperSpanTicks; // = 0;
 
 		private Model.Terminal model; // = null;
 
@@ -95,6 +99,8 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			this.initialAndMinimumUpdateInterval = timer_Update.Interval; // 73 ms (a prime number)
+			this.lowerSpanTicks = StopwatchEx.TimeToTicks(this.initialAndMinimumUpdateInterval); // 73 ms
+			this.upperSpanTicks = StopwatchEx.TimeToTicks(500); // ms
 
 			checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
 
@@ -110,10 +116,31 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		/// <remarks>
+		/// Opposed to <see cref="View.Controls.Monitor"/>, where update is mostly managed by
+		/// <see cref="ListBox"/>, i.e. selective update of added items, the plot is completely
+		/// rendered in <see cref="UpdatePlot(out long)"/>. Thus, an update strategy based on
+		/// regular polling is used.
+		/// </remarks>
 		private void timer_Update_Tick(object sender, EventArgs e)
 		{
-			long updateSpanAvg10s;
-			UpdatePlot(out updateSpanAvg10s); // No additional synchronization is needed, the System.Windows.Forms.Timer is synchronized.
+			long updateSpanTicksAvg10s;
+			UpdatePlot(out updateSpanTicksAvg10s); // No additional synchronization is needed, the System.Windows.Forms.Timer is synchronized.
+
+			DebugUpdate("Update average load of " + updateSpanTicksAvg10s.ToString(CultureInfo.CurrentCulture) + " ticks = ");
+			DebugUpdate(StopwatchEx.TicksToTime(updateSpanTicksAvg10s).ToString(CultureInfo.CurrentCulture) + " ms resulting in ");
+
+			int interval = CalculateUpdateInterval(updateSpanTicksAvg10s);
+			if (timer_Update.Interval != interval) {
+				timer_Update.Interval = interval;
+
+				DebugUpdate("changed.");
+			}
+			else {
+				DebugUpdate("kept.");
+			}
+
+			DebugUpdate(Environment.NewLine);
 		}
 
 		private void scottPlot_MouseEntered(object sender, EventArgs e)
@@ -158,6 +185,68 @@ namespace YAT.View.Forms
 		// Non-Public Methods
 		//==========================================================================================
 
+		/// <summary>
+		/// The update interval is calculated dependent on the time needed to update:
+		///
+		///      update interval in ms
+		///                 ^
+		///      max = 1125 |--------------x|
+		///                 |             x |
+		///                 |            x  |
+		///                 |         xx    |
+		///                 |     xxx       |
+		///        min = 73 |xxxx           |
+		///                 o-----------------> time needed to update in ms
+		///                 0 73   250     500
+		///
+		/// Up to 73 ms, the update is done more or less immediately.
+		/// Above 500 ms, the update is done every 1125 milliseconds.
+		/// Quadratic inbetween, at y = x^2.
+		///
+		/// Rationale:
+		///  - For better user expericence, interval shall gradually increase.
+		///  - Even at high CPU load, there shall still be some updating.
+		/// </summary>
+		/// <param name="updateSpanTicksAvg10s">
+		/// Ticks needed to update.
+		/// </param>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inbetween' is a correct English term.")]
+		private int CalculateUpdateInterval(long updateSpanTicksAvg10s)
+		{
+			int lowerInterval = this.initialAndMinimumUpdateInterval; // 73 ms
+			const int UpperInterval = 1125; // = (75*75) / 5 => eases calculation.
+
+			int resultInterval;
+
+			if (updateSpanTicksAvg10s < this.lowerSpanTicks)
+			{
+				resultInterval = lowerInterval;
+
+				DebugUpdate("minimum update interval of ");
+			}
+			else if (updateSpanTicksAvg10s > this.upperSpanTicks)
+			{
+				resultInterval = UpperInterval;
+
+				DebugUpdate("maximum update interval of ");
+			}
+			else
+			{
+				long x = (updateSpanTicksAvg10s - this.lowerSpanTicks); // Resulting x is equivalent to max. 427 ms
+				int y = (int)((x * x) / 5);
+
+				y = Int32Ex.Limit(y, lowerInterval, UpperInterval); // 'min' and 'max' are fixed.
+
+				resultInterval = y;
+
+				DebugUpdate("calculated update interval of ");
+			}
+
+			DebugUpdate(resultInterval.ToString(CultureInfo.CurrentCulture) + " ms ");
+
+			return (resultInterval);
+		}
+
 		private void Clear()
 		{
 			lock (this.model.AutoActionPlotModelSyncObj)
@@ -168,13 +257,13 @@ namespace YAT.View.Forms
 
 		private void UpdatePlot()
 		{
-			long updateSpanAvg10sDummy;
-			UpdatePlot(out updateSpanAvg10sDummy);
+			long spanTicksAvg10sDummy;
+			UpdatePlot(out spanTicksAvg10sDummy);
 		}
 
-		private void UpdatePlot(out long updateSpanAvg10s)
+		private void UpdatePlot(out long spanTicksAvg10s)
 		{
-			updateSpanAvg10s = 0;
+			spanTicksAvg10s = 0;
 
 			if (!this.updateIsSuspended) // Only update when allowed.
 			{
@@ -183,7 +272,7 @@ namespace YAT.View.Forms
 					var mdl = this.model.AutoActionPlotModel;
 					if (this.lastUpdateCount != mdl.UpdateCounter) // Only update when needed.
 					{
-						var updateBegin = Stopwatch.GetTimestamp();
+						var beginTicks = Stopwatch.GetTimestamp();
 
 						scottPlot.plt.Clear();
 
@@ -244,10 +333,10 @@ namespace YAT.View.Forms
 
 						this.lastUpdateCount = mdl.UpdateCounter;
 
-						var updateEnd = Stopwatch.GetTimestamp();
-						var updateSpan = (updateEnd - updateBegin);
-						updateSpanAvg10s = this.updateSpanAvg10s.EnqueueAndCalculate(updateSpan); // No additional synchronization is needed, all access to this form is synchronized onto the main thread.
-						DebugUpdate("Update took " + StopwatchEx.TicksToTime(updateSpan) + " ms; in average (moving, 10 s) " + StopwatchEx.TicksToTime(updateSpanAvg10s) + " ms");
+						var endTicks = Stopwatch.GetTimestamp();
+						var spanTicks = (endTicks - beginTicks);
+						spanTicksAvg10s = this.updateSpanAvg10s.EnqueueAndCalculate(spanTicks); // No additional synchronization is needed, all access to this form is synchronized onto the main thread.
+						DebugUpdate("Update took " + StopwatchEx.TicksToTime(spanTicks) + " ms; in average (moving, 10 s) " + StopwatchEx.TicksToTime(spanTicksAvg10s) + " ms");
 					}
 				}
 			}
@@ -376,16 +465,10 @@ namespace YAT.View.Forms
 		// Debug
 		//==========================================================================================
 
-		[Conditional("DEBUG")]
-		private void DebugMessage(string message)
-		{
-			Debug.WriteLine(message);
-		}
-
 		[Conditional("DEBUG_UPDATE")]
 		private void DebugUpdate(string message)
 		{
-			DebugMessage(message);
+			Debug.Write(message);
 		}
 
 		#endregion
