@@ -106,7 +106,15 @@ namespace YAT.View.Forms
 			this.lowerSpanTicks = StopwatchEx.TimeToTicks(lowerSpan);
 			this.upperSpanTicks = StopwatchEx.TimeToTicks(lowerSpan + 75); // ms
 
-			checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+			this.isSettingControls.Enter();
+			try
+			{
+				checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 
 			this.model = model;
 
