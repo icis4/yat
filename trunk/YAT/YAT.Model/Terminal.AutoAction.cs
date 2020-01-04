@@ -539,16 +539,17 @@ namespace YAT.Model
 					// No additional action.
 					break;
 
-				case AutoAction.Beep:               SystemSounds.Beep.Play();                                        break;
-				case AutoAction.ShowMessageBox:     RequestAutoActionMessage(triggerTimeStamp,  triggerText, count); break;
+				case AutoAction.Beep:               SystemSounds.Beep.Play();                                         break;
+				case AutoAction.ShowMessageBox:     RequestAutoActionMessage(triggerTimeStamp,  triggerText, count);  break;
 
-				case AutoAction.LineChartIndex:     RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
-				case AutoAction.LineChartTimeStamp: RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
-				case AutoAction.ScatterPlotXY:      RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
-				case AutoAction.ScatterPlotTime:    RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
-				case AutoAction.Histogram:          RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches); break;
+				case AutoAction.LineChartIndex:     RequestAutoActionPlot(action, DateTime.MinValue, triggerMatches); break;
+				case AutoAction.LineChartTime:      RequestAutoActionPlot(action, DateTime.MinValue, triggerMatches); break;
+				case AutoAction.LineChartTimeStamp: RequestAutoActionPlot(action, triggerTimeStamp,  triggerMatches); break;
+				case AutoAction.ScatterPlotXY:      RequestAutoActionPlot(action, triggerTimeStamp,  triggerMatches); break;
+				case AutoAction.ScatterPlotTime:    RequestAutoActionPlot(action, triggerTimeStamp,  triggerMatches); break;
+				case AutoAction.Histogram:          RequestAutoActionPlot(action, triggerTimeStamp,  triggerMatches); break;
 
-				case AutoAction.ClearRepositories:  ClearRepositories();                                             break;
+				case AutoAction.ClearRepositories:  ClearRepositories();                                              break;
 
 				case AutoAction.ClearRepositoriesOnSubsequentRx:
 				{
@@ -620,6 +621,7 @@ namespace YAT.Model
 				case AutoAction.Beep:
 				case AutoAction.ShowMessageBox:
 				case AutoAction.LineChartIndex:
+				case AutoAction.LineChartTime:
 				case AutoAction.LineChartTimeStamp:
 				case AutoAction.ScatterPlotXY:
 				case AutoAction.ScatterPlotTime:
@@ -699,11 +701,12 @@ namespace YAT.Model
 		{
 			switch (plotAction)
 			{
-				case AutoAction.LineChartIndex:
-				case AutoAction.LineChartTimeStamp: return (TryCreateLineChartItem(  plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage));
-// PENDING		case AutoAction.ScatterPlot:        return (TryCreateScatterPlotItem(plotAction,                   triggerMatches, out pi, out errorMessage));
-// PENDING		case AutoAction.ScatterPlot:        return (TryCreateScatterPlotItem(plotAction,                   triggerMatches, out pi, out errorMessage));
-//				case AutoAction.Histogram:          return (TryCreateHistogramItem(  plotAction,                   triggerMatches, out pi, out errorMessage));
+				case AutoAction.LineChartIndex:     return (TryCreateLineChartIndexItem(    plotAction,                   triggerMatches, out pi, out errorMessage));
+				case AutoAction.LineChartTime:      return (TryCreateLineChartTimeItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
+				case AutoAction.LineChartTimeStamp: return (TryCreateLineChartTimeStampItem(plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage));
+				case AutoAction.ScatterPlotXY:      return (TryCreateScatterPlotXYItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
+				case AutoAction.ScatterPlotTime:    return (TryCreateScatterPlotTimeItem(   plotAction,                   triggerMatches, out pi, out errorMessage));
+// PENDING				case AutoAction.Histogram:          return (TryCreateHistogramItem(         plotAction,                   triggerMatches, out pi, out errorMessage));
 
 // PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
 // Histogram: Each capture
@@ -715,11 +718,31 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual bool TryCreateLineChartItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		protected virtual bool TryCreateLineChartIndexItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
+			var yValues = ConvertCapturesToPlotValues(captures);
+			pi = new ValueCollectionAutoActionPlotItem(plotAction, null, yValues);
+			errorMessage = null;
+			return (true);
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual bool TryCreateLineChartTimeItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			return (TryCreateScatterPlotItem(plotAction, triggerMatches, out pi, out errorMessage));
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual bool TryCreateLineChartTimeStampItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
 		{
 			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
-			var yValues = ConvertCapturesToPlotValues(AutoAction.LineChartIndex, captures);
+			var yValues = ConvertCapturesToPlotValues(captures);
 			pi = new ValueCollectionAutoActionPlotItem(plotAction, xValue, yValues);
 			errorMessage = null;
 			return (true);
@@ -728,7 +751,39 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
-		protected virtual Tuple<string, double>[] ConvertCapturesToPlotValues(AutoAction plotAction, string[] captures)
+		protected virtual bool TryCreateScatterPlotXYItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			return (TryCreateScatterPlotItem(plotAction, triggerMatches, out pi, out errorMessage));
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual bool TryCreateScatterPlotTimeItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			return (TryCreateScatterPlotItem(plotAction, triggerMatches, out pi, out errorMessage));
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual bool TryCreateScatterPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
+			var values = ConvertCapturesToPlotValues(captures);
+			var xValue = values[0];
+			var yLength = (values.Length - 1);
+			var yValues = new Tuple<string, double>[yLength];
+			Array.Copy(values, 1, yValues, 0, yLength);
+			pi = new ValueCollectionAutoActionPlotItem(plotAction, xValue, yValues);
+			errorMessage = null;
+			return (true);
+		}
+
+		/// <summary>
+		/// Requests the desired chart/plot.
+		/// </summary>
+		protected virtual Tuple<string, double>[] ConvertCapturesToPlotValues(string[] captures)
 		{
 			var yValues = new List<Tuple<string, double>>(); // No preset needed, the default behavior is good enough.
 
