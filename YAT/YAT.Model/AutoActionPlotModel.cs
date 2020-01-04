@@ -58,9 +58,15 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public Tuple<string, List<double>> XValues { get; protected set; }
-		/// <summary></summary>
 
+		/// <summary></summary>
 		public List<Tuple<string, List<double>>> YValues { get; protected set; }
+
+		/// <summary></summary>
+		public Tuple<string, List<double>> HistogramBins { get; protected set; }
+
+		/// <summary></summary>
+		public Tuple<string, List<double>> HistogramCounts { get; protected set; }
 
 		/// <summary>
 		/// Gets or sets a counter that indicates whether and how many times the plot has changed.
@@ -84,9 +90,10 @@ namespace YAT.Model.Types
 			switch (pi.Action)
 			{
 				case AutoAction.LineChartIndex:     AddItemToLineChartIndex(pi);     break;
+				case AutoAction.LineChartTime:      AddItemToLineChartTime(pi);      break;
 				case AutoAction.LineChartTimeStamp: AddItemToLineChartTimeStamp(pi); break;
 				case AutoAction.ScatterPlotXY:      AddItemToScatterPlotXY(pi);      break;
-				case AutoAction.ScatterPlotTime:    AddItemToScatterPlotXTime(pi);   break;
+				case AutoAction.ScatterPlotTime:    AddItemToScatterPlotTime(pi);    break;
 				case AutoAction.Histogram:          AddItemToHistogram(pi);          break;
 			}
 
@@ -98,6 +105,8 @@ namespace YAT.Model.Types
 		{
 			XValues = null;
 			YValues = null;
+			HistogramBins = null;
+			HistogramCounts = null;
 
 			IndicateUpdate();
 		}
@@ -113,23 +122,63 @@ namespace YAT.Model.Types
 		protected virtual void AddItemToLineChartIndex(AutoActionPlotItem pi)
 		{
 			XLabel = "Index";
+			YLabel = "Value";
 
-			AddItemToLineChart(pi);
+			AddItemToYOnly(pi);
+		}
+
+		/// <summary></summary>
+		protected virtual void AddItemToLineChartTime(AutoActionPlotItem pi)
+		{
+			XLabel = "Time";
+			YLabel = "Value";
+
+			AddItemToXY(pi);
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToLineChartTimeStamp(AutoActionPlotItem pi)
 		{
 			XLabel = "Time Stamp";
+			YLabel = "Value";
 
-			AddItemToLineChart(pi);
+			AddItemToXY(pi);
 		}
 
 		/// <summary></summary>
-		protected virtual void AddItemToLineChart(AutoActionPlotItem pi)
+		protected virtual void AddItemToScatterPlotXY(AutoActionPlotItem pi)
 		{
+			XLabel = "X Value";
+			YLabel = "Y Value";
+
+			AddItemToXY(pi);
+		}
+
+		/// <summary></summary>
+		protected virtual void AddItemToScatterPlotTime(AutoActionPlotItem pi)
+		{
+			XLabel = "Time";
 			YLabel = "Value";
 
+			AddItemToXY(pi);
+		}
+
+		/// <summary></summary>
+		protected virtual void AddItemToYOnly(AutoActionPlotItem pi)
+		{
+			var vc = (pi as ValueCollectionAutoActionPlotItem);
+
+			if (YValues == null)
+			{
+				YValues = new List<Tuple<string, List<double>>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
+			}
+
+			AddItemToY(vc);
+		}
+
+		/// <summary></summary>
+		protected virtual void AddItemToXY(AutoActionPlotItem pi)
+		{
 			var vc = (pi as ValueCollectionAutoActionPlotItem);
 
 			if ((XValues == null) || (YValues == null))
@@ -140,6 +189,12 @@ namespace YAT.Model.Types
 
 			XValues.Item2.Add(vc.XValue.Item2);
 
+			AddItemToY(vc);
+		}
+
+		/// <summary></summary>
+		protected virtual void AddItemToY(ValueCollectionAutoActionPlotItem vc)
+		{
 			for (int i = YValues.Count; i < vc.YValues.Length; i++)
 			{
 				string label = vc.YValues[i].Item1;
@@ -160,18 +215,6 @@ namespace YAT.Model.Types
 				else
 					YValues[i].Item2.Add(0); // Fill with default value.
 			}
-		}
-
-		/// <summary></summary>
-		protected virtual void AddItemToScatterPlotXY(AutoActionPlotItem pi)
-		{
-			// PENDING
-		}
-
-		/// <summary></summary>
-		protected virtual void AddItemToScatterPlotXTime(AutoActionPlotItem pi)
-		{
-			// PENDING
 		}
 
 		/// <summary></summary>

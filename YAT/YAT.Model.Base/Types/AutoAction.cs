@@ -51,6 +51,7 @@ namespace YAT.Model.Types
 		ShowMessageBox,
 
 		LineChartIndex,
+		LineChartTime,
 		LineChartTimeStamp,
 		ScatterPlotXY,
 		ScatterPlotTime,
@@ -108,8 +109,11 @@ namespace YAT.Model.Types
 		private const string             LineChartIndex_string = "[Line Chart]";
 		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LC]" };
 
+		private const string             LineChartTime_string = "[Line Chart (X = Time)]";
+		private static readonly string[] LineChartTime_stringAlternatives = new string[] { "[LCT]" };
+
 		private const string             LineChartTimeStamp_string = "[Line Chart (X = Time Stamp)]";
-		private static readonly string[] LineChartTimeStamp_stringAlternatives = new string[] { "[LCT]" };
+		private static readonly string[] LineChartTimeStamp_stringAlternatives = new string[] { "[LCTS]" };
 
 		private const string             ScatterPlotXY_string = "[Scatter Plot]";
 		private static readonly string[] ScatterPlotXY_stringAlternatives = new string[] { "[SP]" };
@@ -201,6 +205,7 @@ namespace YAT.Model.Types
 				case AutoAction.ShowMessageBox:                  return (ShowMessageBox_string);
 
 				case AutoAction.LineChartIndex:                  return (LineChartIndex_string);
+				case AutoAction.LineChartTime:                   return (LineChartTime_string);
 				case AutoAction.LineChartTimeStamp:              return (LineChartTimeStamp_string);
 				case AutoAction.ScatterPlotXY:                   return (ScatterPlotXY_string);
 				case AutoAction.ScatterPlotTime:                 return (ScatterPlotTime_string);
@@ -285,7 +290,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(20); // Preset the required capacity to improve memory management.
+			var a = new List<AutoActionEx>(21); // Preset the required capacity to improve memory management.
 
 			a.Add(new AutoActionEx(AutoAction.None));
 
@@ -297,6 +302,7 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
 
 			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
+			a.Add(new AutoActionEx(AutoAction.LineChartTime));
 			a.Add(new AutoActionEx(AutoAction.LineChartTimeStamp));
 			a.Add(new AutoActionEx(AutoAction.ScatterPlotXY));
 			a.Add(new AutoActionEx(AutoAction.ScatterPlotTime));
@@ -405,6 +411,12 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartIndex_stringAlternatives))
 			{
 				result = AutoAction.LineChartIndex;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartTime_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartTime_stringAlternatives))
+			{
+				result = AutoAction.LineChartTime;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartTimeStamp_string) ||

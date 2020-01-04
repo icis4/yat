@@ -298,6 +298,9 @@ namespace YAT.View.Forms
 				var mdl = this.model.AutoActionPlotModel;
 				if ((this.lastUpdateCount != mdl.UpdateCounter) || force) // Only update when needed.
 				{
+					var firstColor = this.model.SettingsRoot.Format.RxDataFormat.Color;
+					var isFirst = true;
+
 					scottPlot.plt.Clear();
 
 					scottPlot.plt.Title(mdl.Title);
@@ -310,7 +313,29 @@ namespace YAT.View.Forms
 						case AutoAction.LineChartIndex: {
 							if (mdl.YValues != null) {
 								foreach (var kvp in mdl.YValues) {
-									scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
+									if (isFirst) {
+										isFirst = false;
+										scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), color: firstColor, label: kvp.Item1);
+									}
+									else {
+										scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
+									}
+								}
+							}
+							break;
+						}
+
+						case AutoAction.LineChartTime: {
+							scottPlot.plt.Ticks(dateTimeX: true);
+							if ((mdl.XValues != null) && (mdl.YValues != null)) {
+								foreach (var kvp in mdl.YValues) {
+									if (isFirst) {
+										isFirst = false;
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, label: kvp.Item1);
+									}
+									else {
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
+									}
 								}
 							}
 							break;
@@ -320,28 +345,51 @@ namespace YAT.View.Forms
 							scottPlot.plt.Ticks(dateTimeX: true);
 							if ((mdl.XValues != null) && (mdl.YValues != null)) {
 								foreach (var kvp in mdl.YValues) {
-									scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
+									if (isFirst) {
+										isFirst = false;
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, label: kvp.Item1);
+									}
+									else {
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
+									}
 								}
 							}
 							break;
 						}
 
 						case AutoAction.ScatterPlotXY: {
-							// PENDING
-						//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+							if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0)) {
+								foreach (var kvp in mdl.YValues) {
+									if (isFirst) {
+										isFirst = false;
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, lineWidth: 0, label: kvp.Item1);
+									}
+									else {
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: 0, label: kvp.Item1);
+									}
+								}
+							}
 							break;
 						}
 
 						case AutoAction.ScatterPlotTime: {
-							// PENDING
-						//	scottPlot.plt.Ticks(dateTimeX: true);
-						//	scottPlot.plt.PlotScatter(this.plotXValues.ToArray(), this.plotYValues.ToArray(), lineWidth: 0);
+							scottPlot.plt.Ticks(dateTimeX: true);
+							if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0)) {
+								foreach (var kvp in mdl.YValues) {
+									if (isFirst) {
+										isFirst = false;
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, lineWidth: 0, label: kvp.Item1);
+									}
+									else {
+										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: 0, label: kvp.Item1);
+									}
+								}
+							}
 							break;
 						}
 
 						case AutoAction.Histogram: {
-							// PENDING
-						//	scottPlot.plt.PlotBar(this.plotXValues.ToArray(), this.plotYValues.ToArray(), barWidth: ToHistogramBarWidth(this.plotXValues));
+							scottPlot.plt.PlotBar(mdl.HistogramBins.Item2.ToArray(), mdl.HistogramCounts.Item2.ToArray(), barWidth: ToHistogramBarWidth(mdl.HistogramBins.Item2), color: firstColor);
 							break;
 						}
 
@@ -398,6 +446,7 @@ namespace YAT.View.Forms
 						UpdateHoverOnSignal(cursorPos);
 						break;
 
+					case AutoAction.LineChartTime:
 					case AutoAction.LineChartTimeStamp:
 					case AutoAction.ScatterPlotXY:
 					case AutoAction.ScatterPlotTime:
