@@ -7456,7 +7456,7 @@ namespace YAT.View.Forms
 
 			if (this.autoActionPlotForm == null)
 			{
-				this.terminal.SuspendAutoActionPlotRequestEvent(); // Disarm.
+				DeactivateAutoActionPlotRequestEvent(); // See method remarks!
 
 				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
 				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
@@ -7497,7 +7497,23 @@ namespace YAT.View.Forms
 		{
 			this.autoActionPlotForm = null;
 
-			this.terminal.ResumeAutoActionPlotRequestEvent(); // Arm again.
+			ReactivateAutoActionPlotRequestEvent();
+		}
+
+		/// <remarks>
+		/// Required to prevent unnecessary delays when <see cref="Model.Terminal"/> invokes
+		/// the <see cref="Model.Terminal.AutoActionPlotRequest"/> event, which will be
+		/// will be synchronized onto the main thread, which in case of massive sending
+		/// or receiving is already heavily loaded by the monitor update.
+		/// </remarks>
+		private void DeactivateAutoActionPlotRequestEvent()
+		{
+			this.terminal.AutoActionPlotRequest -= terminal_AutoActionPlotRequest;
+		}
+
+		private void ReactivateAutoActionPlotRequestEvent()
+		{
+			this.terminal.AutoActionPlotRequest += terminal_AutoActionPlotRequest;
 		}
 
 		#endregion
