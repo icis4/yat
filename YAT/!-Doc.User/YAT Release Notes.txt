@@ -104,7 +104,7 @@ New:
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - Automatic responses now support injection of trigger captures, given regular expression is used.
-- New automatic actions [Line Chart (Index)], [Line Chart (Time)], [Scatter Plot] and [Histogram].
+- New automatic actions [Line Chart (Index/Time/TimeStamp)], [Scatter Plot XY/Time], [Histogram].
 
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT

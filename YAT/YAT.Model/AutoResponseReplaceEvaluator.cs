@@ -28,7 +28,7 @@ using System.Text.RegularExpressions;
 
 using MKY;
 
-namespace YAT.Model.Types
+namespace YAT.Model
 {
 	/// <summary>
 	/// A <see cref="MatchEvaluator"/> that "knows" the trigger captures.

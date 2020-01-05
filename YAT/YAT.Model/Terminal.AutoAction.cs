@@ -701,73 +701,27 @@ namespace YAT.Model
 		{
 			switch (plotAction)
 			{
-				case AutoAction.LineChartIndex:     return (TryCreateLineChartIndexItem(    plotAction,                   triggerMatches, out pi, out errorMessage));
-				case AutoAction.LineChartTime:      return (TryCreateLineChartTimeItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
-				case AutoAction.LineChartTimeStamp: return (TryCreateLineChartTimeStampItem(plotAction, triggerTimeStamp, triggerMatches, out pi, out errorMessage));
-				case AutoAction.ScatterPlotXY:      return (TryCreateScatterPlotXYItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
-				case AutoAction.ScatterPlotTime:    return (TryCreateScatterPlotTimeItem(   plotAction,                   triggerMatches, out pi, out errorMessage));
-// PENDING				case AutoAction.Histogram:          return (TryCreateHistogramItem(         plotAction,                   triggerMatches, out pi, out errorMessage));
-
-// PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
-// Histogram: Each capture
+				case AutoAction.LineChartIndex:                CreateYPlotItem(          plotAction,                   triggerMatches, out pi);    errorMessage = null; return (true);
+				case AutoAction.LineChartTime:      return (TryCreateTimeXYPlotItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
+				case AutoAction.LineChartTimeStamp:            CreateTimeStampXYPlotItem(plotAction, triggerTimeStamp, triggerMatches, out pi);    errorMessage = null; return (true);
+				case AutoAction.ScatterPlotXY:                 CreateXYPlotItem(         plotAction,                   triggerMatches, out pi);    errorMessage = null; return (true);
+				case AutoAction.ScatterPlotTime:    return (TryCreateTimeXYPlotItem(     plotAction,                   triggerMatches, out pi, out errorMessage));
+				case AutoAction.Histogram:                     CreateYPlotItem(          plotAction,                   triggerMatches, out pi);    errorMessage = null; return (true);
 
 				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
-		/// <summary>
-		/// Requests the desired chart/plot.
-		/// </summary>
-		protected virtual bool TryCreateLineChartIndexItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		/// <summary></summary>
+		protected virtual void CreateYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
 			var yValues = ConvertCapturesToPlotValues(captures);
-			pi = new ValueCollectionAutoActionPlotItem(plotAction, null, yValues);
-			errorMessage = null;
-			return (true);
+			pi = new AutoActionPlotItem(plotAction, null, yValues);
 		}
 
-		/// <summary>
-		/// Requests the desired chart/plot.
-		/// </summary>
-		protected virtual bool TryCreateLineChartTimeItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
-		{
-			return (TryCreateScatterPlotItem(plotAction, triggerMatches, out pi, out errorMessage));
-		}
-
-		/// <summary>
-		/// Requests the desired chart/plot.
-		/// </summary>
-		protected virtual bool TryCreateLineChartTimeStampItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
-		{
-			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
-			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
-			var yValues = ConvertCapturesToPlotValues(captures);
-			pi = new ValueCollectionAutoActionPlotItem(plotAction, xValue, yValues);
-			errorMessage = null;
-			return (true);
-		}
-
-		/// <summary>
-		/// Requests the desired chart/plot.
-		/// </summary>
-		protected virtual bool TryCreateScatterPlotXYItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
-		{
-			return (TryCreateScatterPlotItem(plotAction, triggerMatches, out pi, out errorMessage));
-		}
-
-		/// <summary>
-		/// Requests the desired chart/plot.
-		/// </summary>
-		protected virtual bool TryCreateScatterPlotTimeItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
-		{
-			return (TryCreateScatterPlotItem(plotAction, triggerMatches, out pi, out errorMessage));
-		}
-
-		/// <summary>
-		/// Requests the desired chart/plot.
-		/// </summary>
-		protected virtual bool TryCreateScatterPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		/// <summary></summary>
+		protected virtual void CreateXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
 			var values = ConvertCapturesToPlotValues(captures);
@@ -775,14 +729,52 @@ namespace YAT.Model
 			var yLength = (values.Length - 1);
 			var yValues = new Tuple<string, double>[yLength];
 			Array.Copy(values, 1, yValues, 0, yLength);
-			pi = new ValueCollectionAutoActionPlotItem(plotAction, xValue, yValues);
+			pi = new AutoActionPlotItem(plotAction, xValue, yValues);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryCreateTimeXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		{
+			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
+			Tuple<string, double> xTimeValue;
+			if (!TryConvertCapturesToPlotTime(captures[0], out xTimeValue)) {
+				errorMessage = string.Format("The first capture {0} could not be converted into a date/time value!", captures[0]);
+				pi = null;
+				return (false);
+			}
+			var values = ConvertCapturesToPlotValues(captures);
+			var yLength = (values.Length - 1);
+			var yValues = new Tuple<string, double>[yLength];
+			Array.Copy(values, 1, yValues, 0, yLength);
+			pi = new AutoActionPlotItem(plotAction, xTimeValue, yValues);
 			errorMessage = null;
 			return (true);
 		}
 
-		/// <summary>
-		/// Requests the desired chart/plot.
-		/// </summary>
+		/// <summary></summary>
+		protected virtual void CreateTimeStampXYPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi)
+		{
+			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
+			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
+			var yValues = ConvertCapturesToPlotValues(captures);
+			pi = new AutoActionPlotItem(plotAction, xValue, yValues);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryConvertCapturesToPlotTime(string capture, out Tuple<string, double> timeValue)
+		{
+			DateTime result;
+			if (DateTime.TryParse(capture, out result))
+			{
+				timeValue = new Tuple<string, double>("Time", result.ToOADate());
+				return (true);
+			}
+
+			timeValue = null;
+			return (false);
+		}
+
+		/// <summary></summary>
 		protected virtual Tuple<string, double>[] ConvertCapturesToPlotValues(string[] captures)
 		{
 			var yValues = new List<Tuple<string, double>>(); // No preset needed, the default behavior is good enough.
