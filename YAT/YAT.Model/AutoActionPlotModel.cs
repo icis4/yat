@@ -135,7 +135,7 @@ namespace YAT.Model
 			XLabel = "Time";
 			YLabel = "Value";
 
-			AddItemToXY(pi);
+			AddItemToXAndY(pi);
 		}
 
 		/// <summary></summary>
@@ -144,7 +144,7 @@ namespace YAT.Model
 			XLabel = "Time Stamp";
 			YLabel = "Value";
 
-			AddItemToXY(pi);
+			AddItemToXAndY(pi);
 		}
 
 		/// <summary></summary>
@@ -153,7 +153,7 @@ namespace YAT.Model
 			XLabel = "X Value";
 			YLabel = "Y Value";
 
-			AddItemToXY(pi);
+			AddItemToXAndY(pi);
 		}
 
 		/// <summary></summary>
@@ -162,44 +162,40 @@ namespace YAT.Model
 			XLabel = "Time";
 			YLabel = "Value";
 
-			AddItemToXY(pi);
+			AddItemToXAndY(pi);
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToYOnly(AutoActionPlotItem pi)
 		{
-			var vc = (pi as AutoActionPlotItem);
-
 			if (YValues == null)
 			{
-				YValues = new List<Tuple<string, List<double>>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
+				YValues = new List<Tuple<string, List<double>>>(pi.YValues.Length); // Preset the required capacity to improve memory management.
 			}
 
-			AddItemToY(vc);
+			AddItemToY(pi);
 		}
 
 		/// <summary></summary>
-		protected virtual void AddItemToXY(AutoActionPlotItem pi)
+		protected virtual void AddItemToXAndY(AutoActionPlotItem pi)
 		{
-			var vc = (pi as AutoActionPlotItem);
-
 			if ((XValues == null) || (YValues == null))
 			{
-				XValues = new Tuple<string, List<double>>(vc.XValue.Item1, new List<double>(1024)); // Add a new empty list.
-				YValues = new List<Tuple<string, List<double>>>(vc.YValues.Length); // Preset the required capacity to improve memory management.
+				XValues = new Tuple<string, List<double>>(pi.XValue.Item1, new List<double>(1024)); // Add a new empty list.
+				YValues = new List<Tuple<string, List<double>>>(pi.YValues.Length); // Preset the required capacity to improve memory management.
 			}
 
-			XValues.Item2.Add(vc.XValue.Item2);
+			XValues.Item2.Add(pi.XValue.Item2);
 
-			AddItemToY(vc);
+			AddItemToY(pi);
 		}
 
 		/// <summary></summary>
-		protected virtual void AddItemToY(AutoActionPlotItem vc)
+		protected virtual void AddItemToY(AutoActionPlotItem pi)
 		{
-			for (int i = YValues.Count; i < vc.YValues.Length; i++)
+			for (int i = YValues.Count; i < pi.YValues.Length; i++)
 			{
-				string label = vc.YValues[i].Item1;
+				string label = pi.YValues[i].Item1;
 
 				List<double> values;
 				if ((i == 0) || (YValues[0].Item2.Count == 0))
@@ -212,8 +208,8 @@ namespace YAT.Model
 
 			for (int i = 0; i < YValues.Count; i++)
 			{
-				if (i < vc.YValues.Length)
-					YValues[i].Item2.Add(vc.YValues[i].Item2);
+				if (i < pi.YValues.Length)
+					YValues[i].Item2.Add(pi.YValues[i].Item2);
 				else
 					YValues[i].Item2.Add(0); // Fill with default value.
 			}
