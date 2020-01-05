@@ -24,28 +24,18 @@
 
 using System;
 
-namespace YAT.Model.Types
+using YAT.Model.Types;
+
+namespace YAT.Model
 {
 	/// <summary>
 	/// Defines an item to plot.
 	/// </summary>
-	public abstract class AutoActionPlotItem
+	public class AutoActionPlotItem
 	{
 		/// <summary></summary>
 		public AutoAction Action { get; }
 
-		/// <summary></summary>
-		public AutoActionPlotItem(AutoAction action)
-		{
-			Action = action;
-		}
-	}
-
-	/// <summary>
-	/// Defines an item to plot.
-	/// </summary>
-	public class ValueCollectionAutoActionPlotItem : AutoActionPlotItem
-	{
 		/// <summary></summary>
 		public Tuple<string, double> XValue { get; }
 
@@ -53,51 +43,11 @@ namespace YAT.Model.Types
 		public Tuple<string, double>[] YValues { get; }
 
 		/// <summary></summary>
-		public ValueCollectionAutoActionPlotItem(AutoAction action, Tuple<string, double> xValue, Tuple<string, double>[] yValues)
-			: base(action)
+		public AutoActionPlotItem(AutoAction action, Tuple<string, double> xValue, Tuple<string, double>[] yValues)
 		{
-			XValue = xValue;
+			Action  = action;
+			XValue  = xValue;
 			YValues = yValues;
-		}
-	}
-
-	/// <summary>
-	/// Defines an item to plot.
-	/// </summary>
-	public class ValuePairAutoActionPlotItem : AutoActionPlotItem
-	{
-		/// <summary></summary>
-		public Tuple<string, double> XValue { get; }
-
-		/// <summary></summary>
-		public Tuple<string, double> YValue { get; }
-
-		/// <summary></summary>
-		public ValuePairAutoActionPlotItem(AutoAction action, Tuple<string, double> xValue, Tuple<string, double> yValue)
-			: base(action)
-		{
-			XValue = xValue;
-			YValue = yValue;
-		}
-	}
-
-	/// <summary>
-	/// Defines an item to plot.
-	/// </summary>
-	public class ValueTimeAutoActionPlotItem : AutoActionPlotItem
-	{
-		/// <summary></summary>
-		public Tuple<string, DateTime> XValue { get; }
-
-		/// <summary></summary>
-		public Tuple<string, double> YValue { get; }
-
-		/// <summary></summary>
-		public ValueTimeAutoActionPlotItem(AutoAction action, Tuple<string, DateTime> xValue, Tuple<string, double> yValue)
-			: base(action)
-		{
-			XValue = xValue;
-			YValue = yValue;
 		}
 	}
 }

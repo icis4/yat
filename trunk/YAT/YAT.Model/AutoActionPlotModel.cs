@@ -25,7 +25,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace YAT.Model.Types
+using YAT.Model.Types;
+
+namespace YAT.Model
 {
 	/// <summary>
 	/// Defines the plot model.
@@ -166,7 +168,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		protected virtual void AddItemToYOnly(AutoActionPlotItem pi)
 		{
-			var vc = (pi as ValueCollectionAutoActionPlotItem);
+			var vc = (pi as AutoActionPlotItem);
 
 			if (YValues == null)
 			{
@@ -179,7 +181,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		protected virtual void AddItemToXY(AutoActionPlotItem pi)
 		{
-			var vc = (pi as ValueCollectionAutoActionPlotItem);
+			var vc = (pi as AutoActionPlotItem);
 
 			if ((XValues == null) || (YValues == null))
 			{
@@ -193,7 +195,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		protected virtual void AddItemToY(ValueCollectionAutoActionPlotItem vc)
+		protected virtual void AddItemToY(AutoActionPlotItem vc)
 		{
 			for (int i = YValues.Count; i < vc.YValues.Length; i++)
 			{
@@ -221,6 +223,9 @@ namespace YAT.Model.Types
 		protected virtual void AddItemToHistogram(AutoActionPlotItem pi)
 		{
 			// PENDING Make histo bins and counts (bins epsilon up to 1024, then equally distributed)
+// PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
+// Histogram: Each capture
+
 		}
 
 		/// <summary></summary>
