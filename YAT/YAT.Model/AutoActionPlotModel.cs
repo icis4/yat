@@ -166,6 +166,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		protected virtual void AddItemToHistogram(AutoActionPlotItem pi)
+		{
+			XLabel = "Bins";
+			YLabel = "Counts";
+
+
+			var histo = new SortedDictionary<double, double>();
+			// PENDING Make histo bins and counts (bins epsilon up to 1024, then equally distributed)
+// PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
+// Histogram: Each capture
+
+		}
+
+		/// <summary></summary>
 		protected virtual void AddItemToYOnly(AutoActionPlotItem pi)
 		{
 			if (YValues == null)
@@ -213,15 +227,6 @@ namespace YAT.Model
 				else
 					YValues[i].Item2.Add(0); // Fill with default value.
 			}
-		}
-
-		/// <summary></summary>
-		protected virtual void AddItemToHistogram(AutoActionPlotItem pi)
-		{
-			// PENDING Make histo bins and counts (bins epsilon up to 1024, then equally distributed)
-// PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
-// Histogram: Each capture
-
 		}
 
 		/// <summary></summary>

@@ -93,6 +93,7 @@
     <Compile Include="Collections\Generic\VarianceWorkaround.cs" />
     <Compile Include="Collections\ObjectModel\ReadOnlyCollectionEx.cs" />
     <Compile Include="Collections\Specialized\RecentItem.cs" />
+    <Compile Include="Collections\Specialized\Histogram.cs" />
     <Compile Include="Collections\Specialized\RecentItemCollection.cs" />
     <Compile Include="Collections\CollectionsEx.cs" />
     <Compile Include="Collections\IEnumeratorEx.cs" />
