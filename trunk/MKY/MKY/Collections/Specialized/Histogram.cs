@@ -23,25 +23,46 @@
 //==================================================================================================
 
 using System;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 namespace MKY.Collections.Specialized
 {
 	/// <summary>
+	/// How the historgram shall be limited.
+	/// </summary>
+	public enum HistogramOutOfBoundsBehavior
+	{
+		/// <summary>
+		/// Ignores values outside <see cref="Histogram{T}.Min"/> and <see cref="Histogram{T}.Max"/>
+		/// in case <see cref="Histogram{T}.AutoRearrange"/> is <c>false</c>.
+		/// </summary>
+		Ignore,
+
+		/// <summary>
+		/// Throws an excetions for values outside <see cref="Histogram{T}.Min"/> and <see cref="Histogram{T}.Max"/>
+		/// in case <see cref="Histogram{T}.AutoRearrange"/> is <c>false</c>.
+		/// </summary>
+		Throw
+	}
+
+	/// <summary>
 	/// Collection of values of a histogram.
 	/// </summary>
 	/// <typeparam name="T">The type of the values of the histogram</typeparam>
-	public abstract class Histogram<T>
-		where T : IComparable<T>
+	public abstract class Histogram<T> where T : IComparable<T>
 	{
 		/// <summary></summary>
-		public const int DefaultBinCount = 101;
+		public const HistogramOutOfBoundsBehavior DefaultOutOfBoundsBehavior = HistogramOutOfBoundsBehavior.Ignore;
 
 		/// <summary></summary>
 		public readonly int MaxBinCount; // Must be initialized with up to 'int.MaxValue'.
 
 		/// <summary></summary>
 		public readonly bool AutoRearrange; // = false;
+
+		/// <summary></summary>
+		public readonly HistogramOutOfBoundsBehavior OutOfBoundsBehavior; // = Ignore;
 
 		/// <summary></summary>
 		public T Min { get; protected set; } // = default(T);
@@ -62,35 +83,41 @@ namespace MKY.Collections.Specialized
 		/// Initializes a new instance of the <see cref="Histogram{T}"/> class with equally
 		/// distributed bins, fixed to the given arguments.
 		/// </summary>
-		public Histogram(T min, T max, int binCount)
+		public Histogram(T min, T max, int binCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
 		{
 			Min = min;
 			Max = max;
 			MaxBinCount = binCount;
-			InitializeBins(binCount);
+			BinSize = CalculateBinSize(min, max, binCount);
+			InitializeBins(binCount, binCount);
 			AutoRearrange = false;
+			OutOfBoundsBehavior = outOfBoundsBehavior;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Histogram{T}"/> class with equally
 		/// distributed bins, automatically rearranging up to <paramref name="maxBinCount"/>.
 		/// </summary>
-		public Histogram(int initialBinCount, int maxBinCount)
+		public Histogram(int maxBinCount)
 		{
+		////Min = default(T);
+		////Max = default(T);
 			MaxBinCount = maxBinCount;
-			InitializeBins(initialBinCount);
+		////BinSize = default(T);
+			InitializeBins(maxBinCount);
 			AutoRearrange = true;
 		}
 
-		private void InitializeBins(int binCount)
+		/// <summary></summary>
+		protected void InitializeBins(int maxBinCount, int binCount = 0)
 		{
-			Bins = new List<long>(binCount);
+			Bins = new List<long>(maxBinCount); // Preset the required capacity to improve memory management.
 			for (int i = 0; i < binCount; i++)
 				Bins.Add(0);
 		}
 
 		/// <summary>
-		/// Gets the current bin count.
+		/// Gets the current number of bins.
 		/// </summary>
 		public virtual int BinCount
 		{
@@ -98,30 +125,333 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
+		/// Gets the current values of the bins.
+		/// </summary>
+		public virtual ReadOnlyCollection<T> BinValues
+		{
+			get
+			{
+				List<T> bins = new List<T>(BinCount);
+
+				for (int i = 0; i < bins.Capacity; i++)
+					bins.Add(MulAdd(i, BinSize, Min));
+					        //// ((i * BinSize) + Min);
+				return (bins.AsReadOnly());
+			}
+		}
+
+		/// <summary>
+		/// Gets the current counts.
+		/// </summary>
+		public virtual ReadOnlyCollection<long> Counts
+		{
+			get { return (Bins.AsReadOnly()); }
+		}
+
+		/// <summary>
+		/// Calculates the required count of bins.
+		/// </summary>
+		protected abstract int CalculateBinCount(T min, T max, T binSize);
+
+		/// <summary>
+		/// Calculates the current size of a bin.
+		/// </summary>
+		protected abstract T CalculateBinSize(T min, T max, int binCount);
+
+		/// <summary>
 		/// Gets the index of the bin corresponding to <paramref name="value"/>.
 		/// </summary>
 		protected abstract int GetIndex(T value);
 
 		/// <summary>
-		/// Adds an item to the histogram.
+		/// Increments the corresponding bin.
 		/// </summary>
-		public virtual void Add(T item)
+		protected virtual void IncrementBin(T value)
 		{
-			Values.Add(item);
+			Bins[GetIndex(value)]++;
+		}
 
-			if ((item.CompareTo(Min) >= 0) && (item.CompareTo(Max) <= 0))
-				Bins[GetIndex(item)]++;
-			else if (AutoRearrange)
+		/// <summary>
+		/// Adds a value to the histogram.
+		/// </summary>
+		public virtual void Add(T value)
+		{
+			// Easy case shall be fast:
+			if ((BinCount > 0) && (value.CompareTo(Min) >= 0) && (value.CompareTo(Max) <= 0))
+			{
+				Values.Add(value);
+				IncrementBin(value);
+				return;
+			}
+
+			// Rearrange if allowed:
+			if (AutoRearrange)
+			{
+				Values.Add(value);
 				Rearrange();
-			else
-				throw (new ArgumentOutOfRangeException("item", item, "The value of the item is outside 'Min'/'Max' and 'AutoRearrange' is 'false'!"));
+
+				if ((BinCount > 0) && (value.CompareTo(Min) >= 0) && (value.CompareTo(Max) <= 0))
+				{
+					IncrementBin(value);
+					return;
+				}
+			}
+
+			// Out-of-bounds:
+			if (OutOfBoundsBehavior == HistogramOutOfBoundsBehavior.Ignore) {
+				// Ignore.
+			}
+			else {                  // HistogramOutOfBoundsBehavior.Throw)
+				throw (new ArgumentOutOfRangeException("item", value, "The value of the item is outside 'Min'/'Max' and 'AutoRearrange' is 'false'!"));
+			}
+		}
+
+		/// <summary>
+		/// Adds values to the histogram.
+		/// </summary>
+		public virtual void AddRange(IEnumerable<T> values)
+		{
+			foreach (var value in values)
+				Add(value);
+		}
+
+		/// <summary>
+		/// Gets the current number of values added by <see cref="Add(T)"/> and <see cref="AddRange(IEnumerable{T})"/>.
+		/// </summary>
+		public virtual int ValueCount
+		{
+			get { return (Values.Count); }
 		}
 
 		/// <summary>
 		/// Rearranges the collection up to <see cref="MaxBinCount"/>.
 		/// Needed when <see cref="AutoRearrange"/> is <c>true</c>.
 		/// </summary>
-		protected abstract void Rearrange();
+		protected virtual void Rearrange()
+		{
+			T min;
+			T max;
+			GetMinMaxFromValues(out min, out max);
+
+			if ((min.CompareTo(Min) < 0) || (max.CompareTo(Max) > 0))
+			{
+				var previousMin = Min;
+				var previousMax = Max;
+
+				Min = min;
+				Max = max;
+
+				if (BinCount <= 0) // No bin yet, i.e. 'BinSize' is yet undefined:
+				{
+					if (Values.Count != 1)
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Exactly one value must be contained when Rearrange() can be called under the current condition!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+					BinSize = CalculateBinSize(Min, Max, MaxBinCount);
+					InitializeBins(MaxBinCount, 1);
+					IncrementBin(Values[0]);
+				}
+				else // Bins exist:
+				{
+					var binCountWithCurrentBinSize = CalculateBinCount(Max, Min, BinSize);
+					if (binCountWithCurrentBinSize.CompareTo(MaxBinCount) <= 0)
+					{
+						int binCountToInsert = SubDivRound(previousMin, min, BinSize);
+						int binCountToAdd    = SubDivRound(max, previousMax, BinSize);
+
+						for (int i = 0; i < binCountToInsert; i++)
+							Bins.Insert(0, 0);
+
+						for (int i = 0; i < binCountToAdd; i++)
+							Bins.Add(0);
+					}
+					else // Rearrange to 'MaxBinCount':
+					{
+						BinSize = CalculateBinSize(Min, Max, MaxBinCount);
+						InitializeBins(MaxBinCount, MaxBinCount);
+
+						foreach (var value in Values)
+							IncrementBin(value);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Get the minimum and maximum within <see cref="Values"/>.
+		/// </summary>
+		protected abstract void GetMinMaxFromValues(out T min, out T max);
+
+		/// <summary>
+		/// Evaluates <c>((a * b) + c)</c>.
+		/// </summary>
+		protected abstract T MulAdd(int a, T b, T c);
+
+		/// <summary>
+		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
+		/// </summary>
+		protected abstract int SubDivRound(T a, T b, T c);
+	}
+
+	/// <summary>
+	/// Collection of values of type <see cref="int"/> of a histogram.
+	/// </summary>
+	public class HistogramInt32 : Histogram<int>
+	{
+		/// <summary></summary>
+		public const int DefaultMin = -100;
+
+		/// <summary></summary>
+		public const int DefaultMax = +100;
+
+		/// <summary></summary>
+		public const int DefaultBinCount = 11;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistogramInt32"/> class with equally
+		/// distributed bins, fixed to the given arguments.
+		/// </summary>
+		public HistogramInt32(int min = DefaultMin, int max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
+			: base(min, max, binCount, outOfBoundsBehavior)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistogramInt32"/> class with equally
+		/// distributed bins, automatically rearranging up to <paramref name="maxBinCount"/>.
+		/// </summary>
+		public HistogramInt32(int maxBinCount)
+			: base(maxBinCount)
+		{
+		}
+
+		/// <summary>
+		/// Calculates the required count of bins.
+		/// </summary>
+		protected override int CalculateBinCount(int min, int max, int binSize)
+		{
+			return ((int)(Math.Round((double)(max - min) / binSize)));
+		}
+
+		/// <summary>
+		/// Calculates the current size of a bin.
+		/// </summary>
+		protected override int CalculateBinSize(int min, int max, int binCount)
+		{
+			return ((max - min) / binCount);
+		}
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="value"/>.
+		/// </summary>
+		protected override int GetIndex(int value)
+		{
+			return ((int)(Math.Round((double)(value - Min) / BinSize)));
+		}
+
+		/// <summary>
+		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
+		/// </summary>
+		protected override void GetMinMaxFromValues(out int min, out int max)
+		{
+			Int32Ex.GetMinMax(Values, out min, out max);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a * b) + c)</c>.
+		/// </summary>
+		protected override int MulAdd(int a, int b, int c)
+		{
+			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
+		/// </summary>
+		protected override int SubDivRound(int a, int b, int c)
+		{
+			return ((int)(Math.Round((double)(a - b) / c)));
+		}
+	}
+
+	/// <summary>
+	/// Collection of values of type <see cref="long"/> of a histogram.
+	/// </summary>
+	public class HistogramInt64 : Histogram<long>
+	{
+		/// <summary></summary>
+		public const long DefaultMin = -100;
+
+		/// <summary></summary>
+		public const long DefaultMax = +100;
+
+		/// <summary></summary>
+		public const int DefaultBinCount = 11;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistogramInt64"/> class with equally
+		/// distributed bins, fixed to the given arguments.
+		/// </summary>
+		public HistogramInt64(long min = DefaultMin, long max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
+			: base(min, max, binCount, outOfBoundsBehavior)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistogramInt64"/> class with equally
+		/// distributed bins, automatically rearranging up to <paramref name="maxBinCount"/>.
+		/// </summary>
+		public HistogramInt64(int maxBinCount)
+			: base(maxBinCount)
+		{
+		}
+
+		/// <summary>
+		/// Calculates the required count of bins.
+		/// </summary>
+		protected override int CalculateBinCount(long min, long max, long binSize)
+		{
+			return ((int)(Math.Round((double)(max - min) / binSize)));
+		}
+
+		/// <summary>
+		/// Calculates the current size of a bin.
+		/// </summary>
+		protected override long CalculateBinSize(long min, long max, int binCount)
+		{
+			return ((max - min) / binCount);
+		}
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="value"/>.
+		/// </summary>
+		protected override int GetIndex(long value)
+		{
+			return ((int)(Math.Round((double)(value - Min) / BinSize)));
+		}
+
+		/// <summary>
+		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
+		/// </summary>
+		protected override void GetMinMaxFromValues(out long min, out long max)
+		{
+			Int64Ex.GetMinMax(Values, out min, out max);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a * b) + c)</c>.
+		/// </summary>
+		protected override long MulAdd(int a, long b, long c)
+		{
+			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
+		/// </summary>
+		protected override int SubDivRound(long a, long b, long c)
+		{
+			return ((int)(Math.Round((double)(a - b) / c)));
+		}
 	}
 
 	/// <summary>
@@ -130,29 +460,46 @@ namespace MKY.Collections.Specialized
 	public class HistogramDouble : Histogram<double>
 	{
 		/// <summary></summary>
-		public const double DefaultMin = -0.5;
+		public const double DefaultMin = -100.0;
 
 		/// <summary></summary>
-		public const double DefaultMax = 100.5;
+		public const double DefaultMax = +100.0;
+
+		/// <summary></summary>
+		public const int DefaultBinCount = 11;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistogramDouble"/> class with equally
 		/// distributed bins, fixed to the given arguments.
 		/// </summary>
-		public HistogramDouble(double min = DefaultMin, double max = DefaultMax, int binCount = DefaultBinCount)
-			: base(min, max, binCount)
+		public HistogramDouble(double min = DefaultMin, double max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
+			: base(min, max, binCount, outOfBoundsBehavior)
 		{
-			BinSize = ((max - min) / binCount);
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HistogramDouble"/> class with equally
 		/// distributed bins, automatically rearranging up to <paramref name="maxBinCount"/>.
 		/// </summary>
-		public HistogramDouble(int initialBinCount, int maxBinCount)
-			: base(initialBinCount, maxBinCount)
+		public HistogramDouble(int maxBinCount)
+			: base(maxBinCount)
 		{
-		////BinSize = 0.0 = default(T);
+		}
+
+		/// <summary>
+		/// Calculates the required count of bins.
+		/// </summary>
+		protected override int CalculateBinCount(double min, double max, double binSize)
+		{
+			return ((int)(Math.Round((max - min) / binSize)));
+		}
+
+		/// <summary>
+		/// Calculates the current size of a bin.
+		/// </summary>
+		protected override double CalculateBinSize(double min, double max, int binCount)
+		{
+			return ((max - min) / binCount);
 		}
 
 		/// <summary>
@@ -160,16 +507,112 @@ namespace MKY.Collections.Specialized
 		/// </summary>
 		protected override int GetIndex(double value)
 		{
-			throw new NotImplementedException();
+			return ((int)(Math.Round((value - Min) / BinSize)));
 		}
 
 		/// <summary>
-		/// Rearranges the collection up to <see cref="Histogram{T}.MaxBinCount"/>.
-		/// Needed when <see cref="Histogram{T}.AutoRearrange"/> is <c>true</c>.
+		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
 		/// </summary>
-		protected override void Rearrange()
+		protected override void GetMinMaxFromValues(out double min, out double max)
 		{
-			throw new NotImplementedException();
+			DoubleEx.GetMinMax(Values, out min, out max);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a * b) + c)</c>.
+		/// </summary>
+		protected override double MulAdd(int a, double b, double c)
+		{
+			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
+		/// </summary>
+		protected override int SubDivRound(double a, double b, double c)
+		{
+			return ((int)(Math.Round((a - b) / c)));
+		}
+	}
+
+	/// <summary>
+	/// Collection of values of type <see cref="decimal"/> of a histogram.
+	/// </summary>
+	public class HistogramDecimal : Histogram<decimal>
+	{
+		/// <summary></summary>
+		public const decimal DefaultMin = -100.0m;
+
+		/// <summary></summary>
+		public const decimal DefaultMax = +100.0m;
+
+		/// <summary></summary>
+		public const int DefaultBinCount = 11;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistogramDecimal"/> class with equally
+		/// distributed bins, fixed to the given arguments.
+		/// </summary>
+		public HistogramDecimal(decimal min = DefaultMin, decimal max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
+			: base(min, max, binCount, outOfBoundsBehavior)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HistogramDecimal"/> class with equally
+		/// distributed bins, automatically rearranging up to <paramref name="maxBinCount"/>.
+		/// </summary>
+		public HistogramDecimal(int maxBinCount)
+			: base(maxBinCount)
+		{
+		}
+
+		/// <summary>
+		/// Calculates the required count of bins.
+		/// </summary>
+		protected override int CalculateBinCount(decimal min, decimal max, decimal binSize)
+		{
+			return ((int)(Math.Round((max - min) / binSize)));
+		}
+
+		/// <summary>
+		/// Calculates the current size of a bin.
+		/// </summary>
+		protected override decimal CalculateBinSize(decimal min, decimal max, int binCount)
+		{
+			return ((max - min) / binCount);
+		}
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="value"/>.
+		/// </summary>
+		protected override int GetIndex(decimal value)
+		{
+			return ((int)(Math.Round((value - Min) / BinSize)));
+		}
+
+		/// <summary>
+		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
+		/// </summary>
+		protected override void GetMinMaxFromValues(out decimal min, out decimal max)
+		{
+			DecimalEx.GetMinMax(Values, out min, out max);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a * b) + c)</c>.
+		/// </summary>
+		protected override decimal MulAdd(int a, decimal b, decimal c)
+		{
+			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
+		/// </summary>
+		protected override int SubDivRound(decimal a, decimal b, decimal c)
+		{
+			return ((int)(Math.Round((a - b) / c)));
 		}
 	}
 }

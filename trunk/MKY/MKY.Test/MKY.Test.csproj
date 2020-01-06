@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Collections\IEnumerableExTest.cs" />
     <Compile Include="Collections\ObjectModel\ReadOnlyCollectionExTest.cs" />
+    <Compile Include="Collections\Specialized\HistogramTest.cs" />
     <Compile Include="CommandLine\ArgsHandlerTest.cs" />
     <Compile Include="CommandLine\CommandLineArgs.cs" />
     <Compile Include="CommandLine\InvalidCommandLineArgs.cs" />
