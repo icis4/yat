@@ -158,6 +158,7 @@ namespace YAT.View.Forms
 
 		private void scottPlot_MouseEntered(object sender, EventArgs e)
 		{
+			button_FitAxis.Enabled = true;
 			label_UpdateSuspended.Visible = true;
 			this.updateIsSuspended = true;
 		}
@@ -171,6 +172,11 @@ namespace YAT.View.Forms
 		private void scottPlot_MouseMoved(object sender, EventArgs e)
 		{
 			UpdateHover();
+		}
+
+		private void button_FitAxis_Click(object sender, EventArgs e)
+		{
+			FitAxis();
 		}
 
 		private void checkBox_ShowLegend_CheckedChanged(object sender, EventArgs e)
@@ -265,6 +271,11 @@ namespace YAT.View.Forms
 			return (resultInterval);
 		}
 
+		private void FitAxis()
+		{
+			UpdatePlot(true); // Immediately update, don't wait for update ticker.
+		}
+
 		private void Clear()
 		{
 			lock (this.model.AutoActionPlotModelSyncObj)
@@ -298,6 +309,8 @@ namespace YAT.View.Forms
 				var mdl = this.model.AutoActionPlotModel;
 				if ((this.lastUpdateCount != mdl.UpdateCounter) || force) // Only update when needed.
 				{
+					button_FitAxis.Enabled = false; // AxisAuto() will be called further below.
+
 					var firstColor = this.model.SettingsRoot.Format.RxDataFormat.Color;
 					var isFirst = true;
 
