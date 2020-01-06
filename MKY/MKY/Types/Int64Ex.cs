@@ -33,11 +33,11 @@ using System.Linq;
 namespace MKY
 {
 	/// <summary>
-	/// <see cref="Int32"/>/<see cref="int"/> utility methods.
+	/// <see cref="Int64"/>/<see cref="long"/> utility methods.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Int32 just *is* 'int'...")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public static class Int32Ex
+	public static class Int64Ex
 	{
 		/// <summary>
 		/// Limits <paramref name="value"/> to the values specified.
@@ -45,7 +45,7 @@ namespace MKY
 		/// <exception cref="ArgumentException">
 		/// <paramref name="min"/> is larger than <paramref name="max"/>.
 		/// </exception>
-		public static int Limit(int value, int min, int max)
+		public static long Limit(long value, long min, long max)
 		{
 			if (min > max)
 				throw (new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
@@ -62,7 +62,7 @@ namespace MKY
 		/// <summary>
 		/// Returns whether <paramref name="value"/> is within the values specified (including boundaries).
 		/// </summary>
-		public static bool IsWithin(int value, int min, int max)
+		public static bool IsWithin(long value, long min, long max)
 		{
 			return ((value >= min) && (value <= max));
 		}
@@ -70,7 +70,7 @@ namespace MKY
 		/// <summary>
 		/// Returns whether <paramref name="value"/> is even.
 		/// </summary>
-		public static bool IsEven(int value)
+		public static bool IsEven(long value)
 		{
 			return ((value % 2) == 0);
 		}
@@ -78,7 +78,7 @@ namespace MKY
 		/// <summary>
 		/// Returns whether <paramref name="value"/> is odd.
 		/// </summary>
-		public static bool IsOdd(int value)
+		public static bool IsOdd(long value)
 		{
 			return ((value % 2) != 0);
 		}
@@ -86,7 +86,7 @@ namespace MKY
 		/// <summary>
 		/// Returns the according numeric suffix like "st", "nd", "rd" or "th".
 		/// </summary>
-		public static string ToEnglishSuffix(int value)
+		public static string ToEnglishSuffix(long value)
 		{
 			switch (value % 10)
 			{
@@ -100,7 +100,7 @@ namespace MKY
 		/// <summary>
 		/// Get the minimum and maximum within <paramref name="collection"/>.
 		/// </summary>
-		public static void GetMinMax(IEnumerable<int> collection, out int min, out int max)
+		public static void GetMinMax(IEnumerable<long> collection, out long min, out long max)
 		{
 			if (collection.Count() <= 0)
 			{

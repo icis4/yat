@@ -22,11 +22,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -34,14 +29,12 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-#endregion
-
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the System namespace.
 namespace MKY
 {
 	/// <summary>
-	/// String utility methods.
+	/// <see cref="String"/>/<see cref="string"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class StringEx
@@ -862,11 +855,11 @@ namespace MKY
 				int countRight = CountRight(str, trimChars);
 
 				// Limit the number of trim characters at both ends:
-				countLeft = System.Math.Min(countLeft, maxLength);
-				countRight = System.Math.Min(countRight, maxLength);
+				countLeft = Math.Min(countLeft, maxLength);
+				countRight = Math.Min(countRight, maxLength);
 
 				// Evaluate the symmetrical portion and trim it:
-				int trimMaxLength = System.Math.Min(countLeft, countRight);
+				int trimMaxLength = Math.Min(countLeft, countRight);
 				return (Trim(str, trimMaxLength, trimChars));
 			}
 			else

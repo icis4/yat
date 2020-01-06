@@ -191,6 +191,7 @@
     <Compile Include="Types\DecimalEx.cs" />
     <Compile Include="Types\DoubleEx.cs" />
     <Compile Include="Types\EnumEx.cs" />
+    <Compile Include="Types\Int64Ex.cs" />
     <Compile Include="Types\Int32Ex.cs" />
     <Compile Include="Types\ObjectEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
