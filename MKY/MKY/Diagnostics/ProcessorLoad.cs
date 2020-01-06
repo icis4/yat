@@ -93,7 +93,7 @@ namespace MKY.Diagnostics
 					if (intervalTime > 0)
 					{
 						int percentage = (int)(100.0 * (intervalProcessorTime.TotalMilliseconds / intervalTime));
-						CurrentPercentage = System.Math.Min(percentage, 100);
+						CurrentPercentage = Math.Min(percentage, 100);
 					}
 				}
 

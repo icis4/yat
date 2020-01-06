@@ -25,7 +25,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace MKY.Math
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Math for consistency with the System namespace.
+namespace MKY
 {
 	/// <summary>
 	/// Simple moving average based on <see cref="Queue{T}"/>.
@@ -142,7 +144,7 @@ namespace MKY.Math
 			foreach (var item in items)
 				sum += item;
 
-			int avg = (int)(System.Math.Round((double)sum / items.Length));
+			int avg = (int)(Math.Round((double)sum / items.Length));
 			return (avg);
 		}
 	}
@@ -170,7 +172,7 @@ namespace MKY.Math
 			foreach (var item in items)
 				sum += item;
 
-			long avg = (long)(System.Math.Round((double)sum / items.Length));
+			long avg = (long)(Math.Round((double)sum / items.Length));
 			return (avg);
 		}
 	}
@@ -225,7 +227,7 @@ namespace MKY.Math
 			foreach (var item in items)
 				sum += item;
 
-			TimeSpan avg = TimeSpan.FromMilliseconds(System.Math.Round(sum.TotalMilliseconds / items.Length));
+			TimeSpan avg = TimeSpan.FromMilliseconds(Math.Round(sum.TotalMilliseconds / items.Length));
 			return (avg);
 		}
 	}
