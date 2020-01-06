@@ -23,15 +23,17 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the System namespace.
 namespace MKY
 {
 	/// <summary>
-	/// Double utility methods.
+	/// <see cref="Double"/>/<see cref="double"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class DoubleEx
@@ -57,6 +59,14 @@ namespace MKY
 		}
 
 		/// <summary>
+		/// Returns whether <paramref name="value"/> is within the values specified (including boundaries).
+		/// </summary>
+		public static bool IsWithin(double value, double min, double max)
+		{
+			return ((value >= min) && (value <= max));
+		}
+
+		/// <summary>
 		/// Evaluates whether the two given values are almost equal,
 		/// taking the given number of digits into account.
 		/// </summary>
@@ -65,7 +75,7 @@ namespace MKY
 		/// </exception>
 		public static bool AlmostEquals(double lhs, double rhs, int digits)
 		{
-			double diff = System.Math.Abs(lhs - rhs);
+			double diff = Math.Abs(lhs - rhs);
 
 			switch (digits)
 			{
@@ -100,6 +110,29 @@ namespace MKY
 		public static bool RatherNotEquals(double lhs, double rhs, int digits)
 		{
 			return (!AlmostEquals(lhs, rhs, digits));
+		}
+
+		/// <summary>
+		/// Get the minimum and maximum within <paramref name="collection"/>.
+		/// </summary>
+		public static void GetMinMax(IEnumerable<double> collection, out double min, out double max)
+		{
+			if (collection.Count() <= 0)
+			{
+				min = 0.0; // = default(T)
+				max = 0.0; // = default(T)
+			}
+			else
+			{
+				min = double.MaxValue;
+				max = double.MinValue;
+
+				foreach (var item in collection)
+				{
+					if      (item < min) { min = item; }
+					else if (item > max) { max = item; }
+				}
+			}
 		}
 	}
 }

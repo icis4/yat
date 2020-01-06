@@ -32,7 +32,7 @@ using System.IO;
 namespace MKY
 {
 	/// <summary>
-	/// UInt64/ulong utility methods.
+	/// <see cref="UInt64"/>/<see cref="ulong"/> utility methods.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "UInt64 just *is* 'ulong'...")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
@@ -88,10 +88,10 @@ namespace MKY
 			using (var to = new StringWriter(CultureInfo.InvariantCulture))
 			{
 				ulong remainder = value; // Cast to double to prevent overflow on ulong.MaxValue.
-				double exactPower = System.Math.Log((double)max + 1, numericBase);
-				for (int power = (int)(System.Math.Ceiling(exactPower)) - 1; power >= 0; power--)
+				double exactPower = Math.Log((double)max + 1, numericBase);
+				for (int power = (int)(Math.Ceiling(exactPower)) - 1; power >= 0; power--)
 				{
-					ulong divider = (ulong)(System.Math.Pow(numericBase, power));
+					ulong divider = (ulong)(Math.Pow(numericBase, power));
 					ulong data = remainder / divider;
 					to.Write(data);
 					remainder %= divider;
@@ -168,9 +168,9 @@ namespace MKY
 			{
 				if (value > 0)
 				{	// Cast to double to prevent overflow on ulong.MaxValue.
-					double base2Log = System.Math.Log((double)value + 1, 2);
-					double bitsSignificant = System.Math.Ceiling(base2Log);
-					bytesSignificant = (int)(System.Math.Ceiling(bitsSignificant / 8));
+					double base2Log = Math.Log((double)value + 1, 2);
+					double bitsSignificant = Math.Ceiling(base2Log);
+					bytesSignificant = (int)(Math.Ceiling(bitsSignificant / 8));
 				}
 			}
 
@@ -211,7 +211,7 @@ namespace MKY
 
 			// Convert most significant byte.
 			if (bytesSignificant < 8)
-				l = value % (ulong)(System.Math.Pow(2, bytesSignificant * 8));
+				l = value % (ulong)(Math.Pow(2, bytesSignificant * 8));
 			else
 				l = value;
 
@@ -236,7 +236,7 @@ namespace MKY
 			// Convert and write remaining bytes.
 			for (int i = (bytesSignificant - 1); i > 0; i--)
 			{
-				l = value % (ulong)(System.Math.Pow(2, i * 8));
+				l = value % (ulong)(Math.Pow(2, i * 8));
 				b = (byte)(l >> ((i - 1) * 8));
 				result[i - 1] = b;
 			}
@@ -323,7 +323,7 @@ namespace MKY
 				int multiplier;
 				if (int.TryParse(from[i].ToString(CultureInfo.InvariantCulture), out multiplier) && (multiplier < numericBase))
 				{
-					result += (ulong)multiplier * (ulong)(System.Math.Pow(numericBase, power));
+					result += (ulong)multiplier * (ulong)(Math.Pow(numericBase, power));
 				}
 				else
 				{
