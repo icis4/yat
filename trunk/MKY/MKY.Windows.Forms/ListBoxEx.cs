@@ -235,8 +235,8 @@ namespace MKY.Windows.Forms
 			{
 				this.clientItemCapacity = (float)ClientSize.Height / (float)ItemHeight;
 
-				this.fullyVisibleClientItemCapacity = (int)(System.Math.Floor(this.clientItemCapacity));
-				this.totalVisibleClientItemCapacity = (int)(System.Math.Ceiling(this.clientItemCapacity));
+				this.fullyVisibleClientItemCapacity = (int)(Math.Floor(this.clientItemCapacity));
+				this.totalVisibleClientItemCapacity = (int)(Math.Ceiling(this.clientItemCapacity));
 
 				DebugClientArea("ClientItemCapacity evaluated");
 			}
@@ -323,7 +323,7 @@ namespace MKY.Windows.Forms
 		{
 			get
 			{
-				int result = System.Math.Max(ControlEx.InvalidIndex, 0);
+				int result = Math.Max(ControlEx.InvalidIndex, 0);
 				return (result);
 			}
 		}
@@ -340,7 +340,7 @@ namespace MKY.Windows.Forms
 		{
 			get
 			{
-				int result = System.Math.Max(ControlEx.InvalidIndex, (Items.Count - 1));
+				int result = Math.Max(ControlEx.InvalidIndex, (Items.Count - 1));
 				return (result);
 			}
 		}
@@ -391,7 +391,7 @@ namespace MKY.Windows.Forms
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int FullyVisibleItemCount
 		{
-			get { return (System.Math.Min(FullyVisibleClientItemCapacity, Items.Count)); }
+			get { return (Math.Min(FullyVisibleClientItemCapacity, Items.Count)); }
 		}
 
 		/// <remarks>
@@ -408,7 +408,7 @@ namespace MKY.Windows.Forms
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual int TotalVisibleItemCount
 		{
-			get { return (System.Math.Min(TotalVisibleClientItemCapacity, Items.Count)); }
+			get { return (Math.Min(TotalVisibleClientItemCapacity, Items.Count)); }
 		}
 
 		/// <summary>
@@ -430,7 +430,7 @@ namespace MKY.Windows.Forms
 			////DebugCountAndIndices("TopIndex is going to be retrieved")
 
 				int unsafeResult = (TopIndex + (TotalVisibleItemCount - 1));
-				int   safeResult = Int32Ex.Limit(unsafeResult, 0, System.Math.Max((Items.Count - 1), 0)); // 'max' must be 0 or above.
+				int   safeResult = Int32Ex.Limit(unsafeResult, 0, Math.Max((Items.Count - 1), 0)); // 'max' must be 0 or above.
 				return (safeResult);
 			}
 		}

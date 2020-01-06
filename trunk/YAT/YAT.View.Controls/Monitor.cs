@@ -68,7 +68,6 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Contracts;
 using MKY.Diagnostics;
-using MKY.Math;
 using MKY.Windows.Forms;
 
 using YAT.Application.Types;
