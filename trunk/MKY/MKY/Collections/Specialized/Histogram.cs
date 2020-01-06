@@ -149,19 +149,28 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the required count of bins.
+		/// Calculates the current size of a bin.
 		/// </summary>
-		protected abstract int CalculateBinCount(T min, T max, T binSize);
+		protected virtual T CalculateBinSize(T min, T max, int binCount)
+		{            // (max - min) / binCount)
+			return (SubDiv(max, min, binCount));
+		}
 
 		/// <summary>
 		/// Calculates the current size of a bin.
 		/// </summary>
-		protected abstract T CalculateBinSize(T min, T max, int binCount);
+		protected virtual int CalculateBinCount(T min, T max, T binSize)
+		{                 // (max - min) / binSize)
+			return (SubDivRound(max, min, binSize));
+		}
 
 		/// <summary>
 		/// Gets the index of the bin corresponding to <paramref name="value"/>.
 		/// </summary>
-		protected abstract int GetIndex(T value);
+		protected virtual int GetIndex(T value)
+		{                 // (value - Min) / BinSize)
+			return (SubDivRound(value, Min, BinSize));
+		}
 
 		/// <summary>
 		/// Increments the corresponding bin.
@@ -233,7 +242,19 @@ namespace MKY.Collections.Specialized
 			T max;
 			GetMinMaxFromValues(out min, out max);
 
-			if ((min.CompareTo(Min) < 0) || (max.CompareTo(Max) > 0))
+			if (BinCount <= 0) // No bin yet, i.e. 'BinSize' is yet undefined:
+			{
+				if (Values.Count != 1)
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Exactly one value must be contained when Rearrange() can be called under the current condition!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				Min = min;
+				Max = max;
+
+				BinSize = CalculateBinSize(Min, Max, MaxBinCount);
+				InitializeBins(MaxBinCount, 1);
+				IncrementBin(Values[0]);
+			}
+			else if ((min.CompareTo(Min) < 0) || (max.CompareTo(Max) > 0)) // Either has changed => Rearrange:
 			{
 				var previousMin = Min;
 				var previousMax = Max;
@@ -241,37 +262,25 @@ namespace MKY.Collections.Specialized
 				Min = min;
 				Max = max;
 
-				if (BinCount <= 0) // No bin yet, i.e. 'BinSize' is yet undefined:
+				var binCountWithCurrentBinSize = CalculateBinCount(Max, Min, BinSize);
+				if (binCountWithCurrentBinSize.CompareTo(MaxBinCount) <= 0)
 				{
-					if (Values.Count != 1)
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Exactly one value must be contained when Rearrange() can be called under the current condition!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					int binCountToInsert = CalculateBinCount(previousMin, min, BinSize);
+					int binCountToAdd    = CalculateBinCount(max, previousMax, BinSize);
 
-					BinSize = CalculateBinSize(Min, Max, MaxBinCount);
-					InitializeBins(MaxBinCount, 1);
-					IncrementBin(Values[0]);
+					for (int i = 0; i < binCountToInsert; i++)
+						Bins.Insert(0, 0);
+
+					for (int i = 0; i < binCountToAdd; i++)
+						Bins.Add(0);
 				}
-				else // Bins exist:
+				else // Rearrange to 'MaxBinCount':
 				{
-					var binCountWithCurrentBinSize = CalculateBinCount(Max, Min, BinSize);
-					if (binCountWithCurrentBinSize.CompareTo(MaxBinCount) <= 0)
-					{
-						int binCountToInsert = SubDivRound(previousMin, min, BinSize);
-						int binCountToAdd    = SubDivRound(max, previousMax, BinSize);
+					BinSize = CalculateBinSize(Min, Max, MaxBinCount);
+					InitializeBins(MaxBinCount, MaxBinCount);
 
-						for (int i = 0; i < binCountToInsert; i++)
-							Bins.Insert(0, 0);
-
-						for (int i = 0; i < binCountToAdd; i++)
-							Bins.Add(0);
-					}
-					else // Rearrange to 'MaxBinCount':
-					{
-						BinSize = CalculateBinSize(Min, Max, MaxBinCount);
-						InitializeBins(MaxBinCount, MaxBinCount);
-
-						foreach (var value in Values)
-							IncrementBin(value);
-					}
+					foreach (var value in Values)
+						IncrementBin(value);
 				}
 			}
 		}
@@ -285,6 +294,11 @@ namespace MKY.Collections.Specialized
 		/// Evaluates <c>((a * b) + c)</c>.
 		/// </summary>
 		protected abstract T MulAdd(int a, T b, T c);
+
+		/// <summary>
+		/// Evaluates <c>((a - b) / c)</c>.
+		/// </summary>
+		protected abstract T SubDiv(T a, T b, int c);
 
 		/// <summary>
 		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
@@ -325,30 +339,6 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the required count of bins.
-		/// </summary>
-		protected override int CalculateBinCount(int min, int max, int binSize)
-		{
-			return ((int)(Math.Round((double)(max - min) / binSize)));
-		}
-
-		/// <summary>
-		/// Calculates the current size of a bin.
-		/// </summary>
-		protected override int CalculateBinSize(int min, int max, int binCount)
-		{
-			return ((max - min) / binCount);
-		}
-
-		/// <summary>
-		/// Gets the index of the bin corresponding to <paramref name="value"/>.
-		/// </summary>
-		protected override int GetIndex(int value)
-		{
-			return ((int)(Math.Round((double)(value - Min) / BinSize)));
-		}
-
-		/// <summary>
 		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
 		/// </summary>
 		protected override void GetMinMaxFromValues(out int min, out int max)
@@ -362,6 +352,14 @@ namespace MKY.Collections.Specialized
 		protected override int MulAdd(int a, int b, int c)
 		{
 			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a - b) / c)</c>.
+		/// </summary>
+		protected override int SubDiv(int a, int b, int c)
+		{
+			return ((a - b) / c);
 		}
 
 		/// <summary>
@@ -406,30 +404,6 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the required count of bins.
-		/// </summary>
-		protected override int CalculateBinCount(long min, long max, long binSize)
-		{
-			return ((int)(Math.Round((double)(max - min) / binSize)));
-		}
-
-		/// <summary>
-		/// Calculates the current size of a bin.
-		/// </summary>
-		protected override long CalculateBinSize(long min, long max, int binCount)
-		{
-			return ((max - min) / binCount);
-		}
-
-		/// <summary>
-		/// Gets the index of the bin corresponding to <paramref name="value"/>.
-		/// </summary>
-		protected override int GetIndex(long value)
-		{
-			return ((int)(Math.Round((double)(value - Min) / BinSize)));
-		}
-
-		/// <summary>
 		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
 		/// </summary>
 		protected override void GetMinMaxFromValues(out long min, out long max)
@@ -443,6 +417,14 @@ namespace MKY.Collections.Specialized
 		protected override long MulAdd(int a, long b, long c)
 		{
 			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a - b) / c)</c>.
+		/// </summary>
+		protected override long SubDiv(long a, long b, int c)
+		{
+			return ((a - b) / c);
 		}
 
 		/// <summary>
@@ -487,30 +469,6 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the required count of bins.
-		/// </summary>
-		protected override int CalculateBinCount(double min, double max, double binSize)
-		{
-			return ((int)(Math.Round((max - min) / binSize)));
-		}
-
-		/// <summary>
-		/// Calculates the current size of a bin.
-		/// </summary>
-		protected override double CalculateBinSize(double min, double max, int binCount)
-		{
-			return ((max - min) / binCount);
-		}
-
-		/// <summary>
-		/// Gets the index of the bin corresponding to <paramref name="value"/>.
-		/// </summary>
-		protected override int GetIndex(double value)
-		{
-			return ((int)(Math.Round((value - Min) / BinSize)));
-		}
-
-		/// <summary>
 		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
 		/// </summary>
 		protected override void GetMinMaxFromValues(out double min, out double max)
@@ -524,6 +482,14 @@ namespace MKY.Collections.Specialized
 		protected override double MulAdd(int a, double b, double c)
 		{
 			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a - b) / c)</c>.
+		/// </summary>
+		protected override double SubDiv(double a, double b, int c)
+		{
+			return ((a - b) / c);
 		}
 
 		/// <summary>
@@ -568,30 +534,6 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the required count of bins.
-		/// </summary>
-		protected override int CalculateBinCount(decimal min, decimal max, decimal binSize)
-		{
-			return ((int)(Math.Round((max - min) / binSize)));
-		}
-
-		/// <summary>
-		/// Calculates the current size of a bin.
-		/// </summary>
-		protected override decimal CalculateBinSize(decimal min, decimal max, int binCount)
-		{
-			return ((max - min) / binCount);
-		}
-
-		/// <summary>
-		/// Gets the index of the bin corresponding to <paramref name="value"/>.
-		/// </summary>
-		protected override int GetIndex(decimal value)
-		{
-			return ((int)(Math.Round((value - Min) / BinSize)));
-		}
-
-		/// <summary>
 		/// Get the minimum and maximum within <see cref="Histogram{T}.Values"/>.
 		/// </summary>
 		protected override void GetMinMaxFromValues(out decimal min, out decimal max)
@@ -605,6 +547,14 @@ namespace MKY.Collections.Specialized
 		protected override decimal MulAdd(int a, decimal b, decimal c)
 		{
 			return ((a * b) + c);
+		}
+
+		/// <summary>
+		/// Evaluates <c>((a - b) / c)</c>.
+		/// </summary>
+		protected override decimal SubDiv(decimal a, decimal b, int c)
+		{
+			return ((a - b) / c);
 		}
 
 		/// <summary>

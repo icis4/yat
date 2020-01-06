@@ -27,12 +27,14 @@ using MKY.Collections.Specialized;
 
 using NUnit.Framework;
 
-namespace MKY.Test.Collections.ObjectModel
+namespace MKY.Test.Collections.Specialized
 {
 	/// <summary></summary>
 	[TestFixture]
 	public class HistogramTest
 	{
+		private const int Few = 10;
+
 		/// <summary></summary>
 		[Test]
 		public virtual void TestHistogramDoubleDefault()
@@ -63,36 +65,36 @@ namespace MKY.Test.Collections.ObjectModel
 			const int MaxBinCount = 256;
 
 			var histogram = new HistogramDouble(MaxBinCount);
-			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(1).Ulps);
-			Assert.That(histogram.Max, Is.EqualTo(0.0).Within(1).Ulps);
+			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(Few).Ulps);
+			Assert.That(histogram.Max, Is.EqualTo(0.0).Within(Few).Ulps);
 			Assert.That(histogram.BinCount, Is.EqualTo(0));
-			Assert.That(histogram.BinSize, Is.EqualTo(0.0).Within(1).Ulps);
+			Assert.That(histogram.BinSize, Is.EqualTo(0.0).Within(Few).Ulps);
 			Assert.That(histogram.ValueCount, Is.EqualTo(0));
 
 			histogram.Add(0.0);
-			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(1).Ulps);
-			Assert.That(histogram.Max, Is.EqualTo(0.0).Within(1).Ulps);
+			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(Few).Ulps);
+			Assert.That(histogram.Max, Is.EqualTo(0.0).Within(Few).Ulps);
 			Assert.That(histogram.BinCount, Is.EqualTo(1));
-			Assert.That(histogram.BinSize, Is.EqualTo(0.0).Within(1).Ulps);
+			Assert.That(histogram.BinSize, Is.EqualTo(0.0).Within(Few).Ulps);
 			Assert.That(histogram.ValueCount, Is.EqualTo(1));
 			Assert.That(histogram.Counts.Count, Is.EqualTo(1));
 			Assert.That(histogram.Counts[0], Is.EqualTo(1));
 
 			histogram.Add(10.0);
-			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(1).Ulps);
-			Assert.That(histogram.Max, Is.EqualTo(10.0).Within(1).Ulps);
+			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(Few).Ulps);
+			Assert.That(histogram.Max, Is.EqualTo(10.0).Within(Few).Ulps);
 			Assert.That(histogram.BinCount, Is.EqualTo(2));
-			Assert.That(histogram.BinSize, Is.EqualTo(5.0).Within(1).Ulps);
+			Assert.That(histogram.BinSize, Is.EqualTo(5.0).Within(Few).Ulps);
 			Assert.That(histogram.ValueCount, Is.EqualTo(2));
 			Assert.That(histogram.Counts.Count, Is.EqualTo(2));
 			Assert.That(histogram.Counts[0], Is.EqualTo(1));
 			Assert.That(histogram.Counts[1], Is.EqualTo(1));
 
 			histogram.Add(20.0);
-			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(1).Ulps);
-			Assert.That(histogram.Max, Is.EqualTo(20.0).Within(1).Ulps);
+			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(Few).Ulps);
+			Assert.That(histogram.Max, Is.EqualTo(20.0).Within(Few).Ulps);
 			Assert.That(histogram.BinCount, Is.EqualTo(4));
-			Assert.That(histogram.BinSize, Is.EqualTo(5.0).Within(1).Ulps);
+			Assert.That(histogram.BinSize, Is.EqualTo(5.0).Within(Few).Ulps);
 			Assert.That(histogram.ValueCount, Is.EqualTo(3));
 			Assert.That(histogram.Counts.Count, Is.EqualTo(3));
 			Assert.That(histogram.Counts[0], Is.EqualTo(1));
@@ -100,10 +102,10 @@ namespace MKY.Test.Collections.ObjectModel
 			Assert.That(histogram.Counts[3], Is.EqualTo(1));
 
 			histogram.Add(20.0);
-			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(1).Ulps);
-			Assert.That(histogram.Max, Is.EqualTo(20.0).Within(1).Ulps);
+			Assert.That(histogram.Min, Is.EqualTo(0.0).Within(Few).Ulps);
+			Assert.That(histogram.Max, Is.EqualTo(20.0).Within(Few).Ulps);
 			Assert.That(histogram.BinCount, Is.EqualTo(4));
-			Assert.That(histogram.BinSize, Is.EqualTo(5.0).Within(1).Ulps);
+			Assert.That(histogram.BinSize, Is.EqualTo(5.0).Within(Few).Ulps);
 			Assert.That(histogram.ValueCount, Is.EqualTo(4));
 			Assert.That(histogram.Counts.Count, Is.EqualTo(4));
 			Assert.That(histogram.Counts[0], Is.EqualTo(1));

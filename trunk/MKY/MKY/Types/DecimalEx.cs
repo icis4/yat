@@ -143,8 +143,8 @@ namespace MKY
 
 				foreach (var item in collection)
 				{
-					if      (item < min) { min = item; }
-					else if (item > max) { max = item; }
+					if (item < min) { min = item; }
+					if (item > max) { max = item; }
 				}
 			}
 		}
