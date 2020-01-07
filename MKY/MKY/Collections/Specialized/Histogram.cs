@@ -34,22 +34,28 @@ namespace MKY.Collections.Specialized
 	public enum HistogramOutOfBoundsBehavior
 	{
 		/// <summary>
-		/// Ignores values outside <see cref="Histogram{T}.Min"/> and <see cref="Histogram{T}.Max"/>
-		/// in case <see cref="Histogram{T}.AutoGrow"/> is <c>false</c>.
+		/// Ignores items outside <see cref="Histogram{T}.Min"/> and <see cref="Histogram{T}.Max"/>
+		/// in case <see cref="Histogram{T}.AutoAdjust"/> is <c>false</c>.
 		/// </summary>
 		Ignore,
 
 		/// <summary>
-		/// Throws an excetions for values outside <see cref="Histogram{T}.Min"/> and <see cref="Histogram{T}.Max"/>
-		/// in case <see cref="Histogram{T}.AutoGrow"/> is <c>false</c>.
+		/// Throws an exception for items outside <see cref="Histogram{T}.Min"/> and <see cref="Histogram{T}.Max"/>
+		/// in case <see cref="Histogram{T}.AutoAdjust"/> is <c>false</c>.
 		/// </summary>
-		Throw
+		Throw,
+
+		/// <summary>
+		/// Items outside <see cref="Histogram{T}.Min"/> and <see cref="Histogram{T}.Max"/> let the
+		/// histogram adjust, this is the case when <see cref="Histogram{T}.AutoAdjust"/> is <c>true</c>.
+		/// </summary>
+		Adjust
 	}
 
 	/// <summary>
-	/// Collection of values of a histogram.
+	/// Collection of items of a histogram.
 	/// </summary>
-	/// <typeparam name="T">The type of the values of the histogram</typeparam>
+	/// <typeparam name="T">The type of the items of the histogram</typeparam>
 	public abstract class Histogram<T> where T : IComparable<T>, IEquatable<T>
 	{
 		/// <summary></summary>
@@ -59,7 +65,7 @@ namespace MKY.Collections.Specialized
 		public readonly int MaxBinCount; // Must be initialized with up to 'int.MaxValue'.
 
 		/// <summary></summary>
-		public readonly bool AutoGrow; // = false;
+		public readonly bool AutoAdjust; // = false;
 
 		/// <summary></summary>
 		public readonly HistogramOutOfBoundsBehavior OutOfBoundsBehavior; // = Ignore;
@@ -74,10 +80,13 @@ namespace MKY.Collections.Specialized
 		public T BinSize { get; protected set; } // = default(T);
 
 		/// <summary></summary>
-		protected List<T> Values = new List<T>(); // No preset needed, the default behavior is good enough.
+		protected List<T> Items = new List<T>(); // No preset needed, the default behavior is good enough.
 
 		/// <summary></summary>
-		protected List<long> Bins; // = null;
+		protected List<long> BinCounts; // = null;
+
+		/// <summary></summary>
+		protected List<T> BinValues; // null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Histogram{T}"/> class with equally
@@ -90,13 +99,14 @@ namespace MKY.Collections.Specialized
 			MaxBinCount = binCount;
 			BinSize = CalculateBinSize(min, max, binCount);
 			InitializeBins(binCount, binCount);
-			AutoGrow = false;
+			AutoAdjust = false;
 			OutOfBoundsBehavior = outOfBoundsBehavior;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Histogram{T}"/> class with equally
-		/// distributed bins, automatically growing up to <paramref name="maxBinCount"/>.
+		/// distributed bins, automatically adjusting <see cref="BinSize"/> as well as
+		/// <see cref="BinCount"/> up to <paramref name="maxBinCount"/>.
 		/// </summary>
 		public Histogram(int maxBinCount)
 		{
@@ -105,15 +115,21 @@ namespace MKY.Collections.Specialized
 			MaxBinCount = maxBinCount;
 		////BinSize = default(T);
 			InitializeBins(maxBinCount, 1);
-			AutoGrow = true;
+			AutoAdjust = true;
+			OutOfBoundsBehavior = HistogramOutOfBoundsBehavior.Adjust;
 		}
 
 		/// <summary></summary>
 		protected void InitializeBins(int maxBinCount, int binCount)
 		{
-			Bins = new List<long>(maxBinCount); // Preset the required capacity to improve memory management.
+			BinCounts = new List<long>(maxBinCount); // Preset the required capacity to improve memory management.
+			BinValues = new List<T>(   maxBinCount); // Preset the required capacity to improve memory management.
+
 			for (int i = 0; i < binCount; i++)
-				Bins.Add(0);
+			{
+				BinCounts.Add(0);
+				BinValues.Add(CalculateBinValue(i));
+			}
 		}
 
 		/// <summary>
@@ -121,23 +137,15 @@ namespace MKY.Collections.Specialized
 		/// </summary>
 		public virtual int BinCount
 		{
-			get { return (Bins.Count); }
+			get { return (BinCounts.Count); }
 		}
 
 		/// <summary>
 		/// Gets the current values of the bins.
 		/// </summary>
-		public virtual ReadOnlyCollection<T> BinValues
+		public virtual ReadOnlyCollection<T> Values
 		{
-			get
-			{
-				List<T> bins = new List<T>(BinCount);
-
-				for (int i = 0; i < bins.Capacity; i++)
-					bins.Add(MulAdd(i, BinSize, Min));
-					        //// ((i * BinSize) + Min);
-				return (bins.AsReadOnly());
-			}
+			get { return (BinValues.AsReadOnly()); }
 		}
 
 		/// <summary>
@@ -145,208 +153,281 @@ namespace MKY.Collections.Specialized
 		/// </summary>
 		public virtual ReadOnlyCollection<long> Counts
 		{
-			get { return (Bins.AsReadOnly()); }
+			get { return (BinCounts.AsReadOnly()); }
 		}
 
 		/// <summary>
 		/// Calculates the current size of a bin.
 		/// </summary>
-		protected virtual T CalculateBinSize(T min, T max, int binCount)
-		{            // (max - min) / binCount)
-			return (SubDiv(max, min, binCount));
-		}
+		protected abstract T CalculateBinSize(T min, T max, int binCount);
 
 		/// <summary>
-		/// Calculates the current size of a bin.
+		/// Calculates the current number of bins.
 		/// </summary>
-		protected virtual int CalculateBinCount(T min, T max, T binSize)
-		{                 // (max - min) / binSize)
-			return (SubDivRound(max, min, binSize));
-		}
+		protected abstract int CalculateBinCount(T min, T max, T binSize);
 
 		/// <summary>
-		/// Gets the index of the bin corresponding to <paramref name="value"/>.
+		/// Calculates the value ("middle" of bin) of the given bin.
 		/// </summary>
-		protected virtual int GetIndex(T value)
-		{                 // (value - Min) / BinSize)
-			return (SubDivRound(value, Min, BinSize));
-		}
+		protected abstract T CalculateBinValue(int index);
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="item"/>.
+		/// </summary>
+		protected abstract int GetIndex(T item);
 
 		/// <summary>
 		/// Increments the corresponding bin.
 		/// </summary>
 		protected virtual void IncrementBin(int index)
 		{
-			Bins[index]++;
+			BinCounts[index]++;
 		}
 
 		/// <summary>
 		/// Increments the corresponding bin.
 		/// </summary>
-		protected virtual void IncrementBin(T value)
+		protected virtual void IncrementBin(T item)
 		{
-			Bins[GetIndex(value)]++;
+			BinCounts[GetIndex(item)]++;
 		}
 
 		/// <summary>
-		/// Adds a value to the histogram.
+		/// Adds an item to the histogram.
 		/// </summary>
-		public virtual void Add(T value)
+		public virtual void Add(T item)
 		{
-			// Easy case shall be fast:
-			if ((BinCount > 0) && (value.CompareTo(Min) >= 0) && (value.CompareTo(Max) <= 0))
+			if (AutoAdjust)
 			{
-				Values.Add(value);
-				IncrementBin(value);
-				return;
-			}
+				Items.Add(item);
 
-			// Grow if allowed:
-			if (AutoGrow)
+				AdjustAsNeededAndIncrementBin(item);
+			}
+			else
 			{
-				Values.Add(value);
-				GrowAsNeededAndIncrementBin(value);
-			}
+				if ((item.CompareTo(Min) >= 0) && (item.CompareTo(Max) <= 0))
+				{
+					Items.Add(item);
 
-			// Out-of-bounds:
-			if (OutOfBoundsBehavior == HistogramOutOfBoundsBehavior.Ignore) {
-				// Ignore.
-			}
-			else {                  // HistogramOutOfBoundsBehavior.Throw)
-				throw (new ArgumentOutOfRangeException("item", value, "The value of the item is outside 'Min'/'Max' and 'AutoRearrange' is 'false'!"));
+					if (BinSize.Equals(default(T))) // Just a single bin yet, 'BinSize' is yet default(T):
+						IncrementBin(0);
+					else
+						IncrementBin(item);
+				}
+				else // Out-of-bounds:
+				{
+					if (OutOfBoundsBehavior == HistogramOutOfBoundsBehavior.Ignore) {
+						// Ignore.
+					}
+					else {                  // HistogramOutOfBoundsBehavior.Throw)
+						throw (new ArgumentOutOfRangeException("item", item, "The value of the item is outside 'Min'/'Max' and 'AutoAdjust' is 'false'!"));
+					}
+				}
 			}
 		}
 
 		/// <summary>
-		/// Adds values to the histogram.
+		/// Adds items to the histogram.
 		/// </summary>
-		public virtual void AddRange(IEnumerable<T> values)
+		public virtual void AddRange(IEnumerable<T> items)
 		{
-			foreach (var value in values)
-				Add(value);
+			foreach (var item in items)
+				Add(item);
 		}
 
 		/// <summary>
-		/// Gets the current number of values added by <see cref="Add(T)"/> and <see cref="AddRange(IEnumerable{T})"/>.
+		/// Gets the current number of items added by <see cref="Add(T)"/> and <see cref="AddRange(IEnumerable{T})"/>.
 		/// </summary>
-		public virtual int ValueCount
+		public virtual int ItemCount
 		{
-			get { return (Values.Count); }
+			get { return (Items.Count); }
 		}
 
 		/// <summary>
-		/// Lets the collection grow up to <see cref="MaxBinCount"/>.
-		/// Needed when <see cref="AutoGrow"/> is <c>true</c>.
+		/// Lets the collection adjust as needed.
 		/// </summary>
-		/// <param name="value">
-		/// The value just added that triggered calling this method.
+		/// <param name="item">
+		/// The item just added that triggered calling this method.
 		/// </param>
-		protected virtual void GrowAsNeededAndIncrementBin(T value)
+		protected virtual void AdjustAsNeededAndIncrementBin(T item)
 		{
-			if (Values.Count == 1) // Just a single bin yet, 'Min'/'Max'/'BinSize' are yet default(T):
+			if (Items.Count == 1) // Just a single bin yet, 'Min'/'Max'/'BinSize' are yet default(T):
 			{
-				Min = Values[0];
-				Max = Values[0];
+				Min = Items[0];
+				Max = Items[0];
 				IncrementBin(0);
 			}
-			else if ((value.CompareTo(Min) >= 0) || (value.CompareTo(Max) <= 0)) // Value is within bounds:
+			else if ((item.CompareTo(Min) >= 0) && (item.CompareTo(Max) <= 0)) // Item is within bounds:
 			{
 				if (BinSize.Equals(default(T))) // Just a single bin yet, 'BinSize' is yet default(T):
 				{
 					IncrementBin(0);
 				}
-				else
+				else if (BinCount < MaxBinCount) // Adjusting is possible:
 				{
-					T lowerLimit;
-					T upperLimit;
-					GetValueProximity(value, out lowerLimit, out upperLimit);
-
-					var valueIsWithinProximityOfAlreadyContainedValue = false;
-					for (int i = 0; i < (Values.Count - 1); i++)
+					int index;
+					if (IsWithinProximityOfBinValue(item, out index))
 					{
-						if ((value.CompareTo(lowerLimit) >= 0) || (value.CompareTo(upperLimit) <= 0))
-						{
-							valueIsWithinProximityOfAlreadyContainedValue = true;
-							break;
-						}
+						IncrementBin(index);
 					}
-
-					if (valueIsWithinProximityOfAlreadyContainedValue)
-						IncrementBin(value);
-					else if (BinCount < MaxBinCount)
-						GrowByBinSizeAndReincrementBins(BinCount + 1); // Gradually increase...
+					else if (IsWithinProximityOfPreviouslyContainedItem(item, out index))
+					{
+						IncrementBin(index);
+					}
 					else
-						GrowByBinSizeAndReincrementBins(MaxBinCount); // ...until 'MaxBinCount'.
+					{
+						AdjustByBinSizeAndReincrementBins(BinCount + 1); // Gradually increase up to 'MaxBinCount' which will be handled below.
+					}
+				}
+				else // Adjusting is no longer possible:
+				{
+					if (BinCount > MaxBinCount)
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'BinCount' must never exceed 'MaxBinCount'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+					IncrementBin(item);
 				}
 			}
-			else // Value is outside bounds:
+			else // Item is outside bounds:
 			{
 				var previousMin = Min;
 				var previousMax = Max;
 
-				if (value.CompareTo(Min) < 0) { Min = value; }
-				if (value.CompareTo(Max) > 0) { Max = value; }
+				if (item.CompareTo(Min) < 0) { Min = item; }
+				if (item.CompareTo(Max) > 0) { Max = item; }
 
-				var binCountKeepingBinSize = CalculateBinCount(Max, Min, BinSize);
-				if (binCountKeepingBinSize.CompareTo(MaxBinCount) <= 0)
-					GrowByBinCountAndIncrementBin(previousMin, previousMax, value);
+				int index;
+				if (IsWithinProximityOfBinValue(item, out index))
+				{
+					IncrementBin(index);
+				}
+				else if (IsWithinProximityOfPreviouslyContainedItem(item, out index))
+				{
+					IncrementBin(index);
+				}
+				else if (BinSize.Equals(default(T))) // Just a single bin yet, 'BinSize' is yet default(T):
+				{
+					AdjustByBinSizeAndReincrementBins(2); // Add new bin for new non-proximate item.
+				}
 				else
-					GrowByBinSizeAndReincrementBins(MaxBinCount);
+				{
+					var binCountKeepingBinSize = CalculateBinCount(Min, Max, BinSize);
+					if (binCountKeepingBinSize.CompareTo(MaxBinCount) <= 0)
+						AdjustByBinCountKeeptingBinSizeAndIncrementBin(previousMin, previousMax, item);
+					else
+						AdjustByBinSizeAndReincrementBins(MaxBinCount);
+				}
 			}
 		}
 
 		/// <summary>
-		/// Grows the histogram by increasing <see cref="BinCount"/>, keeping <see cref="BinSize"/>.
+		/// Evaluates whether the value is within the proximity of a bin value.
 		/// </summary>
-		protected virtual void GrowByBinCountAndIncrementBin(T previousMin, T previousMax, T value)
+		protected virtual bool IsWithinProximityOfBinValue(T value, out int index)
 		{
-			int binCountToInsert = CalculateBinCount(previousMin, Min, BinSize);
-			int binCountToAdd    = CalculateBinCount(Max, previousMax, BinSize);
+			//                     value
+			//                |- proximity -|
+			// |-----    v    -----|-----    v    -----|-----    v    -----|
+			// |----- (i - 1) -----|----- (  i  ) -----|----- (i + 1) -----|
 
-			for (int i = 0; i < binCountToInsert; i++)
-				Bins.Insert(0, 0);
+			var i = GetIndex(value);
 
-			for (int i = 0; i < binCountToAdd; i++)
-				Bins.Add(0);
+			T lower;
+			T upper;
+			GetProximity(value, out lower, out upper);
 
-			IncrementBin(value);
+			index = (i);
+			var binValue = BinValues[index];
+			if ((binValue.CompareTo(lower) >= 0) && (binValue.CompareTo(upper) <= 0))
+				return (true);
+
+			if (i > 0)
+			{
+				index = (i - 1);
+				binValue = BinValues[index];
+				if ((binValue.CompareTo(lower) >= 0) && (binValue.CompareTo(upper) <= 0))
+					return (true);
+			}
+
+			if (i < (BinCount - 1))
+			{
+				index = (i + 1);
+				binValue = BinValues[index];
+				if ((binValue.CompareTo(lower) >= 0) && (binValue.CompareTo(upper) <= 0))
+					return (true);
+			}
+
+			return (false);
 		}
 
 		/// <summary>
-		/// Grows the histogram by increasing <see cref="BinSize"/>, keeping <see cref="Min"/> and <see cref="Max"/>.
+		/// Evaluates whether the value is within the proximity of a previously contained item.
 		/// </summary>
-		protected virtual void GrowByBinSizeAndReincrementBins(int binCount)
+		protected virtual bool IsWithinProximityOfPreviouslyContainedItem(T value, out int index)
 		{
-			BinSize = CalculateBinSize(Min, Max, MaxBinCount);
-			InitializeBins(MaxBinCount, MaxBinCount);
+			T lower;
+			T upper;
+			GetProximity(value, out lower, out upper);
 
-			foreach (var v in Values)
-				IncrementBin(v);
+			for (int i = 0; i < (ItemCount - 1); i++) // Don't include the just added item!
+			{
+				var item = Items[i];
+				if ((item.CompareTo(lower) >= 0) && (item.CompareTo(upper) <= 0))
+				{
+					index = i;
+					return (true);
+				}
+			}
+
+			index = CollectionsEx.InvalidIndex;
+			return (false);
 		}
 
 		/// <summary>
-		/// Gets the proximity around <paramref name="value"/>, taking <see cref="MaxBinCount"/> into account.
+		/// Adjusts the histogram by increasing <see cref="BinCount"/>, keeping <see cref="BinSize"/>.
 		/// </summary>
-		protected abstract void GetValueProximity(T value, out T lower, out T upper);
+		protected virtual void AdjustByBinCountKeeptingBinSizeAndIncrementBin(T previousMin, T previousMax, T item)
+		{
+			int binCountToInsert = CalculateBinCount(Min, previousMin, BinSize);
+			int binCountToAdd    = CalculateBinCount(previousMax, Max, BinSize);
+
+			for (int i = (binCountToInsert - 1); i >= 0; i--)
+			{
+				BinCounts.Insert(0, 0);
+				BinValues.Insert(0, CalculateBinValue(i));
+			}
+
+			int offset = BinCount; // Already taking the above inserted bins into account.
+
+			for (int i = offset; i < (offset + binCountToAdd); i++)
+			{
+				BinCounts.Add(0);
+				BinValues.Add(CalculateBinValue(i));
+			}
+
+			IncrementBin(item);
+		}
 
 		/// <summary>
-		/// Evaluates <c>((a * b) + c)</c>.
+		/// Adjusts the histogram by increasing <see cref="BinSize"/>, keeping <see cref="Min"/> and <see cref="Max"/>.
 		/// </summary>
-		protected abstract T MulAdd(int a, T b, T c);
+		protected virtual void AdjustByBinSizeAndReincrementBins(int binCount)
+		{
+			BinSize = CalculateBinSize(Min, Max, binCount);
+			InitializeBins(binCount, binCount);
+
+			foreach (var item in Items)
+				IncrementBin(item);
+		}
 
 		/// <summary>
-		/// Evaluates <c>((a - b) / c)</c>.
+		/// Gets the proximity around a <paramref name="value"/> in the histogram,
+		/// taking <see cref="MaxBinCount"/> into account.
 		/// </summary>
-		protected abstract T SubDiv(T a, T b, int c);
-
-		/// <summary>
-		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
-		/// </summary>
-		protected abstract int SubDivRound(T a, T b, T c);
+		protected abstract void GetProximity(T value, out T lower, out T upper);
 	}
 
 	/// <summary>
-	/// Collection of values of type <see cref="int"/> of a histogram.
+	/// Collection of items of type <see cref="int"/> of a histogram.
 	/// </summary>
 	public class HistogramInt32 : Histogram<int>
 	{
@@ -378,42 +459,60 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Gets the proximity around <paramref name="value"/>, taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// Calculates the current size of a bin.
 		/// </summary>
-		protected override void GetValueProximity(int value, out int lower, out int upper)
+		protected override int CalculateBinSize(int min, int max, int binCount)
+		{
+			return ((max - min) / binCount);
+		}
+
+		/// <summary>
+		/// Calculates the current number of bins.
+		/// </summary>
+		protected override int CalculateBinCount(int min, int max, int binSize)
+		{
+			return ((int)Math.Round((double)(max - min) / binSize));
+		}
+
+		/// <summary>
+		/// Calculates the value ("middle" of bin) of the given bin.
+		/// </summary>
+		protected override int CalculateBinValue(int index)
+		{
+			var offset = (Min + (BinSize / 2));
+			return (offset + (index * BinSize));
+		}
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="item"/>.
+		/// </summary>
+		protected override int GetIndex(int item)
+		{
+			if (BinCount <= 1) // i.e. 'BinSize' may still be 0.0 = default(T).
+				return (0);
+
+			// Min                 item
+			//                       v
+			// |----- (i - 1) -----|----- (  i  ) -----|----- (i + 1) -----|
+
+			var unlimited = ((int)((double)(item - Min) / BinSize));
+			return (Int32Ex.Limit(unlimited, 0, (BinCount - 1)));
+		}
+
+		/// <summary>
+		/// Gets the proximity around a <paramref name="value"/> in the histogram,
+		/// taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// </summary>
+		protected override void GetProximity(int value, out int lower, out int upper)
 		{
 			var half = (int)(Math.Round((double)(((Max - Min) / MaxBinCount) / 2)));
 			lower = (value - half);
 			upper = (value + half);
 		}
-
-		/// <summary>
-		/// Evaluates <c>((a * b) + c)</c>.
-		/// </summary>
-		protected override int MulAdd(int a, int b, int c)
-		{
-			return ((a * b) + c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>((a - b) / c)</c>.
-		/// </summary>
-		protected override int SubDiv(int a, int b, int c)
-		{
-			return ((a - b) / c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
-		/// </summary>
-		protected override int SubDivRound(int a, int b, int c)
-		{
-			return ((int)(Math.Round((double)(a - b) / c)));
-		}
 	}
 
 	/// <summary>
-	/// Collection of values of type <see cref="long"/> of a histogram.
+	/// Collection of items of type <see cref="long"/> of a histogram.
 	/// </summary>
 	public class HistogramInt64 : Histogram<long>
 	{
@@ -445,42 +544,60 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Gets the proximity around <paramref name="value"/>, taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// Calculates the current size of a bin.
 		/// </summary>
-		protected override void GetValueProximity(long value, out long lower, out long upper)
+		protected override long CalculateBinSize(long min, long max, int binCount)
+		{
+			return ((max - min) / binCount);
+		}
+
+		/// <summary>
+		/// Calculates the current number of bins.
+		/// </summary>
+		protected override int CalculateBinCount(long min, long max, long binSize)
+		{
+			return ((int)Math.Round((double)(max - min) / binSize));
+		}
+
+		/// <summary>
+		/// Calculates the value ("middle" of bin) of the given bin.
+		/// </summary>
+		protected override long CalculateBinValue(int index)
+		{
+			var offset = (Min + (BinSize / 2));
+			return (offset + (index * BinSize));
+		}
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="item"/>.
+		/// </summary>
+		protected override int GetIndex(long item)
+		{
+			if (BinCount <= 1) // i.e. 'BinSize' may still be 0.0 = default(T).
+				return (0);
+
+			// Min                 item
+			//                       v
+			// |----- (i - 1) -----|----- (  i  ) -----|----- (i + 1) -----|
+
+			var unlimited = ((int)((double)(item - Min) / BinSize));
+			return (Int32Ex.Limit(unlimited, 0, (BinCount - 1)));
+		}
+
+		/// <summary>
+		/// Gets the proximity around a <paramref name="value"/> in the histogram,
+		/// taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// </summary>
+		protected override void GetProximity(long value, out long lower, out long upper)
 		{
 			var half = (long)(Math.Round((double)(((Max - Min) / MaxBinCount) / 2)));
 			lower = (value - half);
 			upper = (value + half);
 		}
-
-		/// <summary>
-		/// Evaluates <c>((a * b) + c)</c>.
-		/// </summary>
-		protected override long MulAdd(int a, long b, long c)
-		{
-			return ((a * b) + c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>((a - b) / c)</c>.
-		/// </summary>
-		protected override long SubDiv(long a, long b, int c)
-		{
-			return ((a - b) / c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
-		/// </summary>
-		protected override int SubDivRound(long a, long b, long c)
-		{
-			return ((int)(Math.Round((double)(a - b) / c)));
-		}
 	}
 
 	/// <summary>
-	/// Collection of values of type <see cref="double"/> of a histogram.
+	/// Collection of items of type <see cref="double"/> of a histogram.
 	/// </summary>
 	public class HistogramDouble : Histogram<double>
 	{
@@ -512,42 +629,60 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Gets the proximity around <paramref name="value"/>, taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// Calculates the current size of a bin.
 		/// </summary>
-		protected override void GetValueProximity(double value, out double lower, out double upper)
+		protected override double CalculateBinSize(double min, double max, int binCount)
+		{
+			return ((max - min) / binCount);
+		}
+
+		/// <summary>
+		/// Calculates the current number of bins.
+		/// </summary>
+		protected override int CalculateBinCount(double min, double max, double binSize)
+		{
+			return ((int)Math.Round((max - min) / binSize));
+		}
+
+		/// <summary>
+		/// Calculates the value ("middle" of bin) of the given bin.
+		/// </summary>
+		protected override double CalculateBinValue(int index)
+		{
+			var offset = (Min + (BinSize / 2));
+			return (offset + (index * BinSize));
+		}
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="item"/>.
+		/// </summary>
+		protected override int GetIndex(double item)
+		{
+			if (BinCount <= 1) // i.e. 'BinSize' may still be 0.0 = default(T).
+				return (0);
+
+			// Min                 item
+			//                       v
+			// |----- (i - 1) -----|----- (  i  ) -----|----- (i + 1) -----|
+
+			var unlimited = ((int)((item - Min) / BinSize));
+			return (Int32Ex.Limit(unlimited, 0, (BinCount - 1)));
+		}
+
+		/// <summary>
+		/// Gets the proximity around a <paramref name="value"/> in the histogram,
+		/// taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// </summary>
+		protected override void GetProximity(double value, out double lower, out double upper)
 		{
 			var half = (((Max - Min) / MaxBinCount) / 2);
 			lower = (value - half);
 			upper = (value + half);
 		}
-
-		/// <summary>
-		/// Evaluates <c>((a * b) + c)</c>.
-		/// </summary>
-		protected override double MulAdd(int a, double b, double c)
-		{
-			return ((a * b) + c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>((a - b) / c)</c>.
-		/// </summary>
-		protected override double SubDiv(double a, double b, int c)
-		{
-			return ((a - b) / c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
-		/// </summary>
-		protected override int SubDivRound(double a, double b, double c)
-		{
-			return ((int)(Math.Round((a - b) / c)));
-		}
 	}
 
 	/// <summary>
-	/// Collection of values of type <see cref="decimal"/> of a histogram.
+	/// Collection of items of type <see cref="decimal"/> of a histogram.
 	/// </summary>
 	public class HistogramDecimal : Histogram<decimal>
 	{
@@ -579,37 +714,55 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Gets the proximity around <paramref name="value"/>, taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// Calculates the current size of a bin.
 		/// </summary>
-		protected override void GetValueProximity(decimal value, out decimal lower, out decimal upper)
+		protected override decimal CalculateBinSize(decimal min, decimal max, int binCount)
+		{
+			return ((max - min) / binCount);
+		}
+
+		/// <summary>
+		/// Calculates the current number of bins.
+		/// </summary>
+		protected override int CalculateBinCount(decimal min, decimal max, decimal binSize)
+		{
+			return ((int)Math.Round((max - min) / binSize));
+		}
+
+		/// <summary>
+		/// Calculates the value ("middle" of bin) of the given bin.
+		/// </summary>
+		protected override decimal CalculateBinValue(int index)
+		{
+			var offset = (Min + (BinSize / 2));
+			return (offset + (index * BinSize));
+		}
+
+		/// <summary>
+		/// Gets the index of the bin corresponding to <paramref name="item"/>.
+		/// </summary>
+		protected override int GetIndex(decimal item)
+		{
+			if (BinCount <= 1) // i.e. 'BinSize' may still be 0.0 = default(T).
+				return (0);
+
+			// Min                 item
+			//                       v
+			// |----- (i - 1) -----|----- (  i  ) -----|----- (i + 1) -----|
+
+			var unlimited = ((int)((item - Min) / BinSize));
+			return (Int32Ex.Limit(unlimited, 0, (BinCount - 1)));
+		}
+
+		/// <summary>
+		/// Gets the proximity around a <paramref name="value"/> in the histogram,
+		/// taking <see cref="Histogram{T}.MaxBinCount"/> into account.
+		/// </summary>
+		protected override void GetProximity(decimal value, out decimal lower, out decimal upper)
 		{
 			var half = (((Max - Min) / MaxBinCount) / 2);
 			lower = (value - half);
 			upper = (value + half);
-		}
-
-		/// <summary>
-		/// Evaluates <c>((a * b) + c)</c>.
-		/// </summary>
-		protected override decimal MulAdd(int a, decimal b, decimal c)
-		{
-			return ((a * b) + c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>((a - b) / c)</c>.
-		/// </summary>
-		protected override decimal SubDiv(decimal a, decimal b, int c)
-		{
-			return ((a - b) / c);
-		}
-
-		/// <summary>
-		/// Evaluates <c>(int)(Math.Round((a - b) / c)))</c>.
-		/// </summary>
-		protected override int SubDivRound(decimal a, decimal b, decimal c)
-		{
-			return ((int)(Math.Round((a - b) / c)));
 		}
 	}
 }
