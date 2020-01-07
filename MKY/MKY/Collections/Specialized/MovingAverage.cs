@@ -25,43 +25,35 @@
 using System;
 using System.Collections.Generic;
 
-// This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Math for consistency with the System namespace.
-namespace MKY
+namespace MKY.Collections.Specialized
 {
 	/// <summary>
 	/// Simple moving average based on <see cref="Queue{T}"/>.
 	/// </summary>
-	public abstract class TimedMovingAverage<T>
+	public abstract class MovingAverage<T>
 	{
 		/// <summary>
-		/// The interval of the average in milliseconds.
+		/// The length of the average.
 		/// </summary>
-		public readonly int IntervalMs;
+		public readonly int Length;
 
-		/// <summary>
-		/// The interval of the average in ticks.
-		/// </summary>
-		public readonly long IntervalTicks;
-
-		private Queue<Tuple<T, long>> queue; // = null;
+		private Queue<T> queue; // = null;
 		private bool valueHasToBeCalculated; // = false;
 		private T valueCache; // = default(T);
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TimedMovingAverage{T}"/> class.
+		/// Initializes a new instance of the <see cref="MovingAverage{T}"/> class.
 		/// </summary>
-		/// <param name="intervalMs">The interval of the average in milliseconds.</param>
-		/// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalMs"/> is equal or less than 0 ms.</exception>
-		public TimedMovingAverage(int intervalMs)
+		/// <param name="length">The length of the average.</param>
+		/// <exception cref="ArgumentOutOfRangeException"><paramref name="length"/> is equal or less than 0.</exception>
+		public MovingAverage(int length)
 		{
-			if (intervalMs <= 0)
-				throw (new ArgumentOutOfRangeException("intervalMs", intervalMs, "Interval must be at least 1 ms!"));
+			if (length <= 0)
+				throw (new ArgumentOutOfRangeException("length", length, "Length must be at least 1!"));
 
-			IntervalMs = intervalMs;
-			IntervalTicks = TimeSpanEx.TimeToTicks(intervalMs);
+			Length = length;
 
-			this.queue = new Queue<Tuple<T, long>>();
+			this.queue = new Queue<T>(Length);
 		}
 
 		/// <summary>
@@ -83,27 +75,10 @@ namespace MKY
 		/// </summary>
 		public virtual void Enqueue(T item)
 		{
-			Enqueue(item, DateTime.Now.Ticks);
-		}
-
-		/// <summary>
-		/// Enqueues a value.
-		/// </summary>
-		public virtual void Enqueue(T item, DateTime itemTimeStamp)
-		{
-			Enqueue(item, itemTimeStamp.Ticks);
-		}
-
-		/// <summary>
-		/// Enqueues a value.
-		/// </summary>
-		public virtual void Enqueue(T item, long itemTicks)
-		{
-			var tickLimit = (itemTicks - IntervalTicks);
-			while ((this.queue.Count > 0) && (this.queue.Peek().Item2 < tickLimit))
+			while (this.queue.Count >= Length)
 				this.queue.Dequeue();
 
-			this.queue.Enqueue(new Tuple<T, long>(item, itemTicks));
+			this.queue.Enqueue(item);
 			this.valueHasToBeCalculated = true;
 		}
 
@@ -141,19 +116,19 @@ namespace MKY
 		/// See e.g. https://stackoverflow.com/questions/8122611/c-sharp-adding-two-generic-values
 		/// for background and discussion.
 		/// </remarks>
-		public abstract T Avg(Tuple<T, long>[] items);
+		public abstract T Avg(T[] items);
 	}
 
 	/// <summary>
 	/// Simple moving average based on <see cref="Queue{T}"/>.
 	/// </summary>
-	public class TimedMovingAverageInt32 : TimedMovingAverage<int>
+	public class MovingAverageInt32 : MovingAverage<int>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TimedMovingAverage{T}"/> class.
+		/// Initializes a new instance of the <see cref="MovingAverage{T}"/> class.
 		/// </summary>
 		/// <param name="length">The length of the average.</param>
-		public TimedMovingAverageInt32(int length)
+		public MovingAverageInt32(int length)
 			: base(length)
 		{
 		}
@@ -161,11 +136,11 @@ namespace MKY
 		/// <summary>
 		/// Adds two values.
 		/// </summary>
-		public override int Avg(Tuple<int, long>[] items)
+		public override int Avg(int[] items)
 		{
 			int sum = 0;
 			foreach (var item in items)
-				sum += item.Item1;
+				sum += item;
 
 			int avg = (int)(Math.Round((double)sum / items.Length));
 			return (avg);
@@ -175,13 +150,13 @@ namespace MKY
 	/// <summary>
 	/// Simple moving average based on <see cref="Queue{T}"/>.
 	/// </summary>
-	public class TimedMovingAverageInt64 : TimedMovingAverage<long>
+	public class MovingAverageInt64 : MovingAverage<long>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TimedMovingAverage{T}"/> class.
+		/// Initializes a new instance of the <see cref="MovingAverage{T}"/> class.
 		/// </summary>
 		/// <param name="length">The length of the average.</param>
-		public TimedMovingAverageInt64(int length)
+		public MovingAverageInt64(int length)
 			: base(length)
 		{
 		}
@@ -189,11 +164,11 @@ namespace MKY
 		/// <summary>
 		/// Adds two values.
 		/// </summary>
-		public override long Avg(Tuple<long, long>[] items)
+		public override long Avg(long[] items)
 		{
 			long sum = 0;
 			foreach (var item in items)
-				sum += item.Item1;
+				sum += item;
 
 			long avg = (long)(Math.Round((double)sum / items.Length));
 			return (avg);
@@ -203,13 +178,13 @@ namespace MKY
 	/// <summary>
 	/// Simple moving average based on <see cref="Queue{T}"/>.
 	/// </summary>
-	public class TimedMovingAverageDouble : TimedMovingAverage<double>
+	public class MovingAverageDouble : MovingAverage<double>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TimedMovingAverage{T}"/> class.
+		/// Initializes a new instance of the <see cref="MovingAverage{T}"/> class.
 		/// </summary>
 		/// <param name="length">The length of the average.</param>
-		public TimedMovingAverageDouble(int length)
+		public MovingAverageDouble(int length)
 			: base(length)
 		{
 		}
@@ -217,11 +192,11 @@ namespace MKY
 		/// <summary>
 		/// Adds two values.
 		/// </summary>
-		public override double Avg(Tuple<double, long>[] items)
+		public override double Avg(double[] items)
 		{
 			double sum = 0.0;
 			foreach (var item in items)
-				sum += item.Item1;
+				sum += item;
 
 			return (sum / items.Length);
 		}
@@ -230,13 +205,13 @@ namespace MKY
 	/// <summary>
 	/// Simple moving average based on <see cref="Queue{T}"/>.
 	/// </summary>
-	public class TimedMovingAverageTimeSpan : TimedMovingAverage<TimeSpan>
+	public class MovingAverageTimeSpan : MovingAverage<TimeSpan>
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TimedMovingAverage{T}"/> class.
+		/// Initializes a new instance of the <see cref="MovingAverage{T}"/> class.
 		/// </summary>
 		/// <param name="length">The length of the average.</param>
-		public TimedMovingAverageTimeSpan(int length)
+		public MovingAverageTimeSpan(int length)
 			: base(length)
 		{
 		}
@@ -244,11 +219,11 @@ namespace MKY
 		/// <summary>
 		/// Adds two values.
 		/// </summary>
-		public override TimeSpan Avg(Tuple<TimeSpan, long>[] items)
+		public override TimeSpan Avg(TimeSpan[] items)
 		{
 			TimeSpan sum = TimeSpan.Zero;
 			foreach (var item in items)
-				sum += item.Item1;
+				sum += item;
 
 			TimeSpan avg = TimeSpan.FromMilliseconds(Math.Round(sum.TotalMilliseconds / items.Length));
 			return (avg);

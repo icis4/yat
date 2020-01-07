@@ -66,6 +66,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections.Specialized;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Windows.Forms;

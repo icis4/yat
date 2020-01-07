@@ -143,8 +143,8 @@
     <Compile Include="IO\Temp.cs" />
     <Compile Include="IO\TextEx.cs" />
     <Compile Include="MarshalByRefWrapper.cs" />
-    <Compile Include="Math\TimedMovingAverage.cs" />
-    <Compile Include="Math\MovingAverage.cs" />
+    <Compile Include="Collections\Specialized\TimedMovingAverage.cs" />
+    <Compile Include="Collections\Specialized\MovingAverage.cs" />
     <Compile Include="Media\SystemSoundsEx.cs" />
     <Compile Include="Net\Browser.cs" />
     <Compile Include="Net\IPAddressEx.cs" />
