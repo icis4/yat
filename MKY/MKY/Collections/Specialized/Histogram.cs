@@ -270,9 +270,9 @@ namespace MKY.Collections.Specialized
 					{
 						IncrementBin(index);
 					}
-					else if (IsWithinProximityOfPreviouslyContainedItem(item, out index))
+					else if (IsWithinProximityOfPreviouslyContainedItem(item))
 					{
-						IncrementBin(index);
+						IncrementBin(item);
 					}
 					else
 					{
@@ -300,9 +300,9 @@ namespace MKY.Collections.Specialized
 				{
 					IncrementBin(index);
 				}
-				else if (IsWithinProximityOfPreviouslyContainedItem(item, out index))
+				else if (IsWithinProximityOfPreviouslyContainedItem(item))
 				{
-					IncrementBin(index);
+					IncrementBin(item);
 				}
 				else if (BinSize.Equals(default(T))) // Just a single bin yet, 'BinSize' is yet default(T):
 				{
@@ -362,7 +362,7 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// Evaluates whether the value is within the proximity of a previously contained item.
 		/// </summary>
-		protected virtual bool IsWithinProximityOfPreviouslyContainedItem(T value, out int index)
+		protected virtual bool IsWithinProximityOfPreviouslyContainedItem(T value)
 		{
 			T lower;
 			T upper;
@@ -372,13 +372,9 @@ namespace MKY.Collections.Specialized
 			{
 				var item = Items[i];
 				if ((item.CompareTo(lower) >= 0) && (item.CompareTo(upper) <= 0))
-				{
-					index = i;
 					return (true);
-				}
 			}
 
-			index = CollectionsEx.InvalidIndex;
 			return (false);
 		}
 

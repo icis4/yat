@@ -716,7 +716,7 @@ namespace YAT.Model
 		protected virtual void CreateYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
-			var yValues = ConvertCapturesToPlotValues(captures);
+			var yValues = ConvertToPlotValues(captures);
 			pi = new AutoActionPlotItem(plotAction, null, yValues);
 		}
 
@@ -724,7 +724,7 @@ namespace YAT.Model
 		protected virtual void CreateXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
-			var values = ConvertCapturesToPlotValues(captures);
+			var values = ConvertToPlotValues(captures);
 			var xValue = values[0];
 			var yLength = (values.Length - 1);
 			var yValues = new Tuple<string, double>[yLength];
@@ -737,12 +737,11 @@ namespace YAT.Model
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
 			Tuple<string, double> xTimeValue;
-			if (!TryConvertCapturesToPlotTime(captures[0], out xTimeValue)) {
-				errorMessage = string.Format("The first capture {0} could not be converted into a date/time value!", captures[0]);
+			if (!TryConvertToPlotTime(captures[0], out xTimeValue, out errorMessage)) {
 				pi = null;
 				return (false);
 			}
-			var values = ConvertCapturesToPlotValues(captures);
+			var values = ConvertToPlotValues(captures);
 			var yLength = (values.Length - 1);
 			var yValues = new Tuple<string, double>[yLength];
 			Array.Copy(values, 1, yValues, 0, yLength);
@@ -756,26 +755,42 @@ namespace YAT.Model
 		{
 			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
-			var yValues = ConvertCapturesToPlotValues(captures);
+			var yValues = ConvertToPlotValues(captures);
 			pi = new AutoActionPlotItem(plotAction, xValue, yValues);
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryConvertCapturesToPlotTime(string capture, out Tuple<string, double> timeValue)
+		protected virtual bool TryConvertToPlotTime(string capture, out Tuple<string, double> timeValue, out string errorMessage)
 		{
-			DateTime result;
-			if (DateTime.TryParse(capture, out result))
+			// Try DateTime:
 			{
-				timeValue = new Tuple<string, double>("Time", result.ToOADate());
-				return (true);
+				DateTime result;
+				if (DateTime.TryParse(capture, out result)) // Always name series, even if legend is disabled
+				{                                           // currently, as user can enable it at any time.
+					timeValue = new Tuple<string, double>("Time Captures as OLE Automation Date", result.ToOADate());
+					errorMessage = null;
+					return (true);
+				}
+			}
+
+			// Try double:
+			{
+				double result;
+				if (double.TryParse(capture, out result))
+				{
+					timeValue = new Tuple<string, double>("Numeric Captures as OLE Automation Date", result);
+					errorMessage = null;
+					return (true);
+				}
 			}
 
 			timeValue = null;
+			errorMessage = string.Format("The first capture {0} could not be converted into a date/time value!", capture);
 			return (false);
 		}
 
 		/// <summary></summary>
-		protected virtual Tuple<string, double>[] ConvertCapturesToPlotValues(string[] captures)
+		protected virtual Tuple<string, double>[] ConvertToPlotValues(string[] captures)
 		{
 			var yValues = new List<Tuple<string, double>>(); // No preset needed, the default behavior is good enough.
 
@@ -786,7 +801,7 @@ namespace YAT.Model
 					double result;
 					if (double.TryParse(s, out result))       // Always name series, even if legend is disabled
 					{                                         // currently, as user can enable it at any time.
-						yValues.Add(new Tuple<string, double>("Numeric Values", result));
+						yValues.Add(new Tuple<string, double>("Numeric Captures", result));
 						continue;
 					}
 				}
@@ -796,7 +811,7 @@ namespace YAT.Model
 					DateTime result;
 					if (DateTime.TryParse(s, out result))
 					{
-						yValues.Add(new Tuple<string, double>("Time", result.ToOADate()));
+						yValues.Add(new Tuple<string, double>("Time Captures as OLE Automation Date", result.ToOADate()));
 						continue;
 					}
 				}
