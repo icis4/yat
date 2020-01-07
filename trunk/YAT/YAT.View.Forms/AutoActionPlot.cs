@@ -42,11 +42,11 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 
 using MKY;
@@ -402,7 +402,7 @@ namespace YAT.View.Forms
 						}
 
 						case AutoAction.Histogram: {
-							scottPlot.plt.PlotBar(mdl.HistogramBins.Item2.ToArray(), mdl.HistogramCounts.Item2.ToArray(), barWidth: ToHistogramBarWidth(mdl.HistogramBins.Item2), color: firstColor);
+							scottPlot.plt.PlotStep(mdl.Histogram.Values.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), color: firstColor, label: "All Captures");
 							break;
 						}
 
@@ -429,14 +429,6 @@ namespace YAT.View.Forms
 					return (false);
 				}
 			}
-		}
-
-		private double? ToHistogramBarWidth(List<double> xValues)
-		{
-			if ((xValues != null) && (xValues.Count > 1))
-				return (xValues[1] - xValues[0]);
-			else
-				return (null);
 		}
 
 		/// <remarks>Based on 'ScottPlotDemos.FormHoverValue'.</remarks>

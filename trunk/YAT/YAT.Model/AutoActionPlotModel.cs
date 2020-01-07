@@ -25,6 +25,8 @@
 using System;
 using System.Collections.Generic;
 
+using MKY.Collections.Specialized;
+
 using YAT.Model.Types;
 
 namespace YAT.Model
@@ -65,10 +67,7 @@ namespace YAT.Model
 		public List<Tuple<string, List<double>>> YValues { get; protected set; }
 
 		/// <summary></summary>
-		public Tuple<string, List<double>> HistogramBins { get; protected set; }
-
-		/// <summary></summary>
-		public Tuple<string, List<double>> HistogramCounts { get; protected set; }
+		public HistogramDouble Histogram { get; protected set; }
 
 		/// <summary>
 		/// Gets or sets a counter that indicates whether and how many times the plot has changed.
@@ -107,8 +106,7 @@ namespace YAT.Model
 		{
 			XValues = null;
 			YValues = null;
-			HistogramBins = null;
-			HistogramCounts = null;
+			Histogram = null;
 
 			IndicateUpdate();
 		}
@@ -166,20 +164,6 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void AddItemToHistogram(AutoActionPlotItem pi)
-		{
-			XLabel = "Bins";
-			YLabel = "Counts";
-
-
-			var histo = new SortedDictionary<double, double>();
-			// PENDING Make histo bins and counts (bins epsilon up to 1024, then equally distributed)
-// PENDING	Textli eimal formuliere, dänn ToolTip & MsgBox
-// Histogram: Each capture
-
-		}
-
-		/// <summary></summary>
 		protected virtual void AddItemToYOnly(AutoActionPlotItem pi)
 		{
 			if (YValues == null)
@@ -227,6 +211,19 @@ namespace YAT.Model
 				else
 					YValues[i].Item2.Add(0); // Fill with default value.
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void AddItemToHistogram(AutoActionPlotItem pi)
+		{
+			XLabel = "Bins";
+			YLabel = "Counts";
+
+			if (Histogram == null)
+				Histogram = new HistogramDouble(256);
+
+			foreach (var tuple in pi.YValues)
+				Histogram.Add(tuple.Item2);
 		}
 
 		/// <summary></summary>
