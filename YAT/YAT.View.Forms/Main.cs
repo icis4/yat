@@ -152,6 +152,12 @@ namespace YAT.View.Forms
 		private bool findNextIsFeasible;     // = false
 		private bool findPreviousIsFeasible; // = false
 
+		// Auto:
+		private bool autoActionTriggerIsInEdit;    // = false;
+	////private bool autoActionActionIsInEdit;     // = false; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+		private bool autoResponseTriggerIsInEdit;  // = false;
+		private bool autoResponseResponseIsInEdit; // = false;
+
 	#if (WITH_SCRIPTING)
 		// Scripting:
 		private bool scriptDialogIsOpen = false;
@@ -1237,24 +1243,28 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Trigger, triggerItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+						if (!this.autoActionTriggerIsInEdit)
+						{
+							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Trigger, triggerItems);
+							ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+							toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = childIsReady;
+							toolStripComboBox_MainTool_AutoAction_Trigger.Visible = true;
+						}
 
-						toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoAction_Trigger.Visible = true;
-
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Action, actionItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
-
-						toolStripComboBox_MainTool_AutoAction_Action.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
+					////if (!this.autoActionActionIsInEdit) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+						{
+							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Action, actionItems);
+							ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
+							toolStripComboBox_MainTool_AutoAction_Action.Enabled = childIsReady;
+							toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
+						}
 					}
 
 					SetAutoActionTriggerStateControls(triggerState);
 				////SetAutoActionActionStateControls(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
 					toolStripButton_MainTool_AutoAction_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoAction_Trigger_UseText.Enabled =  triggerTextIsSupported;
+					toolStripButton_MainTool_AutoAction_Trigger_UseText.Enabled = (triggerTextIsSupported || this.autoActionTriggerIsInEdit); // Allow changing to text while editing a not yet validated trigger!
 					toolStripButton_MainTool_AutoAction_Trigger_UseText.Visible =  true;
 
 					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
@@ -1374,22 +1384,28 @@ namespace YAT.View.Forms
 
 					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
 					{
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Trigger, triggerItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = true;
+						if (!this.autoResponseTriggerIsInEdit)
+						{
+							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Trigger, triggerItems);
+							ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+							toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = childIsReady;
+							toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = true;
+						}
 
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Response, responseItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
-						toolStripComboBox_MainTool_AutoResponse_Response.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
+						if (!this.autoResponseResponseIsInEdit)
+						{
+							ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Response, responseItems);
+							ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+							toolStripComboBox_MainTool_AutoResponse_Response.Enabled = childIsReady;
+							toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
+						}
 					}
 
 					SetAutoResponseTriggerStateControls(triggerState);
 					SetAutoResponseResponseStateControls(responseState);
 
 					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Enabled =  triggerTextIsSupported;
+					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Enabled = (triggerTextIsSupported || this.autoResponseTriggerIsInEdit); // Allow changing to text while editing a not yet validated trigger!
 					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Visible =  true;
 
 					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
@@ -1598,9 +1614,6 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Find_Pattern_Enter(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
-
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
 			SuspendCtrlFNPShortcuts(); // Suspend while in find field.
 			EnterFindOnEdit();
@@ -1609,9 +1622,6 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_Find_Pattern_Leave(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
-
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
 			LeaveFindOnEdit(toolStripComboBox_MainTool_Find_Pattern.Text);
 			ResumeCtrlFNPShortcuts(); // Suspended while in find field.
@@ -2181,6 +2191,18 @@ namespace YAT.View.Forms
 				((Terminal)ActiveMdiChild).RequestAutoActionTrigger(trigger);
 		}
 
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_Enter(object sender, EventArgs e)
+		{
+			this.autoActionTriggerIsInEdit = true;
+			SetAutoActionChildControls(); // Needed to update the options.
+		}
+
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_Leave(object sender, EventArgs e)
+		{
+			this.autoActionTriggerIsInEdit = false;
+			SetAutoActionChildControls(); // Needed to update the options.
+		}
+
 		/// <remarks>
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
@@ -2304,6 +2326,8 @@ namespace YAT.View.Forms
 				((Terminal)ActiveMdiChild).RequestAutoActionAction(response);
 		}
 
+	////private void toolStripComboBox_MainTool_AutoAction_Action_Enter(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////private void toolStripComboBox_MainTool_AutoAction_Action_Leave(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 	////private void toolStripComboBox_MainTool_AutoAction_Action_TextChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 	////private void SetAutoActionActionState(AutoContentState state)                                     is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
@@ -2340,6 +2364,18 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 				((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
+		}
+
+		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Enter(object sender, EventArgs e)
+		{
+			this.autoResponseTriggerIsInEdit = true;
+			SetAutoResponseChildControls(); // Needed to update the options.
+		}
+
+		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Leave(object sender, EventArgs e)
+		{
+			this.autoResponseTriggerIsInEdit = false;
+			SetAutoResponseChildControls(); // Needed to update the options.
 		}
 
 		/// <remarks>
@@ -2468,6 +2504,16 @@ namespace YAT.View.Forms
 			var response = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 				((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
+		}
+
+		private void toolStripComboBox_MainTool_AutoResponse_Response_Enter(object sender, EventArgs e)
+		{
+			this.autoResponseResponseIsInEdit = true;
+		}
+
+		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, EventArgs e)
+		{
+			this.autoResponseResponseIsInEdit = false;
 		}
 
 		/// <remarks>

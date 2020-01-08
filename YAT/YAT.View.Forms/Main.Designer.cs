@@ -1412,6 +1412,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText = resources.GetString("toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText");
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.DropDown += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_DropDown);
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_Enter);
+			this.toolStripComboBox_MainTool_AutoAction_Trigger.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_Leave);
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_KeyDown);
 			this.toolStripComboBox_MainTool_AutoAction_Trigger.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoAction_Trigger_KeyUp);
@@ -1509,6 +1511,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText = resources.GetString("toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText");
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = false;
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.DropDown += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_DropDown);
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_Enter);
+			this.toolStripComboBox_MainTool_AutoResponse_Trigger.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_Leave);
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_KeyDown);
 			this.toolStripComboBox_MainTool_AutoResponse_Trigger.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Trigger_KeyUp);
@@ -1565,6 +1569,8 @@ namespace YAT.View.Forms
     "ll-in any command text.";
 			this.toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
 			this.toolStripComboBox_MainTool_AutoResponse_Response.DropDown += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_DropDown);
+			this.toolStripComboBox_MainTool_AutoResponse_Response.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_Enter);
+			this.toolStripComboBox_MainTool_AutoResponse_Response.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_Leave);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_KeyDown);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_KeyUp);

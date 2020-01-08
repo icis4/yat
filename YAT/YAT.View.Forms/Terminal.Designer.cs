@@ -539,18 +539,22 @@ namespace YAT.View.Forms
 			this.contextMenuStrip_Preset.SuspendLayout();
 			this.statusStrip_Terminal.SuspendLayout();
 			this.contextMenuStrip_Status.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Terminal)).BeginInit();
 			this.splitContainer_Terminal.Panel1.SuspendLayout();
 			this.splitContainer_Terminal.Panel2.SuspendLayout();
 			this.splitContainer_Terminal.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Predefined)).BeginInit();
 			this.splitContainer_Predefined.Panel1.SuspendLayout();
 			this.splitContainer_Predefined.Panel2.SuspendLayout();
 			this.splitContainer_Predefined.SuspendLayout();
 			this.panel_Monitor.SuspendLayout();
 			this.groupBox_Monitor.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_TxMonitor)).BeginInit();
 			this.splitContainer_TxMonitor.Panel1.SuspendLayout();
 			this.splitContainer_TxMonitor.Panel2.SuspendLayout();
 			this.splitContainer_TxMonitor.SuspendLayout();
 			this.panel_Monitor_Tx.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_RxMonitor)).BeginInit();
 			this.splitContainer_RxMonitor.Panel1.SuspendLayout();
 			this.splitContainer_RxMonitor.Panel2.SuspendLayout();
 			this.splitContainer_RxMonitor.SuspendLayout();
@@ -3788,9 +3792,10 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "Configure Automatic Response Trigger,\r\neither refer to one of the commands,\r\nor f" +
-    "ill-in any command text.";
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = resources.GetString("toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText");
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Enter += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Enter);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Leave += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Leave);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText
@@ -3846,6 +3851,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
     "ll-in any command text.";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Enter += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Enter);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Leave += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace
@@ -3907,6 +3914,8 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(180, 23);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = resources.GetString("toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText");
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Enter += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Enter);
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Leave += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Leave);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_TextChanged);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText
@@ -5037,18 +5046,22 @@ namespace YAT.View.Forms
 			this.contextMenuStrip_Status.ResumeLayout(false);
 			this.splitContainer_Terminal.Panel1.ResumeLayout(false);
 			this.splitContainer_Terminal.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Terminal)).EndInit();
 			this.splitContainer_Terminal.ResumeLayout(false);
 			this.splitContainer_Predefined.Panel1.ResumeLayout(false);
 			this.splitContainer_Predefined.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Predefined)).EndInit();
 			this.splitContainer_Predefined.ResumeLayout(false);
 			this.panel_Monitor.ResumeLayout(false);
 			this.groupBox_Monitor.ResumeLayout(false);
 			this.splitContainer_TxMonitor.Panel1.ResumeLayout(false);
 			this.splitContainer_TxMonitor.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_TxMonitor)).EndInit();
 			this.splitContainer_TxMonitor.ResumeLayout(false);
 			this.panel_Monitor_Tx.ResumeLayout(false);
 			this.splitContainer_RxMonitor.Panel1.ResumeLayout(false);
 			this.splitContainer_RxMonitor.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_RxMonitor)).EndInit();
 			this.splitContainer_RxMonitor.ResumeLayout(false);
 			this.panel_Monitor_Bidir.ResumeLayout(false);
 			this.panel_Monitor_Rx.ResumeLayout(false);
