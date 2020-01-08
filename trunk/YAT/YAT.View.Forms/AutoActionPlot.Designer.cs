@@ -38,6 +38,7 @@
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
 			this.scottPlot = new ScottPlot.FormsPlot();
 			this.button_FitAxis = new System.Windows.Forms.Button();
+			this.button_Deactivate = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// button_Close
@@ -46,7 +47,7 @@
 			this.button_Close.Location = new System.Drawing.Point(775, 400);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
-			this.button_Close.TabIndex = 5;
+			this.button_Close.TabIndex = 6;
 			this.button_Close.Text = "&Close";
 			this.button_Close.UseVisualStyleBackColor = true;
 			this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
@@ -54,11 +55,11 @@
 			// button_Clear
 			// 
 			this.button_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Clear.Location = new System.Drawing.Point(694, 400);
+			this.button_Clear.Location = new System.Drawing.Point(661, 400);
 			this.button_Clear.Name = "button_Clear";
 			this.button_Clear.Size = new System.Drawing.Size(75, 23);
 			this.button_Clear.TabIndex = 4;
-			this.button_Clear.Text = "C&lear";
+			this.button_Clear.Text = "Cl&ear";
 			this.button_Clear.UseVisualStyleBackColor = true;
 			this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
 			// 
@@ -85,7 +86,7 @@
 			this.label_UpdateSuspended.AutoSize = true;
 			this.label_UpdateSuspended.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_UpdateSuspended.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_UpdateSuspended.Location = new System.Drawing.Point(230, 405);
+			this.label_UpdateSuspended.Location = new System.Drawing.Point(212, 405);
 			this.label_UpdateSuspended.Name = "label_UpdateSuspended";
 			this.label_UpdateSuspended.Size = new System.Drawing.Size(444, 13);
 			this.label_UpdateSuspended.TabIndex = 3;
@@ -116,11 +117,24 @@
 			this.button_FitAxis.UseVisualStyleBackColor = true;
 			this.button_FitAxis.Click += new System.EventHandler(this.button_FitAxis_Click);
 			// 
+			// button_Deactivate
+			// 
+			this.button_Deactivate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
+			this.button_Deactivate.Location = new System.Drawing.Point(742, 400);
+			this.button_Deactivate.Name = "button_Deactivate";
+			this.button_Deactivate.Size = new System.Drawing.Size(27, 23);
+			this.button_Deactivate.TabIndex = 5;
+			this.toolTip.SetToolTip(this.button_Deactivate, "Deactivate");
+			this.button_Deactivate.UseVisualStyleBackColor = true;
+			this.button_Deactivate.Click += new System.EventHandler(this.button_Deactivate_Click);
+			// 
 			// AutoActionPlot
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(884, 441);
+			this.Controls.Add(this.button_Deactivate);
 			this.Controls.Add(this.button_FitAxis);
 			this.Controls.Add(this.label_UpdateSuspended);
 			this.Controls.Add(this.checkBox_ShowLegend);
@@ -131,6 +145,7 @@
 			this.Name = "AutoActionPlot";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "YAT - [[Terminal] - Plot]";
+			this.BackColorChanged += new System.EventHandler(this.AutoActionPlot_BackColorChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -146,5 +161,6 @@
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_UpdateSuspended;
 		private System.Windows.Forms.Button button_FitAxis;
+		private System.Windows.Forms.Button button_Deactivate;
 	}
 }

@@ -91,6 +91,16 @@ namespace YAT.View.Forms
 
 		#endregion
 
+		#region Events
+		//==========================================================================================
+		// Events
+		//==========================================================================================
+
+		/// <summary></summary>
+		public event EventHandler DeactivateAutoAction;
+
+		#endregion
+
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
@@ -99,12 +109,21 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public AutoActionPlot(Model.Terminal model)
 		{
+			this.model = model;
+
 			InitializeComponent();
+
+			// First do InitializeComponent() and UpdatePlot() related initialization:
 
 			this.initialAndMinimumUpdateInterval = timer_Update.Interval; // 73 ms (a prime number)
 			var lowerSpan = this.initialAndMinimumUpdateInterval / 10; // 7 ms
 			this.lowerSpanTicks = StopwatchEx.TimeToTicks(lowerSpan);
 			this.upperSpanTicks = StopwatchEx.TimeToTicks(lowerSpan + 75); // ms
+			this.updateSpanAvg10s = new TimedMovingAverageInt64(10000);
+
+			// Then initialization which is dependent on the intialization above:
+
+			SetBackColor(this.model.SettingsRoot.Format.BackColor);
 
 			this.isSettingControls.Enter();
 			try
@@ -115,10 +134,18 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 			}
+		}
 
-			this.model = model;
+		#endregion
 
-			this.updateSpanAvg10s = new TimedMovingAverageInt64(10000);
+		#region Form Event Handlers
+		//==========================================================================================
+		// Form Event Handlers
+		//==========================================================================================
+
+		private void AutoActionPlot_BackColorChanged(object sender, EventArgs e)
+		{
+			SetBackColor(BackColor);
 		}
 
 		#endregion
@@ -195,6 +222,11 @@ namespace YAT.View.Forms
 			Clear();
 		}
 
+		private void button_Deactivate_Click(object sender, EventArgs e)
+		{
+			OnDeactivateAutoAction(EventArgs.Empty);
+		}
+
 		private void button_Close_Click(object sender, EventArgs e)
 		{
 			Close();
@@ -269,6 +301,12 @@ namespace YAT.View.Forms
 			DebugUpdate(resultInterval.ToString(CultureInfo.CurrentCulture) + " ms ");
 
 			return (resultInterval);
+		}
+
+		private void SetBackColor(Color backColor)
+		{                          // 'dataBg' = inner part of plot, without title/axis/legend (= 'figBg').
+			scottPlot.plt.Style(dataBg: backColor); // Back color is only appied to inner part same as
+			UpdatePlot(true);                       // it is only applied to inner part of monitors.
 		}
 
 		private void FitAxis()
@@ -538,6 +576,19 @@ namespace YAT.View.Forms
 			var plottables = scottPlot.plt.GetPlottables();
 
 			// PENDING
+		}
+
+		#endregion
+
+		#region Event Raising
+		//==========================================================================================
+		// Event Raising
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void OnDeactivateAutoAction(EventArgs e)
+		{
+			EventHelper.RaiseSync(DeactivateAutoAction, this, e);
 		}
 
 		#endregion

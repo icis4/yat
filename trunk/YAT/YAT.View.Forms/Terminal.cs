@@ -166,9 +166,14 @@ namespace YAT.View.Forms
 		private string lastFindPattern; // = null; Remark: Using "Pattern" instead of "TextOrPattern" for simplicity.
 
 		// Auto:
-		private AutoContentState autoActionTriggerState;    // = AutoContentState.Neutral;
-		private AutoContentState autoResponseTriggerState;  // = AutoContentState.Neutral;
-		private AutoContentState autoResponseResponseState; // = AutoContentState.Neutral;
+		private bool             autoActionTriggerIsInEdit;    // = false;
+		private AutoContentState autoActionTriggerState;       // = AutoContentState.Neutral;
+	////private bool             autoActionActionIsInEdit;     // = false;                    is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////private AutoContentState autoActionActionState;        // = AutoContentState.Neutral; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+		private bool             autoResponseTriggerIsInEdit;  // = false;
+		private AutoContentState autoResponseTriggerState;     // = AutoContentState.Neutral;
+		private bool             autoResponseResponseIsInEdit; // = false;
+		private AutoContentState autoResponseResponseState;    // = AutoContentState.Neutral;
 		private AutoActionPlot autoActionPlotForm;
 
 		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
@@ -785,20 +790,26 @@ namespace YAT.View.Forms
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
-					var trigger = this.settingsRoot.AutoResponse.Trigger;
-					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+					if (!this.autoResponseTriggerIsInEdit)
+					{
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
+						var trigger = this.settingsRoot.AutoResponse.Trigger;
+						ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
-					triggerTextIsSupported  = trigger.TextIsSupported;
-					triggerRegexIsSupported = trigger.RegexIsSupported;
+						triggerTextIsSupported  = trigger.TextIsSupported;
+						triggerRegexIsSupported = trigger.RegexIsSupported;
+					}
 
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
-					var response = this.settingsRoot.AutoResponse.Response;
-					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
+					if (!this.autoResponseResponseIsInEdit)
+					{
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
+						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
+						var response = this.settingsRoot.AutoResponse.Response;
+						ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, new Command(response).SingleLineText); // No explicit default radix available (yet).
 
-					responseReplaceIsSupported = response.ReplaceIsSupported;
+						responseReplaceIsSupported = response.ReplaceIsSupported;
+					}
 				}
 
 				SetAutoResponseTriggerStateControls();
@@ -811,7 +822,7 @@ namespace YAT.View.Forms
 				var responseEnableReplace = this.settingsRoot.AutoResponse.ResponseOptions.EnableReplace;
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Enabled =  triggerTextIsSupported;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Enabled = (triggerTextIsSupported || this.autoResponseTriggerIsInEdit); // Allow changing to text while editing a not yet validated trigger!
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
@@ -916,6 +927,18 @@ namespace YAT.View.Forms
 			ShowPredefinedCommandSettings(predefined.SelectedPageId, 1);
 		}
 
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Enter(object sender, EventArgs e)
+		{
+			this.autoResponseTriggerIsInEdit = true;
+			SetAutoResponseControls(); // Needed to update the options.
+		}
+
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Leave(object sender, EventArgs e)
+		{
+			this.autoResponseTriggerIsInEdit = false;
+			SetAutoResponseControls(); // Needed to update the options.
+		}
+
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -981,6 +1004,16 @@ namespace YAT.View.Forms
 			RequestToggleAutoResponseTriggerEnableRegex();
 		}
 
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Enter(object sender, EventArgs e)
+		{
+			this.autoResponseResponseIsInEdit = true;
+		}
+
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave(object sender, EventArgs e)
+		{
+			this.autoResponseResponseIsInEdit = false;
+		}
+
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1007,8 +1040,7 @@ namespace YAT.View.Forms
 				{
 					if (!ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.AllEscapes))
 					{
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.ControlDark;
-						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.ControlText;
+						AutoResponseTriggerState = AutoContentState.Invalid;
 						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 
@@ -1024,8 +1056,7 @@ namespace YAT.View.Forms
 				}
 			}
 
-			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.BackColor = SystemColors.Window;
-			toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ForeColor = SystemColors.WindowText;
+			AutoResponseTriggerState = AutoContentState.Neutral;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace_Click(object sender, EventArgs e)
@@ -1056,7 +1087,7 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				toolStripMenuItem_TerminalMenu_Send_AutoAction_SetMenuItems(); // See remark of that method.
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_SetMenuItems(); // See remark of that method.
 
 				// Note that 'AutoResponse' is implemented in 'Send'.
 			}
@@ -1069,7 +1100,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Separated to ease updating on settings change.
 		/// </remarks>
-		private void toolStripMenuItem_TerminalMenu_Send_AutoAction_SetMenuItems()
+		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
 			try
@@ -1089,18 +1120,24 @@ namespace YAT.View.Forms
 
 				if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 				{
-					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
-					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoActionTriggerItems());
-					var trigger = this.settingsRoot.AutoAction.Trigger;
-					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
+					if (!this.autoActionTriggerIsInEdit)
+					{
+						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
+						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoActionTriggerItems());
+						var trigger = this.settingsRoot.AutoAction.Trigger;
+						ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, new Command(trigger).SingleLineText); // No explicit default radix available (yet).
 
-					triggerTextIsSupported  = trigger.TextIsSupported;
-					triggerRegexIsSupported = trigger.RegexIsSupported;
+						triggerTextIsSupported  = trigger.TextIsSupported;
+						triggerRegexIsSupported = trigger.RegexIsSupported;
+					}
 
-					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
-					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
-					var action = this.settingsRoot.AutoAction.Action;
-					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
+				////if (!this.autoActionActionIsInEdit) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+					{
+						toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
+						toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
+						var action = this.settingsRoot.AutoAction.Action;
+						ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
+					}
 				}
 
 				SetAutoActionTriggerStateControls();
@@ -1112,7 +1149,7 @@ namespace YAT.View.Forms
 				var triggerEnableRegex   = this.settingsRoot.AutoAction.TriggerOptions.EnableRegex;
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Enabled =  triggerTextIsSupported;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Enabled = (triggerTextIsSupported || this.autoActionTriggerIsInEdit); // Allow changing to text while editing a not yet validated trigger!
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
@@ -1134,6 +1171,18 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Receive_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Receive_SetMenuItems();
+		}
+
+		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Enter(object sender, EventArgs e)
+		{
+			this.autoActionTriggerIsInEdit = true;
+			SetAutoActionControls(); // Needed to update the options.
+		}
+
+		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Leave(object sender, EventArgs e)
+		{
+			this.autoActionTriggerIsInEdit = false;
+			SetAutoActionControls(); // Needed to update the options.
 		}
 
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
@@ -1162,8 +1211,7 @@ namespace YAT.View.Forms
 				{
 					if (!ValidationHelper.ValidateTextSilently(triggerText, Domain.Parser.Modes.RadixAndAsciiEscapes))
 					{
-						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
-						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
+						AutoActionTriggerState = AutoContentState.Invalid;
 						return; // Skip request. Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 
@@ -1179,8 +1227,7 @@ namespace YAT.View.Forms
 				}
 			}
 
-			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.BackColor = SystemColors.Window;
-			toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
+			AutoActionTriggerState = AutoContentState.Neutral;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText_Click(object sender, EventArgs e)
@@ -1203,6 +1250,9 @@ namespace YAT.View.Forms
 			RequestToggleAutoActionEnableRegex();
 		}
 
+	////private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_Enter(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_Leave(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1212,6 +1262,8 @@ namespace YAT.View.Forms
 			if (action != null)
 				RequestAutoActionAction(action);
 		}
+
+	////private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_TextChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
 		private void toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_Click(object sender, EventArgs e)
 		{
@@ -5092,7 +5144,7 @@ namespace YAT.View.Forms
 
 		private void SetAutoActionControls()
 		{
-			toolStripMenuItem_TerminalMenu_Send_AutoAction_SetMenuItems();
+			toolStripMenuItem_TerminalMenu_Receive_AutoAction_SetMenuItems();
 		}
 
 		private void SetAutoResponseControls()
@@ -5968,6 +6020,7 @@ namespace YAT.View.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
 				ReformatMonitors();
+				SetAutoActionPlotFormat();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Log))
 			{
@@ -6926,7 +6979,7 @@ namespace YAT.View.Forms
 			SetPresetControls();
 
 			// AutoAction:
-			SetAutoActionPlotFormCaption();
+			SetAutoActionPlotCaption();
 		}
 
 		private void SetTerminalCaption()
@@ -7460,6 +7513,7 @@ namespace YAT.View.Forms
 
 				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
 				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+				this.autoActionPlotForm.DeactivateAutoAction += AutoActionPlotForm_DeactivateAutoAction;
 				this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
 				this.autoActionPlotForm.Show(this);
 			}
@@ -7469,10 +7523,19 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void SetAutoActionPlotFormCaption()
+		private void SetAutoActionPlotCaption()
 		{
 			if (this.autoActionPlotForm != null)
 				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+		}
+
+		private void SetAutoActionPlotFormat()
+		{
+			if (this.autoActionPlotForm != null)
+			{
+				if (this.terminal != null)
+					this.autoActionPlotForm.BackColor = this.terminal.SettingsRoot.Format.BackColor;
+			}
 		}
 
 		/// <summary></summary>
@@ -7491,6 +7554,11 @@ namespace YAT.View.Forms
 			}
 
 			return (sb.ToString());
+		}
+
+		private void AutoActionPlotForm_DeactivateAutoAction(object sender, EventArgs e)
+		{
+			RequestAutoActionDeactivate();
 		}
 
 		private void AutoActionPlotForm_FormClosing(object sender, FormClosingEventArgs e)
