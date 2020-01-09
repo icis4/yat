@@ -155,9 +155,9 @@ Optionally, regular expressions can be enabled for text triggering.
 
 Some useful regular expression capture patterns (use without surrounding quotes):
 Integral numbers: "([-+]\d+)"
-Floating point numbers in normal format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|.[0-9]+))"
-Floating point numbers in scientific format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|.[0-9]+)[Ee][-+]?[0-9]+)"
-Floating point numbers in any format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|.[0-9]+)(?:[Ee][-+]?[0-9]+)?)"
+Floating point numbers in normal format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+))"
+Floating point numbers in scientific format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)[Ee][-+]?[0-9]+)"
+Floating point numbers in any format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)(?:[Ee][-+]?[0-9]+)?)"
 Time with colons (e.g. 12:00:00): "((?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d))"
 Date with hyphens (e.g. 2000-01-01): "((?:19|20)\d\d-(?:[1-9]|0[1-9]|1[012])-(?:0[1-9]|[12][0-9]|3[01]))"
 A single capital letter: "([A-Z]{1}) "
@@ -193,9 +193,9 @@ Optionally, regular expressions can be enabled for text triggering.
 
 Some useful regular expression capture patterns (use without surrounding quotes):
 Integral numbers: "([-+]\d+)"
-Floating point numbers in normal format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|.[0-9]+))"
-Floating point numbers in scientific format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|.[0-9]+)[Ee][-+]?[0-9]+)"
-Floating point numbers in any format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|.[0-9]+)(?:[Ee][-+]?[0-9]+)?)"
+Floating point numbers in normal format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+))"
+Floating point numbers in scientific format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)[Ee][-+]?[0-9]+)"
+Floating point numbers in any format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)(?:[Ee][-+]?[0-9]+)?)"
 Time with colons (e.g. 12:00:00): "((?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d))"
 Date with hyphens (e.g. 2000-01-01): "((?:19|20)\d\d-(?:[1-9]|0[1-9]|1[012])-(?:0[1-9]|[12][0-9]|3[01]))"
 A single capital letter: "([A-Z]{1}) "

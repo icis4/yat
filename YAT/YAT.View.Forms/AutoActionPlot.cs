@@ -440,7 +440,9 @@ namespace YAT.View.Forms
 						}
 
 						case AutoAction.Histogram: {
-							scottPlot.plt.PlotStep(mdl.Histogram.Values.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), color: firstColor, label: "All Captures");
+							if (mdl.Histogram != null) {
+								scottPlot.plt.PlotStep(mdl.Histogram.ValuesLowerLimit.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), color: firstColor, label: "All Captures");
+							}
 							break;
 						}
 

@@ -70,10 +70,10 @@ namespace MKY.Collections.Specialized
 		/// <summary></summary>
 		public readonly HistogramOutOfBoundsBehavior OutOfBoundsBehavior; // = Ignore;
 
-		/// <summary></summary>
+		/// <summary>The value corresponding to the smallest item, as well as the lower limit of the first bin.</summary>
 		public T Min { get; protected set; } // = default(T);
 
-		/// <summary></summary>
+		/// <summary>The value corresponding to the biggest item, as well as the upper limit of the last bin.</summary>
 		public T Max { get; protected set; } // = default(T);
 
 		/// <summary></summary>
@@ -86,7 +86,13 @@ namespace MKY.Collections.Specialized
 		protected List<long> BinCounts; // = null;
 
 		/// <summary></summary>
-		protected List<T> BinValues; // null;
+		protected List<T> BinValuesLowerLimit; // null;
+
+		/// <summary></summary>
+		protected List<T> BinValuesMidPoint; // null;
+
+		/// <summary></summary>
+		protected List<T> BinValuesUpperLimit; // null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Histogram{T}"/> class with equally
@@ -114,7 +120,7 @@ namespace MKY.Collections.Specialized
 		////Max = default(T);
 			MaxBinCount = maxBinCount;
 		////BinSize = default(T);
-			InitializeBins(maxBinCount, 1);
+		////InitializeBins(maxBinCount, 1);
 			AutoAdjust = true;
 			OutOfBoundsBehavior = HistogramOutOfBoundsBehavior.Adjust;
 		}
@@ -122,13 +128,20 @@ namespace MKY.Collections.Specialized
 		/// <summary></summary>
 		protected void InitializeBins(int maxBinCount, int binCount)
 		{
-			BinCounts = new List<long>(maxBinCount); // Preset the required capacity to improve memory management.
-			BinValues = new List<T>(   maxBinCount); // Preset the required capacity to improve memory management.
+			BinCounts           = new List<long>(maxBinCount); // Preset the required capacity to improve memory management.
+			BinValuesLowerLimit = new List<T>(   maxBinCount); // Preset the required capacity to improve memory management.
+			BinValuesMidPoint   = new List<T>(   maxBinCount); // Preset the required capacity to improve memory management.
+			BinValuesUpperLimit = new List<T>(   maxBinCount); // Preset the required capacity to improve memory management.
 
 			for (int i = 0; i < binCount; i++)
 			{
 				BinCounts.Add(0);
-				BinValues.Add(CalculateBinValue(i));
+
+				T lowerLimit, midPoint, upperLimit;
+				CalculateBinValues(i, out lowerLimit, out midPoint, out upperLimit);
+				BinValuesLowerLimit.Add(lowerLimit);
+				BinValuesMidPoint  .Add(midPoint);
+				BinValuesUpperLimit.Add(upperLimit);
 			}
 		}
 
@@ -143,9 +156,25 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// Gets the current values of the bins.
 		/// </summary>
-		public virtual ReadOnlyCollection<T> Values
+		public virtual ReadOnlyCollection<T> ValuesLowerLimit
 		{
-			get { return (BinValues.AsReadOnly()); }
+			get { return (BinValuesLowerLimit.AsReadOnly()); }
+		}
+
+		/// <summary>
+		/// Gets the current values of the bins.
+		/// </summary>
+		public virtual ReadOnlyCollection<T> ValuesMidPoint
+		{
+			get { return (BinValuesMidPoint.AsReadOnly()); }
+		}
+
+		/// <summary>
+		/// Gets the current values of the bins.
+		/// </summary>
+		public virtual ReadOnlyCollection<T> ValuesUpperLimit
+		{
+			get { return (BinValuesUpperLimit.AsReadOnly()); }
 		}
 
 		/// <summary>
@@ -167,9 +196,9 @@ namespace MKY.Collections.Specialized
 		protected abstract int CalculateBinCount(T min, T max, T binSize);
 
 		/// <summary>
-		/// Calculates the value ("middle" of bin) of the given bin.
+		/// Calculates the values of the given bin.
 		/// </summary>
-		protected abstract T CalculateBinValue(int index);
+		protected abstract void CalculateBinValues(int index, out T lowerLimit, out T midPoint, out T upperLimit);
 
 		/// <summary>
 		/// Gets the index of the bin corresponding to <paramref name="item"/>.
@@ -253,8 +282,9 @@ namespace MKY.Collections.Specialized
 		{
 			if (Items.Count == 1) // Just a single bin yet, 'Min'/'Max'/'BinSize' are yet default(T):
 			{
-				Min = Items[0];
-				Max = Items[0];
+				Min = item;
+				Max = item;
+				InitializeBins(MaxBinCount, 1); // Initialize a first bin at the first value (given by Min/Max).
 				IncrementBin(0);
 			}
 			else if ((item.CompareTo(Min) >= 0) && (item.CompareTo(Max) <= 0)) // Item is within bounds:
@@ -295,16 +325,7 @@ namespace MKY.Collections.Specialized
 				if (item.CompareTo(Min) < 0) { Min = item; }
 				if (item.CompareTo(Max) > 0) { Max = item; }
 
-				int index;
-				if (IsWithinProximityOfBinValue(item, out index))
-				{
-					IncrementBin(index);
-				}
-				else if (IsWithinProximityOfPreviouslyContainedItem(item))
-				{
-					IncrementBin(item);
-				}
-				else if (BinSize.Equals(default(T))) // Just a single bin yet, 'BinSize' is yet default(T):
+				if (BinSize.Equals(default(T))) // Just a single bin yet, 'BinSize' is yet default(T):
 				{
 					AdjustByBinSizeAndReincrementBins(2); // Add new bin for new non-proximate item.
 				}
@@ -336,14 +357,14 @@ namespace MKY.Collections.Specialized
 			GetProximity(value, out lower, out upper);
 
 			index = (i);
-			var binValue = BinValues[index];
+			var binValue = BinValuesMidPoint[index];
 			if ((binValue.CompareTo(lower) >= 0) && (binValue.CompareTo(upper) <= 0))
 				return (true);
 
 			if (i > 0)
 			{
 				index = (i - 1);
-				binValue = BinValues[index];
+				binValue = BinValuesMidPoint[index];
 				if ((binValue.CompareTo(lower) >= 0) && (binValue.CompareTo(upper) <= 0))
 					return (true);
 			}
@@ -351,7 +372,7 @@ namespace MKY.Collections.Specialized
 			if (i < (BinCount - 1))
 			{
 				index = (i + 1);
-				binValue = BinValues[index];
+				binValue = BinValuesMidPoint[index];
 				if ((binValue.CompareTo(lower) >= 0) && (binValue.CompareTo(upper) <= 0))
 					return (true);
 			}
@@ -389,7 +410,12 @@ namespace MKY.Collections.Specialized
 			for (int i = (binCountToInsert - 1); i >= 0; i--)
 			{
 				BinCounts.Insert(0, 0);
-				BinValues.Insert(0, CalculateBinValue(i));
+
+				T lowerLimit, midPoint, upperLimit;
+				CalculateBinValues(i, out lowerLimit, out midPoint, out upperLimit);
+				BinValuesLowerLimit.Insert(0, lowerLimit);
+				BinValuesMidPoint  .Insert(0, midPoint);
+				BinValuesUpperLimit.Insert(0, upperLimit);
 			}
 
 			int offset = BinCount; // Already taking the above inserted bins into account.
@@ -397,7 +423,12 @@ namespace MKY.Collections.Specialized
 			for (int i = offset; i < (offset + binCountToAdd); i++)
 			{
 				BinCounts.Add(0);
-				BinValues.Add(CalculateBinValue(i));
+
+				T lowerLimit, midPoint, upperLimit;
+				CalculateBinValues(i, out lowerLimit, out midPoint, out upperLimit);
+				BinValuesLowerLimit.Add(lowerLimit);
+				BinValuesMidPoint  .Add(midPoint);
+				BinValuesUpperLimit.Add(upperLimit);
 			}
 
 			IncrementBin(item);
@@ -471,12 +502,14 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the value ("middle" of bin) of the given bin.
+		/// Calculates the values of the given bin.
 		/// </summary>
-		protected override int CalculateBinValue(int index)
+		protected override void CalculateBinValues(int index, out int lowerLimit, out int midPoint, out int upperLimit)
 		{
-			var offset = (Min + (BinSize / 2));
-			return (offset + (index * BinSize));
+			var half = (BinSize / 2);
+			midPoint = (Min + (index * BinSize) + half); // Calculating based on mid-point in an attempt the reduce rounding errors.
+			lowerLimit = (midPoint - half);
+			upperLimit = (midPoint + half);
 		}
 
 		/// <summary>
@@ -556,12 +589,14 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the value ("middle" of bin) of the given bin.
+		/// Calculates the values of the given bin.
 		/// </summary>
-		protected override long CalculateBinValue(int index)
+		protected override void CalculateBinValues(int index, out long lowerLimit, out long midPoint, out long upperLimit)
 		{
-			var offset = (Min + (BinSize / 2));
-			return (offset + (index * BinSize));
+			var half = (BinSize / 2);
+			midPoint = (Min + (index * BinSize) + half); // Calculating based on mid-point in an attempt the reduce rounding errors.
+			lowerLimit = (midPoint - half);
+			upperLimit = (midPoint + half);
 		}
 
 		/// <summary>
@@ -641,12 +676,14 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the value ("middle" of bin) of the given bin.
+		/// Calculates the values of the given bin.
 		/// </summary>
-		protected override double CalculateBinValue(int index)
+		protected override void CalculateBinValues(int index, out double lowerLimit, out double midPoint, out double upperLimit)
 		{
-			var offset = (Min + (BinSize / 2));
-			return (offset + (index * BinSize));
+			var half = (BinSize / 2);
+			midPoint = (Min + (index * BinSize) + half); // Calculating based on mid-point in an attempt the reduce rounding errors.
+			lowerLimit = (midPoint - half);
+			upperLimit = (midPoint + half);
 		}
 
 		/// <summary>
@@ -726,12 +763,14 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Calculates the value ("middle" of bin) of the given bin.
+		/// Calculates the values of the given bin.
 		/// </summary>
-		protected override decimal CalculateBinValue(int index)
+		protected override void CalculateBinValues(int index, out decimal lowerLimit, out decimal midPoint, out decimal upperLimit)
 		{
-			var offset = (Min + (BinSize / 2));
-			return (offset + (index * BinSize));
+			var half = (BinSize / 2);
+			midPoint = (Min + (index * BinSize) + half); // Calculating based on mid-point in an attempt the reduce rounding errors.
+			lowerLimit = (midPoint - half);
+			upperLimit = (midPoint + half);
 		}
 
 		/// <summary>
