@@ -500,10 +500,10 @@ namespace MKY.IO.Ports
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				var settings = new SerialPortSettings();
-				settings.BaudRate  = (BaudRateEx) base.BaudRate;
-				settings.DataBits  = (DataBitsEx) base.DataBits;
-				settings.Parity    = (ParityEx)   base.Parity;
-				settings.StopBits  = (StopBitsEx) base.StopBits;
+				settings.BaudRate  =  (BaudRateEx)base.BaudRate;
+				settings.DataBits  =  (DataBitsEx)base.DataBits;
+				settings.Parity    =    (ParityEx)base.Parity;
+				settings.StopBits  =  (StopBitsEx)base.StopBits;
 				settings.Handshake = (HandshakeEx)base.Handshake;
 
 				return (settings);
@@ -512,10 +512,10 @@ namespace MKY.IO.Ports
 			{
 				AssertNotDisposed();
 
-				base.BaudRate  = (BaudRateEx) value.BaudRate;
-				base.DataBits  = (DataBitsEx) value.DataBits;
-				base.Parity    = (ParityEx)   value.Parity;
-				base.StopBits  = (StopBitsEx) value.StopBits;
+				base.BaudRate  =  (BaudRateEx)value.BaudRate;
+				base.DataBits  =  (DataBitsEx)value.DataBits;
+				base.Parity    =    (ParityEx)value.Parity;
+				base.StopBits  =  (StopBitsEx)value.StopBits;
 				base.Handshake = (HandshakeEx)value.Handshake;
 
 				OnPortSettingsChanged(EventArgs.Empty);

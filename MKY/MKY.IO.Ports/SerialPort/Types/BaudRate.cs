@@ -104,13 +104,19 @@ namespace MKY.IO.Ports
 		/// Do not use with <see cref="BaudRate.Explicit"/> because that selection requires
 		/// a baud rate value. Use <see cref="BaudRateEx(int)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="baudRate"/> is <see cref="BaudRate.Explicit"/>. Use <see cref="BaudRateEx(int)"/> instead.
+		/// </exception>
 		public BaudRateEx(BaudRate baudRate)
 			: base(baudRate)
 		{
-			Debug.Assert((baudRate != BaudRate.Explicit), "'BaudRate.Explicit' requires a baud rate value, use 'BaudRateEx(int)' instead!");
+			if (baudRate == BaudRate.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'BaudRate.Explicit' requires a baud rate value, use 'BaudRateEx(int)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
-		/// <exception cref="ArgumentOutOfRangeException"> if given value is no potentially valid baud rate value.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <paramref name="baudRate"/> is no potentially valid baud rate value.
+		/// </exception>
 		public BaudRateEx(int baudRate)
 			: base(BaudRate.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
@@ -367,8 +373,13 @@ namespace MKY.IO.Ports
 			return ((BaudRate)baudRate.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator BaudRateEx(BaudRate baudRate)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="BaudRate.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="baudRate"/> is <see cref="BaudRate.Explicit"/>.
+		/// </exception>
+		public static explicit operator BaudRateEx(BaudRate baudRate)
 		{
 			return (new BaudRateEx(baudRate));
 		}

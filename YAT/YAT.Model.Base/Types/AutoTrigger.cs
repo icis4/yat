@@ -126,10 +126,14 @@ namespace YAT.Model.Types
 		/// Do not use with <see cref="AutoTrigger.Explicit"/> because that selection requires
 		/// a trigger command string. Use <see cref="AutoTriggerEx(string)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="trigger"/> is <see cref="AutoTrigger.Explicit"/>. Use <see cref="AutoTriggerEx(string)"/> instead.
+		/// </exception>
 		public AutoTriggerEx(AutoTrigger trigger)
 			: base(trigger)
 		{
-			Debug.Assert((trigger != AutoTrigger.Explicit), "'AutoTrigger.Explicit' requires a trigger command string, use 'AutoTriggerEx(string)' instead!");
+			if (trigger == AutoTrigger.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'AutoTrigger.Explicit' requires a trigger command string, use 'AutoTriggerEx(string)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -486,8 +490,13 @@ namespace YAT.Model.Types
 			return ((AutoTrigger)trigger.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator AutoTriggerEx(AutoTrigger trigger)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="AutoTrigger.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="trigger"/> is <see cref="AutoTrigger.Explicit"/>.
+		/// </exception>
+		public static explicit operator AutoTriggerEx(AutoTrigger trigger)
 		{
 			return (new AutoTriggerEx(trigger));
 		}

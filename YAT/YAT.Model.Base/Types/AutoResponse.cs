@@ -123,10 +123,14 @@ namespace YAT.Model.Types
 		/// Do not use with <see cref="AutoResponse.Explicit"/> because that selection requires
 		/// a response command string. Use <see cref="AutoResponseEx(string)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="response"/> is <see cref="AutoResponse.Explicit"/>. Use <see cref="AutoResponseEx(string)"/> instead.
+		/// </exception>
 		public AutoResponseEx(AutoResponse response)
 			: base(response)
 		{
-			Debug.Assert((response != AutoResponse.Explicit), "'AutoResponse.Explicit' requires a response command string, use 'AutoResponseEx(string)' instead!");
+			if (response == AutoResponse.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'AutoResponse.Explicit' requires a response command string, use 'AutoResponseEx(string)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -476,8 +480,13 @@ namespace YAT.Model.Types
 			return ((AutoResponse)autoResponse.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator AutoResponseEx(AutoResponse autoResponse)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="AutoResponse.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="autoResponse"/> is <see cref="AutoResponse.Explicit"/>.
+		/// </exception>
+		public static explicit operator AutoResponseEx(AutoResponse autoResponse)
 		{
 			return (new AutoResponseEx(autoResponse));
 		}

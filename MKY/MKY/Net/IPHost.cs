@@ -114,10 +114,14 @@ namespace MKY.Net
 		/// an IP address or host name. Use <see cref="IPHostEx(IPAddress)"/> or
 		/// or <see cref="IPHostEx(string, IPAddress)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="host"/> is <see cref="IPHost.Explicit"/>. Use <see cref="IPHostEx(IPAddress)"/> instead.
+		/// </exception>
 		public IPHostEx(IPHost host)
 			: base(host)
 		{
-			Debug.Assert((host != IPHost.Explicit), "'IPHost.Explicit' requires an IP address or host name, use 'IPHostEx(IPAddress)' or 'IPHostEx(string, IPAddress)' instead!");
+			if (host == IPHost.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'IPHost.Explicit' requires an IP address or host name, use 'IPHostEx(IPAddress)' or 'IPHostEx(string, IPAddress)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -690,8 +694,13 @@ namespace MKY.Net
 			return ((IPHost)host.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator IPHostEx(IPHost host)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="IPHost.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="host"/> is <see cref="IPHost.Explicit"/>.
+		/// </exception>
+		public static explicit operator IPHostEx(IPHost host)
 		{
 			return (new IPHostEx(host));
 		}

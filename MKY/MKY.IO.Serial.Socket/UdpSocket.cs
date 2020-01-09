@@ -191,7 +191,16 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
 		/// <remarks>The local IP network interface is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		public UdpSocket(IPHost remoteHost, int remotePort)
+			: this((IPHostEx)remoteHost, remotePort)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
+		/// <remarks>The local IP network interface is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		public UdpSocket(IPHostEx remoteHost, int remotePort)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, System.Net.IPAddress.Any)
 		{
@@ -200,7 +209,16 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
 		/// <remarks>The local IP network interface is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		public UdpSocket(int instanceId, IPHost remoteHost, int remotePort)
+			: this(instanceId, (IPHostEx)remoteHost, remotePort)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
+		/// <remarks>The local IP network interface is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		public UdpSocket(int instanceId, IPHostEx remoteHost, int remotePort)
 			: this(instanceId, remoteHost, remotePort, System.Net.IPAddress.Any)
 		{
@@ -208,7 +226,16 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public UdpSocket(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface)
+			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
+		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		public UdpSocket(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface)
 		{
@@ -216,7 +243,16 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public UdpSocket(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface)
+			: this(instanceId, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Client"/>.</summary>
+		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		public UdpSocket(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
 			: this(instanceId, UdpSocketType.Client, remoteHost, remotePort, localInterface, 0, (System.Net.IPAddress)remoteHost)
 		{
@@ -241,7 +277,15 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(IPNetworkInterface localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this((IPNetworkInterfaceEx)localInterface, localPort, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(IPNetworkInterfaceEx localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(SocketBase.NextInstanceId, localInterface, localPort, System.Net.IPAddress.Any, serverSendMode)
@@ -249,7 +293,15 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(int instanceId, IPNetworkInterface localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(instanceId, (IPNetworkInterfaceEx)localInterface, localPort, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, IPNetworkInterfaceEx localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localInterface, localPort, System.Net.IPAddress.Any, serverSendMode)
@@ -257,8 +309,17 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localFilter"/> is <see cref="IPFilter.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(IPNetworkInterface localInterface, int localPort, IPFilter localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this((IPNetworkInterfaceEx)localInterface, localPort, (IPFilterEx)localFilter, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(IPNetworkInterfaceEx localInterface, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(SocketBase.NextInstanceId, localInterface, localPort, localFilter, serverSendMode)
@@ -266,8 +327,17 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localFilter"/> is <see cref="IPFilter.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(int instanceId, IPNetworkInterface localInterface, int localPort, IPFilter localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(instanceId, (IPNetworkInterfaceEx)localInterface, localPort, (IPFilterEx)localFilter, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, IPNetworkInterfaceEx localInterface, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localInterface, localPort, localFilter, serverSendMode)
@@ -276,8 +346,18 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public UdpSocket(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, int localPort)
+			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, localPort)
+		{
+		}
+
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
+		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public UdpSocket(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface, localPort)
 		{
@@ -285,8 +365,17 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public UdpSocket(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, int localPort)
+			: this(instanceId, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, localPort)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
+		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public UdpSocket(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort)
 			: this(instanceId, UdpSocketType.PairSocket, remoteHost, remotePort, localInterface, localPort, (System.Net.IPAddress)remoteHost)
 		{
@@ -294,8 +383,18 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a UDP/IP socket of the given type.</summary>
 		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(UdpSocketType socketType, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(socketType, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, localPort, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of the given type.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(UdpSocketType socketType, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(SocketBase.NextInstanceId, socketType, remoteHost, remotePort, localInterface, localPort, serverSendMode)
@@ -304,8 +403,18 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a UDP/IP socket of the given type.</summary>
 		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(int instanceId, UdpSocketType socketType, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(instanceId, socketType, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, localPort, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of the given type.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, UdpSocketType socketType, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(instanceId, socketType, remoteHost, remotePort, localInterface, localPort, System.Net.IPAddress.Any, serverSendMode)
@@ -313,9 +422,19 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>Creates a UDP/IP socket of the given type.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localFilter"/> is <see cref="IPFilter.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(UdpSocketType socketType, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, int localPort, IPFilter localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(socketType, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, localPort, (IPFilterEx)localFilter, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of the given type.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(UdpSocketType socketType, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 			: this(SocketBase.NextInstanceId, socketType, remoteHost, remotePort, localInterface, localPort, localFilter, serverSendMode)
@@ -323,9 +442,19 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>Creates a UDP/IP socket of the given type.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localFilter"/> is <see cref="IPFilter.Explicit"/>.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public UdpSocket(int instanceId, UdpSocketType socketType, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, int localPort, IPFilter localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
+			: this(instanceId, socketType, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, localPort, (IPFilterEx)localFilter, serverSendMode)
+		{
+		}
+
+		/// <summary>Creates a UDP/IP socket of the given type.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localFilter"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, UdpSocketType socketType, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
 		{
@@ -679,8 +808,8 @@ namespace MKY.IO.Serial.Socket
 
 				var localFilterCasted = (IPHostEx)this.localFilter.Address;
 				if (localFilterCasted.IsBroadcast) // = limited broadcast (255.255.255.255)
-				{                                    // Filtering for limited broadcast address (255.255.255.255) doesn't work.
-					this.localFilter = IPFilter.Any; // Nothing would be received => using any address (0.0.0.0) instead.
+				{                                                // Filtering for limited broadcast address (255.255.255.255) doesn't work.
+					this.localFilter = (IPFilterEx)IPFilter.Any; // Nothing would be received => using any address (0.0.0.0) instead.
 				}
 				else
 				{

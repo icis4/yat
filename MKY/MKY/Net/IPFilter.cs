@@ -130,10 +130,14 @@ namespace MKY.Net
 		/// an IP address or host name. Use <see cref="IPFilterEx(IPAddress)"/> or
 		/// <see cref="IPFilterEx(string, IPAddress)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="address"/> is <see cref="IPFilter.Explicit"/>. Use <see cref="IPFilterEx(IPAddress)"/> instead.
+		/// </exception>
 		public IPFilterEx(IPFilter address)
 			: base(address)
 		{
-			Debug.Assert((address != IPFilter.Explicit), "'IPFilter.Explicit' requires an IP address or host name, use 'IPFilterEx(IPAddress)' or 'IPFilterEx(string, IPAddress)' instead!");
+			if (address == IPFilter.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'IPFilter.Explicit' requires an IP address or host name, use 'IPFilterEx(IPAddress)' or 'IPFilterEx(string, IPAddress)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			if      (address == IPFilter.Any)           { this.ipv4MaskBytes = 0xFFFFFFFF; }
 			else if (address == IPFilter.Localhost)     { this.ipv4MaskBytes = 0x01FFFF7F; }
@@ -839,8 +843,13 @@ namespace MKY.Net
 			return ((IPFilter)address.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator IPFilterEx(IPFilter address)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="IPFilter.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="address"/> is <see cref="IPFilter.Explicit"/>.
+		/// </exception>
+		public static explicit operator IPFilterEx(IPFilter address)
 		{
 			return (new IPFilterEx(address));
 		}

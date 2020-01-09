@@ -675,7 +675,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.TcpClient, IPNetworkInterface.IPv4Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4LoopbackTextSettings(string dummy)
@@ -686,7 +686,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.TcpClient, IPNetworkInterface.IPv6Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6LoopbackTextSettings(string dummy)
@@ -738,7 +738,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.TcpServer, IPNetworkInterface.IPv4Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4LoopbackTextSettings(string dummy)
@@ -749,7 +749,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.TcpServer, IPNetworkInterface.IPv6Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6LoopbackTextSettings(string dummy)
@@ -801,7 +801,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, IPNetworkInterface.IPv4Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings(string dummy)
@@ -812,7 +812,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, IPNetworkInterface.IPv6Loopback));
+			return (GetStartedTextSettings(Domain.IOType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings(string dummy)
@@ -888,7 +888,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.UdpClient, IPNetworkInterface.IPv4Loopback));
+			return (GetStartedTextSettings(Domain.IOType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4LoopbackTextSettings(string dummy)
@@ -899,7 +899,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.UdpClient, IPNetworkInterface.IPv6Loopback));
+			return (GetStartedTextSettings(Domain.IOType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6LoopbackTextSettings(string dummy)
@@ -951,7 +951,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.UdpServer, IPNetworkInterface.IPv4Loopback));
+			return (GetStartedTextSettings(Domain.IOType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4LoopbackTextSettings(string dummy)
@@ -962,7 +962,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.UdpServer, IPNetworkInterface.IPv6Loopback));
+			return (GetStartedTextSettings(Domain.IOType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6LoopbackTextSettings(string dummy)
@@ -1014,7 +1014,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, IPNetworkInterface.IPv4Loopback));
+			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4LoopbackTextSettings(string dummy)
@@ -1025,7 +1025,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6LoopbackTextSettings()
 		{
-			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, IPNetworkInterface.IPv6Loopback));
+			return (GetStartedTextSettings(Domain.IOType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6LoopbackTextSettings(string dummy)

@@ -127,10 +127,14 @@ namespace YAT.Domain
 		/// Do not use with <see cref="Separator.Explicit"/> because that selection requires
 		/// a separator string. Use <see cref="SeparatorEx(string)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="separator"/> is <see cref="Separator.Explicit"/>. Use <see cref="SeparatorEx(string)"/> instead.
+		/// </exception>
 		public SeparatorEx(Separator separator)
 			: base(separator)
 		{
-			Debug.Assert((separator != Separator.Explicit), "'Separator.Explicit' requires a separator string, use 'SeparatorEx(string)' instead!");
+			if (separator == Separator.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Separator.Explicit' requires a separator string, use 'SeparatorEx(string)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -462,8 +466,13 @@ namespace YAT.Domain
 			return ((Separator)separator.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator SeparatorEx(Separator separator)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="Separator.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="separator"/> is <see cref="Separator.Explicit"/>.
+		/// </exception>
+		public static explicit operator SeparatorEx(Separator separator)
 		{
 			return (new SeparatorEx(separator));
 		}

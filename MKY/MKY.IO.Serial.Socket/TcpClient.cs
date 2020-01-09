@@ -207,32 +207,64 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary>Creates a TCP/IP client socket.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public TcpClient(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface)
+			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface)
+		{
+		}
+
+		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface)
 		{
 		}
 
 		/// <summary>Creates a TCP/IP client socket.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public TcpClient(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface)
+			: this(instanceId, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface)
+		{
+		}
+
+		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
 			: this(instanceId, remoteHost, remotePort, localInterface, new AutoInterval())
 		{
 		}
 
 		/// <summary>Creates a TCP/IP client socket.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public TcpClient(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, AutoInterval autoReconnect)
+			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, autoReconnect)
+		{
+		}
+
+		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface, autoReconnect)
 		{
 		}
 
 		/// <summary>Creates a TCP/IP client socket.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public TcpClient(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, AutoInterval autoReconnect)
+			: this(instanceId, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, autoReconnect)
+		{
+		}
+
+		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
 		{
 			if (remoteHost == null)     throw (new ArgumentNullException("remoteHost"));

@@ -200,14 +200,28 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary>Creates a TCP/IP server socket.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public TcpServer(IPNetworkInterface localInterface, int localPort)
+			: this((IPNetworkInterfaceEx)localInterface, localPort)
+		{
+		}
+
+		/// <summary>Creates a TCP/IP server socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpServer(IPNetworkInterfaceEx localInterface, int localPort)
 			: this(SocketBase.NextInstanceId, localInterface, localPort)
 		{
 		}
 
 		/// <summary>Creates a TCP/IP server socket.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public TcpServer(int instanceId, IPNetworkInterface localInterface, int localPort)
+			: this(instanceId, (IPNetworkInterfaceEx)localInterface, localPort)
+		{
+		}
+
+		/// <summary>Creates a TCP/IP server socket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpServer(int instanceId, IPNetworkInterfaceEx localInterface, int localPort)
 		{
 			if (localInterface == null) throw (new ArgumentNullException("localInterface"));

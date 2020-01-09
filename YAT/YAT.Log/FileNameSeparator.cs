@@ -107,10 +107,14 @@ namespace YAT.Log
 		/// Do not use with <see cref="FileNameSeparator.Explicit"/> because that selection requires
 		/// a separator string. Use <see cref="FileNameSeparatorEx(string)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="separator"/> is <see cref="FileNameSeparator.Explicit"/>. Use <see cref="FileNameSeparatorEx(string)"/> instead.
+		/// </exception>
 		public FileNameSeparatorEx(FileNameSeparator separator)
 			: base(separator)
 		{
-			Debug.Assert((separator != FileNameSeparator.Explicit), "'FileNameSeparator.Explicit' requires a separator string, use 'FileNameSeparatorEx(string)' instead!");
+			if (separator == FileNameSeparator.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'FileNameSeparator.Explicit' requires a separator string, use 'FileNameSeparatorEx(string)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -402,8 +406,13 @@ namespace YAT.Log
 			return ((FileNameSeparator)separator.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator FileNameSeparatorEx(FileNameSeparator separator)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="FileNameSeparator.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="separator"/> is <see cref="FileNameSeparator.Explicit"/>.
+		/// </exception>
+		public static explicit operator FileNameSeparatorEx(FileNameSeparator separator)
 		{
 			return (new FileNameSeparatorEx(separator));
 		}

@@ -184,7 +184,7 @@ namespace YAT.Log.Settings
 			NameDirection    = false;
 			NameDate         = true;
 			NameTime         = true;
-			NameSeparator    = FileNameSeparator.Dash;
+			NameSeparator    = (FileNameSeparatorEx)FileNameSeparator.Dash;
 
 			FolderType       = false;
 			FolderDirection  = false;
