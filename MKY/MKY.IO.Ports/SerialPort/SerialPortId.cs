@@ -243,7 +243,9 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Port number, e.g. 1 of "COM1".
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException"> if given value is not standard port number.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <paramref name="value"/> is not a standard port number.
+		/// </exception>
 		[XmlIgnore]
 		public virtual int StandardPortNumber
 		{
