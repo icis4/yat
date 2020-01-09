@@ -34,7 +34,19 @@ namespace YAT.Application.Settings
 	/// <summary></summary>
 	public class RecentFileSettings : MKY.Settings.SettingsItem, IEquatable<RecentFileSettings>
 	{
-		/// <summary></summary>
+		/// <remarks>
+		/// Limited to 8 for...
+		/// <list type="bullet">
+		/// <item><description>...allowing keyboard shortcuts 1..8 in the menu.</description></item>
+		/// <item><description>..."nice" looking menu numbering (10 would "spoil" the list).</description></item>
+		/// </list>
+		/// Limitation in other applications:
+		/// <list type="bullet">
+		/// <item><description>Visual Studio = 10.</description></item>
+		/// <item><description>Notepad++ = 10.</description></item>
+		/// <item><description>Programmer's Notepad = 15.</description></item>
+		/// </list>
+		/// </remarks>
 		public const int MaxFilePaths = 8;
 
 		private RecentItemCollection<string> filePaths;

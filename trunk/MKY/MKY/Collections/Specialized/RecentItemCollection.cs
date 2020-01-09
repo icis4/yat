@@ -204,21 +204,6 @@ namespace MKY.Collections.Specialized
 		}
 
 		/// <summary>
-		/// Copies the items of this collection to a new array.
-		/// </summary>
-		public virtual T[] ToItemArray()
-		{
-			var items = new List<T>(Count); // Preset the required capacity to improve memory management.
-
-			foreach (var ri in this)
-			{
-				items.Add(ri.Item);
-			}
-
-			return (items.ToArray());
-		}
-
-		/// <summary>
 		/// Updates this collection from the given array.
 		/// </summary>
 		/// <returns>
