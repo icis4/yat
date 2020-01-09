@@ -72,7 +72,7 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Trigger        = AutoTrigger.None;
+			Trigger        = (AutoTriggerEx)AutoTrigger.None;
 			TriggerOptions = new AutoTriggerOptions(false, true, false, false);
 		}                                                   // Same as .NET regex, which are "case-sensitive by default".
 		                                                    // Also same as byte sequence based triggers, which are case-sensitive by nature.
@@ -114,8 +114,8 @@ namespace YAT.Model.Settings
 				if (AutoTriggerEx.TryParse(value, out result))
 					Trigger = result;
 				else
-					Trigger = AutoTriggerEx.Default; // Silently reset to default, in order to prevent exceptions on changed strings.
-			}                                        // Not ideal, but considered good enough. Could be refined by 'intelligent' fallback.
+					Trigger = new AutoTriggerEx(); // Silently reset to default, in order to prevent exceptions on changed strings.
+			}                                      // Not ideal, but considered good enough. Could be refined by 'intelligent' fallback.
 		}
 
 		/// <summary></summary>
@@ -169,7 +169,7 @@ namespace YAT.Model.Settings
 			SuspendChangeEvent();
 			try
 			{
-				Trigger = AutoTrigger.None;
+				Trigger = (AutoTriggerEx)AutoTrigger.None;
 			}
 			finally
 			{
