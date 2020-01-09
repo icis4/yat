@@ -193,7 +193,7 @@ namespace YAT.Model.Settings
 		{
 			unchecked
 			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+				int hashCode = base.GetHashCode(); // Get hash code of base including all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (Action_ForSerialization != null ? Action_ForSerialization.GetHashCode() : 0);
 
@@ -224,7 +224,7 @@ namespace YAT.Model.Settings
 
 			return
 			(
-				base.Equals(other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare base including all settings nodes.
 
 				StringEx.EqualsOrdinalIgnoreCase(Action_ForSerialization, other.Action_ForSerialization)
 			);

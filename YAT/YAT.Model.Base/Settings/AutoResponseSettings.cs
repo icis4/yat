@@ -72,7 +72,7 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Response        = AutoResponse.None;
+			Response        = (AutoResponseEx)AutoResponse.None;
 			ResponseOptions = new AutoResponseOptions(false, false);
 		}
 
@@ -114,8 +114,8 @@ namespace YAT.Model.Settings
 				if (AutoResponseEx.TryParse(value, out result))
 					Response = result;
 				else
-					Response = AutoResponseEx.Default; // Silently reset to default, in order to prevent exceptions on changed strings.
-			}                                          // Not ideal, but considered good enough. Could be refined by 'intelligent' fallback.
+					Response = new AutoResponseEx(); // Silently reset to default, in order to prevent exceptions on changed strings.
+			}                                        // Not ideal, but considered good enough. Could be refined by 'intelligent' fallback.
 		}
 
 		/// <summary></summary>
@@ -157,7 +157,7 @@ namespace YAT.Model.Settings
 			{
 				base.Deactivate();
 
-				Response = AutoResponse.None;
+				Response = (AutoResponseEx)AutoResponse.None;
 			}
 			finally
 			{
@@ -183,7 +183,7 @@ namespace YAT.Model.Settings
 		{
 			unchecked
 			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+				int hashCode = base.GetHashCode(); // Get hash code of base including all settings nodes.
 
 				hashCode = (hashCode * 397) ^ (Response_ForSerialization != null ? Response_ForSerialization.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^                                      ResponseOptions          .GetHashCode();
@@ -215,7 +215,7 @@ namespace YAT.Model.Settings
 
 			return
 			(
-				base.Equals(other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare base including all settings nodes.
 
 				StringEx.EqualsOrdinalIgnoreCase(Response_ForSerialization, other.Response_ForSerialization) &&
 				ResponseOptions.Equals(                                     other.ResponseOptions)
