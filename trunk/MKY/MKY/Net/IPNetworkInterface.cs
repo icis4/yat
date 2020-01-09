@@ -120,10 +120,14 @@ namespace MKY.Net
 		/// requires an IP address or interface description.
 		/// Use <see cref="IPNetworkInterfaceEx(IPAddress, string)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="networkInterface"/> is <see cref="IPNetworkInterface.Explicit"/>. Use <see cref="IPNetworkInterfaceEx(IPAddress, string)"/> instead.
+		/// </exception>
 		public IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
 			: base(networkInterface)
 		{
-			Debug.Assert((networkInterface != IPNetworkInterface.Explicit), "'IPNetworkInterface.Explicit' requires an IP address or interface description, use 'IPNetworkInterfaceEx(IPAddress, string)' instead!");
+			if (networkInterface == IPNetworkInterface.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'IPNetworkInterface.Explicit' requires an IP address or interface description, use 'IPNetworkInterfaceEx(IPAddress, string)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -702,8 +706,13 @@ namespace MKY.Net
 			return ((IPNetworkInterface)networkInterface.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="IPNetworkInterface.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="networkInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.
+		/// </exception>
+		public static explicit operator IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
 		{
 			return (new IPNetworkInterfaceEx(networkInterface));
 		}

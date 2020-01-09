@@ -101,7 +101,7 @@ namespace YAT.Domain.Test
 
 		internal static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackTextSettings()
 		{
-			return (GetTcpAutoSocketTextSettings(IPNetworkInterface.IPv4Loopback));
+			return (GetTcpAutoSocketTextSettings((IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		#endregion

@@ -176,10 +176,10 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				((BaudRateEx) BaudRate) + ", " +
-				((DataBitsEx) DataBits) + ", " +
-				((ParityEx)   Parity)   + ", " +
-				((StopBitsEx) StopBits) + ", " +
+				( (BaudRateEx)BaudRate) + ", " +
+				( (DataBitsEx)DataBits) + ", " +
+				(   (ParityEx)Parity)   + ", " +
+				( (StopBitsEx)StopBits) + ", " +
 				((HandshakeEx)Handshake).ToShortString()
 			);
 		}
@@ -193,7 +193,7 @@ namespace MKY.IO.Ports
 			(
 				((BaudRateEx)this.baudRate) + ", " +
 				((DataBitsEx)this.dataBits) + ", " +
-				((ParityEx)  this.parity)  .ToShortString()
+				(  (ParityEx)this.parity).ToShortString()
 			);
 		}
 

@@ -172,8 +172,16 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary>Creates a TCP/IP AutoSocket.</summary>
-		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is is <c>null</c>.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		public TcpAutoSocket(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, int localPort)
+			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, localPort)
+		{
+		}
+
+		/// <summary>Creates a TCP/IP AutoSocket.</summary>
+		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpAutoSocket(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, int localPort)
 		{
 			if (remoteHost == null)     throw (new ArgumentNullException("remoteHost"));

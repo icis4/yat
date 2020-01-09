@@ -106,10 +106,14 @@ namespace YAT.Domain
 		/// Do not use with <see cref="Enclosure.Explicit"/> because that selection requires
 		/// an enclosure string. Use <see cref="EnclosureEx(string)"/> instead.
 		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="enclosure"/> is <see cref="Enclosure.Explicit"/>. Use <see cref="EnclosureEx(string)"/> instead.
+		/// </exception>
 		public EnclosureEx(Enclosure enclosure)
 			: base(enclosure)
 		{
-			Debug.Assert((enclosure != Enclosure.Explicit), "'Enclosure.Explicit' requires an enclosure string, use 'EnclosureEx(string)' instead!");
+			if (enclosure == Enclosure.Explicit)
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Enclosure.Explicit' requires an enclosure string, use 'EnclosureEx(string)' instead!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -427,8 +431,13 @@ namespace YAT.Domain
 			return ((Enclosure)enclosure.UnderlyingEnum);
 		}
 
-		/// <summary></summary>
-		public static implicit operator EnclosureEx(Enclosure enclosure)
+		/// <remarks>
+		/// Explicit because cast doesn't work for <see cref="Enclosure.Explicit"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="enclosure"/> is <see cref="Enclosure.Explicit"/>.
+		/// </exception>
+		public static explicit operator EnclosureEx(Enclosure enclosure)
 		{
 			return (new EnclosureEx(enclosure));
 		}
