@@ -39,24 +39,39 @@ namespace MKY.Windows.Forms
 	{
 		/// <summary>
 		/// Convert a menu index into a prependable string, e.g. "1: ".
-		/// Indices 1 through 10 will be accessible via ALT + numeric key using the ampersand.
+		/// Indices will be accessible via ALT + numeric key.
 		/// </summary>
+		/// <remarks>
+		/// Ampersand is used as mark.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Prependable' is a correct English term.")]
 		public static string PrependIndex(int index, string text)
 		{
 			var sb = new StringBuilder();
 
-			if ((index >= 1) && (index <= 9))
+			if ((index >= 0) && (index <= 9))
 			{
 				sb.Append("&");
 				sb.Append(index);
 			}
-			else if (index == 10)
+			else if (index <= 99)
 			{
-				sb.Append("1&0");
+				var tenths = (index / 10);
+				var oneths = (index % 10);
+				if (oneths == 0)
+				{
+					sb.Append(tenths);
+					sb.Append("&0"); // Mark zero digit (may result in duplicate marks (0/10/...)).
+				}
+				else
+				{
+					sb.Append("&"); // Mark first digit (resulting in duplicate marks).
+					sb.Append(index);
+				}
 			}
-			else
+			else // Very unlikely case, who wants 100 or more menu items...
 			{
+				sb.Append("&"); // Simply mark first digit (resulting in even more duplicate marks).
 				sb.Append(index);
 			}
 			sb.Append(": ");
