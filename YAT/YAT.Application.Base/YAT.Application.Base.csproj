@@ -87,6 +87,9 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="ApplicationEx.cs" />
+    <Compile Include="Settings\AutoActionSettings.cs" />
+    <Compile Include="Settings\AutoResponseSettings.cs" />
+    <Compile Include="Settings\AutoTriggerSettings.cs" />
     <Compile Include="Settings\AutoWorkspaceSettings.cs" />
     <Compile Include="Settings\ExtensionSettings.cs" />
     <Compile Include="Settings\FindSettings.cs" />

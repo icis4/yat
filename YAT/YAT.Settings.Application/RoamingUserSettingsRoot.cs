@@ -59,6 +59,8 @@ namespace YAT.Settings.Application
 
 		private SocketSettings socket;
 		private FindSettings find;
+		private AutoActionSettings autoAction;
+		private AutoResponseSettings autoResponse;
 		private ViewSettings view;
 		private PlotSettings plot;
 		private ExtensionSettings extensions;
@@ -70,11 +72,13 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			Socket     = new SocketSettings(MKY.Settings.SettingsType.Explicit);
-			Find       = new FindSettings(MKY.Settings.SettingsType.Explicit);
-			View       = new ViewSettings(MKY.Settings.SettingsType.Explicit);
-			Plot       = new PlotSettings(MKY.Settings.SettingsType.Explicit);
-			Extensions = new ExtensionSettings(MKY.Settings.SettingsType.Explicit);
+			Socket       = new SocketSettings(MKY.Settings.SettingsType.Explicit);
+			Find         = new FindSettings(MKY.Settings.SettingsType.Explicit);
+			AutoAction   = new AutoActionSettings(MKY.Settings.SettingsType.Explicit);
+			AutoResponse = new AutoResponseSettings(MKY.Settings.SettingsType.Explicit);
+			View         = new ViewSettings(MKY.Settings.SettingsType.Explicit);
+			Plot         = new PlotSettings(MKY.Settings.SettingsType.Explicit);
+			Extensions   = new ExtensionSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
 		}
@@ -86,11 +90,13 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot(RoamingUserSettingsRoot rhs)
 			: base(rhs)
 		{
-			Socket     = new SocketSettings(rhs.Socket);
-			Find       = new FindSettings(rhs.Find);
-			View       = new ViewSettings(rhs.View);
-			Plot       = new PlotSettings(rhs.Plot);
-			Extensions = new ExtensionSettings(rhs.Extensions);
+			Socket       = new SocketSettings(rhs.Socket);
+			Find         = new FindSettings(rhs.Find);
+			AutoAction   = new AutoActionSettings(rhs.AutoAction);
+			AutoResponse = new AutoResponseSettings(rhs.AutoResponse);
+			View         = new ViewSettings(rhs.View);
+			Plot         = new PlotSettings(rhs.Plot);
+			Extensions   = new ExtensionSettings(rhs.Extensions);
 
 			ClearChanged();
 		}
@@ -168,6 +174,40 @@ namespace YAT.Settings.Application
 				{
 					var oldNode = this.find;
 					this.find = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoAction")]
+		public virtual AutoActionSettings AutoAction
+		{
+			get { return (this.autoAction); }
+			set
+			{
+				if (this.autoAction != value)
+				{
+					var oldNode = this.autoAction;
+					this.autoAction = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoResponse")]
+		public virtual AutoResponseSettings AutoResponse
+		{
+			get { return (this.autoResponse); }
+			set
+			{
+				if (this.autoResponse != value)
+				{
+					var oldNode = this.autoResponse;
+					this.autoResponse = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
