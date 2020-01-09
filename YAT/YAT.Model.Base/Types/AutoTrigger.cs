@@ -150,6 +150,12 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit); }
+		}
+
+		/// <summary></summary>
 		public bool IsActive
 		{
 			get { return ((AutoTrigger)UnderlyingEnum != AutoTrigger.None); }

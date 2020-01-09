@@ -267,6 +267,12 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((IPFilter)UnderlyingEnum == IPFilter.Explicit); }
+		}
+
+		/// <summary></summary>
 		[CLSCompliant(false)]
 		public uint IPv4MaskBytes
 		{

@@ -236,6 +236,12 @@ namespace MKY.Net
 			}
 		}
 
+		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((IPHost)UnderlyingEnum == IPHost.Explicit); }
+		}
+
 		#endregion
 
 		#region Object Members

@@ -123,6 +123,19 @@ namespace YAT.Domain
 			this.explicitEnclosure = enclosure;
 		}
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((Enclosure)UnderlyingEnum == Enclosure.Explicit); }
+		}
+
+		#endregion
+
 		#region Methods
 		//==========================================================================================
 		// Methods
