@@ -154,7 +154,7 @@ Optionally, use the command's text for triggering. Supported for single line tex
 Optionally, regular expressions can be enabled for text triggering.
 
 Some useful regular expression capture patterns (use without surrounding quotes):
-Integral numbers: "([-+]\d+)"
+Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+))"
 Floating point numbers in scientific format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)[Ee][-+]?[0-9]+)"
 Floating point numbers in any format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)(?:[Ee][-+]?[0-9]+)?)"
@@ -192,7 +192,7 @@ Optionally, use the command's text for triggering. Supported for single line tex
 Optionally, regular expressions can be enabled for text triggering.
 
 Some useful regular expression capture patterns (use without surrounding quotes):
-Integral numbers: "([-+]\d+)"
+Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+))"
 Floating point numbers in scientific format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)[Ee][-+]?[0-9]+)"
 Floating point numbers in any format: "([-+]?(?:[0-9]+(?:[.][0-9]*)?|[.][0-9]+)(?:[Ee][-+]?[0-9]+)?)"
