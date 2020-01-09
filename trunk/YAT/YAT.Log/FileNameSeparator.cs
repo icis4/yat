@@ -124,6 +124,19 @@ namespace YAT.Log
 			this.explicitSeparator = separator;
 		}
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Explicit); }
+		}
+
+		#endregion
+
 		#region Methods
 		//==========================================================================================
 		// Methods

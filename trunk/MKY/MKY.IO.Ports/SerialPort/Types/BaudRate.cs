@@ -135,6 +135,19 @@ namespace MKY.IO.Ports
 			}
 		}
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((BaudRate)UnderlyingEnum == BaudRate.Explicit); }
+		}
+
+		#endregion
+
 		#region Object Members
 		//==========================================================================================
 		// Object Members

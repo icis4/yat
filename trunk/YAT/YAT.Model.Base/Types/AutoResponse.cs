@@ -147,6 +147,12 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit); }
+		}
+
+		/// <summary></summary>
 		public bool IsActive
 		{
 			get { return ((AutoResponse)UnderlyingEnum != AutoResponse.None); }

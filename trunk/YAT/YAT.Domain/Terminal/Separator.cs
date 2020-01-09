@@ -144,6 +144,19 @@ namespace YAT.Domain
 			this.explicitSeparator = separator;
 		}
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((Separator)UnderlyingEnum == Separator.Explicit); }
+		}
+
+		#endregion
+
 		#region Methods
 		//==========================================================================================
 		// Methods

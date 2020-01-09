@@ -254,6 +254,12 @@ namespace MKY.Net
 			}
 		}
 
+		/// <summary></summary>
+		public bool IsExplicit
+		{
+			get { return ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit); }
+		}
+
 		#endregion
 
 		#region Methods
