@@ -33,7 +33,7 @@ namespace MKY.IO.Serial.SerialPort
 	public class SerialCommunicationSettings : Settings.SettingsItem, IEquatable<SerialCommunicationSettings>
 	{
 		/// <summary></summary>
-		public const int BaudRateDefault = (int)MKY.IO.Ports.SerialPortSettings.BaudRateDefault;
+		public const int BaudRateDefault = MKY.IO.Ports.SerialPortSettings.BaudRateDefault;
 
 		/// <summary></summary>
 		public const MKY.IO.Ports.DataBits DataBitsDefault = MKY.IO.Ports.SerialPortSettings.DataBitsDefault;
@@ -466,11 +466,11 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			return
 			(
-				BaudRate                            + ", " +
-				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  Parity)   + ", " +
-				((MKY.IO.Ports.StopBitsEx)StopBits) + ", " +
-				((SerialFlowControlEx)FlowControl).ToShortString()
+				                         BaudRate + ", " +
+				(MKY.IO.Ports.DataBitsEx)DataBits + ", " +
+				(MKY.IO.Ports.ParityEx)  Parity   + ", " +
+				(MKY.IO.Ports.StopBitsEx)StopBits + ", " +
+				((SerialFlowControlEx)   FlowControl).ToShortString()
 
 				// Do not include the state of the RTS and DTR pins, as these are advanced settings typically not displayed.
 			);
@@ -481,9 +481,9 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			return
 			(
-				BaudRate                            + ", " +
-				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  Parity).ToShortString()
+				                         BaudRate + ", " +
+				(MKY.IO.Ports.DataBitsEx)DataBits + ", " +
+				((MKY.IO.Ports.ParityEx) Parity).ToShortString()
 			);
 		}
 

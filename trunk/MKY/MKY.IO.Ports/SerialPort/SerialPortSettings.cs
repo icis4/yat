@@ -48,7 +48,7 @@ namespace MKY.IO.Ports
 	public class SerialPortSettings : IEquatable<SerialPortSettings>
 	{
 		/// <summary></summary>
-		public const BaudRate BaudRateDefault = BaudRate.Baud009600;
+		public const int BaudRateDefault = (int)(Ports.BaudRate.Baud009600);
 
 		/// <summary></summary>
 		public const DataBits DataBitsDefault = DataBits.Eight;
@@ -62,7 +62,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public const Handshake HandshakeDefault = Handshake.None;
 
-		private BaudRate  baudRate;
+		private int       baudRate;
 		private DataBits  dataBits;
 		private Parity    parity;
 		private StopBits  stopBits;
@@ -72,7 +72,7 @@ namespace MKY.IO.Ports
 		/// Creates new port settings with specified arguments.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public SerialPortSettings(BaudRate baudRate = BaudRateDefault, DataBits dataBits = DataBitsDefault, Parity parity = ParityDefault, StopBits stopBits = StopBitsDefault, Handshake handshake = HandshakeDefault)
+		public SerialPortSettings(int baudRate = BaudRateDefault, DataBits dataBits = DataBitsDefault, Parity parity = ParityDefault, StopBits stopBits = StopBitsDefault, Handshake handshake = HandshakeDefault)
 		{
 			BaudRate  = baudRate;
 			DataBits  = dataBits;
@@ -100,10 +100,10 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		[XmlElement("BaudRate")]
-		public BaudRate BaudRate
+		public int BaudRate
 		{
 			get { return (this.baudRate); }
-			set { this.baudRate = value; }
+			set { this.baudRate = value;  }
 		}
 
 		/// <summary></summary>
@@ -111,7 +111,7 @@ namespace MKY.IO.Ports
 		public DataBits DataBits
 		{
 			get { return (this.dataBits); }
-			set { this.dataBits = value; }
+			set { this.dataBits = value;  }
 		}
 
 		/// <summary></summary>
@@ -119,7 +119,7 @@ namespace MKY.IO.Ports
 		public Parity Parity
 		{
 			get { return (this.parity); }
-			set { this.parity = value; }
+			set { this.parity = value;  }
 		}
 
 		/// <summary></summary>
@@ -127,7 +127,7 @@ namespace MKY.IO.Ports
 		public StopBits StopBits
 		{
 			get { return (this.stopBits); }
-			set { this.stopBits = value; }
+			set { this.stopBits = value;  }
 		}
 
 		/// <summary></summary>
@@ -135,7 +135,7 @@ namespace MKY.IO.Ports
 		public Handshake Handshake
 		{
 			get { return (this.handshake); }
-			set { this.handshake = value; }
+			set { this.handshake = value;  }
 		}
 
 		/// <summary>
@@ -176,10 +176,10 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				( (BaudRateEx)BaudRate) + ", " +
-				( (DataBitsEx)DataBits) + ", " +
-				(   (ParityEx)Parity)   + ", " +
-				( (StopBitsEx)StopBits) + ", " +
+				              BaudRate + ", " + // Attention, BaudRateEx(BaudRate) would throw for BaudRate.Explicit!
+				  (DataBitsEx)DataBits + ", " +
+				    (ParityEx)Parity   + ", " +
+				  (StopBitsEx)StopBits + ", " +
 				((HandshakeEx)Handshake).ToShortString()
 			);
 		}
@@ -191,9 +191,9 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				((BaudRateEx)this.baudRate) + ", " +
-				((DataBitsEx)this.dataBits) + ", " +
-				(  (ParityEx)this.parity).ToShortString()
+				            BaudRate + ", " + // Attention, BaudRateEx(BaudRate) would throw for BaudRate.Explicit!
+				(DataBitsEx)DataBits + ", " +
+				 ((ParityEx)Parity).ToShortString()
 			);
 		}
 
@@ -210,7 +210,7 @@ namespace MKY.IO.Ports
 			{
 				int hashCode;
 
-				hashCode =                    BaudRate .GetHashCode();
+				hashCode =                    BaudRate;
 				hashCode = (hashCode * 397) ^ DataBits .GetHashCode();
 				hashCode = (hashCode * 397) ^ Parity   .GetHashCode();
 				hashCode = (hashCode * 397) ^ StopBits .GetHashCode();
@@ -304,7 +304,7 @@ namespace MKY.IO.Ports
 			var sa = s.Trim().Split(delimiters.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 			if (sa.Length > 0)
 			{
-				BaudRate baudRate;
+				BaudRateEx baudRate;
 				if (BaudRateEx.TryParse(sa[0], out baudRate))
 				{
 					if (sa.Length > 1)
