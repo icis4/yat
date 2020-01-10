@@ -35,7 +35,6 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Collections.Generic;
 using MKY.Diagnostics;
 using MKY.Text.RegularExpressions;
 
@@ -60,7 +59,7 @@ namespace YAT.Model
 		private AutoTriggerHelper autoResponseTriggerHelper;
 		private object autoResponseTriggerHelperSyncObj = new object();
 
-		private Queue<Triple<byte[], string, MatchCollection>> autoResponseQueue = new Queue<Triple<byte[], string, MatchCollection>>();
+		private Queue<Tuple<byte[], string, MatchCollection>> autoResponseQueue = new Queue<Tuple<byte[], string, MatchCollection>>();
 		private bool autoResponseThreadRunFlag;
 		private AutoResetEvent autoResponseThreadEvent;
 		private Thread autoResponseThread;
@@ -179,7 +178,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements)
 		{
-			List<Triple<byte[], string, MatchCollection>> triggersDummy;
+			List<Tuple<byte[], string, MatchCollection>> triggersDummy;
 			EvaluateAutoResponseFromElements(elements, out triggersDummy);
 		}
 
@@ -189,9 +188,9 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements, out List<Triple<byte[], string, MatchCollection>> triggers)
+		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements, out List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
-			triggers = new List<Triple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
+			triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
 
 			foreach (var de in elements)
 			{
@@ -213,7 +212,7 @@ namespace YAT.Model
 											de.Highlight = true;
 
 											// Signal the trigger:                                   // Always use sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
-											triggers.Add(new Triple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.TriggerSequence, null, null));
+											triggers.Add(new Tuple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.TriggerSequence, null, null));
 										}
 									}
 								}
@@ -236,7 +235,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines)
 		{
-			List<Triple<byte[], string, MatchCollection>> triggersDummy;
+			List<Tuple<byte[], string, MatchCollection>> triggersDummy;
 			EvaluateAutoResponseFromLines(lines, out triggersDummy);
 		}
 
@@ -246,7 +245,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines, out List<Triple<byte[], string, MatchCollection>> triggers)
+		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines, out List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
 			if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 			{
@@ -257,7 +256,7 @@ namespace YAT.Model
 			}
 			else // IsTextTriggered
 			{
-				triggers = new List<Triple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
+				triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
 
 				foreach (var dl in lines)
 				{
@@ -274,7 +273,7 @@ namespace YAT.Model
 
 								// Signal the trigger(s):
 								for (int i = 0; i < triggerCount; i++)                             // Always use text for [Trigger] response, since always 'IsTextTriggered' when evaluated here.
-									triggers.Add(new Triple<byte[], string, MatchCollection>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern, triggerMatches));
+									triggers.Add(new Tuple<byte[], string, MatchCollection>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern, triggerMatches));
 							}
 						}
 						else
@@ -289,10 +288,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Enqueues the automatic responses for invocation on other than the receive thread.
 		/// </summary>
-		protected virtual void EnqueueAutoResponses(List<Triple<byte[], string, MatchCollection>> triggers)
+		protected virtual void EnqueueAutoResponses(List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
 			foreach (var trigger in triggers)
-				EnqueueAutoResponse(trigger.Value1, trigger.Value2, trigger.Value3);
+				EnqueueAutoResponse(trigger.Item1, trigger.Item2, trigger.Item3);
 		}
 
 		/// <summary>
@@ -301,7 +300,7 @@ namespace YAT.Model
 		protected virtual void EnqueueAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection triggerMatches)
 		{
 			lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
-				this.autoResponseQueue.Enqueue(new Triple<byte[], string, MatchCollection>(triggerSequence, triggerText, triggerMatches));
+				this.autoResponseQueue.Enqueue(new Tuple<byte[], string, MatchCollection>(triggerSequence, triggerText, triggerMatches));
 
 			SignalAutoResponseThreadSafely();
 		}
@@ -346,7 +345,7 @@ namespace YAT.Model
 						// since it is likely that more triggers are to be enqueued.
 						Thread.Sleep(TimeSpan.Zero);
 
-						Triple<byte[], string, MatchCollection>[] pendingItems;
+						Tuple<byte[], string, MatchCollection>[] pendingItems;
 						lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
 						{
 							pendingItems = this.autoResponseQueue.ToArray();
@@ -355,7 +354,7 @@ namespace YAT.Model
 
 						foreach (var item in pendingItems)
 						{
-							SendAutoResponse(item.Value1, item.Value2, item.Value3);
+							SendAutoResponse(item.Item1, item.Item2, item.Item3);
 						}
 					} // Inner loop
 				} // Outer loop
