@@ -22,13 +22,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using MKY;
+
+#endregion
 
 namespace YAT.Model.Types
 {
@@ -88,23 +94,14 @@ namespace YAT.Model.Types
 		public const int InvalidPredefinedCommandId = 0;
 
 		#region String Definitions
-		                                 // Attention:
-		                                 // These strings are used for XML serialization!
-		                                 // Not ideal, but required for 'Explicit'!
-		private const string             None_string = "[None]";
-		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
-
-		private const string             Trigger_string = "[Trigger]";
-		private static readonly string[] Trigger_stringAlternatives = new string[] { "[T]" };
-
-		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
-		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
-
-		private const string             SendText_string = "[Send Text]";
-		private static readonly string[] SendText_stringAlternatives = new string[] { "[Text]", "[ST]" };
-
-		private const string             SendFile_string = "[Send File]";
-		private static readonly string[] SendFile_stringAlternatives = new string[] { "[File]", "[SF]" };
+		                     // Attention:
+		                     // These strings are used for XML serialization!
+		                     // Not ideal, but required for 'Explicit'!
+		private const string None_string                   = "[None]";
+		private const string Trigger_string                = "[Trigger]";        // Incl. space!
+		private const string PredefinedCommand_stringStart = "[Predefined Command "; // Any of the commands, ID is parsed separately.
+		private const string SendText_string               = "[Send Text]";
+		private const string SendFile_string               = "[Send File]";
 
 		#endregion
 
@@ -226,18 +223,18 @@ namespace YAT.Model.Types
 			{
 				case AutoResponse.None:                return (None_string);
 				case AutoResponse.Trigger:             return (Trigger_string);
-				case AutoResponse.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
-				case AutoResponse.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
-				case AutoResponse.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
-				case AutoResponse.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
-				case AutoResponse.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
-				case AutoResponse.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
-				case AutoResponse.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
-				case AutoResponse.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
-				case AutoResponse.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
-				case AutoResponse.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
-				case AutoResponse.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
-				case AutoResponse.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
+				case AutoResponse.PredefinedCommand1:  return (PredefinedCommand_stringStart + "1]");
+				case AutoResponse.PredefinedCommand2:  return (PredefinedCommand_stringStart + "2]");
+				case AutoResponse.PredefinedCommand3:  return (PredefinedCommand_stringStart + "3]");
+				case AutoResponse.PredefinedCommand4:  return (PredefinedCommand_stringStart + "4]");
+				case AutoResponse.PredefinedCommand5:  return (PredefinedCommand_stringStart + "5]");
+				case AutoResponse.PredefinedCommand6:  return (PredefinedCommand_stringStart + "6]");
+				case AutoResponse.PredefinedCommand7:  return (PredefinedCommand_stringStart + "7]");
+				case AutoResponse.PredefinedCommand8:  return (PredefinedCommand_stringStart + "8]");
+				case AutoResponse.PredefinedCommand9:  return (PredefinedCommand_stringStart + "9]");
+				case AutoResponse.PredefinedCommand10: return (PredefinedCommand_stringStart + "10]");
+				case AutoResponse.PredefinedCommand11: return (PredefinedCommand_stringStart + "11]");
+				case AutoResponse.PredefinedCommand12: return (PredefinedCommand_stringStart + "12]");
 				case AutoResponse.SendText:            return (SendText_string);
 				case AutoResponse.SendFile:            return (SendFile_string);
 				case AutoResponse.Explicit:            return (this.explicitCommandString);
@@ -420,22 +417,19 @@ namespace YAT.Model.Types
 				result = AutoResponse.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
 				result = AutoResponse.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Trigger_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Trigger_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Trigger_string))
 			{
 				result = AutoResponse.Trigger;
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
-			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives)) // StartWith()! Not Equals()!
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringStart)) // StartWith()! Not Equals()!
 			{
-				var match = Regex.Match(s, @"\d+");
+				var match = Regex.Match(s.Substring(PredefinedCommand_stringStart.Length - 1), @"\d+");
 				if (match.Success)
 				{
 					int intValue;
@@ -454,14 +448,12 @@ namespace YAT.Model.Types
 				result = AutoResponse.PredefinedCommand1;
 				return (false);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendText_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendText_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SendText_string))
 			{
 				result = AutoResponse.SendText;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendFile_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendFile_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SendFile_string))
 			{
 				result = AutoResponse.SendFile;
 				return (true);
