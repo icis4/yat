@@ -90,75 +90,32 @@ namespace YAT.Model.Types
 		                                 // Attention:
 		                                 // These strings are used for XML serialization!
 		                                 // Not ideal, but required for explicit 'AutoTrigger' and 'AutoResponse', thus here too.
-		private const string             None_string = "[None]";
-		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
-
-		private const string             Highlight_string = "[Highlight]";
-		private static readonly string[] Highlight_stringAlternatives = new string[] { "[H]", "[Highlight Only]" };
-
-		private const string             Filter_string = "[Filter]";
-		private static readonly string[] Filter_stringAlternatives = new string[] { "[F]" };
-
-		private const string             Suppress_string = "[Suppress]";
-		private static readonly string[] Suppress_stringAlternatives = new string[] { "[S]" };
-
-		private const string             Beep_string = "[Beep]";
-		private static readonly string[] Beep_stringAlternatives = new string[] { "[B]" };
-
-		private const string             ShowMessageBox_string = "[Show Message Box]";
-		private static readonly string[] ShowMessageBox_stringAlternatives = new string[] { "[M]" };
-
-		private const string             PlotByteCountRate_string = "[Plot Byte Count/Rate]";
-		private static readonly string[] PlotByteCountRate_stringAlternatives = new string[] { "[PB]" };
-
-		private const string             PlotLineCountRate_string = "[Plot Line Count/Rate]";
-		private static readonly string[] PlotLineCountRate_stringAlternatives = new string[] { "[PL]" };
-
-		private const string             LineChartIndex_string = "[Line Chart]";
-		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LC]" };
-
-		private const string             LineChartTime_string = "[Line Chart (X = Time)]";
-		private static readonly string[] LineChartTime_stringAlternatives = new string[] { "[LCT]" };
-
+		private const string             None_string               = "[None]";
+		private const string             Highlight_string          = "[Highlight]";
+		private static readonly string[] Highlight_stringAlternatives = new string[] { "[Highlight Only]" }; // Old name, needed for backward compatibility with old settings!
+		private const string             Filter_string             = "[Filter]";
+		private const string             Suppress_string           = "[Suppress]";
+		private const string             Beep_string               = "[Beep]";
+		private const string             ShowMessageBox_string     = "[Show Message Box]";
+		private const string             PlotByteCountRate_string  = "[Plot Byte Count/Rate]";
+		private const string             PlotLineCountRate_string  = "[Plot Line Count/Rate]";
+		private const string             LineChartIndex_string     = "[Line Chart]";
+		private const string             LineChartTime_string      = "[Line Chart (X = Time)]";
 		private const string             LineChartTimeStamp_string = "[Line Chart (X = Time Stamp)]";
-		private static readonly string[] LineChartTimeStamp_stringAlternatives = new string[] { "[LCTS]" };
-
-		private const string             ScatterPlotXY_string = "[Scatter Plot]";
-		private static readonly string[] ScatterPlotXY_stringAlternatives = new string[] { "[SP]" };
-
-		private const string             ScatterPlotTime_string = "[Scatter Plot (X = Time)]";
-		private static readonly string[] ScatterPlotTime_stringAlternatives = new string[] { "[SPT]" };
-
-		private const string             Histogram_string = "[Histogram]";
-		private static readonly string[] Histogram_stringAlternatives = new string[] { "[HG]" };
-
-		private const string             ClearRepositories_string = "[Clear Monitor]"; // Translating from code to user terminology.
-		private static readonly string[] ClearRepositories_stringAlternatives = new string[] { "[CM]" };
-
+		private const string             ScatterPlotXY_string      = "[Scatter Plot]";
+		private const string             ScatterPlotTime_string    = "[Scatter Plot (X = Time)]";
+		private const string             Histogram_string          = "[Histogram]";
+		private const string             ClearRepositories_string  = "[Clear Monitor]"; // Translating from code to user terminology.
 		private const string             ClearRepositoriesOnSubsequentRx_string = "[Clear Mon. on Subsequent Rx]"; // Translating from code to user terminology.
-		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternatives = new string[] { "[CMSR]" };
-		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Clear Mon. ", "[Clear Monitor " }; // Including ' ' to distinguish from above.
-
-		private const string             ResetCountAndRate_string = "[Reset Count/Rate]";
-		private static readonly string[] ResetCountAndRate_stringAlternatives = new string[] { "[R]" };
-
-		private const string             SwitchLogOn_string = "[Log On]"; // Translating from code to user terminology.
-		private static readonly string[] SwitchLogOn_stringAlternatives = new string[] { "[LN]" };
-
-		private const string             SwitchLogOff_string = "[Log Off]"; // Translating from code to user terminology.
-		private static readonly string[] SwitchLogOff_stringAlternatives = new string[] { "[LF]" };
-
-		private const string             ToggleLogOnOrOff_string = "[Toggle Log On/Off]"; // Translating from code to user terminology.
-		private static readonly string[] ToggleLogOnOrOff_stringAlternatives = new string[] { "[TL]" };
-
-		private const string             StopIO_string = "[Close/Stop I/O]"; // Translating from code to user terminology.
-		private static readonly string[] StopIO_stringAlternatives = new string[] { "[CIO]" };
-
-		private const string             CloseTerminal_string = "[Close Terminal]";
-		private static readonly string[] CloseTerminal_stringAlternatives = new string[] { "[CT]" };
-
-		private static readonly string   ExitApplication_string = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
-		private static readonly string[] ExitApplication_stringAlternatives = new string[] { "[X]" };
+		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Clear Mon. ", "[Clear Monitor " }; // Including ' ' to distinguish from [Clear Monitor]!
+		private const string             ResetCountAndRate_string  = "[Reset Count/Rate]";                                                // Old name, needed for backward compatibility with old settings!
+		private const string             SwitchLogOn_string        = "[Log On]"; // Translating from code to user terminology.
+		private const string             SwitchLogOff_string       = "[Log Off]"; // Translating from code to user terminology.
+		private const string             ToggleLogOnOrOff_string   = "[Toggle Log On/Off]"; // Translating from code to user terminology.
+		private const string             StopIO_string             = "[Close/Stop I/O]"; // Translating from code to user terminology.
+		private const string             CloseTerminal_string      = "[Close Terminal]";
+		private static readonly string   ExitApplication_string    = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
+		private static readonly string[] ExitApplication_stringAlternativeStart = new string[] { "[Exit " + ApplicationEx.CommonName };
 
 		#endregion
 
@@ -383,8 +340,7 @@ namespace YAT.Model.Types
 				result = AutoAction.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
 				result = AutoAction.None;
 				return (true);
@@ -395,129 +351,108 @@ namespace YAT.Model.Types
 				result = AutoAction.Highlight;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Filter_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Filter_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Filter_string))
 			{
 				result = AutoAction.Filter;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Suppress_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Suppress_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Suppress_string))
 			{
 				result = AutoAction.Suppress;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Beep_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Beep_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Beep_string))
 			{
 				result = AutoAction.Beep;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ShowMessageBox_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ShowMessageBox_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ShowMessageBox_string))
 			{
 				result = AutoAction.ShowMessageBox;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, PlotByteCountRate_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, PlotByteCountRate_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, PlotByteCountRate_string))
 			{
 				result = AutoAction.PlotByteCountRate;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, PlotLineCountRate_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, PlotLineCountRate_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, PlotLineCountRate_string))
 			{
 				result = AutoAction.PlotLineCountRate;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartIndex_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartIndex_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineChartIndex_string))
 			{
 				result = AutoAction.LineChartIndex;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartTime_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartTime_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineChartTime_string))
 			{
 				result = AutoAction.LineChartTime;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartTimeStamp_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, LineChartTimeStamp_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineChartTimeStamp_string))
 			{
 				result = AutoAction.LineChartTimeStamp;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlotXY_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlotXY_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ScatterPlotXY_string))
 			{
 				result = AutoAction.ScatterPlotXY;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ScatterPlotTime_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ScatterPlotTime_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ScatterPlotTime_string))
 			{
 				result = AutoAction.ScatterPlotTime;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Histogram_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Histogram_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Histogram_string))
 			{
 				result = AutoAction.Histogram;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ClearRepositories_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ClearRepositories_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ClearRepositories_string))
 			{
 				result = AutoAction.ClearRepositories;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase       (s, ClearRepositoriesOnSubsequentRx_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase    (s, ClearRepositoriesOnSubsequentRx_stringAlternatives) ||
 			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, ClearRepositoriesOnSubsequentRx_stringAlternativeStarts))
 			{
 				result = AutoAction.ClearRepositoriesOnSubsequentRx;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ResetCountAndRate_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ResetCountAndRate_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ResetCountAndRate_string))
 			{
 				result = AutoAction.ResetCountAndRate;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SwitchLogOn_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SwitchLogOn_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SwitchLogOn_string))
 			{
 				result = AutoAction.SwitchLogOn;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SwitchLogOff_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SwitchLogOff_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SwitchLogOff_string))
 			{
 				result = AutoAction.SwitchLogOff;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ToggleLogOnOrOff_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ToggleLogOnOrOff_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToggleLogOnOrOff_string))
 			{
 				result = AutoAction.ToggleLogOnOrOff;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, StopIO_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, StopIO_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, StopIO_string))
 			{
 				result = AutoAction.StopIO;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, CloseTerminal_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, CloseTerminal_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, CloseTerminal_string))
 			{
 				result = AutoAction.CloseTerminal;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ExitApplication_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ExitApplication_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ExitApplication_string))
 			{
 				result = AutoAction.ExitApplication;
 				return (true);

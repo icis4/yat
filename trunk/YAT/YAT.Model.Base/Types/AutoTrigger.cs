@@ -29,7 +29,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -94,20 +93,13 @@ namespace YAT.Model.Types
 		public const int InvalidPredefinedCommandId = 0;
 
 		#region String Definitions
-		                                 // Attention:
-		                                 // These strings are used for XML serialization!
-		                                 // Not ideal, but required for 'Explicit'!
-		private const string             None_string = "[None]";
-		private static readonly string[] None_stringAlternatives = new string[] { "[N]" };
-
-		private const string             AnyLine_string = "[Any Line]";
-		private static readonly string[] AnyLine_stringAlternatives = new string[] { "[A]", "[AL]", "[*L]" };
-
-		private const string             PredefinedCommand_string = "[Predefined Command"; // 'StartsWith', see below.
-		private static readonly string[] PredefinedCommand_stringAlternatives = new string[] { "[Predefined", "[PC", "[P" };
-
-		private const string             SendText_string = "[Send Text]";
-		private static readonly string[] SendText_stringAlternatives = new string[] { "[Text]", "[ST]" };
+		                     // Attention:
+		                     // These strings are used for XML serialization!
+		                     // Not ideal, but required for 'Explicit'!
+		private const string None_string                   = "[None]";
+		private const string AnyLine_string                = "[Any Line]";       // Incl. space!
+		private const string PredefinedCommand_stringStart = "[Predefined Command "; // Any of the commands, ID is parsed separately.
+		private const string SendText_string               = "[Send Text]";
 
 		#endregion
 
@@ -244,18 +236,18 @@ namespace YAT.Model.Types
 			{
 				case AutoTrigger.None:                return (None_string);
 				case AutoTrigger.AnyLine:             return (AnyLine_string);
-				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_string + " 1]");
-				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_string + " 2]");
-				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_string + " 3]");
-				case AutoTrigger.PredefinedCommand4:  return (PredefinedCommand_string + " 4]");
-				case AutoTrigger.PredefinedCommand5:  return (PredefinedCommand_string + " 5]");
-				case AutoTrigger.PredefinedCommand6:  return (PredefinedCommand_string + " 6]");
-				case AutoTrigger.PredefinedCommand7:  return (PredefinedCommand_string + " 7]");
-				case AutoTrigger.PredefinedCommand8:  return (PredefinedCommand_string + " 8]");
-				case AutoTrigger.PredefinedCommand9:  return (PredefinedCommand_string + " 9]");
-				case AutoTrigger.PredefinedCommand10: return (PredefinedCommand_string + " 10]");
-				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
-				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
+				case AutoTrigger.PredefinedCommand1:  return (PredefinedCommand_stringStart + "1]");
+				case AutoTrigger.PredefinedCommand2:  return (PredefinedCommand_stringStart + "2]");
+				case AutoTrigger.PredefinedCommand3:  return (PredefinedCommand_stringStart + "3]");
+				case AutoTrigger.PredefinedCommand4:  return (PredefinedCommand_stringStart + "4]");
+				case AutoTrigger.PredefinedCommand5:  return (PredefinedCommand_stringStart + "5]");
+				case AutoTrigger.PredefinedCommand6:  return (PredefinedCommand_stringStart + "6]");
+				case AutoTrigger.PredefinedCommand7:  return (PredefinedCommand_stringStart + "7]");
+				case AutoTrigger.PredefinedCommand8:  return (PredefinedCommand_stringStart + "8]");
+				case AutoTrigger.PredefinedCommand9:  return (PredefinedCommand_stringStart + "9]");
+				case AutoTrigger.PredefinedCommand10: return (PredefinedCommand_stringStart + "10]");
+				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_stringStart + "11]");
+				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_stringStart + "12]");
 				case AutoTrigger.SendText:            return (SendText_string);
 				case AutoTrigger.Explicit:            return (this.explicitCommandString);
 
@@ -436,22 +428,19 @@ namespace YAT.Model.Types
 				result = AutoTrigger.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
 				result = AutoTrigger.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, AnyLine_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, AnyLine_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, AnyLine_string))
 			{
 				result = AutoTrigger.AnyLine;
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
-			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives)) // StartWith()! Not Equals()!
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringStart)) // StartWith()! Not Equals()!
 			{
-				var match = Regex.Match(s, @"\d+");
+				var match = Regex.Match(s.Substring(PredefinedCommand_stringStart.Length - 1), @"\d+");
 				if (match.Success)
 				{
 					int intValue;
@@ -470,8 +459,7 @@ namespace YAT.Model.Types
 				result = AutoTrigger.PredefinedCommand1;
 				return (false);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (s, SendText_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(s, SendText_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SendText_string))
 			{
 				result = AutoTrigger.SendText;
 				return (true);
