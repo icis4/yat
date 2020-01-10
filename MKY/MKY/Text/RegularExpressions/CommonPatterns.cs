@@ -63,27 +63,27 @@ namespace MKY.Text.RegularExpressions
 		/// <summary>
 		/// Captures dates separated by spaces, e.g 01 01 2000, always including leading zeros.
 		/// </summary>
-		public const string DateWithSpacesAscending = @"(0[1-9]|[12]\d|3[01])\s(0[1-9]|1[012])\s((?:19|20)\d\d)";
+		public const string DateWithSpacesAscending = @"(?:0[1-9]|[12]\d|3[01])\s(?:0[1-9]|1[012])\s(?:19|20)\d\d";
 
 		/// <summary>
 		/// Captures dates separated by spaces, e.g 2000 01 01, always including leading zeros.
 		/// </summary>
-		public const string DateWithSpacesDescending = @"((?:19|20)\d\d)\s(0[1-9]|1[012])\s(0[1-9]|[12]\d|3[01])";
+		public const string DateWithSpacesDescending = @"(?:19|20)\d\d\s(?:0[1-9]|1[012])\s(?:0[1-9]|[12]\d|3[01])";
 
 		/// <summary>
 		/// Captures dates separated by spaces, e.g 2000-01-01, always including leading zeros.
 		/// </summary>
-		public const string DateWithHyphensDescending = @"((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])";
+		public const string DateWithHyphensDescending = @"(?:19|20)\d\d-(?:0[1-9]|1[012])-(?:0[1-9]|[12]\d|3[01])";
 
 		/// <summary>
 		/// Captures times separated by spaces, e.g 12 00 00, always including leading zeros.
 		/// </summary>
-		public const string TimeWithSpaces = @"([01]\d|2[0-3])\s([0-5]\d)\s([0-5]\d)";
+		public const string TimeWithSpaces = @"(?:[01]\d|2[0-3])\s[0-5]\d\s[0-5]\d";
 
 		/// <summary>
 		/// Captures times separated by colons, e.g 12:00:00, always including leading zeros.
 		/// </summary>
-		public const string TimeWithColons = @"([01]\d|2[0-3]):([0-5]\d):([0-5]\d)";
+		public const string TimeWithColons = @"(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d";
 
 		/// <summary>
 		/// Captures '"' quoted strings, allowing escaped '\"'.

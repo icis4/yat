@@ -95,16 +95,17 @@
 			// 
 			// label_UpdateSuspended
 			// 
-			this.label_UpdateSuspended.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label_UpdateSuspended.AutoSize = true;
+			this.label_UpdateSuspended.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_UpdateSuspended.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_UpdateSuspended.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_UpdateSuspended.Location = new System.Drawing.Point(212, 405);
+			this.label_UpdateSuspended.Location = new System.Drawing.Point(212, 400);
 			this.label_UpdateSuspended.Name = "label_UpdateSuspended";
-			this.label_UpdateSuspended.Size = new System.Drawing.Size(444, 13);
+			this.label_UpdateSuspended.Size = new System.Drawing.Size(444, 23);
 			this.label_UpdateSuspended.TabIndex = 3;
 			this.label_UpdateSuspended.Text = "Update is suspended while mouse is on plot (required for mouse interaction, e.g. " +
     "zoom in/out)";
+			this.label_UpdateSuspended.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.label_UpdateSuspended.Visible = false;
 			// 
 			// scottPlot
