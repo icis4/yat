@@ -42,6 +42,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -462,7 +463,22 @@ namespace YAT.View.Forms
 		{
 			if (mdl.Histogram != null)
 			{
-				scottPlot.plt.PlotStep(mdl.Histogram.ValuesLowerLimit.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), color: rxColor, label: "All Captures");
+				// Account for the fact that 'Plot.PlotStep()' requires additional first/last points.
+				// Pretty inefficient, but considered good enough for the moment.
+
+				var xs = mdl.Histogram.ValuesLowerLimit;
+				var xsFramed = new List<double>(xs.Count + 2);
+				xsFramed.Add(xs.First()); // Begin first step.
+				xsFramed.AddRange(xs);
+				xsFramed.Add(xs.Last()); // End last step.
+
+				var ys = mdl.Histogram.Counts;
+				var ysFramed = new List<long>(ys.Count + 2);
+				ysFramed.Add(0); // Begin first step.
+				ysFramed.AddRange(ys);
+				ysFramed.Add(0); // End last step.
+
+				scottPlot.plt.PlotStep(xsFramed.ToArray(), ysFramed.Select(x => (double)x).ToArray(), color: rxColor, label: "All Captures");
 			}
 		}
 

@@ -4599,9 +4599,12 @@ namespace YAT.View.Forms
 			{
 				this.settingsRoot.AutoAction.Trigger = trigger;
 
-				ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
-				ApplicationSettings.RoamingUserSettings.AutoAction.SetChanged(); // Manual change required because underlying collection is modified.
-				ApplicationSettings.SaveRoamingUserSettings();
+				if (trigger.IsExplicit)
+				{
+					ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
+					ApplicationSettings.RoamingUserSettings.AutoAction.SetChanged(); // Manual change required because underlying collection is modified.
+					ApplicationSettings.SaveRoamingUserSettings();
+				}
 			}
 		}
 
@@ -4796,9 +4799,12 @@ namespace YAT.View.Forms
 		{
 			this.settingsRoot.AutoResponse.Trigger = trigger;
 
-			ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
-			ApplicationSettings.RoamingUserSettings.AutoResponse.SetChanged(); // Manual change required because underlying collection is modified.
-			ApplicationSettings.SaveRoamingUserSettings();
+			if (trigger.IsExplicit)
+			{
+				ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
+				ApplicationSettings.RoamingUserSettings.AutoResponse.SetChanged(); // Manual change required because underlying collection is modified.
+				ApplicationSettings.SaveRoamingUserSettings();
+			}
 		}
 
 		/// <summary></summary>
@@ -4901,9 +4907,12 @@ namespace YAT.View.Forms
 		{
 			this.settingsRoot.AutoResponse.Response = response;
 
-			ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.Add(new RecentItem<string>(response));
-			ApplicationSettings.RoamingUserSettings.AutoResponse.SetChanged(); // Manual change required because underlying collection is modified.
-			ApplicationSettings.SaveRoamingUserSettings();
+			if (response.IsExplicit)
+			{
+				ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.Add(new RecentItem<string>(response));
+				ApplicationSettings.RoamingUserSettings.AutoResponse.SetChanged(); // Manual change required because underlying collection is modified.
+				ApplicationSettings.SaveRoamingUserSettings();
+			}
 		}
 
 		/// <summary></summary>
