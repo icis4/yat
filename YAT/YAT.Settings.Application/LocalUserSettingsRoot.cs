@@ -63,6 +63,7 @@ namespace YAT.Settings.Application
 		private MainWindowSettings mainWindow;
 		private Model.Settings.NewTerminalSettings newTerminal;
 		private RecentFileSettings recentFiles;
+		private PlotWindowSettings plotWindow;
 
 		/// <remarks>
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
@@ -77,6 +78,7 @@ namespace YAT.Settings.Application
 			MainWindow    = new MainWindowSettings(MKY.Settings.SettingsType.Explicit);
 			NewTerminal   = new Model.Settings.NewTerminalSettings(MKY.Settings.SettingsType.Explicit);
 			RecentFiles   = new RecentFileSettings(MKY.Settings.SettingsType.Explicit);
+			PlotWindow    = new PlotWindowSettings(MKY.Settings.SettingsType.Explicit);
 
 			ClearChanged();
 		}
@@ -94,6 +96,7 @@ namespace YAT.Settings.Application
 			MainWindow    = new MainWindowSettings(rhs.MainWindow);
 			NewTerminal   = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
 			RecentFiles   = new RecentFileSettings(rhs.RecentFiles);
+			PlotWindow    = new PlotWindowSettings(rhs.PlotWindow);
 
 			ClearChanged();
 		}
@@ -245,6 +248,23 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("PlotWindow")]
+		public virtual PlotWindowSettings PlotWindow
+		{
+			get { return (this.plotWindow); }
+			set
+			{
+				if (this.plotWindow != value)
+				{
+					var oldNode = this.plotWindow;
+					this.plotWindow = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Alternate Elements
@@ -266,6 +286,7 @@ namespace YAT.Settings.Application
 			new AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "SendFiles",           new string[] { "SendFilesPath" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "LogFiles",            new string[] { "LogFilesPath" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MonitorFiles",        new string[] { "MonitorFilesPath" } ),
+			new AlternateXmlElement(new string[] { "#document", "Settings", "MainWindow"  }, "State",               new string[] { "WindowState" } ),
 		/*	new AlternateXmlElement(new string[] { "#document", "Settings", "MainWindow"  }, "AlwaysOnTop",         formerly located in workspace settings */
 			new AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } )
 		};

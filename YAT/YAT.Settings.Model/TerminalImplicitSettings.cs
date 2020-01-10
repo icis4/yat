@@ -38,7 +38,7 @@ namespace YAT.Settings.Model
 		private YAT.Model.Settings.SendTextSettings sendText;
 		private YAT.Model.Settings.SendFileSettings sendFile;
 		private YAT.Model.Settings.PredefinedSettings predefined;
-		private YAT.Application.Settings.WindowSettings window;
+		private Application.Settings.WindowSettings window;
 		private YAT.Model.Settings.LayoutSettings layout;
 
 		/// <summary></summary>
@@ -59,7 +59,7 @@ namespace YAT.Settings.Model
 			SendText   = new YAT.Model.Settings.SendTextSettings(SettingsType);
 			SendFile   = new YAT.Model.Settings.SendFileSettings(SettingsType);
 			Predefined = new YAT.Model.Settings.PredefinedSettings(SettingsType);
-			Window     = new YAT.Application.Settings.WindowSettings(SettingsType);
+			Window     = new Application.Settings.WindowSettings(SettingsType);
 			Layout     = new YAT.Model.Settings.LayoutSettings(SettingsType);
 
 			ClearChanged();
@@ -77,7 +77,7 @@ namespace YAT.Settings.Model
 			SendText   = new YAT.Model.Settings.SendTextSettings(rhs.SendText);
 			SendFile   = new YAT.Model.Settings.SendFileSettings(rhs.SendFile);
 			Predefined = new YAT.Model.Settings.PredefinedSettings(rhs.Predefined);
-			Window     = new YAT.Application.Settings.WindowSettings(rhs.Window);
+			Window     = new Application.Settings.WindowSettings(rhs.Window);
 			Layout     = new YAT.Model.Settings.LayoutSettings(rhs.Layout);
 
 			ClearChanged();
@@ -177,7 +177,7 @@ namespace YAT.Settings.Model
 
 		/// <summary></summary>
 		[XmlElement("Window")]
-		public virtual YAT.Application.Settings.WindowSettings Window
+		public virtual Application.Settings.WindowSettings Window
 		{
 			get { return (this.window); }
 			set

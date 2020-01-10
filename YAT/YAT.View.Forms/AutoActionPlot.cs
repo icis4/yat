@@ -78,6 +78,8 @@ namespace YAT.View.Forms
 		// Fields
 		//==========================================================================================
 
+		private bool isStartingUp = true;
+
 		private readonly int initialAndMinimumUpdateInterval; // = 0;
 		private readonly long lowerSpanTicks; // = 0;
 		private readonly long upperSpanTicks; // = 0;
@@ -135,6 +137,8 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 			}
+
+			ApplyWindowSettingsAccordingToStartupState();
 		}
 
 		#endregion
@@ -143,6 +147,23 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Form Event Handlers
 		//==========================================================================================
+
+		private void AutoActionPlot_Shown(object sender, EventArgs e)
+		{
+			this.isStartingUp = false;
+		}
+
+		private void AutoActionPlot_LocationChanged(object sender, EventArgs e)
+		{
+			if (!this.isStartingUp)
+				SaveWindowSettings(true);
+		}
+
+		private void AutoActionPlot_SizeChanged(object sender, EventArgs e)
+		{
+			if (!this.isStartingUp)
+				SaveWindowSettings(false);
+		}
 
 		private void AutoActionPlot_BackColorChanged(object sender, EventArgs e)
 		{
@@ -239,6 +260,91 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Non-Public Methods
 		//==========================================================================================
+
+		private void ApplyWindowSettingsAccordingToStartupState()
+		{
+			// Attention:
+			// Almost the same code exists in Main.ApplyWindowSettingsAccordingToStartupState().
+			// Changes here likely have to be applied there too.
+
+			if (ApplicationSettings.LocalUserSettingsSuccessfullyLoadedFromFile)
+			{
+				// Do not Suspend/ResumeLayout() when changing the form itself!
+
+				// Window state:
+				WindowState = ApplicationSettings.LocalUserSettings.PlotWindow.State;
+
+				// Start position:
+				var savedStartPosition = ApplicationSettings.LocalUserSettings.PlotWindow.StartPosition;
+				var savedLocation      = ApplicationSettings.LocalUserSettings.PlotWindow.Location; // Note the issue/limitation described
+				var savedSize          = ApplicationSettings.LocalUserSettings.PlotWindow.Size;     // in SaveWindowSettings() below.
+
+				var savedBounds = new Rectangle(savedLocation, savedSize);
+				var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
+				if (isWithinBounds) // Restore saved settings if within bounds:
+				{
+					StartPosition = savedStartPosition;
+					Location      = savedLocation;
+					Size          = savedSize;
+				}
+				else // Let the operating system adjust the position if out of bounds:
+				{
+					StartPosition = FormStartPosition.WindowsDefaultBounds;
+				}
+
+				// Note that check must be done regardless of the window state, since the state may
+				// be changed by the user at any time after the initial layout.
+			}
+		}
+
+		private void SaveWindowSettings(bool setStartPositionToManual)
+		{
+			// Attention:
+			// Almost the same code exists in Main.SaveWindowSettings().
+			// Changes here likely have to be applied there too.
+
+			if (setStartPositionToManual)
+			{
+				ApplicationSettings.LocalUserSettings.PlotWindow.StartPosition = FormStartPosition.Manual;
+				StartPosition = ApplicationSettings.LocalUserSettings.PlotWindow.StartPosition;
+			}
+
+			ApplicationSettings.LocalUserSettings.PlotWindow.State = WindowState;
+
+			if (WindowState == FormWindowState.Normal)
+			{
+				if (StartPosition == FormStartPosition.Manual)
+					ApplicationSettings.LocalUserSettings.PlotWindow.Location = Location;
+
+				ApplicationSettings.LocalUserSettings.PlotWindow.Size = Size;
+
+				// Note the following issue/limitation:
+				// Windows or WinForm seems to consider the shadow around a form to belong to the form,
+				// i.e. a form that is placed at a screen's edge, may tell values outside the screen.
+				//
+				// Example with two screens [2] [1] (where 1 is the main screen, and both screens are 1920 × 1080)
+				// and the main form placed at the upper left corner, spreading across the whole screen. This may
+				// result in the following [LocalUserSettings] values:
+				//
+				//    <Location>
+				//      <X>-1924</X>
+				//      <Y>2</Y>
+				//    </Location>
+				//    <Size>
+				//      <Width>1926</Width>
+				//      <Height>480</Height>
+				//    </Size>
+				//
+				// Location.X and Size.Width are outside the screen's dimensions even though the form is inside!
+				// As a consequence, MKY.Windows.Forms.ScreenEx.IsWithinAnyBounds() will wrongly determine that
+				// the form doesn't fit a screen and ApplyWindowSettingsAccordingToStartup() will fall back to
+				// 'FormStartPosition.WindowsDefaultBounds'.
+				//
+				// Issue/limitation is considered very acceptable, neither bug filed nor added to release notes.
+			}
+
+			ApplicationSettings.SaveLocalUserSettings();
+		}
 
 		/// <summary>
 		/// The update interval is calculated dependent on the time needed to update. Less than ~10%
@@ -463,7 +569,7 @@ namespace YAT.View.Forms
 		{
 			if (mdl.Histogram != null)
 			{
-				scottPlot.plt.PlotBar(mdl.Histogram.ValuesLowerLimit.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
+				scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
 			}
 		}
 

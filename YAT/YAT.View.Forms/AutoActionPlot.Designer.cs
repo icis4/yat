@@ -35,10 +35,10 @@
 			this.checkBox_ShowLegend = new System.Windows.Forms.CheckBox();
 			this.timer_Update = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.button_Deactivate = new System.Windows.Forms.Button();
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
 			this.scottPlot = new ScottPlot.FormsPlot();
 			this.button_FitAxis = new System.Windows.Forms.Button();
-			this.button_Deactivate = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// button_Close
@@ -81,8 +81,21 @@
 			this.timer_Update.Interval = 73;
 			this.timer_Update.Tick += new System.EventHandler(this.timer_Update_Tick);
 			// 
+			// button_Deactivate
+			// 
+			this.button_Deactivate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
+			this.button_Deactivate.Location = new System.Drawing.Point(742, 400);
+			this.button_Deactivate.Name = "button_Deactivate";
+			this.button_Deactivate.Size = new System.Drawing.Size(27, 23);
+			this.button_Deactivate.TabIndex = 5;
+			this.toolTip.SetToolTip(this.button_Deactivate, "Deactivate");
+			this.button_Deactivate.UseVisualStyleBackColor = true;
+			this.button_Deactivate.Click += new System.EventHandler(this.button_Deactivate_Click);
+			// 
 			// label_UpdateSuspended
 			// 
+			this.label_UpdateSuspended.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_UpdateSuspended.AutoSize = true;
 			this.label_UpdateSuspended.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_UpdateSuspended.ForeColor = System.Drawing.SystemColors.GrayText;
@@ -109,6 +122,7 @@
 			// 
 			// button_FitAxis
 			// 
+			this.button_FitAxis.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.button_FitAxis.Location = new System.Drawing.Point(42, 400);
 			this.button_FitAxis.Name = "button_FitAxis";
 			this.button_FitAxis.Size = new System.Drawing.Size(75, 23);
@@ -116,18 +130,6 @@
 			this.button_FitAxis.Text = "&Fit Axis";
 			this.button_FitAxis.UseVisualStyleBackColor = true;
 			this.button_FitAxis.Click += new System.EventHandler(this.button_FitAxis_Click);
-			// 
-			// button_Deactivate
-			// 
-			this.button_Deactivate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
-			this.button_Deactivate.Location = new System.Drawing.Point(742, 400);
-			this.button_Deactivate.Name = "button_Deactivate";
-			this.button_Deactivate.Size = new System.Drawing.Size(27, 23);
-			this.button_Deactivate.TabIndex = 5;
-			this.toolTip.SetToolTip(this.button_Deactivate, "Deactivate");
-			this.button_Deactivate.UseVisualStyleBackColor = true;
-			this.button_Deactivate.Click += new System.EventHandler(this.button_Deactivate_Click);
 			// 
 			// AutoActionPlot
 			// 
@@ -145,7 +147,10 @@
 			this.Name = "AutoActionPlot";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "YAT - [[Terminal] - Plot]";
+			this.Shown += new System.EventHandler(this.AutoActionPlot_Shown);
 			this.BackColorChanged += new System.EventHandler(this.AutoActionPlot_BackColorChanged);
+			this.LocationChanged += new System.EventHandler(this.AutoActionPlot_LocationChanged);
+			this.SizeChanged += new System.EventHandler(this.AutoActionPlot_SizeChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

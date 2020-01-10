@@ -4120,6 +4120,7 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>Property for othogonality with <see cref="IsClosing"/>, <see cref="IsIntegraMdiLayouting"/>,...</remarks>
 		private bool IsStartingUp
 		{
 			get { return (this.isStartingUp); }

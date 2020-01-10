@@ -94,6 +94,7 @@
     <Compile Include="Settings\ExtensionSettings.cs" />
     <Compile Include="Settings\FindSettings.cs" />
     <Compile Include="Settings\GeneralSettings.cs" />
+    <Compile Include="Settings\PlotWindowSettings.cs" />
     <Compile Include="Settings\MainWindowSettings.cs" />
     <Compile Include="Settings\PathSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

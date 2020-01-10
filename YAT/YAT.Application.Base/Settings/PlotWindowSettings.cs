@@ -30,20 +30,20 @@ using System.Xml.Serialization;
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	public class WindowSettings : MKY.Settings.SettingsItem, IEquatable<WindowSettings>
+	public class PlotWindowSettings : WindowSettings, IEquatable<PlotWindowSettings>
 	{
-		private FormWindowState windowState;
-		private Point location;
-		private Size size;
+		private FormStartPosition startPosition;
+
+		private bool alwaysOnTop;
 
 		/// <summary></summary>
-		public WindowSettings()
+		public PlotWindowSettings()
 			: this(MKY.Settings.SettingsType.Explicit)
 		{
 		}
 
 		/// <summary></summary>
-		public WindowSettings(MKY.Settings.SettingsType settingsType)
+		public PlotWindowSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -54,12 +54,12 @@ namespace YAT.Application.Settings
 		/// Fields are assigned via properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public WindowSettings(WindowSettings rhs)
+		public PlotWindowSettings(PlotWindowSettings rhs)
 			: base(rhs)
 		{
-			State    = rhs.State;
-			Location = rhs.Location;
-			Size     = rhs.Size;
+			StartPosition = rhs.StartPosition;
+
+			AlwaysOnTop   = rhs.AlwaysOnTop;
 
 			ClearChanged();
 		}
@@ -71,10 +71,12 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			State    = FormWindowState.Maximized;
-			Location = new Point(0, 0);
-			Size     = new Size(900, 675); // Relates to 'Size' of the 'YAT.View.Main' form as
-		}                                  // well as the 'YAT.Model.Settings.MainWindowSettings'.
+			StartPosition = FormStartPosition.WindowsDefaultLocation;
+
+			Size          = new Size(900, 480); // Override to designed 'Size' of the 'View.AutoActionPlot' form.
+
+			AlwaysOnTop   = false;
+		}
 
 		#region Properties
 		//==========================================================================================
@@ -82,48 +84,31 @@ namespace YAT.Application.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("State")]
-		public FormWindowState State
+		[XmlElement("StartPosition")]
+		public FormStartPosition StartPosition
 		{
-			get { return (this.windowState); }
+			get { return (this.startPosition); }
 			set
 			{
-				if (this.windowState != value)
+				if (this.startPosition != value)
 				{
-					this.windowState = value;
+					this.startPosition = value;
 					SetMyChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Location")]
-		public Point Location
+		[XmlElement("AlwaysOnTop")]
+		public bool AlwaysOnTop
 		{
-			get { return (this.location); }
+			get { return (this.alwaysOnTop); }
 			set
 			{
-				if (this.location != value)
+				if (this.alwaysOnTop != value)
 				{
-					this.location = value;
-					if (this.windowState == FormWindowState.Normal)
-						SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("Size")]
-		public Size Size
-		{
-			get { return (this.size); }
-			set
-			{
-				if (this.size != value)
-				{
-					this.size = value;
-					if (this.windowState == FormWindowState.Normal)
-						SetMyChanged();
+					this.alwaysOnTop = value;
+					SetMyChanged();
 				}
 			}
 		}
@@ -146,9 +131,11 @@ namespace YAT.Application.Settings
 		{
 			unchecked
 			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+				int hashCode = base.GetHashCode(); // Get hash code of base including all settings nodes.
 
-				hashCode = (hashCode * 397) ^ State.GetHashCode();
+				hashCode = (hashCode * 397) ^ StartPosition.GetHashCode();
+
+				hashCode = (hashCode * 397) ^ AlwaysOnTop  .GetHashCode();
 
 				return (hashCode);
 			}
@@ -159,7 +146,7 @@ namespace YAT.Application.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as WindowSettings));
+			return (Equals(obj as PlotWindowSettings));
 		}
 
 		/// <summary>
@@ -169,38 +156,26 @@ namespace YAT.Application.Settings
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(WindowSettings other)
+		public bool Equals(PlotWindowSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
 			if (GetType() != other.GetType()) return (false);
 
-			if (this.windowState == FormWindowState.Normal)
-			{   // Normal
-				return
-				(
-					base.Equals(other) && // Compare all settings nodes.
+			return
+			(
+				base.Equals(other) && // Compare base including all settings nodes.
 
-					State   .Equals(other.State)    &&
-					Location.Equals(other.Location) &&
-					Size    .Equals(other.Size)
-				);
-			}
-			else
-			{   // Maximized or Minimized
-				return
-				(
-					base.Equals(other) && // Compare all settings nodes.
+				StartPosition.Equals(other.StartPosition) &&
 
-					State.Equals(other.State)
-				);
-			}
+				AlwaysOnTop  .Equals(other.AlwaysOnTop)
+			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(WindowSettings lhs, WindowSettings rhs)
+		public static bool operator ==(PlotWindowSettings lhs, PlotWindowSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -213,7 +188,7 @@ namespace YAT.Application.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(WindowSettings lhs, WindowSettings rhs)
+		public static bool operator !=(PlotWindowSettings lhs, PlotWindowSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

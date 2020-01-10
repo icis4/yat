@@ -154,10 +154,9 @@ namespace YAT.View.Forms
 		private bool findPreviousIsFeasible; // = false
 
 		// Auto:
-		private bool autoActionTriggerIsInEdit;    // = false;
-	////private bool autoActionActionIsInEdit;     // = false; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
-		private bool autoResponseTriggerIsInEdit;  // = false;
-		private bool autoResponseResponseIsInEdit; // = false;
+		private bool autoActionTriggerIsInEdit;   // = false;
+	////private bool autoActionActionIsInEdit;    // = false; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+		private bool autoResponseTriggerIsInEdit; // = false;
 
 	#if (WITH_SCRIPTING)
 		// Scripting:
@@ -207,7 +206,7 @@ namespace YAT.View.Forms
 			// Link and attach to user settings:
 			AttachUserSettingsEventHandlers();
 
-			ApplyWindowSettingsAccordingToStartup();
+			ApplyWindowSettingsAccordingToStartupState();
 
 			DebugMessage("...successfully created.");
 		}
@@ -219,6 +218,7 @@ namespace YAT.View.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <remarks>Property for othogonality with <see cref="IsClosing"/>.</remarks>
 		private bool IsStartingUp
 		{
 			get { return (this.isStartingUp); }
@@ -434,7 +434,7 @@ namespace YAT.View.Forms
 		private void Main_SizeChanged(object sender, EventArgs e)
 		{
 			if (!IsStartingUp)
-				SaveWindowSettings();
+				SaveWindowSettings(false);
 		}
 
 		private void Main_Resize(object sender, EventArgs e)
@@ -2585,16 +2585,6 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripComboBox_MainTool_AutoResponse_Response_Enter(object sender, EventArgs e)
-		{
-			this.autoResponseResponseIsInEdit = true;
-		}
-
-		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, EventArgs e)
-		{
-			this.autoResponseResponseIsInEdit = false;
-		}
-
 		/// <remarks>
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
@@ -2992,58 +2982,55 @@ namespace YAT.View.Forms
 		// Window
 		//==========================================================================================
 
-		private void ApplyWindowSettingsAccordingToStartup()
+		private void ApplyWindowSettingsAccordingToStartupState()
 		{
+			// Attention:
+			// Almost the same code exists in AutoActionPlot.ApplyWindowSettingsAccordingToStartupState().
+			// Changes here likely have to be applied there too.
+
 			if (ApplicationSettings.LocalUserSettingsSuccessfullyLoadedFromFile)
 			{
-				SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
-				try
+				// Do not Suspend/ResumeLayout() when changing the form itself!
+
+				// Window state:
+				WindowState = ApplicationSettings.LocalUserSettings.MainWindow.State;
+
+				// Start position:
+				var savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
+				var savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location; // Note the issue/limitation described
+				var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;     // in SaveWindowSettings() below.
+
+				var savedBounds = new Rectangle(savedLocation, savedSize);
+				var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
+				if (isWithinBounds) // Restore saved settings if within bounds:
 				{
-					// Window state:
-					WindowState = ApplicationSettings.LocalUserSettings.MainWindow.WindowState;
-
-					// Start position:
-					var savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
-					var savedLocation      = ApplicationSettings.LocalUserSettings.MainWindow.Location; // Note the issue/limitation described
-					var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;     // in SaveWindowSettings() below.
-
-					var savedBounds = new Rectangle(savedLocation, savedSize);
-					var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
-					if (isWithinBounds) // Restore saved settings if within bounds:
-					{
-						StartPosition = savedStartPosition;
-						Location      = savedLocation;
-						Size          = savedSize;
-					}
-					else // Let the operating system adjust the position if out of bounds:
-					{
-						StartPosition = FormStartPosition.WindowsDefaultBounds;
-					}
-
-					// Note that check must be done regardless of the window state, since the state may
-					// be changed by the user at any time after the initial layout.
+					StartPosition = savedStartPosition;
+					Location      = savedLocation;
+					Size          = savedSize;
 				}
-				finally
+				else // Let the operating system adjust the position if out of bounds:
 				{
-					ResumeLayout(false);
+					StartPosition = FormStartPosition.WindowsDefaultBounds;
 				}
+
+				// Note that check must be done regardless of the window state, since the state may
+				// be changed by the user at any time after the initial layout.
 			}
-		}
-
-		private void SaveWindowSettings()
-		{
-			SaveWindowSettings(false);
 		}
 
 		private void SaveWindowSettings(bool setStartPositionToManual)
 		{
+			// Attention:
+			// Almost the same code exists in AutoActionPlot.SaveWindowSettings().
+			// Changes here likely have to be applied there too.
+
 			if (setStartPositionToManual)
 			{
 				ApplicationSettings.LocalUserSettings.MainWindow.StartPosition = FormStartPosition.Manual;
 				StartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
 			}
 
-			ApplicationSettings.LocalUserSettings.MainWindow.WindowState = WindowState;
+			ApplicationSettings.LocalUserSettings.MainWindow.State = WindowState;
 
 			if (WindowState == FormWindowState.Normal)
 			{
