@@ -112,12 +112,12 @@ namespace YAT.Model.Types
 		{
 			var l = new List<string>(8); // Preset the required capacity to improve memory management.
 
-			l.Add(CommonPatterns.IntegralNumber);
-			l.Add(CommonPatterns.FloatingPointNormal);
-			l.Add(CommonPatterns.FloatingPointScientific);
-			l.Add(CommonPatterns.FloatingPointAny);
-			l.Add(CommonPatterns.TimeWithColons);
-			l.Add(CommonPatterns.DateWithHyphensDescending);
+			l.Add("(" + CommonPatterns.IntegralNumber            + ")");
+			l.Add("(" + CommonPatterns.FloatingPointNormal       + ")");
+			l.Add("(" + CommonPatterns.FloatingPointScientific   + ")");
+			l.Add("(" + CommonPatterns.FloatingPointAny          + ")");
+			l.Add("(" + CommonPatterns.TimeWithColons            + ")");
+			l.Add("(" + CommonPatterns.DateWithHyphensDescending + ")");
 			l.Add(@"\A([A-Z]{1})\Z");
 			l.Add(@"\A([A-Za-z]{2,4})\Z");
 
