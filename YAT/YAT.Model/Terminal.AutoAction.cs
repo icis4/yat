@@ -306,7 +306,7 @@ namespace YAT.Model
 
 								// Signal the trigger(s):
 								for (int i = 0; i < triggerCount; i++)
-									triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(dl.TimeStamp, dl.Text, triggerMatches, triggers[i].Item4));
+									triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(dl.TimeStamp, dl.Text, triggerMatches, dataStatus));
 							}
 						}
 						else

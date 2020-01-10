@@ -35,9 +35,9 @@ namespace YAT.Application.Settings
 	public class AutoTriggerSettings : MKY.Settings.SettingsItem, IEquatable<AutoTriggerSettings>
 	{
 		/// <remarks>
-		/// Using 12 same as 12 commands.
+		/// Using 8 same as <see cref="RecentFileSettings.MaxFilePaths"/>.
 		/// </remarks>
-		protected const int MaxRecents = 12;
+		protected const int MaxRecents = 8;
 
 		private RecentItemCollection<string> recentExplicitTriggers;
 
