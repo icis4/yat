@@ -67,7 +67,7 @@ namespace YAT.Domain
 				int hashCode;
 
 				hashCode =                    Enabled.GetHashCode();
-				hashCode = (hashCode * 397) ^ Length .GetHashCode();
+				hashCode = (hashCode * 397) ^ Length;
 
 				return (hashCode);
 			}
