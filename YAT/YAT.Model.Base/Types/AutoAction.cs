@@ -50,6 +50,8 @@ namespace YAT.Model.Types
 		Beep,
 		ShowMessageBox,
 
+		PlotByteCountRate,
+		PlotLineCountRate,
 		LineChartIndex,
 		LineChartTime,
 		LineChartTimeStamp,
@@ -105,6 +107,12 @@ namespace YAT.Model.Types
 
 		private const string             ShowMessageBox_string = "[Show Message Box]";
 		private static readonly string[] ShowMessageBox_stringAlternatives = new string[] { "[M]" };
+
+		private const string             PlotByteCountRate_string = "[Plot Byte Count/Rate]";
+		private static readonly string[] PlotByteCountRate_stringAlternatives = new string[] { "[PB]" };
+
+		private const string             PlotLineCountRate_string = "[Plot Line Count/Rate]";
+		private static readonly string[] PlotLineCountRate_stringAlternatives = new string[] { "[PL]" };
 
 		private const string             LineChartIndex_string = "[Line Chart]";
 		private static readonly string[] LineChartIndex_stringAlternatives = new string[] { "[LC]" };
@@ -204,6 +212,8 @@ namespace YAT.Model.Types
 				case AutoAction.Beep:                            return (Beep_string);
 				case AutoAction.ShowMessageBox:                  return (ShowMessageBox_string);
 
+				case AutoAction.PlotByteCountRate:               return (PlotByteCountRate_string);
+				case AutoAction.PlotLineCountRate:               return (PlotLineCountRate_string);
 				case AutoAction.LineChartIndex:                  return (LineChartIndex_string);
 				case AutoAction.LineChartTime:                   return (LineChartTime_string);
 				case AutoAction.LineChartTimeStamp:              return (LineChartTimeStamp_string);
@@ -290,7 +300,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(21); // Preset the required capacity to improve memory management.
+			var a = new List<AutoActionEx>(23); // Preset the required capacity to improve memory management.
 
 			a.Add(new AutoActionEx(AutoAction.None));
 
@@ -301,6 +311,8 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.Beep));
 			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
 
+			a.Add(new AutoActionEx(AutoAction.PlotByteCountRate));
+			a.Add(new AutoActionEx(AutoAction.PlotLineCountRate));
 			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
 			a.Add(new AutoActionEx(AutoAction.LineChartTime));
 			a.Add(new AutoActionEx(AutoAction.LineChartTimeStamp));
@@ -405,6 +417,18 @@ namespace YAT.Model.Types
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ShowMessageBox_stringAlternatives))
 			{
 				result = AutoAction.ShowMessageBox;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, PlotByteCountRate_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, PlotByteCountRate_stringAlternatives))
+			{
+				result = AutoAction.PlotByteCountRate;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, PlotLineCountRate_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, PlotLineCountRate_stringAlternatives))
+			{
+				result = AutoAction.PlotLineCountRate;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, LineChartIndex_string) ||

@@ -349,8 +349,8 @@ namespace YAT.View.Forms
 				{
 					button_FitAxis.Enabled = false; // AxisAuto() will be called further below.
 
-					var firstColor = this.model.SettingsRoot.Format.RxDataFormat.Color;
-					var isFirst = true;
+					var txColor = this.model.SettingsRoot.Format.TxDataFormat.Color;
+					var rxColor = this.model.SettingsRoot.Format.RxDataFormat.Color;
 
 					scottPlot.plt.Clear();
 
@@ -361,94 +361,16 @@ namespace YAT.View.Forms
 
 					switch (mdl.Action)
 					{
-						case AutoAction.LineChartIndex: {
-							if (mdl.YValues != null) {
-								foreach (var kvp in mdl.YValues) {
-									if (isFirst) {
-										isFirst = false;
-										scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), color: firstColor, label: kvp.Item1);
-									}
-									else {
-										scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
-									}
-								}
-							}
-							break;
-						}
+						case AutoAction.PlotByteCountRate:  PlotCountRate(mdl, txColor, rxColor       ); break;
+						case AutoAction.PlotLineCountRate:  PlotCountRate(mdl, txColor, rxColor       ); break;
+						case AutoAction.LineChartIndex:     PlotSignal(   mdl,          rxColor       ); break;
+						case AutoAction.LineChartTime:      PlotScatter(  mdl,          rxColor, true ); break;
+						case AutoAction.LineChartTimeStamp: PlotScatter(  mdl,          rxColor, true ); break;
+						case AutoAction.ScatterPlotXY:      PlotScatter(  mdl,          rxColor, false); break;
+						case AutoAction.ScatterPlotTime:    PlotScatter(  mdl,          rxColor, true ); break;
+						case AutoAction.Histogram:          PlotHistogram(mdl,          rxColor       ); break;
 
-						case AutoAction.LineChartTime: {
-							scottPlot.plt.Ticks(dateTimeX: true);
-							if ((mdl.XValues != null) && (mdl.YValues != null)) {
-								foreach (var kvp in mdl.YValues) {
-									if (isFirst) {
-										isFirst = false;
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, label: kvp.Item1);
-									}
-									else {
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
-									}
-								}
-							}
-							break;
-						}
-
-						case AutoAction.LineChartTimeStamp: {
-							scottPlot.plt.Ticks(dateTimeX: true);
-							if ((mdl.XValues != null) && (mdl.YValues != null)) {
-								foreach (var kvp in mdl.YValues) {
-									if (isFirst) {
-										isFirst = false;
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, label: kvp.Item1);
-									}
-									else {
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
-									}
-								}
-							}
-							break;
-						}
-
-						case AutoAction.ScatterPlotXY: {
-							if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0)) {
-								foreach (var kvp in mdl.YValues) {
-									if (isFirst) {
-										isFirst = false;
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, lineWidth: 0, label: kvp.Item1);
-									}
-									else {
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: 0, label: kvp.Item1);
-									}
-								}
-							}
-							break;
-						}
-
-						case AutoAction.ScatterPlotTime: {
-							scottPlot.plt.Ticks(dateTimeX: true);
-							if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0)) {
-								foreach (var kvp in mdl.YValues) {
-									if (isFirst) {
-										isFirst = false;
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, lineWidth: 0, label: kvp.Item1);
-									}
-									else {
-										scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: 0, label: kvp.Item1);
-									}
-								}
-							}
-							break;
-						}
-
-						case AutoAction.Histogram: {
-							if (mdl.Histogram != null) {
-								scottPlot.plt.PlotStep(mdl.Histogram.ValuesLowerLimit.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), color: firstColor, label: "All Captures");
-							}
-							break;
-						}
-
-						default: {
-							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + mdl.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + mdl.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					scottPlot.plt.AxisAuto();
@@ -468,6 +390,79 @@ namespace YAT.View.Forms
 				{
 					return (false);
 				}
+			}
+		}
+
+		private void PlotCountRate(Model.AutoActionPlotModel mdl, Color txColor, Color rxColor)
+		{
+			scottPlot.plt.Ticks(dateTimeX: true);
+
+			if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0))
+			{
+				for (int i = 0; i < mdl.YValues.Count; i++)
+				{
+					switch (i)
+					{
+						case 0: /* TxCount */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: txColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
+						case 1: /* TxRate  */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: txColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
+						case 2: /* RxCount */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: rxColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
+						case 3: /* RxRate  */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: rxColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
+
+						default:  throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+		}
+
+
+		private void PlotSignal(Model.AutoActionPlotModel mdl, Color rxColor)
+		{
+			if ((mdl.YValues != null) && (mdl.YValues.Count > 0))
+			{
+				var isFirst = true;
+				foreach (var kvp in mdl.YValues)
+				{
+					if (isFirst)
+					{
+						isFirst = false;
+						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), color: rxColor, label: kvp.Item1);
+					}
+					else
+					{
+						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
+					}
+				}
+			}
+		}
+
+		private void PlotScatter(Model.AutoActionPlotModel mdl, Color rxColor, bool dateTimeX)
+		{
+			if (dateTimeX)
+				scottPlot.plt.Ticks(dateTimeX: true);
+
+			if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0))
+			{
+				var isFirst = true;
+				foreach (var kvp in mdl.YValues)
+				{
+					if (isFirst)
+					{
+						isFirst = false;
+						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: rxColor, lineWidth: 0, label: kvp.Item1);
+					}
+					else
+					{
+						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: 0, label: kvp.Item1);
+					}
+				}
+			}
+		}
+
+		private void PlotHistogram(Model.AutoActionPlotModel mdl, Color rxColor)
+		{
+			if (mdl.Histogram != null)
+			{
+				scottPlot.plt.PlotStep(mdl.Histogram.ValuesLowerLimit.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), color: rxColor, label: "All Captures");
 			}
 		}
 
@@ -491,6 +486,8 @@ namespace YAT.View.Forms
 						UpdateHoverOnSignal(cursorPos);
 						break;
 
+					case AutoAction.PlotByteCountRate:
+					case AutoAction.PlotLineCountRate:
 					case AutoAction.LineChartTime:
 					case AutoAction.LineChartTimeStamp:
 					case AutoAction.ScatterPlotXY:

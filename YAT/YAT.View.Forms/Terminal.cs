@@ -1662,7 +1662,7 @@ namespace YAT.View.Forms
 			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
 			// manually be triggered here:
 
-			SetDataCountAndRateStatus();
+			SetDataStatus();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowRadix_Click(object sender, EventArgs e)
@@ -2023,7 +2023,7 @@ namespace YAT.View.Forms
 			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
 			// manually be triggered here:
 
-			SetDataCountAndRateStatus();
+			SetDataStatus();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowRadix_Click(object sender, EventArgs e)
@@ -6514,13 +6514,11 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				int txByteRate, txLineRate, rxByteRate, rxLineRate = 0;
+				var status = this.terminal.DataStatus;
 
-				this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
-
-				monitor_Tx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
-				monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
-				monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+				monitor_Tx   .SetDataRateStatusOnly(status.Rates);
+				monitor_Bidir.SetDataRateStatusOnly(status.Rates);
+				monitor_Rx   .SetDataRateStatusOnly(status.Rates);
 			}
 		}
 
@@ -6583,50 +6581,38 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetDataCountAndRateStatus()
+		private void SetDataStatus()
 		{
-			SetDataCountAndRateStatusSent();
-			SetDataCountAndRateStatusReceived();
+			SetDataStatusSent();
+			SetDataStatusReceived();
 		}
 
 		/// <remarks>
 		/// Named 'Sent' to emphasize relation to 'Tx' as well as 'Bidir' monitor.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetDataCountAndRateStatusSent()
+		private void SetDataStatusSent()
 		{
 			if (!TerminalIsAvailable)
 				return; // Ensure not to handle events during closing anymore.
 
-			int txByte, txLine, rxByte, rxLine = 0;
-
-			this.terminal.GetDataCount(out txByte, out txLine, out rxByte, out rxLine);
-			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)    { monitor_Tx   .SetDataCountStatus(txByte, txLine, rxByte, rxLine); }
-			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { monitor_Bidir.SetDataCountStatus(txByte, txLine, rxByte, rxLine); }
-
-			this.terminal.GetDataRate(out txByte, out txLine, out rxByte, out rxLine);
-			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)    { monitor_Tx.   SetDataRateStatus(txByte, txLine, rxByte, rxLine); }
-			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { monitor_Bidir.SetDataRateStatus(txByte, txLine, rxByte, rxLine); }
+			var status = this.terminal.DataStatus;
+			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)    { monitor_Tx   .SetDataStatus(status); }
+			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { monitor_Bidir.SetDataStatus(status); }
 		}
 
 		/// <remarks>
 		/// Named 'Received' to emphasize relation to 'Rx' as well as 'Bidir' monitor.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
-		private void SetDataCountAndRateStatusReceived()
+		private void SetDataStatusReceived()
 		{
 			if (!TerminalIsAvailable)
 				return; // Ensure not to handle events during closing anymore.
 
-			int txByte, txLine, rxByte, rxLine = 0;
-
-			this.terminal.GetDataCount(out txByte, out txLine, out rxByte, out rxLine);
-			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { monitor_Bidir.SetDataCountStatus(txByte, txLine, rxByte, rxLine); }
-			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)    { monitor_Rx.   SetDataCountStatus(txByte, txLine, rxByte, rxLine); }
-
-			this.terminal.GetDataRate(out txByte, out txLine, out rxByte, out rxLine);
-			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { monitor_Bidir.SetDataRateStatus(txByte, txLine, rxByte, rxLine); }
-			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)    { monitor_Rx.   SetDataRateStatus(txByte, txLine, rxByte, rxLine); }
+			var status = this.terminal.DataStatus;
+			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { monitor_Bidir.SetDataStatus(status); }
+			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)    { monitor_Rx.   SetDataStatus(status); }
 		}
 
 		/// <summary>
@@ -6669,7 +6655,7 @@ namespace YAT.View.Forms
 					monitor_Tx.AddElements(e.Elements);
 			}
 
-			SetDataCountAndRateStatusSent();
+			SetDataStatusSent();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6701,7 +6687,7 @@ namespace YAT.View.Forms
 					monitor_Rx.AddElements(e.Elements);
 			}
 
-			SetDataCountAndRateStatusReceived();
+			SetDataStatusReceived();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6715,7 +6701,7 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				monitor_Tx.ReplaceCurrentLine(e.Elements);
 
-			SetDataCountAndRateStatusSent();
+			SetDataStatusSent();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6741,7 +6727,7 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 				monitor_Rx.ReplaceCurrentLine(e.Elements);
 
-			SetDataCountAndRateStatusReceived();
+			SetDataStatusReceived();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6755,7 +6741,7 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				monitor_Tx.ClearCurrentLine();
 
-			SetDataCountAndRateStatusSent();
+			SetDataStatusSent();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6781,7 +6767,7 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 				monitor_Rx.ClearCurrentLine();
 
-			SetDataCountAndRateStatusReceived();
+			SetDataStatusReceived();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6798,7 +6784,7 @@ namespace YAT.View.Forms
 					monitor_Tx.AddLines(e.Lines);
 			}
 
-			SetDataCountAndRateStatusSent();
+			SetDataStatusSent();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -6830,7 +6816,7 @@ namespace YAT.View.Forms
 					monitor_Rx.AddLines(e.Lines);
 			}
 
-			SetDataCountAndRateStatusReceived();
+			SetDataStatusReceived();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]

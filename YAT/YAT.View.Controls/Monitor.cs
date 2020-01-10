@@ -447,82 +447,20 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Action")]
-		[Description("The Tx byte count.")]
-		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
-		public virtual int TxByteCount
+		[Description("The byte/line counts.")]
+		public virtual Model.BytesLinesTuple Counts
 		{
-			get { return (this.dataStatusHelper.TxByteCount); }
-			set { this.dataStatusHelper.TxByteCount = value;  }
+			get { return (this.dataStatusHelper.Counts); }
+			set { this.dataStatusHelper.Counts = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Action")]
-		[Description("The Tx line count.")]
-		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
-		public virtual int TxLineCount
+		[Description("The byte/line rates.")]
+		public virtual Model.BytesLinesTuple Rates
 		{
-			get { return (this.dataStatusHelper.TxLineCount); }
-			set { this.dataStatusHelper.TxLineCount = value;  }
-		}
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("The Rx byte count.")]
-		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
-		public virtual int RxByteCount
-		{
-			get { return (this.dataStatusHelper.RxByteCount); }
-			set { this.dataStatusHelper.RxByteCount = value;  }
-		}
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("The Rx line count.")]
-		[DefaultValue(MonitorDataStatusHelper.CountDefault)]
-		public virtual int RxLineCount
-		{
-			get { return (this.dataStatusHelper.RxLineCount); }
-			set { this.dataStatusHelper.RxLineCount = value;  }
-		}
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("The Tx byte rate.")]
-		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
-		public virtual int TxByteRate
-		{
-			get { return (this.dataStatusHelper.TxByteRate); }
-			set { this.dataStatusHelper.TxByteRate = value;  }
-		}
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("The Tx line rate.")]
-		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
-		public virtual int TxLineRate
-		{
-			get { return (this.dataStatusHelper.TxLineRate); }
-			set { this.dataStatusHelper.TxLineRate = value;  }
-		}
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("The Rx byte rate.")]
-		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
-		public virtual int RxByteRate
-		{
-			get { return (this.dataStatusHelper.RxByteRate); }
-			set { this.dataStatusHelper.RxByteRate = value;  }
-		}
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("The Rx line rate.")]
-		[DefaultValue(MonitorDataStatusHelper.RateDefault)]
-		public virtual int RxLineRate
-		{
-			get { return (this.dataStatusHelper.RxLineRate); }
-			set { this.dataStatusHelper.RxLineRate = value;  }
+			get { return (this.dataStatusHelper.Rates); }
+			set { this.dataStatusHelper.Rates = value;  }
 		}
 
 		/// <remarks>
@@ -1060,23 +998,21 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		public virtual void SetDataCountStatus(int txByteCount, int txLineCount, int rxByteCount, int rxLineCount)
+		public virtual void SetDataStatus(Model.CountsRatesTuple status)
 		{
-			if ((txLineCount <= 0) && (rxLineCount <= 0))
+			if ((status.Counts.TxLines <= 0) && (status.Counts.RxLines <= 0))
 			{
 				this.lineNumberOffset = 0;
 				fastListBox_LineNumbers.Invalidate();
 			}
 
-			this.dataStatusHelper.SetCount(txByteCount, txLineCount, rxByteCount, rxLineCount);
+			this.dataStatusHelper.SetCountsAndRates(status);
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		public virtual void SetDataRateStatus(int txByteRate, int txLineRate, int rxByteRate, int rxLineRate)
+		/// <remarks>Separate for performance optiomization.</remarks>
+		public virtual void SetDataRateStatusOnly(Model.BytesLinesTuple rates)
 		{
-			this.dataStatusHelper.SetRate(txByteRate, txLineRate, rxByteRate, rxLineRate);
+			this.dataStatusHelper.SetRates(rates);
 		}
 
 		/// <summary></summary>
