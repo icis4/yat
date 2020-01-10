@@ -30,12 +30,10 @@ using System.Xml.Serialization;
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	public class MainWindowSettings : MKY.Settings.SettingsItem, IEquatable<MainWindowSettings>
+	public class MainWindowSettings : WindowSettings, IEquatable<MainWindowSettings>
 	{
 		private FormStartPosition startPosition;
-		private FormWindowState windowState;
-		private Point location;
-		private Size size;
+
 		private bool alwaysOnTop;
 
 		private bool showTerminalInfo;
@@ -63,11 +61,9 @@ namespace YAT.Application.Settings
 		public MainWindowSettings(MainWindowSettings rhs)
 			: base(rhs)
 		{
-			StartPosition = rhs.StartPosition;
-			WindowState   = rhs.WindowState;
-			Location      = rhs.Location;
-			Size          = rhs.Size;
-			AlwaysOnTop   = rhs.AlwaysOnTop;
+			StartPosition    = rhs.StartPosition;
+
+			AlwaysOnTop      = rhs.AlwaysOnTop;
 
 			ShowTerminalInfo = rhs.ShowTerminalInfo;
 			ShowTime         = rhs.ShowTime;
@@ -83,11 +79,11 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			StartPosition = FormStartPosition.WindowsDefaultLocation;
-			WindowState   = FormWindowState.Normal;
-			Location      = new Point(0, 0);
-			Size          = new Size(912, 684); // Equals designed 'Size' of the 'View.Main' form.
-			AlwaysOnTop   = false;
+			StartPosition    = FormStartPosition.WindowsDefaultLocation;
+
+			Size             = new Size(912, 684); // Override to designed 'Size' of the 'View.Main' form.
+
+			AlwaysOnTop      = false;
 
 			ShowTerminalInfo = false;
 			ShowTime         = false;
@@ -109,51 +105,6 @@ namespace YAT.Application.Settings
 				if (this.startPosition != value)
 				{
 					this.startPosition = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("WindowState")]
-		public FormWindowState WindowState
-		{
-			get { return (this.windowState); }
-			set
-			{
-				if (this.windowState != value)
-				{
-					this.windowState = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("Location")]
-		public Point Location
-		{
-			get { return (this.location); }
-			set
-			{
-				if (this.location != value)
-				{
-					this.location = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("Size")]
-		public Size Size
-		{
-			get { return (this.size); }
-			set
-			{
-				if (this.size != value)
-				{
-					this.size = value;
 					SetMyChanged();
 				}
 			}
@@ -239,13 +190,11 @@ namespace YAT.Application.Settings
 		{
 			unchecked
 			{
-				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+				int hashCode = base.GetHashCode(); // Get hash code of base including all settings nodes.
 
-				hashCode = (hashCode * 397) ^ StartPosition.GetHashCode();
-				hashCode = (hashCode * 397) ^ WindowState  .GetHashCode();
-				hashCode = (hashCode * 397) ^ Location     .GetHashCode();
-				hashCode = (hashCode * 397) ^ Size         .GetHashCode();
-				hashCode = (hashCode * 397) ^ AlwaysOnTop  .GetHashCode();
+				hashCode = (hashCode * 397) ^ StartPosition   .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ AlwaysOnTop     .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
 				hashCode = (hashCode * 397) ^ ShowTime        .GetHashCode();
@@ -278,13 +227,11 @@ namespace YAT.Application.Settings
 
 			return
 			(
-				base.Equals(other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare base including all settings nodes.
 
-				StartPosition.Equals(other.StartPosition) &&
-				WindowState  .Equals(other.WindowState)   &&
-				Location     .Equals(other.Location)      &&
-				Size         .Equals(other.Size)          &&
-				AlwaysOnTop  .Equals(other.AlwaysOnTop)   &&
+				StartPosition   .Equals(other.StartPosition)    &&
+
+				AlwaysOnTop     .Equals(other.AlwaysOnTop)      &&
 
 				ShowTerminalInfo.Equals(other.ShowTerminalInfo) &&
 				ShowTime        .Equals(other.ShowTime)         &&

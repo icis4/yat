@@ -1569,8 +1569,6 @@ namespace YAT.View.Forms
     "ll-in any command text.";
 			this.toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
 			this.toolStripComboBox_MainTool_AutoResponse_Response.DropDown += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_DropDown);
-			this.toolStripComboBox_MainTool_AutoResponse_Response.Enter += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_Enter);
-			this.toolStripComboBox_MainTool_AutoResponse_Response.Leave += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_Leave);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_KeyDown);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.KeyUp += new System.Windows.Forms.KeyEventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_KeyUp);
