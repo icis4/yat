@@ -52,6 +52,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Security.Permissions;
 using System.Reflection;
 using System.Text;
@@ -1219,6 +1220,7 @@ namespace YAT.View.Forms
 						triggerEnableRegex      = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.EnableRegex;
 
 						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoActionTriggerItems());
+						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
 						triggerItems            = tis.ToArray();
 						trigger                 = activeTerminal.SettingsRoot.AutoAction.Trigger;
@@ -1228,6 +1230,7 @@ namespace YAT.View.Forms
 						triggerRegexIsSupported = (trigger.RegexIsSupported || this.autoActionTriggerIsInEdit); // Allow changing while editing a not yet validated trigger!
 
 					////var ais = new List<AutoActionEx>(activeTerminal.SettingsRoot.GetValidAutoActionItems()); is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+					////ais.AddRange(AutoActionEx.CommonActions.Select(x => new AutoActionEx(x)).ToArray());
 					////ais.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitActions.ConvertAll(new Converter<RecentItem<string>, AutoActionEx>((x) => { return (x.Item); })));
 						actionItems             = activeTerminal.SettingsRoot.GetValidAutoActionItems();
 						action                  = activeTerminal.SettingsRoot.AutoAction.Action;
@@ -1356,6 +1359,7 @@ namespace YAT.View.Forms
 						responseEnableReplace      = activeTerminal.SettingsRoot.AutoResponse.ResponseOptions.EnableReplace;
 
 						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems());
+						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
 						triggerItems               = tis.ToArray();
 						trigger                    = activeTerminal.SettingsRoot.AutoResponse.Trigger;
@@ -1365,6 +1369,7 @@ namespace YAT.View.Forms
 						triggerRegexIsSupported    = (trigger.RegexIsSupported || this.autoResponseTriggerIsInEdit); // Allow changing while editing a not yet validated trigger!
 
 						var ris = new List<AutoResponseEx>(activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath)));
+						ris.AddRange(AutoResponseEx.CommonRegexReplacementPatterns.Select(x => new AutoResponseEx(x)).ToArray());
 						ris.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.ConvertAll(new Converter<RecentItem<string>, AutoResponseEx>((x) => { return (x.Item); })));
 						responseItems              = ris.ToArray();
 						response                   = activeTerminal.SettingsRoot.AutoResponse.Response;

@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -104,6 +105,18 @@ namespace YAT.Model.Types
 		private const string SendFile_string               = "[Send File]";
 
 		#endregion
+
+		/// <summary>Common regular expression replacement patterns.</summary>
+		public static readonly ReadOnlyCollection<string> CommonRegexReplacementPatterns;
+
+		static AutoResponseEx()
+		{
+			var l = new List<string>(1); // Preset the required capacity to improve memory management.
+
+			l.Add("$1");
+
+			CommonRegexReplacementPatterns = l.AsReadOnly();
+		}
 
 		private string explicitCommandString;
 

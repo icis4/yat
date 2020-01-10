@@ -32,6 +32,65 @@ namespace MKY.Text.RegularExpressions
 	public static class CommonPatterns
 	{
 		/// <summary>
+		/// Captures integral numbers.
+		/// </summary>
+		public const string IntegralNumber = @"[-+]?\d+";
+
+		/// <summary>
+		/// Captures numbers in normal floating point format.
+		/// </summary>
+		/// <remarks>
+		/// Includes integral values as well as trailing dot representation, i.e. "123", "123." and ".123".
+		/// </remarks>
+		public const string FloatingPointNormal = @"[-+]?(?:\d+(?:\.\d*)?|\.\d+)";
+
+		/// <summary>
+		/// Captures numbers in normal floating point format.
+		/// </summary>
+		/// <remarks>
+		/// Includes integral values as well as trailing dot representation, i.e. "123e9", "123.e9" and ".123e9".
+		/// </remarks>
+		public const string FloatingPointScientific = @"[-+]?(?:\d+(?:\.\d*)?|\.\d+)[Ee][-+]?\d+";
+
+		/// <summary>
+		/// Captures numbers in normal floating point format.
+		/// </summary>
+		/// <remarks>
+		/// Includes integral values as well as trailing dot representation, i.e. "123", "123." and ".123" as well as "123e9", "123.e9" and ".123e9".
+		/// </remarks>
+		public const string FloatingPointAny = @"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][-+]?\d+)?";
+
+		/// <summary>
+		/// Captures dates separated by spaces, e.g 01 01 2000, always including leading zeros.
+		/// </summary>
+		public const string DateWithSpacesAscending = @"(0[1-9]|[12]\d|3[01])\s(0[1-9]|1[012])\s((?:19|20)\d\d)";
+
+		/// <summary>
+		/// Captures dates separated by spaces, e.g 2000 01 01, always including leading zeros.
+		/// </summary>
+		public const string DateWithSpacesDescending = @"((?:19|20)\d\d)\s(0[1-9]|1[012])\s(0[1-9]|[12]\d|3[01])";
+
+		/// <summary>
+		/// Captures dates separated by spaces, e.g 2000-01-01, always including leading zeros.
+		/// </summary>
+		public const string DateWithHyphensDescending = @"((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])";
+
+		/// <summary>
+		/// Captures times separated by spaces, e.g 12 00 00, always including leading zeros.
+		/// </summary>
+		public const string TimeWithSpaces = @"([01]\d|2[0-3])\s([0-5]\d)\s([0-5]\d)";
+
+		/// <summary>
+		/// Captures times separated by colons, e.g 12:00:00, always including leading zeros.
+		/// </summary>
+		public const string TimeWithColons = @"([01]\d|2[0-3]):([0-5]\d):([0-5]\d)";
+
+		/// <summary>
+		/// Captures '"' quoted strings, allowing escaped '\"'.
+		/// </summary>
+		public const string QuotedString = @"""[^""\\]*(?:\\.[^""\\]*)*""";
+
+		/// <summary>
 		/// Positive lookahead that only captures items outside quotes '"', allowing escaped '\"'.
 		/// </summary>
 		/// <remarks>
