@@ -49,6 +49,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
@@ -792,6 +793,7 @@ namespace YAT.View.Forms
 				{
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ToArray());
 					var trigger = this.settingsRoot.AutoResponse.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger);
@@ -801,6 +803,7 @@ namespace YAT.View.Forms
 
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(AutoResponseEx.CommonRegexReplacementPatterns.Select(x => new AutoResponseEx(x)).ToArray());
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.ToArray());
 					var response = this.settingsRoot.AutoResponse.Response;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response);
@@ -1204,6 +1207,7 @@ namespace YAT.View.Forms
 				{
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoActionTriggerItems());
+					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ToArray());
 					var trigger = this.settingsRoot.AutoAction.Trigger;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger);
@@ -1213,6 +1217,7 @@ namespace YAT.View.Forms
 
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 					toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
+				////toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(AutoActionEx.CommonActions.Select(x => new AutoActionEx(x)).ToArray());
 				////toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitAction.ToArray()); is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 					var action = this.settingsRoot.AutoAction.Action;
 					ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
@@ -4600,7 +4605,7 @@ namespace YAT.View.Forms
 			{
 				this.settingsRoot.AutoAction.Trigger = trigger;
 
-				if (trigger.IsExplicit)
+				if (trigger.IsExplicit && !AutoTriggerEx.CommonRegexCapturePatterns.Contains(trigger))
 				{
 					ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
 					ApplicationSettings.RoamingUserSettings.AutoAction.SetChanged(); // Manual change required because underlying collection is modified.
@@ -4800,7 +4805,7 @@ namespace YAT.View.Forms
 		{
 			this.settingsRoot.AutoResponse.Trigger = trigger;
 
-			if (trigger.IsExplicit)
+			if (trigger.IsExplicit && !AutoTriggerEx.CommonRegexCapturePatterns.Contains(trigger))
 			{
 				ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
 				ApplicationSettings.RoamingUserSettings.AutoResponse.SetChanged(); // Manual change required because underlying collection is modified.
@@ -4908,7 +4913,7 @@ namespace YAT.View.Forms
 		{
 			this.settingsRoot.AutoResponse.Response = response;
 
-			if (response.IsExplicit)
+			if (response.IsExplicit && !AutoResponseEx.CommonRegexReplacementPatterns.Contains(response))
 			{
 				ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.Add(new RecentItem<string>(response));
 				ApplicationSettings.RoamingUserSettings.AutoResponse.SetChanged(); // Manual change required because underlying collection is modified.

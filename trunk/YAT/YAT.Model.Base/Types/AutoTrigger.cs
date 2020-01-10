@@ -29,10 +29,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using MKY;
+using MKY.Text.RegularExpressions;
 
 #endregion
 
@@ -103,7 +105,26 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		private string explicitCommandString;
+		/// <summary>Common regular expression capture patterns.</summary>
+		public static readonly ReadOnlyCollection<string> CommonRegexCapturePatterns;
+
+		static AutoTriggerEx()
+		{
+			var l = new List<string>(8); // Preset the required capacity to improve memory management.
+
+			l.Add(CommonPatterns.IntegralNumber);
+			l.Add(CommonPatterns.FloatingPointNormal);
+			l.Add(CommonPatterns.FloatingPointScientific);
+			l.Add(CommonPatterns.FloatingPointAny);
+			l.Add(CommonPatterns.TimeWithColons);
+			l.Add(CommonPatterns.DateWithHyphensDescending);
+			l.Add(@"\A([A-Z]{1})\Z");
+			l.Add(@"\A([A-Za-z]{2,4})\Z");
+
+			CommonRegexCapturePatterns = l.AsReadOnly();
+		}
+
+		private string explicitTriggerString;
 
 		/// <summary>Default is <see cref="AutoTrigger.None"/>.</summary>
 		public const AutoTrigger Default = AutoTrigger.None;
@@ -130,10 +151,10 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and enum parameters.")]
-		public AutoTriggerEx(string explicitCommandString)
+		public AutoTriggerEx(string explicitTriggerString)
 			: base(AutoTrigger.Explicit) // Do not call this(...) above since that would result in exception above!
 		{
-			this.explicitCommandString = explicitCommandString;
+			this.explicitTriggerString = explicitTriggerString;
 		}
 
 		#region Properties
@@ -249,7 +270,7 @@ namespace YAT.Model.Types
 				case AutoTrigger.PredefinedCommand11: return (PredefinedCommand_stringStart + "11]");
 				case AutoTrigger.PredefinedCommand12: return (PredefinedCommand_stringStart + "12]");
 				case AutoTrigger.SendText:            return (SendText_string);
-				case AutoTrigger.Explicit:            return (this.explicitCommandString);
+				case AutoTrigger.Explicit:            return (this.explicitTriggerString);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -265,7 +286,7 @@ namespace YAT.Model.Types
 				int hashCode = base.GetHashCode();
 
 				if ((AutoTrigger)UnderlyingEnum == AutoTrigger.Explicit)
-					hashCode = (hashCode * 397) ^ (this.explicitCommandString != null ? this.explicitCommandString.GetHashCode() : 0);
+					hashCode = (hashCode * 397) ^ (this.explicitTriggerString != null ? this.explicitTriggerString.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -293,7 +314,7 @@ namespace YAT.Model.Types
 				return
 				(
 					base.Equals(other) &&
-					StringEx.EqualsOrdinal(this.explicitCommandString, other.explicitCommandString)
+					StringEx.EqualsOrdinal(this.explicitTriggerString, other.explicitTriggerString)
 				);
 			}
 			else
