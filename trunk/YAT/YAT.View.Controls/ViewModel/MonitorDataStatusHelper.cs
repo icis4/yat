@@ -39,12 +39,6 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		/// <summary></summary>
-		public const int CountDefault = 0;
-
-		/// <summary></summary>
-		public const int RateDefault = 0;
-
 		private const Domain.RepositoryType RepositoryTypeDefault = Domain.RepositoryType.None;
 
 		#endregion
@@ -56,15 +50,8 @@ namespace YAT.View.Controls
 
 		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
 
-		private int txByteCount = CountDefault;
-		private int rxByteCount = CountDefault;
-		private int txLineCount = CountDefault;
-		private int rxLineCount = CountDefault;
-
-		private int txByteRate = RateDefault;
-		private int rxByteRate = RateDefault;
-		private int txLineRate = RateDefault;
-		private int rxLineRate = RateDefault;
+		private Model.BytesLinesTuple counts = new Model.BytesLinesTuple(); // = { 0, 0, 0, 0 };
+		private Model.BytesLinesTuple rates  = new Model.BytesLinesTuple(); // = { 0, 0, 0, 0 };
 
 		private string txStatusText;
 		private string rxStatusText;
@@ -114,112 +101,28 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual int TxByteCount
+		public virtual Model.BytesLinesTuple Counts
 		{
-			get { return (this.txByteCount); }
+			get { return (this.counts); }
 			set
 			{
-				if (this.txByteCount != value)
+				if (this.counts != value)
 				{
-					this.txByteCount = value;
+					this.counts = value;
 					SetStatusText();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual int RxByteCount
+		public virtual Model.BytesLinesTuple Rates
 		{
-			get { return (this.rxByteCount); }
+			get { return (this.rates); }
 			set
 			{
-				if (this.rxByteCount != value)
+				if (this.rates != value)
 				{
-					this.rxByteCount = value;
-					SetStatusText();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public virtual int TxLineCount
-		{
-			get { return (this.txLineCount); }
-			set
-			{
-				if (this.txLineCount != value)
-				{
-					this.txLineCount = value;
-					SetStatusText();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public virtual int RxLineCount
-		{
-			get { return (this.rxLineCount); }
-			set
-			{
-				if (this.rxLineCount != value)
-				{
-					this.rxLineCount = value;
-					SetStatusText();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public virtual int TxByteRate
-		{
-			get { return (this.txByteRate); }
-			set
-			{
-				if (this.txByteRate != value)
-				{
-					this.txByteRate = value;
-					SetStatusText();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public virtual int RxByteRate
-		{
-			get { return (this.rxByteRate); }
-			set
-			{
-				if (this.rxByteRate != value)
-				{
-					this.rxByteRate = value;
-					SetStatusText();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public virtual int TxLineRate
-		{
-			get { return (this.txLineRate); }
-			set
-			{
-				if (this.txLineRate != value)
-				{
-					this.txLineRate = value;
-					SetStatusText();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public virtual int RxLineRate
-		{
-			get { return (this.rxLineRate); }
-			set
-			{
-				if (this.rxLineRate != value)
-				{
-					this.rxLineRate = value;
+					this.rates = value;
 					SetStatusText();
 				}
 			}
@@ -245,23 +148,26 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void SetCount(int txByteCount, int txLineCount, int rxByteCount, int rxLineCount)
+		public virtual void SetCounts(Model.BytesLinesTuple counts)
 		{
-			this.txByteCount = txByteCount;
-			this.txLineCount = txLineCount;
-			this.rxByteCount = rxByteCount;
-			this.rxLineCount = rxLineCount;
+			this.counts = counts;
 
 			SetStatusText();
 		}
 
 		/// <summary></summary>
-		public virtual void SetRate(int txByteRate, int txLineRate, int rxByteRate, int rxLineRate)
+		public virtual void SetRates(Model.BytesLinesTuple rates)
 		{
-			this.txByteRate = txByteRate;
-			this.txLineRate = txLineRate;
-			this.rxByteRate = rxByteRate;
-			this.rxLineRate = rxLineRate;
+			this.rates = rates;
+
+			SetStatusText();
+		}
+
+		/// <summary></summary>
+		public virtual void SetCountsAndRates(Model.CountsRatesTuple status)
+		{
+			this.counts = status.Counts;
+			this.rates  = status.Rates;
 
 			SetStatusText();
 		}
@@ -269,15 +175,8 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void Reset()
 		{
-			this.txByteCount = 0;
-			this.txLineCount = 0;
-			this.rxByteCount = 0;
-			this.rxLineCount = 0;
-
-			this.txByteRate = 0;
-			this.txLineRate = 0;
-			this.rxByteRate = 0;
-			this.rxLineRate = 0;
+			this.counts.Reset();
+			this.rates .Reset();
 
 			SetStatusText();
 		}
@@ -303,14 +202,14 @@ namespace YAT.View.Controls
 		{
 			var sb = new StringBuilder();
 
-			sb.Append(this.txByteCount);
+			sb.Append(this.counts.TxBytes);
 			sb.Append(" | ");
-			sb.Append(this.txLineCount);
+			sb.Append(this.counts.TxLines);
 			sb.Append(" @ ");
-			sb.Append(this.txByteRate);
+			sb.Append(this.rates.TxBytes);
 			sb.Append("/s");  // " B/s" is not really readable, compare 1024/s vs. 1024 B/s,
 			sb.Append(" | "); //   and consider that the values may be flickering...
-			sb.Append(this.txLineRate);
+			sb.Append(this.rates.TxLines);
 			sb.Append("/s");
 
 			this.txStatusText = sb.ToString();
@@ -320,14 +219,14 @@ namespace YAT.View.Controls
 		{
 			var sb = new StringBuilder();
 
-			sb.Append(this.rxByteCount);
+			sb.Append(this.counts.RxBytes);
 			sb.Append(" | ");
-			sb.Append(this.rxLineCount);
+			sb.Append(this.counts.RxLines);
 			sb.Append(" @ ");
-			sb.Append(this.rxByteRate);
+			sb.Append(this.rates.RxBytes);
 			sb.Append("/s");
 			sb.Append(" | ");
-			sb.Append(this.rxLineRate);
+			sb.Append(this.rates.RxLines);
 			sb.Append("/s");
 
 			this.rxStatusText = sb.ToString();

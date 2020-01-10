@@ -256,6 +256,8 @@ namespace YAT.Model
 	////private RateProvider bidirLineRate would technically be possible, but doesn't make much sense.
 		private RateProvider rxLineRate;
 
+	////private object countsRatesSyncObj = new object(); \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+
 	#if (WITH_SCRIPTING)
 
 		// Scripting:
@@ -3012,12 +3014,18 @@ namespace YAT.Model
 				}
 			}
 
-			// Count:
-			this.txByteCount += e.Value.Content.Count;
+			// Count/Rate:
+			bool rateHasChanged;
+		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+			{
+				this.txByteCount += e.Value.Content.Count;
+
+				rateHasChanged = this.txByteRate.Update(e.Value.Content.Count);
+			}
+
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
-			// Rate:
-			if (this.txByteRate.Update(e.Value.Content.Count))
+			if (rateHasChanged)
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:
@@ -3070,12 +3078,18 @@ namespace YAT.Model
 				}
 			}
 
-			// Rate:
-			this.rxByteCount += e.Value.Content.Count;
+			// Count/Rate:
+			bool rateHasChanged;
+		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+			{
+				this.rxByteCount += e.Value.Content.Count;
+
+				rateHasChanged = this.rxByteRate.Update(e.Value.Content.Count);
+			}
+
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
-			// Rate:
-			if (this.rxByteRate.Update(e.Value.Content.Count))
+			if (rateHasChanged)
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// Log:
@@ -3116,7 +3130,7 @@ namespace YAT.Model
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
-				EvaluateAutoActionFromElements(e.Elements); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				EvaluateAutoActionFromElements(e.Elements, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			// AutoResponse:                                                             // See terminal_DisplayLinesRxAdded for background.
@@ -3140,16 +3154,16 @@ namespace YAT.Model
 				return; // Ensure not to handle events during closing anymore.
 
 			// AutoAction:
-			List<Triple<DateTime, string, MatchCollection>> autoActionTriggers = null; // See terminal_DisplayLinesRxAdded for background.
+			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
-				EvaluateAutoActionFromElements(e.Elements, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				EvaluateAutoActionFromElements(e.Elements, DataStatus, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			// AutoResponse:
-			List<Triple<byte[], string, MatchCollection>> autoResponseTriggers = null;   // See terminal_DisplayLinesRxAdded for background.
+			List<Tuple<byte[], string, MatchCollection>> autoResponseTriggers = null;   // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
@@ -3348,7 +3362,7 @@ namespace YAT.Model
 				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress)
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
 				{
@@ -3391,13 +3405,13 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);
 
 			// AutoAction:
-			List<Triple<DateTime, string, MatchCollection>> autoActionTriggers = null; // See [== AutoTrigger.AnyLine] below.
+			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See [== AutoTrigger.AnyLine] below.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
 				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress)
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
 				{
@@ -3406,7 +3420,7 @@ namespace YAT.Model
 			}
 
 			// AutoResponse:
-			List<Triple<byte[], string, MatchCollection>> autoResponseTriggers = null;   // See [== AutoTrigger.AnyLine] below.
+			List<Tuple<byte[], string, MatchCollection>> autoResponseTriggers = null;   // See [== AutoTrigger.AnyLine] below.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 			{
@@ -3427,7 +3441,7 @@ namespace YAT.Model
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
 			{
 				foreach (var dl in e.Lines)
-					EnqueueAutoAction(dl.TimeStamp, dl.Text, null);
+					EnqueueAutoAction(dl.TimeStamp, dl.Text, null, DataStatus);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.
@@ -3530,7 +3544,7 @@ namespace YAT.Model
 			{
 				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is processed here.
 				{
@@ -3560,7 +3574,7 @@ namespace YAT.Model
 			{
 				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is processed here.
 				{
@@ -4520,7 +4534,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.txByteCount);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.txByteCount);
 			}
 		}
 
@@ -4535,7 +4550,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.rxByteCount);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.rxByteCount);
 			}
 		}
 
@@ -4549,7 +4565,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.txLineCount);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.txLineCount);
 			}
 		}
 
@@ -4563,7 +4580,8 @@ namespace YAT.Model
 	////	{
 	////		AssertNotDisposed();
 	////
-	////		return (this.bidirLineCount) would technically be possible, but doesn't make much sense.
+	////		lock (this.countsRatesSyncObj)
+	////			return (this.bidirLineCount) would technically be possible, but doesn't make much sense.
 	////	}
 	////}
 
@@ -4577,7 +4595,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.rxLineCount);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.rxLineCount);
 			}
 		}
 
@@ -4591,7 +4610,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.txByteRate.RateValue);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.txByteRate.RateValue);
 			}
 		}
 
@@ -4605,7 +4625,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.rxByteRate.RateValue);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.rxByteRate.RateValue);
 			}
 		}
 
@@ -4618,7 +4639,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.txLineRate.RateValue);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.txLineRate.RateValue);
 			}
 		}
 
@@ -4631,7 +4653,8 @@ namespace YAT.Model
 	////	{
 	////		AssertNotDisposed();
 	////
-	////		return (this.bidirLineRate.RateValue) would technically be possible, but doesn't make much sense.
+	////		lock (this.countsRatesSyncObj)
+	////			return (this.bidirLineRate.RateValue) would technically be possible, but doesn't make much sense.
 	////	}
 	////}
 
@@ -4644,44 +4667,31 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				return (this.rxLineRate.RateValue);
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+					return (this.rxLineRate.RateValue);
 			}
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="TxByteCount"/> and <see cref="TxLineCount"/>, <see cref="RxByteCount"/> and <see cref="RxLineCount"/>.
+		/// See remarks of <see cref="TxByteCount"/> and <see cref="TxLineCount"/>, <see cref="RxByteCount"/> and <see cref="RxLineCount"/>,
+		/// <see cref="TxByteRate"/> and <see cref="TxLineRate"/>, <see cref="RxByteRate"/> and <see cref="RxLineRate"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual void GetDataCount(out int txByteCount, out int txLineCount, out int rxByteCount, out int rxLineCount)
+		public virtual CountsRatesTuple DataStatus
 		{
-			AssertNotDisposed();
+			get
+			{
+				AssertNotDisposed();
 
-			txByteCount = this.txByteCount;
-			txLineCount = this.txLineCount;
+				BytesLinesTuple counts, rates;
 
-			rxByteCount = this.rxByteCount;
-			rxLineCount = this.rxLineCount;
-		}
+			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+				{
+					counts = new BytesLinesTuple(this.txByteCount,          this.txLineCount,          this.rxByteCount,          this.rxLineCount         );
+					rates  = new BytesLinesTuple(this.txByteRate.RateValue, this.txLineRate.RateValue, this.rxByteRate.RateValue, this.rxLineRate.RateValue);
+				}
 
-		/// <remarks>
-		/// See remarks of <see cref="TxByteRate"/> and <see cref="TxLineRate"/>, <see cref="RxByteRate"/> and <see cref="RxLineRate"/>.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual void GetDataRate(out int txByteRate, out int txLineRate, out int rxByteRate, out int rxLineRate)
-		{
-			AssertNotDisposed();
-
-			txByteRate = this.txByteRate.RateValue;
-			txLineRate = this.txLineRate.RateValue;
-
-			rxByteRate = this.rxByteRate.RateValue;
-			rxLineRate = this.rxLineRate.RateValue;
+				return (new CountsRatesTuple(counts, rates));
+			}
 		}
 
 		/// <summary></summary>
@@ -4689,22 +4699,24 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			this.txByteCount    = 0;
-			this.rxByteCount    = 0;
+		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+			{
+				this.txByteCount    = 0;
+				this.rxByteCount    = 0;
 
-			this.txLineCount    = 0;
-		////this.bidirLineCount = 0 would technically be possible, but doesn't make much sense.
-			this.rxLineCount    = 0;
+				this.txLineCount    = 0;
+			////this.bidirLineCount = 0 would technically be possible, but doesn't make much sense.
+				this.rxLineCount    = 0;
+
+				this.txByteRate   .Reset();
+				this.rxByteRate   .Reset();
+
+				this.txLineRate   .Reset();
+			////this.bidirLineRate.Reset() would technically be possible, but doesn't make much sense.
+				this.rxLineRate   .Reset();
+			}
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
-
-			this.txByteRate   .Reset();
-			this.rxByteRate   .Reset();
-
-			this.txLineRate   .Reset();
-		////this.bidirLineRate.Reset() would technically be possible, but doesn't make much sense.
-			this.rxLineRate   .Reset();
-
 			OnIORateChanged_Promptly(EventArgs.Empty);
 			OnIORateChanged_Decimated(EventArgs.Empty);
 		}
@@ -4715,56 +4727,62 @@ namespace YAT.Model
 			int rateWindow     = 5000;
 			int updateInterval =  250;
 
-			this.txByteRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
-			this.rxByteRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
+		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+			{
+				this.txByteRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
+				this.rxByteRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
 
-			this.txLineRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
-		////this.bidirLineRate = new RateProvider(rateInterval, rateWindow, updateInterval) would technically be possible, but doesn't make much sense.
-			this.rxLineRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
+				this.txLineRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
+			////this.bidirLineRate = new RateProvider(rateInterval, rateWindow, updateInterval) would technically be possible, but doesn't make much sense.
+				this.rxLineRate    = new RateProvider(rateInterval, rateWindow, updateInterval);
 
-			this.txByteRate   .Changed += rate_Changed;
-			this.rxByteRate   .Changed += rate_Changed;
+				this.txByteRate   .Changed += rate_Changed;
+				this.rxByteRate   .Changed += rate_Changed;
 
-			this.txLineRate   .Changed += rate_Changed;
-		////this.bidirLineRate.Changed += rate_Changed would technically be possible, but doesn't make much sense.
-			this.rxLineRate   .Changed += rate_Changed;
+				this.txLineRate   .Changed += rate_Changed;
+			////this.bidirLineRate.Changed += rate_Changed would technically be possible, but doesn't make much sense.
+				this.rxLineRate   .Changed += rate_Changed;
+			}
 		}
 
 		private void DisposeRates()
 		{
-			if (this.txByteRate != null)
+		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 			{
-				this.txByteRate.Changed -= rate_Changed;
-				this.txByteRate.Dispose();
-				this.txByteRate = null;
-			}
+				if (this.txByteRate != null)
+				{
+					this.txByteRate.Changed -= rate_Changed;
+					this.txByteRate.Dispose();
+					this.txByteRate = null;
+				}
 
-			if (this.rxByteRate != null)
-			{
-				this.rxByteRate.Changed -= rate_Changed;
-				this.rxByteRate.Dispose();
-				this.rxByteRate = null;
-			}
+				if (this.rxByteRate != null)
+				{
+					this.rxByteRate.Changed -= rate_Changed;
+					this.rxByteRate.Dispose();
+					this.rxByteRate = null;
+				}
 
-			if (this.txLineRate != null)
-			{
-				this.txLineRate.Changed -= rate_Changed;
-				this.txLineRate.Dispose();
-				this.txLineRate = null;
-			}
+				if (this.txLineRate != null)
+				{
+					this.txLineRate.Changed -= rate_Changed;
+					this.txLineRate.Dispose();
+					this.txLineRate = null;
+				}
 
-		////if (this.bidirLineRate != null) would technically be possible, but doesn't make much sense.
-		////{
-		////	this.bidirLineRate.Changed -= rate_Changed;
-		////	this.bidirLineRate.Dispose();
-		////	this.bidirLineRate = null;
-		////}
+			////if (this.bidirLineRate != null) would technically be possible, but doesn't make much sense.
+			////{
+			////	this.bidirLineRate.Changed -= rate_Changed;
+			////	this.bidirLineRate.Dispose();
+			////	this.bidirLineRate = null;
+			////}
 
-			if (this.rxLineRate != null)
-			{
-				this.rxLineRate.Changed -= rate_Changed;
-				this.rxLineRate.Dispose();
-				this.rxLineRate = null;
+				if (this.rxLineRate != null)
+				{
+					this.rxLineRate.Changed -= rate_Changed;
+					this.rxLineRate.Dispose();
+					this.rxLineRate = null;
+				}
 			}
 		}
 

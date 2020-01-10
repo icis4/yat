@@ -90,6 +90,8 @@ namespace YAT.Model
 
 			switch (pi.Action)
 			{
+				case AutoAction.PlotByteCountRate:  AddItemToLineChartTimeStamp(pi); break;
+				case AutoAction.PlotLineCountRate:  AddItemToLineChartTimeStamp(pi); break;
 				case AutoAction.LineChartIndex:     AddItemToLineChartIndex(pi);     break;
 				case AutoAction.LineChartTime:      AddItemToLineChartTime(pi);      break;
 				case AutoAction.LineChartTimeStamp: AddItemToLineChartTimeStamp(pi); break;

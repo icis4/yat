@@ -213,7 +213,8 @@ Google for ".NET Regular Expression Quick Reference" for details on syntax.
 
 Note that...
 ...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted.
-...same as other actions, [Filter] and [Suppress] are only applied to received data.</value>
+...same as other actions, [Filter] and [Suppress] are only applied to received data.
+...opposed to [Plot ... Count/Rate] which are also applied to sent data.</value>
   </data>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
@@ -226,7 +227,8 @@ Captures that can neither be converted to an integral or floating point number, 
 Note that...
 ...trigger is highlighted for every action.
 ...[Highlight] and [Suppress]is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted.
-...same as other actions, [Filter] and [Suppress] are only applied to received data.</value>
+...same as other actions, [Filter] and [Suppress] are only applied to received data.
+...opposed to [Plot ... Count/Rate] which are also applied to sent data.</value>
   </data>
   <metadata name="statusStrip_Terminal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>622, 56</value>
