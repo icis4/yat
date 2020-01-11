@@ -428,19 +428,19 @@ namespace YAT.View.Forms
 
 		private void Main_LocationChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp)
-				SaveWindowSettings(true);
+			if (!IsStartingUp && !IsClosing)
+				UpdateWindowSettings(true);
 		}
 
 		private void Main_SizeChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp)
-				SaveWindowSettings(false);
+			if (!IsStartingUp && !IsClosing)
+				UpdateWindowSettings(false);
 		}
 
 		private void Main_Resize(object sender, EventArgs e)
 		{
-			if (!IsStartingUp)
+			if (!IsStartingUp && !IsClosing)
 				ResizeWorkspace();
 		}
 
@@ -523,6 +523,10 @@ namespace YAT.View.Forms
 					if (t != null)
 						t.NotifyClosingFromForm();
 				}
+
+				// Save window settings (which will save the local user settings) before proceeding
+				// (and potentially modify the local user settings):
+				SaveWindowSettings();
 
 				bool cancel;
 				this.main.Exit(out cancel); // Only need to handle cancel on form here, no need to
@@ -3023,7 +3027,14 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void SaveWindowSettings(bool setStartPositionToManual)
+		/// <summary>
+		/// Updates the window settings without saving it to the local user settings (yet).
+		/// </summary>
+		/// <remarks>
+		/// Advantage: Prevents many save operations on resizing the form.
+		/// Disadvantage: State gets lost if application crashes.
+		/// </remarks>
+		private void UpdateWindowSettings(bool setStartPositionToManual)
 		{
 			// Attention:
 			// Almost the same code exists in AutoActionPlot.SaveWindowSettings().
@@ -3069,7 +3080,13 @@ namespace YAT.View.Forms
 				// Issue/limitation is considered very acceptable, neither bug filed nor added to release notes.
 			}
 
-			ApplicationSettings.SaveLocalUserSettings();
+			// Don't save right now, see remarks of this method as well as 'SaveWindowSettings()' below.
+		}
+
+		private void SaveWindowSettings()
+		{
+			if (ApplicationSettings.LocalUserSettings.MainWindow.HaveChanged)
+				ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		#endregion

@@ -148,6 +148,7 @@
 			this.Name = "AutoActionPlot";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "YAT - [[Terminal] - Plot]";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoActionPlot_FormClosing);
 			this.Shown += new System.EventHandler(this.AutoActionPlot_Shown);
 			this.BackColorChanged += new System.EventHandler(this.AutoActionPlot_BackColorChanged);
 			this.LocationChanged += new System.EventHandler(this.AutoActionPlot_LocationChanged);

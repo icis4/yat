@@ -79,6 +79,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		private bool isStartingUp = true;
+		private bool isClosing = false;
 
 		private readonly int initialAndMinimumUpdateInterval; // = 0;
 		private readonly long lowerSpanTicks; // = 0;
@@ -153,21 +154,33 @@ namespace YAT.View.Forms
 			this.isStartingUp = false;
 		}
 
+		private void AutoActionPlot_BackColorChanged(object sender, EventArgs e)
+		{
+			SetBackColor(BackColor);
+		}
+
 		private void AutoActionPlot_LocationChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp)
-				SaveWindowSettings(true);
+			if (!this.isStartingUp && !this.isClosing)
+				UpdateWindowSettings(true);
 		}
 
 		private void AutoActionPlot_SizeChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp)
-				SaveWindowSettings(false);
+			if (!this.isStartingUp && !this.isClosing)
+				UpdateWindowSettings(false);
 		}
 
-		private void AutoActionPlot_BackColorChanged(object sender, EventArgs e)
+		private void AutoActionPlot_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			SetBackColor(BackColor);
+			// Skip if WinForms has already determined to cancel:
+			if (e.Cancel)
+				return;
+
+			this.isClosing = true;
+
+			// Save window settings (which has not yet been done at UpdateWindowSettings()):
+			SaveWindowSettings();
 		}
 
 		#endregion
@@ -297,7 +310,14 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void SaveWindowSettings(bool setStartPositionToManual)
+		/// <summary>
+		/// Updates the window settings without saving it to the local user settings (yet).
+		/// </summary>
+		/// <remarks>
+		/// Advantage: Prevents many save operations on resizing the form.
+		/// Disadvantage: State gets lost if application crashes.
+		/// </remarks>
+		private void UpdateWindowSettings(bool setStartPositionToManual)
 		{
 			// Attention:
 			// Almost the same code exists in Main.SaveWindowSettings().
@@ -343,7 +363,13 @@ namespace YAT.View.Forms
 				// Issue/limitation is considered very acceptable, neither bug filed nor added to release notes.
 			}
 
-			ApplicationSettings.SaveLocalUserSettings();
+			// Don't save right now, see remarks of this method as well as 'SaveWindowSettings()' below.
+		}
+
+		private void SaveWindowSettings()
+		{
+			if (ApplicationSettings.LocalUserSettings.PlotWindow.HaveChanged)
+				ApplicationSettings.SaveLocalUserSettings();
 		}
 
 		/// <summary>
