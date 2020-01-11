@@ -154,12 +154,6 @@ namespace YAT.View.Forms
 		private bool findNextIsFeasible;     // = false
 		private bool findPreviousIsFeasible; // = false
 
-		// Auto:
-		private bool autoActionTriggerIsInEdit;    // = false;
-	////private bool autoActionActionIsInEdit;     // = false; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
-		private bool autoResponseTriggerIsInEdit;  // = false;
-		private bool autoResponseResponseIsInEdit; // = false;
-
 	#if (WITH_SCRIPTING)
 		// Scripting:
 		private bool scriptDialogIsOpen = false;
@@ -1194,12 +1188,7 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive             = false;
-
-				bool triggerCaseSensitive = false;
-				bool triggerWholeWord     = false;
-				bool triggerUseText       = false;
-				bool triggerEnableRegex   = false;
+				bool isActive                 = false;
 
 				AutoTriggerEx[]  triggerItems = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger      = (AutoTriggerEx)AutoTrigger.None;
@@ -1219,11 +1208,6 @@ namespace YAT.View.Forms
 					{
 						isActive                = activeTerminal.SettingsRoot.AutoAction.IsActive;
 
-						triggerUseText          = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.UseText;
-						triggerCaseSensitive    = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.CaseSensitive;
-						triggerWholeWord        = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.WholeWord;
-						triggerEnableRegex      = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.EnableRegex;
-
 						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoActionTriggerItems());
 						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
@@ -1231,8 +1215,8 @@ namespace YAT.View.Forms
 						trigger                 = activeTerminal.SettingsRoot.AutoAction.Trigger;
 						triggerState            = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
 
-						triggerTextIsSupported  = (trigger.TextIsSupported  || this.autoActionTriggerIsInEdit); // Allow changing while editing a not yet validated trigger!
-						triggerRegexIsSupported = (trigger.RegexIsSupported || this.autoActionTriggerIsInEdit); // Allow changing while editing a not yet validated trigger!
+						triggerTextIsSupported  = trigger.TextIsSupported;
+						triggerRegexIsSupported = trigger.RegexIsSupported;
 
 					////var ais = new List<AutoActionEx>(activeTerminal.SettingsRoot.GetValidAutoActionItems()); is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 					////ais.AddRange(AutoActionEx.CommonActions.Select(x => new AutoActionEx(x)).ToArray());
@@ -1254,37 +1238,21 @@ namespace YAT.View.Forms
 					//  > View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 					// Changes here may have to be applied there too.
 
-					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
-					{
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Trigger, triggerItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Trigger, trigger);
-						toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoAction_Trigger.Visible = true;
+					ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Trigger, triggerItems);
+					ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Trigger, trigger, trigger);
+					toolStripComboBox_MainTool_AutoAction_Trigger.Enabled = childIsReady;
+					toolStripComboBox_MainTool_AutoAction_Trigger.Visible = true;
 
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Action, actionItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Action, action);
-						toolStripComboBox_MainTool_AutoAction_Action.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
-					}
+					ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoAction_Action, actionItems);
+					ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoAction_Action, action, action);
+					toolStripComboBox_MainTool_AutoAction_Action.Enabled = childIsReady;
+					toolStripComboBox_MainTool_AutoAction_Action.Visible = true;
 
 					SetAutoActionTriggerStateControls(triggerState);
 				////SetAutoActionActionStateControls(actionState) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
-					toolStripButton_MainTool_AutoAction_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoAction_Trigger_UseText.Enabled =  triggerTextIsSupported;
-					toolStripButton_MainTool_AutoAction_Trigger_UseText.Visible =  true;
-
-					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
-					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Visible =  true;
-
-					toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
-					toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Visible =  true;
-
-					toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
-					toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
-					toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Visible =  true;
+					SetAutoActionTriggerOptionControls(childIsReady, triggerTextIsSupported, triggerRegexIsSupported);
+				////SetAutoActionActionOptionControls() is not needed (yet) because there are no such options (yet).
 
 					toolStripButton_MainTool_SetAutoActionCount();
 
@@ -1321,6 +1289,105 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void SetAutoActionTriggerStateControls(AutoContentState state)
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				switch (state)
+				{
+					case AutoContentState.Neutral:
+						toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.Window;
+						toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
+						break;
+
+					case AutoContentState.Invalid:
+						toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
+						toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
+						break;
+
+					default:
+						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void SetAutoActionTriggerOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported)
+		{
+			bool triggerCaseSensitive = false;
+			bool triggerWholeWord     = false;
+			bool triggerUseText       = false;
+			bool triggerEnableRegex   = false;
+
+			if (childIsReady)
+			{
+				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				{
+					triggerUseText          = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.UseText;
+					triggerCaseSensitive    = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.CaseSensitive;
+					triggerWholeWord        = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.WholeWord;
+					triggerEnableRegex      = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.EnableRegex;
+				}
+			}
+
+			this.isSettingControls.Enter();
+			try
+			{
+				toolStripButton_MainTool_AutoAction_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
+				toolStripButton_MainTool_AutoAction_Trigger_UseText.Enabled =  triggerTextIsSupported;
+				toolStripButton_MainTool_AutoAction_Trigger_UseText.Visible =  true;
+
+				toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
+				toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
+				toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive.Visible =  true;
+
+				toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+				toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
+				toolStripButton_MainTool_AutoAction_Trigger_WholeWord.Visible =  true;
+
+				toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+				toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
+				toolStripButton_MainTool_AutoAction_Trigger_EnableRegex.Visible =  true;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoActionTriggerUseTextAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerUseText();
+			RevalidateAndRequestAutoActionTrigger();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoActionTriggerCaseSensitiveAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerCaseSensitive();
+			RevalidateAndRequestAutoActionTrigger();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoActionTriggerWholeWordAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerWholeWord();
+			RevalidateAndRequestAutoActionTrigger();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoActionTriggerEnableRegexAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerEnableRegex();
+			RevalidateAndRequestAutoActionTrigger();
+		}
+
 		/// <remarks>
 		/// Separated to prevent flickering of other text/combo controls when editing trigger/response.
 		/// </remarks>
@@ -1329,13 +1396,7 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool isActive              = false;
-
-				bool triggerUseText        = false;
-				bool triggerCaseSensitive  = false;
-				bool triggerWholeWord      = false;
- 				bool triggerEnableRegex    = false;
- 				bool responseEnableReplace = false;
+				bool isActive                  = false;
 
 				AutoTriggerEx[]  triggerItems  = AutoTriggerEx.GetFixedItems();
 				AutoTriggerEx    trigger       = (AutoTriggerEx)AutoTrigger.None;
@@ -1357,12 +1418,6 @@ namespace YAT.View.Forms
 					{
 						isActive                   = activeTerminal.SettingsRoot.AutoResponse.IsActive;
 
-						triggerUseText             = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
-						triggerCaseSensitive       = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.CaseSensitive;
-						triggerWholeWord           = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.WholeWord;
-						triggerEnableRegex         = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.EnableRegex;
-						responseEnableReplace      = activeTerminal.SettingsRoot.AutoResponse.ResponseOptions.EnableReplace;
-
 						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems());
 						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
@@ -1370,8 +1425,8 @@ namespace YAT.View.Forms
 						trigger                    = activeTerminal.SettingsRoot.AutoResponse.Trigger;
 						triggerState               = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
 
-						triggerTextIsSupported     = (trigger.TextIsSupported  || this.autoResponseTriggerIsInEdit); // Allow changing while editing a not yet validated trigger!
-						triggerRegexIsSupported    = (trigger.RegexIsSupported || this.autoResponseTriggerIsInEdit); // Allow changing while editing a not yet validated trigger!
+						triggerTextIsSupported     = trigger.TextIsSupported;
+						triggerRegexIsSupported    = trigger.RegexIsSupported;
 
 						var ris = new List<AutoResponseEx>(activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath)));
 						ris.AddRange(AutoResponseEx.CommonRegexReplacementPatterns.Select(x => new AutoResponseEx(x)).ToArray());
@@ -1380,7 +1435,7 @@ namespace YAT.View.Forms
 						response                   = activeTerminal.SettingsRoot.AutoResponse.Response;
 						responseState              = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
 
-						responseReplaceIsSupported = (response.ReplaceIsSupported || this.autoResponseResponseIsInEdit); // Allow changing while editing a not yet validated response!
+						responseReplaceIsSupported = response.ReplaceIsSupported;
 					}
 				}
 
@@ -1395,41 +1450,21 @@ namespace YAT.View.Forms
 					// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 					// Changes here may have to be applied there too.
 
-					if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
-					{
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Trigger, triggerItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Trigger, trigger);
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = true;
+					ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Trigger, triggerItems);
+					ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Trigger, trigger, trigger);
+					toolStripComboBox_MainTool_AutoResponse_Trigger.Enabled = childIsReady;
+					toolStripComboBox_MainTool_AutoResponse_Trigger.Visible = true;
 
-						ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Response, responseItems);
-						ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Response, response);
-						toolStripComboBox_MainTool_AutoResponse_Response.Enabled = childIsReady;
-						toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
-					}
+					ToolStripComboBoxHelper.UpdateItemsKeepingCursorAndSelection(toolStripComboBox_MainTool_AutoResponse_Response, responseItems);
+					ToolStripComboBoxHelper.Select(                              toolStripComboBox_MainTool_AutoResponse_Response, response, response);
+					toolStripComboBox_MainTool_AutoResponse_Response.Enabled = childIsReady;
+					toolStripComboBox_MainTool_AutoResponse_Response.Visible = true;
 
 					SetAutoResponseTriggerStateControls(triggerState);
 					SetAutoResponseResponseStateControls(responseState);
 
-					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Enabled =  triggerTextIsSupported;
-					toolStripButton_MainTool_AutoResponse_Trigger_UseText.Visible =  true;
-
-					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
-					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Visible =  true;
-
-					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
-					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
-					toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Visible =  true;
-
-					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
-					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
-					toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Visible =  true;
-
-					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported && responseEnableReplace);
-					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported);
-					toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Visible =  true;
+					SetAutoResponseTriggerOptionControls(childIsReady, triggerTextIsSupported, triggerRegexIsSupported);
+					SetAutoResponseResponseOptionControls(childIsReady, triggerTextIsSupported, triggerRegexIsSupported, responseReplaceIsSupported);
 
 					toolStripButton_MainTool_SetAutoResponseCount();
 
@@ -1466,6 +1501,169 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 			}
+		}
+
+		private void SetAutoResponseTriggerStateControls(AutoContentState state)
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				switch (state)
+				{
+					case AutoContentState.Neutral:
+						toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.Window;
+						toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
+						break;
+
+					case AutoContentState.Invalid:
+						toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
+						toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
+						break;
+
+					default:
+						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void SetAutoResponseResponseStateControls(AutoContentState state)
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				switch (state)
+				{
+					case AutoContentState.Neutral:
+						toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.Window;
+						toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.WindowText;
+						break;
+
+					case AutoContentState.Invalid:
+						toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.ControlDark;
+						toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.ControlText;
+						break;
+
+					default:
+						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void SetAutoResponseTriggerOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported)
+		{
+			bool triggerUseText       = false;
+			bool triggerCaseSensitive = false;
+			bool triggerWholeWord     = false;
+			bool triggerEnableRegex   = false;
+
+			if (childIsReady)
+			{
+				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				{
+					triggerUseText       = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
+					triggerCaseSensitive = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.CaseSensitive;
+					triggerWholeWord     = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.WholeWord;
+					triggerEnableRegex   = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.EnableRegex;
+				}
+			}
+
+			this.isSettingControls.Enter();
+			try
+			{
+				toolStripButton_MainTool_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
+				toolStripButton_MainTool_AutoResponse_Trigger_UseText.Enabled =  triggerTextIsSupported;
+				toolStripButton_MainTool_AutoResponse_Trigger_UseText.Visible =  true;
+
+				toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
+				toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
+				toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive.Visible =  true;
+
+				toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+				toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
+				toolStripButton_MainTool_AutoResponse_Trigger_WholeWord.Visible =  true;
+
+				toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+				toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
+				toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex.Visible =  true;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoResponseTriggerUseTextAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+			RevalidateAndRequestAutoResponseTrigger();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoResponseTriggerCaseSensitiveAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive();
+			RevalidateAndRequestAutoResponseTrigger();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoResponseTriggerWholeWordAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();
+			RevalidateAndRequestAutoResponseTrigger();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoResponseTriggerEnableRegexAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+			RevalidateAndRequestAutoResponseTrigger();
+		}
+
+		private void SetAutoResponseResponseOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported, bool responseReplaceIsSupported)
+		{
+			bool triggerUseText        = false;
+			bool triggerEnableRegex    = false;
+			bool responseEnableReplace = false;
+
+			if (childIsReady)
+			{
+				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				{
+					triggerUseText        = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
+					triggerEnableRegex    = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.EnableRegex;
+					responseEnableReplace = activeTerminal.SettingsRoot.AutoResponse.ResponseOptions.EnableReplace;
+				}
+			}
+
+			this.isSettingControls.Enter();
+			try
+			{
+				toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported && responseEnableReplace);
+				toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex && responseReplaceIsSupported);
+				toolStripButton_MainTool_AutoResponse_Response_EnableReplace.Visible =  true;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestToggleAutoResponseResponseEnableReplaceAndRevalidate()
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace();
+			RevalidateAndRequestAutoResponseResponse();
 		}
 
 		/// <remarks>
@@ -2193,10 +2391,7 @@ namespace YAT.View.Forms
 				return;
 
 			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-			{
-				this.autoActionTriggerIsInEdit = false;
-				SetAutoActionChildControls(); // Needed to update the options.
-			}
+				SetAutoActionTriggerOptionControls((ActiveMdiChild != null), false, false); // Again disallow changing options while editing a not yet validated trigger!
 
 			var trigger = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
@@ -2211,10 +2406,17 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Note that this 'Leave' event also has a particular behavior:
+		/// <list type="bullet">
+		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
+		/// <item><description>Directly clicking the first option with the mouse, the event is not invoked!</description></item>
+		/// </list>
+		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_Leave(object sender, EventArgs e)
 		{
-			this.autoActionTriggerIsInEdit = false;
-		////SetAutoActionChildControls(); is not needed, the method below will let the options be updated.
+			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
+				SetAutoActionTriggerOptionControls((ActiveMdiChild != null), false, false); // Again disallow changing options while editing a not yet validated trigger!
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -2231,8 +2433,7 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				this.autoActionTriggerIsInEdit = true;
-				SetAutoActionChildControls(); // Needed to update the options.
+				SetAutoActionTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
 
 				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
@@ -2268,38 +2469,11 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-					try
-					{
-						((Terminal)ActiveMdiChild).RequestAutoActionTrigger(triggerTextOrRegexPattern);
-					}
-					finally
-					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-					}
+					((Terminal)ActiveMdiChild).RequestAutoActionTrigger(triggerTextOrRegexPattern);
 				}
 			}
 
 			((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
-		}
-
-		private void SetAutoActionTriggerStateControls(AutoContentState state)
-		{
-			switch (state)
-			{
-				case AutoContentState.Neutral:
-					toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.Window;
-					toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.WindowText;
-					break;
-
-				case AutoContentState.Invalid:
-					toolStripComboBox_MainTool_AutoAction_Trigger.BackColor = SystemColors.ControlDark;
-					toolStripComboBox_MainTool_AutoAction_Trigger.ForeColor = SystemColors.ControlText;
-					break;
-
-				default:
-					throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
 		}
 
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -2307,14 +2481,19 @@ namespace YAT.View.Forms
 			// Note the \remind (2017-11-22..12-16 / MKY) limitations in .NET WinForms (or Win32)
 			// described in toolStripComboBox_MainTool_Find_Pattern_KeyDown() further above.
 
-			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				RevalidateAndRequestAutoActionTrigger();
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoActionUseText();       e.SuppressKeyPress = true; break;
-					case Keys.C: ((Terminal)ActiveMdiChild).RequestToggleAutoActionCaseSensitive(); e.SuppressKeyPress = true; break;
-					case Keys.W: ((Terminal)ActiveMdiChild).RequestToggleAutoActionWholeWord();     e.SuppressKeyPress = true; break;
-					case Keys.E: ((Terminal)ActiveMdiChild).RequestToggleAutoActionEnableRegex();   e.SuppressKeyPress = true; break;
+					case Keys.T: RequestToggleAutoActionTriggerUseTextAndRevalidate();       e.SuppressKeyPress = true; break;
+					case Keys.C: RequestToggleAutoActionTriggerCaseSensitiveAndRevalidate(); e.SuppressKeyPress = true; break;
+					case Keys.W: RequestToggleAutoActionTriggerWholeWordAndRevalidate();     e.SuppressKeyPress = true; break;
+					case Keys.E: RequestToggleAutoActionTriggerEnableRegexAndRevalidate();   e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2327,7 +2506,11 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_KeyUp(object sender, KeyEventArgs e)
 		{
-			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
@@ -2343,22 +2526,22 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_UseText_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionUseText();
+			RequestToggleAutoActionTriggerUseTextAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionCaseSensitive();
+			RequestToggleAutoActionTriggerCaseSensitiveAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_WholeWord_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionWholeWord();
+			RequestToggleAutoActionTriggerWholeWordAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_EnableRegex_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionEnableRegex();
+			RequestToggleAutoActionTriggerEnableRegexAndRevalidate();
 		}
 
 		private void toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
@@ -2371,7 +2554,6 @@ namespace YAT.View.Forms
 				((Terminal)ActiveMdiChild).RequestAutoActionAction(response);
 		}
 
-	////private void toolStripComboBox_MainTool_AutoAction_Action_Enter(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 	////private void toolStripComboBox_MainTool_AutoAction_Action_Leave(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 	////private void toolStripComboBox_MainTool_AutoAction_Action_TextChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 	////private void SetAutoActionActionState(AutoContentState state)                                     is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
@@ -2407,10 +2589,7 @@ namespace YAT.View.Forms
 				return;
 
 			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-			{
-				this.autoResponseTriggerIsInEdit = false;
-				SetAutoResponseChildControls(); // Needed to update the options.
-			}
+				SetAutoResponseTriggerOptionControls((ActiveMdiChild != null), false, false); // Again disallow changing options while editing a not yet validated trigger!
 
 			var trigger = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
@@ -2425,10 +2604,17 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Note that this 'Leave' event also has a particular behavior:
+		/// <list type="bullet">
+		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
+		/// <item><description>Directly clicking the first option with the mouse, the event is not invoked!</description></item>
+		/// </list>
+		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Leave(object sender, EventArgs e)
 		{
-			this.autoResponseTriggerIsInEdit = false;
-		////SetAutoResponseChildControls(); is not needed, the method below will let the options be updated.
+			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
+				SetAutoResponseTriggerOptionControls((ActiveMdiChild != null), false, false); // Again disallow changing options while editing a not yet validated trigger!
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -2445,8 +2631,7 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				this.autoResponseTriggerIsInEdit = true;
-				SetAutoResponseChildControls(); // Needed to update the options.
+				SetAutoResponseTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
 
 				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
@@ -2485,38 +2670,11 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-					try
-					{
-						((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerTextOrRegexPattern);
-					}
-					finally
-					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-					}
+					((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerTextOrRegexPattern);
 				}
 			}
 
 			((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
-		}
-
-		private void SetAutoResponseTriggerStateControls(AutoContentState state)
-		{
-			switch (state)
-			{
-				case AutoContentState.Neutral:
-					toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.Window;
-					toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.WindowText;
-					break;
-
-				case AutoContentState.Invalid:
-					toolStripComboBox_MainTool_AutoResponse_Trigger.BackColor = SystemColors.ControlDark;
-					toolStripComboBox_MainTool_AutoResponse_Trigger.ForeColor = SystemColors.ControlText;
-					break;
-
-				default:
-					throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -2524,14 +2682,19 @@ namespace YAT.View.Forms
 			// Note the \remind (2017-11-22..12-16 / MKY) limitations in .NET WinForms (or Win32)
 			// described in toolStripComboBox_MainTool_Find_Pattern_KeyDown() further above.
 
-			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				RevalidateAndRequestAutoResponseTrigger();
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.T: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerUseText();       e.SuppressKeyPress = true; break;
-					case Keys.C: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive(); e.SuppressKeyPress = true; break;
-					case Keys.W: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();     e.SuppressKeyPress = true; break;
-					case Keys.E: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();   e.SuppressKeyPress = true; break;
+					case Keys.T: RequestToggleAutoResponseTriggerUseTextAndRevalidate();       e.SuppressKeyPress = true; break;
+					case Keys.C: RequestToggleAutoResponseTriggerCaseSensitiveAndRevalidate(); e.SuppressKeyPress = true; break;
+					case Keys.W: RequestToggleAutoResponseTriggerWholeWordAndRevalidate();     e.SuppressKeyPress = true; break;
+					case Keys.E: RequestToggleAutoResponseTriggerEnableRegexAndRevalidate();   e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2544,7 +2707,11 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_KeyUp(object sender, KeyEventArgs e)
 		{
-			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
@@ -2560,22 +2727,22 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_UseText_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerUseText();
+			RequestToggleAutoResponseTriggerUseTextAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive();
+			RequestToggleAutoResponseTriggerCaseSensitiveAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_WholeWord_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();
+			RequestToggleAutoResponseTriggerWholeWordAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+			RequestToggleAutoResponseTriggerEnableRegexAndRevalidate();
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_DropDown(object sender, EventArgs e)
@@ -2589,10 +2756,7 @@ namespace YAT.View.Forms
 				return;
 
 			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
-			{
-				this.autoResponseResponseIsInEdit = false;
-				SetAutoResponseChildControls(); // Needed to update the options.
-			}
+				SetAutoResponseResponseOptionControls((ActiveMdiChild != null), false, false, false); // Again disallow changing options while editing a not yet validated response!
 
 			var response = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
@@ -2607,10 +2771,17 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, System.EventArgs e)
+		/// <remarks>
+		/// Note that this 'Leave' event also has a particular behavior:
+		/// <list type="bullet">
+		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
+		/// <item><description>Directly clicking the first option with the mouse, the event is not invoked!</description></item>
+		/// </list>
+		/// </remarks>
+		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, EventArgs e)
 		{
-			this.autoResponseResponseIsInEdit = false;
-		////SetAutoResponseChildControls(); is not needed, the method below will let the options be updated.
+			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
+				SetAutoResponseResponseOptionControls((ActiveMdiChild != null), false, false, false); // Again disallow changing options while editing a not yet validated response!
 
 			RevalidateAndRequestAutoResponseResponse();
 		}
@@ -2627,8 +2798,7 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				this.autoResponseResponseIsInEdit = true;
-				SetAutoResponseChildControls(); // Needed to update the options.
+				SetAutoResponseResponseOptionControls((ActiveMdiChild != null), true, true, true); // Allow changing options while editing a not yet validated response!
 
 				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
@@ -2667,38 +2837,11 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					this.mainToolValidationWorkaround_UpdateIsSuspended = true;
-					try
-					{
-						((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
-					}
-					finally
-					{
-						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
-					}
+					((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
 				}
 			}
 
 			((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
-		}
-
-		private void SetAutoResponseResponseStateControls(AutoContentState state)
-		{
-			switch (state)
-			{
-				case AutoContentState.Neutral:
-					toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.Window;
-					toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.WindowText;
-					break;
-
-				case AutoContentState.Invalid:
-					toolStripComboBox_MainTool_AutoResponse_Response.BackColor = SystemColors.ControlDark;
-					toolStripComboBox_MainTool_AutoResponse_Response.ForeColor = SystemColors.ControlText;
-					break;
-
-				default:
-					throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_KeyDown(object sender, KeyEventArgs e)
@@ -2706,11 +2849,16 @@ namespace YAT.View.Forms
 			// Note the \remind (2017-11-22..12-16 / MKY) limitations in .NET WinForms (or Win32)
 			// described in toolStripComboBox_MainTool_Find_Pattern_KeyDown() further above.
 
-			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				RevalidateAndRequestAutoResponseResponse();
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
-					case Keys.R: ((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace(); e.SuppressKeyPress = true; break;
+					case Keys.R: RequestToggleAutoResponseResponseEnableReplaceAndRevalidate(); e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2723,7 +2871,11 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
 		private void toolStripComboBox_MainTool_AutoResponse_Response_KeyUp(object sender, KeyEventArgs e)
 		{
-			if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
+			if ((e.KeyData & Keys.KeyCode) == Keys.Enter)
+			{
+				e.SuppressKeyPress = true;
+			}
+			else if ((e.KeyData & Keys.Modifiers) == Keys.Alt)
 			{
 				switch (e.KeyData & Keys.KeyCode)
 				{
@@ -2736,7 +2888,7 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoResponse_Response_EnableReplace_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace();
+			RequestToggleAutoResponseResponseEnableReplaceAndRevalidate();
 		}
 
 		private void toolStripLabel_MainTool_AutoResponse_Count_Click(object sender, EventArgs e)
