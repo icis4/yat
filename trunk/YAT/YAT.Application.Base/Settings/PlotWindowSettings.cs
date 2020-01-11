@@ -71,10 +71,11 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			StartPosition = FormStartPosition.WindowsDefaultLocation;
+			StartPosition = FormStartPosition.CenterParent; // Window shall appear on 'Main' form.
 
-			Size          = new Size(900, 480); // Override to designed 'Size' of the 'View.AutoActionPlot' form.
-
+			State         = FormWindowState.Normal; // Override to intended state of the 'AutoActionPlot' form.
+			Size          = new Size(900, 480); // Override to designed 'Size' of the 'AutoActionPlot' form.
+			  //// ClientSize = Size(884, 441)
 			AlwaysOnTop   = false;
 		}
 

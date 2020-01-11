@@ -79,10 +79,11 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			StartPosition    = FormStartPosition.WindowsDefaultLocation;
+			StartPosition    = FormStartPosition.WindowsDefaultLocation; // Standard when opening an application.
 
-			Size             = new Size(912, 684); // Override to designed 'Size' of the 'View.Main' form.
-
+			State            = FormWindowState.Normal; // Override to intended state of the 'Main' form.
+			Size             = new Size(912, 684);     // Override to designed 'Size' of the 'Main' form.
+			     //// ClientSize = Size(896, 645)
 			AlwaysOnTop      = false;
 
 			ShowTerminalInfo = false;
