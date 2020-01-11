@@ -931,6 +931,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
+			{
+				this.autoResponseTriggerIsInEdit = false;
+				SetAutoResponseControls(); // Needed to update the options.
+			}
+
 			var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
@@ -944,16 +950,10 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Enter(object sender, EventArgs e)
-		{
-			this.autoResponseTriggerIsInEdit = true;
-			SetAutoResponseControls(); // Needed to update the options.
-		}
-
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Leave(object sender, EventArgs e)
 		{
 			this.autoResponseTriggerIsInEdit = false;
-		////SetAutoResponseControls(); is not needed, the method below will let the options being updated.
+		////SetAutoResponseControls(); is not needed, the method below will let the options be updated.
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -970,6 +970,9 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
+				this.autoResponseTriggerIsInEdit = true;
+				SetAutoResponseControls(); // Needed to update the options.
+
 				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{
@@ -1047,6 +1050,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
+			{
+				this.autoResponseResponseIsInEdit = false;
+				SetAutoResponseControls(); // Needed to update the options.
+			}
+
 			var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 			{
@@ -1060,14 +1069,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Enter(object sender, EventArgs e)
-		{
-			this.autoResponseResponseIsInEdit = true;
-		}
-
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave(object sender, EventArgs e)
 		{
 			this.autoResponseResponseIsInEdit = false;
+		////SetAutoResponseControls(); is not needed, the method below will let the options be updated.
+
+			RevalidateAndRequestAutoResponseResponse();
 		}
 
 		/// <remarks>
@@ -1082,6 +1089,9 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
 			{
+				this.autoResponseResponseIsInEdit = true;
+				SetAutoResponseControls(); // Needed to update the options.
+
 				var responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
 				{
@@ -1090,16 +1100,6 @@ namespace YAT.View.Forms
 						AutoResponseResponseState = AutoContentState.Invalid;
 						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
-
-					this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
-					try
-					{
-						RequestAutoResponseResponse(responseText);
-					}
-					finally
-					{
-						this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
-					}
 				}
 			}
 
@@ -1261,6 +1261,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
+			{
+				this.autoActionTriggerIsInEdit = false;
+				SetAutoActionControls(); // Needed to update the options.
+			}
+
 			var trigger = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
@@ -1274,16 +1280,10 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Enter(object sender, EventArgs e)
-		{
-			this.autoActionTriggerIsInEdit = true;
-			SetAutoActionControls(); // Needed to update the options.
-		}
-
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Leave(object sender, EventArgs e)
 		{
 			this.autoActionTriggerIsInEdit = false;
-		////SetAutoActionControls(); is not needed, the method below will let the options being updated.
+		////SetAutoActionControls(); is not needed, the method below will let the options be updated.
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1300,6 +1300,9 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
+				this.autoActionTriggerIsInEdit = true;
+				SetAutoActionControls(); // Needed to update the options.
+
 				var triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
 				{

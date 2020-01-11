@@ -155,9 +155,10 @@ namespace YAT.View.Forms
 		private bool findPreviousIsFeasible; // = false
 
 		// Auto:
-		private bool autoActionTriggerIsInEdit;   // = false;
-	////private bool autoActionActionIsInEdit;    // = false; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
-		private bool autoResponseTriggerIsInEdit; // = false;
+		private bool autoActionTriggerIsInEdit;    // = false;
+	////private bool autoActionActionIsInEdit;     // = false; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+		private bool autoResponseTriggerIsInEdit;  // = false;
+		private bool autoResponseResponseIsInEdit; // = false;
 
 	#if (WITH_SCRIPTING)
 		// Scripting:
@@ -1379,7 +1380,7 @@ namespace YAT.View.Forms
 						response                   = activeTerminal.SettingsRoot.AutoResponse.Response;
 						responseState              = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
 
-						responseReplaceIsSupported = response.ReplaceIsSupported;
+						responseReplaceIsSupported = (response.ReplaceIsSupported || this.autoResponseResponseIsInEdit); // Allow changing while editing a not yet validated response!
 					}
 				}
 
@@ -2191,6 +2192,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
+			{
+				this.autoActionTriggerIsInEdit = false;
+				SetAutoActionChildControls(); // Needed to update the options.
+			}
+
 			var trigger = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
@@ -2204,25 +2211,19 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void toolStripComboBox_MainTool_AutoAction_Trigger_Leave(object sender, EventArgs e)
+		{
+			this.autoActionTriggerIsInEdit = false;
+		////SetAutoActionChildControls(); is not needed, the method below will let the options be updated.
+
+			RevalidateAndRequestAutoActionTrigger();
+		}
+
 		/// <remarks>
 		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
-		private void toolStripComboBox_MainTool_AutoAction_Trigger_Enter(object sender, EventArgs e)
-		{
-			this.autoActionTriggerIsInEdit = true;
-			SetAutoActionChildControls(); // Needed to update the options.
-		}
-
-		private void toolStripComboBox_MainTool_AutoAction_Trigger_Leave(object sender, EventArgs e)
-		{
-			this.autoActionTriggerIsInEdit = false;
-		////SetAutoActionChildControls(); is not needed, the method below will let the options being updated.
-
-			RevalidateAndRequestAutoActionTrigger();
-		}
-
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2230,6 +2231,9 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
+				this.autoActionTriggerIsInEdit = true;
+				SetAutoActionChildControls(); // Needed to update the options.
+
 				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 				{
@@ -2402,6 +2406,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
+			{
+				this.autoResponseTriggerIsInEdit = false;
+				SetAutoResponseChildControls(); // Needed to update the options.
+			}
+
 			var trigger = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
@@ -2415,16 +2425,10 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Enter(object sender, EventArgs e)
-		{
-			this.autoResponseTriggerIsInEdit = true;
-			SetAutoResponseChildControls(); // Needed to update the options.
-		}
-
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Leave(object sender, EventArgs e)
 		{
 			this.autoResponseTriggerIsInEdit = false;
-		////SetAutoResponseChildControls(); is not needed, the method below will let the options being updated.
+		////SetAutoResponseChildControls(); is not needed, the method below will let the options be updated.
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -2441,6 +2445,9 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
+				this.autoResponseTriggerIsInEdit = true;
+				SetAutoResponseChildControls(); // Needed to update the options.
+
 				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 				{
@@ -2581,6 +2588,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
+			{
+				this.autoResponseResponseIsInEdit = false;
+				SetAutoResponseChildControls(); // Needed to update the options.
+			}
+
 			var response = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 			{
@@ -2592,6 +2605,14 @@ namespace YAT.View.Forms
 
 				((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
 			}
+		}
+
+		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, System.EventArgs e)
+		{
+			this.autoResponseResponseIsInEdit = false;
+		////SetAutoResponseChildControls(); is not needed, the method below will let the options be updated.
+
+			RevalidateAndRequestAutoResponseResponse();
 		}
 
 		/// <remarks>
@@ -2606,6 +2627,9 @@ namespace YAT.View.Forms
 
 			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
 			{
+				this.autoResponseResponseIsInEdit = true;
+				SetAutoResponseChildControls(); // Needed to update the options.
+
 				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
 				{
@@ -2623,7 +2647,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// See remark at 'TextChanged' event handler above.
 		/// </remarks>
-		private void RevalidateAndRequest()
+		private void RevalidateAndRequestAutoResponseResponse()
 		{
 			if (this.isSettingControls)
 				return;
