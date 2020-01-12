@@ -1208,8 +1208,8 @@ namespace YAT.View.Forms
 					{
 						isActive                = activeTerminal.SettingsRoot.AutoAction.IsActive;
 
-						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoActionTriggerItems());
-						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
+						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoActionTriggerItems());    // Common and recent patterns/triggers are always shown, though they
+						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray()); // could be limited depending on the options, but that is incomprehensive.
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
 						triggerItems            = tis.ToArray();
 						trigger                 = activeTerminal.SettingsRoot.AutoAction.Trigger;
@@ -1316,6 +1316,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Required to allow/disallow changing options while editing a not yet validated trigger.
+		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
+		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// </remarks>
 		private void SetAutoActionTriggerOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
 			bool triggerCaseSensitive = false;
@@ -1418,8 +1423,8 @@ namespace YAT.View.Forms
 					{
 						isActive                   = activeTerminal.SettingsRoot.AutoResponse.IsActive;
 
-						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems());
-						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
+						var tis = new List<AutoTriggerEx>(activeTerminal.SettingsRoot.GetValidAutoResponseTriggerItems());  // Common and recent patterns/triggers are always shown, though they
+						tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray()); // could be limited depending on the options, but that is incomprehensive.
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
 						triggerItems               = tis.ToArray();
 						trigger                    = activeTerminal.SettingsRoot.AutoResponse.Trigger;
@@ -1557,6 +1562,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Required to allow/disallow changing options while editing a not yet validated trigger.
+		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
+		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// </remarks>
 		private void SetAutoResponseTriggerOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
 			bool triggerUseText       = false;
@@ -1629,6 +1639,11 @@ namespace YAT.View.Forms
 			RevalidateAndRequestAutoResponseTrigger();
 		}
 
+		/// <remarks>
+		/// Required to allow/disallow changing options while editing a not yet validated trigger.
+		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
+		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// </remarks>
 		private void SetAutoResponseResponseOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported, bool responseReplaceIsSupported)
 		{
 			bool triggerUseText        = false;

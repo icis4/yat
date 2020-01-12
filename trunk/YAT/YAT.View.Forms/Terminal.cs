@@ -779,8 +779,8 @@ namespace YAT.View.Forms
 
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ToArray());
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());  // Common and recent patterns/triggers are always shown, though they
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ToArray()); // could be limited depending on the options, but that is incomprehensive.
 				var trigger = this.settingsRoot.AutoResponse.Trigger;
 				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger);
 
@@ -864,6 +864,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Required to allow/disallow changing options while editing a not yet validated trigger.
+		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
+		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// </remarks>
 		private void SetAutoResponseTriggerOptionControls(bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
 			this.isSettingControls.Enter();
@@ -892,6 +897,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Required to allow/disallow changing options while editing a not yet validated trigger.
+		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
+		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// </remarks>
 		private void SetAutoResponseResponseOptionControls(bool triggerTextIsSupported, bool triggerRegexIsSupported, bool responseReplaceIsSupported)
 		{
 			this.isSettingControls.Enter();
@@ -1258,8 +1268,8 @@ namespace YAT.View.Forms
 
 				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
 				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoActionTriggerItems());
-				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());
-				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ToArray());
+				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray()); // Common and recent patterns/triggers are always shown, though they
+				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ToArray());  // could be limited depending on the options, but that is incomprehensive.
 				var trigger = this.settingsRoot.AutoAction.Trigger;
 				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger);
 
@@ -1314,6 +1324,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Required to allow/disallow changing options while editing a not yet validated trigger.
+		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
+		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// </remarks>
 		private void SetAutoActionTriggerOptionControls(bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
 			this.isSettingControls.Enter();
