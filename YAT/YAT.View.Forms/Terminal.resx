@@ -212,21 +212,21 @@ A string of 2..4 letters: "\A([A-Za-z]{2,4})\Z"
 Google for ".NET Regular Expression Quick Reference" for details on syntax.
 
 Note that...
-...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted.
+...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
 ...opposed to [Plot ... Count/Rate] which are also applied to sent data.</value>
   </data>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
 
-[Chart/Plot/Histogram] requires that trigger is based on a regular expression, as the regular expression captures (e.g. "([-+]\d+)") are used to retrieve the values to plot.
+[Plot/Chart/Histogram] requires that trigger is based on a regular expression, as the regular expression captures (e.g. "([-+]\d+)") are used to retrieve the values to plot.
 All captures will be treated as Y values, unless for action stating "(X = Time)" where the first capture will be treated as the X value.
 Date/Time values are converted to "OLE Automation Date" values. Google that term for details.
 Captures that can neither be converted to an integral or floating point number, nor a date/time value, are treated as strings. Strings are converted to a value by summing the code of each character. This allows plotting elements defined by characters (e.g. A, B, C) or even whole strings.
 
 Note that...
-...trigger is highlighted for every action.
-...[Highlight] and [Suppress]is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted.
+...trigger is highlighted for every action except [Filter], [Suppress] and [Plot/Chart/Histogram].
+...[Highlight] and [Suppress] is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
 ...opposed to [Plot ... Count/Rate] which are also applied to sent data.</value>
   </data>

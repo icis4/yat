@@ -3112,9 +3112,27 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
+			// AutoAction for actions that also apply to Tx (e.g. Plot Count/Rate):
+			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See terminal_DisplayLinesRxAdded for background.
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoAction.AlsoAppliesToTx)
+			{
+				EvaluateAutoActionFromElements(e.Elements, DataStatus, SettingsRoot.AutoAction.ShallHighlight, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+			}
+
+			// AutoResponse does not need to be handled here.
+
 			OnDisplayElementsTxAdded(e);
 
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
+
+			// AutoAction for actions that also apply to Tx (e.g. Plot Count/Rate):
+			if ((autoActionTriggers != null) && (autoActionTriggers.Count > 0))
+			{
+				EnqueueAutoActions(autoActionTriggers);
+			}
+
+			// AutoResponse does not need to be handled here.
 		}
 
 		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
@@ -3125,7 +3143,7 @@ namespace YAT.Model
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
+			// AutoAction highlighting:                                              // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
@@ -3133,7 +3151,7 @@ namespace YAT.Model
 				EvaluateAutoActionFromElements(e.Elements, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			// AutoResponse:                                                             // See terminal_DisplayLinesRxAdded for background.
+			// AutoResponse highlighting:                                                // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoResponse.IsByteSequenceTriggered) // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
@@ -3159,7 +3177,7 @@ namespace YAT.Model
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
-				EvaluateAutoActionFromElements(e.Elements, DataStatus, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				EvaluateAutoActionFromElements(e.Elements, DataStatus, SettingsRoot.AutoAction.ShallHighlight, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			// AutoResponse:
