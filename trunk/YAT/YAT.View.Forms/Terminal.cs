@@ -53,6 +53,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -897,6 +898,12 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void ResetAutoResponseTriggerOptionControls()
+		{
+			var trigger = this.settingsRoot.AutoResponse.Trigger;
+			SetAutoResponseTriggerOptionControls(trigger.TextIsSupported, trigger.RegexIsSupported);
+		}
+
 		/// <remarks>
 		/// Required to allow/disallow changing options while editing a not yet validated trigger.
 		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
@@ -918,6 +925,13 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 			}
+		}
+
+		private void ResetAutoResponseResponseOptionControls()
+		{
+			var trigger  = this.settingsRoot.AutoResponse.Trigger;
+			var response = this.settingsRoot.AutoResponse.Response;
+			SetAutoResponseResponseOptionControls(trigger.TextIsSupported, trigger.RegexIsSupported, response.ReplaceIsSupported);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_DropDownOpening(object sender, EventArgs e)
@@ -1007,17 +1021,11 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-				SetAutoResponseTriggerOptionControls(false, false); // Again disallow changing options while editing a not yet validated trigger!
-
 			var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				if ((trigger == AutoTrigger.Explicit) && !RequestAutoResponseValidateTriggerTextSilently(trigger))
-				{
-					AutoResponseTriggerState = AutoContentState.Invalid;
-					return; // Skip request. May e.g. happen when options have changed since a recent item got validated.
-				}
+				if (trigger.IsExplicit)
+					RequestAutoResponseAdjustTriggerOptionsSilently(trigger);
 
 				RequestAutoResponseTrigger(trigger);
 			}
@@ -1033,7 +1041,7 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Leave(object sender, EventArgs e)
 		{
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-				SetAutoResponseTriggerOptionControls(false, false); // Again disallow changing options while editing a not yet validated trigger!
+				ResetAutoResponseTriggerOptionControls();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1071,10 +1079,10 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseTrigger()
 		{
-			if (this.isSettingControls)
-				return;
-
-			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			var selectedIndex = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex;
+			var selectedItem = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
+			                  //// Not listed             or                           listed explicit tigger.
+			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
 			{
 				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
@@ -1121,17 +1129,11 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
-				SetAutoResponseResponseOptionControls(false, false, false); // Again disallow changing options while editing a not yet validated response!
-
 			var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 			{
-				if ((response == AutoResponse.Explicit) && !RequestAutoResponseValidateResponseTextSilently(response))
-				{
-					AutoResponseResponseState = AutoContentState.Invalid;
-					return; // Skip request. May e.g. happen when options have changed since a recent item got validated.
-				}
+				if (response.IsExplicit)
+					RequestAutoResponseAdjustResponseOptionsSilently(response);
 
 				RequestAutoResponseResponse(response);
 			}
@@ -1147,7 +1149,7 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave(object sender, EventArgs e)
 		{
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
-				SetAutoResponseResponseOptionControls(false, false, false); // Again disallow changing options while editing a not yet validated response!
+				ResetAutoResponseResponseOptionControls();
 
 			RevalidateAndRequestAutoResponseResponse();
 		}
@@ -1185,10 +1187,10 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseResponse()
 		{
-			if (this.isSettingControls)
-				return;
-
-			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
+			var selectedIndex = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex;
+			var selectedItem = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoTriggerEx);
+			                  //// Not listed             or                           listed explicit response.
+			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
 			{
 				var responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
@@ -1357,6 +1359,12 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void ResetAutoActionTriggerOptionControls()
+		{
+			var trigger = this.settingsRoot.AutoAction.Trigger;
+			SetAutoActionTriggerOptionControls(trigger.TextIsSupported, trigger.RegexIsSupported);
+		}
+
 		private void toolStripMenuItem_TerminalMenu_Receive_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Receive_SetMenuItems();
@@ -1367,17 +1375,11 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-				SetAutoActionTriggerOptionControls(false, false); // Again disallow changing options while editing a not yet validated trigger!
-
 			var trigger = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				if ((trigger == AutoTrigger.Explicit) && !RequestAutoActionValidateTriggerTextSilently(trigger))
-				{
-					AutoActionTriggerState = AutoContentState.Invalid;
-					return; // Skip request. May e.g. happen when options have changed since a recent item got validated.
-				}
+				if (trigger.IsExplicit)
+					RequestAutoActionAdjustTriggerOptionsSilently(trigger);
 
 				RequestAutoActionTrigger(trigger);
 			}
@@ -1393,7 +1395,7 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Leave(object sender, EventArgs e)
 		{
 			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-				SetAutoActionTriggerOptionControls(false, false); // Again disallow changing options while editing a not yet validated trigger!
+				ResetAutoActionTriggerOptionControls();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1431,10 +1433,10 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoActionTrigger()
 		{
-			if (this.isSettingControls)
-				return;
-
-			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			var selectedIndex = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex;
+			var selectedItem = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
+			                  //// Not listed             or                           listed explicit tigger.
+			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
 			{
 				var triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
@@ -4606,6 +4608,27 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
+		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
+		public virtual void RequestAutoActionAdjustTriggerOptionsSilently(AutoTriggerEx trigger)
+		{
+			var options = this.settingsRoot.AutoAction.TriggerOptions;
+
+			if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
+				options.UseText = true;
+
+				if (!RegexEx.TryValidatePattern(trigger)) {
+					options.EnableRegex = false;
+				}
+			}
+
+			this.settingsRoot.AutoAction.SuspendChangeEvent();
+			{                                // Settings member must be changed to let the changed event be raised!
+				this.settingsRoot.AutoAction.TriggerOptions = options;
+			}
+			this.settingsRoot.AutoAction.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
+		}
+
+		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		public virtual bool RequestAutoActionValidateTriggerTextSilently(string triggerTextOrRegexPattern)
 		{
 			if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
@@ -4856,6 +4879,27 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
+		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
+		public virtual void RequestAutoResponseAdjustTriggerOptionsSilently(AutoTriggerEx trigger)
+		{
+			var options = this.settingsRoot.AutoResponse.TriggerOptions;
+
+			if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
+				options.UseText = true;
+
+				if (!RegexEx.TryValidatePattern(trigger)) {
+					options.EnableRegex = false;
+				}
+			}
+
+			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			{                                  // Settings member must be changed to let the changed event be raised!
+				this.settingsRoot.AutoResponse.TriggerOptions = options;
+			}
+			this.settingsRoot.AutoResponse.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
+		}
+
+		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		public virtual bool RequestAutoResponseValidateTriggerTextSilently(string triggerTextOrRegexPattern)
 		{
 			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
@@ -4994,7 +5038,24 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
+		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
+		public virtual void RequestAutoResponseAdjustResponseOptionsSilently(AutoResponseEx response)
+		{
+			var options = this.settingsRoot.AutoResponse.ResponseOptions;
+
+			var m = Regex.Match(response, @"\$\d");
+			if (m.Success)
+				options.EnableReplace = true;
+
+			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			{                                  // Settings member must be changed to let the changed event be raised!
+				this.settingsRoot.AutoResponse.ResponseOptions = options;
+			}
+			this.settingsRoot.AutoResponse.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
+		}
+
+		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		public virtual bool RequestAutoResponseValidateResponseTextSilently(string responseText)
 		{
 			return (ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.RadixAndAsciiEscapes));
