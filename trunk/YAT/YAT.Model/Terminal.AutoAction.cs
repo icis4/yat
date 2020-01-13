@@ -199,10 +199,10 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from elements always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus)
+		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight)
 		{
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggersDummy;
-			EvaluateAutoActionFromElements(elements, dataStatus, out triggersDummy);
+			EvaluateAutoActionFromElements(elements, dataStatus, shallHighlight, out triggersDummy);
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from elements always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
+		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
 			triggers = new List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>>(); // No preset needed, the default behavior is good enough.
 
@@ -219,42 +219,39 @@ namespace YAT.Model
 
 			foreach (var de in elements)
 			{
-				if (de.Direction == Domain.Direction.Rx) // By specification only active on receive-path.
+				lock (this.autoActionTriggerHelperSyncObj)
 				{
-					lock (this.autoActionTriggerHelperSyncObj)
+					if (this.autoActionTriggerHelper != null)
 					{
-						if (this.autoActionTriggerHelper != null)
+						if (de.Origin != null) // Foreach element where origin exists.
 						{
-							if (de.Origin != null) // Foreach element where origin exists.
+							foreach (var origin in de.Origin)
 							{
-								foreach (var origin in de.Origin)
+								foreach (var originByte in origin.Value1)
 								{
-									foreach (var originByte in origin.Value1)
+									if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
 									{
-										if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
-										{
-											this.autoActionTriggerHelper.Reset();
-											de.Highlight = true;
+										this.autoActionTriggerHelper.Reset();
+										de.Highlight = shallHighlight;
 
-											// Signal the trigger:
-											triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(de.TimeStamp, elements.Text, null, dataStatus));
+										// Signal the trigger:
+										triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(de.TimeStamp, elements.Text, null, dataStatus));
 
-											// Note that 'elements.Text' is not perfect, as it could only contain parts of
-											// the trigger. However, using the trigger sequence formatted with...
-											// this.terminal.Format(triggerSequence, Domain.IODirection.Rx)
-											// ...in RequestAutoActionMessage() isn't perfect either, as it will *never*
-											// contain more than the trigger. Thus preferring 'Elements.Text'.
-										}
+										// Note that 'elements.Text' is not perfect, as it could only contain parts of
+										// the trigger. However, using the trigger sequence formatted with...
+										// this.terminal.Format(triggerSequence, Domain.IODirection.Rx)
+										// ...in RequestAutoActionMessage() isn't perfect either, as it will *never*
+										// contain more than the trigger. Thus preferring 'Elements.Text'.
 									}
 								}
 							}
 						}
-						else
-						{
-							break;     // Break the loop if action got disposed in the meantime.
-						}              // Though unlikely, it may happen when deactivating action
-					} // lock (helper) // while receiving a very large chunk.
-				} // if (direction == Rx)
+					}
+					else
+					{
+						break;     // Break the loop if action got disposed in the meantime.
+					}              // Though unlikely, it may happen when deactivating action
+				} // lock (helper) // while receiving a very large chunk.
 			} // foreach (element)
 		}
 
@@ -264,10 +261,10 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus)
+		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight)
 		{
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggersDummy;
-			EvaluateAutoActionOtherThanFilterOrSuppressFromLines(lines, dataStatus, out triggersDummy);
+			EvaluateAutoActionOtherThanFilterOrSuppressFromLines(lines, dataStatus, shallHighlight, out triggersDummy);
 		}
 
 		/// <summary>
@@ -276,7 +273,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
+		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
 			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
 
@@ -285,7 +282,7 @@ namespace YAT.Model
 				triggers = null;
 
 				foreach (var dl in lines)
-					EvaluateAutoActionFromElements(dl, dataStatus, out triggers);
+					EvaluateAutoActionFromElements(dl, dataStatus, shallHighlight, out triggers);
 			}
 			else // IsTextTriggered
 			{
@@ -302,7 +299,7 @@ namespace YAT.Model
 							if (triggerCount > 0)
 							{
 								this.autoActionTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
-								dl.Highlight = true;
+								dl.Highlight = shallHighlight;
 
 								// Signal the trigger(s):
 								for (int i = 0; i < triggerCount; i++)
