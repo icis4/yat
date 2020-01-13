@@ -194,36 +194,33 @@ namespace YAT.Model
 
 			foreach (var de in elements)
 			{
-				if (de.Direction == Domain.Direction.Rx) // By specification only active on receive-path.
+				lock (this.autoResponseTriggerHelperSyncObj)
 				{
-					lock (this.autoResponseTriggerHelperSyncObj)
+					if (this.autoResponseTriggerHelper != null)
 					{
-						if (this.autoResponseTriggerHelper != null)
+						if (de.Origin != null) // Foreach element where origin exists.
 						{
-							if (de.Origin != null) // Foreach element where origin exists.
+							foreach (var origin in de.Origin)
 							{
-								foreach (var origin in de.Origin)
+								foreach (var originByte in origin.Value1)
 								{
-									foreach (var originByte in origin.Value1)
+									if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
 									{
-										if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
-										{
-											this.autoResponseTriggerHelper.Reset();
-											de.Highlight = true;
+										this.autoResponseTriggerHelper.Reset();
+										de.Highlight = true;
 
-											// Signal the trigger:                                   // Always use sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
-											triggers.Add(new Tuple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.TriggerSequence, null, null));
-										}
+										// Signal the trigger:                                     // Always use sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
+										triggers.Add(new Tuple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.TriggerSequence, null, null));
 									}
 								}
 							}
 						}
-						else
-						{
-							break;     // Break the loop if response got disposed in the meantime.
-						}              // Though unlikely, it may happen when deactivating response
-					} // lock (helper) // while receiving a very large chunk.
-				} // if (direction == Rx)
+					}
+					else
+					{
+						break;     // Break the loop if response got disposed in the meantime.
+					}              // Though unlikely, it may happen when deactivating response
+				} // lock (helper) // while receiving a very large chunk.
 			} // foreach (element)
 		}
 

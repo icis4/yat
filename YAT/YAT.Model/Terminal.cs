@@ -3120,7 +3120,7 @@ namespace YAT.Model
 				EvaluateAutoActionFromElements(e.Elements, DataStatus, SettingsRoot.AutoAction.ShallHighlight, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
-			// AutoResponse does not need to be handled here.
+			// AutoResponse does never apply to Tx (yet).
 
 			OnDisplayElementsTxAdded(e);
 
@@ -3132,7 +3132,7 @@ namespace YAT.Model
 				EnqueueAutoActions(autoActionTriggers);
 			}
 
-			// AutoResponse does not need to be handled here.
+			// AutoResponse does never apply to Tx (yet).
 		}
 
 		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
@@ -3148,7 +3148,7 @@ namespace YAT.Model
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			{
-				EvaluateAutoActionFromElements(e.Elements, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+				EvaluateAutoActionFromElements(e.Elements, DataStatus, SettingsRoot.AutoAction.ShallHighlight); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
 
 			// AutoResponse highlighting:                                                // See terminal_DisplayLinesRxAdded for background.
@@ -3356,6 +3356,16 @@ namespace YAT.Model
 				foreach (var dl in e.Lines)
 					this.log.WriteLine(dl, Log.LogChannel.NeatTx);
 			}
+
+			// AutoAction:
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoAction.AlsoAppliesToTx)
+			{
+				foreach (var dl in e.Lines)
+					EnqueueAutoAction(dl.TimeStamp, dl.Text, null, DataStatus);
+			}
+
+			// AutoResponse does never apply to Tx (yet).
 		}
 
 		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
@@ -3380,7 +3390,7 @@ namespace YAT.Model
 				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress)
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus, SettingsRoot.AutoAction.ShallHighlight); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
 				{
@@ -3429,7 +3439,7 @@ namespace YAT.Model
 				if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 				    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress)
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus, SettingsRoot.AutoAction.ShallHighlight, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress incl. 'IsByteSequenceTriggered' is processed here.
 				{
@@ -3562,7 +3572,7 @@ namespace YAT.Model
 			{
 				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus, SettingsRoot.AutoAction.ShallHighlight); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is processed here.
 				{
@@ -3592,7 +3602,7 @@ namespace YAT.Model
 			{
 				if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 				{
-					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
+					EvaluateAutoActionOtherThanFilterOrSuppressFromLines(e.Lines, DataStatus, SettingsRoot.AutoAction.ShallHighlight); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 				}
 				else if (SettingsRoot.AutoAction.IsFilterOrSuppress) // Filter/Suppress is processed here.
 				{

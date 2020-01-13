@@ -145,6 +145,51 @@ namespace YAT.Model.Types
 			get { return ((AutoAction)UnderlyingEnum != AutoAction.None); }
 		}
 
+		/// <summary></summary>
+		public bool ShallHighlight
+		{
+			get
+			{
+				switch ((AutoAction)UnderlyingEnum)
+				{
+					// Explicitly list those actions that shall not highlight...
+					case AutoAction.None:
+					case AutoAction.Filter:
+					case AutoAction.Suppress:
+					case AutoAction.PlotByteCountRate:
+					case AutoAction.PlotLineCountRate:
+					case AutoAction.LineChartIndex:
+					case AutoAction.LineChartTime:
+					case AutoAction.LineChartTimeStamp:
+					case AutoAction.ScatterPlotXY:
+					case AutoAction.ScatterPlotTime:
+					case AutoAction.Histogram:
+						return (false);
+
+					default: // ...all others shall:
+						return (true);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public bool AlsoAppliesToTx
+		{
+			get
+			{
+				switch ((AutoAction)UnderlyingEnum)
+				{
+					// Explicitly list those actions that apply...
+					case AutoAction.PlotByteCountRate:
+					case AutoAction.PlotLineCountRate:
+						return (true);
+
+					default: // ...all others don't:
+						return (false);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members

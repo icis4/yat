@@ -122,6 +122,13 @@ namespace YAT.Model.Settings
 			get { return (base.IsActive && Action.IsActive); }
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool ShallHighlight
+		{
+			get { return (Action.ShallHighlight); }
+		}
+
 		/// <remarks>"FilterOrSuppress" also means "IsReloadable".</remarks>
 		[XmlIgnore]
 		public virtual bool IsFilterOrSuppress
@@ -148,6 +155,13 @@ namespace YAT.Model.Settings
 		public virtual bool IsActiveAsNeitherFilterNorSuppress
 		{
 			get { return (IsActive && IsNeitherFilterNorSuppress); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool AlsoAppliesToTx
+		{
+			get { return (Action.AlsoAppliesToTx); }
 		}
 
 		#endregion
