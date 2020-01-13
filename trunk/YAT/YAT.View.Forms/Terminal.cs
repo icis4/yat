@@ -741,7 +741,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked      =   this.settingsRoot.Send.Text.SendImmediately;
 				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked =   this.settingsRoot.Send.Text.EnableEscapes;
 
-				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled =  this.settingsRoot.SendText.Command.IsMultiLineText;
+				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled  = this.settingsRoot.SendText.Command.IsMultiLineText;
 
 				toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines.Checked       = this.settingsRoot.Send.File.SkipEmptyLines;
 				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile.Checked = this.settingsRoot.Send.File.EnableEscapes;
@@ -880,17 +880,17 @@ namespace YAT.View.Forms
 				var triggerWholeWord     = this.settingsRoot.AutoResponse.TriggerOptions.WholeWord;
 				var triggerEnableRegex   = this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex;
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Enabled =  triggerTextIsSupported;
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText      .Checked = (triggerTextIsSupported && triggerUseText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText      .Enabled =  triggerTextIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
 				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord    .Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_WholeWord    .Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex  .Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_EnableRegex  .Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
 			}
 			finally
 			{
@@ -1341,17 +1341,17 @@ namespace YAT.View.Forms
 				var triggerWholeWord     = this.settingsRoot.AutoAction.TriggerOptions.WholeWord;
 				var triggerEnableRegex   = this.settingsRoot.AutoAction.TriggerOptions.EnableRegex;
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Checked = (triggerTextIsSupported && triggerUseText);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Enabled =  triggerTextIsSupported;
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText      .Checked = (triggerTextIsSupported && triggerUseText);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText      .Enabled =  triggerTextIsSupported;
 
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Checked = (triggerTextIsSupported && triggerUseText && triggerCaseSensitive);
 				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive.Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord.Enabled = (triggerTextIsSupported && triggerUseText);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord    .Checked = (triggerTextIsSupported && triggerUseText && triggerWholeWord);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord    .Enabled = (triggerTextIsSupported && triggerUseText);
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex.Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex  .Checked = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported && triggerEnableRegex);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex  .Enabled = (triggerTextIsSupported && triggerUseText && triggerRegexIsSupported);
 			}
 			finally
 			{
