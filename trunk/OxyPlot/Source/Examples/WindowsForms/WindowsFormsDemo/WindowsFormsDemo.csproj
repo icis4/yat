@@ -8,8 +8,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WindowsFormsDemo</RootNamespace>
     <AssemblyName>WindowsFormsDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +67,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -78,13 +80,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OxyPlot.WindowsForms\OxyPlot.WindowsForms.csproj">
-      <Project>{8BC521AD-81CF-4E6C-8898-BE67527E7064}</Project>
-      <Name>OxyPlot.WindowsForms</Name>
+    <ProjectReference Include="..\..\..\OxyPlot.WindowsForms\OxyPlot.WindowsForms_NET40.csproj">
+      <Project>{d4554296-094e-4cac-8eae-44eb250666c6}</Project>
+      <Name>OxyPlot.WindowsForms_NET40</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\OxyPlot\OxyPlot.csproj">
-      <Project>{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}</Project>
-      <Name>OxyPlot</Name>
+    <ProjectReference Include="..\..\..\OxyPlot\OxyPlot_NET40.csproj">
+      <Project>{1c1d9807-be39-40a4-87de-3f81e7c651e5}</Project>
+      <Name>OxyPlot_NET40</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -96,4 +98,3 @@
   </Target>
   -->
 </Project>
-

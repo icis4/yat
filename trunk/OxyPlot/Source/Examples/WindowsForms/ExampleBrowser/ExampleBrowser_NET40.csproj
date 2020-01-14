@@ -88,8 +88,8 @@
       <Name>OxyPlot</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ExampleLibrary\ExampleLibrary_NET40.csproj">
-      <Project>{FACB89E5-53A5-4748-9F5B-E0714EBB37B2}</Project>
-      <Name>ExampleLibrary</Name>
+      <Project>{b8a34a2f-e505-4517-8eff-7f80e39cf425}</Project>
+      <Name>ExampleLibrary_NET40</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -101,4 +101,3 @@
   </Target>
   -->
 </Project>
-

@@ -216,6 +216,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup.x64", "YAT\YAT.Se
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup.x86", "YAT\YAT.Setup\YAT.Setup.x86.vdproj", "{D33931A1-0F8B-4524-A5D1-3891B88C21E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OxyPlot", "OxyPlot", "{B530B13B-AEE4-4E02-A831-D87AC761E851}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
