@@ -9,7 +9,7 @@
     <RootNamespace>MKY.IO.Usb</RootNamespace>
     <AssemblyName>MKY.IO.Usb</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\MKY.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
