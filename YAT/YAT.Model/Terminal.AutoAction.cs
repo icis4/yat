@@ -539,19 +539,20 @@ namespace YAT.Model
 					// No additional action.
 					break;
 
-				case AutoAction.Beep:               SystemSounds.Beep.Play();                                                    break;
-				case AutoAction.ShowMessageBox:     RequestAutoActionMessage(triggerTimeStamp,  triggerText, count);             break;
+				case AutoAction.Beep:                SystemSounds.Beep.Play();                                                    break;
+				case AutoAction.ShowMessageBox:      RequestAutoActionMessage(triggerTimeStamp,  triggerText, count);             break;
 
-				case AutoAction.PlotByteCountRate:  RequestAutoActionPlot(action, triggerTimeStamp, null,           dataStatus); break;
-				case AutoAction.PlotLineCountRate:  RequestAutoActionPlot(action, triggerTimeStamp, null,           dataStatus); break;
-				case AutoAction.LineChartIndex:     RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
-				case AutoAction.LineChartTime:      RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
-				case AutoAction.LineChartTimeStamp: RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
-				case AutoAction.ScatterPlotXY:      RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
-				case AutoAction.ScatterPlotTime:    RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
-				case AutoAction.Histogram:          RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.PlotByteCountRate:   RequestAutoActionPlot(action, triggerTimeStamp, null,           dataStatus); break;
+				case AutoAction.PlotLineCountRate:   RequestAutoActionPlot(action, triggerTimeStamp, null,           dataStatus); break;
+				case AutoAction.LineChartIndex:      RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.LineChartTime:       RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.LineChartTimeStamp:  RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.ScatterPlotXY:       RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.ScatterPlotTime:     RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.HistogramHorizontal: RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.HistogramVertical:   RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
 
-				case AutoAction.ClearRepositories:  ClearRepositories();                                                         break;
+				case AutoAction.ClearRepositories:   ClearRepositories();                                                         break;
 
 				case AutoAction.ClearRepositoriesOnSubsequentRx:
 				{
@@ -630,7 +631,8 @@ namespace YAT.Model
 				case AutoAction.LineChartTimeStamp:
 				case AutoAction.ScatterPlotXY:
 				case AutoAction.ScatterPlotTime:
-				case AutoAction.Histogram:
+				case AutoAction.HistogramHorizontal:
+				case AutoAction.HistogramVertical:
 				case AutoAction.ClearRepositories:
 				case AutoAction.ClearRepositoriesOnSubsequentRx:
 				case AutoAction.ResetCountAndRate:
@@ -713,7 +715,8 @@ namespace YAT.Model
 				case AutoAction.LineChartTimeStamp:            CreateTimeStampXYPlotItem(plotAction, triggerTimeStamp, triggerMatches,             out pi);    errorMessage = null; return (true);
 				case AutoAction.ScatterPlotXY:                 CreateXYPlotItem(         plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
 				case AutoAction.ScatterPlotTime:    return (TryCreateTimeXYPlotItem(     plotAction,                   triggerMatches,             out pi, out errorMessage));
-				case AutoAction.Histogram:                     CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
+				case AutoAction.HistogramHorizontal:           CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
+				case AutoAction.HistogramVertical:             CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
 
 				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}

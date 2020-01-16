@@ -57,7 +57,8 @@ namespace YAT.Model.Types
 		LineChartTimeStamp,
 		ScatterPlotXY,
 		ScatterPlotTime,
-		Histogram,
+		HistogramHorizontal,
+		HistogramVertical,
 
 		ClearRepositories,
 		ClearRepositoriesOnSubsequentRx,
@@ -90,31 +91,32 @@ namespace YAT.Model.Types
 		                                 // Attention:
 		                                 // These strings are used for XML serialization!
 		                                 // Not ideal, but required for explicit 'AutoTrigger' and 'AutoResponse', thus here too.
-		private const string             None_string               = "[None]";
-		private const string             Highlight_string          = "[Highlight]";
+		private const string             None_string                = "[None]";
+		private const string             Highlight_string           = "[Highlight]";
 		private static readonly string[] Highlight_stringAlternatives = new string[] { "[Highlight Only]" }; // Old name, needed for backward compatibility with old settings!
-		private const string             Filter_string             = "[Filter]";
-		private const string             Suppress_string           = "[Suppress]";
-		private const string             Beep_string               = "[Beep]";
-		private const string             ShowMessageBox_string     = "[Show Message Box]";
-		private const string             PlotByteCountRate_string  = "[Plot Byte Count/Rate]";
-		private const string             PlotLineCountRate_string  = "[Plot Line Count/Rate]";
-		private const string             LineChartIndex_string     = "[Line Chart]";
-		private const string             LineChartTime_string      = "[Line Chart (X = Time)]";
-		private const string             LineChartTimeStamp_string = "[Line Chart (X = Time Stamp)]";
-		private const string             ScatterPlotXY_string      = "[Scatter Plot]";
-		private const string             ScatterPlotTime_string    = "[Scatter Plot (X = Time)]";
-		private const string             Histogram_string          = "[Histogram]";
-		private const string             ClearRepositories_string  = "[Clear Monitor]"; // Translating from code to user terminology.
+		private const string             Filter_string              = "[Filter]";
+		private const string             Suppress_string            = "[Suppress]";
+		private const string             Beep_string                = "[Beep]";
+		private const string             ShowMessageBox_string      = "[Show Message Box]";
+		private const string             PlotByteCountRate_string   = "[Plot Byte Count/Rate]";
+		private const string             PlotLineCountRate_string   = "[Plot Line Count/Rate]";
+		private const string             LineChartIndex_string      = "[Line Chart]";
+		private const string             LineChartTime_string       = "[Line Chart (X = Time)]";
+		private const string             LineChartTimeStamp_string  = "[Line Chart (X = Time Stamp)]";
+		private const string             ScatterPlotXY_string       = "[Scatter Plot]";
+		private const string             ScatterPlotTime_string     = "[Scatter Plot (X = Time)]";
+		private const string             HistogramHorizontal_string = "[Histogram (Horizontal)]";
+		private const string             HistogramVertical_string   = "[Histogram (Vertical)]";
+		private const string             ClearRepositories_string   = "[Clear Monitor]"; // Translating from code to user terminology.
 		private const string             ClearRepositoriesOnSubsequentRx_string = "[Clear Mon. on Subsequent Rx]"; // Translating from code to user terminology.
 		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Clear Mon. ", "[Clear Monitor " }; // Including ' ' to distinguish from [Clear Monitor]!
-		private const string             ResetCountAndRate_string  = "[Reset Count/Rate]";                                                // Old name, needed for backward compatibility with old settings!
-		private const string             SwitchLogOn_string        = "[Log On]"; // Translating from code to user terminology.
-		private const string             SwitchLogOff_string       = "[Log Off]"; // Translating from code to user terminology.
-		private const string             ToggleLogOnOrOff_string   = "[Toggle Log On/Off]"; // Translating from code to user terminology.
-		private const string             StopIO_string             = "[Close/Stop I/O]"; // Translating from code to user terminology.
-		private const string             CloseTerminal_string      = "[Close Terminal]";
-		private static readonly string   ExitApplication_string    = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
+		private const string             ResetCountAndRate_string   = "[Reset Count/Rate]";                                                // Old name, needed for backward compatibility with old settings!
+		private const string             SwitchLogOn_string         = "[Log On]"; // Translating from code to user terminology.
+		private const string             SwitchLogOff_string        = "[Log Off]"; // Translating from code to user terminology.
+		private const string             ToggleLogOnOrOff_string    = "[Toggle Log On/Off]"; // Translating from code to user terminology.
+		private const string             StopIO_string              = "[Close/Stop I/O]"; // Translating from code to user terminology.
+		private const string             CloseTerminal_string       = "[Close Terminal]";
+		private static readonly string   ExitApplication_string     = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
 		private static readonly string[] ExitApplication_stringAlternativeStart = new string[] { "[Exit " + ApplicationEx.CommonName };
 
 		#endregion
@@ -163,7 +165,8 @@ namespace YAT.Model.Types
 					case AutoAction.LineChartTimeStamp:
 					case AutoAction.ScatterPlotXY:
 					case AutoAction.ScatterPlotTime:
-					case AutoAction.Histogram:
+					case AutoAction.HistogramHorizontal:
+					case AutoAction.HistogramVertical:
 						return (false);
 
 					default: // ...all others shall:
@@ -221,7 +224,8 @@ namespace YAT.Model.Types
 				case AutoAction.LineChartTimeStamp:              return (LineChartTimeStamp_string);
 				case AutoAction.ScatterPlotXY:                   return (ScatterPlotXY_string);
 				case AutoAction.ScatterPlotTime:                 return (ScatterPlotTime_string);
-				case AutoAction.Histogram:                       return (Histogram_string);
+				case AutoAction.HistogramHorizontal:             return (HistogramHorizontal_string);
+				case AutoAction.HistogramVertical:               return (HistogramVertical_string);
 
 				case AutoAction.ClearRepositories:               return (ClearRepositories_string);
 				case AutoAction.ClearRepositoriesOnSubsequentRx: return (ClearRepositoriesOnSubsequentRx_string);
@@ -302,7 +306,7 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(23); // Preset the required capacity to improve memory management.
+			var a = new List<AutoActionEx>(24); // Preset the required capacity to improve memory management.
 
 			a.Add(new AutoActionEx(AutoAction.None));
 
@@ -320,7 +324,8 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.LineChartTimeStamp));
 			a.Add(new AutoActionEx(AutoAction.ScatterPlotXY));
 			a.Add(new AutoActionEx(AutoAction.ScatterPlotTime));
-			a.Add(new AutoActionEx(AutoAction.Histogram));
+			a.Add(new AutoActionEx(AutoAction.HistogramHorizontal));
+			a.Add(new AutoActionEx(AutoAction.HistogramVertical));
 
 			a.Add(new AutoActionEx(AutoAction.ClearRepositories));
 			a.Add(new AutoActionEx(AutoAction.ClearRepositoriesOnSubsequentRx));
@@ -451,9 +456,14 @@ namespace YAT.Model.Types
 				result = AutoAction.ScatterPlotTime;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Histogram_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, HistogramHorizontal_string))
 			{
-				result = AutoAction.Histogram;
+				result = AutoAction.HistogramHorizontal;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, HistogramVertical_string))
+			{
+				result = AutoAction.HistogramVertical;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, ClearRepositories_string))
