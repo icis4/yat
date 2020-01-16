@@ -11,7 +11,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -326,6 +326,14 @@
     <ProjectReference Include="..\..\MKY\MKY.Windows.Forms\MKY.Windows.Forms.csproj">
       <Project>{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}</Project>
       <Name>MKY.Windows.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OxyPlot\Source\OxyPlot.WindowsForms\OxyPlot.WindowsForms_NET40.csproj">
+      <Project>{d4554296-094e-4cac-8eae-44eb250666c6}</Project>
+      <Name>OxyPlot.WindowsForms_NET40</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OxyPlot\Source\OxyPlot\OxyPlot_NET40.csproj">
+      <Project>{1c1d9807-be39-40a4-87de-3f81e7c651e5}</Project>
+      <Name>OxyPlot_NET40</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ScottPlot\src\ScottPlot\ScottPlot.csproj">
       <Project>{ee9215c6-01c1-4835-8514-3a708f9291f1}</Project>
