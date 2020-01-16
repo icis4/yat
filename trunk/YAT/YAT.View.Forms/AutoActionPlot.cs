@@ -494,14 +494,15 @@ namespace YAT.View.Forms
 
 					switch (mdl.Action)
 					{
-						case AutoAction.PlotByteCountRate:  PlotCountRate(mdl, txColor, rxColor       ); break;
-						case AutoAction.PlotLineCountRate:  PlotCountRate(mdl, txColor, rxColor       ); break;
-						case AutoAction.LineChartIndex:     PlotSignal(   mdl,          rxColor       ); break;
-						case AutoAction.LineChartTime:      PlotScatter(  mdl,          rxColor, true ); break;
-						case AutoAction.LineChartTimeStamp: PlotScatter(  mdl,          rxColor, true ); break;
-						case AutoAction.ScatterPlotXY:      PlotScatter(  mdl,          rxColor, false); break;
-						case AutoAction.ScatterPlotTime:    PlotScatter(  mdl,          rxColor, true ); break;
-						case AutoAction.Histogram:          PlotHistogram(mdl,          rxColor       ); break;
+						case AutoAction.PlotByteCountRate:   PlotCountRate(mdl, txColor, rxColor                        ); break;
+						case AutoAction.PlotLineCountRate:   PlotCountRate(mdl, txColor, rxColor                        ); break;
+						case AutoAction.LineChartIndex:      PlotSignal(   mdl,          rxColor                        ); break;
+						case AutoAction.LineChartTime:       PlotScatter(  mdl,          rxColor, true                  ); break;
+						case AutoAction.LineChartTimeStamp:  PlotScatter(  mdl,          rxColor, true                  ); break;
+						case AutoAction.ScatterPlotXY:       PlotScatter(  mdl,          rxColor, false                 ); break;
+						case AutoAction.ScatterPlotTime:     PlotScatter(  mdl,          rxColor, true                  ); break;
+						case AutoAction.HistogramHorizontal: PlotHistogram(mdl,          rxColor, Orientation.Horizontal); break;
+						case AutoAction.HistogramVertical:   PlotHistogram(mdl,          rxColor, Orientation.Vertical  ); break;
 
 						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + mdl.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
@@ -591,11 +592,14 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void PlotHistogram(Model.AutoActionPlotModel mdl, Color rxColor)
+		private void PlotHistogram(Model.AutoActionPlotModel mdl, Color rxColor, Orientation orientation)
 		{
 			if (mdl.Histogram != null)
 			{
-				scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
+				if (orientation == Orientation.Horizontal)
+					scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
+				else // PENDING, probably not supported by ScottPlot
+					scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
 			}
 		}
 
@@ -628,7 +632,8 @@ namespace YAT.View.Forms
 						UpdateHoverOnScatter(cursorPos);
 						break;
 
-					case AutoAction.Histogram:
+					case AutoAction.HistogramHorizontal:
+					case AutoAction.HistogramVertical:
 						UpdateHoverOnHistogram(cursorPos);
 						break;
 
