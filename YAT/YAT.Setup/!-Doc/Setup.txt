@@ -1,0 +1,2 @@
+﻿
+.NET 4 Full Profile (not Client Profile) because ALAZ.SystemEx.NetEx requires reference to System.Web.
