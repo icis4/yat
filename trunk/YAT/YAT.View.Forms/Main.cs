@@ -2471,10 +2471,17 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				if (trigger.IsExplicit)
-					((Terminal)ActiveMdiChild).RequestAutoActionAdjustTriggerOptionsSilently(trigger);
+				if (((Terminal)ActiveMdiChild).RequestAutoActionValidateTrigger(trigger))
+				{
+					if (trigger.IsExplicit)
+						((Terminal)ActiveMdiChild).RequestAutoActionAdjustTriggerOptionsSilently(trigger);
 
-				((Terminal)ActiveMdiChild).RequestAutoActionTrigger(trigger);
+					((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(trigger);
+				}
+				else
+				{
+					SetAutoActionChildControls(); // Revert trigger.
+				}
 			}
 		}
 
@@ -2544,7 +2551,7 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					((Terminal)ActiveMdiChild).RequestAutoActionTrigger(triggerTextOrRegexPattern);
+					((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(triggerTextOrRegexPattern);
 				}
 			}
 
@@ -2624,9 +2631,14 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var response = (toolStripComboBox_MainTool_AutoAction_Action.SelectedItem as AutoActionEx);
-			if (response != null)
-				((Terminal)ActiveMdiChild).RequestAutoActionAction(response);
+			var action = (toolStripComboBox_MainTool_AutoAction_Action.SelectedItem as AutoActionEx);
+			if (action != null)
+			{
+				if (((Terminal)ActiveMdiChild).RequestAutoActionValidateAction(action))
+					((Terminal)ActiveMdiChild).ActivateAutoActionAction(action);
+				else
+					SetAutoActionChildControls(); // Revert action.
+			}
 		}
 
 	////private void toolStripComboBox_MainTool_AutoAction_Action_Leave(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
@@ -2666,10 +2678,17 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				if (trigger.IsExplicit)
-					((Terminal)ActiveMdiChild).RequestAutoResponseAdjustTriggerOptionsSilently(trigger);
+			////if (((Terminal)ActiveMdiChild).RequestAutoResponseValidateTrigger(trigger)) is not needed (yet).
+				{
+					if (trigger.IsExplicit)
+						((Terminal)ActiveMdiChild).RequestAutoResponseAdjustTriggerOptionsSilently(trigger);
 
-				((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(trigger);
+					((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(trigger);
+				}
+			////else
+			////{
+			////	SetAutoResponseChildControls(); // Revert trigger.
+			////}
 			}
 		}
 
@@ -2739,7 +2758,7 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					((Terminal)ActiveMdiChild).RequestAutoResponseTrigger(triggerTextOrRegexPattern);
+					((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
 				}
 			}
 
@@ -2827,10 +2846,17 @@ namespace YAT.View.Forms
 			var response = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 			{
-				if (response.IsExplicit)
-					((Terminal)ActiveMdiChild).RequestAutoResponseAdjustResponseOptionsSilently(response);
+			////if (((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponse(response)) is not needed (yet).
+				{
+					if (response.IsExplicit)
+						((Terminal)ActiveMdiChild).RequestAutoResponseAdjustResponseOptionsSilently(response);
 
-				((Terminal)ActiveMdiChild).RequestAutoResponseResponse(response);
+					((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(response);
+				}
+			////else
+			////{
+			////	SetAutoResponseChildControls(); // Revert resopnse.
+			////}
 			}
 		}
 
@@ -2900,7 +2926,7 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					((Terminal)ActiveMdiChild).RequestAutoResponseResponse(responseText);
+					((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(responseText);
 				}
 			}
 

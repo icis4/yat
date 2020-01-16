@@ -1024,10 +1024,17 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				if (trigger.IsExplicit)
-					RequestAutoResponseAdjustTriggerOptionsSilently(trigger);
+			////if (RequestAutoResponseValidateTrigger(trigger)) is not needed (yet).
+				{
+					if (trigger.IsExplicit)
+						RequestAutoResponseAdjustTriggerOptionsSilently(trigger);
 
-				RequestAutoResponseTrigger(trigger);
+					ActivateAutoResponseTrigger(trigger);
+				}
+			////else
+			////{
+			////	SetAutoResponseControls(); // Revert trigger.
+			////}
 			}
 		}
 
@@ -1097,7 +1104,7 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					RequestAutoResponseTrigger(triggerText);
+					ActivateAutoResponseTrigger(triggerText);
 				}
 			}
 
@@ -1132,10 +1139,17 @@ namespace YAT.View.Forms
 			var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 			{
-				if (response.IsExplicit)
-					RequestAutoResponseAdjustResponseOptionsSilently(response);
+			////if (RequestAutoResponseValidateResponse(response)) is not needed (yet).
+				{
+					if (response.IsExplicit)
+						RequestAutoResponseAdjustResponseOptionsSilently(response);
 
-				RequestAutoResponseResponse(response);
+					ActivateAutoResponseResponse(response);
+				}
+			////else
+			////{
+			////	SetAutoResponseChildControls(); // Revert resopnse.
+			////}
 			}
 		}
 
@@ -1205,7 +1219,7 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					RequestAutoResponseResponse(responseText);
+					ActivateAutoResponseResponse(responseText);
 				}
 			}
 
@@ -1381,7 +1395,7 @@ namespace YAT.View.Forms
 				if (trigger.IsExplicit)
 					RequestAutoActionAdjustTriggerOptionsSilently(trigger);
 
-				RequestAutoActionTrigger(trigger);
+				ActivateAutoActionTrigger(trigger);
 			}
 		}
 
@@ -1451,7 +1465,7 @@ namespace YAT.View.Forms
 						return;
 					}
 
-					RequestAutoActionTrigger(triggerText);
+					ActivateAutoActionTrigger(triggerText);
 				}
 			}
 
@@ -1485,7 +1499,12 @@ namespace YAT.View.Forms
 
 			var action = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.SelectedItem as AutoActionEx);
 			if (action != null)
-				RequestAutoActionAction(action);
+			{
+				if (RequestAutoActionValidateAction(action))
+					ActivateAutoActionAction(action);
+				else
+					SetAutoActionControls(); // Revert action.
+			}
 		}
 
 	////private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_Leave(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
@@ -4607,6 +4626,80 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool RequestAutoActionValidateTrigger(AutoTriggerEx trigger)
+		{
+			var text = new StringBuilder();
+
+			switch ((AutoAction)(this.settingsRoot.AutoAction.Action))
+			{
+				case AutoAction.Highlight:
+				{
+					if (trigger == AutoTrigger.AnyLine)
+					{
+						text.AppendLine("Trigger cannot be set to [Any Line] when action is [Highlight].");
+						text.AppendLine();
+						text.Append    ("Reason: Such action would result in all received lines being highlighted.");
+					}
+					break;
+				}
+
+				case AutoAction.Suppress:
+				{
+					if (trigger == AutoTrigger.AnyLine)
+					{
+						text.AppendLine("Trigger cannot be set to [Any Line] when action is [Suppress].");
+						text.AppendLine();
+						text.Append    ("Reason: Such action would result in all received lines being suppressed.");
+					}
+					break;
+				}
+
+				case AutoAction.LineChartIndex:
+				case AutoAction.LineChartTime:
+				case AutoAction.LineChartTimeStamp:
+				case AutoAction.ScatterPlotXY:
+				case AutoAction.ScatterPlotTime:
+				case AutoAction.HistogramHorizontal:
+				case AutoAction.HistogramVertical:
+				{
+					if (!trigger.RegexIsSupported)
+					{
+						text.Append    ("Trigger cannot be set to ");
+						text.Append    (trigger);
+						text.AppendLine(" because [Line/Scatter/Histogram] require that trigger is based on a regular expression.");
+						text.AppendLine();
+						text.Append    (@"Reason: Regular expression captures (e.g. ""([-+]?\d+)"") are used to retrieve the values to plot.");
+					}
+					break;
+				}
+
+				default:
+				{
+					// Nothing to do.
+					break;
+				}
+			}
+
+			if (text.Length > 0)
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					text.ToString(),
+					"Currently Invalid Trigger",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation
+				);
+
+				return (false);
+			}
+			else
+			{
+				return (true);
+			}
+		}
+
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
 		public virtual void RequestAutoActionAdjustTriggerOptionsSilently(AutoTriggerEx trigger)
@@ -4664,59 +4757,15 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoActionTrigger(AutoTriggerEx trigger)
+		public virtual void ActivateAutoActionTrigger(AutoTriggerEx trigger)
 		{
-			if (trigger == AutoTrigger.AnyLine)
+			this.settingsRoot.AutoAction.Trigger = trigger;
+
+			if (trigger.IsExplicit && !AutoTriggerEx.CommonRegexCapturePatterns.Contains(trigger))
 			{
-				var text = new StringBuilder();
-
-				switch ((AutoAction)(this.settingsRoot.AutoAction.Action))
-				{
-					case AutoAction.Highlight:
-					{
-						text.AppendLine("Trigger cannot be set to [Any Line] when action is [Highlight]!");
-						text.AppendLine();
-						text.Append    ("Reason: Such action would result in all received lines being highlighted.");
-						break;
-					}
-
-					case AutoAction.Suppress:
-					{
-						text.AppendLine("Trigger cannot be set to [Any Line] when action is [Suppress]!");
-						text.AppendLine();
-						text.Append    ("Reason: Such action would result in all received lines being suppressed.");
-						break;
-					}
-
-					default: // Accept change of trigger:
-					{
-						this.settingsRoot.AutoAction.Trigger = trigger;
-						break;
-					}
-				}
-
-				if (text.Length > 0)
-				{
-					MessageBoxEx.Show
-					(
-						this,
-						text.ToString(),
-						"Currently Invalid Trigger",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Exclamation
-					);
-				}
-			}
-			else // Accept change of trigger:
-			{
-				this.settingsRoot.AutoAction.Trigger = trigger;
-
-				if (trigger.IsExplicit && !AutoTriggerEx.CommonRegexCapturePatterns.Contains(trigger))
-				{
-					ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
-					ApplicationSettings.RoamingUserSettings.AutoAction.SetChanged(); // Manual change required because underlying collection is modified.
-					ApplicationSettings.SaveRoamingUserSettings();
-				}
+				ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.Add(new RecentItem<string>(trigger));
+				ApplicationSettings.RoamingUserSettings.AutoAction.SetChanged(); // Manual change required because underlying collection is modified.
+				ApplicationSettings.SaveRoamingUserSettings();
 			}
 		}
 
@@ -4796,57 +4845,86 @@ namespace YAT.View.Forms
 			this.settingsRoot.AutoAction.ResumeChangeEvent(false); // Event will be raised on revalidation.
 		}
 
-	////public virtual AutoContentState AutoActionTriggerState         is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
-	////private void SetAutoActionTriggerState(AutoContentState state) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////public virtual AutoContentState AutoActionTriggerState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
 		/// <summary></summary>
-		public virtual void RequestAutoActionAction(AutoActionEx action)
+		public virtual bool RequestAutoActionValidateAction(AutoActionEx action)
 		{
-			if (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine)
-			{
-				var text = new StringBuilder();
+			var text = new StringBuilder();
 
-				switch ((AutoAction)action)
+			switch ((AutoAction)action)
+			{
+				case AutoAction.Highlight:
 				{
-					case AutoAction.Highlight:
+					if (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine)
 					{
 						text.AppendLine("Action cannot be set to [Highlight] when trigger is [Any Line]!");
 						text.AppendLine();
 						text.Append    ("Reason: Such action would result in all received lines being highlighted.");
-						break;
 					}
+					break;
+				}
 
-					case AutoAction.Suppress:
+				case AutoAction.Suppress:
+				{
+					if (this.settingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine)
 					{
 						text.AppendLine("Action cannot be set to [Suppress] when trigger is [Any Line]!");
 						text.AppendLine();
 						text.Append    ("Reason: Such action would result in all received lines being suppressed.");
-						break;
 					}
-
-					default: // Accept change of action:
-					{
-						this.settingsRoot.AutoAction.Action = action;
-						break;
-					}
+					break;
 				}
 
-				if (text.Length > 0)
+				case AutoAction.LineChartIndex:
+				case AutoAction.LineChartTime:
+				case AutoAction.LineChartTimeStamp:
+				case AutoAction.ScatterPlotXY:
+				case AutoAction.ScatterPlotTime:
+				case AutoAction.HistogramHorizontal:
+				case AutoAction.HistogramVertical:
 				{
-					MessageBoxEx.Show
-					(
-						this,
-						text.ToString(),
-						"Currently Invalid Action",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Exclamation
-					);
+					if (!this.settingsRoot.AutoAction.Trigger.RegexIsSupported)
+					{
+						text.Append    ("Action cannot be set to ");
+						text.Append    (action);
+						text.AppendLine(" when trigger is not based on a regular expression.");
+						text.AppendLine();
+						text.Append    (@"Reason: Regular expression captures (e.g. ""([-+]?\d+)"") are used to retrieve the values to plot.");
+					}
+					break;
+				}
+
+				default: // Accept change of action:
+				{
+					// Nothing to do.
+					break;
 				}
 			}
-			else // Accept change of action:
+
+			if (text.Length > 0)
 			{
-				this.settingsRoot.AutoAction.Action = action;
+				MessageBoxEx.Show
+				(
+					this,
+					text.ToString(),
+					"Currently Invalid Action",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation
+				);
+
+				return (false);
 			}
+			else
+			{
+				return (true);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ActivateAutoActionAction(AutoActionEx action)
+		{
+			this.settingsRoot.AutoAction.Action = action;
 		}
 
 		/// <summary></summary>
@@ -4877,6 +4955,8 @@ namespace YAT.View.Forms
 				}
 			}
 		}
+
+	////public virtual bool RequestAutoResponseValidateTrigger(AutoTriggerEx trigger) is not needed (yet)
 
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
@@ -4935,7 +5015,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoResponseTrigger(AutoTriggerEx trigger)
+		public virtual void ActivateAutoResponseTrigger(AutoTriggerEx trigger)
 		{
 			this.settingsRoot.AutoResponse.Trigger = trigger;
 
@@ -5038,6 +5118,8 @@ namespace YAT.View.Forms
 			}
 		}
 
+	////public virtual bool RequestAutoResponseValidateResponse(AutoResponseEx response) is not needed (yet)
+
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
 		public virtual void RequestAutoResponseAdjustResponseOptionsSilently(AutoResponseEx response)
@@ -5067,11 +5149,8 @@ namespace YAT.View.Forms
 			return (ValidationHelper.ValidateText(this, "response", responseText,  out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes));
 		}
 
-		/// <remarks>
-		/// Named "request" same as <see cref="RequestAutoActionTrigger(AutoTriggerEx)"/> and
-		/// <see cref="RequestAutoActionAction(AutoActionEx)"/> which indeed first need to confirm.
-		/// </remarks>
-		public virtual void RequestAutoResponseResponse(AutoResponseEx response)
+		/// <summary></summary>
+		public virtual void ActivateAutoResponseResponse(AutoResponseEx response)
 		{
 			this.settingsRoot.AutoResponse.Response = response;
 
