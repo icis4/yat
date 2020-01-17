@@ -193,6 +193,51 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
+		public bool IsCountRatePlot
+		{
+			get
+			{
+				switch ((AutoAction)UnderlyingEnum)
+				{
+					case AutoAction.PlotByteCountRate:
+					case AutoAction.PlotLineCountRate:
+						return (true);
+
+					default:
+						return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsLineScatterHistogramPlot
+		{
+			get
+			{
+				switch ((AutoAction)UnderlyingEnum)
+				{
+					case AutoAction.LineChartIndex:
+					case AutoAction.LineChartTime:
+					case AutoAction.LineChartTimeStamp:
+					case AutoAction.ScatterPlotXY:
+					case AutoAction.ScatterPlotTime:
+					case AutoAction.HistogramHorizontal:
+					case AutoAction.HistogramVertical:
+						return (true);
+
+					default:
+						return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsAnyPlot
+		{
+			get { return (IsCountRatePlot || IsLineScatterHistogramPlot); }
+		}
+
 		#endregion
 
 		#region Object Members
@@ -336,6 +381,24 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.StopIO));
 			a.Add(new AutoActionEx(AutoAction.CloseTerminal));
 			a.Add(new AutoActionEx(AutoAction.ExitApplication));
+
+			return (a.ToArray());
+		}
+
+		/// <remarks>
+		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
+		public static AutoActionEx[] GetLineScatterHistrogramPlotItems()
+		{
+			var a = new List<AutoActionEx>(7); // Preset the required capacity to improve memory management.
+
+			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
+			a.Add(new AutoActionEx(AutoAction.LineChartTime));
+			a.Add(new AutoActionEx(AutoAction.LineChartTimeStamp));
+			a.Add(new AutoActionEx(AutoAction.ScatterPlotXY));
+			a.Add(new AutoActionEx(AutoAction.ScatterPlotTime));
+			a.Add(new AutoActionEx(AutoAction.HistogramHorizontal));
+			a.Add(new AutoActionEx(AutoAction.HistogramVertical));
 
 			return (a.ToArray());
 		}
