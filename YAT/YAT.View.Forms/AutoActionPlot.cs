@@ -42,7 +42,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -89,6 +88,7 @@ namespace YAT.View.Forms
 
 		private Model.Terminal model; // = null;
 
+	////private AutoAction lastAction; // = [None]; \remind (2020-01-17 / MKY / FR#391)
 		private int lastUpdateCount; // = 0;
 		private bool updateIsSuspended; // = false;
 		private TimedMovingAverageInt64 updateSpanAvg10s;
@@ -99,6 +99,9 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Events
 		//==========================================================================================
+
+	/////// <summary></summary>
+	////public event EventHandler<EventArgs<AutoAction>> ChangeAutoAction; \remind (2020-01-17 / MKY / FR#391) has been prepared but is yet deactivated for reasons described in FR#391.
 
 		/// <summary></summary>
 		public event EventHandler DeactivateAutoAction;
@@ -132,6 +135,13 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+			////comboBox_PlotAction.Items.AddRange(AutoActionEx.GetLineScatterHistrogramPlotItems());
+			////
+			////var mdl = this.model.AutoActionPlotModel; \remind (2020-01-17 / MKY / FR#391)
+			////var action = (AutoActionEx)mdl.Action;
+			////ComboBoxHelper.Select(comboBox_PlotAction, action, action);
+			////comboBox_PlotAction.Enabled = action.IsLineScatterHistogramPlot;
+
 				checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
 			}
 			finally
@@ -235,6 +245,16 @@ namespace YAT.View.Forms
 		{
 			UpdateHover();
 		}
+
+	////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
+	////{
+	////	if (this.isSettingControls) \remind (2020-01-17 / MKY / FR#391)
+	////		return;
+	////
+	////	var action = (comboBox_PlotAction.SelectedItem as AutoActionEx);
+	////	if (action != null)
+	////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
+	////}
 
 		private void button_FitAxis_Click(object sender, EventArgs e)
 		{
@@ -478,7 +498,25 @@ namespace YAT.View.Forms
 			lock (this.model.AutoActionPlotModelSyncObj)
 			{
 				var mdl = this.model.AutoActionPlotModel;
-				if ((this.lastUpdateCount != mdl.UpdateCounter) || force) // Only update when needed.
+				var doUpdate = ((this.lastUpdateCount != mdl.UpdateCounter) || force); // Only update when needed.
+			////var doUpdate = ((this.lastAction != mdl.Action) || (this.lastUpdateCount != mdl.UpdateCounter) || force); // Only update when needed.
+
+			////if (this.lastAction != mdl.Action) \remind (2020-01-17 / MKY / FR#391)
+			////{
+			////	this.isSettingControls.Enter();
+			////	try
+			////	{
+			////		var action = (AutoActionEx)mdl.Action;
+			////		ComboBoxHelper.Select(comboBox_PlotAction, action, action);
+			////		comboBox_PlotAction.Enabled = action.IsLineScatterHistogramPlot;
+			////	}
+			////	finally
+			////	{
+			////		this.isSettingControls.Leave();
+			////	}
+			////}
+
+				if (doUpdate)
 				{
 					button_FitAxis.Enabled = false; // AxisAuto() will be called further below.
 
@@ -512,6 +550,7 @@ namespace YAT.View.Forms
 
 					scottPlot.Render();
 
+				////this.lastAction = mdl.Action; \remind (2020-01-17 / MKY / FR#391)
 					this.lastUpdateCount = mdl.UpdateCounter;
 
 					var endTicks = Stopwatch.GetTimestamp();
@@ -547,7 +586,6 @@ namespace YAT.View.Forms
 				}
 			}
 		}
-
 
 		private void PlotSignal(Model.AutoActionPlotModel mdl, Color rxColor)
 		{
@@ -721,6 +759,12 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Event Raising
 		//==========================================================================================
+
+	/////// <summary></summary>
+	////protected virtual void OnChangeAutoAction(EventArgs<AutoAction> e)
+	////{
+	////	EventHelper.RaiseSync(ChangeAutoAction, this, e); \remind (2020-01-17 / MKY / FR#391)
+	////}
 
 		/// <summary></summary>
 		protected virtual void OnDeactivateAutoAction(EventArgs e)
