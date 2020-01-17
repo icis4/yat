@@ -4714,7 +4714,7 @@ namespace YAT.View.Forms
 				}
 			}
 
-			this.settingsRoot.AutoAction.SuspendChangeEvent();
+			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{                                // Settings member must be changed to let the changed event be raised!
 				this.settingsRoot.AutoAction.TriggerOptions = options;
 			}
@@ -4759,7 +4759,11 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void ActivateAutoActionTrigger(AutoTriggerEx trigger)
 		{
-			this.settingsRoot.AutoAction.Trigger = trigger;
+			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for trigger and/or previously changed options.
+			{
+				this.settingsRoot.AutoAction.Trigger = trigger;
+			}
+			this.settingsRoot.AutoAction.ResumeChangeEvent(); // Event will be raised for trigger and/or previously changed options.
 
 			if (trigger.IsExplicit && !AutoTriggerEx.CommonRegexCapturePatterns.Contains(trigger))
 			{
@@ -4779,7 +4783,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionTriggerUseText()
 		{
-			this.settingsRoot.AutoAction.SuspendChangeEvent();
+			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoAction.TriggerOptions;
 				options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
@@ -4798,7 +4802,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionTriggerCaseSensitive()
 		{
-			this.settingsRoot.AutoAction.SuspendChangeEvent();
+			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoAction.TriggerOptions;
 				options.CaseSensitive = !options.CaseSensitive; // Settings member must be changed to let the changed event be raised!
@@ -4817,7 +4821,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionTriggerWholeWord()
 		{
-			this.settingsRoot.AutoAction.SuspendChangeEvent();
+			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoAction.TriggerOptions;
 				options.WholeWord = !options.WholeWord; // Settings member must be changed to let the changed event be raised!
@@ -4836,7 +4840,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoActionTriggerEnableRegex()
 		{
-			this.settingsRoot.AutoAction.SuspendChangeEvent();
+			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoAction.TriggerOptions;
 				options.EnableRegex = !options.EnableRegex; // Settings member must be changed to let the changed event be raised!
@@ -4924,7 +4928,11 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void ActivateAutoActionAction(AutoActionEx action)
 		{
-			this.settingsRoot.AutoAction.Action = action;
+			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for trigger and/or previously changed options.
+			{
+				this.settingsRoot.AutoAction.Action = action;
+			}
+			this.settingsRoot.AutoAction.ResumeChangeEvent(); // Event will be raised for trigger and/or previously changed options.
 		}
 
 		/// <summary></summary>
@@ -4972,7 +4980,7 @@ namespace YAT.View.Forms
 				}
 			}
 
-			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{                                  // Settings member must be changed to let the changed event be raised!
 				this.settingsRoot.AutoResponse.TriggerOptions = options;
 			}
@@ -5017,7 +5025,11 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void ActivateAutoResponseTrigger(AutoTriggerEx trigger)
 		{
-			this.settingsRoot.AutoResponse.Trigger = trigger;
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for trigger and/or previously changed options.
+			{
+				this.settingsRoot.AutoResponse.Trigger = trigger;
+			}
+			this.settingsRoot.AutoResponse.ResumeChangeEvent(); // Event will be raised for trigger and/or previously changed options.
 
 			if (trigger.IsExplicit && !AutoTriggerEx.CommonRegexCapturePatterns.Contains(trigger))
 			{
@@ -5037,7 +5049,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoResponseTriggerUseText()
 		{
-			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoResponse.TriggerOptions;
 				options.UseText = !options.UseText; // Settings member must be changed to let the changed event be raised!
@@ -5056,7 +5068,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoResponseTriggerCaseSensitive()
 		{
-			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoResponse.TriggerOptions;
 				options.CaseSensitive = !options.CaseSensitive; // Settings member must be changed to let the changed event be raised!
@@ -5075,7 +5087,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoResponseTriggerWholeWord()
 		{
-			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoResponse.TriggerOptions;
 				options.WholeWord = !options.WholeWord; // Settings member must be changed to let the changed event be raised!
@@ -5094,7 +5106,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoResponseTriggerEnableRegex()
 		{
-			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
 			{
 				var options = this.settingsRoot.AutoResponse.TriggerOptions;
 				options.EnableRegex = !options.EnableRegex; // Settings member must be changed to let the changed event be raised!
@@ -5130,7 +5142,7 @@ namespace YAT.View.Forms
 			if (m.Success)
 				options.EnableReplace = true;
 
-			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and response.
 			{                                  // Settings member must be changed to let the changed event be raised!
 				this.settingsRoot.AutoResponse.ResponseOptions = options;
 			}
@@ -5152,7 +5164,11 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void ActivateAutoResponseResponse(AutoResponseEx response)
 		{
-			this.settingsRoot.AutoResponse.Response = response;
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for response and/or previously changed options.
+			{
+				this.settingsRoot.AutoResponse.Response = response;
+			}
+			this.settingsRoot.AutoResponse.ResumeChangeEvent(); // Event will be raised for response and/or previously changed options.
 
 			if (response.IsExplicit && !AutoResponseEx.CommonRegexReplacementPatterns.Contains(response))
 			{
@@ -5172,7 +5188,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestToggleAutoResponseResponseEnableReplace()
 		{
-			this.settingsRoot.AutoResponse.SuspendChangeEvent();
+			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and response.
 			{
 				var options = this.settingsRoot.AutoResponse.ResponseOptions;
 				options.EnableReplace = !options.EnableReplace; // Settings member must be changed to let the changed event be raised!
@@ -7937,6 +7953,7 @@ namespace YAT.View.Forms
 
 				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
 				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+			////this.autoActionPlotForm.ChangeAutoAction += AutoActionPlotForm_ChangeAutoAction; \remind (2020-01-17 / MKY / FR#391)
 				this.autoActionPlotForm.DeactivateAutoAction += AutoActionPlotForm_DeactivateAutoAction;
 				this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
 				this.autoActionPlotForm.Show(this);
@@ -7979,6 +7996,11 @@ namespace YAT.View.Forms
 
 			return (sb.ToString());
 		}
+
+	////private void AutoActionPlotForm_ChangeAutoAction(object sender, EventArgs<AutoAction> e)
+	////{
+	////	ActivateAutoActionAction(e.Value); \remind (2020-01-17 / MKY / FR#391)
+	////}
 
 		private void AutoActionPlotForm_DeactivateAutoAction(object sender, EventArgs e)
 		{
