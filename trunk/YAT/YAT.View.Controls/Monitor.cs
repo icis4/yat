@@ -446,8 +446,8 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Action")]
-		[Description("The byte/line counts.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Model.BytesLinesTuple Counts
 		{
 			get { return (this.dataStatusHelper.Counts); }
@@ -455,8 +455,8 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Action")]
-		[Description("The byte/line rates.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Model.BytesLinesTuple Rates
 		{
 			get { return (this.dataStatusHelper.Rates); }
@@ -1298,7 +1298,8 @@ namespace YAT.View.Controls
 			int currentValue = ProcessorLoad.Update();
 			int averageValue = timer_ProcessorLoad_Tick_MovingAverage.EnqueueAndCalculate(currentValue);
 
-			DebugUpdate("CPU load (moving average) of " + averageValue.ToString(CultureInfo.CurrentCulture) + "% resulting in ");
+			DebugUpdate(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
+			DebugUpdate(" : CPU load (moving average) of " + averageValue.ToString(CultureInfo.CurrentCulture) + "% resulting in ");
 			CalculateUpdateTickInterval(averageValue);
 		}
 
@@ -2119,7 +2120,7 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Using <see cref="Debug.Write(string)"/> for manually composing line.</remarks>
 		[Conditional("DEBUG_UPDATE")]
 		protected virtual void DebugUpdate(string message)
 		{

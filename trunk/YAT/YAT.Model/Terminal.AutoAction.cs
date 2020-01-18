@@ -93,10 +93,10 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler AutoActionPlotRequest;
+		public event EventHandler AutoActionPlotRequest_Promtly;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoActionCountChanged;
+		public event EventHandler<EventArgs<int>> AutoActionCountChanged_Promtly;
 
 		#endregion
 
@@ -521,7 +521,7 @@ namespace YAT.Model
 		protected virtual void PreformAutoAction(AutoAction action, DateTime triggerTimeStamp, string triggerText, MatchCollection triggerMatches, CountsRatesTuple dataStatus)
 		{
 			int count = Interlocked.Increment(ref this.autoActionCount); // Incrementing before invoking to have the effective count updated during action.
-			OnAutoActionCountChanged(new EventArgs<int>(count));
+			OnAutoActionCountChanged_Promtly(new EventArgs<int>(count));
 
 			// Attention:
 			// Same switch/case exists in HasActionToInvoke() below.
@@ -693,7 +693,7 @@ namespace YAT.Model
 					AutoActionPlotModel.AddItem(pi);
 				}
 
-				OnAutoActionPlotRequest(EventArgs.Empty);
+				OnAutoActionPlotRequest_Promtly(EventArgs.Empty);
 			}
 			else
 			{
@@ -882,7 +882,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			int count = Interlocked.Exchange(ref this.autoActionCount, 0);
-			OnAutoActionCountChanged(new EventArgs<int>(count));
+			OnAutoActionCountChanged_Promtly(new EventArgs<int>(count));
 		}
 
 		/// <summary>
@@ -1024,15 +1024,15 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnAutoActionPlotRequest(EventArgs e)
+		protected virtual void OnAutoActionPlotRequest_Promtly(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs>(AutoActionPlotRequest, this, e);
+			this.eventHelper.RaiseSync<EventArgs>(AutoActionPlotRequest_Promtly, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnAutoActionCountChanged(EventArgs<int> e)
+		protected virtual void OnAutoActionCountChanged_Promtly(EventArgs<int> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged, this, e);
+			this.eventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged_Promtly, this, e);
 		}
 
 		#endregion
