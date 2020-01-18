@@ -2562,14 +2562,15 @@ namespace YAT.View.Forms
 
 					if (!success)
 					{
+						SetAutoActionTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
 						((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_MainTool_AutoAction_Trigger.Focus();
 						toolStripComboBox_MainTool_AutoAction_Trigger.Select(invalidTextStart, invalidTextLength);
 						return;
 					}
-
-					((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(triggerTextOrRegexPattern);
 				}
+
+				((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(triggerTextOrRegexPattern);
 			}
 
 			((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
@@ -2781,14 +2782,15 @@ namespace YAT.View.Forms
 
 					if (!success)
 					{
+						SetAutoResponseTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
 						((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_MainTool_AutoResponse_Trigger.Focus();
 						toolStripComboBox_MainTool_AutoResponse_Trigger.Select(invalidTextStart, invalidTextLength);
 						return;
 					}
-
-					((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
 				}
+
+				((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
 			}
 
 			((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
@@ -2960,14 +2962,15 @@ namespace YAT.View.Forms
 
 					if (!success)
 					{
+						SetAutoResponseResponseOptionControls((ActiveMdiChild != null), true, true, true); // Allow changing options while editing a not yet validated trigger!
 						((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
 						toolStripComboBox_MainTool_AutoResponse_Response.Focus();
 						toolStripComboBox_MainTool_AutoResponse_Response.Select(invalidTextStart, invalidTextLength);
 						return;
 					}
-
-					((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(responseText);
 				}
+
+				((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(responseText);
 			}
 
 			((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;

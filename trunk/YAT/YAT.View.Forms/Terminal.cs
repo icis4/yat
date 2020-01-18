@@ -1113,14 +1113,15 @@ namespace YAT.View.Forms
 
 					if (!success)
 					{
+						SetAutoResponseTriggerOptionControls(true, true); // Allow changing options while editing a not yet validated trigger!
 						AutoResponseTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Focus();
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Select(invalidTextStart, invalidTextLength);
 						return;
 					}
-
-					ActivateAutoResponseTrigger(triggerText);
 				}
+
+				ActivateAutoResponseTrigger(triggerText);
 			}
 
 			AutoResponseTriggerState = AutoContentState.Neutral;
@@ -1239,14 +1240,15 @@ namespace YAT.View.Forms
 
 					if (!success)
 					{
+						SetAutoResponseResponseOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
 						AutoResponseResponseState = AutoContentState.Invalid;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Focus();
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Select(invalidTextStart, invalidTextLength);
 						return;
 					}
-
-					ActivateAutoResponseResponse(responseText);
 				}
+
+				ActivateAutoResponseResponse(responseText);
 			}
 
 			AutoResponseResponseState = AutoContentState.Neutral;
@@ -1503,14 +1505,15 @@ namespace YAT.View.Forms
 
 					if (!success)
 					{
+						SetAutoActionTriggerOptionControls(true, true); // Allow changing options while editing a not yet validated trigger!
 						AutoActionTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Focus();
 						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Select(invalidTextStart, invalidTextLength);
 						return;
 					}
-
-					ActivateAutoActionTrigger(triggerText);
 				}
+
+				ActivateAutoActionTrigger(triggerText);
 			}
 
 			AutoActionTriggerState = AutoContentState.Neutral;
@@ -4772,11 +4775,11 @@ namespace YAT.View.Forms
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		public virtual bool RequestAutoActionValidateTriggerTextSilently(string triggerTextOrRegexPattern)
 		{
-			if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+			if (!this.settingsRoot.AutoAction.TriggerOptions.UseText)
 			{
 				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Modes.RadixAndAsciiEscapes));
 			}
-			else // IsTextTriggered
+			else                                          // UseText
 			{
 				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
@@ -4788,11 +4791,11 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual bool RequestAutoActionValidateTriggerText(string triggerTextOrRegexPattern, out int invalidTextStart, out int invalidTextLength)
 		{
-			if (this.settingsRoot.AutoAction.IsByteSequenceTriggered)
+			if (!this.settingsRoot.AutoAction.TriggerOptions.UseText)
 			{
 				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes));
 			}
-			else // IsTextTriggered
+			else                                          // UseText
 			{
 				invalidTextStart = 0; // Not way to detect this (yet).
 				invalidTextLength = triggerTextOrRegexPattern.Length;
@@ -5044,11 +5047,11 @@ namespace YAT.View.Forms
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		public virtual bool RequestAutoResponseValidateTriggerTextSilently(string triggerTextOrRegexPattern)
 		{
-			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
+			if (!this.settingsRoot.AutoResponse.TriggerOptions.UseText)
 			{
 				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Modes.RadixAndAsciiEscapes));
 			}
-			else // IsTextTriggered
+			else                                            // UseText
 			{
 				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
@@ -5060,11 +5063,11 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual bool RequestAutoResponseValidateTriggerText(string triggerTextOrRegexPattern, out int invalidTextStart, out int invalidTextLength)
 		{
-			if (this.settingsRoot.AutoResponse.IsByteSequenceTriggered)
+			if (!this.settingsRoot.AutoResponse.TriggerOptions.UseText)
 			{
 				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes));
 			}
-			else // IsTextTriggered
+			else                                            // UseText
 			{
 				invalidTextStart = 0; // Not way to detect this (yet).
 				invalidTextLength = triggerTextOrRegexPattern.Length;
