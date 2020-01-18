@@ -127,7 +127,7 @@ namespace YAT.View.Forms
 		// Status
 		private const string DefaultStatusText = "";
 		private const int TimedStatusInterval = 2000;
-		private const int RtsLuminescenceInterval = 179;
+		private const int RtsLuminescenceDuration = 200; // Well above the natural 150 ms, but still quite promt.
 
 		#endregion
 
@@ -5599,11 +5599,31 @@ namespace YAT.View.Forms
 		private void SetAutoActionControls()
 		{
 			toolStripMenuItem_TerminalMenu_Receive_AutoAction_SetMenuItems();
+
+			this.isSettingControls.Enter();
+			try
+			{
+				timer_AutoActionCountUpdate.Enabled = this.settingsRoot.AutoAction.IsActive;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetAutoResponseControls()
 		{
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_SetMenuItems();
+
+			this.isSettingControls.Enter();
+			try
+			{
+				timer_AutoResponseCountUpdate.Enabled = this.settingsRoot.AutoResponse.IsActive;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void SetSendControls()
@@ -6638,29 +6658,29 @@ namespace YAT.View.Forms
 			////this.terminal.SendingIsOngoingChanged += terminal_SendingIsOngoingChanged is not needed yet.
 				this.terminal.SendingIsBusyChanged    += terminal_SendingIsBusyChanged;
 
-				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
-				this.terminal.DisplayElementsBidirAdded       += terminal_DisplayElementsBidirAdded;
-				this.terminal.DisplayElementsRxAdded          += terminal_DisplayElementsRxAdded;
-				this.terminal.CurrentDisplayLineTxReplaced    += terminal_CurrentDisplayLineTxReplaced;
-				this.terminal.CurrentDisplayLineBidirReplaced += terminal_CurrentDisplayLineBidirReplaced;
-				this.terminal.CurrentDisplayLineRxReplaced    += terminal_CurrentDisplayLineRxReplaced;
-				this.terminal.CurrentDisplayLineTxCleared     += terminal_CurrentDisplayLineTxCleared;
-				this.terminal.CurrentDisplayLineBidirCleared  += terminal_CurrentDisplayLineBidirCleared;
-				this.terminal.CurrentDisplayLineRxCleared     += terminal_CurrentDisplayLineRxCleared;
-				this.terminal.DisplayLinesTxAdded             += terminal_DisplayLinesTxAdded;
-				this.terminal.DisplayLinesBidirAdded          += terminal_DisplayLinesBidirAdded;
-				this.terminal.DisplayLinesRxAdded             += terminal_DisplayLinesRxAdded;
+				this.terminal.DisplayElementsTxAdded           += terminal_DisplayElementsTxAdded;
+				this.terminal.DisplayElementsBidirAdded        += terminal_DisplayElementsBidirAdded;
+				this.terminal.DisplayElementsRxAdded           += terminal_DisplayElementsRxAdded;
+				this.terminal.CurrentDisplayLineTxReplaced     += terminal_CurrentDisplayLineTxReplaced;
+				this.terminal.CurrentDisplayLineBidirReplaced  += terminal_CurrentDisplayLineBidirReplaced;
+				this.terminal.CurrentDisplayLineRxReplaced     += terminal_CurrentDisplayLineRxReplaced;
+				this.terminal.CurrentDisplayLineTxCleared      += terminal_CurrentDisplayLineTxCleared;
+				this.terminal.CurrentDisplayLineBidirCleared   += terminal_CurrentDisplayLineBidirCleared;
+				this.terminal.CurrentDisplayLineRxCleared      += terminal_CurrentDisplayLineRxCleared;
+				this.terminal.DisplayLinesTxAdded              += terminal_DisplayLinesTxAdded;
+				this.terminal.DisplayLinesBidirAdded           += terminal_DisplayLinesBidirAdded;
+				this.terminal.DisplayLinesRxAdded              += terminal_DisplayLinesRxAdded;
 
-				this.terminal.RepositoryTxCleared             += terminal_RepositoryTxCleared;
-				this.terminal.RepositoryBidirCleared          += terminal_RepositoryBidirCleared;
-				this.terminal.RepositoryRxCleared             += terminal_RepositoryRxCleared;
-				this.terminal.RepositoryTxReloaded            += terminal_RepositoryTxReloaded;
-				this.terminal.RepositoryBidirReloaded         += terminal_RepositoryBidirReloaded;
-				this.terminal.RepositoryRxReloaded            += terminal_RepositoryRxReloaded;
+				this.terminal.RepositoryTxCleared              += terminal_RepositoryTxCleared;
+				this.terminal.RepositoryBidirCleared           += terminal_RepositoryBidirCleared;
+				this.terminal.RepositoryRxCleared              += terminal_RepositoryRxCleared;
+				this.terminal.RepositoryTxReloaded             += terminal_RepositoryTxReloaded;
+				this.terminal.RepositoryBidirReloaded          += terminal_RepositoryBidirReloaded;
+				this.terminal.RepositoryRxReloaded             += terminal_RepositoryRxReloaded;
 
-				this.terminal.AutoActionPlotRequest           += terminal_AutoActionPlotRequest;
-				this.terminal.AutoActionCountChanged          += terminal_AutoActionCountChanged;
-				this.terminal.AutoResponseCountChanged        += terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionPlotRequest_Promtly    += terminal_AutoActionPlotRequest_Promtly; // is OK to be used, only used once for opening the form.
+			////this.terminal.AutoActionCountChanged_Promtly   += terminal_AutoActionCountChanged_Promtly;   is not used, see further below for reason.
+			////this.terminal.AutoResponseCountChanged_Promtly += terminal_AutoResponseCountChanged_Promtly; is not used, see further below for reason.
 
 				this.terminal.FixedStatusTextRequest             += terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             += terminal_TimedStatusTextRequest;
@@ -6691,29 +6711,29 @@ namespace YAT.View.Forms
 			////this.terminal.SendingIsOngoingChanged -= terminal_SendingIsOngoingChanged is not needed yet.
 				this.terminal.SendingIsBusyChanged    -= terminal_SendingIsBusyChanged;
 
-				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
-				this.terminal.DisplayElementsBidirAdded       -= terminal_DisplayElementsBidirAdded;
-				this.terminal.DisplayElementsRxAdded          -= terminal_DisplayElementsRxAdded;
-				this.terminal.CurrentDisplayLineTxReplaced    -= terminal_CurrentDisplayLineTxReplaced;
-				this.terminal.CurrentDisplayLineBidirReplaced -= terminal_CurrentDisplayLineBidirReplaced;
-				this.terminal.CurrentDisplayLineRxReplaced    -= terminal_CurrentDisplayLineRxReplaced;
-				this.terminal.CurrentDisplayLineTxCleared     -= terminal_CurrentDisplayLineTxCleared;
-				this.terminal.CurrentDisplayLineBidirCleared  -= terminal_CurrentDisplayLineBidirCleared;
-				this.terminal.CurrentDisplayLineRxCleared     -= terminal_CurrentDisplayLineRxCleared;
-				this.terminal.DisplayLinesTxAdded             -= terminal_DisplayLinesTxAdded;
-				this.terminal.DisplayLinesBidirAdded          -= terminal_DisplayLinesBidirAdded;
-				this.terminal.DisplayLinesRxAdded             -= terminal_DisplayLinesRxAdded;
+				this.terminal.DisplayElementsTxAdded           -= terminal_DisplayElementsTxAdded;
+				this.terminal.DisplayElementsBidirAdded        -= terminal_DisplayElementsBidirAdded;
+				this.terminal.DisplayElementsRxAdded           -= terminal_DisplayElementsRxAdded;
+				this.terminal.CurrentDisplayLineTxReplaced     -= terminal_CurrentDisplayLineTxReplaced;
+				this.terminal.CurrentDisplayLineBidirReplaced  -= terminal_CurrentDisplayLineBidirReplaced;
+				this.terminal.CurrentDisplayLineRxReplaced     -= terminal_CurrentDisplayLineRxReplaced;
+				this.terminal.CurrentDisplayLineTxCleared      -= terminal_CurrentDisplayLineTxCleared;
+				this.terminal.CurrentDisplayLineBidirCleared   -= terminal_CurrentDisplayLineBidirCleared;
+				this.terminal.CurrentDisplayLineRxCleared      -= terminal_CurrentDisplayLineRxCleared;
+				this.terminal.DisplayLinesTxAdded              -= terminal_DisplayLinesTxAdded;
+				this.terminal.DisplayLinesBidirAdded           -= terminal_DisplayLinesBidirAdded;
+				this.terminal.DisplayLinesRxAdded              -= terminal_DisplayLinesRxAdded;
 
-				this.terminal.RepositoryTxCleared             -= terminal_RepositoryTxCleared;
-				this.terminal.RepositoryBidirCleared          -= terminal_RepositoryBidirCleared;
-				this.terminal.RepositoryRxCleared             -= terminal_RepositoryRxCleared;
-				this.terminal.RepositoryTxReloaded            -= terminal_RepositoryTxReloaded;
-				this.terminal.RepositoryBidirReloaded         -= terminal_RepositoryBidirReloaded;
-				this.terminal.RepositoryRxReloaded            -= terminal_RepositoryRxReloaded;
+				this.terminal.RepositoryTxCleared              -= terminal_RepositoryTxCleared;
+				this.terminal.RepositoryBidirCleared           -= terminal_RepositoryBidirCleared;
+				this.terminal.RepositoryRxCleared              -= terminal_RepositoryRxCleared;
+				this.terminal.RepositoryTxReloaded             -= terminal_RepositoryTxReloaded;
+				this.terminal.RepositoryBidirReloaded          -= terminal_RepositoryBidirReloaded;
+				this.terminal.RepositoryRxReloaded             -= terminal_RepositoryRxReloaded;
 
-				this.terminal.AutoActionPlotRequest           -= terminal_AutoActionPlotRequest;
-				this.terminal.AutoActionCountChanged          -= terminal_AutoActionCountChanged;
-				this.terminal.AutoResponseCountChanged        -= terminal_AutoResponseCountChanged;
+				this.terminal.AutoActionPlotRequest_Promtly    -= terminal_AutoActionPlotRequest_Promtly; // is OK to be used, only used once for opening the form.
+			////this.terminal.AutoActionCountChanged_Promtly   -= terminal_AutoActionCountChanged_Promtly;   is not used, see further below for reason.
+			////this.terminal.AutoResponseCountChanged_Promtly -= terminal_AutoResponseCountChanged_Promtly; is not used, see further below for reason.
 
 				this.terminal.FixedStatusTextRequest             -= terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             -= terminal_TimedStatusTextRequest;
@@ -7173,7 +7193,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_AutoActionPlotRequest(object sender, EventArgs e)
+		private void terminal_AutoActionPlotRequest_Promtly(object sender, EventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -7181,22 +7201,58 @@ namespace YAT.View.Forms
 			AutoActionPlot();
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_AutoActionCountChanged(object sender, EventArgs<int> e)
+		// The 'terminal_AutoAction/ResponseCountChanged_Promtly' events are not used because in
+		// case of fast continuous data synchronizing the events from the AutoAction/ResponseThread
+		// onto the MainThread will lead to no longer updating monitors (and plot) because the whole
+		// MainThread CPU capacity is spent with updating the quickly changing counts. Therefore
+		// polling the counts by 'timer_AutoAction/ResponseCountUpdate_Tick' instead.
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int timer_AutoActionCountUpdate_Tick_CountOld; // = 0;
+
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
+		private void timer_AutoActionCountUpdate_Tick(object sender, EventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			OnAutoActionCountChanged(e);
+			if (this.terminal != null)
+			{
+				var count = this.terminal.AutoActionCount;
+
+				if (timer_AutoActionCountUpdate_Tick_CountOld != count) {
+					timer_AutoActionCountUpdate_Tick_CountOld = count;
+
+					OnAutoActionCountChanged(new EventArgs<int>(count));
+				}
+			}
 		}
 
-		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_AutoResponseCountChanged(object sender, EventArgs<int> e)
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int timer_AutoResponseCountUpdate_Tick_CountOld; // = 0;
+
+		/// <remarks>
+		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
+		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
+		/// </remarks>
+		private void timer_AutoResponseCountUpdate_Tick(object sender, EventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
 
-			OnAutoResponseCountChanged(e);
+			if (this.terminal != null)
+			{
+				var count = this.terminal.AutoResponseCount;
+
+				if (timer_AutoResponseCountUpdate_Tick_CountOld != count) {
+					timer_AutoResponseCountUpdate_Tick_CountOld = count;
+
+					OnAutoResponseCountChanged(new EventArgs<int>(count));
+				}
+			}
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -7894,7 +7950,7 @@ namespace YAT.View.Forms
 			if (toolStripStatusLabel_TerminalStatus_RTS.Image != on) // Improve performance by only assigning if different.
 				toolStripStatusLabel_TerminalStatus_RTS.Image = on;
 
-			timer_RtsLuminescence.Interval = RtsLuminescenceInterval;
+			timer_RtsLuminescence.Interval = RtsLuminescenceDuration; // Could also be fixed by the designer, doen't matter much.
 			timer_RtsLuminescence.Enabled = true;
 		}
 
@@ -8016,18 +8072,18 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to prevent unnecessary delays when <see cref="Model.Terminal"/> invokes
-		/// the <see cref="Model.Terminal.AutoActionPlotRequest"/> event, which will be
+		/// the <see cref="Model.Terminal.AutoActionPlotRequest_Promtly"/> event, which will be
 		/// will be synchronized onto the main thread, which in case of massive sending
 		/// or receiving is already heavily loaded by the monitor update.
 		/// </remarks>
 		private void DeactivateAutoActionPlotRequestEvent()
 		{
-			this.terminal.AutoActionPlotRequest -= terminal_AutoActionPlotRequest;
+			this.terminal.AutoActionPlotRequest_Promtly -= terminal_AutoActionPlotRequest_Promtly;
 		}
 
 		private void ReactivateAutoActionPlotRequestEvent()
 		{
-			this.terminal.AutoActionPlotRequest += terminal_AutoActionPlotRequest;
+			this.terminal.AutoActionPlotRequest_Promtly += terminal_AutoActionPlotRequest_Promtly;
 		}
 
 		#endregion

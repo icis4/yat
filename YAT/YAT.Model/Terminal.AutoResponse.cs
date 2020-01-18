@@ -73,7 +73,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
+		public event EventHandler<EventArgs<int>> AutoResponseCountChanged_Promtly;
 
 		#endregion
 
@@ -378,7 +378,7 @@ namespace YAT.Model
 		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection triggerMatches)
 		{
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
-			OnAutoResponseCountChanged(new EventArgs<int>(count));
+			OnAutoResponseCountChanged_Promtly(new EventArgs<int>(count));
 
 			AutoResponseEx response = SettingsRoot.AutoResponse.Response;
 			int page = SettingsRoot.Predefined.SelectedPageId;
@@ -509,7 +509,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			int count = Interlocked.Exchange(ref this.autoResponseCount, 0);
-			OnAutoResponseCountChanged(new EventArgs<int>(count));
+			OnAutoResponseCountChanged_Promtly(new EventArgs<int>(count));
 		}
 
 		/// <summary>
@@ -651,9 +651,9 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
+		protected virtual void OnAutoResponseCountChanged_Promtly(EventArgs<int> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
+			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged_Promtly, this, e);
 		}
 
 		#endregion

@@ -529,6 +529,8 @@ namespace YAT.View.Forms
 			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
+			this.timer_AutoActionCountUpdate = new System.Windows.Forms.Timer(this.components);
+			this.timer_AutoResponseCountUpdate = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -5008,6 +5010,16 @@ namespace YAT.View.Forms
 			// 
 			this.timer_IOStatusIndicator.Tick += new System.EventHandler(this.timer_IOStatusIndicator_Tick);
 			// 
+			// timer_AutoActionCountUpdate
+			// 
+			this.timer_AutoActionCountUpdate.Interval = 73;
+			this.timer_AutoActionCountUpdate.Tick += new System.EventHandler(this.timer_AutoActionCountUpdate_Tick);
+			// 
+			// timer_AutoResponseCountUpdate
+			// 
+			this.timer_AutoResponseCountUpdate.Interval = 73;
+			this.timer_AutoResponseCountUpdate.Tick += new System.EventHandler(this.timer_AutoResponseCountUpdate_Tick);
+			// 
 			// Terminal
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5565,5 +5577,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_PasteFromClipboard;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_AllowConcurrency;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AllowConcurrency;
+		private System.Windows.Forms.Timer timer_AutoActionCountUpdate;
+		private System.Windows.Forms.Timer timer_AutoResponseCountUpdate;
 	}
 }

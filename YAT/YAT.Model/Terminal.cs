@@ -3026,7 +3026,9 @@ namespace YAT.Model
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			if (rateHasChanged)
+			{
 				OnIORateChanged_Promptly(EventArgs.Empty);
+			}
 
 			// Log:
 			if (this.log.AnyRawIsOn)
@@ -3090,7 +3092,9 @@ namespace YAT.Model
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			if (rateHasChanged)
+			{
 				OnIORateChanged_Promptly(EventArgs.Empty);
+			}
 
 			// Log:
 			if (this.log.AnyRawIsOn)

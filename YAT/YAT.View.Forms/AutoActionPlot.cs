@@ -211,7 +211,8 @@ namespace YAT.View.Forms
 			long updateSpanTicksAvg10s;
 			if (UpdatePlot(out updateSpanTicksAvg10s)) // No additional synchronization is needed, the System.Windows.Forms.Timer is synchronized.
 			{
-				DebugUpdate("Update span (moving average) of " + updateSpanTicksAvg10s.ToString(CultureInfo.CurrentCulture) + " ticks = ");
+				DebugUpdate(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
+				DebugUpdate(" : Update span (moving average) of " + updateSpanTicksAvg10s.ToString(CultureInfo.CurrentCulture) + " ticks = ");
 				DebugUpdate(StopwatchEx.TicksToTime(updateSpanTicksAvg10s).ToString(CultureInfo.CurrentCulture) + " ms resulting in ");
 
 				int interval = CalculateUpdateInterval(updateSpanTicksAvg10s);
@@ -779,6 +780,7 @@ namespace YAT.View.Forms
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>Using <see cref="Debug.Write(string)"/> for manually composing line.</remarks>
 		[Conditional("DEBUG_UPDATE")]
 		private void DebugUpdate(string message)
 		{
