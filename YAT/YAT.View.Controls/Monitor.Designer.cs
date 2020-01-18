@@ -245,7 +245,7 @@
 			// timer_ProcessorLoad
 			// 
 			this.timer_ProcessorLoad.Enabled = true;
-			this.timer_ProcessorLoad.Interval = 347;
+			this.timer_ProcessorLoad.Interval = 151;
 			this.timer_ProcessorLoad.Tick += new System.EventHandler(this.timer_ProcessorLoad_Tick);
 			// 
 			// Monitor
