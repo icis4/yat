@@ -1295,7 +1295,7 @@ namespace YAT.View.Controls
 		{
 			// Calculate average of last two samples:
 
-			int currentValue = ProcessorLoad.Update();
+			int currentValue = ProcessorLoad.Update(); // Note that interval of 151 ms is a trade-off between responsiveness and wasting time (for Update() itself).
 			int averageValue = timer_ProcessorLoad_Tick_MovingAverage.EnqueueAndCalculate(currentValue);
 
 			DebugUpdate(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));

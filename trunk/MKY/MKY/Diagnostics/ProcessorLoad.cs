@@ -22,14 +22,22 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#if (DEBUG)
+
+	// Enable debugging of update:
+////#define DEBUG_UPDATE
+
+#endif // DEBUG
+
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// An better way to measure the processor time than using a <see cref="PerformanceCounter"/>,
+	/// A better way to measure the processor time than using a <see cref="PerformanceCounter"/>,
 	/// because that...
 	/// ...is pretty resource hungry, and...
 	/// ...is language dependent!
@@ -69,9 +77,14 @@ namespace MKY.Diagnostics
 
 		/// <summary>Updates the processor load evaluation.</summary>
 		/// <remarks>Call in regular intervals, e.g. each second.</remarks>
+		/// <remarks>Keep in mind that updating also takes time, below a millisecond, but still time.</remarks>
 		/// <returns>The current processor load percentage of the current process.</returns>
 		public static int Update()
 		{
+			int result;
+
+			DebugUpdate("Updating...");
+
 			lock (staticSyncObj)
 			{
 				long currentUpdateTimestamp = Stopwatch.GetTimestamp();
@@ -97,8 +110,19 @@ namespace MKY.Diagnostics
 					}
 				}
 
-				return (CurrentPercentage);
+				result = CurrentPercentage;
 			}
+
+			DebugUpdate("...done");
+
+			return (result);
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_UPDATE")]
+		private static void DebugUpdate(string message)
+		{
+			Debug.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo) + " : " + message);
 		}
 	}
 }
