@@ -168,10 +168,14 @@ namespace YAT.View.Forms
 		private string lastFindPattern; // = null; Remark: Using "Pattern" instead of "TextOrPattern" for simplicity.
 
 		// Auto:
-		private AutoContentState autoActionTriggerState;    // = AutoContentState.Neutral;
-	////private AutoContentState autoActionActionState;     // = AutoContentState.Neutral; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
-		private AutoContentState autoResponseTriggerState;  // = AutoContentState.Neutral;
-		private AutoContentState autoResponseResponseState; // = AutoContentState.Neutral;
+		private AutoContentState autoActionTriggerState;      // = AutoContentState.Neutral;
+		private bool autoActionTriggerValidationIsOngoing;    // = false;
+	////private AutoContentState autoActionActionState;       // = AutoContentState.Neutral; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+	////private bool autoActionActionValidationIsOngoing;     // = false;                    is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+		private AutoContentState autoResponseTriggerState;    // = AutoContentState.Neutral;
+		private bool autoResponseTriggerValidationIsOngoing;  // = false;
+		private AutoContentState autoResponseResponseState;   // = AutoContentState.Neutral;
+		private bool autoResponseResponseValidationIsOngoing; // = false;
 		private AutoActionPlot   autoActionPlotForm;
 
 		#endregion
@@ -1038,11 +1042,16 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Enter(object sender, EventArgs e)
+		{
+			this.autoResponseTriggerValidationIsOngoing = false;
+		}
+
 		/// <remarks>
 		/// Note that this 'Leave' event also has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking the first option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Leave(object sender, EventArgs e)
@@ -1050,7 +1059,8 @@ namespace YAT.View.Forms
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
 				ResetAutoResponseTriggerOptionControls();
 
-			RevalidateAndRequestAutoResponseTrigger();
+			if (!this.autoResponseTriggerValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
+				RevalidateAndRequestAutoResponseTrigger();
 		}
 
 		/// <remarks>
@@ -1096,7 +1106,12 @@ namespace YAT.View.Forms
 				{
 					int invalidTextStart;
 					int invalidTextLength;
-					if (!RequestAutoResponseValidateTriggerText(triggerText, out invalidTextStart, out invalidTextLength))
+
+					this.autoResponseTriggerValidationIsOngoing = true;
+					var success = RequestAutoResponseValidateTriggerText(triggerText, out invalidTextStart, out invalidTextLength);
+					this.autoResponseTriggerValidationIsOngoing = false;
+
+					if (!success)
 					{
 						AutoResponseTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Focus();
@@ -1153,11 +1168,16 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Enter(object sender, EventArgs e)
+		{
+			this.autoResponseResponseValidationIsOngoing = false;
+		}
+
 		/// <remarks>
 		/// Note that this 'Leave' event also has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking the first option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave(object sender, EventArgs e)
@@ -1165,7 +1185,8 @@ namespace YAT.View.Forms
 			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
 				ResetAutoResponseResponseOptionControls();
 
-			RevalidateAndRequestAutoResponseResponse();
+			if (!this.autoResponseResponseValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
+				RevalidateAndRequestAutoResponseResponse();
 		}
 
 		/// <remarks>
@@ -1211,7 +1232,12 @@ namespace YAT.View.Forms
 				{
 					int invalidTextStart;
 					int invalidTextLength;
-					if (!RequestAutoResponseValidateResponseText(responseText, out invalidTextStart, out invalidTextLength))
+
+					this.autoResponseResponseValidationIsOngoing = true;
+					var success = RequestAutoResponseValidateResponseText(responseText, out invalidTextStart, out invalidTextLength);
+					this.autoResponseResponseValidationIsOngoing = false;
+
+					if (!success)
 					{
 						AutoResponseResponseState = AutoContentState.Invalid;
 						toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Focus();
@@ -1406,11 +1432,16 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Enter(object sender, EventArgs e)
+		{
+			this.autoActionTriggerValidationIsOngoing = false;
+		}
+
 		/// <remarks>
 		/// Note that this 'Leave' event also has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking the first option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Leave(object sender, EventArgs e)
@@ -1418,7 +1449,8 @@ namespace YAT.View.Forms
 			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
 				ResetAutoActionTriggerOptionControls();
 
-			RevalidateAndRequestAutoActionTrigger();
+			if (!this.autoActionTriggerValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
+				RevalidateAndRequestAutoActionTrigger();
 		}
 
 		/// <remarks>
@@ -1464,7 +1496,12 @@ namespace YAT.View.Forms
 				{
 					int invalidTextStart;
 					int invalidTextLength;
-					if (!RequestAutoActionValidateTriggerText(triggerText, out invalidTextStart, out invalidTextLength))
+
+					this.autoActionTriggerValidationIsOngoing = true;
+					var success = RequestAutoActionValidateTriggerText(triggerText, out invalidTextStart, out invalidTextLength);
+					this.autoActionTriggerValidationIsOngoing = false;
+
+					if (!success)
 					{
 						AutoActionTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Focus();
@@ -1514,6 +1551,7 @@ namespace YAT.View.Forms
 			}
 		}
 
+	////private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_Enter(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 	////private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_Leave(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 	////private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_TextChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 
@@ -4955,6 +4993,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestAutoActionDeactivate()
 		{
+			AutoActionTriggerState = AutoContentState.Neutral;
+		////AutoActionActionState  = AutoContentState.Neutral; is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+
 			if (this.terminal != null)
 				this.terminal.DeactivateAutoAction();
 		}
@@ -5223,6 +5264,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestAutoResponseDeactivate()
 		{
+			AutoResponseTriggerState  = AutoContentState.Neutral;
+			AutoResponseResponseState = AutoContentState.Neutral;
+
 			if (this.terminal != null)
 				this.terminal.DeactivateAutoResponse();
 		}
