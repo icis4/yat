@@ -1392,10 +1392,17 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				if (trigger.IsExplicit)
-					RequestAutoActionAdjustTriggerOptionsSilently(trigger);
+				if (RequestAutoActionValidateTrigger(trigger))
+				{
+					if (trigger.IsExplicit)
+						RequestAutoActionAdjustTriggerOptionsSilently(trigger);
 
-				ActivateAutoActionTrigger(trigger);
+					ActivateAutoActionTrigger(trigger);
+				}
+				else
+				{
+					SetAutoActionControls(); // Revert trigger.
+				}
 			}
 		}
 
@@ -4704,21 +4711,24 @@ namespace YAT.View.Forms
 		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
 		public virtual void RequestAutoActionAdjustTriggerOptionsSilently(AutoTriggerEx trigger)
 		{
-			var options = this.settingsRoot.AutoAction.TriggerOptions;
+			if (trigger.IsExplicit)
+			{
+				var options = this.settingsRoot.AutoAction.TriggerOptions;
 
-			if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
-				options.UseText = true;
+				if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
+					options.UseText = true;
 
-				if (!RegexEx.TryValidatePattern(trigger)) {
-					options.EnableRegex = false;
+					if (!RegexEx.TryValidatePattern(trigger)) {
+						options.EnableRegex = false;
+					}
 				}
-			}
 
-			this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
-			{                                // Settings member must be changed to let the changed event be raised!
-				this.settingsRoot.AutoAction.TriggerOptions = options;
+				this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
+				{                                // Settings member must be changed to let the changed event be raised!
+					this.settingsRoot.AutoAction.TriggerOptions = options;
+				}
+				this.settingsRoot.AutoAction.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
 			}
-			this.settingsRoot.AutoAction.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
 		}
 
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
@@ -4970,21 +4980,24 @@ namespace YAT.View.Forms
 		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
 		public virtual void RequestAutoResponseAdjustTriggerOptionsSilently(AutoTriggerEx trigger)
 		{
-			var options = this.settingsRoot.AutoResponse.TriggerOptions;
+			if (trigger.IsExplicit)
+			{
+				var options = this.settingsRoot.AutoResponse.TriggerOptions;
 
-			if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
-				options.UseText = true;
+				if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
+					options.UseText = true;
 
-				if (!RegexEx.TryValidatePattern(trigger)) {
-					options.EnableRegex = false;
+					if (!RegexEx.TryValidatePattern(trigger)) {
+						options.EnableRegex = false;
+					}
 				}
-			}
 
-			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
-			{                                  // Settings member must be changed to let the changed event be raised!
-				this.settingsRoot.AutoResponse.TriggerOptions = options;
+				this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
+				{                                  // Settings member must be changed to let the changed event be raised!
+					this.settingsRoot.AutoResponse.TriggerOptions = options;
+				}
+				this.settingsRoot.AutoResponse.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
 			}
-			this.settingsRoot.AutoResponse.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
 		}
 
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
@@ -5136,17 +5149,20 @@ namespace YAT.View.Forms
 		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
 		public virtual void RequestAutoResponseAdjustResponseOptionsSilently(AutoResponseEx response)
 		{
-			var options = this.settingsRoot.AutoResponse.ResponseOptions;
+			if (response.IsExplicit)
+			{
+				var options = this.settingsRoot.AutoResponse.ResponseOptions;
 
-			var m = Regex.Match(response, @"\$\d");
-			if (m.Success)
-				options.EnableReplace = true;
+				var m = Regex.Match(response, @"\$\d");
+				if (m.Success)
+					options.EnableReplace = true;
 
-			this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and response.
-			{                                  // Settings member must be changed to let the changed event be raised!
-				this.settingsRoot.AutoResponse.ResponseOptions = options;
+				this.settingsRoot.AutoResponse.SuspendChangeEvent(); // Prevent duplicate events for options and response.
+				{                                  // Settings member must be changed to let the changed event be raised!
+					this.settingsRoot.AutoResponse.ResponseOptions = options;
+				}
+				this.settingsRoot.AutoResponse.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
 			}
-			this.settingsRoot.AutoResponse.ResumeChangeEvent(false); // Event will be raised on revalidation or request.
 		}
 
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
