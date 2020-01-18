@@ -3796,6 +3796,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(180, 23);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = resources.GetString("toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText");
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Enter += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Enter);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Leave += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Leave);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged);
 			// 
@@ -3852,6 +3853,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
     "ll-in any command text.";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Enter += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Enter);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Leave += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged);
 			// 
@@ -3914,6 +3916,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(180, 23);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = resources.GetString("toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText");
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Enter += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Enter);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Leave += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Leave);
 			this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_TextChanged);
 			// 
