@@ -84,7 +84,11 @@ namespace YAT.Model
 		/// <summary></summary>
 		public void AddItem(AutoActionPlotItem pi)
 		{
-			Action = pi.Action;
+			if (Action != pi.Action) {
+				Action = pi.Action;
+
+				ClearAllItems(); // Ensure that X/Y or histogram tuples are consistent.
+			}
 
 			Title = (AutoActionEx)pi.Action;
 
