@@ -151,7 +151,7 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Instructions_Click(object sender, EventArgs e)
 		{
-			var f = new TrackerInstructions(TrackerType.Bug);
+			var f = new FeedbackInstructions(FeedbackType.Bug);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
