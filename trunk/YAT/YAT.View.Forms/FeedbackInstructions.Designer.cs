@@ -1,6 +1,6 @@
 ﻿namespace YAT.View.Forms
 {
-	partial class TrackerInstructions
+	partial class FeedbackInstructions
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrackerInstructions));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FeedbackInstructions));
 			this.button_Close = new System.Windows.Forms.Button();
 			this.groupBox_Instructions = new System.Windows.Forms.GroupBox();
 			this.linkLabel_Link = new System.Windows.Forms.LinkLabel();
@@ -42,7 +42,7 @@
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(270, 312);
+			this.button_Close.Location = new System.Drawing.Point(329, 312);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -60,7 +60,7 @@
 			this.groupBox_Instructions.Controls.Add(this.linkLabel_Intro);
 			this.groupBox_Instructions.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Instructions.Name = "groupBox_Instructions";
-			this.groupBox_Instructions.Size = new System.Drawing.Size(333, 288);
+			this.groupBox_Instructions.Size = new System.Drawing.Size(392, 288);
 			this.groupBox_Instructions.TabIndex = 1;
 			this.groupBox_Instructions.TabStop = false;
 			// 
@@ -104,20 +104,20 @@
 			this.linkLabel_Intro.TabIndex = 0;
 			this.linkLabel_Intro.Text = "Support for YAT...\r\n...";
 			// 
-			// TrackerInstructions
+			// FeedbackInstructions
 			// 
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(357, 347);
+			this.ClientSize = new System.Drawing.Size(416, 347);
 			this.Controls.Add(this.groupBox_Instructions);
 			this.Controls.Add(this.button_Close);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TrackerInstructions";
+			this.Name = "FeedbackInstructions";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "YAT Support Request";
 			this.groupBox_Instructions.ResumeLayout(false);

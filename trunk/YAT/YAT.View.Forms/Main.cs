@@ -962,7 +962,7 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestSupport_Click(object sender, EventArgs e)
 		{
-			var f = new TrackerInstructions(TrackerType.Support);
+			var f = new FeedbackInstructions(FeedbackType.Support);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -971,7 +971,7 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestFeature_Click(object sender, EventArgs e)
 		{
-			var f = new TrackerInstructions(TrackerType.Feature);
+			var f = new FeedbackInstructions(FeedbackType.Feature);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -980,7 +980,16 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_SubmitBug_Click(object sender, EventArgs e)
 		{
-			var f = new TrackerInstructions(TrackerType.Bug);
+			var f = new FeedbackInstructions(FeedbackType.Bug);
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
+			f.Show(this);
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void toolStripMenuItem_MainMenu_Help_AnyOtherFeedback_Click(object sender, EventArgs e)
+		{
+			var f = new FeedbackInstructions(FeedbackType.AnyOther);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
