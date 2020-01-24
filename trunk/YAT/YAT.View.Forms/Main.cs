@@ -1926,38 +1926,6 @@ namespace YAT.View.Forms
 			DebugFindLeave();
 		}
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
-
-		private void SuspendCtrlFNPShortcuts()
-		{
-			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
-			toolStripMenuItem_MainMenu_File_New.Enabled = false;
-
-			// Could be implemented more cleverly, by iterating over all potential shortcut controls
-			// and then handle those that use one of the shortcuts in question. However, that would
-			// be an overkill, thus using this straight-forward implementation.
-
-			foreach (var child in MdiChildren)
-			{
-				var t = (child as Terminal);
-				if (t != null)
-					t.SuspendCtrlFNPShortcuts();
-			}
-		}
-
-		private void ResumeCtrlFNPShortcuts()
-		{
-			toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
-
-			foreach (var child in MdiChildren)
-			{
-				var t = (child as Terminal);
-				if (t != null)
-					t.ResumeCtrlFNPShortcuts();
-			}
-		}
-
 		/// <remarks>
 		/// The 'TextChanged' instead of the 'Validating' event is used because of 'FindOnEdit()'.
 		/// </remarks>
@@ -2502,6 +2470,8 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_Enter(object sender, EventArgs e)
 		{
+			SuspendCtrlACDEDeleteShortcuts(); // Suspend while in trigger field.
+
 			this.autoActionTriggerValidationIsOngoing = false;
 		}
 
@@ -2519,6 +2489,8 @@ namespace YAT.View.Forms
 
 			if (!this.autoActionTriggerValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
 				RevalidateAndRequestAutoActionTrigger();
+
+			ResumeCtrlACDEDeleteShortcuts(); // Suspended while in trigger field.
 		}
 
 		/// <remarks>
@@ -2722,6 +2694,8 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Enter(object sender, EventArgs e)
 		{
+			SuspendCtrlACDEDeleteShortcuts(); // Suspend while in trigger field.
+
 			this.autoResponseTriggerValidationIsOngoing = false;
 		}
 
@@ -2739,6 +2713,8 @@ namespace YAT.View.Forms
 
 			if (!this.autoResponseTriggerValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
 				RevalidateAndRequestAutoResponseTrigger();
+
+			ResumeCtrlACDEDeleteShortcuts(); // Suspended while in trigger field.
 		}
 
 		/// <remarks>
@@ -2902,6 +2878,8 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_Enter(object sender, EventArgs e)
 		{
+			SuspendCtrlACDEDeleteShortcuts(); // Suspend while in trigger field.
+
 			this.autoResponseResponseValidationIsOngoing = false;
 		}
 
@@ -2919,6 +2897,8 @@ namespace YAT.View.Forms
 
 			if (!this.autoResponseResponseValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
 				RevalidateAndRequestAutoResponseResponse();
+
+			ResumeCtrlACDEDeleteShortcuts(); // Suspended while in trigger field.
 		}
 
 		/// <remarks>
@@ -3768,6 +3748,62 @@ namespace YAT.View.Forms
 		{
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
+		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+		private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
+
+		private void SuspendCtrlFNPShortcuts()
+		{
+			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
+			toolStripMenuItem_MainMenu_File_New.Enabled = false;
+
+			// Could be implemented more cleverly, by iterating over all potential shortcut controls
+			// and then handle those that use one of the shortcuts in question. However, that would
+			// be an overkill, thus using this straight-forward implementation.
+
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.SuspendCtrlFNPShortcuts();
+			}
+		}
+
+		private void ResumeCtrlFNPShortcuts()
+		{
+			toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
+
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.ResumeCtrlFNPShortcuts();
+			}
+		}
+
+		private void SuspendCtrlACDEDeleteShortcuts()
+		{
+			// Could be implemented more cleverly, by iterating over all potential shortcut controls
+			// and then handle those that use one of the shortcuts in question. However, that would
+			// be an overkill, thus using this straight-forward implementation.
+
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.SuspendCtrlACDEDeleteShortcuts();
+			}
+		}
+
+		private void ResumeCtrlACDEDeleteShortcuts()
+		{
+			foreach (var child in MdiChildren)
+			{
+				var t = (child as Terminal);
+				if (t != null)
+					t.ResumeCtrlACDEDeleteShortcuts();
+			}
 		}
 
 		#region Main > Methods > New

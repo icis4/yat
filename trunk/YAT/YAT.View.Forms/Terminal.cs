@@ -5727,10 +5727,10 @@ namespace YAT.View.Forms
 		public virtual void SuspendCtrlFNPShortcuts()
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
-			toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled;
+			toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled;
 
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false;
-			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = false;
+			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false; // P
+			toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // F
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -5745,6 +5745,57 @@ namespace YAT.View.Forms
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
 			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
+		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+		private bool toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore; // = false;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+		private bool toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore; // = false;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+		private bool toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore; // = false;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+		private bool toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_EnabledToRestore; // = false;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
+		private bool toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_EnabledToRestore; // = false;
+
+		/// <summary>
+		/// Suspends the [Control+A/C/D/E/Delete] shortcuts.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACDE", Justification = "ACDE refers to these four specific keys.")]
+		public virtual void SuspendCtrlACDEDeleteShortcuts()
+		{
+			toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore            = toolStripMenuItem_TerminalMenu_Terminal_SelectAll           .Enabled;
+			toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore           = toolStripMenuItem_TerminalMenu_Terminal_SelectNone          .Enabled;
+			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore      = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard     .Enabled;
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate .Enabled;
+			toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_EnabledToRestore = toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled;
+
+			toolStripMenuItem_TerminalMenu_Terminal_SelectAll           .Enabled = false; // A
+			toolStripMenuItem_TerminalMenu_Terminal_SelectNone          .Enabled = false; // Delete
+			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard     .Enabled = false; // C
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate .Enabled = false; // D
+			toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = false; // E
+
+			// Could be implemented more cleverly, by iterating over all potential shortcut controls
+			// and then handle those that use one of the shortcuts in question. However, that would
+			// be an overkill, thus using this straight-forward implementation.
+		}
+
+		/// <summary>
+		/// Resumes the [Control+A/C/D/E/Delete] shortcuts.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACDE", Justification = "ACDE refers to these four specific keys.")]
+		public virtual void ResumeCtrlACDEDeleteShortcuts()
+		{
+			toolStripMenuItem_TerminalMenu_Terminal_SelectAll           .Enabled = toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore;
+			toolStripMenuItem_TerminalMenu_Terminal_SelectNone          .Enabled = toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore;
+			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard     .Enabled = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore;
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate .Enabled = toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_EnabledToRestore;
+			toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_EnabledToRestore;
 		}
 
 		#endregion
