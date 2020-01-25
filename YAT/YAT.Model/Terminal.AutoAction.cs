@@ -547,8 +547,7 @@ namespace YAT.Model
 				case AutoAction.LineChartIndex:      RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
 				case AutoAction.LineChartTime:       RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
 				case AutoAction.LineChartTimeStamp:  RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
-				case AutoAction.ScatterPlotXY:       RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
-				case AutoAction.ScatterPlotTime:     RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
+				case AutoAction.ScatterPlot:         RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
 				case AutoAction.HistogramHorizontal: RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
 				case AutoAction.HistogramVertical:   RequestAutoActionPlot(action, triggerTimeStamp, triggerMatches, dataStatus); break;
 
@@ -629,8 +628,7 @@ namespace YAT.Model
 				case AutoAction.LineChartIndex:
 				case AutoAction.LineChartTime:
 				case AutoAction.LineChartTimeStamp:
-				case AutoAction.ScatterPlotXY:
-				case AutoAction.ScatterPlotTime:
+				case AutoAction.ScatterPlot:
 				case AutoAction.HistogramHorizontal:
 				case AutoAction.HistogramVertical:
 				case AutoAction.ClearRepositories:
@@ -713,8 +711,7 @@ namespace YAT.Model
 				case AutoAction.LineChartIndex:                CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
 				case AutoAction.LineChartTime:      return (TryCreateTimeXYPlotItem(     plotAction,                   triggerMatches,             out pi, out errorMessage));
 				case AutoAction.LineChartTimeStamp:            CreateTimeStampXYPlotItem(plotAction, triggerTimeStamp, triggerMatches,             out pi);    errorMessage = null; return (true);
-				case AutoAction.ScatterPlotXY:                 CreateXYPlotItem(         plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
-				case AutoAction.ScatterPlotTime:    return (TryCreateTimeXYPlotItem(     plotAction,                   triggerMatches,             out pi, out errorMessage));
+				case AutoAction.ScatterPlot:                   CreateXYPlotItem(         plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
 				case AutoAction.HistogramHorizontal:           CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
 				case AutoAction.HistogramVertical:             CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
 

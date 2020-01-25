@@ -4710,8 +4710,7 @@ namespace YAT.View.Forms
 				case AutoAction.LineChartIndex:
 				case AutoAction.LineChartTime:
 				case AutoAction.LineChartTimeStamp:
-				case AutoAction.ScatterPlotXY:
-				case AutoAction.ScatterPlotTime:
+				case AutoAction.ScatterPlot:
 				case AutoAction.HistogramHorizontal:
 				case AutoAction.HistogramVertical:
 				{
@@ -4941,8 +4940,7 @@ namespace YAT.View.Forms
 				case AutoAction.LineChartIndex:
 				case AutoAction.LineChartTime:
 				case AutoAction.LineChartTimeStamp:
-				case AutoAction.ScatterPlotXY:
-				case AutoAction.ScatterPlotTime:
+				case AutoAction.ScatterPlot:
 				case AutoAction.HistogramHorizontal:
 				case AutoAction.HistogramVertical:
 				{
