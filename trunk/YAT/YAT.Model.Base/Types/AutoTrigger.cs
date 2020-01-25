@@ -118,8 +118,8 @@ namespace YAT.Model.Types
 			l.Add("(" + CommonPatterns.FloatingPointAny          + ")");
 			l.Add("(" + CommonPatterns.TimeWithColons            + ")");
 			l.Add("(" + CommonPatterns.DateWithHyphensDescending + ")");
-			l.Add(@"\A([A-Z]{1})\Z");
-			l.Add(@"\A([A-Za-z]{2,4})\Z");
+			l.Add(@"\b([A-Z]{1})\b");
+			l.Add(@"\b([A-Za-z]{2,4})\b");
 
 			CommonRegexCapturePatterns = l.AsReadOnly();
 		}

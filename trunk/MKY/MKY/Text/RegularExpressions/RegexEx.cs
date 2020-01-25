@@ -32,6 +32,99 @@ namespace MKY.Text.RegularExpressions
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class RegexEx
 	{
+		#region LikelyContains
+		//------------------------------------------------------------------------------------------
+		// LikelyContains
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Determines whether <paramref name="s"/> likely contains any regular expression typical pattern.
+		/// </summary>
+		public static bool LikelyContainsAnyPattern(string s)
+		{
+			if (LikelyContainsCharacterGroupPattern(s))
+				return (true);
+
+			if (LikelyContainsBasicCharacterClassPattern(s))
+				return (true);
+
+			if (LikelyContainsUnicodeCharacterClassPattern(s))
+				return (true);
+
+			if (LikelyContainsAnchorPattern(s))
+				return (true);
+
+			if (LikelyContainsOtherPattern(s))
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="s"/> likely contains a regular expression character group pattern.
+		/// </summary>
+		public static bool LikelyContainsCharacterGroupPattern(string s)
+		{
+			if (Regex.IsMatch(s, @"\[\w+\]")) // Group, e.g. [aeiou].
+				return (true);
+
+			if (Regex.IsMatch(s, @"\[\^\w+\]")) // Negation, e.g. [^aeiou].
+				return (true);
+
+			if (Regex.IsMatch(s, @"\[\w+-\w+\]")) // Range, e.g. [a-z].
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="s"/> likely contains a basic regular expression character class.
+		/// </summary>
+		public static bool LikelyContainsBasicCharacterClassPattern(string s)
+		{
+			string[] classes = { @"\w", @"\W", @"\s", @"\S", @"\d", @"\D" };
+			return (StringEx.ContainsAny(s, classes));
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="s"/> likely contains a regular expression Unicode character class pattern.
+		/// </summary>
+		public static bool LikelyContainsUnicodeCharacterClassPattern(string s)
+		{
+			if (Regex.IsMatch(s, @"\\p\{[A-Za-z]+\}")) // Category, e.g. \p{Lu}.
+				return (true);
+
+			if (Regex.IsMatch(s, @"\\P\{[A-Za-z]+\}")) // Negation, e.g. \P{Lu}.
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="s"/> likely contains a regular expression anchor pattern.
+		/// </summary>
+		public static bool LikelyContainsAnchorPattern(string s)
+		{
+			string[] anchors = { "^", "$", @"\A", @"\Z", @"\z", @"\G", @"\b", @"\B" };
+			return (StringEx.ContainsAny(s, anchors));
+		}
+
+		/// <summary>
+		/// Determines whether <paramref name="s"/> likely contains any other regular expression typical pattern.
+		/// </summary>
+		public static bool LikelyContainsOtherPattern(string s)
+		{
+			string[] anchors = { "*?", "+?", "??", "}?", "(?" };
+			return (StringEx.ContainsAny(s, anchors));
+		}
+
+		#endregion
+
+		#region TryValidatePattern
+		//------------------------------------------------------------------------------------------
+		// TryValidatePattern
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Validates the given regular expression pattern.
 		/// </summary>
@@ -89,6 +182,8 @@ namespace MKY.Text.RegularExpressions
 				return (false);
 			}
 		}
+
+		#endregion
 	}
 }
 
