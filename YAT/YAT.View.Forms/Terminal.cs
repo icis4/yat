@@ -4766,6 +4766,9 @@ namespace YAT.View.Forms
 					if (!RegexEx.TryValidatePattern(trigger)) {
 						options.EnableRegex = false;
 					}
+					else if (RegexEx.LikelyContainsAnyPattern(trigger)) {
+						options.EnableRegex = true;
+					}
 				}
 
 				this.settingsRoot.AutoAction.SuspendChangeEvent(); // Prevent duplicate events for options and trigger.
@@ -5037,6 +5040,9 @@ namespace YAT.View.Forms
 
 					if (!RegexEx.TryValidatePattern(trigger)) {
 						options.EnableRegex = false;
+					}
+					else if (RegexEx.LikelyContainsAnyPattern(trigger)) {
+						options.EnableRegex = true;
 					}
 				}
 

@@ -169,8 +169,8 @@ Floating point numbers in scientific format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)[Ee][
 Floating point numbers in any format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][-+]?\d+)?)"
 Time with colons (e.g. 12:00:00): "((?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d))"
 Date with hyphens (e.g. 2000-01-01): "((?:19|20)\d\d-(?:0[1-9]|1[012])-(?:0[1-9]|[12]\d|3[01]))"
-A single capital letter: "\A([A-Z]{1})\Z"
-A string of 2..4 letters: "\A([A-Za-z]{2,4})\Z"
+A single capital letter: "\b([A-Z]{1})\b"
+A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.</value>
   </data>
@@ -206,8 +206,8 @@ Floating point numbers in scientific format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)[Ee][
 Floating point numbers in any format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][-+]?\d+)?)"
 Time with colons (e.g. 12:00:00): "((?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d))"
 Date with hyphens (e.g. 2000-01-01): "((?:19|20)\d\d-(?:0[1-9]|1[012])-(?:0[1-9]|[12]\d|3[01]))"
-A single capital letter: "\A([A-Z]{1})\Z"
-A string of 2..4 letters: "\A([A-Za-z]{2,4})\Z"
+A single capital letter: "\b([A-Z]{1})\b"
+A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.
 
