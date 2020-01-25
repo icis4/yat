@@ -178,6 +178,10 @@ namespace YAT.View.Forms
 		private bool autoResponseResponseValidationIsOngoing; // = false;
 		private AutoActionPlot   autoActionPlotForm;
 
+		// View:
+		private int findShortcutsCtrlFNPSuspendedCount;       // = 0;
+		private int editShortcutsCtrlACVDeleteSuspendedCount; // = 0;
+
 		#endregion
 
 		#region Events
@@ -593,10 +597,10 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   by default only bidir is visible.
 				}
 
-				toolStripMenuItem_TerminalMenu_Terminal_SelectAll .Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+A]
-				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+Delete]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+A]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+Delete]
 
-				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused); // [Ctrl+C]
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+C]
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile     .Enabled =  monitorIsDefined;
 				toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled =  monitorIsDefined;
 
@@ -5721,16 +5725,24 @@ namespace YAT.View.Forms
 		private bool toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore; // = false;
 
 		/// <summary>
-		/// Suspends the [Control+F/N/P] shortcuts.
+		/// Suspends the [Ctrl+F/N/P] find shortcuts.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNP", Justification = "FNP refers to these three specific keys.")]
-		public virtual void SuspendCtrlFNPShortcuts()
+		public virtual void SuspendFindShortcutsCtrlFNP()
 		{
-			toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
-			toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled;
+			if (this.findShortcutsCtrlFNPSuspendedCount < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false; // P
-			toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // F
+			if (this.findShortcutsCtrlFNPSuspendedCount == 0)
+			{
+				toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
+				toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled;
+
+				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false; // Ctrl+P
+				toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // Ctrl+F
+			}
+
+			this.findShortcutsCtrlFNPSuspendedCount++;
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -5738,13 +5750,21 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary>
-		/// Resumes the [Control+F/N/P] shortcuts.
+		/// Resumes the [Ctrl+F/N/P] find shortcuts.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNP", Justification = "FNP refers to these three specific keys.")]
-		public virtual void ResumeCtrlFNPShortcuts()
+		public virtual void ResumeFindShortcutsCtrlFNP()
 		{
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
-			toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
+			this.findShortcutsCtrlFNPSuspendedCount--;
+
+			if (this.findShortcutsCtrlFNPSuspendedCount == 0)
+			{
+				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
+				toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
+			}
+
+			if (this.findShortcutsCtrlFNPSuspendedCount < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
@@ -5756,29 +5776,27 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		private bool toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore; // = false;
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_EnabledToRestore; // = false;
-
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_EnabledToRestore; // = false;
-
 		/// <summary>
-		/// Suspends the [Control+A/C/D/E/Delete] shortcuts.
+		/// Suspends the [Ctrl+A/C/V/Delete] edit shortcuts.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACDE", Justification = "ACDE refers to these four specific keys.")]
-		public virtual void SuspendCtrlACDEDeleteShortcuts()
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACV", Justification = "ACV refers to these three specific keys.")]
+		public virtual void SuspendEditShortcutsCtrlACVDelete()
 		{
-			toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore            = toolStripMenuItem_TerminalMenu_Terminal_SelectAll           .Enabled;
-			toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore           = toolStripMenuItem_TerminalMenu_Terminal_SelectNone          .Enabled;
-			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore      = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard     .Enabled;
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate .Enabled;
-			toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_EnabledToRestore = toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled;
+			if (this.editShortcutsCtrlACVDeleteSuspendedCount < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			toolStripMenuItem_TerminalMenu_Terminal_SelectAll           .Enabled = false; // A
-			toolStripMenuItem_TerminalMenu_Terminal_SelectNone          .Enabled = false; // Delete
-			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard     .Enabled = false; // C
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate .Enabled = false; // D
-			toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = false; // E
+			if (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)
+			{
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore       = toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled;
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore      = toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled;
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled;
+
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = false; // Ctrl+A
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = false; // Ctrl+Delete
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = false; // Ctrl+C
+			}
+
+			this.editShortcutsCtrlACVDeleteSuspendedCount++;
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -5786,16 +5804,22 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary>
-		/// Resumes the [Control+A/C/D/E/Delete] shortcuts.
+		/// Resumes the [Ctrl+A/C/V/Delete] edit shortcuts.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACDE", Justification = "ACDE refers to these four specific keys.")]
-		public virtual void ResumeCtrlACDEDeleteShortcuts()
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACV", Justification = "ACV refers to these three specific keys.")]
+		public virtual void ResumeEditShortcutsCtrlACVDelete()
 		{
-			toolStripMenuItem_TerminalMenu_Terminal_SelectAll           .Enabled = toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore;
-			toolStripMenuItem_TerminalMenu_Terminal_SelectNone          .Enabled = toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore;
-			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard     .Enabled = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore;
-			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate .Enabled = toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_EnabledToRestore;
-			toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_EnabledToRestore;
+			this.editShortcutsCtrlACVDeleteSuspendedCount--;
+
+			if (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)
+			{
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore;
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore;
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore;
+			}
+
+			if (this.editShortcutsCtrlACVDeleteSuspendedCount < 0)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
