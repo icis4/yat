@@ -28,11 +28,7 @@ This saves approx. 100 MB of repo space.
     Save H1 through H361 to Plot-3-String.txt
     Save D1:H1 through D361:H361 to Plot-4-Combined.txt
     Save C1:H1 through C361:H361 to Plot-5-CombinedTime.txt
-    Copy C1:H1 through C361:H361 to a new sheet (values only)
-    Remove rows C and E
-    Save B1:D1 through B361:D361 to Plot-6-ScatterXY.txt
-    Delete sheet
 8. Export long series by exporting as tab separated .txt
     Copy E:F to a new file (values only)
-    Save file to Plot-8-IntegersEnormous.txt
+    Save file to Plot-6-IntegersEnormous.txt
     Open file in text editor and remove trailing empty line

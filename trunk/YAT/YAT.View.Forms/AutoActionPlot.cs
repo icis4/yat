@@ -536,10 +536,9 @@ namespace YAT.View.Forms
 						case AutoAction.PlotByteCountRate:   PlotCountRate(mdl, txColor, rxColor                        ); break;
 						case AutoAction.PlotLineCountRate:   PlotCountRate(mdl, txColor, rxColor                        ); break;
 						case AutoAction.LineChartIndex:      PlotSignal(   mdl,          rxColor                        ); break;
-						case AutoAction.LineChartTime:       PlotScatter(  mdl,          rxColor, true                  ); break;
-						case AutoAction.LineChartTimeStamp:  PlotScatter(  mdl,          rxColor, true                  ); break;
-						case AutoAction.ScatterPlotXY:       PlotScatter(  mdl,          rxColor, false                 ); break;
-						case AutoAction.ScatterPlotTime:     PlotScatter(  mdl,          rxColor, true                  ); break;
+						case AutoAction.LineChartTime:       PlotScatter(  mdl,          rxColor, true,  true           ); break;
+						case AutoAction.LineChartTimeStamp:  PlotScatter(  mdl,          rxColor, true,  true           ); break;
+						case AutoAction.ScatterPlot:         PlotScatter(  mdl,          rxColor, false, false          ); break;
 						case AutoAction.HistogramHorizontal: PlotHistogram(mdl,          rxColor, Orientation.Horizontal); break;
 						case AutoAction.HistogramVertical:   PlotHistogram(mdl,          rxColor, Orientation.Vertical  ); break;
 
@@ -608,24 +607,26 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void PlotScatter(Model.AutoActionPlotModel mdl, Color rxColor, bool dateTimeX)
+		private void PlotScatter(Model.AutoActionPlotModel mdl, Color rxColor, bool dateTimeX, bool drawLine)
 		{
 			if (dateTimeX)
 				scottPlot.plt.Ticks(dateTimeX: true);
 
 			if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0))
 			{
+				var lineWidth = (drawLine ? 1 : 0);
+
 				var isFirst = true;
 				foreach (var kvp in mdl.YValues)
 				{
 					if (isFirst)
 					{
 						isFirst = false;
-						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: rxColor, label: kvp.Item1);
+						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: rxColor, lineWidth: lineWidth, label: kvp.Item1);
 					}
 					else
 					{
-						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), label: kvp.Item1);
+						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: lineWidth, label: kvp.Item1);
 					}
 				}
 			}
@@ -666,8 +667,7 @@ namespace YAT.View.Forms
 					case AutoAction.PlotLineCountRate:
 					case AutoAction.LineChartTime:
 					case AutoAction.LineChartTimeStamp:
-					case AutoAction.ScatterPlotXY:
-					case AutoAction.ScatterPlotTime:
+					case AutoAction.ScatterPlot:
 						UpdateHoverOnScatter(cursorPos);
 						break;
 

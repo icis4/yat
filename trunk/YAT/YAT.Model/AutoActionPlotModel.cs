@@ -99,8 +99,7 @@ namespace YAT.Model
 				case AutoAction.LineChartIndex:      AddItemToLineChartIndex(pi);     break;
 				case AutoAction.LineChartTime:       AddItemToLineChartTime(pi);      break;
 				case AutoAction.LineChartTimeStamp:  AddItemToLineChartTimeStamp(pi); break;
-				case AutoAction.ScatterPlotXY:       AddItemToScatterPlotXY(pi);      break;
-				case AutoAction.ScatterPlotTime:     AddItemToScatterPlotTime(pi);    break;
+				case AutoAction.ScatterPlot:         AddItemToScatterPlot(pi);        break;
 				case AutoAction.HistogramHorizontal: AddItemToHistogram(pi);          break;
 				case AutoAction.HistogramVertical:   AddItemToHistogram(pi);          break;
 			}
@@ -153,19 +152,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void AddItemToScatterPlotXY(AutoActionPlotItem pi)
+		protected virtual void AddItemToScatterPlot(AutoActionPlotItem pi)
 		{
 			XLabel = "X Value";
 			YLabel = "Y Value";
-
-			AddItemToXAndY(pi);
-		}
-
-		/// <summary></summary>
-		protected virtual void AddItemToScatterPlotTime(AutoActionPlotItem pi)
-		{
-			XLabel = "Time";
-			YLabel = "Value";
 
 			AddItemToXAndY(pi);
 		}
