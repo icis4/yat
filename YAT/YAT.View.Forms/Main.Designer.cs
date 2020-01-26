@@ -1435,8 +1435,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Name = "toolStripButton_MainTool_AutoAction_Trigger_UseText";
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.ToolTipText = "Use Text\r\nBy default, the trigger is based on the byte sequence of a command.\r\nTh" +
-    "is option switches to a trigger based on the text of a command.\r\n[Alt+T] (while " +
-    "editing)";
+    "is option switches to a trigger based on text.\r\n[Alt+T] (while editing)";
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_Trigger_UseText_Click);
 			// 
@@ -1534,8 +1533,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Name = "toolStripButton_MainTool_AutoResponse_Trigger_UseText";
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.ToolTipText = "Use Text\r\nBy default, the trigger is based on the byte sequence of a command.\r\nTh" +
-    "is option switches to a trigger based on the text of a command.\r\n[Alt+T] (while " +
-    "editing)";
+    "is option switches to a trigger based on text.\r\n[Alt+T] (while editing)";
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_Trigger_UseText_Click);
 			// 
@@ -1575,7 +1573,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_MainTool_AutoResponse_Response.Name = "toolStripComboBox_MainTool_AutoResponse_Response";
 			this.toolStripComboBox_MainTool_AutoResponse_Response.Size = new System.Drawing.Size(160, 25);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
-    "ll-in any command text.";
+    "ll-in any text.";
 			this.toolStripComboBox_MainTool_AutoResponse_Response.Visible = false;
 			this.toolStripComboBox_MainTool_AutoResponse_Response.DropDown += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_DropDown);
 			this.toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged);

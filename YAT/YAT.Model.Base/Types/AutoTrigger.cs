@@ -185,7 +185,7 @@ namespace YAT.Model.Types
 		/// Technically, 'Predefined' could also support text/regex, but doesn't make much sense:
 		/// <list type="bullet">
 		/// <item><description>Command defines a byte sequence anyway.</description></item>
-		/// <item><description>YAT style escapes are useless for text maching.</description></item>
+		/// <item><description>YAT style escapes are useless for text matching.</description></item>
 		/// <item><description>Regex style escapes are not supported for commands.</description></item>
 		/// </list>
 		/// </remarks>
@@ -198,7 +198,7 @@ namespace YAT.Model.Types
 		/// Technically, 'Predefined' could also support text/regex, but doesn't make much sense:
 		/// <list type="bullet">
 		/// <item><description>Command defines a byte sequence anyway.</description></item>
-		/// <item><description>YAT style escapes are useless for text maching.</description></item>
+		/// <item><description>YAT style escapes are useless for text matching.</description></item>
 		/// <item><description>Regex style escapes are not supported for commands.</description></item>
 		/// </list>
 		/// </remarks>

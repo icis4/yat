@@ -156,11 +156,7 @@ Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   <data name="toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText" xml:space="preserve">
     <value>Configure Automatic Response Trigger,
 either refer to one of the commands,
-or fill-in any command text.
-
-By default, the command's resulting byte sequence is used for triggering.
-Optionally, use the command's text for triggering. Supported for single line text commands only.
-Optionally, regular expressions can be enabled for text triggering.
+or fill-in any text, optionally including a regular expression.
 
 Some useful regular expression capture patterns (use without surrounding quotes):
 Integral numbers: "([-+]?\d+)"
@@ -192,12 +188,7 @@ Replacement tags are $1, $2,... (regular expression syntax).</value>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText" xml:space="preserve">
     <value>Configure Automatic Action Trigger,
 either refer to one of the commands,
-or fill-in any command text.
-
-By default, the command's resulting byte sequence is used for triggering.
-Optionally, use the command's text for triggering. Supported for single line text commands only.
-
-Optionally, regular expressions can be enabled for text triggering.
+or fill-in any text, optionally including a regular expression.
 
 Some useful regular expression capture patterns (use without surrounding quotes):
 Integral numbers: "([-+]?\d+)"
@@ -214,7 +205,7 @@ Google for ".NET Regular Expression Quick Reference" for details on syntax.
 Note that...
 ...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
-...opposed to [Plot ... Count/Rate] which are also applied to sent data.</value>
+...only [Plot ... Count/Rate] are also applied to sent data.</value>
   </data>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
@@ -228,7 +219,7 @@ Note that...
 ...trigger is highlighted for every action except [Filter], [Suppress] and [Line/Scatter/Histogram].
 ...[Highlight] and [Suppress] is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
-...opposed to [Plot ... Count/Rate] which are also applied to sent data.</value>
+...only [Plot ... Count/Rate] are also applied to sent data.</value>
   </data>
   <metadata name="statusStrip_Terminal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>622, 56</value>
