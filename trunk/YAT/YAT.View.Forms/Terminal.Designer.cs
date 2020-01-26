@@ -3807,7 +3807,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Text = "Use &Text";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
-    "switches to a trigger based on the text of a command.";
+    "switches to a trigger based on text.";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive
@@ -3851,7 +3851,7 @@ namespace YAT.View.Forms
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Name = "toolStripComboBox_TerminalMenu_Send_AutoResponse_Response";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(180, 23);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "Enable / Disable Automatic Response,\r\neither refer to one of the commands,\r\nor fi" +
-    "ll-in any command text.";
+    "ll-in any text.";
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Enter += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Enter);
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Leave += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave);
@@ -3927,7 +3927,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Text = "Use &Text";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
-    "switches to a trigger based on the text of a command.";
+    "switches to a trigger based on text.";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive
