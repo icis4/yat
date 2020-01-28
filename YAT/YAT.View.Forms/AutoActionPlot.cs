@@ -27,6 +27,9 @@
 // Configuration
 //==================================================================================================
 
+// Select the plot library:
+#define USE_SCOTT_PLOT
+
 #if (DEBUG)
 
 	// Enable debugging of plot update:
@@ -120,6 +123,9 @@ namespace YAT.View.Forms
 
 			InitializeComponent();
 
+	#if USE_SCOTT_PLOT
+			scottPlot.Visible = true;
+	#endif
 			// First do InitializeComponent() and UpdatePlot() related initialization:
 
 			this.initialAndMinimumUpdateInterval = timer_Update.Interval; // 73 ms (a prime number)
@@ -229,6 +235,7 @@ namespace YAT.View.Forms
 			}
 		}
 
+	#if USE_SCOTT_PLOT
 		private void scottPlot_MouseEntered(object sender, EventArgs e)
 		{
 			button_FitAxis.Enabled = true;
@@ -246,16 +253,17 @@ namespace YAT.View.Forms
 		{
 			UpdateHover();
 		}
+	#endif
 
-	////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
-	////{
-	////	if (this.isSettingControls) \remind (2020-01-17 / MKY / FR#391)
-	////		return;
-	////
-	////	var action = (comboBox_PlotAction.SelectedItem as AutoActionEx);
-	////	if (action != null)
-	////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
-	////}
+		////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
+		////{
+		////	if (this.isSettingControls) \remind (2020-01-17 / MKY / FR#391)
+		////		return;
+		////
+		////	var action = (comboBox_PlotAction.SelectedItem as AutoActionEx);
+		////	if (action != null)
+		////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
+		////}
 
 		private void button_FitAxis_Click(object sender, EventArgs e)
 		{
@@ -457,11 +465,13 @@ namespace YAT.View.Forms
 			return (resultInterval);
 		}
 
+	#if USE_SCOTT_PLOT
 		private void SetBackColor(Color backColor)
 		{                          // 'dataBg' = inner part of plot, without title/axis/legend (= 'figBg').
 			scottPlot.plt.Style(dataBg: backColor); // Back color is only appied to inner part same as
 			UpdatePlot(true);                       // it is only applied to inner part of monitors.
 		}
+	#endif
 
 		private void FitAxis()
 		{
@@ -523,7 +533,7 @@ namespace YAT.View.Forms
 
 					var txColor = this.model.SettingsRoot.Format.TxDataFormat.Color;
 					var rxColor = this.model.SettingsRoot.Format.RxDataFormat.Color;
-
+	#if USE_SCOTT_PLOT
 					scottPlot.plt.Clear();
 
 					scottPlot.plt.Title(mdl.Title);
@@ -549,8 +559,8 @@ namespace YAT.View.Forms
 					scottPlot.plt.Legend(enableLegend: ApplicationSettings.RoamingUserSettings.Plot.ShowLegend);
 
 					scottPlot.Render();
-
-				////this.lastAction = mdl.Action; \remind (2020-01-17 / MKY / FR#391)
+	#endif
+					////this.lastAction = mdl.Action; \remind (2020-01-17 / MKY / FR#391)
 					this.lastUpdateCount = mdl.UpdateCounter;
 
 					var endTicks = Stopwatch.GetTimestamp();
@@ -568,7 +578,9 @@ namespace YAT.View.Forms
 
 		private void PlotCountRate(Model.AutoActionPlotModel mdl, Color txColor, Color rxColor)
 		{
+	#if USE_SCOTT_PLOT
 			scottPlot.plt.Ticks(dateTimeX: true);
+	#endif
 
 			if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0))
 			{
@@ -576,11 +588,12 @@ namespace YAT.View.Forms
 				{
 					switch (i)
 					{
+	#if USE_SCOTT_PLOT
 						case 0: /* TxCount */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: txColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
 						case 1: /* TxRate  */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: txColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
 						case 2: /* RxCount */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: rxColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
 						case 3: /* RxRate  */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: rxColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
-
+	#endif
 						default:  throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
@@ -597,11 +610,15 @@ namespace YAT.View.Forms
 					if (isFirst)
 					{
 						isFirst = false;
+	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), color: rxColor, label: kvp.Item1);
+	#endif
 					}
 					else
 					{
+	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
+	#endif
 					}
 				}
 			}
@@ -609,8 +626,10 @@ namespace YAT.View.Forms
 
 		private void PlotScatter(Model.AutoActionPlotModel mdl, Color rxColor, bool dateTimeX, bool drawLine)
 		{
+	#if USE_SCOTT_PLOT
 			if (dateTimeX)
 				scottPlot.plt.Ticks(dateTimeX: true);
+	#endif
 
 			if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0))
 			{
@@ -622,11 +641,15 @@ namespace YAT.View.Forms
 					if (isFirst)
 					{
 						isFirst = false;
+	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: rxColor, lineWidth: lineWidth, label: kvp.Item1);
+	#endif
 					}
 					else
 					{
+	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: lineWidth, label: kvp.Item1);
+	#endif
 					}
 				}
 			}
@@ -636,13 +659,16 @@ namespace YAT.View.Forms
 		{
 			if (mdl.Histogram != null)
 			{
+	#if USE_SCOTT_PLOT
 				if (orientation == Orientation.Horizontal)
 					scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
 				else // PENDING, probably not supported by ScottPlot
 					scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
+	#endif
 			}
 		}
 
+	#if USE_SCOTT_PLOT
 		/// <remarks>Based on 'ScottPlotDemos.FormHoverValue'.</remarks>
 		private void UpdateHover()
 		{
@@ -753,6 +779,7 @@ namespace YAT.View.Forms
 
 			// PENDING
 		}
+	#endif
 
 		#endregion
 
