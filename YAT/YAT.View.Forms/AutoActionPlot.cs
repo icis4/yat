@@ -28,7 +28,8 @@
 //==================================================================================================
 
 // Select the plot library:
-#define USE_SCOTT_PLOT
+////#define USE_SCOTT_PLOT
+#define USE_OXY_PLOT
 
 #if (DEBUG)
 
@@ -89,7 +90,11 @@ namespace YAT.View.Forms
 
 		private SettingControlsHelper isSettingControls;
 
-		private Model.Terminal model; // = null;
+		private Model.Terminal terminal; // = null;
+
+	#if USE_OXY_PLOT
+		private OxyPlot.PlotModel oxyModel; // = null;
+	#endif
 
 	////private AutoAction lastAction; // = [None]; \remind (2020-01-17 / MKY / FR#391)
 		private int lastUpdateCount; // = 0;
@@ -117,14 +122,18 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public AutoActionPlot(Model.Terminal model)
+		public AutoActionPlot(Model.Terminal terminal)
 		{
-			this.model = model;
+			this.terminal = terminal;
 
 			InitializeComponent();
 
 	#if USE_SCOTT_PLOT
 			scottPlot.Visible = true;
+			plotView.Visible = false;
+	#elif USE_OXY_PLOT
+			scottPlot.Visible = false;
+			plotView.Visible = true;
 	#endif
 			// First do InitializeComponent() and UpdatePlot() related initialization:
 
@@ -136,15 +145,15 @@ namespace YAT.View.Forms
 
 			// Then initialization which is dependent on the intialization above:
 
-			SetBackColor(this.model.SettingsRoot.Format.BackColor);
+			SetBackColor(this.terminal.SettingsRoot.Format.BackColor);
 
 			this.isSettingControls.Enter();
 			try
 			{
 			////comboBox_PlotAction.Items.AddRange(AutoActionEx.GetLineScatterHistrogramPlotItems());
 			////
-			////var mdl = this.model.AutoActionPlotModel; \remind (2020-01-17 / MKY / FR#391)
-			////var action = (AutoActionEx)mdl.Action;
+			////var yatModel = this.terminal.AutoActionPlotModel; \remind (2020-01-17 / MKY / FR#391)
+			////var action = (AutoActionEx)yatModel.Action;
 			////ComboBoxHelper.Select(comboBox_PlotAction, action, action);
 			////comboBox_PlotAction.Enabled = action.IsLineScatterHistogramPlot;
 
@@ -255,15 +264,15 @@ namespace YAT.View.Forms
 		}
 	#endif
 
-		////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
-		////{
-		////	if (this.isSettingControls) \remind (2020-01-17 / MKY / FR#391)
-		////		return;
-		////
-		////	var action = (comboBox_PlotAction.SelectedItem as AutoActionEx);
-		////	if (action != null)
-		////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
-		////}
+	////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
+	////{
+	////	if (this.isSettingControls) \remind (2020-01-17 / MKY / FR#391)
+	////		return;
+	////
+	////	var action = (comboBox_PlotAction.SelectedItem as AutoActionEx);
+	////	if (action != null)
+	////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
+	////}
 
 		private void button_FitAxis_Click(object sender, EventArgs e)
 		{
@@ -465,13 +474,17 @@ namespace YAT.View.Forms
 			return (resultInterval);
 		}
 
-	#if USE_SCOTT_PLOT
 		private void SetBackColor(Color backColor)
+	#if USE_SCOTT_PLOT
 		{                          // 'dataBg' = inner part of plot, without title/axis/legend (= 'figBg').
 			scottPlot.plt.Style(dataBg: backColor); // Back color is only appied to inner part same as
 			UpdatePlot(true);                       // it is only applied to inner part of monitors.
-		}
+	#elif USE_OXY_PLOT
+		{
+			plotView.BackColor = backColor;
+			UpdatePlot(true);
 	#endif
+		}
 
 		private void FitAxis()
 		{
@@ -480,8 +493,8 @@ namespace YAT.View.Forms
 
 		private void Clear()
 		{
-			lock (this.model.AutoActionPlotModelSyncObj)
-				this.model.AutoActionPlotModel.ClearAllItems();
+			lock (this.terminal.AutoActionPlotModelSyncObj)
+				this.terminal.AutoActionPlotModel.ClearAllItems();
 
 			UpdatePlot(true); // Immediately update, don't wait for update ticker.
 		}
@@ -506,18 +519,18 @@ namespace YAT.View.Forms
 
 			var beginTicks = Stopwatch.GetTimestamp(); // Measure including waiting for lock!
 
-			lock (this.model.AutoActionPlotModelSyncObj)
+			lock (this.terminal.AutoActionPlotModelSyncObj)
 			{
-				var mdl = this.model.AutoActionPlotModel;
-				var doUpdate = ((this.lastUpdateCount != mdl.UpdateCounter) || force); // Only update when needed.
-			////var doUpdate = ((this.lastAction != mdl.Action) || (this.lastUpdateCount != mdl.UpdateCounter) || force); // Only update when needed.
+				var yatModel = this.terminal.AutoActionPlotModel;
+				var doUpdate = ((this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
+			////var doUpdate = ((this.lastAction != yatModel.Action) || (this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
 
-			////if (this.lastAction != mdl.Action) \remind (2020-01-17 / MKY / FR#391)
+			////if (this.lastAction != yatModel.Action) \remind (2020-01-17 / MKY / FR#391)
 			////{
 			////	this.isSettingControls.Enter();
 			////	try
 			////	{
-			////		var action = (AutoActionEx)mdl.Action;
+			////		var action = (AutoActionEx)yatModel.Action;
 			////		ComboBoxHelper.Select(comboBox_PlotAction, action, action);
 			////		comboBox_PlotAction.Enabled = action.IsLineScatterHistogramPlot;
 			////	}
@@ -531,37 +544,38 @@ namespace YAT.View.Forms
 				{
 					button_FitAxis.Enabled = false; // AxisAuto() will be called further below.
 
-					var txColor = this.model.SettingsRoot.Format.TxDataFormat.Color;
-					var rxColor = this.model.SettingsRoot.Format.RxDataFormat.Color;
+					var txColor = this.terminal.SettingsRoot.Format.TxDataFormat.Color;
+					var rxColor = this.terminal.SettingsRoot.Format.RxDataFormat.Color;
 	#if USE_SCOTT_PLOT
 					scottPlot.plt.Clear();
 
-					scottPlot.plt.Title(mdl.Title);
+					scottPlot.plt.Title(yatModel.Title);
 
-					scottPlot.plt.XLabel(mdl.XLabel);
-					scottPlot.plt.YLabel(mdl.YLabel);
+					scottPlot.plt.XLabel(yatModel.XLabel);
+					scottPlot.plt.YLabel(yatModel.YLabel);
 
-					switch (mdl.Action)
+					switch (yatModel.Action)
 					{
-						case AutoAction.PlotByteCountRate:   PlotCountRate(mdl, txColor, rxColor                        ); break;
-						case AutoAction.PlotLineCountRate:   PlotCountRate(mdl, txColor, rxColor                        ); break;
-						case AutoAction.LineChartIndex:      PlotSignal(   mdl,          rxColor                        ); break;
-						case AutoAction.LineChartTime:       PlotScatter(  mdl,          rxColor, true,  true           ); break;
-						case AutoAction.LineChartTimeStamp:  PlotScatter(  mdl,          rxColor, true,  true           ); break;
-						case AutoAction.ScatterPlot:         PlotScatter(  mdl,          rxColor, false, false          ); break;
-						case AutoAction.HistogramHorizontal: PlotHistogram(mdl,          rxColor, Orientation.Horizontal); break;
-						case AutoAction.HistogramVertical:   PlotHistogram(mdl,          rxColor, Orientation.Vertical  ); break;
+						case AutoAction.PlotByteCountRate:   PlotCountRate(yatModel, txColor, rxColor                        ); break;
+						case AutoAction.PlotLineCountRate:   PlotCountRate(yatModel, txColor, rxColor                        ); break;
+						case AutoAction.LineChartIndex:      PlotSignal(   yatModel,          rxColor                        ); break;
+						case AutoAction.LineChartTime:       PlotScatter(  yatModel,          rxColor, true,  true           ); break;
+						case AutoAction.LineChartTimeStamp:  PlotScatter(  yatModel,          rxColor, true,  true           ); break;
+						case AutoAction.ScatterPlot:         PlotScatter(  yatModel,          rxColor, false, false          ); break;
+						case AutoAction.HistogramHorizontal: PlotHistogram(yatModel,          rxColor, Orientation.Horizontal); break;
+						case AutoAction.HistogramVertical:   PlotHistogram(yatModel,          rxColor, Orientation.Vertical  ); break;
 
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + mdl.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + yatModel.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					scottPlot.plt.AxisAuto();
 					scottPlot.plt.Legend(enableLegend: ApplicationSettings.RoamingUserSettings.Plot.ShowLegend);
 
 					scottPlot.Render();
+	#elif USE_OXY_PLOT
 	#endif
-					////this.lastAction = mdl.Action; \remind (2020-01-17 / MKY / FR#391)
-					this.lastUpdateCount = mdl.UpdateCounter;
+					////this.lastAction = yatModel.Action; \remind (2020-01-17 / MKY / FR#391)
+					this.lastUpdateCount = yatModel.UpdateCounter;
 
 					var endTicks = Stopwatch.GetTimestamp();
 					var spanTicks = (endTicks - beginTicks);
@@ -576,23 +590,25 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void PlotCountRate(Model.AutoActionPlotModel mdl, Color txColor, Color rxColor)
+		private void PlotCountRate(Model.AutoActionPlotModel yatModel, Color txColor, Color rxColor)
 		{
 	#if USE_SCOTT_PLOT
 			scottPlot.plt.Ticks(dateTimeX: true);
+	#elif USE_OXY_PLOT
 	#endif
 
-			if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0))
+			if ((yatModel.XValues != null) && (yatModel.YValues != null) && (yatModel.YValues.Count > 0))
 			{
-				for (int i = 0; i < mdl.YValues.Count; i++)
+				for (int i = 0; i < yatModel.YValues.Count; i++)
 				{
 					switch (i)
 					{
 	#if USE_SCOTT_PLOT
-						case 0: /* TxCount */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: txColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
-						case 1: /* TxRate  */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: txColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
-						case 2: /* RxCount */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: rxColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
-						case 3: /* RxRate  */ scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), mdl.YValues[i].Item2.ToArray(), color: rxColor, label: mdl.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
+						case 0: /* TxCount */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: txColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
+						case 1: /* TxRate  */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: txColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
+						case 2: /* RxCount */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: rxColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
+						case 3: /* RxRate  */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: rxColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
+	#elif USE_OXY_PLOT
 	#endif
 						default:  throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
@@ -600,70 +616,107 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void PlotSignal(Model.AutoActionPlotModel mdl, Color rxColor)
+		private void PlotSignal(Model.AutoActionPlotModel yatModel, Color rxColor)
 		{
-			if ((mdl.YValues != null) && (mdl.YValues.Count > 0))
+			if ((yatModel.YValues != null) && (yatModel.YValues.Count > 0))
 			{
 				var isFirst = true;
-				foreach (var kvp in mdl.YValues)
+				foreach (var kvp in yatModel.YValues)
 				{
 					if (isFirst)
 					{
 						isFirst = false;
 	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), color: rxColor, label: kvp.Item1);
+	#elif USE_OXY_PLOT
 	#endif
 					}
 					else
 					{
 	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
+	#elif USE_OXY_PLOT
 	#endif
 					}
 				}
 			}
 		}
 
-		private void PlotScatter(Model.AutoActionPlotModel mdl, Color rxColor, bool dateTimeX, bool drawLine)
+		private void PlotScatter(Model.AutoActionPlotModel yatModel, Color rxColor, bool dateTimeX, bool drawLine)
 		{
 	#if USE_SCOTT_PLOT
 			if (dateTimeX)
 				scottPlot.plt.Ticks(dateTimeX: true);
+	#elif USE_OXY_PLOT
 	#endif
 
-			if ((mdl.XValues != null) && (mdl.YValues != null) && (mdl.YValues.Count > 0))
+			if ((yatModel.XValues != null) && (yatModel.YValues != null) && (yatModel.YValues.Count > 0))
 			{
 				var lineWidth = (drawLine ? 1 : 0);
 
 				var isFirst = true;
-				foreach (var kvp in mdl.YValues)
+				foreach (var kvp in yatModel.YValues)
 				{
 					if (isFirst)
 					{
 						isFirst = false;
 	#if USE_SCOTT_PLOT
-						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: rxColor, lineWidth: lineWidth, label: kvp.Item1);
+						scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: rxColor, lineWidth: lineWidth, label: kvp.Item1);
+	#elif USE_OXY_PLOT
 	#endif
 					}
 					else
 					{
 	#if USE_SCOTT_PLOT
-						scottPlot.plt.PlotScatter(mdl.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: lineWidth, label: kvp.Item1);
+						scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: lineWidth, label: kvp.Item1);
+	#elif USE_OXY_PLOT
 	#endif
 					}
 				}
 			}
 		}
 
-		private void PlotHistogram(Model.AutoActionPlotModel mdl, Color rxColor, Orientation orientation)
+		private void PlotHistogram(Model.AutoActionPlotModel yatModel, Color rxColor, Orientation orientation)
 		{
-			if (mdl.Histogram != null)
+			if (yatModel.Histogram != null)
 			{
 	#if USE_SCOTT_PLOT
 				if (orientation == Orientation.Horizontal)
-					scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
+					scottPlot.plt.PlotBar(yatModel.Histogram.ValuesMidPoint.ToArray(), yatModel.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: yatModel.Histogram.BinSize, color: rxColor, label: "All Captures");
 				else // PENDING, probably not supported by ScottPlot
-					scottPlot.plt.PlotBar(mdl.Histogram.ValuesMidPoint.ToArray(), mdl.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: mdl.Histogram.BinSize, color: rxColor, label: "All Captures");
+					scottPlot.plt.PlotBar(yatModel.Histogram.ValuesMidPoint.ToArray(), yatModel.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: yatModel.Histogram.BinSize, color: rxColor, label: "All Captures");
+	#elif USE_OXY_PLOT
+				if (this.oxyModel == null)
+				{
+					this.oxyModel = new OxyPlot.PlotModel { Title = yatModel.Title };
+
+					if (orientation == Orientation.Horizontal)
+					{
+						var series = new OxyPlot.Series.ColumnSeries { ItemsSource = yatModel.Histogram.Counts, ValueField = "Value" };
+
+						var labelValues = (((float)(plotView.Width) / (float)(yatModel.Histogram.BinCount)) >= 16.0); // Arbitrary number.
+						if (labelValues)                           // Pragmatic, just calculate when plot gets created.
+							series.LabelFormatString = "{0}";
+
+						this.oxyModel.Series.Add(series);
+
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, ItemsSource = yatModel.Histogram.Counts, LabelField = "Label", GapWidth = 0 });
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left, MinimumPadding = 0, MaximumPadding = 0.1, AbsoluteMinimum = 0 });
+					}
+					else
+					{
+						var series = new OxyPlot.Series.BarSeries { ItemsSource = yatModel.Histogram.Counts, ValueField = "Value" };
+
+						var labelValues = (((float)(plotView.Height) / (float)(plotView.Font.Height)) <= yatModel.Histogram.BinCount);
+						if (labelValues)                            // Pragmatic, just calculate when plot gets created.
+							series.LabelFormatString = "{0}";
+
+						this.oxyModel.Series.Add(series);
+
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left, ItemsSource = yatModel.Histogram.Counts, LabelField = "Label", GapWidth = 0 });
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, MinimumPadding = 0, MaximumPadding = 0.1, AbsoluteMinimum = 0 });
+					}
+				}
 	#endif
 			}
 		}
@@ -679,11 +732,11 @@ namespace YAT.View.Forms
 			cursorPos.X -= this.PointToScreen(scottPlot.Location).X;
 			cursorPos.Y -= this.PointToScreen(scottPlot.Location).Y;
 
-			lock (this.model.AutoActionPlotModelSyncObj)
+			lock (this.terminal.AutoActionPlotModelSyncObj)
 			{
-				var mdl = this.model.AutoActionPlotModel;
+				var yatModel = this.terminal.AutoActionPlotModel;
 
-				switch (mdl.Action)
+				switch (yatModel.Action)
 				{
 					case AutoAction.LineChartIndex:
 						UpdateHoverOnSignal(cursorPos);
@@ -703,7 +756,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + mdl.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + yatModel.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				scottPlot.Render();
