@@ -38,6 +38,7 @@
 			this.button_Deactivate = new System.Windows.Forms.Button();
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
 			this.scottPlot = new ScottPlot.FormsPlot();
+			this.plotView = new OxyPlot.WindowsForms.PlotView();
 			this.button_FitAxis = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
@@ -117,9 +118,23 @@
 			this.scottPlot.Name = "scottPlot";
 			this.scottPlot.Size = new System.Drawing.Size(860, 381);
 			this.scottPlot.TabIndex = 0;
+	#if USE_SCOTT_PLOT
 			this.scottPlot.MouseEntered += new System.EventHandler(this.scottPlot_MouseEntered);
 			this.scottPlot.MouseLeft += new System.EventHandler(this.scottPlot_MouseLeft);
 			this.scottPlot.MouseMoved += new System.EventHandler(this.scottPlot_MouseMoved);
+	#endif
+			// 
+			// plotView
+			// 
+			this.plotView.Location = new System.Drawing.Point(12, 12);
+			this.plotView.Name = "plotView";
+			this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+			this.plotView.Size = new System.Drawing.Size(860, 381);
+			this.plotView.TabIndex = 0;
+			this.plotView.Text = "";
+			this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+			this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+			this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
 			// 
 			// button_FitAxis
 			// 
@@ -137,6 +152,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(884, 441);
+			this.Controls.Add(this.plotView);
 			this.Controls.Add(this.button_Deactivate);
 			this.Controls.Add(this.button_FitAxis);
 			this.Controls.Add(this.label_UpdateSuspended);
@@ -169,5 +185,6 @@
 		private System.Windows.Forms.Label label_UpdateSuspended;
 		private System.Windows.Forms.Button button_FitAxis;
 		private System.Windows.Forms.Button button_Deactivate;
+		private OxyPlot.WindowsForms.PlotView plotView;
 	}
 }
