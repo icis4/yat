@@ -28,8 +28,8 @@
 //==================================================================================================
 
 // Select the plot library:
-////#define USE_SCOTT_PLOT
-#define USE_OXY_PLOT
+#define USE_SCOTT_PLOT
+////#define USE_OXY_PLOT
 
 #if (DEBUG)
 
