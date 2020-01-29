@@ -36,12 +36,13 @@ Tools > Options...
   > Text Editor
     > All Languages > General > Settings > Line numbers = yes
     > C# > Tabs > Keep tabs
-    > C# > Code Style > Qualify member access with 'this' = yes
-    > C# > Formatting > 3 x auto = no
-    > C# > Advanced > Place 'System' usings first
+         > Code Style > Qualify field access with 'this' = Prefer 'this.' / Suggestion
+         > Formatting > 5 x auto = no
+         > Advanced > Place 'System' usings first
+                    > Separate using directive groups
   > Debugging
     > General > Step over properties and operators = no
-    > General > Require source files to excatly match the original version = no
+              > Require source files to excatly match the original version = no
 
 Edit > Advanced
   > View White Space = true

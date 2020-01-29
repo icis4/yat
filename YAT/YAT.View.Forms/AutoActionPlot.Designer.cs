@@ -126,15 +126,21 @@
 			// 
 			// plotView
 			// 
+			this.plotView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.plotView.Location = new System.Drawing.Point(12, 12);
 			this.plotView.Name = "plotView";
 			this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
 			this.plotView.Size = new System.Drawing.Size(860, 381);
 			this.plotView.TabIndex = 0;
-			this.plotView.Text = "";
 			this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
 			this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
 			this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+	#if USE_OXY_PLOT
+			this.plotView.MouseEntered += new System.EventHandler(this.plotView_MouseEntered);
+			this.plotView.MouseLeft += new System.EventHandler(this.plotView_MouseLeft);
+	#endif
 			// 
 			// button_FitAxis
 			// 
