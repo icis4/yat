@@ -77,6 +77,9 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_File_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_File_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_Terminal = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_Terminal_AllClear = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Log_AllOn = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Log_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
@@ -397,6 +400,7 @@ namespace YAT.View.Forms
 			// 
 			this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_MainMenu_File,
+            this.toolStripMenuItem_MainMenu_Terminal,
             this.toolStripMenuItem_MainMenu_Log,
             this.toolStripMenuItem_MainMenu_Window,
 		#if (WITH_SCRIPTING)
@@ -583,6 +587,33 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_File_Exit.Size = new System.Drawing.Size(242, 22);
 			this.toolStripMenuItem_MainMenu_File_Exit.Text = "E&xit";
 			this.toolStripMenuItem_MainMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_File_Exit_Click);
+			// 
+			// toolStripMenuItem_MainMenu_Terminal
+			// 
+			this.toolStripMenuItem_MainMenu_Terminal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_MainMenu_Terminal_AllClear,
+            this.toolStripMenuItem_MainMenu_Terminal_AllRefresh});
+			this.toolStripMenuItem_MainMenu_Terminal.MergeIndex = 1;
+			this.toolStripMenuItem_MainMenu_Terminal.Name = "toolStripMenuItem_MainMenu_Terminal";
+			this.toolStripMenuItem_MainMenu_Terminal.Size = new System.Drawing.Size(65, 20);
+			this.toolStripMenuItem_MainMenu_Terminal.Text = "&Terminal";
+			this.toolStripMenuItem_MainMenu_Terminal.DropDownOpening += new System.EventHandler(this.toolStripMenuItem_MainMenu_Terminal_DropDownOpening);
+			// 
+			// toolStripMenuItem_MainMenu_Terminal_AllClear
+			// 
+			this.toolStripMenuItem_MainMenu_Terminal_AllClear.Name = "toolStripMenuItem_MainMenu_Terminal_AllClear";
+			this.toolStripMenuItem_MainMenu_Terminal_AllClear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+			this.toolStripMenuItem_MainMenu_Terminal_AllClear.Size = new System.Drawing.Size(230, 22);
+			this.toolStripMenuItem_MainMenu_Terminal_AllClear.Text = "All Terminals Cl&ear";
+			this.toolStripMenuItem_MainMenu_Terminal_AllClear.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Terminal_AllClear_Click);
+			// 
+			// toolStripMenuItem_MainMenu_Terminal_AllRefresh
+			// 
+			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.Name = "toolStripMenuItem_MainMenu_Terminal_AllRefresh";
+			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.Size = new System.Drawing.Size(230, 22);
+			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.Text = "All Terminals Refres&h";
+			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Terminal_AllRefresh_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Log
 			// 
@@ -1881,6 +1912,9 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Time;
 		private System.Windows.Forms.Timer timer_Time;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_AnyOtherFeedback;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Terminal;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Terminal_AllClear;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Terminal_AllRefresh;
 	#if (WITH_SCRIPTING)
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_10;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Script_ShowHide;

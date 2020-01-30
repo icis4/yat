@@ -720,6 +720,49 @@ namespace YAT.View.Forms
 
 		#endregion
 
+		#region Controls Event Handlers > Main Menu > Terminal
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Main Menu > Terminal
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_MainMenu_Terminal_SetChildMenuItems()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				bool childIsReady = (ActiveMdiChild != null);
+				var t = (ActiveMdiChild as Terminal);
+
+				toolStripMenuItem_MainMenu_Terminal_AllClear.Enabled   = childIsReady;
+				toolStripMenuItem_MainMenu_Terminal_AllRefresh.Enabled = childIsReady;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
+		private void toolStripMenuItem_MainMenu_Terminal_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_MainMenu_Terminal_SetChildMenuItems();
+		}
+
+		private void toolStripMenuItem_MainMenu_Terminal_AllClear_Click(object sender, EventArgs e)
+		{
+			this.workspace.AllClear();
+		}
+
+		private void toolStripMenuItem_MainMenu_Terminal_AllRefresh_Click(object sender, EventArgs e)
+		{
+			this.workspace.AllRefresh();
+		}
+
+		#endregion
+
 		#region Controls Event Handlers > Main Menu > Log
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Main Menu > Log
@@ -3705,6 +3748,7 @@ namespace YAT.View.Forms
 		{
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
+			toolStripMenuItem_MainMenu_Terminal_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Log_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
 
