@@ -118,11 +118,9 @@
 			this.scottPlot.Name = "scottPlot";
 			this.scottPlot.Size = new System.Drawing.Size(860, 381);
 			this.scottPlot.TabIndex = 0;
-	#if USE_SCOTT_PLOT
 			this.scottPlot.MouseEntered += new System.EventHandler(this.scottPlot_MouseEntered);
 			this.scottPlot.MouseLeft += new System.EventHandler(this.scottPlot_MouseLeft);
 			this.scottPlot.MouseMoved += new System.EventHandler(this.scottPlot_MouseMoved);
-	#endif
 			// 
 			// plotView
 			// 
@@ -137,10 +135,8 @@
 			this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
 			this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
 			this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-	#if USE_OXY_PLOT
-			this.plotView.MouseEntered += new System.EventHandler(this.plotView_MouseEntered);
-			this.plotView.MouseLeft += new System.EventHandler(this.plotView_MouseLeft);
-	#endif
+			this.plotView.MouseEnter += new System.EventHandler(this.plotView_MouseEnter);
+			this.plotView.MouseLeave += new System.EventHandler(this.plotView_MouseLeave);
 			// 
 			// button_FitAxis
 			// 
@@ -172,8 +168,8 @@
 			this.Text = "YAT - [[Terminal] - Plot]";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoActionPlot_FormClosing);
 			this.Shown += new System.EventHandler(this.AutoActionPlot_Shown);
-			this.BackColorChanged += new System.EventHandler(this.AutoActionPlot_BackColorChanged);
 			this.LocationChanged += new System.EventHandler(this.AutoActionPlot_LocationChanged);
+			this.PlotAreaBackColorChanged += new System.EventHandler(this.AutoActionPlot_PlotAreaBackColorChanged);
 			this.SizeChanged += new System.EventHandler(this.AutoActionPlot_SizeChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
