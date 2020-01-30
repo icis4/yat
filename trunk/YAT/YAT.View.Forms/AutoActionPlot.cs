@@ -68,9 +68,20 @@ namespace YAT.View.Forms
 	/// <remarks>
 	/// Separate <see cref="Form"/> rather than integrated into <see cref="Terminal"/> for...
 	/// <list type="bullet">
-	/// <item><description>...allowing a user to minimize YAT while still showing the plot.</description></item>
+	/// <item><description>...allowing a user to freely size and position the plot.</description></item>
 	/// <item><description>...better decoupling monitor and plot update performance.</description></item>
-	/// <item><description>...no adding even more to <see cref="Terminal"/>.</description></item>
+	/// <item><description>...not adding even more to <see cref="Terminal"/>.</description></item>
+	/// </list>
+	/// Note that <see cref="Terminal"/> invokes this form using <see cref="Form.Show(IWin32Window)"/>,
+	/// specifying the terminal as the owner. Advantages:
+	/// <list type="bullet">
+	/// <item><description>Behavior as described above.</description></item>
+	/// <item><description>Keep plot on top of <see cref="Terminal"/> as well as <see cref="Main"/>.</description></item>
+	/// <item><description>Thus possible to position the plot inside the <see cref="Main"/> window.</description></item>
+	/// </list>
+	/// Disdvantages:
+	/// <list type="bullet">
+	/// <item><description>Not possible to minimize YAT while still showing the plot.</description></item>
 	/// </list>
 	/// Potential refinement of this behavior is tracked in https://sourceforge.net/p/y-a-terminal/feature-requests/391/.
 	/// </remarks>
