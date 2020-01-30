@@ -2255,6 +2255,30 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual void AllClear()
+		{
+			AssertNotDisposed();
+
+			if (this.terminals != null)
+			{
+				foreach (var t in this.terminals)
+					t.ClearRepositories();
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void AllRefresh()
+		{
+			AssertNotDisposed();
+
+			if (this.terminals != null)
+			{
+				foreach (var t in this.terminals)
+					t.RefreshRepositories();
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool AllLogOn()
 		{
 			AssertNotDisposed();

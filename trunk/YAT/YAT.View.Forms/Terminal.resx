@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="timer_StatusText.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>783, 56</value>
+    <value>1151, 56</value>
   </metadata>
   <metadata name="contextMenuStrip_Monitor.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>177, 17</value>
+    <value>634, 17</value>
   </metadata>
   <metadata name="contextMenuStrip_Radix.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>375, 17</value>
+    <value>832, 17</value>
   </metadata>
   <metadata name="contextMenuStrip_Predefined.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>409, 56</value>
+    <value>777, 56</value>
   </metadata>
   <metadata name="contextMenuStrip_Command.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>198, 56</value>
+    <value>566, 56</value>
   </metadata>
   <metadata name="contextMenuStrip_Page.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 56</value>
+    <value>385, 56</value>
   </metadata>
   <metadata name="contextMenuStrip_Send.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>934, 17</value>
+    <value>204, 56</value>
   </metadata>
   <data name="toolStripMenuItem_SendContextMenu_AllowConcurrency.ToolTipText" xml:space="preserve">
     <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
@@ -145,7 +145,10 @@ Useful e.g. for sending a text command while a repeating text command is already
 Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   </data>
   <metadata name="menuStrip_Terminal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+    <value>474, 17</value>
+  </metadata>
+  <metadata name="contextMenuStrip_Preset.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1016, 17</value>
   </metadata>
   <data name="toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.ToolTipText" xml:space="preserve">
     <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
@@ -170,9 +173,6 @@ A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.</value>
   </data>
-  <metadata name="contextMenuStrip_Preset.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>559, 17</value>
-  </metadata>
   <data name="toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.ToolTipText" xml:space="preserve">
     <value>Requires that trigger uses text with enabled regular expression,
 because replacement is done based on regular expression captures.
@@ -222,25 +222,25 @@ Note that...
 ...only [Plot ... Count/Rate] are also applied to sent data.</value>
   </data>
   <metadata name="statusStrip_Terminal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>622, 56</value>
+    <value>990, 56</value>
   </metadata>
   <metadata name="contextMenuStrip_Status.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>747, 17</value>
+    <value>17, 56</value>
   </metadata>
   <metadata name="timer_RtsLuminescence.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 95</value>
+    <value>197, 95</value>
   </metadata>
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>196, 95</value>
+    <value>376, 95</value>
   </metadata>
   <metadata name="timer_IOStatusIndicator.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>924, 56</value>
+    <value>17, 95</value>
   </metadata>
-  <metadata name="timer_AutoActionCount.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1054, 56</value>
+  <metadata name="timer_AutoActionCountUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
   </metadata>
-  <metadata name="timer_AutoResponseCount.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1204, 56</value>
+  <metadata name="timer_AutoResponseCountUpdate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>237, 17</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>91</value>

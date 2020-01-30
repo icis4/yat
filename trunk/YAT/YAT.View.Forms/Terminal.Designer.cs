@@ -3326,6 +3326,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Terminal_Start
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_button_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Start.MergeIndex = 0;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Name = "toolStripMenuItem_TerminalMenu_Terminal_Start";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
@@ -3336,6 +3337,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Terminal_Stop
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_delete_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.MergeIndex = 0;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Name = "toolStripMenuItem_TerminalMenu_Terminal_Stop";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.C)));
@@ -3345,11 +3347,13 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_1
 			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.MergeIndex = 0;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_1";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Size = new System.Drawing.Size(211, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Break
 			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_Break.MergeIndex = 0;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Name = "toolStripMenuItem_TerminalMenu_Terminal_Break";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Size = new System.Drawing.Size(214, 22);
@@ -3358,12 +3362,14 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_2
 			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.MergeIndex = 0;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_2";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Size = new System.Drawing.Size(211, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.MergeIndex = 0;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Name = "toolStripMenuItem_TerminalMenu_Terminal_Clear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(214, 22);
@@ -3373,6 +3379,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Terminal_Refresh
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_refresh_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.MergeIndex = 2;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Name = "toolStripMenuItem_TerminalMenu_Terminal_Refresh";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Size = new System.Drawing.Size(214, 22);
@@ -3870,7 +3877,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_email_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.D)));
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Size = new System.Drawing.Size(171, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Text = "&Deactivate";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate_Click);
@@ -3906,7 +3914,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_WholeWord,
             this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_EnableRegex});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(153, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Size = new System.Drawing.Size(170, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.Text = "&Trigger/Pattern";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText = "The trigger or pattern that initiates an action";
 			// 
@@ -3962,7 +3970,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Receive_AutoAction_Action});
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Size = new System.Drawing.Size(153, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Size = new System.Drawing.Size(170, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.Text = "&Action";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Action.ToolTipText = "The action that is automatically executed";
 			// 
@@ -3978,8 +3986,9 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Name = "toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate";
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Size = new System.Drawing.Size(153, 22);
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.E)));
+			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Size = new System.Drawing.Size(170, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Text = "&Deactivate";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate_Click);
 			// 
