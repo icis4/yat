@@ -8173,7 +8173,7 @@ namespace YAT.View.Forms
 			if (this.autoActionPlotForm != null)
 			{
 				if (this.terminal != null)
-					this.autoActionPlotForm.BackColor = this.terminal.SettingsRoot.Format.BackColor;
+					this.autoActionPlotForm.PlotAreaBackColor = this.terminal.SettingsRoot.Format.BackColor;
 			}
 		}
 
