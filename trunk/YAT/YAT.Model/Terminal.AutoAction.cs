@@ -688,7 +688,9 @@ namespace YAT.Model
 					if (AutoActionPlotModel == null)
 						AutoActionPlotModel = new AutoActionPlotModel();
 
-					AutoActionPlotModel.AddItem(pi);
+					var txColor = SettingsRoot.Format.TxDataFormat.Color;
+					var rxColor = SettingsRoot.Format.RxDataFormat.Color;
+					AutoActionPlotModel.AddItem(pi, txColor, rxColor);
 				}
 
 				OnAutoActionPlotRequest_Promtly(EventArgs.Empty);

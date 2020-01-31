@@ -135,8 +135,6 @@
 			this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
 			this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
 			this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-			this.plotView.MouseEnter += new System.EventHandler(this.plotView_MouseEnter);
-			this.plotView.MouseLeave += new System.EventHandler(this.plotView_MouseLeave);
 			// 
 			// button_FitAxis
 			// 
