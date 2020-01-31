@@ -31,7 +31,7 @@
 #define USE_SCOTT_PLOT
 ////#define USE_OXY_PLOT
 
-#if (DEBUG)
+#if (DEBUG) // PENDING: Remove whole section if not using OxyPlot
 
 	// Enable debugging of plot update:
 ////#define DEBUG_UPDATE
@@ -47,21 +47,27 @@
 
 using System;
 using System.ComponentModel;
+#if USE_SCOTT_PLOT
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+#endif
 using System.Drawing;
+#if USE_SCOTT_PLOT
 using System.Globalization;
-//#if USE_SCOTT_PLOT
 using System.Linq;
-//#endif
+#endif
 using System.Windows.Forms;
 
 using MKY;
+#if USE_SCOTT_PLOT
 using MKY.Collections.Specialized;
 using MKY.Diagnostics;
+#endif
 using MKY.Windows.Forms;
 
+#if USE_SCOTT_PLOT
 using YAT.Model.Types;
+#endif
 using YAT.Settings.Application;
 
 #endregion
@@ -100,23 +106,22 @@ namespace YAT.View.Forms
 		private bool isStartingUp = true;
 		private bool isClosing = false;
 
+	#if USE_SCOTT_PLOT
 		private readonly int initialAndMinimumUpdateInterval; // = 0;
 		private readonly long lowerSpanTicks; // = 0;
 		private readonly long upperSpanTicks; // = 0;
+	#endif
 
 		private SettingControlsHelper isSettingControls;
 
 		private Model.Terminal terminal; // = null;
 
-	#if USE_OXY_PLOT
-		private OxyPlot.PlotModel oxyModel; // = null;
-		private AutoAction lastAction; // = [None];
-	#endif
-
 	////private AutoAction lastAction; // = [None]; \remind (2020-01-17 / MKY / FR#391)
+	#if USE_SCOTT_PLOT
 		private int lastUpdateCount; // = 0;
 		private bool updateIsSuspended; // = false;
 		private TimedMovingAverageInt64 updateSpanAvg10s;
+	#endif
 
 		#endregion
 
@@ -155,17 +160,21 @@ namespace YAT.View.Forms
 			scottPlot.Visible = false;
 			plotView.Visible = true;
 
+			plotView.Model = this.terminal.AutoActionPlotModel.OxyModel;
+
 			var controller = new OxyPlot.PlotController();
 			controller.Bind(new OxyPlot.OxyMouseEnterGesture(), OxyPlot.PlotCommands.HoverPointsOnlyTrack);
 			plotView.Controller = controller;
 	#endif
 			// First do InitializeComponent() and UpdatePlot() related initialization:
 
+	#if USE_SCOTT_PLOT
 			this.initialAndMinimumUpdateInterval = timer_Update.Interval; // 73 ms (a prime number)
 			var lowerSpan = this.initialAndMinimumUpdateInterval / 10; // 7 ms
 			this.lowerSpanTicks = StopwatchEx.TimeToTicks(lowerSpan);
 			this.upperSpanTicks = StopwatchEx.TimeToTicks(lowerSpan + 75); // ms
 			this.updateSpanAvg10s = new TimedMovingAverageInt64(10000);
+	#endif
 
 			// Then initialization which is dependent on the intialization above:
 
@@ -273,6 +282,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void timer_Update_Tick(object sender, EventArgs e)
 		{
+	#if USE_SCOTT_PLOT // PENDING: Remove timer if not using ScottPlot.
 			long updateSpanTicksAvg10s;
 			if (UpdatePlot(out updateSpanTicksAvg10s)) // No additional synchronization is needed, the System.Windows.Forms.Timer is synchronized.
 			{
@@ -292,22 +302,6 @@ namespace YAT.View.Forms
 
 				DebugUpdate(Environment.NewLine);
 			}
-		}
-
-		private void plotView_MouseEnter(object sender, EventArgs e)
-		{
-	#if USE_OXY_PLOT
-			button_FitAxis.Enabled = true;
-			label_UpdateSuspended.Visible = true;
-			this.updateIsSuspended = true;
-	#endif
-		}
-
-		private void plotView_MouseLeave(object sender, EventArgs e)
-		{
-	#if USE_OXY_PLOT
-			this.updateIsSuspended = false;
-			label_UpdateSuspended.Visible = false;
 	#endif
 		}
 
@@ -358,7 +352,11 @@ namespace YAT.View.Forms
 			ApplicationSettings.RoamingUserSettings.Plot.ShowLegend = !ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
 			ApplicationSettings.SaveRoamingUserSettings();
 
+	#if USE_SCOTT_PLOT
 			UpdatePlot(true); // Immediately update, don't wait for update ticker.
+	#elif USE_OXY_PLOT
+			plotView.Invalidate();
+	#endif
 		}
 
 		private void button_Clear_Click(object sender, EventArgs e)
@@ -481,6 +479,8 @@ namespace YAT.View.Forms
 				ApplicationSettings.SaveLocalUserSettings();
 		}
 
+	#if USE_SCOTT_PLOT
+
 		/// <summary>
 		/// The update interval is calculated dependent on the time needed to update. Less than ~10%
 		/// of the CPU load shall be consumed by the plot:
@@ -545,6 +545,8 @@ namespace YAT.View.Forms
 			return (resultInterval);
 		}
 
+	#endif
+
 		private void ApplyPlotAreaBackColor()
 	#if USE_SCOTT_PLOT
 		{                          // 'dataBg' = inner part of plot, without title/axis/legend (= 'figBg').
@@ -552,36 +554,45 @@ namespace YAT.View.Forms
 			UpdatePlot(true);                               // it is only applied to inner part of monitors.
 	#elif USE_OXY_PLOT
 		{
-			if (plotView.Model != null)
-				SetPlotAreaBackColor(plotView.Model);
+			var model = plotView.Model;
+			if (model != null)
+			{
+				var oxyColor = OxyPlot.OxyColor.FromArgb(PlotAreaBackColor.A, PlotAreaBackColor.R, PlotAreaBackColor.G, PlotAreaBackColor.B);
 
-			UpdatePlot(true);
+			////model.Background         = oxyColor; // Same as plotView.BackColor ?!?
+				model.PlotAreaBackground = oxyColor; // Back color is only appied to inner part same as it is only applied to inner part of monitors.
+			////model.LegendBackground is not configurable (yet).
+
+				model.InvalidatePlot(false);
+			}
 	#endif
 		}
-
-	#if USE_OXY_PLOT
-		private void SetPlotAreaBackColor(OxyPlot.PlotModel model)
-		{
-			var oxyColor = OxyPlot.OxyColor.FromArgb(PlotAreaBackColor.A, PlotAreaBackColor.R, PlotAreaBackColor.G, PlotAreaBackColor.B);
-		////model.Background         = oxyColor; // Same as plotView.BackColor ?!?
-			model.PlotAreaBackground = oxyColor; // Back color is only appied to inner part same as it is only applied to inner part of monitors.
-		////model.LegendBackground is not configurable (yet).
-		}
-	#endif
 
 		private void FitAxis()
 		{
+	#if USE_SCOTT_PLOT
 			UpdatePlot(true); // Immediately update, don't wait for update ticker.
+	#elif USE_OXY_PLOT
+			var model = plotView.Model;
+			if (model != null)
+			{
+				model.ResetAllAxes();
+				model.InvalidatePlot(false);
+			}
+	#endif
 		}
 
 		private void Clear()
 		{
 			lock (this.terminal.AutoActionPlotModelSyncObj)
-				this.terminal.AutoActionPlotModel.ClearAllItems();
+				this.terminal.AutoActionPlotModel.Clear();
 
+	#if USE_SCOTT_PLOT
 			UpdatePlot(true); // Immediately update, don't wait for update ticker.
+	#endif
 		}
 
+	#if USE_SCOTT_PLOT
 		private void UpdatePlot(bool force)
 		{
 			long spanTicksAvg10sDummy;
@@ -605,10 +616,7 @@ namespace YAT.View.Forms
 			lock (this.terminal.AutoActionPlotModelSyncObj)
 			{
 				var yatModel = this.terminal.AutoActionPlotModel;
-	#if USE_OXY_PLOT
-				if (this.lastAction != yatModel.Action)
-					this.oxyModel = null; // Clear model, it will be recreated by the corresponding Plot...() method again.
-	#endif
+
 				var doUpdate = ((this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
 			////var doUpdate = ((this.lastAction != yatModel.Action) || (this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
 
@@ -633,7 +641,7 @@ namespace YAT.View.Forms
 
 					var txColor = this.terminal.SettingsRoot.Format.TxDataFormat.Color;
 					var rxColor = this.terminal.SettingsRoot.Format.RxDataFormat.Color;
-	#if USE_SCOTT_PLOT
+
 					scottPlot.plt.Clear();
 
 					scottPlot.plt.Title(yatModel.Title);
@@ -659,25 +667,7 @@ namespace YAT.View.Forms
 					scottPlot.plt.Legend(enableLegend: ApplicationSettings.RoamingUserSettings.Plot.ShowLegend);
 
 					scottPlot.Render();
-	#elif USE_OXY_PLOT
-					switch (yatModel.Action)
-					{
-						case AutoAction.PlotByteCountRate:   PlotCountRate(yatModel, txColor, rxColor                        ); break;
-						case AutoAction.PlotLineCountRate:   PlotCountRate(yatModel, txColor, rxColor                        ); break;
-						case AutoAction.LineChartIndex:      PlotSignal(   yatModel,          rxColor                        ); break;
-						case AutoAction.LineChartTime:       PlotScatter(  yatModel,          rxColor, true,  true           ); break;
-						case AutoAction.LineChartTimeStamp:  PlotScatter(  yatModel,          rxColor, true,  true           ); break;
-						case AutoAction.ScatterPlot:         PlotScatter(  yatModel,          rxColor, false, false          ); break;
-						case AutoAction.HistogramHorizontal: PlotHistogram(yatModel,          rxColor, Orientation.Horizontal); break;
-						case AutoAction.HistogramVertical:   PlotHistogram(yatModel,          rxColor, Orientation.Vertical  ); break;
 
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + yatModel.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
-
-					this.oxyModel.InvalidatePlot(true);
-
-					this.lastAction = yatModel.Action;
-	#endif
 				////this.lastAction = yatModel.Action; \remind (2020-01-17 / MKY / FR#391)
 					this.lastUpdateCount = yatModel.UpdateCounter;
 
@@ -696,10 +686,7 @@ namespace YAT.View.Forms
 
 		private void PlotCountRate(Model.AutoActionPlotModel yatModel, Color txColor, Color rxColor)
 		{
-	#if USE_SCOTT_PLOT
 			scottPlot.plt.Ticks(dateTimeX: true);
-	#elif USE_OXY_PLOT
-	#endif
 
 			if ((yatModel.XValues != null) && (yatModel.YValues != null) && (yatModel.YValues.Count > 0))
 			{
@@ -707,20 +694,18 @@ namespace YAT.View.Forms
 				{
 					switch (i)
 					{
-	#if USE_SCOTT_PLOT
 						case 0: /* TxCount */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: txColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
 						case 1: /* TxRate  */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: txColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
 						case 2: /* RxCount */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: rxColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
 						case 3: /* RxRate  */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: rxColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
-	#elif USE_OXY_PLOT
-	#endif
+
 						default:  throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
 		}
 
-		private void PlotSignal(Model.AutoActionPlotModel yatModel, Color rxColor)
+		private void PlotSignal(Model.AutoActionPlotModel yatModel, Color firstColor)
 		{
 			if ((yatModel.YValues != null) && (yatModel.YValues.Count > 0))
 			{
@@ -730,29 +715,20 @@ namespace YAT.View.Forms
 					if (isFirst)
 					{
 						isFirst = false;
-	#if USE_SCOTT_PLOT
-						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), color: rxColor, label: kvp.Item1);
-	#elif USE_OXY_PLOT
-	#endif
+						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), color: firstColor, label: kvp.Item1);
 					}
 					else
 					{
-	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotSignal(kvp.Item2.ToArray(), label: kvp.Item1);
-	#elif USE_OXY_PLOT
-	#endif
 					}
 				}
 			}
 		}
 
-		private void PlotScatter(Model.AutoActionPlotModel yatModel, Color rxColor, bool dateTimeX, bool drawLine)
+		private void PlotScatter(Model.AutoActionPlotModel yatModel, Color firstColor, bool dateTimeX, bool drawLine)
 		{
-	#if USE_SCOTT_PLOT
 			if (dateTimeX)
 				scottPlot.plt.Ticks(dateTimeX: true);
-	#elif USE_OXY_PLOT
-	#endif
 
 			if ((yatModel.XValues != null) && (yatModel.YValues != null) && (yatModel.YValues.Count > 0))
 			{
@@ -764,111 +740,27 @@ namespace YAT.View.Forms
 					if (isFirst)
 					{
 						isFirst = false;
-	#if USE_SCOTT_PLOT
-						scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: rxColor, lineWidth: lineWidth, label: kvp.Item1);
-	#elif USE_OXY_PLOT
-	#endif
+						scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), kvp.Item2.ToArray(), color: firstColor, lineWidth: lineWidth, label: kvp.Item1);
 					}
 					else
 					{
-	#if USE_SCOTT_PLOT
 						scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), kvp.Item2.ToArray(), lineWidth: lineWidth, label: kvp.Item1);
-	#elif USE_OXY_PLOT
-	#endif
 					}
 				}
 			}
 		}
 
-		private void PlotHistogram(Model.AutoActionPlotModel yatModel, Color rxColor, Orientation orientation)
+		private void PlotHistogram(Model.AutoActionPlotModel yatModel, Color color, Orientation orientation)
 		{
 			if (yatModel.Histogram != null)
 			{
-	#if USE_SCOTT_PLOT
 				if (orientation == Orientation.Horizontal)
-					scottPlot.plt.PlotBar(yatModel.Histogram.ValuesMidPoint.ToArray(), yatModel.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: yatModel.Histogram.BinSize, color: rxColor, label: "All Captures");
+					scottPlot.plt.PlotBar(yatModel.Histogram.ValuesMidPoint.ToArray(), yatModel.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: yatModel.Histogram.BinSize, color: color, label: "All Captures");
 				else // PENDING, probably not supported by ScottPlot
-					scottPlot.plt.PlotBar(yatModel.Histogram.ValuesMidPoint.ToArray(), yatModel.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: yatModel.Histogram.BinSize, color: rxColor, label: "All Captures");
-	#elif USE_OXY_PLOT
-				if (this.oxyModel == null)
-				{
-					this.oxyModel = new OxyPlot.PlotModel { Title = yatModel.Title };
-
-					if (orientation == Orientation.Horizontal)
-					{
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom }); // The first axes shall define the bin values.
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left, AbsoluteMinimum = 0 });
-//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, ItemsSource = yatModel.Histogram.BinValuesMidPoint });
-//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, ItemsSource = PlotHistogram_bins, LabelField = "Label" });
-
-//						var series = new OxyPlot.Series.ColumnSeries { ItemsSource = yatModel.Histogram.BinCounts, ValueField = "Value" };
-//						var series = new OxyPlot.Series.ColumnSeries { ItemsSource = PlotHistogram_bins, ValueField = "Value" };
-						var series = new OxyPlot.Series.ColumnSeries { };
-
-						var labelValues = (((float)(plotView.Width) / (float)(yatModel.Histogram.BinCount)) >= 16.0); // Arbitrary number.
-						if (labelValues)                           // Pragmatic, just calculate when plot gets created.
-							series.LabelFormatString = "{0}";
-
-						this.oxyModel.Series.Add(series);
-					}
-					else
-					{
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left }); // The first axes shall define the bin values.
-//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left, ItemsSource = PlotHistogram_bins, LabelField = "Label" });
-//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left, ItemsSource = yatModel.Histogram.BinValuesMidPoint });
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, AbsoluteMinimum = 0 });
-
-//						var series = new OxyPlot.Series.BarSeries { ItemsSource = yatModel.Histogram.BinCounts, ValueField = "Value" };
-//						var series = new OxyPlot.Series.BarSeries { ItemsSource = PlotHistogram_bins, ValueField = "Value" };
-						var series = new OxyPlot.Series.BarSeries { };
-
-						var labelValues = (((float)(plotView.Height) / (float)(plotView.Font.Height)) <= yatModel.Histogram.BinCount);
-						if (labelValues)                            // Pragmatic, just calculate when plot gets created.
-							series.LabelFormatString = "{0}";
-
-						this.oxyModel.Series.Add(series);
-					}
-
-					SetPlotAreaBackColor(this.oxyModel);
-					plotView.Model = this.oxyModel;
-				}
-
-
-				// The OxyPlot model exists for sure now:
-				{
-					// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html: PENDING: Move to PlotModel!
-					((OxyPlot.Axes.CategoryAxis)(this.oxyModel.Axes[0])).Labels.Clear();
-					((OxyPlot.Axes.CategoryAxis)(this.oxyModel.Axes[0])).Labels.AddRange(yatModel.Histogram.ValuesMidPoint.Select(x => x.ToString()));
-
-					int i = 0;
-					if (orientation == Orientation.Horizontal)
-					{
-						((OxyPlot.Series.ColumnSeries)(this.oxyModel.Series[0])).Items.Clear();
-						((OxyPlot.Series.ColumnSeries)(this.oxyModel.Series[0])).Items.AddRange(yatModel.Histogram.Counts.Select(x => new OxyPlot.Series.ColumnItem(x, i++)));
-					}
-					else
-					{
-						((OxyPlot.Series.BarSeries)(this.oxyModel.Series[0])).Items.Clear();
-						((OxyPlot.Series.BarSeries)(this.oxyModel.Series[0])).Items.AddRange(yatModel.Histogram.Counts.Select(x => new OxyPlot.Series.BarItem(x, i++)));
-					}
-				}
-			}
-			else
-			{
-				if (this.oxyModel != null)
-				{
-					((OxyPlot.Axes.CategoryAxis)(this.oxyModel.Axes[0])).Labels.Clear();
-
-					if (orientation == Orientation.Horizontal)
-						((OxyPlot.Series.ColumnSeries)(this.oxyModel.Series[0])).Items.Clear();
-					else
-						((OxyPlot.Series.BarSeries)(this.oxyModel.Series[0])).Items.Clear();
-				}
-	#endif
+					scottPlot.plt.PlotBar(yatModel.Histogram.ValuesMidPoint.ToArray(), yatModel.Histogram.Counts.Select(x => (double)x).ToArray(), barWidth: yatModel.Histogram.BinSize, color: color, label: "All Captures");
 			}
 		}
 
-	#if USE_SCOTT_PLOT
 		/// <remarks>Based on 'ScottPlotDemos.FormHoverValue'.</remarks>
 		private void UpdateHover()
 		{
@@ -1013,12 +905,14 @@ namespace YAT.View.Forms
 		// Debug
 		//==========================================================================================
 
+	#if USE_SCOTT_PLOT // PENDING: Remove whole section if not using OxyPlot
 		/// <remarks>Using <see cref="Debug.Write(string)"/> for manually composing line.</remarks>
 		[Conditional("DEBUG_UPDATE")]
 		private void DebugUpdate(string message)
 		{
 			Debug.Write(message);
 		}
+	#endif
 
 		#endregion
 	}
