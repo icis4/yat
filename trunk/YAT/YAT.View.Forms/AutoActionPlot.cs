@@ -46,11 +46,14 @@
 //==================================================================================================
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+//#if USE_SCOTT_PLOT
 using System.Linq;
+//#endif
 using System.Windows.Forms;
 
 using MKY;
@@ -92,6 +95,8 @@ namespace YAT.View.Forms
 		// Fields
 		//==========================================================================================
 
+		private Color plotAreaBackColor = SystemColors.Control;
+
 		private bool isStartingUp = true;
 		private bool isClosing = false;
 
@@ -105,6 +110,7 @@ namespace YAT.View.Forms
 
 	#if USE_OXY_PLOT
 		private OxyPlot.PlotModel oxyModel; // = null;
+		private AutoAction lastAction; // = [None];
 	#endif
 
 	////private AutoAction lastAction; // = [None]; \remind (2020-01-17 / MKY / FR#391)
@@ -118,6 +124,9 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Events
 		//==========================================================================================
+
+		/// <summary></summary>
+		public event EventHandler PlotAreaBackColorChanged;
 
 	/////// <summary></summary>
 	////public event EventHandler<EventArgs<AutoAction>> ChangeAutoAction; \remind (2020-01-17 / MKY / FR#391) has been prepared but is yet deactivated for reasons described in FR#391.
@@ -145,6 +154,10 @@ namespace YAT.View.Forms
 	#elif USE_OXY_PLOT
 			scottPlot.Visible = false;
 			plotView.Visible = true;
+
+			var controller = new OxyPlot.PlotController();
+			controller.Bind(new OxyPlot.OxyMouseEnterGesture(), OxyPlot.PlotCommands.HoverPointsOnlyTrack);
+			plotView.Controller = controller;
 	#endif
 			// First do InitializeComponent() and UpdatePlot() related initialization:
 
@@ -156,7 +169,7 @@ namespace YAT.View.Forms
 
 			// Then initialization which is dependent on the intialization above:
 
-			SetBackColor(this.terminal.SettingsRoot.Format.BackColor);
+			PlotAreaBackColor = this.terminal.SettingsRoot.Format.BackColor;
 
 			this.isSettingControls.Enter();
 			try
@@ -180,6 +193,32 @@ namespace YAT.View.Forms
 
 		#endregion
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets or sets the back color of the plot area.
+		/// </summary>
+		[Category("Appearance")]
+		[Description("The back color of the plot area.")]
+		[DefaultValue(typeof(SystemColors), "Control")]
+		public Color PlotAreaBackColor
+		{
+			get { return (this.plotAreaBackColor); }
+			set
+			{
+				if (this.plotAreaBackColor != value)
+				{
+					this.plotAreaBackColor = value;
+					OnPlotAreaBackColorChanged(EventArgs.Empty);
+				}
+			}
+		}
+
+		#endregion
+
 		#region Form Event Handlers
 		//==========================================================================================
 		// Form Event Handlers
@@ -190,9 +229,9 @@ namespace YAT.View.Forms
 			this.isStartingUp = false;
 		}
 
-		private void AutoActionPlot_BackColorChanged(object sender, EventArgs e)
+		private void AutoActionPlot_PlotAreaBackColorChanged(object sender, EventArgs e)
 		{
-			SetBackColor(BackColor);
+			ApplyPlotAreaBackColor();
 		}
 
 		private void AutoActionPlot_LocationChanged(object sender, EventArgs e)
@@ -255,25 +294,46 @@ namespace YAT.View.Forms
 			}
 		}
 
-	#if USE_SCOTT_PLOT
-		private void scottPlot_MouseEntered(object sender, EventArgs e)
+		private void plotView_MouseEnter(object sender, EventArgs e)
 		{
+	#if USE_OXY_PLOT
 			button_FitAxis.Enabled = true;
 			label_UpdateSuspended.Visible = true;
 			this.updateIsSuspended = true;
+	#endif
+		}
+
+		private void plotView_MouseLeave(object sender, EventArgs e)
+		{
+	#if USE_OXY_PLOT
+			this.updateIsSuspended = false;
+			label_UpdateSuspended.Visible = false;
+	#endif
+		}
+
+		private void scottPlot_MouseEntered(object sender, EventArgs e)
+		{
+	#if USE_SCOTT_PLOT
+			button_FitAxis.Enabled = true;
+			label_UpdateSuspended.Visible = true;
+			this.updateIsSuspended = true;
+	#endif
 		}
 
 		private void scottPlot_MouseLeft(object sender, EventArgs e)
 		{
+	#if USE_SCOTT_PLOT
 			this.updateIsSuspended = false;
 			label_UpdateSuspended.Visible = false;
+	#endif
 		}
 
 		private void scottPlot_MouseMoved(object sender, EventArgs e)
 		{
+	#if USE_SCOTT_PLOT
 			UpdateHover();
-		}
 	#endif
+		}
 
 	////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
 	////{
@@ -485,17 +545,29 @@ namespace YAT.View.Forms
 			return (resultInterval);
 		}
 
-		private void SetBackColor(Color backColor)
+		private void ApplyPlotAreaBackColor()
 	#if USE_SCOTT_PLOT
 		{                          // 'dataBg' = inner part of plot, without title/axis/legend (= 'figBg').
-			scottPlot.plt.Style(dataBg: backColor); // Back color is only appied to inner part same as
-			UpdatePlot(true);                       // it is only applied to inner part of monitors.
+			scottPlot.plt.Style(dataBg: PlotAreaBackColor); // Color is only appied to inner part same as
+			UpdatePlot(true);                               // it is only applied to inner part of monitors.
 	#elif USE_OXY_PLOT
 		{
-			plotView.BackColor = backColor;
+			if (plotView.Model != null)
+				SetPlotAreaBackColor(plotView.Model);
+
 			UpdatePlot(true);
 	#endif
 		}
+
+	#if USE_OXY_PLOT
+		private void SetPlotAreaBackColor(OxyPlot.PlotModel model)
+		{
+			var oxyColor = OxyPlot.OxyColor.FromArgb(PlotAreaBackColor.A, PlotAreaBackColor.R, PlotAreaBackColor.G, PlotAreaBackColor.B);
+		////model.Background         = oxyColor; // Same as plotView.BackColor ?!?
+			model.PlotAreaBackground = oxyColor; // Back color is only appied to inner part same as it is only applied to inner part of monitors.
+		////model.LegendBackground is not configurable (yet).
+		}
+	#endif
 
 		private void FitAxis()
 		{
@@ -533,6 +605,10 @@ namespace YAT.View.Forms
 			lock (this.terminal.AutoActionPlotModelSyncObj)
 			{
 				var yatModel = this.terminal.AutoActionPlotModel;
+	#if USE_OXY_PLOT
+				if (this.lastAction != yatModel.Action)
+					this.oxyModel = null; // Clear model, it will be recreated by the corresponding Plot...() method again.
+	#endif
 				var doUpdate = ((this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
 			////var doUpdate = ((this.lastAction != yatModel.Action) || (this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
 
@@ -584,8 +660,25 @@ namespace YAT.View.Forms
 
 					scottPlot.Render();
 	#elif USE_OXY_PLOT
+					switch (yatModel.Action)
+					{
+						case AutoAction.PlotByteCountRate:   PlotCountRate(yatModel, txColor, rxColor                        ); break;
+						case AutoAction.PlotLineCountRate:   PlotCountRate(yatModel, txColor, rxColor                        ); break;
+						case AutoAction.LineChartIndex:      PlotSignal(   yatModel,          rxColor                        ); break;
+						case AutoAction.LineChartTime:       PlotScatter(  yatModel,          rxColor, true,  true           ); break;
+						case AutoAction.LineChartTimeStamp:  PlotScatter(  yatModel,          rxColor, true,  true           ); break;
+						case AutoAction.ScatterPlot:         PlotScatter(  yatModel,          rxColor, false, false          ); break;
+						case AutoAction.HistogramHorizontal: PlotHistogram(yatModel,          rxColor, Orientation.Horizontal); break;
+						case AutoAction.HistogramVertical:   PlotHistogram(yatModel,          rxColor, Orientation.Vertical  ); break;
+
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + yatModel.Action.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+
+					this.oxyModel.InvalidatePlot(true);
+
+					this.lastAction = yatModel.Action;
 	#endif
-					////this.lastAction = yatModel.Action; \remind (2020-01-17 / MKY / FR#391)
+				////this.lastAction = yatModel.Action; \remind (2020-01-17 / MKY / FR#391)
 					this.lastUpdateCount = yatModel.UpdateCounter;
 
 					var endTicks = Stopwatch.GetTimestamp();
@@ -703,30 +796,73 @@ namespace YAT.View.Forms
 
 					if (orientation == Orientation.Horizontal)
 					{
-						var series = new OxyPlot.Series.ColumnSeries { ItemsSource = yatModel.Histogram.Counts, ValueField = "Value" };
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom }); // The first axes shall define the bin values.
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left, AbsoluteMinimum = 0 });
+//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, ItemsSource = yatModel.Histogram.BinValuesMidPoint });
+//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, ItemsSource = PlotHistogram_bins, LabelField = "Label" });
+
+//						var series = new OxyPlot.Series.ColumnSeries { ItemsSource = yatModel.Histogram.BinCounts, ValueField = "Value" };
+//						var series = new OxyPlot.Series.ColumnSeries { ItemsSource = PlotHistogram_bins, ValueField = "Value" };
+						var series = new OxyPlot.Series.ColumnSeries { };
 
 						var labelValues = (((float)(plotView.Width) / (float)(yatModel.Histogram.BinCount)) >= 16.0); // Arbitrary number.
 						if (labelValues)                           // Pragmatic, just calculate when plot gets created.
 							series.LabelFormatString = "{0}";
 
 						this.oxyModel.Series.Add(series);
-
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, ItemsSource = yatModel.Histogram.Counts, LabelField = "Label", GapWidth = 0 });
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left, MinimumPadding = 0, MaximumPadding = 0.1, AbsoluteMinimum = 0 });
 					}
 					else
 					{
-						var series = new OxyPlot.Series.BarSeries { ItemsSource = yatModel.Histogram.Counts, ValueField = "Value" };
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left }); // The first axes shall define the bin values.
+//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left, ItemsSource = PlotHistogram_bins, LabelField = "Label" });
+//						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left, ItemsSource = yatModel.Histogram.BinValuesMidPoint });
+						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, AbsoluteMinimum = 0 });
+
+//						var series = new OxyPlot.Series.BarSeries { ItemsSource = yatModel.Histogram.BinCounts, ValueField = "Value" };
+//						var series = new OxyPlot.Series.BarSeries { ItemsSource = PlotHistogram_bins, ValueField = "Value" };
+						var series = new OxyPlot.Series.BarSeries { };
 
 						var labelValues = (((float)(plotView.Height) / (float)(plotView.Font.Height)) <= yatModel.Histogram.BinCount);
 						if (labelValues)                            // Pragmatic, just calculate when plot gets created.
 							series.LabelFormatString = "{0}";
 
 						this.oxyModel.Series.Add(series);
-
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left, ItemsSource = yatModel.Histogram.Counts, LabelField = "Label", GapWidth = 0 });
-						this.oxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, MinimumPadding = 0, MaximumPadding = 0.1, AbsoluteMinimum = 0 });
 					}
+
+					SetPlotAreaBackColor(this.oxyModel);
+					plotView.Model = this.oxyModel;
+				}
+
+
+				// The OxyPlot model exists for sure now:
+				{
+					// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html: PENDING: Move to PlotModel!
+					((OxyPlot.Axes.CategoryAxis)(this.oxyModel.Axes[0])).Labels.Clear();
+					((OxyPlot.Axes.CategoryAxis)(this.oxyModel.Axes[0])).Labels.AddRange(yatModel.Histogram.ValuesMidPoint.Select(x => x.ToString()));
+
+					int i = 0;
+					if (orientation == Orientation.Horizontal)
+					{
+						((OxyPlot.Series.ColumnSeries)(this.oxyModel.Series[0])).Items.Clear();
+						((OxyPlot.Series.ColumnSeries)(this.oxyModel.Series[0])).Items.AddRange(yatModel.Histogram.Counts.Select(x => new OxyPlot.Series.ColumnItem(x, i++)));
+					}
+					else
+					{
+						((OxyPlot.Series.BarSeries)(this.oxyModel.Series[0])).Items.Clear();
+						((OxyPlot.Series.BarSeries)(this.oxyModel.Series[0])).Items.AddRange(yatModel.Histogram.Counts.Select(x => new OxyPlot.Series.BarItem(x, i++)));
+					}
+				}
+			}
+			else
+			{
+				if (this.oxyModel != null)
+				{
+					((OxyPlot.Axes.CategoryAxis)(this.oxyModel.Axes[0])).Labels.Clear();
+
+					if (orientation == Orientation.Horizontal)
+						((OxyPlot.Series.ColumnSeries)(this.oxyModel.Series[0])).Items.Clear();
+					else
+						((OxyPlot.Series.BarSeries)(this.oxyModel.Series[0])).Items.Clear();
 				}
 	#endif
 			}
@@ -851,6 +987,12 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Event Raising
 		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void OnPlotAreaBackColorChanged(EventArgs e)
+		{
+			EventHelper.RaiseSync(PlotAreaBackColorChanged, this, e);
+		}
 
 	/////// <summary></summary>
 	////protected virtual void OnChangeAutoAction(EventArgs<AutoAction> e)
