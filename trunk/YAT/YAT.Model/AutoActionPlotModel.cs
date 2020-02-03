@@ -45,16 +45,20 @@
 // Using
 //==================================================================================================
 
-#if USE_SCOTT_PLOT
 using System;
+#if USE_SCOTT_PLOT
 using System.Collections.Generic;
 #endif
 using System.Drawing;
 #if USE_OXY_PLOT
+using System.Globalization;
 using System.Linq;
 #endif
 using System.Windows.Forms;
 
+#if USE_OXY_PLOT
+using MKY;
+#endif
 using MKY.Collections.Specialized;
 
 using YAT.Model.Types;
@@ -162,8 +166,8 @@ namespace YAT.Model
 
 			switch (pi.Action)
 			{
-				case AutoAction.PlotByteCountRate:   AddItemToPlotCountRate(     pi, txColor, rxColor                        ); break;
-				case AutoAction.PlotLineCountRate:   AddItemToPlotCountRate(     pi, txColor, rxColor                        ); break;
+				case AutoAction.PlotByteCountRate:   AddItemToPlotCountRate(     pi, txColor, rxColor, "bytes"               ); break;
+				case AutoAction.PlotLineCountRate:   AddItemToPlotCountRate(     pi, txColor, rxColor, "lines"               ); break;
 				case AutoAction.LineChartIndex:      AddItemToLineChartIndex(    pi,          rxColor                        ); break;
 				case AutoAction.LineChartTime:       AddItemToLineChartTime(     pi,          rxColor                        ); break;
 				case AutoAction.LineChartTimeStamp:  AddItemToLineChartTimeStamp(pi,          rxColor                        ); break;
@@ -217,16 +221,42 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void AddItemToPlotCountRate(AutoActionPlotItem pi, Color txColor, Color rxColor)
+		protected virtual void AddItemToPlotCountRate(AutoActionPlotItem pi, Color txColor, Color rxColor, string content)
 		{
 	#if USE_SCOTT_PLOT
 			XLabel = "Time Stamp";
 			YLabel = "Value";
-	#elif USE_OXY_PLOT
-			OxyModel.Axes[0].Title = "Time Stamp";
-			OxyModel.Axes[1].Title = "Value";
-	#endif
+
 			AddItemToXAndY(pi);
+	#elif USE_OXY_PLOT
+			if (OxyModel.Axes.Count == 0)
+			{
+				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp",                                  AbsoluteMinimum = DateTime.Now.ToOADate() });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Count", Unit = content,        Key = "Count", AbsoluteMinimum = 0.0 });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Right,  Title = "Rate",  Unit = content + "/s", Key = "Rate",  AbsoluteMinimum = 0.0 });
+			}
+
+			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
+			{
+				switch (i)
+				{
+					case 0: /* TxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(txColor)                                     }); break;
+					case 1: /* TxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(txColor), LineStyle = OxyPlot.LineStyle.Dash }); break;
+					case 2: /* RxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(rxColor)                                     }); break;
+					case 3: /* RxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(rxColor), LineStyle = OxyPlot.LineStyle.Dash }); break;
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+
+			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			for (int i = 0; i < pi.YValues.Length; i++)
+			{
+				var series = OxyModel.Series[i];
+				var points = ((OxyPlot.Series.LineSeries)series).Points;
+				points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+			}
+	#endif
 		}
 
 		/// <summary></summary>
@@ -235,11 +265,39 @@ namespace YAT.Model
 	#if USE_SCOTT_PLOT
 			XLabel = "Index";
 			YLabel = "Value";
-	#elif USE_OXY_PLOT
-			OxyModel.Axes[0].Title = "Index";
-			OxyModel.Axes[1].Title = "Value";
-	#endif
+
 			AddItemToYOnly(pi);
+	#elif USE_OXY_PLOT
+			if (OxyModel.Axes.Count == 0)
+			{
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Index", AbsoluteMinimum = 0.0 });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
+			}
+
+			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
+			{
+				if (i == 0)
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross, Color = OxyPlotEx.ConvertTo(firstColor) });
+				else
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross });
+			}
+
+			var x = 0;
+			foreach (var series in OxyModel.Series)
+			{
+				var points = ((OxyPlot.Series.LineSeries)series).Points;
+				if (x < (points.Count - 1))
+					x = (points.Count - 1);
+			}
+
+			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			for (int i = 0; i < pi.YValues.Length; i++)
+			{
+				var series = OxyModel.Series[i];
+				var points = ((OxyPlot.Series.LineSeries)series).Points;
+				points.Add(new OxyPlot.DataPoint(x, pi.YValues[i].Item2));
+			}
+	#endif
 		}
 
 		/// <summary></summary>
@@ -248,11 +306,31 @@ namespace YAT.Model
 	#if USE_SCOTT_PLOT
 			XLabel = "Time";
 			YLabel = "Value";
-	#elif USE_OXY_PLOT
-			OxyModel.Axes[0].Title = "Time";
-			OxyModel.Axes[1].Title = "Value";
-	#endif
+
 			AddItemToXAndY(pi);
+	#elif USE_OXY_PLOT
+			if (OxyModel.Axes.Count == 0)
+			{
+				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time"  });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Value" });
+			}
+
+			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
+			{
+				if (i == 0)
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross, Color = OxyPlotEx.ConvertTo(firstColor) });
+				else
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross });
+			}
+
+			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			for (int i = 0; i < pi.YValues.Length; i++)
+			{
+				var series = OxyModel.Series[i];
+				var points = ((OxyPlot.Series.LineSeries)series).Points;
+				points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+			}
+	#endif
 		}
 
 		/// <summary></summary>
@@ -261,11 +339,31 @@ namespace YAT.Model
 	#if USE_SCOTT_PLOT
 			XLabel = "Time Stamp";
 			YLabel = "Value";
-	#elif USE_OXY_PLOT
-			OxyModel.Axes[0].Title = "Time Stamp";
-			OxyModel.Axes[1].Title = "Value";
-	#endif
+
 			AddItemToXAndY(pi);
+	#elif USE_OXY_PLOT
+			if (OxyModel.Axes.Count == 0)
+			{
+				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp", AbsoluteMinimum = DateTime.Now.ToOADate() });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
+			}
+
+			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
+			{
+				if (i == 0)
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross, Color = OxyPlotEx.ConvertTo(firstColor) });
+				else
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross });
+			}
+
+			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			for (int i = 0; i < pi.YValues.Length; i++)
+			{
+				var series = OxyModel.Series[i];
+				var points = ((OxyPlot.Series.LineSeries)series).Points;
+				points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+			}
+	#endif
 		}
 
 		/// <summary></summary>
@@ -274,30 +372,49 @@ namespace YAT.Model
 	#if USE_SCOTT_PLOT
 			XLabel = "X Value";
 			YLabel = "Y Value";
-	#elif USE_OXY_PLOT
-			OxyModel.Axes[0].Title = "X Value";
-			OxyModel.Axes[1].Title = "Y Value";
-	#endif
+
 			AddItemToXAndY(pi);
+	#elif USE_OXY_PLOT
+			if (OxyModel.Axes.Count == 0)
+			{
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "X Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "Y Value" });
+			}
+
+			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
+			{
+				if (i == 0)
+					OxyModel.Series.Add(new OxyPlot.Series.ScatterSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerFill = OxyPlotEx.ConvertTo(firstColor) });
+				else
+					OxyModel.Series.Add(new OxyPlot.Series.ScatterSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square });
+			}
+
+			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			for (int i = 0; i < pi.YValues.Length; i++)
+			{
+				var series = OxyModel.Series[i];
+				var points = ((OxyPlot.Series.ScatterSeries)series).Points;
+				points.Add(new OxyPlot.Series.ScatterPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+			}
+	#endif
 		}
+
+	#if USE_SCOTT_PLOT
 
 		/// <summary></summary>
 		protected virtual void AddItemToYOnly(AutoActionPlotItem pi)
 		{
-	#if USE_SCOTT_PLOT
 			if (YValues == null)
 			{
 				YValues = new List<Tuple<string, List<double>>>(pi.YValues.Length); // Preset the required capacity to improve memory management.
 			}
 
 			AddItemToY(pi);
-	#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToXAndY(AutoActionPlotItem pi)
 		{
-	#if USE_SCOTT_PLOT
 			if ((XValues == null) || (YValues == null))
 			{
 				XValues = new Tuple<string, List<double>>(pi.XValue.Item1, new List<double>(1024)); // Add a new empty list.
@@ -307,13 +424,11 @@ namespace YAT.Model
 			XValues.Item2.Add(pi.XValue.Item2);
 
 			AddItemToY(pi);
-	#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToY(AutoActionPlotItem pi)
 		{
-	#if USE_SCOTT_PLOT
 			for (int i = YValues.Count; i < pi.YValues.Length; i++)
 			{
 				string label = pi.YValues[i].Item1;
@@ -334,8 +449,9 @@ namespace YAT.Model
 				else
 					YValues[i].Item2.Add(0); // Fill with default value.
 			}
-	#endif
 		}
+
+	#endif
 
 		/// <summary></summary>
 		protected virtual void AddItemToHistogram(AutoActionPlotItem pi, Color color, Orientation orientation)
@@ -348,13 +464,13 @@ namespace YAT.Model
 			{
 				if (orientation == Orientation.Horizontal)
 				{
-					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Bins" });
-					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Counts", AbsoluteMinimum = 0 });
+					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Bins", GapWidth = 0.1, /* StringFormat = "0.00E00" is set when adding labels */ UseSuperExponentialFormat = true });
+					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Counts", AbsoluteMinimum = 0.0 });
 				}
 				else
 				{
-					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Bins" });
-					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Counts", AbsoluteMinimum = 0 });
+					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Bins", GapWidth = 0.1, /* StringFormat = "0.00E00" is set when adding labels */ UseSuperExponentialFormat = true });
+					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Counts", AbsoluteMinimum = 0.0 });
 				}
 			}
 
@@ -362,11 +478,11 @@ namespace YAT.Model
 			{
 				if (orientation == Orientation.Horizontal)
 				{
-					OxyModel.Series.Add(new OxyPlot.Series.ColumnSeries { });
+					OxyModel.Series.Add(new OxyPlot.Series.ColumnSeries { Title = pi.YValues[0].Item1, FillColor = OxyPlotEx.ConvertTo(color) });
 				}
 				else
 				{
-					OxyModel.Series.Add(new OxyPlot.Series.BarSeries { });
+					OxyModel.Series.Add(new OxyPlot.Series.BarSeries { Title = pi.YValues[0].Item1, FillColor = OxyPlotEx.ConvertTo(color) });
 				}
 			}
 	#endif
@@ -380,19 +496,23 @@ namespace YAT.Model
 			// While directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html,
 			// this seems an overkill for the histogram, as it would have to notify about added as well as inserted bins and... Too complicated, simply recreate:
 
-			((OxyPlot.Axes.CategoryAxis)(OxyModel.Axes[0])).Labels.Clear();
-			((OxyPlot.Axes.CategoryAxis)(OxyModel.Axes[0])).Labels.AddRange(Histogram.ValuesMidPoint.Select(x => x.ToString()));
+			var labels = ((OxyPlot.Axes.CategoryAxis)(OxyModel.Axes[0])).Labels;
+			labels.Clear();
+			labels.AddRange(Histogram.ValuesMidPoint.Select(x => x.ToString("G3", CultureInfo.CurrentCulture)));
 
+			var series = OxyModel.Series[0];
 			int i = 0;
 			if (orientation == Orientation.Horizontal)
 			{
-				((OxyPlot.Series.ColumnSeries)(OxyModel.Series[0])).Items.Clear();
-				((OxyPlot.Series.ColumnSeries)(OxyModel.Series[0])).Items.AddRange(Histogram.Counts.Select(x => new OxyPlot.Series.ColumnItem(x, i++)));
+				var items = ((OxyPlot.Series.ColumnSeries)series).Items;
+				items.Clear();
+				items.AddRange(Histogram.Counts.Select(x => new OxyPlot.Series.ColumnItem(x, i++)));
 			}
 			else
 			{
-				((OxyPlot.Series.BarSeries)(OxyModel.Series[0])).Items.Clear();
-				((OxyPlot.Series.BarSeries)(OxyModel.Series[0])).Items.AddRange(Histogram.Counts.Select(x => new OxyPlot.Series.BarItem(x, i++)));
+				var items = ((OxyPlot.Series.BarSeries)series).Items;
+				items.Clear();
+				items.AddRange(Histogram.Counts.Select(x => new OxyPlot.Series.BarItem(x, i++)));
 			}
 	#endif
 		}
@@ -416,6 +536,25 @@ namespace YAT.Model
 
 		#endregion
 	}
+
+	#region Extension Methods
+	//==============================================================================================
+	// Extension Methods
+	//==============================================================================================
+
+	#if USE_OXY_PLOT
+	/// <summary></summary>
+	public static class OxyPlotEx
+	{
+		/// <summary></summary>
+		public static OxyPlot.OxyColor ConvertTo(Color color)
+		{
+			return (OxyPlot.OxyColor.FromArgb(color.A, color.R, color.G, color.B));
+		}
+
+	}
+	#endif
+	#endregion
 }
 
 //==================================================================================================

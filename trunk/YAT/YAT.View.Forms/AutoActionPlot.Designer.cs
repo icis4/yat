@@ -39,7 +39,7 @@
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
 			this.scottPlot = new ScottPlot.FormsPlot();
 			this.plotView = new OxyPlot.WindowsForms.PlotView();
-			this.button_FitAxis = new System.Windows.Forms.Button();
+			this.button_ResetAxis = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// button_Close
@@ -60,7 +60,7 @@
 			this.button_Clear.Name = "button_Clear";
 			this.button_Clear.Size = new System.Drawing.Size(75, 23);
 			this.button_Clear.TabIndex = 4;
-			this.button_Clear.Text = "Cl&ear";
+			this.button_Clear.Text = "C&lear";
 			this.button_Clear.UseVisualStyleBackColor = true;
 			this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
 			// 
@@ -72,7 +72,7 @@
 			this.checkBox_ShowLegend.Name = "checkBox_ShowLegend";
 			this.checkBox_ShowLegend.Size = new System.Drawing.Size(92, 17);
 			this.checkBox_ShowLegend.TabIndex = 2;
-			this.checkBox_ShowLegend.Text = "Show &Legend";
+			this.checkBox_ShowLegend.Text = "Show L&egend";
 			this.checkBox_ShowLegend.UseVisualStyleBackColor = true;
 			this.checkBox_ShowLegend.CheckedChanged += new System.EventHandler(this.checkBox_ShowLegend_CheckedChanged);
 			// 
@@ -135,17 +135,18 @@
 			this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
 			this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
 			this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+			this.plotView.Paint += new System.Windows.Forms.PaintEventHandler(this.plotView_Paint);
 			// 
-			// button_FitAxis
+			// button_ResetAxis
 			// 
-			this.button_FitAxis.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_FitAxis.Location = new System.Drawing.Point(42, 400);
-			this.button_FitAxis.Name = "button_FitAxis";
-			this.button_FitAxis.Size = new System.Drawing.Size(75, 23);
-			this.button_FitAxis.TabIndex = 1;
-			this.button_FitAxis.Text = "&Fit Axis";
-			this.button_FitAxis.UseVisualStyleBackColor = true;
-			this.button_FitAxis.Click += new System.EventHandler(this.button_FitAxis_Click);
+			this.button_ResetAxis.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_ResetAxis.Location = new System.Drawing.Point(42, 400);
+			this.button_ResetAxis.Name = "button_ResetAxis";
+			this.button_ResetAxis.Size = new System.Drawing.Size(75, 23);
+			this.button_ResetAxis.TabIndex = 1;
+			this.button_ResetAxis.Text = "&Reset Axis";
+			this.button_ResetAxis.UseVisualStyleBackColor = true;
+			this.button_ResetAxis.Click += new System.EventHandler(this.button_ResetAxis_Click);
 			// 
 			// AutoActionPlot
 			// 
@@ -154,17 +155,19 @@
 			this.ClientSize = new System.Drawing.Size(884, 441);
 			this.Controls.Add(this.plotView);
 			this.Controls.Add(this.button_Deactivate);
-			this.Controls.Add(this.button_FitAxis);
+			this.Controls.Add(this.button_ResetAxis);
 			this.Controls.Add(this.label_UpdateSuspended);
 			this.Controls.Add(this.checkBox_ShowLegend);
 			this.Controls.Add(this.button_Clear);
 			this.Controls.Add(this.scottPlot);
 			this.Controls.Add(this.button_Close);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(480, 240);
 			this.Name = "AutoActionPlot";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "YAT - [[Terminal] - Plot]";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoActionPlot_FormClosing);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AutoActionPlot_FormClosed);
 			this.Shown += new System.EventHandler(this.AutoActionPlot_Shown);
 			this.LocationChanged += new System.EventHandler(this.AutoActionPlot_LocationChanged);
 			this.PlotAreaBackColorChanged += new System.EventHandler(this.AutoActionPlot_PlotAreaBackColorChanged);
@@ -183,7 +186,7 @@
 		private System.Windows.Forms.Timer timer_Update;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_UpdateSuspended;
-		private System.Windows.Forms.Button button_FitAxis;
+		private System.Windows.Forms.Button button_ResetAxis;
 		private System.Windows.Forms.Button button_Deactivate;
 		private OxyPlot.WindowsForms.PlotView plotView;
 	}

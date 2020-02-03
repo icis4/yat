@@ -65,9 +65,10 @@ using MKY.Diagnostics;
 #endif
 using MKY.Windows.Forms;
 
-#if USE_SCOTT_PLOT
-using YAT.Model.Types;
+#if USE_OXY_PLOT
+using YAT.Model;
 #endif
+using YAT.Model.Types;
 using YAT.Settings.Application;
 
 #endregion
@@ -131,12 +132,18 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the PlotAreaBackColor property is changed.")]
 		public event EventHandler PlotAreaBackColorChanged;
 
 	/////// <summary></summary>
+	////[Category("Action")]
+	////[Description("Event raised when the AutoAction is requested to be changed.")]
 	////public event EventHandler<EventArgs<AutoAction>> ChangeAutoAction; \remind (2020-01-17 / MKY / FR#391) has been prepared but is yet deactivated for reasons described in FR#391.
 
 		/// <summary></summary>
+		[Category("Action")]
+		[Description("Event raised when the AutoAction is requested to be deactivated.")]
 		public event EventHandler DeactivateAutoAction;
 
 		#endregion
@@ -161,6 +168,11 @@ namespace YAT.View.Forms
 			plotView.Visible = true;
 
 			plotView.Model = this.terminal.AutoActionPlotModel.OxyModel;
+		////plotView.Model.DefaultFont     = Font.Name;
+		////plotView.Model.DefaultFontSize = Font.SizeInPoints;
+		////plotView.Model.DefaultFont     = SystemFonts.DefaultFont.Name;
+		////plotView.Model.DefaultFontSize = SystemFonts.DefaultFont.SizeInPoints;
+			plotView.Model.DefaultFontSize = SystemFonts.DefaultFont.Height; // Best result for unknown reason, clarification PENDING.
 
 			var controller = new OxyPlot.PlotController();
 			controller.Bind(new OxyPlot.OxyMouseEnterGesture(), OxyPlot.PlotCommands.HoverPointsOnlyTrack);
@@ -196,6 +208,10 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Leave();
 			}
+
+	#if USE_OXY_PLOT
+			ApplyShowLegend();
+	#endif
 
 			ApplyWindowSettingsAccordingToStartupState();
 		}
@@ -267,6 +283,13 @@ namespace YAT.View.Forms
 			SaveWindowSettings();
 		}
 
+		private void AutoActionPlot_FormClosed(object sender, FormClosedEventArgs e)
+		{
+	#if USE_OXY_PLOT
+			plotView.Model = null; // Detach, required to potentially attach to model later again.
+	#endif
+		}
+
 		#endregion
 
 		#region Controls Event Handlers
@@ -308,7 +331,7 @@ namespace YAT.View.Forms
 		private void scottPlot_MouseEntered(object sender, EventArgs e)
 		{
 	#if USE_SCOTT_PLOT
-			button_FitAxis.Enabled = true;
+			button_ResetAxis.Enabled = true;
 			label_UpdateSuspended.Visible = true;
 			this.updateIsSuspended = true;
 	#endif
@@ -329,6 +352,82 @@ namespace YAT.View.Forms
 	#endif
 		}
 
+		private void plotView_Paint(object sender, PaintEventArgs e)
+		{
+	#if USE_OXY_PLOT
+			// Manage histogram bin labels:
+			var oxyModel = plotView.Model;
+			var yatModel = this.terminal.AutoActionPlotModel;
+			switch (yatModel.Action)
+			{
+				case AutoAction.HistogramHorizontal:
+				{
+					if (yatModel.Histogram != null) // 'null' when no data yet or just cleared.
+					{
+						var widthPerBin = (0.8 * plotView.Width / yatModel.Histogram.BinCount);
+						var binsPerStep = (widthPerBin / 48.0); // Arbitrary number ~ "8.88E88", chosen experimentally by resizing plot.
+
+						var axes = (OxyPlot.Axes.CategoryAxis)(oxyModel.Axes[0]);
+						axes.MajorStep = ToMajorStep(binsPerStep);
+
+						var showCountLabels = (widthPerBin >= 32.0); // Arbitrary number ~ "8888".
+						var series = (OxyPlot.Series.ColumnSeries)(oxyModel.Series[0]);
+						series.LabelFormatString = (showCountLabels ? "{0}" : "");
+					}
+					break;
+				}
+
+				case AutoAction.HistogramVertical:
+				{
+					if (yatModel.Histogram != null) // 'null' when no data yet or just cleared.
+					{
+						var heightPerBin = (0.8 * plotView.Height / yatModel.Histogram.BinCount);
+						var binsPerStep = (heightPerBin / plotView.Font.Height);
+
+						var axes = (OxyPlot.Axes.CategoryAxis)(oxyModel.Axes[0]);
+						axes.MajorStep = ToMajorStep(binsPerStep);
+
+						var showCountLabels = (heightPerBin >= plotView.Font.Height);
+						var series = (OxyPlot.Series.BarSeries)(oxyModel.Series[0]);
+						series.LabelFormatString = (showCountLabels ? "{0}" : "");
+					}
+					break;
+				}
+
+				default:
+				{
+					break; // Nothing to do.
+				}
+			}
+	#endif
+		}
+
+	#if USE_OXY_PLOT
+		/// <summary>
+		/// Calculates the major step of the histogram bin axes.
+		/// </summary>
+		protected double ToMajorStep(double binsPerStep)
+		{
+			if (binsPerStep >= 1.0)
+			{
+				return (1.0);
+			}
+			else
+			{
+				var log10 = (int)Math.Ceiling(Math.Log10(binsPerStep));
+				var magnitude = Math.Pow(10, log10);
+				var normalized = (binsPerStep / magnitude);
+
+				if      (normalized >= 0.5)
+					return (2.0 / magnitude);
+				else if (normalized >= 0.2)
+					return (5.0 / magnitude);
+				else
+					return (10.0 / magnitude);
+			}
+		}
+	#endif
+
 	////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
 	////{
 	////	if (this.isSettingControls) \remind (2020-01-17 / MKY / FR#391)
@@ -339,9 +438,9 @@ namespace YAT.View.Forms
 	////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
 	////}
 
-		private void button_FitAxis_Click(object sender, EventArgs e)
+		private void button_ResetAxis_Click(object sender, EventArgs e)
 		{
-			FitAxis();
+			ResetAxis();
 		}
 
 		private void checkBox_ShowLegend_CheckedChanged(object sender, EventArgs e)
@@ -355,7 +454,7 @@ namespace YAT.View.Forms
 	#if USE_SCOTT_PLOT
 			UpdatePlot(true); // Immediately update, don't wait for update ticker.
 	#elif USE_OXY_PLOT
-			plotView.Invalidate();
+			ApplyShowLegend();
 	#endif
 		}
 
@@ -557,7 +656,7 @@ namespace YAT.View.Forms
 			var model = plotView.Model;
 			if (model != null)
 			{
-				var oxyColor = OxyPlot.OxyColor.FromArgb(PlotAreaBackColor.A, PlotAreaBackColor.R, PlotAreaBackColor.G, PlotAreaBackColor.B);
+				var oxyColor = OxyPlotEx.ConvertTo(PlotAreaBackColor);
 
 			////model.Background         = oxyColor; // Same as plotView.BackColor ?!?
 				model.PlotAreaBackground = oxyColor; // Back color is only appied to inner part same as it is only applied to inner part of monitors.
@@ -568,7 +667,7 @@ namespace YAT.View.Forms
 	#endif
 		}
 
-		private void FitAxis()
+		private void ResetAxis()
 		{
 	#if USE_SCOTT_PLOT
 			UpdatePlot(true); // Immediately update, don't wait for update ticker.
@@ -581,6 +680,23 @@ namespace YAT.View.Forms
 			}
 	#endif
 		}
+
+	#if USE_OXY_PLOT
+		private void ApplyShowLegend()
+		{
+			var model = plotView.Model;
+			if (model != null)
+			{
+				model.IsLegendVisible = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+
+				model.LegendPlacement   = OxyPlot.LegendPlacement.Outside;
+				model.LegendPosition    = OxyPlot.LegendPosition.BottomLeft;
+				model.LegendOrientation = OxyPlot.LegendOrientation.Horizontal;
+
+				model.InvalidatePlot(false);
+			}
+		}
+	#endif
 
 		private void Clear()
 		{
@@ -637,7 +753,7 @@ namespace YAT.View.Forms
 
 				if (doUpdate)
 				{
-					button_FitAxis.Enabled = false; // AxisAuto() will be called further below.
+					button_ResetAxis.Enabled = false; // AxisAuto() will be called further below.
 
 					var txColor = this.terminal.SettingsRoot.Format.TxDataFormat.Color;
 					var rxColor = this.terminal.SettingsRoot.Format.RxDataFormat.Color;
@@ -699,7 +815,7 @@ namespace YAT.View.Forms
 						case 2: /* RxCount */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: rxColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none);                                     break;
 						case 3: /* RxRate  */ scottPlot.plt.PlotScatter(yatModel.XValues.Item2.ToArray(), yatModel.YValues[i].Item2.ToArray(), color: rxColor, label: yatModel.YValues[i].Item1, markerShape: ScottPlot.MarkerShape.none, lineStyle: ScottPlot.LineStyle.Dot); break;
 
-						default:  throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
