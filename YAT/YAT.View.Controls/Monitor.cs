@@ -214,7 +214,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Action")]
-		[Description("Event raised when the TextFind has changed.")]
+		[Description("Event raised when the Find has changed.")]
 		public event EventHandler FindChanged;
 
 		#endregion
