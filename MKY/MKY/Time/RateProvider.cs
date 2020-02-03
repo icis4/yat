@@ -246,39 +246,40 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual bool Update(int value)
+		public virtual bool Update(int value, bool allowChangedEvent = true)
 		{
 			AssertNotDisposed();
 
 			bool hasChanged = this.rate.Update(value);
 
-			if (hasChanged)
+			if (hasChanged && allowChangedEvent)
 				OnRateChanged(new RateEventArgs(this.rate.Value));
 
 			return (hasChanged);
 		}
 
 		/// <summary></summary>
-		public virtual bool Update(DateTime endOfWindow)
+		public virtual bool Update(DateTime endOfWindow, bool allowChangedEvent = true)
 		{
 			AssertNotDisposed();
 
 			bool hasChanged = this.rate.Update(endOfWindow);
 
-			if (hasChanged)
+			if (hasChanged && allowChangedEvent)
 				OnRateChanged(new RateEventArgs(this.rate.Value));
 
 			return (hasChanged);
 		}
 
 		/// <summary></summary>
-		public virtual void Reset()
+		public virtual void Reset(bool allowChangedEvent = true)
 		{
 			AssertNotDisposed();
 
 			this.rate.Reset();
 
-			OnRateChanged(new RateEventArgs(this.rate.Value));
+			if (allowChangedEvent)
+				OnRateChanged(new RateEventArgs(this.rate.Value));
 		}
 
 		#endregion
