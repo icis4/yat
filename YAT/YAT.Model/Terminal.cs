@@ -3020,8 +3020,8 @@ namespace YAT.Model
 			{
 				this.txByteCount += e.Value.Content.Count;
 
-				rateHasChanged = this.txByteRate.Update(e.Value.Content.Count);
-			}
+				rateHasChanged = this.txByteRate.Update(e.Value.Content.Count, false); // Suppress the 'Changed' event, it will explicitly be raised below,
+			}                                                                          // in order to prevent duplicated events via rate_Changed.
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
@@ -3086,8 +3086,8 @@ namespace YAT.Model
 			{
 				this.rxByteCount += e.Value.Content.Count;
 
-				rateHasChanged = this.rxByteRate.Update(e.Value.Content.Count);
-			}
+				rateHasChanged = this.rxByteRate.Update(e.Value.Content.Count, false); // Suppress the 'Changed' event, it will explicitly be raised below,
+			}                                                                          // in order to prevent duplicated events via rate_Changed.
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
@@ -3348,8 +3348,8 @@ namespace YAT.Model
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
-			if (this.txLineRate.Update(e.Lines.Count))
-				OnIORateChanged_Promptly(EventArgs.Empty);
+			if (this.txLineRate.Update(e.Lines.Count, false)) // Suppress the 'Changed' event, it will explicitly be raised below,
+				OnIORateChanged_Promptly(EventArgs.Empty);    // in order to prevent duplicated events via rate_Changed.
 
 			// Display:
 			OnDisplayLinesTxAdded(e);
@@ -3433,8 +3433,8 @@ namespace YAT.Model
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
 			// Rate:
-			if (this.rxLineRate.Update(e.Lines.Count))
-				OnIORateChanged_Promptly(EventArgs.Empty);
+			if (this.rxLineRate.Update(e.Lines.Count, false)) // Suppress the 'Changed' event, it will explicitly be raised below,
+				OnIORateChanged_Promptly(EventArgs.Empty);    // in order to prevent duplicated events via rate_Changed.
 
 			// AutoAction:
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See [== AutoTrigger.AnyLine] below.
@@ -4740,12 +4740,12 @@ namespace YAT.Model
 			////this.bidirLineCount = 0 would technically be possible, but doesn't make much sense.
 				this.rxLineCount    = 0;
 
-				this.txByteRate   .Reset();
-				this.rxByteRate   .Reset();
+				this.txByteRate   .Reset(false); // Suppress the 'Changed' event, it will explicitly be raised below,
+				this.rxByteRate   .Reset(false); // in order to prevent duplicated events via rate_Changed.
 
-				this.txLineRate   .Reset();
-			////this.bidirLineRate.Reset() would technically be possible, but doesn't make much sense.
-				this.rxLineRate   .Reset();
+				this.txLineRate   .Reset(false); // See above.
+			////this.bidirLineRate.Reset(false) would technically be possible, but doesn't make much sense.
+				this.rxLineRate   .Reset(false); // See above.
 			}
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
@@ -4825,6 +4825,15 @@ namespace YAT.Model
 
 			OnIORateChanged_Promptly(e);
 			OnIORateChanged_Decimated(e);
+
+			// Note that this event handler will not be called when the 'Changed' event is locally
+			// suppressed, as done at several locations, in order to prevent duplicated events.
+
+			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine) &&
+			    SettingsRoot.AutoAction.IsCountRatePlot)
+			{
+				EnqueueAutoAction(DateTime.Now, null, null, DataStatus); // Needed to plot gradual decrease of rate.
+			}
 		}
 
 		/// <remarks>

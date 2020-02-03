@@ -164,6 +164,13 @@ namespace YAT.Model.Settings
 			get { return (Action.AlsoAppliesToTx); }
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsCountRatePlot
+		{
+			get { return (Action.IsCountRatePlot); }
+		}
+
 		#endregion
 
 		#region Methods
