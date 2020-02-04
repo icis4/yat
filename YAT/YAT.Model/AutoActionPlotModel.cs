@@ -28,8 +28,8 @@
 //==================================================================================================
 
 // Select the plot library:
-#define USE_SCOTT_PLOT
-////#define USE_OXY_PLOT
+////#define USE_SCOTT_PLOT
+#define USE_OXY_PLOT
 
 #if (DEBUG)
 
@@ -208,6 +208,7 @@ namespace YAT.Model
 			Clear();
 
 			OxyModel.Axes.Clear();
+			OxyModel.PlotMargins = new OxyPlot.OxyThickness(double.NaN, double.NaN, double.NaN, double.NaN);
 
 			Invalidate(false); // Items have not changed.
 		}
@@ -240,10 +241,10 @@ namespace YAT.Model
 			{
 				switch (i)
 				{
-					case 0: /* TxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(txColor)                                     }); break;
-					case 1: /* TxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(txColor), LineStyle = OxyPlot.LineStyle.Dash }); break;
-					case 2: /* RxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(rxColor)                                     }); break;
-					case 3: /* RxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(rxColor), LineStyle = OxyPlot.LineStyle.Dash }); break;
+					case 0: /* TxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(txColor)                                    }); break;
+					case 1: /* TxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(txColor), LineStyle = OxyPlot.LineStyle.Dot }); break;
+					case 2: /* RxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(rxColor)                                    }); break;
+					case 3: /* RxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(rxColor), LineStyle = OxyPlot.LineStyle.Dot }); break;
 
 					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
@@ -254,8 +255,8 @@ namespace YAT.Model
 			{
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
-				                                                   //// Skip non-isochronuos samples. Such may happen because rate updates are enqueued fro two different locations in the terminal.
-				if ((points.Count > 0) && (points[points.Count-1].X <= pi.XValue.Item2))
+				                                                                          //// Skip non-isochronuos samples. Such may happen because rate updates are enqueued fro two different locations in the terminal.
+				if ((points.Count == 0) || ((points.Count > 0) && (points[points.Count-1].X <= pi.XValue.Item2)))
 					points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
 			}
 	#endif
@@ -279,9 +280,9 @@ namespace YAT.Model
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
 			{
 				if (i == 0)
-					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross, Color = OxyPlotEx.ConvertTo(firstColor) });
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3, MarkerFill = OxyPlotEx.ConvertTo(firstColor), Color = OxyPlotEx.ConvertTo(firstColor) });
 				else
-					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross });
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3 });
 			}
 
 			var x = 0;
@@ -292,12 +293,22 @@ namespace YAT.Model
 					x = (points.Count - 1);
 			}
 
+			int pointsTotalCount = 0;
+
 			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
 			for (int i = 0; i < pi.YValues.Length; i++)
 			{
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
 				points.Add(new OxyPlot.DataPoint(x, pi.YValues[i].Item2));
+
+				pointsTotalCount += points.Count;
+			}
+
+			if (pointsTotalCount > 640) // Arbitrary number, based on FullHD Width / MarkerSize = 1920 / 3 = 640.
+			{                           // Improve readability and performance on large number of points:
+				foreach (var series in OxyModel.Series)
+					((OxyPlot.Series.LineSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
 	#endif
 		}
@@ -314,16 +325,18 @@ namespace YAT.Model
 			if (OxyModel.Axes.Count == 0)
 			{
 				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time"  });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
 			{
 				if (i == 0)
-					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross, Color = OxyPlotEx.ConvertTo(firstColor) });
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3, MarkerFill = OxyPlotEx.ConvertTo(firstColor), Color = OxyPlotEx.ConvertTo(firstColor) });
 				else
-					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross });
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3 });
 			}
+
+			int pointsTotalCount = 0;
 
 			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
 			for (int i = 0; i < pi.YValues.Length; i++)
@@ -331,6 +344,14 @@ namespace YAT.Model
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
 				points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+
+				pointsTotalCount += points.Count;
+			}
+
+			if (pointsTotalCount > 640) // Arbitrary number, based on FullHD Width / MarkerSize = 1920 / 3 = 640.
+			{                           // Improve readability and performance on large number of points:
+				foreach (var series in OxyModel.Series)
+					((OxyPlot.Series.LineSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
 	#endif
 		}
@@ -353,10 +374,12 @@ namespace YAT.Model
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
 			{
 				if (i == 0)
-					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross, Color = OxyPlotEx.ConvertTo(firstColor) });
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3, MarkerFill = OxyPlotEx.ConvertTo(firstColor), Color = OxyPlotEx.ConvertTo(firstColor) });
 				else
-					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Cross });
+					OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3 });
 			}
+
+			int pointsTotalCount = 0;
 
 			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
 			for (int i = 0; i < pi.YValues.Length; i++)
@@ -364,6 +387,14 @@ namespace YAT.Model
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
 				points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+
+				pointsTotalCount += points.Count;
+			}
+
+			if (pointsTotalCount > 640) // Arbitrary number, based on FullHD Width / MarkerSize = 1920 / 3 = 640.
+			{                           // Improve readability and performance on large number of points:
+				foreach (var series in OxyModel.Series)
+					((OxyPlot.Series.LineSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
 	#endif
 		}
@@ -379,17 +410,21 @@ namespace YAT.Model
 	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "X Value" });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "Y Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "X Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Left,   PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "Y Value" });
+
+				OxyModel.PlotMargins = new OxyPlot.OxyThickness(10, 10, 10, 10);
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
 			{
 				if (i == 0)
-					OxyModel.Series.Add(new OxyPlot.Series.ScatterSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerFill = OxyPlotEx.ConvertTo(firstColor) });
+					OxyModel.Series.Add(new OxyPlot.Series.ScatterSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3, MarkerFill = OxyPlotEx.ConvertTo(firstColor) });
 				else
-					OxyModel.Series.Add(new OxyPlot.Series.ScatterSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square });
+					OxyModel.Series.Add(new OxyPlot.Series.ScatterSeries { Title = pi.YValues[i].Item1, MarkerType = OxyPlot.MarkerType.Square, MarkerSize = 3 });
 			}
+
+			int pointsTotalCount = 0;
 
 			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
 			for (int i = 0; i < pi.YValues.Length; i++)
@@ -397,6 +432,14 @@ namespace YAT.Model
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.ScatterSeries)series).Points;
 				points.Add(new OxyPlot.Series.ScatterPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+
+				pointsTotalCount += points.Count;
+			}
+
+			if (pointsTotalCount > 640) // Arbitrary number, based on FullHD Width / MarkerSize = 1920 / 3 = 640.
+			{                           // Improve readability and performance on large number of points:
+				foreach (var series in OxyModel.Series)
+					((OxyPlot.Series.ScatterSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
 	#endif
 		}
