@@ -421,6 +421,7 @@ namespace OxyPlot.WindowsForms
         /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs" /> that contains the event data.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
+        ////var paintBegin = Stopwatch.GetTimestamp();
             base.OnPaint(e);
             try
             {
@@ -479,6 +480,8 @@ namespace OxyPlot.WindowsForms
                         "OxyPlot paint exception: " + paintException.Message, font, Brushes.Red, this.Width * 0.5f, this.Height * 0.5f, new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
                 }
             }
+        ////var paintEnd = Stopwatch.GetTimestamp();
+        ////Debug.WriteLine(((int)(((paintEnd - paintBegin) * 1000 / Stopwatch.Frequency) + 0.5)).ToString() + " ms");
         }
 
         /// <summary>
