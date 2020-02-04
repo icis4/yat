@@ -367,8 +367,8 @@ namespace YAT.View.Forms
 						var widthPerBin = (0.8 * plotView.Width / yatModel.Histogram.BinCount);
 						var binsPerStep = (widthPerBin / 48.0); // Arbitrary number ~ "8.88E88", chosen experimentally by resizing plot.
 
-						var axes = (OxyPlot.Axes.CategoryAxis)(oxyModel.Axes[0]);
-						axes.MajorStep = ToMajorStep(binsPerStep);
+						var axis = (OxyPlot.Axes.CategoryAxis)(oxyModel.Axes[0]);
+						axis.MajorStep = ToMajorStep(binsPerStep);
 
 						var showCountLabels = (widthPerBin >= 32.0); // Arbitrary number ~ "8888".
 						var series = (OxyPlot.Series.ColumnSeries)(oxyModel.Series[0]);
@@ -384,8 +384,8 @@ namespace YAT.View.Forms
 						var heightPerBin = (0.8 * plotView.Height / yatModel.Histogram.BinCount);
 						var binsPerStep = (heightPerBin / plotView.Font.Height);
 
-						var axes = (OxyPlot.Axes.CategoryAxis)(oxyModel.Axes[0]);
-						axes.MajorStep = ToMajorStep(binsPerStep);
+						var axis = (OxyPlot.Axes.CategoryAxis)(oxyModel.Axes[0]);
+						axis.MajorStep = ToMajorStep(binsPerStep);
 
 						var showCountLabels = (heightPerBin >= plotView.Font.Height);
 						var series = (OxyPlot.Series.BarSeries)(oxyModel.Series[0]);
@@ -404,7 +404,7 @@ namespace YAT.View.Forms
 
 	#if USE_OXY_PLOT
 		/// <summary>
-		/// Calculates the major step of the histogram bin axes.
+		/// Calculates the major step of the histogram bin axis.
 		/// </summary>
 		protected double ToMajorStep(double binsPerStep)
 		{
