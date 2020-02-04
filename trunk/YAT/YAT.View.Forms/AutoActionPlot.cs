@@ -187,8 +187,9 @@ namespace YAT.View.Forms
 			controller.Unbind(OxyPlot.PlotCommands.CopyTextReport); // [Ctrl + Alt + R] by default; no use case; [Alt] may cause issues.
 			controller.Unbind(OxyPlot.PlotCommands.SnapTrack);      // [MouseLeft] shall be usable for [PanAt].
 			controller.Bind(new OxyPlot.OxyMouseEnterGesture(), OxyPlot.PlotCommands.HoverSnapTrack);
-
-			plotView.Controller = controller;
+			controller.Unbind(OxyPlot.PlotCommands.PanAt);          // [PanAt] mapped to [MouseLeft].
+			controller.Bind(new OxyPlot.OxyMouseDownGesture(OxyPlot.OxyMouseButton.Left), OxyPlot.PlotCommands.PanAt);
+			plotView.Controller = controller;                       // [MouseRight] free'd for opening context menu.
 	#endif
 			// First do InitializeComponent() and UpdatePlot() related initialization:
 
