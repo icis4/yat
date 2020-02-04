@@ -208,7 +208,6 @@ namespace YAT.Model
 			Clear();
 
 			OxyModel.Axes.Clear();
-			OxyModel.PlotMargins = new OxyPlot.OxyThickness(double.NaN, double.NaN, double.NaN, double.NaN);
 
 			Invalidate(false); // Items have not changed.
 		}
@@ -232,32 +231,41 @@ namespace YAT.Model
 	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
-				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp",                                  AbsoluteMinimum = DateTime.Now.ToOADate() });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Count", Unit = content,        Key = "Count", AbsoluteMinimum = 0.0 });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Dot,   Position = OxyPlot.Axes.AxisPosition.Right,  Title = "Rate",  Unit = content + "/s", Key = "Rate",  AbsoluteMinimum = 0.0 });
+				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid,                           Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp",                                  AbsoluteMinimum = DateTime.Now.ToOADate() });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Solid,                           Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Count", Unit = content,        Key = "Count", AbsoluteMinimum = 0.0 });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Dot, MajorGridlineThickness = 1, Position = OxyPlot.Axes.AxisPosition.Right,  Title = "Rate",  Unit = content + "/s", Key = "Rate",  AbsoluteMinimum = 0.0 });
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
 			{
 				switch (i)
 				{
-					case 0: /* TxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(txColor)                                    }); break;
-					case 1: /* TxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(txColor), LineStyle = OxyPlot.LineStyle.Dot }); break;
-					case 2: /* RxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(rxColor)                                    }); break;
-					case 3: /* RxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(rxColor), LineStyle = OxyPlot.LineStyle.Dot }); break;
+					case 0: /* TxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(txColor)                                                         }); break;
+					case 1: /* TxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Tx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(txColor), LineStyle = OxyPlot.LineStyle.Dot, StrokeThickness = 1 }); break;
+					case 2: /* RxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(rxColor)                                                         }); break;
+					case 3: /* RxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(rxColor), LineStyle = OxyPlot.LineStyle.Dot, StrokeThickness = 1 }); break;
 
 					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 
 			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			var x = pi.XValue.Item2;
 			for (int i = 0; i < pi.YValues.Length; i++)
 			{
+				var y = pi.YValues[i].Item2;
+
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
-				                                                                          //// Skip non-isochronuos samples. Such may happen because rate updates are enqueued fro two different locations in the terminal.
-				if ((points.Count == 0) || ((points.Count > 0) && (points[points.Count-1].X <= pi.XValue.Item2)))
-					points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+
+				if ((points.Count > 0) && (points[points.Count-1].X.Equals(0.0)))   // Add an addition 0 to properly indicate inactivity.
+					points.Add(new OxyPlot.DataPoint(x, 0.0));                      // Applies to rate when inactive and to count on reset.
+
+				if ((points.Count > 0) && (y.Equals(0.0)))                          // Add an addition value to properly indicate count.
+					points.Add(new OxyPlot.DataPoint(x, points[points.Count-1].Y)); // Applies to count on reset.
+				                                                                           //// Skip non-isochronuos samples. Such may happen because rate updates are enqueued fro two different locations in the terminal.
+				if ((points.Count == 0) || ((points.Count > 0) && (points[points.Count-1].X <= x)))
+					points.Add(new OxyPlot.DataPoint(x, y));
 			}
 	#endif
 		}
@@ -412,8 +420,6 @@ namespace YAT.Model
 			{
 				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "X Value" });
 				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "Y Value" });
-
-				OxyModel.PlotMargins = new OxyPlot.OxyThickness(10, 10, 10, 10);
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
