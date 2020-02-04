@@ -254,7 +254,9 @@ namespace YAT.Model
 			{
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
-				points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
+				                                                   //// Skip non-isochronuos samples. Such may happen because rate updates are enqueued fro two different locations in the terminal.
+				if ((points.Count > 0) && (points[points.Count-1].X <= pi.XValue.Item2))
+					points.Add(new OxyPlot.DataPoint(pi.XValue.Item2, pi.YValues[i].Item2));
 			}
 	#endif
 		}
@@ -464,13 +466,13 @@ namespace YAT.Model
 			{
 				if (orientation == Orientation.Horizontal)
 				{
-					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Bins", GapWidth = 0.1, /* StringFormat = "0.00E00" is set when adding labels */ UseSuperExponentialFormat = true });
-					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Counts", AbsoluteMinimum = 0.0 });
+					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Bins", GapWidth = 0.1, StringFormat = "G3" }); // Not using 'SuperExponentialFormat' for two reasons:
+					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Counts", AbsoluteMinimum = 0.0 });             // 1. Readability (always that format) 2. Performance (time consuming)
 				}
 				else
 				{
-					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Bins", GapWidth = 0.1, /* StringFormat = "0.00E00" is set when adding labels */ UseSuperExponentialFormat = true });
-					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Counts", AbsoluteMinimum = 0.0 });
+					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Bins", GapWidth = 0.1, StringFormat = "G3" }); // Not using 'SuperExponentialFormat' for two reasons:
+					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Counts", AbsoluteMinimum = 0.0 });             // 1. Readability (always that format) 2. Performance (time consuming)
 				}
 			}
 
@@ -496,9 +498,10 @@ namespace YAT.Model
 			// While directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html,
 			// this seems an overkill for the histogram, as it would have to notify about added as well as inserted bins and... Too complicated, simply recreate:
 
-			var labels = ((OxyPlot.Axes.CategoryAxis)(OxyModel.Axes[0])).Labels;
+			var axis = (OxyPlot.Axes.CategoryAxis)(OxyModel.Axes[0]);
+			var labels = axis.Labels;
 			labels.Clear();
-			labels.AddRange(Histogram.ValuesMidPoint.Select(x => x.ToString("G3", CultureInfo.CurrentCulture)));
+			labels.AddRange(Histogram.ValuesMidPoint.Select(x => FormatAxisValueUnderride(x, axis, OxyModel.ActualCulture))); // See method's remarks.
 
 			var series = OxyModel.Series[0];
 			int i = 0;
@@ -516,6 +519,18 @@ namespace YAT.Model
 			}
 	#endif
 		}
+
+	#if USE_OXY_PLOT
+		/// <remarks>
+		/// This method partly replicates <see cref="OxyPlot.Axes.Axis.FormatValueOverride(double)"/>
+		/// because it is not available on an <see cref="OxyPlot.Axes.CategoryAxis"/>.
+		/// </remarks>
+		protected static string FormatAxisValueUnderride(double value, OxyPlot.Axes.Axis axis, CultureInfo actualCulture)
+		{
+			string format = string.Concat("{0:", axis.ActualStringFormat ?? axis.StringFormat ?? string.Empty, "}");
+			return (string.Format(actualCulture, format, value));
+		}
+	#endif
 
 	#if USE_SCOTT_PLOT
 		/// <summary></summary>
