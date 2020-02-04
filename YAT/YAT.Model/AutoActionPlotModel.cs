@@ -232,9 +232,9 @@ namespace YAT.Model
 	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
-				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp",                                  AbsoluteMinimum = DateTime.Now.ToOADate() });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Count", Unit = content,        Key = "Count", AbsoluteMinimum = 0.0 });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Right,  Title = "Rate",  Unit = content + "/s", Key = "Rate",  AbsoluteMinimum = 0.0 });
+				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp",                                  AbsoluteMinimum = DateTime.Now.ToOADate() });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Count", Unit = content,        Key = "Count", AbsoluteMinimum = 0.0 });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Dot,   Position = OxyPlot.Axes.AxisPosition.Right,  Title = "Rate",  Unit = content + "/s", Key = "Rate",  AbsoluteMinimum = 0.0 });
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
@@ -273,8 +273,8 @@ namespace YAT.Model
 	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Index", AbsoluteMinimum = 0.0 });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Index", AbsoluteMinimum = 0.0 });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
@@ -324,8 +324,8 @@ namespace YAT.Model
 	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
-				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time"  });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time"  });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
@@ -367,8 +367,8 @@ namespace YAT.Model
 	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
-				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp", AbsoluteMinimum = DateTime.Now.ToOADate() });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp", AbsoluteMinimum = DateTime.Now.ToOADate() });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Value" });
 			}
 
 			for (int i = OxyModel.Series.Count; i < pi.YValues.Length; i++)
@@ -410,8 +410,8 @@ namespace YAT.Model
 	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "X Value" });
-				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Left,   PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "Y Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "X Value" });
+				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "Y Value" });
 
 				OxyModel.PlotMargins = new OxyPlot.OxyThickness(10, 10, 10, 10);
 			}
@@ -509,13 +509,13 @@ namespace YAT.Model
 			{
 				if (orientation == Orientation.Horizontal)
 				{
-					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Bins", GapWidth = 0.1, StringFormat = "G3" }); // Not using 'SuperExponentialFormat' for two reasons:
-					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Counts", AbsoluteMinimum = 0.0 });             // 1. Readability (always that format) 2. Performance (time consuming)
+					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Bins", GapWidth = 0.1, StringFormat = "G3" }); // Not using 'SuperExponentialFormat' for two reasons:
+					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Counts", AbsoluteMinimum = 0.0 });             // 1. Readability (always that format) 2. Performance (time consuming)
 				}
 				else
 				{
-					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Bins", GapWidth = 0.1, StringFormat = "G3" }); // Not using 'SuperExponentialFormat' for two reasons:
-					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Counts", AbsoluteMinimum = 0.0 });             // 1. Readability (always that format) 2. Performance (time consuming)
+					OxyModel.Axes.Add(new OxyPlot.Axes.CategoryAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Left,   Title = "Bins", GapWidth = 0.1, StringFormat = "G3" }); // Not using 'SuperExponentialFormat' for two reasons:
+					OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis   { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Counts", AbsoluteMinimum = 0.0 });             // 1. Readability (always that format) 2. Performance (time consuming)
 				}
 			}
 
