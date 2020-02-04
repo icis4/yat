@@ -55,8 +55,8 @@ namespace YAT.Model.Types
 		LineChartIndex,
 		LineChartTime,
 		LineChartTimeStamp,
-		ScatterPlot,
-		HistogramHorizontal,
+		ScatterPlot,         // Located right after 'LineChartTime*' since they are technically also scatter plots.
+		HistogramHorizontal, // Opposed to histograms, which are bar plots.
 		HistogramVertical,
 
 		ClearRepositories,
