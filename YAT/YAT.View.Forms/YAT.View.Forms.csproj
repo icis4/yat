@@ -111,6 +111,12 @@
     <Compile Include="FormatSettings.Designer.cs">
       <DependentUpon>FormatSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutoActionPlotHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoActionPlotHelp.Designer.cs">
+      <DependentUpon>AutoActionPlotHelp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Help.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,6 +229,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormatSettings.resx">
       <DependentUpon>FormatSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoActionPlotHelp.resx">
+      <DependentUpon>AutoActionPlotHelp.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Help.resx">
