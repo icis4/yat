@@ -39,7 +39,16 @@
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
 			this.scottPlot = new ScottPlot.FormsPlot();
 			this.plotView = new OxyPlot.WindowsForms.PlotView();
-			this.button_ResetAxis = new System.Windows.Forms.Button();
+			this.button_ResetAxes = new System.Windows.Forms.Button();
+			this.contextMenuStrip_Plot = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItem_Plot_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_Plot_SaveToFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_Plot_1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_Plot_ResetAxes = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_Plot_ShowLegend = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_Plot_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_Plot_Help = new System.Windows.Forms.ToolStripMenuItem();
+			this.contextMenuStrip_Plot.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Close
@@ -127,6 +136,7 @@
 			this.plotView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.plotView.ContextMenuStrip = this.contextMenuStrip_Plot;
 			this.plotView.Location = new System.Drawing.Point(12, 12);
 			this.plotView.Name = "plotView";
 			this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
@@ -137,16 +147,75 @@
 			this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
 			this.plotView.Paint += new System.Windows.Forms.PaintEventHandler(this.plotView_Paint);
 			// 
-			// button_ResetAxis
+			// button_ResetAxes
 			// 
-			this.button_ResetAxis.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_ResetAxis.Location = new System.Drawing.Point(42, 400);
-			this.button_ResetAxis.Name = "button_ResetAxis";
-			this.button_ResetAxis.Size = new System.Drawing.Size(75, 23);
-			this.button_ResetAxis.TabIndex = 1;
-			this.button_ResetAxis.Text = "&Reset Axis";
-			this.button_ResetAxis.UseVisualStyleBackColor = true;
-			this.button_ResetAxis.Click += new System.EventHandler(this.button_ResetAxis_Click);
+			this.button_ResetAxes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_ResetAxes.Location = new System.Drawing.Point(42, 400);
+			this.button_ResetAxes.Name = "button_ResetAxes";
+			this.button_ResetAxes.Size = new System.Drawing.Size(75, 23);
+			this.button_ResetAxes.TabIndex = 1;
+			this.button_ResetAxes.Text = "&Reset Axes";
+			this.button_ResetAxes.UseVisualStyleBackColor = true;
+			this.button_ResetAxes.Click += new System.EventHandler(this.button_ResetAxes_Click);
+			// 
+			// contextMenuStrip_Plot
+			// 
+			this.contextMenuStrip_Plot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_Plot_CopyToClipboard,
+            this.toolStripMenuItem_Plot_SaveToFile,
+            this.toolStripSeparator_Plot_1,
+            this.toolStripMenuItem_Plot_ResetAxes,
+            this.toolStripMenuItem_Plot_ShowLegend,
+            this.toolStripSeparator_Plot_2,
+            this.toolStripMenuItem_Plot_Help});
+			this.contextMenuStrip_Plot.Name = "contextMenuStrip_Plot";
+			this.contextMenuStrip_Plot.Size = new System.Drawing.Size(172, 126);
+			this.contextMenuStrip_Plot.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Plot_Opening);
+			// 
+			// toolStripMenuItem_Plot_CopyToClipboard
+			// 
+			this.toolStripMenuItem_Plot_CopyToClipboard.Name = "toolStripMenuItem_Plot_CopyToClipboard";
+			this.toolStripMenuItem_Plot_CopyToClipboard.Size = new System.Drawing.Size(171, 22);
+			this.toolStripMenuItem_Plot_CopyToClipboard.Text = "Copy to Clipboard";
+			this.toolStripMenuItem_Plot_CopyToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_Plot_CopyToClipboard_Click);
+			// 
+			// toolStripMenuItem_Plot_SaveToFile
+			// 
+			this.toolStripMenuItem_Plot_SaveToFile.Name = "toolStripMenuItem_Plot_SaveToFile";
+			this.toolStripMenuItem_Plot_SaveToFile.Size = new System.Drawing.Size(171, 22);
+			this.toolStripMenuItem_Plot_SaveToFile.Text = "Save to File";
+			this.toolStripMenuItem_Plot_SaveToFile.Click += new System.EventHandler(this.toolStripMenuItem_Plot_SaveToFile_Click);
+			// 
+			// toolStripSeparator_Plot_1
+			// 
+			this.toolStripSeparator_Plot_1.Name = "toolStripSeparator_Plot_1";
+			this.toolStripSeparator_Plot_1.Size = new System.Drawing.Size(168, 6);
+			// 
+			// toolStripMenuItem_Plot_ResetAxes
+			// 
+			this.toolStripMenuItem_Plot_ResetAxes.Name = "toolStripMenuItem_Plot_ResetAxes";
+			this.toolStripMenuItem_Plot_ResetAxes.Size = new System.Drawing.Size(171, 22);
+			this.toolStripMenuItem_Plot_ResetAxes.Text = "Reset Axes";
+			this.toolStripMenuItem_Plot_ResetAxes.Click += new System.EventHandler(this.toolStripMenuItem_Plot_ResetAxes_Click);
+			// 
+			// toolStripMenuItem_Plot_ShowLegend
+			// 
+			this.toolStripMenuItem_Plot_ShowLegend.Name = "toolStripMenuItem_Plot_ShowLegend";
+			this.toolStripMenuItem_Plot_ShowLegend.Size = new System.Drawing.Size(171, 22);
+			this.toolStripMenuItem_Plot_ShowLegend.Text = "Show Legend";
+			this.toolStripMenuItem_Plot_ShowLegend.Click += new System.EventHandler(this.toolStripMenuItem_Plot_ShowLegend_Click);
+			// 
+			// toolStripSeparator_Plot_2
+			// 
+			this.toolStripSeparator_Plot_2.Name = "toolStripSeparator_Plot_2";
+			this.toolStripSeparator_Plot_2.Size = new System.Drawing.Size(168, 6);
+			// 
+			// toolStripMenuItem_Plot_Help
+			// 
+			this.toolStripMenuItem_Plot_Help.Name = "toolStripMenuItem_Plot_Help";
+			this.toolStripMenuItem_Plot_Help.Size = new System.Drawing.Size(171, 22);
+			this.toolStripMenuItem_Plot_Help.Text = "Help...";
+			this.toolStripMenuItem_Plot_Help.Click += new System.EventHandler(this.toolStripMenuItem_Plot_Help_Click);
 			// 
 			// AutoActionPlot
 			// 
@@ -155,7 +224,7 @@
 			this.ClientSize = new System.Drawing.Size(884, 441);
 			this.Controls.Add(this.plotView);
 			this.Controls.Add(this.button_Deactivate);
-			this.Controls.Add(this.button_ResetAxis);
+			this.Controls.Add(this.button_ResetAxes);
 			this.Controls.Add(this.label_UpdateSuspended);
 			this.Controls.Add(this.checkBox_ShowLegend);
 			this.Controls.Add(this.button_Clear);
@@ -172,6 +241,7 @@
 			this.LocationChanged += new System.EventHandler(this.AutoActionPlot_LocationChanged);
 			this.PlotAreaBackColorChanged += new System.EventHandler(this.AutoActionPlot_PlotAreaBackColorChanged);
 			this.SizeChanged += new System.EventHandler(this.AutoActionPlot_SizeChanged);
+			this.contextMenuStrip_Plot.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -186,8 +256,16 @@
 		private System.Windows.Forms.Timer timer_Update;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_UpdateSuspended;
-		private System.Windows.Forms.Button button_ResetAxis;
+		private System.Windows.Forms.Button button_ResetAxes;
 		private System.Windows.Forms.Button button_Deactivate;
 		private OxyPlot.WindowsForms.PlotView plotView;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Plot;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Plot_CopyToClipboard;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Plot_SaveToFile;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_Plot_1;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Plot_ResetAxes;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Plot_ShowLegend;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_Plot_2;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Plot_Help;
 	}
 }

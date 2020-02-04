@@ -30,6 +30,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing.Imaging;
 using System.IO;
 
 using MKY.IO;
@@ -374,9 +375,9 @@ namespace YAT.Application.Utilities
 
 		#endregion
 
-		#region Text/Binary/Send/Log/Monitor
+		#region Text/Binary/Send/Log/Monitor/Plot
 		//------------------------------------------------------------------------------------------
-		// Text/Binary/Send/Log/Monitor
+		// Text/Binary/Send/Log/Monitor/Plot
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -384,14 +385,9 @@ namespace YAT.Application.Utilities
 		/// </remarks>
 		public static bool IsTextExtension(string extension)
 		{
-			if (PathEx.Equals(extension, ".txt"))
-				return (true);
-
-			if (PathEx.Equals(extension, ".text"))
-				return (true);
-
-			if (PathEx.Equals(extension, ".log"))
-				return (true);
+			if (PathEx.Equals(extension, ".txt"))  return (true);
+			if (PathEx.Equals(extension, ".text")) return (true);
+			if (PathEx.Equals(extension, ".log"))  return (true);
 
 			return (false);
 		}
@@ -408,14 +404,9 @@ namespace YAT.Application.Utilities
 		/// </remarks>
 		public static bool IsBinaryExtension(string extension)
 		{
-			if (PathEx.Equals(extension, ".dat"))
-				return (true);
-
-			if (PathEx.Equals(extension, ".bin"))
-				return (true);
-
-			if (PathEx.Equals(extension, ".binary"))
-				return (true);
+			if (PathEx.Equals(extension, ".dat"))    return (true);
+			if (PathEx.Equals(extension, ".bin"))    return (true);
+			if (PathEx.Equals(extension, ".binary")) return (true);
 
 			return (false);
 		}
@@ -605,6 +596,105 @@ namespace YAT.Application.Utilities
 		public static string MonitorExtensionDefault
 		{
 			get { return (".rtf"); }
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsImageFile(string)"/>.
+		/// </remarks>
+		public static bool IsImageExtension(string extension)
+		{
+			ImageFormat format;
+			return (IsImageExtension(extension, out format));
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsImageFile(string)"/>.
+		/// </remarks>
+		public static bool IsImageExtension(string extension, out ImageFormat format)
+		{
+			if (PathEx.Equals(extension, ".png")) { format = ImageFormat.Png; return (true); }
+			if (PathEx.Equals(extension, ".bmp")) { format = ImageFormat.Bmp; return (true); }
+			if (PathEx.Equals(extension, ".emf")) { format = ImageFormat.Emf; return (true); }
+			if (PathEx.Equals(extension, ".wmf")) { format = ImageFormat.Wmf; return (true); }
+
+			format = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool IsImageFile(string filePath)
+		{
+			ImageFormat format;
+			return (IsImageFile(filePath, out format));
+		}
+
+		/// <summary></summary>
+		public static bool IsImageFile(string filePath, out ImageFormat format)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsImageExtension(extension, out format));
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsSvgFile(string)"/>.
+		/// </remarks>
+		public static bool IsSvgExtension(string extension)
+		{
+			return (PathEx.Equals(extension, ".svg"));
+		}
+
+		/// <summary></summary>
+		public static bool IsSvgFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsSvgExtension(extension));
+		}
+
+		/// <remarks>
+		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsPdfFile(string)"/>.
+		/// </remarks>
+		public static bool IsPdfExtension(string extension)
+		{
+			return (PathEx.Equals(extension, ".pdf"));
+		}
+
+		/// <summary></summary>
+		public static bool IsPdfFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsPdfExtension(extension));
+		}
+
+		/// <remarks>
+		/// Applies to [Plot > Save].
+		/// </remarks>
+		public static string PlotFilesFilter
+		{
+			get
+			{
+				return ("Images (*.png;*.bmp;*.svg;*.emf;*.wmf)|*.png;*.bmp;*.svg;*.emf;*.wmf" +
+						"|" +
+						"Portable Documents (*.pdf)|*.pdf" +
+						"|" +
+						"All Files (*.*)|*.*");
+			}
+		}
+
+		/// <summary></summary>
+		public static int PlotFilesFilterHelper(string extension)
+		{
+			if      (IsImageFile(extension))
+				return (1);
+			else if (IsPdfExtension(extension))
+				return (2);
+			else
+				return (3);
+		}
+
+		/// <summary></summary>
+		public static string PlotExtensionDefault
+		{
+			get { return (".png"); }
 		}
 
 		#endregion

@@ -52,6 +52,9 @@ namespace YAT.Application.Settings
 		/// <summary></summary>
 		public static readonly string MonitorFilesDefault = ExtensionHelper.MonitorExtensionDefault;
 
+		/// <summary></summary>
+		public static readonly string PlotFilesDefault = ExtensionHelper.PlotExtensionDefault;
+
 		private string textSendFiles;
 		private string binarySendFiles;
 
@@ -60,6 +63,7 @@ namespace YAT.Application.Settings
 		private string neatLogFiles;
 
 		private string monitorFiles;
+		private string plotFiles;
 
 		/// <summary></summary>
 		public ExtensionSettings()
@@ -90,6 +94,7 @@ namespace YAT.Application.Settings
 			NeatLogFiles    = rhs.NeatLogFiles;
 
 			MonitorFiles    = rhs.MonitorFiles;
+			PlotFiles       = rhs.PlotFiles;
 
 			ClearChanged();
 		}
@@ -109,6 +114,7 @@ namespace YAT.Application.Settings
 			NeatLogFiles    = NeatLogFilesDefault;
 
 			MonitorFiles    = MonitorFilesDefault;
+			PlotFiles       = PlotFilesDefault;
 		}
 
 		#region Properties
@@ -206,6 +212,21 @@ namespace YAT.Application.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("PlotFiles")]
+		public virtual string PlotFiles
+		{
+			get { return (this.plotFiles); }
+			set
+			{
+				if (this.plotFiles != value)
+				{
+					this.plotFiles = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -234,6 +255,7 @@ namespace YAT.Application.Settings
 				hashCode = (hashCode * 397) ^ (NeatLogFiles    != null ? NeatLogFiles   .GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^ (MonitorFiles    != null ? MonitorFiles   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (PlotFiles       != null ? PlotFiles      .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -271,7 +293,8 @@ namespace YAT.Application.Settings
 				StringEx.EqualsOrdinalIgnoreCase(RawLogFiles,     other.RawLogFiles)     &&
 				StringEx.EqualsOrdinalIgnoreCase(NeatLogFiles,    other.NeatLogFiles)    &&
 
-				StringEx.EqualsOrdinalIgnoreCase(MonitorFiles,    other.MonitorFiles)
+				StringEx.EqualsOrdinalIgnoreCase(MonitorFiles,    other.MonitorFiles)    &&
+				StringEx.EqualsOrdinalIgnoreCase(PlotFiles,       other.PlotFiles)
 			);
 		}
 
