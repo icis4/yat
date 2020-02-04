@@ -49,13 +49,18 @@ using System;
 using System.ComponentModel;
 #if USE_SCOTT_PLOT
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 #endif
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Drawing.Imaging;
 #if USE_SCOTT_PLOT
 using System.Globalization;
+#endif
+using System.IO;
+#if USE_SCOTT_PLOT
 using System.Linq;
 #endif
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using MKY;
@@ -63,12 +68,15 @@ using MKY;
 using MKY.Collections.Specialized;
 using MKY.Diagnostics;
 #endif
+using MKY.IO;
 using MKY.Windows.Forms;
 
+using YAT.Application.Utilities;
 #if USE_OXY_PLOT
 using YAT.Model;
 #endif
 using YAT.Model.Types;
+using YAT.Model.Utilities;
 using YAT.Settings.Application;
 
 #endregion
@@ -438,9 +446,9 @@ namespace YAT.View.Forms
 	////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
 	////}
 
-		private void button_ResetAxis_Click(object sender, EventArgs e)
+		private void button_ResetAxes_Click(object sender, EventArgs e)
 		{
-			ResetAxis();
+			ResetAxes();
 		}
 
 		private void checkBox_ShowLegend_CheckedChanged(object sender, EventArgs e)
@@ -448,14 +456,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			ApplicationSettings.RoamingUserSettings.Plot.ShowLegend = !ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
-			ApplicationSettings.SaveRoamingUserSettings();
-
-	#if USE_SCOTT_PLOT
-			UpdatePlot(true); // Immediately update, don't wait for update ticker.
-	#elif USE_OXY_PLOT
-			ApplyShowLegend();
-	#endif
+			ToggleShowLegend();
 		}
 
 		private void button_Clear_Click(object sender, EventArgs e)
@@ -472,6 +473,66 @@ namespace YAT.View.Forms
 		{
 			Close();
 		}
+
+		#region Controls Event Handlers > Context Menu
+		//==========================================================================================
+		// Controls Event Handlers > Context Menu
+		//==========================================================================================
+
+		private void contextMenuStrip_Plot_Opening(object sender, CancelEventArgs e)
+		{
+			var oxyModelIsDefined = (plotView.Model != null);
+
+			toolStripMenuItem_Plot_CopyToClipboard.Enabled = oxyModelIsDefined;
+			toolStripMenuItem_Plot_SaveToFile.Enabled      = oxyModelIsDefined;
+			toolStripMenuItem_Plot_ResetAxes.Enabled       = oxyModelIsDefined;
+
+			toolStripMenuItem_Plot_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+		}
+
+		private void toolStripMenuItem_Plot_CopyToClipboard_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				Cursor = Cursors.WaitCursor;
+				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
+
+				var exporter = GetPngExporter();
+				using (var image = exporter.ExportToBitmap(plotView.Model))
+					Clipboard.SetImage(image);
+
+				Cursor = Cursors.Default;
+			}
+			catch (ExternalException) // The clipboard could not be cleared. This typically
+			{                         // occurs when it is being used by another process.
+				Cursor = Cursors.Default;
+			}
+		}
+
+		private void toolStripMenuItem_Plot_SaveToFile_Click(object sender, EventArgs e)
+		{
+			SaveToFile();
+		}
+
+		private void toolStripMenuItem_Plot_ResetAxes_Click(object sender, EventArgs e)
+		{
+			ResetAxes();
+		}
+
+		private void toolStripMenuItem_Plot_ShowLegend_Click(object sender, EventArgs e)
+		{
+			ToggleShowLegend();
+		}
+
+		private void toolStripMenuItem_Plot_Help_Click(object sender, EventArgs e)
+		{
+			var f = new AutoActionPlotHelp();
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
+			f.Show(this);
+		}
+
+		#endregion
 
 		#endregion
 
@@ -667,7 +728,138 @@ namespace YAT.View.Forms
 	#endif
 		}
 
-		private void ResetAxis()
+		private OxyPlot.WindowsForms.PngExporter GetPngExporter()
+		{
+			var exporter = new OxyPlot.WindowsForms.PngExporter
+			{
+				Width  = plotView.Width,
+				Height = plotView.Height,
+				Background = OxyPlot.OxyColors.White
+			};
+
+			return (exporter);
+		}
+
+		private OxyPlot.WindowsForms.SvgExporter GetSvgExporter()
+		{
+			var exporter = new OxyPlot.WindowsForms.SvgExporter
+			{
+				Width  = plotView.Width,
+				Height = plotView.Height,
+			};
+
+			return (exporter);
+		}
+
+		private OxyPlot.PdfExporter GetPdfExporter()
+		{
+			var exporter = new OxyPlot.PdfExporter
+			{
+				Width  = plotView.Width,
+				Height = plotView.Height,
+				Background = OxyPlot.OxyColors.White
+			};
+
+			return (exporter);
+		}
+
+		private void SaveToFile()
+		{
+			string initialExtension = ApplicationSettings.RoamingUserSettings.Extensions.PlotFiles;
+
+			var sfd = new SaveFileDialog();
+			sfd.Title       = "Save Plot As";
+			sfd.Filter      = ExtensionHelper.PlotFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.PlotFilesFilterHelper(initialExtension);
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.PlotFiles;
+
+			var dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
+			{
+				ApplicationSettings.RoamingUserSettings.Extensions.PlotFiles = Path.GetExtension(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.PlotFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+				ApplicationSettings.SaveRoamingUserSettings();
+
+				Refresh(); // Ensure that form has been refreshed before continuing.
+
+				Exception ex;
+				if (TrySaveToFile(sfd.FileName, out ex))
+					return;
+
+				string errorMessage;
+				if (!string.IsNullOrEmpty(sfd.FileName))
+					errorMessage = ErrorHelper.ComposeMessage("Unable to save", sfd.FileName, ex);
+				else
+					errorMessage = ErrorHelper.ComposeMessage("Unable to save file!", ex);
+
+				MessageBoxEx.Show
+				(
+					this,
+					errorMessage,
+					"File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+			}
+		}
+
+		private bool TrySaveToFile(string filePath, out Exception ex)
+		{
+			ImageFormat format;
+			if      (ExtensionHelper.IsImageFile(filePath, out format))
+				return (TrySaveToFile(filePath, GetPngExporter(), format, out ex));
+			else if (ExtensionHelper.IsSvgFile(filePath))
+				return (TrySaveToFile(filePath, GetSvgExporter(), out ex));
+			else if (ExtensionHelper.IsPdfFile(filePath))
+				return (TrySaveToFile(filePath, GetPdfExporter(), out ex));
+			else
+				return (TrySaveToFile(filePath, GetPngExporter(), ImageFormat.Png, out ex)); // Fallback to PNG.
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		private bool TrySaveToFile(string filePath, OxyPlot.WindowsForms.PngExporter exporter, ImageFormat imageFormat, out Exception exception)
+		{
+			try
+			{
+				using (var stream = File.OpenWrite(filePath))
+				{
+					using (var image = exporter.ExportToBitmap(plotView.Model))
+						image.Save(stream, imageFormat);
+				}
+
+				exception = null;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				exception = ex;
+				return (false);
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		private bool TrySaveToFile(string filePath, OxyPlot.IExporter exporter, out Exception exception)
+		{
+			try
+			{
+				using (var stream = File.OpenWrite(filePath))
+				{
+					exporter.Export(plotView.Model, stream);
+				}
+
+				exception = null;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				exception = ex;
+				return (false);
+			}
+		}
+
+		private void ResetAxes()
 		{
 	#if USE_SCOTT_PLOT
 			UpdatePlot(true); // Immediately update, don't wait for update ticker.
@@ -678,6 +870,18 @@ namespace YAT.View.Forms
 				model.ResetAllAxes();
 				model.InvalidatePlot(false);
 			}
+	#endif
+		}
+
+		private void ToggleShowLegend()
+		{
+			ApplicationSettings.RoamingUserSettings.Plot.ShowLegend = !ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+			ApplicationSettings.SaveRoamingUserSettings();
+
+	#if USE_SCOTT_PLOT
+			UpdatePlot(true); // Immediately update, don't wait for update ticker.
+	#elif USE_OXY_PLOT
+			ApplyShowLegend();
 	#endif
 		}
 

@@ -48,11 +48,15 @@ namespace YAT.Application.Settings
 		/// <summary></summary>
 		public static readonly string MonitorFilesDefault = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
 
+		/// <summary></summary>
+		public static readonly string PlotFilesDefault = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + Path.DirectorySeparatorChar + ApplicationEx.ProductName; // File location shall differ for "YAT" and "YATConsole".
+
 		private string mainFiles;
 		private string commandFiles;
 		private string sendFiles;
 		private string logFiles;
 		private string monitorFiles;
+		private string plotFiles;
 
 		/// <summary></summary>
 		public PathSettings()
@@ -80,6 +84,7 @@ namespace YAT.Application.Settings
 			SendFiles    = rhs.SendFiles;
 			LogFiles     = rhs.LogFiles;
 			MonitorFiles = rhs.MonitorFiles;
+			PlotFiles    = rhs.PlotFiles;
 
 			ClearChanged();
 		}
@@ -96,6 +101,7 @@ namespace YAT.Application.Settings
 			SendFiles    = SendFilesDefault;
 			LogFiles     = LogFilesDefault;
 			MonitorFiles = MonitorFilesDefault;
+			PlotFiles    = PlotFilesDefault;
 		}
 
 		#region Properties
@@ -178,6 +184,21 @@ namespace YAT.Application.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("PlotFiles")]
+		public virtual string PlotFiles
+		{
+			get { return (this.plotFiles); }
+			set
+			{
+				if (this.plotFiles != value)
+				{
+					this.plotFiles = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -203,6 +224,7 @@ namespace YAT.Application.Settings
 				hashCode = (hashCode * 397) ^ (SendFiles    != null ? SendFiles   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (LogFiles     != null ? LogFiles    .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (MonitorFiles != null ? MonitorFiles.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (PlotFiles    != null ? PlotFiles   .GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -237,7 +259,8 @@ namespace YAT.Application.Settings
 				PathEx.Equals(CommandFiles, other.CommandFiles) &&
 				PathEx.Equals(SendFiles,    other.SendFiles)    &&
 				PathEx.Equals(LogFiles,     other.LogFiles)     &&
-				PathEx.Equals(MonitorFiles, other.MonitorFiles)
+				PathEx.Equals(MonitorFiles, other.MonitorFiles) &&
+				PathEx.Equals(PlotFiles,    other.PlotFiles)
 			);
 		}
 
