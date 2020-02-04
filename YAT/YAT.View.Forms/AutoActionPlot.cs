@@ -183,7 +183,11 @@ namespace YAT.View.Forms
 			plotView.Model.DefaultFontSize = SystemFonts.DefaultFont.Height; // Best result for unknown reason, clarification PENDING.
 
 			var controller = new OxyPlot.PlotController();
-			controller.Bind(new OxyPlot.OxyMouseEnterGesture(), OxyPlot.PlotCommands.HoverPointsOnlyTrack);
+			controller.Unbind(OxyPlot.PlotCommands.CopyCode);       // [Ctrl + Alt + C] by default; no use case; [Alt] may cause issues.
+			controller.Unbind(OxyPlot.PlotCommands.CopyTextReport); // [Ctrl + Alt + R] by default; no use case; [Alt] may cause issues.
+			controller.Unbind(OxyPlot.PlotCommands.SnapTrack);      // [MouseLeft] shall be usable for [PanAt].
+			controller.Bind(new OxyPlot.OxyMouseEnterGesture(), OxyPlot.PlotCommands.HoverSnapTrack);
+
 			plotView.Controller = controller;
 	#endif
 			// First do InitializeComponent() and UpdatePlot() related initialization:
