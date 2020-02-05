@@ -1,1 +1,0 @@
-convert icon.png icon.ico

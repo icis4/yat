@@ -22,43 +22,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Configuration
-//==================================================================================================
-// Configuration
-//==================================================================================================
-
-// Select the plot library:
-////#define USE_SCOTT_PLOT
-#define USE_OXY_PLOT
-
-#if (DEBUG)
-
-	// Enable debugging of plot update:
-////#define DEBUG_UPDATE
-
-#endif // DEBUG
-
-#endregion
-
 #region Using
 //==================================================================================================
 // Using
 //==================================================================================================
 
 using System;
-#if USE_SCOTT_PLOT
-using System.Collections.Generic;
-#endif
 using System.Drawing;
-#if USE_OXY_PLOT
 using System.Globalization;
 using System.Linq;
-#endif
 using System.Windows.Forms;
 
-#if USE_OXY_PLOT
 using MKY;
-#endif
 using MKY.Collections.Specialized;
 
 using YAT.Model.Types;
@@ -87,41 +62,11 @@ namespace YAT.Model
 		/// <summary></summary>
 		public AutoAction Action { get; protected set; }
 
-	#if USE_SCOTT_PLOT
-
-		/// <summary></summary>
-		public string Title { get; protected set; }
-
-		/// <summary></summary>
-		public string XLabel { get; protected set; }
-
-		/// <summary></summary>
-		public string YLabel { get; protected set; }
-
-		/// <summary></summary>
-		public Tuple<string, List<double>> XValues { get; protected set; }
-
-		/// <summary></summary>
-		public List<Tuple<string, List<double>>> YValues { get; protected set; }
-
-	#endif
-
 		/// <summary></summary>
 		public HistogramDouble Histogram { get; protected set; }
 
-	#if USE_SCOTT_PLOT
-
-		/// <summary>
-		/// Gets or sets a counter that indicates whether and how many times the plot has changed.
-		/// </summary>
-		public int UpdateCounter { get; protected set; } // = 0;
-
-	#elif USE_OXY_PLOT
-
 		/// <summary></summary>
 		public OxyPlot.PlotModel OxyModel { get; protected set; }
-
-	#endif
 
 		#endregion
 
@@ -130,13 +75,11 @@ namespace YAT.Model
 		// Object Lifetime
 		//==========================================================================================
 
-	#if USE_OXY_PLOT
 		/// <summary></summary>
 		public AutoActionPlotModel()
 		{
 			OxyModel = new OxyPlot.PlotModel();
 		}
-	#endif
 
 		#endregion
 
@@ -151,18 +94,10 @@ namespace YAT.Model
 			if (Action != pi.Action) {
 				Action = pi.Action;
 
-	#if USE_SCOTT_PLOT
-				Clear(); // Ensure that X/Y or histogram tuples are consistent.
-	#elif USE_OXY_PLOT
 				Reset(); // Ensure that X/Y or histogram tuples are consistent.
-	#endif
 			}
 
-	#if USE_SCOTT_PLOT
-			Title = (AutoActionEx)pi.Action;
-	#elif USE_OXY_PLOT
 			OxyModel.Title = (AutoActionEx)pi.Action;
-	#endif
 
 			switch (pi.Action)
 			{
@@ -176,32 +111,19 @@ namespace YAT.Model
 				case AutoAction.HistogramVertical:   AddItemToHistogram(         pi,          rxColor, Orientation.Vertical  ); break;
 			}
 
-	#if USE_SCOTT_PLOT
-			IndicateUpdate();
-	#elif USE_OXY_PLOT
 			Invalidate(true); // Items have changed.
-	#endif
 		}
 
 		/// <summary></summary>
 		public virtual void Clear()
 		{
 			Histogram = null;
-	#if USE_SCOTT_PLOT
-			XValues = null;
-			YValues = null;
-	#elif USE_OXY_PLOT
-			OxyModel.Series.Clear();
-	#endif
 
-	#if USE_SCOTT_PLOT
-			IndicateUpdate();
-	#elif USE_OXY_PLOT
+			OxyModel.Series.Clear();
+
 			Invalidate(true); // Items have changed.
-	#endif
 		}
 
-	#if USE_OXY_PLOT
 		/// <summary></summary>
 		public virtual void Reset()
 		{
@@ -211,7 +133,6 @@ namespace YAT.Model
 
 			Invalidate(false); // Items have not changed.
 		}
-	#endif
 
 		#endregion
 
@@ -223,12 +144,6 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void AddItemToPlotCountRate(AutoActionPlotItem pi, Color txColor, Color rxColor, string content)
 		{
-	#if USE_SCOTT_PLOT
-			XLabel = "Time Stamp";
-			YLabel = "Value";
-
-			AddItemToXAndY(pi);
-	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
 				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid,                           Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp",                                  AbsoluteMinimum = DateTime.Now.ToOADate() });
@@ -267,18 +182,11 @@ namespace YAT.Model
 				if ((points.Count == 0) || ((points.Count > 0) && (points[points.Count-1].X <= x)))
 					points.Add(new OxyPlot.DataPoint(x, y));
 			}
-	#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToLineChartIndex(AutoActionPlotItem pi, Color firstColor)
 		{
-	#if USE_SCOTT_PLOT
-			XLabel = "Index";
-			YLabel = "Value";
-
-			AddItemToYOnly(pi);
-	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
 				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Index", AbsoluteMinimum = 0.0 });
@@ -318,18 +226,11 @@ namespace YAT.Model
 				foreach (var series in OxyModel.Series)
 					((OxyPlot.Series.LineSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
-	#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToLineChartTime(AutoActionPlotItem pi, Color firstColor)
 		{
-	#if USE_SCOTT_PLOT
-			XLabel = "Time";
-			YLabel = "Value";
-
-			AddItemToXAndY(pi);
-	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
 				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time"  });
@@ -361,18 +262,11 @@ namespace YAT.Model
 				foreach (var series in OxyModel.Series)
 					((OxyPlot.Series.LineSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
-	#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToLineChartTimeStamp(AutoActionPlotItem pi, Color firstColor)
 		{
-	#if USE_SCOTT_PLOT
-			XLabel = "Time Stamp";
-			YLabel = "Value";
-
-			AddItemToXAndY(pi);
-	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
 				OxyModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "Time Stamp", AbsoluteMinimum = DateTime.Now.ToOADate() });
@@ -404,18 +298,11 @@ namespace YAT.Model
 				foreach (var series in OxyModel.Series)
 					((OxyPlot.Series.LineSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
-	#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void AddItemToScatterPlot(AutoActionPlotItem pi, Color firstColor)
 		{
-	#if USE_SCOTT_PLOT
-			XLabel = "X Value";
-			YLabel = "Y Value";
-
-			AddItemToXAndY(pi);
-	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
 				OxyModel.Axes.Add(new OxyPlot.Axes.LinearAxis { MajorGridlineStyle = OxyPlot.LineStyle.Solid, Position = OxyPlot.Axes.AxisPosition.Bottom, PositionAtZeroCrossing = true, AxislineStyle = OxyPlot.LineStyle.Solid, TickStyle = OxyPlot.Axes.TickStyle.Crossing, Title = "X Value" });
@@ -447,70 +334,11 @@ namespace YAT.Model
 				foreach (var series in OxyModel.Series)
 					((OxyPlot.Series.ScatterSeries)series).MarkerType = OxyPlot.MarkerType.None;
 			}
-	#endif
 		}
-
-	#if USE_SCOTT_PLOT
-
-		/// <summary></summary>
-		protected virtual void AddItemToYOnly(AutoActionPlotItem pi)
-		{
-			if (YValues == null)
-			{
-				YValues = new List<Tuple<string, List<double>>>(pi.YValues.Length); // Preset the required capacity to improve memory management.
-			}
-
-			AddItemToY(pi);
-		}
-
-		/// <summary></summary>
-		protected virtual void AddItemToXAndY(AutoActionPlotItem pi)
-		{
-			if ((XValues == null) || (YValues == null))
-			{
-				XValues = new Tuple<string, List<double>>(pi.XValue.Item1, new List<double>(1024)); // Add a new empty list.
-				YValues = new List<Tuple<string, List<double>>>(pi.YValues.Length); // Preset the required capacity to improve memory management.
-			}
-
-			XValues.Item2.Add(pi.XValue.Item2);
-
-			AddItemToY(pi);
-		}
-
-		/// <summary></summary>
-		protected virtual void AddItemToY(AutoActionPlotItem pi)
-		{
-			for (int i = YValues.Count; i < pi.YValues.Length; i++)
-			{
-				string label = pi.YValues[i].Item1;
-
-				List<double> values;
-				if ((i == 0) || (YValues[0].Item2.Count == 0))
-					values = new List<double>(1024); // Add a new empty list.
-				else
-					values = new List<double>(new double[YValues[0].Item2.Count]); // Add a new list filled with default values.
-
-				YValues.Add(new Tuple<string, List<double>>(label, values));
-			}
-
-			for (int i = 0; i < YValues.Count; i++)
-			{
-				if (i < pi.YValues.Length)
-					YValues[i].Item2.Add(pi.YValues[i].Item2);
-				else
-					YValues[i].Item2.Add(0); // Fill with default value.
-			}
-		}
-
-	#endif
 
 		/// <summary></summary>
 		protected virtual void AddItemToHistogram(AutoActionPlotItem pi, Color color, Orientation orientation)
 		{
-	#if USE_SCOTT_PLOT
-			XLabel = "Bins";
-			YLabel = "Counts";
-	#elif USE_OXY_PLOT
 			if (OxyModel.Axes.Count == 0)
 			{
 				if (orientation == Orientation.Horizontal)
@@ -536,14 +364,13 @@ namespace YAT.Model
 					OxyModel.Series.Add(new OxyPlot.Series.BarSeries { Title = pi.YValues[0].Item1, FillColor = OxyPlotEx.ConvertTo(color) });
 				}
 			}
-	#endif
+
 			if (Histogram == null)
 				Histogram = new HistogramDouble(256);
 
 			foreach (var tuple in pi.YValues)
 				Histogram.Add(tuple.Item2);
 
-	#if USE_OXY_PLOT
 			// While directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html,
 			// this seems an overkill for the histogram, as it would have to notify about added as well as inserted bins and... Too complicated, simply recreate:
 
@@ -566,10 +393,8 @@ namespace YAT.Model
 				items.Clear();
 				items.AddRange(Histogram.Counts.Select(x => new OxyPlot.Series.BarItem(x, i++)));
 			}
-	#endif
 		}
 
-	#if USE_OXY_PLOT
 		/// <remarks>
 		/// This method partly replicates <see cref="OxyPlot.Axes.Axis.FormatValueOverride(double)"/>
 		/// because it is not available on an <see cref="OxyPlot.Axes.CategoryAxis"/>.
@@ -579,24 +404,12 @@ namespace YAT.Model
 			string format = string.Concat("{0:", axis.ActualStringFormat ?? axis.StringFormat ?? string.Empty, "}");
 			return (string.Format(actualCulture, format, value));
 		}
-	#endif
 
-	#if USE_SCOTT_PLOT
-		/// <summary></summary>
-		protected virtual void IndicateUpdate()
-		{
-			unchecked // Loop-around is OK.
-			{
-				UpdateCounter++;
-			}
-		}
-	#elif USE_OXY_PLOT
 		/// <summary></summary>
 		protected virtual void Invalidate(bool updateData)
 		{
 			OxyModel.InvalidatePlot(updateData);
 		}
-	#endif
 
 		#endregion
 	}
@@ -606,7 +419,6 @@ namespace YAT.Model
 	// Extension Methods
 	//==============================================================================================
 
-	#if USE_OXY_PLOT
 	/// <summary></summary>
 	public static class OxyPlotEx
 	{
@@ -617,7 +429,7 @@ namespace YAT.Model
 		}
 
 	}
-	#endif
+
 	#endregion
 }
 

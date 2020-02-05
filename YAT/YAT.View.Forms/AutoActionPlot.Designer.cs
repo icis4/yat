@@ -33,11 +33,9 @@
 			this.button_Close = new System.Windows.Forms.Button();
 			this.button_Clear = new System.Windows.Forms.Button();
 			this.checkBox_ShowLegend = new System.Windows.Forms.CheckBox();
-			this.timer_Update = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_Deactivate = new System.Windows.Forms.Button();
 			this.label_UpdateSuspended = new System.Windows.Forms.Label();
-			this.scottPlot = new ScottPlot.FormsPlot();
 			this.plotView = new OxyPlot.WindowsForms.PlotView();
 			this.button_ResetAxes = new System.Windows.Forms.Button();
 			this.contextMenuStrip_Plot = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -85,12 +83,6 @@
 			this.checkBox_ShowLegend.UseVisualStyleBackColor = true;
 			this.checkBox_ShowLegend.CheckedChanged += new System.EventHandler(this.checkBox_ShowLegend_CheckedChanged);
 			// 
-			// timer_Update
-			// 
-			this.timer_Update.Enabled = true;
-			this.timer_Update.Interval = 73;
-			this.timer_Update.Tick += new System.EventHandler(this.timer_Update_Tick);
-			// 
 			// button_Deactivate
 			// 
 			this.button_Deactivate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -117,19 +109,6 @@
     " zoom in/out)";
 			this.label_UpdateSuspended.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.label_UpdateSuspended.Visible = false;
-			// 
-			// scottPlot
-			// 
-			this.scottPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.scottPlot.Location = new System.Drawing.Point(12, 12);
-			this.scottPlot.Name = "scottPlot";
-			this.scottPlot.Size = new System.Drawing.Size(860, 381);
-			this.scottPlot.TabIndex = 0;
-			this.scottPlot.MouseEntered += new System.EventHandler(this.scottPlot_MouseEntered);
-			this.scottPlot.MouseLeft += new System.EventHandler(this.scottPlot_MouseLeft);
-			this.scottPlot.MouseMoved += new System.EventHandler(this.scottPlot_MouseMoved);
 			// 
 			// plotView
 			// 
@@ -228,7 +207,6 @@
 			this.Controls.Add(this.label_UpdateSuspended);
 			this.Controls.Add(this.checkBox_ShowLegend);
 			this.Controls.Add(this.button_Clear);
-			this.Controls.Add(this.scottPlot);
 			this.Controls.Add(this.button_Close);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(480, 240);
@@ -250,10 +228,8 @@
 		#endregion
 
 		private System.Windows.Forms.Button button_Close;
-		private ScottPlot.FormsPlot scottPlot;
 		private System.Windows.Forms.Button button_Clear;
 		private System.Windows.Forms.CheckBox checkBox_ShowLegend;
-		private System.Windows.Forms.Timer timer_Update;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Label label_UpdateSuspended;
 		private System.Windows.Forms.Button button_ResetAxes;
