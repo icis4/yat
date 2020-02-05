@@ -125,7 +125,6 @@ namespace YAT.View.Forms
 
 		private Model.Terminal terminal; // = null;
 
-	////private AutoAction lastAction; // = [None]; \remind (2020-01-17 / MKY / FR#391)
 	#if USE_SCOTT_PLOT
 		private int lastUpdateCount; // = 0;
 		private bool updateIsSuspended; // = false;
@@ -143,11 +142,6 @@ namespace YAT.View.Forms
 		[Category("Property Changed")]
 		[Description("Event raised when the PlotAreaBackColor property is changed.")]
 		public event EventHandler PlotAreaBackColorChanged;
-
-	/////// <summary></summary>
-	////[Category("Action")]
-	////[Description("Event raised when the AutoAction is requested to be changed.")]
-	////public event EventHandler<EventArgs<AutoAction>> ChangeAutoAction; \remind (2020-01-17 / MKY / FR#391) has been prepared but is yet deactivated for reasons described in FR#391.
 
 		/// <summary></summary>
 		[Category("Action")]
@@ -208,13 +202,6 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-			////comboBox_PlotAction.Items.AddRange(AutoActionEx.GetLineScatterHistrogramPlotItems());
-			////
-			////var yatModel = this.terminal.AutoActionPlotModel; \remind (2020-01-17 / MKY / FR#391)
-			////var action = (AutoActionEx)yatModel.Action;
-			////ComboBoxHelper.Select(comboBox_PlotAction, action, action);
-			////comboBox_PlotAction.Enabled = action.IsLineScatterHistogramPlot;
-
 				checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
 			}
 			finally
@@ -440,16 +427,6 @@ namespace YAT.View.Forms
 			}
 		}
 	#endif
-
-	////private void comboBox_PlotAction_SelectedIndexChanged(object sender, EventArgs e)
-	////{
-	////	if (this.isSettingControls) \remind (2020-01-17 / MKY / FR#391)
-	////		return;
-	////
-	////	var action = (comboBox_PlotAction.SelectedItem as AutoActionEx);
-	////	if (action != null)
-	////		OnChangeAutoAction(new EventArgs<AutoAction>(action));
-	////}
 
 		private void button_ResetAxes_Click(object sender, EventArgs e)
 		{
@@ -945,21 +922,6 @@ namespace YAT.View.Forms
 				var doUpdate = ((this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
 			////var doUpdate = ((this.lastAction != yatModel.Action) || (this.lastUpdateCount != yatModel.UpdateCounter) || force); // Only update when needed.
 
-			////if (this.lastAction != yatModel.Action) \remind (2020-01-17 / MKY / FR#391)
-			////{
-			////	this.isSettingControls.Enter();
-			////	try
-			////	{
-			////		var action = (AutoActionEx)yatModel.Action;
-			////		ComboBoxHelper.Select(comboBox_PlotAction, action, action);
-			////		comboBox_PlotAction.Enabled = action.IsLineScatterHistogramPlot;
-			////	}
-			////	finally
-			////	{
-			////		this.isSettingControls.Leave();
-			////	}
-			////}
-
 				if (doUpdate)
 				{
 					button_ResetAxis.Enabled = false; // AxisAuto() will be called further below.
@@ -993,7 +955,6 @@ namespace YAT.View.Forms
 
 					scottPlot.Render();
 
-				////this.lastAction = yatModel.Action; \remind (2020-01-17 / MKY / FR#391)
 					this.lastUpdateCount = yatModel.UpdateCounter;
 
 					var endTicks = Stopwatch.GetTimestamp();
@@ -1210,12 +1171,6 @@ namespace YAT.View.Forms
 		{
 			EventHelper.RaiseSync(PlotAreaBackColorChanged, this, e);
 		}
-
-	/////// <summary></summary>
-	////protected virtual void OnChangeAutoAction(EventArgs<AutoAction> e)
-	////{
-	////	EventHelper.RaiseSync(ChangeAutoAction, this, e); \remind (2020-01-17 / MKY / FR#391)
-	////}
 
 		/// <summary></summary>
 		protected virtual void OnDeactivateAutoAction(EventArgs e)

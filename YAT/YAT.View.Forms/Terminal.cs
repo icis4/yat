@@ -8151,7 +8151,6 @@ namespace YAT.View.Forms
 
 				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
 				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
-			////this.autoActionPlotForm.ChangeAutoAction += AutoActionPlotForm_ChangeAutoAction; \remind (2020-01-17 / MKY / FR#391)
 				this.autoActionPlotForm.DeactivateAutoAction += AutoActionPlotForm_DeactivateAutoAction;
 				this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
 				this.autoActionPlotForm.Show(this);
@@ -8194,11 +8193,6 @@ namespace YAT.View.Forms
 
 			return (sb.ToString());
 		}
-
-	////private void AutoActionPlotForm_ChangeAutoAction(object sender, EventArgs<AutoAction> e)
-	////{
-	////	ActivateAutoActionAction(e.Value); \remind (2020-01-17 / MKY / FR#391)
-	////}
 
 		private void AutoActionPlotForm_DeactivateAutoAction(object sender, EventArgs e)
 		{
