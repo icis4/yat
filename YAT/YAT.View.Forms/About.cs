@@ -233,158 +233,171 @@ namespace YAT.View.Forms
 			linkLabel_TerminalEmulator.Links.Add(linkStart, textLink.Length, "https://www.vandyke.com/products/securecrt/");
 			linkLabel_TerminalEmulator.Text += textAfter;
 
-			// Environment:
-			linkLabel_Environment.Text = ApplicationEx.CommonName + " is developed with..." + Environment.NewLine;
-
-			textBefore = "...Microsoft ";
-			textLink   =              "Visual Studio Community";
-			textAfter  =                                     "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.visualstudio.com/vs/community/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
-
-			textBefore = "...";
-			textLink   =    "AnkhSVN";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://ankhsvn.open.collab.net/");
-			textBefore =           " and ";
-			textLink   =                "TortoiseSVN";
-			textAfter  =                           "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://tortoisesvn.net/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
-
-			textBefore = "...";
-			textLink   =    "GhostDoc";
-			textAfter  =            "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://submain.com/products/ghostdoc.aspx");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
-
-			textBefore = "...";
-			textLink   =    "NUnit";
-			textAfter  =         "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.nunit.org/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			// Based on:
+			linkLabel_BasedOn.Text = ApplicationEx.CommonName + " is based on..." + Environment.NewLine;
 
 			textBefore = "...System.IO.Ports serial COM port extension by Matthias Kläy..." + Environment.NewLine +
 
 			             "...System.Net.Sockets socket extension ";
 			textLink   =                                        "ALAZ";
 			textAfter  =                                            " by Andre Luis Azevedo...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.codeproject.com/Articles/14155/An-Asynchronous-Socket-Server-and-Client");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://www.codeproject.com/Articles/14155/An-Asynchronous-Socket-Server-and-Client");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
 
 			textBefore = "...USB Ser/HID library by Matthias Kläy based on ";
 			textLink   =                                                  "GenericHid";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://janaxelson.com/hidpage.htm");
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://janaxelson.com/hidpage.htm");
 			textBefore =                                                            "/";
 			textLink   =                                                             "UsbLibrary";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
 			textBefore =                                                                       "/";
 			textLink   =                                                                        "UsbHid";
 			textAfter  =                                                                              "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.florian-leitner.de/index.php/category/usb-hid-library/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.florian-leitner.de/index.php/category/usb-hid-library/");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
 
 		#if !(WITH_SCRIPTING)
 			textBefore = "...YAT icons based on ";
 			textLink   =                       "Nuvola";
 			textAfter  =                             " by David Vignoni";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://icon-king.com/?p=15");
-			linkLabel_Environment.Text += textAfter;
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://icon-king.com/?p=15");
+			linkLabel_BasedOn.Text += textAfter;
 			textBefore =                                               " edited in ";
 			textLink   =                                                          "GIMP";
 			textAfter  =                                                              "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.gimp.org/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.gimp.org/");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
 		#endif // WITH_SCRIPTING
 
 			textBefore = "...";
 			textLink   =    "FatCow";
 			textAfter  =          " icons...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.fatcow.com/free-icons/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.fatcow.com/free-icons/");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
 
 			textBefore = "...terminal font ";
 			textLink   =                  "DejaVu";
 			textAfter  =                        "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://dejavu-fonts.github.io/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://dejavu-fonts.github.io/");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
 
 			textBefore = "...";
 			textLink   =    "RTF writer";
 			textAfter  =              " by Matt Buckley and Thomson Reuters...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/netrtfwriter/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/netrtfwriter/");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
+
+			textBefore = "...";
+			textLink   =    "OxyPlot";
+			textAfter  =           " by Øystein Bjørke.";
+			linkLabel_BasedOn.Text += textBefore;
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://oxyplot.github.io/");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
+
+			// Developed with:
+			linkLabel_DevelopedWith.Text = ApplicationEx.CommonName + " is developed with..." + Environment.NewLine;
+
+			textBefore = "...Microsoft ";
+			textLink   =              "Visual Studio Community";
+			textAfter  =                                     "...";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://www.visualstudio.com/vs/community/");
+			linkLabel_DevelopedWith.Text += textAfter;
+			linkLabel_DevelopedWith.Text += Environment.NewLine;
+
+			textBefore = "...";
+			textLink   =    "AnkhSVN";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://ankhsvn.open.collab.net/");
+			textBefore =           " and ";
+			textLink   =                "TortoiseSVN";
+			textAfter  =                           "...";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://tortoisesvn.net/");
+			linkLabel_DevelopedWith.Text += textAfter;
+			linkLabel_DevelopedWith.Text += Environment.NewLine;
+
+			textBefore = "...";
+			textLink   =    "GhostDoc";
+			textAfter  =            "...";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "http://submain.com/products/ghostdoc.aspx");
+			linkLabel_DevelopedWith.Text += textAfter;
+			linkLabel_DevelopedWith.Text += Environment.NewLine;
+
+			textBefore = "...";
+			textLink   =    "NUnit";
+			textAfter  =         "...";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "http://www.nunit.org/");
+			linkLabel_DevelopedWith.Text += textAfter;
+			linkLabel_DevelopedWith.Text += Environment.NewLine;
 
 		#if !(WITH_SCRIPTING)
 			textBefore = "...hosting and change management on ";
 			textLink   =                                     "SourceForge.net";
 			textAfter  =                                                    "...";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/");
-			linkLabel_Environment.Text += textAfter;
-			linkLabel_Environment.Text += Environment.NewLine;
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/");
+			linkLabel_DevelopedWith.Text += textAfter;
+			linkLabel_DevelopedWith.Text += Environment.NewLine;
 
 			textBefore = "...documentation, test and release management using ";
 			textLink   =                                                     "LibreOffice";
 			textAfter  =                                                                ".";
-			linkLabel_Environment.Text += textBefore;
-			linkStart = linkLabel_Environment.Text.Length;
-			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.documentfoundation.org/");
-			linkLabel_Environment.Text += textAfter;
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://www.documentfoundation.org/");
+			linkLabel_DevelopedWith.Text += textAfter;
 		#endif // WITH_SCRIPTING
 
 			// Home:
