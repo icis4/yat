@@ -135,16 +135,6 @@ namespace YAT.View.Forms
 
 			PlotAreaBackColor = this.terminal.SettingsRoot.Format.BackColor;
 
-			this.isSettingControls.Enter();
-			try
-			{
-				checkBox_ShowLegend.Checked = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-
 			ApplyShowLegend();
 
 			ApplyWindowSettingsAccordingToStartupState();
@@ -183,6 +173,18 @@ namespace YAT.View.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, as the 'Paint' event of this form and its
+		/// child controls has been raised before this 'Shown' event.
+		/// </remarks>
 		private void AutoActionPlot_Shown(object sender, EventArgs e)
 		{
 			this.isStartingUp = false;
@@ -667,10 +669,22 @@ namespace YAT.View.Forms
 
 		private void ApplyShowLegend()
 		{
+			var showLegend = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+
+			this.isSettingControls.Enter();
+			try
+			{
+				checkBox_ShowLegend.Checked = showLegend;
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+
 			var model = plotView.Model;
 			if (model != null)
 			{
-				model.IsLegendVisible = ApplicationSettings.RoamingUserSettings.Plot.ShowLegend;
+				model.IsLegendVisible = showLegend;
 
 				model.LegendPlacement   = OxyPlot.LegendPlacement.Outside;
 				model.LegendPosition    = OxyPlot.LegendPosition.BottomLeft;
