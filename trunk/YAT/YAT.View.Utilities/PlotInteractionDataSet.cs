@@ -88,30 +88,30 @@ namespace YAT.View.Utilities
 
 			var content = new string[][]
 			{
-				new string [] { "",                  "",           "",   "",             ""                        },
-				new string [] { "Tracker",           "Series",     "→",  "",             "Mouse Hover"             }, // Ignore 'Touch', user likely finds out.
-				new string [] { "      Interpolate", "",           "→",  "[Ctrl] +",     "Left Mouse Button"       },
-				new string [] { "      Points Only", "",           "→",  "[Shift] +",    "Left Mouse Button"       },
-				new string [] { "",                  "",           "",   "",             ""                        },
-				new string [] { "Pan",               "Plot, Axes", "→",  "",             "Left Mouse Button"       }, // Ignore 'Touch', user likely finds out.
-				new string [] { "      Coarse",      "",           "→",  "",             "[Left/Right/Up/Down]"    },
-				new string [] { "      Fine",        "",           "→",  "[Ctrl] +",     "[Left/Right/Up/Down]"    },
-				new string [] { "",                  "",           "",   "",             ""                        },
-				new string [] { "Zoom",              "Plot, Axes", "→",  "",             "Mouse Wheel"             }, // Ignore 'Touch', user likely finds out.
-				new string [] { "",                  "",           "→",  "",             "[+/-], [Page Up/Down]"   },
-				new string [] { "      Fine",        "",           "→",  "[Ctrl] +",     "Mouse Wheel"             },
-				new string [] { "",                  "",           "→",  "",             "Mouse Button 4/5"        },
-				new string [] { "",                  "",           "→",  "[Ctrl] +",     "[+/-], [Page Up/Down]"   },
-				new string [] { "      Rectangle",   "",           "→",  "",             "Middle Mouse Button"     },
-				new string [] { "",                  "",           "→",  "[Ctrl] +",     "Right Mouse Button"      },
-				new string [] { "",                  "",           "→",  "[Ctrl+Alt] +", "Left Mouse Button"       },
-				new string [] { "",                  "",           "",   "",             ""                        },
-				new string [] { "Reset",             "Plot, Axes", "→",  "",             "2 x Middle Mouse Button" },
-				new string [] { "",                  "",           "→",  "[Ctrl] +",     "2 x Right Mouse Button"  },
-				new string [] { "",                  "",           "→",  "[Ctrl+Alt] +", "2 x Left Mouse Button"   },
-				new string [] { "",                  "",           "→",  "",             "[A], [Home]"             }, // Ignore 'Shake', unlikely to be used.
-				new string [] { "",                  "",           "",   "",             ""                        },
-				new string [] { "Menu",              "",           "→",  "",             "Right Mouse Button"      }
+				new string [] { "",                "",           "",   "",             ""                        },
+				new string [] { "Track",           "Series",     "→",  "",             "Mouse Hover"             }, // Ignore 'Touch', user likely finds out.
+				new string [] { "      Line",      "",           "→",  "[Ctrl] +",     "Left Mouse Button"       },
+				new string [] { "      Points",    "",           "→",  "[Shift] +",    "Left Mouse Button"       },
+				new string [] { "",                "",           "",   "",             ""                        },
+				new string [] { "Pan",             "Plot, Axes", "→",  "",             "Left Mouse Button"       }, // Ignore 'Touch', user likely finds out.
+				new string [] { "      Coarse",    "",           "→",  "",             "[Left/Right/Up/Down]"    },
+				new string [] { "      Fine",      "",           "→",  "[Ctrl] +",     "[Left/Right/Up/Down]"    },
+				new string [] { "",                "",           "",   "",             ""                        },
+				new string [] { "Zoom",            "Plot, Axes", "→",  "",             "Mouse Wheel"             }, // Ignore 'Touch', user likely finds out.
+				new string [] { "",                "",           "→",  "",             "[+/-], [Page Up/Down]"   },
+				new string [] { "      Fine",      "",           "→",  "",             "Mouse Button 4/5"        },
+				new string [] { "",                "",           "→",  "[Ctrl] +",     "Mouse Wheel"             },
+				new string [] { "",                "",           "→",  "[Ctrl] +",     "[+/-], [Page Up/Down]"   },
+				new string [] { "      Rectangle", "",           "→",  "",             "Middle Mouse Button"     },
+				new string [] { "",                "",           "→",  "[Ctrl] +",     "Right Mouse Button"      },
+				new string [] { "",                "",           "→",  "[Ctrl+Alt] +", "Left Mouse Button"       },
+				new string [] { "",                "",           "",   "",             ""                        },
+				new string [] { "Reset",           "Plot, Axes", "→",  "",             "2 x Middle Mouse Button" },
+				new string [] { "",                "",           "→",  "[Ctrl] +",     "2 x Right Mouse Button"  },
+				new string [] { "",                "",           "→",  "[Ctrl+Alt] +", "2 x Left Mouse Button"   },
+				new string [] { "",                "",           "→",  "",             "[A], [Home]"             }, // Ignore 'Shake', unlikely to be used.
+				new string [] { "",                "",           "",   "",             ""                        },
+				new string [] { "Menu",            "",           "→",  "",             "Right Mouse Button"      }
 			};
 
 			for (int i = 0; i < content.Length; i++)
@@ -169,30 +169,30 @@ namespace YAT.View.Utilities
 
 			var content = new string[][]
 			{
-				new string [] { "",             "",                        "",   "",                    ""           },
-				new string [] { "",             "Mouse Hover",             "→",  "Tracker",             "Series"     },
-				new string [] { "",             "",                        "",   "",                    ""           },
-				new string [] { "",             "Left Mouse Button",       "→",  "Pan",                 "Plot, Axes" },
-				new string [] { "[Shift] +",    "Left Mouse Button",       "→",  "Tracker Points Only", "Series"     },
-				new string [] { "[Ctrl] +",     "Left Mouse Button",       "→",  "Tracker Interpolate", "Series"     },
-				new string [] { "[Ctrl+Alt] +", "Left Mouse Button",       "→",  "Zoom Rectangle",      "Plot, Axes" },
-				new string [] { "[Ctrl+Alt] +", "2 x Left Mouse Button",   "→",  "Reset",               "Plot, Axes" },
-				new string [] { "",             "Middle Mouse Button",     "→",  "Zoom Rectangle",      "Plot, Axes" },
-				new string [] { "",             "2 x Middle Mouse Button", "→",  "Reset",               "Plot, Axes" },
-				new string [] { "",             "Right Mouse Button",      "→",  "Menu",                ""           },
-				new string [] { "[Ctrl] +",     "Right Mouse Button",      "→",  "Zoom Rectangle",      "Plot, Axes" },
-				new string [] { "[Ctrl] +",     "2 x Right Mouse Button",  "→",  "Reset",               "Plot, Axes" },
-				new string [] { "",             "Mouse Button 4/5",        "→",  "Zoom Fine",           "Plot, Axes" },
-				new string [] { "",             "",                        "",   "",                    "Plot, Axes" },
-				new string [] { "",             "Mouse Wheel",             "→",  "Zoom Coarse",         "Plot, Axes" },
-				new string [] { "[Ctrl] +",     "Mouse Wheel",             "→",  "Zoom Fine",           "Plot, Axes" },
-				new string [] { "",             "",                        "",   "",                    ""           },
-				new string [] { "",             "[Left/Right/Up/Down]",    "→",  "Pan Coarse",          "Plot, Axes" },
-				new string [] { "[Ctrl] +",     "[Left/Right/Up/Down]",    "→",  "Pan Fine",            "Plot, Axes" },
-				new string [] { "",             "[+/-], [Page Up/Down]",   "→",  "Zoom Coarse",         "Plot, Axes" },
-				new string [] { "[Ctrl] +",     "[+/-], [Page Up/Down]",   "→",  "Zoom Fine",           "Plot, Axes" },
-				new string [] { "",             "",                        "",   "",                    ""           },
-				new string [] { "",             "[A], [Home]",             "→",  "Reset",               "Plot, Axes" },
+				new string [] { "",             "",                        "",   "",               ""           },
+				new string [] { "",             "Mouse Hover",             "→",  "Track Snap",     "Series"     },
+				new string [] { "",             "",                        "",   "",               ""           },
+				new string [] { "",             "Left Mouse Button",       "→",  "Pan",            "Plot, Axes" },
+				new string [] { "[Shift] +",    "Left Mouse Button",       "→",  "Track Points",   "Series"     },
+				new string [] { "[Ctrl] +",     "Left Mouse Button",       "→",  "Track Line",     "Series"     },
+				new string [] { "[Ctrl+Alt] +", "Left Mouse Button",       "→",  "Zoom Rectangle", "Plot, Axes" },
+				new string [] { "[Ctrl+Alt] +", "2 x Left Mouse Button",   "→",  "Reset",          "Plot, Axes" },
+				new string [] { "",             "Middle Mouse Button",     "→",  "Zoom Rectangle", "Plot, Axes" },
+				new string [] { "",             "2 x Middle Mouse Button", "→",  "Reset",          "Plot, Axes" },
+				new string [] { "",             "Right Mouse Button",      "→",  "Menu",           ""           },
+				new string [] { "[Ctrl] +",     "Right Mouse Button",      "→",  "Zoom Rectangle", "Plot, Axes" },
+				new string [] { "[Ctrl] +",     "2 x Right Mouse Button",  "→",  "Reset",          "Plot, Axes" },
+				new string [] { "",             "Mouse Button 4/5",        "→",  "Zoom Fine",      "Plot, Axes" },
+				new string [] { "",             "",                        "",   "",               "Plot, Axes" },
+				new string [] { "",             "Mouse Wheel",             "→",  "Zoom Coarse",    "Plot, Axes" },
+				new string [] { "[Ctrl] +",     "Mouse Wheel",             "→",  "Zoom Fine",      "Plot, Axes" },
+				new string [] { "",             "",                        "",   "",               ""           },
+				new string [] { "",             "[Left/Right/Up/Down]",    "→",  "Pan Coarse",     "Plot, Axes" },
+				new string [] { "[Ctrl] +",     "[Left/Right/Up/Down]",    "→",  "Pan Fine",       "Plot, Axes" },
+				new string [] { "",             "[+/-], [Page Up/Down]",   "→",  "Zoom Coarse",    "Plot, Axes" },
+				new string [] { "[Ctrl] +",     "[+/-], [Page Up/Down]",   "→",  "Zoom Fine",      "Plot, Axes" },
+				new string [] { "",             "",                        "",   "",               ""           },
+				new string [] { "",             "[A], [Home]",             "→",  "Reset",          "Plot, Axes" },
 				// Ignore 'Touch', user likely finds out.
 				// Ignore 'Shake', unlikely to be used.
 			};
