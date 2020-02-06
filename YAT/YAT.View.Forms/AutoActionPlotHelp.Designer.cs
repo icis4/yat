@@ -205,6 +205,7 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByFunction_Function.HeaderText = "Function";
 			this.dataGridViewTextBoxColumn_ByFunction_Function.Name = "dataGridViewTextBoxColumn_ByFunction_Function";
 			this.dataGridViewTextBoxColumn_ByFunction_Function.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByFunction_Function.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			this.dataGridViewTextBoxColumn_ByFunction_Function.Width = 79;
 			// 
 			// dataGridViewTextBoxColumn_ByFunction_Scope
@@ -213,7 +214,8 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByFunction_Scope.HeaderText = "Scope";
 			this.dataGridViewTextBoxColumn_ByFunction_Scope.Name = "dataGridViewTextBoxColumn_ByFunction_Scope";
 			this.dataGridViewTextBoxColumn_ByFunction_Scope.ReadOnly = true;
-			this.dataGridViewTextBoxColumn_ByFunction_Scope.Width = 21;
+			this.dataGridViewTextBoxColumn_ByFunction_Scope.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dataGridViewTextBoxColumn_ByFunction_Scope.Width = 55;
 			// 
 			// dataGridViewTextBoxColumn_ByFunction_Arrow
 			// 
@@ -221,6 +223,7 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByFunction_Arrow.HeaderText = "";
 			this.dataGridViewTextBoxColumn_ByFunction_Arrow.Name = "dataGridViewTextBoxColumn_ByFunction_Arrow";
 			this.dataGridViewTextBoxColumn_ByFunction_Arrow.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByFunction_Arrow.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			this.dataGridViewTextBoxColumn_ByFunction_Arrow.Width = 21;
 			// 
 			// dataGridViewTextBoxColumn_ByFunction_Modifier
@@ -231,7 +234,8 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByFunction_Modifier.HeaderText = "Modifier";
 			this.dataGridViewTextBoxColumn_ByFunction_Modifier.Name = "dataGridViewTextBoxColumn_ByFunction_Modifier";
 			this.dataGridViewTextBoxColumn_ByFunction_Modifier.ReadOnly = true;
-			this.dataGridViewTextBoxColumn_ByFunction_Modifier.Width = 21;
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.Width = 56;
 			// 
 			// dataGridViewTextBoxColumn_ByFunction_Input
 			// 
@@ -239,7 +243,8 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByFunction_Input.HeaderText = "Input";
 			this.dataGridViewTextBoxColumn_ByFunction_Input.Name = "dataGridViewTextBoxColumn_ByFunction_Input";
 			this.dataGridViewTextBoxColumn_ByFunction_Input.ReadOnly = true;
-			this.dataGridViewTextBoxColumn_ByFunction_Input.Width = 21;
+			this.dataGridViewTextBoxColumn_ByFunction_Input.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dataGridViewTextBoxColumn_ByFunction_Input.Width = 125;
 			// 
 			// dataGridViewTextBoxColumn_ByInput_Modifier
 			// 
@@ -249,6 +254,7 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByInput_Modifier.HeaderText = "Modifier";
 			this.dataGridViewTextBoxColumn_ByInput_Modifier.Name = "dataGridViewTextBoxColumn_ByInput_Modifier";
 			this.dataGridViewTextBoxColumn_ByInput_Modifier.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByInput_Modifier.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			this.dataGridViewTextBoxColumn_ByInput_Modifier.Width = 56;
 			// 
 			// dataGridViewTextBoxColumn_ByInput_Input
@@ -257,7 +263,8 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByInput_Input.HeaderText = "Input";
 			this.dataGridViewTextBoxColumn_ByInput_Input.Name = "dataGridViewTextBoxColumn_ByInput_Input";
 			this.dataGridViewTextBoxColumn_ByInput_Input.ReadOnly = true;
-			this.dataGridViewTextBoxColumn_ByInput_Input.Width = 21;
+			this.dataGridViewTextBoxColumn_ByInput_Input.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dataGridViewTextBoxColumn_ByInput_Input.Width = 125;
 			// 
 			// dataGridViewTextBoxColumn_ByInput_Arrow
 			// 
@@ -265,6 +272,7 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByInput_Arrow.HeaderText = "";
 			this.dataGridViewTextBoxColumn_ByInput_Arrow.Name = "dataGridViewTextBoxColumn_ByInput_Arrow";
 			this.dataGridViewTextBoxColumn_ByInput_Arrow.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByInput_Arrow.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			this.dataGridViewTextBoxColumn_ByInput_Arrow.Width = 21;
 			// 
 			// dataGridViewTextBoxColumn_ByInput_Function
@@ -273,7 +281,8 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByInput_Function.HeaderText = "Function";
 			this.dataGridViewTextBoxColumn_ByInput_Function.Name = "dataGridViewTextBoxColumn_ByInput_Function";
 			this.dataGridViewTextBoxColumn_ByInput_Function.ReadOnly = true;
-			this.dataGridViewTextBoxColumn_ByInput_Function.Width = 21;
+			this.dataGridViewTextBoxColumn_ByInput_Function.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dataGridViewTextBoxColumn_ByInput_Function.Width = 101;
 			// 
 			// dataGridViewTextBoxColumn_ByInput_Scope
 			// 
@@ -281,7 +290,8 @@ namespace YAT.View.Forms
 			this.dataGridViewTextBoxColumn_ByInput_Scope.HeaderText = "Scope";
 			this.dataGridViewTextBoxColumn_ByInput_Scope.Name = "dataGridViewTextBoxColumn_ByInput_Scope";
 			this.dataGridViewTextBoxColumn_ByInput_Scope.ReadOnly = true;
-			this.dataGridViewTextBoxColumn_ByInput_Scope.Width = 21;
+			this.dataGridViewTextBoxColumn_ByInput_Scope.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dataGridViewTextBoxColumn_ByInput_Scope.Width = 55;
 			// 
 			// AutoActionPlotHelp
 			// 
