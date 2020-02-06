@@ -29,7 +29,7 @@ using System.Globalization;
 namespace YAT.View.Utilities
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Justification = "No need to serialize/deserialize, not marking this class eliminates the requirement to implement the ISerialzable constructors.")]
+	[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Justification = "No need to serialize/deserialize, not marking this class eliminates the requirement to implement the ISerializable constructors.")]
 	public class AsciiTableDataSet : DataSet
 	{
 		private const string Dec         = "Dec";
@@ -41,8 +41,14 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		public AsciiTableDataSet()
 		{
+			AddAsciiTable();
+		}
+
+		/// <summary></summary>
+		private void AddAsciiTable()
+		{
 			DataTable t = new DataTable("ASCII");
-			t.Locale = CultureInfo.CurrentUICulture;
+			t.Locale = CultureInfo.CurrentCulture;
 
 			DataColumn c;
 			DataRow r;

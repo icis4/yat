@@ -41,11 +41,20 @@ namespace YAT.View.Forms
 			// Form:
 			Text = ApplicationEx.CommonName + " Help"; // Fixed to "YAT".
 
-			// Contents:
+			// Content:
 			textBox_ParserFormat.Text        = Domain.Parser.Parser.FormatHelp;
 			textBox_ParserKeyword.Text       = Domain.Parser.Parser.KeywordHelp;
 			textBox_TextTerminalKeyword.Text = Domain.TextTerminal.KeywordHelp;
 			textBox_SerialPort.Text          = Domain.Terminal.SerialPortHelp;
+		}
+
+		private void Help_Load(object sender, EventArgs e)
+		{
+			// By default, the first cell is selected when the data grid is shown. The trick by Ravi
+			// at http://manfred-ramoser.blogspot.com/2008/01/hide-selection-in-datagridview.html
+			// deselects properly. Attention, must be here, not in the constructor!
+
+			dataGridView_AsciiTable.ClearSelection();
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)

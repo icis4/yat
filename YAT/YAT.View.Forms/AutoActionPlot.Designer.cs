@@ -35,9 +35,7 @@
 			this.checkBox_ShowLegend = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_Deactivate = new System.Windows.Forms.Button();
-			this.label_UpdateSuspended = new System.Windows.Forms.Label();
 			this.plotView = new OxyPlot.WindowsForms.PlotView();
-			this.button_ResetAxes = new System.Windows.Forms.Button();
 			this.contextMenuStrip_Plot = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_Plot_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_Plot_SaveToFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,13 +44,14 @@
 			this.toolStripMenuItem_Plot_ShowLegend = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_Plot_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_Plot_Help = new System.Windows.Forms.ToolStripMenuItem();
+			this.button_ResetAxes = new System.Windows.Forms.Button();
 			this.contextMenuStrip_Plot.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Close
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Close.Location = new System.Drawing.Point(775, 400);
+			this.button_Close.Location = new System.Drawing.Point(767, 400);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 6;
@@ -63,7 +62,7 @@
 			// button_Clear
 			// 
 			this.button_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Clear.Location = new System.Drawing.Point(661, 400);
+			this.button_Clear.Location = new System.Drawing.Point(653, 400);
 			this.button_Clear.Name = "button_Clear";
 			this.button_Clear.Size = new System.Drawing.Size(75, 23);
 			this.button_Clear.TabIndex = 4;
@@ -87,28 +86,13 @@
 			// 
 			this.button_Deactivate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Deactivate.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_comments_delete_16x16;
-			this.button_Deactivate.Location = new System.Drawing.Point(742, 400);
+			this.button_Deactivate.Location = new System.Drawing.Point(734, 400);
 			this.button_Deactivate.Name = "button_Deactivate";
 			this.button_Deactivate.Size = new System.Drawing.Size(27, 23);
 			this.button_Deactivate.TabIndex = 5;
 			this.toolTip.SetToolTip(this.button_Deactivate, "Deactivate");
 			this.button_Deactivate.UseVisualStyleBackColor = true;
 			this.button_Deactivate.Click += new System.EventHandler(this.button_Deactivate_Click);
-			// 
-			// label_UpdateSuspended
-			// 
-			this.label_UpdateSuspended.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_UpdateSuspended.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_UpdateSuspended.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_UpdateSuspended.Location = new System.Drawing.Point(221, 396);
-			this.label_UpdateSuspended.Name = "label_UpdateSuspended";
-			this.label_UpdateSuspended.Size = new System.Drawing.Size(434, 31);
-			this.label_UpdateSuspended.TabIndex = 3;
-			this.label_UpdateSuspended.Text = "Update is suspended while mouse is on plot\r\n(required for mouse interaction, e.g." +
-    " zoom in/out)";
-			this.label_UpdateSuspended.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.label_UpdateSuspended.Visible = false;
 			// 
 			// plotView
 			// 
@@ -125,17 +109,6 @@
 			this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
 			this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
 			this.plotView.Paint += new System.Windows.Forms.PaintEventHandler(this.plotView_Paint);
-			// 
-			// button_ResetAxes
-			// 
-			this.button_ResetAxes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_ResetAxes.Location = new System.Drawing.Point(42, 400);
-			this.button_ResetAxes.Name = "button_ResetAxes";
-			this.button_ResetAxes.Size = new System.Drawing.Size(75, 23);
-			this.button_ResetAxes.TabIndex = 1;
-			this.button_ResetAxes.Text = "&Reset Axes";
-			this.button_ResetAxes.UseVisualStyleBackColor = true;
-			this.button_ResetAxes.Click += new System.EventHandler(this.button_ResetAxes_Click);
 			// 
 			// contextMenuStrip_Plot
 			// 
@@ -193,8 +166,19 @@
 			// 
 			this.toolStripMenuItem_Plot_Help.Name = "toolStripMenuItem_Plot_Help";
 			this.toolStripMenuItem_Plot_Help.Size = new System.Drawing.Size(171, 22);
-			this.toolStripMenuItem_Plot_Help.Text = "Help...";
+			this.toolStripMenuItem_Plot_Help.Text = "Interaction Help...";
 			this.toolStripMenuItem_Plot_Help.Click += new System.EventHandler(this.toolStripMenuItem_Plot_Help_Click);
+			// 
+			// button_ResetAxes
+			// 
+			this.button_ResetAxes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_ResetAxes.Location = new System.Drawing.Point(42, 400);
+			this.button_ResetAxes.Name = "button_ResetAxes";
+			this.button_ResetAxes.Size = new System.Drawing.Size(75, 23);
+			this.button_ResetAxes.TabIndex = 1;
+			this.button_ResetAxes.Text = "&Reset Axes";
+			this.button_ResetAxes.UseVisualStyleBackColor = true;
+			this.button_ResetAxes.Click += new System.EventHandler(this.button_ResetAxes_Click);
 			// 
 			// AutoActionPlot
 			// 
@@ -204,7 +188,6 @@
 			this.Controls.Add(this.plotView);
 			this.Controls.Add(this.button_Deactivate);
 			this.Controls.Add(this.button_ResetAxes);
-			this.Controls.Add(this.label_UpdateSuspended);
 			this.Controls.Add(this.checkBox_ShowLegend);
 			this.Controls.Add(this.button_Clear);
 			this.Controls.Add(this.button_Close);
@@ -231,7 +214,6 @@
 		private System.Windows.Forms.Button button_Clear;
 		private System.Windows.Forms.CheckBox checkBox_ShowLegend;
 		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.Label label_UpdateSuspended;
 		private System.Windows.Forms.Button button_ResetAxes;
 		private System.Windows.Forms.Button button_Deactivate;
 		private OxyPlot.WindowsForms.PlotView plotView;
