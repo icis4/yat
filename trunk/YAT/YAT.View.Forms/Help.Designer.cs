@@ -33,6 +33,7 @@ namespace YAT.View.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Help));
 			this.groupBox_ParserHelp = new System.Windows.Forms.GroupBox();
 			this.splitContainer_Help = new System.Windows.Forms.SplitContainer();
@@ -47,19 +48,22 @@ namespace YAT.View.Forms
 			this.label_Explanations = new System.Windows.Forms.Label();
 			this.groupBox_AsciiTable = new System.Windows.Forms.GroupBox();
 			this.dataGridView_AsciiTable = new System.Windows.Forms.DataGridView();
-			this.decDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.hexDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.mnemonicDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.escDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_Dec = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_Hex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_Mnemonic = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_Esc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.bindingSource_AsciiTable = new System.Windows.Forms.BindingSource(this.components);
 			this.groupBox_ParserHelp.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Help)).BeginInit();
 			this.splitContainer_Help.Panel1.SuspendLayout();
 			this.splitContainer_Help.Panel2.SuspendLayout();
 			this.splitContainer_Help.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Upper)).BeginInit();
 			this.splitContainer_Upper.Panel1.SuspendLayout();
 			this.splitContainer_Upper.Panel2.SuspendLayout();
 			this.splitContainer_Upper.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Lower)).BeginInit();
 			this.splitContainer_Lower.Panel1.SuspendLayout();
 			this.splitContainer_Lower.Panel2.SuspendLayout();
 			this.splitContainer_Lower.SuspendLayout();
@@ -70,9 +74,8 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_ParserHelp
 			// 
-			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_ParserHelp.Controls.Add(this.splitContainer_Help);
 			this.groupBox_ParserHelp.Controls.Add(this.label_ParserExplanations);
 			this.groupBox_ParserHelp.Location = new System.Drawing.Point(12, 12);
@@ -80,7 +83,7 @@ namespace YAT.View.Forms
 			this.groupBox_ParserHelp.Size = new System.Drawing.Size(455, 490);
 			this.groupBox_ParserHelp.TabIndex = 1;
 			this.groupBox_ParserHelp.TabStop = false;
-			this.groupBox_ParserHelp.Text = "Contents";
+			this.groupBox_ParserHelp.Text = "Format";
 			// 
 			// splitContainer_Help
 			// 
@@ -200,14 +203,14 @@ namespace YAT.View.Forms
 			this.label_ParserExplanations.Name = "label_ParserExplanations";
 			this.label_ParserExplanations.Size = new System.Drawing.Size(443, 32);
 			this.label_ParserExplanations.TabIndex = 0;
-			this.label_ParserExplanations.Text = "Escape sequences and ASCII mnemonics allow sending data other than strings. This " +
-    "applies to commands as well as to files.";
+			this.label_ParserExplanations.Text = "Escape sequences and ASCII mnemonics allow sending data other than strings.\r\nThis" +
+    " applies to text as well as to files; both configurable.";
 			// 
 			// button_Close
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(699, 516);
+			this.button_Close.Location = new System.Drawing.Point(693, 516);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -222,19 +225,21 @@ namespace YAT.View.Forms
 			this.label_Explanations.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Explanations.Location = new System.Drawing.Point(18, 521);
 			this.label_Explanations.Name = "label_Explanations";
-			this.label_Explanations.Size = new System.Drawing.Size(596, 13);
+			this.label_Explanations.Size = new System.Drawing.Size(538, 13);
 			this.label_Explanations.TabIndex = 3;
-			this.label_Explanations.Text = "Since this is non-commercial software, there simply hasn\'t been resources to add " +
-    "a comprehensive help yet. Maybe one day...";
+			this.label_Explanations.Text = "This is non-commercial software; there hasn\'t been resources to add a comprehensi" +
+    "ve help yet; maybe one day...";
 			// 
 			// groupBox_AsciiTable
 			// 
-			this.groupBox_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.groupBox_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_AsciiTable.Controls.Add(this.dataGridView_AsciiTable);
 			this.groupBox_AsciiTable.Location = new System.Drawing.Point(473, 12);
 			this.groupBox_AsciiTable.Name = "groupBox_AsciiTable";
-			this.groupBox_AsciiTable.Size = new System.Drawing.Size(301, 490);
+			this.groupBox_AsciiTable.Padding = new System.Windows.Forms.Padding(6);
+			this.groupBox_AsciiTable.Size = new System.Drawing.Size(295, 490);
 			this.groupBox_AsciiTable.TabIndex = 2;
 			this.groupBox_AsciiTable.TabStop = false;
 			this.groupBox_AsciiTable.Text = "ASCII Table";
@@ -245,68 +250,75 @@ namespace YAT.View.Forms
 			this.dataGridView_AsciiTable.AllowUserToDeleteRows = false;
 			this.dataGridView_AsciiTable.AllowUserToResizeColumns = false;
 			this.dataGridView_AsciiTable.AllowUserToResizeRows = false;
-			this.dataGridView_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGridView_AsciiTable.AutoGenerateColumns = false;
 			this.dataGridView_AsciiTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
 			this.dataGridView_AsciiTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-			this.dataGridView_AsciiTable.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+			this.dataGridView_AsciiTable.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+			this.dataGridView_AsciiTable.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridView_AsciiTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.dataGridView_AsciiTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView_AsciiTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.decDataGridViewTextBoxColumn,
-            this.hexDataGridViewTextBoxColumn,
-            this.mnemonicDataGridViewTextBoxColumn,
-            this.escDataGridViewTextBoxColumn,
-            this.descriptionDataGridViewTextBoxColumn});
+            this.dataGridViewTextBoxColumn_Dec,
+            this.dataGridViewTextBoxColumn_Hex,
+            this.dataGridViewTextBoxColumn_Mnemonic,
+            this.dataGridViewTextBoxColumn_Esc,
+            this.dataGridViewTextBoxColumn_Description});
 			this.dataGridView_AsciiTable.DataSource = this.bindingSource_AsciiTable;
+			this.dataGridView_AsciiTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataGridView_AsciiTable.Location = new System.Drawing.Point(6, 19);
 			this.dataGridView_AsciiTable.Name = "dataGridView_AsciiTable";
 			this.dataGridView_AsciiTable.ReadOnly = true;
 			this.dataGridView_AsciiTable.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 			this.dataGridView_AsciiTable.RowHeadersVisible = false;
-			this.dataGridView_AsciiTable.Size = new System.Drawing.Size(289, 465);
+			this.dataGridView_AsciiTable.Size = new System.Drawing.Size(283, 465);
 			this.dataGridView_AsciiTable.TabIndex = 0;
 			// 
-			// decDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_Dec
 			// 
-			this.decDataGridViewTextBoxColumn.DataPropertyName = "Dec";
-			this.decDataGridViewTextBoxColumn.HeaderText = "D";
-			this.decDataGridViewTextBoxColumn.Name = "decDataGridViewTextBoxColumn";
-			this.decDataGridViewTextBoxColumn.ReadOnly = true;
-			this.decDataGridViewTextBoxColumn.Width = 26;
+			this.dataGridViewTextBoxColumn_Dec.DataPropertyName = "Dec";
+			this.dataGridViewTextBoxColumn_Dec.HeaderText = "D";
+			this.dataGridViewTextBoxColumn_Dec.Name = "dataGridViewTextBoxColumn_Dec";
+			this.dataGridViewTextBoxColumn_Dec.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_Dec.Width = 25;
 			// 
-			// hexDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_Hex
 			// 
-			this.hexDataGridViewTextBoxColumn.DataPropertyName = "Hex";
-			this.hexDataGridViewTextBoxColumn.HeaderText = "H";
-			this.hexDataGridViewTextBoxColumn.Name = "hexDataGridViewTextBoxColumn";
-			this.hexDataGridViewTextBoxColumn.ReadOnly = true;
-			this.hexDataGridViewTextBoxColumn.Width = 22;
+			this.dataGridViewTextBoxColumn_Hex.DataPropertyName = "Hex";
+			this.dataGridViewTextBoxColumn_Hex.HeaderText = "H";
+			this.dataGridViewTextBoxColumn_Hex.Name = "dataGridViewTextBoxColumn_Hex";
+			this.dataGridViewTextBoxColumn_Hex.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_Hex.Width = 21;
 			// 
-			// mnemonicDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_Mnemonic
 			// 
-			this.mnemonicDataGridViewTextBoxColumn.DataPropertyName = "Mnemonic";
-			this.mnemonicDataGridViewTextBoxColumn.HeaderText = "Mnemonic";
-			this.mnemonicDataGridViewTextBoxColumn.Name = "mnemonicDataGridViewTextBoxColumn";
-			this.mnemonicDataGridViewTextBoxColumn.ReadOnly = true;
-			this.mnemonicDataGridViewTextBoxColumn.Width = 61;
+			this.dataGridViewTextBoxColumn_Mnemonic.DataPropertyName = "Mnemonic";
+			this.dataGridViewTextBoxColumn_Mnemonic.HeaderText = "Mnemonic";
+			this.dataGridViewTextBoxColumn_Mnemonic.Name = "dataGridViewTextBoxColumn_Mnemonic";
+			this.dataGridViewTextBoxColumn_Mnemonic.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_Mnemonic.Width = 60;
 			// 
-			// escDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_Esc
 			// 
-			this.escDataGridViewTextBoxColumn.DataPropertyName = "Esc";
-			this.escDataGridViewTextBoxColumn.HeaderText = "Esc";
-			this.escDataGridViewTextBoxColumn.Name = "escDataGridViewTextBoxColumn";
-			this.escDataGridViewTextBoxColumn.ReadOnly = true;
-			this.escDataGridViewTextBoxColumn.Width = 32;
+			this.dataGridViewTextBoxColumn_Esc.DataPropertyName = "Esc";
+			this.dataGridViewTextBoxColumn_Esc.HeaderText = "Esc";
+			this.dataGridViewTextBoxColumn_Esc.Name = "dataGridViewTextBoxColumn_Esc";
+			this.dataGridViewTextBoxColumn_Esc.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_Esc.Width = 31;
 			// 
-			// descriptionDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_Description
 			// 
-			this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
-			this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
-			this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-			this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
-			this.descriptionDataGridViewTextBoxColumn.Width = 128;
+			this.dataGridViewTextBoxColumn_Description.DataPropertyName = "Description";
+			this.dataGridViewTextBoxColumn_Description.HeaderText = "Description";
+			this.dataGridViewTextBoxColumn_Description.Name = "dataGridViewTextBoxColumn_Description";
+			this.dataGridViewTextBoxColumn_Description.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_Description.Width = 127;
 			// 
 			// bindingSource_AsciiTable
 			// 
@@ -320,7 +332,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(786, 551);
+			this.ClientSize = new System.Drawing.Size(780, 551);
 			this.Controls.Add(this.groupBox_AsciiTable);
 			this.Controls.Add(this.label_Explanations);
 			this.Controls.Add(this.button_Close);
@@ -332,19 +344,23 @@ namespace YAT.View.Forms
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "YAT Help";
+			this.Load += new System.EventHandler(this.Help_Load);
 			this.groupBox_ParserHelp.ResumeLayout(false);
 			this.splitContainer_Help.Panel1.ResumeLayout(false);
 			this.splitContainer_Help.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Help)).EndInit();
 			this.splitContainer_Help.ResumeLayout(false);
 			this.splitContainer_Upper.Panel1.ResumeLayout(false);
 			this.splitContainer_Upper.Panel1.PerformLayout();
 			this.splitContainer_Upper.Panel2.ResumeLayout(false);
 			this.splitContainer_Upper.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Upper)).EndInit();
 			this.splitContainer_Upper.ResumeLayout(false);
 			this.splitContainer_Lower.Panel1.ResumeLayout(false);
 			this.splitContainer_Lower.Panel1.PerformLayout();
 			this.splitContainer_Lower.Panel2.ResumeLayout(false);
 			this.splitContainer_Lower.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_Lower)).EndInit();
 			this.splitContainer_Lower.ResumeLayout(false);
 			this.groupBox_AsciiTable.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_AsciiTable)).EndInit();
@@ -365,14 +381,14 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.GroupBox groupBox_AsciiTable;
 		private System.Windows.Forms.DataGridView dataGridView_AsciiTable;
 		private System.Windows.Forms.BindingSource bindingSource_AsciiTable;
-		private System.Windows.Forms.DataGridViewTextBoxColumn decDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn hexDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn mnemonicDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn escDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
 		private System.Windows.Forms.TextBox textBox_SerialPort;
 		private System.Windows.Forms.SplitContainer splitContainer_Help;
 		private System.Windows.Forms.SplitContainer splitContainer_Upper;
 		private System.Windows.Forms.SplitContainer splitContainer_Lower;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_Dec;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_Hex;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_Mnemonic;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_Esc;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_Description;
 	}
 }

@@ -303,9 +303,9 @@
 			this.linkLabel_Thanks.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Thanks.Location = new System.Drawing.Point(12, 540);
 			this.linkLabel_Thanks.Name = "linkLabel_Thanks";
-			this.linkLabel_Thanks.Size = new System.Drawing.Size(429, 13);
+			this.linkLabel_Thanks.Size = new System.Drawing.Size(454, 13);
 			this.linkLabel_Thanks.TabIndex = 15;
-			this.linkLabel_Thanks.Text = "A big \"Thanks!\" to everybody who helped YAT to become what it is today!";
+			this.linkLabel_Thanks.Text = "And a big \"Thanks!\" to everybody who helped YAT to become what it is today!";
 			// 
 			// linkLabel_TerminalEmulator
 			// 

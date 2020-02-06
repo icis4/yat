@@ -33,346 +33,304 @@ namespace YAT.View.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Help));
-			this.groupBox_ParserHelp = new System.Windows.Forms.GroupBox();
-			this.splitContainer_Help = new System.Windows.Forms.SplitContainer();
-			this.splitContainer_Upper = new System.Windows.Forms.SplitContainer();
-			this.textBox_ParserFormat = new System.Windows.Forms.TextBox();
-			this.textBox_ParserKeyword = new System.Windows.Forms.TextBox();
-			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
-			this.textBox_TextTerminalKeyword = new System.Windows.Forms.TextBox();
-			this.textBox_SerialPort = new System.Windows.Forms.TextBox();
-			this.label_ParserExplanations = new System.Windows.Forms.Label();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoActionPlotHelp));
+			this.groupBox_ByFunction = new System.Windows.Forms.GroupBox();
+			this.dataGridView_ByFunction = new System.Windows.Forms.DataGridView();
+			this.bindingSource_ByFunction = new System.Windows.Forms.BindingSource(this.components);
 			this.button_Close = new System.Windows.Forms.Button();
-			this.label_Explanations = new System.Windows.Forms.Label();
-			this.groupBox_AsciiTable = new System.Windows.Forms.GroupBox();
-			this.dataGridView_AsciiTable = new System.Windows.Forms.DataGridView();
-			this.decDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.hexDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.mnemonicDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.escDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.bindingSource_AsciiTable = new System.Windows.Forms.BindingSource(this.components);
-			this.groupBox_ParserHelp.SuspendLayout();
-			this.splitContainer_Help.Panel1.SuspendLayout();
-			this.splitContainer_Help.Panel2.SuspendLayout();
-			this.splitContainer_Help.SuspendLayout();
-			this.splitContainer_Upper.Panel1.SuspendLayout();
-			this.splitContainer_Upper.Panel2.SuspendLayout();
-			this.splitContainer_Upper.SuspendLayout();
-			this.splitContainer_Lower.Panel1.SuspendLayout();
-			this.splitContainer_Lower.Panel2.SuspendLayout();
-			this.splitContainer_Lower.SuspendLayout();
-			this.groupBox_AsciiTable.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_AsciiTable)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource_AsciiTable)).BeginInit();
+			this.groupBox_ByInput = new System.Windows.Forms.GroupBox();
+			this.dataGridView_ByInput = new System.Windows.Forms.DataGridView();
+			this.bindingSource_ByInput = new System.Windows.Forms.BindingSource(this.components);
+			this.linkLabel_Remark = new System.Windows.Forms.LinkLabel();
+			this.dataGridViewTextBoxColumn_ByFunction_Function = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByFunction_Scope = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByFunction_Arrow = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByFunction_Input = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByInput_Modifier = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByInput_Input = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByInput_Arrow = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByInput_Function = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn_ByInput_Scope = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.groupBox_ByFunction.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView_ByFunction)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.bindingSource_ByFunction)).BeginInit();
+			this.groupBox_ByInput.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView_ByInput)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.bindingSource_ByInput)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// groupBox_ParserHelp
+			// groupBox_ByFunction
 			// 
-			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_ParserHelp.Controls.Add(this.splitContainer_Help);
-			this.groupBox_ParserHelp.Controls.Add(this.label_ParserExplanations);
-			this.groupBox_ParserHelp.Location = new System.Drawing.Point(12, 12);
-			this.groupBox_ParserHelp.Name = "groupBox_ParserHelp";
-			this.groupBox_ParserHelp.Size = new System.Drawing.Size(455, 490);
-			this.groupBox_ParserHelp.TabIndex = 1;
-			this.groupBox_ParserHelp.TabStop = false;
-			this.groupBox_ParserHelp.Text = "Contents";
+			this.groupBox_ByFunction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_ByFunction.Controls.Add(this.dataGridView_ByFunction);
+			this.groupBox_ByFunction.Location = new System.Drawing.Point(12, 12);
+			this.groupBox_ByFunction.Name = "groupBox_ByFunction";
+			this.groupBox_ByFunction.Padding = new System.Windows.Forms.Padding(6);
+			this.groupBox_ByFunction.Size = new System.Drawing.Size(351, 505);
+			this.groupBox_ByFunction.TabIndex = 2;
+			this.groupBox_ByFunction.TabStop = false;
+			this.groupBox_ByFunction.Text = "By &Function";
 			// 
-			// splitContainer_Help
+			// dataGridView_ByFunction
 			// 
-			this.splitContainer_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.splitContainer_Help.Location = new System.Drawing.Point(6, 51);
-			this.splitContainer_Help.Name = "splitContainer_Help";
-			this.splitContainer_Help.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.dataGridView_ByFunction.AllowUserToAddRows = false;
+			this.dataGridView_ByFunction.AllowUserToDeleteRows = false;
+			this.dataGridView_ByFunction.AllowUserToResizeColumns = false;
+			this.dataGridView_ByFunction.AllowUserToResizeRows = false;
+			this.dataGridView_ByFunction.AutoGenerateColumns = false;
+			this.dataGridView_ByFunction.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+			this.dataGridView_ByFunction.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+			this.dataGridView_ByFunction.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
+			this.dataGridView_ByFunction.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridView_ByFunction.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			this.dataGridView_ByFunction.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView_ByFunction.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn_ByFunction_Function,
+            this.dataGridViewTextBoxColumn_ByFunction_Scope,
+            this.dataGridViewTextBoxColumn_ByFunction_Arrow,
+            this.dataGridViewTextBoxColumn_ByFunction_Modifier,
+            this.dataGridViewTextBoxColumn_ByFunction_Input});
+			this.dataGridView_ByFunction.DataSource = this.bindingSource_ByFunction;
+			this.dataGridView_ByFunction.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGridView_ByFunction.Location = new System.Drawing.Point(6, 19);
+			this.dataGridView_ByFunction.Name = "dataGridView_ByFunction";
+			this.dataGridView_ByFunction.ReadOnly = true;
+			this.dataGridView_ByFunction.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+			this.dataGridView_ByFunction.RowHeadersVisible = false;
+			this.dataGridView_ByFunction.Size = new System.Drawing.Size(339, 480);
+			this.dataGridView_ByFunction.TabIndex = 1;
 			// 
-			// splitContainer_Help.Panel1
+			// bindingSource_ByFunction
 			// 
-			this.splitContainer_Help.Panel1.Controls.Add(this.splitContainer_Upper);
-			this.splitContainer_Help.Panel1MinSize = 100;
-			// 
-			// splitContainer_Help.Panel2
-			// 
-			this.splitContainer_Help.Panel2.Controls.Add(this.splitContainer_Lower);
-			this.splitContainer_Help.Panel2MinSize = 100;
-			this.splitContainer_Help.Size = new System.Drawing.Size(443, 433);
-			this.splitContainer_Help.SplitterDistance = 265;
-			this.splitContainer_Help.TabIndex = 5;
-			// 
-			// splitContainer_Upper
-			// 
-			this.splitContainer_Upper.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_Upper.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_Upper.Name = "splitContainer_Upper";
-			this.splitContainer_Upper.Orientation = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// splitContainer_Upper.Panel1
-			// 
-			this.splitContainer_Upper.Panel1.Controls.Add(this.textBox_ParserFormat);
-			this.splitContainer_Upper.Panel1MinSize = 48;
-			// 
-			// splitContainer_Upper.Panel2
-			// 
-			this.splitContainer_Upper.Panel2.Controls.Add(this.textBox_ParserKeyword);
-			this.splitContainer_Upper.Panel2MinSize = 48;
-			this.splitContainer_Upper.Size = new System.Drawing.Size(443, 265);
-			this.splitContainer_Upper.SplitterDistance = 181;
-			this.splitContainer_Upper.TabIndex = 0;
-			// 
-			// textBox_ParserFormat
-			// 
-			this.textBox_ParserFormat.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBox_ParserFormat.Location = new System.Drawing.Point(0, 0);
-			this.textBox_ParserFormat.Multiline = true;
-			this.textBox_ParserFormat.Name = "textBox_ParserFormat";
-			this.textBox_ParserFormat.ReadOnly = true;
-			this.textBox_ParserFormat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_ParserFormat.Size = new System.Drawing.Size(443, 181);
-			this.textBox_ParserFormat.TabIndex = 0;
-			this.textBox_ParserFormat.Text = "<PARSER FORMAT HELP>";
-			// 
-			// textBox_ParserKeyword
-			// 
-			this.textBox_ParserKeyword.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBox_ParserKeyword.Location = new System.Drawing.Point(0, 0);
-			this.textBox_ParserKeyword.Multiline = true;
-			this.textBox_ParserKeyword.Name = "textBox_ParserKeyword";
-			this.textBox_ParserKeyword.ReadOnly = true;
-			this.textBox_ParserKeyword.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_ParserKeyword.Size = new System.Drawing.Size(443, 80);
-			this.textBox_ParserKeyword.TabIndex = 0;
-			this.textBox_ParserKeyword.Text = "<PARSER KEYWORD HELP>";
-			// 
-			// splitContainer_Lower
-			// 
-			this.splitContainer_Lower.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_Lower.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_Lower.Name = "splitContainer_Lower";
-			this.splitContainer_Lower.Orientation = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// splitContainer_Lower.Panel1
-			// 
-			this.splitContainer_Lower.Panel1.Controls.Add(this.textBox_TextTerminalKeyword);
-			this.splitContainer_Lower.Panel1MinSize = 48;
-			// 
-			// splitContainer_Lower.Panel2
-			// 
-			this.splitContainer_Lower.Panel2.Controls.Add(this.textBox_SerialPort);
-			this.splitContainer_Lower.Panel2MinSize = 48;
-			this.splitContainer_Lower.Size = new System.Drawing.Size(443, 164);
-			this.splitContainer_Lower.SplitterDistance = 80;
-			this.splitContainer_Lower.TabIndex = 0;
-			// 
-			// textBox_TextTerminalKeyword
-			// 
-			this.textBox_TextTerminalKeyword.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBox_TextTerminalKeyword.Location = new System.Drawing.Point(0, 0);
-			this.textBox_TextTerminalKeyword.Multiline = true;
-			this.textBox_TextTerminalKeyword.Name = "textBox_TextTerminalKeyword";
-			this.textBox_TextTerminalKeyword.ReadOnly = true;
-			this.textBox_TextTerminalKeyword.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_TextTerminalKeyword.Size = new System.Drawing.Size(443, 80);
-			this.textBox_TextTerminalKeyword.TabIndex = 0;
-			this.textBox_TextTerminalKeyword.Text = "<TEXT TERMINAL KEYWORD HELP>";
-			// 
-			// textBox_SerialPort
-			// 
-			this.textBox_SerialPort.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBox_SerialPort.Location = new System.Drawing.Point(0, 0);
-			this.textBox_SerialPort.Multiline = true;
-			this.textBox_SerialPort.Name = "textBox_SerialPort";
-			this.textBox_SerialPort.ReadOnly = true;
-			this.textBox_SerialPort.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_SerialPort.Size = new System.Drawing.Size(443, 80);
-			this.textBox_SerialPort.TabIndex = 0;
-			this.textBox_SerialPort.Text = "<SERIAL COM PORT HELP>";
-			// 
-			// label_ParserExplanations
-			// 
-			this.label_ParserExplanations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ParserExplanations.Location = new System.Drawing.Point(6, 16);
-			this.label_ParserExplanations.Name = "label_ParserExplanations";
-			this.label_ParserExplanations.Size = new System.Drawing.Size(443, 32);
-			this.label_ParserExplanations.TabIndex = 0;
-			this.label_ParserExplanations.Text = "Escape sequences and ASCII mnemonics allow sending data other than strings. This " +
-    "applies to commands as well as to files.";
+			this.bindingSource_ByFunction.DataMember = "ByFunction";
+			this.bindingSource_ByFunction.DataSource = typeof(YAT.View.Utilities.PlotInteractionDataSet);
+			this.bindingSource_ByFunction.Position = 0;
 			// 
 			// button_Close
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(699, 516);
+			this.button_Close.Location = new System.Drawing.Point(668, 531);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
 			this.button_Close.Text = "Close";
 			this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
 			// 
-			// label_Explanations
+			// groupBox_ByInput
 			// 
-			this.label_Explanations.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label_Explanations.AutoSize = true;
-			this.label_Explanations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_Explanations.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Explanations.Location = new System.Drawing.Point(18, 521);
-			this.label_Explanations.Name = "label_Explanations";
-			this.label_Explanations.Size = new System.Drawing.Size(596, 13);
-			this.label_Explanations.TabIndex = 3;
-			this.label_Explanations.Text = "Since this is non-commercial software, there simply hasn\'t been resources to add " +
-    "a comprehensive help yet. Maybe one day...";
-			// 
-			// groupBox_AsciiTable
-			// 
-			this.groupBox_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.groupBox_ByInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_AsciiTable.Controls.Add(this.dataGridView_AsciiTable);
-			this.groupBox_AsciiTable.Location = new System.Drawing.Point(473, 12);
-			this.groupBox_AsciiTable.Name = "groupBox_AsciiTable";
-			this.groupBox_AsciiTable.Size = new System.Drawing.Size(301, 490);
-			this.groupBox_AsciiTable.TabIndex = 2;
-			this.groupBox_AsciiTable.TabStop = false;
-			this.groupBox_AsciiTable.Text = "ASCII Table";
+			this.groupBox_ByInput.Controls.Add(this.dataGridView_ByInput);
+			this.groupBox_ByInput.Location = new System.Drawing.Point(376, 12);
+			this.groupBox_ByInput.Name = "groupBox_ByInput";
+			this.groupBox_ByInput.Padding = new System.Windows.Forms.Padding(6);
+			this.groupBox_ByInput.Size = new System.Drawing.Size(373, 505);
+			this.groupBox_ByInput.TabIndex = 3;
+			this.groupBox_ByInput.TabStop = false;
+			this.groupBox_ByInput.Text = "By &Input";
 			// 
-			// dataGridView_AsciiTable
+			// dataGridView_ByInput
 			// 
-			this.dataGridView_AsciiTable.AllowUserToAddRows = false;
-			this.dataGridView_AsciiTable.AllowUserToDeleteRows = false;
-			this.dataGridView_AsciiTable.AllowUserToResizeColumns = false;
-			this.dataGridView_AsciiTable.AllowUserToResizeRows = false;
-			this.dataGridView_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.dataGridView_AsciiTable.AutoGenerateColumns = false;
-			this.dataGridView_AsciiTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
-			this.dataGridView_AsciiTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-			this.dataGridView_AsciiTable.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-			this.dataGridView_AsciiTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridView_AsciiTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.decDataGridViewTextBoxColumn,
-            this.hexDataGridViewTextBoxColumn,
-            this.mnemonicDataGridViewTextBoxColumn,
-            this.escDataGridViewTextBoxColumn,
-            this.descriptionDataGridViewTextBoxColumn});
-			this.dataGridView_AsciiTable.DataSource = this.bindingSource_AsciiTable;
-			this.dataGridView_AsciiTable.Location = new System.Drawing.Point(6, 19);
-			this.dataGridView_AsciiTable.Name = "dataGridView_AsciiTable";
-			this.dataGridView_AsciiTable.ReadOnly = true;
-			this.dataGridView_AsciiTable.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-			this.dataGridView_AsciiTable.RowHeadersVisible = false;
-			this.dataGridView_AsciiTable.Size = new System.Drawing.Size(289, 465);
-			this.dataGridView_AsciiTable.TabIndex = 0;
+			this.dataGridView_ByInput.AllowUserToAddRows = false;
+			this.dataGridView_ByInput.AllowUserToDeleteRows = false;
+			this.dataGridView_ByInput.AllowUserToResizeColumns = false;
+			this.dataGridView_ByInput.AllowUserToResizeRows = false;
+			this.dataGridView_ByInput.AutoGenerateColumns = false;
+			this.dataGridView_ByInput.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+			this.dataGridView_ByInput.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+			this.dataGridView_ByInput.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
+			this.dataGridView_ByInput.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridView_ByInput.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			this.dataGridView_ByInput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView_ByInput.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn_ByInput_Modifier,
+            this.dataGridViewTextBoxColumn_ByInput_Input,
+            this.dataGridViewTextBoxColumn_ByInput_Arrow,
+            this.dataGridViewTextBoxColumn_ByInput_Function,
+            this.dataGridViewTextBoxColumn_ByInput_Scope});
+			this.dataGridView_ByInput.DataSource = this.bindingSource_ByInput;
+			this.dataGridView_ByInput.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGridView_ByInput.Location = new System.Drawing.Point(6, 19);
+			this.dataGridView_ByInput.Name = "dataGridView_ByInput";
+			this.dataGridView_ByInput.ReadOnly = true;
+			this.dataGridView_ByInput.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+			this.dataGridView_ByInput.RowHeadersVisible = false;
+			this.dataGridView_ByInput.Size = new System.Drawing.Size(361, 480);
+			this.dataGridView_ByInput.TabIndex = 0;
 			// 
-			// decDataGridViewTextBoxColumn
+			// bindingSource_ByInput
 			// 
-			this.decDataGridViewTextBoxColumn.DataPropertyName = "Dec";
-			this.decDataGridViewTextBoxColumn.HeaderText = "D";
-			this.decDataGridViewTextBoxColumn.Name = "decDataGridViewTextBoxColumn";
-			this.decDataGridViewTextBoxColumn.ReadOnly = true;
-			this.decDataGridViewTextBoxColumn.Width = 26;
+			this.bindingSource_ByInput.DataMember = "ByInput";
+			this.bindingSource_ByInput.DataSource = typeof(YAT.View.Utilities.PlotInteractionDataSet);
+			this.bindingSource_ByInput.Position = 0;
 			// 
-			// hexDataGridViewTextBoxColumn
+			// linkLabel_Remark
 			// 
-			this.hexDataGridViewTextBoxColumn.DataPropertyName = "Hex";
-			this.hexDataGridViewTextBoxColumn.HeaderText = "H";
-			this.hexDataGridViewTextBoxColumn.Name = "hexDataGridViewTextBoxColumn";
-			this.hexDataGridViewTextBoxColumn.ReadOnly = true;
-			this.hexDataGridViewTextBoxColumn.Width = 22;
+			this.linkLabel_Remark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.linkLabel_Remark.AutoSize = true;
+			this.linkLabel_Remark.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+			this.linkLabel_Remark.Location = new System.Drawing.Point(21, 536);
+			this.linkLabel_Remark.Name = "linkLabel_Remark";
+			this.linkLabel_Remark.Size = new System.Drawing.Size(540, 13);
+			this.linkLabel_Remark.TabIndex = 1;
+			this.linkLabel_Remark.Tag = "";
+			this.linkLabel_Remark.Text = "YAT uses OxyPlot default interactions, except for [Pan → Left Mouse Button] and [" +
+    "Menu → Right Mouse Button].";
+			this.linkLabel_Remark.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_Remark_LinkClicked);
 			// 
-			// mnemonicDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_ByFunction_Function
 			// 
-			this.mnemonicDataGridViewTextBoxColumn.DataPropertyName = "Mnemonic";
-			this.mnemonicDataGridViewTextBoxColumn.HeaderText = "Mnemonic";
-			this.mnemonicDataGridViewTextBoxColumn.Name = "mnemonicDataGridViewTextBoxColumn";
-			this.mnemonicDataGridViewTextBoxColumn.ReadOnly = true;
-			this.mnemonicDataGridViewTextBoxColumn.Width = 61;
+			this.dataGridViewTextBoxColumn_ByFunction_Function.DataPropertyName = "Function";
+			this.dataGridViewTextBoxColumn_ByFunction_Function.HeaderText = "Function";
+			this.dataGridViewTextBoxColumn_ByFunction_Function.Name = "dataGridViewTextBoxColumn_ByFunction_Function";
+			this.dataGridViewTextBoxColumn_ByFunction_Function.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByFunction_Function.Width = 79;
 			// 
-			// escDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_ByFunction_Scope
 			// 
-			this.escDataGridViewTextBoxColumn.DataPropertyName = "Esc";
-			this.escDataGridViewTextBoxColumn.HeaderText = "Esc";
-			this.escDataGridViewTextBoxColumn.Name = "escDataGridViewTextBoxColumn";
-			this.escDataGridViewTextBoxColumn.ReadOnly = true;
-			this.escDataGridViewTextBoxColumn.Width = 32;
+			this.dataGridViewTextBoxColumn_ByFunction_Scope.DataPropertyName = "Scope";
+			this.dataGridViewTextBoxColumn_ByFunction_Scope.HeaderText = "Scope";
+			this.dataGridViewTextBoxColumn_ByFunction_Scope.Name = "dataGridViewTextBoxColumn_ByFunction_Scope";
+			this.dataGridViewTextBoxColumn_ByFunction_Scope.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByFunction_Scope.Width = 21;
 			// 
-			// descriptionDataGridViewTextBoxColumn
+			// dataGridViewTextBoxColumn_ByFunction_Arrow
 			// 
-			this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
-			this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
-			this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-			this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
-			this.descriptionDataGridViewTextBoxColumn.Width = 128;
+			this.dataGridViewTextBoxColumn_ByFunction_Arrow.DataPropertyName = "Arrow";
+			this.dataGridViewTextBoxColumn_ByFunction_Arrow.HeaderText = "";
+			this.dataGridViewTextBoxColumn_ByFunction_Arrow.Name = "dataGridViewTextBoxColumn_ByFunction_Arrow";
+			this.dataGridViewTextBoxColumn_ByFunction_Arrow.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByFunction_Arrow.Width = 21;
 			// 
-			// bindingSource_AsciiTable
+			// dataGridViewTextBoxColumn_ByFunction_Modifier
 			// 
-			this.bindingSource_AsciiTable.DataMember = "ASCII";
-			this.bindingSource_AsciiTable.DataSource = typeof(YAT.View.Utilities.AsciiTableDataSet);
-			this.bindingSource_AsciiTable.Position = 0;
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.DataPropertyName = "Modifier";
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.DefaultCellStyle = dataGridViewCellStyle2;
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.HeaderText = "Modifier";
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.Name = "dataGridViewTextBoxColumn_ByFunction_Modifier";
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByFunction_Modifier.Width = 21;
 			// 
-			// Help
+			// dataGridViewTextBoxColumn_ByFunction_Input
+			// 
+			this.dataGridViewTextBoxColumn_ByFunction_Input.DataPropertyName = "Input";
+			this.dataGridViewTextBoxColumn_ByFunction_Input.HeaderText = "Input";
+			this.dataGridViewTextBoxColumn_ByFunction_Input.Name = "dataGridViewTextBoxColumn_ByFunction_Input";
+			this.dataGridViewTextBoxColumn_ByFunction_Input.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByFunction_Input.Width = 21;
+			// 
+			// dataGridViewTextBoxColumn_ByInput_Modifier
+			// 
+			this.dataGridViewTextBoxColumn_ByInput_Modifier.DataPropertyName = "Modifier";
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			this.dataGridViewTextBoxColumn_ByInput_Modifier.DefaultCellStyle = dataGridViewCellStyle4;
+			this.dataGridViewTextBoxColumn_ByInput_Modifier.HeaderText = "Modifier";
+			this.dataGridViewTextBoxColumn_ByInput_Modifier.Name = "dataGridViewTextBoxColumn_ByInput_Modifier";
+			this.dataGridViewTextBoxColumn_ByInput_Modifier.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByInput_Modifier.Width = 56;
+			// 
+			// dataGridViewTextBoxColumn_ByInput_Input
+			// 
+			this.dataGridViewTextBoxColumn_ByInput_Input.DataPropertyName = "Input";
+			this.dataGridViewTextBoxColumn_ByInput_Input.HeaderText = "Input";
+			this.dataGridViewTextBoxColumn_ByInput_Input.Name = "dataGridViewTextBoxColumn_ByInput_Input";
+			this.dataGridViewTextBoxColumn_ByInput_Input.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByInput_Input.Width = 21;
+			// 
+			// dataGridViewTextBoxColumn_ByInput_Arrow
+			// 
+			this.dataGridViewTextBoxColumn_ByInput_Arrow.DataPropertyName = "Arrow";
+			this.dataGridViewTextBoxColumn_ByInput_Arrow.HeaderText = "";
+			this.dataGridViewTextBoxColumn_ByInput_Arrow.Name = "dataGridViewTextBoxColumn_ByInput_Arrow";
+			this.dataGridViewTextBoxColumn_ByInput_Arrow.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByInput_Arrow.Width = 21;
+			// 
+			// dataGridViewTextBoxColumn_ByInput_Function
+			// 
+			this.dataGridViewTextBoxColumn_ByInput_Function.DataPropertyName = "Function";
+			this.dataGridViewTextBoxColumn_ByInput_Function.HeaderText = "Function";
+			this.dataGridViewTextBoxColumn_ByInput_Function.Name = "dataGridViewTextBoxColumn_ByInput_Function";
+			this.dataGridViewTextBoxColumn_ByInput_Function.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByInput_Function.Width = 21;
+			// 
+			// dataGridViewTextBoxColumn_ByInput_Scope
+			// 
+			this.dataGridViewTextBoxColumn_ByInput_Scope.DataPropertyName = "Scope";
+			this.dataGridViewTextBoxColumn_ByInput_Scope.HeaderText = "Scope";
+			this.dataGridViewTextBoxColumn_ByInput_Scope.Name = "dataGridViewTextBoxColumn_ByInput_Scope";
+			this.dataGridViewTextBoxColumn_ByInput_Scope.ReadOnly = true;
+			this.dataGridViewTextBoxColumn_ByInput_Scope.Width = 21;
+			// 
+			// AutoActionPlotHelp
 			// 
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(786, 551);
-			this.Controls.Add(this.groupBox_AsciiTable);
-			this.Controls.Add(this.label_Explanations);
+			this.ClientSize = new System.Drawing.Size(761, 566);
+			this.Controls.Add(this.linkLabel_Remark);
+			this.Controls.Add(this.groupBox_ByInput);
 			this.Controls.Add(this.button_Close);
-			this.Controls.Add(this.groupBox_ParserHelp);
+			this.Controls.Add(this.groupBox_ByFunction);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "Help";
-			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.Name = "AutoActionPlotHelp";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "YAT Help";
-			this.groupBox_ParserHelp.ResumeLayout(false);
-			this.splitContainer_Help.Panel1.ResumeLayout(false);
-			this.splitContainer_Help.Panel2.ResumeLayout(false);
-			this.splitContainer_Help.ResumeLayout(false);
-			this.splitContainer_Upper.Panel1.ResumeLayout(false);
-			this.splitContainer_Upper.Panel1.PerformLayout();
-			this.splitContainer_Upper.Panel2.ResumeLayout(false);
-			this.splitContainer_Upper.Panel2.PerformLayout();
-			this.splitContainer_Upper.ResumeLayout(false);
-			this.splitContainer_Lower.Panel1.ResumeLayout(false);
-			this.splitContainer_Lower.Panel1.PerformLayout();
-			this.splitContainer_Lower.Panel2.ResumeLayout(false);
-			this.splitContainer_Lower.Panel2.PerformLayout();
-			this.splitContainer_Lower.ResumeLayout(false);
-			this.groupBox_AsciiTable.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridView_AsciiTable)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.bindingSource_AsciiTable)).EndInit();
+			this.Text = "OxyPlot Interaction Help";
+			this.Load += new System.EventHandler(this.AutoActionPlotHelp_Load);
+			this.groupBox_ByFunction.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView_ByFunction)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.bindingSource_ByFunction)).EndInit();
+			this.groupBox_ByInput.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView_ByInput)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.bindingSource_ByInput)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 		#endregion
 
-		private System.Windows.Forms.GroupBox groupBox_ParserHelp;
+		private System.Windows.Forms.GroupBox groupBox_ByFunction;
 		private System.Windows.Forms.Button button_Close;
-		private System.Windows.Forms.Label label_Explanations;
-		private System.Windows.Forms.Label label_ParserExplanations;
-		private System.Windows.Forms.TextBox textBox_ParserFormat;
-		private System.Windows.Forms.TextBox textBox_TextTerminalKeyword;
-		private System.Windows.Forms.TextBox textBox_ParserKeyword;
-		private System.Windows.Forms.GroupBox groupBox_AsciiTable;
-		private System.Windows.Forms.DataGridView dataGridView_AsciiTable;
-		private System.Windows.Forms.BindingSource bindingSource_AsciiTable;
-		private System.Windows.Forms.DataGridViewTextBoxColumn decDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn hexDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn mnemonicDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn escDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
-		private System.Windows.Forms.TextBox textBox_SerialPort;
-		private System.Windows.Forms.SplitContainer splitContainer_Help;
-		private System.Windows.Forms.SplitContainer splitContainer_Upper;
-		private System.Windows.Forms.SplitContainer splitContainer_Lower;
+		private System.Windows.Forms.GroupBox groupBox_ByInput;
+		private System.Windows.Forms.DataGridView dataGridView_ByInput;
+		private System.Windows.Forms.BindingSource bindingSource_ByFunction;
+		private System.Windows.Forms.LinkLabel linkLabel_Remark;
+		private System.Windows.Forms.DataGridView dataGridView_ByFunction;
+		private System.Windows.Forms.BindingSource bindingSource_ByInput;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByFunction_Function;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByFunction_Scope;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByFunction_Arrow;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByFunction_Modifier;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByFunction_Input;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByInput_Modifier;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByInput_Input;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByInput_Arrow;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByInput_Function;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn_ByInput_Scope;
 	}
 }

@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.2.0 :: 2020-01-xx
+YAT 2.2.0 :: 2020-02-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -103,8 +103,10 @@ New:
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
+- Automatic actions and responses now list recent used trigger and response texts.
 - Automatic responses now support injection of trigger captures, given regular expression is used.
-- New automatic actions [Line Chart (Index)], [Line Chart (Time)], [Scatter Plot] and [Histogram].
+- New automatic actions [Plot Byte Count/Rate] and [Plot Line Count/Rate].
+- New automatic actions [Line Chart], [Scatter Plot] and [Histogram].
 
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
@@ -122,6 +124,7 @@ Important changes:
 - Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
   on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
+- Adaptive monitor update rate further improved.
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
   preparing upcoming feature request #74, part of feature request #229).
@@ -153,6 +156,7 @@ Limitations and known issues:
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
+   > Link label text rendering issues after plotting (bug #485).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).

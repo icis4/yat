@@ -122,11 +122,11 @@ namespace YAT.View.Forms
 		////plotView.Model.DefaultFontSize = Font.SizeInPoints;
 		////plotView.Model.DefaultFont     = SystemFonts.DefaultFont.Name;
 		////plotView.Model.DefaultFontSize = SystemFonts.DefaultFont.SizeInPoints;
-			plotView.Model.DefaultFontSize = SystemFonts.DefaultFont.Height; // Best result for unknown reason, clarification PENDING.
+		////plotView.Model.DefaultFontSize = SystemFonts.DefaultFont.Height; // Attention, see bug #485 "link label text rendering issues after plotting"!
 
 			var controller = new OxyPlot.PlotController();
-			controller.Unbind(OxyPlot.PlotCommands.CopyCode);       // [Ctrl + Alt + C] by default; no use case; [Alt] may cause issues.
-			controller.Unbind(OxyPlot.PlotCommands.CopyTextReport); // [Ctrl + Alt + R] by default; no use case; [Alt] may cause issues.
+			controller.Unbind(OxyPlot.PlotCommands.CopyCode);       // [Ctrl+Alt+C] by default; no use case; [Alt] may cause issues.
+			controller.Unbind(OxyPlot.PlotCommands.CopyTextReport); // [Ctrl+Alt+R] by default; no use case; [Alt] may cause issues.
 			controller.Unbind(OxyPlot.PlotCommands.SnapTrack);      // [MouseLeft] shall be usable for [PanAt].
 			controller.Bind(new OxyPlot.OxyMouseEnterGesture(), OxyPlot.PlotCommands.HoverSnapTrack);
 			controller.Unbind(OxyPlot.PlotCommands.PanAt);          // [PanAt] mapped to [MouseLeft].

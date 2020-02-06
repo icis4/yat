@@ -25,27 +25,47 @@
 using System;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
 	public partial class AutoActionPlotHelp : Form
 	{
-		/// <remarks>
-		/// \fixme:
-		/// Add a true help to YAT.
-		/// </remarks>
+		/// <summary></summary>
 		public AutoActionPlotHelp()
 		{
 			InitializeComponent();
 
-			// Form:
-			Text = ApplicationEx.CommonName + " Plot Help"; // Fixed to "YAT".
+			InitializeRemark();
+		}
 
-			// Contents:
-			textBox_ParserFormat.Text        = Domain.Parser.Parser.FormatHelp;
-			textBox_ParserKeyword.Text       = Domain.Parser.Parser.KeywordHelp;
-			textBox_TextTerminalKeyword.Text = Domain.TextTerminal.KeywordHelp;
-			textBox_SerialPort.Text          = Domain.Terminal.SerialPortHelp;
+		private void InitializeRemark()
+		{
+			linkLabel_Remark.Text = "";
+			var textBefore = "YAT uses ";
+			var textLink   =          "OxyPlot";
+			var textAfter  =                 " default interactions, except for [Pan → Left Mouse Button] and [Menu → Right Mouse Button].";
+			linkLabel_Remark.Text += textBefore;
+			var linkStart = linkLabel_Remark.Text.Length;
+			linkLabel_Remark.Text += textLink;
+			linkLabel_Remark.Links.Add(linkStart, textLink.Length, "https://oxyplot.github.io/");
+			linkLabel_Remark.Text += textAfter;
+		}
+
+		private void AutoActionPlotHelp_Load(object sender, EventArgs e)
+		{
+			// By default, the first cell is selected when the data grid is shown. The trick by Ravi
+			// at http://manfred-ramoser.blogspot.com/2008/01/hide-selection-in-datagridview.html
+			// deselects properly. Attention, must be here, not in the constructor!
+
+			dataGridView_ByFunction.ClearSelection();
+			dataGridView_ByInput.ClearSelection();
+		}
+
+		private void linkLabel_Remark_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			LinkHelper.TryBrowseUriAndShowErrorIfItFails(Parent, e);
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)
