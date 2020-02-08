@@ -315,7 +315,7 @@ namespace YAT.Domain.Settings
 			get { return (FlowControlUsesXOnXOff && !FlowControlManagesXOnXOffManually); }
 		}
 
-		/// <summary></summary>
+		/// <remarks>Intentionally not orthogonal, returning <c>false</c> on get but throwing on set.</remarks>
 		[XmlIgnore]
 		public virtual bool SignalXOnWhenOpened
 		{
