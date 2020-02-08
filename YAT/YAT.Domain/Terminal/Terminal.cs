@@ -82,7 +82,7 @@ namespace YAT.Domain
 	/// <list type="bullet">
 	/// <item><description>Simpler for implementing text/binary specialization</description></item>
 	/// <item><description>Simpler for implementing synchronization among Tx and Rx.</description></item>
-	/// <item><description>Less "Durchlauferhitzer", e.g. directly raising events.</description></item>
+	/// <item><description>Less simple-stupid-forwarder, e.g. directly raising events.</description></item>
 	/// </list>
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
@@ -1337,6 +1337,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Inlines an error message.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
 		public virtual void InlineErrorMessage(Direction direction, string message, bool isWarningOnly)
 		{
 			var ioDirection = (IODirection)direction;

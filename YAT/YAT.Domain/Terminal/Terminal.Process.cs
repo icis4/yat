@@ -685,8 +685,8 @@ namespace YAT.Domain
 		protected virtual void ProcessRawChunk(RawChunk chunk)
 		{
 			bool txIsAffected    =  (chunk.Direction == IODirection.Tx);
-			bool bidirIsAffected = ((chunk.Direction == IODirection.Tx) ||(chunk.Direction == IODirection.Rx));
-			bool rxIsAffected    =                                        (chunk.Direction == IODirection.Rx);
+			bool bidirIsAffected = ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx));
+			bool rxIsAffected    =                                         (chunk.Direction == IODirection.Rx);
 
 			ProcessRawChunk(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
 		}
@@ -710,6 +710,8 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// This method is private as it must synchronize against private <see cref="chunkVsTimeoutSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void ProcessRawChunk(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
@@ -723,6 +725,9 @@ namespace YAT.Domain
 
 		/// <summary>Check whether device or direction has changed.</summary>
 		/// <remarks>A chunk is always tied to device and direction.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void ProcessAndSignalDeviceOrDirectionLineBreak(RawChunk chunk,
 		                                                                  bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
@@ -743,6 +748,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary>Enforce line break if requested.</summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void ProcessAndSignalChunkLineBreak(RawChunk chunk,
 		                                                      bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
@@ -760,6 +768,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void ProcessAndSignalRawChunk(RawChunk chunk,
 		                                                bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
 		{
@@ -952,13 +963,16 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
 		protected virtual void EvaluateDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
 		                                               DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Overall.DeviceLineBreak.IsFirstChunk)         // Not the ideal location to handle this flag and 'DeviceLineBreak.Device' further below.
-			{                                                              // But good enough because not needed anywhere else and more performant if only done here.
+			{                                                              // But good enough because not needed anywhere else and has more performance if only done here.
 				processState.Overall.DeviceLineBreak.IsFirstChunk = false; // Mitigated by using a dedicated 'DeviceLineBreak' sub-item making the scope obvious.
 			}
 			else // = 'IsSubsequentChunk'
@@ -978,13 +992,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
 		protected virtual void EvaluateDirectionLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
 		                                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Overall.DirectionLineBreak.IsFirstChunk)         // Not the ideal location to handle this flag and 'DirectionLineBreak.Direction' further below.
-			{                                                                 // But good enough because not needed anywhere else and more performant if only done here.
+			{                                                                 // But good enough because not needed anywhere else and has more performance if only done here.
 				processState.Overall.DirectionLineBreak.IsFirstChunk = false; // Mitigated by using a dedicated 'DirectionLineBreak' sub-item making the scope obvious.
 			}
 			else // = 'IsSubsequentChunk'
@@ -1004,6 +1021,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void EvaluateChunkLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
 		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
@@ -1017,6 +1037,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void EvaluateTimedLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
 		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
@@ -1030,6 +1053,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void EvaluateTimedLineBreakOnReload(RepositoryType repositoryType, DateTime ts, IODirection dir, int timeout,
 		                                                      DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
@@ -1049,6 +1075,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Must be abstract/virtual because settings and behavior differ among text and binary.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected abstract void DoRawByte(RepositoryType repositoryType,
 		                                  byte b, DateTime ts, string dev, IODirection dir,
@@ -1061,6 +1090,9 @@ namespace YAT.Domain
 		/// <paramref name="ts"/> and <paramref name="dev"/> are prepared for specialization
 		/// by <see cref="BinaryTerminal"/> and <see cref="TextTerminal"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void DoRawBytePre(DateTime ts, string dev, IODirection dir,
 		                                    TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
 		{
@@ -1085,6 +1117,9 @@ namespace YAT.Domain
 		/// <paramref name="ts"/> and <paramref name="dev"/> are prepared for specialization
 		/// by <see cref="BinaryTerminal"/> and <see cref="TextTerminal"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void DoRawBytePost(DateTime ts, string dev, IODirection dir,
 		                                     TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
 		{
@@ -1104,6 +1139,9 @@ namespace YAT.Domain
 		/// <paramref name="repositoryType"/> and <paramref name="elementsToAdd"/> are required
 		/// for specialization by <see cref="BinaryTerminal"/> and <see cref="TextTerminal"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
 		                                   DateTime ts, string dev, IODirection dir,
 		                                   DisplayElementCollection elementsToAdd)
@@ -1118,6 +1156,9 @@ namespace YAT.Domain
 		/// <paramref name="elementsToAdd"/> and <paramref name="linesToAdd"/> are required
 		/// for specialization by <see cref="BinaryTerminal"/> and <see cref="TextTerminal"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
 		                                 DateTime ts, IODirection dir,
 		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
@@ -1128,6 +1169,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void Flush(RepositoryType repositoryType,
 		                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
@@ -1163,6 +1207,9 @@ namespace YAT.Domain
 		}                                                                                  // Elements will be used again!
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual void FlushClearAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
 		                                                    DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
@@ -1191,6 +1238,8 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// This event handler must synchronize against <see cref="chunkVsTimeoutSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{
@@ -1211,6 +1260,8 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// This event handler must synchronize against <see cref="chunkVsTimeoutSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
 		{

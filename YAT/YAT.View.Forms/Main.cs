@@ -53,8 +53,8 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Permissions;
 using System.Reflection;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -220,7 +220,8 @@ namespace YAT.View.Forms
 		// Properties
 		//==========================================================================================
 
-		/// <remarks>Property for othogonality with <see cref="IsClosing"/>.</remarks>
+		/// <remarks>Property for orthogonality with <see cref="IsClosing"/>.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		private bool IsStartingUp
 		{
 			get { return (this.isStartingUp); }
@@ -2543,6 +2544,7 @@ namespace YAT.View.Forms
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'es' relates to preceeding tag.")]
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2573,8 +2575,8 @@ namespace YAT.View.Forms
 		{
 			var selectedIndex = toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
-			                  //// Not listed             or                           listed explicit tigger.
-			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
+			                  //// Not listed             or                            listed explicit tigger.
+			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
 				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
@@ -2767,6 +2769,7 @@ namespace YAT.View.Forms
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'es' relates to preceeding tag.")]
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2797,8 +2800,8 @@ namespace YAT.View.Forms
 		{
 			var selectedIndex = toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
-			                  //// Not listed             or                           listed explicit tigger.
-			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
+			                  //// Not listed             or                            listed explicit tigger.
+			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
 				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
@@ -2951,6 +2954,7 @@ namespace YAT.View.Forms
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'es' relates to preceeding tag.")]
 		private void toolStripComboBox_MainTool_AutoResponse_Response_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2981,8 +2985,8 @@ namespace YAT.View.Forms
 		{
 			var selectedIndex = toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoTriggerEx);
-			                  //// Not listed             or                           listed explicit response.
-			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
+			                  //// Not listed             or                            listed explicit response.
+			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
 				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))

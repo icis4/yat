@@ -102,7 +102,7 @@ namespace YAT.Domain.Settings
 		public const string TimeDurationFormatDefault = TimeDeltaFormatPresetEx.DefaultFormat;
 
 		/// <remarks>
-		/// Prepended "IO" for distiction with ASCII "Control" characters.
+		/// Prepended "IO" for distinction with ASCII "Control" characters.
 		/// </remarks>
 		public const bool IncludeIOControlDefault = false;
 
@@ -602,7 +602,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Prepended "IO" for distiction with ASCII "Control" characters.
+		/// Prepended "IO" for distinction with ASCII "Control" characters.
 		/// </remarks>
 		[XmlElement("IncludeIOControl")]
 		public virtual bool IncludeIOControl

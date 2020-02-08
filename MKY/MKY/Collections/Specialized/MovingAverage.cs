@@ -30,6 +30,7 @@ namespace MKY.Collections.Specialized
 	/// <summary>
 	/// Simple moving average based on <see cref="Queue{T}"/>.
 	/// </summary>
+	/// <typeparam name="T">The type of the items of the collection.</typeparam>
 	public abstract class MovingAverage<T>
 	{
 		/// <summary>
@@ -112,7 +113,7 @@ namespace MKY.Collections.Specialized
 		/// <remarks>
 		/// Required to not have to use the dynamic keyword (which would require a reference to the
 		/// 'Microsoft.CSharp' assembly) nor <see cref="System.Linq.Expressions.Expression"/> (which
-		/// is much less performant).
+		/// has much less performance).
 		/// See e.g. https://stackoverflow.com/questions/8122611/c-sharp-adding-two-generic-values
 		/// for background and discussion.
 		/// </remarks>

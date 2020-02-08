@@ -353,7 +353,6 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-
 		/// <summary>Creates a UDP/IP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		/// <remarks>The local IP address filter is set to the remote IP address.</remarks>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>

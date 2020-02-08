@@ -48,7 +48,7 @@ namespace YAT.Model
 	/// <remarks>
 	/// Separated from plot view for...
 	/// <list type="bullet">
-	/// <item><description>...better decoupling updating the model (threadpool thread) and updating the view (main thread).</description></item>
+	/// <item><description>...better decoupling updating the model (thread pool thread) and updating the view (main thread).</description></item>
 	/// <item><description>...better decoupling model and view implementation (MVVM).</description></item>
 	/// </list>
 	/// </remarks>
@@ -173,13 +173,13 @@ namespace YAT.Model
 				var series = OxyModel.Series[i];
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
 
-				if ((points.Count > 0) && (points[points.Count-1].X.Equals(0.0)))   // Add an addition 0 to properly indicate inactivity.
-					points.Add(new OxyPlot.DataPoint(x, 0.0));                      // Applies to rate when inactive and to count on reset.
+				if ((points.Count > 0) && (points[points.Count - 1].X.Equals(0.0)))   // Add an addition 0 to properly indicate inactivity.
+					points.Add(new OxyPlot.DataPoint(x, 0.0));                        // Applies to rate when inactive and to count on reset.
 
-				if ((points.Count > 0) && (y.Equals(0.0)))                          // Add an addition value to properly indicate count.
-					points.Add(new OxyPlot.DataPoint(x, points[points.Count-1].Y)); // Applies to count on reset.
+				if ((points.Count > 0) && (y.Equals(0.0)))                            // Add an addition value to properly indicate count.
+					points.Add(new OxyPlot.DataPoint(x, points[points.Count - 1].Y)); // Applies to count on reset.
 				                                                                           //// Skip non-isochronuos samples. Such may happen because rate updates are enqueued fro two different locations in the terminal.
-				if ((points.Count == 0) || ((points.Count > 0) && (points[points.Count-1].X <= x)))
+				if ((points.Count == 0) || ((points.Count > 0) && (points[points.Count - 1].X <= x)))
 					points.Add(new OxyPlot.DataPoint(x, y));
 			}
 		}
@@ -427,7 +427,6 @@ namespace YAT.Model
 		{
 			return (OxyPlot.OxyColor.FromArgb(color.A, color.R, color.G, color.B));
 		}
-
 	}
 
 	#endregion

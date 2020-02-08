@@ -23,13 +23,13 @@
 //==================================================================================================
 
 using System;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MKY.Collections.Specialized
 {
 	/// <summary>
-	/// How the historgram shall be limited.
+	/// How the histogram shall be limited.
 	/// </summary>
 	public enum HistogramOutOfBoundsBehavior
 	{
@@ -55,7 +55,7 @@ namespace MKY.Collections.Specialized
 	/// <summary>
 	/// Collection of items of a histogram.
 	/// </summary>
-	/// <typeparam name="T">The type of the items of the histogram</typeparam>
+	/// <typeparam name="T">The type of the items of the histogram.</typeparam>
 	public abstract class Histogram<T> where T : IComparable<T>, IEquatable<T>
 	{
 		/// <summary></summary>
@@ -80,19 +80,19 @@ namespace MKY.Collections.Specialized
 		public T BinSize { get; protected set; } // = default(T);
 
 		/// <summary></summary>
-		protected List<T> Items = new List<T>(); // No preset needed, the default behavior is good enough.
+		protected List<T> Items { get; private set; } = new List<T>(); // No preset needed, the default behavior is good enough.
 
 		/// <summary></summary>
-		protected List<long> BinCounts; // = null;
+		protected List<long> BinCounts { get; private set; } // = null;
 
 		/// <summary></summary>
-		protected List<T> BinValuesLowerLimit; // null;
+		protected List<T> BinValuesLowerLimit { get; private set; } // null;
 
 		/// <summary></summary>
-		protected List<T> BinValuesMidPoint; // null;
+		protected List<T> BinValuesMidPoint { get; private set; } // null;
 
 		/// <summary></summary>
-		protected List<T> BinValuesUpperLimit; // null;
+		protected List<T> BinValuesUpperLimit { get; private set; } // null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Histogram{T}"/> class with equally

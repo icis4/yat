@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY
 {
@@ -32,6 +33,8 @@ namespace MKY
 	/// <remarks>
 	/// Based on https://stackoverflow.com/questions/22766549/cross-appdomain-cancelable-event.
 	/// </remarks>
+	/// <typeparam name="T">The type of the object to wrap.</typeparam>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	public class MarshalByRefWrapper<T> : MarshalByRefObject
 	{
 		/// <summary>

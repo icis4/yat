@@ -151,11 +151,15 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				var text = new StringBuilder();
+				text.AppendLine("Failed to copy to clipboard!");
+				text.AppendLine();
+				text.Append    ("Make sure the clipboard is not blocked by another process.");
+
 				MessageBoxEx.Show
 				(
 					owner,
-					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
-					"Make sure the clipboard is not blocked by another process.",
+					text.ToString(),
 					"Clipboard Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -182,11 +186,15 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				var text = new StringBuilder();
+				text.AppendLine("Failed to copy to clipboard!");
+				text.AppendLine();
+				text.Append    ("Make sure the clipboard is not blocked by another process.");
+
 				MessageBoxEx.Show
 				(
 					owner,
-					"Failed to copy to clipboard!" + Environment.NewLine + Environment.NewLine +
-					"Make sure the clipboard is not blocked by another process.",
+					text.ToString(),
 					"Clipboard Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -209,11 +217,15 @@ namespace YAT.View.Utilities
 			}
 			catch (ExternalException) // The clipboard could not be cleared. This typically
 			{                         // occurs when it is being used by another process.
+				var text = new StringBuilder();
+				text.AppendLine("Failed to paste from clipboard!");
+				text.AppendLine();
+				text.Append    ("Make sure the clipboard is not blocked by another process.");
+
 				MessageBoxEx.Show
 				(
 					owner,
-					"Failed to paste from clipboard!" + Environment.NewLine + Environment.NewLine +
-					"Make sure the clipboard is not blocked by another process.",
+					text.ToString(),
 					"Clipboard Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

@@ -79,6 +79,9 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		public FormatSettings(Format.Settings.FormatSettings formatSettings, int[] customColors,
 		                      Domain.SeparatorEx contentSeparator, Domain.SeparatorEx infoSeparator, Domain.EnclosureEx infoEnclosure,
 		                      bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat, string timeDurationFormat)
@@ -253,7 +256,6 @@ namespace YAT.View.Forms
 		{
 			ShowBackgroundColorDialog();
 		}
-
 
 	////private void comboBox_ContentSeparator_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since        "        _Validating() below gets called anyway.

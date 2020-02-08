@@ -322,7 +322,7 @@ namespace MKY
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Determines how many occurrances of <paramref name="value"/> are contained in <paramref name="str"/>.
+		/// Determines how many occurrences of <paramref name="value"/> are contained in <paramref name="str"/>.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
@@ -344,7 +344,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Determines how many occurrances of <paramref name="value"/> are contained in <paramref name="str"/>.
+		/// Determines how many occurrences of <paramref name="value"/> are contained in <paramref name="str"/>.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>

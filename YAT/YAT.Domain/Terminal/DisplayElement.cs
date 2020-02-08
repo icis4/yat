@@ -119,6 +119,7 @@ namespace YAT.Domain
 		public class TxData : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public TxData()
 				: base(Direction.Tx, ElementAttributes.DataContent)
 			{
@@ -148,6 +149,7 @@ namespace YAT.Domain
 		public class TxControl : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public TxControl()
 				: base(Direction.Tx, ElementAttributes.ControlContent)
 			{
@@ -177,6 +179,7 @@ namespace YAT.Domain
 		public class RxData : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public RxData()
 				: base(Direction.Rx, ElementAttributes.DataContent)
 			{
@@ -206,6 +209,7 @@ namespace YAT.Domain
 		public class RxControl : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public RxControl()
 				: base(Direction.Rx, ElementAttributes.ControlContent)
 			{
@@ -270,6 +274,7 @@ namespace YAT.Domain
 		public class TimeStampInfo : InfoElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public TimeStampInfo()
 				: base()
 			{
@@ -380,6 +385,7 @@ namespace YAT.Domain
 		public class DeviceInfo : InfoElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public DeviceInfo()
 				: base()
 			{
@@ -403,6 +409,7 @@ namespace YAT.Domain
 		public class DirectionInfo : InfoElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public DirectionInfo()
 				: base()
 			{
@@ -507,10 +514,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary>The separator that is added inbetween info elements as well as to the left/right of the data/control content.</summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class InfoSeparator : FormatElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public InfoSeparator()
 				: base()
 			{
@@ -585,6 +594,7 @@ namespace YAT.Domain
 		public class IOControlInfo : InlineElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public IOControlInfo()
 				: base()
 			{
@@ -613,6 +623,7 @@ namespace YAT.Domain
 		public class ErrorInfo : InlineElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
 			public ErrorInfo()
 				: base()
 			{

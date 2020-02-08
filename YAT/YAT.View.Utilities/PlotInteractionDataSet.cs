@@ -193,8 +193,8 @@ namespace YAT.View.Utilities
 				new string [] { "[Ctrl] +",     "[+/-], [Page Up/Down]",   "→",  "Zoom Fine",      "Plot, Axes" },
 				new string [] { "",             "",                        "",   "",               ""           },
 				new string [] { "",             "[A], [Home]",             "→",  "Reset",          "Plot, Axes" },
-				// Ignore 'Touch', user likely finds out.
-				// Ignore 'Shake', unlikely to be used.
+				//// Ignore 'Touch', user likely finds out.
+				//// Ignore 'Shake', unlikely to be used.
 			};
 
 			for (int i = 0; i < content.Length; i++)

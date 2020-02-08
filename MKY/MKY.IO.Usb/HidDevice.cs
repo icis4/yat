@@ -240,7 +240,7 @@ namespace MKY.IO.Usb
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
 		/// <param name="usagePage">Given usage page.</param>
-		/// <param name="usageId">Given usgae ID.</param>
+		/// <param name="usageId">Given usage ID.</param>
 		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
 		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
@@ -294,7 +294,7 @@ namespace MKY.IO.Usb
 		/// <param name="productId">Given PID.</param>
 		/// <param name="serial">Given serial string.</param>
 		/// <param name="usagePage">Given usage page.</param>
-		/// <param name="usageId">Given usgae ID.</param>
+		/// <param name="usageId">Given usage ID.</param>
 		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
 		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>

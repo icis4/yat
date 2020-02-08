@@ -64,7 +64,7 @@ namespace YAT.View.Forms
 	/// <item><description>Keep plot on top of <see cref="Terminal"/> as well as <see cref="Main"/>.</description></item>
 	/// <item><description>Thus possible to position the plot inside the <see cref="Main"/> window.</description></item>
 	/// </list>
-	/// Disdvantages:
+	/// Disadvantages:
 	/// <list type="bullet">
 	/// <item><description>Not possible to minimize YAT while still showing the plot.</description></item>
 	/// </list>
