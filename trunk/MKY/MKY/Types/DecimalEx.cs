@@ -66,7 +66,6 @@ namespace MKY
 			return ((value >= min) && (value <= max));
 		}
 
-
 		/// <summary>
 		/// Evaluates whether the two given values are almost equal,
 		/// taking the given number of digits into account.

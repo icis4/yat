@@ -490,6 +490,7 @@ namespace YAT.View.Controls
 		}
 
 ////#if (DEBUG) must not be active, configuration shall always be available.
+
 		/// <remarks>
 		/// Flag in a addition to configuration item to allow selective debugging of just a single
 		/// monitor, e.g. the bidir monitor, to reduce debug output.
@@ -502,6 +503,7 @@ namespace YAT.View.Controls
 			get { return (this.fastListBox_Monitor.DebugEnabled); }
 			set { this.fastListBox_Monitor.DebugEnabled = value;  }
 		}
+
 ////#endif
 
 		#endregion
@@ -1009,7 +1011,7 @@ namespace YAT.View.Controls
 			this.dataStatusHelper.SetCountsAndRates(status);
 		}
 
-		/// <remarks>Separate for performance optiomization.</remarks>
+		/// <remarks>Separate for performance optimization.</remarks>
 		public virtual void SetDataRateStatusOnly(Model.BytesLinesTuple rates)
 		{
 			this.dataStatusHelper.SetRates(rates);
@@ -1031,7 +1033,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Labels are manually resized/relocated because <see cref="Label.AutoSize"/> doesn't work
 		/// with <see cref="Label.AutoEllipsis"/>. But, not using <see cref="Label.AutoSize"/> means
-		/// that label will not adjust to different font size, tja...
+		/// that label will not adjust to different font size, well...
 		/// </remarks>
 		/// <remarks>
 		/// From YAT 2.1.1, two separate labels are used. This prevents undesireable line breaks a

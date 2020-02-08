@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -68,6 +69,9 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		public static string Compose(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, TerminalSettingsRoot settingsRoot, Domain.Terminal terminal,
 		                             string indicatedName, bool isStarted, bool isOpen, bool isConnected)
 		{

@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -603,7 +604,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Determines wether the given action has a true action to invoke.
+		/// Determines whether the given action has a true action to invoke.
 		/// </summary>
 		protected virtual bool HasActionToInvoke(AutoAction action)
 		{
@@ -722,6 +723,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		protected virtual void CreateCountRatePlotItem(AutoAction plotAction, DateTime triggerTimeStamp, CountsRatesTuple dataStatus, out AutoActionPlotItem pi)
 		{
 			string label;
@@ -744,6 +746,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		protected virtual void CreateYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
@@ -752,6 +755,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		protected virtual void CreateXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
@@ -764,6 +768,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		protected virtual bool TryCreateTimeXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
@@ -782,6 +787,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		protected virtual void CreateTimeStampXYPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
@@ -821,6 +827,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		protected virtual Tuple<string, double>[] ConvertToPlotValues(string[] captures)
 		{
 			var yValues = new List<Tuple<string, double>>(); // No preset needed, the default behavior is good enough.

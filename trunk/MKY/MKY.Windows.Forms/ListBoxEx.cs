@@ -112,8 +112,10 @@ namespace MKY.Windows.Forms
 	#endif
 
 ////#if (DEBUG) must not be active, configuration shall always be available.
+
 		/// <remarks>Public for use in parent controls.</remarks>
 		public const bool DebugEnabledDefault = false;
+
 ////#endif
 
 		#endregion
@@ -784,6 +786,7 @@ namespace MKY.Windows.Forms
 		}
 
 ////#if (DEBUG) must not be active, configuration shall always be available.
+
 		/// <remarks>
 		/// Flag in a addition to configuration items to allow selective debugging of just a single
 		/// list box, in order to reduce debug output.
@@ -796,6 +799,7 @@ namespace MKY.Windows.Forms
 			get { return (this.debugEnabled); }
 			set { this.debugEnabled = value;  }
 		}
+
 ////#endif
 
 		#endregion

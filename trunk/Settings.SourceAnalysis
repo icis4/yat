@@ -11,8 +11,12 @@
       <Value>mky</Value>
       <Value>mscorlib</Value>
       <Value>netrtfwriter</Value>
+      <Value>pdf</Value>
+      <Value>png</Value>
+      <Value>sourceforge</Value>
       <Value>stackoverflow</Value>
       <Value>todo</Value>
+      <Value>usb</Value>
       <Value>yat</Value>
     </CollectionProperty>
   </GlobalSettings>

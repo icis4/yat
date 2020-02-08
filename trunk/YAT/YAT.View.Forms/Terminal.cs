@@ -1072,6 +1072,7 @@ namespace YAT.View.Forms
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'es' relates to preceeding tag.")]
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1102,8 +1103,8 @@ namespace YAT.View.Forms
 		{
 			var selectedIndex = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
-			                  //// Not listed             or                           listed explicit tigger.
-			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
+			                  //// Not listed             or                            listed explicit tigger.
+			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
 				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
@@ -1199,6 +1200,7 @@ namespace YAT.View.Forms
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'es' relates to preceeding tag.")]
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1229,8 +1231,8 @@ namespace YAT.View.Forms
 		{
 			var selectedIndex = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex;
 			var selectedItem = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as AutoTriggerEx);
-			                  //// Not listed             or                           listed explicit response.
-			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
+			                  //// Not listed             or                            listed explicit response.
+			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
 				var responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
@@ -1464,6 +1466,7 @@ namespace YAT.View.Forms
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'es' relates to preceeding tag.")]
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1494,8 +1497,8 @@ namespace YAT.View.Forms
 		{
 			var selectedIndex = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
-			                  //// Not listed             or                           listed explicit tigger.
-			if ((selectedIndex == ControlEx.InvalidIndex) || (selectedItem != null) && selectedItem.IsExplicit)
+			                  //// Not listed             or                            listed explicit tigger.
+			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
 				var triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
 				if (!string.IsNullOrEmpty(triggerText))
@@ -4300,7 +4303,8 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <remarks>Property for othogonality with <see cref="IsClosing"/>, <see cref="IsIntegraMdiLayouting"/>,...</remarks>
+		/// <remarks>Property for orthogonality with <see cref="IsClosing"/>, <see cref="IsIntegraMdiLayouting"/>,...</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		private bool IsStartingUp
 		{
 			get { return (this.isStartingUp); }
@@ -5393,10 +5397,10 @@ namespace YAT.View.Forms
 
 						// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
 						// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
-					////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+					////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 					////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_Predefined, unscaledDistance);
 
-						int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+						int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 						int limitedDistance;
 						if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_Predefined, distance, out limitedDistance))
 						{
@@ -5438,10 +5442,10 @@ namespace YAT.View.Forms
 
 							// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
 							// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
-						////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+						////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 						////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_TxMonitor, unscaledDistance);
 
-							int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+							int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 							int limitedDistance;
 							if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_TxMonitor, distance, out limitedDistance))
 							{
@@ -5473,10 +5477,10 @@ namespace YAT.View.Forms
 
 							// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
 							// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
-						////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+						////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 						////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_RxMonitor, unscaledDistance);
 
-							int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+							int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 							int limitedDistance;
 							if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_RxMonitor, distance, out limitedDistance))
 							{
@@ -6230,6 +6234,9 @@ namespace YAT.View.Forms
 		// Monitor Panels > Methods
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
@@ -7064,7 +7071,7 @@ namespace YAT.View.Forms
 		/// <list type="bullet">
 		/// <item><description>AutoAction: Filter/Suppress.</description></item>
 		/// <item><description>AutoAction: Text based triggers.</description></item>
-		/// <item><description>AutoReponse: Text based triggers.</description></item>
+		/// <item><description>AutoResponse: Text based triggers.</description></item>
 		/// </list>
 		/// Not the perfect solution, but considered good enough, although it doesn't fully work when both
 		/// automatic action and response are active. But then highlighting becomes limited anyway...

@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 
@@ -471,6 +472,7 @@ namespace YAT.Domain
 		/// Explicit <paramref name="direction"/> because <see cref="DisplayElement.Direction"/>
 		/// may be <see cref="Direction.None"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
 		protected virtual void InlineDisplayElement(IODirection direction, DisplayElement.InlineElement element)
 		{
 			switch (direction)
@@ -499,6 +501,7 @@ namespace YAT.Domain
 		/// <see cref="DisplayElement.InlineElement "/> for <paramref name="elements"/> in order to
 		/// ease cloning.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
 		protected virtual void InlineDisplayElements(IODirection direction, DisplayElementCollection elements)
 		{
 			switch (direction)

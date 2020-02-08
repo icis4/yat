@@ -671,6 +671,9 @@ namespace YAT.Settings.Model
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		public virtual bool TryGetActiveAutoActionTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
 			if (AutoAction.Trigger.IsActive)
@@ -689,6 +692,9 @@ namespace YAT.Settings.Model
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		public virtual bool TryGetActiveAutoResponseTrigger(out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{
 			if (AutoResponse.Trigger.IsActive)
@@ -707,6 +713,9 @@ namespace YAT.Settings.Model
 		/// <remarks>
 		/// Located here in 'Settings' instead of 'Model' since only accessing settings items.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		protected virtual bool TryGetActiveAutoTrigger(AutoTriggerEx trigger, AutoTriggerOptions triggerOptions, bool isByteSequenceTriggered,
 		                                               out Command command, out string triggerTextOrRegexPattern, out Regex regex)
 		{

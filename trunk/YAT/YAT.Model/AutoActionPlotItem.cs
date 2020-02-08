@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using YAT.Model.Types;
 
@@ -43,6 +44,7 @@ namespace YAT.Model
 		public Tuple<string, double>[] YValues { get; }
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		public AutoActionPlotItem(AutoAction action, Tuple<string, double> xValue, Tuple<string, double>[] yValues)
 		{
 			Action  = action;

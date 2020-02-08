@@ -26,6 +26,7 @@ using System;
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
+	/// <typeparam name="T">The applicable type for the predicate.</typeparam>
 	public class EqualsVidPid<T>
 		where T : DeviceInfo
 	{
@@ -51,6 +52,7 @@ namespace MKY.IO.Usb
 	}
 
 	/// <summary></summary>
+	/// <typeparam name="T">The applicable type for the predicate.</typeparam>
 	public class EqualsVidPidSerial<T>
 		where T : DeviceInfo
 	{
@@ -76,6 +78,7 @@ namespace MKY.IO.Usb
 	}
 
 	/// <summary></summary>
+	/// <typeparam name="T">The applicable type for the predicate.</typeparam>
 	public class EqualsVidPidUsage<T>
 		where T : HidDeviceInfo
 	{
@@ -101,6 +104,7 @@ namespace MKY.IO.Usb
 	}
 
 	/// <summary></summary>
+	/// <typeparam name="T">The applicable type for the predicate.</typeparam>
 	public class EqualsVidPidSerialUsage<T>
 		where T : HidDeviceInfo
 	{

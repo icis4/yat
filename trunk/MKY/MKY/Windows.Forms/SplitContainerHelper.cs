@@ -85,12 +85,12 @@ namespace MKY.Windows.Forms
 
 			if (sc.FixedPanel == FixedPanel.Panel1)
 			{
-				return ((int)((unscaledDistance * scaleOfContainer) + 0.5f)); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				return ((int)((unscaledDistance * scaleOfContainer) + 0.5f)); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 			}
 			else if (sc.FixedPanel == FixedPanel.Panel2)
 			{
 				int widthOrHeightOfPanel2 = OrientationEx.SizeToWidthOrHeight(sc.Panel2.ClientSize, sc.Orientation);
-				int widthOrHeightOffset = (int)((widthOrHeightOfPanel2 * scaleOfContainer) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				int widthOrHeightOffset = (int)((widthOrHeightOfPanel2 * scaleOfContainer) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 				return (unscaledDistance - (widthOrHeightOffset - widthOrHeightOfPanel2));
 			}
 			else // No fixed panel:
@@ -110,12 +110,12 @@ namespace MKY.Windows.Forms
 
 			if (sc.FixedPanel == FixedPanel.Panel1)
 			{
-				return ((int)((scaledDistance / scaleOfContainer) + 0.5f)); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				return ((int)((scaledDistance / scaleOfContainer) + 0.5f)); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 			}
 			else if (sc.FixedPanel == FixedPanel.Panel2)
 			{
 				int widthOrHeightOfPanel2 = OrientationEx.SizeToWidthOrHeight(sc.Panel2.ClientSize, sc.Orientation);
-				int widthOrHeightOffset = (int)((widthOrHeightOfPanel2 / scaleOfContainer) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
+				int widthOrHeightOffset = (int)((widthOrHeightOfPanel2 / scaleOfContainer) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
 				return (scaledDistance - (widthOrHeightOffset - widthOrHeightOfPanel2));
 			}
 			else // No fixed panel:

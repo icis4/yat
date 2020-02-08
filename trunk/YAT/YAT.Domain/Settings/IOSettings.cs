@@ -382,7 +382,6 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-
 		#endregion
 
 		#region Object Members

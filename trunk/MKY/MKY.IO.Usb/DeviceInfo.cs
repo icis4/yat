@@ -86,10 +86,10 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static readonly string LastProductIdString  = LastProductId .ToString("X4", CultureInfo.InvariantCulture);
 
-		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
+		/// <remarks>Named [Item]Default to ease lookup.</remarks>
 		public const int VendorIdDefault = FirstVendorId;
 
-		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
+		/// <remarks>Named [Item]Default to ease lookup.</remarks>
 		public const int ProductIdDefault = FirstProductId;
 
 		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
@@ -117,10 +117,10 @@ namespace MKY.IO.Usb
 		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
 		public static readonly Regex SerialRegexRemainder = new Regex(@"PID[^0-9a-fA-F][0-9a-fA-F]+.\s?(?<serial>.+)", Options); // Everything following the PID pattern.
 
-		/// <remarks>Named 'Item'Default to ease lookup.</remarks>
+		/// <remarks>Named [Item]Default to ease lookup.</remarks>
 		public const string SerialDefault = "";
 
-		/// <remarks>Not named 'Item'Default since there is not (yet) a 'Separator' item.</remarks>
+		/// <remarks>Not named [Item]Default since there is not (yet) a 'Separator' item.</remarks>
 		public const string DefaultSeparator = " - ";
 
 		#endregion

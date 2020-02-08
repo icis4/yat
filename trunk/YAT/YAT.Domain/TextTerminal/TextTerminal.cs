@@ -56,7 +56,7 @@ namespace YAT.Domain
 	/// <list type="bullet">
 	/// <item><description>Simpler for implementing text/binary specialization.</description></item>
 	/// <item><description>Simpler for implementing synchronization among Tx and Rx.</description></item>
-	/// <item><description>Less "Durchlauferhitzer", e.g. directly raising events.</description></item>
+	/// <item><description>Less simple-stupid-forwarder, e.g. directly raising events.</description></item>
 	/// </list>
 	/// </remarks>
 	public partial class TextTerminal : Terminal

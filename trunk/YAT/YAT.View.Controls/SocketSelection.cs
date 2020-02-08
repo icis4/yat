@@ -544,7 +544,6 @@ namespace YAT.View.Controls
 	////private void comboBox_RemotePort_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since     "     _Validating() below gets called anyway.
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RemotePort_Validating(object sender, CancelEventArgs e)
 		{
@@ -639,7 +638,6 @@ namespace YAT.View.Controls
 	////private void comboBox_LocalPort_SelectedIndexChanged(object sender, EventArgs e)
 	////is not required since     "    _Validating() below gets called anyway.
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{

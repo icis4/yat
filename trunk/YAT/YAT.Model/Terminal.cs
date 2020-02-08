@@ -1497,7 +1497,7 @@ namespace YAT.Model
 		///  2. The constructor of this terminal will call CreateAuto[Action|Response]Helper() but
 		///     linked settings are not be available yet.
 		///      => TryGetActiveAutoActionTrigger() will fail in case of linked commands.
-		///  3. The workspace will also calle TryLoadLinkedSettings().
+		///  3. The workspace will also called TryLoadLinkedSettings().
 		///      => TryGetActiveAutoActionTrigger() will succeed.
 		///
 		/// Not the perfect solution, but good enough for the moment.

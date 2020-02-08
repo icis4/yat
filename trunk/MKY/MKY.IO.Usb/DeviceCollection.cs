@@ -52,6 +52,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Base of list for containing USB device information.
 	/// </summary>
+	/// <typeparam name="T">The type of the items in the collection.</typeparam>
 	[Serializable]
 	public abstract class DeviceCollection<T> : List<T>
 		where T : DeviceInfo
