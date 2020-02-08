@@ -245,10 +245,10 @@ namespace MKY.IO.Usb
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
 		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
 		/// <param name="serial">Retrieved serial string, or "" if no appropriate device was found.</param>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "7#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetDeviceInfoFromVidPidUsage(int vendorId, int productId, int usagePage, int usageId, out string path, out string manufacturer, out string product, out string serial)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
@@ -298,9 +298,9 @@ namespace MKY.IO.Usb
 		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
 		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "7#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetDeviceInfoFromVidPidSerialUsage(int vendorId, int productId, string serial, int usagePage, int usageId, out string path, out string manufacturer, out string product)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))

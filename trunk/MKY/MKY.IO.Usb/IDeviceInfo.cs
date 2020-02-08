@@ -53,7 +53,7 @@ namespace MKY.IO.Usb
 		string ToString();
 
 		/// <summary></summary>
-		string ToString(bool insertIds);
+		string ToString(bool insertVidPid);
 
 		/// <summary></summary>
 		string ToShortString();

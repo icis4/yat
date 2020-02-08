@@ -65,6 +65,7 @@ namespace MKY.Collections
 		/// <returns>
 		/// String containing values of all items.
 		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string ItemsToString(IEnumerable collection, string enclosure = null)
 		{
 			// Attention:

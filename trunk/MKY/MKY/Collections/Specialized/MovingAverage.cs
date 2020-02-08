@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Collections.Specialized
 {
@@ -36,7 +37,7 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// The length of the average.
 		/// </summary>
-		public readonly int Length;
+		public int Length { get; protected set; } // = 0;
 
 		private Queue<T> queue; // = null;
 		private bool valueHasToBeCalculated; // = false;
@@ -47,7 +48,7 @@ namespace MKY.Collections.Specialized
 		/// </summary>
 		/// <param name="length">The length of the average.</param>
 		/// <exception cref="ArgumentOutOfRangeException"><paramref name="length"/> is equal or less than 0.</exception>
-		public MovingAverage(int length)
+		protected MovingAverage(int length)
 		{
 			if (length <= 0)
 				throw (new ArgumentOutOfRangeException("length", length, "Length must be at least 1!"));
@@ -117,6 +118,7 @@ namespace MKY.Collections.Specialized
 		/// See e.g. https://stackoverflow.com/questions/8122611/c-sharp-adding-two-generic-values
 		/// for background and discussion.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Avg", Justification = "Short form of operation, same as e.g. 'Add' or 'Div'.")]
 		public abstract T Avg(T[] items);
 	}
 

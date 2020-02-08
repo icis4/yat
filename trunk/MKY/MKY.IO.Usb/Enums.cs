@@ -267,8 +267,10 @@ namespace MKY.IO.Usb
 		CameraControl                = 0x90,
 		Arcade                       = 0x91,
 		////                           0x92..0xFEFF are reserved
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Make obvious that item defines a range.")]
 		VendorDefined_First        = 0xFF00,
 		////                         0xFF00..0xFFFF are vendor-defined
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Make obvious that item defines a range.")]
 		VendorDefined_Last         = 0xFFFF
 	}
 
@@ -429,11 +431,15 @@ namespace MKY.IO.Usb
 	public enum HidUsageId : ushort // 16 bits!
 	{
 		Undefined                    = 0x00,
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Make obvious that item defines a range.")]
 		PageDefined_First            = 0x01,
 		////                           0x01..0xFEFF are defined per usage page
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Make obvious that item defines a range.")]
 		PageDefined_Last           = 0xFEFF,
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Make obvious that item defines a range.")]
 		VendorDefined_First        = 0xFF00,
 		////                         0xFF00..0xFFFF are vendor-defined
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Make obvious that item defines a range.")]
 		VendorDefined_Last         = 0xFFFF
 	}
 
