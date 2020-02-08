@@ -1080,6 +1080,7 @@ namespace MKY.IO.Usb
 		/// Will be signaled by <see cref="AsyncReadCompleted"/> event above, or by XOn/XOff while
 		/// sending.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void ReceiveThread()
 		{
 			DebugThreadState("ReceiveThread() has started.");

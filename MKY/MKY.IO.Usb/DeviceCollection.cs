@@ -61,19 +61,19 @@ namespace MKY.IO.Usb
 		private Guid        classGuid   = Guid.Empty;
 
 		/// <summary></summary>
-		public DeviceCollection()
+		protected DeviceCollection()
 		{
 		}
 
 		/// <summary></summary>
-		public DeviceCollection(DeviceClass deviceClass)
+		protected DeviceCollection(DeviceClass deviceClass)
 		{
 			this.deviceClass = deviceClass;
 			this.classGuid = Device.GetGuidFromDeviceClass(deviceClass);
 		}
 
 		/// <summary></summary>
-		public DeviceCollection(IEnumerable<T> rhs)
+		protected DeviceCollection(IEnumerable<T> rhs)
 			: base(rhs)
 		{
 			var casted = (rhs as DeviceCollection<T>);

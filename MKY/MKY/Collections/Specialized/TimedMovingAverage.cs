@@ -37,12 +37,13 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// The interval of the average in milliseconds.
 		/// </summary>
-		public readonly int IntervalMs;
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms", Justification = "Emphasize difference among 'ms' and 'ticks'.")]
+		public int IntervalMs { get; protected set; } // = 0;
 
 		/// <summary>
 		/// The interval of the average in ticks.
 		/// </summary>
-		public readonly long IntervalTicks;
+		public long IntervalTicks { get; protected set; } // = 0;
 
 		private Queue<Tuple<T, long>> queue; // = null;
 		private bool valueHasToBeCalculated; // = false;
@@ -54,7 +55,8 @@ namespace MKY.Collections.Specialized
 		/// <param name="intervalMs">The interval of the average in milliseconds.</param>
 		/// <exception cref="ArgumentOutOfRangeException"><paramref name="intervalMs"/> is equal or less than 0 ms.</exception>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
-		public TimedMovingAverage(int intervalMs)
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Ms", Justification = "Emphasize difference among 'ms' and 'ticks'.")]
+		protected TimedMovingAverage(int intervalMs)
 		{
 			if (intervalMs <= 0)
 				throw (new ArgumentOutOfRangeException("intervalMs", intervalMs, "Interval must be at least 1 ms!"));
@@ -142,6 +144,7 @@ namespace MKY.Collections.Specialized
 		/// See e.g. https://stackoverflow.com/questions/8122611/c-sharp-adding-two-generic-values
 		/// for background and discussion.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Avg", Justification = "Short form of operation, same as e.g. 'Add' or 'Div'.")]
 		public abstract T Avg(Tuple<T, long>[] items);
 	}
 

@@ -100,6 +100,8 @@ namespace MKY
 		/// <summary>
 		/// Get the minimum and maximum within <paramref name="collection"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void GetMinMax(IEnumerable<int> collection, out int min, out int max)
 		{
 			if (collection.Count() <= 0)

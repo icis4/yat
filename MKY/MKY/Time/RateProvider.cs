@@ -246,6 +246,7 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool Update(int value, bool allowChangedEvent = true)
 		{
 			AssertNotDisposed();
@@ -259,6 +260,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool Update(DateTime endOfWindow, bool allowChangedEvent = true)
 		{
 			AssertNotDisposed();
@@ -272,6 +274,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void Reset(bool allowChangedEvent = true)
 		{
 			AssertNotDisposed();

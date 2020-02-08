@@ -426,7 +426,7 @@ namespace MKY.IO.Usb
 		/// Use properties instead of fields. This ensures that 'intelligent' properties,
 		/// i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual string ToString(bool insertIds)
+		public virtual string ToString(bool insertVidPid)
 		{
 			var sb = new StringBuilder();
 
@@ -435,7 +435,7 @@ namespace MKY.IO.Usb
 				sb.Append(Manufacturer);         // "Company"
 			}
 
-			if (insertIds)
+			if (insertVidPid)
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company "
@@ -453,7 +453,7 @@ namespace MKY.IO.Usb
 				sb.Append(Product);              // "Company (VID:0ABC) Product"
 			}
 
-			if (insertIds)
+			if (insertVidPid)
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company (VID:0ABC) Product "

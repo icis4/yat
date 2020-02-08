@@ -62,6 +62,7 @@ namespace MKY
 		/// Performs an implicit conversion from <typeparamref name="T"/> to <see cref="MarshalByRefWrapper{T}"/>.
 		/// </summary>
 		/// <param name="obj">The object to be converted.</param>
+		[SuppressMessage("Microsoft.Usage", "CA2225:OperatorOverloadsHaveNamedAlternates", Justification = "A static FromObject() method would result in CA1000 'DoNotDeclareStaticMembersOnGenericTypes', kind of an FxCop deadlock.")]
 		public static implicit operator MarshalByRefWrapper<T>(T obj)
 		{
 			return (new MarshalByRefWrapper<T>(obj));

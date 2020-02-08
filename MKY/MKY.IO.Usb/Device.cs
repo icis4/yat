@@ -1070,11 +1070,11 @@ namespace MKY.IO.Usb
 		/// Converts the value of this instance to its equivalent string representation,
 		/// which is a string describing the USB device as accurately as possible.
 		/// </summary>
-		public virtual string ToString(bool insertIds)
+		public virtual string ToString(bool insertVidPid)
 		{
 			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
-			return (Info.ToString(insertIds));
+			return (Info.ToString(insertVidPid));
 		}
 
 		/// <summary>

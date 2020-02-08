@@ -25,6 +25,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Collections.Specialized
 {
@@ -59,16 +60,17 @@ namespace MKY.Collections.Specialized
 	public abstract class Histogram<T> where T : IComparable<T>, IEquatable<T>
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Any better idea to implement a common default?")]
 		public const HistogramOutOfBoundsBehavior DefaultOutOfBoundsBehavior = HistogramOutOfBoundsBehavior.Ignore;
 
 		/// <summary></summary>
-		public readonly int MaxBinCount; // Must be initialized with up to 'int.MaxValue'.
+		public int MaxBinCount { get; protected set; } // Must be initialized with up to 'int.MaxValue'.
 
 		/// <summary></summary>
-		public readonly bool AutoAdjust; // = false;
+		public bool AutoAdjust { get; protected set; } // = false;
 
 		/// <summary></summary>
-		public readonly HistogramOutOfBoundsBehavior OutOfBoundsBehavior; // = Ignore;
+		public HistogramOutOfBoundsBehavior OutOfBoundsBehavior { get; protected set; } // = Ignore;
 
 		/// <summary>The value corresponding to the smallest item, as well as the lower limit of the first bin.</summary>
 		public T Min { get; protected set; } // = default(T);
@@ -89,6 +91,7 @@ namespace MKY.Collections.Specialized
 		protected List<T> BinValuesLowerLimit { get; private set; } // null;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MidPoint", Justification = "Orthogonality with 'LowerLimit' and 'UpperLimit'.")]
 		protected List<T> BinValuesMidPoint { get; private set; } // null;
 
 		/// <summary></summary>
@@ -98,7 +101,8 @@ namespace MKY.Collections.Specialized
 		/// Initializes a new instance of the <see cref="Histogram{T}"/> class with equally
 		/// distributed bins, fixed to the given arguments.
 		/// </summary>
-		public Histogram(T min, T max, int binCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected Histogram(T min, T max, int binCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
 		{
 			Min = min;
 			Max = max;
@@ -114,7 +118,7 @@ namespace MKY.Collections.Specialized
 		/// distributed bins, automatically adjusting <see cref="BinSize"/> as well as
 		/// <see cref="BinCount"/> up to <paramref name="maxBinCount"/>.
 		/// </summary>
-		public Histogram(int maxBinCount)
+		protected Histogram(int maxBinCount)
 		{
 		////Min = default(T);
 		////Max = default(T);
@@ -164,6 +168,7 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// Gets the current values of the bins.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MidPoint", Justification = "Orthogonality with 'LowerLimit' and 'UpperLimit'.")]
 		public virtual ReadOnlyCollection<T> ValuesMidPoint
 		{
 			get { return (BinValuesMidPoint.AsReadOnly()); }
@@ -198,6 +203,10 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// Calculates the values of the given bin.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "midPoint", Justification = "Orthogonality with 'lowerLimit' and 'upperLimit'.")]
 		protected abstract void CalculateBinValues(int index, out T lowerLimit, out T midPoint, out T upperLimit);
 
 		/// <summary>
@@ -333,7 +342,7 @@ namespace MKY.Collections.Specialized
 				{
 					var binCountKeepingBinSize = CalculateBinCount(Min, Max, BinSize);
 					if (binCountKeepingBinSize.CompareTo(MaxBinCount) <= 0)
-						AdjustByBinCountKeeptingBinSizeAndIncrementBin(previousMin, previousMax, item);
+						AdjustByBinCountKeepingBinSizeAndIncrementBin(previousMin, previousMax, item);
 					else
 						AdjustByBinSizeAndReincrementBins(MaxBinCount);
 				}
@@ -343,6 +352,7 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// Evaluates whether the value is within the proximity of a bin value.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool IsWithinProximityOfBinValue(T value, out int index)
 		{
 			//                     value
@@ -402,7 +412,7 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// Adjusts the histogram by increasing <see cref="BinCount"/>, keeping <see cref="BinSize"/>.
 		/// </summary>
-		protected virtual void AdjustByBinCountKeeptingBinSizeAndIncrementBin(T previousMin, T previousMax, T item)
+		protected virtual void AdjustByBinCountKeepingBinSizeAndIncrementBin(T previousMin, T previousMax, T item)
 		{
 			int binCountToInsert = CalculateBinCount(Min, previousMin, BinSize);
 			int binCountToAdd    = CalculateBinCount(previousMax, Max, BinSize);
@@ -437,6 +447,7 @@ namespace MKY.Collections.Specialized
 		/// <summary>
 		/// Adjusts the histogram by increasing <see cref="BinSize"/>, keeping <see cref="Min"/> and <see cref="Max"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reincrement", Justification = "Considered to best matching term here.")]
 		protected virtual void AdjustByBinSizeAndReincrementBins(int binCount)
 		{
 			BinSize = CalculateBinSize(Min, Max, binCount);
@@ -450,6 +461,8 @@ namespace MKY.Collections.Specialized
 		/// Gets the proximity around a <paramref name="value"/> in the histogram,
 		/// taking <see cref="MaxBinCount"/> into account.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected abstract void GetProximity(T value, out T lower, out T upper);
 	}
 
@@ -471,6 +484,7 @@ namespace MKY.Collections.Specialized
 		/// Initializes a new instance of the <see cref="HistogramInt32"/> class with equally
 		/// distributed bins, fixed to the given arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public HistogramInt32(int min = DefaultMin, int max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
 			: base(min, max, binCount, outOfBoundsBehavior)
 		{
@@ -558,6 +572,7 @@ namespace MKY.Collections.Specialized
 		/// Initializes a new instance of the <see cref="HistogramInt64"/> class with equally
 		/// distributed bins, fixed to the given arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public HistogramInt64(long min = DefaultMin, long max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
 			: base(min, max, binCount, outOfBoundsBehavior)
 		{
@@ -645,6 +660,7 @@ namespace MKY.Collections.Specialized
 		/// Initializes a new instance of the <see cref="HistogramDouble"/> class with equally
 		/// distributed bins, fixed to the given arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public HistogramDouble(double min = DefaultMin, double max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
 			: base(min, max, binCount, outOfBoundsBehavior)
 		{
@@ -732,6 +748,7 @@ namespace MKY.Collections.Specialized
 		/// Initializes a new instance of the <see cref="HistogramDecimal"/> class with equally
 		/// distributed bins, fixed to the given arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public HistogramDecimal(decimal min = DefaultMin, decimal max = DefaultMax, int binCount = DefaultBinCount, HistogramOutOfBoundsBehavior outOfBoundsBehavior = DefaultOutOfBoundsBehavior)
 			: base(min, max, binCount, outOfBoundsBehavior)
 		{
