@@ -26,6 +26,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using MKY;
+
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
@@ -268,6 +270,7 @@ namespace YAT.Domain.Settings
 				{
 					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlIsInUse);
 					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlIsInUse);
+
 					default:                  return (false);
 				}
 			}
@@ -283,6 +286,7 @@ namespace YAT.Domain.Settings
 				{
 					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlUsesXOnXOff);
 					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlUsesXOnXOff);
+
 					default:                  return (false);
 				}
 			}
@@ -298,6 +302,7 @@ namespace YAT.Domain.Settings
 				{
 					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlManagesXOnXOffManually);
 					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlManagesXOnXOffManually);
+
 					default:                  return (false);
 				}
 			}
@@ -308,6 +313,32 @@ namespace YAT.Domain.Settings
 		public virtual bool FlowControlUsesXOnXOffAutomatically
 		{
 			get { return (FlowControlUsesXOnXOff && !FlowControlManagesXOnXOffManually); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool SignalXOnWhenOpened
+		{
+			get
+			{
+				switch (this.ioType)
+				{
+					case IOType.SerialPort:   return (this.serialPort        .SignalXOnWhenOpened);
+					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.SignalXOnWhenOpened);
+
+					default:                  return (false);
+				}
+			}
+			set
+			{
+				switch (this.ioType)
+				{
+					case IOType.SerialPort:   this.serialPort        .SignalXOnWhenOpened = value; break;
+					case IOType.UsbSerialHid: this.usbSerialHidDevice.SignalXOnWhenOpened = value; break;
+
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'SignalXOnWhenOpened' can only be applied to serial COM ports or USB Ser/HID devices!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 		}
 
 		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>

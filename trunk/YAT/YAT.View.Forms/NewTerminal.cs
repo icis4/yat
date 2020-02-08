@@ -441,6 +441,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.Parity      = this.newTerminalSettings.SerialPortCommunication.Parity;
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.StopBits    = this.newTerminalSettings.SerialPortCommunication.StopBits;
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.FlowControl = this.newTerminalSettings.SerialPortCommunication.FlowControl;
+		////this.terminalSettings.Terminal.IO.SerialPort.SignalXOnWhenOpened is an advanced setting, i.e. not available in the [New Terminal] dialog.
 			this.terminalSettings.Terminal.IO.SerialPort.AliveMonitor              = this.newTerminalSettings.SerialPortAliveMonitor;
 			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen                = this.newTerminalSettings.SerialPortAutoReopen;
 
@@ -460,6 +461,7 @@ namespace YAT.View.Forms
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxFilterUsage     = this.newTerminalSettings.UsbSerialHidRxFilterUsage;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
+		////this.terminalSettings.Terminal.IO.UsbSerialHidDevice.SignalXOnWhenOpened is an advanced setting, i.e. not available in the [New Terminal] dialog.
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
 		////this.terminalSettings.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 

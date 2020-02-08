@@ -960,23 +960,26 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssumeOutputXOn();
 
-				// Immediately send XOn if software flow control is enabled to ensure that
-				//   device gets put into XOn if it was XOff before.
-				switch (this.settings.Communication.FlowControl)
+				if (this.settings.SignalXOnWhenOpened)
 				{
-					case SerialFlowControl.ManualSoftware:
-					case SerialFlowControl.ManualCombined:
+					// Immediately send XOn if software flow control is enabled to ensure that
+					//   device gets put into XOn if it was XOff before.
+					switch (this.settings.Communication.FlowControl)
 					{
-						if (this.iXOnXOffHelper.ManualInputWasXOn)
+						case SerialFlowControl.ManualSoftware:
+						case SerialFlowControl.ManualCombined:
+						{
+							if (this.iXOnXOffHelper.ManualInputWasXOn)
+								SignalInputXOn();
+
+							break;
+						}
+
+						default:
+						{
 							SignalInputXOn();
-
-						break;
-					}
-
-					default:
-					{
-						SignalInputXOn();
-						break;
+							break;
+						}
 					}
 				}
 			}

@@ -63,6 +63,9 @@ namespace MKY.IO.Serial.Usb
 		public const SerialHidFlowControl FlowControlDefault = SerialHidFlowControl.None;
 
 		/// <summary></summary>
+		public const bool SignalXOnWhenOpenedDefault = true;
+
+		/// <summary></summary>
 		public const bool AutoOpenDefault = IO.Usb.SerialHidDevice.AutoOpenDefault;
 
 		/// <summary></summary>
@@ -85,6 +88,7 @@ namespace MKY.IO.Serial.Usb
 		private SerialHidRxFilterUsage rxFilterUsage;
 
 		private SerialHidFlowControl flowControl;
+		private bool signalXOnWhenOpened;
 		private bool autoOpen;
 
 		private bool includeNonPayloadData;
@@ -129,8 +133,9 @@ namespace MKY.IO.Serial.Usb
 			ReportFormat  = rhs.ReportFormat;
 			RxFilterUsage = rhs.RxFilterUsage;
 
-			FlowControl = rhs.FlowControl;
-			AutoOpen    = rhs.AutoOpen;
+			FlowControl         = rhs.FlowControl;
+			SignalXOnWhenOpened = rhs.SignalXOnWhenOpened;
+			AutoOpen            = rhs.AutoOpen;
 
 			IncludeNonPayloadData = rhs.IncludeNonPayloadData;
 
@@ -151,8 +156,9 @@ namespace MKY.IO.Serial.Usb
 			ReportFormat  = ReportFormatDefault;
 			RxFilterUsage = RxFilterUsageDefault;
 
-			FlowControl = FlowControlDefault;
-			AutoOpen    = AutoOpenDefault;
+			FlowControl         = FlowControlDefault;
+			SignalXOnWhenOpened = SignalXOnWhenOpenedDefault;
+			AutoOpen            = AutoOpenDefault;
 
 			IncludeNonPayloadData = IncludeNonPayloadDataDefault;
 		}
@@ -286,6 +292,21 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
+		/// <remarks>Applies if <see cref="FlowControlUsesXOnXOff"/>.</remarks>
+		[XmlElement("SignalXOnWhenOpened")]
+		public virtual bool SignalXOnWhenOpened
+		{
+			get { return (this.signalXOnWhenOpened); }
+			set
+			{
+				if (this.signalXOnWhenOpened != value)
+				{
+					this.signalXOnWhenOpened = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <summary></summary>
 		[XmlElement("AutoOpen")]
 		public virtual bool AutoOpen
@@ -353,6 +374,7 @@ namespace MKY.IO.Serial.Usb
 				hashCode = (hashCode * 397) ^  RxFilterUsage                  .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
+				hashCode = (hashCode * 397) ^  SignalXOnWhenOpened            .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  IncludeNonPayloadData          .GetHashCode();
@@ -393,8 +415,9 @@ namespace MKY.IO.Serial.Usb
 				ReportFormat .Equals(other.ReportFormat)  &&
 				RxFilterUsage.Equals(other.RxFilterUsage) &&
 
-				FlowControl.Equals(other.FlowControl) &&
-				AutoOpen   .Equals(other.AutoOpen)    &&
+				FlowControl        .Equals(other.FlowControl)         &&
+				SignalXOnWhenOpened.Equals(other.SignalXOnWhenOpened) &&
+				AutoOpen           .Equals(other.AutoOpen)            &&
 
 				IncludeNonPayloadData.Equals(other.IncludeNonPayloadData)
 			);

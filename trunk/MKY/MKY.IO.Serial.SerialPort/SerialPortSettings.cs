@@ -38,6 +38,9 @@ namespace MKY.IO.Serial.SerialPort
 		// Constants
 		//==========================================================================================
 
+		/// <summary></summary>
+		public const bool SignalXOnWhenOpenedDefault = true;
+
 		/// <remarks>
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
@@ -128,6 +131,7 @@ namespace MKY.IO.Serial.SerialPort
 		private SerialPortId portId;
 
 		private SerialCommunicationSettings communication;
+		private bool signalXOnWhenOpened;
 		private AutoInterval aliveMonitor;
 		private AutoInterval autoReopen;
 		private OutputBufferSize outputBufferSize;
@@ -215,6 +219,7 @@ namespace MKY.IO.Serial.SerialPort
 				PortId = null;
 
 			Communication       = new SerialCommunicationSettings(rhs.Communication);
+			SignalXOnWhenOpened = rhs.SignalXOnWhenOpened;
 			AliveMonitor        = rhs.AliveMonitor;
 			AutoReopen          = rhs.AutoReopen;
 			OutputBufferSize    = rhs.OutputBufferSize;
@@ -244,6 +249,7 @@ namespace MKY.IO.Serial.SerialPort
 			// Attention: See remarks above.
 			PortId              = SerialPortId.FirstStandardPort;
 
+			SignalXOnWhenOpened = SignalXOnWhenOpenedDefault;
 			AliveMonitor        = AliveMonitorDefault;
 			AutoReopen          = AutoReopenDefault;
 			OutputBufferSize    = OutputBufferSizeDefault;
@@ -292,6 +298,21 @@ namespace MKY.IO.Serial.SerialPort
 					this.communication = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <remarks>Applies if <see cref="SerialCommunicationSettings.FlowControlUsesXOnXOff"/>.</remarks>
+		[XmlElement("SignalXOnWhenOpened")]
+		public virtual bool SignalXOnWhenOpened
+		{
+			get { return (this.signalXOnWhenOpened); }
+			set
+			{
+				if (this.signalXOnWhenOpened != value)
+				{
+					this.signalXOnWhenOpened = value;
+					SetMyChanged();
 				}
 			}
 		}
@@ -497,17 +518,18 @@ namespace MKY.IO.Serial.SerialPort
 
 				hashCode = (hashCode * 397) ^ (PortId != null ? PortId.GetHashCode() : 0); // May be 'null' if no ports are available!
 
-				hashCode = (hashCode * 397) ^  AliveMonitor           .GetHashCode();
-				hashCode = (hashCode * 397) ^  AutoReopen             .GetHashCode();
-				hashCode = (hashCode * 397) ^  OutputBufferSize       .GetHashCode();
-				hashCode = (hashCode * 397) ^  BufferMaxBaudRate      .GetHashCode();
-				hashCode = (hashCode * 397) ^  MaxChunkSize           .GetHashCode();
-				hashCode = (hashCode * 397) ^  MaxSendRate            .GetHashCode();
+				hashCode = (hashCode * 397) ^  SignalXOnWhenOpened.GetHashCode();
+				hashCode = (hashCode * 397) ^  AliveMonitor       .GetHashCode();
+				hashCode = (hashCode * 397) ^  AutoReopen         .GetHashCode();
+				hashCode = (hashCode * 397) ^  OutputBufferSize   .GetHashCode();
+				hashCode = (hashCode * 397) ^  BufferMaxBaudRate  .GetHashCode();
+				hashCode = (hashCode * 397) ^  MaxChunkSize       .GetHashCode();
+				hashCode = (hashCode * 397) ^  MaxSendRate        .GetHashCode();
 
-				hashCode = (hashCode * 397) ^  IgnoreFramingErrors    .GetHashCode();
+				hashCode = (hashCode * 397) ^  IgnoreFramingErrors.GetHashCode();
 
-				hashCode = (hashCode * 397) ^  NoSendOnOutputBreak    .GetHashCode();
-				hashCode = (hashCode * 397) ^  NoSendOnInputBreak     .GetHashCode();
+				hashCode = (hashCode * 397) ^  NoSendOnOutputBreak.GetHashCode();
+				hashCode = (hashCode * 397) ^  NoSendOnInputBreak .GetHashCode();
 
 				return (hashCode);
 			}
@@ -540,12 +562,13 @@ namespace MKY.IO.Serial.SerialPort
 
 				ObjectEx.Equals(PortId, other.PortId) &&
 
-				AliveMonitor       .Equals(other.AliveMonitor)      &&
-				AutoReopen         .Equals(other.AutoReopen)        &&
-				OutputBufferSize   .Equals(other.OutputBufferSize)  &&
-				BufferMaxBaudRate  .Equals(other.BufferMaxBaudRate) &&
-				MaxChunkSize       .Equals(other.MaxChunkSize)      &&
-				MaxSendRate        .Equals(other.MaxSendRate)       &&
+				SignalXOnWhenOpened.Equals(other.SignalXOnWhenOpened) &&
+				AliveMonitor       .Equals(other.AliveMonitor)        &&
+				AutoReopen         .Equals(other.AutoReopen)          &&
+				OutputBufferSize   .Equals(other.OutputBufferSize)    &&
+				BufferMaxBaudRate  .Equals(other.BufferMaxBaudRate)   &&
+				MaxChunkSize       .Equals(other.MaxChunkSize)        &&
+				MaxSendRate        .Equals(other.MaxSendRate)         &&
 
 				IgnoreFramingErrors.Equals(other.IgnoreFramingErrors) &&
 

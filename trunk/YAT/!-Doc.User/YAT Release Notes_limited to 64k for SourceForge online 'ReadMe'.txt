@@ -113,10 +113,10 @@ Important changes:
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
   As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
   renamed to \!(IOSettings()) (related to feature request #71).
-- Sending refactored (precondition for feature reqests #19, #333, #387 and fix of bug #176).
+- Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
 - Line content and EOL is no longer sent in two separate chunks (feature request #333).
-- Element and line processing refactored (precondition for feature reqests #19, #366, #367 and fix
-  of bugs #176, #371, #477, #478 as well as preparing upcoming feature reqest #74).
+- Element and line processing refactored (precondition for feature requests #19, #366, #367 and fix
+  of bugs #176, #371, #477, #478 as well as preparing upcoming feature request #74).
 - Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
   break lines at the same location as the bidirectional monitor panel (bugs #371 and #477).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
@@ -125,6 +125,7 @@ Important changes:
   on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Adaptive monitor update rate further improved.
+- Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
   preparing upcoming feature request #74, part of feature request #229).
