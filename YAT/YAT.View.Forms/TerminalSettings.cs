@@ -597,6 +597,7 @@ namespace YAT.View.Forms
 				serialPortSettings.Parity       = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
 				serialPortSettings.StopBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.StopBits;
 				serialPortSettings.FlowControl  = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
+			////serialPortSettings.SignalXOnWhenOpened is an advanced setting, i.e. not available in the [Terminal Settings] dialog.
 				serialPortSettings.AliveMonitor = this.settingsInEdit.Terminal.IO.SerialPort.AliveMonitor;
 				serialPortSettings.AutoReopen   = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
 
@@ -623,7 +624,9 @@ namespace YAT.View.Forms
 				usbSerialHidDeviceSettings.ReportFormat  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
 				usbSerialHidDeviceSettings.RxFilterUsage = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage;
 				usbSerialHidDeviceSettings.FlowControl   = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.FlowControl;
+			////usbSerialHidDeviceSettings.SignalXOnWhenOpened is an advanced setting, i.e. not available in the [Terminal Settings] dialog.
 				usbSerialHidDeviceSettings.AutoOpen      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.AutoOpen;
+			////usbSerialHidDeviceSettings.IncludeNonPayloadData is an advanced setting, i.e. not available in the [Terminal Settings] dialog.
 
 				// Trigger refresh of ports/devices if selection of I/O type has changed:
 				bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
@@ -772,6 +775,9 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Send.Text.SendImmediately            = f.SettingsResult.Terminal.Send.Text.SendImmediately;
 				this.settingsInEdit.Terminal.Send.File.SkipEmptyLines             = f.SettingsResult.Terminal.Send.File.SkipEmptyLines;
 				this.settingsInEdit.Terminal.Send.CopyPredefined                  = f.SettingsResult.Terminal.Send.CopyPredefined;
+
+				this.settingsInEdit.Terminal.IO.SerialPort        .SignalXOnWhenOpened = f.SettingsResult.Terminal.IO.SerialPort.SignalXOnWhenOpened;
+				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.SignalXOnWhenOpened = f.SettingsResult.Terminal.IO.UsbSerialHidDevice.SignalXOnWhenOpened;
 
 				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = f.SettingsResult.Terminal.Send.SignalXOnBeforeEachTransmission;
 				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = f.SettingsResult.Terminal.Send.SignalXOnPeriodically;

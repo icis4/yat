@@ -582,22 +582,25 @@ namespace MKY.IO.Serial.Usb
 					{
 						AssumeOutputXOn();
 
-						// Immediately send XOn if software flow control is enabled to ensure that
-						//   device gets put into XOn if it was XOff before.
-						switch (this.settings.FlowControl)
+						if (this.settings.SignalXOnWhenOpened)
 						{
-							case SerialHidFlowControl.ManualSoftware:
+							// Immediately send XOn if software flow control is enabled to ensure that
+							//   device gets put into XOn if it was XOff before.
+							switch (this.settings.FlowControl)
 							{
-								if (this.iXOnXOffHelper.ManualInputWasXOn)
+								case SerialHidFlowControl.ManualSoftware:
+								{
+									if (this.iXOnXOffHelper.ManualInputWasXOn)
+										SignalInputXOn();
+
+									break;
+								}
+
+								default:
+								{
 									SignalInputXOn();
-
-								break;
-							}
-
-							default:
-							{
-								SignalInputXOn();
-								break;
+									break;
+								}
 							}
 						}
 					}

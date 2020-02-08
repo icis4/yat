@@ -413,6 +413,8 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.StopBits,    Is.EqualTo(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault));
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.FlowControl, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialFlowControl.Software));
 
+				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.SignalXOnWhenOpened,   Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.SignalXOnWhenOpenedDefault));
+
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AliveMonitor.Enabled,  Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault.Enabled));
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AliveMonitor.Interval, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault.Interval));
 
@@ -500,6 +502,7 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.DeviceInfo.VendorIdString,  Is.EqualTo("1234"));
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.DeviceInfo.ProductIdString, Is.EqualTo("ABCD"));
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.FlowControl,                Is.EqualTo(MKY.IO.Serial.Usb.SerialHidFlowControl.None));
+				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.SignalXOnWhenOpened,        Is.True);
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.AutoOpen,                   Is.False);
 
 				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);

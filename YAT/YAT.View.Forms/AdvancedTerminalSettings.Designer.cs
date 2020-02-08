@@ -34,7 +34,6 @@
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_User = new System.Windows.Forms.GroupBox();
-			this.textBox_UserName = new MKY.Windows.Forms.TextBoxEx();
 			this.label_UserName = new System.Windows.Forms.Label();
 			this.groupBox_Communication = new System.Windows.Forms.GroupBox();
 			this.groupBox_Communication_SerialPorts = new System.Windows.Forms.GroupBox();
@@ -52,11 +51,7 @@
 			this.checkBox_UseExplicitDefaultRadix = new System.Windows.Forms.CheckBox();
 			this.label_SignalXOnPeriodicallyIntervalUnit = new System.Windows.Forms.Label();
 			this.groupBox_Send_SerialPorts = new System.Windows.Forms.GroupBox();
-			this.textBox_MaxChunkSize = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_BufferMaxBaudRate = new System.Windows.Forms.CheckBox();
-			this.textBox_MaxSendRateSize = new MKY.Windows.Forms.TextBoxEx();
-			this.textBox_MaxSendRateInterval = new MKY.Windows.Forms.TextBoxEx();
-			this.textBox_OutputBufferSize = new MKY.Windows.Forms.TextBoxEx();
 			this.checkBox_OutputBufferSize = new System.Windows.Forms.CheckBox();
 			this.label_OutputBufferSizeUnit = new System.Windows.Forms.Label();
 			this.checkBox_MaxChunkSizeEnable = new System.Windows.Forms.CheckBox();
@@ -66,19 +61,14 @@
 			this.label_MaxSendRateIntervalUnit2 = new System.Windows.Forms.Label();
 			this.checkBox_NoSendOnInputBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_NoSendOnOutputBreak = new System.Windows.Forms.CheckBox();
-			this.textBox_SignalXOnPeriodicallyInterval = new MKY.Windows.Forms.TextBoxEx();
 			this.groupBox_Send_Keywords = new System.Windows.Forms.GroupBox();
 			this.label_DefaultLineIntervalUnit = new System.Windows.Forms.Label();
-			this.textBox_DefaultLineInterval = new MKY.Windows.Forms.TextBoxEx();
 			this.label_DefaultLineInterval = new System.Windows.Forms.Label();
 			this.label_DefaultLineRepeatUnit = new System.Windows.Forms.Label();
-			this.textBox_DefaultLineRepeat = new MKY.Windows.Forms.TextBoxEx();
 			this.label_DefaultLineRepeat = new System.Windows.Forms.Label();
 			this.label_DefaultLineDelayUnit = new System.Windows.Forms.Label();
-			this.textBox_DefaultLineDelay = new MKY.Windows.Forms.TextBoxEx();
 			this.label_DefaultLineDelay = new System.Windows.Forms.Label();
 			this.label_DefaultDelayUnit = new System.Windows.Forms.Label();
-			this.textBox_DefaultDelay = new MKY.Windows.Forms.TextBoxEx();
 			this.label_DefaultDelay = new System.Windows.Forms.Label();
 			this.checkBox_SignalXOnPeriodicallyEnable = new System.Windows.Forms.CheckBox();
 			this.checkBox_SignalXOnBeforeEachTransmission = new System.Windows.Forms.CheckBox();
@@ -95,12 +85,10 @@
 			this.checkBox_ShowCopyOfActiveLine = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_UsbSerialHid = new System.Windows.Forms.GroupBox();
 			this.checkBox_IncludeNonPayloadData = new System.Windows.Forms.CheckBox();
-			this.textBox_MaxLineLength = new MKY.Windows.Forms.TextBoxEx();
 			this.label_MaxLineLengthUnit = new System.Windows.Forms.Label();
 			this.label_MaxLineLength = new System.Windows.Forms.Label();
 			this.checkBox_DeviceLineBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowDevice = new System.Windows.Forms.CheckBox();
-			this.textBox_MaxLineCount = new MKY.Windows.Forms.TextBoxEx();
 			this.groupBox_Display_Special = new System.Windows.Forms.GroupBox();
 			this.checkBox_Hide0xFF = new System.Windows.Forms.CheckBox();
 			this.checkBox_Hide0x00 = new System.Windows.Forms.CheckBox();
@@ -137,6 +125,19 @@
 			this.label_LineBreakRemark = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.label_TextSettingsRemark = new System.Windows.Forms.Label();
+			this.textBox_UserName = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_MaxChunkSize = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_MaxSendRateSize = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_MaxSendRateInterval = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_OutputBufferSize = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_SignalXOnPeriodicallyInterval = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_DefaultLineInterval = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_DefaultLineRepeat = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_DefaultLineDelay = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_DefaultDelay = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_MaxLineLength = new MKY.Windows.Forms.TextBoxEx();
+			this.textBox_MaxLineCount = new MKY.Windows.Forms.TextBoxEx();
+			this.checkBox_SignalXOnWhenOpened = new System.Windows.Forms.CheckBox();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
 			this.groupBox_Communication_SerialPorts.SuspendLayout();
@@ -190,20 +191,10 @@
 			this.groupBox_User.Controls.Add(this.label_UserName);
 			this.groupBox_User.Location = new System.Drawing.Point(12, 747);
 			this.groupBox_User.Name = "groupBox_User";
-			this.groupBox_User.Size = new System.Drawing.Size(532, 45);
+			this.groupBox_User.Size = new System.Drawing.Size(263, 45);
 			this.groupBox_User.TabIndex = 1;
 			this.groupBox_User.TabStop = false;
 			this.groupBox_User.Text = "User Settings";
-			// 
-			// textBox_UserName
-			// 
-			this.textBox_UserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_UserName.Location = new System.Drawing.Point(99, 17);
-			this.textBox_UserName.Name = "textBox_UserName";
-			this.textBox_UserName.Size = new System.Drawing.Size(427, 20);
-			this.textBox_UserName.TabIndex = 1;
-			this.textBox_UserName.TextChanged += new System.EventHandler(this.textBox_UserName_TextChanged);
 			// 
 			// label_UserName
 			// 
@@ -224,7 +215,7 @@
 			this.groupBox_Communication.Controls.Add(this.checkBox_ShowFlowControlCount);
 			this.groupBox_Communication.Location = new System.Drawing.Point(281, 12);
 			this.groupBox_Communication.Name = "groupBox_Communication";
-			this.groupBox_Communication.Size = new System.Drawing.Size(263, 188);
+			this.groupBox_Communication.Size = new System.Drawing.Size(263, 204);
 			this.groupBox_Communication.TabIndex = 2;
 			this.groupBox_Communication.TabStop = false;
 			this.groupBox_Communication.Text = "&Communication Settings";
@@ -237,7 +228,7 @@
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_OutputBreakModifiable);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_IndicateBreakStates);
 			this.groupBox_Communication_SerialPorts.Controls.Add(this.checkBox_ShowBreakCount);
-			this.groupBox_Communication_SerialPorts.Location = new System.Drawing.Point(6, 45);
+			this.groupBox_Communication_SerialPorts.Location = new System.Drawing.Point(6, 53);
 			this.groupBox_Communication_SerialPorts.Name = "groupBox_Communication_SerialPorts";
 			this.groupBox_Communication_SerialPorts.Size = new System.Drawing.Size(251, 111);
 			this.groupBox_Communication_SerialPorts.TabIndex = 2;
@@ -311,7 +302,7 @@
 			// checkBox_ShowFlowControlCount
 			// 
 			this.checkBox_ShowFlowControlCount.AutoSize = true;
-			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(12, 162);
+			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(12, 175);
 			this.checkBox_ShowFlowControlCount.Name = "checkBox_ShowFlowControlCount";
 			this.checkBox_ShowFlowControlCount.Size = new System.Drawing.Size(140, 17);
 			this.checkBox_ShowFlowControlCount.TabIndex = 4;
@@ -324,6 +315,7 @@
 			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Send.Controls.Add(this.checkBox_SignalXOnWhenOpened);
 			this.groupBox_Send.Controls.Add(this.checkBox_AllowConcurrency);
 			this.groupBox_Send.Controls.Add(this.checkBox_SkipEmptyLines);
 			this.groupBox_Send.Controls.Add(this.checkBox_EnableEscapesForText);
@@ -338,9 +330,9 @@
 			this.groupBox_Send.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_CopyPredefined);
 			this.groupBox_Send.Controls.Add(this.checkBox_KeepSendText);
-			this.groupBox_Send.Location = new System.Drawing.Point(281, 207);
+			this.groupBox_Send.Location = new System.Drawing.Point(281, 222);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(263, 534);
+			this.groupBox_Send.Size = new System.Drawing.Size(263, 570);
 			this.groupBox_Send.TabIndex = 3;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settin&gs";
@@ -370,12 +362,11 @@
 			// 
 			// checkBox_EnableEscapesForText
 			// 
-			this.checkBox_EnableEscapesForText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_EnableEscapesForText.AutoSize = true;
-			this.checkBox_EnableEscapesForText.Location = new System.Drawing.Point(12, 368);
+			this.checkBox_EnableEscapesForText.Location = new System.Drawing.Point(12, 401);
 			this.checkBox_EnableEscapesForText.Name = "checkBox_EnableEscapesForText";
 			this.checkBox_EnableEscapesForText.Size = new System.Drawing.Size(237, 17);
-			this.checkBox_EnableEscapesForText.TabIndex = 11;
+			this.checkBox_EnableEscapesForText.TabIndex = 12;
 			this.checkBox_EnableEscapesForText.Text = "&Enable <...> and \\... escapes on [Send Text]";
 			this.checkBox_EnableEscapesForText.UseVisualStyleBackColor = true;
 			this.checkBox_EnableEscapesForText.CheckedChanged += new System.EventHandler(this.checkBox_EnableEscapesForText_CheckedChanged);
@@ -397,16 +388,16 @@
 			// label_SignalXOnPeriodicallyIntervalUnit
 			// 
 			this.label_SignalXOnPeriodicallyIntervalUnit.AutoSize = true;
-			this.label_SignalXOnPeriodicallyIntervalUnit.Location = new System.Drawing.Point(218, 181);
+			this.label_SignalXOnPeriodicallyIntervalUnit.Location = new System.Drawing.Point(219, 204);
 			this.label_SignalXOnPeriodicallyIntervalUnit.Name = "label_SignalXOnPeriodicallyIntervalUnit";
 			this.label_SignalXOnPeriodicallyIntervalUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_SignalXOnPeriodicallyIntervalUnit.TabIndex = 9;
+			this.label_SignalXOnPeriodicallyIntervalUnit.TabIndex = 10;
 			this.label_SignalXOnPeriodicallyIntervalUnit.Text = "ms";
 			this.label_SignalXOnPeriodicallyIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// groupBox_Send_SerialPorts
 			// 
-			this.groupBox_Send_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Send_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Send_SerialPorts.Controls.Add(this.textBox_MaxChunkSize);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_BufferMaxBaudRate);
@@ -422,22 +413,12 @@
 			this.groupBox_Send_SerialPorts.Controls.Add(this.label_MaxSendRateIntervalUnit2);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnInputBreak);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnOutputBreak);
-			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 204);
+			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 230);
 			this.groupBox_Send_SerialPorts.Name = "groupBox_Send_SerialPorts";
 			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 158);
-			this.groupBox_Send_SerialPorts.TabIndex = 10;
+			this.groupBox_Send_SerialPorts.TabIndex = 11;
 			this.groupBox_Send_SerialPorts.TabStop = false;
 			this.groupBox_Send_SerialPorts.Text = "Serial COM Ports";
-			// 
-			// textBox_MaxChunkSize
-			// 
-			this.textBox_MaxChunkSize.Location = new System.Drawing.Point(132, 63);
-			this.textBox_MaxChunkSize.Name = "textBox_MaxChunkSize";
-			this.textBox_MaxChunkSize.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxChunkSize.TabIndex = 5;
-			this.textBox_MaxChunkSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_MaxChunkSize.TextChanged += new System.EventHandler(this.textBox_MaxChunkSize_TextChanged);
-			this.textBox_MaxChunkSize.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxChunkSize_Validating);
 			// 
 			// checkBox_BufferMaxBaudRate
 			// 
@@ -450,34 +431,6 @@
 			this.toolTip.SetToolTip(this.checkBox_BufferMaxBaudRate, resources.GetString("checkBox_BufferMaxBaudRate.ToolTip"));
 			this.checkBox_BufferMaxBaudRate.UseVisualStyleBackColor = true;
 			this.checkBox_BufferMaxBaudRate.CheckedChanged += new System.EventHandler(this.checkBox_BufferMaxBaudRate_CheckedChanged);
-			// 
-			// textBox_MaxSendRateSize
-			// 
-			this.textBox_MaxSendRateSize.Location = new System.Drawing.Point(78, 86);
-			this.textBox_MaxSendRateSize.Name = "textBox_MaxSendRateSize";
-			this.textBox_MaxSendRateSize.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxSendRateSize.TabIndex = 8;
-			this.textBox_MaxSendRateSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_MaxSendRateSize.TextChanged += new System.EventHandler(this.textBox_MaxSendRateSize_TextChanged);
-			this.textBox_MaxSendRateSize.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxSendRateSize_Validating);
-			// 
-			// textBox_MaxSendRateInterval
-			// 
-			this.textBox_MaxSendRateInterval.Location = new System.Drawing.Point(178, 86);
-			this.textBox_MaxSendRateInterval.Name = "textBox_MaxSendRateInterval";
-			this.textBox_MaxSendRateInterval.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxSendRateInterval.TabIndex = 10;
-			this.textBox_MaxSendRateInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_MaxSendRateInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxSendRateInterval_Validating);
-			// 
-			// textBox_OutputBufferSize
-			// 
-			this.textBox_OutputBufferSize.Location = new System.Drawing.Point(163, 17);
-			this.textBox_OutputBufferSize.Name = "textBox_OutputBufferSize";
-			this.textBox_OutputBufferSize.Size = new System.Drawing.Size(48, 20);
-			this.textBox_OutputBufferSize.TabIndex = 1;
-			this.textBox_OutputBufferSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_OutputBufferSize.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_OutputBufferSize_Validating);
 			// 
 			// checkBox_OutputBufferSize
 			// 
@@ -579,18 +532,9 @@
 			this.checkBox_NoSendOnOutputBreak.UseVisualStyleBackColor = true;
 			this.checkBox_NoSendOnOutputBreak.CheckedChanged += new System.EventHandler(this.checkBox_NoSendOnOutputBreak_CheckedChanged);
 			// 
-			// textBox_SignalXOnPeriodicallyInterval
-			// 
-			this.textBox_SignalXOnPeriodicallyInterval.Location = new System.Drawing.Point(168, 178);
-			this.textBox_SignalXOnPeriodicallyInterval.Name = "textBox_SignalXOnPeriodicallyInterval";
-			this.textBox_SignalXOnPeriodicallyInterval.Size = new System.Drawing.Size(48, 20);
-			this.textBox_SignalXOnPeriodicallyInterval.TabIndex = 8;
-			this.textBox_SignalXOnPeriodicallyInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_SignalXOnPeriodicallyInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SignalXOnPeriodicallyInterval_Validating);
-			// 
 			// groupBox_Send_Keywords
 			// 
-			this.groupBox_Send_Keywords.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Send_Keywords.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultLineIntervalUnit);
 			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultLineInterval);
@@ -604,10 +548,10 @@
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultDelayUnit);
 			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultDelay);
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultDelay);
-			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 416);
+			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 452);
 			this.groupBox_Send_Keywords.Name = "groupBox_Send_Keywords";
 			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 112);
-			this.groupBox_Send_Keywords.TabIndex = 13;
+			this.groupBox_Send_Keywords.TabIndex = 14;
 			this.groupBox_Send_Keywords.TabStop = false;
 			this.groupBox_Send_Keywords.Text = "&Keywords";
 			// 
@@ -620,15 +564,6 @@
 			this.label_DefaultLineIntervalUnit.TabIndex = 8;
 			this.label_DefaultLineIntervalUnit.Text = "ms";
 			this.label_DefaultLineIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBox_DefaultLineInterval
-			// 
-			this.textBox_DefaultLineInterval.Location = new System.Drawing.Point(147, 63);
-			this.textBox_DefaultLineInterval.Name = "textBox_DefaultLineInterval";
-			this.textBox_DefaultLineInterval.Size = new System.Drawing.Size(48, 20);
-			this.textBox_DefaultLineInterval.TabIndex = 7;
-			this.textBox_DefaultLineInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_DefaultLineInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineInterval_Validating);
 			// 
 			// label_DefaultLineInterval
 			// 
@@ -650,17 +585,6 @@
 			this.label_DefaultLineRepeatUnit.Text = "times";
 			this.label_DefaultLineRepeatUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textBox_DefaultLineRepeat
-			// 
-			this.textBox_DefaultLineRepeat.Location = new System.Drawing.Point(147, 86);
-			this.textBox_DefaultLineRepeat.Name = "textBox_DefaultLineRepeat";
-			this.textBox_DefaultLineRepeat.Size = new System.Drawing.Size(48, 20);
-			this.textBox_DefaultLineRepeat.TabIndex = 10;
-			this.textBox_DefaultLineRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip.SetToolTip(this.textBox_DefaultLineRepeat, "Set to -1 for infinite repeating");
-			this.textBox_DefaultLineRepeat.TextChanged += new System.EventHandler(this.textBox_DefaultLineRepeat_TextChanged);
-			this.textBox_DefaultLineRepeat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineRepeat_Validating);
-			// 
 			// label_DefaultLineRepeat
 			// 
 			this.label_DefaultLineRepeat.AutoSize = true;
@@ -680,15 +604,6 @@
 			this.label_DefaultLineDelayUnit.TabIndex = 5;
 			this.label_DefaultLineDelayUnit.Text = "ms";
 			this.label_DefaultLineDelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBox_DefaultLineDelay
-			// 
-			this.textBox_DefaultLineDelay.Location = new System.Drawing.Point(147, 40);
-			this.textBox_DefaultLineDelay.Name = "textBox_DefaultLineDelay";
-			this.textBox_DefaultLineDelay.Size = new System.Drawing.Size(48, 20);
-			this.textBox_DefaultLineDelay.TabIndex = 4;
-			this.textBox_DefaultLineDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_DefaultLineDelay.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineDelay_Validating);
 			// 
 			// label_DefaultLineDelay
 			// 
@@ -710,15 +625,6 @@
 			this.label_DefaultDelayUnit.Text = "ms";
 			this.label_DefaultDelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textBox_DefaultDelay
-			// 
-			this.textBox_DefaultDelay.Location = new System.Drawing.Point(147, 17);
-			this.textBox_DefaultDelay.Name = "textBox_DefaultDelay";
-			this.textBox_DefaultDelay.Size = new System.Drawing.Size(48, 20);
-			this.textBox_DefaultDelay.TabIndex = 1;
-			this.textBox_DefaultDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_DefaultDelay.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultDelay_Validating);
-			// 
 			// label_DefaultDelay
 			// 
 			this.label_DefaultDelay.AutoSize = true;
@@ -732,10 +638,10 @@
 			// checkBox_SignalXOnPeriodicallyEnable
 			// 
 			this.checkBox_SignalXOnPeriodicallyEnable.AutoSize = true;
-			this.checkBox_SignalXOnPeriodicallyEnable.Location = new System.Drawing.Point(12, 180);
+			this.checkBox_SignalXOnPeriodicallyEnable.Location = new System.Drawing.Point(12, 203);
 			this.checkBox_SignalXOnPeriodicallyEnable.Name = "checkBox_SignalXOnPeriodicallyEnable";
 			this.checkBox_SignalXOnPeriodicallyEnable.Size = new System.Drawing.Size(159, 17);
-			this.checkBox_SignalXOnPeriodicallyEnable.TabIndex = 7;
+			this.checkBox_SignalXOnPeriodicallyEnable.TabIndex = 8;
 			this.checkBox_SignalXOnPeriodicallyEnable.Text = "Send XOn periodically every";
 			this.checkBox_SignalXOnPeriodicallyEnable.UseVisualStyleBackColor = true;
 			this.checkBox_SignalXOnPeriodicallyEnable.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnPeriodicallyEnable_CheckedChanged);
@@ -743,22 +649,21 @@
 			// checkBox_SignalXOnBeforeEachTransmission
 			// 
 			this.checkBox_SignalXOnBeforeEachTransmission.AutoSize = true;
-			this.checkBox_SignalXOnBeforeEachTransmission.Location = new System.Drawing.Point(12, 157);
+			this.checkBox_SignalXOnBeforeEachTransmission.Location = new System.Drawing.Point(12, 180);
 			this.checkBox_SignalXOnBeforeEachTransmission.Name = "checkBox_SignalXOnBeforeEachTransmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.Size = new System.Drawing.Size(195, 17);
-			this.checkBox_SignalXOnBeforeEachTransmission.TabIndex = 6;
+			this.checkBox_SignalXOnBeforeEachTransmission.TabIndex = 7;
 			this.checkBox_SignalXOnBeforeEachTransmission.Text = "Send XOn before each transmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.UseVisualStyleBackColor = true;
 			this.checkBox_SignalXOnBeforeEachTransmission.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnBeforeEachTransmission_CheckedChanged);
 			// 
 			// checkBox_EnableEscapesForFile
 			// 
-			this.checkBox_EnableEscapesForFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_EnableEscapesForFile.AutoSize = true;
-			this.checkBox_EnableEscapesForFile.Location = new System.Drawing.Point(12, 391);
+			this.checkBox_EnableEscapesForFile.Location = new System.Drawing.Point(12, 424);
 			this.checkBox_EnableEscapesForFile.Name = "checkBox_EnableEscapesForFile";
 			this.checkBox_EnableEscapesForFile.Size = new System.Drawing.Size(232, 17);
-			this.checkBox_EnableEscapesForFile.TabIndex = 12;
+			this.checkBox_EnableEscapesForFile.TabIndex = 13;
 			this.checkBox_EnableEscapesForFile.Text = "Enable <...> and \\... escapes on [Send File]";
 			this.toolTip.SetToolTip(this.checkBox_EnableEscapesForFile, "Only applies to text terminals.");
 			this.checkBox_EnableEscapesForFile.UseVisualStyleBackColor = true;
@@ -932,17 +837,6 @@
 			this.checkBox_IncludeNonPayloadData.UseVisualStyleBackColor = true;
 			this.checkBox_IncludeNonPayloadData.CheckedChanged += new System.EventHandler(this.checkBox_IncludeNonPayloadData_CheckedChanged);
 			// 
-			// textBox_MaxLineLength
-			// 
-			this.textBox_MaxLineLength.Location = new System.Drawing.Point(90, 387);
-			this.textBox_MaxLineLength.Name = "textBox_MaxLineLength";
-			this.textBox_MaxLineLength.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxLineLength.TabIndex = 27;
-			this.textBox_MaxLineLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
-			this.textBox_MaxLineLength.TextChanged += new System.EventHandler(this.textBox_MaxLineLength_TextChanged);
-			this.textBox_MaxLineLength.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineLength_Validating);
-			// 
 			// label_MaxLineLengthUnit
 			// 
 			this.label_MaxLineLengthUnit.AutoSize = true;
@@ -983,17 +877,6 @@
 			this.checkBox_ShowDevice.Text = "Show I/O de&vice";
 			this.checkBox_ShowDevice.UseVisualStyleBackColor = true;
 			this.checkBox_ShowDevice.CheckedChanged += new System.EventHandler(this.checkBox_ShowDevice_CheckedChanged);
-			// 
-			// textBox_MaxLineCount
-			// 
-			this.textBox_MaxLineCount.Location = new System.Drawing.Point(90, 364);
-			this.textBox_MaxLineCount.Name = "textBox_MaxLineCount";
-			this.textBox_MaxLineCount.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxLineCount.TabIndex = 24;
-			this.textBox_MaxLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip.SetToolTip(this.textBox_MaxLineCount, "The maximal number of lines is limited in order to improve performance.");
-			this.textBox_MaxLineCount.TextChanged += new System.EventHandler(this.textBox_MaxLineCount_TextChanged);
-			this.textBox_MaxLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineCount_Validating);
 			// 
 			// groupBox_Display_Special
 			// 
@@ -1382,10 +1265,138 @@
 			this.label_TextSettingsRemark.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_TextSettingsRemark.Location = new System.Drawing.Point(544, 131);
 			this.label_TextSettingsRemark.Name = "label_TextSettingsRemark";
-			this.label_TextSettingsRemark.Size = new System.Drawing.Size(103, 656);
+			this.label_TextSettingsRemark.Size = new System.Drawing.Size(103, 655);
 			this.label_TextSettingsRemark.TabIndex = 7;
 			this.label_TextSettingsRemark.Text = "Also see\r\n[Text Settings...]";
 			this.label_TextSettingsRemark.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// textBox_UserName
+			// 
+			this.textBox_UserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_UserName.Location = new System.Drawing.Point(99, 17);
+			this.textBox_UserName.Name = "textBox_UserName";
+			this.textBox_UserName.Size = new System.Drawing.Size(158, 20);
+			this.textBox_UserName.TabIndex = 1;
+			this.textBox_UserName.TextChanged += new System.EventHandler(this.textBox_UserName_TextChanged);
+			// 
+			// textBox_MaxChunkSize
+			// 
+			this.textBox_MaxChunkSize.Location = new System.Drawing.Point(132, 63);
+			this.textBox_MaxChunkSize.Name = "textBox_MaxChunkSize";
+			this.textBox_MaxChunkSize.Size = new System.Drawing.Size(48, 20);
+			this.textBox_MaxChunkSize.TabIndex = 5;
+			this.textBox_MaxChunkSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_MaxChunkSize.TextChanged += new System.EventHandler(this.textBox_MaxChunkSize_TextChanged);
+			this.textBox_MaxChunkSize.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxChunkSize_Validating);
+			// 
+			// textBox_MaxSendRateSize
+			// 
+			this.textBox_MaxSendRateSize.Location = new System.Drawing.Point(78, 86);
+			this.textBox_MaxSendRateSize.Name = "textBox_MaxSendRateSize";
+			this.textBox_MaxSendRateSize.Size = new System.Drawing.Size(48, 20);
+			this.textBox_MaxSendRateSize.TabIndex = 8;
+			this.textBox_MaxSendRateSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_MaxSendRateSize.TextChanged += new System.EventHandler(this.textBox_MaxSendRateSize_TextChanged);
+			this.textBox_MaxSendRateSize.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxSendRateSize_Validating);
+			// 
+			// textBox_MaxSendRateInterval
+			// 
+			this.textBox_MaxSendRateInterval.Location = new System.Drawing.Point(178, 86);
+			this.textBox_MaxSendRateInterval.Name = "textBox_MaxSendRateInterval";
+			this.textBox_MaxSendRateInterval.Size = new System.Drawing.Size(48, 20);
+			this.textBox_MaxSendRateInterval.TabIndex = 10;
+			this.textBox_MaxSendRateInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_MaxSendRateInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxSendRateInterval_Validating);
+			// 
+			// textBox_OutputBufferSize
+			// 
+			this.textBox_OutputBufferSize.Location = new System.Drawing.Point(163, 17);
+			this.textBox_OutputBufferSize.Name = "textBox_OutputBufferSize";
+			this.textBox_OutputBufferSize.Size = new System.Drawing.Size(48, 20);
+			this.textBox_OutputBufferSize.TabIndex = 1;
+			this.textBox_OutputBufferSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_OutputBufferSize.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_OutputBufferSize_Validating);
+			// 
+			// textBox_SignalXOnPeriodicallyInterval
+			// 
+			this.textBox_SignalXOnPeriodicallyInterval.Location = new System.Drawing.Point(169, 201);
+			this.textBox_SignalXOnPeriodicallyInterval.Name = "textBox_SignalXOnPeriodicallyInterval";
+			this.textBox_SignalXOnPeriodicallyInterval.Size = new System.Drawing.Size(48, 20);
+			this.textBox_SignalXOnPeriodicallyInterval.TabIndex = 9;
+			this.textBox_SignalXOnPeriodicallyInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_SignalXOnPeriodicallyInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SignalXOnPeriodicallyInterval_Validating);
+			// 
+			// textBox_DefaultLineInterval
+			// 
+			this.textBox_DefaultLineInterval.Location = new System.Drawing.Point(147, 63);
+			this.textBox_DefaultLineInterval.Name = "textBox_DefaultLineInterval";
+			this.textBox_DefaultLineInterval.Size = new System.Drawing.Size(48, 20);
+			this.textBox_DefaultLineInterval.TabIndex = 7;
+			this.textBox_DefaultLineInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_DefaultLineInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineInterval_Validating);
+			// 
+			// textBox_DefaultLineRepeat
+			// 
+			this.textBox_DefaultLineRepeat.Location = new System.Drawing.Point(147, 86);
+			this.textBox_DefaultLineRepeat.Name = "textBox_DefaultLineRepeat";
+			this.textBox_DefaultLineRepeat.Size = new System.Drawing.Size(48, 20);
+			this.textBox_DefaultLineRepeat.TabIndex = 10;
+			this.textBox_DefaultLineRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.textBox_DefaultLineRepeat, "Set to -1 for infinite repeating");
+			this.textBox_DefaultLineRepeat.TextChanged += new System.EventHandler(this.textBox_DefaultLineRepeat_TextChanged);
+			this.textBox_DefaultLineRepeat.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineRepeat_Validating);
+			// 
+			// textBox_DefaultLineDelay
+			// 
+			this.textBox_DefaultLineDelay.Location = new System.Drawing.Point(147, 40);
+			this.textBox_DefaultLineDelay.Name = "textBox_DefaultLineDelay";
+			this.textBox_DefaultLineDelay.Size = new System.Drawing.Size(48, 20);
+			this.textBox_DefaultLineDelay.TabIndex = 4;
+			this.textBox_DefaultLineDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_DefaultLineDelay.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineDelay_Validating);
+			// 
+			// textBox_DefaultDelay
+			// 
+			this.textBox_DefaultDelay.Location = new System.Drawing.Point(147, 17);
+			this.textBox_DefaultDelay.Name = "textBox_DefaultDelay";
+			this.textBox_DefaultDelay.Size = new System.Drawing.Size(48, 20);
+			this.textBox_DefaultDelay.TabIndex = 1;
+			this.textBox_DefaultDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_DefaultDelay.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultDelay_Validating);
+			// 
+			// textBox_MaxLineLength
+			// 
+			this.textBox_MaxLineLength.Location = new System.Drawing.Point(90, 387);
+			this.textBox_MaxLineLength.Name = "textBox_MaxLineLength";
+			this.textBox_MaxLineLength.Size = new System.Drawing.Size(48, 20);
+			this.textBox_MaxLineLength.TabIndex = 27;
+			this.textBox_MaxLineLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
+			this.textBox_MaxLineLength.TextChanged += new System.EventHandler(this.textBox_MaxLineLength_TextChanged);
+			this.textBox_MaxLineLength.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineLength_Validating);
+			// 
+			// textBox_MaxLineCount
+			// 
+			this.textBox_MaxLineCount.Location = new System.Drawing.Point(90, 364);
+			this.textBox_MaxLineCount.Name = "textBox_MaxLineCount";
+			this.textBox_MaxLineCount.Size = new System.Drawing.Size(48, 20);
+			this.textBox_MaxLineCount.TabIndex = 24;
+			this.textBox_MaxLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.textBox_MaxLineCount, "The maximal number of lines is limited in order to improve performance.");
+			this.textBox_MaxLineCount.TextChanged += new System.EventHandler(this.textBox_MaxLineCount_TextChanged);
+			this.textBox_MaxLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineCount_Validating);
+			// 
+			// checkBox_SignalXOnWhenOpened
+			// 
+			this.checkBox_SignalXOnWhenOpened.AutoSize = true;
+			this.checkBox_SignalXOnWhenOpened.Location = new System.Drawing.Point(12, 157);
+			this.checkBox_SignalXOnWhenOpened.Name = "checkBox_SignalXOnWhenOpened";
+			this.checkBox_SignalXOnWhenOpened.Size = new System.Drawing.Size(209, 17);
+			this.checkBox_SignalXOnWhenOpened.TabIndex = 6;
+			this.checkBox_SignalXOnWhenOpened.Text = "Send XOn when I/O has been opened";
+			this.checkBox_SignalXOnWhenOpened.UseVisualStyleBackColor = true;
+			this.checkBox_SignalXOnWhenOpened.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnWhenOpened_CheckedChanged);
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -1545,5 +1556,6 @@
 		private System.Windows.Forms.Label label_TextSettingsRemark;
 		private System.Windows.Forms.Label label_LineBreaks;
 		private System.Windows.Forms.CheckBox checkBox_AllowConcurrency;
+		private System.Windows.Forms.CheckBox checkBox_SignalXOnWhenOpened;
 	}
 }

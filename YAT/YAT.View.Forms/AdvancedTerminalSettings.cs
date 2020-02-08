@@ -809,6 +809,14 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void checkBox_SignalXOnWhenOpened_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.Terminal.IO.SignalXOnWhenOpened = checkBox_SignalXOnWhenOpened.Checked;
+		}
+
 		private void checkBox_SignalXOnBeforeEachTransmission_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1192,6 +1200,8 @@ namespace YAT.View.Forms
 				checkBox_SkipEmptyLines.Checked          =   this.settingsInEdit.Terminal.Send.File.SkipEmptyLines;
 				checkBox_CopyPredefined.Checked          =   this.settingsInEdit.Terminal.Send.CopyPredefined;
 
+				checkBox_SignalXOnWhenOpened.Enabled             = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+				checkBox_SignalXOnWhenOpened.Checked             = this.settingsInEdit.Terminal.IO.SignalXOnWhenOpened;
 				checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 				checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
 				checkBox_SignalXOnPeriodicallyEnable.Enabled     = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
