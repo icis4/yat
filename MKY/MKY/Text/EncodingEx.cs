@@ -712,21 +712,16 @@ namespace MKY.Text
 			}
 		}
 
-		private static EncodingInfoEx[] staticInfos;
-
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "'staticInfos' must be initialized in static constructor because it uses a list object.")]
-		static EncodingEx()
+		private static EncodingInfoEx[] staticInfos =
 		{
-			var l = new List<EncodingInfoEx>(7); // Preset the required capacity to improve memory management.
-			l.Add(new EncodingInfoEx(SupportedEncoding.ASCII,   "ASCII (ISO646-US)",         Encoding.ASCII));
-			l.Add(new EncodingInfoEx(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7));
-			l.Add(new EncodingInfoEx(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8));
-			l.Add(new EncodingInfoEx(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode));
-			l.Add(new EncodingInfoEx(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode));
-			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32));
-			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false)));
-			staticInfos = l.ToArray();
-		}
+			new EncodingInfoEx(SupportedEncoding.ASCII,   "ASCII (ISO646-US)",         Encoding.ASCII),
+			new EncodingInfoEx(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7),
+			new EncodingInfoEx(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8),
+			new EncodingInfoEx(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode),
+			new EncodingInfoEx(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode),
+			new EncodingInfoEx(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32),
+			new EncodingInfoEx(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false))
+		};
 
 		/// <summary>
 		/// Default is <see cref="System.Text.Encoding.Default"/>.

@@ -36,10 +36,10 @@ namespace YAT.Domain.Utilities
 	/// struct manages the state and the various criteria.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
-	public struct SendingIsBusyChangedEventHelper
+	public struct SendingIsBusyChangedEventHelper : IEquatable<SendingIsBusyChangedEventHelper>
 	{
-		/// <summary></summary>
-		public const int ThresholdMs = 400;
+		/// <remarks>In milliseconds.</remarks>
+		public const int Threshold = 400;
 
 		private bool eventMustBeRaised;
 		private DateTime initialTimeStamp;
@@ -60,10 +60,11 @@ namespace YAT.Domain.Utilities
 		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
 		public static bool ChunkSizeIsAboveThreshold(int chunkSize, double bytesPerMillisecond)
 		{
-			return (chunkSize >= (ThresholdMs * bytesPerMillisecond));
+			return (chunkSize >= (Threshold * bytesPerMillisecond));
 		}
 
 		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Funny, this *is* an event helper.")]
 		public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize, double bytesPerMillisecond)
 		{
 			// Only let the event get raised if it hasn't been yet:
@@ -79,10 +80,11 @@ namespace YAT.Domain.Utilities
 		/// <summary></summary>
 		public static bool DelayIsAboveThreshold(int delay)
 		{
-			return (delay >= ThresholdMs);
+			return (delay >= Threshold);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Funny, this *is* an event helper.")]
 		public bool RaiseEventIfDelayIsAboveThreshold(int delay)
 		{
 			// Only let the event get raised if it hasn't been yet:
@@ -99,10 +101,11 @@ namespace YAT.Domain.Utilities
 		public bool TotalTimeLagIsAboveThreshold()
 		{
 			TimeSpan totalTimeLag = (DateTime.Now - this.initialTimeStamp);
-			return (totalTimeLag.Milliseconds >= ThresholdMs);
+			return (totalTimeLag.Milliseconds >= Threshold);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Funny, this *is* an event helper.")]
 		public bool RaiseEventIfTotalTimeLagIsAboveThreshold()
 		{
 			// Only let the event get raised if it hasn't been yet:
@@ -114,6 +117,76 @@ namespace YAT.Domain.Utilities
 
 			return (false);
 		}
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    this.eventMustBeRaised.GetHashCode();
+				hashCode = (hashCode * 397) ^ this.initialTimeStamp .GetHashCode();
+
+				return (hashCode);
+			}
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is SendingIsBusyChangedEventHelper)
+				return (Equals((SendingIsBusyChangedEventHelper)obj));
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public bool Equals(SendingIsBusyChangedEventHelper other)
+		{
+			return
+			(
+				this.eventMustBeRaised.Equals(other.eventMustBeRaised) &&
+				this.initialTimeStamp .Equals(other.initialTimeStamp)
+			);
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have value equality.
+		/// </summary>
+		public static bool operator ==(SendingIsBusyChangedEventHelper lhs, SendingIsBusyChangedEventHelper rhs)
+		{
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have value inequality.
+		/// </summary>
+		public static bool operator !=(SendingIsBusyChangedEventHelper lhs, SendingIsBusyChangedEventHelper rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
 	}
 }
 

@@ -111,7 +111,7 @@ namespace YAT.Model.Test.Transmission
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static OneWayTestData()
 		{
 			SingleLine   = new Utilities.TestSet(new Types.Command(TestTextLines[0]));

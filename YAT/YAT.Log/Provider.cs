@@ -119,7 +119,8 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "portLog", Justification = "Logs are actually disposed via this.logs in the below foreach loop.")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "controlLog", Justification = "Log is actually disposed via 'this.logs' in the below loop.")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "portLog", Justification = "Log is actually disposed via 'this.logs' in the below loop.")]
 		protected virtual void Dispose(bool disposing)
 		{
 			if (!IsDisposed)

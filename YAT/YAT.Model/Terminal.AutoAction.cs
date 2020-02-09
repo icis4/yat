@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -94,10 +95,12 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler AutoActionPlotRequest_Promtly;
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		public event EventHandler AutoActionPlotRequest_Promptly;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoActionCountChanged_Promtly;
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		public event EventHandler<EventArgs<int>> AutoActionCountChanged_Promptly;
 
 		#endregion
 
@@ -212,6 +215,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from elements always are non-reloadable.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
 			triggers = new List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>>(); // No preset needed, the default behavior is good enough.
@@ -274,6 +278,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
 			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
@@ -421,6 +426,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Enqueues the automatic actions for invocation on other than the receive thread.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Agree, but this is a helper method to simplify enqueuing triggers.")]
 		protected virtual void EnqueueAutoActions(List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
 			foreach (var trigger in triggers)
@@ -452,6 +458,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Will be signaled by <see cref="EnqueueAutoAction(AutoAction, DateTime, string, MatchCollection, CountsRatesTuple)"/> above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void AutoActionThread()
 		{
 			DebugThreadState("AutoActionThread() has started.");
@@ -495,7 +502,7 @@ namespace YAT.Model
 
 						foreach (var item in pendingItems)
 						{
-							PreformAutoAction(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5);
+							PerformAutoAction(item.Item1, item.Item2, item.Item3, item.Item4, item.Item5);
 						}
 					} // Inner loop
 				} // Outer loop
@@ -519,10 +526,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Performs the automatic action.
 		/// </summary>
-		protected virtual void PreformAutoAction(AutoAction action, DateTime triggerTimeStamp, string triggerText, MatchCollection triggerMatches, CountsRatesTuple dataStatus)
+		protected virtual void PerformAutoAction(AutoAction action, DateTime triggerTimeStamp, string triggerText, MatchCollection triggerMatches, CountsRatesTuple dataStatus)
 		{
 			int count = Interlocked.Increment(ref this.autoActionCount); // Incrementing before invoking to have the effective count updated during action.
-			OnAutoActionCountChanged_Promtly(new EventArgs<int>(count));
+			OnAutoActionCountChanged_Promptly(new EventArgs<int>(count));
 
 			// Attention:
 			// Same switch/case exists in HasActionToInvoke() below.
@@ -609,7 +616,7 @@ namespace YAT.Model
 		protected virtual bool HasActionToInvoke(AutoAction action)
 		{
 			// Attention:
-			// Same switch/case exists in PreformAutoAction() above.
+			// Same switch/case exists in PerformAutoAction() above.
 			// Changes here must be applied there too.
 
 			switch (action)
@@ -694,7 +701,7 @@ namespace YAT.Model
 					AutoActionPlotModel.AddItem(pi, txColor, rxColor);
 				}
 
-				OnAutoActionPlotRequest_Promtly(EventArgs.Empty);
+				OnAutoActionPlotRequest_Promptly(EventArgs.Empty);
 			}
 			else
 			{
@@ -705,6 +712,8 @@ namespace YAT.Model
 		/// <summary>
 		/// Requests the desired chart/plot.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool TryCreateAutoActionPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, CountsRatesTuple dataStatus, out AutoActionPlotItem pi, out string errorMessage)
 		{
 			switch (plotAction)
@@ -724,6 +733,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void CreateCountRatePlotItem(AutoAction plotAction, DateTime triggerTimeStamp, CountsRatesTuple dataStatus, out AutoActionPlotItem pi)
 		{
 			string label;
@@ -747,6 +757,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void CreateYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
@@ -756,6 +767,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void CreateXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
@@ -769,6 +781,8 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool TryCreateTimeXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
@@ -788,6 +802,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void CreateTimeStampXYPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, out AutoActionPlotItem pi)
 		{
 			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
@@ -797,6 +812,8 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool TryConvertToPlotTime(string capture, out Tuple<string, double> timeValue, out string errorMessage)
 		{
 			// Try DateTime:
@@ -822,7 +839,7 @@ namespace YAT.Model
 			}
 
 			timeValue = null;
-			errorMessage = string.Format("The first capture {0} could not be converted into a date/time value!", capture);
+			errorMessage = string.Format(CultureInfo.CurrentCulture, "The first capture {0} could not be converted into a date/time value!", capture);
 			return (false);
 		}
 
@@ -888,7 +905,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			int count = Interlocked.Exchange(ref this.autoActionCount, 0);
-			OnAutoActionCountChanged_Promtly(new EventArgs<int>(count));
+			OnAutoActionCountChanged_Promptly(new EventArgs<int>(count));
 		}
 
 		/// <summary>
@@ -1030,15 +1047,17 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnAutoActionPlotRequest_Promtly(EventArgs e)
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		protected virtual void OnAutoActionPlotRequest_Promptly(EventArgs e)
 		{
-			this.eventHelper.RaiseSync<EventArgs>(AutoActionPlotRequest_Promtly, this, e);
+			this.eventHelper.RaiseSync<EventArgs>(AutoActionPlotRequest_Promptly, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnAutoActionCountChanged_Promtly(EventArgs<int> e)
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		protected virtual void OnAutoActionCountChanged_Promptly(EventArgs<int> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged_Promtly, this, e);
+			this.eventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged_Promptly, this, e);
 		}
 
 		#endregion

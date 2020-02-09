@@ -481,9 +481,9 @@ namespace YAT.Application
 				else
 					ShowConsoleHelp(true);
 			}
-			                                                                               //// Two args required to format without leading
-			DebugMessage(string.Format("Exiting with {0} (0x{1:X}).", result, (int)result)); // zeros, same as Visual Studio is doing, e.g.:
-			                                                                                 // "The program '[<ID>] <APP>.exe' has exited with code 0 (0x0)".
+			                                                                                                           //// Two args required to format without leading
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, "Exiting with {0} (0x{1:X}).", result, (int)result)); // zeros, same as Visual Studio is doing, e.g.:
+			                                                                                                             // "The program '[<ID>] <APP>.exe' has exited with code 0 (0x0)".
 			return (result);
 		}
 

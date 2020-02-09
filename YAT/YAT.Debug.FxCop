@@ -22,16 +22,15 @@
   <TargetFrameworkVersion>3.5</TargetFrameworkVersion>
  </ProjectOptions>
  <Targets>
+  <Target Name="$(ProjectDir)/YAT.Application.Base/bin/Debug/YAT.Application.Base.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Application.Test/bin/Debug/YAT.Application.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Application/bin/Debug/YAT.Application.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Controller.Test/bin/Debug/YAT.Controller.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Controller/bin/Debug/YAT.Controller.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Domain.Test/bin/Debug/YAT.Domain.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Domain/bin/Debug/YAT.Domain.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Format/bin/Debug/YAT.Format.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Log/bin/Debug/YAT.Log.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Model.Settings/bin/Debug/YAT.Model.Settings.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Model.Base/bin/Debug/YAT.Model.Base.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Model.Test/bin/Debug/YAT.Model.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Model.Types/bin/Debug/YAT.Model.Types.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Model/bin/Debug/YAT.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Settings.Application/bin/Debug/YAT.Settings.Application.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Settings.Model.Test/bin/Debug/YAT.Settings.Model.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
@@ -42,6 +41,7 @@
   <Target Name="$(ProjectDir)/YAT.View.Test/bin/Debug/YAT.View.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.View.Utilities/bin/Debug/YAT.View.Utilities.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT/bin/Debug/YAT.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YATConsole/bin/Debug/YATConsole.exe" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>

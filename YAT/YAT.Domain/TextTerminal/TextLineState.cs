@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in
@@ -32,9 +33,11 @@ namespace YAT.Domain
 	public class TextLineState
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
 		public byte[]                            EolSequence                          { get; }
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiBytes'?")]
 		public List<byte>                        PendingMultiBytesToDecode            { get; private set; }
 
 		/// <summary></summary>

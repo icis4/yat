@@ -107,8 +107,10 @@ namespace YAT.Model.Types
 		#endregion
 
 		/// <summary>Common regular expression replacement patterns.</summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "A 'ReadOnlyCollection' indeed is a read-only wrapper.")]
 		public static readonly ReadOnlyCollection<string> CommonRegexReplacementPatterns;
 
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future patterns may have to implement more logic.")]
 		static AutoResponseEx()
 		{
 			var l = new List<string>(1); // Preset the required capacity to improve memory management.

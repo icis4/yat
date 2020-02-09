@@ -45,6 +45,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "infos", Justification = "Plural of 'info'.")]
 		public static string ComposeInvariant(string indicatedName, IEnumerable<string> infos)
 		{
 			var sb = new StringBuilder();

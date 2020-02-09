@@ -289,7 +289,7 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Calculates the major step of the histogram bin axis.
 		/// </summary>
-		protected double ToMajorStep(double binsPerStep)
+		protected static double ToMajorStep(double binsPerStep)
 		{
 			if (binsPerStep >= 1.0)
 			{
@@ -497,7 +497,7 @@ namespace YAT.View.Forms
 			// Don't save right now, see remarks of this method as well as 'SaveWindowSettings()' below.
 		}
 
-		private void SaveWindowSettings()
+		private static void SaveWindowSettings()
 		{
 			if (ApplicationSettings.LocalUserSettings.PlotWindow.HaveChanged)
 				ApplicationSettings.SaveLocalUserSettings();

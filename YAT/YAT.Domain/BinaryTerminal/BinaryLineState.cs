@@ -38,7 +38,7 @@ namespace YAT.Domain
 		public SequenceQueue        SequenceBefore                                  { get; set; }
 
 		/// <remarks>Must not be a <see cref="DisplayElementCollection"/> to prevent elements from being appended/merged.</remarks>
-		public List<DisplayElement> RetainedUnconfirmedHiddenSequenceBeforeElements { get; set; }
+		public List<DisplayElement> RetainedUnconfirmedHiddenSequenceBeforeElements { get; }
 
 		/// <summary></summary>
 		public BinaryLineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore)
@@ -46,7 +46,7 @@ namespace YAT.Domain
 			SequenceAfter  = sequenceAfter;
 			SequenceBefore = sequenceBefore;
 
-			Initialize();
+			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary></summary>
@@ -55,12 +55,6 @@ namespace YAT.Domain
 			SequenceAfter  = rhs.SequenceAfter;
 			SequenceBefore = rhs.SequenceBefore;
 
-			Initialize();
-		}
-
-		/// <summary></summary>
-		protected virtual void Initialize()
-		{
 			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
 		}
 
@@ -72,7 +66,7 @@ namespace YAT.Domain
 			SequenceAfter .Reset();
 			SequenceBefore.Reset();
 
-			Initialize();
+			RetainedUnconfirmedHiddenSequenceBeforeElements.Clear();
 		}
 
 		/// <summary>

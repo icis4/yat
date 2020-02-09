@@ -725,7 +725,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(Direction direction, ElementAttributes flags)
-			: this(TimeStampDefault, direction, null, flags)
+			: this(TimeStampDefault, direction, flags)
 		{
 		}
 

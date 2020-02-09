@@ -30,6 +30,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -73,7 +74,8 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<int>> AutoResponseCountChanged_Promtly;
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		public event EventHandler<EventArgs<int>> AutoResponseCountChanged_Promptly;
 
 		#endregion
 
@@ -188,6 +190,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements, out List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
 			triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
@@ -242,6 +245,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines, out List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
 			if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
@@ -285,6 +289,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Enqueues the automatic responses for invocation on other than the receive thread.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Agree, but this is a helper method to simplify enqueuing triggers.")]
 		protected virtual void EnqueueAutoResponses(List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
 			foreach (var trigger in triggers)
@@ -308,6 +313,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Will be signaled by <see cref="EnqueueAutoResponse(byte[], string, MatchCollection)"/> above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void AutoResponseThread()
 		{
 			DebugThreadState("AutoResponseThread() has started.");
@@ -378,7 +384,7 @@ namespace YAT.Model
 		protected virtual void SendAutoResponse(byte[] triggerSequence, string triggerText, MatchCollection triggerMatches)
 		{
 			int count = Interlocked.Increment(ref this.autoResponseCount); // Incrementing before invoking to have the effective count updated when sending.
-			OnAutoResponseCountChanged_Promtly(new EventArgs<int>(count));
+			OnAutoResponseCountChanged_Promptly(new EventArgs<int>(count));
 
 			AutoResponseEx response = SettingsRoot.AutoResponse.Response;
 			int page = SettingsRoot.Predefined.SelectedPageId;
@@ -509,7 +515,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			int count = Interlocked.Exchange(ref this.autoResponseCount, 0);
-			OnAutoResponseCountChanged_Promtly(new EventArgs<int>(count));
+			OnAutoResponseCountChanged_Promptly(new EventArgs<int>(count));
 		}
 
 		/// <summary>
@@ -651,9 +657,10 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnAutoResponseCountChanged_Promtly(EventArgs<int> e)
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		protected virtual void OnAutoResponseCountChanged_Promptly(EventArgs<int> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged_Promtly, this, e);
+			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged_Promptly, this, e);
 		}
 
 		#endregion

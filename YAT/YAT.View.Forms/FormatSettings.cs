@@ -39,6 +39,15 @@ using MKY.Windows.Forms;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", Scope = "member", Target = "YAT.View.Forms.FormatSettings.#InitializeComponent()", MessageId="System.TimeSpan.Parse(System.String)", Justification = "Designer generated!")]
+
+#endregion
+
 namespace YAT.View.Forms
 {
 	/// <summary></summary>

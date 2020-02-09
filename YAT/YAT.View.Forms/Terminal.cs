@@ -81,6 +81,9 @@ using YAT.View.Utilities;
 // Module-level FxCop suppressions
 //==================================================================================================
 
+[module: SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", Scope = "member", Target = "YAT.View.Forms.Terminal.#InitializeComponent()", MessageId = "System.TimeSpan.Parse(System.String)", Justification = "Designer generated!")]
+[module: SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member", Target = "YAT.View.Forms.Terminal.#InitializeComponent()", Justification = "The timer is only used for a well-defined interval.")]
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.Terminal.resources", MessageId = "A-Za-z", Justification = "This is a valid regular expression.")]
 [module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.View.Forms.Terminal.#toolTip", Justification = "This is a bug in FxCop.")]
 
 #endregion
@@ -4799,6 +4802,8 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool RequestAutoActionValidateTriggerText(string triggerTextOrRegexPattern, out int invalidTextStart, out int invalidTextLength)
 		{
 			if (!this.settingsRoot.AutoAction.TriggerOptions.UseText)
@@ -5073,6 +5078,8 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool RequestAutoResponseValidateTriggerText(string triggerTextOrRegexPattern, out int invalidTextStart, out int invalidTextLength)
 		{
 			if (!this.settingsRoot.AutoResponse.TriggerOptions.UseText)
@@ -5228,6 +5235,8 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool RequestAutoResponseValidateResponseText(string responseText, out int invalidTextStart, out int invalidTextLength)
 		{
 			return (ValidationHelper.ValidateText(this, "response", responseText,  out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes));
@@ -5397,10 +5406,10 @@ namespace YAT.View.Forms
 
 						// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
 						// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
-					////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
+					////int unscaledDistance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 					////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_Predefined, unscaledDistance);
 
-						int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
+						int distance = (int)((this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 						int limitedDistance;
 						if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_Predefined, distance, out limitedDistance))
 						{
@@ -5442,10 +5451,10 @@ namespace YAT.View.Forms
 
 							// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
 							// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
-						////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
+						////int unscaledDistance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 						////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_TxMonitor, unscaledDistance);
 
-							int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
+							int distance = (int)((this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 							int limitedDistance;
 							if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_TxMonitor, distance, out limitedDistance))
 							{
@@ -5477,10 +5486,10 @@ namespace YAT.View.Forms
 
 							// No need to 'splitContainerHelper.CalculateScaledDistanceFromUnscaled()' since no
 							// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
-						////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
+						////int unscaledDistance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 						////int scaledDistance = this.splitContainerHelper.CalculateScaledDistanceFromUnscaled(splitContainer_RxMonitor, unscaledDistance);
 
-							int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and has more performance, since Math.Round() doesn't provide a 'float' overload.
+							int distance = (int)((this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight) + 0.5f); // Minimalistic rounding is sufficient and more performant, since Math.Round() doesn't provide a 'float' overload.
 							int limitedDistance;
 							if (SplitContainerHelper.TryLimitSplitterDistance(splitContainer_RxMonitor, distance, out limitedDistance))
 							{
@@ -6098,8 +6107,11 @@ namespace YAT.View.Forms
 			monitor_Rx   .ShowDataStatus = showCountAndRate;
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void ClearMonitor(Domain.RepositoryType repositoryType)
 		{
+			Exception exception = null;
+
 			try
 			{
 				SetFixedStatusText("Clearing...");
@@ -6118,7 +6130,8 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						exception = new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug);
+						break;
 				}
 
 				Cursor = Cursors.Default;
@@ -6129,6 +6142,9 @@ namespace YAT.View.Forms
 				Cursor = Cursors.Default;
 				SetFixedStatusText("Clearing failed!");
 			}
+
+			if (exception != null) // Outside try/catch since throw is intended.
+				throw (exception);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
@@ -6154,6 +6170,8 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void RefreshMonitor(Domain.RepositoryType repositoryType)
 		{
+			Exception exception = null;
+
 			try
 			{
 				SetFixedStatusText("Refreshing...");
@@ -6172,7 +6190,8 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						exception = new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug);
+						break;
 				}
 
 				Cursor = Cursors.Default;
@@ -6183,6 +6202,9 @@ namespace YAT.View.Forms
 				Cursor = Cursors.Default;
 				SetFixedStatusText("Refreshing failed!");
 			}
+
+			if (exception != null) // Outside try/catch since throw is intended.
+				throw (exception);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
@@ -6807,29 +6829,29 @@ namespace YAT.View.Forms
 			////this.terminal.SendingIsOngoingChanged += terminal_SendingIsOngoingChanged is not needed yet.
 				this.terminal.SendingIsBusyChanged    += terminal_SendingIsBusyChanged;
 
-				this.terminal.DisplayElementsTxAdded           += terminal_DisplayElementsTxAdded;
-				this.terminal.DisplayElementsBidirAdded        += terminal_DisplayElementsBidirAdded;
-				this.terminal.DisplayElementsRxAdded           += terminal_DisplayElementsRxAdded;
-				this.terminal.CurrentDisplayLineTxReplaced     += terminal_CurrentDisplayLineTxReplaced;
-				this.terminal.CurrentDisplayLineBidirReplaced  += terminal_CurrentDisplayLineBidirReplaced;
-				this.terminal.CurrentDisplayLineRxReplaced     += terminal_CurrentDisplayLineRxReplaced;
-				this.terminal.CurrentDisplayLineTxCleared      += terminal_CurrentDisplayLineTxCleared;
-				this.terminal.CurrentDisplayLineBidirCleared   += terminal_CurrentDisplayLineBidirCleared;
-				this.terminal.CurrentDisplayLineRxCleared      += terminal_CurrentDisplayLineRxCleared;
-				this.terminal.DisplayLinesTxAdded              += terminal_DisplayLinesTxAdded;
-				this.terminal.DisplayLinesBidirAdded           += terminal_DisplayLinesBidirAdded;
-				this.terminal.DisplayLinesRxAdded              += terminal_DisplayLinesRxAdded;
+				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
+				this.terminal.DisplayElementsBidirAdded       += terminal_DisplayElementsBidirAdded;
+				this.terminal.DisplayElementsRxAdded          += terminal_DisplayElementsRxAdded;
+				this.terminal.CurrentDisplayLineTxReplaced    += terminal_CurrentDisplayLineTxReplaced;
+				this.terminal.CurrentDisplayLineBidirReplaced += terminal_CurrentDisplayLineBidirReplaced;
+				this.terminal.CurrentDisplayLineRxReplaced    += terminal_CurrentDisplayLineRxReplaced;
+				this.terminal.CurrentDisplayLineTxCleared     += terminal_CurrentDisplayLineTxCleared;
+				this.terminal.CurrentDisplayLineBidirCleared  += terminal_CurrentDisplayLineBidirCleared;
+				this.terminal.CurrentDisplayLineRxCleared     += terminal_CurrentDisplayLineRxCleared;
+				this.terminal.DisplayLinesTxAdded             += terminal_DisplayLinesTxAdded;
+				this.terminal.DisplayLinesBidirAdded          += terminal_DisplayLinesBidirAdded;
+				this.terminal.DisplayLinesRxAdded             += terminal_DisplayLinesRxAdded;
 
-				this.terminal.RepositoryTxCleared              += terminal_RepositoryTxCleared;
-				this.terminal.RepositoryBidirCleared           += terminal_RepositoryBidirCleared;
-				this.terminal.RepositoryRxCleared              += terminal_RepositoryRxCleared;
-				this.terminal.RepositoryTxReloaded             += terminal_RepositoryTxReloaded;
-				this.terminal.RepositoryBidirReloaded          += terminal_RepositoryBidirReloaded;
-				this.terminal.RepositoryRxReloaded             += terminal_RepositoryRxReloaded;
+				this.terminal.RepositoryTxCleared             += terminal_RepositoryTxCleared;
+				this.terminal.RepositoryBidirCleared          += terminal_RepositoryBidirCleared;
+				this.terminal.RepositoryRxCleared             += terminal_RepositoryRxCleared;
+				this.terminal.RepositoryTxReloaded            += terminal_RepositoryTxReloaded;
+				this.terminal.RepositoryBidirReloaded         += terminal_RepositoryBidirReloaded;
+				this.terminal.RepositoryRxReloaded            += terminal_RepositoryRxReloaded;
 
-				this.terminal.AutoActionPlotRequest_Promtly    += terminal_AutoActionPlotRequest_Promtly; // is OK to be used, only used once for opening the form.
-			////this.terminal.AutoActionCountChanged_Promtly   += terminal_AutoActionCountChanged_Promtly;   is not used, see further below for reason.
-			////this.terminal.AutoResponseCountChanged_Promtly += terminal_AutoResponseCountChanged_Promtly; is not used, see further below for reason.
+				this.terminal.AutoActionPlotRequest_Promptly    += terminal_AutoActionPlotRequest_Promptly; // is OK to be used, only used once for opening the form.
+			////this.terminal.AutoActionCountChanged_Promptly   += terminal_AutoActionCountChanged_Promptly;   is not used, see further below for reason.
+			////this.terminal.AutoResponseCountChanged_Promptly += terminal_AutoResponseCountChanged_Promptly; is not used, see further below for reason.
 
 				this.terminal.FixedStatusTextRequest             += terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             += terminal_TimedStatusTextRequest;
@@ -6860,29 +6882,29 @@ namespace YAT.View.Forms
 			////this.terminal.SendingIsOngoingChanged -= terminal_SendingIsOngoingChanged is not needed yet.
 				this.terminal.SendingIsBusyChanged    -= terminal_SendingIsBusyChanged;
 
-				this.terminal.DisplayElementsTxAdded           -= terminal_DisplayElementsTxAdded;
-				this.terminal.DisplayElementsBidirAdded        -= terminal_DisplayElementsBidirAdded;
-				this.terminal.DisplayElementsRxAdded           -= terminal_DisplayElementsRxAdded;
-				this.terminal.CurrentDisplayLineTxReplaced     -= terminal_CurrentDisplayLineTxReplaced;
-				this.terminal.CurrentDisplayLineBidirReplaced  -= terminal_CurrentDisplayLineBidirReplaced;
-				this.terminal.CurrentDisplayLineRxReplaced     -= terminal_CurrentDisplayLineRxReplaced;
-				this.terminal.CurrentDisplayLineTxCleared      -= terminal_CurrentDisplayLineTxCleared;
-				this.terminal.CurrentDisplayLineBidirCleared   -= terminal_CurrentDisplayLineBidirCleared;
-				this.terminal.CurrentDisplayLineRxCleared      -= terminal_CurrentDisplayLineRxCleared;
-				this.terminal.DisplayLinesTxAdded              -= terminal_DisplayLinesTxAdded;
-				this.terminal.DisplayLinesBidirAdded           -= terminal_DisplayLinesBidirAdded;
-				this.terminal.DisplayLinesRxAdded              -= terminal_DisplayLinesRxAdded;
+				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
+				this.terminal.DisplayElementsBidirAdded       -= terminal_DisplayElementsBidirAdded;
+				this.terminal.DisplayElementsRxAdded          -= terminal_DisplayElementsRxAdded;
+				this.terminal.CurrentDisplayLineTxReplaced    -= terminal_CurrentDisplayLineTxReplaced;
+				this.terminal.CurrentDisplayLineBidirReplaced -= terminal_CurrentDisplayLineBidirReplaced;
+				this.terminal.CurrentDisplayLineRxReplaced    -= terminal_CurrentDisplayLineRxReplaced;
+				this.terminal.CurrentDisplayLineTxCleared     -= terminal_CurrentDisplayLineTxCleared;
+				this.terminal.CurrentDisplayLineBidirCleared  -= terminal_CurrentDisplayLineBidirCleared;
+				this.terminal.CurrentDisplayLineRxCleared     -= terminal_CurrentDisplayLineRxCleared;
+				this.terminal.DisplayLinesTxAdded             -= terminal_DisplayLinesTxAdded;
+				this.terminal.DisplayLinesBidirAdded          -= terminal_DisplayLinesBidirAdded;
+				this.terminal.DisplayLinesRxAdded             -= terminal_DisplayLinesRxAdded;
 
-				this.terminal.RepositoryTxCleared              -= terminal_RepositoryTxCleared;
-				this.terminal.RepositoryBidirCleared           -= terminal_RepositoryBidirCleared;
-				this.terminal.RepositoryRxCleared              -= terminal_RepositoryRxCleared;
-				this.terminal.RepositoryTxReloaded             -= terminal_RepositoryTxReloaded;
-				this.terminal.RepositoryBidirReloaded          -= terminal_RepositoryBidirReloaded;
-				this.terminal.RepositoryRxReloaded             -= terminal_RepositoryRxReloaded;
+				this.terminal.RepositoryTxCleared             -= terminal_RepositoryTxCleared;
+				this.terminal.RepositoryBidirCleared          -= terminal_RepositoryBidirCleared;
+				this.terminal.RepositoryRxCleared             -= terminal_RepositoryRxCleared;
+				this.terminal.RepositoryTxReloaded            -= terminal_RepositoryTxReloaded;
+				this.terminal.RepositoryBidirReloaded         -= terminal_RepositoryBidirReloaded;
+				this.terminal.RepositoryRxReloaded            -= terminal_RepositoryRxReloaded;
 
-				this.terminal.AutoActionPlotRequest_Promtly    -= terminal_AutoActionPlotRequest_Promtly; // is OK to be used, only used once for opening the form.
-			////this.terminal.AutoActionCountChanged_Promtly   -= terminal_AutoActionCountChanged_Promtly;   is not used, see further below for reason.
-			////this.terminal.AutoResponseCountChanged_Promtly -= terminal_AutoResponseCountChanged_Promtly; is not used, see further below for reason.
+				this.terminal.AutoActionPlotRequest_Promptly    -= terminal_AutoActionPlotRequest_Promptly; // is OK to be used, only used once for opening the form.
+			////this.terminal.AutoActionCountChanged_Promptly   -= terminal_AutoActionCountChanged_Promptly;   is not used, see further below for reason.
+			////this.terminal.AutoResponseCountChanged_Promptly -= terminal_AutoResponseCountChanged_Promptly; is not used, see further below for reason.
 
 				this.terminal.FixedStatusTextRequest             -= terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             -= terminal_TimedStatusTextRequest;
@@ -7342,7 +7364,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_AutoActionPlotRequest_Promtly(object sender, EventArgs e)
+		private void terminal_AutoActionPlotRequest_Promptly(object sender, EventArgs e)
 		{
 			if (IsDisposed)
 				return; // Ensure not to handle events during closing anymore.
@@ -7350,7 +7372,7 @@ namespace YAT.View.Forms
 			AutoActionPlot();
 		}
 
-		// The 'terminal_AutoAction/ResponseCountChanged_Promtly' events are not used because in
+		// The 'terminal_AutoAction/ResponseCountChanged_Promptly' events are not used because in
 		// case of fast continuous data synchronizing the events from the AutoAction/ResponseThread
 		// onto the MainThread will lead to no longer updating monitors (and plot) because the whole
 		// MainThread CPU capacity is spent with updating the quickly changing counts. Therefore
@@ -8215,18 +8237,18 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to prevent unnecessary delays when <see cref="Model.Terminal"/> invokes
-		/// the <see cref="Model.Terminal.AutoActionPlotRequest_Promtly"/> event, which will be
+		/// the <see cref="Model.Terminal.AutoActionPlotRequest_Promptly"/> event, which will be
 		/// will be synchronized onto the main thread, which in case of massive sending
 		/// or receiving is already heavily loaded by the monitor update.
 		/// </remarks>
 		private void DeactivateAutoActionPlotRequestEvent()
 		{
-			this.terminal.AutoActionPlotRequest_Promtly -= terminal_AutoActionPlotRequest_Promtly;
+			this.terminal.AutoActionPlotRequest_Promptly -= terminal_AutoActionPlotRequest_Promptly;
 		}
 
 		private void ReactivateAutoActionPlotRequestEvent()
 		{
-			this.terminal.AutoActionPlotRequest_Promtly += terminal_AutoActionPlotRequest_Promtly;
+			this.terminal.AutoActionPlotRequest_Promptly += terminal_AutoActionPlotRequest_Promptly;
 		}
 
 		#endregion

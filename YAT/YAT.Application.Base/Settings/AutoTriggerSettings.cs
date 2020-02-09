@@ -37,6 +37,7 @@ namespace YAT.Application.Settings
 		/// <remarks>
 		/// Using 8 same as <see cref="RecentFileSettings.MaxFilePaths"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Plural of 'recent' items.")]
 		protected const int MaxRecents = 8;
 
 		private RecentItemCollection<string> recentExplicitTriggers;

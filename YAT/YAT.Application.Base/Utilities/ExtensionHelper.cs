@@ -610,6 +610,7 @@ namespace YAT.Application.Utilities
 		/// <remarks>
 		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsImageFile(string)"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool IsImageExtension(string extension, out ImageFormat format)
 		{
 			if (PathEx.Equals(extension, ".png")) { format = ImageFormat.Png; return (true); }
@@ -629,6 +630,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool IsImageFile(string filePath, out ImageFormat format)
 		{
 			string extension = Path.GetExtension(filePath);
@@ -638,12 +640,14 @@ namespace YAT.Application.Utilities
 		/// <remarks>
 		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsSvgFile(string)"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Svg", Justification = "SVG is a file format.")]
 		public static bool IsSvgExtension(string extension)
 		{
 			return (PathEx.Equals(extension, ".svg"));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Svg", Justification = "SVG is a file format.")]
 		public static bool IsSvgFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);

@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -399,6 +400,7 @@ namespace YAT.Model
 		/// This method partly replicates <see cref="OxyPlot.Axes.Axis.FormatValueOverride(double)"/>
 		/// because it is not available on an <see cref="OxyPlot.Axes.CategoryAxis"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Underride", Justification = "Meant to be something like but opposite to 'override'.")]
 		protected static string FormatAxisValueUnderride(double value, OxyPlot.Axes.Axis axis, CultureInfo actualCulture)
 		{
 			string format = string.Concat("{0:", axis.ActualStringFormat ?? axis.StringFormat ?? string.Empty, "}");
@@ -420,6 +422,7 @@ namespace YAT.Model
 	//==============================================================================================
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class OxyPlotEx
 	{
 		/// <summary></summary>

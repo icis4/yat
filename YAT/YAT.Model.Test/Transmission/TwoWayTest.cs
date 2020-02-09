@@ -59,7 +59,7 @@ namespace YAT.Model.Test.Transmission
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static TwoWayTestData()
 		{                                                                                          // LineStart + EOL + LineBreak result in three more elements.
 			PingPongCommand = new Utilities.TestSet(new Types.Command(@"ABC DE F"), 1, new int[] { 4 }, new int[] { 10 }, true);

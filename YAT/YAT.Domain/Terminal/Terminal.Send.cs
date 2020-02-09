@@ -228,8 +228,8 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// Opposed to <see cref="SendingIsOngoing"/>, this property only becomes <c>true</c> when
-		/// sending has been ongoing for more than <see cref="SendingIsBusyChangedEventHelper.ThresholdMs"/>,
-		/// or is about to be ongoing for more than <see cref="SendingIsBusyChangedEventHelper.ThresholdMs"/>.
+		/// sending has been ongoing for more than <see cref="SendingIsBusyChangedEventHelper.Threshold"/>,
+		/// or is about to be ongoing for more than <see cref="SendingIsBusyChangedEventHelper.Threshold"/>.
 		/// </remarks>
 		public virtual bool SendingIsBusy
 		{
@@ -477,6 +477,22 @@ namespace YAT.Domain
 		// Non-Public Methods
 		//==========================================================================================
 
+		/// <summary>
+		/// Disposes the processing state.
+		/// </summary>
+		protected virtual void DisposeSend()
+		{
+			if (this.nextPermittedSequenceNumberEvent != null)
+				this.nextPermittedSequenceNumberEvent.Dispose();
+
+			this.nextPermittedSequenceNumberEvent = null;
+
+			if (this.packetGateEvent != null)
+				this.packetGateEvent.Dispose();
+
+			this.packetGateEvent = null;
+		}
+
 		/// <summary></summary>
 		protected virtual void PermitSendThreads()
 		{
@@ -692,8 +708,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InLine", Justification = "It's 'in line' and not inline!")]
-		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agreed, could be refactored. Could be.")]
+		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agree, could be refactored. Could be.")]
 		protected virtual void ProcessInLineKeywords(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
 		{
 			doBreakSend = false;
@@ -1099,6 +1116,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterRequestGate(long sequenceNumber)
 		{
 			while (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
@@ -1158,6 +1176,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterPacketGate()
 		{
 			while (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
