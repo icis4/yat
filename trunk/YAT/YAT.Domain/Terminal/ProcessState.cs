@@ -172,12 +172,24 @@ namespace YAT.Domain
 		public IODirection              Direction    { get; set; }
 
 		/// <summary></summary>
-		public DisplayElementCollection Elements     { get; protected set; }
+		public DisplayElementCollection Elements     { get; }
 
 		/// <summary></summary>
 		public LineState()
 		{
-			Reset();
+			Initialize();
+			Elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+		}
+
+		/// <summary>
+		/// Initializes the state.
+		/// </summary>
+		protected virtual void Initialize()
+		{
+			Position  = LinePosition.Begin;
+			TimeStamp = DisplayElement.TimeStampDefault;
+			Device    = null;
+			Direction = IODirection.None;
 		}
 
 		/// <summary>
@@ -185,11 +197,8 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Reset()
 		{
-			Position  = LinePosition.Begin;
-			TimeStamp = DisplayElement.TimeStampDefault;
-			Device    = null;
-			Direction = IODirection.None;
-			Elements  = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			Initialize();
+			Elements.Clear();
 		}
 
 		/// <summary>

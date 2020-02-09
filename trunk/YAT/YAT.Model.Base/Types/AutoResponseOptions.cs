@@ -35,7 +35,7 @@ namespace YAT.Model.Types
 		public bool EnableReplace { get; set; }
 
 		/// <summary></summary>
-		public AutoResponseOptions(bool useText, bool enableReplace)
+		public AutoResponseOptions(bool enableReplace)
 		{
 			EnableReplace = enableReplace;
 		}

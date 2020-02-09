@@ -70,34 +70,25 @@ namespace YAT.View.Controls
 		private static Font staticWhiteSpacesFontCache;
 
 		/// <summary>String format used for drawing line numbers.</summary>
-		private static TextFormatFlags staticLineNumberFormat;
+		private static TextFormatFlags staticLineNumberFormat =
+		(
+			TextFormatFlags.Default    |
+			TextFormatFlags.SingleLine |
+			TextFormatFlags.Right
+		);
 
 		/// <summary>String format used for drawing monitor strings.</summary>
-		private static TextFormatFlags staticMonitorFormat;
-
-			/// <summary>
-		/// Use GenericTypographic format to be able to measure characters individually,
-		///   i.e. without a small margin before and after the character.
-		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Hmm... How can the logic below be implemented in the initializer?")]
-		static MonitorRenderer()
-		{
-			staticLineNumberFormat  = TextFormatFlags.Default;
-			staticLineNumberFormat |= TextFormatFlags.SingleLine;
-			staticLineNumberFormat |= TextFormatFlags.Right;
-
-			staticMonitorFormat  = TextFormatFlags.Default;
-			staticMonitorFormat |= TextFormatFlags.SingleLine;
-			staticMonitorFormat |= TextFormatFlags.ExpandTabs;
-			staticMonitorFormat |= TextFormatFlags.NoPadding;
-			staticMonitorFormat |= TextFormatFlags.NoPrefix;
+		private static TextFormatFlags staticMonitorFormat =
+		(
+			TextFormatFlags.Default    |
+			TextFormatFlags.SingleLine |
+			TextFormatFlags.ExpandTabs |
+			TextFormatFlags.NoPadding  |
+			TextFormatFlags.NoPrefix
 
 			// Attention, do not use 'EndEllipsis' for the monitor! These ellipses were the root
 			// cause of issue #125 "Representation of long texts in the terminal".
-
-			// Also, note that this class earlier used Graphics.DrawString() and .MeasureString()
-			// instead of TextRenderer. See SVN revisions #938 and #940 for intermediate state.
-		}
+		);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]

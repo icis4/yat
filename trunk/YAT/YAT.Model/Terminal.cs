@@ -114,23 +114,6 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Static Lifetime
-		//==========================================================================================
-		// Static Lifetime
-		//==========================================================================================
-
-		/// <remarks>
-		/// 'StyleCop' asks to remove this static constructor. But 'Code Analysis' (FxCop) requires
-		/// the suppressions at this static constructor. So what...
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.Maintainability", "SA1409:RemoveUnnecessaryCode", Justification = "See below ;-) But unfortunately it seems that StyleCop doesn't allow a suppression at the constructor itself. So what...")]
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Well, kind of a code analysis deadlock ;-)")]
-		static Terminal()
-		{
-		}
-
-		#endregion
-
 		#region Static Methods
 		//==========================================================================================
 		// Static Methods
@@ -823,8 +806,8 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Opposed to <see cref="SendingIsOngoing"/>, this property only becomes <c>true</c> when
-		/// sending has been ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.ThresholdMs"/>,
-		/// or is about to be ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.ThresholdMs"/>.
+		/// sending has been ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.Threshold"/>,
+		/// or is about to be ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.Threshold"/>.
 		/// </remarks>
 		public virtual bool SendingIsBusy
 		{
@@ -4178,6 +4161,7 @@ namespace YAT.Model
 		/// </summary>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool StartIO(out string errorMessage)
 		{
 			return (StartIO(true, out errorMessage));
@@ -4200,6 +4184,7 @@ namespace YAT.Model
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool StartIO(bool saveStatus, out string errorMessage)
 		{
@@ -4219,7 +4204,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					errorMessage = string.Format("Terminal on '{0}' could not be started!", this.terminal.ToShortIOString());
+					errorMessage = string.Format(CultureInfo.CurrentCulture, "Terminal on '{0}' could not be started!", this.terminal.ToShortIOString());
 					OnFixedStatusTextRequest(errorMessage);
 
 					if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
@@ -4276,6 +4261,7 @@ namespace YAT.Model
 		/// </summary>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool StopIO(out string errorMessage)
 		{
 			return (StopIO(true, out errorMessage));
@@ -4298,6 +4284,7 @@ namespace YAT.Model
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool StopIO(bool saveStatus, out string errorMessage)
 		{

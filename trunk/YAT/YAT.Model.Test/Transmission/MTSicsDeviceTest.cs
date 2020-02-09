@@ -66,7 +66,7 @@ namespace YAT.Model.Test.Transmission
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static MTSicsDeviceTestData()
 		{
 			Commands = new List<Pair<Pair<string, string>, TimeSpan>>(4); // Preset the required capacity to improve memory management.

@@ -88,6 +88,7 @@ using YAT.View.Utilities;
 //==================================================================================================
 
 [module: SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member", Target = "YAT.View.Forms.Main.#InitializeComponent()", Justification = "Well, any better idea on how to implement a millisecond update ticker? And, the timer is only used if the user choses so.")]
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.Main.resources", MessageId = "A-Za-z", Justification = "This is a valid regular expression.")]
 [module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.View.Forms.Main.#toolTip", Justification = "This is a bug in FxCop.")]
 
 #endregion
@@ -736,7 +737,6 @@ namespace YAT.View.Forms
 			try
 			{
 				bool childIsReady = (ActiveMdiChild != null);
-				var t = (ActiveMdiChild as Terminal);
 
 				toolStripMenuItem_MainMenu_Terminal_AllClear.Enabled   = childIsReady;
 				toolStripMenuItem_MainMenu_Terminal_AllRefresh.Enabled = childIsReady;
@@ -2435,6 +2435,7 @@ namespace YAT.View.Forms
 				OpenDefaultLogDirectory();
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all 7 potential exceptions of 'Directory.CreateDirectory()' and 'Path.GetDirectoryName()' are handled.")]
 		private void OpenDefaultLogDirectory()
 		{
 			// Attention:
@@ -3429,7 +3430,7 @@ namespace YAT.View.Forms
 			// Don't save right now, see remarks of this method as well as 'SaveWindowSettings()' below.
 		}
 
-		private void SaveWindowSettings()
+		private static void SaveWindowSettings()
 		{
 			if (ApplicationSettings.LocalUserSettings.MainWindow.HaveChanged)
 				ApplicationSettings.SaveLocalUserSettings();

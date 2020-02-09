@@ -24,6 +24,7 @@
 
 //    System is not used for making origin more obvious.
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 
 // This code is intentionally placed into the YAT namespace even though the file is located in
@@ -105,7 +106,7 @@ namespace YAT
 		/// <summary>The <see cref="System.Version.Revision"/> part of the product version.</summary>
 		public static string ProductRevision
 		{
-			get { return (ProductFullVersionValue.Revision.ToString()); }
+			get { return (ProductFullVersionValue.Revision.ToString(CultureInfo.InvariantCulture)); } // Version identification is invariant.
 		}
 
 		/// <summary>The version designation.</summary>

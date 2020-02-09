@@ -140,9 +140,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
@@ -665,6 +665,7 @@ namespace YAT.Domain
 		/// This method shall not be overridden as it accesses the private members
 		/// <see cref="txProcessState"/> and <see cref="rxProcessState"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unidir", Justification = "Orthogonality with 'Bidir'.")]
 		protected LineState GetUnidirLineState(IODirection dir)
 		{
 			switch (dir)
@@ -972,7 +973,7 @@ namespace YAT.Domain
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Overall.DeviceLineBreak.IsFirstChunk)         // Not the ideal location to handle this flag and 'DeviceLineBreak.Device' further below.
-			{                                                              // But good enough because not needed anywhere else and has more performance if only done here.
+			{                                                              // But good enough because not needed anywhere else and more performant if only done here.
 				processState.Overall.DeviceLineBreak.IsFirstChunk = false; // Mitigated by using a dedicated 'DeviceLineBreak' sub-item making the scope obvious.
 			}
 			else // = 'IsSubsequentChunk'
@@ -1001,7 +1002,7 @@ namespace YAT.Domain
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Overall.DirectionLineBreak.IsFirstChunk)         // Not the ideal location to handle this flag and 'DirectionLineBreak.Direction' further below.
-			{                                                                 // But good enough because not needed anywhere else and has more performance if only done here.
+			{                                                                 // But good enough because not needed anywhere else and more performant if only done here.
 				processState.Overall.DirectionLineBreak.IsFirstChunk = false; // Mitigated by using a dedicated 'DirectionLineBreak' sub-item making the scope obvious.
 			}
 			else // = 'IsSubsequentChunk'

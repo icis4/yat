@@ -51,6 +51,7 @@ namespace YAT.Model.Types
 		ShowMessageBox,
 
 		PlotByteCountRate,
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "PlotLine", Justification = "Orthogonality with 'PlotByte' above.")]
 		PlotLineCountRate,
 		LineChartIndex,
 		LineChartTime,
@@ -115,7 +116,7 @@ namespace YAT.Model.Types
 		private const string             StopIO_string              = "[Close/Stop I/O]"; // Translating from code to user terminology.
 		private const string             CloseTerminal_string       = "[Close Terminal]";
 		private static readonly string   ExitApplication_string     = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
-		private static readonly string[] ExitApplication_stringAlternativeStart = new string[] { "[Exit " + ApplicationEx.CommonName };
+		private const string             ExitApplication_stringAlternativeStart = "[Exit " + ApplicationEx.CommonName;
 
 		#endregion
 
@@ -382,7 +383,7 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static AutoActionEx[] GetLineScatterHistrogramPlotItems()
+		public static AutoActionEx[] GetLineScatterHistogramPlotItems()
 		{
 			var a = new List<AutoActionEx>(6); // Preset the required capacity to improve memory management.
 
@@ -558,7 +559,8 @@ namespace YAT.Model.Types
 				result = AutoAction.CloseTerminal;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, ExitApplication_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ExitApplication_string) ||
+			         StringEx.StartsWithOrdinalIgnoreCase(s, ExitApplication_stringAlternativeStart))
 			{
 				result = AutoAction.ExitApplication;
 				return (true);

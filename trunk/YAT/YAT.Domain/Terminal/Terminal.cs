@@ -395,6 +395,7 @@ namespace YAT.Domain
 				{
 					// In the 'normal' case, the related timers will already have been stopped in Stop()...
 					DisposeProcess();
+					DisposeSend();
 					DisposePeriodicXOnTimer();
 
 					// ...and the send threads will already have been stopped in Close()...
