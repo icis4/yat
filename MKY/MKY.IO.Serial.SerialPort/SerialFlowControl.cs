@@ -73,7 +73,7 @@ namespace MKY.IO.Serial.SerialPort
 	{
 		#region String Definitions
 
-		private const string             ManualHardware_string = "Manual Hardware (RTS/CTS + DSR/DTR)";
+		private const string             ManualHardware_string = "Manual Hardware (RTS/CTS + DTR/DSR)";
 		private const string             ManualHardware_stringShort = "Manual Hardware";
 		private static readonly string[] ManualHardware_stringAlternatives = new string[] { "Manual Hardware", "ManualHardware", "Manual Hard", "ManualHard", "Manual HW", "ManualHW", "MHW", "MH" };
 
@@ -81,7 +81,7 @@ namespace MKY.IO.Serial.SerialPort
 		private const string             ManualSoftware_stringShort = "Manual Software";
 		private static readonly string[] ManualSoftware_stringAlternatives = new string[] { "Manual Software", "ManualSoftware", "Manual Soft", "ManualSoft", "Manual SW", "ManualSW", "MSW", "MS" };
 
-		private const string             ManualCombined_string = "Manual Combined (RTS/CTS + DSR/DTR + XOn/XOff)";
+		private const string             ManualCombined_string = "Manual Combined (RTS/CTS + DTR/DSR + XOn/XOff)";
 		private const string             ManualCombined_stringShort = "Manual Combined";
 		private static readonly string[] ManualCombined_stringAlternatives = new string[] { "Manual Combined", "ManualCombined", "Manual Combi", "ManualCombi", "Manual C", "ManualC", "MHW", "MH" };
 
