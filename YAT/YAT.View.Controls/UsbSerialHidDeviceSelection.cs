@@ -54,7 +54,7 @@ namespace YAT.View.Controls
 		/// Only set device list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the devices may take some time.
 		/// </summary>
-		private bool deviceListIsBeingSetOrIsAlreadySet; // = false;
+		private bool deviceListIsBeingSetOrHasAlreadyBeenSet; // = false;
 
 		private SettingControlsHelper isSettingControls;
 
@@ -84,7 +84,7 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			// SetControls() is initially called in the 'Paint' event handler.
+		////SetDeviceSelection() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -168,7 +168,7 @@ namespace YAT.View.Controls
 			// Ensure that device list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
-			if (Enabled && !this.deviceListIsBeingSetOrIsAlreadySet)
+			if (Enabled && !this.deviceListIsBeingSetOrHasAlreadyBeenSet)
 				SetDeviceList();
 		}
 
@@ -244,7 +244,7 @@ namespace YAT.View.Controls
 			{
 				ResetOnDialogMessage();
 
-				this.deviceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
+				this.deviceListIsBeingSetOrHasAlreadyBeenSet = true; // Purpose see remarks above.
 
 				var devices = new SerialHidDeviceCollection();
 				devices.FillWithAvailableDevices(true); // Retrieve strings from devices in order to get serial strings.

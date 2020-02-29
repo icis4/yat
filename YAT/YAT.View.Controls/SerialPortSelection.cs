@@ -77,7 +77,7 @@ namespace YAT.View.Controls
 		/// Only set device list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the ports may take some time.
 		/// </summary>
-		private bool portListIsBeingSetOrIsAlreadySet; // = false;
+		private bool portListIsBeingSetOrHasAlreadyBeenSet; // = false;
 
 		private SettingControlsHelper isSettingControls;
 
@@ -121,7 +121,7 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			// SetControls() is initially called in the 'Paint' event handler.
+		////SetPortSelection() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -230,7 +230,7 @@ namespace YAT.View.Controls
 			// Ensure that port list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
-			if (Enabled && !this.portListIsBeingSetOrIsAlreadySet)
+			if (Enabled && !this.portListIsBeingSetOrHasAlreadyBeenSet)
 				SetPortList();
 		}
 
@@ -338,7 +338,7 @@ namespace YAT.View.Controls
 			{
 				ResetOnDialogMessage();
 
-				this.portListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
+				this.portListIsBeingSetOrHasAlreadyBeenSet = true; // Purpose see remarks above.
 
 				SerialPortCollection ports = null;
 
