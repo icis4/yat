@@ -482,14 +482,10 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void DisposeSend()
 		{
-			if (this.nextPermittedSequenceNumberEvent != null)
-				this.nextPermittedSequenceNumberEvent.Dispose();
-
+			this.nextPermittedSequenceNumberEvent?.Dispose();
 			this.nextPermittedSequenceNumberEvent = null;
 
-			if (this.packetGateEvent != null)
-				this.packetGateEvent.Dispose();
-
+			this.packetGateEvent?.Dispose();
 			this.packetGateEvent = null;
 		}
 
@@ -506,8 +502,8 @@ namespace YAT.Domain
 			this.sendThreadsArePermitted = false;
 
 			// ...then signal threads:
-			this.nextPermittedSequenceNumberEvent.Set();
-			this.packetGateEvent.Set();
+			this.nextPermittedSequenceNumberEvent?.Set(); // Handle 'null' because this method is called during
+			this.packetGateEvent?.Set();                  // shutdown/dispose and may be called multiple times.
 		}
 
 		/// <summary></summary>

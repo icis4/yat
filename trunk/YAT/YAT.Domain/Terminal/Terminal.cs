@@ -393,13 +393,13 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the related timers will already have been stopped in Stop()...
+					// In the 'normal' case, the send threads will already have been stopped in Close()...
+					BreakSendThreads();
+
+					// and the related timers will already have been stopped in Stop()...
 					DisposeProcess();
 					DisposeSend();
 					DisposePeriodicXOnTimer();
-
-					// ...and the send threads will already have been stopped in Close()...
-					BreakSendThreads();
 
 					// ...and objects will already have been detached and disposed of in Close():
 					DetachTerminalSettings();
