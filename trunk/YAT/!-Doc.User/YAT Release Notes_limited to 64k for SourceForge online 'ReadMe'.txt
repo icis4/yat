@@ -132,6 +132,7 @@ Important changes:
 - Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 
 Fixed bugs:
+- Recent TCP/IP and UDP/IP ports, remote hosts and local filters are remembered again (req. #273).
 - Layout of predefined commands can now also be changed on a new terminal that doesn't contain
   commands yet (related to previous feature requests #28, #257, #365).
 - Import/Paste of a .yacp command page file that contains more predefined commands than currently
