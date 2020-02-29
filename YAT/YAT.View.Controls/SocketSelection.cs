@@ -82,7 +82,7 @@ namespace YAT.View.Controls
 		/// Only set interface list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the interfaces may take some time.
 		/// </summary>
-		private bool localInterfaceListIsBeingSetOrIsAlreadySet; // = false;
+		private bool localInterfaceListIsBeingSetOrHasAlreadyBeenSet; // = false;
 
 		private SettingControlsHelper isSettingControls;
 
@@ -155,7 +155,6 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			InitializeControls();
 		////SetControls() is initially called in the 'Paint' event handler.
 		}
 
@@ -171,10 +170,7 @@ namespace YAT.View.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual SocketType SocketType
 		{
-			get
-			{
-				return (this.socketType);
-			}
+			get { return (this.socketType); }
 			set
 			{
 				if (this.socketType != value)
@@ -340,7 +336,7 @@ namespace YAT.View.Controls
 				if (this.recentRemoteHosts != value)
 				{
 					this.recentRemoteHosts = value;
-					SetControls();
+					SetRecentControls();
 				}
 			}
 		}
@@ -357,7 +353,7 @@ namespace YAT.View.Controls
 				if (this.recentLocalFilters != value)
 				{
 					this.recentLocalFilters = value;
-					SetControls();
+					SetRecentControls();
 				}
 			}
 		}
@@ -374,7 +370,7 @@ namespace YAT.View.Controls
 				if (this.recentPorts != value)
 				{
 					this.recentPorts = value;
-					SetControls();
+					SetRecentControls();
 				}
 			}
 		}
@@ -433,7 +429,7 @@ namespace YAT.View.Controls
 			// Ensure that interface list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
-			if (Enabled && !this.localInterfaceListIsBeingSetOrIsAlreadySet)
+			if (Enabled && !this.localInterfaceListIsBeingSetOrHasAlreadyBeenSet)
 				SetLocalInterfaceList();
 		}
 
@@ -717,12 +713,20 @@ namespace YAT.View.Controls
 		// Non-Public Methods
 		//==========================================================================================
 
-		private void InitializeControls()
+		private void SetListsOtherThanLocalInterface()
 		{
 			this.isSettingControls.Enter();
 			try
 			{
-				SetRemoteHostList();
+				comboBox_RemoteHost.Items.Clear();
+				if (RecentRemoteHosts != null) {                                                   // Make sure to only list the item, in its type.
+					comboBox_RemoteHost.Items.AddRange(RecentRemoteHosts.ConvertAll(x => (object)x.Item).ToArray());
+				}                                                                                       // Recent items shall be listed first.
+				foreach (var item in IPHostEx.GetItems(((SocketTypeEx)SocketType).SupportsBroadcast)) { // Predefined items shall be listed after.
+					var casted = (string)item; // Make sure to compare (and list) identical types!
+					if (!comboBox_RemoteHost.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
+						comboBox_RemoteHost.Items.Add(item); // Make sure to list the item in its type! "IPv4 localhost (127.0.0.1)" would
+				}                                            // otherwise result in a "Remote host name or address is invalid!" message!
 
 				comboBox_RemotePort.Items.Clear();
 				if (RecentPorts != null) {                                                   // Make sure to only list the item, in its type.
@@ -743,30 +747,6 @@ namespace YAT.View.Controls
 				if (RecentPorts != null) {                                                  // Make sure to only list the item, in its type.
 					comboBox_LocalPort.Items.AddRange(RecentPorts.ConvertAll(x => (object)x.Item).ToArray());
 				}
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-		}
-
-		/// <remarks>
-		/// Needed to update list with or without broadcast, depending on whether TCP/IP or UDP/IP is selected.
-		/// </remarks>
-		private void SetRemoteHostList()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				comboBox_RemoteHost.Items.Clear();
-				if (RecentRemoteHosts != null) {                                                   // Make sure to only list the item, in its type.
-					comboBox_RemoteHost.Items.AddRange(RecentRemoteHosts.ConvertAll(x => (object)x.Item).ToArray());
-				}                                                                                       // Recent items shall be listed first.
-				foreach (var item in IPHostEx.GetItems(((SocketTypeEx)SocketType).SupportsBroadcast)) { // Predefined items shall be listed after.
-					var casted = (string)item; // Make sure to compare (and list) identical types!
-					if (!comboBox_RemoteHost.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
-						comboBox_RemoteHost.Items.Add(item); // Make sure to list the item in its type! "IPv4 localhost (127.0.0.1)" would
-				}                                            // otherwise result in a "Remote host name or address is invalid!" message!
 			}
 			finally
 			{
@@ -806,7 +786,7 @@ namespace YAT.View.Controls
 			{
 				ResetOnDialogMessage();
 
-				this.localInterfaceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
+				this.localInterfaceListIsBeingSetOrHasAlreadyBeenSet = true; // Purpose see remarks above.
 
 				var localInterfaces = new IPNetworkInterfaceCollection();
 				localInterfaces.FillWithAvailableLocalInterfaces();
@@ -918,14 +898,19 @@ namespace YAT.View.Controls
 			);
 		}
 
+		private void SetRecentControls()
+		{
+			SetListsOtherThanLocalInterface(); // Simply forward.
+		}
+
 		private void SetControls()
 		{
+			SetListsOtherThanLocalInterface();
+		////SetLocalInterfaceList() is initially called in the 'Paint' event handler.
+
 			this.isSettingControls.Enter();
 			try
 			{
-				// Remote host list:
-				SetRemoteHostList();
-
 				// Remote host address:
 				if (!DesignMode && Enabled && (this.remoteHost != null) &&
 				    ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
