@@ -48,7 +48,7 @@ namespace MKY.IO.Ports
 	public class SerialPortSettings : IEquatable<SerialPortSettings>
 	{
 		/// <summary></summary>
-		public const int BaudRateDefault = (int)(Ports.BaudRate.Baud009600);
+		public const int BaudRateDefault = (int)(Ports.BaudRate.Baud_9600);
 
 		/// <summary></summary>
 		public const DataBits DataBitsDefault = DataBits.Eight;

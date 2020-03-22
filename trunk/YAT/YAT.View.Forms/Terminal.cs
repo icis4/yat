@@ -5878,7 +5878,7 @@ namespace YAT.View.Forms
 					{
 						case 1: // "2400, 7, Even, 1, None"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_2400;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
 							scs.Parity      = System.IO.Ports.Parity.Even;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
@@ -5887,7 +5887,7 @@ namespace YAT.View.Forms
 						}
 						case 2: // "2400, 7, Even, 1, Software"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_2400;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Seven;
 							scs.Parity      = System.IO.Ports.Parity.Even;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
@@ -5896,7 +5896,7 @@ namespace YAT.View.Forms
 						}
 						case 3: // "9600, 8, None, 1, None"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_9600;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
 							scs.Parity      = System.IO.Ports.Parity.None;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
@@ -5905,7 +5905,7 @@ namespace YAT.View.Forms
 						}
 						case 4: // "9600, 8, None, 1, Software"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_9600;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
 							scs.Parity      = System.IO.Ports.Parity.None;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
@@ -5914,7 +5914,7 @@ namespace YAT.View.Forms
 						}
 						case 5: // "19200, 8, None, 1, None"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_19200;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
 							scs.Parity      = System.IO.Ports.Parity.None;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
@@ -5923,7 +5923,7 @@ namespace YAT.View.Forms
 						}
 						case 6: // "19200, 8, None, 1, Software"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_19200;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
 							scs.Parity      = System.IO.Ports.Parity.None;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
@@ -5932,7 +5932,7 @@ namespace YAT.View.Forms
 						}
 						case 7: // "115200, 8, None, 1, None"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_115200;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
 							scs.Parity      = System.IO.Ports.Parity.None;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
@@ -5941,7 +5941,7 @@ namespace YAT.View.Forms
 						}
 						case 8: // "115200, 8, None, 1, Software"
 						{
-							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+							scs.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud_115200;
 							scs.DataBits    = MKY.IO.Ports.DataBits.Eight;
 							scs.Parity      = System.IO.Ports.Parity.None;
 							scs.StopBits    = System.IO.Ports.StopBits.One;
