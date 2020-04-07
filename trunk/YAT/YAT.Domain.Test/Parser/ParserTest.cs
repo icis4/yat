@@ -543,6 +543,8 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(LineRepeat)",				Domain.Parser.Keyword.LineRepeat,           null));
 				yield return (new TestCaseData(@"\!(LineRepeat())",				Domain.Parser.Keyword.LineRepeat,           null));
 				yield return (new TestCaseData(@"\!(LineRepeat(10))",			Domain.Parser.Keyword.LineRepeat,           new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(TimeStamp)",				Domain.Parser.Keyword.TimeStamp,            null));
+				yield return (new TestCaseData(@"\!(TimeStamp())",				Domain.Parser.Keyword.TimeStamp,            null));
 				yield return (new TestCaseData(@"\!(Eol)",						Domain.Parser.Keyword.Eol,                  null));
 				yield return (new TestCaseData(@"\!(Eol())",					Domain.Parser.Keyword.Eol,                  null));
 				yield return (new TestCaseData(@"\!(NoEol)",					Domain.Parser.Keyword.NoEol,                null));
@@ -799,7 +801,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
 		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
-			using (var p = new Domain.Parser.Parser(Domain.Parser.Modes.AllEscapes))
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -822,7 +824,7 @@ namespace YAT.Domain.Test.Parser
 			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
-			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian, Domain.Parser.Modes.RadixAndAsciiEscapes))
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian, Domain.Parser.Mode.RadixAndAsciiEscapes))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -830,7 +832,7 @@ namespace YAT.Domain.Test.Parser
 				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
 			}
 
-			using (var p = new Domain.Parser.Parser(encoding, Endianness.BigEndian, Domain.Parser.Modes.RadixAndAsciiEscapes))
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.BigEndian, Domain.Parser.Mode.RadixAndAsciiEscapes))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -846,7 +848,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(KeywordTestData), "TestCases")]
 		public virtual void TestParserKeyword(string s, Domain.Parser.Keyword expectedKeyword, int[] expectedArgs)
 		{
-			using (var p = new Domain.Parser.Parser(Domain.Parser.Modes.AllEscapes))
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes))
 			{
 				Domain.Parser.Result[] results;
 				string successfullyParsed;
@@ -864,7 +866,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ErrorTestData), "TestCases")]
 		public virtual void TestParserError(string s, string expectedParsed, string expectedMessage)
 		{
-			using (var p = new Domain.Parser.Parser(Domain.Parser.Modes.AllEscapes))
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes))
 			{
 				byte[] actualBytes;
 				string actualParsed;

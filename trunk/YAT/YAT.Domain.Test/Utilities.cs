@@ -115,7 +115,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForConnection(Terminal terminalA, Terminal terminalB)
+		internal static void WaitForConnection(Domain.Terminal terminalA, Domain.Terminal terminalB)
 		{
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
@@ -138,7 +138,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForDisconnection(Terminal terminal)
+		internal static void WaitForDisconnection(Domain.Terminal terminal)
 		{
 			int waitTime = 0;
 			while (terminal.IsConnected)
@@ -168,7 +168,7 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForSendingAndVerifyCounts(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForSendingAndVerifyCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
 			int timeout = WaitTimeoutForLineTransmission;
@@ -223,7 +223,7 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			// Calculate timeout:
 			int timeout = WaitTimeoutForLineTransmission;
