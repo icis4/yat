@@ -1040,7 +1040,7 @@ namespace MKY.Text
 		/// Returns all available encodings in a useful order.
 		/// </summary>
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. view lists.
 		/// </remarks>
 		public static EncodingEx[] GetItems()
 		{

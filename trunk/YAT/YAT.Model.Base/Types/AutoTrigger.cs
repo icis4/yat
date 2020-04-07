@@ -354,7 +354,7 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. view lists.
 		/// </remarks>
 		public static AutoTriggerEx[] GetAllItems()
 		{
@@ -362,7 +362,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. view lists.
 		/// </remarks>
 		public static AutoTriggerEx[] GetFixedItems()
 		{
@@ -370,7 +370,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. view lists.
 		/// </remarks>
 		private static AutoTriggerEx[] GetItems(bool addFixed, bool addVariable)
 		{
