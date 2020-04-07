@@ -282,7 +282,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeStampInfo(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
-				: base(timeStamp, DirectionDefault, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
+				: this(timeStamp, DirectionDefault, format, useUtc, enclosureLeft, enclosureRight)
+			{
+			}
+
+			/// <summary></summary>
+			public TimeStampInfo(DateTime timeStamp, Direction direction, string format, bool useUtc, string enclosureLeft, string enclosureRight)
+				: base(timeStamp, direction, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
 			{
 			}
 

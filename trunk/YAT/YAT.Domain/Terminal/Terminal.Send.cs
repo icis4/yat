@@ -537,16 +537,18 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		protected virtual bool DoTryParse(string textToParse, Radix radix, Parser.Mode parseMode, out Parser.Result[] parseResult, out string textSuccessfullyParsed)
+		{
+			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, parseMode))
+				return (p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, radix));
+		}
+
+		/// <summary></summary>
 		protected virtual void DoSendTextItem(TextSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
-			bool hasSucceeded;
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-
-			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, item.ParseMode))
-				hasSucceeded = p.TryParse(item.Data, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
-
-			if (hasSucceeded)
+			if (DoTryParse(item.Data, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
 				DoSendText(sendingIsBusyChangedEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
@@ -716,14 +718,16 @@ namespace YAT.Domain
 				case Parser.Keyword.Clear:
 				{
 					ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-				////LeavePacketGate() must not be called, clearing yet is about to happen and packet shall resume afterwards
+				////LeavePacketGate() must not be called, clearing is yet about to happen and packet shall resume afterwards.
+					{
+						// Wait some time to allow previous data being transmitted.
+						// Wait quite long as the 'DataSent' event will take time.
+						// This even has the advantage that data is quickly shown.
+						Thread.Sleep(150);
 
-					// Wait some time to allow previous data being transmitted.
-					// Wait quite long as the 'DataSent' event will take time.
-					// This even has the advantage that data is quickly shown.
-					Thread.Sleep(150);
-
-					this.ClearRepositories();
+						this.ClearRepositories();
+					}
+				////doBreakSend = !TryEnterPacketGate() must not be called, see above.
 
 					break;
 				}
@@ -744,6 +748,26 @@ namespace YAT.Domain
 						Thread.Sleep(delay);
 					}
 					doBreakSend = !TryEnterPacketGate();
+
+					break;
+				}
+
+				case Parser.Keyword.TimeStamp:
+				{
+					string format = TerminalSettings.Display.TimeStampFormat;
+				////if (!ArrayEx.IsNullOrEmpty(result.Args)) // with argument is yet pending (FR #400) and requires parser support for strings.
+				////	format = result.Args[0];
+
+					var now = DateTime.Now;                                                                                          // No enclosure!
+					var de = new DisplayElement.TimeStampInfo(now, Direction.Tx, format, TerminalSettings.Display.TimeStampUseUtc, "", "");
+					var text = de.Text;
+
+					Parser.Result[] parseResult;
+					string textSuccessfullyParsed;                 // A date/time format may conflict with YAT syntax.
+					if (DoTryParse(text, Radix.String, Parser.Mode.NoEscapes, out parseResult, out textSuccessfullyParsed))
+						DoSendText(sendingIsBusyChangedEventHelper, parseResult); // Results in recursion; OK since keyword has been replaced by result.
+					else
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(text, textSuccessfullyParsed)));
 
 					break;
 				}

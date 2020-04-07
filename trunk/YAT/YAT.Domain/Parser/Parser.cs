@@ -116,6 +116,8 @@ namespace YAT.Domain.Parser
 			@"To prevent, use the keyword combined with a delay or interval keyword, e.g. ""\!(" + (KeywordEx)Keyword.LineRepeat + @")\!(" + (KeywordEx)Keyword.LineInterval + @")""." + Environment.NewLine +
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
+			@"""Send the current time stamp ""\!(" + (KeywordEx)Keyword.TimeStamp + @"())"" formatted according to [View > Format Settings... > Options > Time Stamp]." + Environment.NewLine +
+			Environment.NewLine +
 			@"Change I/O settings to the specified values ""\!(" + (KeywordEx)Keyword.IOSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
 			@"Changing I/O settings is yet limited to serial COM ports." +                                    // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
 			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
@@ -159,7 +161,7 @@ namespace YAT.Domain.Parser
 
 		private Encoding encoding;        // = null;
 		private Endianness endianness;    // = BigEndian;
-		private Modes modes;              // = None;
+		private Mode mode;                // = None;
 
 		private Radix defaultRadix;       // = None;
 
@@ -183,31 +185,31 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Parser(Modes modes)
-			: this(Encoding.Default, modes)
+		public Parser(Mode mode)
+			: this(Encoding.Default, mode)
 		{
 		}
 
 		/// <summary></summary>
-		public Parser(Encoding encoding, Modes modes)
-			: this(encoding, Endianness.BigEndian, modes)
-		{
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Endianness endianness, Modes modes)
-			: this(Encoding.Default, endianness, modes)
+		public Parser(Encoding encoding, Mode mode)
+			: this(encoding, Endianness.BigEndian, mode)
 		{
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public Parser(Encoding encoding, Endianness endianness, Modes modes)
+		public Parser(Endianness endianness, Mode mode)
+			: this(Encoding.Default, endianness, mode)
+		{
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public Parser(Encoding encoding, Endianness endianness, Mode mode)
 		{
 			this.encoding   = encoding;
 			this.endianness = endianness;
-			this.modes      = modes;
+			this.mode       = mode;
 		}
 
 		/// <summary></summary>
@@ -334,9 +336,9 @@ namespace YAT.Domain.Parser
 			get { return (this.endianness); }
 		}
 
-		internal virtual Modes Modes
+		internal virtual Mode Mode
 		{
-			get { return (this.modes); }
+			get { return (this.mode); }
 		}
 
 		/// <remarks>Radix: public get, private set.</remarks>
@@ -1108,7 +1110,7 @@ namespace YAT.Domain.Parser
 
 			this.encoding        = parent.encoding;
 			this.endianness      = parent.endianness;
-			this.modes           = parent.modes;
+			this.mode            = parent.mode;
 
 			this.defaultRadix    = parent.defaultRadix;
 
