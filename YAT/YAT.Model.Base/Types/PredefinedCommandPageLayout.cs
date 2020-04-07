@@ -151,7 +151,7 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. view lists.
 		/// </remarks>
 		public static PredefinedCommandPageLayoutEx[] GetItems()
 		{
