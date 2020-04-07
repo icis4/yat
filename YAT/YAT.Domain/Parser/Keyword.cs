@@ -49,6 +49,7 @@ namespace YAT.Domain.Parser
 		LineInterval,
 	////Repeat is yet pending (FR #13) and requires parser support for strings.
 		LineRepeat,
+		TimeStamp,
 		Eol,
 		NoEol,
 		IOSettings,
@@ -99,6 +100,7 @@ namespace YAT.Domain.Parser
 		private const string LineDelay_string            = "LineDelay";
 		private const string LineInterval_string         = "LineInterval";
 		private const string LineRepeat_string           = "LineRepeat";
+		private const string TimeStamp_string            = "TimeStamp";
 		private const string Eol_string                  = "EOL";
 		private const string NoEol_string                = "NoEOL";
 		private const string IOSettings_string           = "IOSettings";
@@ -153,6 +155,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineInterval:         return (LineInterval_string);
 			////case Keyword.Repeat:               return (Repeat_string); is yet pending (FR #13) and requires parser support for strings.
 				case Keyword.LineRepeat:           return (LineRepeat_string);
+				case Keyword.TimeStamp:            return (TimeStamp_string);
 				case Keyword.Eol:                  return (Eol_string);
 				case Keyword.NoEol:                return (NoEol_string);
 				case Keyword.IOSettings:           return (IOSettings_string);
@@ -183,7 +186,7 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <remarks>
-		/// An array of extended enum items is returned for more versatile use, e.g. UI controls lists.
+		/// An array of extended enum items is returned for more versatile use, e.g. view lists.
 		/// </remarks>
 		public static KeywordEx[] GetItems()
 		{
@@ -197,6 +200,7 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.LineInterval));
 		////a.Add(new KeywordEx(Keyword.Repeat)); is yet pending (FR #13) and requires parser support for strings.
 			a.Add(new KeywordEx(Keyword.LineRepeat));
+			a.Add(new KeywordEx(Keyword.TimeStamp));
 			a.Add(new KeywordEx(Keyword.Eol));
 			a.Add(new KeywordEx(Keyword.NoEol));
 			a.Add(new KeywordEx(Keyword.IOSettings));
@@ -231,6 +235,7 @@ namespace YAT.Domain.Parser
 				case Keyword.LineInterval: return (1);
 			////case Keyword.Repeat:       return (3); is yet pending (FR #13) and requires parser support for strings.
 				case Keyword.LineRepeat:   return (1);
+			////case Keyword.TimeStamp:    return (1); with argument is yet pending (FR #400) and requires parser support for strings.
 				case Keyword.IOSettings:   return (5);
 				case Keyword.Baud:         return (1);
 				case Keyword.DataBits:     return (1);
@@ -258,6 +263,7 @@ namespace YAT.Domain.Parser
 			////case Keyword.Repeat:       return (ValidateRepeatArg(argIndex, argValue)); is yet pending (FR #13) and requires parser support for strings.
 				                                                 //// Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
+			////case Keyword.TimeStamp:    return (ValidateTimeStampArg(argIndex, argValue)); with argument is yet pending (FR #400) and requires parser support for strings.
 				case Keyword.IOSettings:   return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue) || MKY.IO.Ports.DataBitsEx.IsDefined(argValue) || MKY.IO.Ports.ParityEx.IsDefined(argValue) || MKY.IO.Ports.StopBitsEx.IsDefined(argValue) || MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue) );
 				                                                 //// Attention, a similar validation exists in 'View.Controls.SerialPortSettings'. Changes here may have to be applied there too.
 				case Keyword.Baud:         return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue));
@@ -299,7 +305,8 @@ namespace YAT.Domain.Parser
 				case Keyword.LineInterval:         return ("an integer value of 1 or more indicating the interval in milliseconds"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 			////case Keyword.Repeat:               return (RepeatArgMessage); is yet pending (FR #13) and requires parser support for strings.
 				case Keyword.LineRepeat:           return ("an integer value of 1 or more indicating the number of repetitions, or " + Settings.SendSettings.LineRepeatInfinite + " for infinite repetitions");
-				case Keyword.Eol:                  return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.TimeStamp:            return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
+				case Keyword.Eol:                  return (noArgSupportedMessage);
 				case Keyword.NoEol:                return (noArgSupportedMessage);
 				case Keyword.IOSettings:           return ("one or more integer values indicating the settings, separated by ',' (comma) or ';' (semicolon) or '|' (pipe)");
 				case Keyword.Baud:                 return ("an integer value of 1 or more indicating the number of bits per second");
@@ -404,6 +411,11 @@ namespace YAT.Domain.Parser
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineRepeat_string))
 			{
 				result = Keyword.LineRepeat;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TimeStamp_string))
+			{
+				result = Keyword.TimeStamp;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Eol_string))

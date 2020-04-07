@@ -56,6 +56,13 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
+		protected override bool DoTryParse(string textToParse, Radix radix, Parser.Mode parseMode, out Parser.Result[] parseResult, out string textSuccessfullyParsed)
+		{
+			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, parseMode))
+				return (p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, radix));
+		}
+
+		/// <summary></summary>
 		protected override void DoSendTextItem(TextSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
 		{
 			string textToParse = item.Data;
@@ -63,7 +70,7 @@ namespace YAT.Domain
 			// Check for text exclusion patterns:
 			if (TextTerminalSettings.TextExclusion.Enabled)
 			{
-				foreach (Regex r in TextTerminalSettings.TextExclusion.Regexes)
+				foreach (var r in TextTerminalSettings.TextExclusion.Regexes)
 				{
 					var m = r.Match(textToParse);
 					if (m.Success)
@@ -75,15 +82,10 @@ namespace YAT.Domain
 				}
 			}
 
-			// Parse the item string:
-			bool hasSucceeded;
+			// Parse the item data:
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-
-			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, item.ParseMode))
-				hasSucceeded = p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, item.DefaultRadix);
-
-			if (hasSucceeded)
+			if (DoTryParse(textToParse, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
 				DoSendText(sendingIsBusyChangedEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
