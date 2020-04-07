@@ -68,7 +68,7 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void AssertSingleLineText(Command c, string text, string description = null, Domain.Parser.Modes modes = Domain.Parser.Modes.NoEscapes)
+		public virtual void AssertSingleLineText(Command c, string text, string description = null, Domain.Parser.Mode modes = Domain.Parser.Mode.NoEscapes)
 		{
 			Assert.That(c.IsDefined,          Is.True);
 			Assert.That(c.IsValid(modes),     Is.True);

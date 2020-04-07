@@ -58,7 +58,7 @@ namespace YAT.View.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private Domain.RadixEx defaultRadix;
-		private Domain.Parser.Modes parseMode;
+		private Domain.Parser.Mode parseMode;
 
 		private Command command;
 		private Command commandInEdit;
@@ -74,7 +74,7 @@ namespace YAT.View.Controls
 		/// This mini-form must be located in 'Controls' rather than 'Forms' because other controls
 		/// use it.
 		/// </remarks>
-		public MultiLineBox(Command command, Point startupLocation, Domain.Radix defaultRadix, Domain.Parser.Modes parseMode)
+		public MultiLineBox(Command command, Point startupLocation, Domain.Radix defaultRadix, Domain.Parser.Mode parseMode)
 		{
 			InitializeComponent();
 

@@ -42,7 +42,7 @@ namespace YAT.View.Utilities
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateTextSilently(string textToValidate, Domain.Parser.Modes modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
+		public static bool ValidateTextSilently(string textToValidate, Domain.Parser.Mode modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
 			int invalidTextLength;
 			int invalidTextStart;
@@ -54,7 +54,7 @@ namespace YAT.View.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, Domain.Parser.Modes modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
+		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, Domain.Parser.Mode modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
 			string errorMessage;
 			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, modes, defaultRadix))
@@ -69,7 +69,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ValidateRadix(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, Domain.Radix radix)
+		public static bool ValidateRadix(IWin32Window owner, string description, string textToValidate, Domain.Parser.Mode modes, Domain.Radix radix)
 		{
 			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, modes, radix))
 			{

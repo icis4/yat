@@ -44,7 +44,7 @@ namespace YAT.Domain
 		public Radix DefaultRadix { get; }
 
 		/// <summary></summary>
-		public Parser.Modes ParseMode { get; }
+		public Parser.Mode ParseMode { get; }
 
 		/// <summary></summary>
 		public SendMode SendMode { get; }
@@ -53,7 +53,7 @@ namespace YAT.Domain
 		public bool IsLine { get; }
 
 		/// <summary></summary>
-		public TextSendItem(string data, Radix defaultRadix, Parser.Modes parseMode, SendMode sendMode, bool isLine)
+		public TextSendItem(string data, Radix defaultRadix, Parser.Mode parseMode, SendMode sendMode, bool isLine)
 		{
 			Data         = data;
 			DefaultRadix = defaultRadix;

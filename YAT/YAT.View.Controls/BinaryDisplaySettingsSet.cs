@@ -185,7 +185,7 @@ namespace YAT.View.Controls
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			if (Utilities.ValidationHelper.ValidateText(this, "sequence", textBox_SequenceLineBreakBeforeSequence.Text, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes))
+			if (Utilities.ValidationHelper.ValidateText(this, "sequence", textBox_SequenceLineBreakBeforeSequence.Text, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes))
 			{
 				var slb = this.settings.SequenceLineBreakBefore;
 				slb.Sequence = textBox_SequenceLineBreakBeforeSequence.Text;
@@ -216,7 +216,7 @@ namespace YAT.View.Controls
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			if (Utilities.ValidationHelper.ValidateText(this, "sequence", textBox_SequenceLineBreakAfterSequence.Text, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes))
+			if (Utilities.ValidationHelper.ValidateText(this, "sequence", textBox_SequenceLineBreakAfterSequence.Text, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes))
 			{
 				var slb = this.settings.SequenceLineBreakAfter;
 				slb.Sequence = textBox_SequenceLineBreakAfterSequence.Text;

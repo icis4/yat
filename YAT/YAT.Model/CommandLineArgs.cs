@@ -562,7 +562,7 @@ namespace YAT.Model
 			if (!string.IsNullOrEmpty(RequestedTransmitText))
 			{
 				string errorMessage;
-				if (!Domain.Utilities.ValidationHelper.ValidateText("text to send", RequestedTransmitText, out errorMessage, Domain.Parser.Modes.AllEscapes))
+				if (!Domain.Utilities.ValidationHelper.ValidateText("text to send", RequestedTransmitText, out errorMessage, Domain.Parser.Mode.AllEscapes))
 				{
 					RequestedTransmitText = null;
 					Invalidate(errorMessage);

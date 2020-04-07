@@ -137,7 +137,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 			const int WaitForDisposal = 100;
 
-			using (var parser = new Domain.Parser.Parser(encoding, Domain.Parser.Modes.RadixAndAsciiEscapes))
+			using (var parser = new Domain.Parser.Parser(encoding, Domain.Parser.Mode.RadixAndAsciiEscapes))
 			{
 				byte[] parseResult;
 
@@ -243,6 +243,7 @@ namespace YAT.Domain.Test.TextTerminal
 					terminalA.Stop();
 					Utilities.WaitForDisconnection(terminalA);
 				} // using (terminalA)
+
 			} // using (parser)
 
 			Thread.Sleep(WaitForDisposal);

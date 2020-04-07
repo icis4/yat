@@ -75,7 +75,7 @@ namespace YAT.Domain
 			base.InitializeProcess();
 
 			// Binary specifics:
-			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, Parser.Modes.RadixAndAsciiEscapes))
+			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, Parser.Mode.RadixAndAsciiEscapes))
 			{
 				// Tx:
 				{
