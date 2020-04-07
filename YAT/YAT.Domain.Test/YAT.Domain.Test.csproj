@@ -87,6 +87,7 @@
     </Compile>
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Terminal\KeywordTest.cs" />
     <Compile Include="TextTerminal\EolTest.cs" />
     <Compile Include="TextTerminal\SubstitutionParserTest.cs" />
     <Compile Include="Utilities.cs" />
