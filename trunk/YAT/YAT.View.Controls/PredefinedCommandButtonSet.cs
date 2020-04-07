@@ -56,7 +56,7 @@ namespace YAT.View.Controls
 
 		private const int SubpageIdDefault = PredefinedCommandPage.FirstSubpageId;
 
-		private const Domain.Parser.Modes ParseModeForTextDefault = Domain.Parser.Modes.Default;
+		private const Domain.Parser.Mode ParseModeForTextDefault = Domain.Parser.Mode.Default;
 		private const bool TerminalIsReadyToSendDefault = false;
 
 		#endregion
@@ -79,7 +79,7 @@ namespace YAT.View.Controls
 		private int subpageId = SubpageIdDefault;
 		private List<Command> commands; // = null;
 
-		private Domain.Parser.Modes parseModeForText = ParseModeForTextDefault;
+		private Domain.Parser.Mode parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
@@ -157,7 +157,7 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Domain.Parser.Modes ParseModeForText
+		public virtual Domain.Parser.Mode ParseModeForText
 		{
 			set
 			{

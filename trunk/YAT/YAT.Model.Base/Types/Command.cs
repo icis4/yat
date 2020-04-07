@@ -658,10 +658,10 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// Validation is dependent on <see cref="Domain.Parser.Modes"/>! Thus, validation must be
+		/// Validation is dependent on <see cref="Domain.Parser.Mode"/>! Thus, validation must be
 		/// done during runtime when the mode is given; i.e. it cannot be done once and then kept.
 		/// </remarks>
-		public virtual bool IsValidText(Domain.Parser.Modes parseModesForText)
+		public virtual bool IsValidText(Domain.Parser.Mode parseModesForText)
 		{
 			if (!IsText)
 				return (false);
@@ -693,9 +693,9 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// Method instead of property for consistency with the <see cref="IsValid(Domain.Parser.Modes, string)"/> method below.
+		/// Method instead of property for consistency with the <see cref="IsValid(Domain.Parser.Mode, string)"/> method below.
 		/// </remarks>
-		public virtual bool IsValid(Domain.Parser.Modes parseModesForText)
+		public virtual bool IsValid(Domain.Parser.Mode parseModesForText)
 		{
 			if (IsText)
 				return (IsValidText(parseModesForText));
@@ -704,7 +704,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public virtual bool IsValid(Domain.Parser.Modes parseModesForText, string rootDirectoryForFile)
+		public virtual bool IsValid(Domain.Parser.Mode parseModesForText, string rootDirectoryForFile)
 		{
 			if (IsText)
 				return (IsValidText(parseModesForText));

@@ -108,7 +108,7 @@
     <Compile Include="IOType.cs" />
     <Compile Include="Parser\Exceptions.cs" />
     <Compile Include="Parser\Keyword.cs" />
-    <Compile Include="Parser\Modes.cs" />
+    <Compile Include="Parser\Mode.cs" />
     <Compile Include="Parser\Result.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Settings\CharActionSettings.cs" />

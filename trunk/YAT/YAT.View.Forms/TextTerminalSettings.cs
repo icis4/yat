@@ -202,7 +202,7 @@ namespace YAT.View.Forms
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Utilities.ValidationHelper.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes))
+				if (Utilities.ValidationHelper.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes))
 				{
 					if (!this.isSettingControls)
 					{
@@ -238,7 +238,7 @@ namespace YAT.View.Forms
 				string description = "Rx EOL";
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Utilities.ValidationHelper.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes))
+				if (Utilities.ValidationHelper.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes))
 				{
 					if (!this.isSettingControls)
 						this.settingsInEdit.RxEol = eolString;

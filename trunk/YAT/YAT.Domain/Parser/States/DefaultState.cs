@@ -90,7 +90,7 @@ namespace YAT.Domain.Parser
 				parser.HasFinished = true;
 				ChangeState(parser, null);
 			}                      // End of contiguous string.
-			else if (parseChar == ')' && (parser.Modes != Modes.NoEscapes) && !parser.IsTopLevel)
+			else if (parseChar == ')' && (parser.Mode != Mode.NoEscapes) && !parser.IsTopLevel)
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
@@ -98,7 +98,7 @@ namespace YAT.Domain.Parser
 				parser.HasFinished = true;
 				ChangeState(parser, null);
 			}                      // Escape sequence.
-			else if (parseChar == '\\' && (parser.Modes != Modes.NoEscapes))
+			else if (parseChar == '\\' && (parser.Mode != Mode.NoEscapes))
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
@@ -108,7 +108,7 @@ namespace YAT.Domain.Parser
 				parser.NestedParser = parser.GetNestedParser(new EscapeState());
 				ChangeState(parser, new NestedState());
 			}                      // ASCII mnemonic sequence.
-			else if (parseChar == '<' && ((parser.Modes & Modes.AsciiEscapes) != 0))
+			else if (parseChar == '<' && ((parser.Mode & Mode.AsciiEscapes) != 0))
 			{
 				if (!TryWriteContiguous(parser, ref formatException))
 					return (false);
@@ -118,7 +118,7 @@ namespace YAT.Domain.Parser
 				parser.NestedParser = parser.GetNestedParser(new AsciiMnemonicState());
 				ChangeState(parser, new NestedState());
 			}                       // Keyword args.
-			else if (parseChar == '(' && ((parser.Modes & Modes.KeywordEscapes) != 0) && parser.IsKeywordParser)
+			else if (parseChar == '(' && ((parser.Mode & Mode.KeywordEscapes) != 0) && parser.IsKeywordParser)
 			{
 				KeywordResult result;
 

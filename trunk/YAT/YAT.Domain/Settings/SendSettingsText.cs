@@ -141,12 +141,12 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual Parser.Modes ToParseMode()
+		public virtual Parser.Mode ToParseMode()
 		{
 			if (EnableEscapes)
-				return (Parser.Modes.AllEscapes);
+				return (Parser.Mode.AllEscapes);
 			else
-				return (Parser.Modes.NoEscapes);
+				return (Parser.Mode.NoEscapes);
 		}
 
 		#endregion

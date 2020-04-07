@@ -4766,7 +4766,7 @@ namespace YAT.View.Forms
 			{
 				var options = this.settingsRoot.AutoAction.TriggerOptions;
 
-				if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
+				if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Mode.RadixAndAsciiEscapes)) {
 					options.UseText = true;
 
 					if (!RegexEx.TryValidatePattern(trigger)) {
@@ -4790,7 +4790,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.settingsRoot.AutoAction.TriggerOptions.UseText)
 			{
-				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Modes.RadixAndAsciiEscapes));
+				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
 			else                                          // UseText
 			{
@@ -4808,7 +4808,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.settingsRoot.AutoAction.TriggerOptions.UseText)
 			{
-				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes));
+				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
 			else                                          // UseText
 			{
@@ -5042,7 +5042,7 @@ namespace YAT.View.Forms
 			{
 				var options = this.settingsRoot.AutoResponse.TriggerOptions;
 
-				if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Modes.RadixAndAsciiEscapes)) {
+				if (!ValidationHelper.ValidateTextSilently(trigger, Domain.Parser.Mode.RadixAndAsciiEscapes)) {
 					options.UseText = true;
 
 					if (!RegexEx.TryValidatePattern(trigger)) {
@@ -5066,7 +5066,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.settingsRoot.AutoResponse.TriggerOptions.UseText)
 			{
-				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Modes.RadixAndAsciiEscapes));
+				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
 			else                                            // UseText
 			{
@@ -5084,7 +5084,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.settingsRoot.AutoResponse.TriggerOptions.UseText)
 			{
-				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes));
+				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
 			else                                            // UseText
 			{
@@ -5231,7 +5231,7 @@ namespace YAT.View.Forms
 		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
 		public virtual bool RequestAutoResponseValidateResponseTextSilently(string responseText)
 		{
-			return (ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Modes.RadixAndAsciiEscapes));
+			return (ValidationHelper.ValidateTextSilently(responseText, Domain.Parser.Mode.RadixAndAsciiEscapes));
 		}
 
 		/// <summary></summary>
@@ -5239,7 +5239,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool RequestAutoResponseValidateResponseText(string responseText, out int invalidTextStart, out int invalidTextLength)
 		{
-			return (ValidationHelper.ValidateText(this, "response", responseText,  out invalidTextStart, out invalidTextLength, Domain.Parser.Modes.RadixAndAsciiEscapes));
+			return (ValidationHelper.ValidateText(this, "response", responseText,  out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes));
 		}
 
 		/// <summary></summary>

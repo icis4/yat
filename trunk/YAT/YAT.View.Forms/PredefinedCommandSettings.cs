@@ -121,7 +121,7 @@ namespace YAT.View.Forms
 		/// <param name="requestedPageId">Page 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		/// <param name="requestedCommandId">Command 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		/// <param name="indicatedTerminalName">The indicated terminal name.</param>
-		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Modes parseModeForText, string rootDirectoryForFile, int requestedPageId, int requestedCommandId, string indicatedTerminalName)
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, bool useExplicitDefaultRadix, Domain.Parser.Mode parseModeForText, string rootDirectoryForFile, int requestedPageId, int requestedCommandId, string indicatedTerminalName)
 		{
 			InitializeComponent();
 

@@ -109,7 +109,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
-		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
+		private const Domain.Parser.Mode ParseModeDefault = Domain.Parser.Mode.Default;
 
 		/// <summary></summary>
 		public const bool SendImmediatelyDefault = false;
@@ -136,7 +136,7 @@ namespace YAT.View.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
-		private Domain.Parser.Modes parseMode = ParseModeDefault;
+		private Domain.Parser.Mode parseMode = ParseModeDefault;
 
 		private bool sendImmediately = SendImmediatelyDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
@@ -296,7 +296,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Domain.Parser.Modes ParseMode
+		public virtual Domain.Parser.Mode ParseMode
 		{
 			get { return (this.parseMode); }
 			set
